@@ -4151,12 +4151,14 @@ $langDownloadToPDF = "Αναφορά σε PDF";
 
 $langGradeRubric = "Ρουμπρίκα";
 $langGradeRubrics = "Ρουμπρίκες";
+$langGradeRubricsSelect ="Επιλογή Ρουμπρίκας";
 $langNewGradeRubric = "Δημιουργία ρουμπρίκας";
 $langNoGradeRubrics = 'Δεν έχουν καταχωρηθεί ρουμπρίκες.';
 $langTitleRubric = "Όνομα ρουμπρίκας";
 $langRubricDesc = "Περιγραφή ρουμπρίκας";
 $langRubricCrit = "Κριτήριο";
 $langRubricCriteria = "Κριτήρια";
+$langRubricWeight = "Το άθροισμα των ποσοστών συμμετοχής των κριτηρίων θα πρέπει να είναι ίσο με 100";
 $langAddRubricCriteria ="Νέο κριτήριο";
 $langRubricOptions = "Επιλογές ρουμπρίκας";
 $langRubricOption1 = "Να επιτρέπεται η προεπισκόπηση της ρουμπρίκας από τον εκπαιδευόμενο πριν τη βαθμολόγηση";

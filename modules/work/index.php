@@ -596,7 +596,7 @@ function ipORcidr($field, $value, array $params) {
  */
 function add_assignment() {
     global $tool_content, $workPath, $course_id, $uid, $langTheField, $m, $langTitle,
-        $course_code, $langFormErrors, $langNewAssignSuccess, $langScales, $langIPInvalid;
+        $course_code, $langFormErrors, $langNewAssignSuccess, $langScales, $langGradeRubrics, $langIPInvalid;
 
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
@@ -614,6 +614,11 @@ function add_assignment() {
         $v->rule('numeric', array('scale'));
         $v->labels(array('scale' => "$langTheField $langScales"));
     }
+    if (isset($_POST['rubric'])) {
+        $v->rule('required', array('rubric'));
+        $v->rule('numeric', array('rubric'));
+        $v->labels(array('rubric' => "$langTheField $langGradeRubrics"));
+    }
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
         $title = $_POST['title'];
@@ -626,7 +631,12 @@ function add_assignment() {
         if (isset($_POST['scale'])) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
-        } else {
+        }
+		elseif (isset($_POST['rubric'])) {
+         //   $max_grade = max_grade_from_scale($_POST['rubric']);
+            $grading_scale_id = $_POST['rubric'];
+        }
+		else {
             $max_grade = $_POST['max_grade'];
             $grading_scale_id = 0;
         }
@@ -713,7 +723,7 @@ function add_assignment() {
                 redirect_to_home_page("modules/work/index.php?course=$course_code");
             } else {
                 @rmdir("$workPath/$secret");
-                Session::Mesages($langGeneralError, 'alert-danger');
+                Session::Messages($langGeneralError, 'alert-danger');
                 redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
             }
         } else {
@@ -744,7 +754,7 @@ function add_assignment() {
  */
 function edit_assignment($id) {
     global $tool_content, $langEditSuccess, $m, $langTheField, $course_code,
-        $course_id, $uid, $workPath, $langFormErrors, $langScales, $langTitle,
+        $course_id, $uid, $workPath, $langFormErrors, $langScales, $langGradeRubrics, $langTitle,
         $langIPInvalid;
 
     $v = new Valitron\Validator($_POST);
@@ -763,6 +773,11 @@ function edit_assignment($id) {
         $v->rule('numeric', array('scale'));
         $v->labels(array('scale' => "$langTheField $langScales"));
     }
+    if (isset($_POST['rubric'])) {
+        $v->rule('required', array('rubric'));
+        $v->rule('numeric', array('rubric'));
+        $v->labels(array('rubric' => "$langTheField $langGradeRubrics"));
+    }
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
         $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -776,6 +791,10 @@ function edit_assignment($id) {
         if (isset($_POST['scale'])) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
+        }
+		elseif (isset($_POST['rubric'])) {
+            $max_grade = max_grade_from_rubric($_POST['rubric']);
+            $grading_scale_id = $_POST['rubric'];
         } else {
             $max_grade = $_POST['max_grade'];
             $grading_scale_id = 0;
@@ -1182,7 +1201,7 @@ function new_assignment() {
            $desc, $language, $head_content, $langMoreOptions, $langLessOptions,
            $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
-           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales, $langGradeRubric,
+           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales, $langGradeRubricsSelect, $langGradeRubrics,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
@@ -1197,9 +1216,15 @@ function new_assignment() {
     foreach ($scales as $scale) {
         $scale_options .= "<option value='$scale->id'>$scale->title</option>";
     }
+	$rubrics = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);
+	$rubric_options = "<option value>-- $langGradeRubricsSelect --</option>";
+	foreach ($rubrics as $rubric) {
+        $rubric_options .= "<option value='$rubric->id'>$rubric->name</option>";
+    }
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#scales').select2({ width: '100%' });
+			$('#rubrics').select2({ width: '100%' });
             $('input[name=grading_type]').on('change', function(e){
                 var choice = $(this).val();
                 if (choice == 0) {
@@ -1211,7 +1236,11 @@ function new_assignment() {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-                } else {
+                    $('#rubrics')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                } else if (choice == 1) {
                     $('#max_grade')
                         .prop('disabled', true)
                         .closest('div.form-group')
@@ -1220,7 +1249,25 @@ function new_assignment() {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
+					$('#rubrics')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
                 }
+				else {
+                    $('#max_grade')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#scales')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+					$('#rubrics')
+                         .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');			
+				}
             });
             $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
@@ -1271,8 +1318,10 @@ function new_assignment() {
     $desc = Session::has('desc') ? Session::get('desc') : '';
     $max_grade_error = Session::getError('max_grade');
     $scale_error = Session::getError('scale');
+	$rubric_error = Session::getError('rubric');
     $max_grade = Session::has('max_grade') ? Session::get('max_grade') : 10;
     $scale = Session::getError('scale');
+	$rubric = Session::getError('rubric');
     $submission_type = Session::has('submission_type') ? Session::get('submission_type') : 0;
     $grading_type = Session::has('grading_type') ? Session::get('grading_type') : 0;
     $WorkStart = Session::has('WorkStart') ? Session::get('WorkStart') : (new DateTime('NOW'))->format('d-m-Y H:i');
@@ -1336,7 +1385,7 @@ function new_assignment() {
                         <div class='radio'>
                           <label>
                             <input type='radio' name='grading_type' value='2'". ($grading_type ? " checked" : "") .">
-                            $langGradeRubric
+                            $langGradeRubrics
                           </label>
                         </div>
                     </div>
@@ -1349,20 +1398,16 @@ function new_assignment() {
                       </select>
                       <span class='help-block'>$scale_error</span>
                     </div>
-                </div>";
-       if (isset($rubric_options)) {
-            $tool_content .= "
-                <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
-                    <label for='title' class='col-sm-2 control-label'>$langGradeRubric:</label>
+                </div>
+                <div class='form-group".($rubric_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
+                    <label for='title' class='col-sm-2 control-label'>$langGradeRubrics:</label>
                     <div class='col-sm-10'>
-                      <select name='scale' class='form-control' id='rubric' disabled>
+                      <select name='rubric' class='form-control' id='rubrics' disabled>
                             $rubric_options
                       </select>
                       <span class='help-block'>$rubric_error</span>
                     </div>
-                </div>";
-        }
-        $tool_content .= "
+                </div>
                 <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type ? " hidden" : "")."'>
                     <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
                     <div class='col-sm-10'>
@@ -1644,8 +1689,8 @@ function show_edit_assignment($id) {
         $langSave, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType,
-        $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales,
-        $langLessOptions, $langMoreOptions, $langAutoJudgeInputNotSupported, $langTitle,
+        $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales, $langGradeRubrics,
+        $langLessOptions, $langAutoJudgeInputNotSupported, $langTitle,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langAutoJudgeOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
@@ -1657,6 +1702,7 @@ function show_edit_assignment($id) {
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#scales').select2({ width: '100%' });
+			$('#rubrics').select2({ width: '100%' });
             $('input[name=grading_type]').on('change', function(e){
                 var choice = $(this).val();
                 if (choice == 0) {
@@ -1668,7 +1714,11 @@ function show_edit_assignment($id) {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-                } else {
+					$('#rubrics')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                } else if (choice == 1) {
                     $('#max_grade')
                         .prop('disabled', true)
                         .closest('div.form-group')
@@ -1677,8 +1727,24 @@ function show_edit_assignment($id) {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-                }
-            });
+					$('#rubrics')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');                
+				} else {
+				    $('#max_grade')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#scales')
+						.prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');   
+					$('#rubrics')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');          
+				});
             $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
@@ -1736,7 +1802,11 @@ function show_edit_assignment($id) {
     foreach ($scales as $scale) {
         $scale_options .= "<option value='$scale->id'".($row->grading_scale_id == $scale->id ? " selected" : "").">$scale->title</option>";
     }
-
+    $rubrics = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);
+	$rubric_options = "<option value>-- $langGradeRubricsSelect --</option>";
+    foreach ($rubrics as $rubric) {
+        $rubric_options .= "<option value='$rubric->id'".($row->grading_scale_id == $rubric->id ? " selected" : "").">$rubric->name</option>";
+    }
     if ($row->assign_to_specific) {
         //preparing options in select boxes for assigning to speficic users/groups
         $assignee_options = '';
@@ -1797,6 +1867,7 @@ function show_edit_assignment($id) {
     $title_error = Session::getError('title');
     $max_grade_error = Session::getError('max_grade');
     $scale_error = Session::getError('scale');
+	$rubric_error = Session::getError('rubric');
 
     $tool_content .= "
     <div class='form-wrapper'>
@@ -1859,9 +1930,16 @@ function show_edit_assignment($id) {
                         <div class='radio'>
                           <label>
                             <input type='radio' name='grading_type' value='2'". ($grading_type ? " checked" : "") .">
-                            $langGradeRubric
+                            $langGradeRubrics
                           </label>
                         </div>
+                    </div>
+                </div>
+                <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type ? " hidden" : "")."'>
+                    <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                    <div class='col-sm-10'>
+                      <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
+                      <span class='help-block'>$max_grade_error</span>
                     </div>
                 </div>
                 <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
@@ -1873,14 +1951,16 @@ function show_edit_assignment($id) {
                       <span class='help-block'>$scale_error</span>
                     </div>
                 </div>
-                <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type ? " hidden" : "")."'>
-                    <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                <div class='form-group".($rubric_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
+                    <label for='title' class='col-sm-2 control-label'>$langGradeRubrics:</label>
                     <div class='col-sm-10'>
-                      <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
-                      <span class='help-block'>$max_grade_error</span>
+                      <select name='rubric' class='form-control' id='rubrics'".(!$grading_type ? " disabled" : "").">
+                            $rubric_options
+                      </select>
+                      <span class='help-block'>$scale_error</span>
                     </div>
                 </div>
-                <div class='form-group'>
+				<div class='form-group'>
                     <label class='col-sm-2 control-label'>$langWorkSubType:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
@@ -3392,7 +3472,7 @@ function show_assignments() {
                 $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
             }
 
-            // Check if assignement contains submissions
+            // Check if assignment contains submissions
             $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
             $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d AND grade IS NULL", $row->id)->count;
             if (!$num_ungraded) {

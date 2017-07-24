@@ -33,10 +33,16 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langW
 
 if (isset($_GET['delete'])) { // delete rubric
 	Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
-    Session::Messages($langRubricDeleted, 'alert-success');
-    redirect_to_home_page("modules/work/rubrics.php");
-    }
-elseif (isset($_POST['submitRubric'])) {
+	Session::Messages($langRubricDeleted, 'alert-success');
+	redirect_to_home_page("modules/work/rubrics.php");
+}
+
+if (isset($_GET['preview'])) { // preview rubric
+	$rubric_id = $_GET['preview'];
+	show_rubric ($rubric_id);
+}	
+
+if (isset($_POST['submitRubric'])) {
     $v = new Valitron\Validator($_POST);
 	$v->rule('required', array('name'));
     $v->rule('required', array('title'));
@@ -48,28 +54,40 @@ elseif (isset($_POST['submitRubric'])) {
     if($v->validate()) {
         $name = $_POST['name'];
 		$desc = $_POST['desc'];
+		$sum_weight = 0;
         $criteria = array();
 		foreach ($_POST['title'] as $crit => $item_criterio){
 			$criteria[$crit]['title_name'] = $item_criterio;
-		
+			$criteria[$crit]['crit_weight'] = $_POST['weight'][$crit];
+			
 			//$scales = array();
 			foreach ($_POST['scale_item_name'][$crit] as $key => $item_name) {
 				$criteria[$crit]['crit_scales'][$key]['scale_item_name'] = $item_name;
 				$criteria[$crit]['crit_scales'][$key]['scale_item_value'] = $_POST['scale_item_value'][$crit][$key];
 			}
-		}
-		$serialized_criteria = serialize($criteria);
-		$preview_rubric = isset($_POST['options0'])?1:0; 
-		$points_to_graded = isset($_POST['options1'])?1:0;
-		
-        if ($rubric_id) {
-
-            Database::get()->query("UPDATE rubric SET name = ?s, scales = ?s, description = ?s, preview_rubric = ?d, points_to_graded = ?d, course_id = ?d WHERE id = ?d",$name, $serialized_criteria, $desc, $preview_rubric, $points_to_graded, $course_id, $rubric_id);
-            //update_assignments_max_grade($scale_id);
-        } else {
-            Database::get()->query("INSERT INTO rubric (name, scales, description, preview_rubric, points_to_graded, course_id) VALUES (?s, ?s, ?s, ?d, ?d, ?d)", $name, $serialized_criteria, $desc, $preview_rubric, $points_to_graded, $course_id);
 			
-        }
+		$sum_weight += $criteria[$crit]['crit_weight'];
+		}
+		
+		if ($sum_weight!=100){
+			Session::flashPost()->Messages($langRubricWeight);
+			redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
+		}
+		else{
+		
+			$serialized_criteria = serialize($criteria);
+			$preview_rubric = isset($_POST['options0'])?1:0; 
+			$points_to_graded = isset($_POST['options1'])?1:0;
+		
+			if ($rubric_id) {
+
+				Database::get()->query("UPDATE rubric SET name = ?s, scales = ?s, description = ?s, preview_rubric = ?d, points_to_graded = ?d, course_id = ?d WHERE id = ?d",$name, $serialized_criteria, $desc, $preview_rubric, $points_to_graded, $course_id, $rubric_id);
+				//update_assignments_max_grade($scale_id);
+			} else {
+				Database::get()->query("INSERT INTO rubric (name, scales, description, preview_rubric, points_to_graded, course_id) VALUES (?s, ?s, ?s, ?d, ?d, ?d)", $name, $serialized_criteria, $desc, $preview_rubric, $points_to_graded, $course_id);
+			
+			}
+		}
        redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
     } else {
 		//$DEBUGQ .= "	ELSE ERROR	";
@@ -139,8 +157,12 @@ if (isset($_GET['rubric_id'])) {
 						'<div id=\'critDiv'+ j +'\'>'+	
 						'<div class=\'form-group\'>'+
                         '   <label for=\'title\' class=\'col-sm-2 control-label\'>Κριτήριο:</label>'+
-                        '    <div class=\'col-sm-9\'>'+
+                        '    <div class=\'col-sm-3\'>'+
                         '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+     
+                        '    </div>'+
+						'   <label for=\'weight\' class=\'col-sm-3 control-label\'>Ποσοστό Συμμετοχής (%):</label>'+
+                        '    <div class=\'col-sm-1\'>'+
+                        '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+     
                         '    </div>'+
 						'    <div class=\'col-sm-1\'><a href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a></div>'+
                         '</div>'+
@@ -174,7 +196,10 @@ if (isset($_GET['rubric_id'])) {
     </script>
     ";
 	
-
+    $toolName = $langGradeRubrics;
+    $pageName = $langNewGradeRubric;
+    $navigation[] = array("url" => "rubrics.php?course=$course_code", "name" => $langGradeRubrics);
+	
     $rubric_used = 0;
     if ($_GET['rubric_id']) {
         $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $_GET['rubric_id'], $course_id);
@@ -195,10 +220,15 @@ if (isset($_GET['rubric_id'])) {
 		$crit_rows .= "
 		<div id='critDiv$crit'>
 			<div class='form-group'>
-			<label for='title' class='col-sm-2 control-label'>Κριτήριο:</label>
-				<div class='col-sm-9'>
+				<label for='title[$crit]' class='col-sm-2 control-label'>Κριτήριο:</label>
+				<div class='col-sm-3'>
 					<input type='text' name='title[$crit]' class='form-control' value='".q($title['title_name'])."' required".($rubric_used ? " disabled" : "").">
-				</div>";
+				</div>
+				<label for='weight[$crit]' class='col-sm-3 control-label'>Ποσοστό Συμμετοχής (%):</label>
+				<div class='col-sm-2'>
+					<input name='weight[$crit]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>     
+				</div>
+				";
 		if($crit>0)
 		$crit_rows .= "		
 				<div class='col-sm-1'>
@@ -224,9 +254,9 @@ if (isset($_GET['rubric_id'])) {
 								$cc++;
 									$crit_rows .= "
 									<tr>
-										<td class='form-group'><input name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required=".($rubric_used ? " disabled" : "")." type='text'>
+										<td class='form-group'><input name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required='".($rubric_used ? ' disabled' : '')."' type='text'>
 										</td>
-										<td class='form-group'><input name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required=".($rubric_used ? " disabled" : "")." type='number'>
+										<td class='form-group'><input name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required='".($rubric_used ? ' disabled' : '')."' type='number'>
 										</td>
 										<td class='text-center'><a href='#' class='removeScale' id='remScale$cc'><span class='fa fa-times' style='color:red'></span></a></td>
 									</tr>";
@@ -240,11 +270,9 @@ if (isset($_GET['rubric_id'])) {
                             </div>
 			</div>	
         </div>";
-	}	
+		}	
 	}
-    $toolName = $langGradeRubrics;
-    $pageName = $langNewGradeRubric;
-    $navigation[] = array("url" => "rubrics.php?course=$course_code", "name" => $langGradeRubrics);
+	
     if ($rubric_used) {
         $tool_content .= "<div class='alert alert-info'>$langRubricNotEditable</div>";
     }
@@ -268,7 +296,7 @@ if (isset($_GET['rubric_id'])) {
                             <div class='col-sm-10'>
                               <input name='name' type='text' class='form-control' id='name' value='$name'".($rubric_used ? " disabled" : "").">
                               ".(Session::getError('name') ? "<span class='help-block'>" . Session::getError('name') . "</span>" : "")."
-                            </div>
+                         </div>
 						</div>
 						<div class='form-group'>
 							<label for='desc' class='col-sm-2 control-label'>$langRubricDesc:</label>
@@ -284,10 +312,14 @@ if (isset($_GET['rubric_id'])) {
       $tool_content .= "<div id='critDiv0'>
 						<div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
                             <label for='title' class='col-sm-2 control-label'>$langRubricCrit:</label>
-                            <div class='col-sm-10'>
+                            <div class='col-sm-4'>
                               <input name='title[]' type='text' class='form-control' id='title' value='$title'".($rubric_used ? " disabled" : "").">
                               ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."
                             </div>
+							<label for='weight' class='col-sm-3 control-label'>Ποσοστό Συμμετοχής (%):</label>
+							<div class='col-sm-1'>
+								<input name='weight[]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>     
+							</div>							
                         </div>
                         <div class='form-group'>
                             <label class='col-sm-2 control-label'>$langScales:</label>
@@ -307,14 +339,14 @@ if (isset($_GET['rubric_id'])) {
                                     </table>
                                 </div>
                             </div>";
-    if (!$rubric_used) {
-        $tool_content .= "
+			if (!$rubric_used) {
+				$tool_content .= "
                             <div class='col-xs-offset-2 col-sm-10'>
                                  <a class='btn btn-xs btn-success margin-top-thin' id='addScale0'>$langAdd</a>
                             </div>
 							</div>";
-    }
-    $tool_content .= "  </div>";
+			}
+		$tool_content .= "  </div>";
 	}
 	
 	 $tool_content .= "
@@ -323,25 +355,25 @@ if (isset($_GET['rubric_id'])) {
 								<a class='btn btn-xs btn-success margin-top-thin' id='addCriteria'>$langAddRubricCriteria</a>
 							</div>
 						</div>
-		<div class='form-group'>
-            <label for='rubric_options' class='col-sm-2 control-label'>$langRubricOptions:</label>
-				<div class='table-responsive'>
-                    <table id='rubric_opts'> 
-							<tr class='title1'>
-								<td colspan='2'>
-									<input type='checkbox' id='user_button0' name='options0' checked='1' />
-									$langRubricOption1
-								</td>
-							</tr>
-							<tr class='title1'>
-								<td colspan='2'>
-									<input type='checkbox' id='user_button1' name='options1' checked='1' />
-									$langRubricOption5
-								</td>
-							</tr>
-					</table>
-				</div>
-		</div>";
+						<div class='form-group'>
+							<label for='rubric_options' class='col-sm-2 control-label'>$langRubricOptions:</label>
+							<div class='table-responsive'>
+							<table id='rubric_opts'> 
+								<tr class='title1'>
+									<td colspan='2'>
+										<input type='checkbox' id='user_button0' name='options0' checked='1' />
+										$langRubricOption1
+									</td>
+								</tr>
+								<tr class='title1'>
+									<td colspan='2'>
+										<input type='checkbox' id='user_button1' name='options1' checked='1' />
+										$langRubricOption5
+									</td>
+								</tr>
+							</table>
+							</div>
+						</div>";
 	
     if (!$rubric_used) {
         $tool_content .= " 
@@ -384,14 +416,17 @@ if (isset($_GET['rubric_id'])) {
         ),
     ),false);
 
-    $rubrics = Database::get()->queryArray("SELECT * FROM rubric WHERE course_id = ?d", $course_id);
+    
+	$rubrics = Database::get()->queryArray("SELECT * FROM rubric WHERE course_id = ?d", $course_id);
     if ($rubrics) {
+	 if  (!isset($_GET['preview'])){
         $table_content = "";
         foreach ($rubrics as $rubric) {
+			$rubric_id = $rubric->id;
             $criteria = unserialize($rubric->scales);
             $criteria_list = "";
             foreach ($criteria as $ci => $criterio) {
-                $criteria_list .= "<li>$criterio[title_name]</li>";
+                $criteria_list .= "<li>$criterio[title_name] <b>($criterio[crit_weight])</b></li>";
 				if(is_array($criterio['crit_scales']))
 				foreach ($criterio['crit_scales'] as $si=>$scale){
 					$criteria_list .= "<ul><li>$scale[scale_item_name] ( $scale[scale_item_value] )</li></ul>";
@@ -400,14 +435,15 @@ if (isset($_GET['rubric_id'])) {
 				
             $table_content .= "
                         <tr>
-                            <td>$rubric->name</td>
-							<td>$rubric->description</td>
-                            <td>
+                            <td><a href='rubrics.php?course=$course_code&amp;preview=$rubric_id'>$rubric->name</a></td>
+							<td>$rubric->description</td>";
+                            /*<td>
                                 <ul class='list-unstyled'>
                                     $criteria_list
                                 </ul>
-                            </td>
-                            <td class='option-btn-cell'>
+                            </td>*/
+            $table_content .= "
+							<td class='option-btn-cell'>
                             ". action_button(array(
                                 array(
                                     'title' => $langEdit,
@@ -433,7 +469,6 @@ if (isset($_GET['rubric_id'])) {
                         <tr>
                             <th>$langTitleRubric</th>
                             <th>$langRubricDesc</th>
-							<th>$langRubricCriteria</th>
                             <th class='text-center'>" . icon('fa-gears') . "</th>
                         </tr>
                     </thead>
@@ -443,10 +478,74 @@ if (isset($_GET['rubric_id'])) {
                 </table>
             </div>";
 
-    } else {
+		}
+	} else {
         $tool_content .= "<div class='alert alert-warning'>$langNoGradeRubrics</div>";
     }
 }
+	
+	function show_rubric ($rubric_id){
+
+	    global $tool_content, $m, $langBack, $course_code,
+        $langSave, $course_id, $head_content, $language, $langTitle,
+		$langTitleRubric, $langRubricDesc, $langRubricCriteria,
+		$langEdit,$langDelete,$langConfirmDelete;
+		
+		$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
+  
+        $table_content = "";
+
+            $criteria = unserialize($rubric->scales);
+            $criteria_list = "";
+            foreach ($criteria as $ci => $criterio) {
+                $criteria_list .= "<li>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
+				if(is_array($criterio['crit_scales']))
+				foreach ($criterio['crit_scales'] as $si=>$scale){
+					$criteria_list .= "<ul><li>$scale[scale_item_name] ( $scale[scale_item_value] )</li></ul>";
+				}
+			}
+	
+		$tool_content .= "
+            <div class='table-responsive'>
+                <table class='table-default'>
+                    <thead>
+					
+                        <th>$langTitleRubric</th> 
+                        <th>$langRubricDesc</th>
+						<th>$langRubricCriteria</th>
+						<th class='text-center' rowspan='2'>" . icon('fa-gears') . "</th>
+					
+					</thead>
+					<tr>
+						<td>$rubric->name</td>
+						<td>$rubric->description</td>
+						<td>
+                            <ul class='list-unstyled'>
+                                $criteria_list
+                            </ul>
+                        </td>
+						<td class='option-btn-cell'>
+                            ". action_button(array(
+                                array(
+                                    'title' => $langEdit,
+                                    'url' => "rubrics.php?course=$course_code&amp;rubric_id=$rubric->id",
+                                    'icon' => 'fa-edit'
+                                ),
+								array(
+									'title' => $langDelete,
+									'url' => "rubrics.php?course=$course_code&amp;delete=$rubric->id",
+									'icon' => 'fa-times',
+									'class' => 'delete',
+									'confirm' => $langConfirmDelete)
+								))."
+                        </td>
+					</tr>
+                </table>
+            </div>";
+	
+	
+	}
+
 
 draw($tool_content, 2, null, $head_content);
 
