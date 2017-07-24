@@ -1567,6 +1567,17 @@ $db->query("CREATE TABLE `tc_log` (
     KEY `userid` (`bbbuserid`),
     KEY `fullName` (`fullName`)) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `rubric` (            
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(200) NOT NULL,
+    `scales` text NOT NULL,
+    `description` text,
+    `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
+    `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+    `course_id` int(11) NOT NULL)
+    $tbl_options");            
+
+
 $db->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) NOT NULL,

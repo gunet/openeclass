@@ -3723,9 +3723,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `expires` datetime,
             `bundle` int(11) not null default 0,
             index `badge_course` (`course_id`),
-            foreign key (`course_id`) references `course` (`id`)
-        ) $tbl_options");
-
+            foreign key (`course_id`) references `course` (`id`)  
+          )");
+        
         Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate` (
           `id` int(11) not null auto_increment primary key,
           `user` int(11) not null,
@@ -3808,6 +3808,43 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `expires` datetime DEFAULT NULL,
             PRIMARY KEY (`id`)
         ) $tbl_options");
+
+            
+
+        // tc attendance tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
+            `id` int(11) NOT NULL DEFAULT '0',
+            `meetingid` varchar(20) NOT NULL,
+            `bbbuserid` varchar(20) DEFAULT NULL,
+            `totaltime` int(11) NOT NULL DEFAULT '0',
+            `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`,`meetingid`),
+            KEY `id` (`id`),
+            KEY `meetingid` (`meetingid`)
+        ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
+                `id` int(11) NOT NULL,
+                `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                `meetingid` varchar(20) NOT NULL,
+                `bbbuserid` varchar(20) DEFAULT NULL,
+                `fullName` varchar(200) DEFAULT NULL,
+                `type` varchar(255) default 'bbb',
+                PRIMARY KEY (`id`),
+                KEY `userid` (`bbbuserid`),
+                KEY `fullName` (`fullName`)
+            ) $tbl_options");
+        
+        // Rubric tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (            
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(200) NOT NULL,
+            `scales` text NOT NULL,
+            `description` text,
+            `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
+            `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+            `course_id` int(11) NOT NULL)
+            $tbl_options");                
     }
 
     // update eclass version
