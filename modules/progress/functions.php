@@ -1881,7 +1881,7 @@ function student_view_progress() {
                 . " b.description, b.active, b.created, b.id"
                 . " FROM user_{$key} a "
                 . " JOIN {$key} b ON (a.{$key} = b.id) "
-                . " WHERE a.user = ?d AND b.course_id = ?d AND b.active = 1 AND b.bundle != -1";
+                . " WHERE a.user = ?d AND b.course_id = ?d AND b.active = 1 AND b.bundle != -1 AND (b.expires IS NULL OR b.expires > NOW())";
         Database::get()->queryFunc($gameQ, function($game) use ($key, &$data) {            
             if ($key == 'badge') { // get badge icon                
                 $game->filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 
