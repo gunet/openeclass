@@ -178,8 +178,12 @@ hContent;
     // visibility commands
     if (isset($_GET['vis'])) {
         $table = select_table($_GET['table']);
-        Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d", $_GET['vis'], $_GET['vid']);
-        $action_message = "<div class='alert alert-success'>$langViMod</div>";
+        if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['vid'])) {
+            Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d", $_GET['vis'], $_GET['vid']);
+            $action_message = "<div class='alert alert-success'>$langViMod</div>";
+        } else {
+            Session::Messages($langResourceBelongsToCert, "alert-warning");
+        }
     }
 
     // Public accessibility commands
@@ -379,7 +383,11 @@ hContent;
         if ($_GET['delete'] == 'delcat') { // delete video category
             $q = Database::get()->queryArray("SELECT id FROM video WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
             foreach ($q as $a) {
-                delete_video($a->id, 'video');
+                if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $a->id)) {
+                    delete_video($a->id, 'video');
+                } else {
+                    Session::Messages($langResourceBelongsToCert, "alert-warning");                    
+                }
             }
             $q = Database::get()->queryArray("SELECT id FROM videolink WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
             foreach ($q as $a) {
@@ -388,7 +396,11 @@ hContent;
             delete_video_category($_GET['id']);
         } else {  // delete video / videolink
             $table = select_table($_GET['table']);
-            delete_video($_GET['id'], $table);
+            if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['id'])) {
+                delete_video($_GET['id'], $table);
+            } else {
+                Session::Messages($langResourceBelongsToCert, "alert-warning");
+            }            
         }
         $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div>";
     } else if (isset($_GET['form_input'])) { // display video form

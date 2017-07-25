@@ -478,8 +478,12 @@ if ($is_editor) {
         } elseif (isset($_REQUEST['choice'])) {
             $choice = $_REQUEST['choice'];
             if ($choice == 'disable') {
-                if (Database::get()->query("UPDATE assignment SET active = '0' WHERE id = ?d", $id)->affectedRows > 0) {
-                    Session::Messages($langAssignmentDeactivated, 'alert-success');
+                if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
+                    if (Database::get()->query("UPDATE assignment SET active = '0' WHERE id = ?d", $id)->affectedRows > 0) {
+                        Session::Messages($langAssignmentDeactivated, 'alert-success');
+                    }
+                } else {
+                    Session::Messages($langResourceBelongsToCert, 'alert-warning');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'enable') {
@@ -488,10 +492,14 @@ if ($is_editor) {
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'do_delete') {
-                if(delete_assignment($id)) {
-                    Session::Messages($langDeleted, 'alert-success');
+                if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
+                    if(delete_assignment($id)) {
+                        Session::Messages($langDeleted, 'alert-success');
+                    } else {
+                        Session::Messages($langDelError, 'alert-danger');
+                    }
                 } else {
-                    Session::Messages($langDelError, 'alert-danger');
+                    Session::Messages($langResourceBelongsToCert, 'alert-warning');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'do_delete_file') {
@@ -502,8 +510,12 @@ if ($is_editor) {
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
             } elseif ($choice == 'do_purge') {
-                if (purge_assignment_subs($id)) {
-                    Session::Messages($langAssignmentSubsDeleted, 'alert-success');
+                if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
+                    if (purge_assignment_subs($id)) {
+                        Session::Messages($langAssignmentSubsDeleted, 'alert-success');
+                    }
+                } else {
+                    Session::Messages($langResourceBelongsToCert, 'alert-warning');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'edit') {

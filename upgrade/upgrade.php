@@ -162,6 +162,11 @@ touch_or_error('courses/temp/index.php');
 mkdir_or_error('courses/userimg');
 touch_or_error('courses/userimg/index.php');
 touch_or_error($webDir . '/video/index.php');
+mkdir_or_error('courses/user_progress_data');
+mkdir_or_error('courses/user_progress_data/cert_templates');
+touch_or_error('courses/user_progress_data/cert_templates/index.php');
+mkdir_or_error('courses/user_progress_data/badge_templates');
+touch_or_error('courses/user_progress_data/badge_templates/index.php');
 mkdir_or_error('courses/eportfolio');
 touch_or_error('courses/eportfolio/index.php');
 mkdir_or_error('courses/eportfolio/userbios');
@@ -3410,7 +3415,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-    if (version_compare($oldversion, '3.6', '<')) {        
+    if (version_compare($oldversion, '3.6', '<')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `order` INT(11) NOT NULL DEFAULT 0,
@@ -3498,7 +3503,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('user', 'eportfolio_enable')) {
             Database::get()->query("ALTER TABLE `user` ADD eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0");
         }
-		// upgrade table `assignment_submit`
+        // upgrade table `assignment_submit`
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
@@ -3568,6 +3573,139 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             KEY `course_id` (`course_id`)
             ) $tbl_options");
 
+        // Gamification Tables (aka certificate + badge)
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate_template` (
+            `id` mediumint(8) not null auto_increment,
+            `name` varchar(255) not null,
+            `description` text,
+            `filename` varchar(255),
+            PRIMARY KEY(`id`)
+        )");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge_icon` (
+                `id` mediumint(8) not null auto_increment primary key,
+                `name` varchar(255) not null,
+                `description` text,
+                `filename` varchar(255)
+        )");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate` (
+          `id` int(11) not null auto_increment primary key,
+          `course_id` int(11) not null,
+          `issuer` varchar(255) not null default '',
+          `template` mediumint(8),
+          `title` varchar(255) not null,
+          `description` text,
+          `autoassign` tinyint(1) not null default 1,
+          `active` tinyint(1) not null default 1,
+          `created` datetime,
+          `expires` datetime,
+          `bundle` int(11) not null default 0,
+          index `certificate_course` (`course_id`),
+          foreign key (`course_id`) references `course` (`id`),
+          foreign key (`template`) references `certificate_template`(`id`)
+        ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge` (
+            `id` int(11) not null auto_increment primary key,
+            `course_id` int(11) not null,
+            `issuer` varchar(255) not null default '',
+            `icon` mediumint(8),
+            `title` varchar(255) not null,
+            `description` text,
+            `message` text,
+            `autoassign` tinyint(1) not null default 1,
+            `active` tinyint(1) not null default 1,
+            `created` datetime,
+            `expires` datetime,
+            `bundle` int(11) not null default 0,
+            index `badge_course` (`course_id`),
+            foreign key (`course_id`) references `course` (`id`)  
+          )");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate` (
+          `id` int(11) not null auto_increment primary key,
+          `user` int(11) not null,
+          `certificate` int(11) not null,
+          `completed` boolean default false,
+          `completed_criteria` int(11),
+          `total_criteria` int(11),
+          `updated` datetime,
+          `assigned` datetime,
+          unique key `user_certificate` (`user`, `certificate`),
+          foreign key (`user`) references `user`(`id`),
+          foreign key (`certificate`) references `certificate` (`id`)
+        ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_badge` (
+          `id` int(11) not null auto_increment primary key,
+          `user` int(11) not null,
+          `badge` int(11) not null,
+          `completed` boolean default false,
+          `completed_criteria` int(11),
+          `total_criteria` int(11),
+          `updated` datetime,
+          `assigned` datetime,
+          unique key `user_badge` (`user`, `badge`),
+          foreign key (`user`) references `user`(`id`),
+          foreign key (`badge`) references `badge` (`id`)
+        ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate_criterion` (
+          `id` int(11) not null auto_increment primary key,
+          `certificate` int(11) not null,
+          `activity_type` varchar(255),
+          `module` int(11),
+          `resource` int(11),
+          `threshold` decimal(7,2),
+          `operator` varchar(20),
+          foreign key (`certificate`) references `certificate`(`id`)
+        ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge_criterion` (
+          `id` int(11) not null auto_increment primary key,
+          `badge` int(11) not null,
+          `activity_type` varchar(255),
+          `module` int(11),
+          `resource` int(11),
+          `threshold` decimal(7,2),
+          `operator` varchar(20),
+          foreign key (`badge`) references `badge`(`id`)
+        ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate_criterion` (
+          `id` int(11) not null auto_increment primary key,
+          `user` int(11) not null,
+          `certificate_criterion` int(11) not null,
+          `created` datetime,
+          unique key `user_certificate_criterion` (`user`, `certificate_criterion`),
+          foreign key (`user`) references `user`(`id`),
+          foreign key (`certificate_criterion`) references `certificate_criterion`(`id`)
+        ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_badge_criterion` (
+          `id` int(11) not null auto_increment primary key,
+          `user` int(11) not null,
+          `badge_criterion` int(11) not null,
+          `created` datetime,
+          unique key `user_badge_criterion` (`user`, `badge_criterion`),
+          foreign key (`user`) references `user`(`id`),
+          foreign key (`badge_criterion`) references `badge_criterion`(`id`)
+        ) $tbl_options");
+                
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certified_users` (
+            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            `course_title` varchar(255) NOT NULL DEFAULT '',
+            `cert_title` varchar(255) NOT NULL DEFAULT '',
+            `cert_id` int(11) NOT NULL,
+            `cert_issuer` varchar(256) DEFAULT NULL,
+            `user_fullname` varchar(255) NOT NULL DEFAULT '',
+            `assigned` datetime NOT NULL,
+            `identifier` varchar(255) NOT NULL DEFAULT '',
+            `expires` datetime DEFAULT NULL,
+            PRIMARY KEY (`id`)
+        ) $tbl_options");        
+        
         // tc attendance tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
             `id` int(11) NOT NULL DEFAULT '0',

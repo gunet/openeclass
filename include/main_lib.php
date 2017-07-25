@@ -104,6 +104,7 @@ define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
+define('MODULE_ID_PROGRESS', 48);
 
 // user modules
 
@@ -163,6 +164,10 @@ define('GROUP', 1);
 define('EBOOK', 2);
 define('COMMON', 3);
 define('MYDOCS', 4);
+
+// path for certificates / badges templates
+define('CERT_TEMPLATE_PATH', "/courses/user_progress_data/cert_templates/");
+define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
 
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 10);
@@ -1244,6 +1249,37 @@ function resource_access($visible, $public) {
     } else {
         return FALSE;
     }
+}
+
+/**
+ * @brief check if a specific resource belongs to certificate / badge
+ * @global type $course_id
+ * @param type $module
+ * @param type $resource_id
+ * @return boolean
+ */
+function resource_belongs_to_progress_data($module, $resource_id) {
+         
+    global $course_id;
+    
+    // check if module belongs to certificate
+    $sql = Database::get()->querySingle("SELECT * FROM certificate_criterion JOIN certificate "
+                                            . "ON certificate.id = certificate_criterion.certificate "
+                                            . "WHERE course_id = ?d AND module = ?d AND resource = ?d",
+                                        $course_id, $module, $resource_id);
+    if ($sql) {
+        return true;
+    }
+    // check if module belongs to badge
+    $sql2 = Database::get()->querySingle("SELECT * FROM badge_criterion JOIN badge "
+                                            . "ON badge.id = badge_criterion.badge "
+                                            . "WHERE course_id = ?d AND module = ?d AND resource = ?d", 
+                                        $course_id, $module, $resource_id);
+    if ($sql2) {
+        return true;
+    }
+    
+    return false;
 }
 
 # Only languages defined below are available for selection in the UI

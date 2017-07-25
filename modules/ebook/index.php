@@ -92,20 +92,24 @@ if ($is_editor) {
 
     if (isset($_REQUEST['delete']) or isset($_POST['delete_x'])) {
         $id = $_REQUEST['delete'];
-        $r = Database::get()->querySingle("SELECT title FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $id);
-        if ($r) {
-            $title = $r->title;
-            Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
-                                         (SELECT id FROM ebook_section WHERE ebook_id = ?d)", $id);
-            Database::get()->query("DELETE FROM ebook_section WHERE ebook_id = ?d", $id);
-            Database::get()->query("DELETE FROM ebook WHERE id = ?d", $id);
-            $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
-            my_delete($basedir);
-            Database::get()->query("DELETE FROM document WHERE
-                                 subsystem = " . EBOOK . " AND
-                                 subsystem_id = ?d AND
-                                 course_id = ?d", $id, $course_id);
-            $tool_content .= "<div class='alert alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
+        if (!resource_belongs_to_progress_data(MODULE_ID_EBOOK, $id)) {
+            $r = Database::get()->querySingle("SELECT title FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $id);
+            if ($r) {
+                $title = $r->title;
+                Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
+                                             (SELECT id FROM ebook_section WHERE ebook_id = ?d)", $id);
+                Database::get()->query("DELETE FROM ebook_section WHERE ebook_id = ?d", $id);
+                Database::get()->query("DELETE FROM ebook WHERE id = ?d", $id);
+                $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
+                my_delete($basedir);
+                Database::get()->query("DELETE FROM document WHERE
+                                     subsystem = " . EBOOK . " AND
+                                     subsystem_id = ?d AND
+                                     course_id = ?d", $id, $course_id);
+                $tool_content .= "<div class='alert alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
+            } else {
+                Session::Messages($langResourceBelongsToCert, "alert-warning");
+            }
         }
     } elseif (isset($_GET['create'])) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langEBook);
@@ -148,9 +152,13 @@ if ($is_editor) {
             </form>
         </div>";
     } elseif (isset($_GET['vis'])) {
-        Database::get()->query("UPDATE ebook SET visible = NOT visible
+        if (!resource_belongs_to_progress_data(MODULE_ID_EBOOK, $_GET['vis'])) {
+            Database::get()->query("UPDATE ebook SET visible = NOT visible
                                  WHERE course_id = ?d AND
                                        id = ?d", $course_id, $_GET['vis']);
+        } else {
+            Session::Messages($langResourceBelongsToCert, "alert-warning");
+        }
     }
 }
 

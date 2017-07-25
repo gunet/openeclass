@@ -142,12 +142,15 @@ if ($is_editor) {
         switch ($_REQUEST['cmd']) {
             // DELETE COMMAND
             case "delete" :
-                $lp_name = deleteLearningPath($_GET['del_path_id']);
-                Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
-                Session::Messages($langLearnPathDeleted, 'alert-success');
-                redirect_to_home_page('modules/learnPath/?course=' . $course_code);
+                if (!resource_belongs_to_progress_data(MODULE_ID_LP, $_GET['del_path_id'])) {
+                    $lp_name = deleteLearningPath($_GET['del_path_id']);
+                    Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
+                    Session::Messages($langLearnPathDeleted, 'alert-success');
+                    redirect_to_home_page('modules/learnPath/?course=' . $course_code);
+                } else {
+                    $tool_content .= "<div class='alert alert-warning'>$langResourceBelongsToCert</div>";
+                }
                 break;
-
             // ACCESSIBILITY COMMAND
             case "mkBlock" :
             case "mkUnblock" :
@@ -161,11 +164,15 @@ if ($is_editor) {
             case "mkVisibl" :
             case "mkInvisibl" :
                 $visibility = ($_REQUEST['cmd'] == "mkVisibl") ? 1 : 0;
-                Database::get()->query("UPDATE `lp_learnPath`
-                    SET `visible` = ?d
-                    WHERE `learnPath_id` = ?d
-                    AND `visible` != ?d
-                    AND `course_id` = ?d", $visibility, $_GET['visibility_path_id'], $visibility, $course_id);
+                if (($_REQUEST['cmd'] == "mkInvisibl") and resource_belongs_to_progress_data(MODULE_ID_LP, $_GET['visibility_path_id'])) {
+                    $tool_content .= "<div class='alert alert-warning'>$langResourceBelongsToCert</div>";
+                } else {
+                    Database::get()->query("UPDATE `lp_learnPath`
+                        SET `visible` = ?d
+                        WHERE `learnPath_id` = ?d
+                        AND `visible` != ?d
+                        AND `course_id` = ?d", $visibility, $_GET['visibility_path_id'], $visibility, $course_id);
+                }
                 break;
             // CREATE COMMAND
             case "create" :                

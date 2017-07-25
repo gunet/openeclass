@@ -512,6 +512,11 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/commondocs/index.php');
     mkdir_try('video');
     touch_try('video/index.php');
+    mkdir_try('courses/user_progress_data');
+    mkdir_try('courses/user_progress_data/cert_templates');
+    touch_try('courses/user_progress_data/cert_templates/index.php');
+    mkdir_try('courses/user_progress_data/badge_templates');
+    touch_try('courses/user_progress_data/badge_templates/index.php');
     mkdir_try('courses/eportfolio');
     touch_try('courses/eportfolio/index.php');
     mkdir_try('courses/eportfolio/userbios');

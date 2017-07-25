@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.5
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -423,6 +423,7 @@ $modules = array(
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
     MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'conference'),
+    MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-trophy'),
     MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap')
 );
 // ----------------------------------------
@@ -525,6 +526,7 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_GRADEBOOK . ",
                                                 " . MODULE_ID_ATTENDANCE . ",
                                                 " . MODULE_ID_MINDMAP . ",
+                                                " . MODULE_ID_PROGRESS . ",
                                                 " . MODULE_ID_LP . ")", $course_id);
     } elseif ($is_editor) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module

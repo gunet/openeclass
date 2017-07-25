@@ -108,6 +108,7 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_ATTENDANCE . ",
                                           " . MODULE_ID_GRADEBOOK . ",
                                           " . MODULE_ID_MINDMAP . ",
+                                          " . MODULE_ID_PROGRESS . ",
                                           " . MODULE_ID_LP . ") AND
                         module_id NOT IN (SELECT module_id FROM module_disable)";
             if (!check_guest()) {
@@ -540,6 +541,10 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langDisableModules']);
         array_push($sideMenuLink, "../admin/modules.php");
         array_push($sideMenuImg, "fa-caret-right");
+        
+        array_push($sideMenuText, $GLOBALS['langCertBadge']);
+        array_push($sideMenuLink, '../admin/certbadge.php');
+        array_push($sideMenuImg, 'fa-caret-right');
         
         array_push($sideMenuText, $GLOBALS['langActivityCourse']);
         array_push($sideMenuLink, '../admin/activity.php');
