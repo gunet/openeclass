@@ -3641,10 +3641,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
         }
         
-        if (!DBHelper::fieldExists('assignment', 'password')) {
-            Database::get()->query("ALTER TABLE `assignment`
-                ADD `ip_lock` TEXT,
-                ADD `password_lock` VARCHAR(255)");
+        if (!DBHelper::fieldExists('assignment', 'password_lock')) {
+            Database::get()->query("ALTER TABLE `assignment` ADD `password_lock` VARCHAR(255)");
+        }
+        
+        if (!DBHelper::fieldExists('assignment', 'ip_lock')) {
+            Database::get()->query("ALTER TABLE `assignment` ADD `ip_lock` TEXT");
         }
         
         // Course Category tables
@@ -3796,7 +3798,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`badge_criterion`) references `badge_criterion`(`id`)
         ) $tbl_options");
                 
-        Database::get()->query("CREATE TABLE `certified_users` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certified_users` (
             `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
             `course_title` varchar(255) NOT NULL DEFAULT '',
             `cert_title` varchar(255) NOT NULL DEFAULT '',
