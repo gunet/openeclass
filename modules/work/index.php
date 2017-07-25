@@ -592,10 +592,12 @@ function ipORcidr($field, $value, array $params) {
  * @global type $langFormErrors
  * @global type $langNewAssignSuccess
  * @global type $langScales
+ * @global type $langGeneralError
+ * @global type $langErrorCreatingDirectory
  * @return type
  */
 function add_assignment() {
-    global $tool_content, $workPath, $course_id, $uid, $langTheField, $m, $langTitle,
+    global $workPath, $course_id, $uid, $langTheField, $m, $langTitle, $langErrorCreatingDirectory, $langGeneralError,
         $course_code, $langFormErrors, $langNewAssignSuccess, $langScales, $langGradeRubrics, $langIPInvalid;
 
     $v = new Valitron\Validator($_POST);
@@ -632,11 +634,11 @@ function add_assignment() {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
         }
-		elseif (isset($_POST['rubric'])) {
+        elseif (isset($_POST['rubric'])) {
          //   $max_grade = max_grade_from_scale($_POST['rubric']);
             $grading_scale_id = $_POST['rubric'];
         }
-		else {
+        else {
             $max_grade = $_POST['max_grade'];
             $grading_scale_id = 0;
         }
