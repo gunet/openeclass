@@ -963,6 +963,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `active` CHAR(1) NOT NULL DEFAULT '1',
     `secret_directory` VARCHAR(30) NOT NULL,
     `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
+	`grading_type` TINYINT NOT NULL DEFAULT '0',
     `max_grade` FLOAT DEFAULT '10' NOT NULL,
     `grading_scale_id` INT(11) NOT NULL DEFAULT '0',
     `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,

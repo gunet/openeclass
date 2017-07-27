@@ -46,6 +46,7 @@ if (isset($_POST['submitRubric'])) {
     $v = new Valitron\Validator($_POST);
 	$v->rule('required', array('name'));
     $v->rule('required', array('title'));
+	$v->rule('required', array('scale_item_value'));
     $v->labels(array(
         'title' => "$langTheField $langTitle",
         'max_grade' => "$langTheField $m[max_grade]"
@@ -179,6 +180,16 @@ if (isset($_GET['rubric_id'])) {
                         '                    </tr>'+
                         '                </thead>'+
                         '                <tbody>'+
+						'					<tr>'+
+						'						<td class=\'form-group\'>'+
+						'							<input type=\'text\' name=\'scale_item_name['+j+'][]\' class=\'form-control\' value=\'\' required>'+
+						'						</td>'+
+						'						<td class=\'form-group\'>'+
+						'							<input type=\'number\' name=\'scale_item_value['+j+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
+						'						</td>'+
+						'						<td class=\'text-center\'>'+
+						'						</td>'+
+						'					</tr>'+				
                         '                </tbody>'+
                         '            </table>'+
                         '        </div>'+
@@ -250,17 +261,25 @@ if (isset($_GET['rubric_id'])) {
 							</thead>
 							<tbody>";
 								if(is_array($title['crit_scales']))
+								$i=0;
 								foreach ($title['crit_scales'] as $key => $scale) {
 								$cc++;
-									$crit_rows .= "
-									<tr>
-										<td class='form-group'><input name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required='".($rubric_used ? ' disabled' : '')."' type='text'>
-										</td>
-										<td class='form-group'><input name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required='".($rubric_used ? ' disabled' : '')."' type='number'>
-										</td>
-										<td class='text-center'><a href='#' class='removeScale' id='remScale$cc'><span class='fa fa-times' style='color:red'></span></a></td>
-									</tr>";
-								}	
+										$crit_rows .= "
+										<tr>
+											<td class='form-group'><input name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required='".($rubric_used ? ' disabled' : '')."' type='text'>
+											</td>
+											<td class='form-group'><input name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required='".($rubric_used ? ' disabled' : '')."' type='number'>
+											</td>";
+									if($i==0){
+										$crit_rows .= "<td class='text-center'></td>";
+									}
+									else{
+										$crit_rows .= "<td class='text-center'><a href='#' class='removeScale' id='remScale$cc$i'><span class='fa fa-times' style='color:red'></span></a>
+											</td>";
+									}
+									$crit_rows .= "</tr>";
+								$i++;
+								}
 			$crit_rows .= "</tbody>
 						</table>
 					</div>
@@ -334,7 +353,17 @@ if (isset($_GET['rubric_id'])) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            $scale_rows
+											<tr>
+												<td class='form-group'>
+													<input type='text' name='scale_item_name[0][]' class='form-control' value='' required>
+												</td>
+												<td class='form-group'>
+													<input type='number' name='scale_item_value[0][]' class='form-control' value='' min='0' required>
+												</td>
+												<td class='text-center'>
+													
+												</td>
+											</tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -348,9 +377,9 @@ if (isset($_GET['rubric_id'])) {
 			}
 		$tool_content .= "  </div>";
 	}
-	
-	 $tool_content .= "
-						<div id='inserthere' class=''>
+	$opt1 = $rubric_data->preview_rubric;
+	$opt2 = $rubric_data->points_to_graded;
+	 $tool_content .= "<div id='inserthere' class=''>
 							<div class='form-group'>
 								<a class='btn btn-xs btn-success margin-top-thin' id='addCriteria'>$langAddRubricCriteria</a>
 							</div>
@@ -361,13 +390,13 @@ if (isset($_GET['rubric_id'])) {
 							<table id='rubric_opts'> 
 								<tr class='title1'>
 									<td colspan='2'>
-										<input type='checkbox' id='user_button0' name='options0' checked='1' />
+										<input type='checkbox' id='user_button0' name='options0' checked='$opt1' />
 										$langRubricOption1
 									</td>
 								</tr>
 								<tr class='title1'>
 									<td colspan='2'>
-										<input type='checkbox' id='user_button1' name='options1' checked='1' />
+										<input type='checkbox' id='user_button1' name='options1' checked='$opt2' />
 										$langRubricOption5
 									</td>
 								</tr>
