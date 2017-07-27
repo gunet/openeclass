@@ -39,6 +39,8 @@ require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
+doc_init();
+
 $action = new action();
 $action->record(MODULE_ID_UNITS);
 

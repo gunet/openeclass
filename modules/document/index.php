@@ -53,6 +53,8 @@ require_once 'include/course_settings.php';
 $require_help = true;
 $helpTopic = 'documents';
 
+doc_init();
+
 // Used to check for quotas
 $diskUsed = dir_total_space($basedir);
 

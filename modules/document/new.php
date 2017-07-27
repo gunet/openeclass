@@ -31,6 +31,8 @@ require_once "../../include/baseTheme.php";
 require_once "modules/document/doc_init.php";
 require_once 'include/course_settings.php';
 
+doc_init();
+
 if ($subsystem == MAIN and get_config('enable_docs_public_write') and
     setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE)) {
         $can_upload = true;

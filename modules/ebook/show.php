@@ -65,11 +65,14 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/progress/ViewingEvent.php';
 
+doc_init();
 if ($not_found) {
     not_found($uri);
 }
 
+triggerGame($ebook_id);
 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {
@@ -310,4 +313,17 @@ function send_file_by_url_file_path($file_path, $initial_path = '') {
         not_found($file_path);
     }
     exit;
+}
+
+function triggerGame($ebookId) {
+    global $course_id, $uid;
+    
+    $eventData = new stdClass();
+    $eventData->courseId = $course_id;
+    $eventData->uid = $uid;
+    $eventData->activityType = ViewingEvent::EBOOK_ACTIVITY;
+    $eventData->module = MODULE_ID_EBOOK;
+    $eventData->resource = intval($ebookId);
+    
+    ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 }

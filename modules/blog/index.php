@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
 * E-learning and Course Management System
 * ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
+* Copyright 2003-2017  Greek Universities Network - GUnet
 * A full copyright notice can be read in "/info/copyright.txt".
 * For a full list of contributors, see "credits.txt".
 *
@@ -37,6 +37,7 @@ require_once 'modules/blog/class.blog.php';
 require_once 'modules/blog/class.blogpost.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
+require_once 'modules/progress/BlogEvent.php';
 
 if ($blog_type == 'course_blog') {
     $user_id = 0;
@@ -321,6 +322,7 @@ if ($action == "delPost") {
         if ($allow_to_edit) {
             if($post->delete()) {
                 Session::Messages($langBlogPostDelSucc, 'alert-success');
+                triggerGame($course_id, $uid, BlogEvent::DELPOST);
             } else {
                 Session::Messages($langBlogPostDelFail);
             }
@@ -501,6 +503,7 @@ if ($action == "savePost") {
             }
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id, $commenting)) {
                 Session::Messages($langBlogPostSaveSucc, 'alert-success');
+                triggerGame($course_id, $uid, BlogEvent::NEWPOST);
             } else {
                 Session::Messages($langBlogPostSaveFail);
             }
@@ -758,4 +761,14 @@ if ($blog_type == 'course_blog') {
     draw($tool_content, 2, null, $head_content);
 } elseif ($blog_type == 'perso_blog') {
     draw($tool_content, 1, null, $head_content);
+}
+
+function triggerGame($courseId, $uid, $eventName) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = BlogEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_BLOG;
+    
+    BlogEvent::trigger($eventName, $eventData);
 }

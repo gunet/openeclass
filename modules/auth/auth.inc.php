@@ -700,6 +700,7 @@ function process_login() {
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                     VALUES (?d, ?s, NOW(), 'LOGIN')", $_SESSION['uid'], $ip);
             $session->setLoginTimestamp();
+            triggerGame($_SESSION['uid']);
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
@@ -947,6 +948,7 @@ function hybridauth_login() {
     } else {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
                 . "VALUES (?d, ?s, NOW(), 'LOGIN')", $_SESSION['uid'], $ip);
+        triggerGame($_SESSION['uid']);
         if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
             $_SESSION['mail_verification_required'] = 1;
@@ -1380,6 +1382,7 @@ function shib_cas_login($type) {
                     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')",
                     $_SESSION['uid'], Log::get_client_ip());
     $session->setLoginTimestamp();
+    triggerGame($_SESSION['uid']);
     if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
         $_SESSION['mail_verification_required'] = 1;
@@ -1596,4 +1599,14 @@ function deny_access() {
         Session::Messages($langRegistrationDenied, 'alert-warning');
         redirect_to_home_page();
     }
+}
+
+
+function triggerGame($uid) {
+    require_once 'modules/progress/CourseParticipationEvent.php';
+    $eventData = new stdClass();
+    $eventData->uid = $uid;
+    $eventData->activityType = CourseParticipationEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_USAGE;
+    CourseParticipationEvent::trigger(CourseParticipationEvent::LOGGEDIN, $eventData);
 }

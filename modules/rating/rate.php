@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
 * E-learning and Course Management System
 * ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
+* Copyright 2003-2017  Greek Universities Network - GUnet
 * A full copyright notice can be read in "/info/copyright.txt".
 * For a full list of contributors, see "credits.txt".
 *
@@ -23,6 +23,7 @@ $require_current_course = TRUE;
 require_once 'class.rating.php';
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
+require_once 'modules/progress/RatingEvent.php';
 
 $is_link = false;
 $is_wallpost = false;
@@ -52,6 +53,7 @@ if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
         $rating = new Rating($widget, $rtype, $rid);
         $had_rated = $rating->userHasRated($uid);
         $action = $rating->castRating($value, $uid);
+        triggerGame($course_id, $uid, $rateEventActivity);
         
         if ($widget == 'up_down') {
             $up_value = $rating->getUpRating();
@@ -116,5 +118,17 @@ if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
         }
         
         echo json_encode($response);
+    }
+}
+
+function triggerGame($courseId, $uid, $rateEventActivity) {
+    if ($rateEventActivity !== null) {
+        $eventData = new stdClass();
+        $eventData->courseId = $courseId;
+        $eventData->uid = $uid;
+        $eventData->activityType = $rateEventActivity;
+        $eventData->module = MODULE_ID_RATING;
+
+        RatingEvent::trigger(RatingEvent::RATECAST, $eventData);
     }
 }

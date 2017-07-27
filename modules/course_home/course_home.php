@@ -47,6 +47,7 @@ require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 
+doc_init();
 $tree = new Hierarchy();
 $course = new Course();
 $pageName = ''; // delete $pageName set in doc_init.php

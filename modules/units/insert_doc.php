@@ -22,24 +22,9 @@
 
 require_once 'modules/document/doc_init.php';
 require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/lib/fileManageLib.inc.php';
 
-/**
- * helper function to get a file path from get variable
- * @param string $name
- * @global array $_GET
- * @return string
- */
-function get_dir_path($name) {
-    if (isset($_GET[$name])) {
-        $path = q($_GET[$name]);
-        if ($path == '/' or $path == '\\') {
-            $path = '';
-        }
-    } else {
-        $path = '';
-    }
-    return $path;
-}
+doc_init();
 
 /**
  * list documents while inserting them in course unit

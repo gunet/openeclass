@@ -92,6 +92,7 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
             @unlink("$GLOBALS[workPath]/$row->file_path");
         }
         Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
+        triggerGame($row->course_id, $row->uid, $id);
         if ($GLOBALS['uid'] == $row->uid) {
             $return .= $m['deleted_work_by_user'];
         } else {
@@ -308,6 +309,15 @@ function cleanup_filename($f) {
     return preg_replace('{//}', '/', $f);
 }
 
+function triggerGame($courseId, $uid, $assignId) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = AssignmentEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_ASSIGN;
+    $eventData->resource = intval($assignId);
+    AssignmentEvent::trigger(AssignmentEvent::UPDGRADE, $eventData);
+}
 
 /**
  * @brief Export assignment's grades to CSV file

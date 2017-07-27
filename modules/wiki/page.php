@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,12 +31,6 @@
   original file: page Revision: 1.61.2.4
 
   Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
   ==============================================================================
  */
 $tlabelReq = 'CLWIKI__';
@@ -82,6 +76,7 @@ require_once "modules/wiki/lib/class.wikisearchengine.php";
 require_once 'modules/wiki/lib/class.lockmanager.php';
 require_once 'modules/wiki/lib/lib.requestfilter.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
+require_once 'modules/progress/WikiEvent.php';
 
 // set request variables
 $wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
@@ -402,6 +397,7 @@ switch ($action) {
                     } else {
                         $message = $langWikiPageSaved;
                         $style = 'success';
+                        triggerGame($course_id, $uid, WikiEvent::NEWPAGE);
                     }
                     $action = 'show';
                 }
@@ -779,6 +775,7 @@ switch ($action) {
                      $wikiPage->loadPage($wiki_title);
                      if ($wikiPage->delete()) {
                          Session::Messages($langWikiPageDeleted, 'alert-success');
+                         triggerGame($course_id, $uid, WikiEvent::DELPAGE);
                          redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                      } else {
                          Session::Messages($langWikiDeletePageError, 'alert-danger');
@@ -1087,3 +1084,12 @@ else {
     draw($tool_content, 2, null, $head_content);
 }
 
+function triggerGame($courseId, $uid, $eventName) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = WikiEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_WIKI;
+
+    WikiEvent::trigger($eventName, $eventData);
+}

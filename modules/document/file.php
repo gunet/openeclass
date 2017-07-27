@@ -77,6 +77,9 @@ $guest_allowed = true;
 require_once '../../include/init.php';
 require_once 'include/action.php';
 require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'modules/progress/ViewingEvent.php';
+require_once 'modules/document/doc_init.php';
 
 if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {
     // check user's access to cours
@@ -94,9 +97,9 @@ if (defined('MY_DOCUMENTS')) {
     // temporary change, uid is used to get the full path in doc_init
     $uid = $mydocs_uid;
 }
-require_once 'doc_init.php';
+
+doc_init();
 $uid = $session->user_id;
-require_once 'include/lib/forcedownload.php';
 
 if (defined('GROUP_DOCUMENTS')) {
     if (!$uid) {
@@ -121,6 +124,7 @@ if ($file_info->extra_path) {
     $disk_path = common_doc_path($file_info->extra_path, true);
     if (!$disk_path) {
         // external file URL
+        triggerGame($file_info->id);
         header("Location: $file_info->extra_path");
         exit;
     } elseif (!$common_doc_visible) {
@@ -157,6 +161,7 @@ if (file_exists($disk_path)) {
             unset($_SESSION['FILE_PHP__LP_MODE']);
             exit();
         }
+        triggerGame($file_info->id);
         send_file_to_client($disk_path, $file_info->filename);
     } else {
         require_once 'include/lib/fileDisplayLib.inc.php';
@@ -169,6 +174,7 @@ if (file_exists($disk_path)) {
         $token = token_generate($file_info->path, true);
         $mediaAccess = $mediaPath . '?token=' . $token;
 
+        triggerGame($file_info->id);
         echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, $mediaPath);
         exit();
     }
@@ -215,4 +221,17 @@ function check_cours_access() {
             }
     }
     exit;
+}
+
+function triggerGame($documentId) {
+    global $course_id, $uid;
+    
+    $eventData = new stdClass();
+    $eventData->courseId = $course_id;
+    $eventData->uid = $uid;
+    $eventData->activityType = ViewingEvent::DOCUMENT_ACTIVITY;
+    $eventData->module = MODULE_ID_DOCS;
+    $eventData->resource = intval($documentId);
+    
+    ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 }

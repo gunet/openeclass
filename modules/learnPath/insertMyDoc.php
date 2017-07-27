@@ -54,6 +54,7 @@ require_once 'modules/document/doc_init.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
+doc_init();
 ModalBoxHelper::loadModalBox(true);
 $head_content .= <<<EOF
 <script type='text/javascript'>

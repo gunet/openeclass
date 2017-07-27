@@ -25,6 +25,8 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'modules/document/doc_init.php';
+require_once 'include/log.class.php';
 
 $pageName = $langEBookCreate;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
@@ -55,9 +57,8 @@ if (!$is_editor) {
                                                     title = ?s"
             , $ebook_id, '1', $langSection.' 1');
     // Initialize document subsystem global variables
-    require_once 'modules/document/doc_init.php';
-    require_once 'include/log.class.php';
-
+    doc_init();
+    
     if (!make_dir($basedir)) {
         Database::get()->query("DELETE FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
         Session::Messages($langImpossible, 'alert-danger');

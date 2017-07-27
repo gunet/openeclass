@@ -29,6 +29,7 @@ include('exercise.lib.php');
 $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
+require_once 'game.php';
 
 $pageName = $langExercicesView;
 require_once 'include/lib/textLib.inc.php';
@@ -77,6 +78,7 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 $tmp = Database::get()->querySingle("SELECT COUNT(*) AS cnt, record_start_date FROM `exercise_user_record` WHERE eid = ?d AND uid= ?d AND record_end_date is NULL", $exerciseId, $uid);
 if ($tmp->cnt > 0) {	
     Database::get()->query("UPDATE `exercise_user_record` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = ?d AND uid = ?d AND record_end_date is NULL", $exerciseId, $uid);
+    triggerGame($course_id, $uid, $exerciseId);
 }
 
 $exerciseTitle = $objExercise->selectTitle();

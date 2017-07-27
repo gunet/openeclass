@@ -29,6 +29,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
+require_once 'game.php';
 
 $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
@@ -64,6 +65,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             SET total_score = total_score + ?f WHERE eurid = ?d",
             $grade, $eurid);
     }
+    $eur = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
+    triggerGame($course_id, $uid, $eur->eid);
     exit();
 }
 require_once 'include/lib/modalboxhelper.class.php';

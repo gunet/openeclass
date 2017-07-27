@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
 * E-learning and Course Management System
 * ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
+* Copyright 2003-2017  Greek Universities Network - GUnet
 * A full copyright notice can be read in "/info/copyright.txt".
 * For a full list of contributors, see "credits.txt".
 *
@@ -23,6 +23,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 require_once 'class.comment.php';
 require_once 'class.commenting.php';
+require_once 'modules/progress/CommentEvent.php';
 
 $wall_commenting = false;
 
@@ -70,6 +71,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                     </div>
                 </div>                    
                 ";
+                triggerGame($course_id, $uid, CommentEvent::NEWCOMMENT, $commentEventActivity, $comment->getRid());
             } else {
                 $response[0] = 'ERROR';
                 $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
@@ -86,6 +88,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 if ($comment->delete()) {
                     $response[0] = 'OK';
                     $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>"; 
+                    triggerGame($course_id, $uid, CommentEvent::DELCOMMENT, $commentEventActivity, $comment->getRid());
                 } else {
                     $response[0] = 'ERROR';
                     $response[1] = "<div class='alert alert-warning'>".$langCommentsDelFail."</div>";
@@ -137,5 +140,17 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
             $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
         }
         echo json_encode($response);
+    }
+}
+
+function triggerGame($courseId, $uid, $eventName, $commentEventActivity, $resourceId) {
+    if ($commentEventActivity !== null) {
+        $eventData = new stdClass();
+        $eventData->courseId = $courseId;
+        $eventData->uid = $uid;
+        $eventData->activityType = $commentEventActivity;
+        $eventData->module = MODULE_ID_COMMENTS;
+        $eventData->resource = $resourceId;
+        CommentEvent::trigger($eventName, $eventData);
     }
 }
