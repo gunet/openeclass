@@ -25,9 +25,9 @@
  */
 
 function doc_init() {
-    global $urlAppend, $course_id, $course_code, $webDir, $can_upload,
-        $is_editor, $is_admin, $navigation, $subsystem, $subsystem_id,
-        $group_id, $groupset, $base_url, $upload_target_url, $group_sql,
+    global $urlAppend, $course_id, $course_code, $webDir, $can_upload, $group_name, 
+        $is_editor, $is_admin, $navigation, $subsystem, $subsystem_id, $secret_directory,
+        $group_id, $groupset, $base_url, $upload_target_url, $group_sql, $is_member,
         $group_hidden_input, $basedir, $ebook_id, $uid, $session, $pageName;
 
     $can_upload = $is_editor || $is_admin;
