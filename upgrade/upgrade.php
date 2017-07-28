@@ -3639,12 +3639,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         
         if (!DBHelper::fieldExists('assignment', 'notification')) {
             Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
+        }                
+        if (!DBHelper::fieldExists('assignment', 'grading_type')) {
+            Database::get()->query("ALTER TABLE assignment ADD `grading_type` TINYINT NOT NULL DEFAULT '0' AFTER group_submissions");
         }
-        
         if (!DBHelper::fieldExists('assignment', 'password_lock')) {
             Database::get()->query("ALTER TABLE `assignment` ADD `password_lock` VARCHAR(255)");
-        }
-        
+        }        
         if (!DBHelper::fieldExists('assignment', 'ip_lock')) {
             Database::get()->query("ALTER TABLE `assignment` ADD `ip_lock` TEXT");
         }
