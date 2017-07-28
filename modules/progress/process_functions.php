@@ -513,7 +513,7 @@ function is_cert_visible($element, $element_id) {
  */
 function has_certificate_completed($uid, $element, $element_id) {
         
-    $sql = Database::get()->querySingle("SELECT completed FROM user_${element} WHERE $element = ?d AND user = ?d", $element_id, $uid);
+    $sql = Database::get()->querySingle("SELECT completed FROM user_${element} WHERE $element = ?d AND user = ?d", $element_id, $uid);    
     if ($sql) {
         if (!$sql->completed) {
             return false;

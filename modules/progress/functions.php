@@ -207,10 +207,7 @@ function display_badges() {
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $langConfirmDelete),
-                    array('title' => $langSee,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;preview=1",
-                        'icon' => 'fa-search')
+                        'confirm' => $langConfirmDelete)                    
                 ))
                 ."</div>
                                 </div>";
@@ -267,11 +264,11 @@ function display_course_completion() {
        
             $vis_status = $data->active ? "text-success" : "text-danger";
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
-            $status_msg = $data->active ? $langActive : $langInactive;            
+            $status_msg = $data->active ? $langActive : $langInactive;
             $tool_content .= "
                         <div class='row res-table-row'>
                             <div class='col-sm-2'>
-                                <i class='fa fa-circle-o-notch fa-3x' aria-hidden='true'></i>
+                                <i class='fa fa-certificate fa-3x' aria-hidden='true'></i>
                             </div>
                             <div class='col-sm-9'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
@@ -1992,10 +1989,12 @@ function display_user_progress_details($element, $element_id, $user_id) {
     $element_title = get_cert_title($element, $element_id);
 
     $resource_data = array();
-
-    // create certification identifier if user has completed certificate
-    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {        
+    $cert_public_link = '';    
+    // create certification identifier and public link if user has completed certificate
+    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {
         register_certified_user($element, $element_id, $element_title, $user_id);
+        $cert_public_link = "<div class='pn-info-title-sct'>$langCertAddress</div>
+                            <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
     }
     
     // certificate
@@ -2049,8 +2048,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                 <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
                                 <div class='pn-info-title-sct'>$langpublisher</div>
                                 <div class='pn-info-text-sct'>" . get_cert_issuer($element_id) . "</div>
-                                <div class='pn-info-title-sct'>$langCertAddress</div>
-                                <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>
+                                $cert_public_link
                             </div>
                         </div>
                     </div>
