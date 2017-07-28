@@ -373,7 +373,7 @@ if ($is_editor) {
         certificate_settings('badge');
         $display = FALSE;
     } elseif (isset($_GET['newcc'])) { // create course completion (special type of badge)          
-        add_certificate('badge', $langCourseCompletion, '', $langCourseCompletionMessage, '', q(get_config('institution')), 0, -1);
+        add_certificate('badge', $langCourseCompletion, '', $langCourseCompletionMessage, '', q(get_config('institution')), 0, -1, null);
         Session::Messages("$langCourseCompletionCreated", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
         $display = FALSE;
@@ -440,8 +440,7 @@ if (isset($display) and $display == TRUE) {
             }
         } else {
             // display certificate (student view)
-            student_view_progress();
-            exit;
+            student_view_progress();            
         }
     }
 }

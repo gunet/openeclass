@@ -3280,3 +3280,136 @@ td {
         }  
     }
 }
+
+// progress (aka gamification)
+.badge-container
+{
+    font-family: 'Open Sans', sans-serif;
+}
+.badge-container
+{
+    padding-bottom: 40px;
+}
+
+h4
+{
+    font-family: Roboto;
+}
+a{
+    color: inherit;
+}
+a:hover
+{
+    text-decoration: none;
+    color: inherit;
+}
+
+.certificate_panel
+{
+    width: 348px; /* original was max-width: 300px; */
+    height: 198px; /* original was height: 150px; */
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 1px;
+    background-color: #fafafa;
+    transition: box-shadow 0.1s;
+    box-shadow: 0px 0px 5px 2px #BBBBBB;
+    border: 4px solid #FFFFFF;
+    position: relative;
+    font-family: Calibri;
+    float: left;
+    margin: 20px;
+}
+.certificate_panel:hover
+{
+    box-shadow: 0px 0px 10px 6px #d9d9d9;
+}
+
+.certificate_panel_title
+{
+    font-size: 20px;
+    height:60%;
+    font-weight: 600;
+}
+
+.certificate_panel_date
+{
+    font-size: 17px;
+}
+
+.certificate_panel_viewdetails
+{
+    font-size: 15px;
+    position: absolute;
+    bottom: 15px;
+}
+
+.certificate_panel_state
+{
+    position: absolute;
+    top:-20px;
+    right:-20px;
+    font-size:20px;
+    padding: 10px;
+    width: 40px; /* original was width: 20px; */
+    height: 40px; /* original was height: 20px; */
+    box-shadow: 0px 3px 4px 1px #999999;
+    border-radius: 30px;
+    background: #FFFFFF;
+}
+
+.certificate_panel_state .state_success
+{
+    font-size: 2em;
+    position: absolute;
+    left: 3px;
+    bottom: 0px;
+    color: #11D888;
+}
+
+.certificate_panel_state .state_waiting
+{
+    position: absolute;
+    font-size: 1.1em;
+    bottom: 7px;
+    margin-left: 1px;
+    color: #F73B51;
+}
+
+.certificate_panel_badge
+{
+    position: absolute;
+    bottom:0;
+    right:0px
+}
+
+.certificate_panel_badge img
+{
+    width: 120px;
+    top: 30px;
+    left: 10px;
+    position: relative;
+}
+
+.certificate_panel_badge .badge_waiting
+{
+    opacity: 0.1;
+}
+
+.certificate_panel_percentage
+{
+    position: absolute;
+    bottom:15px;
+    right:15px;
+    font-size:20px;
+    padding: 10px 10px;
+    width: 72px; /* original was width: 40px; */
+    height: 72px; /* original was height: 40px;*/
+    border: 6px solid #AAAAAA;
+    border-radius: 40px;
+    background: #FFFFFF;
+    color: #AAAAAA;
+    line-height: 38px;
+    font-weight: 600;
+    text-align: center;
+}
