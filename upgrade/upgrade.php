@@ -3516,7 +3516,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // upgrade table `assignment`
         if (!DBHelper::fieldExists('assignment', 'notification')) {
             Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
-        }        
+        }
+        if (!DBHelper::fieldExists('assignment', 'grading_type')) {
+            Database::get()->query("ALTER TABLE assignment ADD `grading_type` TINYINT NOT NULL DEFAULT '0' AFTER group_submissions");
+        }
 
         // plagiarism tool table
         if (!DBHelper::tableExists('ext_plag_connection')) {
