@@ -3410,13 +3410,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-    if (version_compare($oldversion, '3.6', '<')) {
-        if (!DBHelper::fieldExists('password', 'assignment')) {
-            Database::get()->query("ALTER TABLE `assignment`
-                ADD `ip_lock` TEXT,
-                ADD `password_lock` VARCHAR(255)");
-        }
-
+    if (version_compare($oldversion, '3.6', '<')) {        
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `order` INT(11) NOT NULL DEFAULT 0,
@@ -3519,6 +3513,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (!DBHelper::fieldExists('assignment', 'grading_type')) {
             Database::get()->query("ALTER TABLE assignment ADD `grading_type` TINYINT NOT NULL DEFAULT '0' AFTER group_submissions");
+        }
+        if (!DBHelper::fieldExists('assignment', 'password_lock')) {
+            Database::get()->query("ALTER TABLE `assignment` ADD `password_lock` VARCHAR(255)");
+        }
+        if (!DBHelper::fieldExists('assignment', 'ip_lock')) {
+            Database::get()->query("ALTER TABLE `assignment` ADD `ip_lock` TEXT");
         }
 
         // plagiarism tool table
