@@ -3520,7 +3520,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE assignment ADD `grading_type` TINYINT NOT NULL DEFAULT '0' AFTER group_submissions");
         }
         if (!DBHelper::fieldExists('assignment', 'password_lock')) {
-            Database::get()->query("ALTER TABLE `assignment` ADD `password_lock` VARCHAR(255)");
+            Database::get()->query("ALTER TABLE `assignment` ADD `password_lock` VARCHAR(255) NOT NULL DEFAULT ''");
         }
         if (!DBHelper::fieldExists('assignment', 'ip_lock')) {
             Database::get()->query("ALTER TABLE `assignment` ADD `ip_lock` TEXT");
