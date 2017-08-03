@@ -48,10 +48,6 @@ function display_certificates() {
 
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
-    
-    if (count($sql_cer) == 0) { // If no certificates
-        $tool_content .= "<div class='alert alert-info'>$langNoCertificates <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1'>$langHere</a>.</div>";
-    } else { // If there are certificates
 
         $tool_content .= "
             <div class='row'>
@@ -69,6 +65,9 @@ function display_certificates() {
                                 </div>
                             </div>
                             <div class='res-table-wrapper'>";
+        if (count($sql_cer) == 0) { // If no certificates
+        $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
+    } else { // If there are certificates
 
                             foreach ($sql_cer as $data) {
 
@@ -111,6 +110,7 @@ function display_certificates() {
                                 </div>";
 
                             }
+    }
 
                             $tool_content .= "
                             </div>
@@ -119,7 +119,7 @@ function display_certificates() {
                 </div>
             </div>
         ";
-    }
+    
 }
 
 
@@ -156,9 +156,6 @@ function display_badges() {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0 ", $course_id);
     }
     
-    if (count($sql_cer) == 0) { // no badges
-        $tool_content .= "<div class='alert alert-info'>$langNoBadges <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1'>$langHere</a>.</div>";
-    } else {
 
         $tool_content .= "
             <div class='row'>
@@ -176,6 +173,10 @@ function display_badges() {
                                 </div>
                             </div>
                             <div class='res-table-wrapper'>";
+        
+        if (count($sql_cer) == 0) { // no badges
+        $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
+    } else {
 
         foreach ($sql_cer as $data) {
             $vis_status = $data->active ? "text-success" : "text-danger";
@@ -213,6 +214,7 @@ function display_badges() {
                                 </div>";
 
         }
+    }
 
         $tool_content .= "
                             </div>
@@ -221,7 +223,7 @@ function display_badges() {
                 </div>
             </div>
         ";
-    }
+    
 }
 
 /**
