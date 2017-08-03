@@ -2769,22 +2769,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
             FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE) $tbl_options");
 
-        $db->query("CREATE TABLE IF NOT EXISTS `widget` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `class` varchar(400) NOT NULL) $tbl_options");
-        $db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `widget_id` int(11) unsigned NOT NULL,
-                `widget_area_id` int(11) NOT NULL,
-                `options` text NOT NULL,
-                `position` int(3) NOT NULL,
-                `user_id` int(11) NULL,
-                `course_id` int(11) NULL,
-                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
-
-
         // Abuse report table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3426,7 +3410,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // fix wrong entries in statistics
         Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
-        
+
         // hierarchy extra fields
         if (!DBHelper::fieldExists('hierarchy', 'description') or (!DBHelper::fieldExists('hierarchy', 'visible'))) {
             Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
@@ -3464,7 +3448,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         END IF;
                     END");
         }
-        
+
         // fix invalid agenda durations
         Database::get()->queryFunc("SELECT DISTINCT duration FROM agenda WHERE duration NOT LIKE '%:%'",
             function ($item) {
@@ -3483,10 +3467,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
                 Database::get()->query('UPDATE agenda
                     SET duration = ?s WHERE duration = ?s', $fixed, $d);
-            });        
+            });
     }
-    
-    
+
+
     if (version_compare($oldversion, '3.5.1', '<')) {
         // FAQ, E-book and learning path unique indexes
         if (!DBHelper::indexExists('faq', 'faq_order')) {
@@ -3502,17 +3486,17 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 ADD UNIQUE KEY `learnPath_order` (`course_id`, `rank`)');
         }
     }
-    
+
     if (version_compare($oldversion, '3.6', '<')) {
 
-        updateInfo(-1, sprintf($langUpgForVersion, '3.6'));                
+        updateInfo(-1, sprintf($langUpgForVersion, '3.6'));
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `order` INT(11) NOT NULL DEFAULT 0,
             `heading` TEXT NOT NULL,
             `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_content` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `course_id` INT(11) NOT NULL,
@@ -3520,9 +3504,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `content` TEXT NOT NULL,
             FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
             FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
-            UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");        
-        
-        
+            UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");
+
+
         //eportfolio tables and data
         if (!DBHelper::tableExists('eportfolio_fields')) {
             Database::get()->query("CREATE TABLE `eportfolio_fields` (
@@ -3601,7 +3585,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('user', 'public_blog')) {
             Database::get()->query("ALTER TABLE `user` ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
         }
-                
+
         // bbb attendance tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
                         `id` int(11) NOT NULL DEFAULT '0',
@@ -3625,31 +3609,31 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         KEY `userid` (`bbbuserid`),
                         KEY `fullName` (`fullName`)
                     ) $tbl_options");
-                        
-        // upgrade assignments        
+
+        // upgrade assignments
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
         }
-        
+
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filename')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filename VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
         }
-        
+
         if (!DBHelper::fieldExists('assignment', 'notification')) {
             Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
-        }                
+        }
         if (!DBHelper::fieldExists('assignment', 'grading_type')) {
             Database::get()->query("ALTER TABLE assignment ADD `grading_type` TINYINT NOT NULL DEFAULT '0' AFTER group_submissions");
         }
         if (!DBHelper::fieldExists('assignment', 'password_lock')) {
             Database::get()->query("ALTER TABLE `assignment` ADD `password_lock` VARCHAR(255)");
-        }        
+        }
         if (!DBHelper::fieldExists('assignment', 'ip_lock')) {
             Database::get()->query("ALTER TABLE `assignment` ADD `ip_lock` TEXT");
         }
-        
+
         // Course Category tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `category` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3673,12 +3657,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `course_id` INT(11) NOT NULL REFERENCES course(id),
             `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
             ) $tbl_options");
-    }
-    
-    
-    if (version_compare($oldversion, '3.7', '<')) {
-        updateInfo(-1, sprintf($langUpgForVersion, '3.7'));
-    
+
         // Gamification Tables (aka certificate + badge)
         Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate_template` (
             `id` mediumint(8) not null auto_increment,
@@ -3726,9 +3705,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `expires` datetime,
             `bundle` int(11) not null default 0,
             index `badge_course` (`course_id`),
-            foreign key (`course_id`) references `course` (`id`)  
+            foreign key (`course_id`) references `course` (`id`)
           )");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate` (
           `id` int(11) not null auto_increment primary key,
           `user` int(11) not null,
@@ -3798,7 +3777,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`user`) references `user`(`id`),
           foreign key (`badge_criterion`) references `badge_criterion`(`id`)
         ) $tbl_options");
-                
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `certified_users` (
             `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
             `course_title` varchar(255) NOT NULL DEFAULT '',
@@ -3811,8 +3790,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `expires` datetime DEFAULT NULL,
             PRIMARY KEY (`id`)
         ) $tbl_options");
-
-            
 
         // tc attendance tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
@@ -3837,9 +3814,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 KEY `userid` (`bbbuserid`),
                 KEY `fullName` (`fullName`)
             ) $tbl_options");
-        
+
         // Rubric tables
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (            
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` VARCHAR(200) NOT NULL,
             `scales` text NOT NULL,
@@ -3847,7 +3824,26 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
             `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
             `course_id` int(11) NOT NULL)
-            $tbl_options");                
+            $tbl_options");
+    }
+
+    if (version_compare($oldversion, '4.0', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
+
+        $db->query("CREATE TABLE IF NOT EXISTS `widget` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `class` varchar(400) NOT NULL) $tbl_options");
+        $db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `widget_id` int(11) unsigned NOT NULL,
+                `widget_area_id` int(11) NOT NULL,
+                `options` text NOT NULL,
+                `position` int(3) NOT NULL,
+                `user_id` int(11) NULL,
+                `course_id` int(11) NULL,
+                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
     }
 
     // update eclass version
