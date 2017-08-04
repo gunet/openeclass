@@ -454,9 +454,7 @@ function display_activities($element, $id) {
             'secondary_btn_class' => 'btn-success btn-sm'
         ));
 
-    if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoActivCert</div>";
-    }
+    
     $tool_content .= "
             <div class='row'>
             <div class='col-xs-12'>
@@ -487,8 +485,9 @@ function display_activities($element, $id) {
                                     <i class='fa fa-cogs'></i>
                                 </div>
                             </div>";
-        
-    if (count($result) > 0) {
+    if (count($result) == 0) {
+        $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+    } else { 
         foreach ($result as $details) {
                 $resource_data = get_resource_details($element, $details->id);
                 $tool_content .= "
