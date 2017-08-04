@@ -670,7 +670,11 @@ function get_cert_percentage_completion($element, $element_id) {
     $data = Database::get()->querySingle("SELECT completed_criteria, total_criteria "
             . "FROM user_{$element} WHERE user = ?d AND $element = ?d", $uid, $element_id);
     
-    return round($data->completed_criteria / $data->total_criteria * 100, 2);
+    if (!$data) {
+        return 0;
+    } else {
+        return round($data->completed_criteria / $data->total_criteria * 100, 2);
+    }
 }
 
 /**

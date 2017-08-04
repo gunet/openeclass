@@ -184,11 +184,11 @@
                             $faded = ($badge->completed != 1) ? "faded" : '';
                         ?>
                         
-                        <div class="certificate_panel_badge_compact texct-center ">
-                            <a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}" style="display: inline-block; width: 100%">
+                        <div class="col-xs-6 col-sm-3">
+                            <a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}" style="display: block; width: 100%;">
                                 <img class="{{ $faded }} center-block" src="{{ $badge_template_path }}{{ $badge->filename }}">
-                                <p class="text-center" style="padding-top: 10px; font-size: larger; font-weight: bold;">
-                                    {{ $badge->title }}
+                                <p class="text-center" style="padding-top: 10px; font-size: larger;">
+                                    {{ ellipsize($badge->title, 40) }}
                                 </p>
                             @if ($badge->completed != 1)
                                 <div class="not_completed">
