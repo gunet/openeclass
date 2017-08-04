@@ -372,7 +372,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `document` (
     `subsystem_id` INT(11) DEFAULT NULL,
     `path` VARCHAR(255) NOT NULL,
     `extra_path` VARCHAR(255) NOT NULL DEFAULT '',
-    `filename` VARCHAR(255) NOT NULL,
+    `filename` VARCHAR(255) NOT NULL COLLATE utf8_bin,
     `visible` TINYINT(4) NOT NULL DEFAULT 1,
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `comment` TEXT,
@@ -940,7 +940,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pid` INT(11) NOT NULL DEFAULT 0,
-    `question_text` VARCHAR(250) NOT NULL DEFAULT '',
+    `question_text` TEXT NOT NULL,
     `qtype` tinyint(3) UNSIGNED NOT NULL,
     `q_position` INT(11) DEFAULT 1,
     `q_scale` INT(11) NULL DEFAULT NULL) $tbl_options");

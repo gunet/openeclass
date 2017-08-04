@@ -3562,7 +3562,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             ) $tbl_options");
 
         // Rubric tables
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (            
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` VARCHAR(200) NOT NULL,
             `scales` text NOT NULL,
@@ -3620,9 +3620,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `expires` datetime,
             `bundle` int(11) not null default 0,
             index `badge_course` (`course_id`),
-            foreign key (`course_id`) references `course` (`id`)  
+            foreign key (`course_id`) references `course` (`id`)
           )");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate` (
           `id` int(11) not null auto_increment primary key,
           `user` int(11) not null,
@@ -3692,7 +3692,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`user`) references `user`(`id`),
           foreign key (`badge_criterion`) references `badge_criterion`(`id`)
         ) $tbl_options");
-                
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `certified_users` (
             `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
             `course_title` varchar(255) NOT NULL DEFAULT '',
@@ -3704,8 +3704,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `identifier` varchar(255) NOT NULL DEFAULT '',
             `expires` datetime DEFAULT NULL,
             PRIMARY KEY (`id`)
-        ) $tbl_options");        
-        
+        ) $tbl_options");
+
         // tc attendance tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
             `id` int(11) NOT NULL DEFAULT '0',
@@ -3729,6 +3729,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 KEY `userid` (`bbbuserid`),
                 KEY `fullName` (`fullName`)
             ) $tbl_options");
+
+        Database::get()->query('ALTER TABLE poll_question
+                CHANGE question_text question_text TEXT NOT NULL');
+        Database::get()->query('ALTER TABLE document
+                CHANGE filename filename VARCHAR(255) NOT NULL COLLATE utf8_bin');
+
     }
 
     // update eclass version
