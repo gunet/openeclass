@@ -1876,7 +1876,7 @@ function student_view_progress() {
     // populate with data
     foreach ($iter as $key) {
         $gameQ = "SELECT a.*, b.title,"
-                . " b.description, b.active, b.created, b.id"
+                . " b.description, b.issuer, b.active, b.created, b.id"
                 . " FROM user_{$key} a "
                 . " JOIN {$key} b ON (a.{$key} = b.id) "
                 . " WHERE a.user = ?d AND b.course_id = ?d AND b.active = 1 AND b.bundle != -1 AND (b.expires IS NULL OR b.expires > NOW())";
