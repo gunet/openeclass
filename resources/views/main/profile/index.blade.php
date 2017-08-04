@@ -118,5 +118,108 @@
             </div>
         </div>
     </div>
+    
+    
+    <style>
+        .profile-name
+        {
+            font-size: larger;
+            font-weight: bold;
+            line-height: 3;
+        }
+        
+        .profile-content-panel
+        {
+            font-size: 14px;
+            margin: 25px 0;
+            padding: 25px;
+            background-color: #f5f5f5;
+        }
+        
+        .profile-content-panel-title
+        {
+            font-size: larger;
+            color: #888;
+            margin-bottom: 40px;
+        }
+    </style>
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="inner-heading clearfix">
+                        <button class="btn btn-primary btn-sm pull-right">Button</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div id='profile-avatar'>{!! $profile_img !!}</div>
+                            </div>
+                            <div class="col-xs8">
+                                <div class="profile-name">{{ $userdata->givenname }} {{ $userdata->surname }}</div>
+                                <div class='not_visible'><strong>{{ $userdata->username }}</strong></div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-sm-6">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="profile-content-panel">
+                                <div class="profile-content-panel-title">
+                                    Personal Info
+                                </div>
+                                <div class="profile-content-panel-text">
+                                    <div style="line-height:26px;"><span style="font-weight: bold; color: #888;">asdasdf</span>: adsfasdfasdf</div>
+                                    <div style="line-height:26px;"><span style="font-weight: bold; color: #888;">asdasdf</span>: adsfasdfasdf</div>
+                                    <div style="line-height:26px;"><span style="font-weight: bold; color: #888;">asdasdf</span>: adsfasdfasdf</div>
+                                    <div style="line-height:26px;"><span style="font-weight: bold; color: #888;">asdasdf</span>: adsfasdfasdf</div>
+                                    <div style="line-height:26px;"><span style="font-weight: bold; color: #888;">asdasdf</span>: adsfasdfasdf</div>
+                                    <div style="line-height:26px;"><span style="font-weight: bold; color: #888;">asdasdf</span>: adsfasdfasdf</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="profile-content-panel">
+                                <div class="profile-content-panel-title">
+                                    Description
+                                </div>
+                                <div class="profile-content-panel-text">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel venenatis odio. Sed condimentum cursus quam in mattis. Aliquam ut aliquam erat. Aliquam luctus lacinia auctor. Curabitur blandit augue id quam blandit, convallis aliquet magna vulputate. Sed nec urna lacus. Morbi sodales orci eget lacus imperdiet, non egestas justo lobortis. Praesent eget molestie eros. Proin euismod, augue id auctor iaculis, elit justo mattis nisl, tempor tincidunt diam dolor a lorem. Ve</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="profile-content-panel-title">
+                                Delete Account
+                            </div>
+                            <div class="profile-content-panel-text">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel venenatis odio. Sed condimentum
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="center-block" style="display: inline-block; background-color: #aa9933;  margin-top: 50px;  border-radius: 3px; "><p style="padding: 15px 40px;" class="text-center">DELETE ACCOUNT</p></div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection

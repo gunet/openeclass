@@ -5,5 +5,8 @@
         <data xmlns="http://www.netbeans.org/ns/php-project/1">
             <name>Open e-Class (4.x)</name>
         </data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>adsfasdfasdf</word>
+        </spellchecker-wordlist>
     </configuration>
 </project>
