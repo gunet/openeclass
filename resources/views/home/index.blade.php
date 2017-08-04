@@ -56,7 +56,7 @@
             </div>
             {!! $home_main_area_widgets !!}
             @if ($announcements)
-                <div class='content-title h3'>
+                <div class='content-title'>
                     <a href='{{$urlServer}}main/system_announcements.php'>{{ trans('langAnnouncements') }}</a>
                     <a href='{{ $urlServer }}rss.php' style='padding-left:5px;'>
                         <span class='fa fa-rss-square'></span>

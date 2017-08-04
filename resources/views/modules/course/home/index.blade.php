@@ -277,12 +277,13 @@
             <div class='row'>
                 @if (isset($course_completion_id) and $course_completion_id > 0)
                     <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                        <div class='content-title h3'>{{ trans('langCourseCompletion') }}</div>
+                        <div class='content-title'>{{ trans('langCourseCompletion') }}</div>
                         <div class='panel'>
                             <div class='panel-body'>
                                 <div class='text-center'>
                                     <div class='col-sm-12'>
-                                        <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
+                                        <div class="center-block" style="display:inline-block;">
+                                            <a style="text-decoration:none;" href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
                                         @if ($percentage == '100%')
                                             <i class='fa fa-check-circle fa-5x state_success'></i>
                                         @else
@@ -291,6 +292,7 @@
                                             </div>                                            
                                         @endif
                                         </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +301,7 @@
                 @endif
                 @if (isset($level) && !empty($level))
                     <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                        <div class='content-title h3'>{{ trans('langOpenCourseShort') }}</div>
+                        <div class='content-title'>{{ trans('langOpenCourseShort') }}</div>
                         <div class='panel'>
                             <div class='panel-body'>
                                 {!! $opencourses_level !!}
@@ -311,7 +313,7 @@
                     </div>
                 @endif
                 <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                    <div class='content-title h3'>{{ trans('langCalendar') }}</div>
+                    <div class='content-title'>{{ trans('langCalendar') }}</div>
                     <div class='panel'>
                         <div class='panel-body'>
                             {!! $user_personal_calendar !!}
@@ -343,7 +345,7 @@
                     </div>
                 </div>
                 <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                    <div class='content-title h3'>{{ trans('langAnnouncements') }}</div>
+                    <div class='content-title'>{{ trans('langAnnouncements') }}</div>
                     <div class='panel'>
                         <div class='panel-body'>
                             <ul class='tablelist'>
