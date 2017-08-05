@@ -242,9 +242,17 @@ function delete_users() {
 
     $details = array('multiple' => true, 'params' => array());
 
-    $sql = 'SELECT user.id AS user_id FROM course_user, user, user_department
+    if (isset($_POST['delusersdept']) and isset($_POST['dept_flag']) and isset($_POST['department'])) {
+        $filter_department = true;
+        $sql_department = 'LEFT JOIN user_department ON user.id = user_department.user';
+    } else {
+        $filter_department = false;
+        $sql_department = '';
+    }
+
+    $sql = 'SELECT user.id AS user_id
+        FROM course_user, user ' . $sql_department . '
         WHERE course_user.user_id = user.id
-          AND user_department.user = user.id
           AND course_user.status <> ' . USER_TEACHER . '
           AND course_user.editor = 0
           AND course_user.reviewer = 0
@@ -264,11 +272,17 @@ function delete_users() {
         $details['params'][] = "reg_date $operator $del_date\n";
     }
 
-    if (isset($_POST['delusersdept']) and isset($_POST['dept_flag']) and isset($_POST['department'])) {
-        $operator = $_POST['dept_flag'] == 'no'? 'NOT IN': 'IN';
-        $sql .= ' AND user_department.department ' .
-            $operator . '(' .
-            implode(', ', array_fill(0, count($_POST['department']), '?d')) . ')';
+    if ($filter_department) {
+        if ($_POST['dept_flag'] == 'no') {
+            $sql .= ' AND (user_department.department IS NULL OR user_department.department NOT IN (';
+            $close = '))';
+            $operator = 'not in';
+        } else {
+            $sql .= ' AND user_department.department IN (';
+            $close = ')';
+            $operator = 'in';
+        }
+        $sql .= implode(', ', array_fill(0, count($_POST['department']), '?d')) . $close;
         $args[] = $_POST['department'];
 
         $details['params'][] = "department $_POST[dept_flag] $operator (" .
