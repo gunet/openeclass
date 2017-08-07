@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -48,20 +48,26 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
 require_once 'modules/drives/clouddrive.php';
+require_once 'include/course_settings.php';
 
 $require_help = true;
-$helpTopic = 'Doc';
+$helpTopic = 'documents';
+
+doc_init();
 
 // Used to check for quotas
 $diskUsed = dir_total_space($basedir);
+
+$user_upload = $uid && $subsystem == MAIN && get_config('enable_docs_public_write') && setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE);
+$uploading_as_user = !$can_upload && $user_upload;
 
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
     $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
-} elseif (defined('MY_DOCUMENTS')) {    
+} elseif (defined('MY_DOCUMENTS')) {
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
-        redirect_to_home_page();        
+        redirect_to_home_page();
     }
     if ($session->status == USER_STUDENT and !get_config('mydocs_student_enable')) {
         redirect_to_home_page();
@@ -103,6 +109,109 @@ if (isset($_GET['showQuota'])) {
     draw($tool_content, $menuTypeID);
     exit;
 }
+
+// ---------------------------
+//mindmap save button
+// ---------------------------
+if (isset($_GET['mindmap'])) {
+    $mindmap = $_GET['mindmap'];
+    $title = $_GET['mindtitle'];
+
+    //$uploadPath = " ";
+    $filename = $title . ".jm";
+    $safe_fileName = safe_filename(get_file_extension($filename));
+    $file_path = '/' . $safe_fileName;
+    $file_date = date('Y\-m\-d G\:i\:s');
+    $file_format = get_file_extension($filename);
+
+    $myfile = fopen($basedir . $file_path, 'w') or die('Unable to open file!');
+    $txt = $mindmap;
+
+    fwrite($myfile, $txt);
+    fclose($myfile);
+
+    move_uploaded_file($myfile , $basedir . $file_path);
+
+    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+    Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = '',
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 0,
+            lock_user_id = ?d",
+            $course_id, $subsystem, $subsystem_id, $file_path,
+            $filename, $title, $file_creator,
+            $file_date, $file_date, $file_creator, $file_format,
+            $language, $uid);
+    Session::Messages($langMindMapSaved,"alert-success");
+    redirect_to_home_page("modules/mindmap/index.php");
+}
+
+
+// ---------------------------
+// mindmap screenshot save
+// ---------------------------
+if (isset($_POST['imgBase64'])) {
+    $shootname = $_POST['imgname'];
+    $img = $_POST['imgBase64'];
+    $img = str_replace('data:image/png;base64,', '', $img);
+    $img = str_replace(' ', '+', $img);
+    $fileData = base64_decode($img);
+    $filename = $shootname . '.png';
+    $safe_fileName = safe_filename(get_file_extension($filename));
+    $file_path = '/' . $safe_fileName;
+    $file_date = date("Y\-m\-d G\:i\:s");
+    $file_format = get_file_extension($filename);
+
+    // mindmap save in database
+    file_put_contents($basedir . $file_path, $fileData);
+
+    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+    Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = '',
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 0,
+            lock_user_id = ?d",
+            $course_id, $subsystem, $subsystem_id, $file_path,
+            $filename, $shootname, $file_creator,
+            $file_date, $file_date, $file_creator, $file_format,
+            $language, $uid);
+    exit;
+}
+
 
 // ---------------------------
 // download directory or file
@@ -162,7 +271,7 @@ if (isset($_GET['download'])) {
 }
 
 
-if ($can_upload) {
+if ($can_upload or $user_upload) {
     $fileName = '';
     $error = false;
     $uploaded = false;
@@ -245,13 +354,13 @@ if ($can_upload) {
             $checkFileSQL = 'filename = ?s';
             $checkFileName = $fileName;
         }
-        $result = Database::get()->querySingle("SELECT path, visible FROM document WHERE
+        $result = Database::get()->querySingle("SELECT path, visible, lock_user_id FROM document WHERE
                                            $group_sql AND
                                            path REGEXP ?s AND
                                            $checkFileSQL LIMIT 1",
                                         "^$uploadPath/[^/]+$", $checkFileName);
         if ($result) {
-            if (isset($_POST['replace'])) {
+            if (isset($_POST['replace']) and (!$uploading_as_user or $result->lock_user_id == $uid)) {
                 // Delete old file record when replacing file
                 $file_path = $result->path;
                 $vis = $result->visible;
@@ -321,11 +430,12 @@ if ($can_upload) {
                                         author = ?s,
                                         format = ?s,
                                         language = ?s,
-                                        copyrighted = ?d"
+                                        copyrighted = ?d,
+                                        lock_user_id = ?d"
                             , $course_id, $subsystem, $subsystem_id, $file_path, $extra_path, $fileName, $vis
                             , $_POST['file_comment'], $_POST['file_category'], $_POST['file_title'], $_POST['file_creator']
                             , $file_date, $file_date, $_POST['file_subject'], $_POST['file_description'], $_POST['file_author']
-                            , $file_format, $_POST['file_language'], $_POST['file_copyrighted'])->lastInsertID;
+                            , $file_format, $_POST['file_language'], $_POST['file_copyrighted'], $uid)->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
             // Logging
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
@@ -342,7 +452,7 @@ if ($can_upload) {
             $v->labels(array(
                 'file_title' => "$langTheField $langTitle"
             ));
-            if($v->validate()) {
+            if ($v->validate()) {
                 $q = false;
                 if (isset($_POST['editPath'])) {
                     $fileInfo = Database::get()->querySingle("SELECT * FROM document
@@ -382,11 +492,12 @@ if ($can_upload) {
                                 format = ?s,
                                 language = ?s,
                                 copyrighted = 0,
-                                editable = 1",
+                                editable = 1,
+                                lock_user_id = ?d",
                                 $course_id, $subsystem, $subsystem_id, $file_path,
                                 $fileName, $_POST['file_title'], $file_creator,
                                 $file_date, $file_date, $file_creator, $file_format,
-                                $language);
+                                $language, $uid);
                 }
                 if ($q) {
                     if (!isset($id)) {
@@ -458,6 +569,16 @@ if ($can_upload) {
             $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path=?s", $source);
             $filename = $r->filename;
             $extra_path = $r->extra_path;
+            // Check if target filename already exists
+            $curDirPath = $moveTo;
+            $fileExists = Database::get()->querySingle("SELECT id FROM document
+                    WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
+                    "^$curDirPath/[^/]+$", $filename);
+            if ($fileExists) {
+                $curDirPath = my_dirname($source);
+                Session::Messages($langFileExists, 'alert-danger');
+                redirect_to_current_dir();
+            }
             if (empty($extra_path)) {
                 if (move($basedir . $source, $basedir . $moveTo)) {
                     if (hasMetaData($source, $basedir, $group_sql)) {
@@ -469,7 +590,6 @@ if ($can_upload) {
                 update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
             }
             Session::Messages($langDirMv, 'alert-success');
-            $curDirPath = $moveTo;
             redirect_to_current_dir();
         } else {
             $action_message = "<div class='alert alert-danger'>$langImpossible</div><br>";
@@ -498,37 +618,45 @@ if ($can_upload) {
         $filePath = $_GET['filePath'];
         $curDirPath = my_dirname($_GET['filePath']);
         // Check if file actually exists
-        $r = Database::get()->querySingle("SELECT id, path, extra_path, format, filename FROM document
+        $r = Database::get()->querySingle("SELECT id, path, extra_path, format, filename, lock_user_id FROM document
                                         WHERE $group_sql AND path = ?s", $filePath);
         $delete_ok = true;
-        if ($r) {
-            // remove from index if relevant (except non-main sysbsystems and metadata)
-            Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
-                                            AND format <> '.meta' AND path LIKE ?s",
-                function ($r2) {
-                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
-                },
-                $filePath . '%');
+        if ($r and (!$uploading_as_user or $r->lock_user_id == $uid)) {
+            if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
+                Session::Messages($langResourceBelongsToCert, "alert-warning");
+            } else {
+                // remove from index if relevant (except non-main sysbsystems and metadata)
+                Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
+                                                AND format <> '.meta' AND path LIKE ?s",
+                    function ($r2) {
+                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                        if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {                            
+                            Session::Messages($langResourceBelongsToCert, "alert-warning");
+                            redirect_to_current_dir();
+                        }
+                    },
+                    $filePath . '%');
 
-            if (empty($r->extra_path)) {
-                if ($delete_ok = my_delete($basedir . $filePath) && $delete_ok) {
-                    if (hasMetaData($filePath, $basedir, $group_sql)) {
-                        $delete_ok = my_delete($basedir . $filePath . ".xml") && $delete_ok;
+                if (empty($r->extra_path)) {
+                    if ($delete_ok = my_delete($basedir . $filePath) && $delete_ok) {
+                        if (hasMetaData($filePath, $basedir, $group_sql)) {
+                            $delete_ok = my_delete($basedir . $filePath . ".xml") && $delete_ok;
+                        }
+                        update_db_info('document', 'delete', $filePath, $r->filename);
                     }
+                } else {
                     update_db_info('document', 'delete', $filePath, $r->filename);
                 }
-            } else {
-                update_db_info('document', 'delete', $filePath, $r->filename);
+                if(isset($_GET['ebook_id'])){
+                    Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
+                }
+                if ($delete_ok) {
+                    Session::Messages($langDocDeleted, 'alert-success');
+                } else {
+                    Session::Messages($langGeneralError, 'alert-danger');
+                }
+                redirect_to_current_dir();
             }
-            if(isset($_GET['ebook_id'])){
-                Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
-            }
-            if ($delete_ok) {
-                Session::Messages($langDocDeleted, 'alert-success');
-            } else {
-                Session::Messages($langGeneralError, 'alert-danger');
-            }
-            redirect_to_current_dir();
         }
     }
 
@@ -538,68 +666,79 @@ if ($can_upload) {
     // Step 2: Rename file by updating record in database
     if (isset($_POST['renameTo'])) {
 
+        $r = Database::get()->querySingle("SELECT id, filename, format, lock_user_id FROM document WHERE $group_sql AND path = ?s", $_POST['sourceFile']);
 
-        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_POST['sourceFile']);
-
-        if ($r->format != '.dir') {
-            validateRenamedFile($_POST['renameTo'], $menuTypeID);
-        }
-
-        Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
-                          WHERE $group_sql AND path=?s"
-                , $_POST['renameTo'], $_POST['sourceFile']);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $_POST['sourceFile'],
-            'filename' => $r->filename,
-            'newfilename' => $_POST['renameTo']));
-        if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
-            if (Database::get()->query("UPDATE document SET filename=?s WHERE $group_sql AND path = ?s"
-                            , ($_POST['renameTo'] . '.xml'), ($_POST['sourceFile'] . '.xml'))->affectedRows > 0) {
-                metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $_POST['renameTo']);
+        if ($r) {
+            // Check if target filename already exists
+            $curDirPath = my_dirname($_POST['sourceFile']);
+            $fileExists = Database::get()->querySingle("SELECT id FROM document
+                    WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
+                    "^$curDirPath/[^/]+$", $_POST['renameTo']);
+            if ($fileExists) {
+                Session::Messages($langFileExists, 'alert-danger');
+                redirect_to_current_dir();
             }
+            if ($r->format != '.dir') {
+                validateRenamedFile($_POST['renameTo'], $menuTypeID);
+            }
+            Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
+                              WHERE $group_sql AND path=?s",
+                        $_POST['renameTo'], $_POST['sourceFile']);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+            Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $_POST['sourceFile'],
+                'filename' => $r->filename,
+                'newfilename' => $_POST['renameTo']));
+            if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
+                if (Database::get()->query("UPDATE document SET filename=?s WHERE $group_sql AND path = ?s",
+                    $_POST['renameTo'] . '.xml', $_POST['sourceFile'] . '.xml')->affectedRows > 0) {
+                    metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $_POST['renameTo']);
+                }
+            }
+            Session::Messages($langElRen, 'alert-success');
+            redirect_to_current_dir();
         }
-        $curDirPath = my_dirname($_POST['sourceFile']);
-        Session::Messages($langElRen, 'alert-success');
-        redirect_to_current_dir();
     }
 
     // Step 1: Show rename dialog box
     if (isset($_GET['rename'])) {
 
-        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_GET['rename']);
+        $r = Database::get()->querySingle("SELECT id, filename, format, lock_user_id
+            FROM document WHERE $group_sql AND path = ?s", $_GET['rename']);
 
-        $fileName = Database::get()->querySingle("SELECT filename FROM document
-                                             WHERE $group_sql AND
-                                                   path = ?s", $_GET['rename'])->filename;
-        $curDirPath = my_dirname($_GET['rename']);
-        $backUrl = documentBackLink($curDirPath);
-        $navigation[] = array('url' => $backUrl, 'name' => $pageName);
-        $dialogBox .= "
-            <div class='row'>
-                <div class='col-xs-12'>
-                    <div class='form-wrapper'>
-                        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                            <fieldset>
-                                    <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
-                                    $group_hidden_input
-                                    <div class='form-group'>
-                                        <label for='renameTo' class='col-xs-2 control-label' >" . ($r->format != '.dir'? $m['filename'] : $m['dirname'] ). ":</label>
-                                        <div class='col-xs-10'>
-                                            <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
+        if ($r and (!$uploading_as_user or $r->lock_user_id == $uid)) {
+            $fileName = Database::get()->querySingle("SELECT filename FROM document
+                                                 WHERE $group_sql AND
+                                                       path = ?s", $_GET['rename'])->filename;
+            $curDirPath = my_dirname($_GET['rename']);
+            $backUrl = documentBackLink($curDirPath);
+            $navigation[] = array('url' => $backUrl, 'name' => $pageName);
+            $dialogBox .= "
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='form-wrapper'>
+                            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                                <fieldset>
+                                        <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
+                                        $group_hidden_input
+                                        <div class='form-group'>
+                                            <label for='renameTo' class='col-xs-2 control-label' >" . ($r->format != '.dir'? $m['filename'] : $m['dirname'] ). ":</label>
+                                            <div class='col-xs-10'>
+                                                <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class='form-group'>
-                                        <div class='col-xs-offset-2 col-xs-10'>" .
-                                            form_buttons(array(
-                                                array('text' => $langRename, 'value'=> $langRename),
-                                                array('href' => $backUrl))) . "
+                                        <div class='form-group'>
+                                            <div class='col-xs-offset-2 col-xs-10'>" .
+                                                form_buttons(array(
+                                                    array('text' => $langRename, 'value'=> $langRename),
+                                                    array('href' => $backUrl))) . "
+                                            </div>
                                         </div>
-                                    </div>
-                            </fieldset>
-                        </form>
+                                </fieldset>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </div>";
+                </div>";
+        }
     }
 
     // create directory
@@ -607,6 +746,7 @@ if ($can_upload) {
     if (isset($_POST['newDirPath'])) {
         $newDirName = canonicalize_whitespace($_POST['newDirName']);
         if (!empty($newDirName)) {
+            $curDirPath = $_POST['newDirPath'];
             $newDirPath = make_path($_POST['newDirPath'], array($newDirName));
             // $path_already_exists: global variable set by make_path()
             if ($path_already_exists) {
@@ -617,7 +757,6 @@ if ($can_upload) {
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
                 Session::Messages($langDirCr, 'alert-success');
             }
-            $curDirPath = $_POST['newDirPath'];
             redirect_to_current_dir();
         }
     }
@@ -664,7 +803,7 @@ if ($can_upload) {
         $res = Database::get()->querySingle("SELECT * FROM document
                                              WHERE $group_sql AND
                                                    path=?s", $commentPath);
-        if ($res) {
+        if ($res and (!$uploading_as_user or $res->lock_user_id == $uid)) {
             $file_language = $session->validate_language_code($_POST['file_language'], $language);
             Database::get()->query("UPDATE document SET
                                                 comment = ?s,
@@ -711,8 +850,8 @@ if ($can_upload) {
                                 date_modified = NOW(),
                                 format = ?s,
                                 language = ?s
-                                WHERE $group_sql AND path = ?s"
-                    , ($_SESSION['givenname'] . " " . $_SESSION['surname']), $file_format, $_POST['meta_language'], $metadataPath);
+                                WHERE $group_sql AND path = ?s",
+                "$_SESSION[givenname] $_SESSION[surname]", $file_format, $_POST['meta_language'], $metadataPath);
         } else {
             Database::get()->query("INSERT INTO document SET
                                 course_id = ?d ,
@@ -725,9 +864,11 @@ if ($can_upload) {
                                 date = ?t ,
                                 date_modified = ?t ,
                                 format = ?s,
-                                language = ?s"
-                    , $course_id, $subsystem, $subsystem_id, $metadataPath, $oldFilename
-                    , ($_SESSION['givenname'] . " " . $_SESSION['surname']), $xml_date, $xml_date, $file_format, $_POST['meta_language']);
+                                language = ?s,
+                                lock_user_id = ?d",
+                $course_id, $subsystem, $subsystem_id, $metadataPath, $oldFilename,
+                "$_SESSION[givenname] $_SESSION[surname]", $xml_date, $xml_date,
+                $file_format, $_POST['meta_language'], $uid);
         }
 
         Session::Messages($langMetadataMod, 'alert-success');
@@ -740,11 +881,11 @@ if ($can_upload) {
         validateUploadedFile($_FILES['newFile']['name'], $menuTypeID);
         $replacePath = $_POST['replacePath'];
         // Check if file actually exists
-        $result = Database::get()->querySingle("SELECT id, path, format FROM document WHERE
+        $result = Database::get()->querySingle("SELECT id, path, format, lock_user_id FROM document WHERE
                                         $group_sql AND
                                         format <> '.dir' AND
                                         path=?s", $replacePath);
-        if ($result) {
+        if ($result and (!uploading_as_user or $result->lock_user_id == $uid)) {
             $docId = $result->id;
             $oldpath = $result->path;
             $oldformat = $result->format;
@@ -796,11 +937,11 @@ if ($can_upload) {
 
     // Display form to replace/overwrite an existing file
     if (isset($_GET['replace'])) {
-        $result = Database::get()->querySingle("SELECT filename, path FROM document
+        $result = Database::get()->querySingle("SELECT filename, path, lock_user_id FROM document
                                         WHERE $group_sql AND
                                                 format <> '.dir' AND
                                                 path = ?s", $_GET['replace']);
-        if ($result) {
+        if ($result and (!$uploading_as_user or $result->lock_user_id == $uid)) {
             $curDirPath = my_dirname($result->path);
             $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
             $filename = q($result->filename);
@@ -838,7 +979,7 @@ if ($can_upload) {
         $comment = $_GET['comment'];
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
-        if ($row) {
+        if ($row and (!$uploading_as_user or $row->lock_user_id == $uid)) {
             $curDirPath = my_dirname($comment);
             $backUrl = documentBackLink($curDirPath);
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
@@ -961,7 +1102,7 @@ if ($can_upload) {
 
         $metadata = $_GET['metadata'];
         $row = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $metadata);
-        if ($row) {
+        if ($row && (!$uploading_as_user or $row->lock_user_id == $uid)) {
             $curDirPath = my_dirname($metadata);
             $backUrl = documentBackLink($curDirPath);
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
@@ -973,39 +1114,46 @@ if ($can_upload) {
         }
     }
 
-    // Visibility commands
-    if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
-        if (isset($_GET['mkVisibl'])) {
-            $newVisibilityStatus = 1;
-            $visibilityPath = $_GET['mkVisibl'];
-        } else {
-            $newVisibilityStatus = 0;
-            $visibilityPath = $_GET['mkInvisibl'];
+    // Don't allow these commands for users in courses with user upload
+    if (!$uploading_as_user) {
+        // Visibility commands
+        if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
+            if (isset($_GET['mkVisibl'])) {
+                $newVisibilityStatus = 1;
+                $visibilityPath = $_GET['mkVisibl'];
+            } else {
+                $newVisibilityStatus = 0;
+                $visibilityPath = $_GET['mkInvisibl'];
+            }
+            Database::get()->query("UPDATE document SET visible = ?d
+                                              WHERE $group_sql AND
+                                                    path = ?s", $newVisibilityStatus, $visibilityPath);
+            $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
+            if (($newVisibilityStatus == 0) and resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
+                Session::Messages($langResourceBelongsToCert, "alert-warning");
+            } else {
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+                Session::Messages($langViMod, 'alert-success');
+                $curDirPath = my_dirname($visibilityPath);
+                redirect_to_current_dir();
+            }
         }
-        Database::get()->query("UPDATE document SET visible = ?d
-                                          WHERE $group_sql AND
-                                                path = ?s", $newVisibilityStatus, $visibilityPath);
-        $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        Session::Messages($langViMod, 'alert-success');
-        $curDirPath = my_dirname($visibilityPath);
-        redirect_to_current_dir();
-    }
 
-    // Public accessibility commands
-    if (isset($_GET['public']) || isset($_GET['limited'])) {
-        $new_public_status = intval(isset($_GET['public']));
-        $path = isset($_GET['public']) ? $_GET['public'] : $_GET['limited'];
-        Database::get()->query("UPDATE document SET public = ?d
-                                          WHERE $group_sql AND
-                                                path = ?s", $new_public_status, $path);
-        $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        Session::Messages($langViMod, 'alert-success');
-        $curDirPath = my_dirname($path);
-        redirect_to_current_dir();
+        // Public accessibility commands
+        if (isset($_GET['public']) || isset($_GET['limited'])) {
+            $new_public_status = intval(isset($_GET['public']));
+            $path = isset($_GET['public']) ? $_GET['public'] : $_GET['limited'];
+            Database::get()->query("UPDATE document SET public = ?d
+                                              WHERE $group_sql AND
+                                                    path = ?s", $new_public_status, $path);
+            $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+            Session::Messages($langViMod, 'alert-success');
+            $curDirPath = my_dirname($path);
+            redirect_to_current_dir();
+        }
     }
-} // teacher only
+}
 
 // Common for teachers and students
 
@@ -1073,10 +1221,15 @@ if ($curDirPath) {
 }
 
 /* * * Retrieve file info for current directory from database and disk ** */
-$result = Database::get()->queryArray("SELECT id, path, filename, format, title, extra_path, course_id, date_modified, public, visible, editable, copyrighted, comment, IF((title = '' OR title IS NULL), filename, title) AS sort_key FROM document
-                        WHERE $group_sql AND
-                              path LIKE '$curDirPath/%' AND
-                              path NOT LIKE '$curDirPath/%/%' $filter $order");
+$result = Database::get()->queryArray("SELECT id, path, filename,
+        format, title, extra_path, course_id, date_modified,
+        public, visible, editable, copyrighted, comment, lock_user_id,
+        IF((title = '' OR title IS NULL), filename, title) AS sort_key
+    FROM document
+    WHERE $group_sql AND
+          path LIKE ?s AND
+          path NOT LIKE ?s $filter $order",
+    "$curDirPath/%", "$curDirPath/%/%");
 $fileinfo = array();
 foreach ($result as $row) {
     $is_dir = $row->format == '.dir';
@@ -1126,6 +1279,7 @@ foreach ($result as $row) {
         'date' => $row->date_modified,
         'object' => MediaResourceFactory::initFromDocument($row),
         'editable' => $row->editable,
+        'controls' => $can_upload || ($user_upload && $row->lock_user_id == $uid),
         'updated' => $updated);
 }
 // end of common to teachers and students
@@ -1136,7 +1290,7 @@ foreach ($result as $row) {
 $cmdCurDirPath = rawurlencode($curDirPath);
 $cmdParentDir = rawurlencode($parentDir);
 
-if ($can_upload) {
+if ($can_upload or $user_upload) {
     // Action result message
     if (!empty($action_message)) {
         $tool_content .= $action_message;
@@ -1308,7 +1462,8 @@ if ($doc_count == 0) {
                     }
                 }
 
-                if ($can_upload and $entry['editable']) {
+
+                if ($entry['editable'] and $entry['controls']) {
                     $edit_url = "new.php?course=$course_code&amp;editPath=$entry[path]" .
                         ($groupset? "&amp;$groupset": '');
                     $link_title_extra .= '&nbsp;' .
@@ -1351,8 +1506,24 @@ if ($doc_count == 0) {
                 $link_title_extra .= '&nbsp;' . icon('fa-lock', $langNonPublicFile);
             }
 
-            $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
+            // open jm in mindmap module
+            if ($entry['format'] == "jm"){
+
+                $jmname = $entry['title'];
+                $jmpath = base64_encode( json_encode($basedir . $entry['path']) );
+
+                $edit_url = "../mindmap/index.php?course=$course_code&amp;jmpath=$jmpath";
+
+
+                $tool_content .= "<tr $style><td class='text-center'>.jm</td>
+                              <td><a href='$edit_url'>$jmname $link_title_extra</a>";
+
+            }else{
+
+                $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
                               <td><input type='hidden' value='$download_url'>$link_href $link_title_extra";
+
+            }
             // comments
             if (!empty($entry['comment'])) {
                 $tool_content .= "<br><span class='comment text-muted'><small>" .
@@ -1372,7 +1543,7 @@ if ($doc_count == 0) {
                 $tool_content .= "<td>$size</td><td title='$date_with_time'>$date</td>";
             }
             if (!$is_in_tinymce) {
-                if ($can_upload) {
+                if ($entry['controls']) {
                     $tool_content .= "<td class='option-btn-cell'>";
 
                     $xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
@@ -1403,13 +1574,19 @@ if ($doc_count == 0) {
                                           'show' => get_config("insert_xml_metadata")),
                                     array('title' => $entry['visible'] ? $langViewHide : $langViewShow,
                                           'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=$cmdDirName" : "mkVisibl=$cmdDirName"),
-                                          'icon' => $entry['visible'] ? 'fa-eye-slash' : 'fa-eye' ),
+                                          'icon' => $entry['visible'] ? 'fa-eye-slash' : 'fa-eye',
+                                          'show' => !$uploading_as_user),
                                     array('title' => $entry['public'] ? $langResourceAccessLock : $langResourceAccessUnlock,
                                           'url' => $entry['public'] ? "{$base_url}limited=$cmdDirName" : "{$base_url}public=$cmdDirName",
-                                          'icon' => $entry['public'] ? 'fa-lock' : 'fa-unlock'),
+                                          'icon' => $entry['public'] ? 'fa-lock' : 'fa-unlock',
+                                          'show' => !$uploading_as_user),
                                     array('title' => $langDownload,
                                           'url' => $download_url,
                                           'icon' => 'fa-download'),
+                                    array('title' => $langAddResePortfolio,
+                                          'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=mydocs&amp;rid=".$row->id,
+                                          'icon' => 'fa-star',
+                                          'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                                     array('title' => $langDelete,
                                           'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                                           'icon' => 'fa-times',
