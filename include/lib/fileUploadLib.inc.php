@@ -598,38 +598,34 @@ function make_path($path, $path_components) {
     global $basedir, $givenname, $surname, $path_already_exists, $course_id, $group_sql, $subsystem, $subsystem_id;
 
     $path_already_exists = true;
-    $depth = 1 + substr_count($path, '/');
     foreach ($path_components as $component) {
-        $q = Database::get()->querySingle("SELECT path, visible, format,
-                                      (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
-                                      FROM document
-                                      WHERE $group_sql AND
-                                            filename = ?s AND
-                                            path LIKE ?s HAVING depth = $depth", $component, ($path . '%'));
+        $q = Database::get()->querySingle("SELECT path FROM document
+                WHERE $group_sql AND filename = ?s AND path REGEXP ?s",
+                $component, "^$path/[^/]+$");
         if ($q) {
             // Path component already exists in database
+            $path_already_exists = true;
             $path = $q->path;
-            $depth++;
         } else {
             // Path component must be created
+            $path_already_exists = false;
             $path .= '/' . safe_filename();
             make_dir($basedir . $path);
             $id = Database::get()->query("INSERT INTO document SET
-                                          course_id = ?d,
+                      course_id = ?d,
                       subsystem = ?d,
-                                          subsystem_id = ?d,
-                                          path = ?s,
-                                          filename = ?s,
-                                          visible = 1,
-                                          creator = ?s,
-                                          date = NOW(),
-                                          date_modified = NOW(),
-                                          format = '.dir'"
-                            , $course_id, $subsystem, $subsystem_id, $path, $component, ($givenname . $surname))->lastInsertID;
+                      subsystem_id = ?d,
+                      path = ?s,
+                      filename = ?s,
+                      visible = 1,
+                      creator = ?s,
+                      date = NOW(),
+                      date_modified = NOW(),
+                      format = '.dir'",
+                $course_id, $subsystem, $subsystem_id, $path, $component, ($givenname . $surname))->lastInsertID;
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
                 'path' => $path,
                 'filename' => $component));
-            $path_already_exists = false;
         }
     }
     return $path;

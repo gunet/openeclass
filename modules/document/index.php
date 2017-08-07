@@ -566,9 +566,19 @@ if ($can_upload or $user_upload) {
         $sourceXml = $source . '.xml';
         // check if source and destination are the same
         if ($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
-            $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path=?s", $source);
+            $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path = ?s", $source);
             $filename = $r->filename;
             $extra_path = $r->extra_path;
+            // Check if target filename already exists
+            $curDirPath = $moveTo;
+            $fileExists = Database::get()->querySingle("SELECT id FROM document
+                    WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
+                    "^$curDirPath/[^/]+$", $filename);
+            if ($fileExists) {
+                $curDirPath = my_dirname($source);
+                Session::Messages($langFileExists, 'alert-danger');
+                redirect_to_current_dir();
+            }
             if (empty($extra_path)) {
                 if (move($basedir . $source, $basedir . $moveTo)) {
                     if (hasMetaData($source, $basedir, $group_sql)) {
@@ -580,7 +590,6 @@ if ($can_upload or $user_upload) {
                 update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
             }
             Session::Messages($langDirMv, 'alert-success');
-            $curDirPath = $moveTo;
             redirect_to_current_dir();
         } else {
             $action_message = "<div class='alert alert-danger'>$langImpossible</div><br>";
@@ -660,6 +669,15 @@ if ($can_upload or $user_upload) {
         $r = Database::get()->querySingle("SELECT id, filename, format, lock_user_id FROM document WHERE $group_sql AND path = ?s", $_POST['sourceFile']);
 
         if ($r) {
+            // Check if target filename already exists
+            $curDirPath = my_dirname($_POST['sourceFile']);
+            $fileExists = Database::get()->querySingle("SELECT id FROM document
+                    WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
+                    "^$curDirPath/[^/]+$", $_POST['renameTo']);
+            if ($fileExists) {
+                Session::Messages($langFileExists, 'alert-danger');
+                redirect_to_current_dir();
+            }
             if ($r->format != '.dir') {
                 validateRenamedFile($_POST['renameTo'], $menuTypeID);
             }
@@ -676,7 +694,6 @@ if ($can_upload or $user_upload) {
                     metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $_POST['renameTo']);
                 }
             }
-            $curDirPath = my_dirname($_POST['sourceFile']);
             Session::Messages($langElRen, 'alert-success');
             redirect_to_current_dir();
         }
@@ -729,6 +746,7 @@ if ($can_upload or $user_upload) {
     if (isset($_POST['newDirPath'])) {
         $newDirName = canonicalize_whitespace($_POST['newDirName']);
         if (!empty($newDirName)) {
+            $curDirPath = $_POST['newDirPath'];
             $newDirPath = make_path($_POST['newDirPath'], array($newDirName));
             // $path_already_exists: global variable set by make_path()
             if ($path_already_exists) {
@@ -739,7 +757,6 @@ if ($can_upload or $user_upload) {
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
                 Session::Messages($langDirCr, 'alert-success');
             }
-            $curDirPath = $_POST['newDirPath'];
             redirect_to_current_dir();
         }
     }
