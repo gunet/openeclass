@@ -53,13 +53,8 @@ require_once 'include/course_settings.php';
 $require_help = true;
 $helpTopic = 'documents';
 
-doc_init();
-
 // Used to check for quotas
 $diskUsed = dir_total_space($basedir);
-
-$user_upload = $uid && $subsystem == MAIN && get_config('enable_docs_public_write') && setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE);
-$uploading_as_user = !$can_upload && $user_upload;
 
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
@@ -271,7 +266,7 @@ if (isset($_GET['download'])) {
 }
 
 
-if ($can_upload or $user_upload) {
+if ($can_upload) {
     $fileName = '';
     $error = false;
     $uploaded = false;
@@ -360,7 +355,7 @@ if ($can_upload or $user_upload) {
                                            $checkFileSQL LIMIT 1",
                                         "^$uploadPath/[^/]+$", $checkFileName);
         if ($result) {
-            if (isset($_POST['replace']) and (!$uploading_as_user or $result->lock_user_id == $uid)) {
+            if (isset($_POST['replace'])) {
                 // Delete old file record when replacing file
                 $file_path = $result->path;
                 $vis = $result->visible;
@@ -621,7 +616,7 @@ if ($can_upload or $user_upload) {
         $r = Database::get()->querySingle("SELECT id, path, extra_path, format, filename, lock_user_id FROM document
                                         WHERE $group_sql AND path = ?s", $filePath);
         $delete_ok = true;
-        if ($r and (!$uploading_as_user or $r->lock_user_id == $uid)) {
+        if ($r) {
             if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
                 Session::Messages($langResourceBelongsToCert, "alert-warning");
             } else {
@@ -705,7 +700,7 @@ if ($can_upload or $user_upload) {
         $r = Database::get()->querySingle("SELECT id, filename, format, lock_user_id
             FROM document WHERE $group_sql AND path = ?s", $_GET['rename']);
 
-        if ($r and (!$uploading_as_user or $r->lock_user_id == $uid)) {
+        if ($r) {
             $fileName = Database::get()->querySingle("SELECT filename FROM document
                                                  WHERE $group_sql AND
                                                        path = ?s", $_GET['rename'])->filename;
@@ -803,7 +798,7 @@ if ($can_upload or $user_upload) {
         $res = Database::get()->querySingle("SELECT * FROM document
                                              WHERE $group_sql AND
                                                    path=?s", $commentPath);
-        if ($res and (!$uploading_as_user or $res->lock_user_id == $uid)) {
+        if ($res) {
             $file_language = $session->validate_language_code($_POST['file_language'], $language);
             Database::get()->query("UPDATE document SET
                                                 comment = ?s,
@@ -885,7 +880,7 @@ if ($can_upload or $user_upload) {
                                         $group_sql AND
                                         format <> '.dir' AND
                                         path=?s", $replacePath);
-        if ($result and (!uploading_as_user or $result->lock_user_id == $uid)) {
+        if ($result) {
             $docId = $result->id;
             $oldpath = $result->path;
             $oldformat = $result->format;
@@ -941,7 +936,7 @@ if ($can_upload or $user_upload) {
                                         WHERE $group_sql AND
                                                 format <> '.dir' AND
                                                 path = ?s", $_GET['replace']);
-        if ($result and (!$uploading_as_user or $result->lock_user_id == $uid)) {
+        if ($result) {
             $curDirPath = my_dirname($result->path);
             $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
             $filename = q($result->filename);
@@ -979,7 +974,7 @@ if ($can_upload or $user_upload) {
         $comment = $_GET['comment'];
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
-        if ($row and (!$uploading_as_user or $row->lock_user_id == $uid)) {
+        if ($row) {
             $curDirPath = my_dirname($comment);
             $backUrl = documentBackLink($curDirPath);
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
@@ -1102,7 +1097,7 @@ if ($can_upload or $user_upload) {
 
         $metadata = $_GET['metadata'];
         $row = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $metadata);
-        if ($row && (!$uploading_as_user or $row->lock_user_id == $uid)) {
+        if ($row) {
             $curDirPath = my_dirname($metadata);
             $backUrl = documentBackLink($curDirPath);
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
@@ -1114,44 +1109,41 @@ if ($can_upload or $user_upload) {
         }
     }
 
-    // Don't allow these commands for users in courses with user upload
-    if (!$uploading_as_user) {
-        // Visibility commands
-        if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
-            if (isset($_GET['mkVisibl'])) {
-                $newVisibilityStatus = 1;
-                $visibilityPath = $_GET['mkVisibl'];
-            } else {
-                $newVisibilityStatus = 0;
-                $visibilityPath = $_GET['mkInvisibl'];
-            }
-            Database::get()->query("UPDATE document SET visible = ?d
-                                              WHERE $group_sql AND
-                                                    path = ?s", $newVisibilityStatus, $visibilityPath);
-            $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
-            if (($newVisibilityStatus == 0) and resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
-                Session::Messages($langResourceBelongsToCert, "alert-warning");
-            } else {
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-                Session::Messages($langViMod, 'alert-success');
-                $curDirPath = my_dirname($visibilityPath);
-                redirect_to_current_dir();
-            }
+    // Visibility commands
+    if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
+        if (isset($_GET['mkVisibl'])) {
+            $newVisibilityStatus = 1;
+            $visibilityPath = $_GET['mkVisibl'];
+        } else {
+            $newVisibilityStatus = 0;
+            $visibilityPath = $_GET['mkInvisibl'];
         }
-
-        // Public accessibility commands
-        if (isset($_GET['public']) || isset($_GET['limited'])) {
-            $new_public_status = intval(isset($_GET['public']));
-            $path = isset($_GET['public']) ? $_GET['public'] : $_GET['limited'];
-            Database::get()->query("UPDATE document SET public = ?d
-                                              WHERE $group_sql AND
-                                                    path = ?s", $new_public_status, $path);
-            $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
+        Database::get()->query("UPDATE document SET visible = ?d
+                                          WHERE $group_sql AND
+                                                path = ?s", $newVisibilityStatus, $visibilityPath);
+        $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
+        if (($newVisibilityStatus == 0) and resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
+            Session::Messages($langResourceBelongsToCert, "alert-warning");
+        } else {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
             Session::Messages($langViMod, 'alert-success');
-            $curDirPath = my_dirname($path);
+            $curDirPath = my_dirname($visibilityPath);
             redirect_to_current_dir();
         }
+    }
+
+    // Public accessibility commands
+    if (isset($_GET['public']) || isset($_GET['limited'])) {
+        $new_public_status = intval(isset($_GET['public']));
+        $path = isset($_GET['public']) ? $_GET['public'] : $_GET['limited'];
+        Database::get()->query("UPDATE document SET public = ?d
+                                          WHERE $group_sql AND
+                                                path = ?s", $new_public_status, $path);
+        $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+        Session::Messages($langViMod, 'alert-success');
+        $curDirPath = my_dirname($path);
+        redirect_to_current_dir();
     }
 }
 
@@ -1279,7 +1271,7 @@ foreach ($result as $row) {
         'date' => $row->date_modified,
         'object' => MediaResourceFactory::initFromDocument($row),
         'editable' => $row->editable,
-        'controls' => $can_upload || ($user_upload && $row->lock_user_id == $uid),
+        'controls' => $can_upload,
         'updated' => $updated);
 }
 // end of common to teachers and students
@@ -1290,7 +1282,7 @@ foreach ($result as $row) {
 $cmdCurDirPath = rawurlencode($curDirPath);
 $cmdParentDir = rawurlencode($parentDir);
 
-if ($can_upload or $user_upload) {
+if ($can_upload) {
     // Action result message
     if (!empty($action_message)) {
         $tool_content .= $action_message;
@@ -1574,19 +1566,13 @@ if ($doc_count == 0) {
                                           'show' => get_config("insert_xml_metadata")),
                                     array('title' => $entry['visible'] ? $langViewHide : $langViewShow,
                                           'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=$cmdDirName" : "mkVisibl=$cmdDirName"),
-                                          'icon' => $entry['visible'] ? 'fa-eye-slash' : 'fa-eye',
-                                          'show' => !$uploading_as_user),
+                                          'icon' => $entry['visible'] ? 'fa-eye-slash' : 'fa-eye'),
                                     array('title' => $entry['public'] ? $langResourceAccessLock : $langResourceAccessUnlock,
                                           'url' => $entry['public'] ? "{$base_url}limited=$cmdDirName" : "{$base_url}public=$cmdDirName",
-                                          'icon' => $entry['public'] ? 'fa-lock' : 'fa-unlock',
-                                          'show' => !$uploading_as_user),
+                                          'icon' => $entry['public'] ? 'fa-lock' : 'fa-unlock'),
                                     array('title' => $langDownload,
                                           'url' => $download_url,
                                           'icon' => 'fa-download'),
-                                    array('title' => $langAddResePortfolio,
-                                          'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=mydocs&amp;rid=".$row->id,
-                                          'icon' => 'fa-star',
-                                          'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                                     array('title' => $langDelete,
                                           'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                                           'icon' => 'fa-times',
