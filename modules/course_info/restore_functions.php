@@ -348,13 +348,15 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                            <input type='radio' name='add_users' value='none' id='add_users_none'>
                            $langNone
                         </div>
-                    </div>
+                    </div>" .
+                    // Hide "Create accounts" option if in course (i.e. clone mode)
+                    (isset($GLOBALS['course_code'])? '': "
                     <div class='form-group'>
                         <label class='col-sm-3 control-label'>$langMultiRegType:</label>
                         <div class='col-sm-9'>
                             <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
                         </div>
-                    </div>
+                    </div>") . "
                     <div class='form-group'>
                         <div class='col-sm-offset-3 col-sm-9'>
                         <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />

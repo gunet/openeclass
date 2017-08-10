@@ -38,6 +38,7 @@ require_once 'restore_functions.php';
 $toolName = $langCloneCourse;
 $treeObj = new Hierarchy();
 $_POST['restoreThis'] = null; // satisfy course_details_form()
+$_POST['create_users'] = null; // no need to try recreating accounts while cloning
 
 if (isset($_POST['create_restored_course'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
