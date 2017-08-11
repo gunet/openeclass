@@ -51,7 +51,7 @@ function getSideMenu($menuTypeID, $rich=true) {
                 break;
             }
 
-        case 1: { //logged in                      
+        case 1: { //logged in
                 $menu = loggedInMenu($rich);
                 break;
             }
@@ -293,7 +293,7 @@ function loggedInMenu($rich=true) {
     array_push($sideMenuLink, $urlServer . "main/notes/index.php");
     array_push($sideMenuImg, "fa-edit");
 
-    if (isset($status) and ($status == USER_STUDENT)) {
+    if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_GRADEBOOK)) {
         array_push($sideMenuText, $GLOBALS['langGradeTotal']);
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
         array_push($sideMenuImg, "gradebook");
@@ -612,7 +612,7 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langUsage']);
         array_push($sideMenuLink, "../../modules/usage/?t=a");
         array_push($sideMenuImg, "arrow.png");
-        
+
         array_push($sideMenuText, $GLOBALS['langRecordLog']);
         array_push($sideMenuLink, "../admin/otheractions.php");
         array_push($sideMenuImg, "fa-caret-right");
@@ -836,7 +836,7 @@ function pickerMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
-	$arrMenuType['class'] = 'picker';
+    $arrMenuType['class'] = 'picker';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     if (isset($course_id) and $course_id >= 1) {
