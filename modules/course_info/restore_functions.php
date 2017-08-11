@@ -469,7 +469,11 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $user_file = $restoreThis . '/user';
         if (file_exists($user_file)) {
             $cours_user = unserialize(file_get_contents($restoreThis . '/' . $restoreHelper->getFile('course_user')));
-            $userid_map = restore_users(unserialize(file_get_contents($user_file)), $cours_user, $departments, $restoreHelper);
+            if ($clone_course) {
+                $userid_map = clone_users($cours_user, $restoreHelper);
+            } else {
+                $userid_map = restore_users(unserialize(file_get_contents($user_file)), $cours_user, $departments, $restoreHelper);
+            }
             register_users($new_course_id, $userid_map, $cours_user, $restoreHelper);
         }
         $userid_map[0] = 0;
@@ -1070,6 +1074,26 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                   'level' => 'primary-label')), false);
 
     }
+}
+
+function clone_users($cours_user, $restoreHelper) {
+    global $uid;
+
+    $userid_map = array();
+    foreach ($cours_user as $item) {
+        $user_id = $item['user_id'];
+        $is_teacher = $item['status'] == USER_TEACHER;
+        if ($_POST['add_users'] == 'all' or
+            ($_POST['add_users'] == 'prof' and $is_teacher)) {
+                $userid_map[$user_id] = $user_id;
+        } elseif ($_POST['add_users'] == 'none' and $is_teacher) {
+            // when adding no users, just map the first prof to the current
+            // user and return the single-element mapping array
+            $userid_map[$user_id] = $uid;
+            return $userid_map;
+        }
+    }
+    return $userid_map;
 }
 
 function restore_users($users, $cours_user, $departments, $restoreHelper) {
