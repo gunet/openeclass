@@ -295,7 +295,7 @@ function loggedInMenu($rich=true) {
     array_push($sideMenuLink, $urlServer . "main/notes/index.php");
     array_push($sideMenuImg, "fa-edit");
 
-    if (isset($status) and ($status == USER_STUDENT)) {
+    if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_GRADEBOOK)) {
         array_push($sideMenuText, $GLOBALS['langGradeTotal']);
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
         array_push($sideMenuImg, "gradebook");
@@ -306,7 +306,7 @@ function loggedInMenu($rich=true) {
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
         array_push($sideMenuImg, "blog");
     }
-    
+
     if (get_config('eportfolio_enable')) {
         array_push($sideMenuText, $GLOBALS['langMyePortfolio']);
         array_push($sideMenuLink, $urlServer . "main/eportfolio/index.php?id=$uid&amp;token=".token_generate('eportfolio' . $uid));
@@ -541,11 +541,11 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langDisableModules']);
         array_push($sideMenuLink, "../admin/modules.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langCertBadge']);
         array_push($sideMenuLink, '../admin/certbadge.php');
         array_push($sideMenuImg, 'fa-caret-right');
-        
+
         array_push($sideMenuText, $GLOBALS['langActivityCourse']);
         array_push($sideMenuLink, '../admin/activity.php');
         array_push($sideMenuImg, 'fa-caret-right');
@@ -568,12 +568,12 @@ function adminMenu() {
     $sideMenuImg = array();
 
     if (isset($is_admin) and $is_admin) {
-               
+
         array_push($sideMenuSubGroup, array(
             'type' => 'text',
             'text' => $GLOBALS['langAdminTool'],
             'class' => 'server_admin'));
-        
+
         array_push($sideMenuText, $GLOBALS['langConfig']);
         array_push($sideMenuLink, "../admin/eclassconf.php");
         array_push($sideMenuImg, "fa-caret-right");
@@ -585,7 +585,7 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         if (get_config('phpMyAdminURL')) {
             array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
             array_push($sideMenuLink, get_config('phpMyAdminURL'));
@@ -607,17 +607,17 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langAdminAn']);
         array_push($sideMenuLink, "../admin/adminannouncements.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
         array_push($sideMenuLink, "../admin/faq_create.php");
         array_push($sideMenuImg, "fa-caret-right");
-                       
+
         if (get_config('enable_common_docs')) {
             array_push($sideMenuText, $GLOBALS['langCommonDocs']);
             array_push($sideMenuLink, "../admin/commondocs.php");
             array_push($sideMenuImg, "fa-caret-right");
-        }              
-        
+        }
+
         array_push($sideMenuText, $GLOBALS['langCleanUp']);
         array_push($sideMenuLink, "../admin/cleanup.php");
         array_push($sideMenuImg, "fa-caret-right");
@@ -630,18 +630,18 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langPHPInfo']);
         array_push($sideMenuLink, "../admin/phpInfo.php");
-        array_push($sideMenuImg, "fa-caret-right");       
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langAdminManual']);
         $manual_language = ($language == 'el')? $language: 'en';
         array_push($sideMenuLink, "http://docs.openeclass.org/doku.php?id=$manual_language:admin_doc");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
         array_push($sideMenuGroup, $sideMenuSubGroup);
-    }   
+    }
 
     return $sideMenuGroup;
 }
@@ -839,7 +839,7 @@ function pickerMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
-	$arrMenuType['class'] = 'picker';
+    $arrMenuType['class'] = 'picker';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     if (isset($course_id) and $course_id >= 1) {
