@@ -57,4 +57,8 @@ class OpenDelosApp extends ExtApp {
         return $GLOBALS['langOpenDelosDescription'];
     }
 
+    public function getConfigUrl() {
+        return 'modules/admin/opendelosmoduleconf.php';
+    }
+
 }
