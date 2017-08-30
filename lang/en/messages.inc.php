@@ -3971,7 +3971,7 @@ $langOpenDelosRequireAuth = "Authentication with the OpenDelos system is require
 $langOpenDelosRequireAuthHere = "here";
 $langOpenDelosAuth = "OpenDelos Authentication";
 $langOpenDelosPrivateNote = "Note: if your course utilizes open access and you add private multimedia files in the multimedia section, these files will be visible to anonymous users.";
-$langOpenDelosHttpsError = "Connectivity with Open Delos cannot be enabled because the local server utilizes HTTP protocol, whereas the Open Delos host utilizes HTTPS protocol. The newer versions of web browsers do not allow such mixed protocol usage.";
+$langOpenDelosHttpsError = "Connectivity with Open Delos cannot be enabled because the local server utilizes HTTPS protocol, whereas the Open Delos host utilizes HTTP protocol. The newer versions of web browsers do not allow such mixed protocol usage.";
 $langBBBDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between instructors and trainees.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
 $langFtpShortDescription = "Link to FTP service";
 $langFtpLongDescription = "Enter the FTP link";

@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
     $server_https = isset($_SERVER['HTTPS']);
     $delos_https = preg_match('/^https/i', $app->getParam(OpenDelosApp::URL)->value());
 
-    if (!$server_https && $delos_https) {
+    if ($server_https && !$delos_https) {
         Session::Messages($langOpenDelosHttpsError, 'alert-danger');
         $app->setEnabled(0);
     }
