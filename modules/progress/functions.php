@@ -49,10 +49,6 @@ function display_certificates() {
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
     
-    if (count($sql_cer) == 0) { // If no certificates
-        $tool_content .= "<div class='alert alert-info'>$langNoCertificates <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1'>$langHere</a>.</div>";
-    } else { // If there are certificates
-
         $tool_content .= "
             <div class='row'>
                 <div class='col-xs-12'>
@@ -69,6 +65,9 @@ function display_certificates() {
                                 </div>
                             </div>
                             <div class='res-table-wrapper'>";
+        if (count($sql_cer) == 0) { // If no certificates
+        $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
+    } else { // If there are certificates
 
                             foreach ($sql_cer as $data) {
 
@@ -111,6 +110,7 @@ function display_certificates() {
                                 </div>";
 
                             }
+    }
 
                             $tool_content .= "
                             </div>
@@ -119,8 +119,8 @@ function display_certificates() {
                 </div>
             </div>
         ";
+    
     }
-}
 
 
 /**
@@ -156,9 +156,6 @@ function display_badges() {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0 ", $course_id);
     }
     
-    if (count($sql_cer) == 0) { // no badges
-        $tool_content .= "<div class='alert alert-info'>$langNoBadges <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1'>$langHere</a>.</div>";
-    } else {
 
         $tool_content .= "
             <div class='row'>
@@ -176,6 +173,10 @@ function display_badges() {
                                 </div>
                             </div>
                             <div class='res-table-wrapper'>";
+
+        if (count($sql_cer) == 0) { // no badges
+        $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
+    } else {
 
         foreach ($sql_cer as $data) {
             $vis_status = $data->active ? "text-success" : "text-danger";
@@ -213,6 +214,7 @@ function display_badges() {
                                 </div>";
 
         }
+    }
 
         $tool_content .= "
                             </div>
@@ -221,8 +223,8 @@ function display_badges() {
                 </div>
             </div>
         ";
+    
     }
-}
 
 /**
  * @brief display course completion (special type of badge)
@@ -452,9 +454,7 @@ function display_activities($element, $id) {
             'secondary_btn_class' => 'btn-success btn-sm'
         ));
 
-    if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoActivCert</div>";
-    }
+    
     $tool_content .= "
             <div class='row'>
             <div class='col-xs-12'>
@@ -485,8 +485,9 @@ function display_activities($element, $id) {
                                     <i class='fa fa-cogs'></i>
                                 </div>
                             </div>";
-        
-    if (count($result) > 0) {
+    if (count($result) == 0) {
+        $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+    } else { 
         foreach ($result as $details) {
                 $resource_data = get_resource_details($element, $details->id);
                 $tool_content .= "
@@ -1876,7 +1877,7 @@ function student_view_progress() {
     // populate with data
     foreach ($iter as $key) {
         $gameQ = "SELECT a.*, b.title,"
-                . " b.description, b.active, b.created, b.id"
+                . " b.description, b.issuer, b.active, b.created, b.id"
                 . " FROM user_{$key} a "
                 . " JOIN {$key} b ON (a.{$key} = b.id) "
                 . " WHERE a.user = ?d "
@@ -1894,45 +1895,49 @@ function student_view_progress() {
             }
         }        
     if (count($game_badge) > 0 or count($game_certificate) > 0) {
+        $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='badge-container'>";
         $tool_content .= "<h4>$langBadges</h4>";
-        $tool_content .= "<hr>";
+        $tool_content .= "<div class='form-wrapper'>";
         if (count($game_badge) > 0) {
             $tool_content .= "<div class='clearfix'>";
-                foreach ($game_badge as $key => $badge)                
-                    $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned));
-                    $dateAssigned = ($badge->completed == 1) ? $formatted_date : '';                    
-                    $tool_content .= "<a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user'>";
-                    $tool_content .= "<div class='certificate_panel'>
-                        <h4 class='certificate_panel_title'>$badge->title</h4>
-                        <div class='certificate_panel_date'>$dateAssigned</div>";
+            foreach ($game_badge as $key => $badge) {
+                $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned));
+                $dateAssigned = ($badge->completed == 1) ? $formatted_date : '';
+                $faded = ($badge->completed != 1) ? "faded" : '';    
+                $tool_content .= "<div class='col-xs-6 col-sm-3'>";
+                $tool_content .= "<a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>
+                    <img class='$faded center-block' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
+                    <p class='text-center' style='padding-top: 10px; font-size: larger;'>
+                        " . ellipsize($badge->title, 40) . "
+                    </p>";
 
-                    if ($badge->completed == 1) {
-                        $tool_content .= "<i class='fa fa-check-circle fa-inverse state_success'></i>
-                            <div class='certificate_panel_badge'>
-                            <img src='$urlServer'" . BADGE_TEMPLATE_PATH . "'$badge->filename'>
-                            </div>";
-                    } else {
-                        $tool_content .= "<div class='certificate_panel_percentage'>" 
-                            . round($badge->completed_criteria / $badge->total_criteria * 100, 0) . 
-                            "%</div>";
-                    }
-                    $tool_content .= "</div></a>";
-                    $tool_content .= "</div>";
+                if ($badge->completed != 1) {
+                    $tool_content .= "<div class='not_completed'>
+                        <div class='certificate_panel_percentage_compact center-block'>" . round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%</div>
+                        </div>";
                 }
+                $tool_content .= "</a></div>";                                       
+            }
             $tool_content .= "</div>";
+        }
+        $tool_content .= "</div></div></div>";
           
+    $tool_content .= "<div class='row'>";
     $tool_content .= "<div class='badge-container'>
                     <h4>$langCertificates</h4><hr>";
+    $tool_content .= "<div class='form-wrapper'>";
         if (count($game_certificate) > 0) {
             $tool_content .= "<div class='clearfix'>";
             foreach ($game_certificate as $key => $certificate) {
                 $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
-                $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';                    
-                $tool_content .= "<a href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
+                $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';                  
+                $tool_content .= "<div class='col-xs-12 col-sm-6 col-xl-4'>";
+                $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
                 $tool_content .= "<div class='certificate_panel'>
                         <h4 class='certificate_panel_title'>$certificate->title</h4>
                         <div class='certificate_panel_date'>$dateAssigned</div>
+                        <div class='certificate_panel_issuer'>$certificate->issuer</div>
                         <div class='certificate_panel_viewdetails'>";
                 if ($certificate->completed == 1) {
                     $tool_content .= "&nbsp;&nbsp;<a href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user&amp;p=1'>$langPrintVers</a>";
@@ -1954,11 +1959,11 @@ function student_view_progress() {
                 $tool_content .= "</div>";
             }
             $tool_content .= "</div>";
-        } 
+        }
+        $tool_content .= "</div></div></div>";
     } else {
         $tool_content .= "<div class='alert alert-info'>$langNoCertBadge</div>";
-    }
-    
+    }    
 }
 
 

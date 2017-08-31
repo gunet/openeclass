@@ -3426,6 +3426,22 @@ a:hover
     right:0px
 }
 
+.certificate_panel_badge_compact
+{
+    max-width: 200px;
+    position: relative;
+}
+
+.not_completed
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding-top: 40px;
+    top: 0px;
+    left: 0px;
+}
+
 .certificate_panel_badge img
 {
     width: 120px;
@@ -3455,4 +3471,22 @@ a:hover
     line-height: 38px;
     font-weight: 600;
     text-align: center;
+}
+
+.certificate_panel_percentage_compact
+{
+    padding-top: 80px;
+    font-size:30px;
+    padding: 10px 10px;
+    width: 72px; /* original was width: 40px; */
+    height: 72px; /* original was height: 40px;*/
+    color: #555;
+    line-height: 48px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.faded
+{
+    opacity: 0.2;
 }
