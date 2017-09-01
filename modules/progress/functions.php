@@ -398,7 +398,7 @@ function display_activities($element, $id) {
             'class' => ''),
         array('title' => "$langOfBlogComments",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
-            'icon' => 'fa fa-columns fa-fw',
+            'icon' => 'fa fa-comment fa-fw',
             'class' => ''),
         /*array('title' => "$langOfCourseComments",
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
@@ -442,7 +442,7 @@ function display_activities($element, $id) {
             'class' => ''),
         array('title' => "$langWiki",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=wiki",
-            'icon' => 'fa fa-wikipedia-w fa-fw',
+            'icon' => 'fa fa-wikipedia fa-fw',
             'class' => ''),
         array('title' => "$langCourseParticipation",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
@@ -2048,7 +2048,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                 <div class='pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
                                 <div class='pn-info-title-sct'>$langpublisher</div>
-                                <div class='pn-info-text-sct'>" . get_cert_issuer($element_id) . "</div>
+                                <div class='pn-info-text-sct'>" . get_cert_issuer($element, $element_id) . "</div>
                                 $cert_public_link
                             </div>
                         </div>

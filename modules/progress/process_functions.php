@@ -408,12 +408,13 @@ function get_cert_expiration_day($element, $id) {
 
 /**
  * @brief get certificate issuer
+ * @param type $element
  * @param type $certificate_id
  * @return type
  */
-function get_cert_issuer($certificate_id) {
+function get_cert_issuer($element, $id) {
 
-    $cert_issuer =  Database::get()->querySingle("SELECT issuer FROM certificate WHERE id = ?d", $certificate_id)->issuer;
+    $cert_issuer =  Database::get()->querySingle("SELECT issuer FROM $element WHERE id = ?d", $id)->issuer;
     
     return $cert_issuer;
 }
@@ -911,7 +912,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $certificate_title = get_cert_title('certificate', $certificate_id);
     }
     if (is_null($certificate_issuer)) {
-        $certificate_issuer = get_cert_issuer($certificate_id);
+        $certificate_issuer = get_cert_issuer('certificate', $certificate_id);
     }    
     
     $sql = Database::get()->querySingle("SELECT message FROM certificate WHERE id = ?d", $certificate_id);
@@ -949,7 +950,7 @@ function register_certified_user($table, $element_id, $element_title, $user_id) 
     
     $title = course_id_to_title($course_id);    
     $user_fullname = uid_to_name($user_id);
-    $issuer = get_cert_issuer($element_id);
+    $issuer = get_cert_issuer($table, $element_id);
     $expiration_date = get_cert_expiration_day($table, $element_id);
     Database::get()->query("INSERT INTO certified_users SET course_title = ?s, "
                                                                 . "cert_title = ?s, "
