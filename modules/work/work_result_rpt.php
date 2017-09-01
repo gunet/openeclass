@@ -86,7 +86,7 @@ function get_submission_rank($assign_id,$grade, $submission_date) {
  * @global type $langAutoJudgeInput
  * @global type $langAutoJudgeOutput
  * @global type $langAutoJudgeExpectedOutput
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langAutoJudgeWeight
  * @global type $langAutoJudgeResult
  * @global type $langAutoJudgeResultsFor
@@ -103,7 +103,7 @@ function get_submission_rank($assign_id,$grade, $submission_date) {
  */
 function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
     global $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
-        $langAutoJudgeExpectedOutput, $langAutoJudgeOperator, $langAutoJudgeWeight,
+        $langAutoJudgeExpectedOutput, $langOperator, $langAutoJudgeWeight,
         $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
         $langAutoJudgeDownloadPdf, $langBack, $langGradebookGrade;
     
@@ -115,7 +115,7 @@ function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge
         </tr>
           <tr> <td> <b>$langAutoJudgeInput</b> </td>
                <td> <b>$langAutoJudgeOutput</b> </td>
-               <td> <b>$langAutoJudgeOperator</b> </td>
+               <td> <b>$langOperator</b> </td>
                <td> <b>$langAutoJudgeExpectedOutput</b> </td>
                <td> <b>$langAutoJudgeWeight</b> </td>
                <td> <b>$langAutoJudgeResult</b> </td>
@@ -155,7 +155,7 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
  * @global type $langAutoJudgeInput
  * @global type $langAutoJudgeOutput
  * @global type $langAutoJudgeExpectedOutput
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langAutoJudgeWeight
  * @global type $langAutoJudgeResult
  * @global type $langGradebookGrade
@@ -171,7 +171,7 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
  */
 function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
     global $langAutoJudgeInput, $langAutoJudgeOutput, $course_id,
-        $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
+        $langAutoJudgeExpectedOutput, $langOperator,
         $langAutoJudgeWeight, $langAutoJudgeResult, $langGradebookGrade,
         $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank;
 
@@ -212,7 +212,7 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
         <tr>
             <th>' . $langAutoJudgeInput . '</th>
             <th>' . $langAutoJudgeOutput . '</th>
-            <th>' . $langAutoJudgeOperator . '</th>
+            <th>' . $langOperator . '</th>
             <th>' . $langAutoJudgeExpectedOutput . '</th>
             <th>' . $langAutoJudgeWeight . '</th>
             <th>' . $langAutoJudgeResult . '</th>

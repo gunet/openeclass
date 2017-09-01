@@ -756,7 +756,7 @@ function display_available_exercises($element, $element_id) {
             $exercise_id = $entry['id'];
             $tool_content .= "<tr class='$vis'>";
             $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a></td>";
-            $tool_content .= "<td class='text-left'>" . $entry['comment'] . "</td>";            
+            $tool_content .= "<td class='text-left'>" . $entry['comment'] . "</td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
             $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$exercise_id]' value=''></td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$exercise_id'></td>";

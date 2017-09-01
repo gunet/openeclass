@@ -1227,7 +1227,7 @@ function new_assignment() {
            $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales, $langGradeRubricsSelect, $langGradeRubrics,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
-           $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
+           $langOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
            $langAutoJudgeAssertions, $langDescription, $langTitle, $langNotifyAssignmentSubmission,
            $langPasswordUnlock, $langIPUnlock;
 
@@ -1568,7 +1568,7 @@ function new_assignment() {
                             <thead>
                                 <tr>
                                   <th>$langAutoJudgeInput</th>
-                                  <th>$langAutoJudgeOperator</th>
+                                  <th>$langOperator</th>
                                   <th>$langAutoJudgeExpectedOutput</th>
                                   <th>$langAutoJudgeWeight</th>
                                   <th>".$m['delete']."</th>
@@ -1698,7 +1698,7 @@ function new_assignment() {
  * @global type $langDescription
  * @global type $langAutoJudgeInput
  * @global type $langAutoJudgeExpectedOutput
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langAutoJudgeWeight
  * @global type $langAutoJudgeProgrammingLanguage
  * @global type $langAutoJudgeAssertions
@@ -1715,7 +1715,7 @@ function show_edit_assignment($id) {
         $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales, $langGradeRubrics,
         $langGradeRubricsSelect, $langLessOptions, $langAutoJudgeInputNotSupported, $langTitle,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
-        $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langAutoJudgeOperator, $langNotifyAssignmentSubmission,
+        $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
         $langPasswordUnlock, $langIPUnlock;
 
@@ -2120,7 +2120,7 @@ function show_edit_assignment($id) {
                             <thead>
                                 <tr>
                                     <th>$langAutoJudgeInput</th>
-                                    <th>$langAutoJudgeOperator</th>
+                                    <th>$langOperator</th>
                                     <th>$langAutoJudgeExpectedOutput</th>
                                     <th>$langAutoJudgeWeight</th>
                                     <th>".$m['delete']."</th>
