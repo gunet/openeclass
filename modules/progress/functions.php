@@ -1859,12 +1859,13 @@ function certificate_settings($element, $element_id = 0) {
  * @global type $langNoCertBadge
  * @global type $langBadges
  * @global type $course_code
+ * @global type $langPrintVers
  * @global type $langCertificates
  */
 function student_view_progress() {
     
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
-            $langBadges, $course_code, $langCertificates;
+            $langBadges, $course_code, $langCertificates, $langPrintVers;
     
     require_once 'Game.php';
     // check for completeness in order to refresh user data
@@ -1948,7 +1949,7 @@ function student_view_progress() {
                         <i class='fa fa-check-circle fa-inverse state_success'></i>
                     </div>
                     <div class='certificate_panel_badge'>
-                        <img src='$template_base/img/game/badge.png'>
+                        <img src='" . $urlServer . "'template/default/img/game/badge.png'>
                     </div>";
                 } else {
                     $tool_content .= "<div class='certificate_panel_percentage'> " 
