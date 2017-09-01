@@ -1949,7 +1949,7 @@ function student_view_progress() {
                         <i class='fa fa-check-circle fa-inverse state_success'></i>
                     </div>
                     <div class='certificate_panel_badge'>
-                        <img src='" . $urlServer . "'template/default/img/game/badge.png'>
+                        <img src='" . $urlServer . "template/default/img/game/badge.png'>
                     </div>";
                 } else {
                     $tool_content .= "<div class='certificate_panel_percentage'> " 
