@@ -27,6 +27,7 @@ require_once 'modules/progress/CommentEvent.php';
 
 $wall_commenting = false;
 
+$commentEventActivity = null;
 if ($_POST['rtype'] == 'blogpost') {
     $setting_id = SETTING_BLOG_COMMENT_ENABLE;
 } elseif ($_POST['rtype'] == 'course') {
