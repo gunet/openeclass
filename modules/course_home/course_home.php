@@ -46,6 +46,7 @@ require_once 'modules/weeks/functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
+require_once 'modules/progress/process_functions.php';
 
 doc_init();
 $tree = new Hierarchy();
@@ -479,28 +480,35 @@ $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
 //set the lang var for lessons visibility status
 switch ($visible) {
     case COURSE_CLOSED: {
-        $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
+        $lessonStatus = "<span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_REGISTRATION: {
-        $lessonStatus = "   <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
+        $lessonStatus = "<span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
                                 <span class='fa fa-pencil text-danger fa-custom-lock'></span>
                             </span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_OPEN: {
-        $lessonStatus = "    <span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span><span class='hidden'>.</span>";
+        $lessonStatus = "<span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_INACTIVE: {
-        $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
+        $lessonStatus = "<span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
                                 <span class='fa fa-times text-danger fa-custom-lock'></span>
                              </span><span class='hidden'>.</span>";
         break;
     }
 }
-//$bar_content_2 = "<br><strong>$langConfidentiality:</strong> $lessonStatus";
-//$bar_content_2 = "<br><strong>$langUsers:</strong> $Users_link";
+
+if ($uid and !$is_editor) {
+    $course_completion_id = has_course_completion(); // is course completion enabled?
+    if ($course_completion_id) {
+        $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
+        $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+    }
+}
+
 $citation_text = "$professor.&nbsp;<i>$currentCourseName.</i>&nbsp;$langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) . "&nbsp;$langFrom2 {$urlServer}courses/$course_code/";
 $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
@@ -929,6 +937,32 @@ if ($course_info->view_type == 'activity') {
 $tool_content .= "
     <div class='col-md-$cunits_sidebar_columns'>
         <div class='row'>";
+
+// display course completion status (if defined)
+if (isset($course_completion_id) and $course_completion_id > 0) {
+        $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
+            <div class='content-title'>$langCourseCompletion</div>
+            <div class='panel'>
+                <div class='panel-body'>
+                    <div class='text-center'>
+                        <div class='col-sm-12'>
+                            <div class='center-block' style='display:inline-block;'>
+                                <a style='text-decoration:none;' href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&u=$uid'>";
+                            if ($percentage == '100%') {
+                                $tool_content .= "<i class='fa fa-check-circle fa-5x state_success'></i>";
+                            } else {
+                                $tool_content .= "<div class='course_completion_panel_percentage'>$percentage</div>";
+                            }
+                            $tool_content .= "</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>";
+}
+
+
 
 // display open course level if exist
 if (isset($level) && !empty($level)) {
