@@ -617,41 +617,33 @@ if ($can_upload) {
                                         WHERE $group_sql AND path = ?s", $filePath);
         $delete_ok = true;
         if ($r) {
-            if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
-                Session::Messages($langResourceBelongsToCert, "alert-warning");
-            } else {
-                // remove from index if relevant (except non-main sysbsystems and metadata)
-                Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
-                                                AND format <> '.meta' AND path LIKE ?s",
-                    function ($r2) {
-                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
-                        if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {                            
-                            Session::Messages($langResourceBelongsToCert, "alert-warning");
-                            redirect_to_current_dir();
-                        }
-                    },
-                    $filePath . '%');
+            // remove from index if relevant (except non-main sysbsystems and metadata)
+            Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
+                AND format <> '.meta' AND path LIKE ?s",
+                function ($r2) {
+                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                },
+                $filePath . '%');
 
-                if (empty($r->extra_path)) {
-                    if ($delete_ok = my_delete($basedir . $filePath) && $delete_ok) {
-                        if (hasMetaData($filePath, $basedir, $group_sql)) {
-                            $delete_ok = my_delete($basedir . $filePath . ".xml") && $delete_ok;
-                        }
-                        update_db_info('document', 'delete', $filePath, $r->filename);
+            if (empty($r->extra_path)) {
+                if ($delete_ok = my_delete($basedir . $filePath) && $delete_ok) {
+                    if (hasMetaData($filePath, $basedir, $group_sql)) {
+                        $delete_ok = my_delete($basedir . $filePath . ".xml") && $delete_ok;
                     }
-                } else {
                     update_db_info('document', 'delete', $filePath, $r->filename);
                 }
-                if(isset($_GET['ebook_id'])){
-                    Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
-                }
-                if ($delete_ok) {
-                    Session::Messages($langDocDeleted, 'alert-success');
-                } else {
-                    Session::Messages($langGeneralError, 'alert-danger');
-                }
-                redirect_to_current_dir();
+            } else {
+                update_db_info('document', 'delete', $filePath, $r->filename);
             }
+            if(isset($_GET['ebook_id'])){
+                Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
+            }
+            if ($delete_ok) {
+                Session::Messages($langDocDeleted, 'alert-success');
+            } else {
+                Session::Messages($langGeneralError, 'alert-danger');
+            }
+            redirect_to_current_dir();
         }
     }
 
@@ -1122,14 +1114,10 @@ if ($can_upload) {
                                           WHERE $group_sql AND
                                                 path = ?s", $newVisibilityStatus, $visibilityPath);
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
-        if (($newVisibilityStatus == 0) and resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
-            Session::Messages($langResourceBelongsToCert, "alert-warning");
-        } else {
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-            Session::Messages($langViMod, 'alert-success');
-            $curDirPath = my_dirname($visibilityPath);
-            redirect_to_current_dir();
-        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+        Session::Messages($langViMod, 'alert-success');
+        $curDirPath = my_dirname($visibilityPath);
+        redirect_to_current_dir();
     }
 
     // Public accessibility commands
