@@ -3512,6 +3512,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filename VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
         }
+        if (!DBHelper::fieldExists('assignment_submit', 'grade_submission_rubric')) {
+            Database::get()->query("ALTER TABLE assignment_submit ADD `grade_submission_rubric` TEXT AFTER grade_submission_ip");
+        }
         // upgrade table `assignment`
         if (!DBHelper::fieldExists('assignment', 'notification')) {
             Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
