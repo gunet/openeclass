@@ -32,9 +32,16 @@ $pageName = $langGradeRubrics;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
 
 if (isset($_GET['delete'])) { // delete rubric
-	Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
-	Session::Messages($langRubricDeleted, 'alert-success');
-	redirect_to_home_page("modules/work/rubrics.php");
+	$rubric_used = Database::get()->querySingle("SELECT COUNT(*) as count FROM `assignment`, `assignment_submit` "
+                . "WHERE `assignment`.`grading_scale_id` = ?d AND `assignment`.`course_id` = ?d AND `assignment`.`id` = `assignment_submit`.`assignment_id` AND `assignment_submit`.`grade` IS NOT NULL", $_GET['delete'], $course_id)->count;
+	if ($rubric_used) {
+        $tool_content .= "<div class='alert alert-info'>$langRubricNotDelete</div>";
+    }
+	else{
+		Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
+		Session::Messages($langRubricDeleted, 'alert-success');
+		redirect_to_home_page("modules/work/rubrics.php");
+	}
 }
 
 if (isset($_GET['preview'])) { // preview rubric
@@ -379,7 +386,7 @@ if (isset($_GET['rubric_id'])) {
 	}
 	$opt1 = $rubric_data->preview_rubric;
 	$opt2 = $rubric_data->points_to_graded;
-	 $tool_content .= "<div id='inserthere' class=''>
+	$tool_content .= "<div id='inserthere' class=''>
 							<div class='form-group'>
 								<a class='btn btn-xs btn-success margin-top-thin' id='addCriteria'>$langAddRubricCriteria</a>
 							</div>
@@ -518,7 +525,7 @@ if (isset($_GET['rubric_id'])) {
 	    global $tool_content, $m, $langBack, $course_code,
         $langSave, $course_id, $head_content, $language, $langTitle,
 		$langTitleRubric, $langRubricDesc, $langRubricCriteria,
-		$langEdit,$langDelete,$langConfirmDelete;
+		$langEdit,$langDelete,$langConfirmDelete, $langRubricNotDelete;
 		
 		$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
   

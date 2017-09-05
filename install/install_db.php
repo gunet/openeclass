@@ -992,6 +992,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `grade_comments_filename` VARCHAR(200) NOT NULL DEFAULT '',
     `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
     `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
+	`grade_submission_rubric` text DEFAULT '',
     `group_id` INT( 11 ) DEFAULT NULL,
     `auto_judge_scenarios_output` TEXT) $tbl_options");
 
