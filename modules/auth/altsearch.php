@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.3
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -199,7 +199,7 @@ if ($is_valid) {
             $email = $_SESSION['auth_user_info']['email'];
         }
     }
-    if (!empty($email) and !Swift_Validate::email($email)) {
+    if (!empty($email) and !valid_email($email)) {
         $ok = NULL;
         $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
     } else {
@@ -359,7 +359,7 @@ if ($is_valid) {
         }
 
         // check if mail address is valid
-        if (!empty($email) and !Swift_Validate::email($email)) {
+        if (!empty($email) and !valid_email($email)) {
             $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
             user_info_form();
             draw($tool_content, 0, null, $head_content);
@@ -524,7 +524,7 @@ function user_info_form() {
         $mail_message = $langEmailNotice;
     } else {
         $mail_message = '';
-    }   
+    }
     if (isset($_SESSION['auth_user_info']) and !empty($_SESSION['auth_user_info']['givenname'])) {
         $givennameClass = ' form-control-static';
         $givennameInput = q($_SESSION['auth_user_info']['givenname']);

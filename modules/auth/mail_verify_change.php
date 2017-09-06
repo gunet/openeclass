@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -58,20 +58,20 @@ if (!get_config('email_verification_required') or
 }
 
 if (!empty($_POST['submit'])) {
-    if (!empty($_POST['email']) && Swift_Validate::email($_POST['email'])) {
+    if (!empty($_POST['email']) && valid_email($_POST['email'])) {
         $email = $_POST['email'];
         // user put a new email address update db and session
         if ($email != $_SESSION['email']) {
             $_SESSION['email'] = $email;
-            Database::get()->query("UPDATE user SET email = ?s WHERE id = ?d", $email, $uid);            
+            Database::get()->query("UPDATE user SET email = ?s WHERE id = ?d", $email, $uid);
         }
-        //send new code                
+        //send new code
         if (get_config('case_insensitive_usernames')) {
             $hmac = token_generate(strtolower($_SESSION['uname']) . $email . $uid);
         } else {
             $hmac = token_generate($_SESSION['uname'] . $email . $uid);
         }
-        
+
         $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid."</a>";
 
         $subject = $langMailChangeVerificationSubject;
@@ -102,7 +102,7 @@ if (!empty($_POST['submit'])) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
             $tool_content .= $mail_ver_error;
         } else {
-            $tool_content .= 
+            $tool_content .=
                 action_bar(array(
                     array(
                         'title' => $langBack,
@@ -128,25 +128,25 @@ if (!empty($_POST['submit'])) {
     }
 }
 
-if (empty($_POST['email']) or !Swift_Validate::email($_POST['email'])) {
+if (empty($_POST['email']) or !valid_email($_POST['email'])) {
     $tool_content .= "<div class='form-wrapper'>
-    	<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
+        <form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-			<div class='form-group'>
+            <div class='form-group'>
                 <label class='col-sm-2'>$lang_email:</label>
                 <div class='col-sm-10'>
-					<input class='form-control' type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' placeholder='$langMailVerificationAddrChange'>
-				</div>
-			</div>
-			<div class='form-group'>
-				<div class='col-sm-offset-2 col-sm-10'>
-					<input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>" .
+                    <input class='form-control' type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' placeholder='$langMailVerificationAddrChange'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>" .
                     (isset($_GET['from_profile']) || get_config('email_required')? '':
                         " <input class='btn btn-primary' type='submit' name='enter' value='$langCancelAndEnter'>") .
                     (isset($_GET['from_profile']) && !get_config('mail_verification_required')?
                         " <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-default' type='button'>$langCancel</a>": '') . "
-				</div>
-			</div>
+                </div>
+            </div>
         </fieldset>
     </form>
     </div>";

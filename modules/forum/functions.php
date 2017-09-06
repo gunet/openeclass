@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -45,7 +45,7 @@ function get_total_posts($id) {
 
 function get_last_post($topic_id) {
     return Database::get()->querySingle("SELECT post_time FROM forum_post
-                WHERE topic_id = ?d                
+                WHERE topic_id = ?d
                 ORDER BY post_time DESC LIMIT 1", $topic_id)->post_time;
 }
 
@@ -147,7 +147,7 @@ function init_forum_group_info($forum_id) {
     global $course_id, $group_id, $can_post, $is_member, $is_editor;
 
     $q = Database::get()->querySingle("SELECT id FROM `group`
-			WHERE course_id = ?d AND forum_id = ?d", $course_id, $forum_id);
+            WHERE course_id = ?d AND forum_id = ?d", $course_id, $forum_id);
     if ($q) {
         $group_id = $q->id;
         initialize_group_info($group_id);
@@ -176,7 +176,7 @@ function add_topic_link($pagenr, $total_reply_pages) {
  * @brief Send an e-mail notification for new messages to subscribed users
  * @global type $logo
  * @global type $langNewForumNotify
- * @global type $course_code 
+ * @global type $course_code
  * @global type $course_id
  * @global type $langForumFrom
  * @global type $uid
@@ -210,7 +210,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
 
     $subject_notify = "$logo - $langNewForumNotify";
     $category_id = forum_category($forum_id);
-    $cat_name = category_name($category_id);    
+    $cat_name = category_name($category_id);
     $name = uid_to_name($uid);
     $title = course_id_to_title($course_id);
 
@@ -227,7 +227,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
             </ul>
         </div>
     </div>";
-    
+
     $body_html_topic_notify = "<!-- Body Section -->
     <div id='mail-body'>
         <br>
@@ -253,8 +253,8 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
        "$langSender: $name\n" .
        "$langCourse: $title\n    {$urlServer}courses/$course_code/\n" .
        "$langCategory: $cat_name\n" .
-       "$langForum: $forum_name\n    {$urlServer}modules/forum/viewforum.php?course=$course_code&forum=$forum_id\n" . 
-       "$langSubject: $subject\n    {$urlServer}modules/forum/viewforum.php?course=$course_code&forum=$forum_id&topic=$topic_id\n" . 
+       "$langForum: $forum_name\n    {$urlServer}modules/forum/viewforum.php?course=$course_code&forum=$forum_id\n" .
+       "$langSubject: $subject\n    {$urlServer}modules/forum/viewforum.php?course=$course_code&forum=$forum_id&topic=$topic_id\n" .
        "--------------------------------------------\n$plain_message\n" .
        "--------------------------------------------\n" .
        "$langNote: " . canonicalize_whitespace(str_replace('<br />', "\n", sprintf($langLinkUnsubscribe, q($title)))) .
@@ -266,19 +266,19 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
                                                 WHERE cu.course_id = ?d
                                                 AND u.email <> ''
                                                 AND u.email IS NOT NULL", $course_id);
-       } else { // if it's not set lookup user setting           
+       } else { // if it's not set lookup user setting
             $users = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
-			WHERE (forum_id = ?d OR cat_id = ?d)
-			AND notify_sent = 1 AND course_id = ?d AND user_id != ?d", $forum_id, $category_id, $course_id, $uid);
-       }       
+            WHERE (forum_id = ?d OR cat_id = ?d)
+            AND notify_sent = 1 AND course_id = ?d AND user_id != ?d", $forum_id, $category_id, $course_id, $uid);
+       }
     $email = array();
     foreach ($users as $user) {
         if (get_user_email_notification($user->user_id, $course_id)) {
             $useremail = uid_to_email($user->user_id);
-            if (Swift_Validate::email($useremail)) { // if email is valid
+            if (valid_email($useremail)) { // if email is valid
                 $email[] = $useremail;
             }
         }
-    }    
+    }
     send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify);
 }

@@ -4023,6 +4023,22 @@ function user_hook($user_id) {
 }
 
 /**
+ * @brief Check whether an email address is valid
+ *
+ * @param string $email - Email address to check
+ */
+function valid_email($email) {
+    static $validator, $validation;
+
+    if (!isset($validator)) {
+        $validator = new Egulias\EmailValidator\EmailValidator();
+        $validation = new Egulias\EmailValidator\Validation\RFCValidation();
+    }
+
+    return $validator->isValid($email, $validation);
+}
+
+/**
  * @brief Display a message if course is under not-allowed department
  *
  * @param boolean $prompt - Provide a link to course settings if true
@@ -4108,8 +4124,6 @@ function showSecondFactorUserProfile(){
  * @param  POST variables
  * @return string
  */
-
-
 function saveSecondFactorUserProfile(){
     $connector = secondfaApp::getsecondfa();
     if($connector->isEnabled() == true ){
@@ -4125,7 +4139,6 @@ function saveSecondFactorUserProfile(){
  *
  * @return string
  */
-
 function showSecondFactorChallenge(){
     global $langSFAType;
     $connector = secondfaApp::getsecondfa();
@@ -4150,8 +4163,6 @@ function showSecondFactorChallenge(){
  * @param  POST variables
  * @return string
  */
-
-
 function checkSecondFactorChallenge(){
     $connector = secondfaApp::getsecondfa();
     if($connector->isEnabled() == true ){

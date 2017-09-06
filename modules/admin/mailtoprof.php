@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -56,7 +56,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         }
     } elseif ($_POST['sendTo'] == "1") { // Only professors
         if (isDepartmentAdmin()) {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user 
+            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user
                                                                 AND user.status = " . USER_TEACHER . " AND " . $depwh);
         } else {
             $sql = Database::get()->queryArray("SELECT email, id FROM user where status = " . USER_TEACHER . "");
@@ -79,7 +79,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         $emailTo = $m->email;
         $user_id = $m->id;
         // checks if user is notified by email and his email address is valid
-        if (Swift_Validate::email($emailTo) and get_user_email_notification($user_id)) {
+        if (valid_email($emailTo) and get_user_email_notification($user_id)) {
             array_push($recipients, $emailTo);
         }
 
@@ -139,25 +139,25 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
                 <input class='form-control' type='text' name='email_title' value='$email_title' size='50' />
             </div>
         </div>
-	<div class='form-group'>
-	  <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
+    <div class='form-group'>
+      <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
               <div class='col-sm-10'>
-	      ".rich_text_editor('body_mail', 10, 20, $body_mail)."
+          ".rich_text_editor('body_mail', 10, 20, $body_mail)."
               </div/>
-	</div>
-	<div class='form-group'>
-	  <label for='sendTo' class='col-sm-2 control-label'>$langSendMessageTo</label>
+    </div>
+    <div class='form-group'>
+      <label for='sendTo' class='col-sm-2 control-label'>$langSendMessageTo</label>
             <div class='col-sm-10'>
                 <select class='form-control' name='sendTo' id='sendTo'>
                     <option value='1'>$langProfOnly</option>
                     <option value='2'>$langStudentsOnly</option>
                     <option value='0'>$langToAllUsers</option>
-                </select>	    
+                </select>
             </div>
         </div>
-	<div class='col-sm-offset-2 col-sm-10'>	
-	  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>          
-        </div>	
+    <div class='col-sm-offset-2 col-sm-10'>
+      <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
+        </div>
     </fieldset>
     ". generate_csrf_token_form_field() ."
     </form>

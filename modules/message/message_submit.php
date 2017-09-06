@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -84,7 +84,7 @@ if (isset($_POST['submit'])) {
     } elseif (!empty($_FILES['file']['name'])) {
         $file_attached = TRUE;
     }
-    
+
     /*
      * submit message
      */
@@ -128,17 +128,17 @@ if (isset($_POST['submit'])) {
 
             validateUploadedFile($_FILES['file']['name'], 1);
 
-            if ($filesize + $dropbox_space > $diskQuotaDropbox) {            
+            if ($filesize + $dropbox_space > $diskQuotaDropbox) {
                 $errormsg = $langMesageNoSent;
                 $error = TRUE;
             } elseif (!is_uploaded_file($filetmpname)) { // check user found : no clean error msg
                 $errormsg = $langBadFormData;
                 $error = TRUE;
-            }            
+            }
             $format = get_file_extension($filename);
             $real_filename = $filename;
             $filename = safe_filename($format);
-            $filename = php2phps($filename);                       
+            $filename = php2phps($filename);
             if (!$error) {
                 $filename_final = $message_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);
@@ -152,7 +152,7 @@ if (isset($_POST['submit'])) {
                     }
                 }
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
-            } else {                
+            } else {
                 Session::Messages($errormsg, 'alert-danger');
                 redirect_to_home_page('modules/message/' . ($course_id? "?course=$course_code": ''));
             }
@@ -214,7 +214,7 @@ if (isset($_POST['submit'])) {
 
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
-                        if (Swift_Validate::email($emailaddr)) { // if email address is valid
+                        if (valid_email($emailaddr)) { // if email address is valid
                             send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
                         } else {
                             $errormail = TRUE;
@@ -224,7 +224,7 @@ if (isset($_POST['submit'])) {
             } else {//message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 foreach ($recipients as $userid) {
-                    if (get_user_email_notification($userid)) {                        
+                    if (get_user_email_notification($userid)) {
                         $datetime = date('l jS \of F Y h:i:s A');
                         $header_dropbox_message = "
                             <!-- Header Section -->
@@ -260,7 +260,7 @@ if (isset($_POST['submit'])) {
                         $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
-                        if (Swift_Validate::email($emailaddr)) { // if email address is valid
+                        if (valid_email($emailaddr)) { // if email address is valid
                             send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
                         } else {
                             $errormail = TRUE;

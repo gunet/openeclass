@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -84,7 +84,7 @@ if (!$all_set) {
     $errors[] = $langFieldsMissing;
 }
 
-if (!Swift_Validate::email($usermail)) {
+if (!valid_email($usermail)) {
     $errors[] = $langEmailWrong;
     $all_set = false;
 } else {
@@ -145,20 +145,20 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
-    
+
     $hybridauth = new Hybrid_Auth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
-    
+
     // additional layer of checks to verify that the provider is valid via hybridauth middleware
     if($provider_name == 'linkedin') $provider_name = 'LinkedIn'; //small fix required for LinkedIn
-    if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) { 
+    if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) {
         try {
             $hybridauth = new Hybrid_Auth($config);
-    
+
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate(strtolower($provider_name));
-    
+
             // grab the user profile and check if the provider_uid
             $user_data = $adapter->getUserProfile();
             if ($user_data->identifier) {
@@ -168,7 +168,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
                     //the provider user id already exists the the db. show an error.
                     $registration_errors[] = $langProviderError9;
                 } else {
-                    $provider_id = $user_data->identifier; 
+                    $provider_id = $user_data->identifier;
                     if (empty($givenname)) $givenname = $user_data->firstName;
                     if (empty($surname)) $surname = $user_data->lastName;
                     if (empty($username)) $username = q(str_replace(' ', '', $user_data->displayName));
@@ -240,10 +240,10 @@ if ($all_set) {
             SET auth_id = ?d, user_request_id = ?d, uid = ?s',
             $auth_id, $request_id, $user_data->identifier);
     }
-    
+
     //save custom profile fields values in pending table
     process_profile_fields_data(array('user_request_id' => $request_id, 'pending' => true));
-    
+
     // email does not need verification -> mail helpdesk
     if (!$email_verification_required) {
         //----------------------------- Email Request Message --------------------------
@@ -328,7 +328,7 @@ if ($all_set) {
         $tool_content .= "<div class='alert alert-success'>" .
                 ($prof ? $langDearProf : $langDearUser) .
                 "<br />$langMailVerificationSuccess
-			$langMailVerificationSuccess2</div><br /><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+            $langMailVerificationSuccess2</div><br /><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
     }
     draw($tool_content, 0);
     exit();

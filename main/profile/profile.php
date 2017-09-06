@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
     Database::get()->query("UPDATE user SET lang = ?s WHERE id = ?d", $langcode, $uid);
-    
+
     $var_arr = array('am_form' => get_config('am_required') and $myrow->status != 1,
                     'desc_form' => false,
                     'phone_form' => false,
@@ -118,11 +118,11 @@ if (isset($_POST['submit'])) {
                     'email_public' => false,
                     'phone_public' => false,
                     'am_public' => false);
-    
+
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
-    
-    $all_ok = register_posted_variables($var_arr, 'all');    
+
+    $all_ok = register_posted_variables($var_arr, 'all');
     $departments = null;
     if (!get_config('restrict_owndep')) {
         if (!isset($_POST['department']) and !$is_admin) {
@@ -157,9 +157,9 @@ if (isset($_POST['submit'])) {
                                              'imagetype' => $type));
     }
 
-    
+
     // check if email is valid
-    if ((get_config('email_required') or get_config('email_verification_required')) and !Swift_Validate::email($email_form)) { 
+    if ((get_config('email_required') or get_config('email_verification_required')) and !valid_email($email_form)) {
         Session::Messages($langEmailWrong);
         redirect_to_home_page("main/profile/profile.php");
     }
@@ -183,7 +183,7 @@ if (isset($_POST['submit'])) {
             redirect_to_home_page("main/profile/profile.php");
         }
     }
-    
+
     //check for validation errors in custom profile fields
     $cpf_check = cpf_validate_format();
     if ($cpf_check[0] === false) {
@@ -219,10 +219,10 @@ if (isset($_POST['submit'])) {
                              $verified_mail_sql
                          WHERE id = ?d",
                             $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
-        
+
     //fill custom profile fields
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
-    
+
         if ($q->affectedRows > 0 or isset($departments)) {
             $userObj->refresh($uid, $departments);
             Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
@@ -298,7 +298,7 @@ if (isset($_GET['provider'])) {
                             }
                     } else {
                         Session::Messages($langProviderError, 'alert-danger');
-                    } 
+                    }
                     redirect_to_home_page('main/profile/profile.php');
                 } catch (Exception $e) {
                     // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
@@ -327,11 +327,11 @@ if (isset($_GET['provider'])) {
                             break;
                         case 6:
                             Session::Messages($langProviderError7, 'alert-danger');
-                            $adapter->logout(); 
+                            $adapter->logout();
                             break;
                         case 7:
                             Session::Messages($langProviderError8, 'alert-danger');
-                            $adapter->logout(); 
+                            $adapter->logout();
                             break;
                     }
                     $_GET['msg'] = 11; // display generic error for now
@@ -553,7 +553,7 @@ Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d'
     }, $uid);
 
 // HybridAuth settings and links
-// check if there are any available alternative providers for authentication and show the corresponding links on 
+// check if there are any available alternative providers for authentication and show the corresponding links on
 // the homepage, or no mesage if no providers are enabled
 $config = get_hybridauth_config();
 
@@ -599,7 +599,7 @@ $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
           <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
         </div>
       </fieldset>
-      ". generate_csrf_token_form_field() ."  
+      ". generate_csrf_token_form_field() ."
       </form>
       </div>";
 
