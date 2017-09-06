@@ -804,8 +804,8 @@ function get_resource_details($element, $resource_id) {
                 $title = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource)->name;
                 $type = "$langLearningPath";
             break;
-        case ViewingEvent::DOCUMENT_ACTIVITY: 
-                $cer_res = Database::get()->queryArray("SELECT IF(title = '', filename, title) AS file_details FROM document 
+        case ViewingEvent::DOCUMENT_ACTIVITY:             
+                $cer_res = Database::get()->queryArray("SELECT IFNULL(title, filename) AS file_details FROM document 
                                     WHERE document.course_id = ?d AND document.id = ?d", $course_id, $resource);                
                 foreach ($cer_res as $res_data) {
                     $title = $res_data->file_details;
