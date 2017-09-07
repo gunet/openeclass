@@ -3738,6 +3738,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query('ALTER TABLE document
                 CHANGE filename filename VARCHAR(255) NOT NULL COLLATE utf8_bin');
 
+        // restore admin user white list
+        Database::get()->query("UPDATE user SET whitelist=NULL where username='admin'");
+        
     }
 
     // update eclass version

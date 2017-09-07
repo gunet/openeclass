@@ -112,7 +112,7 @@ if (isset($_POST['import'])) {
                 $theme_options = unserialize(base64_decode($base64_str));                
                 $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
                 @rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
-                recurse_php2phps_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
+                copyDirTo("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
                 Session::Messages($langThemeInstalled);
             }

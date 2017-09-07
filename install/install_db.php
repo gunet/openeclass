@@ -1299,7 +1299,7 @@ $admin_uid = $db->query("INSERT INTO `user`
     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, " . DBHelper::timeAfter() . ", " .
             DBHelper::timeAfter(5 * 365 * 24 * 60 * 60) . ", ?d, ?s, ?s)",
     $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, $lang, 1,
-    '*,,', 'Administrator')->lastInsertID;
+    NULL, 'Administrator')->lastInsertID;
 $db->query("INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)",
     $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
