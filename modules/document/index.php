@@ -893,10 +893,7 @@ if ($can_upload or $user_upload) {
             // check for disk quota
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
                 Session::Messages($langNoSpace, 'alert-danger');
-                redirect_to_current_dir();
-            } elseif (unwanted_file($_FILES['newFile']['name'])) {
-                Session::Messages($langUnwantedFiletype . ": " . q($_FILES['newFile']['name']), 'alert-danger');
-                redirect_to_current_dir();
+                redirect_to_current_dir();            
             } else {
                 $newformat = get_file_extension($_FILES['newFile']['name']);
                 $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .

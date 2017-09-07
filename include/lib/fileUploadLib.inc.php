@@ -458,13 +458,6 @@ function showquota($quota, $used, $backPath=null) {
     return $retstring;
 }
 
-// check for dangerous extensions and file types
-function unwanted_file($filename) {
-    return preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
-            'inf|ins|isp|jse|lnk|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
-            'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $filename);
-}
-
 // Actions to do before extracting file from zip archive
 // Create database entries and set extracted file path to
 // a new safe filename
@@ -492,10 +485,7 @@ function process_extracted_file($p_event, &$p_header) {
         $stored_filename = cp737_to_utf8($stored_filename);
     }
     $path_components = explode('/', $stored_filename);
-    $filename = array_pop($path_components);
-    if (unwanted_file($filename)) {
-        $filename .= '.bin';
-    }
+    $filename = array_pop($path_components);    
     $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
     $path = make_path($uploadPath, $path_components);
     if ($p_header['folder']) {
