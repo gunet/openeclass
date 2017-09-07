@@ -149,8 +149,7 @@ if (isset($_POST['add_submit'])) { // add
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
 
-        // convert php file in phps to protect the platform against malicious codes
-        $file_name = php2phps($file_name);                    
+        // convert php file in phps to protect the platform against malicious codes        
         $file_name = str_replace(" ", "%20", $file_name);
         $file_name = str_replace("%20", "", $file_name);
         $file_name = str_replace("\'", "", $file_name);

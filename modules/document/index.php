@@ -304,6 +304,7 @@ if ($can_upload) {
         } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $fileName)) {
             /* ** Unzipping stage ** */
             $zipFile = new PclZip($userFile);
+            // check for file type in zip contents
             validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
             $realFileSize = 0;
             $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
@@ -371,9 +372,8 @@ if ($can_upload) {
         // No errors, so proceed with upload
         // File date is current date
         $file_date = date("Y\-m\-d G\:i\:s");
-        // Try to add an extension to files witout extension,
-        // change extension of PHP files
-        $fileName = php2phps(add_ext_on_mime($fileName));
+        // Try to add an extension to files without extension,        
+        $fileName = add_ext_on_mime($fileName);
         // File name used in file system and path field
         $safe_fileName = safe_filename(get_file_extension($fileName));
         if ($uploadPath == '.') {
@@ -834,8 +834,7 @@ if ($can_upload) {
             } else {
                 $newformat = get_file_extension($_FILES['newFile']['name']);
                 $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .
-                        (empty($newformat) ? '' : '.' . $newformat);
-                $newpath = php2phps($newpath);
+                        (empty($newformat) ? '' : '.' . $newformat);                
                 my_delete($basedir . $oldpath);
                 $affectedRows = Database::get()->query("UPDATE document SET path = ?s, format = ?s, filename = ?s, date_modified = NOW()
                         WHERE $group_sql AND path = ?s",

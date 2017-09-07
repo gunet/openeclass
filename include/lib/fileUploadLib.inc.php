@@ -51,19 +51,6 @@ function replace_dangerous_char($string) {
 
 //------------------------------------------------------------------------------
 
-/*
- * change the file name extension from .php to .phps
- * Useful to secure a site !!
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - fileName (string) name of a file
- * @return - the filenam phps'ized
- */
-
-function php2phps($fileName) {
-    $fileName = preg_replace('/\.(php[0-9]*|phtml|pht)$/', '.phps', $fileName);
-    return $fileName;
-}
 
 /*
  * Copy folder and change the file name extension from .php to .phps
@@ -455,7 +442,7 @@ function process_extracted_file($p_event, &$p_header) {
         $stored_filename = cp737_to_utf8($stored_filename);
     }
     $path_components = explode('/', $stored_filename);
-    $filename = php2phps(array_pop($path_components));
+    $filename = array_pop($path_components);
     if (unwanted_file($filename)) {
         $filename .= '.bin';
     }
