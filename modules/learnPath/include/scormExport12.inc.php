@@ -635,7 +635,7 @@ if (!class_exists('ScormExport')):
             if ($this->fromScorm) {
                 // Copy the scorm directory as OrigScorm/
                 if (
-                        !claro_copy_file($this->srcDirScorm, $this->destDir) || !claro_rename_file($this->destDir . '/path_' . $this->id, $this->destDir . '/OrigScorm')) {
+                        !claro_copy_file($this->srcDirScorm, $this->destDir) || !my_rename($this->destDir . '/path_' . $this->id, $this->destDir . '/OrigScorm')) {
                     $this->error[] = $langErrorCopyingScorm;
                     return false;
                 }

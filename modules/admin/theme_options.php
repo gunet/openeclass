@@ -91,8 +91,7 @@ if (isset($_POST['import'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     validateUploadedFile($_FILES['themeFile']['name'], 2);
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
-        $file_name = $_FILES['themeFile']['name'];
-        $file_name = php2phps($file_name);
+        $file_name = $_FILES['themeFile']['name'];        
         if(!is_dir('courses/theme_data')) make_dir('courses/theme_data');
         if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
             require_once 'modules/admin/extconfig/externals.php';
@@ -701,8 +700,7 @@ function upload_images($new_theme_id = null) {
                 $name = pathinfo($file_name, PATHINFO_FILENAME);
                 $ext =  get_file_extension($file_name);
                 $file_name = "$name-$i.$ext";
-            }
-            $file_name = php2phps($file_name);
+            }            
             move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/courses/theme_data/$theme_id/$file_name");
             require_once 'modules/admin/extconfig/externals.php';
             $connector = AntivirusApp::getAntivirus();

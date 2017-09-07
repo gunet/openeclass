@@ -138,13 +138,10 @@ function my_rename($filePath, $newFileName) {
     if (check_name_exist($path . "/" . $newFileName) && $newFileName != $oldFileName) {
         return false;
     } else {
-        /*         * * check if the new name has an extension ** */
+        /** * check if the new name has an extension ***/
         if ((!preg_match('/[^.]+\.[[:alnum:]]+$/', $newFileName)) and preg_match('/\.([[:alnum:]]+)$/', $oldFileName, $extension)) {
             $newFileName .= '.' . $extension[1];
-        }
-
-        /*         * * Prevent file name with php extension ** */
-        $newFileName = php2phps($newFileName);
+        }        
         $newFileName = replace_dangerous_char($newFileName);
         chdir($path);
         rename($oldFileName, $newFileName);
@@ -537,46 +534,6 @@ function claro_delete_file($filePath) {
         }
         return rmdir($filePath);
     } // end elseif is_dir()
-}
-
-/*
- * Rename a file or a directory
- *
- * @param  - $filePath (string) - complete path of the file or the directory
- * @param  - $newFileName (string) - new name for the file or the directory
- * @return - string  - new file path if it succeeds
- *         - boolean - false otherwise
- * @see    - rename() uses the check_name_exist() and php2phps() functions
- */
-
-function claro_rename_file($oldFilePath, $newFilePath) {
-    if (realpath($oldFilePath) == realpath($newFilePath))
-        return true;
-
-    /* CHECK IF THE NEW NAME HAS AN EXTENSION */
-
-    if (!preg_match('/[[:print:]]+\.[[:alnum:]]+$/', $newFilePath) and preg_match('/[[:print:]]+\.([[:alnum:]]+)$/', $oldFilePath, $extension)) {
-        $newFilePath .= '.' . $extension[1];
-    }
-
-    /* PREVENT FILE NAME WITH PHP EXTENSION */
-
-    $newFilePath = php2phps($newFilePath);
-
-    /* REPLACE CHARACTER POTENTIALY DANGEROUS FOR THE SYSTEM */
-
-    $newFilePath = dirname($newFilePath) . '/'
-            . replace_dangerous_char(my_basename($newFilePath));
-
-    if (check_name_exist($newFilePath) && $newFilePath != $oldFilePath) {
-        return false;
-    } else {
-        if (rename($oldFilePath, $newFilePath)) {
-            return $newFilePath;
-        } else {
-            return false;
-        }
-    }
 }
 
 /*

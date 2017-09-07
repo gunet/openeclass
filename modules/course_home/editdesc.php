@@ -55,8 +55,7 @@ if (isset($_GET['delete_image'])) {
             $name = pathinfo($file_name, PATHINFO_FILENAME);
             $ext =  get_file_extension($file_name);
             $file_name = "$name-$i.$ext";
-        }
-        $file_name = php2phps($file_name);
+        }        
         move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$course_code/image/$file_name");
         require_once 'modules/admin/extconfig/externals.php';
         $connector = AntivirusApp::getAntivirus();

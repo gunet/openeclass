@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
             if (is_dir($message_dir)) {
                 $dropbox_space = dir_total_space($message_dir);
             }
-            $filename = php2phps($_FILES['file']['name']);
+            $filename = $_FILES['file']['name'];
             $filesize = $_FILES['file']['size'];
             $filetype = $_FILES['file']['type'];
             $filetmpname = $_FILES['file']['tmp_name'];
@@ -137,8 +137,7 @@ if (isset($_POST['submit'])) {
             }
             $format = get_file_extension($filename);
             $real_filename = $filename;
-            $filename = safe_filename($format);
-            $filename = php2phps($filename);
+            $filename = safe_filename($format);            
             if (!$error) {
                 $filename_final = $message_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);

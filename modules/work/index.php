@@ -3700,7 +3700,7 @@ function submit_grade_comments($args) {
         if (isset($_FILES['comments_file']) and is_uploaded_file($_FILES['comments_file']['tmp_name'])) { // upload comments file
             $comments_filename = $_FILES['comments_file']['name'];
             validateUploadedFile($comments_filename); // check file type
-            $comments_filename = php2phps(add_ext_on_mime($comments_filename));
+            $comments_filename = add_ext_on_mime($comments_filename);
             // File name used in file system and path field
             $safe_comments_filename = safe_filename(get_file_extension($comments_filename));
             if (move_uploaded_file($_FILES['comments_file']['tmp_name'], "$workPath/admin_files/$safe_comments_filename")) {

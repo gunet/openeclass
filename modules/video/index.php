@@ -322,9 +322,7 @@ hContent;
                         $tmpfile = $_FILES['userFile']['tmp_name'];
                     }
                 }
-                validateUploadedFile($file_name, $menuTypeID);
-                // convert php file in phps to protect the platform against malicious codes
-                $file_name = php2phps($file_name);                    
+                validateUploadedFile($file_name, $menuTypeID);                
                 $file_name = str_replace(" ", "%20", $file_name);
                 $file_name = str_replace("%20", "", $file_name);
                 $file_name = str_replace("\'", "", $file_name);
