@@ -296,7 +296,8 @@ if ($can_upload) {
             $fileName = $_FILES['userFile']['name'];
             $userFile = $_FILES['userFile']['tmp_name'];
         }
-        validateUploadedFile($fileName, $menuTypeID); // check file type
+        // check file type
+        validateUploadedFile($fileName, $menuTypeID);
         // check for disk quotas
         if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
             Session::Messages($langNoSpace, 'alert-danger');

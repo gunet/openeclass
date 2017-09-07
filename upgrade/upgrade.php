@@ -3632,6 +3632,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             KEY `userid` (`bbbuserid`),
                             KEY `fullName` (`fullName`)
                         ) $tbl_options");
+        
+        
+        // restore admin user white list
+        Database::get()->query("UPDATE user SET whitelist=NULL where username='admin'");
+        
     }
 
     if (version_compare($oldversion, '4.0', '<')) {
