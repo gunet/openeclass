@@ -29,6 +29,7 @@ $helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 load_js('bootstrap-slider');
 
@@ -41,10 +42,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             exit();
         }
 }
-if (!isset($_REQUEST['UseCase']))
+if (!isset($_REQUEST['UseCase'])) {
     $_REQUEST['UseCase'] = "";
-if (!isset($_REQUEST['pid']))
+}
+if (!isset($_REQUEST['pid'])) {
     die();
+}
 $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $_REQUEST['pid']);
 if(!$p){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -267,15 +270,15 @@ function printPollForm() {
  * @global type $langUsage
  * @global type $langTheField
  * @global type $langFormErrors
- * @global type $charset
  * @global type $urlServer
  * @global type $langPollEmailUsed
  * @global type $langPollParticipateConfirmation
+ * @global type $course_id
  */
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
-           $langUsage, $langTheField, $langFormErrors, $charset, $urlServer,
-           $langPollEmailUsed, $langPollParticipateConfirmation;
+           $langUsage, $langTheField, $langFormErrors, $urlServer,
+           $langPollEmailUsed, $langPollParticipateConfirmation, $course_id;
 
     $pid = intval($_POST['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
@@ -294,6 +297,14 @@ function submitPoll() {
         $CreationDate = date("Y-m-d H:i");
         $answer = isset($_POST['answer'])? $_POST['answer']: array();
         if ($uid) {
+            $eventData = new stdClass();
+            $eventData->courseId = $course_id;
+            $eventData->uid = $uid;
+            $eventData->activityType = ViewingEvent::QUESTIONNAIRE_ACTIVITY;
+            $eventData->module = MODULE_ID_QUESTIONNAIRE;
+            $eventData->resource = intval($pid);
+            ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
+            
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
             require_once 'include/sendMail.inc.php';
