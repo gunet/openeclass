@@ -50,9 +50,9 @@ $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 $clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
 doc_init();
 
-// lib of this tool
-
 function directly_pass_lp_module($table, $userid, $lpmid) {
+    global $course_id;
+    
     // if credit was already set this query changes nothing else it update the query made at the beginning of this script
     $sql = "UPDATE `" . $table . "`
                SET `credit` = 1,
