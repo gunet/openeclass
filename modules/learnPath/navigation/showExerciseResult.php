@@ -401,6 +401,7 @@ if ($uid) {
            WHERE `learnPath_module_id` = ?d
              AND `user_id` = ?d";
     Database::get()->query($sqlupd, $scoreMin, $scoreMax, addScormTime($row->total_time, $scormSessionTime), $scormSessionTime, $row->learnPath_module_id, $uid);
+    triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
 }
 
 echo "</div></body></html>" . "\n";

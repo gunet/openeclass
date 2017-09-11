@@ -35,6 +35,8 @@
   ==============================================================================
  */
 
+require_once 'modules/progress/LearningPathEvent.php';
+
 /*
  * content type
  */
@@ -1671,4 +1673,15 @@ function deleteLearningPath($pathId) {
                                                 AND `course_id` = ?d", $pathId, $course_id);
 
     return $lp_name;
+}
+
+function triggerLPGame($courseId, $uid, $lpId, $eventName) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = LearningPathEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_LP;
+    $eventData->resource = intval($lpId);
+    
+    LearningPathEvent::trigger($eventName, $eventData);
 }

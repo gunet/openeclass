@@ -22,6 +22,7 @@
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 if (!isset($_GET['course']) || !isset($_GET['id'])) {
     header("Location: ${urlServer}");
@@ -72,6 +73,15 @@ if (!$valid) {
     header("Location: ${urlServer}");
     exit();
 }
+
+// trigger gamification
+$videoData = new stdClass();
+$videoData->courseId = $course_id;
+$videoData->uid = $uid;
+$videoData->activityType = ViewingEvent::VIDEO_ACTIVITY;
+$videoData->module = MODULE_ID_VIDEO;
+$videoData->resource = intval($_GET['id']);
+ViewingEvent::trigger(ViewingEvent::NEWVIEW, $videoData);
 
 $vObj = MediaResourceFactory::initFromVideo($res2);
 $real_file = $webDir . "/video/" . q($_GET['course']) . q($vObj->getPath());

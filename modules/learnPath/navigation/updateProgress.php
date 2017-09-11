@@ -107,6 +107,11 @@ if (isset($_POST['ump_id'])) {
                 `credit` = ?s
           WHERE `user_module_progress_id` = ?d";
     Database::get()->query($sql, $_POST['lesson_location'], $lesson_status_value, $entry_value, $raw_value, $scoreMin_value, $scoreMax_value, $total_time_value, $session_time_formatted, $_POST['suspend_data'], $credit_value, $_POST['ump_id']);
+    $lp = Database::get()->querySingle("SELECT lp.* "
+            . " FROM lp_user_module_progress lump "
+            . " JOIN lp_learnPath lp ON (lp.learnPath_id = lump.learnPath_id) "
+            . " WHERE lump.user_module_progress_id = ?d", $_POST['ump_id']);
+    triggerLPGame($lp->course_id, $uid, $lp->learnPath_id, LearningPathEvent::UPDPROGRESS);
 }
 
 // display the form to accept new commit and

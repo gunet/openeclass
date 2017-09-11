@@ -26,6 +26,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/action.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 $action = new action();
 $action->record(MODULE_ID_VIDEO);
@@ -36,6 +37,15 @@ $action->record(MODULE_ID_VIDEO);
 $row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
 
 if ($row) {
+    // trigger gamification
+    $videoData = new stdClass();
+    $videoData->courseId = $course_id;
+    $videoData->uid = $uid;
+    $videoData->activityType = ViewingEvent::VIDEO_ACTIVITY;
+    $videoData->module = MODULE_ID_VIDEO;
+    $videoData->resource = intval($_GET['id']);
+    ViewingEvent::trigger(ViewingEvent::NEWVIEW, $videoData);
+    
     $vObj = MediaResourceFactory::initFromVideo($row);
     $token = token_generate($row->path, true);                         // generate new token
     $vObj->setAccessURL($vObj->getAccessURL() . '&amp;token=' . $token); // append token to accessurl
