@@ -1308,6 +1308,7 @@ $native_language_names_init = array(
     'sl' => 'Slovenščina',
     'sk' => 'Slovenčina',
     'hr' => 'Hrvatski',
+    'pt' => 'Português',
     'xx' => 'Variable Names',
 );
 
@@ -1334,6 +1335,7 @@ $language_codes = array(
     'sl' => 'slovene',
     'sk' => 'slovak',
     'hr' => 'croatian',
+    'pt' => 'portuguese',
     'xx' => 'variables',
 );
 
