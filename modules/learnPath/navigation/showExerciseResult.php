@@ -342,14 +342,14 @@ if ($displayScore == 1) {
     <br/>
     <table class='table-default'>
     <tr class='odd'>
-	<td class='right'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
+	<td class='right'>$langYourTotalScore: <b>" . round($totalScore, 2) . "/$totalWeighting</b>
       </td>
     </tr>
     </table>");
 }
 echo ("
   <br/>
-  <div align='center'><input class='btn btn-primary' type='submit' value='$langFinish' /></div>
+  <div align='center'><input class='btn btn-primary' type='submit' value='$langNext' /></div>
   <br />
   </form><br />");
 

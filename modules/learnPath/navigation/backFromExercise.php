@@ -25,18 +25,14 @@
 $require_current_course = true;
 require_once '../../../include/init.php';
 
-$TOCurl = "../viewer_toc.php?course=$course_code";
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
         <title>-</title>
         <link href="../../../template/<?php echo $theme ?>/CSS/lp.css" rel="stylesheet" type="text/css" />
-        <script type='text/javascript'>
-            <!-- //
-          parent.tocFrame.location.href = "<?php echo $TOCurl; ?>";
-//-->
-        </script>
+        <link rel="stylesheet" href="../../../template/default/CSS/bootstrap-custom.css">
+        <script src="../../../template/default/js/bootstrap.min.js"></script>                
     </head>
     <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
         <div id="content" style="width:800px; margin: 0 auto;">
@@ -44,7 +40,7 @@ $TOCurl = "../viewer_toc.php?course=$course_code";
             <?php
             if ($_GET['op'] == 'cancel') {
                 echo "<div class='alert alert-warning'>$langExerciseCancelled</div>";
-            } elseif ($_GET['op'] == 'finish') { // exercise done
+            } elseif ($_GET['op'] == 'finish') { // exercise done                                            
                 echo "<div class='alert alert-success'>$langExerciseDone</div>";
             }
             ?>
