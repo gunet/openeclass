@@ -36,7 +36,6 @@
  * @global type $langViewHide
  * @global type $langViewShow
  * @global type $langEditChange
- * @global type $langHere
  * @global type $langSee
  */
 function display_certificates() {
@@ -44,7 +43,7 @@ function display_certificates() {
     global $course_id, $tool_content, $course_code, $urlServer,
            $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
            $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange, 
-           $langNewCertificate, $langCertificates, $langActivate, $langDeactivate, $langSee, $langHere;
+           $langNewCertificate, $langCertificates, $langActivate, $langDeactivate, $langSee;
 
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
@@ -615,7 +614,7 @@ function display_modification_activity($element, $element_id, $activity_id) {
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langOperator:</label>";    
-        $tool_content .= "<span class='col-sm-1'>" . selection($operators, 'cert_operator', $operators[$data->operator]) . "</span>";
+        $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $operators[$data->operator]) . "</span>";
         $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";    
         $tool_content .= "</div>";
         $tool_content .= "<div class='col-sm-5 col-sm-offset-5'>";
@@ -2135,14 +2134,12 @@ function get_operators() {
  */
 function criteria_with_operators() {
     
-    return array('assignment', 
-                 'exercise', 
-                 'learning path',
-                 'wiki',
-                 'forum',
-                 'forumtopic',
-                 'blog',
-                 'blogcomment',
-                 'forum',
-                 'forum_post');
+    return array(AssignmentEvent::ACTIVITY, 
+                 ExerciseEvent::ACTIVITY, 
+                 LearningPathEvent::ACTIVITY,
+                 WikiEvent::ACTIVITY,
+                 ForumEvent::ACTIVITY,
+                 ForumTopicEvent::ACTIVITY,
+                 BlogEvent::ACTIVITY,
+                 CommentEvent::BLOG_ACTIVITY);
 }
