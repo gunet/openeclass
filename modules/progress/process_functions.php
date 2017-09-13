@@ -898,7 +898,7 @@ function get_resource_details($element, $resource_id) {
  */
 function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_issuer = null) {
     
-    global $webDir;
+    global $webDir, $dateFormatLong;
            
     $cert_file = Database::get()->querySingle("SELECT filename FROM certificate_template 
                                                     JOIN certificate ON certificate_template.id = certificate.template
@@ -924,12 +924,15 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $student_name = uid_to_name($user);
     } else {
         $student_name = $user;
-    }    
+    }
+    $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(updated) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
+    $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
 
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
     $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
+    $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);
     
     $mpdf->WriteHTML($html_certificate);
 
