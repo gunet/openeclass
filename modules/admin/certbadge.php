@@ -60,13 +60,33 @@ if (isset($_GET['del_cert'])) { // delete certificate template
 }
 
 if (isset($_POST['submit_cert_template'])) { // insert certificate template
-    $filename = $_FILES['filename']['name'];
-    if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
-        Database::get()->querySingle("INSERT INTO certificate_template SET 
-                                        name = ?s, 
+    if (isset($_POST['cert_id'])) {
+        if ($_FILES['filename']['size'] > 0) { // replace file if needed
+            $filename = $_FILES['filename']['name'];
+            if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
+                $old_file = Database::get()->querySingle("SELECT filename FROM certificate_template WHERE id = ?d", $_POST['cert_id'])->filename;
+                unlink($webDir . CERT_TEMPLATE_PATH . $old_file); // delete old icon
+                Database::get()->querySingle("UPDATE certificate_template SET
+                                        name = ?s,
                                         description = ?s,
-                                        filename = ?s", $_POST['name'], $_POST['description'], $filename);
-        Session::Messages($langDownloadEnd, 'alert-success');
+                                        filename = ?s
+                                       WHERE id = ?d", $_POST['name'], $_POST['description'], $filename, $_POST['cert_id']);
+            }
+        } else {
+            Database::get()->querySingle("UPDATE certificate_template SET
+                                        name = ?s,
+                                        description = ?s
+                                       WHERE id = ?d", $_POST['name'], $_POST['description'], $_POST['cert_id']);
+        }
+    } else {        
+        $filename = $_FILES['filename']['name'];
+        if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
+            Database::get()->querySingle("INSERT INTO certificate_template SET 
+                                            name = ?s, 
+                                            description = ?s,
+                                            filename = ?s", $_POST['name'], $_POST['description'], $filename);
+            Session::Messages($langDownloadEnd, 'alert-success');
+        }
     }
 } elseif (isset($_POST['submit_badge_icon'])) { // insert / update badge icon
     if (isset($_POST['badge_id'])) {        
@@ -102,6 +122,14 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
 // display forms
 if (isset($_GET['action'])) {
     if (($_GET['action'] == 'add_cert') or ($_GET['action'] == 'edit_cert')) { // add certificate template
+        $cert_name = $cert_description = $cert_hidden_id = '';
+        if (isset($_GET['cid'])) {
+            $cert_id = $_GET['cid'];
+            $cert_data = Database::get()->querySingle("SELECT * FROM certificate_template WHERE id = ?d", $cert_id);
+            $cert_name = $cert_data->name;
+            $cert_description = $cert_data->description;
+            $cert_hidden_id = "<input type='hidden' name='cert_id' value='$cert_id'>";
+        }
         $tool_content .= "<div class='row'>
                         <div class='col-md-12'>
                         <div class='form-wrapper'>
@@ -115,15 +143,16 @@ if (isset($_GET['action'])) {
                             <div class='form-group'>
                                 <label class='col-sm-2 control-label'>$langTemplateName:</label>
                                 <div class='col-sm-10'>
-                                    <input type='text' class='form-control' name='name' value=''>
+                                    <input type='text' class='form-control' name='name' value='$cert_name'>
                                 </div>
                             </div>
                             <div class='form-group'>
                             <label for='description' class='col-sm-2 control-label'>$langDescription: </label>
                                 <div class='col-sm-10'>
-                                    " . rich_text_editor('description', 2, 60,'') . "
+                                    " . rich_text_editor('description', 2, 60, $cert_description) . "
                                 </div>
                             </div>
+                            $cert_hidden_id
                             <div class='form-group'>
                                 <div class='col-xs-offset-2 col-xs-10'>
                                     <button class='btn btn-primary' type ='submit' name='submit_cert_template'>$langUpload</button>

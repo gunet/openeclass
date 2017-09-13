@@ -2060,10 +2060,13 @@ function display_user_progress_details($element, $element_id, $user_id) {
     $element_title = get_cert_title($element, $element_id);
 
     $resource_data = array();
-    $cert_public_link = '';    
-    // create certification identifier and public link if user has completed certificate
-    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {        
-        register_certified_user($element, $element_id, $element_title, $user_id);
+    $cert_public_link = '';   
+    // create certification identifier
+    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {    
+        register_certified_user($element, $element_id, $element_title, $user_id);        
+    }
+    // create public link if user has completed certificate and there is cert identifier
+    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) != null) {    
         $cert_public_link = "<div class='pn-info-title-sct'>$langCertAddress</div>
                             <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
     }
