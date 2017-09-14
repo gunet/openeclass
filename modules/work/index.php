@@ -445,7 +445,7 @@ if ($is_editor) {
         $pageName = $langNewAssign;
         $navigation[] = $works_url;
         new_assignment();
-		//print_r ($_POST);
+        //print_r ($_POST);
 
     } elseif (isset($_POST['new_assign'])) {
         add_assignment();
@@ -460,8 +460,8 @@ if ($is_editor) {
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     } elseif (isset($_POST['grades']) || isset($_POST['grade_rubric']) ) {
         $navigation[] = $works_url;
-		//submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
-		submit_grades(intval($_POST['grades_id']), $_POST, $email_notify);
+        //submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
+        submit_grades(intval($_POST['grades_id']), $_POST, $email_notify);
     } elseif (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
         $work_title = q(Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title);
@@ -649,17 +649,17 @@ function add_assignment() {
         if (isset($_POST['scale'])) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
-			$grade_type = 1;
+            $grade_type = 1;
         }
         elseif (isset($_POST['rubric'])) {
             $max_grade = max_grade_from_rubric($_POST['rubric']);
             $grading_scale_id = $_POST['rubric'];
-			$grade_type = 2;
+            $grade_type = 2;
         }
         else {
             $max_grade = $_POST['max_grade'];
             $grading_scale_id = 0;
-			$grade_type = 0;
+            $grade_type = 0;
         }
         $assign_to_specific = $_POST['assign_to_specific'];
         $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
@@ -809,14 +809,14 @@ function edit_assignment($id) {
         $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
-		$grade_type = $_POST['grading_type'];
+        $grade_type = $_POST['grading_type'];
         if (isset($_POST['scale'])) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
         }
-		elseif (isset($_POST['rubric'])) {
+        elseif (isset($_POST['rubric'])) {
             $max_grade = max_grade_from_rubric($_POST['rubric']);
-			//Session::Messages("<pre>".print_r($max_grade,true)."</pre>");
+            //Session::Messages("<pre>".print_r($max_grade,true)."</pre>");
             $grading_scale_id = $_POST['rubric'];
         } else {
             $max_grade = $_POST['max_grade'];
@@ -1074,7 +1074,7 @@ function submit_work($id, $on_behalf_of = null) {
                 $grade,
                 $grade_comments,
                 $grade_ip,
-				$rb_grade_crit,
+                $rb_grade_crit,
                 $group_id
             );
             $sid = Database::get()->query("INSERT INTO assignment_submit
@@ -1089,7 +1089,7 @@ function submit_work($id, $on_behalf_of = null) {
                 'filepath' => $filename,
                 'filename' => $file_name,
                 'comments' => $stud_comments,
-				'rb_grade' => $rb_grade_crit,
+                'rb_grade' => $rb_grade_crit,
                 'group_id' => $group_id));
 
             // notify course admin (if requested)
@@ -1242,15 +1242,15 @@ function new_assignment() {
     foreach ($scales as $scale) {
         $scale_options .= "<option value='$scale->id'>$scale->title</option>";
     }
-	$rubrics = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);
-	$rubric_options = "<option value>-- $langGradeRubricsSelect --</option>";
-	foreach ($rubrics as $rubric) {
+    $rubrics = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);
+    $rubric_options = "<option value>-- $langGradeRubricsSelect --</option>";
+    foreach ($rubrics as $rubric) {
         $rubric_options .= "<option value='$rubric->id'>$rubric->name</option>";
     }
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#scales').select2({ width: '100%' });
-			$('#rubrics').select2({ width: '100%' });
+            $('#rubrics').select2({ width: '100%' });
             $('input[name=grading_type]').on('change', function(e){
                 var choice = $(this).val();
                 if (choice == 0) {
@@ -1275,12 +1275,12 @@ function new_assignment() {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-					$('#rubrics')
+                    $('#rubrics')
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
                 }
-				else {
+                else {
                     $('#max_grade')
                         .prop('disabled', true)
                         .closest('div.form-group')
@@ -1289,11 +1289,11 @@ function new_assignment() {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-					$('#rubrics')
+                    $('#rubrics')
                          .prop('disabled', false)
                         .closest('div.form-group')
-                        .removeClass('hidden');			
-				}
+                        .removeClass('hidden');
+                }
             });
             $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
@@ -1344,10 +1344,10 @@ function new_assignment() {
     $desc = Session::has('desc') ? Session::get('desc') : '';
     $max_grade_error = Session::getError('max_grade');
     $scale_error = Session::getError('scale');
-	$rubric_error = Session::getError('rubric');
+    $rubric_error = Session::getError('rubric');
     $max_grade = Session::has('max_grade') ? Session::get('max_grade') : 10;
     $scale = Session::getError('scale');
-	$rubric = Session::getError('rubric');
+    $rubric = Session::getError('rubric');
     $submission_type = Session::has('submission_type') ? Session::get('submission_type') : 0;
     $grading_type = Session::has('grading_type') ? Session::get('grading_type') : 0;
     $WorkStart = Session::has('WorkStart') ? Session::get('WorkStart') : (new DateTime('NOW'))->format('d-m-Y H:i');
@@ -1422,7 +1422,7 @@ function new_assignment() {
                       <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
                       <span class='help-block'>$max_grade_error</span>
                     </div>
-                </div>				
+                </div>
                 <div class='form-group".($scale_error ? " has-error" : "").($grading_type==1 ? "" : " hidden")."'>
                     <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
                     <div class='col-sm-10'>
@@ -1728,7 +1728,7 @@ function show_edit_assignment($id) {
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#scales').select2({ width: '100%' });
-			$('#rubrics').select2({ width: '100%' });
+            $('#rubrics').select2({ width: '100%' });
             $('input[name=grading_type]').on('change', function(e){
                 var choice = $(this).val();
                 if (choice == 0) {
@@ -1740,7 +1740,7 @@ function show_edit_assignment($id) {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-					$('#rubrics')
+                    $('#rubrics')
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
@@ -1753,24 +1753,24 @@ function show_edit_assignment($id) {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-					$('#rubrics')
+                    $('#rubrics')
                         .prop('disabled', true)
                         .closest('div.form-group')
-                        .addClass('hidden');                
-				} else if (choice == 2) {
-				    $('#max_grade')
+                        .addClass('hidden');
+                } else if (choice == 2) {
+                    $('#max_grade')
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
                     $('#scales')
-						.prop('disabled', true)
+                        .prop('disabled', true)
                         .closest('div.form-group')
-                        .addClass('hidden');   
-					$('#rubrics')
+                        .addClass('hidden');
+                    $('#rubrics')
                         .prop('disabled', false)
                         .closest('div.form-group')
-                        .removeClass('hidden');          
-				}});
+                        .removeClass('hidden');
+                }});
             $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
@@ -1822,16 +1822,16 @@ function show_edit_assignment($id) {
             $item = trim($item);
             return $item? ('<option selected>' . q($item) . '</option>'): '';
         }, $assignmentIPLock));
-		
-	//Session::Messages("<pre>".print_r($row,true)."</pre>");
-	$grading_type = ($row->grading_type ? $row->grading_type : 0);
+
+    //Session::Messages("<pre>".print_r($row,true)."</pre>");
+    $grading_type = ($row->grading_type ? $row->grading_type : 0);
     $scales = Database::get()->queryArray('SELECT * FROM grading_scale WHERE course_id = ?d', $course_id);
     $scale_options = "<option value>-- $langGradeScalesSelect --</option>";
     foreach ($scales as $scale) {
         $scale_options .= "<option value='$scale->id'".(($row->grading_scale_id == $scale->id && $grading_type==1)? " selected" : "").">$scale->title</option>";
     }
     $rubrics = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);
-	$rubric_options = "<option value>-- $langGradeRubricsSelect --</option>";
+    $rubric_options = "<option value>-- $langGradeRubricsSelect --</option>";
     foreach ($rubrics as $rubric) {
         $rubric_options .= "<option value='$rubric->id'".(($row->grading_scale_id == $rubric->id && $grading_type==2) ? " selected" : "").">$rubric->name</option>";
     }
@@ -1895,7 +1895,7 @@ function show_edit_assignment($id) {
     $title_error = Session::getError('title');
     $max_grade_error = Session::getError('max_grade');
     $scale_error = Session::getError('scale');
-	$rubric_error = Session::getError('rubric');
+    $rubric_error = Session::getError('rubric');
 
     $tool_content .= "
     <div class='form-wrapper'>
@@ -1940,7 +1940,7 @@ function show_edit_assignment($id) {
                                      <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
                 </div>
-				<div class='form-group'>
+                <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langGradeType:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
@@ -1970,7 +1970,7 @@ function show_edit_assignment($id) {
                       <span class='help-block'>$max_grade_error</span>
                     </div>
                 </div>
-				<div class='form-group".($scale_error ? " has-error" : "").($grading_type==1 ? "" : " hidden")."'>
+                <div class='form-group".($scale_error ? " has-error" : "").($grading_type==1 ? "" : " hidden")."'>
                     <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
                     <div class='col-sm-10'>
                       <select name='scale' class='form-control' id='scales'".(!$grading_type ? " disabled" : "").">
@@ -1979,7 +1979,7 @@ function show_edit_assignment($id) {
                       <span class='help-block'>$scale_error</span>
                     </div>
                 </div>
-				<div class='form-group".($rubric_error ? " has-error" : "").($grading_type==2 ? "" : " hidden")."'>
+                <div class='form-group".($rubric_error ? " has-error" : "").($grading_type==2 ? "" : " hidden")."'>
                     <label for='title' class='col-sm-2 control-label'>$langGradeRubrics:</label>
                     <div class='col-sm-10'>
                       <select name='rubric' class='form-control' id='rubrics'".(!$grading_type ? " disabled" : "").">
@@ -1988,7 +1988,7 @@ function show_edit_assignment($id) {
                       <span class='help-block'>$rubric_error</span>
                     </div>
                 </div>
-				<div class='form-group'>
+                <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langWorkSubType:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
@@ -2422,7 +2422,7 @@ function show_student_assignment($id) {
             redirect_to_home_page('modules/work/?course=' . $course_code);
         }
 
-        if ($row->ip_lock !== '') {
+        if ($row->ip_lock) {
             $user_ip = Log::get_client_ip();
             if (!match_ip_to_ip_or_cidr($user_ip, explode(',', $row->ip_lock))) {
                 Session::Messages($langIPHasNoAccess);
@@ -2647,34 +2647,34 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
 function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $m, $langDaysLeft,$course_id,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
-           $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber, 
-		   $langGradeScale, $langGradeRubric, $langTitleRubric, $langRubricDesc, $langRubricCriteria,
-		   $langEditChange, $langExportGrades, $langDescription, $langTitle;
-	
-	$grade_type = $row->grading_type;
-	if ($grade_type == 0){
-		$g_type=$langGradeNumber;
-	}
-	elseif ($grade_type ==1){
-		$g_type=$langGradeScale;
-	}
-	else {
-		$g_type=$langGradeRubric;
-		$rubric_id = $row ->grading_scale_id;
-		$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
-			$rubric_name =  $rubric->name;
-			$rubric_desc = $rubric -> description;
+           $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
+           $langGradeScale, $langGradeRubric, $langTitleRubric, $langRubricDesc, $langRubricCriteria,
+           $langEditChange, $langExportGrades, $langDescription, $langTitle;
+
+    $grade_type = $row->grading_type;
+    if ($grade_type == 0){
+        $g_type=$langGradeNumber;
+    }
+    elseif ($grade_type ==1){
+        $g_type=$langGradeScale;
+    }
+    else {
+        $g_type=$langGradeRubric;
+        $rubric_id = $row ->grading_scale_id;
+        $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
+            $rubric_name =  $rubric->name;
+            $rubric_desc = $rubric -> description;
             $criteria = unserialize($rubric->scales);
             $criteria_list = "";
             foreach ($criteria as $ci => $criterio) {
                 $criteria_list .= "<li>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
-				if(is_array($criterio['crit_scales']))
-				foreach ($criterio['crit_scales'] as $si=>$scale){
-					$criteria_list .= "<ul><li>$scale[scale_item_name] ( $scale[scale_item_value] )</li></ul>";
-				}
-			}
-			$preview_rubric = $rubric -> preview_rubric;
-	}
+                if(is_array($criterio['crit_scales']))
+                foreach ($criterio['crit_scales'] as $si=>$scale){
+                    $criteria_list .= "<ul><li>$scale[scale_item_name] ( $scale[scale_item_value] )</li></ul>";
+                }
+            }
+            $preview_rubric = $rubric->preview_rubric;
+    }
     if ($is_editor) {
         $tool_content .= action_bar(array(
             array(
@@ -2786,38 +2786,38 @@ function assignment_details($id, $row) {
                     <strong>$langGradeType:</strong>
                 </div>
                 <div class='col-sm-9'>";
-		if ($preview_rubric == 1){
-			$tool_content .= "
-				<a class='' role='button' data-toggle='collapse' href='#collapseRubric' aria-expanded='false' aria-controls='collapseRubric'>
-					$g_type 
-				</a>
-				</div>
-			</div>
-			<div class='table-responsive  collapse' id='collapseRubric'>
+        if (isset($preview_rubric) and $preview_rubric == 1) {
+            $tool_content .= "
+                <a class='' role='button' data-toggle='collapse' href='#collapseRubric' aria-expanded='false' aria-controls='collapseRubric'>
+                    $g_type
+                </a>
+                </div>
+            </div>
+            <div class='table-responsive  collapse' id='collapseRubric'>
                 <table class='table-default'>
                     <thead>
-					
-                        <th>$langTitleRubric</th> 
+
+                        <th>$langTitleRubric</th>
                         <th>$langRubricDesc</th>
-						<th>$langRubricCriteria</th>					
-					</thead>
-					<tr>
-						<td>$rubric_name</td>
-						<td>$rubric_desc</td>
-						<td>
+                        <th>$langRubricCriteria</th>
+                    </thead>
+                    <tr>
+                        <td>$rubric_name</td>
+                        <td>$rubric_desc</td>
+                        <td>
                             <ul class='list-unstyled'>
                                 $criteria_list
                             </ul>
                         </td>
-					</tr>
-				</table>
-			</div>";
-				}
-				else {
-	$tool_content .= "$g_type
-				</div>
-			</div>";
-				}
+                    </tr>
+                </table>
+            </div>";
+                }
+                else {
+    $tool_content .= "$g_type
+                </div>
+            </div>";
+                }
         $tool_content .= "<div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$m[start_date]:</strong>
@@ -2920,9 +2920,9 @@ function show_assignment($id, $display_graph_results = false) {
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,$langRubricGrading, $langRubricGrade,
     $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck, $langProgress,
-	$langTitleRubric, $langRubricCriteria, $langClose, $langSave;
-  
-	$assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+    $langTitleRubric, $langRubricCriteria, $langClose, $langSave;
+
+    $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
                                 WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $nav[] = $works_url;
@@ -2965,7 +2965,7 @@ function show_assignment($id, $display_graph_results = false) {
                                                    assign.grade_comments_filepath grade_comments_filepath,
                                                    assignment.grading_scale_id grading_scale_id,
                                                    assignment.deadline deadline,
-												   assignment.grading_type
+                                                   assignment.grading_type
                                                    FROM assignment_submit AS assign, user, assignment
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
                                                    ORDER BY $order $rev", $id);
@@ -3043,65 +3043,65 @@ function show_assignment($id, $display_graph_results = false) {
                             </select>";
                 }
                 else if ($row->grading_scale_id && $row->grading_type == 2) {
-				$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $row->grading_scale_id);
+                $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $row->grading_scale_id);
 
-				$criteria = unserialize($rubric->scales);
-				$criteria_list = "";
-				foreach ($criteria as $ci => $criterio) {
-					$criteria_list .= "<li  class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
-					if(is_array($criterio['crit_scales']))
-					foreach ($criterio['crit_scales'] as $si=>$scale){
-						$criteria_list .= "<ul class='list-unstyled'><li  class='list-group-item'>
-						<input type='radio' name='grade_rubric[$row->uid][$ci]' value='$si'>
-						$scale[scale_item_name] ( $scale[scale_item_value] )
+                $criteria = unserialize($rubric->scales);
+                $criteria_list = "";
+                foreach ($criteria as $ci => $criterio) {
+                    $criteria_list .= "<li  class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
+                    if(is_array($criterio['crit_scales']))
+                    foreach ($criterio['crit_scales'] as $si=>$scale){
+                        $criteria_list .= "<ul class='list-unstyled'><li  class='list-group-item'>
+                        <input type='radio' name='grade_rubric[$row->uid][$ci]' value='$si'>
+                        $scale[scale_item_name] ( $scale[scale_item_value] )
       </li></ul>";
-					}
-				}
-				$grade_field ="
-					
-					<button type='button' class='btn btn-info btn-sm' data-toggle='modal' data-target='#myModal$row->uid'>
-						$langRubricGrade
-					</button>					
-					<div class='modal fade' id='myModal$row->uid' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
-					<div class='modal-dialog' role='document'>
-					<div class='modal-content'>
+                    }
+                }
+                $grade_field ="
 
-						<div class='modal-header'>
-						<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-						<h4 class='modal-title' id='myModalLabel$row->uid'>$langRubricGrading</h4>
-						</div>
-						<div class='modal-body'>
-						<table class='table-default'>
-							<thead>
-								<th>$langTitleRubric</th> 
-								<th>$langRubricCriteria</th>
-							</thead>
-							<tr>
-								<td>$rubric->name</td>
-								<td>
-									<ul class='list-unstyled'>
-										$criteria_list
-									</ul>
-								</td>
-							</tr>
-						</table>
-						</div>
-					
-						<div class='modal-footer'>
-							<button type='button' class='btn btn-default' data-dismiss='modal'>$langClose</button>
-							<button type='button' class='btn btn-primary' data-dismiss='modal'>$langSave</button>
-						</div>
-						
-					</div>
-					</div>
-					</div>
-					";
-					
-				}
-				else {
+                    <button type='button' class='btn btn-info btn-sm' data-toggle='modal' data-target='#myModal$row->uid'>
+                        $langRubricGrade
+                    </button>
+                    <div class='modal fade' id='myModal$row->uid' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
+                    <div class='modal-dialog' role='document'>
+                    <div class='modal-content'>
+
+                        <div class='modal-header'>
+                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                        <h4 class='modal-title' id='myModalLabel$row->uid'>$langRubricGrading</h4>
+                        </div>
+                        <div class='modal-body'>
+                        <table class='table-default'>
+                            <thead>
+                                <th>$langTitleRubric</th>
+                                <th>$langRubricCriteria</th>
+                            </thead>
+                            <tr>
+                                <td>$rubric->name</td>
+                                <td>
+                                    <ul class='list-unstyled'>
+                                        $criteria_list
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
+
+                        <div class='modal-footer'>
+                            <button type='button' class='btn btn-default' data-dismiss='modal'>$langClose</button>
+                            <button type='button' class='btn btn-primary' data-dismiss='modal'>$langSave</button>
+                        </div>
+
+                    </div>
+                    </div>
+                    </div>
+                    ";
+
+                }
+                else {
                     $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3'>";
                 }
-				
+
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
                 $tool_content .= "
                                 <tr>
@@ -3184,8 +3184,8 @@ function show_assignment($id, $display_graph_results = false) {
                                 </tr>";
                 $i++;
             } //END of Foreach
-			
-			//Session::Messages("<pre>".print_r($_POST,true)."</pre>");
+
+            //Session::Messages("<pre>".print_r($_POST,true)."</pre>");
 
             $tool_content .= "
                     </tbody>
@@ -3792,7 +3792,7 @@ function submit_grades($grades_id, $grades, $email = false) {
 
 
     if(empty($errors)) {
-		if(is_array($grades['grades'])){
+        if(is_array($grades['grades'])){
         foreach ($grades['grades'] as $sid => $grade) {
             $sid = intval($sid);
             $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
@@ -3828,23 +3828,23 @@ function submit_grades($grades_id, $grades, $email = false) {
                 }
             }
         }
-		}
-			
-		if(is_array($grades['grade_rubric'])){
-		//LOAD RUBRIC
+        }
+
+        if(is_array($grades['grade_rubric'])){
+        //LOAD RUBRIC
         foreach ($grades['grade_rubric'] as  $uid=>$rubrdata){
-			$student_grade = 0;	
-			$rubric_grades = serialize($rubrdata);
-			//FOREACH TIN RUBRIC (CRITERIA KAI SCALES)
-			//YPOLOGISMOS GRADE MATHITI ME VASI TA rubrdata
-			//UPDATE DB
-		}
-		}
+            $student_grade = 0;
+            $rubric_grades = serialize($rubrdata);
+            //FOREACH TIN RUBRIC (CRITERIA KAI SCALES)
+            //YPOLOGISMOS GRADE MATHITI ME VASI TA rubrdata
+            //UPDATE DB
+        }
+        }
         Session::Messages($langGrades, 'alert-success');
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($errors);
     }
-	Session::Messages("submit_grades<pre>".print_r($grades,true)."</pre>", 'alert-success');
+    Session::Messages("submit_grades<pre>".print_r($grades,true)."</pre>", 'alert-success');
     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$grades_id");
 
 }
@@ -4173,19 +4173,19 @@ function max_grade_from_rubric($rubric_id) {
     global $course_id;
     $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $rubric_id, $course_id);
     $unserialized_scale_items = unserialize($rubric_data->scales);
-	//Session::Messages("<pre>".print_r($unserialized_scale_items,true)."</pre>");
-	$max_grade = 0;
+    //Session::Messages("<pre>".print_r($unserialized_scale_items,true)."</pre>");
+    $max_grade = 0;
     $max_scale_item_value = 0;
     foreach ($unserialized_scale_items as $CritArrItems) {
-		$max_scale_item_value = 0;	
+        $max_scale_item_value = 0;
         if(is_array($CritArrItems['crit_scales'] ))
-		foreach($CritArrItems['crit_scales'] as $scalesArr){
-			$max_scale_item_value = $max_scale_item_value<$scalesArr['scale_item_value']?$scalesArr['scale_item_value']:$max_scale_item_value;
-		}	
-		$max_grade = $max_grade+$CritArrItems['crit_weight']*$max_scale_item_value;
+        foreach($CritArrItems['crit_scales'] as $scalesArr){
+            $max_scale_item_value = $max_scale_item_value<$scalesArr['scale_item_value']?$scalesArr['scale_item_value']:$max_scale_item_value;
+        }
+        $max_grade = $max_grade+$CritArrItems['crit_weight']*$max_scale_item_value;
     }
-	//Session::Messages("<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
-    return $max_grade/100; 
+    //Session::Messages("<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
+    return $max_grade/100;
 }
 
 
