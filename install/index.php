@@ -506,6 +506,7 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/index.php');
     mkdir_try('courses/temp');
     touch_try('courses/temp/index.php');
+    mkdir_try('courses/temp/pdf');
     mkdir_try('courses/userimg');
     touch_try('courses/userimg/index.php');
     mkdir_try('courses/commondocs');

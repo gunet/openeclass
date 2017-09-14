@@ -159,6 +159,7 @@ if (!file_exists($videoDir)) {
 
 mkdir_or_error('courses/temp');
 touch_or_error('courses/temp/index.php');
+mkdir_or_error('courses/temp/pdf');
 mkdir_or_error('courses/userimg');
 touch_or_error('courses/userimg/index.php');
 touch_or_error($webDir . '/video/index.php');
