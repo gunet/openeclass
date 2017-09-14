@@ -904,10 +904,10 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
                                                     JOIN certificate ON certificate_template.id = certificate.template
                                                AND certificate.id = ?d", $certificate_id)->filename;
     
-    $mpdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
+    $mpdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);    
+    chdir("$webDir" . CERT_TEMPLATE_PATH);    
+    $html_certificate = file_get_contents($cert_file);
     
-    $html_certificate = file_get_contents($webDir . CERT_TEMPLATE_PATH . $cert_file);
-
     if (is_null($certificate_title)) {
         $certificate_title = get_cert_title('certificate', $certificate_id);
     }
