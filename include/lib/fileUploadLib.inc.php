@@ -494,10 +494,10 @@ function make_path($path, $path_components) {
  * @param integer $menuTypeID - The menu type to display in case of error.
  */
 function validateUploadedFile($filename, $menuTypeID = 2) {
-    global $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed;
+    global $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed, $langContactAdmin;
 
     if (!isWhitelistAllowed($filename)) {
-        $tool_content .= "<div class='alert alert-danger'>$langUploadedFileNotAllowed<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
+        $tool_content .= "<div class='alert alert-danger'>$langUploadedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
         draw($tool_content, $menuTypeID, null, $head_content);
         exit;
     }
@@ -510,10 +510,10 @@ function validateUploadedFile($filename, $menuTypeID = 2) {
  * @param integer $menuTypeID - The menu type to display in case of error.
  */
 function validateRenamedFile($filename, $menuTypeID = 2) {
-    global $tool_content, $head_content, $langBack, $langRenamedFileNotAllowed;
+    global $tool_content, $head_content, $langBack, $langRenamedFileNotAllowed, $langContactAdmin;
 
     if (!isWhitelistAllowed($filename)) {
-        $tool_content .= "<div class='alert alert-danger'>$langRenamedFileNotAllowed<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
+        $tool_content .= "<div class='alert alert-danger'>$langRenamedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
         draw($tool_content, $menuTypeID, null, $head_content);
         exit;
     }
@@ -526,7 +526,7 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
  * @param integer $menuTypeID  - The menu type to display in case of error.
  */
 function validateUploadedZipFile($listContent, $menuTypeID = 2) {
-    global $tool_content, $head_content, $langBack, $langUploadedZipFileNotAllowed;
+    global $tool_content, $head_content, $langBack, $langUploadedZipFileNotAllowed, $langContactAdmin;
 
     if (!is_array($listContent)) {
         return false;
@@ -539,10 +539,10 @@ function validateUploadedZipFile($listContent, $menuTypeID = 2) {
         $filename = basename($entry['filename']);
 
         if (!isWhitelistAllowed($filename)) {
-            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
+            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed <b>". q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";            
             draw($tool_content, $menuTypeID, null, $head_content);
             exit;
-        }
+        }        
     }
 }
 
