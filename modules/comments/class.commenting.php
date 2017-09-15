@@ -94,7 +94,7 @@ Class Commenting {
                           </div>
                           <div class='modal-body' id='comments-$this->rid'>";
         } else {
-            $comments_title = "<h3 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h3><br>";
+            $comments_title = "<h4 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h4><br>";
             $out = "<div class='commenting'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>

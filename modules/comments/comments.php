@@ -30,8 +30,10 @@ $wall_commenting = false;
 $commentEventActivity = null;
 if ($_POST['rtype'] == 'blogpost') {
     $setting_id = SETTING_BLOG_COMMENT_ENABLE;
+    $commentEventActivity = CommentEvent::BLOG_ACTIVITY;
 } elseif ($_POST['rtype'] == 'course') {
     $setting_id = SETTING_COURSE_COMMENT_ENABLE;
+    $commentEventActivity = CommentEvent::COURSE_ACTIVITY;
 } elseif ($_POST['rtype'] == 'wallpost') {
     $wall_commenting = true;
 }
