@@ -896,7 +896,7 @@ function get_resource_details($element, $resource_id) {
  * @global type $webDir;
  * @param type $user_id
  */
-function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_issuer = null) {
+function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_issuer = null, $certificate_date = null) {
     
     global $webDir, $dateFormatLong;
            
@@ -922,12 +922,12 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     
     if (intval($user) > 0) {
         $student_name = uid_to_name($user);
+        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
+        $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
     } else {
-        $student_name = $user;
+        $student_name = $user;      
     }
-    $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(updated) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
-    $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
-
+    
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
     $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);
