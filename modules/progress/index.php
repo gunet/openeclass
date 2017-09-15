@@ -438,7 +438,7 @@ if (isset($display) and $display == TRUE) {
                 // display detailed user progress
                 display_user_progress_details($element, $element_id, $uid);
             }
-        } else {
+        } else {            
             // display certificate (student view)
             student_view_progress();
             exit;
