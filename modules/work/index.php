@@ -135,11 +135,9 @@ if ($is_editor) {
 }
 
 if ($is_editor) {
-    load_js('tools.js');
-    global $themeimg, $m;
-    $head_content .= "
-    <script type='text/javascript'>
-    ";
+    load_js('tools.js');    
+    $head_content .= "<script type='text/javascript'>";
+    
     if (AutojudgeApp::getAutojudge()->isEnabled()) {
         $head_content .= "
     function check_weights() {
@@ -233,6 +231,7 @@ if ($is_editor) {
         $('.onlineText').click( function(e){
             e.preventDefault();
             var sid = $(this).data('id');
+            var assignment_title = $('#assignment_title').text();
             $.ajax({
               type: 'POST',
               url: '',
@@ -240,9 +239,10 @@ if ($is_editor) {
               data: {
                  sid: sid
               },
-              success: function(data){
+              success: function(data){              
                 data = $.parseJSON(data);
                 bootbox.alert({
+                    title: assignment_title,
                     size: 'large',
                     message: data.submission_text ? data.submission_text : '',
                 });
@@ -258,12 +258,14 @@ if ($is_editor) {
         $('input[id=assign_button_some]').click(ajaxAssignees);
         $('input[id=assign_button_all]').click(hideAssignees);
         ";
+    
         if(AutojudgeApp::getAutojudge()->isEnabled()) {
-        $head_content .= "
-        $('input[name=auto_judge]').click(changeAutojudgeScenariosVisibility);
-        $(document).ready(function() { changeAutojudgeScenariosVisibility.apply($('input[name=auto_judge]')); });
-        ";
+            $head_content .= "
+            $('input[name=auto_judge]').click(changeAutojudgeScenariosVisibility);
+            $(document).ready(function() { changeAutojudgeScenariosVisibility.apply($('input[name=auto_judge]')); });
+            ";
         }
+        
         $head_content .= "
         function hideAssignees()
         {
@@ -312,73 +314,73 @@ if ($is_editor) {
             });
         }";
         if(AutojudgeApp::getAutojudge()->isEnabled()) {
-        $head_content .= "
-        function changeAutojudgeScenariosVisibility() {
-            if($(this).is(':checked')) {
-                $(this).parent().parent().find('table').show();
-                $('#lang').parent().parent().show();
-            } else {
-                $(this).parent().parent().find('table').hide();
-                $('#lang').parent().parent().hide();
-            }
-        }
-        $('#autojudge_new_scenario').click(function(e) {
-            var rows = $(this).parent().parent().parent().find('tr').size()-1;
-            // Clone the first line
-            var newLine = $(this).parent().parent().parent().find('tr:first').clone();
-            // Replace 0 wth the line number
-            newLine.html(newLine.html().replace(/auto_judge_scenarios\[0\]/g, 'auto_judge_scenarios['+rows+']'));
-            // Initialize the remove event and show the button
-            newLine.find('.autojudge_remove_scenario').show();
-            newLine.find('.autojudge_remove_scenario').click(removeRow);
-            // Clear out any potential content
-            newLine.find('input').val('');
-            // Insert it just before the final line
-            newLine.insertBefore($(this).parent().parent().parent().find('tr:last'));
-            // Add the event handler
-            newLine.find('.auto_judge_weight').change(updateWeightsSum);
-            e.preventDefault();
-            return false;
-        });
-        // Remove row
-        function removeRow(e) {
-            $(this).parent().parent().remove();
-            e.preventDefault();
-            return false;
-        }
-        $('.autojudge_remove_scenario').click(removeRow);
-        $(document).on('change', 'select.auto_judge_assertion', function(e) {
-            e.preventDefault();
-            var value = $(this).val();
-
-            // Change selected attr.
-            $(this).find('option').each(function() {
-                if ($(this).attr('selected') == 'selected') {
-                    $(this).removeAttr('selected');
-                } else if ($(this).attr('value') == value) {
-                    $(this).attr('selected', true);
+            $head_content .= "
+            function changeAutojudgeScenariosVisibility() {
+                if($(this).is(':checked')) {
+                    $(this).parent().parent().find('table').show();
+                    $('#lang').parent().parent().show();
+                } else {
+                    $(this).parent().parent().find('table').hide();
+                    $('#lang').parent().parent().hide();
                 }
-            });
-            var row       = $(this).parent().parent();
-            var tableBody = $(this).parent().parent().parent();
-            var indexNum  = row.index() + 1;
-
-            if (value === 'eq' ||
-                value === 'same' ||
-                value === 'notEq' ||
-                value === 'notSame' ||
-                value === 'startsWith' ||
-                value === 'endsWith' ||
-                value === 'contains'
-            ) {
-                tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').removeAttr('disabled');
-            } else {
-                tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').val('');
-                tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').attr('disabled', 'disabled');
             }
-            return false;
-        });
-        ";
+            $('#autojudge_new_scenario').click(function(e) {
+                var rows = $(this).parent().parent().parent().find('tr').size()-1;
+                // Clone the first line
+                var newLine = $(this).parent().parent().parent().find('tr:first').clone();
+                // Replace 0 wth the line number
+                newLine.html(newLine.html().replace(/auto_judge_scenarios\[0\]/g, 'auto_judge_scenarios['+rows+']'));
+                // Initialize the remove event and show the button
+                newLine.find('.autojudge_remove_scenario').show();
+                newLine.find('.autojudge_remove_scenario').click(removeRow);
+                // Clear out any potential content
+                newLine.find('input').val('');
+                // Insert it just before the final line
+                newLine.insertBefore($(this).parent().parent().parent().find('tr:last'));
+                // Add the event handler
+                newLine.find('.auto_judge_weight').change(updateWeightsSum);
+                e.preventDefault();
+                return false;
+            });
+            // Remove row
+            function removeRow(e) {
+                $(this).parent().parent().remove();
+                e.preventDefault();
+                return false;
+            }
+            $('.autojudge_remove_scenario').click(removeRow);
+            $(document).on('change', 'select.auto_judge_assertion', function(e) {
+                e.preventDefault();
+                var value = $(this).val();
+
+                // Change selected attr.
+                $(this).find('option').each(function() {
+                    if ($(this).attr('selected') == 'selected') {
+                        $(this).removeAttr('selected');
+                    } else if ($(this).attr('value') == value) {
+                        $(this).attr('selected', true);
+                    }
+                });
+                var row       = $(this).parent().parent();
+                var tableBody = $(this).parent().parent().parent();
+                var indexNum  = row.index() + 1;
+
+                if (value === 'eq' ||
+                    value === 'same' ||
+                    value === 'notEq' ||
+                    value === 'notSame' ||
+                    value === 'startsWith' ||
+                    value === 'endsWith' ||
+                    value === 'contains'
+                ) {
+                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').removeAttr('disabled');
+                } else {
+                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').val('');
+                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').attr('disabled', 'disabled');
+                }
+                return false;
+            });
+            ";
         }
         $head_content .= "
     });
@@ -588,11 +590,13 @@ draw($tool_content, 2, null, $head_content);
  * @param array $params ignored
  */
 function ipORcidr($field, $value, array $params) {
-        foreach ($value as $ip){
-            $valid = isIPv4($ip) || isIPv4cidr($ip) || isIPv6($ip) || isIPv6cidr($ip);
-            if (!$valid) return false;
+    foreach ($value as $ip){
+        $valid = isIPv4($ip) || isIPv4cidr($ip) || isIPv6($ip) || isIPv6cidr($ip);
+        if (!$valid) {
+            return false;
         }
-        return true;
+    }
+    return true;
 };
 
 /**
@@ -759,7 +763,6 @@ function add_assignment() {
 
 /**
  * @brief edit assignment
- * @global type $tool_content
  * @global type $langEditSuccess
  * @global type $m
  * @global type $langTheField
@@ -774,7 +777,7 @@ function add_assignment() {
  * @return type
  */
 function edit_assignment($id) {
-    global $tool_content, $langEditSuccess, $m, $langTheField, $course_code,
+    global $langEditSuccess, $m, $langTheField, $course_code,
         $course_id, $uid, $workPath, $langFormErrors, $langScales, $langGradeRubrics, $langTitle,
         $langIPInvalid;
 //Session::Messages("<pre>edit_assignment</pre>");
@@ -2454,15 +2457,14 @@ function show_student_assignment($id) {
         if (!$uid) {
             $tool_content .= "<p>$langUserOnly</p>";
             $submit_ok = FALSE;
-        } elseif ($GLOBALS['status'] == 10) {
-            $tool_content .= "\n  <div class='alert alert-warning'>$m[noguest]</div>";
-            $submit_ok = FALSE;;
+        } elseif ($GLOBALS['status'] == USER_GUEST) {
+            $tool_content .= "<div class='alert alert-warning'>$m[noguest]</div>";
+            $submit_ok = FALSE;
         } else {
             foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
                 $submissions_exist = true;
                 if ($sub->grade != '') {
                     $submit_ok = false;
-
                 }
                 show_submission_details($sub->id);
             }
@@ -2475,9 +2477,32 @@ function show_student_assignment($id) {
     }
 }
 
+/**
+ * 
+ * @global type $tool_content
+ * @global type $m
+ * @global type $langWorkFile
+ * @global type $langSave
+ * @global type $langSubmit
+ * @global type $langNotice3
+ * @global type $urlAppend
+ * @global type $langGroupSpaceLink
+ * @global type $langOnBehalfOf
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $langBack
+ * @global type $is_editor
+ * @global type $langWorkOnlineText
+ * @global type $langGradebookGrade
+ * @param type $id
+ * @param type $user_group_info
+ * @param type $on_behalf_of
+ * @param type $submissions_exist
+ * @return type
+ */
 function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submissions_exist=false) {
-    global $tool_content, $m, $langWorkFile, $langSave, $langSubmit, $uid,
-    $langNotice3, $gid, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
+    global $tool_content, $m, $langWorkFile, $langSave, $langSubmit,
+    $langNotice3, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
     $langGradebookGrade;
 
@@ -2644,6 +2669,36 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
 }
 
+/**
+ * @brief display assignment details
+ * @global type $tool_content
+ * @global type $is_editor
+ * @global type $course_code
+ * @global type $m
+ * @global type $langDaysLeft
+ * @global type $course_id
+ * @global type $langEndDeadline
+ * @global type $langDelAssign
+ * @global type $langAddGrade
+ * @global type $langZipDownload
+ * @global type $langTags
+ * @global type $langGraphResults
+ * @global type $langWorksDelConfirm
+ * @global type $langWorkFile
+ * @global type $langGradeType
+ * @global type $langGradeNumber
+ * @global type $langGradeScale
+ * @global type $langGradeRubric
+ * @global type $langTitleRubric
+ * @global type $langRubricDesc
+ * @global type $langRubricCriteria
+ * @global type $langEditChange
+ * @global type $langExportGrades
+ * @global type $langDescription
+ * @global type $langTitle
+ * @param type $id
+ * @param type $row
+ */
 function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $m, $langDaysLeft,$course_id,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
@@ -2738,7 +2793,7 @@ function assignment_details($id, $row) {
                 <div class='col-sm-3'>
                     <strong>$langTitle:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-9' id='assignment_title'>
                     " . q($row->title) . "
                 </div>
             </div>";
@@ -2860,9 +2915,17 @@ function assignment_details($id, $row) {
 
 }
 
-// Show a table header which is a link with the appropriate sorting
-// parameters - $attrib should contain any extra attributes requered in
-// the <th> tags
+
+/**
+ * @brief // Show a table header which is a link with the appropriate sorting
+    parameters - $attrib should contain any extra attributes requered in
+    the <th> tags
+ * @global type $tool_content
+ * @global type $course_code
+ * @param type $title
+ * @param type $opt
+ * @param type $attrib
+ */
 function sort_link($title, $opt, $attrib = '') {
     global $tool_content, $course_code;
     $i = '';

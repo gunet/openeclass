@@ -187,12 +187,47 @@ function was_graded($uid, $id, $ret_val = FALSE) {
  * @global type $langAutoJudgeEnable
  * @global type $langAutoJudgeShowWorkResultRpt
  * @global type $langGradebookGrade
+ * @global type $langFileName
+ * @global type $langWorkOnlineText
  * @param type $id
  */
 function show_submission_details($id) {
     
-    global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code,
-           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langGradebookGrade;
+    global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code, 
+           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView,
+           $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content;
+    
+    load_js('tools.js');
+    $head_content .= "<script type='text/javascript'>";
+    $head_content .= "$(function() {
+        $('.onlineText').click( function(e){
+            e.preventDefault();
+            var sid = $(this).data('id');
+            var assignment_title = $('#assignment_title').text();
+            $.ajax({
+              type: 'POST',
+              url: '',
+              datatype: 'json',
+              data: {
+                 sid: sid
+              },
+              success: function(data){              
+                data = $.parseJSON(data);
+                bootbox.alert({
+                    title: assignment_title,
+                    size: 'large',
+                    message: data.submission_text? data.submission_text: '',
+                });
+              },
+              error: function(xhr, textStatus, error){
+                  console.log(xhr.statusText);
+                  console.log(textStatus);
+                  console.log(error);
+              }
+            });
+        });
+    })";
+    $head_content .= "</script>";
     
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
@@ -215,6 +250,7 @@ function show_submission_details($id) {
                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>";
     }
+    $sub_type = Database::get()->querySingle("SELECT submission_type FROM assignment WHERE id = ?d", $sub->assignment_id)->submission_type;    
 
     $tool_content .= "
         <div class='panel panel-default'>
@@ -247,16 +283,26 @@ function show_submission_details($id) {
                     <div class='col-sm-3'>
                         <strong>" . $m['sub_date'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . $sub->submission_date . "
-                    </div>
-                </div>
-                <div class='row margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong>" . $m['filename'] . ":</strong>
-                    </div>
-                    <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
+                    <div class='col-sm-9'>" . nice_format($sub->submission_date, true) . "
                     </div>
                 </div>";
+                if ($sub_type == 0) {
+                    $tool_content .= "<div class='row margin-bottom-fat'>
+                        <div class='col-sm-3'>
+                            <strong>" . $langFileName . ":</strong>
+                        </div>
+                            <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
+                        </div>
+                    </div>";
+                } else {
+                    $tool_content .= "<div class='row margin-bottom-fat'>
+                        <div class='col-sm-3'>
+                            <strong>" . $langWorkOnlineText . ":</strong>
+                        </div>
+                            <div class='col-sm-9'><a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>
+                        </div>
+                    </div>";
+                }
                 if(AutojudgeApp::getAutojudge()->isEnabled()) {
                 $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
                 $tool_content .= "
