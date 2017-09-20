@@ -24,6 +24,7 @@ define('RESPONSE_OK', 'OK');
 define('RESPONSE_FAILED', 'FAILED');
 define('RESPONSE_EXPIRED', 'EXPIRED');
 define('RESPONSE_NOTENABLED', 'NOTENABLED');
+define('RESPONSE_USERNOTACTIVE', 'USERNOTACTIVE');
 define('M_INIT', 1);
 header('Content-Type: application/xml; charset=utf-8');
 
