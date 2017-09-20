@@ -83,10 +83,10 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
     global $m;
 
     $return = '';
-    $res = Database::get()->queryArray("SELECT s.id, s.file_path, s.file_name, s.uid, s.group_id, a.course_id
-				FROM assignment_submit s JOIN assignment a ON (a.id = s.assignment_id)
-                                WHERE s.assignment_id = ?d AND
-				      (s.uid = ?d OR s.group_id = ?d)", $id, $uid, $gid);
+    $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
+				FROM assignment_submit
+                                WHERE assignment_id = ?d AND
+				      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
     foreach ($res as $row) {
         if ($row->file_path != $new_filename) {
             @unlink("$GLOBALS[workPath]/$row->file_path");
@@ -177,14 +177,57 @@ function was_graded($uid, $id, $ret_val = FALSE) {
     }
 }
 
-
-/*
+/**
  * @brief Show details of a submission
+ * @global type $uid
+ * @global type $m
+ * @global type $langSubmittedAndGraded
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $langAutoJudgeEnable
+ * @global type $langAutoJudgeShowWorkResultRpt
+ * @global type $langGradebookGrade
+ * @global type $langFileName
+ * @global type $langWorkOnlineText
+ * @param type $id
  */
 function show_submission_details($id) {
     
-    global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code, $langSubmissionDate,
-           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langGradebookGrade;
+    global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code, 
+           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView,
+           $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content;
+    
+    load_js('tools.js');
+    $head_content .= "<script type='text/javascript'>";
+    $head_content .= "$(function() {
+        $('.onlineText').click( function(e){
+            e.preventDefault();
+            var sid = $(this).data('id');
+            var assignment_title = $('#assignment_title').text();
+            $.ajax({
+              type: 'POST',
+              url: '',
+              datatype: 'json',
+              data: {
+                 sid: sid
+              },
+              success: function(data){              
+                data = $.parseJSON(data);
+                bootbox.alert({
+                    title: assignment_title,
+                    size: 'large',
+                    message: data.submission_text? data.submission_text: '',
+                });
+              },
+              error: function(xhr, textStatus, error){
+                  console.log(xhr.statusText);
+                  console.log(textStatus);
+                  console.log(error);
+              }
+            });
+        });
+    })";
+    $head_content .= "</script>";
     
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
@@ -207,6 +250,7 @@ function show_submission_details($id) {
                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>";
     }
+    $sub_type = Database::get()->querySingle("SELECT submission_type FROM assignment WHERE id = ?d", $sub->assignment_id)->submission_type;    
 
     $tool_content .= "
         <div class='panel panel-default'>
@@ -232,23 +276,33 @@ function show_submission_details($id) {
                     <div class='col-sm-3'>
                         <strong>" . $m['gradecomments'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . $sub->grade_comments . "
+                    <div class='col-sm-9'>" . $sub->grade_comments . "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$sub->id'>" . $sub->grade_comments_filename . "</a>
                     </div>
                 </div>
                 <div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $langSubmissionDate . ":</strong>
+                        <strong>" . $m['sub_date'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . $sub->submission_date . "
-                    </div>
-                </div>
-                <div class='row margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong>" . $m['filename'] . ":</strong>
-                    </div>
-                    <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
+                    <div class='col-sm-9'>" . nice_format($sub->submission_date, true) . "
                     </div>
                 </div>";
+                if ($sub_type == 0) {
+                    $tool_content .= "<div class='row margin-bottom-fat'>
+                        <div class='col-sm-3'>
+                            <strong>" . $langFileName . ":</strong>
+                        </div>
+                            <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
+                        </div>
+                    </div>";
+                } else {
+                    $tool_content .= "<div class='row margin-bottom-fat'>
+                        <div class='col-sm-3'>
+                            <strong>" . $langWorkOnlineText . ":</strong>
+                        </div>
+                            <div class='col-sm-9'><a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>
+                        </div>
+                    </div>";
+                }
                 if(AutojudgeApp::getAutojudge()->isEnabled()) {
                 $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
                 $tool_content .= "
@@ -260,10 +314,11 @@ function show_submission_details($id) {
                     </div>
                 </div>";
                 }
-        table_row($m['comments'], $sub->comments, true);
-        $tool_content .= "
-                </div>
-            </div>";
+            table_row($m['comments'], $sub->comments, true);
+$tool_content .= "
+            </div>
+        </div>
+            ";
 }
 
 // Check if a file has been submitted by user uid or group gid
@@ -414,77 +469,44 @@ function notify_for_assignment_submission($title) {
     }
 }
 
-/**
- * Auto Judge functions
- * @param type $scenarionAssertion
- * @param type $scenarioInputResult
- * @param type $scenarioOutputExpectation
- * @return type
- */
-function doScenarioAssertion($scenarionAssertion, $scenarioInputResult, $scenarioOutputExpectation) {
-    switch($scenarionAssertion) {
-        case 'eq':
-            $assertionResult = ($scenarioInputResult == $scenarioOutputExpectation);
-            break;
-        case 'same':
-            $assertionResult = ($scenarioInputResult === $scenarioOutputExpectation);
-            break;
-        case 'notEq':
-            $assertionResult = ($scenarioInputResult != $scenarioOutputExpectation);
-            break;
-        case 'notSame':
-            $assertionResult = ($scenarioInputResult !== $scenarioOutputExpectation);
-            break;
-        case 'integer':
-            $assertionResult = (is_int($scenarioInputResult));
-            break;
-        case 'float':
-            $assertionResult = (is_float($scenarioInputResult));
-            break;
-        case 'digit':
-            $assertionResult = (ctype_digit($scenarioInputResult));
-            break;
-        case 'boolean':
-            $assertionResult = (is_bool($scenarioInputResult));
-            break;
-        case 'notEmpty':
-            $assertionResult = (empty($scenarioInputResult) === false);
-            break;
-        case 'notNull':
-            $assertionResult = ($scenarioInputResult !== null);
-            break;
-        case 'string':
-            $assertionResult = (is_string($scenarioInputResult));
-            break;
-        case 'startsWith':
-            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === 0);
-            break;
-        case 'endsWith':
-            $stringPosition  = mb_strlen($scenarioInputResult, 'utf8') - mb_strlen($scenarioOutputExpectation, 'utf8');
-            $assertionResult = (mb_strripos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === $stringPosition);
-            break;
-        case 'contains':
-            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8'));
-            break;
-        case 'numeric':
-            $assertionResult = (is_numeric($scenarioInputResult));
-            break;
-        case 'isArray':
-            $assertionResult = (is_array($scenarioInputResult));
-            break;
-        case 'true':
-            $assertionResult = ($scenarioInputResult === true);
-            break;
-        case 'false':
-            $assertionResult = ($scenarioInputResult === false);
-            break;
-        case 'isJsonString':
-            $assertionResult = (json_decode($value) !== null && JSON_ERROR_NONE === json_last_error());
-            break;
-        case 'isObject':
-            $assertionResult = (is_object($scenarioInputResult));
-            break;
-    }
 
-    return $assertionResult;
+/**
+ * @brief send file for plagiarism check
+ * @param type $assign_id
+ * @param type $file_id
+ * @param type $true_file_path
+ * @param type $true_file_name
+ * @global type $course_code
+ */
+function send_file_for_plagiarism($assign_id, $file_id, $true_file_path, $true_file_name) {
+    
+    global $course_code, $langPlagiarismAlreadyCheck, $langPlagiarismFileSent;
+    
+    if (!Plagiarism::get()->isFileSubmitted($file_id)) {
+        Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);        
+        Session::Messages($langPlagiarismFileSent, 'alert-success');
+    } else {
+        Session::Messages($langPlagiarismAlreadyCheck, 'alert-warning');        
+    }
+    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$assign_id");
+}
+
+
+/**
+ * @brief check for valid plagiarism file type
+ * @param type $file_id
+ * @return boolean
+ */
+function valid_plagiarism_file_type($file_id) {
+            
+    $unplag_allowable_file_extensions = array('doc', 'docx', 'rtf', 'txt', 'odt', 'html', 'pdf');
+    
+    $file_details = Database::get()->querySingle("SELECT file_name FROM assignment_submit WHERE id = ?d", $file_id);
+    if ($file_details) {
+        $file_type = get_file_extension($file_details->file_name);        
+        if (in_array($file_type, $unplag_allowable_file_extensions)) {
+            return TRUE;
+        }
+    }
+    return FALSE;    
 }
