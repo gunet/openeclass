@@ -107,7 +107,11 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
         if ($ok === 4) {
             increaseLoginFailure();
         }
-        echo RESPONSE_FAILED;
+        if ($ok === 3) {
+            echo RESPONSE_USERNOTACTIVE;
+        } else {
+            echo RESPONSE_FAILED;
+        }
     }
 
     exit();
