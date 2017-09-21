@@ -185,6 +185,11 @@ if (isset($_POST['submit'])) {
         if ($search == 'inactive') {
             $criteria[] = 'expires_at < ' . DBHelper::timeAfter();
         }
+        
+        // search for users with their account being expired in one month
+        if ($search == 'wexpire') {
+            $criteria[] = 'expires_at between CURRENT_DATE() and date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';            
+        }
 
         // Department search
         $depqryadd = '';
