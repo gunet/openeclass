@@ -104,7 +104,6 @@ if (isset($_POST['submit'])) {
 } else {
 
     $usernames = '';
-
     if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit']) or isset($_POST['move_submit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         // get the incoming values
@@ -119,23 +118,22 @@ if (isset($_POST['submit'])) {
         $auth_type = isset($_POST['auth_type']) ? $_POST['auth_type'] : '';
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
         $reg_flag = isset($_POST['reg_flag']) ? intval($_POST['reg_flag']) : '';
-        $hour = isset($_POST['hour']) ? $_POST['hour'] : 0;
-        $minute = isset($_POST['minute']) ? $_POST['minute'] : 0;
+        $user_registered_at = isset($_POST['user_registered_at']) ? $_POST['user_registered_at'] : '';
+        $user_expires_until = isset($_POST['user_expires_until']) ? $_POST['user_expires_until'] : '';        
         // Criteria/Filters
         $criteria = array();
         $terms = array();
-
-        if (isset($_POST['date']) or $hour or $minute) {
-            $date = explode('-', $_POST['date']);
-            if (count($date) == 3) {
-                $day = intval($date[0]);
-                $month = intval($date[1]);
-                $year = intval($date[2]);
-                $user_registered_at = mktime($hour, $minute, 0, $month, $day, $year);
-            } else {
-                $user_registered_at = mktime($hour, $minute, 0, 0, 0, 0);
-            }
-            $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ' . $user_registered_at;
+        
+        if (!empty($user_registered_at)) {
+            $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ?s';
+            $date_user_registered_at = DateTime::createFromFormat("d-m-Y", $user_registered_at);
+            $terms[] = $date_user_registered_at->format("Y-m-d");
+        }
+        
+        if (!empty($_user_expires_until)) {
+            $criteria[] = 'expires_at > CURRENT_DATE() AND expires_at < ?s';
+            $date_user_expires_until = DateTime::createFromFormat("d-m-Y", $user_expires_until);
+            $terms[] = $date_user_expires_until->format("Y-m-d");
         }
 
         if (!empty($lname)) {
@@ -244,7 +242,7 @@ if (isset($_POST['submit'])) {
             }
             $qry = 'SELECT DISTINCT username ' . $qry_base . ' ORDER BY username ASC';
         }
-
+        
         Database::get()->queryFunc($qry
                 , function($users) use(&$usernames) {
             $usernames .= $users->username . "\n";

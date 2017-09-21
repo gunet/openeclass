@@ -33,13 +33,19 @@ require_once 'hierarchy_validations.php';
 $user = new User();
 
 load_js('jstree3');
-load_js('bootstrap-datetimepicker');
+load_js('bootstrap-datepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#id_user_registered_at').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-right', 
+            $('#id_user_registered_at').datepicker({
+                format: 'dd-mm-yyyy', 
+                pickerPosition: 'bottom-right',
+                language: '" . $language . "',
+                autoclose: true    
+            });
+            $('#id_user_expires_until').datepicker({
+                format: 'dd-mm-yyyy',              
+                pickerPosition: 'bottom-right',
                 language: '" . $language . "',
                 autoclose: true    
             });
@@ -111,4 +117,3 @@ $data['html'] = $html;
 
 $data['menuTypeID'] = 3;
 view('admin.users.search_user', $data);
-

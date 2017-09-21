@@ -57,6 +57,12 @@
                 </div>   
             </div>
             <div class='form-group'>
+	        	<label class='col-sm-2 control-label'>{{ trans('langExpirationDate') }}:</label>
+    	    	<div class='col-sm-10'>
+        	    	<input class='form-control' name='user_expires_until' id='id_user_expires_until' type='text' value='{{ $user_expires_until }}' data-date-format='dd-mm-yyyy' placeholder='{{ trans('langUntil') }}'>
+        		</div>
+        	</div>
+            <div class='form-group'>
                 <label class='col-sm-2 control-label'>{{ trans('langEmailVerified') }}:</label>
                 <div class='col-sm-10'>
                     {!! selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-control"') !!}
