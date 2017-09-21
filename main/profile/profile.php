@@ -195,10 +195,12 @@ if (isset($_POST['submit'])) {
         Session::Messages($cpf_error_str);
         redirect_to_home_page("main/profile/profile.php");
     }
-
+    
+    $need_email_verification = false;
     // TODO: Allow admin to configure allowed username format
     if (!empty($email_form) && ($email_form != $_SESSION['email']) && get_config('email_verification_required')) {
         $verified_mail_sql = ", verified_mail = " . EMAIL_UNVERIFIED;
+        $need_email_verification = true;
     } else {
         $verified_mail_sql = '';
     }
@@ -223,20 +225,24 @@ if (isset($_POST['submit'])) {
     //fill custom profile fields
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
 
-        if ($q->affectedRows > 0 or isset($departments)) {
-            $userObj->refresh($uid, $departments);
-            Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
-                                                 'modifyprofile' => 1,
-                                                 'username' => $username_form,
-                                                 'email' => $email_form,
-                                                 'am' => $am_form));
-            $_SESSION['uname'] = $username_form;
-            $_SESSION['surname'] = $surname_form;
-            $_SESSION['givenname'] = $givenname_form;
-            $_SESSION['email'] = $email_form;
+    if ($q->affectedRows > 0 or isset($departments)) {
+        $userObj->refresh($uid, $departments);
+        Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
+                                             'modifyprofile' => 1,
+                                             'username' => $username_form,
+                                             'email' => $email_form,
+                                             'am' => $am_form));
+        $_SESSION['uname'] = $username_form;
+        $_SESSION['surname'] = $surname_form;
+        $_SESSION['givenname'] = $givenname_form;
+        $_SESSION['email'] = $email_form;
+        if ($need_email_verification) { // email has been changed and needs verification
+            redirect_to_home_page("modules/auth/mail_verify_change.php?from_profile=true");
+        } else {
             Session::Messages($langProfileReg, 'alert-success');
-            redirect_to_home_page("main/profile/display_profile.php");
+            redirect_to_home_page("main/profile/display_profile.php");    
         }
+    }
     if ($old_language != $language) {
         Session::Messages($langProfileReg, 'alert-success');
         redirect_to_home_page("main/profile/display_profile.php");
