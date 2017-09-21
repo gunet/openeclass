@@ -538,7 +538,8 @@ $langUserType = "Τύπος χρήστη";
 
 // search
 $langSearchUsers = "Αναζήτηση Χρηστών";
-$langInactiveUsers = "Μη ενεργοί χρήστες";
+$langInactiveUsers = "Μη ενεργοί";
+$langWillExpireUsers = "Λήγουν μέσα στο μήνα";
 $langAddSixMonths = "Επέκταση διάρκειας λογαριασμών";
 $langChangeDepartment = 'Αλλαγή σχολής - τμήματος';
 $langSearchInCourse = "Αναζήτηση στους πόρους";

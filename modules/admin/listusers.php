@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- *   Open eClass 3.0
+ *   Open eClass 3.6
  *   E-learning and Course Management System
  * ========================================================================
- *  Copyright(c) 2003-2014  Greek Universities Network - GUnet
+ *  Copyright(c) 2003-2017  Greek Universities Network - GUnet
  *  A full copyright notice can be read in "/info/copyright.txt".
  *
  *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -138,6 +138,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     if ($search == 'inactive') {
         $criteria[] = 'expires_at < CURRENT_DATE()';
         add_param('search', 'inactive');
+    }
+    
+    // search for users with their account being expired in one month
+    if ($search == 'wexpire') {
+        $criteria[] = 'expires_at between CURRENT_DATE() and date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';
+        add_param('search', 'wexpire');
     }
 
     // Department search
@@ -456,12 +462,7 @@ $data['action_bar'] = action_bar(array(
                 'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
                 'icon' => 'fa-search',
                 'level' => 'primary-label',
-                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive')),
-            array('title' => $langAddSixMonths,
-                'url' => "updatetheinactive.php?activate=1",
-                'icon' => 'fa-plus-circle',
-                'level' => 'primary',
-                'show' => (isset($_GET['search']) and $_GET['search'] == 'inactive')),
+                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive')),            
             array('title' => $langBack,
                 'url' => "search_user.php",
                 'icon' => 'fa-reply',
