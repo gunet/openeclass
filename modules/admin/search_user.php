@@ -33,12 +33,18 @@ require_once 'hierarchy_validations.php';
 $user = new User();
 
 load_js('jstree3');
-load_js('bootstrap-datetimepicker');
+load_js('bootstrap-datepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#id_user_registered_at').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', 
+            $('#id_user_registered_at').datepicker({
+                format: 'dd-mm-yyyy', 
+                pickerPosition: 'bottom-right',
+                language: '" . $language . "',
+                autoclose: true    
+            });
+            $('#id_user_expires_until').datepicker({
+                format: 'dd-mm-yyyy',              
                 pickerPosition: 'bottom-right',
                 language: '" . $language . "',
                 autoclose: true    
@@ -62,6 +68,7 @@ $auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
 $email = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 $user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
+$user_expires_until = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
 
 if (isset($_GET['department'])) {
     $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
@@ -165,6 +172,12 @@ $tool_content .= "
         </div>
         <div class='col-sm-5'>       
             <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='$user_registered_at' data-date-format='dd-mm-yyyy' placeholder='$langRegistrationDate'>
+        </div>   
+    </div>    
+    <div class='form-group'>
+        <label class='col-sm-2 control-label'>$langExpirationDate:</label>        
+        <div class='col-sm-10'>
+            <input class='form-control' name='user_expires_until' id='id_user_expires_until' type='text' value='$user_expires_until' data-date-format='dd-mm-yyyy' placeholder='$langUntil'>
         </div>   
     </div>
     <div class='form-group'>

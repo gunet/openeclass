@@ -51,6 +51,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $email = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
     $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
     $user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
+    $user_expires_until = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
     $mail_ver_required = get_config('email_verification_required');
     // pagination
     $limit = intval($_GET['iDisplayLength']);
@@ -79,10 +80,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         add_param('user_registered_at');
         // join the above with registered at search
         $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ?s';
-        $date_user_registered_at = DateTime::createFromFormat("d-m-Y H:i", $user_registered_at);
-        $terms[] = $date_user_registered_at->format("Y-m-d H:i:s");
+        $date_user_registered_at = DateTime::createFromFormat("d-m-Y", $user_registered_at);
+        $terms[] = $date_user_registered_at->format("Y-m-d");
     }
 
+    // Expiration date search
+    if (!empty($user_expires_until)) {        
+        add_param('user_expires_until');
+        // join the above with registered at search
+        $criteria[] = 'expires_at > CURRENT_DATE() AND expires_at < ?s';
+        $date_user_expires_until = DateTime::createFromFormat("d-m-Y", $user_expires_until);
+        $terms[] = $date_user_expires_until->format("Y-m-d");
+    }
+    
     // surname search
     if (!empty($lname)) {
         $criteria[] = 'surname LIKE ?s ' . $cs;
@@ -142,7 +152,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     
     // search for users with their account being expired in one month
     if ($search == 'wexpire') {
-        $criteria[] = 'expires_at between CURRENT_DATE() and date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';
+        $criteria[] = 'expires_at BETWEEN CURRENT_DATE() AND date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';
         add_param('search', 'wexpire');
     }
 
