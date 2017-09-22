@@ -258,7 +258,7 @@ function showgroupsofcategory($catid) {
                 $tool_content .= q($group_name);
             }
         }
-        $tool_content .= "<br><p>$group_description</p>";
+        $tool_content .= "<br><p style='padding-top:10px;'>$group_description</p>";
         if (!$is_editor){
             if ($student_desc) {
                 if ($user_group_description) {

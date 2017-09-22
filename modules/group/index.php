@@ -510,7 +510,7 @@ if ($is_editor) {
             initialize_group_info($group->id);            
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
-                    <br><p>$group_description</p>";
+                    <br><p style='padding-top:10px;'>$group_description</p>";
             if ($user_group_description && $student_desc) {
                 $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
@@ -589,7 +589,7 @@ if ($is_editor) {
             } else {
                 $tool_content .= q($group_name);
             }
-            $tool_content .= "<br><em>$group_description</em><br>";
+            $tool_content .= "<br><p style='padding-top:10px;'>$group_description</p>";
             if ($student_desc) {
                 if ($user_group_description) {
                     $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .

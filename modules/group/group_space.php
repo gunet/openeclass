@@ -161,7 +161,8 @@ if (isset($_GET['group_as'])) {
                 array('title' => $langGroupAssignments,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
                       'icon' => 'fa-globe',
-                      'level' => 'primary'),
+                      'level' => 'primary',
+                      'show' => visible_module(MODULE_ID_ASSIGN)),
                 array('title' => $langBack,
                       'url' => "index.php?course=$course_code",
                       'icon' => 'fa-reply',
@@ -215,16 +216,12 @@ if (isset($_GET['group_as'])) {
                 $langGroupInfo
                 </h3>
             </div>
-            <div class='panel-body'>
-                <div class='row'>
-                    <div class='col-sm-3'><strong>$langGroupName:</strong></div>
-                    <div class='col-sm-9'>" . q($group_name) . "</div>
-                </div>
+            <div class='panel-body'>                
                 <div class='row'>
                     <div class='col-sm-3'><strong>$langGroupTutor:</strong></div>
                     <div class='col-sm-9'>$tool_content_tutor</div>
                 </div>
-                <div class='row'>
+                <div class='row' style='padding-top: 20px; padding-bottom:10px'>
                     <div class='col-sm-3'><strong>$langDescription:</strong></div>
                     <div class='col-sm-9'>$tool_content_description</div>
                 </div>
