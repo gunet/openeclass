@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,44 +29,56 @@ require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
 load_js('tools.js');
-global $themeimg;
+load_js('sortable/Sortable.min.js');
+
 $toolName = $langQuestionnaire;
-$navigation[] = array(
-            'url' => "index.php?course=$course_code",
-            'name' => $langQuestionnaire
-        );
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
+
+if (isset($_REQUEST['pid'])) {
+    $pid = intval($_REQUEST['pid']);
+}
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    if ($_POST['assign_type'] == 2) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
-    } elseif ($_POST['assign_type'] == 1) {
-        $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
-                                FROM user, course_user
-                                WHERE user.id = course_user.user_id
-                                AND course_user.course_id = ?d AND course_user.status = 5
-                                AND user.id ORDER BY surname", $course_id);
+    if (isset($_POST['assign_type'])) {
+        if ($_POST['assign_type'] == 2) {
+            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+        } elseif ($_POST['assign_type'] == 1) {
+            $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                    FROM user, course_user
+                                    WHERE user.id = course_user.user_id
+                                    AND course_user.course_id = ?d AND course_user.status = 5
+                                    AND user.id ORDER BY surname", $course_id);
+        }
+        echo json_encode($data);
     }
-    echo json_encode($data);
+    if (isset($_POST['toReorder'])) {
+        reorder_table('poll_question', 'pid', $pid, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null, 'pqid', 'q_position');        
+    }
     exit;
 }
-if (isset($_GET['pid'])) {
-    $pid = intval($_GET['pid']);
-}
 
-if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {
-    $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
-    $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
-    if(!$poll){
-        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
-    }
-    $position = $poll->q_position;
-    $new_position = isset($_GET['moveUp']) ? $position - 1 : $position + 1;
-    $trade_position_pqid = Database::get()->querySingle("SELECT pqid FROM `poll_question`
-                  WHERE pid = ?d AND q_position = ?d", $pid, $new_position)->pqid;
-    Database::get()->query("UPDATE poll_question SET q_position = ?d WHERE pid = ?d AND pqid= ?d", $new_position, $pid, $pqid);
-    Database::get()->query("UPDATE poll_question SET q_position = ?d WHERE pid = ?d AND pqid = ?d", $position, $pid, $trade_position_pqid);
-    redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
-}
+$head_content .= "<script>
+    $(document).ready(function(){
+        Sortable.create(pollAnswers,{
+            handle: '.fa-arrows',
+            animation: 150,
+            onEnd: function (evt) {
+                var itemEl = $(evt.item);
+                var idReorder = itemEl.attr('data-id');
+                var prevIdReorder = itemEl.prev().attr('data-id');
+                $.ajax({
+                  type: 'post',
+                  dataType: 'text',
+                  data: {
+                        toReorder: idReorder,
+                        prevReorder: prevIdReorder,
+                    }
+                });
+            }
+        });
+    });
+</script>";
 
 if (isset($_POST['submitPoll'])) {
     $v = new Valitron\Validator($_POST);
@@ -755,18 +767,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 } else {
 
     $pageName = $langEditChange;
-    $navigation[] = array(
-            'url' => "admin.php?course=$course_code&amp;pid=$pid",
-            'name' => $poll->name
-        );
+    $navigation[] = array('url' => "admin.php?course=$course_code&amp;pid=$pid", 'name' => $poll->name);
 
-    if($poll->type == 0)
-            $poll_type = $langGeneralSurvey;
-    else if($poll->type == 1)
-            $poll_type = $langCollesSurvey." $langSurvey";
-    else if($poll->type == 2)
-            $poll_type = $langATTLSSurvey." $langSurvey";
-
+    if ($poll->type == 0) {
+        $poll_type = $langGeneralSurvey;
+    } else if($poll->type == 1) {
+        $poll_type = $langCollesSurvey." $langSurvey";
+    } else if($poll->type == 2) {
+        $poll_type = $langATTLSSurvey." $langSurvey";
+    }
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -840,79 +849,61 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </div>
     ";
 
-    if($poll->type == 0){
-
-    $tool_content .= action_bar(array(
-        array('title' => $langNewQu,
-              'level' => 'primary-label',
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes",
-              'icon' => 'fa-plus-circle',
-              'button-class' => 'btn-success'),
-        array('title' => $langNewLa,
-              'level' => 'primary-label',
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&questionType=label",
-              'icon' => 'fa-tag',
-              'button-class' => 'btn-success')
-        ),false);
-    if ($questions) {
-        $tool_content .= "<table class='table-default'>
-                    <tbody>
-                        <tr class='list-header'>
-                          <th colspan='2'>$langQuesList</th>
-                          <th class='text-center'>".icon('fa-gears', $langCommands)."</th>
-                        </tr>";
-        $i=1;
-        $nbrQuestions = count($questions);
-        foreach ($questions as $question) {
-        $tool_content .= "<tr class='even'>
-                            <td align='text-right' width='1'>$i.</td>
-                            <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
-                            $aType[$question->qtype - 1]."</td>
-                            <td class='option-btn-cell'>".action_button(array(
-                                array(
-                                    'title' => $langEditChange,
-                                    'icon' => 'fa-edit',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid"
-                                ),
-                                array(
-                                    'title' => $langDelete,
-                                    'icon' => 'fa-times',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;deleteQuestion=$question->pqid",
-                                    'class' => 'delete',
-                                    'confirm' => $langConfirmYourChoice
-                                ),
-                                array(
-                                    'title' => $langUp,
-                                    'icon' => 'fa-arrow-up',
-                                    'level' => 'primary',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;moveUp=$question->pqid",
-                                    'disabled' => $i==1
-                                ),
-                                array(
-                                    'title' => $langDown,
-                                    'icon' => 'fa-arrow-down',
-                                    'level' => 'primary',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;moveDown=$question->pqid",
-                                    'disabled' => $i==$nbrQuestions
-                                )
-                            ))."</td></tr>";
-            $i++;
+    if($poll->type == 0) {
+        $tool_content .= action_bar(array(
+            array('title' => $langNewQu,
+                  'level' => 'primary-label',
+                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes",
+                  'icon' => 'fa-plus-circle',
+                  'button-class' => 'btn-success'),
+            array('title' => $langNewLa,
+                  'level' => 'primary-label',
+                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&questionType=label",
+                  'icon' => 'fa-tag',
+                  'button-class' => 'btn-success')
+            ),false);
+        if ($questions) {
+            $tool_content .= "<table class='table-default'>
+                        <tbody id='pollAnswers'>
+                            <tr class='list-header'>
+                              <th colspan='2'>$langQuesList</th>
+                              <th class='text-center'>".icon('fa-gears', $langCommands)."</th>
+                            </tr>";
+            $i=1;
+            $nbrQuestions = count($questions);
+            foreach ($questions as $question) {
+                $tool_content .= "<tr class='even' data-id='$question->pqid'>
+                                <td align='text-right' width='1'>$i.</td>
+                                <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
+                                $aType[$question->qtype - 1]."</td>
+                                <td style='padding: 10px 0; width: 85px;'>
+                                    <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                                            <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                                    </div>
+                                <div class='pull-left'>".action_button(array(
+                                    array(
+                                        'title' => $langEditChange,
+                                        'icon' => 'fa-edit',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid"
+                                    ),
+                                    array(
+                                        'title' => $langDelete,
+                                        'icon' => 'fa-times',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;deleteQuestion=$question->pqid",
+                                        'class' => 'delete',
+                                        'confirm' => $langConfirmYourChoice
+                                    )
+                                ))."</div></td></tr>";
+                $i++;
+            }
+            $tool_content .= "</tbody></table>";
+        } else {
+            $tool_content .= "<div class='alert alert-warning'>$langPollEmpty</div>";
         }
-        $tool_content .= "</tbody></table>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langPollEmpty</div>";
-    }
-    }
-  elseif ($poll->type==1){
-        $tool_content .= "<div class='alert alert-info' role='alert'>
-                        $colles_desc
-                    </div>";
-
-    }
-  elseif ($poll->type==2){
-        $tool_content .= "<div class='alert alert-info' role='alert'>
-                        $rate_scale
-                    </div>";
+    } elseif ($poll->type==1) {
+        $tool_content .= "<div class='alert alert-info' role='alert'>$colles_desc</div>";
+    } elseif ($poll->type==2) {
+        $tool_content .= "<div class='alert alert-info' role='alert'>$rate_scale</div>";
     }
 }
 draw($tool_content, 2, null, $head_content);
