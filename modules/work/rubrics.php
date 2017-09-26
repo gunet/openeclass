@@ -44,10 +44,7 @@ if (isset($_GET['delete'])) { // delete rubric
 	}
 }
 
-if (isset($_GET['preview'])) { // preview rubric
-	$rubric_id = $_GET['preview'];
-	show_rubric ($rubric_id);
-}	
+	
 
 if (isset($_POST['submitRubric'])) {
     $v = new Valitron\Validator($_POST);
@@ -68,7 +65,6 @@ if (isset($_POST['submitRubric'])) {
 			$criteria[$crit]['title_name'] = $item_criterio;
 			$criteria[$crit]['crit_weight'] = $_POST['weight'][$crit];
 			
-			//$scales = array();
 			foreach ($_POST['scale_item_name'][$crit] as $key => $item_name) {
 				$criteria[$crit]['crit_scales'][$key]['scale_item_name'] = $item_name;
 				$criteria[$crit]['crit_scales'][$key]['scale_item_value'] = $_POST['scale_item_value'][$crit][$key];
@@ -84,7 +80,7 @@ if (isset($_POST['submitRubric'])) {
 		else{
 		
 			$serialized_criteria = serialize($criteria);
-			$preview_rubric = isset($_POST['options0'])?1:0; 
+			$preview_rubric = isset($_POST['options0'])?1:0;
 			$points_to_graded = isset($_POST['options1'])?1:0;
 		
 			if ($rubric_id) {
@@ -291,9 +287,9 @@ if (isset($_GET['rubric_id'])) {
 						</table>
 					</div>
 				</div>
-				                            <div class='col-xs-offset-2 col-sm-10'>
-                                 <a class='btn btn-xs btn-success margin-top-thin' id='addScale$crit'>$langAdd</a>
-                            </div>
+				    <div class='col-xs-offset-2 col-sm-10'>
+                        <a class='btn btn-xs btn-success margin-top-thin' id='addScale$crit'>$langAdd</a>
+                    </div>
 			</div>	
         </div>";
 		}	
@@ -385,7 +381,9 @@ if (isset($_GET['rubric_id'])) {
 		$tool_content .= "  </div>";
 	}
 	$opt1 = $rubric_data->preview_rubric;
+	$sel_opt1 = ($opt1==1?"checked=\"checked\"":"");
 	$opt2 = $rubric_data->points_to_graded;
+	$sel_opt2 = ($opt2==1?"checked=\"checked\"":"");
 	$tool_content .= "<div id='inserthere' class=''>
 							<div class='form-group'>
 								<a class='btn btn-xs btn-success margin-top-thin' id='addCriteria'>$langAddRubricCriteria</a>
@@ -397,14 +395,14 @@ if (isset($_GET['rubric_id'])) {
 							<table id='rubric_opts'> 
 								<tr class='title1'>
 									<td colspan='2'>
-										<input type='checkbox' id='user_button0' name='options0' checked='$opt1' />
+										<input type='checkbox' id='user_button0' name='options0' value='$opt1' $sel_opt1 />
 										$langRubricOption1
 									</td>
 								</tr>
 								<tr class='title1'>
 									<td colspan='2'>
-										<input type='checkbox' id='user_button1' name='options1' checked='$opt2' />
-										$langRubricOption5
+										<input type='checkbox' id='user_button1' name='options1' value='$opt2' $sel_opt2/>
+										$langRubricOption2
 									</td>
 								</tr>
 							</table>
@@ -448,10 +446,9 @@ if (isset($_GET['rubric_id'])) {
             'title' => $langBack,
             'level' => 'primary-label',
             'icon' => 'fa-reply',
-            'url' => "index.php?course=$course_code"
+            'url' => (isset($_GET['preview'])?"rubrics":"index").".php?course=$course_code"
         ),
     ),false);
-
     
 	$rubrics = Database::get()->queryArray("SELECT * FROM rubric WHERE course_id = ?d", $course_id);
     if ($rubrics) {
@@ -480,7 +477,7 @@ if (isset($_GET['rubric_id'])) {
                             </td>*/
             $table_content .= "
 							<td class='option-btn-cell'>
-                            ". action_button(array(
+                            ".action_button(array(
                                 array(
                                     'title' => $langEdit,
                                     'url' => "rubrics.php?course=$course_code&amp;rubric_id=$rubric->id",
@@ -499,7 +496,7 @@ if (isset($_GET['rubric_id'])) {
         }
 
         $tool_content .= "
-            <div class='table-responsive'>
+            <div class='table-responsive '>
                 <table class='table-default'>
                     <thead>
                         <tr>
@@ -518,6 +515,10 @@ if (isset($_GET['rubric_id'])) {
 	} else {
         $tool_content .= "<div class='alert alert-warning'>$langNoGradeRubrics</div>";
     }
+	if (isset($_GET['preview'])) { // preview rubric
+		$rubric_id = $_GET['preview'];
+		show_rubric ($rubric_id);
+	}
 }
 	
 	function show_rubric ($rubric_id){

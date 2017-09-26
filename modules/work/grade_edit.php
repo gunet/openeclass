@@ -65,9 +65,11 @@ function get_assignment_details($id) {
 function show_edit_form($id, $sid, $assign) {
     
     global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
-           $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile;
+           $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $langRubricGrading;
     
-    $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
+    $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
+	
+	$sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
         if (!empty($sub->group_id)) {
@@ -100,20 +102,57 @@ function show_edit_form($id, $sid, $assign) {
                     </div>";
         }
         if ($assign->grading_scale_id) {
-            $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
-            $scales = unserialize($serialized_scale_data);
-            $scale_options = "<option value> - </option>";
-            $scale_values = array_value_recursive('scale_item_value', $scales);
-            if (!in_array($sub->grade, $scale_values) && !is_null($sub->grade)) {
-                $sub->grade = closest($sub->grade, $scale_values)['value'];
-            }
-            foreach ($scales as $scale) {
-                $scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
-            }
-            $grade_field = "
+			if ($grading_type == 1){
+				$serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
+				$scales = unserialize($serialized_scale_data);
+				$scale_options = "<option value> - </option>";
+				$scale_values = array_value_recursive('scale_item_value', $scales);
+				if (!in_array($sub->grade, $scale_values) && !is_null($sub->grade)) {
+					$sub->grade = closest($sub->grade, $scale_values)['value'];
+				}
+				foreach ($scales as $scale) {
+					$scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
+				}
+				$grade_field = "
                     <select name='grade' class='form-control' id='scales'>
                         $scale_options
                     </select>";
+			}
+			elseif($grading_type == 2){
+				$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
+				$criteria = unserialize($rubric->scales);
+				$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
+				$sel_criteria = unserialize($submitted_grade->grade_rubric);
+				$criteria_list = "";
+				//Session::Messages("<pre>".print_r($criteria,true)."</pre><pre>-".print_r($sel_criteria,true)."</pre>", 'alert-danger');
+				foreach ($criteria as $ci => $criterio ) {
+					$criteria_list .= "<li  class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
+					if(is_array($criterio['crit_scales'])){
+					$criteria_list .= "<li><ul class='list-unstyled'>";
+					foreach ($criterio['crit_scales'] as $si=>$scale){
+						$selectedrb = ($sel_criteria[$ci]==$si?"checked=\"checked\"":"");
+						$criteria_list .= "<li  class='list-group-item'>
+						<input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
+						$scale[scale_item_name] ( $scale[scale_item_value] )
+						</li>";
+					}					
+					$criteria_list .= "</ul></li>";
+					}
+				}
+				
+				$grade_field .="<div class='col-sm-9'id='myModalLabel$row->uid'>$rubric->name
+						<table class='table-default'>
+							<tr>
+								<td>
+									<ul class='list-unstyled'>
+										$criteria_list
+									</ul>
+								</td>
+							</tr>
+						</table>
+						</div>						
+						";
+				}
         } else {
             $grade_field = "<input class='form-control' type='text' name='grade' maxlength='4' size='3' value='$sub->grade'> ($m[max_grade]: $assign->max_grade)";
         }
