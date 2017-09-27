@@ -2584,15 +2584,11 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         foreach ($scales as $scale) {
             $scale_options .= "<option value='$scale[scale_item_value]'>$scale[scale_item_name]</option>";
         }
-        $grade_field = "
-                <select name='grade' class='form-control' id='scales'>
-                    $scale_options
-                </select>";
-    }
-	elseif($assignment->grading_type == 2){
-		$grade_field = "<input class='form-control' type='text' value='$grade' name='grade' maxlength='4' size='3' readonly>";
-	}
-	else {
+        $grade_field = "<select name='grade' class='form-control' id='scales'>$scale_options</select>";
+    } elseif($assignment->grading_type == 2) {
+        $valuegrade = (isset($grade)) ? $grade : '';
+        $grade_field = "<input class='form-control' type='text' value='$valuegrade' name='grade' maxlength='4' size='3' readonly>";
+    } else {
         $grade_field = "<input class='form-control' type='text' name='grade' maxlength='4' size='3'> ($m[max_grade]: $assignment->max_grade)";
     }
     $extra = $on_behalf_of ? "
@@ -2702,8 +2698,6 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
  * @global type $langGradeNumber
  * @global type $langGradeScale
  * @global type $langGradeRubric
- * @global type $langTitleRubric
- * @global type $langRubricDesc
  * @global type $langRubricCriteria
  * @global type $langEditChange
  * @global type $langExportGrades
@@ -2716,44 +2710,44 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $m, $langDaysLeft,$course_id,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
-           $langGradeScale, $langGradeRubric, $langTitleRubric, $langRubricDesc, $langRubricCriteria,
+           $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail,
            $langEditChange, $langExportGrades, $langDescription, $langTitle;
 
+    $preview_rubric = '';
     $grade_type = $row->grading_type;
     if ($grade_type == 0){
         $g_type=$langGradeNumber;
     }
-    elseif ($grade_type ==1){
+    elseif ($grade_type ==1) {
         $g_type=$langGradeScale;
-    }
-    else {
-        $g_type=$langGradeRubric;
+    } else {        
+        $g_type = $langGradeRubric;
         $rubric_id = $row ->grading_scale_id;
         $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
+        if ($rubric) {            
             $rubric_name =  $rubric->name;
             $rubric_desc = $rubric -> description;
-			$preview_rubric = $rubric -> preview_rubric;
-			$points_to_graded = $rubric -> points_to_graded;
+            $preview_rubric = $rubric -> preview_rubric;
+            $points_to_graded = $rubric -> points_to_graded;
             $criteria = unserialize($rubric->scales);
             $criteria_list = "";
             foreach ($criteria as $ci => $criterio) {
                 $criteria_list .= "<li><b>$criterio[title_name] ($criterio[crit_weight]%)</b></li>";
-				if(is_array($criterio['crit_scales'])){
-				$criteria_list .= "<li><ul>";
-                foreach ($criterio['crit_scales'] as $si=>$scale){
-				if($preview_rubric ==1 AND $points_to_graded == 1){
-					$criteria_list .= "<li>$scale[scale_item_name] ( $scale[scale_item_value] )</li>";
-				}elseif ($preview_rubric ==1 AND $points_to_graded == 0) {
-					$criteria_list .= "<li>$scale[scale_item_name]</li>";
+                if(is_array($criterio['crit_scales'])) {
+                    $criteria_list .= "<li><ul>";
+                    foreach ($criterio['crit_scales'] as $si=>$scale) {
+                        if ($preview_rubric ==1 AND $points_to_graded == 1) {
+                            $criteria_list .= "<li>$scale[scale_item_name] ( $scale[scale_item_value] )</li>";
+                        } elseif ($preview_rubric ==1 AND $points_to_graded == 0) {
+                            $criteria_list .= "<li>$scale[scale_item_name]</li>";
+                        } else {
+                            $criteria_list .= "";
+                        }
+                    }
+                    $criteria_list .= "</ul></li>";
                 }
-				else {
-					$criteria_list .= "";
-				}
-				}
-				$criteria_list .= "</ul></li>";
-				}
-			}
-
+            }
+        }
     }
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -2862,42 +2856,37 @@ function assignment_details($id, $row) {
                 </div>
             </div>
             <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langGradeType:</strong>
-                </div>
-                <div class='col-sm-9'>";
-				if ($preview_rubric == 1){
-					$tool_content .= "
-					<a class='' role='button' data-toggle='collapse' href='#collapseRubric' aria-expanded='false' aria-controls='collapseRubric'>
-                    $g_type
-					</a>
-                </div>
+            <div class='col-sm-3'>
+                <strong>$langGradeType:</strong>
             </div>
-            <div class='table-responsive  collapse' id='collapseRubric'>
-                <table class='table-default'>
-                    <thead>
-
-                        <th>$langTitleRubric</th>
-                        <th>$langRubricDesc</th>
-                        <th>$langRubricCriteria</th>
-                    </thead>
-                    <tr>
-                        <td>$rubric_name</td>
-                        <td>$rubric_desc</td>
-                        <td>
-                            <ul class='list-unstyled'>
-                                $criteria_list
-                            </ul>
-                        </td>
-                    </tr>
-                </table>
-            </div>";
-                }
-                else {
-    $tool_content .= "$g_type
+            <div class='col-sm-9'>";
+            if ($preview_rubric == 1) {
+                $tool_content .= "
+                    <a class='' role='button' data-toggle='collapse' href='#collapseRubric' aria-expanded='false' aria-controls='collapseRubric'>
+                        $g_type
+                    </a>
                 </div>
-            </div>";
-                }
+                </div>
+                <div class='table-responsive  collapse' id='collapseRubric'>
+                    <table class='table-default'>
+                        <thead>
+                            <th>$langDetail</th>                                
+                            <th>$langRubricCriteria</th>
+                        </thead>
+                        <tr>
+                            <td><h5>$rubric_name</h5><h6>$rubric_desc</h6></td>
+                            <td>
+                                <ul class='list-unstyled'>
+                                    $criteria_list
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>";
+            } else {
+                $tool_content .= "$g_type
+                    </div></div>";
+            }
         $tool_content .= "<div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$m[start_date]:</strong>
@@ -2937,7 +2926,6 @@ function assignment_details($id, $row) {
     $tool_content .= "
         </div>
     </div>";
-
 }
 
 
@@ -3503,8 +3491,7 @@ function show_student_assignments() {
                                       <th class='text-center'>$m[submitted]</th>
                                       <th class='text-center'>$langGradebookGrade</th>
                                       $add_eportfolio_res_th
-                                  </tr>";
-        $k = 0;
+                                  </tr>";        
         foreach ($result as $row) {
             $exclamation_icon = '';
             $class = '';
@@ -3528,14 +3515,13 @@ function show_student_assignments() {
             } else {
                 $deadline = $m['no_deadline'];
             }
-            $tool_content .= "
-                                <tr>
-                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>
-                                        $exclamation_icon</td>
-                                    <td class='text-center'>" . $deadline ;
+            $tool_content .= "<tr>
+                                <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>
+                                    $exclamation_icon</td>
+                                <td class='text-center'>" . $deadline ;
             if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
-            } else if($row->deadline){
+            } else if($row->deadline) {
                 $tool_content .= "<br> (<small><span class='expired'>$langHasExpiredS</span></small>)";
             }
             $tool_content .= "</td><td class='text-center'>";
@@ -3575,14 +3561,9 @@ function show_student_assignments() {
                 $add_eportfolio_res_td = "<td class='option-btn-cell'>".
                         action_button($eportfolio_action_array)."</td>";
             }
-
-            $tool_content .= "</td>
-                                $add_eportfolio_res_td
-                                  </tr>";
-            $k++;
+            $tool_content .= "</td>$add_eportfolio_res_td</tr>";            
         }
-        $tool_content .= '
-                                  </table></div></div></div>';
+        $tool_content .= '</table></div></div></div>';
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }
@@ -3616,7 +3597,7 @@ function show_assignments() {
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
               FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
- $tool_content .= action_bar(array(
+    $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
                   'button-class' => 'btn-success',

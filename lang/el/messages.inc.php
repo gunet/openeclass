@@ -4233,7 +4233,6 @@ $langPlagiarismAlreadyCheck = "To αρχείο έχει ήδη σταλεί γι
 $langPlagiarismFileSent = "To αρχείο στάλθηκε για έλεγχο λογοκλοπής";
 $langPlagiarismResult = "Αποτέλεσμα ελέγχου λογοκλοπής";
 $langDownloadToPDF = "Αναφορά σε PDF";
-
 $langGradeRubric = "Ρουμπρίκα";
 $langGradeRubrics = "Ρουμπρίκες";
 $langGradeRubricsSelect ="Επιλογή Ρουμπρίκας";
