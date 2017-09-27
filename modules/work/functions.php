@@ -189,13 +189,14 @@ function was_graded($uid, $id, $ret_val = FALSE) {
  * @global type $langGradebookGrade
  * @global type $langFileName
  * @global type $langWorkOnlineText
+ * @global type $langCriteria
  * @param type $id
  */
 function show_submission_details($id) {
     
     global $uid, $m, $course_id, $langSubmittedAndGraded, $tool_content, $course_code,
            $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView,
-           $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content;
+           $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content, $langCriteria;
     
     load_js('tools.js');
     $head_content .= "<script type='text/javascript'>";
@@ -250,70 +251,72 @@ function show_submission_details($id) {
                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>";
     }
-	$sel_criteria = unserialize($sub->grade_rubric);
-	$assignment_id = $sub -> assignment_id;
-	$assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $assignment_id);
-	$rubric_id = $assignment -> grading_scale_id;
-	$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
-		$rubric_name =  $rubric -> name;
-		$rubric_desc = $rubric -> description;
+    $sel_criteria = unserialize($sub->grade_rubric);
+    $assignment_id = $sub -> assignment_id;
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $assignment_id);
+    $rubric_id = $assignment -> grading_scale_id;
+    $preview_rubric = '';
+    $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
+    if ($rubric) {
+        $rubric_name =  $rubric -> name;
+        $rubric_desc = $rubric -> description;
         $criteria = unserialize($rubric->scales);
         $criteria_list = "";
         foreach ($criteria as $ci => $criterio) {
             $criteria_list .= "<li><b>$criterio[title_name] ($criterio[crit_weight]%)</b></li>";
-			if(is_array($criterio['crit_scales'])){
-			$criteria_list .= "<li><ul>";
-			foreach ($criterio['crit_scales'] as $si=>$scale){
-				if($sel_criteria[$ci]==$si)
-				$criteria_list .= "<li><strong>$scale[scale_item_name] ( $scale[scale_item_value] )</strong></li>";
-				else
-				$criteria_list .= "<li>$scale[scale_item_name] ( $scale[scale_item_value] )</li>";				
-			}
-			$criteria_list .= "</ul></li>";
-			}
-		}
-		$preview_rubric = $rubric -> preview_rubric;
-		$points_to_graded = $rubric -> points_to_graded;
-
+            if(is_array($criterio['crit_scales'])){
+                $criteria_list .= "<li><ul>";
+                foreach ($criterio['crit_scales'] as $si=>$scale) {
+                    if($sel_criteria[$ci]==$si)
+                        $criteria_list .= "<li><strong>$scale[scale_item_name] ( $scale[scale_item_value] )</strong></li>";
+                    else
+                        $criteria_list .= "<li>$scale[scale_item_name] ( $scale[scale_item_value] )</li>";				
+                }
+                $criteria_list .= "</ul></li>";
+            }
+        }
+        $preview_rubric = $rubric -> preview_rubric;
+        $points_to_graded = $rubric -> points_to_graded;
+    }
     $tool_content .= "
-        <div class='panel panel-default'>
-            <div class='panel-heading list-header'>
-                <h3 class='panel-title'>$m[SubmissionWorkInfo]</h3>
-            </div>
-            <div class='panel-body'>
-                <div class='row margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong>".$m['SubmissionStatusWorkInfo'].":</strong>
-                    </div>
-                    <div class='col-sm-9'>$notice
-                    </div>
+    <div class='panel panel-default'>
+        <div class='panel-heading list-header'>
+            <h3 class='panel-title'>$m[SubmissionWorkInfo]</h3>
+        </div>
+        <div class='panel-body'>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>".$m['SubmissionStatusWorkInfo'].":</strong>
                 </div>
-                <div class='row margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong>" . $langGradebookGrade . ":</strong>
-                    </div>					
-                   <div class='col-sm-9'>";
-					if ($preview_rubric == 1 AND $points_to_graded == 1){ 
-					$tool_content .= "
-						<a class='' role='button' data-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
-						. $sub->grade .
-						"</a>
-					<div class='table-responsive  collapse' id='collapseGrade'>
-					<table class='table-default'>
-						<thead>
-							<th>$langRubricCriteria</th>					
-						</thead>
-						<tr>
-							<td>
-								<ul class='list-unstyled'>
-									$criteria_list
-								</ul>
-							</td>
-						</tr>
-					</table>
-					</div>";
-				   }else
-				$tool_content .= $sub->grade;
+                <div class='col-sm-9'>$notice
+                </div>
+            </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>" . $langGradebookGrade . ":</strong>
+                </div>					
+               <div class='col-sm-9'>";
+                if ($preview_rubric == 1 AND $points_to_graded == 1) { 
+                    $tool_content .= "
+                            <a class='' role='button' data-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
+                            . $sub->grade .
+                            "</a>
+                            <div class='table-responsive  collapse' id='collapseGrade'>
+                            <table class='table-default'>
+                            <thead>
+                                    <th>$langCriteria</th>
+                            </thead>
+                            <tr>
+                                <td>
+                                    <ul class='list-unstyled'>
+                                        $criteria_list
+                                    </ul>
+                                </td>
+                            </tr>
+                    </table>
+                    </div>";
+                } else
+                    $tool_content .= $sub->grade;
                 $tool_content .= "</div>
                 </div>
                 <div class='row margin-bottom-fat'>
@@ -330,39 +333,36 @@ function show_submission_details($id) {
                     <div class='col-sm-9'>" . nice_format($sub->submission_date, true) . "
                     </div>
                 </div>";
-                if ($sub_type == 0) {
-                    $tool_content .= "<div class='row margin-bottom-fat'>
-                        <div class='col-sm-3'>
-                            <strong>" . $langFileName . ":</strong>
-                        </div>
-                            <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
-                        </div>
-                    </div>";
-                } else {
-                    $tool_content .= "<div class='row margin-bottom-fat'>
-                        <div class='col-sm-3'>
-                            <strong>" . $langWorkOnlineText . ":</strong>
-                        </div>
-                            <div class='col-sm-9'><a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>
-                        </div>
-                    </div>";
-                }
-                if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
-                $tool_content .= "
-                <div class='row margin-bottom-fat'>
+            if ($assignment->submission_type == 0) {
+                $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $langAutoJudgeEnable . ":</strong>
+                        <strong>" . $langFileName . ":</strong>
                     </div>
-                    <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
+                        <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
                     </div>
                 </div>";
-                }
-            table_row($m['comments'], $sub->comments, true);
-$tool_content .= "
-            </div>
-        </div>
-            ";
+            } else {
+                $tool_content .= "<div class='row margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong>" . $langWorkOnlineText . ":</strong>
+                    </div>
+                        <div class='col-sm-9'><a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>
+                    </div>
+                </div>";
+            }
+            if(AutojudgeApp::getAutojudge()->isEnabled()) {
+            $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
+            $tool_content .= "
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>" . $langAutoJudgeEnable . ":</strong>
+                </div>
+                <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
+                </div>
+            </div>";
+            }
+        table_row($m['comments'], $sub->comments, true);
+        $tool_content .= "</div></div>";
 }
 
 // Check if a file has been submitted by user uid or group gid
