@@ -2285,7 +2285,7 @@ $m['plainview'] = "Liste concise de devoirs et de notes d'evaluation";
 $m['WorkInfo'] = 'Informations sur le devoir'
 ;
 $m['WorkView'] = 'Devoirs du cours';
-$m['WorkDelete'] = 'Supprimer le devoir';
+$langDeleteSubmission = 'Supprimer le devoir';
 $m['WorkEdit'] = 'Modifier le devoir';
 $m['SubmissionWorkInfo'] = 'Informations sur la soumission du devoir'
 ;
