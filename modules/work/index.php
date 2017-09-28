@@ -137,7 +137,19 @@ if ($is_editor) {
 
 if ($is_editor) {
     load_js('tools.js');    
-    $head_content .= "<script type='text/javascript'>";
+    $head_content .= "<script type='text/javascript'>";    
+    // assignment delete confirmation
+    $head_content .= '
+            $(document).on("click", ".linkdelete", function(e) {
+                var link = $(this).attr("href");
+                e.preventDefault();
+                bootbox.confirm("'.$langDelWarnUserAssignment.'", function(result) {
+                    if (result) {
+                        document.location.href = link;
+                    }
+                });
+            });
+        ';
     
     if (AutojudgeApp::getAutojudge()->isEnabled()) {
         $head_content .= "
@@ -1229,17 +1241,47 @@ function submit_work($id, $on_behalf_of = null) {
  * @global type $m
  * @global type $course_code
  * @global type $course_id
- * @global type $answer
  * @global type $desc
  * @global type $language
  * @global string $head_content
+ * @global type $langBack
+ * @global type $langSave
+ * @global type $langStudents
+ * @global type $langMove
+ * @global type $langWorkFile
+ * @global type $langAssignmentStartHelpBlock
+ * @global type $langAssignmentEndHelpBlock
+ * @global type $langWorkSubType
+ * @global type $langWorkOnlineText
+ * @global type $langStartDate
+ * @global type $langGradeNumbers
+ * @global type $langGradeScalesSelect
+ * @global type $langGradeType
+ * @global type $langGradeScales
+ * @global type $langGradeRubricsSelect
+ * @global type $langGradeRubrics
+ * @global type $langAutoJudgeInputNotSupported
+ * @global type $langAutoJudgeSum
+ * @global type $langAutoJudgeNewScenario
+ * @global type $langAutoJudgeEnable
+ * @global type $langAutoJudgeInput
+ * @global type $langAutoJudgeExpectedOutput
+ * @global type $langOperator
+ * @global type $langAutoJudgeWeight
+ * @global type $langAutoJudgeProgrammingLanguage
+ * @global type $langAutoJudgeAssertions
+ * @global type $langDescription
+ * @global type $langTitle
+ * @global type $langNotifyAssignmentSubmission
+ * @global type $langPasswordUnlock
+ * @global type $langIPUnlock
  */
 function new_assignment() {
     global $tool_content, $m, $course_code, $course_id,
-           $desc, $language, $head_content, $langMoreOptions, $langLessOptions,
+           $desc, $language, $head_content, $langGradeRubricsSelect, $langGradeRubrics,
            $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
-           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales, $langGradeRubricsSelect, $langGradeRubrics,
+           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales, 
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
@@ -1322,20 +1364,7 @@ function new_assignment() {
                     $('input#'+dateType).prop('disabled', true);
                     $('#late_sub_row').addClass('hide');
                 }
-            });
-            $('#hidden-opt-btn').on('click', function(e) {
-                e.preventDefault();
-                $('#hidden-opt').collapse('toggle');
-            });
-            $('#hidden-opt').on('shown.bs.collapse', function () {
-                $('#hidden-opt-btn i').removeClass('fa-caret-down').addClass('fa-caret-up');
-                var caret = '<i class=\"fa fa-caret-up\"></i>';
-                $('#hidden-opt-btn').html('$langLessOptions '+caret);
-            });
-            $('#hidden-opt').on('hidden.bs.collapse', function () {
-                var caret = '<i class=\"fa fa-caret-down\"></i>';
-                $('#hidden-opt-btn').html('$langMoreOptions '+caret);
-            });
+            });            
             $('#assignmentIPLock').select2({
                 minimumResultsForSearch: Infinity,
                 tags: true,
@@ -1391,289 +1420,282 @@ function new_assignment() {
                 <div class='col-sm-10'>
                 " . rich_text_editor('desc', 4, 20, $desc) . "
                 </div>
+            </div>            
+            <div class='form-group'>
+                <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                <div class='col-sm-10'>" .
+                  fileSizeHidenInput() . "
+                  <input type='file' id='userfile' name='userfile'>
+                </div>
             </div>
             <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
-                    <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
+                <label class='col-sm-2 control-label'>$langGradeType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='grading_type' value='0'". ($grading_type==0 ? " checked" : "") .">
+                         $langGradeNumbers
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") .">
+                        $langGradeScales
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") .">
+                        $langGradeRubrics
+                      </label>
+                    </div>
                 </div>
             </div>
-            <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
-                <div class='form-group'>
-                    <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
-                    <div class='col-sm-10'>" .
-                      fileSizeHidenInput() . "
-                      <input type='file' id='userfile' name='userfile'>
+            <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type==0 ? "" : " hidden")."'>
+                <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                <div class='col-sm-10'>
+                  <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
+                  <span class='help-block'>$max_grade_error</span>
+                </div>
+            </div>
+            <div class='form-group".($scale_error ? " has-error" : "").($grading_type==1 ? "" : " hidden")."'>
+                <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
+                <div class='col-sm-10'>
+                  <select name='scale' class='form-control' id='scales' disabled>
+                        $scale_options
+                  </select>
+                  <span class='help-block'>$scale_error</span>
+                </div>
+            </div>
+            <div class='form-group".($rubric_error ? " has-error" : "").($grading_type==2 ? "" : " hidden")."'>
+                <label for='title' class='col-sm-2 control-label'>$langGradeRubrics:</label>
+                <div class='col-sm-10'>
+                  <select name='rubric' class='form-control' id='rubrics' disabled>
+                        $rubric_options
+                  </select>
+                  <span class='help-block'>$rubric_error</span>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langWorkSubType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='submission_type' value='0'". ($submission_type ? '' : ' checked') .">
+                         $langWorkFile
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='submission_type' value='1'". ($submission_type ? ' checked' : '') .">
+                        $langWorkOnlineText
+                      </label>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langGradeType:</label>
-                    <div class='col-sm-10'>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='grading_type' value='0'". ($grading_type==0 ? " checked" : "") .">
-                             $langGradeNumbers
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") .">
-                            $langGradeScales
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") .">
-                            $langGradeRubrics
-                          </label>
-                        </div>
+            </div>
+            <div class='input-append date form-group".(Session::getError('WorkStart') ? " has-error" : "")."' id='startdatepicker' data-date='$WorkStart' data-date-format='dd-mm-yyyy'>
+                <label for='WorkStart' class='col-sm-2 control-label'>$langStartDate:</label>
+                <div class='col-sm-10'>
+                   <div class='input-group'>
+                       <span class='input-group-addon'>
+                         <input style='cursor:pointer;' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
+                       </span>
+                       <input class='form-control' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
+                   </div>
+                   <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
+                </div>
+            </div>
+            <div class='input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
+                <label for='exerciseEndDate' class='col-sm-2 control-label'>$m[deadline]:</label>
+                <div class='col-sm-10'>
+                   <div class='input-group'>
+                       <span class='input-group-addon'>
+                         <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
+                       </span>
+                       <input class='form-control' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
+                   </div>
+                   <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
+                </div>
+            </div>
+            <div class='form-group ". ($WorkEnd ? "" : "hide") ."' id='late_sub_row'>
+                <div class='col-xs-10 col-xs-offset-2'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' id='late_submission' name='late_submission' value='1'>
+                        $m[late_submission_enable]
+                      </label>
                     </div>
                 </div>
-                <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type==0 ? "" : " hidden")."'>
-                    <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
-                    <div class='col-sm-10'>
-                      <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
-                      <span class='help-block'>$max_grade_error</span>
+            </div>
+            <div class='form-group'>
+                <div class='col-xs-10 col-xs-offset-2'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='notify_submission' value='1'>
+                        $langNotifyAssignmentSubmission
+                      </label>
                     </div>
                 </div>
-                <div class='form-group".($scale_error ? " has-error" : "").($grading_type==1 ? "" : " hidden")."'>
-                    <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
-                    <div class='col-sm-10'>
-                      <select name='scale' class='form-control' id='scales' disabled>
-                            $scale_options
-                      </select>
-                      <span class='help-block'>$scale_error</span>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='user_button' name='group_submissions' value='0' checked>
+                        $m[user_work]
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='group_button' name='group_submissions' value='1'>
+                        $m[group_work]
+                      </label>
                     </div>
                 </div>
-                <div class='form-group".($rubric_error ? " has-error" : "").($grading_type==2 ? "" : " hidden")."'>
-                    <label for='title' class='col-sm-2 control-label'>$langGradeRubrics:</label>
-                    <div class='col-sm-10'>
-                      <select name='rubric' class='form-control' id='rubrics' disabled>
-                            $rubric_options
-                      </select>
-                      <span class='help-block'>$rubric_error</span>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked>
+                        <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_some' name='assign_to_specific' value='1'>
+                        <span id='assign_button_some_text'>$m[WorkToUser]</span>
+                      </label>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langWorkSubType:</label>
-                    <div class='col-sm-10'>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='submission_type' value='0'". ($submission_type ? '' : ' checked') .">
-                             $langWorkFile
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='submission_type' value='1'". ($submission_type ? ' checked' : '') .">
-                            $langWorkOnlineText
-                          </label>
-                        </div>
-                    </div>
-                </div>
-                <div class='input-append date form-group".(Session::getError('WorkStart') ? " has-error" : "")."' id='startdatepicker' data-date='$WorkStart' data-date-format='dd-mm-yyyy'>
-                    <label for='WorkStart' class='col-sm-2 control-label'>$langStartDate:</label>
-                    <div class='col-sm-10'>
-                       <div class='input-group'>
-                           <span class='input-group-addon'>
-                             <input style='cursor:pointer;' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
-                           </span>
-                           <input class='form-control' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
-                       </div>
-                       <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
-                    </div>
-                </div>
-                <div class='input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
-                    <label for='exerciseEndDate' class='col-sm-2 control-label'>$m[deadline]:</label>
-                    <div class='col-sm-10'>
-                       <div class='input-group'>
-                           <span class='input-group-addon'>
-                             <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
-                           </span>
-                           <input class='form-control' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
-                       </div>
-                       <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
-                    </div>
-                </div>
-                <div class='form-group ". ($WorkEnd ? "" : "hide") ."' id='late_sub_row'>
-                    <div class='col-xs-10 col-xs-offset-2'>
-                        <div class='checkbox'>
-                          <label>
-                            <input type='checkbox' id='late_submission' name='late_submission' value='1'>
-                            $m[late_submission_enable]
-                          </label>
-                        </div>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <div class='col-xs-10 col-xs-offset-2'>
-                        <div class='checkbox'>
-                          <label>
-                            <input type='checkbox' name='notify_submission' value='1'>
-                            $langNotifyAssignmentSubmission
-                          </label>
-                        </div>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
-                    <div class='col-sm-10'>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='user_button' name='group_submissions' value='0' checked>
-                            $m[user_work]
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='group_button' name='group_submissions' value='1'>
-                            $m[group_work]
-                          </label>
-                        </div>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
-                    <div class='col-sm-10'>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked>
-                            <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='assign_button_some' name='assign_to_specific' value='1'>
-                            <span id='assign_button_some_text'>$m[WorkToUser]</span>
-                          </label>
-                        </div>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <div class='table-responsive'>
-                            <table id='assignees_tbl' class='table-default hide'>
-                                <tr class='title1'>
-                                  <td id='assignees'>$langStudents</td>
-                                  <td class='text-center'>$langMove</td>
-                                  <td>$m[WorkAssignTo]</td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                    <select class='form-control' id='assign_box' size='10' multiple></select>
-                                  </td>
-                                  <td class='text-center'>
-                                    <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
-                                  </td>
-                                  <td width='40%'>
-                                    <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple></select>
-                                  </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>";
-                if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                    $connector = AutojudgeApp::getAutojudge();
-                    $tool_content .= "
-                    <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
-                    <div class='col-sm-10'>
-                        <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' /></div>
-                        <table style='display: none;'>
-                            <thead>
-                                <tr>
-                                  <th>$langAutoJudgeInput</th>
-                                  <th>$langOperator</th>
-                                  <th>$langAutoJudgeExpectedOutput</th>
-                                  <th>$langAutoJudgeWeight</th>
-                                  <th>".$m['delete']."</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                  <td><input type='text' name='auto_judge_scenarios[0][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
-                                  <td>
-                                    <select name='auto_judge_scenarios[0][assertion]' class='auto_judge_assertion'>
-                                        <option value='eq' selected='selected'>".$langAutoJudgeAssertions['eq']."</option>
-                                        <option value='same'>".$langAutoJudgeAssertions['same']."</option>
-                                        <option value='notEq'>".$langAutoJudgeAssertions['notEq']."</option>
-                                        <option value='notSame'>".$langAutoJudgeAssertions['notSame']."</option>
-                                        <option value='integer'>".$langAutoJudgeAssertions['integer']."</option>
-                                        <option value='float'>".$langAutoJudgeAssertions['float']."</option>
-                                        <option value='digit'>".$langAutoJudgeAssertions['digit']."</option>
-                                        <option value='boolean'>".$langAutoJudgeAssertions['boolean']."</option>
-                                        <option value='notEmpty'>".$langAutoJudgeAssertions['notEmpty']."</option>
-                                        <option value='notNull'>".$langAutoJudgeAssertions['notNull']."</option>
-                                        <option value='string'>".$langAutoJudgeAssertions['string']."</option>
-                                        <option value='startsWith'>".$langAutoJudgeAssertions['startsWith']."</option>
-                                        <option value='endsWith'>".$langAutoJudgeAssertions['endsWith']."</option>
-                                        <option value='contains'>".$langAutoJudgeAssertions['contains']."</option>
-                                        <option value='numeric'>".$langAutoJudgeAssertions['numeric']."</option>
-                                        <option value='isArray'>".$langAutoJudgeAssertions['isArray']."</option>
-                                        <option value='true'>".$langAutoJudgeAssertions['true']."</option>
-                                        <option value='false'>".$langAutoJudgeAssertions['false']."</option>
-                                        <option value='isJsonString'>".$langAutoJudgeAssertions['isJsonString']."</option>
-                                        <option value='isObject'>".$langAutoJudgeAssertions['isObject']."</option>
-                                    </select>
-                                  </td>
-                                  <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output' /></td>
-                          <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'/></td>
-                                  <td><a href='#' class='autojudge_remove_scenario' style='display: none;'>X</a></td>
-                                </tr>
-                                <tr>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td style='text-align:center;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>
-                                    <td> <input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
-                                </tr>
-                            </tbody>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <div class='table-responsive'>
+                        <table id='assignees_tbl' class='table-default hide'>
+                            <tr class='title1'>
+                              <td id='assignees'>$langStudents</td>
+                              <td class='text-center'>$langMove</td>
+                              <td>$m[WorkAssignTo]</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <select class='form-control' id='assign_box' size='10' multiple></select>
+                              </td>
+                              <td class='text-center'>
+                                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                              </td>
+                              <td width='40%'>
+                                <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple></select>
+                              </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
-                <div class='form-group'>
-                  <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
-                  <div class='col-sm-10'>
-                    <select id='lang' name='lang'>";
-                    foreach($connector->getSupportedLanguages() as $lang => $ext) {
-                        $tool_content .= "<option value='$lang'>$lang</option>\n";
-                    }
-                    $tool_content .= "</select>
-                  </div>
-                </div>
-                ";
-                }
+            </div>";
+            if(AutojudgeApp::getAutojudge()->isEnabled()) {
+                $connector = AutojudgeApp::getAutojudge();
                 $tool_content .= "
                 <div class='form-group'>
-                    <label for='assignmentPasswordLock' class='col-sm-2 control-label'>$langPasswordUnlock:</label>
-                    <div class='col-sm-10'>
-                        <input name='assignmentPasswordLock' type='text' class='form-control' id='assignmentPasswordLock' value='".q($assignmentPasswordLock)."'>
-                    </div>
+                <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' /></div>
+                    <table style='display: none;'>
+                        <thead>
+                            <tr>
+                              <th>$langAutoJudgeInput</th>
+                              <th>$langOperator</th>
+                              <th>$langAutoJudgeExpectedOutput</th>
+                              <th>$langAutoJudgeWeight</th>
+                              <th>".$m['delete']."</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                              <td><input type='text' name='auto_judge_scenarios[0][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
+                              <td>
+                                <select name='auto_judge_scenarios[0][assertion]' class='auto_judge_assertion'>
+                                    <option value='eq' selected='selected'>".$langAutoJudgeAssertions['eq']."</option>
+                                    <option value='same'>".$langAutoJudgeAssertions['same']."</option>
+                                    <option value='notEq'>".$langAutoJudgeAssertions['notEq']."</option>
+                                    <option value='notSame'>".$langAutoJudgeAssertions['notSame']."</option>
+                                    <option value='integer'>".$langAutoJudgeAssertions['integer']."</option>
+                                    <option value='float'>".$langAutoJudgeAssertions['float']."</option>
+                                    <option value='digit'>".$langAutoJudgeAssertions['digit']."</option>
+                                    <option value='boolean'>".$langAutoJudgeAssertions['boolean']."</option>
+                                    <option value='notEmpty'>".$langAutoJudgeAssertions['notEmpty']."</option>
+                                    <option value='notNull'>".$langAutoJudgeAssertions['notNull']."</option>
+                                    <option value='string'>".$langAutoJudgeAssertions['string']."</option>
+                                    <option value='startsWith'>".$langAutoJudgeAssertions['startsWith']."</option>
+                                    <option value='endsWith'>".$langAutoJudgeAssertions['endsWith']."</option>
+                                    <option value='contains'>".$langAutoJudgeAssertions['contains']."</option>
+                                    <option value='numeric'>".$langAutoJudgeAssertions['numeric']."</option>
+                                    <option value='isArray'>".$langAutoJudgeAssertions['isArray']."</option>
+                                    <option value='true'>".$langAutoJudgeAssertions['true']."</option>
+                                    <option value='false'>".$langAutoJudgeAssertions['false']."</option>
+                                    <option value='isJsonString'>".$langAutoJudgeAssertions['isJsonString']."</option>
+                                    <option value='isObject'>".$langAutoJudgeAssertions['isObject']."</option>
+                                </select>
+                              </td>
+                              <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output' /></td>
+                      <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'/></td>
+                              <td><a href='#' class='autojudge_remove_scenario' style='display: none;'>X</a></td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td style='text-align:center;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>
+                                <td> <input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class='form-group ".(Session::getError('assignmentIPLock') ? 'has-error' : '')."'>
-                    <label for='assignmentIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
-                    <div class='col-sm-10'>
-                        <select name='assignmentIPLock[]' class='form-control' id='assignmentIPLock' multiple>
-                            $assignmentIPLockOptions
-                        </select>
-                    </div>
-                </div>" .
-                eClassTag::tagInput() . "
             </div>
             <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>".
-                    form_buttons(array(
-                        array(
-                            'class'         => 'btn-primary',
-                            'name'          => 'new_assign',
-                            'value'         => $langSave,
-                            'javascript'    => "selectAll('assignee_box',true)"
-                        ),
-                        array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                        )
-                    ))
-                    ."</div>
+              <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
+              <div class='col-sm-10'>
+                <select id='lang' name='lang'>";
+                foreach($connector->getSupportedLanguages() as $lang => $ext) {
+                    $tool_content .= "<option value='$lang'>$lang</option>\n";
+                }
+                $tool_content .= "</select>
+              </div>
+            </div>
+            ";
+            }
+            $tool_content .= "
+            <div class='form-group'>
+                <label for='assignmentPasswordLock' class='col-sm-2 control-label'>$langPasswordUnlock:</label>
+                <div class='col-sm-10'>
+                    <input name='assignmentPasswordLock' type='text' class='form-control' id='assignmentPasswordLock' value='".q($assignmentPasswordLock)."'>
+                </div>
+            </div>
+            <div class='form-group ".(Session::getError('assignmentIPLock') ? 'has-error' : '')."'>
+                <label for='assignmentIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
+                <div class='col-sm-10'>
+                    <select name='assignmentIPLock[]' class='form-control' id='assignmentIPLock' multiple>
+                        $assignmentIPLockOptions
+                    </select>
+                </div>
+            </div>" .
+            eClassTag::tagInput() . "            
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>".
+                form_buttons(array(
+                    array(
+                        'class'         => 'btn-primary',
+                        'name'          => 'new_assign',
+                        'value'         => $langSave,
+                        'javascript'    => "selectAll('assignee_box',true)"
+                    ),
+                    array(
+                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    )
+                ))
+                ."</div>
             </div>
         </fieldset>
         </form></div></div></div>";
@@ -1704,8 +1726,6 @@ function new_assignment() {
  * @global type $langGradeType
  * @global type $langGradeNumbers
  * @global type $langGradeScales
- * @global type $langLessOptions
- * @global type $langMoreOptions
  * @global type $langAutoJudgeInputNotSupported
  * @global type $langAutoJudgeSum
  * @global type $langAutoJudgeNewScenario
@@ -1726,9 +1746,9 @@ function show_edit_assignment($id) {
     global $tool_content, $m, $langBack, $course_code,
         $langSave, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
-        $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType,
-        $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales, $langGradeRubrics,
-        $langGradeRubricsSelect, $langLessOptions, $langAutoJudgeInputNotSupported, $langTitle,
+        $langWorkOnlineText, $langWorkSubType, $langGradeRubrics, 
+        $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales,
+        $langGradeRubricsSelect, $langAutoJudgeInputNotSupported, $langTitle,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
@@ -1801,19 +1821,6 @@ function show_edit_assignment($id) {
                     $('#late_sub_row').addClass('hide');
                 }
             });
-            $('#hidden-opt-btn').on('click', function(e) {
-                e.preventDefault();
-                $('#hidden-opt').collapse('toggle');
-            });
-            $('#hidden-opt').on('shown.bs.collapse', function () {
-                $('#hidden-opt-btn i').removeClass('fa-caret-down').addClass('fa-caret-up');
-                var caret = '<i class=\"fa fa-caret-up\"></i>';
-                $('#hidden-opt-btn').html('$langLessOptions '+caret);
-            })
-            $('#hidden-opt').on('hidden.bs.collapse', function () {
-                var caret = '<i class=\"fa fa-caret-down\"></i>';
-                $('#hidden-opt-btn').html('$langMoreOptions '+caret);
-            })
             $('#assignmentIPLock').select2({
                 minimumResultsForSearch: Infinity,
                 tags: true,
@@ -1938,12 +1945,6 @@ function show_edit_assignment($id) {
     }
 
     $tool_content .= "
-        <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
-                <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
-            </div>
-        </div>
-            <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
                     <div class='col-sm-10'>
@@ -2127,7 +2128,7 @@ function show_edit_assignment($id) {
                     $auto_judge = $row->auto_judge;
                     $lang = $row->lang;
                     $tool_content .= "
-                <div class='form-group'>
+                    <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
                     <div class='col-sm-10'>
                         <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' ".($auto_judge == true ? "checked='1'" : '')." /></div>
@@ -2152,7 +2153,6 @@ function show_edit_assignment($id) {
                             $tool_content .= "
                                 <tr>
                                     <td><input type='text' value='".htmlspecialchars($aajudge['input'], ENT_QUOTES)."' name='auto_judge_scenarios[$rows][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
-
                                     <td>
                                         <select name='auto_judge_scenarios[$rows][assertion]' class='auto_judge_assertion'>
                                             <option value='eq'"; if ($aajudge['assertion'] === 'eq') {$tool_content .= " selected='selected'";} $tool_content .=">".$langAutoJudgeAssertions['eq']."</option>
@@ -2262,8 +2262,7 @@ function show_edit_assignment($id) {
                         </select>
                     </div>
                 </div>" .
-                eClassTag::tagInput($id) . "
-            </div>
+                eClassTag::tagInput($id) . "            
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>".
                     form_buttons(array(
@@ -2977,27 +2976,28 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langDownloadToPDF
  * @global array $works_url
  * @global type $course_id
- * @global type $langDelWarnUserAssignment
  * @global type $langQuestionView
  * @global type $langDelete
- * @global type $langEditChange
+ * @global type $langSGradebookBook
  * @global type $langAutoJudgeShowWorkResultRpt
- * @global type $langGroupName
+ * @global type $langSurnameName
  * @global type $langPlagiarismCheck
  * @global type $langProgress
  * @global type $langGradebookGrade
- * @global type $langHasAssignmentPublished
+ * @global type $langHasAssignmentP
+ * @global type $langAmShortublished
+ * @global type $langGradedAt
+ * @global type $langDeleteSubmission
  * @param type $id
  * @param type $display_graph_results
  */
 function show_assignment($id, $display_graph_results = false) {
-    global $tool_content, $m, $langNoSubmissions, $langSubmissions, $langGradebookGrade,
+    global $tool_content, $m, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
     $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult, $langHasAssignmentPublished,
-    $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF,
-    $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,$langRubricGrading, $langRubricGrade,
-    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck, $langProgress,
-    $langTitleRubric, $langRubricCriteria, $langClose, $langSave;
-
+    $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
+    $langQuestionView, $langDelete, $langAmShort, $langSGradebookBook, $langDeleteSubmission,
+    $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress;  
+    
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
                                 WHERE course_id = ?d AND id = ?d", $course_id, $id);
@@ -3006,9 +3006,7 @@ function show_assignment($id, $display_graph_results = false) {
 
     $rev = (@($_REQUEST['rev'] == 1)) ? 'DESC' : 'ASC';
     if (isset($_REQUEST['sort'])) {
-        if ($_REQUEST['sort'] == 'am') {
-            $order = 'am';
-        } elseif ($_REQUEST['sort'] == 'date') {
+        if ($_REQUEST['sort'] == 'date') {
             $order = 'submission_date';
         } elseif ($_REQUEST['sort'] == 'grade') {
             $order = 'grade';
@@ -3032,38 +3030,36 @@ function show_assignment($id, $display_graph_results = false) {
 
         if (!$display_graph_results) {
             $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
-                                                   assign.uid uid, assign.group_id group_id,
-                                                   assign.submission_date submission_date,
-                                                   assign.grade_submission_date grade_submission_date,
-                                                   assign.grade grade, assign.comments comments,
-                                                   assign.grade_comments grade_comments,
-                                                   assign.grade_comments_filename grade_comments_filename,
-                                                   assign.grade_comments_filepath grade_comments_filepath,
-                                                   assignment.grading_scale_id grading_scale_id,
-                                                   assignment.deadline deadline,
-                                                   assignment.grading_type
+                                                    assign.uid uid, assign.group_id group_id,
+                                                    assign.submission_date submission_date,
+                                                    assign.grade_submission_date grade_submission_date,
+                                                    assign.grade grade, assign.comments comments,
+                                                    assign.grade_comments grade_comments,
+                                                    assign.grade_comments_filename grade_comments_filename,
+                                                    assign.grade_comments_filepath grade_comments_filepath,
+                                                    assignment.grading_scale_id grading_scale_id,
+                                                    assignment.deadline deadline,
+                                                    assignment.grading_type
                                                    FROM assignment_submit AS assign, user, assignment
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
                                                    ORDER BY $order $rev", $id);
-            $tool_content .= "
-                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
-                        <input type='hidden' name='grades_id' value='$id' />
-                        <br>
-                        <div class='margin-bottom-thin'>
-                            <b>$langSubmissions:</b>&nbsp; $count_of_assignments
-                        </div>
-                        <div class='table-responsive'>
-                        <table class='table-default'>
-                        <tbody>
-                        <tr class='list-header'>
-                      <th width='3'>&nbsp;</th>";
-            sort_link($m['username'].' / '.$langGroupName, 'username');
-            sort_link($m['am'], 'am');
+            
+            $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
+                <input type='hidden' name='grades_id' value='$id' />
+                <br>
+                <div class='margin-bottom-thin'>
+                    <b>$langSubmissions:</b>&nbsp; $count_of_assignments
+                </div>
+                <div class='table-responsive'>
+                <table class='table-default'>
+                <tbody>
+                <tr class='list-header'>
+                <th width='3'>&nbsp;</th>";
+            sort_link($langSurnameName, 'username');            
             $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
             sort_link($m['sub_date'], 'date');
             sort_link($langGradebookGrade, 'grade');
-            $tool_content .= "<th width='5%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
-
+            $tool_content .= "<th width='8%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
             $i = 1;
             $plagiarismlink = '';
             foreach ($result as $row) {
@@ -3076,7 +3072,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $subContentGroup = '';
                 }
                 $name = empty($row->group_id) ? display_user($row->uid) : display_group($row->group_id);
-                $stud_am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $row->uid)->am;
+                $stud_am = uid_to_am($row->uid);
                 if ($assign->submission_type) {
                     $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
                 } else {
@@ -3102,6 +3098,9 @@ function show_assignment($id, $display_graph_results = false) {
                 } else {
                     $grade = $row->grade;
                 }
+                $icon_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                                <span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span>
+                            </a>";
                 if ($row->grading_scale_id && $row->grading_type == 1) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
@@ -3113,43 +3112,70 @@ function show_assignment($id, $display_graph_results = false) {
                     foreach ($scales as $scale) {
                         $scale_options .= "<option value='$scale[scale_item_value]'".($scale['scale_item_value'] == $grade ? " selected" : "").">$scale[scale_item_name]</option>";
                     }
-                    $grade_field = "
-                            <select name='grades[$row->id][grade]' class='form-control' id='scales'>
-                                $scale_options
-                            </select>";
+                    $grade_field = "<select name='grades[$row->id][grade]' class='form-control' id='scales'>$scale_options</select>";
                 }
                 else if ($row->grading_scale_id && $row->grading_type == 2) {
-                $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $row->grading_scale_id);
+                    $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $row->grading_scale_id);
 
-                $criteria = unserialize($rubric->scales);
-                $criteria_list = "";
-                foreach ($criteria as $ci => $criterio) {
-                    $criteria_list .= "<li  class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
-                    if(is_array($criterio['crit_scales']))
-                    foreach ($criterio['crit_scales'] as $si=>$scale){
-                        $criteria_list .= "<ul class='list-unstyled'><li  class='list-group-item'>
-                        <input type='radio' name='grade_rubric[$row->uid][$ci]' value='$si'>
-                        $scale[scale_item_name] ( $scale[scale_item_value] )
-      </li></ul>";
+                    $criteria = unserialize($rubric->scales);
+                    $criteria_list = "";
+                    foreach ($criteria as $ci => $criterio) {
+                        $criteria_list .= "<li  class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
+                        if(is_array($criterio['crit_scales'])) {
+                            foreach ($criterio['crit_scales'] as $si=>$scale) {
+                                $criteria_list .= "<ul class='list-unstyled'><li  class='list-group-item'>
+                                <input type='radio' name='grade_rubric[$row->uid][$ci]' value='$si'>
+                                $scale[scale_item_name] ( $scale[scale_item_value] )
+                                </li></ul>";
+                            }
+                        }
                     }
-                }
-					$grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' readonly>";
-                }
-                else {
+                    if (!empty($grade)) {
+                        $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' disabled>";
+                    } else {
+                        $icon_field = '';
+                        $grade_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                                <span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span>
+                            </a>";
+                    }                    
+                } else {
                     $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3'>";
                 }
 
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
-                $tool_content .= "
-                                <tr>
-                                <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
-                                <td>$name";
+                $am_field = '';
+                if (trim($stud_am) != '') {
+                    $am_field = "<h6>$langAmShort: " . q($stud_am) . "</h6>";
+                }
+                $tool_content .= "<tr>
+                                <td class='text-right' width='4'>$i.</td>
+                                <td>$name $am_field";
+                 
+                // student comment
                 if (trim($row->comments != '')) {
                     $tool_content .= "<div style='margin-top: .5em;'><small>" .
                             q($row->comments) . '</small></div>';
                 }
+                $label = '';
+                $comments = '';
+                if ($row->grade != '') { // grade submission date
+                    $label = "<h6>($langGradedAt " .nice_format($row->grade_submission_date) . ")</h6>";
+                }
+                //professor comments
+                if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
+                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:';
+                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
+                    $comments .= "&nbsp;&nbsp;<span class='small'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
+                            </span>";
+                }
+                $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
+                if(AutojudgeApp::getAutojudge()->isEnabled()) {
+                    $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                    $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
+                }                
 
-                // check for plagiarism via 'unplag' tool (http://www.unplag.com)
+                // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
                 if (get_config('ext_unplag_enabled') and valid_plagiarism_file_type($row->id)) {
                     $results = Plagiarism::get()->getResults($row->id);
                     if ($results) {
@@ -3163,67 +3189,26 @@ function show_assignment($id, $display_graph_results = false) {
                     }
                 }
                 // ---------------------------------
-                $tool_content .= "</td>
-                                <td width='85'>" . q($stud_am) . "</td>
-                                <td class='text-center' width='180'>
-                                        $filelink <br> $plagiarismlink
-                                </td>
-                                <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
-                                <td width='5'>
-                                    <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
-                                        $grade_field
-                                        <span class='help-block'>".Session::getError("grade.$row->id")."</span>
-                                    </div>
-                                </td>
-                                <td class='option-btn-cell'>".
-                                    action_button(array(
-                                        array(
-                                            'title' => $langEditChange,
-                                            'url' => "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id",
-                                            'level' => 'primary',
-                                            'icon' => 'fa-edit'
-                                        ),
-                                        array(
-                                            'title' => $langDelete,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id",
-                                            'class' => 'delete',
-                                            'icon' => 'fa-times',
-                                            'confirm' => $langDelWarnUserAssignment
-                                        )
-                                    ))."
-                                </td>
-                                </tr>
-                                <tr>
-                                <td colspan='6'>";
-
-                //professor comments
-                if ($row->grade_comments || $row->grade != '') {
-                    $comments = "<br><div class='label label-primary'>" .
-                            nice_format($row->grade_submission_date) . "</div>";
-                }
-                if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
-                    $label = '<b>'.$m['gradecomments'] . '</b>:';
-                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
-                    $comments .= "&nbsp;&nbsp;<span class='small'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
-                            </span>";
-                } else {
-                    $label = '';
-                    $comments = '';
-                }
-                $tool_content .= "<div style='padding-top: .5em;'>$label $comments</div>";
-                if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                    $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
-                    $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
-                }
-                $tool_content .= "
-                                </td>
-                                </tr>";
+                $tool_content .= "</td>                                
+                            <td class='text-center' width='180'>
+                                    $filelink <br> $plagiarismlink
+                            </td>
+                            <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
+                            <td width='5' class='text-center'>
+                                <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
+                                    $grade_field
+                                    <span class='help-block'>".Session::getError("grade.$row->id")."</span>
+                                </div>
+                            </td>
+                            <td class='text-center'>
+                            $icon_field                            
+                            <a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
+                                <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteSubmission' title='' data-toggle='tooltip'></span>
+                            </a>
+                        </td></tr>";                                                
                 $i++;
             } //END of Foreach
-
-            //Session::Messages("<pre>".print_r($_POST,true)."</pre>");
-
+           
             $tool_content .= "
                     </tbody>
                 </table>
@@ -3522,7 +3507,7 @@ function show_student_assignments() {
             if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
             } else if($row->deadline) {
-                $tool_content .= "<br> (<small><span class='expired'>$langHasExpiredS</span></small>)";
+                $tool_content .= "<br> (<small><span class='text-danger'>$langHasExpiredS</span></small>)";
             }
             $tool_content .= "</td><td class='text-center'>";
 
@@ -3544,11 +3529,10 @@ function show_student_assignments() {
                     }
                     $tool_content .= "<i class='fa fa-check-square-o'></i><br>";
                 }
-                } else {
-                    $tool_content .= "<i class='fa fa-square-o'></i><br>";
-                }
-                $tool_content .= "</td>
-                                    <td width='30' align='center'>";
+            } else {
+                $tool_content .= "<i class='fa fa-square-o'></i><br>";
+            }
+            $tool_content .= "</td><td width='30' align='center'>";
             foreach ($submission as $sub) {
                 $grade = submission_grade($sub->id);
                 if (!$grade) {
@@ -3708,8 +3692,6 @@ function show_assignments() {
 function submit_grade_comments($args) {
     global $langGrades, $course_id, $langTheField, $course_code,
             $langFormErrors, $workPath, $langGradebookGrade;
-// Session::Messages("submit_grade_comments", 'alert-success');
-//Session::Messages("<pre>".print_r($args,true)."</pre>");
 
 	$id = $args['assignment'];
 	$rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
@@ -3731,9 +3713,7 @@ function submit_grade_comments($args) {
     if($v->validate()) {
 		if ($grading_type == 2){
 			$grade_rubric = serialize($args['grade_rubric']);
-			$criteria = unserialize($rubric->scales);
-			//Session::Messages("<pre>".print_r($criteria,true).print_r($args,true)."</pre>");
-			
+			$criteria = unserialize($rubric->scales);						
 			$r_grade = 0;
 			foreach ($criteria as $ci => $criterio) {
 				if(is_array($criterio['crit_scales']))
@@ -3881,10 +3861,8 @@ function submit_grades($grades_id, $grades, $email = false) {
         Session::Messages($langGrades, 'alert-success');
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($errors);
-    }
-    Session::Messages("submit_grades<pre>".print_r($grades,true)."</pre>", 'alert-success');
+    }    
     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$grades_id");
-
 }
 
 

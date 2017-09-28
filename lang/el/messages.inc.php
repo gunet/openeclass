@@ -1249,6 +1249,7 @@ $langGradebookActivityDate2 = "Ημερομηνία";
 $langGradebookActivityWeight = "Ποσοστό συμμετοχής στη βαθμολογία";
 $langGradebookActivityWeightLeft = "διαθέσιμο";
 $langGradebookBook = "Καταχώρηση βαθμών";
+$langSGradebookBook = "Καταχώρηση βαθμού";
 $langGradebookBooking = "Καταχώρηση";
 $langGradebookUpdate = "Ενημέρωση βαθμών";
 $langGradebookAutoUpdate = "Αυτόματα ενημέρωση βαθμών";
@@ -4114,7 +4115,6 @@ $m['more_non_submissions'] = 'Δεν έχουν υποβληθεί %d εργασ
 $m['plainview'] = 'Συνοπτική λίστα εργασιών - βαθμολογίας';
 $m['WorkInfo'] = 'Στοιχεία εργασίας';
 $m['WorkView'] = "Εργασίες $langsOfCourse";
-$m['WorkDelete'] = 'Διαγραφή εργασίας';
 $m['WorkSubsDelete']= 'Διαγραφή υποβολών εργασίας';
 $m['WorkDeleteAssignmentFile'] = 'Διαγραφή αρχείου εργασίας';
 $m['WorkDeleteAssignmentFileConfirm'] = 'Επιβεβαίωση διαγραφής αρχείου εργασίας';
@@ -4188,6 +4188,8 @@ $langDelMany1 = "Έχουν αποσταλεί";
 $langDelMany2 = "εργασίες " . $langsOfStudents . ". Τα αρχεία αυτά θα διαγραφούν!";
 $langSubmissions = "Εργασίες που έχουν υποβληθεί";
 $langSubmitted = "Η εργασία αυτή έχει ήδη υποβληθεί.";
+$m['WorkDelete'] = 'Διαγραφή εργασίας';
+$langDeleteSubmission = 'Διαγραφή εργασίας';
 $langNotice2 = "Ημερομηνία αποστολής";
 $langNotice3 = "Αν στείλετε κάποιο άλλο αρχείο, το αρχείο που υπάρχει
 	αυτή τη στιγμή θα διαγραφεί και θα αντικατασταθεί με το νέο.";
@@ -4252,6 +4254,7 @@ $langRubricNotEditable = "Η ρουμπρίκα δεν είναι πλέον ε�
 $langRubricNotDelete = "Η ρουμπρίκα δεν μπορεί πλέον να διαγραφεί γιατί έχει χρησιμοποιηθεί για την βαθμολόγηση μίας ή περισσότερων εργασιών.";
 $langRubricGrade = "Βαθμ. με ρουμπρίκα";
 $langRubricGrading = "Βαθμολόγηση με ρουμπρίκα";
+$langGradedAt = 'βαθμολογήθηκε στις';
 
 
 /* * ***********************************************************
