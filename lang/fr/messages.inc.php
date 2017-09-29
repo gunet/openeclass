@@ -2252,7 +2252,6 @@ $m['sub_date'] = "Date de soumission";
 $m['comments'] = "Commentaires";
 $m['gradecomments'] = "Commentaires d'évaluation";
 $m['addgradecomments'] = "Ajouter les commentaires de l'évaluateur";
-$m['delete'] = "Supprimer";
 $m['edit'] = "Modifier";
 $m['start_date'] = "Start date";
 $m['grade'] = "Note";

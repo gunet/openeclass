@@ -66,7 +66,7 @@ if (isset($_GET['scale_id'])) {
                 $('#scale_table tbody').append(
                     '<tr>'+
                     '<td class=\'form-group\'>'+
-                    '<input type=\'text\' name=\'scale_item_name[' + rowCount +'\' class=\'form-control\' value=\'\' required>'+
+                    '<input type=\'text\' name=\'scale_item_name[' + rowCount +']\' class=\'form-control\' value=\'\' required>'+
                     '</td>'+
                     '<td class=\'form-group\'>'+
                     '<input type=\'number\' name=\'scale_item_value[' + rowCount +']\' class=\'form-control\' value=\'\' min=\'0\' required>'+

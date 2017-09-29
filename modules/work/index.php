@@ -460,8 +460,6 @@ if ($is_editor) {
         $pageName = $langNewAssign;
         $navigation[] = $works_url;
         new_assignment();
-        //print_r ($_POST);
-
     } elseif (isset($_POST['new_assign'])) {
         add_assignment();
     } elseif (isset($_GET['as_id'])) {
@@ -474,9 +472,8 @@ if ($is_editor) {
         }
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     } elseif (isset($_POST['grades']) || isset($_POST['grade_rubric']) ) {
-        $navigation[] = $works_url;
-        //submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
-		submit_grades($id, intval($_POST['grades_id']), $_POST, $email_notify);
+        $navigation[] = $works_url;        
+        submit_grades(intval($_POST['grades_id']), $_POST, $email_notify);        
 		
     } elseif (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
@@ -624,15 +621,15 @@ function ipORcidr($field, $value, array $params) {
  * @global type $langTitle
  * @global type $course_code
  * @global type $langFormErrors
- * @global type $langNewAssignSuccess
- * @global type $langScales
+ * @global type $langNewAssignSuccess 
  * @global type $langGeneralError
  * @global type $langErrorCreatingDirectory
  * @return type
  */
 function add_assignment() {
-    global $workPath, $course_id, $uid, $langTheField, $m, $langTitle, $langErrorCreatingDirectory, $langGeneralError,
-        $course_code, $langFormErrors, $langNewAssignSuccess, $langScales, $langGradeRubrics, $langIPInvalid;
+    global $workPath, $course_id, $uid, $langTheField, $m, $langTitle, 
+        $langErrorCreatingDirectory, $langGeneralError,
+        $course_code, $langFormErrors, $langNewAssignSuccess, $langIPInvalid;
 
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
@@ -644,17 +641,7 @@ function add_assignment() {
         $v->rule('required', array('max_grade'));
         $v->rule('numeric', array('max_grade'));
         $v->labels(array('max_grade' => "$langTheField $m[max_grade]"));
-    }
-    if (isset($_POST['scale'])) {
-        $v->rule('required', array('scale'));
-        $v->rule('numeric', array('scale'));
-        $v->labels(array('scale' => "$langTheField $langScales"));
-    }
-    if (isset($_POST['rubric'])) {
-        $v->rule('required', array('rubric'));
-        $v->rule('numeric', array('rubric'));
-        $v->labels(array('rubric' => "$langTheField $langGradeRubrics"));
-    }
+    }    
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
         $title = $_POST['title'];
@@ -784,17 +771,16 @@ function add_assignment() {
  * @global type $course_id
  * @global type $uid
  * @global string $workPath
- * @global type $langFormErrors
- * @global type $langScales
+ * @global type $langFormErrors 
  * @global type $langTitle
  * @param type $id
  * @return type
  */
 function edit_assignment($id) {
     global $langEditSuccess, $m, $langTheField, $course_code,
-        $course_id, $uid, $workPath, $langFormErrors, $langScales, $langGradeRubrics, $langTitle,
+        $course_id, $uid, $workPath, $langFormErrors, $langTitle,
         $langIPInvalid;
-//Session::Messages("<pre>edit_assignment</pre>");
+
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
     $v->rule('integer', array('group_submissions', 'assign_to_specific'));
@@ -805,16 +791,6 @@ function edit_assignment($id) {
         $v->rule('required', array('max_grade'));
         $v->rule('numeric', array('max_grade'));
         $v->labels(array('max_grade' => "$langTheField $m[max_grade]"));
-    }
-    if (isset($_POST['scale'])) {
-        $v->rule('required', array('scale'));
-        $v->rule('numeric', array('scale'));
-        $v->labels(array('scale' => "$langTheField $langScales"));
-    }
-    if (isset($_POST['rubric'])) {
-        $v->rule('required', array('rubric'));
-        $v->rule('numeric', array('rubric'));
-        $v->labels(array('rubric' => "$langTheField $langGradeRubrics"));
     }
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
@@ -833,7 +809,6 @@ function edit_assignment($id) {
         }
         elseif (isset($_POST['rubric'])) {
             $max_grade = max_grade_from_rubric($_POST['rubric']);
-            //Session::Messages("<pre>".print_r($max_grade,true)."</pre>");
             $grading_scale_id = $_POST['rubric'];
         } else {
             $max_grade = $_POST['max_grade'];
@@ -1255,10 +1230,8 @@ function submit_work($id, $on_behalf_of = null) {
  * @global type $langWorkOnlineText
  * @global type $langStartDate
  * @global type $langGradeNumbers
- * @global type $langGradeScalesSelect
  * @global type $langGradeType
  * @global type $langGradeScales
- * @global type $langGradeRubricsSelect
  * @global type $langGradeRubrics
  * @global type $langAutoJudgeInputNotSupported
  * @global type $langAutoJudgeSum
@@ -1275,29 +1248,30 @@ function submit_work($id, $on_behalf_of = null) {
  * @global type $langNotifyAssignmentSubmission
  * @global type $langPasswordUnlock
  * @global type $langIPUnlock
+ * @global type $langDelete
  */
 function new_assignment() {
-    global $tool_content, $m, $course_code, $course_id,
-           $desc, $language, $head_content, $langGradeRubricsSelect, $langGradeRubrics,
-           $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
+    global $tool_content, $m, $course_code, $course_id, $langAssignmentStartHelpBlock,
+           $desc, $language, $head_content, $langGradeRubrics,
+           $langBack, $langSave, $langStudents, $langMove, $langWorkFile, 
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
-           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales, 
+           $langGradeNumbers, $langGradeType, $langGradeScales, 
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
            $langAutoJudgeAssertions, $langDescription, $langTitle, $langNotifyAssignmentSubmission,
-           $langPasswordUnlock, $langIPUnlock;
+           $langPasswordUnlock, $langIPUnlock, $langDelete;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
 
     $scales = Database::get()->queryArray('SELECT * FROM grading_scale WHERE course_id = ?d', $course_id);
-    $scale_options = "<option value>-- $langGradeScalesSelect --</option>";
+    $scale_options = "";
     foreach ($scales as $scale) {
         $scale_options .= "<option value='$scale->id'>$scale->title</option>";
     }
     $rubrics = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);
-    $rubric_options = "<option value>-- $langGradeRubricsSelect --</option>";
+    $rubric_options = "";
     foreach ($rubrics as $rubric) {
         $rubric_options .= "<option value='$rubric->id'>$rubric->name</option>";
     }
@@ -1378,7 +1352,7 @@ function new_assignment() {
     $tool_content .= action_bar(array(
         array('title' => $langBack,
               'level' => 'primary-label',
-              'url' => "$_SERVER[PHP_SELF]?course=$course_code",
+              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
               'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
     $title = q(Session::has('title') ? Session::get('title') : '');
@@ -1609,7 +1583,7 @@ function new_assignment() {
                               <th>$langOperator</th>
                               <th>$langAutoJudgeExpectedOutput</th>
                               <th>$langAutoJudgeWeight</th>
-                              <th>".$m['delete']."</th>
+                              <th>$langDelete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1653,18 +1627,17 @@ function new_assignment() {
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class='form-group'>
-              <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
-              <div class='col-sm-10'>
-                <select id='lang' name='lang'>";
-                foreach($connector->getSupportedLanguages() as $lang => $ext) {
-                    $tool_content .= "<option value='$lang'>$lang</option>\n";
-                }
-                $tool_content .= "</select>
-              </div>
-            </div>
-            ";
+                </div>
+                <div class='form-group'>
+                  <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
+                  <div class='col-sm-10'>
+                    <select id='lang' name='lang'>";
+                    foreach($connector->getSupportedLanguages() as $lang => $ext) {
+                        $tool_content .= "<option value='$lang'>$lang</option>\n";
+                    }
+                    $tool_content .= "</select>
+                  </div>
+                </div>";
             }
             $tool_content .= "
             <div class='form-group'>
@@ -1721,8 +1694,7 @@ function new_assignment() {
  * @global type $langLessOptions
  * @global type $langMoreOptions
  * @global type $langWorkOnlineText
- * @global type $langWorkSubType
- * @global type $langGradeScalesSelect
+ * @global type $langWorkSubType 
  * @global type $langGradeType
  * @global type $langGradeNumbers
  * @global type $langGradeScales
@@ -1739,6 +1711,7 @@ function new_assignment() {
  * @global type $langAutoJudgeAssertions
  * @global type $langTitle
  * @global type $langNotifyAssignmentSubmission
+ * @global type $langDelete
  * @param type $id
  */
 function show_edit_assignment($id) {
@@ -1747,12 +1720,12 @@ function show_edit_assignment($id) {
         $langSave, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langWorkOnlineText, $langWorkSubType, $langGradeRubrics, 
-        $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales,
-        $langGradeRubricsSelect, $langAutoJudgeInputNotSupported, $langTitle,
+        $langGradeType, $langGradeNumbers, $langGradeScales,
+        $langAutoJudgeInputNotSupported, $langTitle,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
-        $langPasswordUnlock, $langIPUnlock;
+        $langPasswordUnlock, $langIPUnlock, $langDelete;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -1841,16 +1814,15 @@ function show_edit_assignment($id) {
             $item = trim($item);
             return $item? ('<option selected>' . q($item) . '</option>'): '';
         }, $assignmentIPLock));
-
-    //Session::Messages("<pre>".print_r($row,true)."</pre>");
+    
     $grading_type = ($row->grading_type ? $row->grading_type : 0);
     $scales = Database::get()->queryArray('SELECT * FROM grading_scale WHERE course_id = ?d', $course_id);
-    $scale_options = "<option value>-- $langGradeScalesSelect --</option>";
+    $scale_options = '';
     foreach ($scales as $scale) {
         $scale_options .= "<option value='$scale->id'".(($row->grading_scale_id == $scale->id && $grading_type==1)? " selected" : "").">$scale->title</option>";
     }
-    $rubrics = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);
-    $rubric_options = "<option value>-- $langGradeRubricsSelect --</option>";
+    $rubrics = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);    
+    $rubric_options = '';
     foreach ($rubrics as $rubric) {
         $rubric_options .= "<option value='$rubric->id'".(($row->grading_scale_id == $rubric->id && $grading_type==2) ? " selected" : "").">$rubric->name</option>";
     }
@@ -2139,7 +2111,7 @@ function show_edit_assignment($id) {
                                     <th>$langOperator</th>
                                     <th>$langAutoJudgeExpectedOutput</th>
                                     <th>$langAutoJudgeWeight</th>
-                                    <th>".$m['delete']."</th>
+                                    <th>$langDelete</th>
                                 </tr>
                             </thead>
                             <tbody>";
@@ -2353,15 +2325,14 @@ function purge_assignment_subs($id) {
         return false;
 }
 /**
- * @brief delete user assignment
- * @global string $tool_content
+ * @brief delete user assignment 
  * @global type $course_id
  * @global type $course_code
  * @global type $webDir
  * @param type $id
  */
 function delete_user_assignment($id) {
-    global $tool_content, $course_code, $webDir;
+    global $course_code, $webDir;
 
     $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?d", $id);
     if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
@@ -2929,37 +2900,6 @@ function assignment_details($id, $row) {
 
 
 /**
- * @brief // Show a table header which is a link with the appropriate sorting
-    parameters - $attrib should contain any extra attributes requered in
-    the <th> tags
- * @global type $tool_content
- * @global type $course_code
- * @param type $title
- * @param type $opt
- * @param type $attrib
- */
-function sort_link($title, $opt, $attrib = '') {
-    global $tool_content, $course_code;
-    $i = '';
-    if (isset($_REQUEST['id'])) {
-        $i = "&id=$_REQUEST[id]";
-   }
-    if (@($_REQUEST['sort'] == $opt)) {
-        if (@($_REQUEST['rev'] == 1)) {
-            $r = 0;
-        } else {
-            $r = 1;
-        }
-        $tool_content .= "
-                  <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt&rev=$r$i'>" . "$title</a></th>";
-    } else {
-        $tool_content .= "
-                  <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt$i'>$title</a></th>";
-    }
-}
-
-
-/**
  * @brief show assignment - prof view only
  * @brief the optional message appears instead of assignment details
  * @global type $tool_content
@@ -2976,8 +2916,7 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langDownloadToPDF
  * @global array $works_url
  * @global type $course_id
- * @global type $langQuestionView
- * @global type $langDelete
+ * @global type $langQuestionView 
  * @global type $langSGradebookBook
  * @global type $langAutoJudgeShowWorkResultRpt
  * @global type $langSurnameName
@@ -2995,7 +2934,7 @@ function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $m, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
     $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult, $langHasAssignmentPublished,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
-    $langQuestionView, $langDelete, $langAmShort, $langSGradebookBook, $langDeleteSubmission,
+    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress;  
     
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -3693,9 +3632,9 @@ function submit_grade_comments($args) {
     global $langGrades, $course_id, $langTheField, $course_code,
             $langFormErrors, $workPath, $langGradebookGrade;
 
-	$id = $args['assignment'];
-	$rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
-	$grading_type = $rubric->grading_type;
+    $id = $args['assignment'];
+    $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
+    $grading_type = $rubric->grading_type;
     $sid = $args['submission'];
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
 
@@ -3711,19 +3650,18 @@ function submit_grade_comments($args) {
         'grade' => "$langTheField $langGradebookGrade"
     ));
     if($v->validate()) {
-		if ($grading_type == 2){
-			$grade_rubric = serialize($args['grade_rubric']);
-			$criteria = unserialize($rubric->scales);						
-			$r_grade = 0;
-			foreach ($criteria as $ci => $criterio) {
-				if(is_array($criterio['crit_scales']))
-					$r_grade += $criterio['crit_scales'][$args['grade_rubric'][$ci]]['scale_item_value'] * $criterio['crit_weight'];
-			}	
-			$grade = $r_grade/100;
-		}
-		else{
-			$grade = $args['grade'];
-		}
+        if ($grading_type == 2) {
+            $grade_rubric = serialize($args['grade_rubric']);
+            $criteria = unserialize($rubric->scales);						
+            $r_grade = 0;
+            foreach ($criteria as $ci => $criterio) {
+                    if(is_array($criterio['crit_scales']))
+                            $r_grade += $criterio['crit_scales'][$args['grade_rubric'][$ci]]['scale_item_value'] * $criterio['crit_weight'];
+            }	
+            $grade = $r_grade/100;
+        } else {
+            $grade = $args['grade'];
+        }
         $comment = $args['comments'];
         if (isset($_FILES['comments_file']) and is_uploaded_file($_FILES['comments_file']['tmp_name'])) { // upload comments file
             $comments_filename = $_FILES['comments_file']['name'];
@@ -3798,7 +3736,7 @@ function submit_grades($grades_id, $grades, $email = false) {
     global $langGrades, $course_id, $course_code, $langFormErrors,
             $langTheField, $langGradebookGrade;
 
-    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $grades_id, $id);
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $grades_id);
     $errors = [];
 
     foreach ($grades['grades'] as $key => $grade) {
@@ -3818,44 +3756,42 @@ function submit_grades($grades_id, $grades, $email = false) {
         }
     }
 
-
     if(empty($errors)) {
-        if(is_array($grades['grades'])){
-        foreach ($grades['grades'] as $sid => $grade) {
-            $sid = intval($sid);
-            $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
+        if(is_array($grades['grades'])) {
+            foreach ($grades['grades'] as $sid => $grade) {
+                $sid = intval($sid);
+                $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
 
-            $grade = is_numeric($grade['grade']) ? $grade['grade'] : null;
+                $grade = is_numeric($grade['grade']) ? $grade['grade'] : null;
 
-            if ($val !== $grade) {
-                if (Database::get()->query("UPDATE assignment_submit
-                                            SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
-                                            WHERE id = ?d", $grade, Log::get_client_ip(), $sid)->affectedRows > 0) {
-                    $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                    triggerGame($course_id, $quserid, $assignment->id);
-                    Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
-                            'title' => $assignment->title,
-                            'grade' => $grade));
-
-                    //update gradebook if needed
-                    if ($assignment->group_submissions) {
-                        $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
-                        $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
-                        foreach ($user_ids as $user_id) {
-                            update_gradebook_book($user_id, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
-                        }
-                    } else {
+                if ($val !== $grade) {
+                    if (Database::get()->query("UPDATE assignment_submit
+                                                SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
+                                                WHERE id = ?d", $grade, Log::get_client_ip(), $sid)->affectedRows > 0) {
                         $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                        update_gradebook_book($quserid, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
-                    }
+                        triggerGame($course_id, $quserid, $assignment->id);
+                        Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
+                                'title' => $assignment->title,
+                                'grade' => $grade));
 
-                    if ($email) {
-                        grade_email_notify($grades_id, $sid, $grade, '');
+                        //update gradebook if needed
+                        if ($assignment->group_submissions) {
+                            $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
+                            $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
+                            foreach ($user_ids as $user_id) {
+                                update_gradebook_book($user_id, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                            }
+                        } else {
+                            $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+                            update_gradebook_book($quserid, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                        }
+                        if ($email) {
+                            grade_email_notify($grades_id, $sid, $grade, '');
+                        }
+                        Session::Messages($langGrades, 'alert-success');
                     }
-                    Session::Messages($langGrades, 'alert-success');
                 }
             }
-        }
         }
 
         Session::Messages($langGrades, 'alert-success');

@@ -2108,7 +2108,6 @@ $m['sub_date'] = "Fecha de sumisión";
 $m['comments'] = "Comentarios";
 $m['gradecomments'] = "Comentarios graduados";
 $m['addgradecomments'] = "Añadiendo comentarios graduados";
-$m['delete'] = "Borrado";
 $m['edit'] = "Modificado";
 $m['start_date'] = "Fecha de inicio";
 $m['grade'] = "Grado";

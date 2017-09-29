@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,7 +19,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-// Print a two-cell table row with that title, if the content is non-empty
+
+/**
+ * @brief Print a two-cell table row with that title, if the content is non-empty
+ * @global type $tool_content
+ * @param type $title
+ * @param type $content
+ * @param type $html
+ */
 function table_row($title, $content, $html = false) {
     global $tool_content;
 
@@ -37,6 +44,34 @@ function table_row($title, $content, $html = false) {
                             <div class='col-sm-9'>$content
                             </div>
                         </div>";
+    }
+}
+
+/**
+ * @brief Show a table header which is a link with the appropriate sorting
+    parameters - $attrib should contain any extra attributes requered in
+    the <th> tags
+ * @global type $tool_content
+ * @global type $course_code
+ * @param type $title
+ * @param type $opt
+ * @param type $attrib
+ */
+function sort_link($title, $opt, $attrib = '') {
+    global $tool_content, $course_code;
+    $i = '';
+    if (isset($_REQUEST['id'])) {
+        $i = "&id=$_REQUEST[id]";
+   }
+    if (@($_REQUEST['sort'] == $opt)) {
+        if (@($_REQUEST['rev'] == 1)) {
+            $r = 0;
+        } else {
+            $r = 1;
+        }
+        $tool_content .= "<th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt&rev=$r$i'>" . "$title</a></th>";
+    } else {
+        $tool_content .= "<th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt$i'>$title</a></th>";
     }
 }
 
