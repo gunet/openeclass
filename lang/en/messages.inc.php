@@ -2121,7 +2121,6 @@ $langSubmissionDate = "Submission date";
 $m['comments'] = "Comments";
 $m['gradecomments'] = "Grading comments";
 $m['addgradecomments'] = "Add grading comments";
-$m['delete'] = "Delete";
 $m['edit'] = "Modify";
 $m['start_date'] = "Start date";
 $m['grade'] = "Grade";

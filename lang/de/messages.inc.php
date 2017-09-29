@@ -2051,7 +2051,6 @@ $langSubmissionDate = "Absendedatum";
 $m['comments'] = "Kommentare";
 $m['gradecomments'] = "Kommentare des Korrektors";
 $m['addgradecomments'] = "Kommentare des Korrektors hinzufügen";
-$m['delete'] = "Löschen";
 $m['edit'] = "Ändern";
 $m['start_date'] = "Anfangsdatum";
 $m['grade'] = "Benotung";

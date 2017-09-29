@@ -116,7 +116,7 @@ function show_edit_form($id, $sid, $assign) {
                 foreach ($scales as $scale) {
                     $scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
                 }
-                $grade_field = "<select name='grade' class='form-control' id='scales'>$scale_options</select>";
+                $grade_field = "<div class='col-sm-3'><select name='grade' class='form-control' id='scales'>$scale_options</select></div>";
             } elseif($grading_type == 2) {
                 $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
                 $criteria = unserialize($rubric->scales);

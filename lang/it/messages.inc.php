@@ -2104,7 +2104,6 @@ $langSubmissionDate = "Data d' invio";
 $m['comments'] = "Commenti";
 $m['gradecomments'] = "Commenti di valutazione";
 $m['addgradecomments'] = "Aggiungere commenti di valutazione";
-$m['delete'] = "Eliminare";
 $m['edit'] = "Modificare";
 $m['start_date'] = "Data di inizio";
 $m['grade'] = "Voto";
