@@ -8,33 +8,33 @@
     "packages": [
         {
             "name": "doctrine/inflector",
-            "version": "v1.2.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462"
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/e11d84c6e018beedd929cff5220969a3c6d1d462",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0"
+                "php": ">=5.3.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.2"
+                "phpunit/phpunit": "4.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Doctrine\\Common\\Inflector\\": "lib/Doctrine/Common/Inflector"
+                "psr-0": {
+                    "Doctrine\\Common\\Inflector\\": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -71,7 +71,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2017-07-22T12:18:28+00:00"
+            "time": "2015-11-06T14:35:42+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -268,20 +268,20 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-24 02:50:48"
+            "time": "2017-06-24T02:50:48+00:00"
         },
         {
             "name": "facebook/graph-sdk",
-            "version": "5.6.0",
+            "version": "5.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/php-graph-sdk.git",
-                "reference": "34f5e5993c67acd264017373f23848961585dcac"
+                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/34f5e5993c67acd264017373f23848961585dcac",
-                "reference": "34f5e5993c67acd264017373f23848961585dcac",
+                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2f9639c15ae043911f40ffe44080b32bac2c5280",
+                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
                 "shasum": ""
             },
             "require": {
@@ -326,7 +326,7 @@
                 "facebook",
                 "sdk"
             ],
-            "time": "2017-07-23T14:06:52+00:00"
+            "time": "2017-08-16T17:28:07+00:00"
         },
         {
             "name": "google/apiclient",
@@ -1312,7 +1312,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.4.27",
+            "version": "v5.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -1355,16 +1355,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.4.27",
+            "version": "v5.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "31f0193eb14aa3ee07841dc254081425616e79f0"
+                "reference": "67f642e018f3e95fb0b2ebffc206c3200391b1ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/31f0193eb14aa3ee07841dc254081425616e79f0",
-                "reference": "31f0193eb14aa3ee07841dc254081425616e79f0",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/67f642e018f3e95fb0b2ebffc206c3200391b1ab",
+                "reference": "67f642e018f3e95fb0b2ebffc206c3200391b1ab",
                 "shasum": ""
             },
             "require": {
@@ -1393,11 +1393,11 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2017-04-19T20:17:43+00:00"
+            "time": "2017-08-26T23:56:53+00:00"
         },
         {
             "name": "illuminate/events",
-            "version": "v5.4.27",
+            "version": "v5.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
@@ -1442,16 +1442,16 @@
         },
         {
             "name": "illuminate/filesystem",
-            "version": "v5.4.27",
+            "version": "v5.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
-                "reference": "e0ee832f625fbfadb816a972655b1a66af1a5bda"
+                "reference": "b800a1423d06869ee5c2768eee123917f12b693e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/e0ee832f625fbfadb816a972655b1a66af1a5bda",
-                "reference": "e0ee832f625fbfadb816a972655b1a66af1a5bda",
+                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/b800a1423d06869ee5c2768eee123917f12b693e",
+                "reference": "b800a1423d06869ee5c2768eee123917f12b693e",
                 "shasum": ""
             },
             "require": {
@@ -1488,24 +1488,24 @@
             ],
             "description": "The Illuminate Filesystem package.",
             "homepage": "https://laravel.com",
-            "time": "2017-05-18T14:37:58+00:00"
+            "time": "2017-08-02T21:58:00+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.4.27",
+            "version": "v5.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "a42393b56d0ec75f55e760f2a47bcf85a17a278d"
+                "reference": "feab1d1495fd6d38970bd6c83586ba2ace8f299a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/a42393b56d0ec75f55e760f2a47bcf85a17a278d",
-                "reference": "a42393b56d0ec75f55e760f2a47bcf85a17a278d",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/feab1d1495fd6d38970bd6c83586ba2ace8f299a",
+                "reference": "feab1d1495fd6d38970bd6c83586ba2ace8f299a",
                 "shasum": ""
             },
             "require": {
-                "doctrine/inflector": "~1.0",
+                "doctrine/inflector": "~1.1",
                 "ext-mbstring": "*",
                 "illuminate/contracts": "5.4.*",
                 "paragonie/random_compat": "~1.4|~2.0",
@@ -1545,20 +1545,20 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2017-06-15T12:35:32+00:00"
+            "time": "2017-08-15T13:25:41+00:00"
         },
         {
             "name": "illuminate/view",
-            "version": "v5.4.27",
+            "version": "v5.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/view.git",
-                "reference": "423652ea1c4c4c2f6494bd6b8cfb6eb943c5ba75"
+                "reference": "785f41f8f01653dc830c5c89eb0f25c311af7615"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/view/zipball/423652ea1c4c4c2f6494bd6b8cfb6eb943c5ba75",
-                "reference": "423652ea1c4c4c2f6494bd6b8cfb6eb943c5ba75",
+                "url": "https://api.github.com/repos/illuminate/view/zipball/785f41f8f01653dc830c5c89eb0f25c311af7615",
+                "reference": "785f41f8f01653dc830c5c89eb0f25c311af7615",
                 "shasum": ""
             },
             "require": {
@@ -1593,7 +1593,7 @@
             ],
             "description": "The Illuminate View package.",
             "homepage": "https://laravel.com",
-            "time": "2017-06-07T13:32:57+00:00"
+            "time": "2017-08-05T12:41:58+00:00"
         },
         {
             "name": "jasig/phpcas",
@@ -1764,16 +1764,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.10",
+            "version": "v2.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d"
+                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/634bae8e911eefa89c1abfbf1b66da679ac8f54d",
-                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/5da4d3c796c275c55f057af5a643ae297d96b4d8",
+                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8",
                 "shasum": ""
             },
             "require": {
@@ -1808,7 +1808,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-13T16:27:32+00:00"
+            "time": "2017-09-27T21:40:39+00:00"
         },
         {
             "name": "pclzip/pclzip",
@@ -1924,7 +1924,7 @@
             ],
             "description": "PHPIDS (PHP-Intrusion Detection System) is a simple to use, well structured, fast and state-of-the-art security layer for your PHP based web application",
             "homepage": "http://phpids.org",
-            "time": "2014-09-03 11:39:39"
+            "time": "2014-09-03T11:39:39+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -1932,22 +1932,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/antonioribeiro/google2fa.git",
-                "reference": "394b3ae1c7f7ba267cb632722f214f8fd7fe1cd1"
+                "reference": "bc2d654305e4d09254125f8cd390a7fbc4742d46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/394b3ae1c7f7ba267cb632722f214f8fd7fe1cd1",
-                "reference": "394b3ae1c7f7ba267cb632722f214f8fd7fe1cd1",
+                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/bc2d654305e4d09254125f8cd390a7fbc4742d46",
+                "reference": "bc2d654305e4d09254125f8cd390a7fbc4742d46",
                 "shasum": ""
             },
             "require": {
-                "paragonie/constant_time_encoding": "~1.0",
+                "paragonie/constant_time_encoding": "~1.0|~2.0",
                 "paragonie/random_compat": "~1.4|~2.0",
                 "php": ">=5.4",
                 "symfony/polyfill-php56": "~1.2"
             },
             "require-dev": {
-                "phpspec/phpspec": "~2.1"
+                "bacon/bacon-qr-code": "~1.0",
+                "phpspec/phpspec": "~2.1",
+                "phpunit/phpunit": "~4"
             },
             "suggest": {
                 "bacon/bacon-qr-code": "Required to generate inline QR Codes."
@@ -1983,7 +1985,7 @@
                 "google2fa",
                 "laravel"
             ],
-            "time": "2017-07-06 18:03:13"
+            "time": "2017-09-12T06:55:05+00:00"
         },
         {
             "name": "psr/http-message",
@@ -2540,30 +2542,29 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v6.0.1",
+            "version": "v5.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "008f088d535ed3333af5ad804dd4c0eaf97c2805"
+                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/008f088d535ed3333af5ad804dd4c0eaf97c2805",
-                "reference": "008f088d535ed3333af5ad804dd4c0eaf97c2805",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/9a06dc570a0367850280eefd3f1dc2da45aef517",
+                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517",
                 "shasum": ""
             },
             "require": {
-                "egulias/email-validator": "~2.0",
-                "php": ">=7.0.0"
+                "php": ">=5.3.3"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.1",
-                "symfony/phpunit-bridge": "~3.3@dev"
+                "symfony/phpunit-bridge": "~3.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.0-dev"
+                    "dev-master": "5.4-dev"
                 }
             },
             "autoload": {
@@ -2591,24 +2592,24 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2017-05-20T06:20:27+00:00"
+            "time": "2017-05-01T15:54:03+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.3.6",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "7c13ae8ce1e2adbbd574fc39de7be498e1284e13"
+                "reference": "8beb24eec70b345c313640962df933499373a944"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/7c13ae8ce1e2adbbd574fc39de7be498e1284e13",
-                "reference": "7c13ae8ce1e2adbbd574fc39de7be498e1284e13",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/8beb24eec70b345c313640962df933499373a944",
+                "reference": "8beb24eec70b345c313640962df933499373a944",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9",
+                "php": "^5.5.9|>=7.0.8",
                 "psr/log": "~1.0"
             },
             "conflict": {
@@ -2647,24 +2648,24 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-28T15:27:31+00:00"
+            "time": "2017-09-01T13:23:39+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v3.3.6",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "baea7f66d30854ad32988c11a09d7ffd485810c4"
+                "reference": "b2260dbc80f3c4198f903215f91a1ac7fe9fe09e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/baea7f66d30854ad32988c11a09d7ffd485810c4",
-                "reference": "baea7f66d30854ad32988c11a09d7ffd485810c4",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/b2260dbc80f3c4198f903215f91a1ac7fe9fe09e",
+                "reference": "b2260dbc80f3c4198f903215f91a1ac7fe9fe09e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "php": "^5.5.9|>=7.0.8"
             },
             "type": "library",
             "extra": {
@@ -2696,20 +2697,20 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-01T21:01:25+00:00"
+            "time": "2017-07-29T21:54:42+00:00"
         },
         {
             "name": "symfony/polyfill-php56",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php56.git",
-                "reference": "bc0b7d6cb36b10cfabb170a3e359944a95174929"
+                "reference": "e85ebdef569b84e8709864e1a290c40f156b30ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/bc0b7d6cb36b10cfabb170a3e359944a95174929",
-                "reference": "bc0b7d6cb36b10cfabb170a3e359944a95174929",
+                "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/e85ebdef569b84e8709864e1a290c40f156b30ca",
+                "reference": "e85ebdef569b84e8709864e1a290c40f156b30ca",
                 "shasum": ""
             },
             "require": {
@@ -2719,7 +2720,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -2752,20 +2753,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-09T08:25:21+00:00"
+            "time": "2017-06-14T15:44:48+00:00"
         },
         {
             "name": "symfony/polyfill-util",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-util.git",
-                "reference": "ebccbde4aad410f6438d86d7d261c6b4d2b9a51d"
+                "reference": "67925d1cf0b84bd234a83bebf26d4eb281744c6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/ebccbde4aad410f6438d86d7d261c6b4d2b9a51d",
-                "reference": "ebccbde4aad410f6438d86d7d261c6b4d2b9a51d",
+                "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/67925d1cf0b84bd234a83bebf26d4eb281744c6d",
+                "reference": "67925d1cf0b84bd234a83bebf26d4eb281744c6d",
                 "shasum": ""
             },
             "require": {
@@ -2774,7 +2775,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -2804,7 +2805,7 @@
                 "polyfill",
                 "shim"
             ],
-            "time": "2017-06-09T08:25:21+00:00"
+            "time": "2017-07-05T15:09:33+00:00"
         },
         {
             "name": "vlucas/valitron",
@@ -2812,12 +2813,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/valitron.git",
-                "reference": "1e98c97ca225466f94b8fe4861d93e1dc087a357"
+                "reference": "20a9c2d604b0932b2bd58fa32fbb2520616fef65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/valitron/zipball/1e98c97ca225466f94b8fe4861d93e1dc087a357",
-                "reference": "1e98c97ca225466f94b8fe4861d93e1dc087a357",
+                "url": "https://api.github.com/repos/vlucas/valitron/zipball/20a9c2d604b0932b2bd58fa32fbb2520616fef65",
+                "reference": "20a9c2d604b0932b2bd58fa32fbb2520616fef65",
                 "shasum": ""
             },
             "require": {
@@ -2850,7 +2851,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2017-07-18 18:57:38"
+            "time": "2017-08-28T20:06:05+00:00"
         }
     ],
     "packages-dev": [],
