@@ -4165,6 +4165,33 @@ $langNotifyAssignmentSubmission = "Να ειδοποιηθώ (μέσω email) ό
 $langAssignmentPublished = "Υποβολή εργασίας";
 $langHasAssignmentPublished = 'Έχει υποβληθεί μία εργασία';
 $langExportGrades = "Εξαγωγή βαθμολογιών";
+$langCommentsFile = "Αρχείο σχολίων";
+$langPlagiarismCheck = "Αποστολή για έλεγχο λογοκλοπής";
+$langPlagiarismAlreadyCheck = "To αρχείο έχει ήδη σταλεί για έλεγχο λογοκλοπής";
+$langPlagiarismFileSent = "To αρχείο στάλθηκε για έλεγχο λογοκλοπής";
+$langPlagiarismResult = "Αποτέλεσμα ελέγχου λογοκλοπής";
+$langDownloadToPDF = "Αναφορά σε PDF";
+$langGradeRubric = "Ρουμπρίκα";
+$langGradeRubrics = "Ρουμπρίκες";
+$langGradeRubricsSelect ="Επιλογή Ρουμπρίκας";
+$langNewGradeRubric = "Δημιουργία ρουμπρίκας";
+$langNoGradeRubrics = 'Δεν έχουν καταχωρηθεί ρουμπρίκες.';
+$langTitleRubric = "Όνομα ρουμπρίκας";
+$langRubricDesc = "Περιγραφή ρουμπρίκας";
+$langRubricCrit = "Κριτήριο";
+$langRubricCriteria = "Κριτήρια";
+$langRubricWeight = "Το άθροισμα των ποσοστών συμμετοχής των κριτηρίων θα πρέπει να είναι ίσο με 100";
+$langAddRubricCriteria ="Νέο κριτήριο";
+$langRubricOptions = "Επιλογές ρουμπρίκας";
+$langRubricOption1 = "Να επιτρέπεται η προεπισκόπηση της ρουμπρίκας από τον εκπαιδευόμενο πριν τη βαθμολόγηση";
+$langRubricOption2 = "Προβολή των βαθμών κάθε κριτηρίου στα άτομα προς βαθμολόγηση";
+$langRubricDeleted = "Η ρουμπρίκα διαγράφηκε";
+$langRubricCreated = "H ρουμπρίκα δημιουργήθηκε με επιτυχία";
+$langRubricNotEditable = "Η ρουμπρίκα δεν είναι πλέον επεξεργάσιμη γιατί έχει χρησιμοποιηθεί για την βαθμολόγηση μίας ή περισσότερων εργασιών.";
+$langRubricNotDelete = "Η ρουμπρίκα δεν μπορεί πλέον να διαγραφεί γιατί έχει χρησιμοποιηθεί για την βαθμολόγηση μίας ή περισσότερων εργασιών.";
+$langRubricGrade = "Βαθμ. με ρουμπρίκα";
+$langRubricGrading = "Βαθμολόγηση με ρουμπρίκα";
+$langGradedAt = 'βαθμολογήθηκε στις';
 
 /* * ***********************************************************
  * listerqusers.php
