@@ -2,7 +2,7 @@
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /* ========================================================================
- * Open eClass 3.5
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2017 Greek Universities Network - GUnet
@@ -480,6 +480,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // write to file
         fwrite($fd, $stringConfig);
         fclose($fd);
+        // install ready to use certificate templates
+        installCertTemplates();
+        // install badge icons
+        installBadgeIcons();
         // message
         $tool_content .= "
     <div class='alert alert-success'>$langInstallSuccess</div>
