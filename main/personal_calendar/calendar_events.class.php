@@ -21,7 +21,7 @@
  */
 
 /**
- * Eclass personal and course events manipulation library
+ * eClass personal and course events manipulation library
  *
  * @version 1.0
  * @absract
@@ -29,7 +29,7 @@
  * as a namespace.
  * However, it is created as a class for a possible need of instantiation of
  * event objects in the future. Another scenario could be the creation
- * of a set of abstract methods to be implemented seperatelly per module.
+ * of a set of abstract methods to be implemented separately per module.
  *
  */
 
@@ -58,9 +58,9 @@ class Calendar_Events {
     private static $calsettings;
 
     public static function get_calendar_settings() {
-        global $uid;        
-        
-        Calendar_Events::$calsettings = new stdClass();    
+        global $uid;
+
+        Calendar_Events::$calsettings = new stdClass();
         $q = Database::get()->querySingle("SELECT
                             user_id, view_type,
                             personal_color, course_color, deadline_color, admin_color,
@@ -68,7 +68,7 @@ class Calendar_Events {
                             CAST(show_course AS UNSIGNED INTEGER) AS show_course,
                             CAST(show_deadline AS UNSIGNED INTEGER) AS show_deadline,
                             CAST(show_admin AS UNSIGNED INTEGER) AS show_admin
-                        FROM personal_calendar_settings WHERE user_id = ?d", $uid);        
+                        FROM personal_calendar_settings WHERE user_id = ?d", $uid);
         if ($q) {
             Calendar_Events::$calsettings->user_id = $q->user_id;
             Calendar_Events::$calsettings->view_type = $q->view_type;
@@ -90,7 +90,7 @@ class Calendar_Events {
             Calendar_Events::$calsettings->show_course = 1;
             Calendar_Events::$calsettings->show_deadline = 1;
             Calendar_Events::$calsettings->show_admin = 1;
-        }        
+        }
     }
 
     public static function set_calendar_settings($show_personal, $show_course, $show_seadline, $show_admin) {
@@ -122,7 +122,7 @@ class Calendar_Events {
      * @return array event tuple
      */
     public static function get_admin_event($eventid) {
-                
+
         return Database::get()->querySingle("SELECT * FROM admin_calendar WHERE id = ?d", $eventid);
 
     }
@@ -159,7 +159,7 @@ class Calendar_Events {
     }
 
     /**
-     * Get calendar events for a given userincluding personal and course events
+     * Get calendar events for a given user including personal and course events
      * @param string $scope month|week|day the calendar selected view
      * @param string $startdate mysql friendly formatted string representing the start of the time frame for which events are seeked
      * @param string $enddate mysql friendly formatted string representing the end of the time frame for which events are seeked
@@ -232,12 +232,11 @@ class Calendar_Events {
                     $q .= " UNION ";
                 }
                 $dc = str_replace('start', 'tc.start_date', $datecond);
-                $q .= "SELECT tc.id, CONCAT(c.title,': ',tc.title), tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(tc.start_date, interval 1 hour), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+                $q .= "SELECT tc.id, CONCAT(c.title,': ',tc.title), tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(tc.start_date, interval 1 minute), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                         . "FROM tc_session tc JOIN course_user cu ON tc.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
                         . "WHERE cu.user_id =?d AND tc.active='1' "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
-
             }
             if (Calendar_Events::$calsettings->show_deadline == 1) {
                 // assignments
@@ -245,7 +244,7 @@ class Calendar_Events {
                     $q .= " UNION ";
                 }
                 $dc = str_replace('start', 'ass.deadline', $datecond);
-                $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(ass.deadline, interval 1 hour), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+                $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(ass.deadline, interval 1 minute), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                         . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
                         . "WHERE cu.user_id =?d AND (assign_to_specific = '0' OR  ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
                         . $dc;
@@ -268,7 +267,7 @@ class Calendar_Events {
             return null;
         }
         $q .= " ORDER BY start, event_type";
-        
+
         return Database::get()->queryArray($q, $q_args);
 
         /*if ($eventtypes == "all") {
@@ -379,7 +378,7 @@ class Calendar_Events {
                Database::get()->query("UPDATE admin_calendar SET source_event_id = id WHERE id = ?d",$eventid);
             }
         }
-        
+
 
         /* Additional events generated by recursion */
         if (isset($eventid) && !is_null($eventid) && !empty($recursion)) {
@@ -429,7 +428,7 @@ class Calendar_Events {
      */
     public static function update_event($eventid, $title, $start, $duration, $content, $recursivelly = false, $recursion = NULL, $reference_obj_id = NULL) {
         global $uid, $langNotValidInput;
-        
+
         if($recursivelly && !is_null($recursion)){
             $oldrec = Calendar_Events::get_event_recursion($eventid, 'personal');
             $p = "P".$recursion['repeat'].$recursion['unit'];
@@ -443,7 +442,7 @@ class Calendar_Events {
             Calendar_Events::delete_event($eventid, 'personal');
             return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, $reference_obj_id);
         }
-            
+
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
 
         $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
@@ -505,7 +504,7 @@ class Calendar_Events {
         if (!$is_admin) {
             return array('success' => false, 'message' => $langNotAllowed);
         }
-        
+
         if($recursivelly && !is_null($recursion)){
             $oldrec = Calendar_Events::get_event_recursion($eventid, 'admin');
             $p = "P".$recursion['repeat'].$recursion['unit'];
@@ -515,13 +514,13 @@ class Calendar_Events {
                 return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, null, $visibility_level);
             }
         }
-        
+
         if(!is_null($recursion) && !Calendar_Events::is_recursive($eventid, 'admin'))
         {
             Calendar_Events::delete_event($eventid, 'admin');
             return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, null, $visibility_level);
         }
-        
+
         $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
         $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
         $title = trim($title);
@@ -546,7 +545,7 @@ class Calendar_Events {
         'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
         return array('success' => true, 'message' => '', 'event' => $eventid);
     }
-    
+
     /**
      * Updates existing group of administrative recursive events and logs the action
      * @param int $eventid id in table admin_calendar
@@ -573,10 +572,10 @@ class Calendar_Events {
      */
     public static function delete_event($eventid, $eventtype, $recursivelly = false) {
         global $uid, $is_admin, $langNotAllowed;
-        
+
         if ($eventtype == 'personal') {
             $event = Calendar_Events::get_event($eventid);
-        } else {           
+        } else {
             $event = Calendar_Events::get_admin_event($eventid);
         }
 
@@ -586,12 +585,12 @@ class Calendar_Events {
         if ($eventtype == 'personal' && !$event) {
             return array('success' => false, 'message' => $langNotAllowed);
         }
-        if ($eventtype == 'admin' && (!$is_admin)) {            
+        if ($eventtype == 'admin' && (!$is_admin)) {
             return array('success' => false, 'message' => $langNotAllowed);
         }
         $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';
-        
-        $where_clause = ($recursivelly)? "WHERE source_event_id = ?d":"WHERE id = ?d";        
+
+        $where_clause = ($recursivelly)? "WHERE source_event_id = ?d":"WHERE id = ?d";
         $resp = Database::get()->query("DELETE FROM $t ".$where_clause, $eventid);
 
         $m = ($eventtype == 'personal')? MODULE_ID_PERSONALCALENDAR:MODULE_ID_ADMINCALENDAR;
@@ -610,12 +609,12 @@ class Calendar_Events {
      * @return type
      */
     public static function delete_recursive_event($eventid, $eventtype) {
-        global $langNotValidInput;        
-        $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';                        
-        $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM '.$t.' WHERE id=?d', $eventid)->source_event_id;        
-        
+        global $langNotValidInput;
+        $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';
+        $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM '.$t.' WHERE id=?d', $eventid)->source_event_id;
+
         return Calendar_Events::delete_event($rec_eventid, $eventtype, true);
-        
+
     }
     /**
      * Delete all events of a given user and logs the action
@@ -633,7 +632,7 @@ class Calendar_Events {
     }
 
     /**
-     * Get calendar events for a given userincluding personal and course events
+     * Get calendar events for a given user including personal and course events
      * @param string $scope month|week|day the calendar selected view
      * @param string $startdate mysql friendly formatted string representing the start of the time frame for which events are seeked
      * @param string $enddate mysql friendly formatted string representing the end of the time frame for which events are seeked
@@ -823,7 +822,7 @@ class Calendar_Events {
             Calendar_Events::set_calendar_view_preference($calendar_type);
             $view_func = $calendar_type."_calendar";
         }
-        else{
+        else {
             $view_func = Calendar_Events::$calsettings->view_type."_calendar";
         }
         if (is_null($month) || is_null($year) || $month<0 || $month>12 || $year<1990 || $year>2099) {
@@ -834,8 +833,7 @@ class Calendar_Events {
         }
         if ($calendar_type == 'small') {
             return Calendar_Events::small_month_calendar($day, $month, $year);
-        }
-        else{
+        } else {
             return Calendar_Events::$view_func($day, $month, $year);
         }
     }
@@ -850,6 +848,7 @@ class Calendar_Events {
      */
    public static function month_calendar($day, $month, $year) {
        global $uid, $langDay_of_weekNames, $langMonthNames, $langToday, $langDay, $langWeek, $langMonth, $langViewShow;
+
        $calendar_content = "";
         //Handle leap year
         $numberofdays = array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -964,6 +963,7 @@ class Calendar_Events {
       */
     public static function week_calendar($day, $month, $year) {
         global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langViewShow;
+
         $calendar_content = "";
         if (is_null($day)) {
             $day = 1;
@@ -997,13 +997,9 @@ class Calendar_Events {
         $calendar_content .= "</tr>";
         $calendar_content .= "</table>";
         $eventlist = Calendar_Events::get_calendar_events("week", "$year-$month-$day");
-        //$dateNow = date("j-n-Y", time());
         $numLine = 0;
 
         $calendar_content .= "<table class='table-default'>";
-        //                <tr><th colspan='2' class='left'>$langEvents</th>";
-        //$calendar_content .= "<th width='50'><b>$langActions</b></th>";
-        //$calendar_content .= "</tr>";
 
         $curday = 0;
         $now = getdate();
@@ -1022,13 +1018,6 @@ class Calendar_Events {
                     $cursorday->add(new DateInterval('P1D'));
                     $curday++;
                 }
-
-                /*if ($numLine % 2 == 0) {
-                    $classvis = "class='even'";
-                } else {
-                    $classvis = "class='odd'";
-                }*/
-
                 if ($thiseventdatetime == $today)
                     $class = 'today';
                 else
@@ -1070,6 +1059,7 @@ class Calendar_Events {
      */
    public static function day_calendar($day, $month, $year) {
        global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langViewShow;
+
         $calendar_content = "";
         if (is_null($day)) {
             $day = 1;
@@ -1171,6 +1161,7 @@ class Calendar_Events {
      */
    public static function month_calendar_item($event, $color) {
        global $urlServer, $is_admin;
+
        $link = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
        if ($event->event_type != 'personal' && $event->event_type != 'admin') {
            $link = str_replace('thiscourse', $event->course, $link);
@@ -1190,6 +1181,7 @@ class Calendar_Events {
      */
     public static function week_calendar_item($event, $class) {
         global $urlServer,$is_admin,$langVisibility, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
+
         $formatted_calendar_item = "";
         $formatted_calendar_item .= "<tr $class>";
         $formatted_calendar_item .= "<td valign='top'><div class=\"legend_color\" style=\"float:left;margin:3px;height:16px;width:16px;background-color:".Calendar_Events::$calsettings->{$event->event_group."_color"}."\"></div></td>";
@@ -1246,6 +1238,7 @@ class Calendar_Events {
      */
     public static function day_calendar_item($event, $class) {
         global $urlServer, $is_admin, $langVisibility, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
+
         $formatted_calendar_item = "";
         $formatted_calendar_item .= "<tr $class>";
         $formatted_calendar_item .= "<td valign='top'><div class=\"legend_color\" style=\"float:left;margin:3px;height:16px;width:16px;background-color:".Calendar_Events::$calsettings->{$event->event_group."_color"}."\"></div></td>";
@@ -1369,10 +1362,10 @@ class Calendar_Events {
        } else {
             $eventlist = Calendar_Events::get_calendar_events("month", $fromdatetime, $todatetime);
        }
-       
+
        $events = array();
        if (count($eventlist > 0)) {
-            foreach ($eventlist as $event) { 
+            foreach ($eventlist as $event) {
                 $event->title = q($event->title);
                 $event->content = q($event->content);
                 $event->course = q($event->course);
@@ -1386,7 +1379,14 @@ class Calendar_Events {
                 if ($event->event_type != 'personal' && $event->event_type != 'admin') {
                     $event->url = str_replace('thiscourse', $event->course, $event->url);
                 }
-                array_push($events, $event);
+                if ($event->event_type == 'teleconference') {
+                    $participants = Database::get()->querySingle("SELECT participants FROM tc_session WHERE id = ?d", $event->id)->participants;
+                    if (($status == USER_TEACHER) or ($participants == 0) or in_array($uid, explode(',', $participants))) {
+                        array_push($events, $event);
+                    }
+                } else {
+                    array_push($events, $event);
+                }
             }
        }
        return json_encode(array('success'=>1, 'result'=>$events, 'cid'=>$course_id));
@@ -1405,9 +1405,9 @@ class Calendar_Events {
 
         return $calendar;
    }
-   
+
    public static function is_recursive($event_id, $eventtype){
-        $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';        
+        $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';
         $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM '.$t.' WHERE id=?d', $event_id);
         if($rec_eventid && $rec_eventid->source_event_id>0){
             $event_count = Database::get()->querySingle('SELECT COUNT(*) c FROM '.$t.' WHERE source_event_id=?d', $rec_eventid->source_event_id);
@@ -1417,12 +1417,12 @@ class Calendar_Events {
         }
         return false;
     }
-    
-    
+
+
     public static function get_event_recursion($eventid, $eventtype)
     {
         $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';
         return Database::get()->querySingle('SELECT recursion_period, recursion_end FROM '.$t.' WHERE id=?d',$eventid);
-    }    
+    }
 
 }
