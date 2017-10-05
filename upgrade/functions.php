@@ -1794,6 +1794,56 @@ function installTheme($themesDir, $file_name) {
         }
     }    
 }
+
+
+/**
+ * @brief install ready to use certificate templates
+ * @global type $webDir
+ */
+function installCertTemplates() {
+    
+    global $webDir;
+    
+    $cert_default_dir = $webDir . "/template/default/img/game";
+    chdir($cert_default_dir);
+    foreach (glob("*.zip") as $zipfile) {
+        if (copy("$zipfile", "$webDir" . CERT_TEMPLATE_PATH . "$zipfile")) {
+            $archive = new PclZip("$webDir" . CERT_TEMPLATE_PATH . "$zipfile");
+            if ($archive->extract(PCLZIP_OPT_PATH , "$webDir" . CERT_TEMPLATE_PATH) == 0) {
+                die("Error : ".$archive->errorInfo(true));
+            }
+            unlink("$webDir" . CERT_TEMPLATE_PATH . "$zipfile");            
+        }
+    }
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 1', '', 'certificate1.html')");
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 2', '', 'certificate2.html')");
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 3', '', 'certificate3.html')");
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 4', '', 'certificate4.html')");    
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 5', '', 'certificate5.html')");
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 6', '', 'certificate6.html')");
+}
+
+/**
+ * install ready to use badge icons
+ * @global type $webDir
+ */
+function installBadgeIcons () {
+    
+    global $webDir;
+    
+    $cert_default_dir = $webDir . "/template/default/img/game";
+    chdir($cert_default_dir);
+    foreach (glob("*.png") as $icon) {
+        if (!copy("$icon", "$webDir" . BADGE_TEMPLATE_PATH . "$icon")) {
+            die("Error copying badge icon!");
+        }
+        $iconname = substr($icon, 0, -4);
+        Database::get()->query("INSERT INTO badge_icon(name, description, filename) VALUES (?s, '', ?s)", $iconname, $icon);
+    }
+}
+
+
+
 function setGlobalContactInfo() {
     global $Institution, $postaddress, $telephone, $fax;
 

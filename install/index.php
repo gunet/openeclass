@@ -461,7 +461,7 @@ elseif (isset($_POST['install7'])) {
     // create config.php
     $stringConfig = '<?php
 /* ========================================================
- * Open eClass 3.0 configuration file
+ * Open eClass 3.x configuration file
  * Created by install on ' . date('Y-m-d H:i') . '
  * ======================================================== */
 
@@ -479,6 +479,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     } else {
         // write to file
         fwrite($fd, $stringConfig);
+        // install certificate templates
+        installCertTemplates();
         // message
         $tool_content .= "
     <div class='alert alert-success'>$langInstallSuccess</div>

@@ -3709,7 +3709,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `expires` datetime DEFAULT NULL,
             PRIMARY KEY (`id`)
         ) $tbl_options");
-
+        
+        // install predefined cert templates
+        installCertTemplates();
+        // install badge icons
+        installBadgeIcons();
+                               
         // tc attendance tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
             `id` int(11) NOT NULL DEFAULT '0',
