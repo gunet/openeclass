@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 
@@ -37,30 +37,31 @@ require_once 'personal_calendar/calendar_events.class.php';
 if (isset($uid)) {
     Calendar_Events::get_calendar_settings();
 }
-if(isset($_GET['from']) && isset($_GET['to'])){        
+if (isset($_GET['from']) && isset($_GET['to'])){
+    header('Content-Type: application/json; charset=UTF-8');
     echo Calendar_Events::bootstrap_events($_GET['from'], $_GET['to']);
 }
-elseif(isset($_GET['caltype']) && $_GET['caltype'] == 'small'){
+elseif (isset($_GET['caltype']) && $_GET['caltype'] == 'small'){
     $day = (isset($_GET['day']))? intval($_GET['day']):null;
     $month = (isset($_GET['month']))? intval($_GET['month']):null;
     $year = (isset($_GET['year']))? intval($_GET['year']):null;
-    echo Calendar_Events::calendar_view($day, $month, $year, 'small'); 
+    echo Calendar_Events::calendar_view($day, $month, $year, 'small');
 }
-elseif(isset($_GET['caltype']) && $_GET['caltype'] == 'week'){
+elseif (isset($_GET['caltype']) && $_GET['caltype'] == 'week'){
    $day = (isset($_GET['day']))? intval($_GET['day']):null;
    $month = (isset($_GET['month']))? intval($_GET['month']):null;
    $year = (isset($_GET['year']))? intval($_GET['year']):null;
-   echo Calendar_Events::calendar_view($day, $month, $year, 'week'); 
+   echo Calendar_Events::calendar_view($day, $month, $year, 'week');
 }
-elseif(isset($_GET['caltype']) && $_GET['caltype'] == 'day'){
+elseif (isset($_GET['caltype']) && $_GET['caltype'] == 'day'){
    $day = (isset($_GET['day']))? intval($_GET['day']):null;
    $month = (isset($_GET['month']))? intval($_GET['month']):null;
    $year = (isset($_GET['year']))? intval($_GET['year']):null;
-   echo Calendar_Events::calendar_view($day, $month, $year, 'day'); 
+   echo Calendar_Events::calendar_view($day, $month, $year, 'day');
 }
-else{
+else {
    $day = (isset($_GET['day']))? intval($_GET['day']):null;
    $month = (isset($_GET['month']))? intval($_GET['month']):null;
    $year = (isset($_GET['year']))? intval($_GET['year']):null;
-   echo Calendar_Events::calendar_view($day, $month, $year, 'month'); 
+   echo Calendar_Events::calendar_view($day, $month, $year, 'month');
 }
