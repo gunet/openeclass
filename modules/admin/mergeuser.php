@@ -49,7 +49,13 @@ if (isset($_REQUEST['u'])) {
     $info = Database::get()->querySingle("SELECT * FROM user WHERE id = ?s", $u);
     if ($info) {
         $info = (array) $info;
-        $auth_id = isset($auth_ids[$info['password']]) ? $auth_ids[$info['password']] : 1;
+        if (in_array($info['password'], $auth_ids)) {            
+            $temp = array_keys($auth_ids, $info['password']);// to avoid strict standards warning
+            $auth_id = array_pop($temp);
+        } else {
+            $auth_id = 1; // eclass default method
+        }
+                
         $legend = q(sprintf($langUserMergeLegend, $info['username']));
         $status_names = array(USER_GUEST => $langGuest, USER_TEACHER => $langTeacher, USER_STUDENT => $langStudent);
         $target = false;
@@ -71,9 +77,14 @@ if (isset($_REQUEST['u'])) {
             }
         }
         $target_field = $target_user_input = '';
-        $submit_button = $langSearch;
+        $submit_button = $langSearch;        
         if ($target) {
-            $target_auth_id = isset($auth_ids[$target['password']]) ? $auth_ids[$target['password']] : 1;
+            if (in_array($target['password'], $auth_ids)) {
+                $temp = array_keys($auth_ids, $target['password']);// to avoid strict standards warning
+                $target_auth_id = array_pop($temp);
+            } else {
+                $target_auth_id = 1; // eclass default method
+            }
             $target_field .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
                                               <div class='col-sm-9'><p class='form-control-static'>" . display_user($target['id']) .
                     " (" . q($target['username']) . ")</p></div></div>
