@@ -43,7 +43,13 @@ if (isset($_REQUEST['u'])) {
     $info = Database::get()->querySingle("SELECT * FROM user WHERE id = ?s", $u);
     if ($info) {
         $info = (array) $info;
-        $data['auth_id'] = isset($auth_ids[$info['password']]) ? $auth_ids[$info['password']] : 1;
+        if (in_array($info['password'], $auth_ids)) {            
+            $temp = array_keys($auth_ids, $info['password']);// to avoid strict standards warning
+            $data['auth_id'] = array_pop($temp);
+        } else {
+            $data['auth_id'] = 1; // eclass default method
+        }
+       
         $legend = q(sprintf($langUserMergeLegend, $info['username']));
         $data['status_names'] = $status_names = array(USER_GUEST => $langGuest, USER_TEACHER => $langTeacher, USER_STUDENT => $langStudent);
         $target = false;
@@ -62,17 +68,24 @@ if (isset($_REQUEST['u'])) {
             else
                 $target = false;
         }
+
         $data['target_field'] = $data['target_user_input'] = '';
         $data['submit_button'] = $langSearch;
+
         if ($target) {
-            $target_auth_id = isset($auth_ids[$target['password']]) ? $auth_ids[$target['password']] : 1;
+            if (in_array($target['password'], $auth_ids)) {
+                $temp = array_keys($auth_ids, $target['password']);// to avoid strict standards warning
+                $target_auth_id = array_pop($temp);
+            } else {
+                $target_auth_id = 1; // eclass default method
+            }
             $data['target_field'] .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
-                                              <div class='col-sm-9'>" . display_user($target['id']) .
-                    " (" . q($target['username']) . ")</div></div>
-                                    <div class='form-group'><label class='col-sm-3 control-label'>$langEditAuthMethod:</label>
-                                              <div class='col-sm-9'>" . get_auth_info($target_auth_id) . "</div></div>
-                                                  <div class='form-group'><label class='col-sm-3 control-label'>$langProperty:</label>                                          
-                                              <div class='col-sm-9'>" . q($status_names[$target['status']]) . "</div></div>";
+                                              <div class='col-sm-9'><p class='form-control-static'>" . display_user($target['id']) .
+                    " (" . q($target['username']) . ")</p></div></div>
+                <div class='form-group'><label class='col-sm-3 control-label'>$langEditAuthMethod:</label>
+                          <div class='col-sm-9'>" . get_auth_info($target_auth_id) . "</div></div>
+                              <div class='form-group'><label class='col-sm-3 control-label'>$langProperty:</label>                                          
+                          <div class='col-sm-9'>" . q($status_names[$target['status']]) . "</div></div>";
             if ($info['status'] == USER_TEACHER and $target['status'] != USER_TEACHER) {
                 $target = false;
                 $data['target_field'] .= "<div class='alert alert-warning'>$langUserMergeForbidden</div>";
@@ -106,7 +119,7 @@ view('admin.users.mergeuser', $data);
  * @param type $target
  */
 function do_user_merge($source, $target) {
-    global $langUserMergeSuccess, $langBack;
+    global $langUserMergeSuccess;
 
     $source_id = $source['id'];
     $target_id = $target['id'];
