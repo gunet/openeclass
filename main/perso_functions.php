@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -32,7 +32,7 @@ require_once 'modules/message/class.msg.php';
  * @brief display user courses
  * @global type $session
  * @global array $lesson_ids
- * @global type $urlServer 
+ * @global type $urlServer
  * @global type $langUnregCourse
  * @global type $langAdm
  * @global type $langNotEnrolledToLessons
@@ -57,27 +57,27 @@ function getUserLessonInfo($uid) {
                              course.prof_names professor,
                              course.lang,
                              course.visible,
-                             course_user.status status	                        
+                             course_user.status status
                        FROM course, course_user, user
                        WHERE course.id = course_user.course_id AND
                              course_user.user_id = ?d AND
                              user.id = ?d
                        ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
     } else {
-        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
+        $myCourses = Database::get()->queryArray('SELECT course.id course_id,
                              course.code code,
                              course.public_code,
                              course.title title,
                              course.prof_names professor,
                              course.lang,
                              course.visible,
-                             course_user.status status                                
+                             course_user.status status
                        FROM course, course_user, user
                        WHERE course.id = course_user.course_id AND
                              course_user.user_id = ?d AND
                              user.id = ?d AND
-                             course.visible != ?d
-                       ORDER BY course.title, course.prof_names", $uid, $uid, COURSE_INACTIVE);
+                             (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
+                       ORDER BY course.title, course.prof_names', $uid, $uid);
     }
 
     //getting user's lesson info
@@ -93,9 +93,9 @@ function getUserLessonInfo($uid) {
                 $visclass = "not_visible";
             }
             $lesson_content .= "<tr class='$visclass'>
-			  <td class='text-left'>
-			  <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
-			  <div class='smaller'>" . q($data->professor) . "</div></td>";
+              <td class='text-left'>
+              <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
+              <div class='smaller'>" . q($data->professor) . "</div></td>";
             $lesson_content .= "<td class='text-center right-cell'>";
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
@@ -113,20 +113,20 @@ function getUserLessonInfo($uid) {
             $lesson_content .= "<div class='alert alert-info'>$langWelcomeSelect $langWelcomeProfPerso</div>";
         } else {
             $lesson_content .= "<div class='alert alert-info'>$langWelcomeSelect $langWelcomeStudPerso</div>";
-        }        
+        }
     }
     return $lesson_content;
 }
 
 /**
- * @brief get last month course announcements 
+ * @brief get last month course announcements
  * @global type $urlAppend
  * @global type $langMore
  * @global type $dateFormatLong
  * @global type $langNoAnnouncementsExist
  * @param type $param
  * @return string
- */ 
+ */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null) {
 
     global $urlAppend, $dateFormatLong, $langAdminAn;
@@ -152,7 +152,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
         $q = Database::get()->queryArray("
                                 SELECT admin_announcement.title,
                                              admin_announcement.`date` AS an_date,
-                                             admin_announcement.id                                            
+                                             admin_announcement.id
                                 FROM admin_announcement
                                 WHERE admin_announcement.visible = 1
                                         AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
@@ -180,10 +180,10 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
                                 AND announcement.`date` >= ?s
                                 AND course_module.module_id = ?d
                                 AND course_module.visible = 1 $course_filter_sql)
-                                UNION 
+                                UNION
                                 (SELECT admin_announcement.title,
                                              admin_announcement.`date` AS admin_an_date,
-                                             admin_announcement.id, admin_announcement.body AS content, '', ''                                             
+                                             admin_announcement.id, admin_announcement.body AS content, '', ''
                                 FROM admin_announcement
                                 WHERE   admin_announcement.visible = 1
                                         AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
@@ -208,9 +208,9 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
                                 <div class='text-title'>
                                     <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                 </div>
-        
+
                             <div class='text-grey'>$course_title</div>
-                            
+
                             <div>$ann_date</div>
                         </div>
                     </li>";
@@ -226,9 +226,9 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
                             <div class='text-title'>
                                 <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                             </div>
-    
+
                         <div class='text-grey'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
-                        
+
                         <div>$ann_date</div>
                     </div>
                 </li>";
@@ -259,11 +259,11 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
  * @return string
  */
 function getUserMessages() {
-           
+
     global $uid, $urlServer, $langFrom, $dateFormatLong;
-    
-    $message_content = '';    
-               
+
+    $message_content = '';
+
     $mbox = new Mailbox($uid, 0);
     $msgs = $mbox->getInboxMsgs('', 5);
     foreach ($msgs as $message) {
@@ -274,15 +274,15 @@ function getUserMessages() {
         }
         $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
         $message_content .= "<li class='list-item'>
-                                <div class='item-wholeline'>                                    
+                                <div class='item-wholeline'>
                                     <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
                                         <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
-                                    </div>                                    
+                                    </div>
                                     <div class='text-grey'>$course_title</div>
                                     <div>$message_date</div>
                                 </div>
                             </li>";
-    }    
+    }
     return $message_content;
 }
 
