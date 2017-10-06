@@ -4,7 +4,7 @@
  * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -78,13 +78,18 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
         if ($_FILES['filename']['size'] > 0) { // replace file if needed
             $filename = $_FILES['filename']['name'];
             if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
-                $old_file = Database::get()->querySingle("SELECT filename FROM certificate_template WHERE id = ?d", $_POST['cert_id'])->filename;
-                unlink($webDir . CERT_TEMPLATE_PATH . $old_file); // delete old icon
-                Database::get()->querySingle("UPDATE certificate_template SET
-                                        name = ?s,
-                                        description = ?s,
-                                        filename = ?s
-                                       WHERE id = ?d", $_POST['name'], $_POST['description'], $filename, $_POST['cert_id']);
+                $archive = new PclZip("$webDir" . CERT_TEMPLATE_PATH . "$filename");
+                if ($archive->extract(PCLZIP_OPT_PATH , "$webDir" . CERT_TEMPLATE_PATH)) {
+                    $old_file = Database::get()->querySingle("SELECT filename FROM certificate_template WHERE id = ?d", $_POST['cert_id'])->filename;
+                    unlink($webDir . CERT_TEMPLATE_PATH . $old_file); // delete old template
+                    Database::get()->querySingle("UPDATE certificate_template SET
+                                            name = ?s,
+                                            description = ?s,
+                                            filename = ?s
+                                           WHERE id = ?d", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
+                } else {
+                    die("Error : ".$archive->errorInfo(true));
+                }
             }
         } else {
             Database::get()->querySingle("UPDATE certificate_template SET
@@ -95,11 +100,16 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
     } else {        
         $filename = $_FILES['filename']['name'];
         if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
-            Database::get()->querySingle("INSERT INTO certificate_template SET 
-                                            name = ?s, 
+            $archive = new PclZip("$webDir" . CERT_TEMPLATE_PATH . "$filename");
+            if ($archive->extract(PCLZIP_OPT_PATH , "$webDir" . CERT_TEMPLATE_PATH)) {
+                Database::get()->querySingle("INSERT INTO certificate_template SET 
+                                            name = ?s,                                             
                                             description = ?s,
-                                            filename = ?s", $_POST['name'], $_POST['description'], $filename);
-            Session::Messages($langDownloadEnd, 'alert-success');
+                                            filename = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile']);
+                Session::Messages($langDownloadEnd, 'alert-success');
+            } else {
+                die("Error : ".$archive->errorInfo(true));
+            }
         }
     }
 } elseif (isset($_POST['submit_badge_icon'])) { // insert / update badge icon
@@ -136,12 +146,13 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
 // display forms
 if (isset($_GET['action'])) {
     if (($_GET['action'] == 'add_cert') or ($_GET['action'] == 'edit_cert')) { // add certificate template
-        $cert_name = $cert_description = $cert_hidden_id = '';
+        $cert_name = $cert_description = $cert_hidden_id = $cert_htmlfile = '';
         if (isset($_GET['cid'])) {
             $cert_id = $_GET['cid'];
             $cert_data = Database::get()->querySingle("SELECT * FROM certificate_template WHERE id = ?d", $cert_id);
             $cert_name = $cert_data->name;
             $cert_description = $cert_data->description;
+            $cert_htmlfile = $cert_data->filename;
             $cert_hidden_id = "<input type='hidden' name='cert_id' value='$cert_id'>";
         }
         $tool_content .= "<div class='row'>
@@ -149,9 +160,15 @@ if (isset($_GET['action'])) {
                         <div class='form-wrapper'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
                             <div class='form-group'>
-                                <label class='col-sm-2 control-label'>$langFileName:</label>
+                                <label class='col-sm-2 control-label'>$langZipFile:</label>
                                 <div class='col-sm-10'>
                                     <input type='file' name='filename' value=''>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <label class='col-sm-2 control-label'>$langHtmlFile:</label>
+                                <div class='col-sm-10'>
+                                    <input type='text' class='form-control' name='certhtmlfile' value='$cert_htmlfile'>
                                 </div>
                             </div>
                             <div class='form-group'>
@@ -248,15 +265,16 @@ if (isset($_GET['action'])) {
                                       <td>" . ellipsize_html($cert_data->description, 100) . "</td>";
                     $tool_content .= "<td class='text-center option-btn-cell'>".
                             action_button(array(
+                                array('title' => $langEdit,
+                                    'icon' => 'fa-edit',
+                                    'url' => "$_SERVER[SCRIPT_NAME]?action=edit_cert&amp;cid=$cert_data->id"
+                                    ),
                                 array('title' => $langDelete,
                                     'icon' => 'fa-times',
                                     'url' => "$_SERVER[SCRIPT_NAME]?del_cert=$cert_data->id",
                                     'confirm' => $langConfirmDelete,
-                                    'class' => 'delete'),
-                                array('title' => $langEdit,
-                                    'icon' => 'fa-edit',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?action=edit_cert&amp;cid=$cert_data->id"
-                                    ))).
+                                    'class' => 'delete')
+                                )).
                             "</td></tr>";
                 }
     $tool_content .= "</table>";

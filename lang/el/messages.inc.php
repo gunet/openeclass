@@ -2422,6 +2422,7 @@ $langExportIMSCP = "Εξαγωγή σε IMS CP 1.1.4";
 $langFailed = "Ολοκληρώθηκε ανεπιτυχώς";
 $langFileScormError = "Το αρχείο που θα ενημερωθεί δεν είναι έγκυρο.";
 $langFileName = "Aρχείο";
+$langHtmlFile = "Όνομα html αρχείου";
 $langFullScreen = "Πλήρης οθόνη ";
 $langGlobalProgress = "Πρόοδος της γραμμής μάθησης: ";
 $langImport = "Εισαγωγή";

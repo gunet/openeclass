@@ -1809,10 +1809,11 @@ function installCertTemplates() {
     foreach (glob("*.zip") as $zipfile) {
         if (copy("$zipfile", "$webDir" . CERT_TEMPLATE_PATH . "$zipfile")) {
             $archive = new PclZip("$webDir" . CERT_TEMPLATE_PATH . "$zipfile");
-            if ($archive->extract(PCLZIP_OPT_PATH , "$webDir" . CERT_TEMPLATE_PATH) == 0) {
+            if ($archive->extract(PCLZIP_OPT_PATH , "$webDir" . CERT_TEMPLATE_PATH)) {
+                unlink("$webDir" . CERT_TEMPLATE_PATH . "$zipfile");                
+            } else {
                 die("Error : ".$archive->errorInfo(true));
             }
-            unlink("$webDir" . CERT_TEMPLATE_PATH . "$zipfile");            
         }
     }
     Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 1', '', 'certificate1.html')");
@@ -1827,7 +1828,7 @@ function installCertTemplates() {
  * install ready to use badge icons
  * @global type $webDir
  */
-function installBadgeIcons () {
+function installBadgeIcons() {
     
     global $webDir;
     
