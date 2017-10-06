@@ -481,6 +481,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         fwrite($fd, $stringConfig);
         // install certificate templates
         installCertTemplates();
+        // install badge icons
+        installBadgeIcons();
         // message
         $tool_content .= "
     <div class='alert alert-success'>$langInstallSuccess</div>
