@@ -41,13 +41,13 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
     $questionTypeWord = $objQuestionTmp->selectTypeWord($answerType);
     $tool_content .= "
-            <div class='panel panel-success'>
+            <div class='panel panel-success qPanel' id='qPanel$questionId'>
               <div class='panel-heading'>
                 <h3 class='panel-title'>$langQuestion : $i ($questionWeight $message)".(($exerciseType == 2) ? " / " . $nbrQuestions : "")."</h3>
               </div>
               <div class='panel-body'>
                     <h4>
-                        <small>$questionTypeWord</small><br>" . q_math($questionName) . " 
+                        <small>$questionTypeWord</small><br>" . q_math($questionName) . "
                     </h4>
                     $questionDescription
                     <div class='text-center'>
@@ -159,10 +159,10 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                 if ($answerId == $nbrAnswers) {
                     // if it remains answers to shown at the right side
                     while (isset($Select[$cpt2])) {
-                            $tool_content .= "<tr class='even'>                                                
+                            $tool_content .= "<tr class='even'>
                                               <td>&nbsp;</td>
                                               <td>&nbsp;</td>
-                                              <td>" . "<b>" . q($Select[$cpt2]['Lettre']) . ".</b> " . q($Select[$cpt2]['Reponse']) . "</td>                                                
+                                              <td>" . "<b>" . q($Select[$cpt2]['Lettre']) . ".</b> " . q($Select[$cpt2]['Reponse']) . "</td>
                                           </tr>";
                         $cpt2++;
                     } // end while()

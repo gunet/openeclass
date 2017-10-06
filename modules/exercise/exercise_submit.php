@@ -150,16 +150,16 @@ if ($ips && !$is_editor){
     }
 }
 // if the user has clicked on the "Cancel" button
-// ends the exercise and returns to the exercise list
+// end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
-        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-        $exercisetotalweight = $objExercise->selectTotalWeighting();
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
-                WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
-        Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-        unset_exercise_var($exerciseId);
-        Session::Messages($langAttemptWasCanceled);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
+    $exercisetotalweight = $objExercise->selectTotalWeighting();
+    Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
+        WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
+    Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+    unset_exercise_var($exerciseId);
+    Session::Messages($langAttemptWasCanceled);
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
 load_js('tools.js');
@@ -236,7 +236,7 @@ $nbrQuestions = count($questionList);
 
 // determine begin time:
 // either from a previews attempt meaning that user hasn't sumbited his answers permanantly
-// 		and exerciseTimeConstrain hasn't yet passed,
+// and exerciseTimeConstrain hasn't yet passed,
 // either start a new attempt and count now() as begin time.
 
 if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || isset($paused_attempt)) {
@@ -466,6 +466,13 @@ foreach ($questionList as $questionId) {
     }
 } // end foreach()
 
+// Enable check for unanswered questions when displaying more than one question
+if ($i > 1) {
+    $exercise_check_unanswered = '$(exercise_check_unanswered);';
+} else {
+    $exercise_check_unanswered = '';
+}
+
 if (!$questionList) {
     $tool_content .= "
             <div class='alert alert-warning'>$langNoQuestion</div>
@@ -490,48 +497,50 @@ $tool_content .= "</form>";
 if ($questionList) {
 $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
 $head_content .= "<script type='text/javascript'>
-                $(window).bind('beforeunload', function(){
-                    var date = new Date();
-                    date.setTime(date.getTime()+(30*1000));
-                    var expires = '; expires='+date.toGMTString();
-                    document.cookie = 'inExercise=$exerciseId'+expires;
-                    return '" . js_escape($langLeaveExerciseWarning) ."';
-                });
-                $(window).bind('unload', function(){
-                    $.ajax({
-                      type: 'POST',
-                      url: '',
-                      data: { action: 'endExerciseNoSubmit', eid: $exerciseId, eurid: $eurid},
-                      async: false
-                    });
-                });
-    		$(document).ready(function(){
-                    timer = $('#progresstime');
-                    timer.time = timer.text();
-                    timer.text(secondsToHms(timer.time--));
-                    hidden_timer = $('#secsRemaining');
-                    hidden_timer.time = timer.time;
-                    setInterval(function() {
-                        hidden_timer.val(hidden_timer.time--);
-                        if (hidden_timer.time + 1 == 0) {
-                            clearInterval();
-                        }
-                    }, 1000);
-    		    countdown(timer, function() {
-    		        $('.exercise').submit();
-    		    });
-                    $('.exercise').submit(function(){
-                            $(window).unbind('beforeunload');
-                            $(window).unbind('unload');
-                            document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-                    });
-                    setInterval(function() {
-                        $.ajax({
-                          type: 'POST',
-                          data: { action: 'refreshSession'}
-                        });
-                    }, $refresh_time);
-    		});
-                $(exercise_enter_handler);</script>";
+    $(window).bind('beforeunload', function(){
+        var date = new Date();
+        date.setTime(date.getTime()+(30*1000));
+        var expires = '; expires='+date.toGMTString();
+        document.cookie = 'inExercise=$exerciseId'+expires;
+        return '" . js_escape($langLeaveExerciseWarning) ."';
+    });
+    $(window).bind('unload', function(){
+        $.ajax({
+          type: 'POST',
+          url: '',
+          data: { action: 'endExerciseNoSubmit', eid: $exerciseId, eurid: $eurid},
+          async: false
+        });
+    });
+    $(document).ready(function(){
+        timer = $('#progresstime');
+        timer.time = timer.text();
+        timer.text(secondsToHms(timer.time--));
+        hidden_timer = $('#secsRemaining');
+        hidden_timer.time = timer.time;
+        setInterval(function() {
+            hidden_timer.val(hidden_timer.time--);
+            if (hidden_timer.time + 1 == 0) {
+                clearInterval();
+            }
+        }, 1000);
+        countdown(timer, function() {
+            $('.exercise').submit();
+        });
+        $('.exercise').submit(function(){
+            $(window).unbind('beforeunload');
+            $(window).unbind('unload');
+            document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        });
+        setInterval(function() {
+            $.ajax({
+              type: 'POST',
+              data: { action: 'refreshSession'}
+            });
+        }, $refresh_time);
+    });
+    $(exercise_enter_handler);
+    $exercise_check_unanswered
+</script>";
 }
 draw($tool_content, 2, null, $head_content);

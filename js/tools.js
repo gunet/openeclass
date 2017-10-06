@@ -82,30 +82,30 @@ function confirmation(message) {
 
 
 function add_bookmark() {
-	// add a "rel" attrib if Opera 7+
-	if(window.opera) {
-		if ($("a.jqbookmark").attr("rel") != ""){ // don't overwrite the rel attrib if already set
-			$("a.jqbookmark").attr("rel","sidebar");
-		}
-	}
+  // add a "rel" attrib if Opera 7+
+  if(window.opera) {
+    if ($("a.jqbookmark").attr("rel") != ""){ // don't overwrite the rel attrib if already set
+      $("a.jqbookmark").attr("rel","sidebar");
+    }
+  }
 
-	$("a.jqbookmark").click(function(event){
-		event.preventDefault(); // prevent the anchor tag from sending the user off to the link
-		var url = this.href;
-		var title = this.title;
+  $("a.jqbookmark").click(function(event){
+    event.preventDefault(); // prevent the anchor tag from sending the user off to the link
+    var url = this.href;
+    var title = this.title;
 
-		if (window.sidebar) { // Mozilla Firefox Bookmark
-			window.sidebar.addPanel(title, url,"");
-		} else if( window.external ) { // IE Favorite
-			window.external.AddFavorite( url, title);
-		} else if(window.opera) { // Opera 7+
-			return false; // do nothing - the rel="sidebar" should do the trick
-		} else { // for Safari, Konq etc - browsers who do not support bookmarking scripts (that i could find anyway)
-			 alert('Unfortunately, this browser does not support the requested action,'
-			 + ' please bookmark this page manually.');
-		}
+    if (window.sidebar) { // Mozilla Firefox Bookmark
+      window.sidebar.addPanel(title, url,"");
+    } else if( window.external ) { // IE Favorite
+      window.external.AddFavorite( url, title);
+    } else if(window.opera) { // Opera 7+
+      return false; // do nothing - the rel="sidebar" should do the trick
+    } else { // for Safari, Konq etc - browsers who do not support bookmarking scripts (that i could find anyway)
+      alert('Unfortunately, this browser does not support the requested action,'
+        + ' please bookmark this page manually.');
+    }
 
-	});
+  });
 }
 
 function control_deactivate_off() {
@@ -253,25 +253,24 @@ function course_list_handler() {
 
 // User profile UI
 
-function profile_init()
-{
-        $(document).on('click', '#delete', function() {
-                if (confirm(lang.confirmDelete)) {
-                        var delBtn = $(this).closest("div");
-                        delBtn.find('span').remove();
-                        $("li#profile_menu_dropdown img").attr("src", "/openeclass/template/default/img/default_32.jpg");
-                        $.post('profile.php', { delimage: true });
-                }
-        });
+function profile_init() {
+    $(document).on('click', '#delete', function() {
+        if (confirm(lang.confirmDelete)) {
+            var delBtn = $(this).closest("div");
+            delBtn.find('span').remove();
+            $("li#profile_menu_dropdown img").attr("src", "/openeclass/template/default/img/default_32.jpg");
+            $.post('profile.php', { delimage: true });
+        }
+    });
 }
 
-function toggleMenu(mid){
-	menuObj = document.getElementById(mid);
+function toggleMenu(mid) {
+  menuObj = document.getElementById(mid);
 
-	if(menuObj.style.display=='none')
-		menuObj.style.display='block';
-	else
-		menuObj.style.display='none';
+  if(menuObj.style.display=='none')
+    menuObj.style.display='block';
+  else
+    menuObj.style.display='none';
 }
 
 function exercise_enter_handler() {
@@ -309,29 +308,125 @@ function exercise_enter_handler() {
         pivot2 = 0;
         while(inputs[pivot2].name != $(this)[0].name)
             pivot2++;
-        inputs[pivot2].select();
+        $(inputs[pivot2]).select();
         inputs.pivot = pivot2;
         ck = $(':checked');
         answers = [];
         for(i = 0; i < ck.length; i++) {
-        	ans = {
-        		name : ck[i].name,
-        		value : ck[i].value
-        	}
-        	answers.push(ans);
+          ans = {
+            name : ck[i].name,
+            value : ck[i].value
+          }
+          answers.push(ans);
         }
         localStorage["answers"] = JSON.stringify(answers);
     });
 }
 
+// Keep track of which questions have been answered
+function exercise_check_unanswered() {
+    var cancelCheck = false;
+    var exercise_id = function (el) {
+        return el.closest('.qPanel')[0].id.replace('qPanel', '');
+    }
+    var continueSubmit = function () {
+        $(window).unbind('beforeunload');
+        $(window).unbind('unload');
+        document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        cancelCheck = true;
+        $('.exercise').off().submit();
+    }
+    var answered = {};
+    var qids = $('.qPanel').map(function () {
+        return this.id.replace('qPanel', '');
+    }).get();
+    $('.qPanel :input').change(function () {
+        var el = $(this);
+        var id = exercise_id(el);
+        answered[id] = true;
+        if (el.attr('type') == 'text') {
+            // Text inputs are fill-in-blanks questions:
+            // if any remain empty, question remains unanswered
+            el.siblings('input').each(function () {
+                if (this.value == '') {
+                    answered[id] = false;
+                }
+            });
+        } else if (el.is('select')) {
+            // Selects are matching questions:
+            // if any remain unset, question remains unanswered
+            el.closest('.qPanel').find('select').each(function () {
+                if (this.value == '0') {
+                    answered[id] = false;
+                }
+            });
+        }
+    });
+    $('.btn[name=buttonCancel]').click(continueSubmit);
+    $('.exercise').submit(function (e) {
+        var unansweredCount = 0, firstUnanswered;
+
+        if ('tinymce' in window) {
+            // Check for empty tinyMCE instances
+            tinymce.get().forEach(function (e) {
+                if (e.getContent({format: 'text'}).trim() != '') {
+                    var id = exercise_id($(e.container));
+                    answered[id] = true;
+                }
+            });
+        }
+        qids.forEach(function (id) {
+            if (!answered[id]) {
+                if (!firstUnanswered) {
+                    firstUnanswered = id;
+                }
+                unansweredCount++;
+            }
+        });
+        if (!cancelCheck && unansweredCount) {
+            e.preventDefault();
+            var message = 'There are _ unanswered questions. Do you want to proceed with submission or go to first unanswered question?'.replace('_', unansweredCount);
+            bootbox.dialog({
+                title: 'Unanswered questions',
+                message:
+                    '<div class="row">' +
+                      '<div class="col-md-12">' +
+                        '<h4>Unanswered questions</h4>' +
+                        '<p>' + message + '</p>' +
+                      '</div>' +
+                    '</div>',
+                buttons: {
+                    submit: {
+                        label: 'Submit',
+                        className: 'btn-warning',
+                        callback: continueSubmit
+                    },
+                    goBack: {
+                        label: 'Go Back',
+                        className: 'btn-success',
+                        callback: function () {
+                            $.unblockUI();
+                            $('html').animate({
+                                scrollTop: $('#qPanel' + firstUnanswered).offset().top + 'px'
+                            }, 'fast');
+                        }
+                    }
+                }
+            });
+        } else {
+            continueSubmit();
+        }
+    });
+}
+
 function countdown(timer, callback) {
     int = setInterval(function() {
-    	timer.text(secondsToHms(timer.time--));
-        if (timer.time + 1 == 0) {
-            clearInterval(int);
-            // 600ms - width animation time
-            callback && setTimeout(callback, 600);
-        }
+      timer.text(secondsToHms(timer.time--));
+      if (timer.time + 1 == 0) {
+        clearInterval(int);
+        // 600ms - width animation time
+        callback && setTimeout(callback, 600);
+      }
     }, 1000);
 }
 
