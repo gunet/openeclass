@@ -409,10 +409,10 @@ if ($is_editor) {
 
 if (isset($display) and $display == TRUE) {
     if ($is_editor) {
-        if (isset($element_id)) {
+        if (isset($element_id)) {            
             $pageName = $element_title;
             // display certificate settings and resources
-            display_activities($element, $element_id);
+            display_activities($element, $element_id);            
         } else { // display all certificate
                 display_course_completion();
 	        display_badges();

@@ -64,62 +64,57 @@ function display_certificates() {
                                 </div>
                             </div>
                             <div class='res-table-wrapper'>";
-        if (count($sql_cer) == 0) { // If no certificates
+    if (count($sql_cer) == 0) { // If no certificates
         $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
     } else { // If there are certificates
-
-                            foreach ($sql_cer as $data) {
-
-                                $vis_status = $data->active ? "text-success" : "text-danger";
-                                $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
-                                $status_msg = $data->active ? $langActive : $langInactive;
-                                $template_details = get_certificate_template($data->template);
-                                $template_name = key($template_details);
-                                $template_filename = $template_details[$template_name];
-                                $template_link = $urlServer . CERT_TEMPLATE_PATH . "$template_filename";
-                                //<img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='".$urlServer . CERT_TEMPLATE_PATH . $template."';'>
-                                $tool_content .= "
-                                <div class='row res-table-row'>
-                                    <div class='col-sm-2'>
-                                        <a href='$template_link' target=_blank>$template_name</a>
-                                    </div>
-                                    <div class='col-sm-9'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
-                                        <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
-                                    </div>
-                                    <div class='col-sm-1 text-left'>".
-                                    action_button(array(
-                                        array('title' => $langEditChange,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
-                                            'icon' => 'fa-edit'),
-                                        array('title' => $data->active ? $langDeactivate : $langActivate,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" .
-                                                ($data->active ? '0' : '1'),
-                                            'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                                        array('title' => $langSee,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
-                                            'icon' => 'fa-search'),
-                                        array('title' => $langDelete,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
-                                            'icon' => 'fa-times',
-                                            'class' => 'delete',
-                                            'confirm' => $langConfirmDelete)
-                                    ))
-                                    ."</div>
-                                </div>";
-
-                            }
+        foreach ($sql_cer as $data) {
+            $vis_status = $data->active ? "text-success" : "text-danger";
+            $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
+            $status_msg = $data->active ? $langActive : $langInactive;
+            $template_details = get_certificate_template($data->template);
+            $template_name = key($template_details);
+            $template_filename = $template_details[$template_name];            
+            
+            $tool_content .= "
+            <div class='row res-table-row'>
+                <div class='col-sm-2'>
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1'>$template_name</a>
+                </div>
+                <div class='col-sm-9'>
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
+                    <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;"
+                    . "<span class='{$vis_status}'>$status_msg</span>
+                    </div>
+                </div>
+                <div class='col-sm-1 text-left'>".
+                action_button(array(
+                    array('title' => $langEditChange,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
+                        'icon' => 'fa-edit'),
+                    array('title' => $data->active ? $langDeactivate : $langActivate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" .
+                            ($data->active ? '0' : '1'),
+                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                    array('title' => $langSee,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
+                        'icon' => 'fa-search'),
+                    array('title' => $langDelete,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
+                        'icon' => 'fa-times',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmDelete)
+                ))
+                ."</div>
+            </div>";
+        }
     }
-
-                            $tool_content .= "
-                            </div>
-                        </div>
+            $tool_content .= "
                     </div>
                 </div>
             </div>
-        ";
-    
-    }
+        </div>
+    </div>";
+}
 
 
 /**
@@ -138,24 +133,22 @@ function display_certificates() {
  * @global type $langViewHide
  * @global type $langViewShow
  * @global type $langEditChange
- * @global type $langHere
+
  * @global type $langSee
  */
 function display_badges() {
 
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
-           $langNoBadges, $langEditChange, $langBadges, $langHere,
+           $langNoBadges, $langEditChange, $langBadges,
            $langActivate, $langDeactivate, $langNewBadge, 
-           $langSee, $langActive, $langInactive, $urlServer;
+           $langActive, $langInactive, $urlServer;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND bundle >= 0", $course_id);
     } else {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0 ", $course_id);
-    }
-    
-
+    }    
         $tool_content .= "
             <div class='row'>
                 <div class='col-xs-12'>
@@ -173,10 +166,9 @@ function display_badges() {
                             </div>
                             <div class='res-table-wrapper'>";
 
-        if (count($sql_cer) == 0) { // no badges
+    if (count($sql_cer) == 0) { // no badges
         $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
     } else {
-
         foreach ($sql_cer as $data) {
             $vis_status = $data->active ? "text-success" : "text-danger";
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
@@ -209,20 +201,15 @@ function display_badges() {
                         'class' => 'delete',
                         'confirm' => $langConfirmDelete)                    
                 ))
-                ."</div>
-                                </div>";
-
+                ."</div></div>";
         }
     }
 
-        $tool_content .= "
-                            </div>
+    $tool_content .= "</div>
                         </div>
                     </div>
                 </div>
-            </div>
-        ";
-    
+            </div>";    
     }
 
 /**
@@ -233,7 +220,6 @@ function display_badges() {
  * @global type $langDelete
  * @global type $langConfirmDelete
  * @global type $langCourseCompletion
- * @global type $langEditChange
  * @global type $langActivate
  * @global type $langDeactivate
  * @global type $langSee
@@ -243,7 +229,7 @@ function display_badges() {
 function display_course_completion() {
     global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, $langCourseCompletion,
-           $langEditChange, $langActivate, $langDeactivate, 
+           $langActivate, $langDeactivate, 
            $langSee, $langActive, $langInactive;
     
     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge "
@@ -1643,9 +1629,7 @@ function display_settings($element, $element_id) {
             $badge_icon = $badge_details[$badge_name];
             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";        
         }
-
-        //$icon_link = $urlServer . "/modules/tc/test.pdf";
-        //$tool_content .= "<h:graphicImage value='$icon_link' width='100' height='100'>";
+        
         $tool_content .= "
             <div class='row'>
                 <div class='col-xs-12'>
@@ -1657,7 +1641,9 @@ function display_settings($element, $element_id) {
                                         <strong>$langProgressBasicInfo</strong>
                                     </div>
                                     <div class='col-sm-5 text-right'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'><span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange</a>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
+                                                . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -1767,8 +1753,7 @@ function certificate_settings($element, $element_id = 0) {
             $statuscertdeadline = '';            
         } else {
             $certdeadline = '';
-            $check_certdeadline = '';
-            //$statuscertdeadline = " disabled";
+            $check_certdeadline = '';            
             $statuscertdeadline = "";
         }        
     } else {        // add
@@ -1776,14 +1761,12 @@ function certificate_settings($element, $element_id = 0) {
         $template = '';        
         $title = '';
         $description = '';
-        $message = '';        
+        $message = '';
         $cert_id = '';
         $name = ($element == 'certificate')? 'newCertificate' : 'newBadge';
-        $certdeadline = '';
-        //$certdeadline = (new DateTime('NOW'))->format('d-m-Y H:i');
+        $certdeadline = '';        
         $check_certdeadline = '';
-        $statuscertdeadline = '';
-        //$statuscertdeadline = 'disabled';
+        $statuscertdeadline = '';        
     }    
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
@@ -1810,7 +1793,7 @@ function certificate_settings($element, $element_id = 0) {
                 <div class='form-group'>
                     <label for='message' class='col-sm-2 control-label'>$langMessage</label>
                     <div class='col-sm-10'>
-                        <textarea class='form-control' name='message' rows='6'>$message</textarea>
+                        <textarea class='form-control' name='message' rows='3' maxlength='200'>$message</textarea>
                     </div>
                 </div>
                 <div class='form-group'>
