@@ -913,8 +913,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     }
     if (is_null($certificate_issuer)) {
         $certificate_issuer = get_cert_issuer('certificate', $certificate_id);
-    }    
-    
+    }
     $sql = Database::get()->querySingle("SELECT message FROM certificate WHERE id = ?d", $certificate_id);
     if ($sql) {
         $certificate_message = $sql->message;
@@ -922,15 +921,19 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     
     if (intval($user) > 0) {
         $student_name = uid_to_name($user);
-        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
+        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;        
+        if (is_null($cert_date)) {
+            $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(NOW()) AS cert_date")->cert_date;
+        }
         $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
     } else {
         $student_name = $user;      
     }
-    
+        
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
     $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);
+    //$html_certificate = preg_replace('(%teacher_name%)', $certificate_issuer, $html_certificate);
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
     $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);
     
