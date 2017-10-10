@@ -3583,6 +3583,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `name` varchar(255) not null,
             `description` text,
             `filename` varchar(255),
+            `orientation` varchar(10), 
             PRIMARY KEY(`id`)
         )");
 

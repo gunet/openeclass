@@ -1816,12 +1816,11 @@ function installCertTemplates() {
             }
         }
     }
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 1', '', 'certificate1.html')");
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 2', '', 'certificate2.html')");
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 3', '', 'certificate3.html')");
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 4', '', 'certificate4.html')");    
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 5', '', 'certificate5.html')");
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 6', '', 'certificate6.html')");
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 1', '', 'certificate1.html', 'L')");
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 2', '', 'certificate2.html', 'L')");
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 3', '', 'certificate3.html', 'P')");
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 4', '', 'certificate4.html', 'L')");    
+    Database::get()->query("INSERT INTO certificate_template(name, description, filename) VALUES ('Πρότυπο 5', '', 'certificate5.html', 'L')");    
 }
 
 /**
