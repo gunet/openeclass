@@ -20,9 +20,9 @@
 
 $require_current_course = TRUE;
 
-require_once 'class.rating.php';
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
+require_once 'class.rating.php';
 require_once 'modules/progress/RatingEvent.php';
 
 $is_link = false;
