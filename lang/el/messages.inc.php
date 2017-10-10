@@ -1091,6 +1091,11 @@ $langWithoutDepartment = 'δεν ανήκουν στα';
 $langWith = 'Με';
 $langWithStudentId = 'αριθμούς μητρώου';
 $langWithUsernames = 'ονόματα χρήστών';
+$langUnansweredQuestions = 'Μη απαντηθείσες ερωτήσεις';
+$langUnansweredQuestionsWarningOne = 'Δεν έχετε απαντήσει σε μία ερώτηση.';
+$langUnansweredQuestionsWarningMany = 'Δεν έχετε απαντήσει σε _ ερωτήσεις.';
+$langUnansweredQuestionsQuestion = 'Θέλετε να προχωρήσετε στην υποβολή ή να επιστρέψετε στην πρώτη αναπάντητη ερώτηση;';
+
 
 /* * ***************************************************
  * contact.php

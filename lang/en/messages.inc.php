@@ -4952,3 +4952,7 @@ $langGradedAt = 'was graded at';
 $langInsertTcMeeting = "teleconference";
 $langOperator = 'Operator';
 $langMindMapSaved = "Mindmap saved";
+$langUnansweredQuestions = 'Unanswered Questions';
+$langUnansweredQuestionsWarningOne = 'There is one unaswered question.';
+$langUnansweredQuestionsWarningMany = 'There are _ unanswered questions.';
+$langUnansweredQuestionsQuestion = 'Do you want to proceed with submission or go to first unanswered question?';

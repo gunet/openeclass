@@ -323,12 +323,10 @@ function exercise_enter_handler() {
     });
 }
 
-// Keep track of which questions have been answered
-function exercise_check_unanswered() {
-    var cancelCheck = false;
-    var exercise_id = function (el) {
-        return el.closest('.qPanel')[0].id.replace('qPanel', '');
-    }
+function exercise_init_countdown(params) {
+    var exerciseId = params.exerciseId,
+        eurid = params.eurid;
+
     var continueSubmit = function () {
         $(window).unbind('beforeunload');
         $(window).unbind('unload');
@@ -336,87 +334,138 @@ function exercise_check_unanswered() {
         cancelCheck = true;
         $('.exercise').off().submit();
     }
-    var answered = {};
-    var qids = $('.qPanel').map(function () {
-        return this.id.replace('qPanel', '');
-    }).get();
-    $('.qPanel :input').change(function () {
-        var el = $(this);
-        var id = exercise_id(el);
-        answered[id] = true;
-        if (el.attr('type') == 'text') {
-            // Text inputs are fill-in-blanks questions:
-            // if any remain empty, question remains unanswered
-            el.siblings('input').each(function () {
-                if (this.value == '') {
-                    answered[id] = false;
-                }
-            });
-        } else if (el.is('select')) {
-            // Selects are matching questions:
-            // if any remain unset, question remains unanswered
-            el.closest('.qPanel').find('select').each(function () {
-                if (this.value == '0') {
-                    answered[id] = false;
-                }
-            });
-        }
-    });
-    $('.btn[name=buttonCancel]').click(continueSubmit);
-    $('.exercise').submit(function (e) {
-        var unansweredCount = 0, firstUnanswered;
 
-        if ('tinymce' in window) {
-            // Check for empty tinyMCE instances
-            tinymce.get().forEach(function (e) {
-                if (e.getContent({format: 'text'}).trim() != '') {
-                    var id = exercise_id($(e.container));
-                    answered[id] = true;
-                }
+    $(window).bind('beforeunload', function() {
+        var date = new Date();
+        date.setTime(date.getTime() + 30 * 1000);
+        var expires = '; expires=' + date.toGMTString();
+        document.cookie = 'inExercise=' + exerciseId + expires;
+        return params.warning;
+    });
+    $(window).bind('unload', function() {
+        $.ajax({
+            type: 'POST',
+            url: '',
+            data: { action: 'endExerciseNoSubmit', eid: exerciseId, eurid: eurid },
+            async: false
+        });
+    });
+    $(document).ready(function(){
+        var timer = $('#progresstime');
+        timer.time = timer.text();
+        timer.text(secondsToHms(timer.time--));
+        var hidden_timer = $('#secsRemaining');
+        hidden_timer.time = timer.time;
+        setInterval(function() {
+            hidden_timer.val(hidden_timer.time--);
+            if (hidden_timer.time + 1 == 0) {
+                clearInterval();
+            }
+        }, 1000);
+        countdown(timer, function() {
+            continueSubmit()
+        });
+        setInterval(function() {
+            $.ajax({
+              type: 'POST',
+              data: { action: 'refreshSession'}
             });
-        }
-        qids.forEach(function (id) {
-            if (!answered[id]) {
-                if (!firstUnanswered) {
-                    firstUnanswered = id;
-                }
-                unansweredCount++;
+        }, params.refreshTime);
+    });
+
+    // Keep track of which questions have been answered
+    var cancelCheck = false;
+    var answered = {};
+    var questionId = function (el) {
+        return el.closest('.qPanel')[0].id.replace('qPanel', '');
+    }
+    var exerciseCheckUnanswered = function() {
+        var qids = $('.qPanel').map(function () {
+            return this.id.replace('qPanel', '');
+        }).get();
+        $('.qPanel :input').change(function () {
+            var el = $(this);
+            var id = questionId(el);
+            answered[id] = true;
+            if (el.attr('type') == 'text') {
+                // Text inputs are fill-in-blanks questions:
+                // if any remain empty, question remains unanswered
+                el.siblings('input').each(function () {
+                    if (this.value == '') {
+                        answered[id] = false;
+                    }
+                });
+            } else if (el.is('select')) {
+                // Selects are matching questions:
+                // if any remain unset, question remains unanswered
+                el.closest('.qPanel').find('select').each(function () {
+                    if (this.value == '0') {
+                        answered[id] = false;
+                    }
+                });
             }
         });
-        if (!cancelCheck && unansweredCount) {
-            e.preventDefault();
-            var message = 'There are _ unanswered questions. Do you want to proceed with submission or go to first unanswered question?'.replace('_', unansweredCount);
-            bootbox.dialog({
-                title: 'Unanswered questions',
-                message:
-                    '<div class="row">' +
-                      '<div class="col-md-12">' +
-                        '<h4>Unanswered questions</h4>' +
-                        '<p>' + message + '</p>' +
-                      '</div>' +
-                    '</div>',
-                buttons: {
-                    submit: {
-                        label: 'Submit',
-                        className: 'btn-warning',
-                        callback: continueSubmit
-                    },
-                    goBack: {
-                        label: 'Go Back',
-                        className: 'btn-success',
-                        callback: function () {
-                            $.unblockUI();
-                            $('html').animate({
-                                scrollTop: $('#qPanel' + firstUnanswered).offset().top + 'px'
-                            }, 'fast');
-                        }
+        $('.btn[name=buttonCancel]').click(continueSubmit);
+        $('.exercise').submit(function (e) {
+            var unansweredCount = 0, firstUnanswered;
+
+            if ('tinymce' in window) {
+                // Check for empty tinyMCE instances
+                tinymce.get().forEach(function (e) {
+                    if (e.getContent({format: 'text'}).trim() != '') {
+                        var id = questionId($(e.container));
+                        answered[id] = true;
                     }
+                });
+            }
+            qids.forEach(function (id) {
+                if (!answered[id]) {
+                    if (!firstUnanswered) {
+                        firstUnanswered = id;
+                    }
+                    unansweredCount++;
                 }
             });
-        } else {
-            continueSubmit();
-        }
-    });
+            if (!cancelCheck && unansweredCount) {
+                e.preventDefault();
+                var message = (unansweredCount === 1? params.oneUnanswered:
+                    params.manyUnanswered.replace('_', unansweredCount)) +
+                    ' ' + params.question;
+                bootbox.dialog({
+                    title: params.unansweredQuestions,
+                    message:
+                        '<div class="row">' +
+                          '<div class="col-md-12">' +
+                            '<h4>' + params.unansweredQuestions + '</h4>' +
+                            '<p>' + message + '</p>' +
+                          '</div>' +
+                        '</div>',
+                    buttons: {
+                        goBack: {
+                            label: params.goBack,
+                            className: 'btn-success',
+                            callback: function () {
+                                $.unblockUI();
+                                $('html').animate({
+                                    scrollTop: $('#qPanel' + firstUnanswered).offset().top + 'px'
+                                }, 'fast');
+                            }
+                        },
+                        submit: {
+                            label: params.submit,
+                            className: 'btn-warning',
+                            callback: continueSubmit
+                        },
+                    }
+                });
+            } else {
+                continueSubmit();
+            }
+        });
+    }
+    if (params.checkUnanswered) {
+        $(exerciseCheckUnanswered);
+    }
 }
 
 function countdown(timer, callback) {
