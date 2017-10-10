@@ -935,8 +935,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);
     //$html_certificate = preg_replace('(%teacher_name%)', $certificate_issuer, $html_certificate);
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
-    $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);
-    
+    $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);    
     $mpdf->WriteHTML($html_certificate);
 
     $mpdf->Output();
