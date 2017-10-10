@@ -83,19 +83,22 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                     $old_file = Database::get()->querySingle("SELECT filename FROM certificate_template WHERE id = ?d", $_POST['cert_id'])->filename;
                     unlink($webDir . CERT_TEMPLATE_PATH . $old_file); // delete old template
                     Database::get()->querySingle("UPDATE certificate_template SET
-                                            name = ?s,
-                                            description = ?s,
-                                            filename = ?s
-                                           WHERE id = ?d", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
+                                                    name = ?s,
+                                                    description = ?s,
+                                                    filename = ?s
+                                                   WHERE id = ?d", 
+                                                $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
                 } else {
                     die("Error : ".$archive->errorInfo(true));
                 }
             }
         } else {
             Database::get()->querySingle("UPDATE certificate_template SET
-                                        name = ?s,
-                                        description = ?s
-                                       WHERE id = ?d", $_POST['name'], $_POST['description'], $_POST['cert_id']);
+                                            name = ?s,
+                                            description = ?s,
+                                            orientation = ?s
+                                        WHERE id = ?d", 
+                                    $_POST['name'], $_POST['description'], $_POST['orientation'], $_POST['cert_id']);
         }
     } else {        
         $filename = $_FILES['filename']['name'];
@@ -105,7 +108,8 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                 Database::get()->querySingle("INSERT INTO certificate_template SET 
                                             name = ?s,                                             
                                             description = ?s,
-                                            filename = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile']);
+                                            filename = ?s,
+                                            orientation = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['orientation']);
                 Session::Messages($langDownloadEnd, 'alert-success');
             } else {
                 die("Error : ".$archive->errorInfo(true));
@@ -147,12 +151,19 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
 if (isset($_GET['action'])) {
     if (($_GET['action'] == 'add_cert') or ($_GET['action'] == 'edit_cert')) { // add certificate template
         $cert_name = $cert_description = $cert_hidden_id = $cert_htmlfile = '';
+        $cert_orientation_l = 'checked';
+        $cert_orientation_p = '';
         if (isset($_GET['cid'])) {
             $cert_id = $_GET['cid'];
             $cert_data = Database::get()->querySingle("SELECT * FROM certificate_template WHERE id = ?d", $cert_id);
             $cert_name = $cert_data->name;
             $cert_description = $cert_data->description;
             $cert_htmlfile = $cert_data->filename;
+            $cert_orientation = $cert_data->orientation;
+            if ($cert_orientation == "P") {
+                $cert_orientation_l = '';
+                $cert_orientation_p = 'checked';
+            }
             $cert_hidden_id = "<input type='hidden' name='cert_id' value='$cert_id'>";
         }
         $tool_content .= "<div class='row'>
@@ -176,6 +187,13 @@ if (isset($_GET['action'])) {
                                 <div class='col-sm-10'>
                                     <input type='text' class='form-control' name='name' value='$cert_name'>
                                 </div>
+                            </div>
+                            <div class='form-group'>
+                                <label class='col-sm-2 control-label'>$langOrientation:</label>
+                                    <div class='col-sm-10 radio'>
+                                        <label class='radio-inline'><input type='radio' name='orientation' $cert_orientation_l value='L'>$langLandscape</label>
+                                        <label class='radio-inline'><input type='radio' name='orientation' $cert_orientation_p value='P'>$langPortrait</label>
+                                    </div>                                
                             </div>
                             <div class='form-group'>
                             <label for='description' class='col-sm-2 control-label'>$langDescription: </label>
@@ -260,8 +278,8 @@ if (isset($_GET['action'])) {
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
                 foreach ($sql1 as $cert_data) {
-                    $template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
-                    $tool_content .= "<tr><td width='100'><a href='$template_link' target=_blank>$cert_data->name</a></td>
+                    //$template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
+                    $tool_content .= "<tr><td width='100'>$cert_data->name</td>
                                       <td>" . ellipsize_html($cert_data->description, 100) . "</td>";
                     $tool_content .= "<td class='text-center option-btn-cell'>".
                             action_button(array(

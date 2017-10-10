@@ -900,11 +900,13 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     
     global $webDir, $dateFormatLong;
            
-    $cert_file = Database::get()->querySingle("SELECT filename FROM certificate_template 
+    $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template 
                                                     JOIN certificate ON certificate_template.id = certificate.template
-                                               AND certificate.id = ?d", $certificate_id)->filename;
+                                               AND certificate.id = ?d", $certificate_id);
+    $cert_file = $q->filename;
+    $orientation = $q->orientation;   
     
-    $mpdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);    
+    $mpdf = new mPDF('utf-8', 'A4-' . $orientation, 0, '', 0, 0, 0, 0, 0, 0);
     chdir("$webDir" . CERT_TEMPLATE_PATH);    
     $html_certificate = file_get_contents($cert_file);
     
@@ -921,7 +923,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     
     if (intval($user) > 0) {
         $student_name = uid_to_name($user);
-        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;        
+        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
         if (is_null($cert_date)) {
             $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(NOW()) AS cert_date")->cert_date;
         }

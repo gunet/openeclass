@@ -1361,6 +1361,9 @@ $langCourseCompletionMessage = "Το $langsCourse ολοκληρώθηκε με 
 $langCertAddress = "Δημόσια διεύθυνση πιστοποιητικού";
 $langCertificateDeadline = "Λήξη πιστοποιητικού";
 $langCertDeadlineHelp = "κάντε κλικ για να ορίσετε (προαιρετικά) ημερομηνία λήξης πιστοποιητικού";
+$langOrientation = "Προσανατολισμός";
+$langPortrait = "Κάθετος";
+$langLandscape = "Οριζόντιος";
 //------------------------------------
 
 

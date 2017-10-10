@@ -1759,7 +1759,8 @@ $db->query("CREATE TABLE `certificate_template` (
     `id` mediumint(8) not null auto_increment primary key,
     `name` varchar(255) not null,
     `description` text,
-    `filename` varchar(255)
+    `filename` varchar(255),
+    `orientation` varchar(10)
 )");
 
 $db->query("CREATE TABLE `badge_icon` (
