@@ -39,7 +39,7 @@ if (isset($_GET['i'])) {
         if (!is_null($certificate_expiration_date) and $certificate_expiration_date < date('Y-m-d H:i:s')) {
             echo "<div align='center'><h3>Το πιστοποιητικό που είχατε αποκτήσει έχει λήξει!</h3></div>";
         } else {
-            cert_output_to_pdf($certificate_id, $username, $certificate_title, $certificate_issuer, $certificate_date);
+            cert_output_to_pdf($certificate_id, $username, $certificate_title, $certificate_issuer, $certificate_date, $i);
         }
     }
 }

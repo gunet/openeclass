@@ -26,7 +26,6 @@
  * @global type $course_id
  * @global type $tool_content
  * @global type $course_code
- * @global type $urlServer
  * @global type $langDelete
  * @global type $langConfirmDelete
  * @global type $langCreateDuplicate
@@ -40,7 +39,7 @@
  */
 function display_certificates() {
 
-    global $course_id, $tool_content, $course_code, $urlServer,
+    global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
            $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange, 
            $langNewCertificate, $langCertificates, $langActivate, $langDeactivate, $langSee;
@@ -1852,7 +1851,7 @@ function student_view_progress() {
     require_once 'Game.php';
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
-    
+    $found = false;
     $iter = array('certificate', 'badge');    
     foreach ($iter as $key) {
         ${'game_'.$key} = array();
@@ -1876,13 +1875,14 @@ function student_view_progress() {
                 }
                 ${'game_'.$key}[] = $game;
             }
-        }        
-    if (count($game_badge) > 0 or count($game_certificate) > 0) {
-        $tool_content .= "<div class='row'>";
-        $tool_content .= "<div class='badge-container'>";
-        $tool_content .= "<h4>$langBadges</h4>";
-        $tool_content .= "<div class='form-wrapper'>";
+        }
+            
         if (count($game_badge) > 0) {
+            $found = true;
+            $tool_content .= "<div class='row'>";
+            $tool_content .= "<div class='badge-container'>";
+            $tool_content .= "<h4>$langBadges</h4>";
+            $tool_content .= "<div class='form-wrapper'>";
             $tool_content .= "<div class='clearfix'>";
             foreach ($game_badge as $key => $badge) {
                 $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned));
@@ -1901,16 +1901,16 @@ function student_view_progress() {
                         </div>";
                 }
                 $tool_content .= "</a></div>";                                       
-            }
-            $tool_content .= "</div>";
-        }
-        $tool_content .= "</div></div></div>";
-          
-    $tool_content .= "<div class='row'>";
-    $tool_content .= "<div class='badge-container'>
-                    <h4>$langCertificates</h4><hr>";
-    $tool_content .= "<div class='form-wrapper'>";
+            }            
+            $tool_content .= "</div></div></div></div>";
+        }        
+              
         if (count($game_certificate) > 0) {
+            $found = true;
+            $tool_content .= "<div class='row'>";
+            $tool_content .= "<div class='badge-container'>
+                    <h4>$langCertificates</h4><hr>";
+            $tool_content .= "<div class='form-wrapper'>";
             $tool_content .= "<div class='clearfix'>";
             foreach ($game_certificate as $key => $certificate) {
                 $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
@@ -1940,11 +1940,11 @@ function student_view_progress() {
                 }
                 $tool_content .= "</div></a>";                
                 $tool_content .= "</div>";
-            }
-            $tool_content .= "</div>";
+            }            
+            $tool_content .= "</div></div></div></div>";
         }
-        $tool_content .= "</div></div></div>";
-    } else {
+    
+    if (!$found) {
         $tool_content .= "<div class='alert alert-info'>$langNoCertBadge</div>";
     }    
 }
@@ -2041,21 +2041,20 @@ function display_user_progress_details($element, $element_id, $user_id) {
            $langCertAddress;
 
     $element_title = get_cert_title($element, $element_id);
-
     $resource_data = array();
-    $cert_public_link = '';   
-    // create certification identifier
-    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {    
-        register_certified_user($element, $element_id, $element_title, $user_id);        
-    }
-    // create public link if user has completed certificate and there is cert identifier
-    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) != null) {    
-        $cert_public_link = "<div class='pn-info-title-sct'>$langCertAddress</div>
-                            <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
-    }
-    
+        
     // certificate
-    if ($element == 'certificate') { // completed user resources
+    if ($element == 'certificate') {
+        $cert_public_link = '';   
+        // create certification identifier
+        if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {    
+            register_certified_user($element, $element_id, $element_title, $user_id);        
+        }
+        // create public link if user has completed certificate and there is cert identifier
+        if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) != null) {    
+            $cert_public_link = "<div class='pn-info-title-sct'>$langCertAddress</div>
+                                <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
+        }        
         $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
                                                             ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
                                                                 AND certificate_criterion.certificate = ?d 
@@ -2066,8 +2065,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                             (SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
                                                 ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
                                                 AND certificate_criterion.certificate = ?d AND user = ?d)", $element_id, $element_id, $user_id);
+        // completed user resources
         $sql3 = "SELECT completed, completed_criteria, total_criteria FROM user_certificate WHERE certificate = ?d AND user = ?d";
     } else { // badge
+        $cert_public_link = '';
         $sql = Database::get()->queryArray("SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion 
                                                             ON user_badge_criterion.badge_criterion = badge_criterion.id 
                                                                 AND badge_criterion.badge = ?d 
