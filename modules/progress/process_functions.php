@@ -896,18 +896,20 @@ function get_resource_details($element, $resource_id) {
  * @global type $webDir;
  * @param type $user_id
  */
-function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_issuer = null, $certificate_date = null) {
+function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_issuer = null, $certificate_date = null, $certificate_identifier = null) {
     
-    global $webDir, $dateFormatLong;
+    global $webDir, $dateFormatLong, $urlServer;
            
     $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template 
                                                     JOIN certificate ON certificate_template.id = certificate.template
                                                AND certificate.id = ?d", $certificate_id);
     $cert_file = $q->filename;
     $orientation = $q->orientation;   
+    $cert_link = '';
     
+    // init pdf
     $mpdf = new mPDF('utf-8', 'A4-' . $orientation, 0, '', 0, 0, 0, 0, 0, 0);
-    chdir("$webDir" . CERT_TEMPLATE_PATH);    
+    chdir("$webDir" . CERT_TEMPLATE_PATH);        
     $html_certificate = file_get_contents($cert_file);
     
     if (is_null($certificate_title)) {
@@ -923,21 +925,27 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     
     if (intval($user) > 0) {
         $student_name = uid_to_name($user);
+        $cert_link = certificate_link($certificate_id, $user, true);
         $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
         if (is_null($cert_date)) {
             $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(NOW()) AS cert_date")->cert_date;
         }
         $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
     } else {
+        $cert_link = $urlServer . "modules/progress/out.php?i=" .$certificate_identifier;
         $student_name = $user;      
-    }
+    }     
         
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
-    $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);
-    //$html_certificate = preg_replace('(%teacher_name%)', $certificate_issuer, $html_certificate);
+    $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);    
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
     $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);    
+    
+    $mpdf->SetWatermarkText($cert_link);
+    $mpdf->showWatermarkText = true;
+    $mpdf->watermarkTextAlpha = 0.1;
+    
     $mpdf->WriteHTML($html_certificate);
 
     $mpdf->Output();
@@ -998,13 +1006,18 @@ function get_cert_identifier($certificate_id, $user_id) {
  * @global type $urlServer
  * @param type $element_id
  * @param type $user_id
+ * @param type $printable
  * @return type
  */
-function certificate_link($element_id, $user_id) {
+function certificate_link($element_id, $user_id, $printable = false) {
     
     global $urlServer;
     
     $link = $urlServer . "modules/progress/out.php?i=".get_cert_identifier($element_id, $user_id);
+    if ($printable) {
+        return $link;
+    }
     return "<a href='$link' target=_blank>$link</a>";
+    
     
 }

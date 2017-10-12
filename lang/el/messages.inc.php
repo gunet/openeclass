@@ -1364,6 +1364,7 @@ $langCertDeadlineHelp = "κάντε κλικ για να ορίσετε (προ�
 $langOrientation = "Προσανατολισμός";
 $langPortrait = "Κάθετος";
 $langLandscape = "Οριζόντιος";
+$langMyCertificates = "Τα πιστοποιητικά μου";
 //------------------------------------
 
 

@@ -26,7 +26,6 @@
  * @global type $course_id
  * @global type $tool_content
  * @global type $course_code
- * @global type $urlServer
  * @global type $langDelete
  * @global type $langConfirmDelete
  * @global type $langCreateDuplicate
@@ -40,7 +39,7 @@
  */
 function display_certificates() {
 
-    global $course_id, $tool_content, $course_code, $urlServer,
+    global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
            $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange, 
            $langNewCertificate, $langCertificates, $langActivate, $langDeactivate, $langSee;
@@ -1853,7 +1852,7 @@ function student_view_progress() {
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
     
-    $data = array();
+    $data = array();   
     $iter = array('certificate', 'badge');    
 
     // initialize data vars for template
@@ -1976,21 +1975,20 @@ function display_user_progress_details($element, $element_id, $user_id) {
            $langCertAddress;
 
     $element_title = get_cert_title($element, $element_id);
-
     $resource_data = array();
-    $cert_public_link = '';   
-    // create certification identifier
-    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {    
-        register_certified_user($element, $element_id, $element_title, $user_id);        
-    }
-    // create public link if user has completed certificate and there is cert identifier
-    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) != null) {    
-        $cert_public_link = "<div class='pn-info-title-sct'>$langCertAddress</div>
-                            <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
-    }
-    
+        
     // certificate
-    if ($element == 'certificate') { // completed user resources
+    if ($element == 'certificate') {
+        $cert_public_link = '';   
+        // create certification identifier
+        if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {    
+            register_certified_user($element, $element_id, $element_title, $user_id);        
+        }
+        // create public link if user has completed certificate and there is cert identifier
+        if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) != null) {    
+            $cert_public_link = "<div class='pn-info-title-sct'>$langCertAddress</div>
+                                <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
+        }        
         $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
                                                             ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
                                                                 AND certificate_criterion.certificate = ?d 
@@ -2001,8 +1999,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                             (SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
                                                 ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
                                                 AND certificate_criterion.certificate = ?d AND user = ?d)", $element_id, $element_id, $user_id);
+        // completed user resources
         $sql3 = "SELECT completed, completed_criteria, total_criteria FROM user_certificate WHERE certificate = ?d AND user = ?d";
     } else { // badge
+        $cert_public_link = '';
         $sql = Database::get()->queryArray("SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion 
                                                             ON user_badge_criterion.badge_criterion = badge_criterion.id 
                                                                 AND badge_criterion.badge = ?d 

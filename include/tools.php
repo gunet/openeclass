@@ -312,6 +312,12 @@ function loggedInMenu($rich=true) {
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
         array_push($sideMenuImg, "gradebook");
     }
+    
+    if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_PROGRESS)) {
+        array_push($sideMenuText, $GLOBALS['langMyCertificates']);
+        array_push($sideMenuLink, $urlServer . "main/mycertificates.php");
+        array_push($sideMenuImg, "fa-trophy");
+    }
 
     if (get_config('personal_blog')) {
         array_push($sideMenuText, $GLOBALS['langMyBlog']);
