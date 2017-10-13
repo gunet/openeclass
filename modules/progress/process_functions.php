@@ -942,9 +942,9 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
     $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);    
     
-    $mpdf->SetWatermarkText($cert_link);
-    $mpdf->showWatermarkText = true;
-    $mpdf->watermarkTextAlpha = 0.1;
+    //$mpdf->SetWatermarkText($cert_link);
+    //$mpdf->showWatermarkText = true;
+    //$mpdf->watermarkTextAlpha = 0.1;
     
     $mpdf->WriteHTML($html_certificate);
 
