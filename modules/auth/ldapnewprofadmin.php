@@ -89,10 +89,10 @@ if ($submit) {
         default: $password = "";
             break;
     }
-
+    
     $registered_at = time();
     $expires_at = time() + get_config('account_duration');
-    $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
+    $verified_mail = isset($_REQUEST['verified_mail_form']) ? intval($_REQUEST['verified_mail_form']) : EMAIL_UNVERIFIED;
 
     $sql = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email, status, phone,
                                                     am, registered_at, expires_at, lang, verified_mail, description, whitelist)
