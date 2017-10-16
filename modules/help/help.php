@@ -38,7 +38,7 @@ if (isset($_GET['subtopic'])) {
     $subtopic = $_GET['subtopic'];
 }
 $user_status = (isset($_SESSION['status']) and  $_SESSION['status'] == USER_TEACHER)? 'teacher' : 'student'; 
-$link = "https://wiki-devel.gunet.gr/$language/$user_status/$topic/$subtopic";
+$link = "https://docs.openeclass.org/$language/$user_status/$topic/$subtopic";
 header('Content-Type: text/html; charset=UTF-8');
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
