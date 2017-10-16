@@ -77,7 +77,7 @@ function display_certificates() {
             $tool_content .= "
             <div class='row res-table-row'>
                 <div class='col-sm-2'>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1'>$template_name</a>
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>$template_name</a>
                 </div>
                 <div class='col-sm-9'>
                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>

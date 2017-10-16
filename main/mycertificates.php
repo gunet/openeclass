@@ -57,7 +57,7 @@ if (count($courses) > 0) {
                 $icon_content = "<span style='padding-left: 5px;' class='fa fa-check-circle'></span>";
                 $table_content .= "<tr><td>" . $data->course_title . " ($data->cert_title)</td>
                     <td style='text-align:center;'>
-                    <a href= '{$urlServer}modules/progress/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content . 
+                    <a href= '{$urlServer}main/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content . 
                             "</td></tr>";
         }
     }

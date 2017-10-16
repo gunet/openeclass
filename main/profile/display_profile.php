@@ -26,6 +26,7 @@ include '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
+require_once 'include/lib/textLib.inc.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $tree = new Hierarchy();
@@ -127,10 +128,10 @@ if ($userdata) {
                                 <div class='col-xs-12'>
                                     <div>
                                         <a href='".$urlServer."main/eportfolio/index.php?id=$id&token=".token_generate("eportfolio" . $id)."'>$langUserePortfolio</a>
-                                            </div>
-                                            </div>
-                                            </div>";
-                                            } else {
+                                    </div>
+                                </div>
+                        </div>";
+        } else {
             $eportfolio_html = '';
         }
     $tool_content .= "
@@ -166,7 +167,6 @@ if ($userdata) {
                                     <span class='tag'>$langPhone :</span>";
                 if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
                     $tool_content .= " <span class='tag-value'>" . q($userdata->phone) . "</span>";
-
                 } else {
                     $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
                 }
@@ -175,7 +175,6 @@ if ($userdata) {
                 if (!empty($userdata->status)) { // Status
                     $message_status = (q($userdata->status)==1)?$langTeacher:$langStudent;
                     $tool_content .= " <span class='tag-value'>$message_status</span>";
-
                 } else {
                     $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
                 }
@@ -183,12 +182,9 @@ if ($userdata) {
                                   <div class='profile-pers-info-data'>
                                     <span class='tag'>$langAm :</span>";
                 if (!empty($userdata->am) and allow_access($userdata->am_public)) {
-
                     $tool_content .= " <span class='tag-value'>" . q($userdata->am) . "</span>";
-
                 } else {
                     $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
-
                 }
                 $tool_content .= $providers;
                 $tool_content .= "</div>
@@ -202,10 +198,10 @@ if ($userdata) {
                             <h4>$langProfileAboutMe</h4><div>
                                 ".standard_text_escape($userdata->description)."</div></div></div>";
     }
-        $tool_content .= "
+    $tool_content .= "
     <div id='profile-departments' class='row'>
-        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-            <div><span class='tag'>$langFaculty : </span>";
+        <div class='col-xs-12 col-sm-10 col-sm-offset-2'>
+            <div class='profile-pers-info'><span class='tag'>$langFaculty : </span>";
             $departments = $user->getDepartmentIds($id);
                 $i = 1;
                 foreach ($departments as $dep) {
@@ -214,17 +210,75 @@ if ($userdata) {
                     $i++;
                 }
         $tool_content .= "</div>
-            <div>
-                <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>$userdata->registered_at</span>
+            <div class='profile-pers-info'>
+                <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>" . nice_format($userdata->registered_at, true) . "</span>
             </div>
         </div>
     </div>";
+       
+    // get completed certificates with public url
+    $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
+                                        . "FROM certified_users "
+                                        . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
+    
+    if (count($sql) > 0) {
+        $tool_content .= "<div class='col-sm-10 col-sm-offset-2' style='padding-top:20px;'><h4>$langMyCertificates</h4></div>";
+        $tool_content .= "<div class='row'>";
+        $tool_content .= "<div class='badge-container'>";                
+        $tool_content .= "<div class='clearfix'>";
+        foreach ($sql as $key => $certificate) {            
+            $tool_content .= "<div class='col-xs-12 col-sm-4 col-xl-2'>";
+            $tool_content .= "<a style='display:inline-block; width: 100%' <a href='../out.php?i=$certificate->identifier'>";
+            $tool_content .= "<div class='certificate_panel' style='width:210px; height:120px;'>
+                    <h4 class='certificate_panel_title' style='font-size:15px;'>$certificate->cert_title</h4>
+                    <div style='font-size:10px;'>" . claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) . "</div>
+                    <div class='certificate_panel_issuer' style='font-size:11px;'>$certificate->cert_issuer</div>";                    
+            $tool_content .= "</a>";            
+            $tool_content .= "<div class='certificate_panel_state'>
+                <i class='fa fa-check-circle fa-inverse state_success'></i>
+            </div>";
+            $tool_content .= "</div>";
+            $tool_content .= "</div>";
+        }                    
+        $tool_content .= "</div></div></div>";
+    }
+        
+    //get completed badges
+    $gameQ = "SELECT a.*, b.title,"
+            . " b.description, b.issuer, b.active, b.created, b.id, b.course_id"
+            . " FROM user_badge a "
+            . " JOIN badge b ON (a.badge = b.id) "
+            . " WHERE a.user = ?d "
+            . "AND a.completed = 1 "            
+            . "AND b.active = 1 "
+            . "AND b.bundle != -1 "
+            . "AND (b.expires IS NULL OR b.expires > NOW())";
+    $sql2 = Database::get()->queryArray($gameQ, $uid);            
+    if (count($sql2) > 0) {
+        $tool_content .= "<div class='col-sm-10 col-sm-offset-2' style='padding-bottom:30px;'><h4>$langBadges</h4></div>";
+        $tool_content .= "<div class='row'>";
+        $tool_content .= "<div class='badge-container'>";
+        $tool_content .= "<div class='clearfix'>";
+        foreach ($sql2 as $key => $badge) {
+            $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 
+                                                 (SELECT icon FROM badge WHERE id = ?d)", $badge->id)->filename;
+            $tool_content .= "<div class='col-xs-6 col-sm-4'>";
+            $tool_content .= "<a href='../../modules/progress/index.php?course=".course_id_to_code($badge->course_id)."&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>
+                <img class='center-block' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename' width='100' height='100'>
+                <h5 class='text-center' style='padding-top: 10px;'>
+                    " . ellipsize($badge->title, 40) . "
+                </h5>";            
+            $tool_content .= "</a></div>";                                       
+        }
+        $tool_content .= "</div></div></div>";
+    }
+        
     //render custom profile fields content
     $tool_content .= render_profile_fields_content(array('user_id' => $id));
     $tool_content .= "</div>
+                </div>
             </div>
-        </div>
-    </div>";
+        </div>";
 }
 draw($tool_content, 1);
 

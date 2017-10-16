@@ -20,10 +20,10 @@
  * ======================================================================== 
  */
 
-require_once '../../include/baseTheme.php';
+require_once '../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
-require_once 'functions.php';
-require_once 'process_functions.php';
+require_once 'modules/progress/functions.php';
+require_once 'modules/progress/process_functions.php';
 
 if (isset($_GET['i'])) {
     $i = $_GET['i'];

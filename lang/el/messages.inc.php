@@ -1418,6 +1418,7 @@ $langOrientation = "Προσανατολισμός";
 $langPortrait = "Κάθετος";
 $langLandscape = "Οριζόντιος";
 $langMyCertificates = "Τα πιστοποιητικά μου";
+$langCertAuthenticity = "Αναγνωριστικό γνησιότητας";
 //------------------------------------
 
 
@@ -3144,7 +3145,7 @@ $langProfilePersInfo = 'Προσωπικά Στοιχεία';
 $langProfileAboutMe = 'Σχετικά με μένα';
 $langProfileStats = 'Στατιστικά';
 $langStatus = "Ιδιότητα";
-$langProfileMemberSince = 'Μέλος απο';
+$langProfileMemberSince = 'Μέλος από';
 $langSumCoursesEnrolled = "$langCourses που παρακολουθώ";
 $langSumCoursesSupport = "$langCourses που υποστηρίζω";
 $langProfileLastVisit = "Τελευταία επίσκεψη";
