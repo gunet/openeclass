@@ -103,7 +103,23 @@ if ($data['userdata']) {
 
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle');
 
-
+    $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
+                                        . "FROM certified_users "
+                                        . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
+    
+    
+    //get completed badges
+    $gameQ = "SELECT a.*, b.title,"
+            . " b.description, b.issuer, b.active, b.created, b.id, b.course_id"
+            . " FROM user_badge a "
+            . " JOIN badge b ON (a.badge = b.id) "
+            . " WHERE a.user = ?d "
+            . "AND a.completed = 1 "            
+            . "AND b.active = 1 "
+            . "AND b.bundle != -1 "
+            . "AND (b.expires IS NULL OR b.expires > NOW())";
+    $sql2 = Database::get()->queryArray($gameQ, $uid);
+    
 }
 
 $data['menuTypeID'] = 1;

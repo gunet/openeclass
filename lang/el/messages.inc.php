@@ -1365,6 +1365,7 @@ $langOrientation = "Προσανατολισμός";
 $langPortrait = "Κάθετος";
 $langLandscape = "Οριζόντιος";
 $langMyCertificates = "Τα πιστοποιητικά μου";
+$langCertAuthenticity = "Αναγνωριστικό γνησιότητας";
 //------------------------------------
 
 

@@ -97,17 +97,56 @@
                         </div>
                     </div>
                 @endif
-                    <div id='profile-departments' class='row'>
-                        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-                            <div>
-                                <span class='tag'>{{ trans('langFaculty') }} : </span>
-                                @foreach ($user->getDepartmentIds($id) as $i=>$dep)
-                                    {!! $tree->getFullPath($dep) !!}
-                                    @if($i+1 < count($user->getDepartmentIds($id)))
-                                        <br/>
-                                    @endif
-                                @endforeach
-                            </div>
+            <div id='profile-departments' class='row'>
+                <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
+                    <div>
+                        <span class='tag'>{{ trans('langFaculty') }} : </span>
+                        @foreach ($user->getDepartmentIds($id) as $i=>$dep)
+                            {!! $tree->getFullPath($dep) !!}
+                            @if($i+1 < count($user->getDepartmentIds($id)))
+                                <br/>
+                            @endif
+                        @endforeach
+                    </div>                                                            
+        @if (count($sql) > 0)
+            <div class='col-sm-10 col-sm-offset-2' style='padding-top:20px;'><h4>{{ trans('langMyCertificates') }}</h4></div>
+            <div class='row'>
+            <div class='badge-container'>
+            $tool_content .= "<div class='clearfix'>
+            @foreach ($sql as $key => $certificate)           
+                <div class='col-xs-12 col-sm-4 col-xl-2'>
+                <a style='display:inline-block; width: 100%' <a href='../out.php?i={{ $certificate->identifier }}'>
+                <div class='certificate_panel' style='width:210px; height:120px;'>
+                    <h4 class='certificate_panel_title' style='font-size:15px;'>{{ $certificate->cert_title }}</h4>
+                    <div style='font-size:10px;'>{{ claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) }}</div>
+                    <div class='certificate_panel_issuer' style='font-size:11px;'>{{ $certificate->cert_issuer }}</div>
+                </a>
+                <div class='certificate_panel_state'>
+                    <i class='fa fa-check-circle fa-inverse state_success'></i>
+                </div>
+                </div>
+                </div>
+            @endforeach                    
+            </div></div></div>
+        @endif            
+        @if (count($sql2) > 0) 
+            <div class='col-sm-10 col-sm-offset-2' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
+            <div class='row'>
+            <div class='badge-container'>
+            <div class='clearfix'>
+            @foreach ($sql2 as $key => $badge)
+                <!-- $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 
+                                                     (SELECT icon FROM badge WHERE id = ?d)", $badge->id)->filename; -->
+                <div class='col-xs-6 col-sm-4'>
+                <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}"&badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>
+                    <img class='center-block' src='{{$ urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename }}' width='100' height='100'>
+                    <h5 class='text-center' style='padding-top: 10px;'>
+                        {{ ellipsize($badge->title, 40) }}
+                    </h5>
+                </a></div>
+            @endforeach
+            </div></div></div>
+        @endif                                                                                    
                             <div>
                                 <span class='tag'>{{ trans('langProfileMemberSince') }} : </span><span class='tag-value'>{{ $userdata->registered_at }}</span>
                             </div>
