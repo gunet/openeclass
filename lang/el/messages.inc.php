@@ -2358,6 +2358,7 @@ $langFailed = "Ολοκληρώθηκε ανεπιτυχώς";
 $langFileScormError = "Το αρχείο που θα ενημερωθεί δεν είναι έγκυρο.";
 $langFileName = "Aρχείο";
 $langFullScreen = "Πλήρης οθόνη ";
+$langNewTab = "Νέο Παράθυρο";
 $langGlobalProgress = "Πρόοδος της γραμμής μάθησης: ";
 $langImport = "Εισαγωγή";
 $langInFrames = "Σε πλαίσια";
