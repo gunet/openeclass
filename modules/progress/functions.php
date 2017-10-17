@@ -1252,9 +1252,9 @@ function display_available_multimedia($element, $element_id) {
     require_once 'include/lib/multimediahelper.class.php';
 
     global $tool_content, $themeimg, $course_id,
-                $langTitle, $langDescription, $langDate, $langChoice,
-                $langAddModulesButton, $langNoVideo, $course_code;
-               
+            $langTitle, $langDescription, $langDate, $langChoice,
+            $langAddModulesButton, $langNoVideo, $course_code;
+                   
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $count = 0;
     $video_found = FALSE;
@@ -1264,7 +1264,7 @@ function display_available_multimedia($element, $element_id) {
     if ($count > 0) {
         $video_found = TRUE;
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" . 
-                         "<input type='hidden' name='$element_name' value='$element_id'>" .
+                         "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>" .
                          "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
@@ -1289,11 +1289,12 @@ function display_available_multimedia($element, $element_id) {
                     $vObj = MediaResourceFactory::initFromVideoLink($row);
                     $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                 }                
-                $tool_content .= "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
+                $tool_content .= "<tr>".
+                                 "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
                                  "<td>" . q($row->description) . "</td>".
                                  "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
                                  "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
-                                 "</tr>";                
+                                 "</tr>";
             }
         }
         $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY name", $course_id);
@@ -1303,7 +1304,7 @@ function display_available_multimedia($element, $element_id) {
                 $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" .
                                  q($videocat->name) . "</td>";
                 $tool_content .= "<td colspan='2'>" . standard_text_escape($videocat->description) . "</td>";
-                $tool_content .= "<td align='center'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /></td>";
+                $tool_content .= "<td align='center'><input type='checkbox' name='videocatlink[]' value='$videocat->id'></td>";
                 $tool_content .= "</tr>";
                 foreach (array('video', 'videolink') as $table) {
                     $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d
@@ -1313,18 +1314,22 @@ function display_available_multimedia($element, $element_id) {
                                                         AND resource!=''
                                                         AND activity_type IN ('" . ViewingEvent::VIDEO_ACTIVITY . "', '" . ViewingEvent::VIDEOLINK_ACTIVITY . "') AND module = " . MODULE_ID_VIDEO . ")", $videocat->id, $element_id);
                     foreach ($sql2 as $linkvideocat) {
-                            $tool_content .= "<tr>";
-                            $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
-                                    q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
-                            $tool_content .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
-                            $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
-                            $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /></td>";
-                            $tool_content .= "</tr>";	
+                        $tool_content .= "<tr>";
+                        $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
+                                q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
+                        $tool_content .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
+                        $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                        $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'></td>";
+                        $tool_content .= "</tr>";	
                     }
                 }
             }
         }
-        $tool_content .= "</table><div class='text-right'><input class='btn btn-primary' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."'>&nbsp;&nbsp;</div></form>";
+        $tool_content .= "</table>"
+                . "<div class='text-right'>"
+                . "<input class='btn btn-primary' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."'>&nbsp;&nbsp;"
+                . "</div>"
+                . "</form>";
     }
     if (!$video_found) {
         $tool_content .= "<div class='alert alert-warning'>$langNoVideo</div>";

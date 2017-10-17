@@ -178,18 +178,18 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
-                  'icon' => 'fa fa-reply ',
+                  'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
-    } elseif(isset($_GET['add'])) { // add certificate activity
-            $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);        
-            $pageName = "$langAdd $langOfGradebookActivity";
-            $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
-                      'icon' => 'fa fa-reply',
-                      'level' => 'primary-label')
-                ));
+    } elseif(isset($_GET['add'])) { // add certificate activity        
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);        
+        $pageName = "$langAdd $langOfGradebookActivity";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
+                  'icon' => 'fa fa-reply',
+                  'level' => 'primary-label')
+            ));
     } elseif (isset($_GET['newcert'])) { // new certificate activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
         $pageName = $langNewCertificate;
