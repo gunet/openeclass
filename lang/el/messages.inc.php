@@ -2482,6 +2482,7 @@ $langFileScormError = "Το αρχείο που θα ενημερωθεί δεν
 $langFileName = "Aρχείο";
 $langHtmlFile = "Όνομα html αρχείου";
 $langFullScreen = "Πλήρης οθόνη ";
+$langNewTab = "Νέο Παράθυρο";
 $langGlobalProgress = "Πρόοδος της γραμμής μάθησης: ";
 $langImport = "Εισαγωγή";
 $langInFrames = "Σε πλαίσια";
