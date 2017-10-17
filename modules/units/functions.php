@@ -129,10 +129,11 @@ function check_admin_unit_resource($resource_id) {
  */
 function show_resources($unit_id) {
     global $tool_content, $max_resource_id, $langAvailableUnitResources,
-           $is_editor, $head_content, $langDownload, $langPrint, $langCancel;
+           $is_editor, $head_content, $langDownload, $langPrint, $langCancel, $langFullScreen, $langNewTab;
 
     $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
     if (count($req) > 0) {
+        load_js('screenfull/screenfull.min.js');
         $head_content .= "<script>
         $(function(){
             $('.fileModal').click(function (e)
@@ -141,6 +142,49 @@ function show_resources($unit_id) {
                 var fileURL = $(this).attr('href');
                 var downloadURL = $(this).prev('input').val();
                 var fileTitle = $(this).attr('title');
+                
+                // BUTTONS declare
+                var bts = {
+                    download: {
+                        label: '<i class=\"fa fa-download\"></i> $langDownload',
+                        className: 'btn-success',
+                        callback: function (d) {
+                            window.location = downloadURL;
+                        }
+                    },
+                    print: {
+                        label: '<i class=\"fa fa-print\"></i> $langPrint',
+                        className: 'btn-primary',
+                        callback: function (d) {
+                            var iframe = document.getElementById('fileFrame');
+                            iframe.contentWindow.print();
+                        }
+                    }
+                };
+                if (screenfull.enabled) {
+                    bts.fullscreen = {
+                        label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
+                        className: 'btn-primary',
+                        callback: function() {
+                            screenfull.request(document.getElementById('fileFrame'));
+                            return false;
+                        }
+                    };
+                }
+                bts.newtab = {
+                    label: '<i class=\"fa fa-plus\"></i> $langNewTab',
+                    className: 'btn-primary',
+                    callback: function() {
+                        window.open(fileURL);
+                        return false;
+                    }
+                };
+                bts.cancel = {
+                    label: '$langCancel',
+                    className: 'btn-default'
+                };
+                
+                
                 bootbox.dialog({
                     size: 'large',
                     title: fileTitle,
@@ -149,27 +193,7 @@ function show_resources($unit_id) {
                                     '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
                                 '</div>'+
                             '</div>',
-                    buttons: {
-                        download: {
-                            label: '<i class=\"fa fa-download\"></i> $langDownload',
-                            className: 'btn-success',
-                            callback: function (d) {
-                                window.location = downloadURL;
-                            }
-                        },
-                        print: {
-                            label: '<i class=\"fa fa-print\"></i> $langPrint',
-                            className: 'btn-primary',
-                            callback: function (d) {
-                                var iframe = document.getElementById('fileFrame');
-                                iframe.contentWindow.print();
-                            }
-                        },
-                        cancel: {
-                            label: '$langCancel',
-                            className: 'btn-default'
-                        }
-                    }
+                    buttons: bts
                 });
             });
         });

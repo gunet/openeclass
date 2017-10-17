@@ -90,6 +90,7 @@ if ($is_in_tinymce) {
 }
 
 load_js('tools.js');
+load_js('screenfull/screenfull.min.js');
 ModalBoxHelper::loadModalBox(true);
 copyright_info_init();
 

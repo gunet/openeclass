@@ -135,6 +135,48 @@
             var fileURL = $(this).attr('href');
             var downloadURL = $(this).prev('input').val();
             var fileTitle = $(this).attr('title');
+
+            // BUTTONS declare
+            var bts = {
+                download: {
+                    label: '<span class="fa fa-download"></span> {{ trans('langDownload') }}',
+                    className: 'btn-success',
+                    callback: function (d) {
+                        window.location = downloadURL;
+                    }
+                },
+                print: {
+                    label: '<span class="fa fa-print"></span> {{ trans('langPrint') }}',
+                    className: 'btn-primary',
+                    callback: function (d) {
+                        var iframe = document.getElementById('fileFrame');
+                        iframe.contentWindow.print();
+                    }
+                }
+            };
+            if (screenfull.enabled) {
+                bts.fullscreen = {
+                    label: '<span class="fa fa-arrows-alt"></span> {{ trans('langFullScreen') }}',
+                    className: 'btn-primary',
+                    callback: function() {
+                        screenfull.request(document.getElementById('fileFrame'));
+                        return false;
+                    }
+                };
+            }
+            bts.newtab = {
+                label: '<span class="fa fa-plus"></span> {{ trans('langNewTab') }}',
+                className: 'btn-primary',
+                callback: function() {
+                    window.open(fileURL);
+                    return false;
+                }
+            };
+            bts.cancel = {
+                label: '{{ trans('langCancel') }}',
+                className: 'btn-default'
+            };
+
             bootbox.dialog({
                 size: 'large',
                 title: fileTitle,
@@ -143,27 +185,7 @@
                                 '<div class="iframe-container"><iframe id="fileFrame" src="'+fileURL+'"></iframe></div>'+
                             '</div>'+
                         '</div>',
-                buttons: {
-                    download: {
-                        label: '<span class="fa fa-download"></span> {{ trans('langDownload') }}',
-                        className: 'btn-success',
-                        callback: function (d) {
-                            window.location = downloadURL;
-                        }
-                    },
-                    print: {
-                        label: '<span class="fa fa-print"></span> {{ trans('langPrint') }}',
-                        className: 'btn-primary',
-                        callback: function (d) {
-                            var iframe = document.getElementById('fileFrame');
-                            iframe.contentWindow.print();
-                        }
-                    },
-                    cancel: {
-                        label: '{{ trans('langCancel') }}',
-                        className: 'btn-default'
-                    }
-                }
+                buttons: bts
             });
         });
     });

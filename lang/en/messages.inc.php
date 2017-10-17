@@ -1163,6 +1163,7 @@ $langFailed = "Failed";
 $langFileScormError = "The updated file is not valid.";
 $langFileName = "File";
 $langFullScreen = "Fullscreen";
+$langNewTab = "New Tab";
 $langGlobalProgress = "Learning path progress: ";
 $langImport = "Import";
 $langInFrames = "In frames";
