@@ -230,7 +230,7 @@ if ($userdata) {
             $tool_content .= "<div class='col-xs-12 col-sm-4 col-xl-2'>";
             $tool_content .= "<a style='display:inline-block; width: 100%' <a href='../out.php?i=$certificate->identifier'>";
             $tool_content .= "<div class='certificate_panel' style='width:210px; height:120px;'>
-                    <h4 class='certificate_panel_title' style='font-size:15px;'>$certificate->cert_title</h4>
+                    <h4 class='certificate_panel_title' style='font-size:15px;  margin-top:2px;'>$certificate->cert_title</h4>
                     <div style='font-size:10px;'>" . claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) . "</div>
                     <div class='certificate_panel_issuer' style='font-size:11px;'>$certificate->cert_issuer</div>";                    
             $tool_content .= "</a>";            

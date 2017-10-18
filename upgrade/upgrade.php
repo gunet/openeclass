@@ -3702,12 +3702,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
             `course_title` varchar(255) NOT NULL DEFAULT '',
             `cert_title` varchar(255) NOT NULL DEFAULT '',
+            `cert_message` TEXT,
             `cert_id` int(11) NOT NULL,
             `cert_issuer` varchar(256) DEFAULT NULL,
             `user_fullname` varchar(255) NOT NULL DEFAULT '',
             `assigned` datetime NOT NULL,
             `identifier` varchar(255) NOT NULL DEFAULT '',
             `expires` datetime DEFAULT NULL,
+            `template_id` INT(11),
             PRIMARY KEY (`id`)
         ) $tbl_options");
         
