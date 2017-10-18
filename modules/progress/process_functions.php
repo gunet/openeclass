@@ -420,6 +420,19 @@ function get_cert_issuer($element, $id) {
 }
 
 /**
+ * @brief get certificate message
+ * @param type $element
+ * @param type $id
+ * @return type
+ */
+function get_cert_message($element, $id) {
+    
+    $cert_message = Database::get()->querySingle("SELECT message FROM $element WHERE id = ?d", $id)->message;
+    
+    return $cert_message;
+}
+
+/**
  * @brief get certificate template filename
  * @param type $certificate_id
  */
@@ -514,7 +527,7 @@ function is_cert_visible($element, $element_id) {
  */
 function has_certificate_completed($uid, $element, $element_id) {
         
-    $sql = Database::get()->querySingle("SELECT completed FROM user_${element} WHERE $element = ?d AND user = ?d", $element_id, $uid);    
+    $sql = Database::get()->querySingle("SELECT completed FROM user_${element} WHERE $element = ?d AND user = ?d", $element_id, $uid);
     if ($sql) {
         if (!$sql->completed) {
             return false;
@@ -670,7 +683,7 @@ function get_cert_percentage_completion($element, $element_id) {
     
     $data = Database::get()->querySingle("SELECT completed_criteria, total_criteria "
             . "FROM user_{$element} WHERE user = ?d AND $element = ?d", $uid, $element_id);
-    
+   
     if (!$data) {
         return 0;
     } else {
@@ -897,62 +910,57 @@ function get_resource_details($element, $resource_id) {
  * @global $dateFormatLong
  * @global $urlServer 
  * @global $langCertAuthenticity;
+ * @param type $certificate_id
  * @param type $user_id
+ * @param type $certificate_title
+ * @param type $certificate_message
+ * @param type $certificate_issuer
+ * @param type $certificate_date
+ * @param type $certificate_template_id
+ * @param type $certificate_identifier
  */
-function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_issuer = null, $certificate_date = null, $certificate_identifier = null) {
+function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_message = null, $certificate_issuer = null, $certificate_date = null, $certificate_template_id = null, $certificate_identifier = null) {
     
     global $webDir, $dateFormatLong, $urlServer, $langCertAuthenticity;
-           
-    $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template 
+                       
+    if (intval($user) > 0) { // if we are logged in and course / certificate exist
+        $certificate_title = get_cert_title('certificate', $certificate_id);
+        $certificate_issuer = get_cert_issuer('certificate', $certificate_id);                
+        $certificate_message = get_cert_message('certificate', $certificate_id);        
+        $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template 
                                                     JOIN certificate ON certificate_template.id = certificate.template
                                                AND certificate.id = ?d", $certificate_id);
-    $cert_file = $q->filename;
-    $orientation = $q->orientation;   
-    $cert_link = '';
-    
+        $cert_file = $q->filename;
+        $orientation = $q->orientation;   
+        $student_name = uid_to_name($user);
+        $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
+        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
+        /*if (is_null($cert_date)) {
+            $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(NOW()) AS cert_date")->cert_date;
+        }*/
+        $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
+    } else { // logged out
+        $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template 
+                                                JOIN certified_users ON certificate_template.id = certified_users.template_id 
+                                                AND certified_users.cert_title = ?s", $certificate_title);
+        $cert_file = $q->filename;
+        $orientation = $q->orientation;                   
+        $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . $urlServer . "main/out.php?i=" .$certificate_identifier;
+        $student_name = $user;      
+    }     
     // init pdf
     $mpdf = new mPDF('utf-8', 'A4-' . $orientation, 0, '', 0, 0, 0, 0, 0, 0);
     chdir("$webDir" . CERT_TEMPLATE_PATH);        
     $html_certificate = file_get_contents($cert_file);
-    
-    if (is_null($certificate_title)) {
-        $certificate_title = get_cert_title('certificate', $certificate_id);
-    }
-    if (is_null($certificate_issuer)) {
-        $certificate_issuer = get_cert_issuer('certificate', $certificate_id);
-    }
-    $sql = Database::get()->querySingle("SELECT message FROM certificate WHERE id = ?d", $certificate_id);
-    if ($sql) {
-        $certificate_message = $sql->message;
-    }
-    
-    if (intval($user) > 0) {
-        $student_name = uid_to_name($user);
-        $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
-        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
-        if (is_null($cert_date)) {
-            $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(NOW()) AS cert_date")->cert_date;
-        }
-        $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
-    } else {
-        $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . $urlServer . "main/out.php?i=" .$certificate_identifier;
-        $student_name = $user;      
-    }     
-        
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
     $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);    
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
     $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);
-    $html_certificate = preg_replace('(%link%)', $cert_link, $html_certificate);    
-    
-    $mpdf->SetWatermarkText($cert_link);
-    $mpdf->showWatermarkText = true;
-    $mpdf->watermarkTextAlpha = 0.1;
+    $html_certificate = preg_replace('(%link%)', $cert_link, $html_certificate);            
     
     $mpdf->WriteHTML($html_certificate);
-
-    $mpdf->Output();
+    $mpdf->Output();    
 }
 
 /**
@@ -970,16 +978,20 @@ function register_certified_user($table, $element_id, $element_title, $user_id) 
     $title = course_id_to_title($course_id);    
     $user_fullname = uid_to_name($user_id);
     $issuer = get_cert_issuer($table, $element_id);
+    $message = get_cert_message($table, $element_id);
     $expiration_date = get_cert_expiration_day($table, $element_id);
+    $template_id = Database::get()->querySingle("SELECT template FROM $table WHERE id = ?d", $element_id)->template;
     Database::get()->query("INSERT INTO certified_users SET course_title = ?s, "
                                                                 . "cert_title = ?s, "
+                                                                . "cert_message = ?s, "
                                                                 . "cert_id = ?d, "
                                                                 . "cert_issuer = ?s, "
                                                                 . "user_fullname = ?s, "
                                                                 . "assigned = " . DBHelper::timeAfter() . ","
                                                                 . "expires = ?s, "
+                                                                . "template_id = ?d, "
                                                                 . "identifier = '" . uniqid(rand()) . "'", 
-                                                    $title, $element_title, $element_id, $issuer, $user_fullname, $expiration_date);
+                                                    $title, $element_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id);
     
 }
 

@@ -224,7 +224,7 @@ if ($is_editor) {
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));        
     } elseif (isset($_GET['preview'])) { // certificate preview
-        cert_output_to_pdf($element_id, $uid, null, null);
+        cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
     } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
         $tool_content .= action_bar(array(
             array('title' => $langCourseCompletion,
@@ -429,7 +429,7 @@ if (isset($display) and $display == TRUE) {
                 if (!has_certificate_completed($uid, $element, $element_id)) { // security check
                     redirect_to_home_page();
                 }
-                cert_output_to_pdf($element_id, $uid, null, null);
+                cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
             } else {
                 if (!is_cert_visible($element, $element_id)) { // security check
                     redirect_to_home_page();

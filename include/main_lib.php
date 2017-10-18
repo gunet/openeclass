@@ -1583,7 +1583,26 @@ function delete_course($cid) {
         return;
     }
     $course_code = course_id_to_code($cid);
-
+    
+    
+    Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion IN
+                            (SELECT id FROM badge_criterion WHERE badge IN
+                            (SELECT id FROM badge WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM badge_criterion WHERE badge IN 
+                            (SELECT id FROM badge WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM user_badge WHERE badge IN 
+                            (SELECT id FROM badge WHERE course_id = ?d)", $cid);    
+    Database::get()->query("DELETE FROM badge WHERE course_id = ?d", $cid);
+    
+    Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN 
+                            (SELECT id FROM certificate_criterion WHERE certificate IN 
+                            (SELECT id FROM certificate WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM certificate_criterion WHERE certificate IN 
+                            (SELECT id FROM certificate WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM user_certificate WHERE certificate IN 
+                             (SELECT id FROM certificate WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM certificate WHERE course_id = ?d", $cid);
+               
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM document WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
@@ -1741,8 +1760,11 @@ function deleteUser($id, $log) {
                     unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);                
                 }
             }
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
-            
             Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
             Database::get()->query("DELETE dropbox_attachment FROM dropbox_attachment INNER JOIN dropbox_msg ON dropbox_attachment.msg_id = dropbox_msg.id
                                     WHERE dropbox_msg.author_id = ?d", $u);
