@@ -16,7 +16,7 @@
         "hybridauth/hybridauth": "^2.9",
         "mpdf/mpdf": "^6.1",
         "philo/laravel-blade": "3.*",
-        "hoa/ruler": "~1.0",
+        "hoa/ruler": "~2.0",
         "egulias/email-validator": "^2.1"
     },
     "autoload": {
