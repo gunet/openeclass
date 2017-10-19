@@ -44,15 +44,16 @@ if (isset($_POST['submit'])) {
 
         // form parameters
         $inputName = "cat" . $catIndex;
-
-        if (isset($_POST[$inputName])) {
-            if ($category->multiple) {
-                $selectActive = $inputName . "Active";
+        if ($category->multiple) {
+            $selectActive = $inputName . "Active";
+            if (isset($_POST[$selectActive])) {
                 foreach ($_POST[$selectActive] as $mid_ref) {
                     $mid = getDirectReference($mid_ref);
                     Database::get()->query("INSERT INTO course_category (course_id, category_value_id) VALUES (?d, ?d)", $course_id, $mid);
                 }
-            } else {
+            }
+        } else {
+            if (isset($_POST[$inputName])) {
                 $mid = getDirectReference($_POST[$inputName]);
                 Database::get()->query("INSERT INTO course_category (course_id, category_value_id) VALUES (?d, ?d)", $course_id, $mid);
             }
