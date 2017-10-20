@@ -184,8 +184,9 @@ if (file_exists($disk_path)) {
 function check_cours_access() {
     global $course_code, $uid, $uri;
 
-    if (!$uid && !isset($course_code))
-        $course_code = $_SESSION['course_code'];
+    if (!$uid && !isset($course_code)) {
+        $course_code = $_SESSION['dbname'];
+    }
 
     $cours = Database::get()->querySingle("SELECT id, code, visible FROM `course` WHERE code=?s", $course_code);
 
