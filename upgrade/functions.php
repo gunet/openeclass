@@ -1797,20 +1797,18 @@ function installTheme($themesDir, $file_name) {
 
 
 /**
- * @brief install ready to use certificate templates
- * @global type $webDir
+ * @brief install ready to use certificate templates 
  */
-function installCertTemplates() {
+function installCertTemplates($root_dir) {
+        
     
-    global $webDir;
-    
-    $cert_default_dir = $webDir . "/template/default/img/game";
+    $cert_default_dir = $root_dir . "/template/default/img/game";
     chdir($cert_default_dir);
     foreach (glob("*.zip") as $zipfile) {
-        if (copy("$zipfile", "$webDir" . CERT_TEMPLATE_PATH . "$zipfile")) {
-            $archive = new PclZip("$webDir" . CERT_TEMPLATE_PATH . "$zipfile");
-            if ($archive->extract(PCLZIP_OPT_PATH , "$webDir" . CERT_TEMPLATE_PATH)) {
-                unlink("$webDir" . CERT_TEMPLATE_PATH . "$zipfile");                
+        if (copy("$zipfile", "$root_dir" . CERT_TEMPLATE_PATH . "$zipfile")) {
+            $archive = new PclZip("$root_dir" . CERT_TEMPLATE_PATH . "$zipfile");
+            if ($archive->extract(PCLZIP_OPT_PATH , "$root_dir" . CERT_TEMPLATE_PATH)) {
+                unlink("$root_dir" . CERT_TEMPLATE_PATH . "$zipfile");                
             } else {
                 die("Error : ".$archive->errorInfo(true));
             }
@@ -1824,17 +1822,15 @@ function installCertTemplates() {
 }
 
 /**
- * install ready to use badge icons
- * @global type $webDir
+ * install ready to use badge icons 
  */
-function installBadgeIcons() {
+function installBadgeIcons($root_dir) {
+        
     
-    global $webDir;
-    
-    $cert_default_dir = $webDir . "/template/default/img/game";
+    $cert_default_dir = $root_dir . "/template/default/img/game";
     chdir($cert_default_dir);
     foreach (glob("*.png") as $icon) {
-        if (!copy("$icon", "$webDir" . BADGE_TEMPLATE_PATH . "$icon")) {
+        if (!copy("$icon", "$root_dir" . BADGE_TEMPLATE_PATH . "$icon")) {
             die("Error copying badge icon!");
         }
         $iconname = substr($icon, 0, -4);

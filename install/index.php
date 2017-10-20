@@ -65,11 +65,11 @@ if (!isset($language_codes[$lang])) {
 }
 
 if ($lang == 'el') {
-    $install_info_file = "http://docs.openeclass.org/doku.php?id=el:install_doc";
-    $readme_file =  "http://docs.openeclass.org/el:readme_gr";
+    $install_info_file = "http://docs.openeclass.org/el/install";
+    $readme_file =  "http://docs.openeclass.org/el/general";
 } else {
-    $install_info_file = "http://docs.openeclass.org/doku.php?id=en:install_doc";
-    $readme_file = "http://docs.openeclass.org/en:readme_gr";
+    $install_info_file = "http://docs.openeclass.org/en/install";
+    $readme_file = "http://docs.openeclass.org/en/general";
 }
 
 // include_messages
@@ -479,18 +479,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     } else {
         // write to file
         fwrite($fd, $stringConfig);
+
+        $installDir = dirname(dirname(__FILE__));
         // install certificate templates
-        installCertTemplates();
+        installCertTemplates($installDir);
         // install badge icons
-        installBadgeIcons();
+        installBadgeIcons($installDir);
+        chdir(dirname(__FILE__));
         // message
         $tool_content .= "
-    <div class='alert alert-success'>$langInstallSuccess</div>
+        <div class='alert alert-success'>$langInstallSuccess</div>
 
-    <br />
-    <div>$langProtect</div>
-    <br /><br />
-    <form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
+        <br />
+        <div>$langProtect</div>
+        <br /><br />
+        <form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
     }
     $_SESSION['langswitch'] = $lang;
     draw($tool_content);
