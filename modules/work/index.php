@@ -2457,11 +2457,10 @@ function show_student_assignment($id) {
 }
 
 /**
- * 
+ * @brief display submission assignment form
  * @global type $tool_content
  * @global type $m
  * @global type $langWorkFile
- * @global type $langSave
  * @global type $langSubmit
  * @global type $langNotice3
  * @global type $urlAppend
@@ -2480,7 +2479,7 @@ function show_student_assignment($id) {
  * @return type
  */
 function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submissions_exist=false) {
-    global $tool_content, $m, $langWorkFile, $langSave, $langSubmit,
+    global $tool_content, $m, $langWorkFile, $langSubmit,
     $langNotice3, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
     $langGradebookGrade;
@@ -2630,7 +2629,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             <div class='col-sm-10 col-sm-offset-2'>".
                     form_buttons(array(
                         array(
-                            'text'          => $langSave,
+                            'text'          => $langSubmit,
                             'name'          => 'work_submit',
                             'value'         => $langSubmit
                         ),

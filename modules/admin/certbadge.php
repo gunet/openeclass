@@ -190,7 +190,7 @@ if (isset($_GET['action'])) {
                             </div>
                             <div class='form-group'>
                                 <label class='col-sm-2 control-label'>$langOrientation:</label>
-                                    <div class='col-sm-10 radio'>
+                                    <div class='col-sm-10'>
                                         <label class='radio-inline'><input type='radio' name='orientation' $cert_orientation_l value='L'>$langLandscape</label>
                                         <label class='radio-inline'><input type='radio' name='orientation' $cert_orientation_p value='P'>$langPortrait</label>
                                     </div>                                
