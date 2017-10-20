@@ -2,7 +2,7 @@
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2017 Greek Universities Network - GUnet
@@ -65,11 +65,11 @@ if (!isset($language_codes[$lang])) {
 }
 
 if ($lang == 'el') {
-    $install_info_file = "http://docs.openeclass.org/doku.php?id=el:install_doc";
-    $readme_file =  "http://docs.openeclass.org/el:readme_gr";
+    $install_info_file = "http://docs.openeclass.org/el/install";
+    $readme_file =  "http://docs.openeclass.org/el/general";
 } else {
-    $install_info_file = "http://docs.openeclass.org/doku.php?id=en:install_doc";
-    $readme_file = "http://docs.openeclass.org/en:readme_gr";
+    $install_info_file = "http://docs.openeclass.org/en/install";
+    $readme_file = "http://docs.openeclass.org/en/general";
 }
 
 // include_messages
@@ -461,7 +461,7 @@ elseif (isset($_POST['install7'])) {
     // create config.php
     $stringConfig = '<?php
 /* ========================================================
- * Open eClass 3.0 configuration file
+ * Open eClass 3.x configuration file
  * Created by install on ' . date('Y-m-d H:i') . '
  * ======================================================== */
 
@@ -472,26 +472,28 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 ';
     $fd = @fopen("../config/config.php", "w");
     if (!$fd) {
-        $config_dir = dirname(__DIR__) . '/laravel';
+        $config_dir = dirname(__DIR__) . '/config';
         $tool_content .= "<p class='alert'>$langErrorConfig</p>" .
                 "<p class='info'>" . sprintf($langErrorConfigAlt, $config_dir) .
                 "</p><pre class='config'>" . q($stringConfig) . "</pre>";
     } else {
         // write to file
         fwrite($fd, $stringConfig);
-        fclose($fd);
-        // install ready to use certificate templates
-        installCertTemplates();
+
+        $installDir = dirname(dirname(__FILE__));
+        // install certificate templates
+        installCertTemplates($installDir);
         // install badge icons
-        installBadgeIcons();
+        installBadgeIcons($installDir);
+        chdir(dirname(__FILE__));
         // message
         $tool_content .= "
-    <div class='alert alert-success'>$langInstallSuccess</div>
+        <div class='alert alert-success'>$langInstallSuccess</div>
 
-    <br />
-    <div>$langProtect</div>
-    <br /><br />
-    <form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
+        <br />
+        <div>$langProtect</div>
+        <br /><br />
+        <form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
     }
     $_SESSION['langswitch'] = $lang;
     draw($tool_content);
@@ -518,8 +520,6 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/commondocs/index.php');
     mkdir_try('video');
     touch_try('video/index.php');
-    mkdir_try('storage');
-    mkdir_try('storage/views');
     mkdir_try('courses/user_progress_data');
     mkdir_try('courses/user_progress_data/cert_templates');
     touch_try('courses/user_progress_data/cert_templates/index.php');
@@ -533,7 +533,7 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/eportfolio/work_submissions/index.php');
     mkdir_try('courses/eportfolio/mydocs');
     touch_try('courses/eportfolio/mydocs/index.php');
-    
+
     if ($configErrorExists) {
         $tool_content .= "<div class='alert alert-danger'>" . implode('', $errorContent) . "</div>" .
             "<div class='alert alert-warning'>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</div>";

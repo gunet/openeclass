@@ -3714,9 +3714,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         ) $tbl_options");
         
         // install predefined cert templates
-        installCertTemplates();
+        installCertTemplates($webDir);
         // install badge icons
-        installBadgeIcons();
+        installBadgeIcons($webDir);
                                
         // tc attendance tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
