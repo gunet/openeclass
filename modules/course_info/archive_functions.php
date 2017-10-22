@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,12 +17,12 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 /**
  * Archive serialized course tables
- * 
+ *
  * @param int $course_id
  * @param string $course_code
  * @param string $archivedir  Target directory
@@ -60,7 +60,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                     WHERE course_id = $course_id)",
         'course_weekly_view' => $sql_course,
-        'course_weekly_view_activities' => "course_weekly_view_id IN (SELECT id FROM course_weekly_view 
+        'course_weekly_view_activities' => "course_weekly_view_id IN (SELECT id FROM course_weekly_view
                                                                                 WHERE course_id = $course_id)",
         'forum' => $sql_course,
         'forum_category' => $sql_course,
@@ -143,7 +143,13 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'abuse_report' => $sql_course,
         'wall_post' => $sql_course,
         'wall_post_resources' => "post_id IN (SELECT id FROM wall_post WHERE course_id = $course_id)",
-        'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)");
+        'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)",
+        'activity_heading' => 'true',
+        'activity_content' => $sql_course,
+        'category' => 'true',
+        'category_value' => 'true',
+        'course_category' => $sql_course,
+        );
 
     foreach ($archive_conditions as $table => $condition) {
         backup_table($archivedir, $table, $condition);
@@ -160,13 +166,13 @@ function archiveTables($course_id, $course_code, $archivedir) {
 
 /**
  * Do the main task of archiving a course.
- * 
+ *
  * @param int $course_id
  * @param string $course_code
  */
 function doArchive($course_id, $course_code) {
     global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
-    
+
     $basedir = "$webDir/courses/archive/$course_code";
     file_exists($basedir) or make_dir($basedir);
 
@@ -188,7 +194,7 @@ function doArchive($course_id, $course_code) {
     $result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive") &&
         $zipCourse->add("$webDir/courses/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html") &&
         $zipCourse->add("$webDir/video/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
-    
+
     removeDir($archivedir);
 
     if (!$result) {
@@ -215,7 +221,7 @@ function backup_table($basedir, $table, $condition) {
 
 /**
  * Delete everything in $basedir older than $age seconds.
- * 
+ *
  * @param string $basedir
  * @param string $age
  */

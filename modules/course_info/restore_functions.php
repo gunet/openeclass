@@ -161,10 +161,14 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
         }
         if (isset($options['map'])) {
             foreach ($options['map'] as $field => &$map) {
-                if (isset($data[$restoreHelper->getField($table, $field)]) && isset($map[$data[$restoreHelper->getField($table, $field)]])) { // map needs reverse resolution
-                    $data[$restoreHelper->getField($table, $field)] = $map[$data[$restoreHelper->getField($table, $field)]];
-                } else {
-                    continue 2;
+                $newField = $restoreHelper->getField($table, $field);
+                // Don't pass null data through mapping
+                if (!is_null($data[$newField])) {
+                    if (isset($data[$newField]) && isset($map[$data[$newField]])) { // map needs reverse resolution
+                        $data[$newField] = $map[$data[$newField]];
+                    } else {
+                        continue 2;
+                    }
                 }
             }
         }
@@ -459,6 +463,9 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $course_data['start_date'],
                     $course_data['finish_date']
                 );
+            } else {
+                $upd_course_sql .= " , view_type = ?s ";
+                array_push($upd_course_args, $course_data['view_type']);
             }
             $upd_course_sql .= " WHERE id = ?d ";
             array_push($upd_course_args, intval($new_course_id));
@@ -1030,6 +1037,24 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'set' => array('course_id' => $new_course_id),
             'delete' => array('id')
             ), $url_prefix_map, $backupData, $restoreHelper);
+
+        // Course category metadata - restore only if cloning
+        // TODO: handle restore if categories are identical to source instance
+        if ($clone_course) {
+            restore_table($restoreThis, 'course_category', array(
+                'set' => array('course_id' => $new_course_id),
+                'delete' => array('id')
+                ), $url_prefix_map, $backupData, $restoreHelper);
+        }
+
+        // Course activity-type course - restore only if cloning
+        // TODO: handle restore if headings are identical to source instance
+        if ($clone_course) {
+            restore_table($restoreThis, 'activity_content', array(
+                'set' => array('course_id' => $new_course_id),
+                'delete' => array('id')
+                ), $url_prefix_map, $backupData, $restoreHelper);
+        }
 
         removeDir($restoreThis);
 
