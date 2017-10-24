@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -222,7 +222,8 @@ if ($userdata) {
                                         . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
     
     if (count($sql) > 0) {
-        $tool_content .= "<div class='col-sm-10 col-sm-offset-2' style='padding-top:20px;'><h4>$langMyCertificates</h4></div>";
+        $tool_content .= "<hr>";
+        $tool_content .= "<div class='col-sm-10' style='padding-top:20px;'><h4>$langMyCertificates</h4></div>";
         $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='badge-container'>";                
         $tool_content .= "<div class='clearfix'>";
@@ -255,7 +256,8 @@ if ($userdata) {
             . "AND (b.expires IS NULL OR b.expires > NOW())";
     $sql2 = Database::get()->queryArray($gameQ, $uid);            
     if (count($sql2) > 0) {
-        $tool_content .= "<div class='col-sm-10 col-sm-offset-2' style='padding-bottom:30px;'><h4>$langBadges</h4></div>";
+        $tool_content .= "<hr>";
+        $tool_content .= "<div class='col-sm-10' style='padding-bottom:30px;'><h4>$langBadges</h4></div>";
         $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='badge-container'>";
         $tool_content .= "<div class='clearfix'>";
