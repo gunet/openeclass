@@ -25,6 +25,7 @@
 $require_current_course = true;
 $require_editor = true;
 require_once '../../include/baseTheme.php';
+require_once 'modules/search/indexer.class.php';
 $toolName = $langActivityEdit;
 
 $course_info = Database::get()->querySingle('SELECT view_type FROM course WHERE id = ?d', $course_id);
@@ -42,6 +43,7 @@ if (isset($_POST['submit']) and isset($_POST['content'])) {
             ON DUPLICATE KEY UPDATE content = VALUES(content)',
             $id, $course_id, $content);
     }
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
     Session::Messages($langFaqEditSuccess, 'alert-success');
     redirect_to_home_page('courses/' . $course_code . '/');
 }

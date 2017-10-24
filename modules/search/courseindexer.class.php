@@ -30,7 +30,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a course db row.
-     * 
+     *
      * @global string $urlServer
      * @param  object  $course
      * @return Zend_Search_Lucene_Document
@@ -58,36 +58,54 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
 
     /**
      * Fetch a Course from DB.
-     * 
+     *
      * @param  int $courseId
      * @return object - the mysql fetched row
      */
     protected function fetch($courseId) {
-        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $courseId);        
+        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $courseId);
         if (!$course) {
             return null;
         }
 
-        // visible units
         $course->units = '';
-        $res = Database::get()->queryArray("SELECT id, title, comments
-                                            FROM course_units
-                                           WHERE visible > 0
-                                             AND course_id = ?d", $courseId);
-        $unitIds = array();
-        foreach ($res as $row) {
-            $course->units .= $row->title . ' ' . $row->comments . ' ';
-            $unitIds[] = $row->id;
-        }
-
-        // visible unit resources
-        foreach ($unitIds as $unitId) {
-            $res = Database::get()->queryArray("SELECT title, comments
-                                                FROM unit_resources
+        if ($course->view_type == 'activity') {
+            $res = Database::get()->queryArray("SELECT content
+                                                FROM activity_content
+                                               WHERE course_id = ?d", $courseId);
+            foreach ($res as $row) {
+                $course->units .= $row->content . ' ';
+            }
+        } elseif (in_array($course->view_type, ['units', 'weekly'])) {
+            if ($course->view_type == 'units') {
+                $dbtable = 'course_units';
+                $resdbtable = 'unit_resources';
+                $keyfield = 'unit_id';
+            } else {
+                $dbtable = 'course_weekly_view';
+                $resdbtable = 'course_weekly_view_activities';
+                $keyfield = 'course_weekly_view_id';
+            }
+            // visible units
+            $res = Database::get()->queryArray("SELECT id, title, comments
+                                                FROM $dbtable
                                                WHERE visible > 0
-                                                 AND unit_id = ?d", $unitId);
+                                                 AND course_id = ?d", $courseId);
+            $unitIds = array();
             foreach ($res as $row) {
                 $course->units .= $row->title . ' ' . $row->comments . ' ';
+                $unitIds[] = $row->id;
+            }
+
+            // visible unit resources
+            foreach ($unitIds as $unitId) {
+                $res = Database::get()->queryArray("SELECT title, comments
+                                                    FROM $resdbtable
+                                                   WHERE visible > 0
+                                                     AND $keyfield = ?d", $unitId);
+                foreach ($res as $row) {
+                    $course->units .= $row->title . ' ' . $row->comments . ' ';
+                }
             }
         }
 
@@ -112,29 +130,29 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
         }
         return $course;
     }
-    
+
     /**
      * Get Term object for locating a unique single course.
-     * 
+     *
      * @param  int $courseId - the course id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($courseId) {
         return new Zend_Search_Lucene_Index_Term('course_' . $courseId, 'pk');
     }
-    
+
     /**
      * Get Term object for locating all possible courses.
-     * 
+     *
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForAllResources() {
         return new Zend_Search_Lucene_Index_Term('course', 'doctype');
     }
-    
+
     /**
      * Get all possible courses from DB.
-     * 
+     *
      * @return array - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getAllResourcesFromDB() {
@@ -143,7 +161,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
 
     /**
      * Return the detailed search form for courses.
-     * 
+     *
      * @global string $langSearchCriteria
      * @global string $langTitle
      * @global string $langTitle_Descr
@@ -165,33 +183,33 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
         $langInstructor_Descr, $langCourseCode, $langCourseCode_Descr, $langDoSearch,
         $langNewSearch;
 
-        return "<div class='form-wrapper'>            
-        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>            
-        <fieldset>         
+        return "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
+        <fieldset>
             <div class='form-group'>
                 <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                 <div class='col-sm-10'><input id='title' class='form-control' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
             </div>
             <div class='form-group'>
                 <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
-                <div class='col-sm-10'><input id='description' class='form-control' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>                    
+                <div class='col-sm-10'><input id='description' class='form-control' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>
             </div>
             <div class='form-group'>
                 <label for='keywords' class='col-sm-2 control-label'>$langKeywords:</label>
-                <div class='col-sm-10'><input id='keywords' class='form-control' name='search_terms_keywords' type='text' placeholder='$langKeywords_Descr'></div>                
+                <div class='col-sm-10'><input id='keywords' class='form-control' name='search_terms_keywords' type='text' placeholder='$langKeywords_Descr'></div>
             </div>
             <div class='form-group'>
                 <label for='teacher' class='col-sm-2 control-label'>$langTeacher:</label>
-                <div class='col-sm-10'><input id='teacher' class='form-control' name='search_terms_instructor' type='text' placeholder='$langInstructor_Descr'></div>                
+                <div class='col-sm-10'><input id='teacher' class='form-control' name='search_terms_instructor' type='text' placeholder='$langInstructor_Descr'></div>
             </div>
             <div class='form-group'>
                 <label for='code' class='col-sm-2 control-label'>$langCourseCode:</label>
-                <div class='col-sm-10'><input id='code' class='form-control' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>                
+                <div class='col-sm-10'><input id='code' class='form-control' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>
             </div>
-            <div class='col-sm-offset-2 col-sm-10'>              
+            <div class='col-sm-offset-2 col-sm-10'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch'>
                 <input class='btn btn-default' type='reset' name='reset' value='$langNewSearch'>
-            </div>            
+            </div>
             </fieldset>
             </form>
         </div>";
@@ -199,7 +217,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
 
     /**
      * Build one or more Lucene Queries.
-     * 
+     *
      * @param  array   $data      - The data (normally $_POST), needs specific array keys, @see getDetailedSearchForm()
      * @return string             - the returned query string
      */
@@ -250,7 +268,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
 
     /**
      * Append to the Lucene Query according to data input.
-     * 
+     *
      * @param  array   $data     - The data (normally coming from $_POST)
      * @param  string  $key      - $data[key]
      * @param  string  $queryKey - Lucene Document field key
