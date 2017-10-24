@@ -157,8 +157,8 @@ class Log {
             $tool_content .= "<tbody>";
             // display logs
             foreach ($sql as $r) {
-                $tool_content .= "<tr>";
-                $tool_content .= "<td>" . nice_format($r->ts, true) . "</td>";
+                $tool_content .= "<tr>";                
+                $tool_content .= "<td><span style='display:none;'>$r->ts</span>" . nice_format($r->ts, true) . "<s/</td>";
                 if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
                     $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                 } else {
