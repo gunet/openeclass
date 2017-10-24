@@ -109,7 +109,8 @@
                         @endforeach
                     </div>                                                            
         @if (count($sql) > 0)
-            <div class='col-sm-10 col-sm-offset-2' style='padding-top:20px;'><h4>{{ trans('langMyCertificates') }}</h4></div>
+        	<hr>
+            <div class='col-sm-10' style='padding-top:20px;'><h4>{{ trans('langMyCertificates') }}</h4></div>
             <div class='row'>
             <div class='badge-container'>
             $tool_content .= "<div class='clearfix'>
@@ -130,7 +131,8 @@
             </div></div></div>
         @endif            
         @if (count($sql2) > 0) 
-            <div class='col-sm-10 col-sm-offset-2' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
+	        <hr>
+            <div class='col-sm-10' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
             <div class='row'>
             <div class='badge-container'>
             <div class='clearfix'>

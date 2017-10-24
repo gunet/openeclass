@@ -36,10 +36,11 @@
  * @global type $langViewShow
  * @global type $langEditChange
  * @global type $langSee
+ * @global type $urlServer
  */
 function display_certificates() {
 
-    global $course_id, $tool_content, $course_code,
+    global $course_id, $tool_content, $course_code, $urlServer,
            $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
            $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange, 
            $langNewCertificate, $langCertificates, $langActivate, $langDeactivate, $langSee;
@@ -73,11 +74,14 @@ function display_certificates() {
             $template_details = get_certificate_template($data->template);
             $template_name = key($template_details);
             $template_filename = $template_details[$template_name];            
-            
+            $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
+            $template_thumbnail = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
             $tool_content .= "
             <div class='row res-table-row'>
                 <div class='col-sm-2'>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>$template_name</a>
+                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>
+                    <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='$template_thumbnail' title='$template_name'>                
+                </a>
                 </div>
                 <div class='col-sm-9'>
                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
