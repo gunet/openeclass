@@ -1607,9 +1607,7 @@ function display_available_participation($element, $element_id) {
  * @global type $course_code
  * @global type $langDescription 
  * @global type $langMessage
- * @global type $langpublisher
- * @global type $langCertificateDetails
- * @global type $langBadgeDetails
+ * @global type $langpublisher 
  * @global type $langCourseCompletion
  * @param type $element
  * @param type $element_id
@@ -1618,10 +1616,9 @@ function display_settings($element, $element_id) {
     
     global $tool_content, $course_id, $course_code, $urlServer, $langTitle, 
            $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
-           $langpublisher, $langCertificateDetails, $langBadgeDetails, $langEditChange;
+           $langpublisher, $langEditChange;
 
-    $field = ($element == 'certificate')? 'template' : 'icon';
-    $header = ($element == 'certificate')? "$langCertificateDetails" : "$langBadgeDetails";
+    $field = ($element == 'certificate')? 'template' : 'icon';    
     $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle 
                             FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     $bundle = $data->bundle;
@@ -1636,8 +1633,13 @@ function display_settings($element, $element_id) {
             $badge_name = key($badge_details);
             $badge_icon = $badge_details[$badge_name];
             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";        
+        } else {        
+            $template_details = get_certificate_template($data->template);
+            $template_name = key($template_details);
+            $template_filename = $template_details[$template_name];            
+            $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
+            $icon_link = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
         }
-        
         $tool_content .= "
             <div class='row'>
                 <div class='col-xs-12'>
