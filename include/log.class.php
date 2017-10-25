@@ -287,7 +287,7 @@ class Log {
                 break;
             case MODULE_ID_TC: $content = $this->tc_action_details($details);
                 break;
-			case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
+            case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
                 break;
             default: $content = $langUnknownModule;
                 break;
@@ -787,6 +787,9 @@ class Log {
         global $langTitle, $langDescription;
 
         $details = unserialize($details);
+        if (is_object($details['title'])) {
+            $details['title'] = $details['title']->title;
+        }
         $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . ellipsize($details['description'], 100) . "&raquo";
