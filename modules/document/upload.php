@@ -180,15 +180,8 @@ if ($can_upload) {
         <input type='hidden' name='file_format' value='' size='40' />
 
         <label for='inputFileLanguage' class='col-sm-2 control-label'>$langLanguage:</label>
-        <div class='col-sm-10'>
-          <select class='form-control' name='file_language'>
-                <option value='en'>$langEnglish</option>
-                <option value='fr'>$langFrench</option>
-                <option value='de'>$langGerman</option>
-                <option value='el' selected>$langGreek</option>
-                <option value='it'>$langItalian</option>
-                <option value='es'>$langSpanish</option>
-            </select>
+        <div class='col-sm-10'>          
+            " . lang_select_options('file_language', "class='form_control'") . "
         </div>
       </div>
 
