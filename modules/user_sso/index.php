@@ -47,7 +47,7 @@ if ($exists && intval($exists->exists) === 1) {
     
     $user = Database::get()->querySingle("SELECT * FROM user WHERE username COLLATE utf8_bin = ?s", $username);
     
-    $is_active = check_activity($user->id);
+    $is_active = is_active_account($user->id, false);
     $admin_rights = get_admin_rights($user->id);
     if ($admin_rights == ADMIN_USER) {
         $is_active = 1;   // admin user is always active

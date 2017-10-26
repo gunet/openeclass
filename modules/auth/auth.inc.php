@@ -151,10 +151,11 @@ function count_auth_users($auth) {
   find/return the string, describing in words the default authentication method
   return $m (string)
  * ************************************************************** */
-
 function get_auth_info($auth)
 {
-    global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth, $langViaCAS, $langViaFacebook, $langViaTwitter, $langViaGoogle, $langViaLive, $langViaYahoo, $langViaLinkedIn, $langNbUsers, $langAuthChangeUser;
+    global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, 
+            $langViaShibboleth, $langViaCAS, $langViaFacebook, $langViaTwitter, 
+            $langViaGoogle, $langViaLive, $langViaYahoo, $langViaLinkedIn;            
 
     if(!empty($auth)) {
         $title = Database::get()->querySingle('SELECT auth_title FROM auth WHERE auth_id = ?d', $auth);
@@ -264,8 +265,7 @@ function get_hybridauth_settings($provider) {
   studentid
  * ************************************************************** */
 
-function auth_user_login($auth, $test_username, $test_password, $settings) {
-    global $webDir;
+function auth_user_login($auth, $test_username, $test_password, $settings) {   
 
     $testauth = false;
     switch ($auth) {
@@ -405,14 +405,23 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
   $userid : the id of the account
   return $testauth (boolean: true-is authenticated, false-is not)
  * ************************************************************** */
-
-function check_activity($userid) {
-    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?d", intval($userid));
+function is_active_account($userid, $eclass_auth = true) {
+    
+    if ($eclass_auth) {
+        if (get_config('block_duration_account')) { // user accounts never expire.        
+            Database::get()->query("UPDATE user SET expires_at = DATE_ADD(NOW(), INTERVAL 1 YEAR) WHERE id = ?d", $userid);
+            return 1;    
+        } 
+    } elseif (get_config('block_duration_alt_account')) { // user accounts never expire.
+        Database::get()->query("UPDATE user SET expires_at = DATE_ADD(NOW(), INTERVAL 1 YEAR) WHERE id = ?d", $userid);
+        return 1;
+    } 
+    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?d", $userid);
     if (!empty($result) && strtotime($result->expires_at) > time()) {
         return 1;
     } else {
         return 0;
-    }
+    }    
 }
 
 /* * **************************************************************
@@ -550,10 +559,29 @@ function get_cas_attrs($phpCASattrs, $settings) {
     return $ret;
 }
 
-/* * **************************************************************
-  Process login form submission
- * ************************************************************** */
 
+/**
+ * @brief  Process login form submission
+ * @global type $warning
+ * @global type $surname
+ * @global type $givenname
+ * @global type $email
+ * @global type $status
+ * @global type $is_admin
+ * @global type $language
+ * @global type $session
+ * @global type $langInvalidId
+ * @global type $langAccountInactive1
+ * @global type $langAccountInactive2
+ * @global type $langNoCookies
+ * @global type $langEnterPlatform
+ * @global type $urlServer
+ * @global type $langHere
+ * @global array $auth_ids
+ * @global type $inactive_uid
+ * @global type $langTooManyFails
+ * @global type $urlAppend
+ */
 function process_login() {
     global $warning, $surname, $givenname, $email, $status, $is_admin,
         $language, $session, $langInvalidId, $langAccountInactive1,
@@ -935,10 +963,17 @@ function hybridauth_login($provider=null) {
     }
 }
 
-/* * **************************************************************
-  Authenticate user via eclass
- * ************************************************************** */
-
+/**
+ * @brief Authenticate user via eclass
+ * @global type $session
+ * @global array $auth_ids
+ * @param type $user_info_object
+ * @param type $posted_uname
+ * @param type $pass
+ * @param type $provider
+ * @param type $user_data
+ * @return int
+ */
 function login($user_info_object, $posted_uname, $pass, $provider=null, $user_data=null) {
     global $session, $auth_ids;
 
@@ -989,7 +1024,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
         if ($user_info_object->status == USER_GUEST) {
             $is_active = get_config('course_guest') != 'off';
         } else {
-            $is_active = check_activity($user_info_object->id);
+            $is_active = is_active_account($user_info_object->id, true);
 
             // check for admin privileges
             $admin_rights = get_admin_rights($user_info_object->id);
@@ -1073,7 +1108,7 @@ function alt_login($user_info_object, $uname, $pass) {
     if ($user_info_object->password == $auth_method_settings['auth_name']) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
-            $is_active = check_activity($user_info_object->id);
+            $is_active = is_active_account($user_info_object->id, false);
             // check for admin privileges
             $admin_rights = get_admin_rights($user_info_object->id);
             if ($admin_rights == ADMIN_USER) {
@@ -1156,15 +1191,28 @@ function alt_login($user_info_object, $uname, $pass) {
     return $auth_allow;
 }
 
-/* * **************************************************************
-  Authenticate user via Shibboleth or CAS
-  $type is 'shibboleth' or 'cas'
- * ************************************************************** */
-
+/**
+ * @brief Authenticate user via Shibboleth or CAS          
+ * @global type $surname
+ * @global type $givenname
+ * @global type $email
+ * @global type $status
+ * @global type $language
+ * @global type $session
+ * @global int $is_admin
+ * @global int $is_power_user
+ * @global int $is_usermanage_user
+ * @global int $is_departmentmanage_user
+ * @global type $langUserAltAuth
+ * @global type $langAccountInactive1
+ * @global type $langAccountInactive2
+ * @param type is 'shibboleth' or 'cas' 
+ */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
-        $urlServer, $is_admin, $is_power_user, $is_usermanage_user,
-        $is_departmentmanage_user, $langUserAltAuth;
+        $is_admin, $is_power_user, $is_usermanage_user,
+        $is_departmentmanage_user, $langUserAltAuth, 
+        $langAccountInactive1, $langAccountInactive2;
 
     $_SESSION['canChangePassword'] = false;
     $autoregister = get_config('alt_auth_stud_reg') == 2;
@@ -1218,7 +1266,19 @@ function shib_cas_login($type) {
                             status, email, lang, verified_mail, am
                         FROM user WHERE username $sqlLogin", $uname);
 
-    if ($info) {
+    if ($info) {                
+        if (!is_active_account($info->id, false)) { // check if user is active
+            unset($_SESSION['cas_uname']);
+            unset($_SESSION['cas_email']);
+            unset($_SESSION['cas_surname']);
+            unset($_SESSION['cas_givenname']);
+            unset($_SESSION['cas_userstudentid']);
+            $message = "$langAccountInactive1 <a href='modules/auth/contactadmin.php?userid=$info->id&amp;h=" .
+                            token_generate("userid=$info->id") . "'>$langAccountInactive2</a>";
+            Session::Messages($message, 'alert-warning');            
+            redirect_to_home_page();
+        }        
+        
         // if user found
         if ($info->password != $type) {
             // has different auth method - redirect to home page

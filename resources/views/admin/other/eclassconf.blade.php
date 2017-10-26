@@ -203,6 +203,15 @@
                                </div>
                             </div>
                             <div class='form-group'>
+                                <label class='col-sm-3 control-label'>{{ trans('lang_block_duration_account') }}:</label>
+                                <div class='checkbox col-sm-9'>
+                                    <label>
+                                        <input type='checkbox' name='block_duration_account' value='1' {{ $cbox_block_duration_account }}>
+                                        {{ trans('lang_message_block_duration_account') }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class='form-group'>
                                <label for='formdurationAccount' class='col-sm-3 control-label'>{{ trans('langUserDurationAccount') }} ({{ trans('langMonthsUnit') }}): </label>
                                <div class='col-sm-9'>
                                     <input type='text' class='form-control' name='formdurationAccount' id='formdurationAccount' maxlength='3' value='{{ get_config('account_duration') / MONTHS }}'>
