@@ -296,6 +296,9 @@ if ($searching) {
     if (count($course_ids)) {
         $where[] = 'course_id IN ' . placeholders($course_ids);
         $args[] = $course_ids;
+    } elseif ($search_terms) {
+        // Did a free-text search and found no results - suppress further searching
+        $where[] = 'false';
     }
 
     foreach ($catNames as $catId => $catName) {
