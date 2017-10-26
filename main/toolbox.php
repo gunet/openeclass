@@ -239,7 +239,12 @@ foreach ($categories as $category) {
     $t->set_var('selectOption', '');
 }
 
-if (isset($_GET['catlang'])) {
+if (isset($_GET['search_terms'])) {
+    $search_terms = trim($_GET['search_terms']);
+} else {
+    $search_terms = null;
+}
+if (isset($_GET['catlang']) or $search_terms) {
     $searching = true;
 }
 $t->set_var('selectFieldLabel', $langLanguage);
@@ -275,16 +280,14 @@ if ($searching) {
     // Free text search in index
     $course_ids = array();
     if (get_config('enable_search')) {
-        if (isset($_GET['search_terms'])) {
-            $search_terms = trim($_GET['search_terms']);
-            if ($search_terms) {
-                // search in the index
-                $idx = new Indexer();
-                $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_GET));
-                $course_ids = array_map(function ($hit) {
-                    return $hit->pkid;
-                }, $hits);
-            }
+        if ($search_terms) {
+            // search in the index
+            $idx = new Indexer();
+            $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_GET));
+            $course_ids = array_map(function ($hit) {
+                return $hit->pkid;
+            }, $hits);
+            $t->set_var('search_terms', q($search_terms));
         }
     } else {
         $t->set_block('main', 'searchBlock', 'delete');
