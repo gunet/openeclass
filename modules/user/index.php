@@ -78,16 +78,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // user status
     if (!empty($_GET['sSearch_1'])) {
         $filter = $_GET['sSearch_1'];
-        $status = array('teacher','student');
-        $others = array('editor', 'reviewer', 'tutor');
-        if (in_array($filter, $status)) {
-            $value = $filter == 'teacher' ? 1 : 5;
-            $search_values[] = $value;
-            $search_sql .= " AND (course_user.status = ?d)";
-        } elseif (in_array($filter, $others)) {
-            $search_sql .= " AND (course_user.$filter = 1)";
+        if ($filter == 'editor') {
+            $search_sql .= ' AND course_user.editor = 1 AND course_user.status = '.USER_STUDENT;
+        } elseif ($filter == 'teacher') {
+            $search_sql .= ' AND course_user.status = '.USER_TEACHER;
+        } elseif ($filter == 'student') {
+            $search_sql .= ' AND course_user.editor <> 1 AND course_user.status = '.USER_STUDENT;
+        } elseif ($filter == 'tutor') {
+            $search_sql .= ' AND course_user.tutor = 1';
+        } elseif ($filter == 'reviewer') { 
+            $search_sql .= ' AND course_user.reviewer = 1';
         }
-
     }
     $sortDir = ($_GET['sSortDir_0'] == 'desc')? 'DESC': '';
     $order_sql = 'ORDER BY ' .
@@ -182,13 +183,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             )
             )
         ));
-        $user_roles = array();
-        ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langStudent);
+        if ($myrow->editor == '1' and $myrow->status != USER_TEACHER) {
+            $user_roles = array($langEditor);
+        } elseif ($myrow->status == USER_TEACHER) {
+            $user_roles = array($langTeacher);
+        } else {
+            $user_roles = array($langStudent);
+        }
         if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
-        if ($myrow->editor == '1') array_push($user_roles, $langEditor);
         if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
 
-        $user_role_string = implode(', ', $user_roles);
+        $user_role_string = implode(',<br>', $user_roles);
 
         $nameColumn = "
                         <div class='pull-left' style='width: 32px ; margin-right: 10px;'>
@@ -200,7 +205,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a></small></div>
                             <div class='text-muted'><small>$am_message</small></div>
                         </div>";
-        $roleColumn = "<div class='text-muted'>".str_replace(', ', ',<br>', $user_role_string)."</div>";        
+        $roleColumn = "<div class='text-muted'>$user_role_string</div>";
         // search for inactive users
         $inactive_user = is_inactive_user($myrow->id);
         //setting datables column data
