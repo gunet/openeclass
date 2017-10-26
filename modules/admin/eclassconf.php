@@ -358,6 +358,7 @@ if (isset($_POST['submit'])) {
         'personal_blog_rating' => true,
         'personal_blog_sharing' => true,
         'block_username_change' => true,
+        'block_duration_account' => true,
         'display_captcha' => true,
         'insert_xml_metadata' => true,
         'enable_mobileapi' => true,
@@ -492,6 +493,8 @@ else {
         $disable_display_captcha = 'disabled';
         $message_display_captcha = '<div>' . $lang_display_captcha_unsupported . '</div>';
     }
+    
+    $cbox_block_duration_account = get_config('block_duration_account') ? 'checked' : '';
     $tool_content .= "
 <div class='row'>
     <div class='col-sm-9'>
@@ -648,6 +651,15 @@ else {
                            </div>
                         </div>
                         <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$lang_block_duration_account:</label>
+                            <div class='checkbox col-sm-9'>
+                            <label>
+                                <input type='checkbox' name='block_duration_account' value='1' $cbox_block_duration_account>
+                                $lang_message_block_duration_account
+                            </label>
+                            </div>
+                        </div>
+                        <div class='form-group'>
                            <label for='formdurationAccount' class='col-sm-3 control-label'>$langUserDurationAccount&nbsp;($langMonthsUnit): </label>
                            <div class='col-sm-9'>
                                 <input type='text' class='form-control' name='formdurationAccount' id='formdurationAccount' maxlength='3' value='" . intval(get_config('account_duration') / MONTHS) . "'>
@@ -687,7 +699,7 @@ else {
         $sel = array();
         $selectable_langs = array();
         $cbox_dont_display_login_form = get_config('dont_display_login_form') ? 'checked' : '';
-        $cbox_hide_login_link = get_config('hide_login_link') ? 'checked' : '';
+        $cbox_hide_login_link = get_config('hide_login_link') ? 'checked' : '';        
         foreach ($language_codes as $langcode => $langname) {
             if (in_array($langcode, $langdirs)) {
                 $loclangname = $langNameOfLang[$langname];
