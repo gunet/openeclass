@@ -80,7 +80,8 @@ $t->set_var('LANG_SELECT', $lang_select);
 
 $msgs = array('langSearch', 'langRegister', 'langLogin', 'langName',
     'langSurname', 'langUsername', 'langEmail', 'langPass', 'langSubmit',
-    'langConfirmation', 'langSearchForm', 'langSearchResults', 'langSearchFreeText');
+    'langConfirmation', 'langSearchForm', 'langSearchResults',
+    'langSearchFreeText', 'langSearchFreeTextPlaceholder');
 foreach ($msgs as $msg) {
     $t->set_var($msg, q($GLOBALS[$msg]));
 }

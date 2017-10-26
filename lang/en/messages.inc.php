@@ -4957,4 +4957,5 @@ $langUnansweredQuestions = 'Unanswered Questions';
 $langUnansweredQuestionsWarningOne = 'There is one unaswered question.';
 $langUnansweredQuestionsWarningMany = 'There are _ unanswered questions.';
 $langUnansweredQuestionsQuestion = 'Do you want to proceed with submission or go to first unanswered question?';
-$langSearchFreeText = "Term Search";
+$langSearchFreeText = "Free text";
+$langSearchFreeTextPlaceholder = "Title, description, keywords...";
