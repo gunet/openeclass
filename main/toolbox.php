@@ -25,6 +25,7 @@
 require_once '../include/baseTheme.php';
 require_once 'modules/sharing/sharing.php';
 require_once 'modules/auth/login_form.inc.php';
+require_once 'modules/search/indexer.class.php';
 
 load_js('select2');
 
@@ -79,7 +80,7 @@ $t->set_var('LANG_SELECT', $lang_select);
 
 $msgs = array('langSearch', 'langRegister', 'langLogin', 'langName',
     'langSurname', 'langUsername', 'langEmail', 'langPass', 'langSubmit',
-    'langConfirmation', 'langSearchForm', 'langSearchResults');
+    'langConfirmation', 'langSearchForm', 'langSearchResults', 'langSearchFreeText');
 foreach ($msgs as $msg) {
     $t->set_var($msg, q($GLOBALS[$msg]));
 }
@@ -270,6 +271,29 @@ if ($searching) {
     }
 
     $query .= ' FROM course c ';
+
+    // Free text search in index
+    $course_ids = array();
+    if (get_config('enable_search')) {
+        if (isset($_GET['search_terms'])) {
+            $search_terms = trim($_GET['search_terms']);
+            if ($search_terms) {
+                // search in the index
+                $idx = new Indexer();
+                $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_GET));
+                $course_ids = array_map(function ($hit) {
+                    return $hit->pkid;
+                }, $hits);
+            }
+        }
+    } else {
+        $t->set_block('main', 'searchBlock', 'delete');
+    }
+
+    if (count($course_ids)) {
+        $where[] = 'course_id IN ' . placeholders($course_ids);
+        $args[] = $course_ids;
+    }
 
     foreach ($catNames as $catId => $catName) {
         if (isset($_GET[$catName])) {

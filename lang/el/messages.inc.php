@@ -406,6 +406,7 @@ $langSearchCourse = "Αναζήτηση $langOfCourses";
 $langNewSearch = "Νέα Αναζήτηση";
 $langSearchCriteria = "Κριτήρια Αναζήτησης";
 $langSearch = "Αναζήτηση";
+$langSearchFreeText = "Αναζήτηση Όρων";
 
 // statuscours.php
 $langCourseStatusChangedSuccess = "Ο τύπος πρόσβασης του $langsOfCourse άλλαξε με επιτυχία!";
