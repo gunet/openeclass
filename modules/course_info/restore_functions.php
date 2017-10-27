@@ -43,10 +43,7 @@ function unpack_zip_inner($zipfile, $clone) {
     require_once 'include/lib/fileUploadLib.inc.php';
 
     $zip = new PclZip($zipfile);
-    if (!$clone) {
-        validateUploadedZipFile($zip->listContent(), 3);
-    }
-
+    
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
     if (!is_dir($destdir)) {
         make_dir($destdir);
