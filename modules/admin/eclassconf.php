@@ -359,6 +359,7 @@ if (isset($_POST['submit'])) {
         'personal_blog_sharing' => true,
         'block_username_change' => true,
         'block_duration_account' => true,
+        'block_duration_alt_account' => true,
         'display_captcha' => true,
         'insert_xml_metadata' => true,
         'enable_mobileapi' => true,
@@ -495,6 +496,7 @@ else {
     }
     
     $cbox_block_duration_account = get_config('block_duration_account') ? 'checked' : '';
+    $cbox_block_duration_alt_account = get_config('block_duration_alt_account') ? 'checked' : '';
     $tool_content .= "
 <div class='row'>
     <div class='col-sm-9'>
@@ -655,6 +657,15 @@ else {
                             <div class='checkbox col-sm-9'>
                             <label>
                                 <input type='checkbox' name='block_duration_account' value='1' $cbox_block_duration_account>
+                                $lang_message_block_duration_account
+                            </label>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$lang_block_duration_alt_account:</label>
+                            <div class='checkbox col-sm-9'>
+                            <label>
+                                <input type='checkbox' name='block_duration_alt_account' value='1' $cbox_block_duration_alt_account>
                                 $lang_message_block_duration_account
                             </label>
                             </div>
