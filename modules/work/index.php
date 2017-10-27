@@ -3114,7 +3114,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }                
 
                 // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
-                if (get_config('ext_unplag_enabled') and valid_plagiarism_file_type($row->id)) {
+                if (get_config('ext_unicheck_enabled') and valid_plagiarism_file_type($row->id)) {
                     $results = Plagiarism::get()->getResults($row->id);
                     if ($results) {
                         if ($results->ready) {
