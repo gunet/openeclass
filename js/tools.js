@@ -471,7 +471,7 @@ function exercise_init_countdown(params) {
             $(window).unbind('unload');
             document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         });
-
+    }
 }
 
 function countdown(timer, callback) {
