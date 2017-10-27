@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -90,11 +90,22 @@ if (isset($_POST['submit'])) {
         } else {
             $password_encrypted = $auth_ids[$_POST['auth_form']];
         }
+        
+        if (isset($_POST['user_date_expires_at'])) {
+            $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
+            $user_expires_at = $expires_at->format("Y-m-d H:i");
+            $user_date_expires_at = $expires_at->format("d-m-Y H:i");
+        } else {                                    
+            $expires_at = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now + 1 year")));
+            $user_expires_at = $expires_at->format("Y-m-d H:i");
+        }        
         $uid = Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
-                VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", " .
-                        DBHelper::timeAfter(get_config('account_duration')) . ", ?s, '', ?s, '')",
-             $surname_form, $givenname_form, $uname_form, $password_encrypted, $email_form, $pstatus, $phone_form, $am_form, $language_form, $verified_mail)->lastInsertID;
+                VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '')",
+                    $surname_form, $givenname_form, $uname_form, 
+                    $password_encrypted, $email_form, 
+                    $pstatus, $phone_form, $am_form, 
+                    $user_expires_at, $language_form, $verified_mail)->lastInsertID;
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $uid);
@@ -185,6 +196,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 // javascript
 load_js('jstree3');
 load_js('pwstrength.js');
+load_js('bootstrap-datetimepicker');
 $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -212,6 +224,18 @@ $head_content .= <<<hContent
 /* ]]> */
 </script>
 hContent;
+
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#user_date_expires_at').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
+                language: '".$language."',
+                minuteStep: 10,
+                autoclose: true
+            });
+        });
+    </script>";
 
 $reqtype = '';
 
@@ -363,6 +387,26 @@ if ($pstatus == 5) { // only for students
     formGroup('am_form', $langAm, 
         "<input class='form-control' id='am_form' type='text' name='am_form'" .
         getValue('am_form', $pam) . " placeholder='" . q($am_message) . "'>");
+}
+
+if (get_config('block_duration_account')) {
+    $tool_content .= "<div class='input-append date form-group'>
+                        <label class='col-sm-2 control-label'>$langExpirationDate:</label>
+                        <div class='col-sm-10'>
+                            <span class='help-block'>$lang_message_block_duration_account</span>
+                        </div>
+                    </div>";
+} else {
+    $expirationDate = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now") + get_config('account_duration')));
+    $tool_content .= "<div class='input-append date form-group'>
+                        <label class='col-sm-2 control-label'>$langExpirationDate:</label>
+                        <div class='col-sm-10'>
+                            <div class='input-group'>
+                                <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
+                                <span class='input-group-addon'><i class='fa fa-calendar'></i></span>
+                            </div>
+                        </div>
+                    </div>";
 }
 
 formGroup('language_form', $langLanguage,
