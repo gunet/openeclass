@@ -33,6 +33,10 @@ if (isset($_POST['buttonBack'])) {
     $buttonBack = $_POST['buttonBack'];
 }
 
+function fix_float($str) {
+    return str_replace(',', '.', $str);
+}
+
 // the answer form has been submitted
 if (isset($submitAnswers) || isset($buttonBack)) {
     if (isset($_POST['nbrAnswers'])) {
@@ -44,7 +48,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             $reponse[$i] = trim($_POST['reponse'][$i]);
             $comment[$i] = trim($_POST['comment'][$i]);
-            $weighting[$i] = $_POST['weighting'][$i];
+            $weighting[$i] = fix_float($_POST['weighting'][$i]);
 
             if ($answerType == UNIQUE_ANSWER) {
                 $goodAnswer = @($_POST['correct'] == $i) ? 1 : 0;
@@ -95,6 +99,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if (isset($_POST['weighting']) and isset($_POST['blanksDefined'])) {
             // a blank can't have a negative weighting
             $weighting = array_map('abs', $_POST['weighting']);
+            $weighting = array_map('fix_float', $weighting);
             // separate text and weightings by '::'
             $reponse .= '::' . implode(',', $weighting);
             $questionWeighting = array_sum($weighting);
@@ -145,7 +150,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if (empty($msgErr)) {
             for ($j = 1; $j <= $_POST['nbrMatches']; $i++, $j++) {
                 $match[$i] = trim($_POST['match'][$i]);
-                $weighting[$i] = abs($_POST['weighting'][$i]);
+                $weighting[$i] = abs(fix_float($_POST['weighting'][$i]));
                 $sel[$i] = intval($_POST['sel'][$i]);
                 $questionWeighting += $weighting[$i];
                 // check if field is empty
@@ -177,14 +182,14 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             if ($goodAnswer) {
                 $nbrGoodAnswers++;
                 // a good answer can't have a negative weighting
-                $weighting[$i] = abs($_POST['weighting'][$i]);
+                $weighting[$i] = abs(fix_float($_POST['weighting'][$i]));
                 // calculates the sum of answer weighting
                 if ($weighting[$i]) {
                     $questionWeighting += $weighting[$i];
                 }
             } else {
                 // a bad answer can't have a positive weighting
-                $weighting[$i] = -abs($_POST['weighting'][$i]);
+                $weighting[$i] = -abs(fix_float($_POST['weighting'][$i]));
             }
             // checks if field is empty
             if (!isset($_POST['reponse'][$i]) || ($_POST['reponse'][$i] === '')) {
@@ -296,7 +301,7 @@ if (isset($_GET['modifyAnswers'])) {
             $option = $_POST['option'];
             $match = $_POST['match'];
             $sel = $_POST['sel'];
-            $weighting = $_POST['weighting'];
+            $weighting = fix_float($_POST['weighting']);
         }
 
         if (isset($_POST['lessOptions'])) {
