@@ -714,7 +714,7 @@ require_once 'include/lib/references.class.php';
      */
     function get_course_events($scope = "month", $startdate = null, $enddate = null){
 
-        global $course_id;
+        global $course_id, $is_editor;
         //form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
@@ -745,21 +745,31 @@ require_once 'include/lib/references.class.php';
         if(!empty($q)){
             $q .= " UNION ";
         }
-        $dc = str_replace('start','ag.start',$datecond);
+        if ($is_editor) {
+            $q_extra = '';
+        } else {
+            $q_extra = "AND ag.visible = 1";    
+        }
+        $dc = str_replace('start','ag.start',$datecond);        
         $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(addtime(ag.start, if(ag.duration = '', '0:00', ag.duration)), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                 . "FROM agenda ag JOIN course c ON ag.course_id=c.id "
-                . "WHERE ag.course_id =?d "
+                . "WHERE ag.course_id =?d $q_extra"
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
         //big blue button
         if(!empty($q)){
             $q .= " UNION ";
+        }                
+        if ($is_editor) {
+            $q_extra = '';
+        } else {
+            $q_extra = "AND tc.active = 1";    
         }
         $dc = str_replace('start','tc.start_date', $datecond);
         $q .= "SELECT tc.id, tc.title, tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date + time('01:00:00'), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-special' class, 'teleconference' event_type,  c.code course "
                 . "FROM tc_session tc JOIN course c ON tc.course_id = c.id "
-                . "WHERE tc.course_id = ?d "
+                . "WHERE tc.course_id = ?d $q_extra"
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
@@ -768,10 +778,15 @@ require_once 'include/lib/references.class.php';
         if(!empty($q)){
             $q .= " UNION ";
         }
+        if ($is_editor) {
+            $q_extra = '';
+        } else {
+            $q_extra = "AND ass.active = 1";    
+        }
         $dc = str_replace('start','ass.deadline', $datecond);
         $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                 . "FROM assignment ass JOIN course c ON ass.course_id=c.id "
-                . "WHERE ass.course_id =?d "
+                . "WHERE ass.course_id =?d $q_extra"
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
@@ -779,10 +794,15 @@ require_once 'include/lib/references.class.php';
         if(!empty($q)){
             $q .= " UNION ";
         }
+        if ($is_editor) {
+            $q_extra = '';
+        } else {
+            $q_extra = "AND ex.active = 1";    
+        }
         $dc = str_replace('start','ex.end_date',$datecond);
         $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                 . "FROM exercise ex JOIN course c ON ex.course_id=c.id "
-                . "WHERE ex.course_id =?d "
+                . "WHERE ex.course_id =?d $q_extra"
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
