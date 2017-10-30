@@ -177,7 +177,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         $questionWeighting = $nbrGoodAnswers = 0;
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             $comment[$i] = trim($_POST['comment'][$i]);
-            $goodAnswer = ($_POST['correct'] == $i) ? 1 : 0;
+            $goodAnswer = (isset($_POST['correct']) && $_POST['correct'] == $i) ? 1 : 0;
 
             if ($goodAnswer) {
                 $nbrGoodAnswers++;
@@ -218,7 +218,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
     }
-    if (!isset($_POST['setWeighting'])) {
+    if (empty($msgErr) and !isset($_POST['setWeighting'])) {
         if (isset($exerciseId)) {
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
         } else {
