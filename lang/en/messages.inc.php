@@ -1,8 +1,10 @@
 <?php
 
 // Message file for language en
-// Generated 2017-10-27 14:28:23
+// Generated 2017-10-30 11:27:02
 
+$langYes = "Yes";
+$langNo = "No";
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
 $langAboutText = "The platform version is";

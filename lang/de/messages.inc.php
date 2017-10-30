@@ -1,8 +1,10 @@
 <?php
 
 // Message file for language de
-// Generated 2017-10-03 10:49:22
+// Generated 2017-10-30 11:27:04
 
+$langYes = "Ja";
+$langNo = "Nein";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
 $langAboutText = "Die Plattform Version ist";
@@ -2737,7 +2739,7 @@ $langlastResent = "Last resent on";
 $langTableEmpty = "Folder is empty.";
 $langNoFileSpecified = "No file selected";
 $langdocAdd = "The message was sent successfully";
-$langMailToUsers = "Notify users";
+$langMailToUsers = "Notify users via e-mail";
 $langDropboxMailNotify = "you have received a new message. You will find it in 'My messages' after logging in to the platform or by following this link:";
 $langNewDropboxFile = "New message notification";
 $langMaxMessageSize = "Max. characters: 500";
@@ -4856,3 +4858,20 @@ $langGradedAt = 'was graded at';
 $langInsertTcMeeting = "teleconference";
 $langOperator = 'Operator';
 $langMindMapSaved = "Mindmap saved";
+$langNewTab = "New Tab";
+$langUnansweredQuestions = 'Unanswered Questions';
+$langUnansweredQuestionsWarningOne = 'There is one unaswered question.';
+$langUnansweredQuestionsWarningMany = 'There are _ unanswered questions.';
+$langUnansweredQuestionsQuestion = 'Do you want to proceed with submission or go to first unanswered question?';
+$langSearchFreeText = "Free text";
+$langSearchFreeTextPlaceholder = "Title, description, keywords...";
+$langOrientation = "Orientation";
+$langPortrait = "Portrait";
+$langLandscape = "Landscape";
+$langMyCertificates = "My certificates";
+$langCertAuthenticity = "Unique identifier";
+$lang_block_duration_account = "Disable user account expiration";
+$lang_block_duration_alt_account = "Disable user account expiration with alternate authentication method";
+$lang_message_block_duration_account = "User accounts never expire.";
+$langHtmlFile = "Html file";
+$langRubricCreated = "Rubrique created successfully";
