@@ -5335,6 +5335,10 @@ $langOpenMeetingsDescription = "<p>Το υποσύστημα <strong>Τηλεσ�
 <p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href=\"openmeetingsconf.php\">Ρυθμίσεις</a>.</p>";
 $langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
 <p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
+$langTurnitinShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). 
+Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Turnitin. 
+Δείτε περισσότερες πληροφορίες στο <a href=\"https://turnitin.com\">https://turnitin.com</a>";
+
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
