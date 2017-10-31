@@ -100,41 +100,42 @@ if ($appName) {
               'level' => 'primary-label')));
 
     $boolean_field = "";
-
-    $tool_content .= "<div class='row extapp'><div class='col-xs-12'>";
-    $tool_content .= "<div class='form-wrapper'>";
-    $tool_content .= "<form class='form-horizontal' role='form' action='extapp.php?edit=" . $appName . "' method='post'>";
-    $tool_content .= "<fieldset>";
-
-    foreach ($app->getParams() as $param) {
-
-        if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
-            $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
-            $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-            $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
-            $boolean_field .= "</div></div></div>";
-        } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
-            $tool_content .= "<div class='form-group'>";
-            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
-            $tool_content .= "<div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
-                                            q($param->value()) . "</textarea></div>";
-            $tool_content .= "</div>";
-        } else {
-            $tool_content .= "<div class='form-group'>";
-            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
-            $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
-            $tool_content .= "</div>";
+    if ($app->getName() == 'turnitin') {  // under construction
+        $tool_content .= "<div class='text-center alert alert-warning'>Δεν έχει υλοποιηθεί ακόμα.</div>";
+    } else {
+        $tool_content .= "<div class='row extapp'><div class='col-xs-12'>";
+        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<form class='form-horizontal' role='form' action='extapp.php?edit=" . $appName . "' method='post'>";
+        $tool_content .= "<fieldset>";
+        foreach ($app->getParams() as $param) {      
+            if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
+                $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
+                $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+                $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
+                $boolean_field .= "</div></div></div>";
+            } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
+                $tool_content .= "<div class='form-group'>";
+                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
+                $tool_content .= "<div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
+                                                q($param->value()) . "</textarea></div>";
+                $tool_content .= "</div>";
+            } else {
+                $tool_content .= "<div class='form-group'>";
+                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
+                $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+                $tool_content .= "</div>";
+            }
         }
+    
+        $tool_content .= $boolean_field;
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
+        $tool_content .= "<button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
+        $tool_content .= "</div>";
+        $tool_content .= "</div>";
+        $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";
+        $tool_content .= "</form></div></div></div>";
     }
-
-    $tool_content .= $boolean_field;
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
-    $tool_content .= "<button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
-    $tool_content .= "</div>";
-    $tool_content .= "</div>";
-    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";
-    $tool_content .= "</form></div></div></div>";
 } else {
     $tool_content .= action_bar(array(
         array('title' => $langBack,
