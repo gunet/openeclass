@@ -214,7 +214,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
 } else {
     if (isset($paused_attempt)) {
-        $record_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d ORDER BY answer_record_id ASC", $paused_attempt->eurid);
+        $record_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, answer_record_id FROM exercise_answer_record WHERE eurid = ?d ORDER BY answer_record_id ASC", $paused_attempt->eurid);
         $i=1;
         foreach ($record_question_ids as $row) {
             $questionList[$i] = $row->question_id;
@@ -310,11 +310,15 @@ if (isset($_POST['formSent'])) {
     $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
 
     // checking if user's time is more than exercise's time constrain
-    if (isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {
+    if (isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {    
         $nowTime = new DateTime();
         $startTime = new DateTime();
-        if (isset($paused_attempt)) {
-            $startTime->setTimestamp($exercise_EndDate);
+        if (isset($paused_attempt)) {            
+            if (is_object($exercise_EndDate)) {
+                $startTime->setTimestamp(strtotime($exercise_EndDate->format("Y-m-d H:i:s")));
+            } else {
+                $startTime->setTimestamp($exercise_EndDate);
+            }
         } else {
             $startTime->setTimestamp($recordStartDate);
         }
@@ -386,6 +390,7 @@ if (isset($_POST['formSent'])) {
     // if the user has clicked on the "Save & Exit" button
     // keeps the exercise in a pending/uncompleted state and returns to the exercise list
     if (isset($_POST['buttonSave']) && $exerciseTempSave) {
+                
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $secs_remaining = isset($_POST['secsRemaining']) ? $_POST['secsRemaining'] : 0;
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
@@ -394,7 +399,7 @@ if (isset($_POST['formSent'])) {
                                           SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
         } else {
             $totalWeighting = $objExercise->selectTotalWeighting();
-        }
+        }        
         //if we are currently in a previously paused attempt (so this is not the first pause), unanswered are already saved in the DB and they onky need an update
         if (!isset($paused_attempt)) {
             $objExercise->save_unanswered(0); //passing 0 to save like unanswered
@@ -404,9 +409,6 @@ if (isset($_POST['formSent'])) {
         unset_exercise_var($exerciseId);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-//    else {
-//        redirect_to_home_page("modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId");
-//    }
 } // end of submit
 
 
