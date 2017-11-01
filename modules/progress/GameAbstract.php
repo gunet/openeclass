@@ -81,7 +81,12 @@ abstract class GameAbstract {
     protected function assertedAction($context) {
         $uid = (isset($context['uid'])) ? $context['uid'] : null;
         if ($uid) {
-            Database::get()->query("update $this->table set completed = true, assigned = ?t where user = ?d and $this->field = ?d", gmdate('Y-m-d H:i:s'), $uid, $this->id);            
+            $current = Database::get()->querySingle("select * from $this->table where user = ?d and $this->field = ?d", $uid, $this->id);
+            if ($current && $current->assigned != null) {
+                Database::get()->query("update $this->table set completed = true where user = ?d and $this->field = ?d", $uid, $this->id);
+            } else {
+                Database::get()->query("update $this->table set completed = true, assigned = ?t where user = ?d and $this->field = ?d", gmdate('Y-m-d H:i:s'), $uid, $this->id);
+            }
         }
     }
     
