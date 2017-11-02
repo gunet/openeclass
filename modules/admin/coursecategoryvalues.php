@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_admin = true;
@@ -106,7 +106,7 @@ if (!isset($_GET['action'])) {
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
-        
+
         list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
@@ -116,7 +116,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
             // OK Create the new course category value
             $q = "INSERT INTO category_value (category_id, name, ordering, active) VALUES (?d, ?s, ?d, ?d)";
             Database::get()->query($q, $catId, $name, $ordering, $active);
-            Session::Messages($langAddSuccess, 'alert alert-success');
+            Session::Messages($langAddSuccess, 'alert-success');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
         }
     } else {
@@ -133,8 +133,9 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
 
     if ($value !== false) {
         // The category value can be deleted
+        Database::get()->query("DELETE FROM course_category WHERE category_value_id = ?d", $id);
         Database::get()->query("DELETE FROM category_value WHERE id = ?d", $id);
-        Session::Messages($langCourseCategoryValueErase, 'alert alert-success');
+        Session::Messages($langCourseCategoryValueErase, 'alert-success');
         redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
     }
 }
@@ -148,13 +149,13 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyCourseCategoryValueName, 'alert alert-danger');
+            Session::Messages($langEmptyCourseCategoryValueName, 'alert-danger');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=edit&id=' . $id);
         } else {
             // OK Update the course category value
             $q = "UPDATE category_value SET name = ?s, ordering = ?d, active = ?d WHERE id = ?d";
             Database::get()->query($q, $name, $ordering, $active, $id);
-            Session::Messages($langEditCourseCategoryValueSuccess, 'alert alert-success');
+            Session::Messages($langEditCourseCategoryValueSuccess, 'alert-success');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
         }
     } else {
@@ -169,7 +170,7 @@ draw($tool_content, 3, null, $head_content);
 
 function prepareDataFromPost() {
     global $session;
-    
+
     $names = array();
     foreach ($session->active_ui_languages as $key => $langcode) {
         $n = (isset($_POST['name-' . $langcode])) ? $_POST['name-' . $langcode] : null;
