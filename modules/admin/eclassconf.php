@@ -347,6 +347,7 @@ if (isset($_POST['submit'])) {
         'personal_blog_sharing' => true,
         'block_username_change' => true,
         'block_duration_account' => true,
+        'block_duration_alt_account' => true,
         'display_captcha' => true,
         'insert_xml_metadata' => true,
         'enable_mobileapi' => true,
@@ -556,6 +557,7 @@ else {
     $data['cbox_login_fail_check'] = get_config('login_fail_check') ? 'checked' : '';
     $data['id_enable_mobileapi'] = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
     $data['cbox_block_duration_account'] = get_config('block_duration_account') ? 'checked' : '';
+    $data['cbox_block_duration_alt_account'] = get_config('block_duration_alt_account') ? 'checked' : '';
     $data['cbox_disable_log_actions'] = get_config('disable_log_actions') ? 'checked' : '';
     $data['cbox_disable_log_course_actions'] = get_config('disable_log_course_actions') ? 'checked' : '';
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';

@@ -2311,6 +2311,7 @@ $lang_dont_display_login_form = "Να μην εμφανίζεται στην α�
 $lang_hide_login_link = "Να μην εμφανίζεται σύνδεσμος προς την οθόνη σύνδεσης";
 $lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
 $lang_block_duration_account = "Απενεργοποίηση λήξης λογαριασμών";
+$lang_block_duration_alt_account = "Απενεργοποίηση λήξης λογαριασμών χρηστών που χρησιμοποιούν εναλλακτικό τρόπο πιστοποίησης";
 $lang_message_block_duration_account = "Οι λογαριασμοί των χρηστών δεν λήγουν ποτέ.";
 $lang_display_captcha = "Εμφάνιση κωδικού ασφαλείας κατά την εγγραφή χρηστών";
 $lang_display_captcha_label = "Κωδικός ασφαλείας (CAPTCHA)";
