@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.7
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2017  Greek Universities Network - GUnet
@@ -84,7 +84,7 @@ if (isset($_POST['submitQuestion'])) {
     if ($v->validate()) {
         $questionName = trim($_POST['questionName']);
         $questionDescription = purify($_POST['questionDescription']);
-        $answerType = intval($_POST['answerType']);        
+        $answerType = intval($_POST['answerType']);
         // no name given
         if (empty($questionName)) {
             $msgErr = $langGiveQuestion;
@@ -100,7 +100,7 @@ if (isset($_POST['submitQuestion'])) {
 
         // If grade field set (only in Free text questions)
         if (isset($_POST['questionGrade'])) {
-            $objQuestion->updateWeighting($_POST['questionGrade']);
+            $objQuestion->updateWeighting(str_replace(',', '.', $_POST['questionGrade']));
         }
         if (isset($_GET['exerciseId'])) {
             $exerciseId = intval($_GET['exerciseId']);

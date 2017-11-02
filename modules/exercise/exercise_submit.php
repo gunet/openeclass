@@ -126,7 +126,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
 }
 
 if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
-    //If the exercise is password protected
+    // If the exercise is password protected
     $password = $objExercise->selectPasswordLock();
     if ($password && !$is_editor) {
         if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
@@ -149,7 +149,7 @@ if ($ips && !$is_editor){
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
 }
-// if the user has clicked on the "Cancel" button
+// If the user has clicked on the "Cancel" button,
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
@@ -178,8 +178,9 @@ $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
 $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
 
-// exercise has ended or hasn't been enabled yet due to declared dates
-if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) {
+// exercise has ended or hasn't been enabled yet due to declared dates or was submmitted automatically due to expiring time
+$autoSubmit = isset($_POST['autoSubmit']) && $_POST['autoSubmit'] == 'true';
+if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) or $autoSubmit) {
     // if that happens during an active attempt
     if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
@@ -246,7 +247,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     $recordStartDate = strtotime($recordStartDate);
     // if exerciseTimeConstrain has not passed yet calculate the remaining time
     if ($exerciseTimeConstraint>0) {
-        $timeleft = isset($paused_attempt) ? $paused_attempt->secs_remaining : ($exerciseTimeConstraint*60) - ($temp_CurrentDate - $recordStartDate);
+        $timeleft = isset($paused_attempt) ? $paused_attempt->secs_remaining : ($exerciseTimeConstraint * 60) - ($temp_CurrentDate - $recordStartDate);
     }
 } elseif (!isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) && $nbrQuestions > 0) {
     $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
@@ -288,10 +289,7 @@ if ($exercise_EndDate) {
         $timeleft = $exerciseTimeLeft;
     }
 }
-if (isset($timeleft)) {
-    // Automatically submit 10 sec before expiration to account for delays etc.
-    $timeleft -= 10;
-}
+
 // If there are answers in the session get them
     if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
             $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
@@ -306,26 +304,13 @@ if (isset($timeleft)) {
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
+    $time_expired = false;
     $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
-
     // checking if user's time is more than exercise's time constrain
-    if (isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {    
-        $nowTime = new DateTime();
-        $startTime = new DateTime();
-        if (isset($paused_attempt)) {            
-            if (is_object($exercise_EndDate)) {
-                $startTime->setTimestamp(strtotime($exercise_EndDate->format("Y-m-d H:i:s")));
-            } else {
-                $startTime->setTimestamp($exercise_EndDate);
-            }
-        } else {
-            $startTime->setTimestamp($recordStartDate);
-        }
-        $endTime = new DateTime($startTime->format('Y-m-d H:i:s'));
-        $interval = isset($paused_attempt) ? 'PT'.$paused_attempt->secs_remaining.'S' :'PT'.$exerciseTimeConstraint.'M';
-        $endTime->add(new DateInterval($interval));
-        if ($endTime < $nowTime) {
-            $time_expired = TRUE;
+    if (isset($timeleft)) {
+        $timeleft += 1; // Add 1 sec for leniency when submitting
+        if ($timeleft < 0) {
+            $time_expired = true;
         }
     }
 
@@ -339,7 +324,7 @@ if (isset($_POST['formSent'])) {
 
     // if it is a non-sequential exercice OR
     // if it is a sequnential exercise in the last question OR the time has expired
-    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
+    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || $time_expired)) {
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -361,7 +346,7 @@ if (isset($_POST['formSent'])) {
 
         // If time expired in sequential exercise we must add to the DB the non-given answers
         // to the questions the student didn't had the time to answer
-        if (isset($time_expired) && $time_expired && $exerciseType == 2) {
+        if ($time_expired && $exerciseType == 2) {
             $objExercise->save_unanswered();
         }
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
@@ -381,7 +366,7 @@ if (isset($_POST['formSent'])) {
         unset($objExercise);
         unset_exercise_var($exerciseId);
         // if time expired set flashdata
-        if (isset($time_expired) && $time_expired) {
+        if ($time_expired) {
             Session::Messages($langExerciseExpiredTime);
         } else {
             Session::Messages($langExerciseCompleted, 'alert-success');
@@ -413,13 +398,19 @@ if (isset($_POST['formSent'])) {
     }
 }
 
-
+if (isset($timeleft)) {
+    // Submit 10 sec earlier to account for delays when submitting etc.
+    $timeleft -= 10;
+    if ($timeleft <= 1) {
+        $timeleft = 1;
+    }
+}
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" .
-      (isset($timeleft) && $timeleft > 0 ?
-        "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>" . $timeleft . "</span></div>" : '') .
+    (isset($timeleft)?
+        "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>$timeleft</span></div>" : '') .
       q_math($exerciseTitle) . "</h3>
   </div>";
 if (!empty($exerciseDescription_temp)) {
@@ -436,7 +427,7 @@ $tool_content .= "
   <input type='hidden' name='attempt_value' value='$attempt_value'>
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions'>";
 
-if (isset($timeleft) && $timeleft>0) {
+if (isset($timeleft) && $timeleft > 0) {
   $tool_content .= "<input type='hidden' name='secsRemaining' id='secsRemaining' value='$timeleft' />";
 }
 $i = 0;
@@ -493,20 +484,20 @@ $tool_content .= "</form>";
 if ($questionList) {
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     // Enable check for unanswered questions when displaying more than one question
-    $exercise_check_unanswered = ($i > 1)? 'true': 'false';
     $head_content .= "<script type='text/javascript'>
-        exercise_init_countdown({
-            warning: '". js_escape($langLeaveExerciseWarning) ."',
-            unansweredQuestions: '". js_escape($langUnansweredQuestions) ."',
-            oneUnanswered: '". js_escape($langUnansweredQuestionsWarningOne) ."',
-            manyUnanswered: '". js_escape($langUnansweredQuestionsWarningMany) ."',
-            question: '". js_escape($langUnansweredQuestionsQuestion) ."',
-            submit: '". js_escape($langSubmit) ."',
-            goBack: '". js_escape($langGoBackToEx) ."',
-            refreshTime: $refresh_time,
-            exerciseId: $exerciseId,
-            eurid: $eurid,
-            checkUnanswered: $exercise_check_unanswered
+        $(function () {
+            exercise_init_countdown({
+                warning: '". js_escape($langLeaveExerciseWarning) ."',
+                unansweredQuestions: '". js_escape($langUnansweredQuestions) ."',
+                oneUnanswered: '". js_escape($langUnansweredQuestionsWarningOne) ."',
+                manyUnanswered: '". js_escape($langUnansweredQuestionsWarningMany) ."',
+                question: '". js_escape($langUnansweredQuestionsQuestion) ."',
+                submit: '". js_escape($langSubmit) ."',
+                goBack: '". js_escape($langGoBackToEx) ."',
+                refreshTime: $refresh_time,
+                exerciseId: $exerciseId,
+                eurid: $eurid
+            });
         });
 </script>";
 }

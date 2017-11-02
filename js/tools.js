@@ -328,21 +328,20 @@ function exercise_init_countdown(params) {
         eurid = params.eurid;
 
     var continueSubmit = function () {
-        $(window).unbind('beforeunload');
-        $(window).unbind('unload');
+        $(window).off();
         document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         cancelCheck = true;
         $('.exercise').off().submit();
     }
 
-    $(window).bind('beforeunload', function() {
+    $(window).on('beforeunload', function() {
         var date = new Date();
         date.setTime(date.getTime() + 30 * 1000);
         var expires = '; expires=' + date.toGMTString();
         document.cookie = 'inExercise=' + exerciseId + expires;
         return params.warning;
     });
-    $(window).bind('unload', function() {
+    $(window).on('unload', function() {
         $.ajax({
             type: 'POST',
             url: '',
@@ -350,28 +349,28 @@ function exercise_init_countdown(params) {
             async: false
         });
     });
-    $(document).ready(function(){
-        var timer = $('#progresstime');
-        timer.time = timer.text();
-        timer.text(secondsToHms(timer.time--));
-        var hidden_timer = $('#secsRemaining');
-        hidden_timer.time = timer.time;
-        setInterval(function() {
-            hidden_timer.val(hidden_timer.time--);
-            if (hidden_timer.time + 1 == 0) {
-                clearInterval();
-            }
-        }, 1000);
-        countdown(timer, function() {
-            continueSubmit()
-        });
-        setInterval(function() {
-            $.ajax({
-              type: 'POST',
-              data: { action: 'refreshSession'}
-            });
-        }, params.refreshTime);
+
+    var timer = $('#progresstime');
+    timer.time = timer.text();
+    timer.text(secondsToHms(timer.time--));
+    var hidden_timer = $('#secsRemaining');
+    hidden_timer.time = timer.time;
+    setInterval(function() {
+        hidden_timer.val(hidden_timer.time--);
+        if (hidden_timer.time + 1 == 0) {
+            clearInterval();
+        }
+    }, 1000);
+    countdown(timer, function() {
+        $('<input type="hidden" name="autoSubmit" value="true">').appendTo('.exercise');
+        continueSubmit();
     });
+    setInterval(function() {
+        $.ajax({
+          type: 'POST',
+          data: { action: 'refreshSession'}
+        });
+    }, params.refreshTime);
 
     // Keep track of which questions have been answered
     var cancelCheck = false;
@@ -405,7 +404,6 @@ function exercise_init_countdown(params) {
                 });
             }
         });
-        $('.btn[name=buttonCancel]').click(continueSubmit);
         $('.exercise').submit(function (e) {
             var unansweredCount = 0, firstUnanswered;
 
@@ -463,12 +461,13 @@ function exercise_init_countdown(params) {
             }
         });
     }
-    if (params.checkUnanswered) {
-        $(exerciseCheckUnanswered);
+    var checkUnanswered = $('.qPanel').length > 1;
+    $('.btn[name=buttonCancel], .btn[name=buttonSave]').click(continueSubmit);
+    if (checkUnanswered) {
+        exerciseCheckUnanswered();
     } else {
         $('.exercise').submit(function () {
-            $(window).unbind('beforeunload');
-            $(window).unbind('unload');
+            $(window).off();
             document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         });
     }
