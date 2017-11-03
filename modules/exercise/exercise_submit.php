@@ -246,13 +246,13 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     $recordStartDate = Database::get()->querySingle("SELECT record_start_date FROM exercise_user_record WHERE eurid = ?d", $eurid)->record_start_date;
     $recordStartDate = strtotime($recordStartDate);
     // if exerciseTimeConstrain has not passed yet calculate the remaining time
-    if ($exerciseTimeConstraint>0) {
+    if ($exerciseTimeConstraint > 0) {
         $timeleft = isset($paused_attempt) ? $paused_attempt->secs_remaining : ($exerciseTimeConstraint * 60) - ($temp_CurrentDate - $recordStartDate);
     }
 } elseif (!isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) && $nbrQuestions > 0) {
     $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
 
-    // Check if allowed number of attempts surpassed and if so redirect
+    // Check if allowed number of attempts exceeded and if so redirect
    if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseMaxAttemptsReached);
@@ -278,7 +278,6 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
         $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status)
                         VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt+1)->lastInsertID;
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
-        $timeleft = $exerciseTimeConstraint*60;
    }
 }
 if ($exercise_EndDate) {
@@ -291,15 +290,15 @@ if ($exercise_EndDate) {
 }
 
 // If there are answers in the session get them
-    if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
-            $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
+if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
+    $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
+} else {
+    if (isset($paused_attempt)) {
+        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value]= $objExercise->get_attempt_results_array($eurid);
     } else {
-        if (isset($paused_attempt)) {
-            $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value]= $objExercise->get_attempt_results_array($eurid);
-        } else {
-            $exerciseResult = array();
-        }
+        $exerciseResult = array();
     }
+}
 
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
