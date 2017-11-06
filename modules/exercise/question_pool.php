@@ -24,13 +24,13 @@ include 'exercise.class.php';
 include 'question.class.php';
 include 'answer.class.php';
 
+$require_course_admin = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'exercises';
 $helpSubTopic = 'question_bank';
 
 include '../../include/baseTheme.php';
-
 require_once 'imsqtilib.php';
 
 $head_content .= "
@@ -76,7 +76,6 @@ if (!isset($_GET['page'])) {
 } else {
     $page = $_GET['page'];
 }
-if ($is_editor) {
     // deletes a question from the data base and all exercises
     if (isset($_GET['delete'])) {
         $delete = intval($_GET['delete']);
@@ -207,22 +206,29 @@ if ($is_editor) {
         }
         $total_query_vars = isset($fromExercise) ? array_merge($total_query_vars, array($fromExercise, $fromExercise)) : $total_query_vars;
         $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
+<<<<<<< local
         if (isset($fromExercise)) {
             $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+=======
+        if (isset($fromExercise)) {            
+            $export_result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+>>>>>>> graft
                             ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            GROUP BY id ORDER BY question LIMIT ?d, ?d";
+                            GROUP BY id ORDER BY question";
+            $result_query = $export_result_query .  " LIMIT ?d, ?d";
             $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))";
         } else {
-            $result_query = "SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
+            $export_result_query = "SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
                             WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$extraSql
-                            ORDER BY q_position LIMIT ?d, ?d";
+                            ORDER BY q_position";
+            $result_query = $export_result_query .  " LIMIT ?d, ?d";
             $total_query = "SELECT COUNT(id) AS total FROM `exercise_with_questions`, `exercise_question`
                             WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$extraSql";
         }
-    } else { // if user selected either Orphan Qustion or All Questions
+    } else { // if user selected either Orphan Question or All Questions
         $total_query_vars[] = $course_id;
         $extraSql = "";
         if(isset($difficultyId) && $difficultyId!=-1) {
@@ -246,18 +252,36 @@ if ($is_editor) {
             $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$extraSql";
         } else { // if user selected all questions
+<<<<<<< local
             if (isset($fromExercise)) { // if coming to question pool from an exercise
                 $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                                 ON question_id = id WHERE course_id = ?d $extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+=======
+            if (isset($fromExercise)) { // if is coming to question pool from an exercise
+                $export_result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                                ON question_id = id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+>>>>>>> graft
                                 question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
+<<<<<<< local
                                 GROUP BY id, question, type ORDER BY question LIMIT ?d, ?d";
+=======
+                                GROUP BY id ORDER BY question";
+                $result_query = $export_result_query .  " LIMIT ?d, ?d";
+>>>>>>> graft
                 $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                                 ON question_id = id WHERE course_id = ?d $extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                                 question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))";
             } else {
+<<<<<<< local
                 $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                                 ON question_id = id WHERE course_id = ?d $extraSql
                                 GROUP BY id, question, type ORDER BY question LIMIT ?d, ?d";
+=======
+                $export_result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                                ON question_id = id WHERE course_id = ?d$extraSql
+                                GROUP BY id ORDER BY question";
+                $result_query = $export_result_query .  " LIMIT ?d, ?d";
+>>>>>>> graft
                 $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                                 ON question_id = id WHERE course_id = ?d $extraSql";
             }
@@ -267,12 +291,16 @@ if ($is_editor) {
     }
 
     if (isset($_GET['exportIMSQTI'])) {
+<<<<<<< local
 
         $result = Database::get()->queryArray($result_query, $result_query_vars);
+=======
+        
+        $result = Database::get()->queryArray($export_result_query, $total_query_vars);
+>>>>>>> graft
         header('Content-type: text/xml');
         header('Content-Disposition: attachment; filename="exportQTI.xml"');
         exportIMSQTI($result);
-
         exit();
 
     } else {
@@ -290,27 +318,26 @@ if ($is_editor) {
         foreach ($result as $row) {
             $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
             if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
-                if ($row->type == 1) {
+                if ($row->type == UNIQUE_ANSWER) {
                     $answerType = $langUniqueSelect;
-                } elseif ($row->type == 2) {
+                } elseif ($row->type == MULTIPLE_ANSWER) {
                     $answerType = $langMultipleSelect;
-                } elseif ($row->type == 3) {
+                } elseif ($row->type == FILL_IN_BLANKS) {
                     $answerType = "$langFillBlanks ($langFillBlanksStrict)";
-                } elseif ($row->type == 4) {
+                } elseif ($row->type == MATCHING) {
                     $answerType = $langMatching;
-                } elseif ($row->type == 5) {
+                } elseif ($row->type == TRUE_FALSE) {
                     $answerType = $langTrueFalse;
-                } elseif ($row->type == 6) {
+                } elseif ($row->type == FREE_TEXT) {
                     $answerType = $langFreeText;
-                } elseif ($row->type == 7) {
+                } elseif ($row->type == FILL_IN_BLANKS_TOLERANT) {
                     $answerType = "$langFillBlanks ($langFillBlanksTolerant)";
                 }
                 $tool_content .= "<tr>";
                 if (!isset($fromExercise)) {
                     $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
                 } else {
-                    $tool_content .= "<td>
-                                        <a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br>" . $answerType . "</td>";
+                    $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br>" . $answerType . "</td>";
                 }
                 $tool_content .= "<td class='option-btn-cell'>".
                     action_button(array(
@@ -359,7 +386,11 @@ if ($is_editor) {
             if ($page > 0) {
                 $prevpage = $page - 1;
                 $query_string_url = removeGetVar($_SERVER['REQUEST_URI'], 'page');
+<<<<<<< local
                 $tool_content .= "<small>&lt;&lt; <a href='$query_string_url&amp;page=$prevpage'>$langPreviousPage</a></small>";
+=======
+                $tool_content .= "<small>&lt;&lt; <a href='$query_string_url&amp;page=$prevpage'>$langPreviousPage</a>&nbsp;&nbsp;</small>";
+>>>>>>> graft
             }
             if ($page < $numpages) {
                 $nextpage = $page + 1;
@@ -369,9 +400,6 @@ if ($is_editor) {
         }
         $tool_content .= "</table>";
     }
-} else { // if not admin of course
-    $tool_content .= $langNotAllowed;
-}
 
 $tool_content .= "
 <!-- Modal -->
