@@ -292,7 +292,7 @@ if (!class_exists('Exercise')) {
          *
          * @author - Olivier Brouckaert
          * @return - array - if the exercise is not set to take questions randomly, returns the question list
-         *                   without randomizing, otherwise, returns the list with questions selected randomly
+         * 					 without randomizing, otherwise, returns the list with questions selected randomly
          */
         function selectRandomList() {
             // if the exercise is not a random exercise, or if there are not at least 2 questions
@@ -630,19 +630,12 @@ if (!class_exists('Exercise')) {
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
             }
         }
-         /**
-         * checks if exercise time has expired
-         */
-        function has_time_expired($choice, $exerciseResult) {
-            global $is_editor;
 
-
-        }
         /**
-         * keeps record of user answers
+         * @brief keeps record of user answers         
          */
         function record_answers($choice, $exerciseResult, $record_type = 'insert') {
-            global $is_editor;
+            
             $action = $record_type.'_answer_records';
 
             // if the user has answered at least one question
@@ -881,19 +874,12 @@ if (!class_exists('Exercise')) {
                    Database::get()->query("UPDATE exercise_answer_record SET is_answered= 1 WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                } else {
                    $objAnswersTmp = new Answer($key);
-                   $i = 1;
-                   // the first time in the loop we should update in order to keep question position in the DB
-                   // and then insert a new record if there are more than one answers
+                   Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $key);                   
                    foreach ($value as $row_key => $row_choice) {
                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
-                       if ($i==1) {
-                           Database::get()->query("UPDATE exercise_answer_record SET answer_id = ?d, weight = ?f , is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $row_key, $answer_weight, $eurid, $key);
-                       } else {
                            Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
                                     VALUES (?d, ?d, ?d, ?f, 1)", $eurid, $key, $row_key, $answer_weight);
-                       }
                        unset($answer_weight);
-                       $i++;
                    }
                    unset($objAnswersTmp);
                }
@@ -923,6 +909,7 @@ if (!class_exists('Exercise')) {
            }
            unset($objQuestionTmp);
         }
+        
         /**
          * Purge exercise user results
          */
