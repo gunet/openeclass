@@ -65,8 +65,8 @@ if (isset($_COOKIE['inExercise'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
-//Identifying ajax request that cancels an active attempt
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+// Identifying ajax request that cancels an active attempt
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         if ($_POST['action'] == 'refreshSession') {
             // Does nothing just refreshes the session
             exit();
@@ -213,7 +213,7 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_
 if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
 } else {
-    if (isset($paused_attempt)) {        
+    if (isset($paused_attempt)) {
         $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id ORDER BY question_id ASC", $paused_attempt->eurid);
         $i=1;
         foreach ($record_question_ids as $row) {
@@ -275,8 +275,11 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
          }
         // count this as an attempt by saving it as an incomplete record, if there are any available attempts left
         $start = date('Y-m-d H:i:s', $attempt_value);
+        if ($exerciseTimeConstraint) {
+            $timeleft = $exerciseTimeConstraint * 60;
+        }
         $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status)
-                        VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt+1)->lastInsertID;
+                        VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt + 1)->lastInsertID;
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
    }
 }
@@ -305,7 +308,7 @@ $questionNum = count($exerciseResult) + 1;
 if (isset($_POST['formSent'])) {
     $time_expired = false;
     $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
-    // checking if user's time is more than exercise's time constrain
+    // checking if user's time expired
     if (isset($timeleft)) {
         $timeleft += 1; // Add 1 sec for leniency when submitting
         if ($timeleft < 0) {
@@ -314,7 +317,6 @@ if (isset($_POST['formSent'])) {
     }
 
     // inserts user's answers in the database and adds them in the $exerciseResult array which is returned
-
     $action = isset($paused_attempt) ? 'update' : 'insert';
 
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
@@ -376,7 +378,7 @@ if (isset($_POST['formSent'])) {
     // keeps the exercise in a pending/uncompleted state and returns to the exercise list
     if (isset($_POST['buttonSave']) && $exerciseTempSave) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-        $secs_remaining = isset($_POST['secsRemaining']) ? $_POST['secsRemaining'] : 0;
+        $secs_remaining = isset($timeleft) ? $timeleft : 0;
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
         if ($objExercise->isRandom()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (

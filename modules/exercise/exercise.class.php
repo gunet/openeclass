@@ -647,7 +647,7 @@ if (!class_exists('Exercise')) {
 
             // if the user has answered at least one question
             if (is_array($choice)) {
-                //if all questions on the same page
+                // if all questions on the same page
                 if ($this->selectType() == 1) {
                     // $exerciseResult receives the content of the form.
                     // Each choice of the student is stored into the array $choice
@@ -655,7 +655,7 @@ if (!class_exists('Exercise')) {
                     foreach ($exerciseResult as $key => $value) {
                         $this->$action($key, $value);
                     }
-                //else if one question per page
+                // else if one question per page
                 } else {
                     // gets the question ID from $choice. It is the key of the array
                     list($key) = array_keys($choice);
@@ -841,7 +841,7 @@ if (!class_exists('Exercise')) {
          * Update user answers
          */
         private function update_answer_records($key, $value) {
-                        
+
             // construction of the Question object
            $objQuestionTmp = new Question();
            // reads question informations
@@ -864,13 +864,13 @@ if (!class_exists('Exercise')) {
                list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
                // splits weightings that are joined with a comma
                $rightAnswerWeighting = explode(',', $answerWeighting);
-               $blanks = Question::getBlanks($answer);                              
-               foreach ($value as $row_key => $row_choice) {                   
+               $blanks = Question::getBlanks($answer);
+               foreach ($value as $row_key => $row_choice) {
                    // if user's choice is right assign rightAnswerWeight else 0
                        $canonical_choice = canonicalize_whitespace($objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice);
                        $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($blanks[$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $blanks[$row_key-1];
-                       $right_answers = array_map('canonicalize_whitespace', preg_split('/\s*\|\s*/', $canonical_match));               
-                       $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key-1] : 0;                       
+                       $right_answers = array_map('canonicalize_whitespace', preg_split('/\s*\|\s*/', $canonical_match));
+                       $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key-1] : 0;
                        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, weight = ?f, is_answered = 1
                                               WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d", $row_choice, $weight, $eurid, $key, $row_key);
                }
