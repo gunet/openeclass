@@ -221,7 +221,7 @@ if (!$nbrExercises) {
             $lock_description = "<ul>";
             if ($row->password_lock) {
                 $lock_description .= "<li>$langPasswordUnlock</li>";
-                $link_class = " class='password_protected'";
+                $link_class = "password_protected";
             }
             if ($row->ip_lock) {
                 $lock_description .= "<li>$langIPUnlock</li>";
@@ -295,17 +295,20 @@ if (!$nbrExercises) {
             $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
 
             if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
+                
+            
                 $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
                                 . "FROM exercise_user_record "
                                 . "WHERE eid = ?d AND uid = ?d "
                                 . "AND attempt_status = ?d", $row->id, $uid, ATTEMPT_PAUSED);
                 if ($paused_exercises) {
                     $password_protected = isset($row->password_lock) && !$is_editor ? " password_lock": "";
-                    $tool_content .= "<td><a$link_class href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
+                    $tool_content .= "<td><a class='paused_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
                             . "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAttemptPaused'>$lock_icon";
                 } else {
-                    $tool_content .= "<td><a$link_class href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
+                    $tool_content .= "<td><a class='$link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
                 }                                
+                
              } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
