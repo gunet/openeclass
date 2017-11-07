@@ -212,8 +212,8 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise
 if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
 } else {
-    if (isset($paused_attempt)) {
-        $record_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, answer_record_id FROM exercise_answer_record WHERE eurid = ?d ORDER BY answer_record_id ASC", $paused_attempt->eurid);
+    if (isset($paused_attempt)) {        
+        $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id ORDER BY question_id ASC", $paused_attempt->eurid);
         $i=1;
         foreach ($record_question_ids as $row) {
             $questionList[$i] = $row->question_id;

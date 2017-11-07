@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -139,29 +139,9 @@ if ($is_editor) {
             ."ORDER BY id LIMIT ?d, ?d", $course_id, $uid, $from, $limitExPage);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
-$paused_exercises = Database::get()->queryArray("SELECT eurid, eid, title, attempt, password_lock FROM exercise_user_record a "
-        . "JOIN exercise b ON a.eid = b.id WHERE b.course_id = ?d AND a.uid = ?d "
-        . "AND a.attempt_status = ?d ORDER BY eid, attempt", $course_id, $uid, ATTEMPT_PAUSED);
+
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
 $nbrExercises = count($result); //Getting number of limited (offset and limit) exercises of the course (active and inactive)
-if (count($paused_exercises) > 0) {
-    $paused_exercise_id = 0;
-    foreach ($paused_exercises as $row) {
-        if ($paused_exercise_id != $row->eid) {
-            if ($paused_exercise_id) {
-                $tool_content .= "</ul></div>";
-            }
-            $tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice ". q($row->title) .": <ul>";
-        }
-        $password_protected = isset($row->password_lock) && !$is_editor ? " password_lock": "";
-
-        $tool_content .= "<li><a class='paused_exercise$password_protected' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->eid&amp;eurId=$row->eurid'>$langAttempt $row->attempt</a></li>";
-
-        $paused_exercise_id = $row->eid;
-        //$tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice " . q($row->title) . ". <a class='paused_exercise' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->eid&amp;eurId=$row->eurid'>($langCont)</a></div>";
-    }
-    $tool_content .= "</ul></div>";
-}
 if ($is_editor) {
     $pending_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
             . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d GROUP BY eid, title", ATTEMPT_PENDING, $course_id);
@@ -315,7 +295,17 @@ if (!$nbrExercises) {
             $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
 
             if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
-                $tool_content .= "<td><a$link_class href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
+                $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
+                                . "FROM exercise_user_record "
+                                . "WHERE eid = ?d AND uid = ?d "
+                                . "AND attempt_status = ?d", $row->id, $uid, ATTEMPT_PAUSED);
+                if ($paused_exercises) {
+                    $password_protected = isset($row->password_lock) && !$is_editor ? " password_lock": "";
+                    $tool_content .= "<td><a$link_class href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
+                            . "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAttemptPaused'>$lock_icon";
+                } else {
+                    $tool_content .= "<td><a$link_class href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
+                }                                
              } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
