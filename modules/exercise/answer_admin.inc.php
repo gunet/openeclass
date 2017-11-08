@@ -220,6 +220,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
     }
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
         if (isset($exerciseId)) {
+            Session::Messages($langQuestionReused, 'alert-success');
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
         } else {
             redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code");
@@ -255,14 +256,12 @@ if (isset($_GET['modifyAnswers'])) {
         if (isset($_POST['lessAnswers'])) {
             $nbrAnswers--;
         }
-        if (isset($_POST['moreAnswers'])) {
+        if (isset($_POST['moreAnswers'])) {                      
             $nbrAnswers++;
-        }
+        }        
         // minimum 2 answers
-        if ($nbrAnswers == 1) {
+        if ($nbrAnswers < 2) {
             $nbrAnswers = 2;
-        } elseif ($nbrAnswers == 0) {
-            $nbrAnswers = 4;
         }
     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         if (!isset($submitAnswers) && !isset($buttonBack)) {
@@ -385,20 +384,16 @@ if (isset($_GET['modifyAnswers'])) {
                       </div>
                       <div class='panel-body'>";
 
-    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {        
         $tool_content .= "
-                    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
-                    <input type='hidden' name='formSent' value='1' />
-                    <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
-
-                    <fieldset>
-                    <table class='table table-striped table-hover'>";
+            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+            <input type='hidden' name='formSent' value='1' />
+            <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
+            <fieldset>
+            <table class='table table-striped table-hover'>";
         // if there is an error message
         if (!empty($msgErr)) {
-            $tool_content .= "
-                            <tr>
-                              <td colspan='5'><div class='alert alert-danger'>$msgErr</div></td>
-                            </tr>";
+            $tool_content .= "<tr><td colspan='5'><div class='alert alert-danger'>$msgErr</div></td></tr>";
         }
         $tool_content .= "
                     <tr>
@@ -409,20 +404,16 @@ if (isset($_GET['modifyAnswers'])) {
                       <th class='text-center'>$langQuestionWeighting</th>
                     </tr>";
         for ($i = 1; $i <= $nbrAnswers; $i++) {
-            $tool_content .="
-                            <tr>
-                              <td class=\"text-right\" valign='top'>$i.</td>";
+            $tool_content .="<tr><td class='text-right' valign='top'>$i.</td>";
             if ($answerType == UNIQUE_ANSWER) {
-                $tool_content .= "
-                                            <td class=\"text-center\"><input type=\"radio\" value=\"" . $i . "\" name=\"correct\" ";
+                $tool_content .= "<td class='text-center'><input type='radio' value=\"" . $i . "\" name=\"correct\" ";
                 if (isset($correct) and $correct == $i) {
                     $tool_content .= "checked=\"checked\" /></td>";
                 } else {
                     $tool_content .= "></td>";
                 }
             } else {
-                $tool_content .= "
-                                            <td class=\"text-center\"><input type=\"checkbox\" value=\"1\" name=\"correct[" . $i . "]\" ";
+                $tool_content .= "<td class='text-center'><input type='checkbox' value=\"1\" name=\"correct[" . $i . "]\" ";
                 if ((isset($correct[$i])) && ($correct[$i])) {
                     $tool_content .= "checked=\"checked\"></td>";
                 } else {
@@ -436,14 +427,12 @@ if (isset($_GET['modifyAnswers'])) {
                 <td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, @$comment[$i], true) . "</td>
                 <td class='text-center'><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
         }
-        $tool_content .= "
-              <tr>
-                <td class='left' colspan='2'>&nbsp;</td>
-                <td><b>$langSurveyAddAnswer :</b>&nbsp;
-                  <input type='submit' name='lessAnswers' value='$langLessAnswers' />&nbsp;
-                  <input type='submit' name='moreAnswers' value='$langMoreAnswers' />
+        $tool_content .= "<tr>
+                <td class='text-left' colspan='3'><strong>$langSurveyAddAnswer :</strong>&nbsp;
+                    <input type='submit' name='moreAnswers' value='$langMoreAnswers' />&nbsp;
+                  <input type='submit' name='lessAnswers' value='$langLessAnswers' />                  
                 </td>
-                <td colspan='3'>&nbsp;</td>
+                <td colspan='2'>&nbsp;</td>
               </tr>
             </table>";
     }
@@ -490,22 +479,21 @@ if (isset($_GET['modifyAnswers'])) {
             // if there is an error message
             if (!empty($msgErr)) {
                 $tool_content .= "
-                                    <table border='0' cellpadding='3' align='center' width='400'>
-                                    <tr><td class='alert alert-danger'>$msgErr</td></tr>
-                                    </table>";
+                            <table border='0' cellpadding='3' align='center' width='400'>
+                            <tr><td class='alert alert-danger'>$msgErr</td></tr>
+                            </table>";
             } else {
                 $tool_content .= "
-                                    <fieldset>
-                                    <tr>
-                                        <td>$langWeightingForEachBlank</td>
-                                    </tr>
-                                    <table class='table'>";
+                                <fieldset>
+                                <tr>
+                                    <td>$langWeightingForEachBlank</td>
+                                </tr>
+                                <table class='table'>";
                 foreach ($blanks as $i => $blank) {
-                    $tool_content .= "
-                                            <tr>
-                                              <td class='text-right'><b>[" . q($blank) . "] :</b></td>" . "
-                                              <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
-                                            </tr>";
+                    $tool_content .= "<tr>
+                                    <td class='text-right'><b>[" . q($blank) . "] :</b></td>" . "
+                                        <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
+                                    </tr>";
                 }
                 $tool_content .= "</table>";
             }
@@ -567,8 +555,9 @@ if (isset($_GET['modifyAnswers'])) {
               <td><div class='text-right'><select class='form-control' name='sel[$i]'>";
             foreach ($optionsList as $key => $val) {
                 $tool_content .= "<option value='" . q($key) . "'";
-                if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key)
+                if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) {
                     $tool_content .= " selected='selected'";
+                }
                 $tool_content .= ">" . q($val) . "</option>";
             }
             $tool_content .= "</select></div></td>
@@ -590,11 +579,10 @@ if (isset($_GET['modifyAnswers'])) {
         </tr>";
 
         foreach ($optionsList as $key => $val) {
-            $tool_content .= "
-                    <tr>
-                      <td class=\"text-right\"><b>" . q($val) . "</b></td>
-                      <td><input class=\"form-control\" type=\"text\" " .
-                    "name=\"option[" . $key . "]\" size=\"58\" value=\"";
+            $tool_content .= "<tr>
+                      <td class='text-right'><b>" . q($val) . "</b></td>
+                      <td><input class='form-control' type='text' " .
+                    "name=\"option[" . $key . "]\" size='58' value=\"";
             if (!isset($_POST['formSent']) && !isset($_POST['option'][$key])) {
                 $tool_content .= ${"langDefaultMatchingOpt$val"};
             } else {
