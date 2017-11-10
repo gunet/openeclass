@@ -245,7 +245,7 @@ if (isset($_GET['search_terms'])) {
 } else {
     $search_terms = null;
 }
-if (isset($_GET['catlang']) or $search_terms) {
+if (isset($_GET['catlang']) or isset($_GET['department']) or $search_terms) {
     $searching = true;
 }
 $t->set_var('selectFieldLabel', $langLanguage);
@@ -264,7 +264,13 @@ foreach ($session->active_ui_languages as $langCode) {
 $t->parse('selectField', 'selectFieldBlock', true);
 
 if ($searching) {
-    $query = 'SELECT DISTINCT(a.course_id), a.title, a.code, a.description, a.lang FROM ('
+    if (isset($_GET['department'])) {
+        $sql_department = 'course_department,';
+    } else {
+        $sql_department = '';
+    }
+    $query = 'SELECT DISTINCT(a.course_id), a.title, a.code, a.description, a.lang'
+             . " FROM $sql_department ("
              . '  SELECT'
              . '   c.id AS course_id, c.title, c.code, c.description, c.lang';
     $where = array();
@@ -317,6 +323,11 @@ if ($searching) {
     }
 
     $query .= ' ) AS a WHERE ' . implode(' AND ', $where);
+
+    if (isset($_GET['department'])) {
+        $query .= ' AND a.course_id = course_department.course AND course_department.department = ?d';
+        $args[] = $_GET['department'];
+    }
 
     $courses = Database::get()->queryArray($query, $args);
     foreach ($courses as $course) {
