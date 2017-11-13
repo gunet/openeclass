@@ -49,13 +49,13 @@ add_nosniff_headers();
 
 //add_hsts_headers();
 
-if (is_readable('config/config.php')) {
-    require_once 'config/config.php';
-} else {
-    require_once 'include/not_installed.php';
+try {
+    @include_once 'config/config.php';
+} catch (Exception $e) {
+    include_once 'include/not_installed.php';
 }
 if (!isset($mysqlServer)) {
-    require_once 'include/not_installed.php';
+    include_once 'include/not_installed.php';
 }
 
 // Initialize global debug mechanism
