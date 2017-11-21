@@ -375,6 +375,12 @@ function exercise_init_countdown(params) {
     // Keep track of which questions have been answered
     var cancelCheck = false;
     var answered = {};
+    if (params.answeredIds) {
+        params.answeredIds.forEach(function (id) {
+            answered[id] = true;
+        });
+    }
+
     var questionId = function (el) {
         return el.closest('.qPanel')[0].id.replace('qPanel', '');
     }

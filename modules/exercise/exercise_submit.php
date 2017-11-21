@@ -432,6 +432,7 @@ if (isset($timeleft) && $timeleft > 0) {
   $tool_content .= "<input type='hidden' name='secsRemaining' id='secsRemaining' value='$timeleft' />";
 }
 $i = 0;
+$answeredIds = array();
 foreach ($questionList as $questionId) {
     $i++;
     // for sequential exercises
@@ -447,10 +448,42 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    // shows the question and its answers
+    // check if question is actually answered
     $question = new Question();
     $question->read($questionId);
+    if (isset($exerciseResult[$questionId])) {
+        $type = $question->type;
+        $answer = $exerciseResult[$questionId];
+        if ($type == FREE_TEXT) {
+            if (trim($answer) !== '') {
+                $answeredIds[] = $questionId;;
+            }
+        } elseif ($type == TRUE_FALSE or $type == UNIQUE_ANSWER) {
+            if ($answer) {
+                $answeredIds[] = $questionId;
+            }
+        } elseif ($type == FILL_IN_BLANKS or $type == FILL_IN_BLANKS_TOLERANT) {
+            if (is_array($answer)) {
+                foreach ($answer as $id => $blank) {
+                    if (trim($blank) !== '') {
+                        $answeredIds[] = $questionId;
+                        break;
+                    }
+                }
+            }
+        } elseif ($type == MULTIPLE_ANSWER) {
+            unset($answer[0]);
+            if (count($answer)) {
+                $answeredIds[] = $questionId;
+            }
+        } elseif ($type == MATCHING) {
+            if (array_filter($answer)) {
+                $answeredIds[] = $questionId;
+            }
+        }
+    }
 
+    // shows the question and its answers
     showQuestion($question, $exerciseResult);
 
     $tool_content .= "<br>";
@@ -497,6 +530,7 @@ if ($questionList) {
                 goBack: '". js_escape($langGoBackToEx) ."',
                 refreshTime: $refresh_time,
                 exerciseId: $exerciseId,
+                answeredIds: ". json_encode($answeredIds) .",
                 eurid: $eurid
             });
         });
