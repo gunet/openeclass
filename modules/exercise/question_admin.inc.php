@@ -63,10 +63,17 @@ $tool_content .= "
 ";
 
 if ($questionType != FREE_TEXT) {
+    
+    $addon = '';
+    if ($questionType == MATCHING) {
+        $sql = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $questionId);
+        if (!$sql) $addon = "&amp;htopic=4";
+    }
+    
     $tool_content .= "
         <div class='panel panel-info'>
           <div class='panel-heading'>
-            <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;".icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$questionId")."</h3>
+            <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;".icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$questionId$addon")."</h3>
           </div>
         </div>
     ";

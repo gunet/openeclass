@@ -68,7 +68,7 @@ if (!class_exists('Answer')):
         function read() {
             $questionId = $this->questionId;
             $result = Database::get()->queryArray("SELECT answer, correct, comment, weight, r_position
-                            FROM exercise_answer WHERE question_id = ?d ORDER BY r_position", $questionId);            
+                            FROM exercise_answer WHERE question_id = ?d ORDER BY r_position", $questionId);
             if ($result) { // found result ?
                 $i = 1;                
                 foreach ($result as $object) {
@@ -83,7 +83,11 @@ if (!class_exists('Answer')):
             } else { // new answer
                 for ($i = 1; $i <= 2; $i++) {
                     $this->answer[$i] = '';
-                    $this->correct[$i] = 0;
+                    if ($this->getQuestionType() == MATCHING) {
+                        $this->correct[$i] = 1;
+                    } else {
+                        $this->correct[$i] = 0;    
+                    }                    
                     $this->comment[$i] = '';
                     $this->weighting[$i] = 0.00;
                     $this->position[$i] = 0;
@@ -91,6 +95,7 @@ if (!class_exists('Answer')):
             }
         }
 
+                        
         /**
          * returns the number of answers in this question
          *
@@ -250,6 +255,17 @@ if (!class_exists('Answer')):
                 $sql = substr($sql, 0, -1);
                 Database::get()->query($sql,$data_array);
             }
+        }
+        
+        /**
+         * @brief get question type (e.g. multiple choice, matching etc)
+         * @return type
+         */
+        private function getQuestionType() {
+            
+            $question_type = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $this->selectQuestionId())->type;            
+            return $question_type;            
+            
         }
 
     }
