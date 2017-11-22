@@ -45,7 +45,7 @@ if (isset($_POST['lessAnswers'])) {
     $deleteAnswer = true;
 }
 if (isset($_POST['moreAnswers'])) {
-    $newAnswer = true;    
+    $newAnswer = true;
 }
 
 
@@ -250,14 +250,12 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 }
 
 if (isset($_GET['modifyAnswers'])) {   
-    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {        
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
         
-        if ($newAnswer) {
+        if ($newAnswer) {            
             $objAnswer->createAnswer('', 0, '', 0, 0, true);
-        }
-        
-        $nbrAnswers = $objAnswer->selectNbrAnswers();
-        
+        }        
+        $nbrAnswers = $objAnswer->selectNbrAnswers();        
         if ($deleteAnswer) {
             $nbrAnswers--;
             if ($nbrAnswers < 2) { // minimum 2 answers
@@ -409,8 +407,8 @@ if (isset($_GET['modifyAnswers'])) {
                 
         $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
-            <input type='hidden' name='formSent' value='1' />
-            <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
+            <input type='hidden' name='formSent' value='1'>
+            <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
             <fieldset>
             <table class='table table-striped table-hover'>";
         // if there is an error message
@@ -422,7 +420,7 @@ if (isset($_GET['modifyAnswers'])) {
                       <th class='text-center'>$langTrue</th>
                       <th class='text-center'>$langAnswer</th>
                       <th class='text-center'>$langComment</th>
-                      <th class='text-center'>$langQuestionWeighting</th>
+                      <th class='text-center'>$langScore</th>
                     </tr>";
         
         for ($i = 1; $i <= $nbrAnswers; $i++) {
@@ -561,7 +559,7 @@ if (isset($_GET['modifyAnswers'])) {
               <td><b>$langColumnA:</b> <span style='valign:middle;'>$langMoreLessChoices:</span> <input type='submit' name='moreMatches' value='+' />&nbsp;
               <input type='submit' name='lessMatches' value='-' /></td>
               <td><div align='text-right'>$langColumnB</div></td>
-              <td>$langQuestionWeighting</td>
+              <td>$langScore</td>
             </tr>";       
 
         for ($j = 1; $j <= $nbrMatches; $i++, $j++) {
@@ -645,7 +643,7 @@ if (isset($_GET['modifyAnswers'])) {
             <tr>
               <td colspan='2'><b>$langAnswer</b></td>
               <td class='text-center'><b>$langComment</b></td>
-              <td class='text-center'><b>$langQuestionWeighting</b></td>
+              <td class='text-center'><b>$langScore</b></td>
             </tr>
             <tr>
               <td width='30'>$langCorrect</td>

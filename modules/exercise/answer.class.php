@@ -190,6 +190,8 @@ if (!class_exists('Answer')):
             if ($newEmptyAnswer) {
                 $this->nbrAnswers = $this->nbrAnswers + 1;
                 $id = $this->nbrAnswers;
+                Database::get()->querySingle("INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) 
+                    VALUES (?d, ?s, ?d, ?s, ?f, ?d)", $this->questionId, $answer, $correct, $comment, $weighting, $position);
             } else {
                 $this->nbrAnswers = $position;
                 $id = $position;                
@@ -208,7 +210,7 @@ if (!class_exists('Answer')):
          */
         public function save() {
 
-            $questionId = intval($this->questionId);
+            $questionId = $this->questionId;
             // removes old answers before inserting of new ones
             Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);            
             // inserts new answers into data base
