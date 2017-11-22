@@ -48,7 +48,6 @@ if (isset($_POST['moreAnswers'])) {
     $newAnswer = true;
 }
 
-
 function fix_float($str) {
     return str_replace(',', '.', $str);
 }
@@ -143,7 +142,6 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $blanks = Question::getBlanks($_POST['reponse']);
         }
     } elseif ($answerType == MATCHING) {
-        
         if (isset($_POST['nbrOptions'])) {
             if (isset($_POST['moreOptions'])) {
                 $opt = $_POST['nbrOptions'] + 1;
@@ -295,7 +293,7 @@ if (isset($_GET['modifyAnswers'])) {
                 $weighting = explode(',', $_POST['str_weighting']);
             }
         }
-    } elseif ($answerType == MATCHING) {        
+    } elseif ($answerType == MATCHING) {
         
         $option = $match = $sel = array();
         if (isset($_POST['option'])) {
@@ -311,8 +309,16 @@ if (isset($_GET['modifyAnswers'])) {
             $weighting = fix_float($_POST['weighting']);
         }                        
         
-        if ($htopic == 4) {
-            $nbrOptions = $nbrMatches = 2;
+        if ($htopic == 4) { // new matching question
+            $nbrOptions = $nbrMatches = 2; // default options
+                // option
+            for ($k = 1; $k <= $nbrOptions; $k++) {
+                $objAnswer->createAnswer(${"langDefaultMatchingOpt$k"}, 0, '', 0, $k, true);
+                // match
+                $objAnswer->createAnswer(${"langDefaultMakeCorrespond$k"}, $k, '', 1, $k + $nbrMatches, true);
+            }
+            
+            
         } else { // question exists
             $nbrOptions = $nbrMatches = 0;
             // fills arrays from data base
@@ -349,6 +355,7 @@ if (isset($_GET['modifyAnswers'])) {
         }
 
         if (isset($_POST['moreOptions'])) {
+            $objAnswer->createAnswer('', 0, '', 0, $nbrOptions + 1, true);
             // keeps the correct sequence of array keys when adding an option into the list
             for ($i = $nbrMatches + $nbrOptions; $i > $nbrOptions; $i--) {
                 $match[$i + 1] = $match[$i];
@@ -368,7 +375,8 @@ if (isset($_GET['modifyAnswers'])) {
             }
         }
         if (isset($_POST['moreMatches'])) {
-            $nbrMatches++;
+            $nbrMatches++;            
+            $objAnswer->createAnswer('', 1, '', 0, $nbrOptions + $nbrMatches, true);
         }
         
         
