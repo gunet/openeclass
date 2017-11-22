@@ -467,7 +467,7 @@ function exercise_init_countdown(params) {
             }
         });
     }
-    var checkUnanswered = $('.qPanel').length > 1;
+    var checkUnanswered = $('.qPanel').length > 1 || params.attemptsAllowed >= 1;
     $('.btn[name=buttonCancel], .btn[name=buttonSave]').click(continueSubmit);
     if (checkUnanswered) {
         exerciseCheckUnanswered();

@@ -483,10 +483,9 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    // shows the question and its answers
+    // show the question and its answers
     showQuestion($question, $exerciseResult);
 
-    $tool_content .= "<br>";
     // for sequential exercises
     if ($exerciseType == 2) {
         // quits the loop
@@ -531,6 +530,7 @@ if ($questionList) {
                 refreshTime: $refresh_time,
                 exerciseId: $exerciseId,
                 answeredIds: ". json_encode($answeredIds) .",
+                attemptsAllowed: {$objExercise->attemptsAllowed},
                 eurid: $eurid
             });
         });
