@@ -632,10 +632,10 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * @brief keeps record of user answers         
+         * @brief keeps record of user answers
          */
         function record_answers($choice, $exerciseResult, $record_type = 'insert') {
-            
+
             $action = $record_type.'_answer_records';
 
             // if the user has answered at least one question
@@ -667,7 +667,7 @@ if (!class_exists('Exercise')) {
          */
         function get_attempt_results_array($eurid) {
             $exerciseResult = array();
-            $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered = 1", $eurid);
+            $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0", $eurid);
             foreach ($results as $row) {
                 $objQuestionTmp = new Question();
                 // reads question informations
@@ -697,7 +697,7 @@ if (!class_exists('Exercise')) {
             $id = $this->id;
             $attempt_value = $_POST['attempt_value'];
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
-            $question_ids = Database::get()->queryArray('SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d AND is_answered = 1', $eurid);
+            $question_ids = Database::get()->queryArray('SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0', $eurid);
             if (count($question_ids) > 0) {
                 foreach ($question_ids as $row) {
                     $answered_question_ids[] = $row->question_id;
@@ -871,10 +871,10 @@ if (!class_exists('Exercise')) {
                if ($value == 0) {
                    $row_key = 0;
                    $answer_weight = 0;
-                   Database::get()->query("UPDATE exercise_answer_record SET is_answered= 1 WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
+                   Database::get()->query("UPDATE exercise_answer_record SET is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                } else {
                    $objAnswersTmp = new Answer($key);
-                   Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $key);                   
+                   Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                    foreach ($value as $row_key => $row_choice) {
                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
                            Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
@@ -909,7 +909,7 @@ if (!class_exists('Exercise')) {
            }
            unset($objQuestionTmp);
         }
-        
+
         /**
          * Purge exercise user results
          */

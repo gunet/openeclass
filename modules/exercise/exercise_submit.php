@@ -215,7 +215,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
 } else {
     if (isset($paused_attempt)) {
         $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id ORDER BY question_id ASC", $paused_attempt->eurid);
-        $i=1;
+        $i = 1;
         foreach ($record_question_ids as $row) {
             $questionList[$i] = $row->question_id;
             $i++;
@@ -297,7 +297,7 @@ if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
     $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
 } else {
     if (isset($paused_attempt)) {
-        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value]= $objExercise->get_attempt_results_array($eurid);
+        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $objExercise->get_attempt_results_array($eurid);
     } else {
         $exerciseResult = array();
     }
@@ -394,6 +394,13 @@ if (isset($_POST['formSent'])) {
         }
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?d, total_weighting = ?d, attempt_status = ?d, secs_remaining = ?d
                 WHERE eurid = ?d", $totalScore, $totalWeighting, ATTEMPT_PAUSED, $secs_remaining, $eurid);
+        if ($exerciseType == 2 and isset($_POST['choice']) and is_array($_POST['choice'])) {
+            // for sequential exercises, return to current question
+            // by setting is_answered to a special value
+            $qid = array_keys($_POST['choice']);
+            Database::get()->query('UPDATE exercise_answer_record SET is_answered = 2
+                WHERE eurid = ?d AND question_id = ?d', $eurid, $qid);
+        }
         unset_exercise_var($exerciseId);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
@@ -433,19 +440,30 @@ if (isset($timeleft) && $timeleft > 0) {
 }
 $i = 0;
 $answeredIds = array();
+if (isset($exerciseResult)) {
+    $answered_question_ids = array_keys($exerciseResult);
+}
+
+$savedQuestion = null;
+if ($exerciseType == 2) {
+    $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
+    $r = Database::get()->querySingle('SELECT question_id FROM exercise_answer_record
+        WHERE eurid = ?d AND is_answered = 2 LIMIT 1', $eurid);
+    if ($r) {
+        $savedQuestion = $r->question_id;
+        Database::get()->query('UPDATE exercise_answer_record SET is_answered = 1
+            WHERE eurid = ?d AND is_answered = 2', $eurid);
+    }
+}
+
 foreach ($questionList as $questionId) {
     $i++;
-    // for sequential exercises
-    if ($exerciseType == 2) {
-        // if it is not the right question, goes to the next loop iteration
-        if (isset($exerciseResult)) {
-            $answered_question_ids = array_keys($exerciseResult);
-        } else {
-            $answered_question_ids = array();
-        }
-        if (in_array($questionId, $answered_question_ids)) {
+    // for sequential exercises, if this is not the right question,
+    // continue to the next loop iteration
+    if ($exerciseType == 2 and isset($answered_question_ids) and
+        $questionId != $savedQuestion and
+        in_array($questionId, $answered_question_ids)) {
             continue;
-        }
     }
 
     // check if question is actually answered
