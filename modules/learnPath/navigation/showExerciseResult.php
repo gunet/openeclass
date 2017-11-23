@@ -47,6 +47,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
  . "<link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>\n"
  . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>\n"
  . '<title>' . $langExercicesResult . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
@@ -130,7 +131,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
         </tr>
         <tr>
-        <td class='even' colspan='${colspan}'>
+        <td colspan='${colspan}'>
         <b>" . q($questionName) . "</b>
         <br />" .
         standard_text_escape($questionDescription, '../../../courses/mathimg/')
@@ -142,7 +143,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
 
     if ($displayResults == 1) {
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-            echo "<tr class='even'>
+            echo "<tr>
                         <td width='50' valign='top'><b>$langChoice</b></td>
                         <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
                         <td valign='top'><b>$langAnswer</b></td>
@@ -150,10 +151,10 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                         </tr>";
         } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             echo "<tr>
-                        <td class='even'><b>$langAnswer</b></td>
+                        <td><b>$langAnswer</b></td>
                         </tr>";
         } else {
-            echo "<tr class='even'>
+            echo "<tr>
                         <td><b>$langElementList</b></td>
                         <td><b>$langCorrespondsTo</b></td>
                         </tr>";
@@ -265,30 +266,21 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         } // end switch()
         if ($displayResults == 1) {
             if ($answerType != MATCHING || $answerCorrect) {
-                if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                    echo ("<tr class='even'><td><div align='center'><img src='$themeimg/");
-                    if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
-                        echo ("radio");
-                    } else {
-                        echo ("checkbox");
-                    }
+                if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {                    
+                    echo "<tr><td><div align='center'>";                    
                     if ($studentChoice) {
-                        echo ("_on");
+                        $icon_choice= "fa-check-square-o";
                     } else {
-                        echo ("_off");
+                        $icon_choice = "fa-square-o";
                     }
-                    echo (".png' /></div></td><td><div align='center'>");
-                    if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
-                        echo ("<img src=\"$themeimg/radio");
-                    } else {
-                        echo ("<img src=\"$themeimg/checkbox");
-                    }
+                    echo icon($icon_choice);
+                    echo "</div></div></td><td><div align='center'>";                    
                     if ($answerCorrect) {
-                        echo ("_on");
+                        $icon_choice= "fa-check-square-o";
                     } else {
-                        echo ("_off");
+                        $icon_choice = "fa-square-o";
                     }
-                    echo (".png\" /></div>");
+                    echo icon($icon_choice) . "</div>";                    
                     echo ("</td>
                             <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
                             <td>");
@@ -300,12 +292,12 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     echo ("</td></tr>");
                 } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                     echo ("
-                        <tr class='even'>
+                        <tr>
                           <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
                         </tr>");
                 } else {
                     echo ("
-                        <tr class='even'>
+                        <tr>
                           <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
                           <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
                         </tr>");
@@ -315,8 +307,8 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     } // end for()
     if ($displayScore == 1) {
         echo ("
-                <tr class='even'>
-                  <th colspan='$colspan' class='odd'><div align='right'>
+                <tr>
+                  <th colspan='$colspan'><div align='right'>
                             $langQuestionScore: <b>" . round($questionScore, 2) . " / $questionWeighting</b></div>
                   </th>
                 </tr>");
@@ -341,7 +333,7 @@ if ($displayScore == 1) {
     echo ("
     <br/>
     <table class='table-default'>
-    <tr class='odd'>
+    <tr>
 	<td class='right'>$langYourTotalScore: <b>" . round($totalScore, 2) . "/$totalWeighting</b>
       </td>
     </tr>
