@@ -413,16 +413,16 @@ if (isset($_GET['modifyAnswers'])) {
 
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
                 
+        if (!empty($msgErr)) {
+            $tool_content .= "<div class='alert alert-danger'>$msgErr</div>";
+        }
+        
         $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
             <input type='hidden' name='formSent' value='1'>
             <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
             <fieldset>
             <table class='table table-striped table-hover'>";
-        // if there is an error message
-        if (!empty($msgErr)) {
-            $tool_content .= "<tr><td colspan='5'><div class='alert alert-danger'>$msgErr</div></td></tr>";
-        }
         $tool_content .= "<tr>
                       <th class='text-right'></th>
                       <th class='text-center'>$langTrue</th>
@@ -434,16 +434,16 @@ if (isset($_GET['modifyAnswers'])) {
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             $tool_content .="<tr><td class='text-right' valign='top'>$i.</td>";
             if ($answerType == UNIQUE_ANSWER) {
-                $tool_content .= "<td class='text-center'><input type='radio' value=\"" . $i . "\" name=\"correct\" ";
-                if (isset($correct) and $correct == $i) {
-                    $tool_content .= "checked=\"checked\" /></td>";
+                $tool_content .= "<td class='text-center'><input type='radio' value=\"" . $i . "\" name='correct' ";
+                if ((isset($correct) and $correct == $i) or (isset($_POST['correct']) and ($_POST['correct'] == $i))) {
+                    $tool_content .= "checked='checked'></td>";
                 } else {
                     $tool_content .= "></td>";
                 }
             } else {                
-                $tool_content .= "<td class='text-center'><input type='checkbox' value=\"1\" name=\"correct[" . $i . "]\" ";
-                if ((isset($correct[$i])) && ($correct[$i])) {
-                    $tool_content .= "checked=\"checked\"></td>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' value='1' name=\"correct[" . $i . "]\" ";
+                if ((isset($correct[$i]) && ($correct[$i]) or (isset($_POST['correct'][$i]) and $_POST['correct'][$i]))) {
+                    $tool_content .= "checked='checked'></td>";
                 } else {
                     $tool_content .= " /></td>";
                 }
