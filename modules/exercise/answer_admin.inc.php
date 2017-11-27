@@ -250,10 +250,13 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 if (isset($_GET['modifyAnswers'])) {   
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
         
-        if ($newAnswer) {            
-            $objAnswer->createAnswer('', 0, '', 0, 0, true);
-        }        
-        $nbrAnswers = $objAnswer->selectNbrAnswers();        
+        if (($htopic == 2) or ($htopic == 1)) {
+            $nbrAnswers = 2; // default            
+        } elseif ($newAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers']+1;
+        } else {
+            $nbrAnswers = $objAnswer->selectNbrAnswers();
+        }
         if ($deleteAnswer) {
             $nbrAnswers--;
             if ($nbrAnswers < 2) { // minimum 2 answers
@@ -411,8 +414,7 @@ if (isset($_GET['modifyAnswers'])) {
                       </div>
                       <div class='panel-body'>";
 
-    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-                
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {                
         if (!empty($msgErr)) {
             $tool_content .= "<div class='alert alert-danger'>$msgErr</div>";
         }

@@ -49,7 +49,7 @@ if (!class_exists('Answer')):
          * @param - integer $questionId - question ID that answers belong to
          */
         public function __construct($questionId) {
-            $this->questionId = $questionId;
+            $this->questionId = $questionId;            
             $this->nbrAnswers = 2;
             $this->answer = array();
             $this->correct = array();
@@ -127,7 +127,7 @@ if (!class_exists('Answer')):
             if (isset($this->answer[$id])) {
                 return $this->answer[$id];
             } else {
-                return '::0';
+                return '';
             }
         }
 
