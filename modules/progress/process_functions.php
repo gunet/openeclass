@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 /**
@@ -28,50 +28,50 @@
 
 
 /**
- * @brief add assignment db entries in certificate criterion 
+ * @brief add assignment db entries in certificate criterion
  * @param type $element
  * @param type $element_id
  * @return type
  */
 function add_assignment_to_certificate($element, $element_id) {
-            
-    if (isset($_POST['assignment'])) {        
+
+    if (isset($_POST['assignment'])) {
         foreach ($_POST['assignment'] as $datakey => $data) {
             Database::get()->query("INSERT INTO ${element}_criterion
-                                    SET $element = ?d, 
-                                        module= " . MODULE_ID_ASSIGN . ", 
-                                        resource = ?d, 
-                                        activity_type = '" . AssignmentEvent::ACTIVITY . "', 
-                                        operator = ?s, 
+                                    SET $element = ?d,
+                                        module= " . MODULE_ID_ASSIGN . ",
+                                        resource = ?d,
+                                        activity_type = '" . AssignmentEvent::ACTIVITY . "',
+                                        operator = ?s,
                                         threshold = ?f",
-                                    $element_id, 
-                                    $_POST['assignment'][$datakey], 
-                                    $_POST['operator'][$data], 
+                                    $element_id,
+                                    $_POST['assignment'][$datakey],
+                                    $_POST['operator'][$data],
                                     $_POST['threshold'][$data]);
         }
     }
-    return;    
+    return;
 }
 
 
 /**
- * @brief add exercise db entries in certificate criterion 
+ * @brief add exercise db entries in certificate criterion
  * @param type $element
  * @param type $element_id
  * @return type
  */
 function add_exercise_to_certificate($element, $element_id) {
-        
+
     if (isset($_POST['exercise'])) {
-        foreach ($_POST['exercise'] as $datakey => $data) {    
+        foreach ($_POST['exercise'] as $datakey => $data) {
             Database::get()->query("INSERT INTO ${element}_criterion
-                                    SET $element = ?d, 
-                                        module = " . MODULE_ID_EXERCISE . ", 
-                                        resource = ?d, 
-                                        activity_type = '" . ExerciseEvent::ACTIVITY . "', 
-                                        operator = ?s, 
+                                    SET $element = ?d,
+                                        module = " . MODULE_ID_EXERCISE . ",
+                                        resource = ?d,
+                                        activity_type = '" . ExerciseEvent::ACTIVITY . "',
+                                        operator = ?s,
                                         threshold = ?f",
-                                    $element_id, 
+                                    $element_id,
                                     $_POST['exercise'][$datakey],
                                     $_POST['operator'][$data],
                                     $_POST['threshold'][$data]);
@@ -88,15 +88,15 @@ function add_exercise_to_certificate($element, $element_id) {
  * @return type
  */
 function add_document_to_certificate($element, $element_id) {
-    
+
     if (isset($_POST['document'])) {
-        foreach ($_POST['document'] as $data) {           
+        foreach ($_POST['document'] as $data) {
            Database::get()->query("INSERT INTO ${element}_criterion
-                            SET $element = ?d, 
+                            SET $element = ?d,
                                 module= " . MODULE_ID_DOCS . ",
-                                resource = ?d, 
+                                resource = ?d,
                                 activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "'",
-                        $element_id, $data);              
+                        $element_id, $data);
             }
         }
     return;
@@ -109,7 +109,7 @@ function add_document_to_certificate($element, $element_id) {
  * @param type $element_id
  */
 function add_multimedia_to_certificate($element, $element_id) {
-                
+
     if (isset($_POST['video'])) {
         foreach ($_POST['video'] as $data) {
             $d = explode(":", $data);
@@ -136,17 +136,17 @@ function add_multimedia_to_certificate($element, $element_id) {
  * @param type $element_id
  */
 function add_lp_to_certificate($element, $element_id) {
-    
+
     if (isset($_POST['lp'])) {
         foreach ($_POST['lp'] as $datakey => $data) {
             Database::get()->query("INSERT INTO ${element}_criterion
-                                SET $element = ?d, 
-                                module = " . MODULE_ID_LP . ", 
+                                SET $element = ?d,
+                                module = " . MODULE_ID_LP . ",
                                 resource = ?d,
                                 activity_type = '" . LearningPathEvent::ACTIVITY . "',
-                                operator = ?s, 
+                                operator = ?s,
                                 threshold = ?f",
-                            $element_id, 
+                            $element_id,
                             $_POST['lp'][$datakey],
                             $_POST['operator'][$data],
                             $_POST['threshold'][$data]);
@@ -162,19 +162,19 @@ function add_lp_to_certificate($element, $element_id) {
  * @return type
  */
 function add_courseparticipation_to_certificate($element, $element_id) {
-              
-    if (isset($_POST['participation'])) {        
+
+    if (isset($_POST['participation'])) {
         Database::get()->query("INSERT INTO ${element}_criterion
-                            SET $element = ?d, 
-                            module = " . MODULE_ID_USAGE . ", 
-                            resource = null, 
+                            SET $element = ?d,
+                            module = " . MODULE_ID_USAGE . ",
+                            resource = null,
                             activity_type = '" . CourseParticipationEvent::ACTIVITY . "',
                             operator = ?s,
                             threshold = ?f",
-                        $element_id,                         
+                        $element_id,
                         $_POST['operator'],
                         $_POST['threshold']);
-        
+
     }
     return;
 }
@@ -186,19 +186,19 @@ function add_courseparticipation_to_certificate($element, $element_id) {
  * @return type
  */
 function add_wiki_to_certificate($element, $element_id) {
-              
-    if (isset($_POST['wiki'])) {        
+
+    if (isset($_POST['wiki'])) {
         Database::get()->query("INSERT INTO ${element}_criterion
-                            SET $element = ?d, 
-                            module = " . MODULE_ID_WIKI . ", 
-                            resource = null, 
+                            SET $element = ?d,
+                            module = " . MODULE_ID_WIKI . ",
+                            resource = null,
                             activity_type = '" . WikiEvent::ACTIVITY . "',
                             operator = ?s,
                             threshold = ?f",
-                        $element_id,                         
+                        $element_id,
                         $_POST['operator'],
                         $_POST['threshold']);
-        
+
     }
     return;
 }
@@ -210,13 +210,13 @@ function add_wiki_to_certificate($element, $element_id) {
  * @return type
  */
 function add_poll_to_certificate($element, $element_id) {
-    
+
     if (isset($_POST['poll'])) {
-        foreach ($_POST['poll'] as $data) {            
+        foreach ($_POST['poll'] as $data) {
           Database::get()->query("INSERT INTO ${element}_criterion
-                                    SET $element = ?d, 
-                                    module= " . MODULE_ID_QUESTIONNAIRE . ", 
-                                    resource = ?d, 
+                                    SET $element = ?d,
+                                    module= " . MODULE_ID_QUESTIONNAIRE . ",
+                                    resource = ?d,
                                     activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "'",
                             $element_id,
                             $data);
@@ -234,39 +234,39 @@ function add_poll_to_certificate($element, $element_id) {
  */
 function add_ebook_to_certificate($element, $element_id) {
      if (isset($_POST['ebook'])) {
-        foreach ($_POST['ebook'] as $data) {     
+        foreach ($_POST['ebook'] as $data) {
           Database::get()->query("INSERT INTO ${element}_criterion
-                                    SET $element = ?d, 
-                                    module= " . MODULE_ID_EBOOK . ", 
-                                    resource = ?d, 
+                                    SET $element = ?d,
+                                    module= " . MODULE_ID_EBOOK . ",
+                                    resource = ?d,
                                     activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
                             $element_id,
                             $data);
         }
     }
     if (isset($_POST['section'])) {
-        foreach ($_POST['section'] as $data) {     
+        foreach ($_POST['section'] as $data) {
           Database::get()->query("INSERT INTO ${element}_criterion
-                                    SET $element = ?d, 
-                                    module= " . MODULE_ID_EBOOK . ", 
-                                    resource = ?d, 
+                                    SET $element = ?d,
+                                    module= " . MODULE_ID_EBOOK . ",
+                                    resource = ?d,
                                     activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
                             $element_id,
                             $data);
         }
     }
     if (isset($_POST['subsection'])) {
-        foreach ($_POST['subsection'] as $data) {     
+        foreach ($_POST['subsection'] as $data) {
           Database::get()->query("INSERT INTO ${element}_criterion
-                                    SET $element = ?d, 
-                                    module= " . MODULE_ID_EBOOK . ", 
-                                    resource = ?d, 
+                                    SET $element = ?d,
+                                    module= " . MODULE_ID_EBOOK . ",
+                                    resource = ?d,
                                     activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
                             $element_id,
                             $data);
         }
     }
-    
+
     return;
 }
 
@@ -279,12 +279,12 @@ function add_ebook_to_certificate($element, $element_id) {
  * @return type
  */
 function add_forum_to_certificate($element, $element_id) {
-    
-    if (isset($_POST[ForumEvent::ACTIVITY])) {        
+
+    if (isset($_POST[ForumEvent::ACTIVITY])) {
         Database::get()->query("INSERT INTO ${element}_criterion
-                            SET $element = ?d, 
-                            module = " . MODULE_ID_FORUM . ", 
-                            resource = null, 
+                            SET $element = ?d,
+                            module = " . MODULE_ID_FORUM . ",
+                            resource = null,
                             activity_type = '" . ForumEvent::ACTIVITY . "',
                             operator = ?s,
                             threshold = ?f",
@@ -306,17 +306,17 @@ function add_forumtopic_to_certificate($element, $element_id) {
     if (isset($_POST[ForumTopicEvent::ACTIVITY])) {
         foreach ($_POST[ForumTopicEvent::ACTIVITY] as $datakey => $data) {
             Database::get()->query("INSERT INTO ${element}_criterion
-                                SET $element = ?d, 
-                                module = " . MODULE_ID_FORUM . ", 
-                                resource = ?d, 
+                                SET $element = ?d,
+                                module = " . MODULE_ID_FORUM . ",
+                                resource = ?d,
                                 activity_type = '" . ForumTopicEvent::ACTIVITY . "',
                                 operator = ?s,
                                 threshold = ?f",
-                            $element_id, 
+                            $element_id,
                             $_POST['forumtopic'][$datakey],
                             $_POST['operator'][$data],
                             $_POST['threshold'][$data]);
-        }        
+        }
     }
     return;
 }
@@ -327,18 +327,18 @@ function add_forumtopic_to_certificate($element, $element_id) {
  * @param type $element_id
  */
 function add_blog_to_certificate($element, $element_id) {
-    
-    if (isset($_POST[BlogEvent::ACTIVITY])) {        
+
+    if (isset($_POST[BlogEvent::ACTIVITY])) {
         Database::get()->query("INSERT INTO ${element}_criterion
-                            SET $element = ?d, 
-                            module = " . MODULE_ID_BLOG . ", 
-                            resource = null, 
+                            SET $element = ?d,
+                            module = " . MODULE_ID_BLOG . ",
+                            resource = null,
                             activity_type = '" . BlogEvent::ACTIVITY . "',
                             operator = ?s,
                             threshold = ?f",
-                        $element_id,                         
+                        $element_id,
                         $_POST['operator'],
-                        $_POST['threshold']);        
+                        $_POST['threshold']);
     }
 }
 
@@ -348,17 +348,17 @@ function add_blog_to_certificate($element, $element_id) {
  * @param type $element_id
  */
 function add_blogcomment_to_certificate($element, $element_id) {
-    
+
     if (isset($_POST['blogcomment'])) {
         foreach ($_POST['blogcomment'] as $datakey => $data) {
             Database::get()->query("INSERT INTO ${element}_criterion
-                                SET $element = ?d, 
-                                module = " . MODULE_ID_COMMENTS . ", 
-                                resource = ?d, 
+                                SET $element = ?d,
+                                module = " . MODULE_ID_COMMENTS . ",
+                                resource = ?d,
                                 activity_type = '" . CommentEvent::BLOG_ACTIVITY . "',
                                 operator = ?s,
                                 threshold = ?f",
-                            $element_id, 
+                            $element_id,
                             $_POST['blogcomment'][$datakey],
                             $_POST['operator'][$data],
                             $_POST['threshold'][$data]);
@@ -387,7 +387,7 @@ function get_cert_title($table, $id) {
  * @return type
  */
 function get_cert_desc($element, $id) {
-    
+
     $cert_desc = Database::get()->querySingle("SELECT description FROM $element WHERE id = ?d", $id)->description;
 
     return $cert_desc;
@@ -401,7 +401,7 @@ function get_cert_desc($element, $id) {
  */
 function get_cert_expiration_day($element, $id) {
     $cert_expires = Database::get()->querySingle("SELECT expires FROM $element WHERE id = ?d", $id)->expires;
-    
+
     return $cert_expires;
 }
 
@@ -415,7 +415,7 @@ function get_cert_expiration_day($element, $id) {
 function get_cert_issuer($element, $id) {
 
     $cert_issuer =  Database::get()->querySingle("SELECT issuer FROM $element WHERE id = ?d", $id)->issuer;
-    
+
     return $cert_issuer;
 }
 
@@ -426,9 +426,9 @@ function get_cert_issuer($element, $id) {
  * @return type
  */
 function get_cert_message($element, $id) {
-    
+
     $cert_message = Database::get()->querySingle("SELECT message FROM $element WHERE id = ?d", $id)->message;
-    
+
     return $cert_message;
 }
 
@@ -437,9 +437,9 @@ function get_cert_message($element, $id) {
  * @param type $certificate_id
  */
 function get_certificate_template($certificate_id) {
-    
-    $r = Database::get()->querySingle("SELECT name, filename FROM certificate_template WHERE id = ?d", $certificate_id);   
-    
+
+    $r = Database::get()->querySingle("SELECT name, filename FROM certificate_template WHERE id = ?d", $certificate_id);
+
     return [$r->name => $r->filename];
 }
 
@@ -448,9 +448,9 @@ function get_certificate_template($certificate_id) {
  * @return type
  */
 function get_certificate_templates() {
-    
+
     $templates = array();
-    
+
     $t = Database::get()->queryArray("SELECT id, name FROM certificate_template");
     foreach ($t as $data) {
         $templates[$data->id] = $data->name;
@@ -464,11 +464,11 @@ function get_certificate_templates() {
  * @return type
  */
 function get_badge_icon($badge_id) {
-    
+
     $r = Database::get()->querySingle("SELECT name, filename FROM badge_icon WHERE id = ?d", $badge_id);
-   
-    return [$r->name => $r->filename];    
-    
+
+    return [$r->name => $r->filename];
+
 }
 
 /**
@@ -476,9 +476,9 @@ function get_badge_icon($badge_id) {
  * @return string
  */
 function get_badge_icons() {
-    
+
     $badges = array();
-    
+
     $b = Database::get()->queryArray("SELECT id, name FROM badge_icon");
     foreach ($b as $data) {
         $badges[$data->id] = $data->name;
@@ -491,7 +491,7 @@ function get_badge_icons() {
  * @param type $uid
  */
 function check_user_details($uid) {
-    
+
     if (isset($_REQUEST['u'])) {
         if ($uid != $_REQUEST['u']) {
             redirect_to_home_page();
@@ -506,7 +506,7 @@ function check_user_details($uid) {
  * @return boolean
  */
 function is_cert_visible($element, $element_id) {
-        
+
     $sql = Database::get()->querySingle("SELECT active FROM $element WHERE id = ?d", $element_id);
     if ($sql) {
         if (!$sql->active) {
@@ -526,7 +526,7 @@ function is_cert_visible($element, $element_id) {
  * @return boolean
  */
 function has_certificate_completed($uid, $element, $element_id) {
-        
+
     $sql = Database::get()->querySingle("SELECT completed FROM user_${element} WHERE $element = ?d AND user = ?d", $element_id, $uid);
     if ($sql) {
         if (!$sql->completed) {
@@ -554,10 +554,10 @@ function has_certificate_completed($uid, $element, $element_id) {
  * @return type
  */
 function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day) {
-    
+
     global $course_id;
     if ($table == 'certificate') {
-        $new_id = Database::get()->query("INSERT INTO certificate 
+        $new_id = Database::get()->query("INSERT INTO certificate
                                 SET course_id = ?d,
                                 title = ?s,
                                 description = ?s,
@@ -568,7 +568,7 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 bundle = ?d,
                                 expires = ?t", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
     } else {
-        $new_id = Database::get()->query("INSERT INTO badge 
+        $new_id = Database::get()->query("INSERT INTO badge
                                 SET course_id = ?d,
                                 title = ?s,
                                 description = ?s,
@@ -594,18 +594,18 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
  * @param type $issuer
  * @param type $active
  */
-function modify($element, $element_id, $title, $description, $message, $value, $issuer) {    
-    
+function modify($element, $element_id, $title, $description, $message, $value, $issuer) {
+
     global $course_id;
     $field = ($element == 'certificate')? 'template' : 'icon';
-    Database::get()->query("UPDATE $element SET title = ?s, 
+    Database::get()->query("UPDATE $element SET title = ?s,
                                                    description = ?s,
                                                    message = ?s,
                                                    $field = ?d,
-                                                   issuer = ?s                                                   
+                                                   issuer = ?s
                                                 WHERE id = ?d AND course_id = ?d",
                                     $title, $description, $message, $value, $issuer, $element_id, $course_id);
-    
+
 }
 
 /**
@@ -615,10 +615,10 @@ function modify($element, $element_id, $title, $description, $message, $value, $
  */
 function modify_certificate_activity($element, $element_id, $activity_id) {
 
-    Database::get()->query("UPDATE ${element}_criterion 
-                                SET threshold = ?f, 
-                                    operator = ?s 
-                                WHERE id = ?d 
+    Database::get()->query("UPDATE ${element}_criterion
+                                SET threshold = ?f,
+                                    operator = ?s
+                                WHERE id = ?d
                                 AND $element = ?d",
                             $_POST['cert_threshold'], $_POST['cert_operator'], $activity_id, $element_id);
 }
@@ -631,10 +631,10 @@ function modify_certificate_activity($element, $element_id, $activity_id) {
  * @return type
  */
 function has_activity($element, $element_id) {
-    
+
     $num_of_activities = Database::get()->querySingle("SELECT COUNT(*) AS act FROM ${element}_criterion WHERE $element = ?d", $element_id)->act;
-    
-    return $num_of_activities;    
+
+    return $num_of_activities;
 }
 
 
@@ -643,14 +643,14 @@ function has_activity($element, $element_id) {
  * @global type $course_id
  * @param type $element_id
  * @param type $element
- * @param type $visibility 
+ * @param type $visibility
  */
 function update_visibility($element, $element_id, $visibility) {
-    
+
     global $course_id;
-    
+
     Database::get()->query("UPDATE $element SET active = ?d WHERE id = ?d AND course_id = ?d", $visibility, $element_id, $course_id);
-    
+
 }
 
 /**
@@ -659,9 +659,9 @@ function update_visibility($element, $element_id, $visibility) {
  * @return boolean
  */
 function has_course_completion() {
-    
+
     global $course_id;
-    
+
     $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1", $course_id);
     if ($sql) {
         return $sql->id;
@@ -678,12 +678,12 @@ function has_course_completion() {
  * @return type
  */
 function get_cert_percentage_completion($element, $element_id) {
-    
+
     global $uid;
-    
+
     $data = Database::get()->querySingle("SELECT completed_criteria, total_criteria "
             . "FROM user_{$element} WHERE user = ?d AND $element = ?d", $uid, $element_id);
-   
+
     if (!$data) {
         return 0;
     } else {
@@ -709,7 +709,7 @@ function delete_certificate($element, $element_id) {
                 return false;
             }
         }
-        Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);        
+        Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     } else {
         $r = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d", $element_id);
         foreach ($r as $act) { // delete badge activities
@@ -717,11 +717,11 @@ function delete_certificate($element, $element_id) {
                 delete_activity('badge', $element_id, $act->id);
             } else {
                 return false;
-            }            
+            }
         }
-        Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d", $element_id, $course_id);        
+        Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     }
-    
+
     return true;
 }
 
@@ -733,12 +733,12 @@ function delete_certificate($element, $element_id) {
  * @param type $activity_id
  */
 function delete_activity($element, $element_id, $activity_id) {
-    
-    $query = ($element == 'certificate')? 
+
+    $query = ($element == 'certificate')?
             "DELETE FROM certificate_criterion WHERE id = ?d AND certificate = ?d" :
             "DELETE FROM badge_criterion WHERE id = ?d AND badge = ?d";
     Database::get()->query($query, $activity_id, $element_id);
-    
+
 }
 
 /**
@@ -748,16 +748,16 @@ function delete_activity($element, $element_id, $activity_id) {
  * @return boolean
  */
 function resource_usage($element, $element_resource_id) {
-    
-    $query = ($element == 'certificate')? 
-            "SELECT user FROM user_certificate_criterion WHERE certificate_criterion = ?d" : 
+
+    $query = ($element == 'certificate')?
+            "SELECT user FROM user_certificate_criterion WHERE certificate_criterion = ?d" :
             "SELECT user FROM user_badge_criterion WHERE badge_criterion = ?d";
     $sql = Database::get()->querySingle($query, $element_resource_id);
     if ($sql) {
         return true;
     } else {
         return false;
-    }    
+    }
 }
 
 
@@ -771,7 +771,7 @@ function resource_usage($element, $element_resource_id) {
  * @global type $langVideo
  * @global type $langsetvideo
  * @global type $langEBook
- * @global type $langMetaQuestionnaire 
+ * @global type $langMetaQuestionnaire
  * @global type $langBlog
  * @global type $langNumOfBlogs
  * @global type $langNumOfForums
@@ -791,35 +791,35 @@ function resource_usage($element, $element_resource_id) {
  * @return type
  */
 function get_resource_details($element, $resource_id) {
-    
+
     global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath, $langNumOfForums,
-            $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire, 
+            $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire,
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation;
-    
+
     $data = array('type' => '', 'title' => '');
-    
+
     $res_data = Database::get()->querySingle("SELECT activity_type, module, resource FROM ${element}_criterion WHERE id = ?d", $resource_id);
     $resource = $res_data->resource;
     $resource_type = $res_data->activity_type;
-    
+
     switch ($resource_type) {
-        case ExerciseEvent::ACTIVITY: 
+        case ExerciseEvent::ACTIVITY:
                 $title = Database::get()->querySingle("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $resource)->title;
-                $type = "$langCategoryExcercise";                
+                $type = "$langCategoryExcercise";
                 break;
         case AssignmentEvent::ACTIVITY:
                 $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $resource)->title;
-                $type = "$langCategoryEssay";                
+                $type = "$langCategoryEssay";
             break;
-        case LearningPathEvent::ACTIVITY: 
+        case LearningPathEvent::ACTIVITY:
                 $title = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource)->name;
                 $type = "$langLearningPath";
             break;
-        case ViewingEvent::DOCUMENT_ACTIVITY:            
-                $cer_res = Database::get()->queryArray("SELECT (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) AS file_details FROM document 
-                                    WHERE document.course_id = ?d AND document.id = ?d", $course_id, $resource);                
+        case ViewingEvent::DOCUMENT_ACTIVITY:
+                $cer_res = Database::get()->queryArray("SELECT (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) AS file_details FROM document
+                                    WHERE document.course_id = ?d AND document.id = ?d", $course_id, $resource);
                 foreach ($cer_res as $res_data) {
                     $title = $res_data->file_details;
                 }
@@ -827,11 +827,11 @@ function get_resource_details($element, $resource_id) {
             break;
         case ViewingEvent::VIDEO_ACTIVITY:
                 $title = Database::get()->querySingle("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $resource)->title;
-                $type = "$langVideo";                
+                $type = "$langVideo";
             break;
         case ViewingEvent::VIDEOLINK_ACTIVITY:
                 $title = Database::get()->querySingle("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $resource)->title;
-                $type = "$langsetvideo";                
+                $type = "$langsetvideo";
             break;
         case ViewingEvent::EBOOK_ACTIVITY:
                 $q = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $resource);
@@ -848,20 +848,20 @@ function get_resource_details($element, $resource_id) {
                                 . "AND ebook.course_id = ?d AND ebook_subsection.id = ?d", $course_id, $resource);
                         if ($q2) {
                             $title = $q2->title;
-                        }                    
+                        }
                     }
-                }                
+                }
                 $type = "$langEBook";
             break;
-        case ViewingEvent::QUESTIONNAIRE_ACTIVITY: 
+        case ViewingEvent::QUESTIONNAIRE_ACTIVITY:
                 $title = Database::get()->querySingle("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $resource)->name;
                 $type = "$langMetaQuestionnaire";
             break;
-        case BlogEvent::ACTIVITY: 
+        case BlogEvent::ACTIVITY:
                 $title = "$langNumOfBlogs";
-                $type = "$langBlog";                
+                $type = "$langBlog";
             break;
-        case CommentEvent::BLOG_ACTIVITY:                
+        case CommentEvent::BLOG_ACTIVITY:
                 $title = Database::get()->querySingle("SELECT title FROM blog_post WHERE blog_post.course_id = ?d AND blog_post.id = ?d", $course_id, $resource)->title;
                 $type = "$langCommentsBlog";
             break;
@@ -885,7 +885,7 @@ function get_resource_details($element, $resource_id) {
                 $type = "$langForumRating";
                 $title = "$langPersoValue";
             break;
-        case WikiEvent::ACTIVITY:                
+        case WikiEvent::ACTIVITY:
                 $type = "$langWiki";
                 $title = "$langWikiPages";
             break;
@@ -893,22 +893,22 @@ function get_resource_details($element, $resource_id) {
                 $type = "$langCourseParticipation";
                 $title = "$langCourseHoursParticipation";
             break;
-        default: 
+        default:
                 $title = "$langAllActivities";
             break;
     }
     $data['type'] = $type;
     $data['title'] = $title;
-        
-    return $data;    
+
+    return $data;
 }
 
 
 /**
- * @brief certificate pdf output 
+ * @brief certificate pdf output
  * @global type $webDir
  * @global $dateFormatLong
- * @global $urlServer 
+ * @global $urlServer
  * @global $langCertAuthenticity;
  * @param type $certificate_id
  * @param type $user_id
@@ -920,47 +920,60 @@ function get_resource_details($element, $resource_id) {
  * @param type $certificate_identifier
  */
 function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_message = null, $certificate_issuer = null, $certificate_date = null, $certificate_template_id = null, $certificate_identifier = null) {
-    
+
     global $webDir, $dateFormatLong, $urlServer, $langCertAuthenticity;
-                       
+
     if (intval($user) > 0) { // if we are logged in and course / certificate exist
         $certificate_title = get_cert_title('certificate', $certificate_id);
-        $certificate_issuer = get_cert_issuer('certificate', $certificate_id);                
-        $certificate_message = get_cert_message('certificate', $certificate_id);        
-        $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template 
+        $certificate_issuer = get_cert_issuer('certificate', $certificate_id);
+        $certificate_message = get_cert_message('certificate', $certificate_id);
+        $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
                                                     JOIN certificate ON certificate_template.id = certificate.template
                                                AND certificate.id = ?d", $certificate_id);
         $cert_file = $q->filename;
-        $orientation = $q->orientation;   
+        $orientation = $q->orientation;
         $student_name = uid_to_name($user);
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
-        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
-        /*if (is_null($cert_date)) {
-            $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(NOW()) AS cert_date")->cert_date;
-        }*/
+        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id);
+        if ($cert_date) {
+            $cert_date = $cert_date->cert_date;
+        } else {
+            $cert_date = time();
+        }
         $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
     } else { // logged out
-        $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template 
-                                                JOIN certified_users ON certificate_template.id = certified_users.template_id 
+        $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
+                                                JOIN certified_users ON certificate_template.id = certified_users.template_id
                                                 AND certified_users.cert_title = ?s", $certificate_title);
         $cert_file = $q->filename;
-        $orientation = $q->orientation;                   
+        $orientation = $q->orientation;
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . $urlServer . "main/out.php?i=" .$certificate_identifier;
-        $student_name = $user;      
-    }     
+        $student_name = $user;
+    }
     // init pdf
-    $mpdf = new mPDF('utf-8', 'A4-' . $orientation, 0, '', 0, 0, 0, 0, 0, 0);
-    chdir("$webDir" . CERT_TEMPLATE_PATH);        
+    $mpdf = new \Mpdf\Mpdf([
+        'mode' => 'utf-8',
+        'format' => $orientation == 'P'? 'A4': 'A4-L',
+        'tempDir' => _MPDF_TEMP_PATH,
+        'margin_left' => 0,
+        'margin_right' => 0,
+        'margin_top' => 0,
+        'margin_bottom' => 0,
+        'margin_header' => 0,
+        'margin_footer' => 0,
+    ]);
+    $mpdf->AddFontDirectory(_MPDF_TTFONTDATAPATH);
+    chdir("$webDir" . CERT_TEMPLATE_PATH);
     $html_certificate = file_get_contents($cert_file);
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
-    $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);    
+    $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
     $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);
-    $html_certificate = preg_replace('(%link%)', $cert_link, $html_certificate);            
-    
+    $html_certificate = preg_replace('(%link%)', $cert_link, $html_certificate);
+
     $mpdf->WriteHTML($html_certificate);
-    $mpdf->Output();    
+    $mpdf->Output();
 }
 
 /**
@@ -972,10 +985,10 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
  * @param type $user_id
  */
 function register_certified_user($table, $element_id, $element_title, $user_id) {
-    
+
     global $course_id;
-    
-    $title = course_id_to_title($course_id);    
+
+    $title = course_id_to_title($course_id);
     $user_fullname = uid_to_name($user_id);
     $issuer = get_cert_issuer($table, $element_id);
     $message = get_cert_message($table, $element_id);
@@ -990,9 +1003,9 @@ function register_certified_user($table, $element_id, $element_title, $user_id) 
                                                                 . "assigned = " . DBHelper::timeAfter() . ","
                                                                 . "expires = ?s, "
                                                                 . "template_id = ?d, "
-                                                                . "identifier = '" . uniqid(rand()) . "'", 
+                                                                . "identifier = '" . uniqid(rand()) . "'",
                                                     $title, $element_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id);
-    
+
 }
 
 
@@ -1003,15 +1016,15 @@ function register_certified_user($table, $element_id, $element_title, $user_id) 
  * @return type
  */
 function get_cert_identifier($certificate_id, $user_id) {
-    
+
     $user_fullname = uid_to_name($user_id);
     $sql = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE "
                                                         . "cert_id = ?d "
-                                                        . "AND user_fullname = ?s", 
+                                                        . "AND user_fullname = ?s",
                                                     $certificate_id, $user_fullname);
-    if ($sql) {    
+    if ($sql) {
         return $sql->identifier;
-    } else {    
+    } else {
         return null;
     }
 }
@@ -1026,14 +1039,14 @@ function get_cert_identifier($certificate_id, $user_id) {
  * @return type
  */
 function certificate_link($element_id, $user_id, $printable = false) {
-    
+
     global $urlServer;
-    
+
     $link = $urlServer . "main/out.php?i=".get_cert_identifier($element_id, $user_id);
     if ($printable) {
         return $link;
     }
     return "<a href='$link' target=_blank>$link</a>";
-    
-    
+
+
 }

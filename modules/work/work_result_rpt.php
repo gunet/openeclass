@@ -175,7 +175,17 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
         $langAutoJudgeWeight, $langAutoJudgeResult, $langGradebookGrade,
         $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank;
 
-    $pdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
+    $pdf = new \Mpdf\Mpdf([
+        'mode' => 'utf-8',
+        'format' => 'A4-L',
+        'tempDir' => _MPDF_TEMP_PATH,
+        'margin_left' => 0,
+        'margin_right' => 0,
+        'margin_top' => 0,
+        'margin_bottom' => 0,
+        'margin_header' => 0,
+        'margin_footer' => 0,
+    ]);
     // set document information     
     $pdf->SetTitle('Auto Judge Report');
     $pdf->SetSubject('Auto Judge Report');        

@@ -3867,7 +3867,17 @@ function download_assignments($id) {
         if ($sub_type == 1) { // free text assignment
             $sql = Database::get()->queryArray("SELECT uid, submission_text FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($sql as $data) {
-                $onlinetext = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
+                $onlinetext = new \Mpdf\Mpdf([
+                    'mode' => 'utf-8',
+                    'format' => 'A4-L',
+                    'tempDir' => _MPDF_TEMP_PATH,
+                    'margin_left' => 0,
+                    'margin_right' => 0,
+                    'margin_top' => 0,
+                    'margin_bottom' => 0,
+                    'margin_header' => 0,
+                    'margin_footer' => 0,
+                ]);
                 $onlinetext->WriteHTML($data->submission_text);
                 $pdfname = greek_to_latin(uid_to_name($data->uid)) . ".pdf";
                 $onlinetext->Output($pdfname, 'F');
