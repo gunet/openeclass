@@ -175,6 +175,15 @@ if (!class_exists('Answer')):
             return $this->position[$id];
         }
 
+        
+        public function getFirstMatchingPosition() {
+            $pos = Database::get()->querySingle("SELECT r_position FROM exercise_answer "
+                    . "WHERE question_id = ?d "
+                    . "AND correct > 0 "
+                    . "ORDER BY r_position ASC LIMIT 1", $this->questionId)->r_position;
+            return $pos;
+        }
+        
         /**
          * creates a new answer
          *
@@ -195,7 +204,7 @@ if (!class_exists('Answer')):
             } else {
                 $this->nbrAnswers = $position;
                 $id = $position;                
-            }                        
+            }            
             $this->answer[$id] = $answer;
             $this->correct[$id] = $correct;
             $this->comment[$id] = $comment;
@@ -212,7 +221,7 @@ if (!class_exists('Answer')):
 
             $questionId = $this->questionId;
             // removes old answers before inserting of new ones
-            Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);            
+           Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);            
             // inserts new answers into data base
             $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";           
             
@@ -225,7 +234,7 @@ if (!class_exists('Answer')):
                   $data_array[] = $this->position[$i];
                 $sql .= "(?d, ?s, ?d, ?s, ?f, ?d),";
             }
-            $sql = substr($sql, 0, -1);
+            $sql = substr($sql, 0, -1);            
             Database::get()->query($sql, $data_array);
                        
         }
