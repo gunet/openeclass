@@ -243,7 +243,7 @@ if (isset($_GET['modifyAnswers'])) {
             $nbrAnswers = $objAnswer->selectNbrAnswers();
         }
         if ($deleteAnswer) {
-            $nbrAnswers--;
+            $nbrAnswers = $_POST['nbrAnswers']-1;            
             if ($nbrAnswers < 2) { // minimum 2 answers
                $nbrAnswers = 2;
             }
@@ -340,8 +340,7 @@ if (isset($_GET['modifyAnswers'])) {
             $nbrOptions++;
         }
         
-        if (isset($_POST['lessMatches'])) {
-            //$nbrMatches--;
+        if (isset($_POST['lessMatches'])) {            
             $nbrMatches = $_POST['nbrMatches']-1;
             // minimum 2 matches
             if ($nbrMatches < 2) {
