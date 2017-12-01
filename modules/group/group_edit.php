@@ -219,7 +219,7 @@ if ($multi_reg) {
                               cu.user_id = u.id AND
                               u.id NOT IN (SELECT user_id FROM group_members WHERE group_id = ?d) AND
                               cu.status = " . USER_STUDENT . "
-                        GROUP BY u.id
+                        GROUP BY u.id, u.surname, u.givenname, u.am
                         ORDER BY u.surname, u.givenname", $course_id, $group_id);
 } else {
     // Students registered to the course but members of no group
