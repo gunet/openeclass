@@ -33,7 +33,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'group_functions.php';
 
-if (isset($_GET['selfReg']) and isset($_GET['group_id'])) {
+if ((isset($_GET['selfReg']) or isset($_GET['selfUnReg'])) and isset($_GET['group_id'])) {
     $group_id = getDirectReference($_GET['group_id']);
 } else {
     initialize_group_id();
