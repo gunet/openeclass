@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,6 +33,7 @@
   ==============================================================================
  */
 use Hautelook\Phpass\PasswordHash;
+use Hybrid\Auth;
 
 require_once 'include/log.class.php';
 require_once 'include/lib/user.class.php';
@@ -265,8 +266,7 @@ function get_hybridauth_settings($provider) {
   studentid
  * ************************************************************** */
 
-function auth_user_login($auth, $test_username, $test_password, $settings) {   
-
+function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
@@ -329,13 +329,17 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 @ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
                 @ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0); // for search in Active Directory
                 if (@ldap_bind($ldap, $settings['ldapbind_dn'], $settings['ldapbind_pw'])) {
-                    if (empty($settings['ldap_login_attr2'])) {
-                        $search_filter = "($settings[ldap_login_attr]=${test_username})";
-                    } else {
-                        $search_filter = "(|($settings[ldap_login_attr]=${test_username})
-                                            ($settings[ldap_login_attr2]=${test_username}))";
+                    if (isset($settings['ldap_login_attr2']) and !empty($settings['ldap_login_attr2'])) {
+                        $settings['ldap_login_attr'] .= ' ' . $settings['ldap_login_attr2'];
                     }
-
+                    $search_filter = '';
+                    $ldap_login_attrs = explode(' ', $settings['ldap_login_attr']);
+                    foreach ($ldap_login_attrs as $attr) {
+                        $search_filter .= "($attr=$test_username)";
+                    }
+                    if (count($ldap_login_attrs) > 1) {
+                        $search_filter = "(|$search_filter)";
+                    }
                     $userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
                     if ($entry_id = ldap_first_entry($ldap, $userinforequest)) {
                         $user_dn = ldap_get_dn($ldap, $entry_id);
@@ -343,11 +347,31 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
                             if ($userinfo['count'] == 1) {
-                                $surname = get_ldap_attribute($userinfo, 'sn');
-                                $givenname = get_ldap_attribute($userinfo, 'givenname');
-                                if (empty($givennname)) {
-                                    $cn = get_ldap_attribute($userinfo, 'cn');
-                                    $givenname = trim(str_replace($surname, '', $cn));
+                                if (isset($settings['ldap_surname_attr']) and !empty($settings['ldap_surname_attr'])) {
+                                    // find ldap surname attribute
+                                    $attr_surname = explode(' ', $settings['ldap_surname_attr']);
+                                    foreach ($attr_surname as $asurname) {
+                                        $l_surname = get_ldap_attribute($userinfo, $asurname);
+                                        if (!empty($l_surname)) {
+                                            $surname = $l_surname;
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    $surname = get_ldap_attribute($userinfo, 'sn');
+                                }
+                                if (isset($settings['ldap_firstname_attr']) and !empty($settings['ldap_firstname_attr'])) {
+                                    // find ldap name attribute
+                                    $attr_givenname = explode(' ', $settings['ldap_firstname_attr']);
+                                    foreach ($attr_givenname as $agivenname) {
+                                        $l_givenname = get_ldap_attribute($userinfo, $agivenname);
+                                        if (!empty($l_givenname)) {
+                                            $givenname = $l_givenname;
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    $givenname = get_ldap_attribute($userinfo, 'givenname');
                                 }
                                 $_SESSION['auth_user_info'] = array(
                                     'attributes' => get_ldap_attributes($userinfo),
@@ -370,15 +394,18 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '5':
-            $link = new Database($settings['dbhost'], $settings['dbname'], $settings['dbuser'], $settings['dbpass']);
+            try {
+                $link = new Database($settings['dbhost'], $settings['dbname'], $settings['dbuser'], $settings['dbpass']);
+            } catch(Exception $ex) {                
+                break;
+            }
             if ($link) {
-                if ($link) {
-                    $res = $link->querySingle("SELECT `$settings[dbfieldpass]`
-                                                FROM `$settings[dbtable]`
-                                                WHERE `$settings[dbfielduser]` = ?s", $test_username);
-                    if ($res) {
-                        $testauth = external_DB_Check_Pass($test_password, $res->{$settings['dbfieldpass']}, $settings['dbpassencr']);
-                    }
+                $res = $link->querySingle("SELECT `$settings[dbfieldpass]`
+                                            FROM `$settings[dbtable]`
+                                            WHERE `$settings[dbfielduser]` = ?s", $test_username);
+                if ($res) {
+                    $field = $settings['dbfieldpass'];
+                    $testauth = external_DB_Check_Pass($test_password, $res->$field, $settings['dbpassencr']);
                 }
             }
             break;
@@ -674,7 +701,11 @@ function process_login() {
                 case 4:
                     if (isset($_GET['login_page'])) {
                         Session::flash('login_error', $invalidIdMessage);
-                        redirect_to_home_page('main/login_form.php');
+                        if ($_GET['login_page'] == 'toolbox') {
+                            redirect_to_home_page('main/toolbox.php');
+                        } else {
+                            redirect_to_home_page('main/login_form.php');
+                        }
                     } else {
                         $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
                         increaseLoginFailure();
@@ -690,6 +721,10 @@ function process_login() {
                     break;
                 default:
                     break;
+            }
+            if ($warning and isset($_GET['login_page']) and $_GET['login_page'] == 'toolbox') {
+                Session::flash('login_warning', $warning);
+                redirect_to_home_page('main/toolbox.php');
             }
         } else {
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
@@ -716,15 +751,14 @@ function process_login() {
  Yahoo, Live accounts)
 * ************************************************************** */
 
-function hybridauth_login($provider=null) {
+function hybridauth_login() {
     global $surname, $givenname, $email, $status, $is_admin, $language,
         $langInvalidId, $langAccountInactive1, $langAccountInactive2,
         $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
         $inactive_uid, $langTooManyFails, $warning, $langGeneralError;
 
-    // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+
     $config = get_hybridauth_config();
 
     $_SESSION['canChangePassword'] = false;
@@ -741,11 +775,7 @@ function hybridauth_login($provider=null) {
 
     // if user select a provider to login with then include hybridauth config
     // and main class, try to authenticate, finally redirect to profile
-    if (!$provider and isset($_GET['provider'])) {
-        $provider = $_GET['provider'];
-    }
-
-    if ($provider) {
+    if (isset($_GET['provider'])) {
         try {
             $hybridauth = new Hybrid_Auth($config);
 
@@ -1046,6 +1076,12 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
                 Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
                     $options['status'], $user_info_object->id);
             }
+            if ($options['am'] != $user_info_object->am) {
+                // update student ID
+                $user_info_object->am = $options['am'];
+                Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                    $options['am'], $user_info_object->id);
+            }
             $userObj->refresh($user_info_object->id, $options['departments']);
             if (!array_search($user_info_object->password, $auth_ids)) {
                 $_SESSION['canChangePassword'] = true;
@@ -1077,7 +1113,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
   Authenticate user via alternate defined methods
  * ************************************************************** */
 
-function alt_login($user_info_object, $uname, $pass) {
+function alt_login($user_info_object, $uname, $pass, $mobile = false) {
     global $warning, $auth_ids;
 
     $_SESSION['canChangePassword'] = false;
@@ -1088,10 +1124,13 @@ function alt_login($user_info_object, $uname, $pass) {
     // a CAS user might enter a username/password in the form, instead of doing CAS login
     // check auth according to the defined alternative authentication method of CAS
     if ($auth == 7) {
-        $cas = explode('|', $auth_method_settings['auth_settings']);
-        $cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
-        // check if alt auth is valid and configured
-        if (($cas_altauth > 0) && check_auth_configured($cas_altauth)) {
+        $cas_settings = get_auth_settings($auth);
+        $cas_altauth = intval($cas_settings['cas_altauth']);
+        $use_altauth = $mobile ||
+            (isset($cas_settings['cas_altauth_use']) &&
+             $cas_settings['cas_altauth_use'] == 'all');
+        if ($use_altauth and $cas_altauth > 0 and
+                check_auth_configured($cas_altauth)) {
             $auth = $cas_altauth;
             // fetch settings of alt auth
             $auth_method_settings = get_auth_settings($auth);
@@ -1152,6 +1191,12 @@ function alt_login($user_info_object, $uname, $pass) {
                 $user_info_object->status = $options['status'];
                 Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
                     $options['status'], $user_info_object->id);
+            }
+            if ($options['am'] != $user_info_object->am) {
+                // update student ID
+                $user_info_object->am = $options['am'];
+                Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                    $options['am'], $user_info_object->id);
             }
 
             $userObj->refresh($user_info_object->id, $options['departments']);
@@ -1311,6 +1356,7 @@ function shib_cas_login($type) {
             }
 
             $status = $options['status'];
+            $am = $options['am'];
 
             // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
@@ -1357,7 +1403,7 @@ function shib_cas_login($type) {
 
         if (!$options['accept']) {
             deny_access();
-            }
+        }
 
         $status = $options['status'];
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
@@ -1404,6 +1450,12 @@ function shib_cas_login($type) {
         $_SESSION['mail_verification_required'] = 1;
         // init.php is already loaded so redirect from here
         redirect_to_home_page('modules/auth/mail_verify_change.php');
+    } else {
+        if (isset($_GET['next'])) {
+            redirect_to_home_page($_GET['next']);
+        } else {
+            redirect_to_home_page('main/portfolio.php');
+        }
     }
 }
 
@@ -1469,14 +1521,12 @@ function resetLoginFailure() {
 function external_DB_Check_Pass($test_password, $hash, $encryption) {
     switch ($encryption) {
         case 'none':
-            return ($test_password == $hash);
-            break;
+            return ($test_password == $hash);            
         case 'md5':
-            return (md5($test_password) == $hash);
+            return (md5($test_password) == $hash);            
         case 'ehasher':
-            require_once 'include/phpass/PasswordHash.php';
             $hasher = new PasswordHash(8, false);
-            return $hasher->CheckPassword($test_password, $hash);
+            return $hasher->CheckPassword($test_password, $hash);            
         default:
             /* Maybe append an error message to tool_content, telling not supported encryption */
     }
@@ -1600,14 +1650,17 @@ function get_shibboleth_vars($file) {
 }
 
 function deny_access() {
+    global $langRegistrationDenied;
+
     if (!$options['accept']) {
         foreach (array_keys($_SESSION) as $key) {
             unset($_SESSION[$key]);
         }
-        Session::Messages(trans('langRegistrationDenied'), 'alert-warning');
+        Session::Messages($langRegistrationDenied, 'alert-warning');
         redirect_to_home_page();
     }
 }
+
 
 function triggerGame($uid, $is_admin) {
     if (!$is_admin) {
