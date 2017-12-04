@@ -1457,6 +1457,7 @@ $langGroupCategoryDeleted = "Η κατηγορία διαγράφηκε μαζί
 $langGroupDeleted = "Η ομάδα χρηστών διαγράφηκε";
 $langGroupTeam = "Γενικές Ομάδες Χρηστών";
 $langInvalidNumericValue = "άκυρη τιμή πεδίου";
+$langGroupFull = "η ομάδα είναι πλήρης";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη λειτουργία 'Διαχείριση $langOfCourse'";
