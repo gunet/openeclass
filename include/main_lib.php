@@ -2071,8 +2071,8 @@ tinymce.init({
     // Menubar options
     menu : 'false',
     // Toolbar options
-    toolbar1: 'toggle | bold | italic | forecolor | emoticons | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
-    toolbar2: 'underline | strikethrough | superscript | subscript | table | undo | redo | pastetext | cut | copy | paste | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
+    toolbar1: 'toggle | bold | italic | underline | forecolor | backcolor | emoticons | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
+    toolbar2: 'strikethrough | superscript | subscript | table | undo | redo | pastetext | cut | copy | paste | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
     // Replace values for the template plugin
      // Toolbar options
     //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
