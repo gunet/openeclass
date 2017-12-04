@@ -580,14 +580,19 @@ if ($is_editor) {
             $group_id = $row->id;
 
             initialize_group_info($group_id);
-
+            
+            $tool_content .= "<tr>";
             $tool_content .= "<td class='text-left'>";
             // Allow student to enter group only if he's a member
             if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                         "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
             } else {
-                $tool_content .= q($group_name);
+                $full_group_message = '';
+                if ($max_members > 0 and $max_members == $member_count) {
+                   $full_group_message = "<span style='color:#900; weight:bold; padding-left: 10px;'>($langGroupFull)</span>";
+                }
+                $tool_content .= q($group_name) . "$full_group_message";
             }
             $tool_content .= "<br><p style='padding-top:10px;'>$group_description</p>";
             if ($student_desc) {
@@ -629,10 +634,10 @@ if ($is_editor) {
 }
 
     if (!in_array($action, array('addcategory', 'editcategory'))) {
-    $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
-    $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
-    $aantalcategories = count($cat);
-    $tool_content .= "<br><br><div class='row'>
+        $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
+        $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
+        $aantalcategories = count($cat);
+        $tool_content .= "<br><br><div class='row'>
             <div class='col-sm-12'>
             <div class='margin-bottom-thin' style='font-weight: bold;'>";
         if ($aantalcategories > 0) {

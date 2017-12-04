@@ -2008,6 +2008,7 @@ $langGroupPrefs = "Λειτουργικά Χαρακτηριστικά Ομάδ�
 $langGroupPropertiesSum = "Σύνοψη Ρυθμίσεων";
 $langGroup = "Ομάδα Χρηστών";
 $langInGroup = "στην ομάδα χρηστών";
+$langGroupFull = "η ομάδα είναι πλήρης";
 
 // Group Properties
 $langGroupProperties = "Ρυθμίσεις Ομάδων Χρηστών";
