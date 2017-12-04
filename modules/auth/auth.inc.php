@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -266,8 +266,7 @@ function get_hybridauth_settings($provider) {
   studentid
  * ************************************************************** */
 
-function auth_user_login($auth, $test_username, $test_password, $settings) {   
-
+function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
@@ -395,15 +394,18 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '5':
-            $link = new Database($settings['dbhost'], $settings['dbname'], $settings['dbuser'], $settings['dbpass']);
+            try {
+                $link = new Database($settings['dbhost'], $settings['dbname'], $settings['dbuser'], $settings['dbpass']);
+            } catch(Exception $ex) {                
+                break;
+            }
             if ($link) {
-                if ($link) {
-                    $res = $link->querySingle("SELECT `$settings[dbfieldpass]`
-                                                FROM `$settings[dbtable]`
-                                                WHERE `$settings[dbfielduser]` = ?s", $test_username);
-                    if ($res) {
-                        $testauth = external_DB_Check_Pass($test_password, $res->$settings['dbfieldpass'], $settings['dbpassencr']);
-                    }
+                $res = $link->querySingle("SELECT `$settings[dbfieldpass]`
+                                            FROM `$settings[dbtable]`
+                                            WHERE `$settings[dbfielduser]` = ?s", $test_username);
+                if ($res) {
+                    $field = $settings['dbfieldpass'];
+                    $testauth = external_DB_Check_Pass($test_password, $res->$field, $settings['dbpassencr']);
                 }
             }
             break;
@@ -1519,14 +1521,13 @@ function resetLoginFailure() {
 function external_DB_Check_Pass($test_password, $hash, $encryption) {
     switch ($encryption) {
         case 'none':
-            return ($test_password == $hash);
-            break;
+            return ($test_password == $hash);            
         case 'md5':
-            return (md5($test_password) == $hash);
+            return (md5($test_password) == $hash);            
         case 'ehasher':
             require_once 'include/phpass/PasswordHash.php';
             $hasher = new PasswordHash(8, false);
-            return $hasher->CheckPassword($test_password, $hash);
+            return $hasher->CheckPassword($test_password, $hash);            
         default:
             /* Maybe append an error message to tool_content, telling not supported encryption */
     }
