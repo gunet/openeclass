@@ -578,11 +578,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         ";
 
         $help_link_icon = "
-
         <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?language=$language&amp;topic=$helpTopic&amp;subtopic=$helpSubTopic\">
-            <i class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
+            <span class='pull-right text-info fa fa-question-circle fa-2x' data-toggle='tooltip' data-placement='top' title='$langHelp'>                
+            </span>
         </a>";
-
+       
         $t->set_var('HELP_LINK_ICON', $help_link_icon);
         $t->set_var('LANG_HELP', $langHelp);
     } else {
