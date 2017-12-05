@@ -234,8 +234,7 @@ if (isset($_GET['pid'])) {
     $pageName = $poll->name;
     $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE pid = ?d", $pid)->count;
     if ($attempt_counter>0) {
-        Session::Messages($langThereAreParticipants);
-        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+        Session::Messages($langThereAreParticipants);        
     }
 } else {
     if (!isset($_GET['newPoll'])) {
