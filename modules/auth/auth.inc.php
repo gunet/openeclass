@@ -1525,7 +1525,6 @@ function external_DB_Check_Pass($test_password, $hash, $encryption) {
         case 'md5':
             return (md5($test_password) == $hash);            
         case 'ehasher':
-            require_once 'include/phpass/PasswordHash.php';
             $hasher = new PasswordHash(8, false);
             return $hasher->CheckPassword($test_password, $hash);            
         default:
