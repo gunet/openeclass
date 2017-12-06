@@ -1915,6 +1915,9 @@ $langCorrespondsTo = "Αντιστοιχεί σε";
 $langExpectedChoice = "Αναμενόμενη Απάντηση";
 $langYourTotalScore = "Συνολική βαθμολογία άσκησης";
 $langQuestionAlreadyDeleted = "Η ερώτηση έχει διαγραφεί.";
+$langScoreDiffers = 'Η αποθηκευμένη βαθμολογία της άσκησης διαφέρει από την τρέχουσα. Επιθυμείτε να γίνει αναβάθμολόγηση;';
+$langRegrade = 'Αναβαθμολόγηση';
+$langNewScoreRecorded = 'Η νέα βαθμολογία αποθηκεύτηκε';
 
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";

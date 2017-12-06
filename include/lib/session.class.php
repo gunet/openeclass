@@ -43,7 +43,7 @@ class Session {
 
     public function __construct() {
         global $native_language_names_init;
-        
+
         $this->active_ui_languages = explode(' ', get_config('active_ui_languages'));
         // Set active user interface languages
         $this->native_language_names = array();
@@ -97,7 +97,7 @@ class Session {
         if ($this->user_id and $this->status != USER_GUEST) {
             if ($timestamp) {
                 Database::get()->query('UPDATE course_user
-                    SET document_timestamp = ?t 
+                    SET document_timestamp = ?t
                     WHERE user_id = ?d AND course_id = ?d',
                     $timestamp, $this->user_id, $course_id);
             } else {
@@ -139,30 +139,30 @@ class Session {
             return false;
         }
     }
-    
+
     // Sets flash data
     public static function flash($key, $data) {
         $_SESSION[$key]['data'] = $data;
         if (!isset($_SESSION['flash_new'])) {
             $_SESSION['flash_new'] = array();
         }
-        array_push($_SESSION['flash_new'], $key);       
+        array_push($_SESSION['flash_new'], $key);
     }
     public static function has($key) {
         if (isset($_SESSION[$key]['data'])) {
             return TRUE;
         } else {
             return FALSE;
-        }   
-    }    
+        }
+    }
     // Sets automatically generated on next request messages
     public static function Messages($messages, $class='alert-warning'){
         if(!is_array($messages)) $messages = array($messages);
-        
+
         foreach ($messages as $i => $message) {
             $_SESSION['messages'][$class][$i] = $message;
         }
-   
+
         if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
         array_push($_SESSION['flash_new'], 'messages');
         return new self;
@@ -170,7 +170,7 @@ class Session {
     // Flashes posted variables
     public static function flashPost() {
         foreach ($_POST as $key => $value){
-          self::flash($key, $value);   
+          self::flash($key, $value);
         }
         return new self;
     }
@@ -186,9 +186,9 @@ class Session {
         foreach ($keys as $key) {
             array_push($_SESSION['flash_new'], $key);
         }
-        array_push($_SESSION['flash_new'], 'messages');         
+        array_push($_SESSION['flash_new'], 'messages');
         return new self;
-    }      
+    }
     public static function get($key) {
         if(isset($_SESSION[$key]['data'])) {
             return $_SESSION[$key]['data'];
@@ -199,7 +199,7 @@ class Session {
     public static function hasErrors() {
         if(isset($_SESSION['flash_old'])) {
             foreach ($_SESSION['flash_old'] as $row) {
-                if (isset($_SESSION[$row]['errors'][0])){                
+                if (isset($_SESSION[$row]['errors'][0])){
                     return TRUE;
                 }
             }
@@ -212,7 +212,7 @@ class Session {
         } else {
             return FALSE;
         }
-    }    
+    }
     public static function getError($key) {
         if (isset($_SESSION[$key]['errors'][0])){
             return $_SESSION[$key]['errors'][0];
@@ -232,9 +232,9 @@ class Session {
         unset($_SESSION['messages']);
         return $msg_boxes;
     }
-    
+
     // Make sure a language code is valid - if not, default language is Greek
-    public function validate_language_code($langcode, $default = 'el') {     
+    public function validate_language_code($langcode, $default = 'el') {
         if (array_search($langcode, $this->active_ui_languages) === false) {
             return $default;
         } else {

@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -32,7 +31,7 @@ require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 
 $pageName = $langExercicesResult;
-$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 // picture path
 $picturePath = "courses/$course_code/image";
@@ -255,8 +254,16 @@ $tool_content .= "
   </div>";
 $i = 0;
 
+if ($is_editor and $exercise_user_record->attempt_status == ATTEMPT_COMPLETED and isset($_POST['regrade'])) {
+    $regrade = true;
+} else {
+    $regrade = false;
+}
+
+$totalWeighting = $totalScore = 0;
+
 // for each question
-if (count($exercise_question_ids)>0){
+if (count($exercise_question_ids) > 0) {
     foreach ($exercise_question_ids as $row) {
 
         // creates a temporary Question object
@@ -271,7 +278,7 @@ if (count($exercise_question_ids)>0){
 
         // destruction of the Question object
         unset($objQuestionTmp);
-        //check if question has been graded
+        // check if question has been graded
         $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
         $question_graded = is_null($question_weight) ? FALSE : TRUE;
 
@@ -309,7 +316,6 @@ if (count($exercise_question_ids)>0){
                         <td class='text-center' colspan='${colspan}'><img src='../../$picturePath/quiz-" . $row->question_id . "'></td>
                       </tr>";
         }
-        $questionScore = 0;
 
         if ($showResults && $choice) {
             if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
@@ -333,6 +339,9 @@ if (count($exercise_question_ids)>0){
                             </tr>";
             }
         }
+
+        $questionScore = 0;
+
         if ($answerType != FREE_TEXT) { // if NOT FREE TEXT (i.e. question has answers)
             // construction of the Answer object
             $objAnswerTmp = new Answer($row->question_id);
@@ -351,17 +360,20 @@ if (count($exercise_question_ids)>0){
                 $answer = standard_text_escape($answer);
                 $answerComment = standard_text_escape($answerComment);
 
+                $grade = 0;
                 switch ($answerType) {
                     // for unique answer
                     case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
+                            $grade = $answerWeighting;
                         }
                         break;
                     // for multiple answers
                     case MULTIPLE_ANSWER : $studentChoice = @$choice[$answerId];
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
+                            $grade = $answerWeighting;
                         }
                         break;
                     // for fill in the blanks
@@ -399,6 +411,12 @@ if (count($exercise_question_ids)>0){
                             if (in_array($canonical_choice, $right_answers)) {
                                 // gives the related weighting to the student
                                 $questionScore += $answerWeighting[$j-1];
+                                if ($regrade) {
+                                    Database::get()->query('UPDATE exercise_answer_record
+                                        SET weight = ?f
+                                        WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
+                                        $answerWeighting[$j-1], $eurid, $row->question_id, $j);
+                                }
                                 // increments total score
                                 // adds the word in green at the end of the string
                                 $answer .= '<b>' . q($choice[$j]) . '</b>';
@@ -423,6 +441,7 @@ if (count($exercise_question_ids)>0){
                     case MATCHING : if ($answerCorrect) {
                             if ($answerCorrect == $choice[$answerId]) {
                                 $questionScore += $answerWeighting;
+                                $grade = $answerWeighting;
                                 $choice[$answerId] = $matching[$choice[$answerId]];
                             } elseif (!$choice[$answerId]) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
@@ -438,9 +457,18 @@ if (count($exercise_question_ids)>0){
                     case TRUE_FALSE : $studentChoice = ($choice == $answerId) ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
+                            $grade = $answerWeighting;
                         }
                         break;
                 } // end switch()
+
+                if ($regrade and $answerType != FILL_IN_BLANKS_TOLERANT and $answerType != FILL_IN_BLANKS) {
+                    Database::get()->query('UPDATE exercise_answer_record
+                        SET weight = ?f
+                        WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
+                        $grade, $eurid, $row->question_id, $answerId);
+                }
+
                 if ($showResults) {
                     if ($answerType != MATCHING || $answerCorrect) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
@@ -507,6 +535,7 @@ if (count($exercise_question_ids)>0){
                 }
             }
         }
+
         if ($showScore) {
             if ($choice) {
                 if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
@@ -526,12 +555,31 @@ if (count($exercise_question_ids)>0){
 
         }
         $tool_content .= "</th></tr></table>";
+
+        $totalScore += $questionScore;
+        $totalWeighting += $questionWeighting;
+
         // destruction of Answer
         unset($objAnswerTmp);
         $i++;
     } // end foreach()
 } else {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+}
+
+if ($regrade) {
+    Database::get()->query('UPDATE exercise_user_record
+        SET total_score = ?f, total_weighting = ?f
+        WHERE eurid = ?d', $totalScore, $totalWeighting, $eurid);
+    Session::Messages($langNewScoreRecorded, 'alert-success');
+    redirect_to_home_page("modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid");
+}
+
+if ($is_editor and ($totalScore != $exercise_user_record->total_score or $totalWeighting != $exercise_user_record->total_weighting)) {
+    Session::Messages($langScoreDiffers .
+        "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
+            <button class='btn btn-default' type='submit' name='regrade' value='true'>$langRegrade</button>
+         </form>", 'alert-warning');
 }
 
 if ($showScore) {
