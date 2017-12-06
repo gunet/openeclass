@@ -108,8 +108,8 @@ if (user_app_exists($username)) {
 
 if ($display_captcha) {
     // captcha check
-    include 'include/securimage/securimage.php';
-    $securimage = new Securimage();
+    include 'include/securimage/securimage.php';    
+    $securimage = new Securimage($options);
     if ($securimage->check($captcha_code) == false) {
         $errors[] = $langCaptchaWrong;
         $all_set = false;

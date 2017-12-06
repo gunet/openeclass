@@ -246,7 +246,7 @@ if (!isset($_POST['submit'])) {
         if ($display_captcha) {
             // captcha check
             require_once 'include/securimage/securimage.php';
-            $securimage = new Securimage();
+            $securimage = new Securimage($options = array('perturbation' => '0.9'));
             if ($securimage->check($_POST['captcha_code']) == false) {
                 $registration_errors[] = $langCaptchaWrong;
             }
