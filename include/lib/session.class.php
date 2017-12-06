@@ -230,6 +230,9 @@ class Session {
             $msg_boxes .= "<div class='alert $class'><ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
         }
         unset($_SESSION['messages']);
+        if (isset($_SESSION['flash_new'])) {
+            $_SESSION['flash_new'] = array_diff($_SESSION['flash_new'], ['messages']);
+        }
         return $msg_boxes;
     }
 

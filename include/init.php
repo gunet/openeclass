@@ -99,7 +99,7 @@ if (isset($language)) {
     $urlServer = get_config('base_url');
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;    
+    $language = $session->language;
 }
 //Initializing Valitron (form validation library)
 use Valitron\Validator as V;
