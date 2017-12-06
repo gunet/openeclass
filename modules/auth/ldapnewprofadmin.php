@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -52,7 +52,8 @@ $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../admin/listreq.php", "name" => $langOpenProfessorRequests);
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
-// professor registration
+
+// user registration
 if ($submit) {
     $rid = $_POST['rid'];
     $pn = $_POST['pn'];
@@ -61,6 +62,7 @@ if ($submit) {
     $pe = $_POST['pe'];
     $phone = $_POST['phone'];
     $department = $_POST['department'];
+    $pstatus = $_POST['pstatus'];
     $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
     $lang = $session->validate_language_code(@$_POST['language']);
     
@@ -96,10 +98,10 @@ if ($submit) {
 
     $sql = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email, status, phone,
                                                     am, registered_at, expires_at, lang, verified_mail, description, whitelist)
-                                VALUES (?s, ?s, ?s, ?s, ?s, 1, ?s, ?s, 
+                                VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, 
                                 " . DBHelper::timeAfter() . ",
                                 " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, ?d, '', '')", 
-                    $ps, $pn, $pu, $password, $pe, $phone, $comment, $lang, $verified_mail);
+                    $ps, $pn, $pu, $password, $pe, $pstatus, $phone, $comment, $lang, $verified_mail);
     $last_id = $sql->lastInsertID;
     // update personal calendar info table
     // we don't check if trigger exists since it requires `super` privilege
@@ -183,7 +185,7 @@ if ($submit) {
                   'level' => 'primary')));
                         
         $res = Database::get()->querySingle("SELECT givenname, surname, username, email,
-                                                    faculty_id, comment, lang, date_open, phone, am, verified_mail 
+                                                    faculty_id, comment, lang, date_open, phone, am, status, verified_mail 
                                                     FROM user_request WHERE id = ?d", $id);
         $ps = $res->surname;
         $pn = $res->givenname;
@@ -194,6 +196,7 @@ if ($submit) {
         $pam = $res->am;
         $pphone = $res->phone;
         $lang = $res->lang;
+        $pstatus = $res->status;
         $pvm = $res->verified_mail;
         $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
     }
@@ -264,8 +267,11 @@ if ($submit) {
                                 <div class='col-sm-10'>" . q($pdate) . "</div></div>        
 	<div class='col-sm-offset-2 col-sm-10'>
             <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-        </div>		
-	<input type='hidden' name='auth' value='$auth' >	
+        </div>";
+        if (isset($pstatus)) {
+            $tool_content .= "<input type='hidden' name='pstatus' value='$pstatus'>";
+        }        
+	$tool_content .= "<input type='hidden' name='auth' value='$auth' >	
 	<input type='hidden' name='rid' value='" . @$id . "'>
       </fieldset>
     </form>
