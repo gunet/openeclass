@@ -91,9 +91,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
         if (empty($msgErr)) {
             if (!$nbrGoodAnswers) {
-                $msgErr = ($answerType == UNIQUE_ANSWER) ? $langChooseGoodAnswer : $langChooseGoodAnswers;
-                // clears answers already recorded into the Answer object
-                //$objAnswer->cancel();
+                $msgErr = ($answerType == UNIQUE_ANSWER) ? $langChooseGoodAnswer : $langChooseGoodAnswers;                
             } else {
                 // save the answers into the data base
                 $objAnswer->save();
@@ -141,8 +139,22 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             unset($submitAnswers);
             $blanks = Question::getBlanks($_POST['reponse']);
         }
-    } elseif ($answerType == MATCHING) {        
+    } elseif ($answerType == MATCHING) {
         
+        if (isset($_POST['match'])) { // check for blank matches
+            if ($_POST['match'] != array_filter($_POST['match'])) {
+                Session::Messages($langGiveAnswers, 'alert-warning');
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");    
+            }
+        }
+
+        if (isset($_POST['option'])) { // check for blank options
+            if ($_POST['option'] != array_filter($_POST['option'])) {
+                Session::Messages($langGiveAnswers, 'alert-warning');
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
+            }
+        }
+                                
         for ($i = 1; $i <= $_POST['nbrOptions']; $i++) {
             $option[$i] = trim($_POST['option'][$i]);
         }
@@ -209,9 +221,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
         if (empty($msgErr)) {
             if (!$nbrGoodAnswers) {
-                $msgErr = ($answerType == TRUE_FALSE) ? $langChooseGoodAnswer : $langChooseGoodAnswers;
-                // clears answers already recorded into the Answer object
-                //$objAnswer->cancel();
+                $msgErr = ($answerType == TRUE_FALSE) ? $langChooseGoodAnswer : $langChooseGoodAnswers;                
             } else {
                 // saves the answers into the data base
                 $objAnswer->save();
@@ -335,8 +345,7 @@ if (isset($_GET['modifyAnswers'])) {
             }
         }
 
-        if (isset($_POST['moreOptions'])) {
-            $objAnswer->createAnswer('', 0, '', 0, $nbrOptions + 1, true);             
+        if (isset($_POST['moreOptions'])) {            
             $nbrOptions++;
         }
         
@@ -349,8 +358,7 @@ if (isset($_GET['modifyAnswers'])) {
         }
         
         if (isset($_POST['moreMatches'])) {
-            $nbrMatches++;            
-            $objAnswer->createAnswer('', 1, '', 0, $nbrOptions + $nbrMatches, true);
+            $nbrMatches++;
         }
         
         
