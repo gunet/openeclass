@@ -27,17 +27,44 @@
  * @link http://www.phpcaptcha.org Securimage PHP CAPTCHA
  * @link http://www.phpcaptcha.org/latest.zip Download Latest Version
  * @link http://www.phpcaptcha.org/Securimage_Docs/ Online Documentation
- * @copyright 2009 Drew Phillips
- * @author drew010 <drew@drew-phillips.com>
- * @version 2.0.1 BETA (December 6th, 2009)
+ * @copyright 2012 Drew Phillips
+ * @author Drew Phillips <drew@drew-phillips.com>
+ * @version 3.6.6 (Nov 20 2017)
  * @package Securimage
  *
  */
 
-include 'securimage.php';
+require_once dirname(__FILE__) . '/securimage.php';
 
-$img    = new Securimage();
-$img->audio_format = (isset($_GET['format']) && in_array(strtolower($_GET['format']), array('mp3', 'wav')) ? strtolower($_GET['format']) : 'mp3');
-//$img->setAudioPath('/path/to/securimage/audio/');
+// if using database, adjust these options as necessary and change $img = new Securimage(); to $img = new Securimage($options);
+// see test.mysql.php or test.sqlite.php for examples
+$options = array(
+    'use_database'    => true,
+    'database_name'   => '',
+    'database_user'   => '',
+    'database_driver' => Securimage::SI_DRIVER_MYSQL
+);
 
-$img->outputAudioFile();
+$img = new Securimage();
+
+// Other audio settings
+//$img->audio_use_sox   = true;
+//$img->audio_use_noise = true;
+//$img->degrade_audio   = false;
+//$img->sox_binary_path = 'sox';
+//Securimage::$lame_binary_path = '/usr/bin/lame'; // for mp3 audio support
+
+// To use an alternate language, uncomment the following and download the files from phpcaptcha.org
+// $img->audio_path = $img->securimage_path . '/audio/es/';
+
+// If you have more than one captcha on a page, one must use a custom namespace
+// $img->namespace = 'form2';
+
+// set namespace if supplied to script via HTTP GET
+if (!empty($_GET['namespace'])) $img->setNamespace($_GET['namespace']);
+
+
+// mp3 or wav format
+$format = (isset($_GET['format']) && strtolower($_GET['format']) == 'mp3') ? 'mp3' : null;
+
+$img->outputAudioFile($format);

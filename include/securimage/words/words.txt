@@ -1,3 +1,4 @@
+aahing
 aaliis
 aarrgh
 abacas
@@ -510,7 +511,6 @@ anural
 anuran
 anuria
 anuric
-anuses
 anvils
 anyhow
 anyone
@@ -689,20 +689,6 @@ aspics
 aspire
 aspish
 asrama
-assail
-assais
-assays
-assent
-assert
-assess
-assets
-assign
-assist
-assize
-assoil
-assort
-assume
-assure
 astern
 asters
 asthma
@@ -913,12 +899,9 @@ baling
 balked
 balker
 ballad
-balled
-baller
 ballet
 ballon
 ballot
-ballsy
 balsam
 balsas
 bamboo
@@ -1497,14 +1480,11 @@ bonbon
 bonded
 bonder
 bonduc
-boners
-bonged
 bongos
 bonier
 boning
 bonita
 bonito
-bonked
 bonnes
 bonnet
 bonnie
@@ -1561,8 +1541,6 @@ borzoi
 boshes
 bosker
 bosket
-bosoms
-bosomy
 bosons
 bosque
 bossed
@@ -1817,8 +1795,6 @@ bulled
 bullet
 bumble
 bumkin
-bummed
-bummer
 bumped
 bumper
 bumphs
@@ -2840,6 +2816,7 @@ coombs
 cooped
 cooper
 coopts
+cooter
 cootie
 copalm
 copals
@@ -3655,10 +3632,6 @@ dicast
 dicers
 dicier
 dicing
-dicked
-dicker
-dickey
-dickie
 dicots
 dictum
 didact
@@ -3835,7 +3808,6 @@ doming
 domino
 donate
 donees
-dongas
 dongle
 donjon
 donkey
@@ -4714,6 +4686,7 @@ felons
 felony
 felsic
 felted
+female
 femmes
 femora
 femurs
@@ -4845,7 +4818,6 @@ fiscal
 fished
 fisher
 fishes
-fisted
 fistic
 fitchy
 fitful
@@ -4878,9 +4850,9 @@ flakey
 flambe
 flamed
 flamen
+flamer
 flames
 flanes
-flange
 flanks
 flappy
 flared
@@ -5218,7 +5190,6 @@ fuming
 fumuli
 funded
 funder
-fundic
 fundus
 funest
 fungal
@@ -5423,9 +5394,6 @@ gawped
 gawper
 gawsie
 gayals
-gaydar
-gayest
-gayety
 gazabo
 gazars
 gazebo
@@ -5670,20 +5638,15 @@ goblet
 goblin
 goboes
 gobony
-goddam
-godded
 godets
 godown
 godson
-godwit
 gofers
 goffer
 goggle
 goggly
 goglet
 goings
-goiter
-goitre
 golden
 golder
 golems
@@ -5759,7 +5722,6 @@ graham
 grails
 grains
 grainy
-
 gramas
 gramma
 gramme
@@ -5825,6 +5787,8 @@ grimes
 grimly
 grinch
 grinds
+gringa
+gringo
 griots
 griped
 griper
@@ -5842,7 +5806,6 @@ groans
 groats
 grocer
 groggy
-groins
 grooms
 groove
 groovy
@@ -5966,7 +5929,6 @@ haboob
 haceks
 hacked
 hackee
-hacker
 hackie
 hackle
 hackly
@@ -6049,7 +6011,6 @@ handed
 hander
 handle
 hangar
-hanged
 hanger
 hangul
 hangup
@@ -6232,7 +6193,6 @@ hermit
 hernia
 heroes
 heroic
-heroin
 herons
 herpes
 hetero
@@ -6285,7 +6245,6 @@ hinted
 hinter
 hipped
 hipper
-hippie
 hippos
 hirees
 hirers
@@ -6359,6 +6318,8 @@ holmic
 holpen
 homage
 hombre
+homely
+homers
 homily
 homing
 hominy
@@ -6372,18 +6333,15 @@ honest
 honied
 honing
 honked
+honker
 honors
 honour
 hooded
-hoodie
 hoodoo
 hooeys
 hoofed
 hoofer
-hookah
-hookas
 hooked
-hooker
 hookey
 hookup
 hoolie
@@ -6908,8 +6866,6 @@ jerboa
 jereed
 jerids
 jerked
-jerker
-jerkin
 jerrid
 jersey
 jessed
@@ -6925,7 +6881,6 @@ jetted
 jetton
 jetway
 jewels
-jewing
 jezail
 jibbed
 jibber
@@ -6952,8 +6907,6 @@ jinked
 jinker
 jinnee
 jinnis
-jinxed
-jinxes
 jitney
 jitter
 jivers
@@ -7039,7 +6992,6 @@ junior
 junked
 junker
 junket
-junkie
 juntas
 juntos
 jupons
@@ -7353,7 +7305,6 @@ kythes
 laager
 labara
 labels
-labial
 labile
 labium
 labors
@@ -7611,7 +7562,6 @@ leones
 lepers
 leptin
 lepton
-lesbos
 lesion
 lessee
 lessen
@@ -7636,8 +7586,12 @@ levier
 levies
 levins
 levity
+lewder
+lewdly
 lexeme
 lexica
+lezzes
+lezzie
 liable
 liaise
 lianas
@@ -7858,8 +7812,6 @@ looked
 looker
 lookup
 loomed
-looney
-loonie
 looped
 looper
 loosed
@@ -8027,8 +7979,6 @@ madcap
 madded
 madden
 madder
-madman
-madmen
 madras
 madres
 madtom
@@ -8445,9 +8395,6 @@ mimics
 miming
 mimosa
 minced
-mincer
-minces
-minded
 minder
 miners
 mingle
@@ -8623,7 +8570,6 @@ morgan
 morgen
 morgue
 morion
-morons
 morose
 morpho
 morphs
@@ -8989,7 +8935,6 @@ ninths
 niobic
 nipped
 nipper
-nipple
 niseis
 niters
 nitery
@@ -9697,7 +9642,6 @@ pecans
 pechan
 peched
 pecked
-pecker
 pecten
 pectic
 pectin
@@ -9739,15 +9683,11 @@ pencel
 pencil
 pended
 pengos
-penial
-penile
 penman
 penmen
 pennae
 penned
 penner
-pennia
-pennis
 pennon
 pensee
 pensil
@@ -9808,8 +9748,6 @@ pettle
 pewees
 pewits
 pewter
-peyote
-peyotl
 phages
 pharos
 phased
@@ -10158,16 +10096,6 @@ ponies
 pontes
 pontil
 ponton
-poodle
-poohed
-pooing
-pooled
-pooler
-pooped
-poorer
-pooris
-poorly
-pooves
 popery
 popgun
 popish
@@ -10481,12 +10409,9 @@ purses
 pursue
 purvey
 pushed
-pusher
 pushes
 pushup
 pusley
-pusses
-pussly
 putlog
 putoff
 putons
@@ -10838,7 +10763,6 @@ reckon
 reclad
 recoal
 recoat
-recock
 recode
 recoil
 recoin
@@ -10852,8 +10776,6 @@ recoup
 rectal
 rector
 rectos
-rectum
-rectus
 recurs
 recuse
 recuts
@@ -10900,9 +10822,6 @@ reechy
 reeded
 reedit
 reefed
-reefer
-reeked
-reeker
 reeled
 reeler
 reemit
@@ -11301,9 +11220,6 @@ rilles
 rillet
 rimers
 rimier
-riming
-rimmed
-rimmer
 rimose
 rimous
 rimple
@@ -11384,8 +11300,6 @@ romaji
 romano
 romans
 romeos
-romped
-romper
 rondel
 rondos
 ronion
@@ -11430,10 +11344,6 @@ rotate
 rotche
 rotgut
 rotors
-rotted
-rotten
-rotter
-rottes
 rotund
 rouble
 rouche
@@ -11572,8 +11482,6 @@ saddhu
 saddle
 sadhes
 sadhus
-sadism
-sadist
 safari
 safely
 safest
@@ -11784,8 +11692,6 @@ schema
 scheme
 schism
 schist
-schizo
-schizy
 schlep
 schlub
 schmoe
@@ -11864,7 +11770,6 @@ sculks
 sculls
 sculps
 sculpt
-scummy
 scurfs
 scurfy
 scurry
@@ -11872,7 +11777,6 @@ scurvy
 scutch
 scutes
 scutum
-scuzzy
 scyphi
 scythe
 seabag
@@ -11882,7 +11786,6 @@ sealed
 sealer
 seaman
 seamed
-seamen
 seamer
 seance
 search
@@ -12534,7 +12437,6 @@ smudge
 smudgy
 smugly
 smutch
-smutty
 snacks
 snafus
 snaggy
@@ -12830,7 +12732,6 @@ splays
 spleen
 splent
 splice
-spliff
 spline
 splint
 splits
@@ -12887,9 +12788,6 @@ spryly
 spuing
 spumed
 spumes
-spunks
-spunky
-spurge
 spurns
 spurry
 spying
@@ -13022,10 +12920,6 @@ stilts
 stimes
 stingo
 stings
-stingy
-stinko
-stinks
-stinky
 stints
 stiped
 stipel
@@ -13060,7 +12954,6 @@ stones
 stoney
 stooge
 stooks
-stools
 stoops
 stoped
 stoper
@@ -13651,8 +13544,6 @@ testae
 tested
 testee
 tester
-testes
-testis
 teston
 tetany
 tetchy
@@ -13750,7 +13641,6 @@ throve
 thrown
 throws
 thrums
-thrush
 thrust
 thujas
 thulia
@@ -13877,8 +13767,6 @@ toiles
 toited
 tokays
 tokens
-tokers
-toking
 tolane
 tolans
 tolars
@@ -13960,7 +13848,6 @@ tortes
 torula
 toshes
 tossed
-tosser
 tosses
 tossup
 totals
@@ -14214,9 +14101,7 @@ tushes
 tushie
 tusked
 tusker
-tussah
 tussal
-tussar
 tusseh
 tusser
 tusses
@@ -14233,8 +14118,6 @@ tuxedo
 tuyere
 tuyers
 twains
-twangs
-twangy
 twanky
 tweaks
 tweaky
@@ -14605,14 +14488,10 @@ uredos
 ureide
 uremia
 uremic
-ureter
-uretic
 urgent
 urgers
 urging
 urials
-urinal
-urines
 uropod
 urping
 ursids
@@ -14915,17 +14794,8 @@ voyage
 voyeur
 vrooms
 vrouws
-vulgar
-vulgus
-vulvae
-vulval
-vulvar
-vulvas
 wabble
 wabbly
-wacker
-wackes
-wackos
 wadded
 wadder
 waddie
@@ -14994,9 +14864,6 @@ wampum
 wampus
 wander
 wandle
-wangan
-wangle
-wangun
 wanier
 waning
 wanion
@@ -15034,8 +14901,6 @@ washed
 washer
 washes
 washup
-wasted
-waster
 wastes
 wastry
 watape
@@ -15104,8 +14969,6 @@ weevil
 weewee
 weighs
 weight
-weiner
-weirdo
 weirds
 weirdy
 welded
@@ -15121,8 +14984,6 @@ weskit
 wester
 wether
 wetted
-wetter
-whacko
 whacks
 whacky
 whaled
@@ -15177,6 +15038,7 @@ whited
 whiten
 whiter
 whites
+whitey
 whizzy
 wholes
 wholly
