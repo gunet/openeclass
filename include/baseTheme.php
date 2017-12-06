@@ -102,7 +102,12 @@ function view($view_file, $view_data = array()) {
     } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
         $section_title = trans('langUserPortfolio');
     } else {
-        $section_title = $siteName;
+        $homepagetitle = get_config('homepage_title');
+        if (isset($homepagetitle)) {
+            $section_title = $homepagetitle;
+        } else {
+	        $section_title = $siteName;
+        }
     }
 
     //set the appropriate search action for the searchBox form
@@ -136,7 +141,15 @@ function view($view_file, $view_data = array()) {
                 }
             } else {
                 $hideStart = true;
-                $item['bread_text'] = trans('langHomePage');
+                $homebreadcrumb = get_config('homepage_name');
+                if (isset($homebreadcrumb)) {
+                	$item['bread_text'] = trans('homebreadcrumb');
+                } else {
+                	$item['bread_text'] = trans('langHomePage');
+                }
+                $showStart = true;
+            }
+            if ($showStart) {
                 if (isset($require_current_course) or $pageName) {
                     $item['bread_href'] = $urlAppend;
                 }
