@@ -329,8 +329,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('SECTION_TITLE', $langUserPortfolio);
         $sectionName = $langUserPortfolio;
     } else {
-        $t->set_var('SECTION_TITLE', get_config('defaultHomepageTitle', $langEclass));
-        $sectionName = get_config('defaultHomepageTitle', $langEclass);
+        $homepagetitle = get_config('homepage_title');        
+        if (isset($homepagetitle)) {
+            $t->set_var('SECTION_TITLE', $homepagetitle);
+            $sectionName = $homepagetitle;
+        } else {
+            $t->set_var('SECTION_TITLE', get_config('defaultHomepageTitle', $langEclass));
+            $sectionName = get_config('defaultHomepageTitle', $langEclass);
+        }
     }
 
     //set the appropriate search action for the searchBox form
@@ -412,7 +418,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->set_var('BREAD_TEXT', '<span class="fa fa-home"></span> ' . $langPortfolio);
                 $t->set_var('BREAD_HREF', $urlAppend . 'main/portfolio.php');
             } else {
-                $t->set_var('BREAD_TEXT', get_config('defaultHomepageBcrmp', $langHomePage));
+                $homebreadcrumb = get_config('homepage_name');
+                if (isset($homebreadcrumb)) {
+                    $t->set_var('BREAD_TEXT', $homebreadcrumb);
+                } else {
+                    $t->set_var('BREAD_TEXT', get_config('defaultHomepageBcrmp', $langHomePage));    
+                }                
                 $t->set_var('BREAD_HREF', $urlAppend);
                 $showStart = true;
             }
