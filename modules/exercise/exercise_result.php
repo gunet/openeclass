@@ -85,7 +85,7 @@ if (isset($_GET['eurId'])) {
         Session::Messages($langExerciseNotFound);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status==ATTEMPT_PAUSED) {
+    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
        // student is not allowed to view other people's exercise results
        // Nobody can see results of a paused exercise
        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
@@ -439,11 +439,12 @@ if (count($exercise_question_ids) > 0) {
                         break;
                     // for matching
                     case MATCHING : if ($answerCorrect) {
-                            if ($answerCorrect == $choice[$answerId]) {
+                            $thisChoice = isset($choice[$answerId])? $choice[$answerId]: null;
+                            if ($answerCorrect == $thisChoice) {
                                 $questionScore += $answerWeighting;
                                 $grade = $answerWeighting;
                                 $choice[$answerId] = $matching[$choice[$answerId]];
-                            } elseif (!$choice[$answerId]) {
+                            } elseif (!$thisChoice) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
                             } else {
                                 $choice[$answerId] = "<span class='text-danger'>
@@ -571,6 +572,8 @@ if ($regrade) {
     Database::get()->query('UPDATE exercise_user_record
         SET total_score = ?f, total_weighting = ?f
         WHERE eurid = ?d', $totalScore, $totalWeighting, $eurid);
+    update_gradebook_book($exercise_user_record->uid,
+        $exercise_user_record->eid, $totalScore / $totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
     Session::Messages($langNewScoreRecorded, 'alert-success');
     redirect_to_home_page("modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid");
 }
