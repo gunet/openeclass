@@ -44,6 +44,7 @@ require_once '../../../include/init.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/gradebook/functions.php';
 require_once 'modules/document/doc_init.php';
 
 $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
@@ -63,7 +64,7 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
              WHERE `user_id` = ?d
                AND `learnPath_module_id` = ?d";
     Database::get()->query($sql, $userid, $lpmid);
-    triggerLPGame($course_id, $userid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
+    triggerLPGame($course_id, $userid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);    
 }
 
 if (isset($_GET['viewModule_id']) && !empty($_GET['viewModule_id'])) {
