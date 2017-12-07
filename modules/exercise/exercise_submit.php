@@ -32,6 +32,7 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
+require_once 'modules/group/group_functions.php';
 require_once 'game.php';
 
 $pageName = $langExercicesView;
@@ -108,6 +109,31 @@ if (isset($_REQUEST['exerciseId'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
+// If the exercise is assigned to specific users / groups
+if ($objExercise->assign_to_specific and !$is_editor) {
+    $assignees = Database::get()->queryArray('SELECT user_id, group_id
+        FROM exercise_to_specific WHERE exercise_id = ?d', $exerciseId);
+    $accessible = false;
+    foreach ($assignees as $item) {
+        if ($item->user_id == $uid) {
+            $accessible = true;
+            break;
+        } elseif ($item->group_id) {
+            if (!isset($groups)) {
+                $groups = user_group_info($uid, $course_id);
+            }
+            if (isset($groups[$item->group_id])) {
+                $accessible = true;
+                break;
+            }
+        }
+        if (!$accessible) {
+            Session::Messages($langNoAccessPrivilages);
+            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        }
+    }
+}
+
 // Initialize attempts timestamp
 if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
     $attempt_value = $_POST['attempt_value'];
@@ -138,7 +164,6 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
             }
         }
     }
-
 }
 // If the exercise is IP protected
 $ips = $objExercise->selectIPLock();
