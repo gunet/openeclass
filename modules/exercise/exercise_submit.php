@@ -127,10 +127,10 @@ if ($objExercise->assign_to_specific and !$is_editor) {
                 break;
             }
         }
-        if (!$accessible) {
-            Session::Messages($langNoAccessPrivilages);
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-        }
+    }
+    if (!$accessible) {
+        Session::Messages($langNoAccessPrivilages);
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
 }
 
