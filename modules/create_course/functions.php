@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -57,7 +57,7 @@ function create_course($public_code, $lang, $title, $description, $departments, 
         $course_id = $q->lastInsertID;
     } else {
         return false;
-    }       
+    }
 
     require_once 'include/lib/course.class.php';
     $course = new Course();
@@ -88,7 +88,7 @@ function course_index($code) {
 }
 
 /**
- * @brief create course directories 
+ * @brief create course directories
  * @param type $code
  * @return boolean
  */
@@ -103,7 +103,7 @@ function create_course_dirs($code) {
        if (!make_dir($dir)) {
             Session::Messages(sprintf($langDirectoryCreateError, $dir));
             return false;
-       } 
+       }
     }
     return true;
 }
@@ -125,7 +125,7 @@ function create_modules($cid) {
             $args[] = array($mid, $vis, $cid);
         }
     }
-    Database::get()->query("INSERT INTO course_module
+    Database::get()->query("INSERT IGNORE INTO course_module
         (module_id, visible, course_id) VALUES " .
         implode(', ', $placeholders), $args);
 }

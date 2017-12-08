@@ -526,6 +526,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_3X) {
             restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $new_course_id), 'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
+            create_modules($new_course_id);
         } else if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
             create_modules($new_course_id);
             foreach (get_tabledata_from_parsed('accueil', $backupData, $restoreHelper) as $accueil) {
