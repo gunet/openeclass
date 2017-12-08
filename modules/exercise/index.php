@@ -42,6 +42,8 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_EXERCISE);
 
+load_js('datatables');
+
 $pageName = $langExercices;
 
 //Unsetting the redirect cookie which is set in case of exercise page unload event
@@ -50,15 +52,36 @@ if (isset($_COOKIE['inExercise'])) {
     setcookie("inExercise", "", time() - 3600);
 }
 
-// maximum number of exercises on a same page
-$limitExPage = 15;
-if (isset($_GET['page'])) {
-    $page = intval($_GET['page']);
-} else {
-    $page = 0;
-}
-// selects $limitExPage exercises at the same time
-$from = $page * $limitExPage;
+$head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+            $('#ex').DataTable ({
+                'sPaginationType': 'full_numbers',
+                'bAutoWidth': true,
+                'searchDelay': 1000,
+                'order' : [[1, 'desc']],
+                'oLanguage': {
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '" . $langNoResult . "',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
+                   }
+               }
+            });
+            $('.dataTables_filter input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
+        });
+        </script>";
 
 // only for administrator
 if ($is_editor) {
@@ -122,7 +145,9 @@ if ($is_editor) {
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public, ip_lock, password_lock FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
+    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, ip_lock, password_lock FROM exercise "
+                                . "WHERE course_id = ?d "
+                                . "ORDER BY start_date DESC", $course_id);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
         $gids = user_group_info($uid, $course_id);
@@ -131,12 +156,12 @@ if ($is_editor) {
         } else {
             $gids_sql_ready = "''";
         }
-    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
+    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
             "FROM exercise WHERE course_id = ?d AND active = 1 "
             . "AND (assign_to_specific = '0' OR assign_to_specific != '0' AND id IN
                        (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d UNION SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ($gids_sql_ready))
                     ) "
-            ."ORDER BY id LIMIT ?d, ?d", $course_id, $uid, $from, $limitExPage);
+            ."ORDER BY start_date DESC", $course_id, $uid);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
 
@@ -176,19 +201,7 @@ if ($is_editor) {
 if (!$nbrExercises) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEx</div>";
 } else {
-    $maxpage = 1 + intval($num_of_ex / $limitExPage);
-    if ($maxpage > 0) {
-        $prevpage = $page - 1;
-        $nextpage = $page + 1;
-        if ($prevpage >= 0) {
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;page=$prevpage'>&lt;&lt; $langPreviousPage</a>&nbsp;";
-        }
-        if ($nextpage < $maxpage) {
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;page=$nextpage'>$langNextPage &gt;&gt;</a>";
-        }
-    }
-
-    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr class='list-header'>";
+    $tool_content .= "<div class='table-responsive'><table id='ex' class='table-default'><thead><tr class='list-header'>";
 
     // shows the title bar only for the administrator
     if ($is_editor) {
@@ -208,10 +221,9 @@ if (!$nbrExercises) {
                 $resultsHeader
               </tr>";
     }
-    // display exercise list
-    $k = 0;
+    $tool_content .= "</thead><tbody>";
+    // display exercise list    
     foreach ($result as $row) {
-
         $tool_content .= "<tr ".($is_editor && !$row->active ? "class='not_visible'" : "").">";
         $row->description = standard_text_escape($row->description);
         $exclamation_icon = '';
@@ -259,7 +271,7 @@ if (!$nbrExercises) {
                           'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-edit'),
                     array('title' => $row->active ?  $langViewHide : $langViewShow,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable").(isset($page) ? "&amp;page=$page" : "")."&amp;exerciseId=" . $row->id,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable")."&amp;exerciseId=" . $row->id,
                           'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
                     array('title' => $row->public ? $langResourceAccessLock : $langResourceAccessUnlock,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
@@ -346,14 +358,9 @@ if (!$nbrExercises) {
                     $tool_content .= "<td class='text-center'>$langNotAvailable</td>";
                 }
             }
-        }
-        // skips the last exercise, that is only used to know if we have or not to create a link "Next page"
-        if ($k + 1 == $limitExPage) {
-            break;
-        }
-        $k++;
+        }        
     } // end while()
-    $tool_content .= "</table></div>";
+    $tool_content .= "</tbody></table></div>";
 }
 add_units_navigation(TRUE);
 $head_content .= "<script type='text/javascript'>
