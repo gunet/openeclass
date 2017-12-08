@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -86,7 +86,15 @@ function bbb_session_form($session_id = 0) {
         $textarea = rich_text_editor('desc', 4, 20, $row->description);
         $value_title = q($row->title);
         $value_session_users = $row->sessionUsers;
-        $value_external_users = trim($row->external_users);
+        $data_external_users = trim($row->external_users);
+        if ($data_external_users) {
+            $init_external_users = 'data: ' . json_encode(array_map(function ($item) {
+                    $item = trim($item);
+                    return array('id' => $item, 'text' => $item, 'selected' => true);
+            }, explode(',', $data_external_users))) . ',';
+        } else {
+            $init_external_users = '';
+        }
         $submit_name = 'update_bbb_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
@@ -101,7 +109,7 @@ function bbb_session_form($session_id = 0) {
         $BBBEndDate = $end_date->format('d-m-Y H:i');
         $textarea = rich_text_editor('desc', 4, 20, '');
         $value_title = '';
-        $value_external_users = '';
+        $init_external_users = '';
         $value_session_users = $c;
         $submit_name = 'new_bbb_session';
         $submit_id = '';
@@ -170,7 +178,7 @@ function bbb_session_form($session_id = 0) {
                         AND cu.user_id = u.id
                         AND cu.status != ?d
                         AND u.id != ?d
-                        GROUP BY user_id
+                        GROUP BY u.id, name, u.username
                         ORDER BY UPPER(u.surname), UPPER(u.givenname)";
             $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
             foreach ($res as $r) {
@@ -245,7 +253,7 @@ function bbb_session_form($session_id = 0) {
         <div class='form-group'>
             <label for='tags_1' class='col-sm-2 control-label'>$langBBBNotifyExternalUsers:</label>
             <div class='col-sm-10'>
-                <input class='form-control' id='tags_1' name='external_users' type='text' class='tags' value='$value_external_users'>
+                <select id='tags_1' class='form-control' name='external_users[]' multiple></select>
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>
             </div>
         </div>
@@ -267,13 +275,21 @@ function bbb_session_form($session_id = 0) {
         </fieldset>
          ". generate_csrf_token_form_field() ."
         </form></div>";
-        $tool_content .='<script language="javaScript" type="text/javascript">
+        $tool_content .= "<script language='javaScript' type='text/javascript'>
         //<![CDATA[
-            var chkValidator  = new Validator("sessionForm");
-            chkValidator.addValidation("title","req","'.$langBBBAlertTitle.'");
-            chkValidator.addValidation("sessionUsers","req","'.$langBBBAlertMaxParticipants.'");
-            chkValidator.addValidation("sessionUsers","numeric","'.$langBBBAlertMaxParticipants.'");
-        //]]></script>';
+            var chkValidator  = new Validator('sessionForm');
+            chkValidator.addValidation('title', 'req', '".js_escape($langBBBAlertTitle)."');
+            chkValidator.addValidation('sessionUsers', 'req', '".js_escape($langBBBAlertMaxParticipants)."');
+            chkValidator.addValidation('sessionUsers', 'numeric', '".js_escape($langBBBAlertMaxParticipants)."');
+            $(function () {
+                $('#tags_1').select2({
+                    $init_external_users
+                    tags: true,
+                    tokenSeparators: [',', ' '],
+                    width: '100%',
+                    selectOnClose: true});
+                });
+        //]]></script>";
 }
 
 /**
