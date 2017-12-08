@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -27,7 +27,7 @@
 function doc_init() {
     global $urlAppend, $course_id, $course_code, $webDir, $can_upload, $langEBook,
         $is_editor, $is_admin, $navigation, $subsystem, $subsystem_id, $langFileAdmin,
-        $group_id, $groupset, $base_url, $upload_target_url, $group_sql, $langDoc,
+        $group_id, $groupset, $group_name, $base_url, $upload_target_url, $group_sql, $langDoc,
         $group_hidden_input, $basedir, $ebook_id, $uid, $session, $pageName,
         $langGroupDocumentsLink, $is_member, $secret_directory, $langGroups,
         $langCommonDocs, $langAdmin, $langMyDocs;
