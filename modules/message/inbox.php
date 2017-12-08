@@ -226,9 +226,11 @@ $out .=         "
             $out .= "
                  <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div>";
-
-             $out .= "<script type='text/javascript' src='{$urlAppend}js/select2-3.5.1/select2.min.js'></script>\n
-                 <script type='text/javascript'>
+                
+                load_js('select2');
+             
+                $out .= 
+                 "<script type='text/javascript'>
                         $(document).ready(function () {
 
                             $('.row.title-row').next('.row').hide();
