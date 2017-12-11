@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2017-12-01 12:36:30
+// Generated 2017-12-11 15:11:42
 
 $langYes = "Yes";
 $langNo = "No";
@@ -274,7 +274,7 @@ $langTotal = "Total";
 $langProperty = "Property";
 $langStat = "Statistics";
 $langNoUserList = "No listed results";
-$langContactAdmin = "Send an email to Administrator";
+$langContactAdmin = "Send email to platform administrator";
 $langActivateAccount = "Please activate my account";
 $langLessonCode = "Course password";
 $langConfirmDelete = "Confirm delete of ";
@@ -4359,9 +4359,6 @@ $langRegistrationInfo = 'Registration instructions';
 $langShow = 'Show';
 $langHide = 'Hide';
 $langQuestionAlreadyDeleted = "Question has been deleted!";
-$langScoreDiffers = 'The recorded exercise score is different to the currently calculated one. Would you like to regrade the exercise?';
-$langNewScoreRecorded = 'The recalculated score was recorded';
-$langRegrade = 'Regrade';
 $langUpgForVersion = 'Version %s upgrades.';
 $langGroupAllowStudentUnregister = "$langsStudents allow to unregister";
 $langTypeInactive = "Inactive";
@@ -5189,4 +5186,9 @@ $langPollPurged = "Questionnaire results have been purged.";
 $lang_error_db = "The platform is unable to create new databases. Unable to continue!";
 $langMonthsToAdd = 'Months to add';
 $langUsersActivated = 'User accounts having their expiration extended:';
+$langGroupFull = "full group";
+$langScoreDiffers = 'The recorded exercise score is different to the currently calculated one. Would you like to regrade the exercise?';
+$langRegrade = 'Regrade';
+$langNewScoreRecorded = 'The recalculated score was recorded';
 $langQuestionStoredScore = 'Recorded Question Score';
+$langContactAdminForInfo = "Please contact the platform administrator for more information.";
