@@ -21,12 +21,12 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.6-dev');
+define('ECLASS_VERSION', '3.6');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
 
-// mPDF library temporary file path and font path 
+// mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
     define("_MPDF_TEMP_PATH", $webDir . '/courses/temp/pdf/');
     define("_MPDF_TTFONTDATAPATH", $webDir . '/courses/temp/pdf/');
@@ -807,12 +807,12 @@ function user_exists($login) {
  * @return boolean
  */
 function is_inactive_user($uid) {
-    
-    $qry = Database::get()->querySingle("SELECT * FROM user 
-                            WHERE id = ?d 
+
+    $qry = Database::get()->querySingle("SELECT * FROM user
+                            WHERE id = ?d
                         AND expires_at < " . DBHelper::timeAfter() . "", $uid);
     if ($qry) {
-        return true;        
+        return true;
     } else {
         return false;
     }
@@ -891,10 +891,10 @@ function new_code($fac) {
         do {
             $code = $gencode->code . $gencode->generator;
             $gencode->generator += 1;
-			$code = $gencode->code . $gencode->generator;
+            $code = $gencode->code . $gencode->generator;
             Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
         } while (file_exists("courses/" . $code));
-		Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
+        Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
 
     // Make sure the code returned isn't empty!
     } else {
@@ -1259,9 +1259,9 @@ function resource_access($visible, $public) {
  * @return boolean
  */
 function resource_belongs_to_progress_data($module, $resource_id) {
-         
+
     global $course_id;
-    
+
     // check if module belongs to certificate
     $sql = Database::get()->querySingle("SELECT * FROM certificate_criterion JOIN certificate "
                                             . "ON certificate.id = certificate_criterion.certificate "
@@ -1273,12 +1273,12 @@ function resource_belongs_to_progress_data($module, $resource_id) {
     // check if module belongs to badge
     $sql2 = Database::get()->querySingle("SELECT * FROM badge_criterion JOIN badge "
                                             . "ON badge.id = badge_criterion.badge "
-                                            . "WHERE course_id = ?d AND module = ?d AND resource = ?d", 
+                                            . "WHERE course_id = ?d AND module = ?d AND resource = ?d",
                                         $course_id, $module, $resource_id);
     if ($sql2) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -1629,26 +1629,26 @@ function delete_course($cid) {
         return;
     }
     $course_code = course_id_to_code($cid);
-    
-    
+
+
     Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion IN
                             (SELECT id FROM badge_criterion WHERE badge IN
                             (SELECT id FROM badge WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM badge_criterion WHERE badge IN 
+    Database::get()->query("DELETE FROM badge_criterion WHERE badge IN
                             (SELECT id FROM badge WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM user_badge WHERE badge IN 
-                            (SELECT id FROM badge WHERE course_id = ?d)", $cid);    
+    Database::get()->query("DELETE FROM user_badge WHERE badge IN
+                            (SELECT id FROM badge WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM badge WHERE course_id = ?d", $cid);
-    
-    Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN 
-                            (SELECT id FROM certificate_criterion WHERE certificate IN 
+
+    Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN
+                            (SELECT id FROM certificate_criterion WHERE certificate IN
                             (SELECT id FROM certificate WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM certificate_criterion WHERE certificate IN 
+    Database::get()->query("DELETE FROM certificate_criterion WHERE certificate IN
                             (SELECT id FROM certificate WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM user_certificate WHERE certificate IN 
+    Database::get()->query("DELETE FROM user_certificate WHERE certificate IN
                              (SELECT id FROM certificate WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM certificate WHERE course_id = ?d", $cid);
-               
+
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM document WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
@@ -1788,7 +1788,7 @@ function deleteUser($id, $log) {
     global $webDir;
 
     $u = intval($id);
-       
+
     if (!isset($webDir) or empty($webDir)) { // security
         return false;
     }
