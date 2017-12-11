@@ -506,7 +506,7 @@ if ($is_editor) {
                 </tr>";
 
         foreach ($groupSelect as $group) {
-            initialize_group_info($group->id);            
+            initialize_group_info($group->id);
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p style='padding-top:10px;'>$group_description</p>";
@@ -579,17 +579,17 @@ if ($is_editor) {
             $group_id = $row->id;
 
             initialize_group_info($group_id);
-            
+
             $tool_content .= "<tr>";
             $tool_content .= "<td class='text-left'>";
             // Allow student to enter group only if he's a member
             if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
-                        "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
+                        "</a> <span class='pull-right label label-success'>$langMyGroup</span>";
             } else {
                 $full_group_message = '';
                 if ($max_members > 0 and $max_members == $member_count) {
-                   $full_group_message = "<span style='color:#900; weight:bold; padding-left: 10px;'>($langGroupFull)</span>";
+                   $full_group_message = " <span class='pull-right label label-warning'>$langGroupFull</span>";
                 }
                 $tool_content .= q($group_name) . "$full_group_message";
             }
