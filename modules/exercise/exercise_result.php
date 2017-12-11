@@ -454,6 +454,12 @@ if (count($exercise_question_ids) > 0) {
                         } else {
                             $matching[$answerId] = $answer;
                         }
+                        if ($regrade) {
+                            Database::get()->query('UPDATE exercise_answer_record
+                                SET weight = ?f
+                                WHERE eurid = ?d AND question_id = ?d AND answer = ?d',
+                                $grade, $eurid, $row->question_id, $answerId);
+                        }
                         break;
                     case TRUE_FALSE : $studentChoice = ($choice == $answerId) ? 1 : 0;
                         if ($studentChoice) {
@@ -463,7 +469,7 @@ if (count($exercise_question_ids) > 0) {
                         break;
                 } // end switch()
 
-                if ($regrade and $answerType != FILL_IN_BLANKS_TOLERANT and $answerType != FILL_IN_BLANKS) {
+                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, MATCHING])) {
                     Database::get()->query('UPDATE exercise_answer_record
                         SET weight = ?f
                         WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
@@ -540,13 +546,13 @@ if (count($exercise_question_ids) > 0) {
         if ($showScore) {
             if ($choice) {
                 if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
-                 //show input field
-                 $tool_content .= "<span style='float:right;'>
+                    // show input field
+                    $tool_content .= "<span style='float:right;'>
                                    $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
                                    <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
                                    <b>/$questionWeighting</b></span>";
                 } else {
-                $tool_content .= "<span style='float:right;'>
+                    $tool_content .= "<span style='float:right;'>
                                     $langQuestionScore: <b>".round($questionScore, 2). " / $questionWeighting</b></span>";
                 }
             } else {
@@ -555,7 +561,18 @@ if (count($exercise_question_ids) > 0) {
             }
 
         }
-        $tool_content .= "</th></tr></table>";
+        $tool_content .= "</th></tr>";
+
+        if ($showScore and $question_weight != $questionScore) {
+            $tool_content .= "<tr class='warning'>
+                                <th colspan='$colspan' class='text-right'>
+                                    $langQuestionStoredScore: " . round($question_weight, 2) . " / $questionWeighting
+                                </th>
+                              </tr>";
+
+        }
+
+        $tool_content .= "</table>";
 
         $totalScore += $questionScore;
         $totalWeighting += $questionWeighting;

@@ -1918,6 +1918,7 @@ $langQuestionAlreadyDeleted = "Η ερώτηση έχει διαγραφεί.";
 $langScoreDiffers = 'Η αποθηκευμένη βαθμολογία της άσκησης διαφέρει από την τρέχουσα. Επιθυμείτε να γίνει αναβαθμολόγηση;';
 $langRegrade = 'Αναβαθμολόγηση';
 $langNewScoreRecorded = 'Η νέα βαθμολογία αποθηκεύτηκε';
+$langQuestionStoredScore = 'Αποθηκευμένη βαθμολογία ερώτησης';
 
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";

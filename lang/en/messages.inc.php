@@ -5189,3 +5189,4 @@ $langPollPurged = "Questionnaire results have been purged.";
 $lang_error_db = "The platform is unable to create new databases. Unable to continue!";
 $langMonthsToAdd = 'Months to add';
 $langUsersActivated = 'User accounts having their expiration extended:';
+$langQuestionStoredScore = 'Recorded Question Score';
