@@ -1,11 +1,11 @@
 <?php
 
 // Message file for language fr
-// Generated 2017-10-30 11:27:04
+// Generated 2017-12-11 15:11:44
 
 $langYes = "Oui";
 $langNo = "Non";
-$langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
+$langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
 $langAboutText = "La version de la plateforme est";
 $langHostName = "Le nom de l'ordinateur hôte qui héberge la plateforme est";
@@ -273,17 +273,12 @@ $langMultiRegUserInfo = "<p>Please enter in the area below a list of user detail
 <li><tt>first</tt>: First name</li>
 <li><tt>last</tt>: Last name / surname</li>
 <li><tt>email</tt>: e-mail address</li>
-<li><tt>id</tt>: Student ID</li>
+<li><tt>id</tt>: $langOfStudent ID</li>
 <li><tt>phone</tt>: Phone number</li>
 <li><tt>username</tt>: Username</li>
 <li><tt>password</tt>: Password</li>
 </ul>
-<p>To have the users automatically registered to $langsCourses, please add the $langsCourse
-codes after the user details in the end of each line. The e-mail addres is optional - you can
-use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If
-you don't specify usernames, they will be automatically creating by appending a serial
-number to the user prefix entered below. If you don't specify passwords, a random
-password will be created for each account.</p>";
+<p>To have the users automatically registered to some courses, please add the course codes after the user details in the end of each line. The e-mail address is optional - you can use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If you don't specify usernames, they will be automatically created by appending a serial number to the user prefix entered below. If you don't specify passwords, a random password will be created for each account.</p>";
 $langMultiRegCourseInvalid = 'Utilisateur %s: code de cours invalide «%s»';
 $langMultiRegFields = 'Définition des champs';
 $langMultiRegFieldError = 'Erreur ! Étiquette de champ invalide :';
@@ -353,7 +348,7 @@ $langAddModify = "Ajouter / Modifier";
 $langAddIntro = "Ajouter un texte introductif";
 $langBackList = "Retour à la liste";
 $langEvents = "Événements";
-$langAgenda = "Calendar";
+$langAgenda = "Agenda";
 $langDay = "Jour";
 $langMonth = "Mois";
 $langYear = "Année";
@@ -441,7 +436,7 @@ $langAlreadyActiv = "Le mode d'authentification que vous avez choisi est déjà 
 $langErrActiv = "Erreur ! Le mode d'authentification ne peut pas être activé";
 $langAuthSettings = "Paramètres d'authentification";
 $langWrongAuth = "Le nom d'utilisateur/ mot de passe que vous avez saisi est erroné";
-$langExplainShib = "Enter the names of the variables returned by the Shibboleth server. The variables will be written in %s. Please note that if the Shibboleth Canonical Name contains the user's full name (both first and last names), you need the enter the character delimiting the first from the last name.";
+$langExplainShib = "Enter the names of the variables returned by the Shibboleth server. The variables will be written in <em>${webDir}secure/index.php</em>. Please note that if the Shibboleth Canonical Name contains the user full name (both first and last name), you need to enter the character delimiting the first from the last name.";
 $langCharSeparator = "Caractère délimiteur";
 $langWash = "Effacement";
 $langWashFrom = "La conversation (chat) a été effacée depuis";
@@ -461,17 +456,17 @@ $langSaveErrorMessage = "Erreur. La conversation (chat) n'a pas pu être sauvega
 $langNoGuest = "Les utilisateurs-visiteurs ne sont pas autorisés à utiliser le sous-système 'Conversation (Chat)' !";
 $langCopyright = "Notice de Copyright";
 $langCopyrightNotice = '
-Copyright © 2003 - 2011 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
-Platform ' . $siteName . ' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
-which is a complete Electronic $langCourse Management System and is GUnet\'s
+Copyright © 2003 - 2013 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
+Platform '.$siteName.' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
+which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
 It was developed and is actively supported by the GUnet Asynchronous
 eLearning Group, and is <a href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
 as Open Source Software under the GNU General Public License (GNU GPL).<br><br>
-The content of Electronic '. $langCourses . ' hosted on the Open eClass platform, as well as
-all copyrights of this content, belongs to the authors of the $langsCourses and
-GUnet claims no rights on it. For every use or republication of $langsCourse
-content, please contact the persons in charge of the respective $langsCourse.';
+The content of Electronic Courses hosted on the Open eClass platform, as well as
+all copyrights of this content, belongs to the authors of the courses and
+GUnet claims no rights on it. For every use or republication of course
+content, please contact the persons in charge of the respective course.';
 $langCourseProgram = "Description du cours";
 $langThisCourseDescriptionIsEmpty = "Il n'y a pas de description pour ce cours";
 $langEditCourseProgram = "Créer et corriger";
@@ -683,7 +678,7 @@ $langCategoryTheory = "Τhéorie";
 $langCategoryLecture = "Conférence";
 $langCategoryNotes = "Notes";
 $langCategoryOther = "Autre";
-$langNotRequired = "Fields are optional.";
+$langNotRequired = "Filling-in the fields is not mandatory";
 $langCommands = "Actions";
 $langQuotaBar = "Visualiser l'espace disque";
 $langQuotaUsed = "Espace disque utilisé"
@@ -990,22 +985,22 @@ $gunet = "Équipe de Télé-enseignement Asynchrone $siteName"
 $introcontact = "Vous pouvez contacter l'Équipe de Soutien de la plateforme <b>".$siteName."</b> par les moyens suivants :";
 $langPostMail = "<b>Adresse postale :</b>";
 $langPhone = "Téléphone";
-$langFax = "<strong>Fax:</strong>";
+$langFax = "<b>Fax:</b>";
 $langForm = "Remplir le formulaire";
 $langReturn = "Retour";
 $langAddPage = "Ajouter une page";
 $langPageAdded = "La page a été ajoutée";
 $langPageTitleModified = "Le titre de la page a été modifié";
 $langSendPage = "Nom du fichier de la page";
-$langCouldNotSendPage = "This file is not in HTML format and could not be sent. If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/index.php'>Documents tool</a>";
+$langCouldNotSendPage = "This file is not in HTML format and could not be sent. If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/document.php'>Documents tool</a>";
 $langAddPageToSite = "Ajouter une page à un site web";
 $langCouldNot = "Impossible d'envoyer le fichier";
 $langOkSent = "<b>Votre page a été envoyée</b><br/>Un lien vers celle-ci a été créé dans le menu gauche";
 $langTooBig = "Vous n'avez pas sélectionné de fichier à envoyer, ou le fichier est trop grand, ou vous n'avez pas saisi le titre de la page";
-$langExplanation_0 = "The page must be in HTML format (e.g. \"my_page.htm\"). It will be linked from Homepage.";
+$langExplanation_0 = "If you have created a page for your course in HTML format (e.g. \"my_page.htm\"), then you can use the form below to create a link in the course menu (on the left). Your page thus will be published in the platform and displayed along with the other course tools. <br/>";
 $langExplanation_1 = "Informations sur la page";
 $langExplanation_2 = "Le nom qui apparaîtra dans le menu de gauche.";
-$langExplanation_3 = "If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/index.php'>Documents tool</a>";
+$langExplanation_3 = "If you want to create links to non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/document.php'>Documents</a> tool.";
 $langExplanation_4 = "Informations sur le lien externe";
 $langNoticeExpl = "N.B.: La taille maximale autorisée du fichier de la page est de 20MB.";
 $langPgTitle = "Titre de la page";
@@ -1106,11 +1101,11 @@ $langInstallEnd = "Installation terminée"
 $langModuleNotInstalled = "Non installé" 
 ;
 $langReadHelp = "Lire plus";
-$langWarnConfig = "Warning !! File <strong>config.php</strong> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
+$langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
 $langWarnConfig1 = "Le fichier <b>config.php</b> existe déjà dans votre système";
 $langWarnConfig2 = "If you want to rerun installation, first delete config.php file";
 $langWarnConfig3 = "Le programme d'installation ne peut pas effectuer la mise à niveau";
-$langErrorConfig = "<br><strong>Error occured!</strong><br><br>Creation of file config.php is not possible.<br><br>Please check access rights in subdirectories of Open eClass and rerun installation.";
+$langErrorConfig = "<br><b>Error occured!</b><br><br>Creation of file config.php is not possible.<br><br>Please check access rights in subdirectories of Open eClass and rerun installation.";
 $langErrorMysql = "MySQL is not working or username / password is wrong.<br/>Please check your settings:";
 $langBackStep3 = "Retour à l'étape 3";
 $langBackStep3_2 = "Retour à l'étape 3 pour les corriger";
@@ -1124,9 +1119,9 @@ $langEnterFirstTime = "Entrer sur Open eClass";
 $langSiteUrl = "URL de la plateforme Open eClass";
 $langInstall = "Installation de la plateforme Open eClass";
 $langAddOnStreaming = "Fonctionnalité supplémentaire";
-$langWarningInstall1 = "<strong>Warning!</strong> It seems that the option register_globals of php.ini is not set. Without it Open eClass cannot run. Please modify php.ini accordingly (i.e.: add the line <strong>register_globals = On</strong>).";
-$langWarningInstall2 = "<strong>Warning!</strong> It seems that option <em>short_open_tag</em> in php.ini is set. It is recommended to disable it";
-$langWarningInstall3 = "<strong>Warning!</strong> It seems that installation wizard has not creation rights of directory <strong>/config</strong>.<br/>Without creation rights, the installation wizard cannot continue. Please change the directory access permissions.";
+$langWarningInstall1 = "<b>Warning!</b> It seems that the option <em>register_globals</em> within <em>php.ini</em> file is enabled, while it should be disabled for the  platform to function properly. Please modify php.ini accordingly (i.e.: <b>register_globals = Off</b>).";
+$langWarningInstall2 = "<b>Warning!</b> It seems that the option <em>short_open_tag</em> within <em>php.ini</em> file is enabled. It is recommended to disable it.";
+$langWarningInstall3 = "<b>Warning!</b> It seems that the installation wizard has not any creation rights for the <b>/config</b> directory.<br/>Without creation rights, the installation wizard cannot continue. Please change the directory access permissions.";
 $langWarnInstallNotice1 = "Probably some other changes are required. Read the installation instructions in";
 $langWarnInstallNotice2 = "et redémarrez l'assistant d'installation.";
 $langReviewSettings = "Les données que vous avez fournies sont les suivantes : (Imprimez-les si vous voulez vous rappeler le mot de passe de l'administrateur et les autres paramètres)";
@@ -1188,7 +1183,7 @@ $langDefaultModuleAddedComment = "This an additional introduction text about the
 $langDefaultModuleComment = "Ceci est le texte introductif du module. Il s'affichera dans chaque parcours d'apprentissage qui contiendra ce module";
 $langInstructions = "Instructions";
 $langModuleComment_inCurrentLP = "<u>Seulement</u> pour ce parcours d'apprentissage";
-$langModuleComment_inCourse = "Visible when <u>reuse</u> this object in other Learning Paths";
+$langModuleComment_inCourse = "Visible with the <u>reuse</u> of this object in other Learning Paths";
 $langDescriptionCours = "Description du cours";
 $langDocInsertedAsModule = "A été ajouté en tant que module";
 $langDocumentAlreadyUsed = "Ce document est déjà utilisé en tant que module dans ce parcours d'apprentissage";
@@ -1221,10 +1216,10 @@ $langErrorNoZlibExtension = "L'extension Zlib php est requise pour utiliser cet 
 $langErrorOpeningManifest = "Cannot find <i>manifest</i> file in the package.<br /> File not found : imsmanifest.xml";
 $langErrorOpeningXMLFile = "Cannot find secondary initialisation file in the package.<br /> File not found : ";
 $langErrorReadingManifest = "Error reading <i>manifest</i> file";
-$langErrorReadingXMLFile = "Error reading a secondary initialisation file : ";
+$langErrorReadingXMLFile = "Error reading the secondary initialisation file : ";
 $langErrorReadingZipFile = "Error reading zip file.";
 $langErrorSql = "Error in SQL statement";
-$langErrorValuesInDouble = "Error: One or more values are doubled";
+$langErrorValuesInDouble = "Error: One or more values are duplicate";
 $langErrortExtractingManifest = "Cannot extract manifest from zip file (corrupted file ? ).";
 $langExAlreadyUsed = "Cet exercice est déjà utilisé en tant que module dans ce parcours d'apprentissage";
 $langExInsertedAsModule = "A été ajouté en tant que module dans ce parcours d'apprentissage";
@@ -1325,7 +1320,12 @@ $langProgress = "Progression";
 $langQuitViewer = "Retour à la liste";
 $langRawHasBeenChanged = "Le score minimum pour réussir a été changé";
 $langSCORMTypeDesc = "Contenu conforme à SCORM";
-$langScormIntroTextForDummies = "Imported packages must consist of a zip file and be <strong>SCORM 2004</strong> or <strong>SCORM 1.2</strong> or <strong>IMS CP 1.1.4</strong> conformable.";
+$langScormIntroTextForDummies = "Imported packages must consist of a zip file and compatible with:
+<ul class='right smaller'>
+     <li> SCORM 2004 or</li>
+     <li> SCORM 1.2.</li>
+     <li> IMS CP 1.1.4</li>
+   </ul>";
 $langSecondShort = "sec.";
 $langStartModule = "Démarrer le module";
 $langStatsOfLearnPath = "Suivi du parcours d'apprentissage";
@@ -1344,7 +1344,7 @@ $langTracking = "Suivi";
 $langTypeOfModule = "Type de module";
 $langUnamedModule = "Module sans nom";
 $langUnamedPath = "Parcours sans nom";
-$langUseOfPool = "This page allows you to view all the modules available in this $langsCourse. <br> Any educational resource that has been added in a learning path will also appear in this list.";
+$langUseOfPool = "This page allows you to view all the modules available in this course. <br /> Any exercise or document that has been added in a learning path will also appear in this list.";
 $langUsedInLearningPaths = "Nombre de parcours d'apprentissage utilisant ce module : ";
 $langView = "Afficher";
 $langViewMode = "Visualiser le mode";
@@ -1389,14 +1389,15 @@ $langProfNoLinksExist = "Vous pouvez utiliser les fonctions de l'outil pour ajou
 $langNoLinksExist = "Il n'y a pas de liens !";
 $langEmptyLinkURL = "Vous n'avez pas saisi le url du lien";
 $lang_remind_pass = 'Créer un nouveau mot de passe';
-$lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
+$lang_pass_intro = '<p>If you have forgotten your password, please fill in your <em>username</em>
 and email.
-(<em>CAUTION: This email must much the one set in your user profile</em>).</p> <p>After submitting these data you will receive an email with instruction on how to reset your password.</p>';
+(<em>CAUTION: This email must match the one set in your user profile</em>).</p> <p>After submitting these data you will receive an email with instructions on how to reset your password.</p>';
 $lang_pass_submit = 'Envoyer';
 $langPassResetIntro = "
-Someone has asked to reset your access password on the $siteName platform.";
+Someone has asked to reset your access password on the $siteName platform.
+If this was not yourself, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
 $langHowToResetTitle = " =============================================================================== Instructions pour créer un nouveau mot de passe =============================================================================== ";
-$langPassResetGoHere = "To reset your password go to the following address through your web browser.
+$langPassResetGoHere = "To reset your password go to the following address.
 If you cannot click on the address, copy & paste it on your browser's address bar.
 This address is valid for one (1) hour. Beyond this time limit, you will need
 to repeat the password reset request from the beginning.
@@ -1415,7 +1416,7 @@ $lang_email = "e-mail";
 $lang_send = "Envoyer";
 $lang_username = "Nom d'utilisateur";
 $langPassCannotChange1 = "Le mot de passe du compte ne peut pas être modifié.";
-$langPassCannotChange2 = "This account is authenticated via";
+$langPassCannotChange2 = "This account uses an external authentication method. Please contact the administrator at";
 $langPassCannotChange3 = "Veuillez contacter  l'administrateur de la plateforme à l'adresse";
 $langFinalDesc = "Description détaillée du $siteName"
 ;
@@ -1502,7 +1503,7 @@ $langOfForum = "du forum";
 $langSubjects = "Sujets";
 $langPosts = "Posts";
 $langMessage = "Message";
-$langMessages = 'Messages';
+$langMessages = "Messages";
 $langAllOfThem = "tout";
 $langBodyMessage = "Corps du message";
 $langPostTitle = "Sujet de la publication";
@@ -1608,8 +1609,8 @@ $langSurname = "Nom";
 $langUsername = "Nom d'utilisateur (username)";
 $langConfirmation = "Confirmation du mot de passe";
 $langUserNotice = "max. 30 caractères";
-$langEmailNotice = "An email address is not required, but keep in mind that without it, you won't be able to receive
-announcements and notifications by email";
+$langEmailNotice = "e-mail address is not required but, keep in mind that without it, ".$langsTeacher."cannot send
+announcements to your mail box, neither you can use the feature 'forgot your password'";
 $langAm = "Numéro d'étudiant";
 $langUserDetails = "Inscription $langStudent"
 ;
@@ -1628,7 +1629,8 @@ $langProblem = "En cas de problème, nous contacter.";
 $langFormula = "Cordialement,";
 $langManager = "Responsable";
 $langPersonalSettings = "Vos paramètres personnels ont été enregistrés. Vous recevrez un e-mail vous rappelant votre nom d'utilisateur et votre mot de passe.</p>";
-$langPersonalSettingsMore = "to navigate to your Portfolio. You can:";
+$langPersonalSettingsMore = "Click <a href='../../index.php'>here</a> to navigate your User Portfolio.<br>
+You can also:<ul><li>navigate the platform and your personal selections,</li><li>select 'Courses List' to review the available courses.</li><ul>";
 $langYourRegTo = "Votre liste des cours contient";
 $langIsReg = "a été mis à jour";
 $langCanEnter = "Entrer dans la salle virtuelle.";
@@ -1654,7 +1656,7 @@ $langAllAdmin = "possède maintenant <b> tous les droits d'administrateur sur ce
 $langModRole = "Modifier le rôle de";
 $langRole = "Rôle";
 $langIsNow = "est maintenant";
-$langInC = "in this $langsCourse";
+$langInC = "in this course";
 $langUserNo = "Le nom d'utilisateur que vous avez choisi";
 $langTaken = "est déjà utilisé. Choisissez-en un autre.";
 $langRegYou = "vous a inscrit(e) au cours";
@@ -1663,8 +1665,8 @@ $langAddedU = "a été ajouté. Un e-mail lui a été envoyé avec son nom d'uti
 $langAndP = "et son mot de passe";
 $langAddAU = "Ajoutez un utilisateur";
 $langAdmR = "Droits d'administrateur";
-$langAddHereSomeCourses = "<p>To register / unregister to / from a $langsCourse,
-choose the faculty and then select / unselect the desired $langsCourse.</p>
+$langAddHereSomeCourses = "<p>To register to / unregister from a course,
+select the $langsFaculty and then select / unselect the desired course.</p>
 <p>To save your preferences click on 'Submit changes'</p><br>";
 $langDeleteUser = "Êtes-vous sûr de vouloir supprimer l'utilisateur";
 $langDeleteUser2 = "de ce cours";
@@ -1693,11 +1695,10 @@ $langUserRights = "Droits des utilisateurs";
 $langNow = "maintenant";
 $langOneByOne = "Ajouter un utilisateur";
 $langUserMany = "Importer une liste d'utilisateurs via des fichiers texte";
-$langUserAddExplanation = "every line of file to send will necessarily an only
-        include 5 fields: <strong>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
-        Login&nbsp;&nbsp;&nbsp;Password&nbsp;
-        &nbsp;&nbsp;Email</strong> separated by tabs and in this order.
-        Users will recieve email confirmation with login/password.";
+$langUserAddExplanation = "every line of the file to send will necessarily and only include 5 fields: <b>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
+        Login username&nbsp;&nbsp;&nbsp;Password&nbsp;
+        &nbsp;&nbsp;Email</b> separated by tabs and in this order.
+        Users will receive an email confirmation with login username/password info.";
 $langDownloadUserList = "Téléversement de la liste";
 $langUserNumber = "nombre";
 $langRemoveRight = "Retirer ce droit";
@@ -1716,11 +1717,11 @@ $langChoiceDepartment = "Sélectionner $langFaculty"
 $langCoursesRegistered = "Votre inscription aux cours choisis a été effectuée avec succès !";
 $langNoCoursesRegistered = "<p>Vous n'avez pas choisi de cours pour vous inscrire.</p><p> Vous pouvez toujours vous inscrire lors de votre prochaine connexion à la plateforme.</p>";
 $langIfYouWantToAddManyUsers = "If you want to add a list of users in
-            your $langsCourse, please contact your web administrator.";
+            your course, please contact your web administrator.";
 $langLastVisits = "Mes dernières visites";
 $langLastUserVisits = "Last Visits of User ";
 $langDumpUser = "Liste d'utilisateurs :";
-$langCsv = "csv:";
+$langCsv = "in csv:";
 $langcsvenc1 = "encodage windows (windows-1253)";
 $langcsvenc2 = "encodage unicode (UTF-8)";
 $langFieldsMissing = "Un ou plusieurs champs obligatoires sont vides !";
@@ -1748,7 +1749,7 @@ $ldapnamesur = "Nom et prénom :";
 $langInstitution = 'Institution :';
 $ldapuserexists = "Un utilisateur avec les détails que vous avez donnés existe déjà dans le système.";
 $ldapempty = "Un ou plusieurs champs sont vides !";
-$ldapfound = "was authenticated successfully with the info provided";
+$ldapfound = "was successfully authenticated with the info provided";
 $ldapchoice = "Veuillez sélectionnez votre institution !";
 $ldapnorecords = "Aucune entrée trouvée. Les informations fournies sont probablement incorrectes.";
 $ldapwrongpasswd = "Mot de passe incorrect. Veuillez réessayer";
@@ -1864,10 +1865,10 @@ $langWithDetails = "avec les détails"
 ;
 $langNewUserDetails = "Détails du compte utilisateur-$langStudent"
 ;
-$langInfoProfReq = "If you wish to access the platform as a $langsTeacher, please complete the form below. Your request will be sent to an administrator who will create your account and send you an informational email.";
+$langInfoProfReq = "If you wish to access the platform as a $langsTeacher, please fill the form below. Your request will be sent to the platfrom administrator who will create your account and send you an email with the account details.";
 $langInfoStudReg = "If you wish to access the platform as a $langsStudent, please complete the form below. Your account will be created automatically.";
 $langReason = "Déterminez les raisons pour lesquelles vous utilisez la plateforme";
-$langInfoStudReq = "If you wish to access the platform as a $langsStudent, please complete the form below. Your request will be sent to an administrator who will create your account and send you an informational email.";
+$langInfoStudReq = "If you wish to access the platform as a $langsStudent, please fill the form below. Your request will be sent to the platfrom administrator who will create your account and send you an email with the account details.";
 $langInfoProf = "Un e-mail avec les détails de votre compte vous sera bientôt envoyé par l'Équipe de Gestion de la Plateforme de Télé-enseignement Asynchrone $siteName."
 ;
 $langDearUser = "Cher utilisateur";
@@ -1884,8 +1885,8 @@ $langTryAgain = "Essayer de nouveau !";
 $langViaReq = "Inscription d'utilisateurs sur demande";
 $langFirstMethod = "Premier mode";
 $langSecondMethod = "Deuxième mode";
-$langRequest1 = "Click on \"Browse\"to search for the backup file of the $langsCourse
-	you want to restore. Then click on \"Submit\".";
+$langRequest1 = "Click on 'Browse' to search for the backup file of the course
+	you want to restore. Then click on 'Submit'.";
 $langRestore = "Restore";
 $langRequest2 = "If the backup file you wish to restore is too large and can't
 	be uploaded, you can enter the path of a directory on the server where
@@ -1901,12 +1902,12 @@ $langFileUnzipping = "Décompression du fichier";
 $langEndFileUnzip = "Décompression terminée";
 $langLesFound = "Cours trouvés dans le fichier :";
 $langLesFiles = "Fichiers du cours :";
-$langInvalidCode = "Invalid $langsCourse code";
+$langInvalidCode = "Invalid course code";
 $langCopyFiles = "Les fichiers du cours ont été copiés sur";
 $langCourseExists = "Un cours existe déjà avec ce code !";
 $langUserExists = "Il existe déjà un utilisateur avec le nom d'utilisateur";
 $langUserExists2 = "Named";
-$langWarning = "Warning!";
+$langWarning = "Warning! If you choose not to add users in course, information about users actions in course modules will not be restored";
 $langUserWith = "Erreur ! L'utilisateur avec userid";
 $langAlready = "a été déjà ajouté";
 $langWithUsername = "L'utilisateur avec le username";
@@ -1940,7 +1941,7 @@ $langNOT = "Aucun des termes suivants"
 ;
 $langKeywords = "Mots-clés";
 $langTitle_Descr = "concerne le titre ou une partie du titre du cours";
-$langKeywords_Descr = "one or more $langsCourse keywords";
+$langKeywords_Descr = "one or more course keywords";
 $langInstructor_Descr = "le(s) nom(s) des professeurs du cours";
 $langCourseCode_Descr = "le code du cours";
 $langAccessType = "Type d'accès";
@@ -1956,17 +1957,17 @@ $langAlreadySubscribe = "Vous êtes déjà inscrit";
 $langAs = "en tant que";
 $langUpgrade = "Mise à niveau des bases de données";
 $langExplUpgrade = "The upgrade script will modify configuration file <em>config.php</em>.
-   Please make sure that web server have access to <em>config.php</em>. For security reasons, current configuration of <em>config.php</em> will remain in file <em>config_backup.php</em>.";
+   Please make sure that the web server has access to <em>config.php</em>. For security reasons, current configuration settings of <em>config.php</em> will be stored in file <em>config_backup.php</em>.";
 $langExpl2Upgrade = "De plus, pour des raisons de sécurité assurez-vous que vous avez gardé des copies de sauvegarde des bases de données.";
 $langWarnUpgrade = "ATTENTION !";
-$langUpgradeCont = "Tο begin the upgrade process, please enter the username and password of the platform administrator.";
+$langUpgradeCont = "Tο continue with the upgrade process, please enter the platform administrator username / password.";
 $langUpgDetails = "Détails de connexion (nom d'utilisateur / mot de passe)";
 $langUpgMan = "instructions sur la mise à niveau";
 $langUpgLastStep = "avant de passer à l'étape suivante.";
-$langUpgToSee = "To review all the new features and changes of eClass new version click ";
+$langUpgToSee = "To review all the new features and changes of the new version of eClass click";
 $langUpgRead = "Si vous ne l'avez pas encore fait, veuillez lire et suivre les";
 $langSuccessOk = "Succès";
-$langSuccessBad = "Error or not needed modification";
+$langSuccessBad = "Error or no modification needed";
 $langUpgAdminError = "Les données que vous avez fournies ne correspondent pas à l'administrateur du système! Veuillez revenir à la page précédente et réessayer.";
 $langUpgNoVideoDir = "Le sous-répertoire 'vidéo' n'existe pas et n'a pas été créé. Veuillez vérifier les droits d'accès.";
 $langUpgNoVideoDir2 = "Il y a un fichier nommé 'video' qui entrave! Il faut le supprimer.";
@@ -1977,14 +1978,15 @@ $langConfigError2 = "Impossible de lire le fichier de configurations config.php 
 $langConfigError3 = "config.php was NOT modified! Please check permissions.";
 $langUpgradeSuccess = "La mise à niveau des bases de données d'eClass a été effectuée !";
 $langUpgReady = "Vous êtes prêt à utiliser la nouvelle édition de la plateforme Open eClass !";
-$langUpgSucNotice = "An error occured, you may encounter problems.<br/>In that case, please contact us at <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a> with a description of the problem, including (if possible) all error messages.";
+$langUpgSucNotice = "If an error occured, you may encounter problems.<br><br>
+In that case, please contact us at <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a> with a description of the problem, including (if possible) all error messages.";
 $langUpgCourse = "Mise à niveau du cours";
 $langUpgFileNotRead = "Le fichier n'a pas pu être lu. Vérifiez les droits d'accès.";
 $langUpgFileNotModify = "Impossible de modifier le fichier. Vérifiez les droits d'accès.";
 $langUpgNotChDir = "Couldn't change directory! Please check permissions.";
 $langUpgIndex = "Modifier le fichier index.php du cours";
 $langCheckPerm = "Vérifier les droits d'accès";
-$langUpgNotIndex = "Couldn't change $langsCourse directory";
+$langUpgNotIndex = "Couldn't change course directory";
 $langUpgContact = "Détails de contact";
 $langUpgAddress = "Adresse de l'Institution :";
 $langUpgTel = "Téléphone de contact :";
@@ -2032,20 +2034,24 @@ $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
-$langNoAdminAccess = '<strong>The page you tried to access requires a valid username and password.</strong><br/>
-The system has automatically redirected you to the start page to login. This could have been caused
-by a mistyped URL or due to session timeout.';
-$langLoginRequired = '<strong>You are not registered to the $langsCourse you are trying to access.</strong><br/> The system has automatically redirect you to the start page to register (if the $langsCourse is open for registration).
-';
-$langSessionIsLost = "<strong>Your session has timed-out.</strong><br/>The system has automatically redirected you to the start page to login again.";
-$langCheckProf = "<strong>Your action requires $langsTeacher privileges. </strong><br/> The system has
-automatically redirect you to the start page to login. If you are the lesson's $langsTeacher you will be
-allowed access to the $langsCourse administration tools.";
-$langLessonDoesNotExist = "<strong>The $langsCourse you are trying to access does not exist.</strong><br/> This could have been caused by a disallowed action or a platform error.";
-$langCheckAdmin = "<strong>Your action requires administrator privileges. </strong><br/> The system has automatically redirected you to the start page to login. If you are the platform administrator, you will be allowed access to the administration tools.";
-$langCheckGuest = "<strong>The action you attempted to execute is not possible with guest user privileges. </strong><br/> For security reasons the system has automatically redirected you to the start page to login again.";
-$langCheckPublicTools = "<strong>You tried to access an inactive module.</strong><br/> For security reasons the system has automatically redirected you to the start page to login again.";
-$langWarnShibUser = "<p><strong>Warning:</strong> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
+$langNoAdminAccess = '<b>The page you tried to access requires a valid username and password.</b><br/>
+The system has automatically redirected you to the start page to login. 
+This could have been caused by a mistyped URL or due to session timeout.';
+$langLoginRequired = '
+        <b>You are not registered to the course and therefore you cannot use the corresponding module.</b>
+        <br>The system has automatically redirected you to the start page to register to the course (if registration is open).';
+$langSessionIsLost = "<b>Your session has timed-out.</b>
+<br>The system has automatically redirected you to the start page to login again.";
+$langCheckProf = "<b>Your action requires $langsTeacher privileges. </b>
+<br> The system has automatically redirected you to the start page to login again.";
+$langLessonDoesNotExist = "<b>The course you are trying to access does not exist.</b><br/> This could have been caused by a disallowed action or a platform technical error.";
+$langCheckAdmin = "<b>Your action requires administrator privileges. </b>
+<br> The system has automatically redirected you to the start page to login again. ";
+$langCheckGuest = "<b>The action you attempted to execute is not possible with guest user rights.</b>
+<br> For security reasons the system has automatically redirected you to the start page to login again.";
+$langCheckPublicTools = "<b>You tried to access an inactive module.</b>
+<br> For security reasons the system has automatically redirected you to the start page to login again.";
+$langWarnShibUser = "<b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.";
 $langUserPortfolio = "Portfolio d'utilisateur";
 $langPortfolio = "Portfolio personnel";
 $langAdvancedSearch = "Recherche avancée";
@@ -2053,7 +2059,7 @@ $langTitle = "Titre";
 $langType = "Type";
 $langBackHome = "Retour à la page d'accueil";
 $langAdminNo = "Le compte de l'administrateur de la plateforme ne peut pas être supprimé !";
-$langExplain = "In order to delete your account, you must unregister from your $langsCourses.";
+$langExplain = "In order to delete your account, you must unregister from your courses.";
 $langConfirm = "Confirmation de suppression de compte";
 $langDelSuccess = "Votre compte sur la plateforme a été supprimé.";
 $langThanks = "Merci d'avoir utilisé la plateforme !";
@@ -2123,7 +2129,7 @@ $langAddress = "Addresse";
 $langLoginDate = "Date de connexion";
 $langNoLogins = "Aucune entrée n'a été effectuée pendant cette période.";
 $langNoStatistics = "Aucune visite n'a été effectuée pendant cette période.";
-$langStatAccueil = "For this period, the following information is available, for all users of $langsCourse:";
+$langStatAccueil = "For this period, the following information is available, for all users of course:";
 $langHost = "Ordinateur hôte";
 $langGroupUsage = "Statistiques de groupes d'utilisateurs";
 $langUsersCourse = "Utilisateurs par cours";
@@ -2199,7 +2205,7 @@ $langWikiEditPrivilege = "Modifier les pages";
 $langWikiEditProperties = "Modifier les propriétés";
 $langWikiEditionSucceed = "Les changements ont été effectués";
 $langWikiGroupMembers = "Membres du groupe";
-$langWikiIdenticalContent = "Identical content<br />no modification saved";
+$langWikiIdenticalContent = "Same content<br />no modification is saved";
 $langWikiInvalidWikiId = "Invalid Wiki Id";
 $langWikiList = "Liste du Wiki";
 $langWikiMainPage = "Page centrale";
@@ -2211,7 +2217,7 @@ $langWikiNotAllowedToRead = "Vous n'êtes pas autorisé(e) à lire cette page";
 $langWikiNumberOfPages = "Nombre de pages";
 $langWikiOtherUsers = "Autres utilisateurs (*)";
 $langWikiOtherUsersText = "(*) utilisateurs anonymes et utilisateurs n'étant pas membres de ce cours...";
-$langWikiPageHistory = "History";
+$langWikiPageHistory = "Page history";
 $langWikiPageSaved = "La page a été sauvegardée";
 $langWikiPreviewTitle = "Preview : ";
 $langWikiPreviewWarning = "AVERTISSEMENT: Celle-ci est une page de prévisualisation ! Vos modifications dans le wiki n'ont pas encore été enregistrées ! Pour les enregistrer cliquez sur 'Enregistrer'.";
@@ -2295,11 +2301,9 @@ $m['SubmissionWorkInfo'] = 'Informations sur la soumission du devoir'
 ;
 $m['SubmissionStatusWorkInfo'] = 'État de la soumission du devoir';
 $langGroupWorkIntro = '
-	Below appear the assignments available in this $langsCourse. Please select
-	an assignment to which to submit the file as group work, and
-	add any comments you would like. Please note that if you submit a new
-	file when a file has been already been submitted by you or a member of
-	your team, the old file will be deleted and replaced by the new.
+	Assignments available in this course are displayed below. Please select
+	the assignment you wish to submit on behalf of your group and
+	add any comments you want to be read by the course teacher. Please note that, when a submission has already been made by you or another member of your group, and you submit a new file for the same assignment, this file will replace the old file in the system (the old file will be deleted).
 	Furthermore, no new submissions are allowed when the assignment has
 	been graded.';
 $langGroupWorkSubmitted = "a été&nbsp;envoyé";
@@ -2467,14 +2471,14 @@ $langReplaceOK = "Le fichier a été remplacé";
 $langDownloadDir = "Télécharger tout le répertoire";
 $langTrueFalse = "Vrai / Faux";
 $langFalse = "Faux";
-$langInvalidPicture = "Invalide picture type";
+$langInvalidPicture = "Unsupported image format";
 $langImportExercise = "Importer un exercice";
 $langAskExercise = "Localiser le fichier de l'exercice"
 ;
 $langExerciseNoTitle = "L'exercice n'a pas de titre !";
 $langExerciseWrongDates = "Les dates de l'exercice ne sont pas correctes !";
 $langAddDescription = "Ajouter une description";
-$langGroupDescInfo = "Enter a description or note about you as member of this group. Please note that it will be visible to the group tutor as well as the other members of the group.";
+$langGroupDescInfo = "Enter a description or note about you and/or the user group. Please note that it will be visible to the group tutor as well as the other group members.";
 $langGroupMembersUnchanged = "Le nombre de membres du groupe est supérieur au nombre maximum que vous avez indiqué. Le nombre a été ajusté pour être égal au nombre actuel des membres.";
 $langGroupAllowMultipleRegistration = "Autoriser les membres à s'inscrire à plusieurs groupes";
 $langGroupAllowUnregister = "Autoriser les membres à se désinscrire du groupe";
@@ -2605,7 +2609,7 @@ $langJQUncheckAll = 'Effacer tout';
 $langcas_logout = "Adresse de la page de déconnexion";
 $langDocQuota = "Limite d'espace de stockage (quota) du cours pour les «Documents»";
 $langVideoQuota = "Limite d'espace de stockage (quota) du cours  pour les «Vidéos»";
-$langDropboxQuota = "Dropbox quota";
+$langDropboxQuota = "Message Exchange quota";
 $langGroupQuota = "Limite d'espace de stockage (quota) du cours pour les «Groupes d'utilisateurs»";
 $langAlternateLogin = "Connexion alternative";
 $langEnterPlatform = "Pour entrer sur la plateforme cliquez";
@@ -2694,10 +2698,11 @@ $langOtherOptions = "Autres paramètres";
 $langDefaultQuota = "Espace de stockage de nouveaux cours";
 $langCreateBackup = "Créer une copie de sauvegarde des paramètres";
 $langInvalidMail = "ont une adresse e-mail invalide ou n'ont pas d'adresse e-mail";
-$langLinkUnsubscribe = "Note: You have received this email because you are registered  in $langsCourse '%s'. If you wish to stop receiving messages from the $langsCourse, please click";
+$langLinkUnsubscribe = "Note: You have received this email because you are registered to course '%s'.<br /> 
+To stop receiving messages from this course, click";
 $langEmailUnsubscribe = "Notifications du cours";
 $langInfoUnsubscribe = "Vous pouvez modifier la réception de notifications par e-mail des cours ci-dessous. Si vous ne souhaitez pas recevoir des e-mails d'un cours donné, désélectionnez-le et cliquez sur 'Soumettre'.  <br />(N.B. Vous n'allez pas vous désincrire du cours).";
-$langEmailUnsubSuccess = "Emails from $langsCourse '%s' will not be sent";
+$langEmailUnsubSuccess = "You will no longer receive emails from course '%s'";
 $langEmailFromCourses = "Recevoir des e-mails de mes cours"
 ;
 $langAuthChangeUser = "Changer le mode d'authentification";
@@ -2706,8 +2711,7 @@ $langAuthChangeno = "There is no other active authentication method";
 $langAuthChangeYes = "Le mode d'authentification a été modifié";
 $langNoUserEmailNotification = "Vous ne recevez pas de notifications par e-mail.";
 $langReplaceSameName = "Remplacer les fichiers ayant le même nom";
-$langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored due to compatibility reasons. Please check id of table
-    'dropbox_file' in $langsCourse database.";
+$langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored properly due to compatibility reasons. Please check the id of table dropbox_file in the course database.";
 $langInfoGrades = "notes";
 $langInfoGrade = "note";
 $langFromRandomQuestions = "de questions aléatoires à partir de";
@@ -2761,19 +2765,19 @@ $langMailVerificationNoU = "Il n'a pas été confirmé";
 $langMailVerificationYesU = "L'e-mail a été confirmé";
 $langMailVerificationPendingU = "La vérification de l'e-mail est en attente";
 $langMailVerificationSettings = "Paramètres de confirmation de l'adresse e-mail des utilisateurs";
-$langMailVerificationNotice = "If email verification of $langOfUser is required and email verification is pending, then:<br /><lu><li>platform will redirect user to email verification page</li><li>user will not receive email from registered $langsCourses</li></lu>";
+$langMailVerificationNotice = "If email verification of $langOfUser is required and email verification is pending, then:<br /><ul><li>the platform will redirect user to email verification page</li><li>the user will not receive any emails (with announcements) from his registered courses</li></ul>";
 $langMailVerificationNoticeAdmin = "Vous ne pouvez pas modifier l'utilisateur admin sur cette page.";
 $langChangeTo = "Changer en";
 $langMailVerificationChanged = "Changement effectué";
 $langMailVerificationChangedNo = "Aucune modification n'a été sélectionnée";
 $langMailVerificationChangedNoAdmin = "No users or admin email address is not allowed";
 $langCheckCourseAdmin = "
-        <strong>Action requires $langsCourse administrator rights.</strong>
+        <b>Action requires course administrator rights.</b>
         <br>You have been redirected to home page for logging in again.";
 $langCheckPowerUser = "
-        <strong>Action requires $langsCourse and user administration rights.</strong>
+        <b>Action requires course and user administration rights.</b>
         <br>You have been redirected to home page for logging in again.";
-$langCheckUserManageUser = "<strong>Action requires user administration rights.</strong>
+$langCheckUserManageUser = "<b>Action requires user administration rights.</b>
         <br>You have been redirected to home page for logging in again.";
 $langCheckMailVerify = " <b>$langMailVerificationSuccess</b>";
 $langAllAuthTypes = "Tous les modes d'authentification";
@@ -2793,14 +2797,14 @@ $langMailVerifySuccess2 = "Votre e-mail a été vérifié avec succès.";
 $langMailVerifySuccessReq = "La demande de création de compte a été renouvelée.";
 $langMailVerifySuccessU = "Votre compte a été activé.";
 $langGlossaryIndex = 'Index alphabétique des termes du glossaire';
-$langEBookNoSections = "No Ebook pages have been assigned to sections";
+$langEBookNoSections = "e-book sections have not been defined";
 $langAdmins = "Administrateurs";
 $langManageUser = "Administrateur des utilisateurs";
 $langHelpAdministrator = "L'administrateur peut gérer toute la plateforme";
 $langHelpPowerUser = "L'administrateur assistant gère les cours et les utilisateurs";
 $langHelpManageUser = "L'administrateur d'utilisateurs gère les utilisateurs";
-$langLinkUnsubscribeFromPlatform = "Note: You are receiving this message because you are registered in platform '%s'.<br />
-                If you don't wish to receive any more email messages click";
+$langLinkUnsubscribeFromPlatform = "Note: You are receiving this message because you are registered to '%s'.<br /> 
+ If you don't wish to receive any more email messages click";
 $langEmailUnsubscribeWarning = "Vous avez désactivé la possibilité de recevoir des e-mails via la plateforme. Vous ne pouvez pas régler les paramètres de réception de messages pour des cours spécifiques avant de l'avoir reactivée.";
 $langCourseInactive = "L'accés au cours est réservé aux $langTeachers du cours";
 $langCourseInactiveShort = "Cours inactif";
@@ -2823,8 +2827,8 @@ $langColorboxCurrent = "fichier multimédia {current} de {total}";
 $langVerifiedMail = "Adresse e-mail vérifiée";
 $langMailNotVerified = "Votre adresse e-mail n'est pas confirmée. Vous ne pourrez pas recevoir des e-mails à partir des cours jusqu'à ce que vous le confirmiez. Pour le confirmer cliquez sur";
 $langExerciseMaxAttemptsReached = "Vous avez atteint le nombre maximum d'essais autorisés pour cet exercice.";
-$lang_max_glossary_terms = "The display of term definitions in $langsCourse pages for a large number of terms in glossary is not allowed";
-$langGlossaryOverLimit = 'The number of glossary terms has exceeded the limit (%s) for displaying definitions in $langsCourse pages.';
+$lang_max_glossary_terms = 'Displaying of term definitions in course pages is not allowed, if the total number of terms in the glossary is greater than:';
+$langGlossaryOverLimit = 'The number of glossary terms has exceeded the limit (%s) for displaying definitions in course pages.';
 $langVideoDirectory = "Fichiers multimédia";
 $langUserNotLogin = "Utilisateurs qui n'ont pas été connectés";
 $langExternalLinks = "Liens externes";
@@ -2942,14 +2946,14 @@ $langMultiDelUserConfirm = "This will also delete all users' trace data, such as
 $langMultiDelUserData = "Usernames";
 $langMultiDelUserInfo = 'Please enter a list of usernames (one line per user) you wish to delete. Lines beginning with # are ignored.';
 $langConfirmDeleteQuestion3 = "This action will also delete all traces of a user from the platform, such as statistics, participation in forums, etc.";
-$langErrorUnreguser = "Error unregistering user from $langsCourse";
+$langErrorUnreguser = "Error unregistering user from course";
 $langRenamedFileNotAllowed = "New filename is not allowed.  For more information, please contact the platform administrator.";
-$langEnableSearch = "Enable search engine";
+$langEnableSearch = "Enable seach engine";
 $langUserRegistration = "User registration option";
 $langReqRegUser = "$langOfStudent request registration";
 $langViaAltAuthMethods = "via alternative authentication methods";
 $langDelUser = "Delete user";
-$langTooManyFails = "You have made too many failed attempts. You must wait for a short interval till the next attempt.";
+$langTooManyFails = "You have made too many failed attempts. You must wait 5 minutes till the next attempt.";
 $langOnlyInEnglish = "En anglais seulement";
 $langUserMerge = 'Merging user accounts';
 $langUserMergeLegend = 'Merging user %s with...';
@@ -2964,7 +2968,7 @@ $langPwStrengthWeak = "Weak";
 $langPwStrengthGood = "Good";
 $langPwStrengthStrong = "Strong";
 $langRecipient = "Recipient";
-$langOnlineUsers = 'Online Users';
+$langOnlineUsers = "Online users";
 $langIndexInfo = "Information about the Index";
 $langIndexNumDocs = "Number of Documents Indexed";
 $langIndexIsOptimized = "Is optimized?";
@@ -2973,18 +2977,18 @@ $langReindex = "Rebuild index";
 $langCronInfo = "Information about scheduled tasks";
 $langCronName = "Job name";
 $langCronLastRun = "Last Run";
-$langLoginFailCheck = "Check for Login Failures";
-$langEnableLoginFailCheck = "Enable check for Login Failures";
-$langLoginFailThreshold = "Allowed Login Failures";
-$langLoginFailDenyInterval = "Blockade Interval";
-$langLoginFailForgiveInterval = "Quarantine Interval";
+$langLoginFailCheck = "Check login failures";
+$langEnableLoginFailCheck = "Enable check of login failures";
+$langLoginFailThreshold = "Number of allowable failure logins";
+$langLoginFailDenyInterval = "Interval of denied logins";
+$langLoginFailForgiveInterval = "Interval of banned login";
 $langActionsExpireInterval = "Statistics retention period";
 $langLogActions = "Action logging";
 $langEnableCommonDocs = "Enable 'Common Docs'";
 $langCommonDocs = "Common Documents";
-$langExplainCommonDocs = "File will be accessible to all $langsCourses via 'Documents'";
-$langExternalFile = 'External File Link';
-$langExternalFileInfo = 'External file URL';
+$langExplainCommonDocs = "File will be accessible to all courses via 'Documents'";
+$langExternalFile = "Link external file";
+$langExternalFileInfo = "External file URL";
 $langCheckTools = "Software tools prerequisites check";
 $langCheckIntro = "To view all the material contained in the platform, you must have the appropriate tools installed on your computer.";
 $langCheckIntro2 = "The following table displays which of the required tools are not installed or are not of the required version. For those tools, please install the required software by clicking on each button and following the instructions.";
@@ -3008,13 +3012,13 @@ $langCheckNotOk3 = "You have to install all required programs which don't have t
 $langCheckNotOk4 = "After completing the installation of all required software tools, please check installation by clicking";
 $langCheckNotOk5 = 'If there are no messages in red letters in the diagnostics table, all installations will have been performed correctly and a message to that effect will be displayed.';
 $langCheckOk = "You have all required programs installed on your computer and you can use the platform without problems.";
-$langPurgeExerciseResults = "Clear results";
+$langPurgeExerciseResults = "Delete course exercise results";
 $langClearStats = "Clear Statistics";
 $langStatsCleared = "Statistics cleared";
-$langMultiCourse = "Multiple $langsCourse creation";
-$langMultiCourseInfo = "Enter $langsCourse titles (one title per line). If you wish to add a $langsCourse administrator, too then enter his username or name / surname, separated with character \"|\".";
-$langMultiCourseTitles = "$langCourses Titles";
-$langMultiCourseData = "$langCourse Data";
+$langMultiCourse = 'Multiple course creation';
+$langMultiCourseInfo = 'Enter course titles (one title per line). If you wish to add a course administrator, too then enter his username or name / surname, separated with character "|".';
+$langMultiCourseTitles = 'Courses Titles';
+$langMultiCourseData = 'Course Data';
 $langResourceAccess = "Resource Access";
 $langCreativeCommonsCCBY = "CC - Attribution";
 $langCreativeCommonsCCBYSA = "CC - Attribution-ShareAlike";
@@ -3035,9 +3039,9 @@ $langdocAdd = "The message was sent successfully";
 $langMailToUsers = "Notify users via e-mail";
 $langDropboxMailNotify = "you have received a new message. You will find it in 'My messages' after logging in to the platform or by following this link:";
 $langNewDropboxFile = "New message notification";
-$langMaxMessageSize = "Max. characters: 500";
+$langMaxMessageSize = "Your message must not exceed 1000 characters.";
 $langAttachedFile = "Attached file";
-$langPurgeExercises = "Clear results";
+$langPurgeExercises = "Delete results";
 $langConfirmPurgeExercises = "Confirm results deletion";
 $langInGroup = "in group";
 $langErrorConfigAlt = "Alternatively, you can manually create the <strong>config.php</strong> file in the <strong>%s</strong> subdirectory with the following contents:";
@@ -3045,13 +3049,13 @@ $lang_restrict_owndep = "Disallow department change to users";
 $lang_disable_log_actions = "Disable action log";
 $lang_disable_log_course_actions = "Disable action log in $langsCourses";
 $lang_disable_log_system_actions = "Disable action log outside $langsCourses";
-$lang_course_metadata = "$langCourse Metadata";
-$lang_opencourses_enable = "Enable GUnet Open $langCourses";
-$langErrorValidatingManifest = "File <i>manifest</i> contains errors: ";
-$langExportIMSCP = "Export to IMS CP 1.1.4 format";
+$lang_course_metadata = "Course Metadata";
+$lang_opencourses_enable = "Enable GUnet Open Courses";
+$langErrorValidatingManifest = "File <i>manifest</i> has errors: ";
+$langExportIMSCP = "Export in IMS CP 1.1.4";
 $langLostPassPending = "You've already attempted to recover the password within the last hour. Please try later.";
 $langToUser = "to user";
-$langGiveRightReviewer = "Reviewer right";
+$langGiveRightReviewer = "Add OpenCourses Reviewer right";
 $langRemoveRightReviewer = "OpenCourses Reviewer permission removal";
 $langUsersWithNoMail = "Users without email address";
 $langOldValue = "Old value";
@@ -3069,41 +3073,41 @@ $langLogExpireInterval = "Log retention interval";
 $langLogPurgeInterval = "Log purge interval";
 $langWikiPageNotFound = "Wiki page not found";
 $langDelWarnUserAssignment = 'Confirm assignment delete of '.$langOfUser;
-$langOpenCourses = "Open $langCourses";
-$langOpenCoursesShort = "Open $langCourses";
-$langCourseMetadata = "$langCourse Metadata";
+$langOpenCourses = "Open Courses";
+$langOpenCoursesShort = "Open Courses";
+$langCourseMetadata = "Course Metadata";
 $langOpenCoursesReviewer = "OpenCourses Reviewer";
 $langHelpOpenCoursesReviewer = "administers $langsCourses and users and approves open $langsCourses";
 $langCourseMetadataControlPanel = "OpenCourses Control Panel";
 $langOpenCoursesCharacteristics = "Qualitative/Quantitative characteristics";
-$langOpenCoursesCharacter = "$langCourse Rating";
+$langOpenCoursesCharacter = "Course Rating";
 $langOpenCoursesOpenAccess = "Access Type (Open)";
-$langOpenCoursesMandatoryMetadata = "Mandatory $langCourse Metadata (complete)";
-$langOpenCoursesLicense = "$langCourse License";
+$langOpenCoursesMandatoryMetadata = "Mandatory Course Metadata (complete)";
+$langOpenCoursesLicense = "Course License";
 $langOpenCoursesTeacherConfirm = "Teacher Statement - The available training material covers 100% of the curriculum";
 $langOpenCoursesHasDocuments = "Has Documents";
-$langOpenCoursesHasUnits = "Has $langCourse units";
+$langOpenCoursesHasUnits = "Has Course units";
 $langOpenCoursesHasMediaFiles = "Has multimedia files";
 $langOpenCoursesTeacherConfirmVideo = "Teacher statement - The available video lectures cover 80% of the curriculum";
 $langOpenCoursesFiles = "Files";
-$langOpenCoursesIsAMinusLevel = "Open $langCourses Α-";
-$langOpenCoursesIsALevel = "Open $langCourses Α";
-$langOpenCoursesIsAPlusLevel = "Open $langCourses Α+";
+$langOpenCoursesIsAMinusLevel = "Open Courses Α-";
+$langOpenCoursesIsALevel = "Open Courses Α";
+$langOpenCoursesIsAPlusLevel = "Open Courses Α+";
 $langOpenCoursesLevel = "OpenCourses Level";
 $langOpenCoursesAMinusLevel = "A-";
 $langOpenCoursesALevel = "A";
 $langOpenCoursesAPlusLevel = "A+";
-$langListOpenCourses = "Open $langCourses List";
-$langListOpenCoursesShort = "Open $langCourses List";
-$langOpenCourseShort = "Open Academic $langCourse";
-$langNumOpenCourses = "open $langsCourses";
-$langNumOpenCourse = "open $langsCourse";
+$langListOpenCourses = "Open Courses List";
+$langListOpenCoursesShort = "Open Courses List";
+$langOpenCourseShort = "Open Academic Course";
+$langNumOpenCourses = "open courses";
+$langNumOpenCourse = "open course";
 $langMetaCommentary = "Meta comments";
-$langOpenCoursesType = "Open $langCourse type";
-$langOpenCoursesWasNotSet = "$langCourse is not Open $langCourse ready";
-$langOpenCoursesWasSet = "$langCourse is Open $langCourse ready";
+$langOpenCoursesType = "Open Course type";
+$langOpenCoursesWasNotSet = "Course is not Open Course ready";
+$langOpenCoursesWasSet = "Course is Open Course ready";
 $langLastSubmission = "Last Submission";
-$langCMeta['courseGroup'] = "$langCourse";
+$langCMeta['courseGroup'] = "Course";
 $langCMeta['instructorGroup'] = "Tutors";
 $langCMeta['curriculumGroup'] = "Curriculum";
 $langCMeta['unitsGroup'] = "Units";
@@ -3128,29 +3132,29 @@ $langCMeta['course_instructor_lastName'] = "Instructor surname";
 $langCMeta['course_instructor_fullName'] = "Instructor Full name";
 $langCMeta['course_instructor_moreInformation'] = "More about instructor";
 $langCMeta['course_instructor_cv'] = "Link to CV or brief biography (10 lines maximum)";
-$langCMeta['course_instructor_photo'] = "$langCourse instructor photo";
-$langCMeta['course_title'] = "$langCourse Title";
+$langCMeta['course_instructor_photo'] = "Course instructor photo";
+$langCMeta['course_title'] = "Course Title";
 $langCMeta['help_course_title'] = "as stated in the curriculum";
-$langCMeta['course_url'] = "$langCourse URL";
-$langCMeta['help_course_url'] = "$langCourse page and/or link to the Learning Management System (LMS) (eg in eClass, Moodle, Blackboard or other LMS)";
-$langCMeta['course_code'] = "$langCourse Code";
+$langCMeta['course_url'] = "Course URL";
+$langCMeta['help_course_url'] = "Course page and/or link to the Learning Management System (LMS) (eg in eClass, Moodle, Blackboard or other LMS)";
+$langCMeta['course_code'] = "Course Code";
 $langCMeta['help_course_code'] = "as stated in the curriculum";
-$langCMeta['course_level'] = "$langCourse Level";
+$langCMeta['course_level'] = "Course Level";
 $langCMeta['help_course_level'] = "Select";
-$langCMeta['course_yearOfStudy'] = "$langCourse Year";
+$langCMeta['course_yearOfStudy'] = "Course Year";
 $langCMeta['help_course_yearOfStudy'] = "Select 1 to 6 as indicated in the curriculum";
 $langCMeta['course_semester'] = "Semester";
 $langCMeta['help_course_semester'] = "Select 1 to 12 as stated in the curriculum";
-$langCMeta['course_type'] = "$langCourse type";
+$langCMeta['course_type'] = "Course type";
 $langCMeta['help_course_type'] = "Select";
 $langCMeta['course_credithours'] = "Semester Credit hours";
-$langCMeta['help_course_credithours'] = "Indicate the number of teaching hours of the $langsCourse during the semester";
+$langCMeta['help_course_credithours'] = "Indicate the number of teaching hours of the course during the semester";
 $langCMeta['course_coTeaching'] = "Co-Teaching";
-$langCMeta['help_course_coTeaching'] = "Select accordingly:
-    <ul><li> if your colleague is participating in the $langsCourse opening</li>
-    <li> if your corresponding faculty is autonomous</li>
+$langCMeta['help_course_coTeaching'] = "Select accordingly: 
+    <ul><li> if your colleague is participating in the course opening</li> 
+    <li> if your corresponding faculty is autonomous</li> 
     <li> teaching hours which correspond to your department</li></ul>";
-$langCMeta['course_coTeachingColleagueOpensCourse'] = "Colleague participation in the $langsCourse opening";
+$langCMeta['course_coTeachingColleagueOpensCourse'] = "Colleague participation in the course opening";
 $langCMeta['course_coTeachingAutonomousDepartment'] = "Autonomous department";
 $langCMeta['course_coTeachingDepartmentCreditHours'] = "Co-Teaching hours";
 $langCMeta['course_language'] = "Teaching language";
@@ -3158,78 +3162,78 @@ $langCMeta['course_targetGroup'] = "Target group";
 $langCMeta['help_course_targetGroup'] = "E.g. students/Alumni of the Department.
     Interested in a thematic area. ";
 $langCMeta['course_credits'] = "Credits";
-$langCMeta['help_course_credits'] = "As stated in the curriculum. Only visible to students, not to the general public.
+$langCMeta['help_course_credits'] = "As stated in the curriculum. Only visible to students, not to the general public. 
     This information may be ignored by faculty members, instead inserted by the local support team ";
-$langCMeta['course_description'] = "$langCourse description";
-$langCMeta['course_contents'] = "$langCourse contents";
-$langCMeta['help_course_contents'] = "Verbal description is proposed in order to include the following:
-    <ul><li>Contents structure ($langsCourse outline) and </li>
-    <li> $langsCourse topics</li></ul>";
-$langCMeta['course_objectives'] = "$langCourse Objectives";
+$langCMeta['course_description'] = "Course description";
+$langCMeta['course_contents'] = "Course contents";
+$langCMeta['help_course_contents'] = "Verbal description is proposed in order to include the following: 
+    <ul><li>Contents structure (course outline) and </li>
+    <li> course topics</li></ul>";
+$langCMeta['course_objectives'] = "Course Objectives";
 $langCMeta['help_course_objectives'] = "Summary description that includes the following:
-    <ul><li> $langCourse objectives – expected and learning outcomes</li>
-    <li> what the learner is expected to know, understand and can do after successful completion of the $langsCourse </li></ul>";
+    <ul><li> Course objectives – expected and learning outcomes</li> 
+    <li> what the learner is expected to know, understand and can do after successful completion of the course </li></ul>";
 $langCMeta['course_keywords'] = "Keywords";
-$langCMeta['course_coursePhoto'] = "Proposed photo for the $langsCourse";
+$langCMeta['course_coursePhoto'] = "Proposed photo for the course";
 $langCMeta['course_contentDevelopment'] = "Content development team";
-$langCMeta['help_course_contentDevelopment'] = "The team that has helped in the development of the content of the $langsCourse";
+$langCMeta['help_course_contentDevelopment'] = "The team that has helped in the development of the content of the course";
 $langCMeta['course_format'] = "Types of educational material";
-$langCMeta['help_course_format'] = "Select (more than one) the $langsCourse's educational types";
+$langCMeta['help_course_format'] = "Select (more than one) the course's educational types";
 $langCMeta['course_featuredBooks'] = "Featured writings";
-$langCMeta['course_structure'] = "$langCourse Structure";
-$langCMeta['help_course_structure'] = "Only available to students, not in the general public <br/>
-    Structure and teaching frequency
+$langCMeta['course_structure'] = "Course Structure";
+$langCMeta['help_course_structure'] = "Only available to students, not in the general public <br/> 
+    Structure and teaching frequency 
     <ul><li> office hours</li>
-    <li>Lectures (e.g. 2 times a week, 3 hours) for 13 weeks </li>
+    <li>Lectures (e.g. 2 times a week, 3 hours) for 13 weeks </li> 
     <li>Tutorials (Recitations) (once a week, 2 hours) </li>
-    <li>Practical activities</li>
+    <li>Practical activities</li> 
     <li>Other</li></ul>";
-$langCMeta['course_teachingMethod'] = "$langCourse teaching method";
-$langCMeta['help_course_teachingMethod'] = "Only available to students not in the general public<br/>
-    Description of teaching and learning methods used.
+$langCMeta['course_teachingMethod'] = "Course teaching method";
+$langCMeta['help_course_teachingMethod'] = "Only available to students not in the general public<br/> 
+    Description of teaching and learning methods used. 
     E.g. seat-tilt and supplementary-supporting teaching education through asynchronous learning platform.
     Practical Activities. ";
-$langCMeta['course_assessmentMethod'] = "$langCourse assesment method";
+$langCMeta['course_assessmentMethod'] = "Course assesment method";
 $langCMeta['help_course_assessmentMethod'] = "Only available to students not in the general public<br/>
-    Description of evaluation, grading methods and evaluation criteria used.
-    One can refer to the following:
-    <ul><li>Examinations</li>
-    <li>Assignments and advances</li>
+    Description of evaluation, grading methods and evaluation criteria used. 
+    One can refer to the following: 
+    <ul><li>Examinations</li> 
+    <li>Assignments and advances</li> 
     <li>Permissible material during exams</li>
     <li>Formerly exam questions</li></ul>";
-$langCMeta['course_prerequisites'] = "$langCourse prerequisites";
+$langCMeta['course_prerequisites'] = "Course prerequisites";
 $langCMeta['help_course_prerequisites'] = "Description to include the following:
-    <ul><li> Prerequisite knowledge and preparation requirements</li>
-    <li>Links to $langsCourse prerequisites </li></ul>";
+    <ul><li> Prerequisite knowledge and preparation requirements</li> 
+    <li>Links to course prerequisites </li></ul>";
 $langCMeta['course_literature'] = "Additional recommended literature and study material";
-$langCMeta['help_course_literature'] = "Description in order to cover the following:
+$langCMeta['help_course_literature'] = "Description in order to cover the following: 
 <ul><li>Texts and books</li>
 <li>Writings </li>
 <li>Bibliography</li>
 <li>Online readings</li>
 <li>Internet sources</li>
 <li>Library resources</li>
-<li>Related 3rd party open $langsCourses</li>
-<li>Articles</li>
+<li>Related 3rd party open courses</li> 
+<li>Articles</li> 
 <li>Videos and movies</li></ul>
 each proposal is recommended to be accompanied by a short commentary on its purpose and usefulness";
-$langCMeta['course_recommendedComponents'] = "Other recommended $langsCourses of the faculty related to the curriculum";
-$langCMeta['course_assignments'] = "$langCourse assignments";
+$langCMeta['course_recommendedComponents'] = "Other recommended courses of the faculty related to the curriculum";
+$langCMeta['course_assignments'] = "Course assignments";
 $langCMeta['help_course_assignments'] = "Description in order to cover the following:
     <ul><li>Assignments (homework)</li>
-    <li>Assessments</li>
+    <li>Assessments</li> 
     <li>Grading: how the final grade is calculated</li></ul>";
-$langCMeta['course_requirements'] = "$langCourse requirements";
-$langCMeta['help_course_requirements'] = "Ddescription in order to include the following:
-    <ul><li> Technical requirements </li>
+$langCMeta['course_requirements'] = "Course requirements";
+$langCMeta['help_course_requirements'] = "Ddescription in order to include the following: 
+    <ul><li> Technical requirements </li> 
     <li> Other requirements, assignments (homework)</li></ul>";
 $langCMeta['course_remarks'] = "Remarks";
-$langCMeta['course_acknowledgments'] = "$langCourse acknowledgements";
+$langCMeta['course_acknowledgments'] = "Course acknowledgements";
 $langCMeta['help_course_acknowledgments'] = "E.g. towards a publishing house or another faculty member for granting educational material";
-$langCMeta['course_eudoxusCode'] = "$langCourse code in 'Eudoxus'";
-$langCMeta['course_eudoxusURL'] = "$langCourse url in Eudoxus";
+$langCMeta['course_eudoxusCode'] = "Course code in 'Eudoxus'";
+$langCMeta['course_eudoxusURL'] = "Course url in Eudoxus";
 $langCMeta['course_kalliposURL'] = "Writings link (Kallipos)";
-$langCMeta['help_course_kalliposURL'] = "In case an e-textbook under the programme Callippus is developed.
+$langCMeta['help_course_kalliposURL'] = "In case an e-textbook under the programme Callippus is developed. 
     For more information, check the link at http://www.kallipos.gr";
 $langCMeta['course_thematic'] = "Thematic scientific area";
 $langCMeta['help_course_thematic'] = "Thematic classification according to library standards. The filling may be done in conjunction with the corresponding library of the department or faculty.";
@@ -3249,21 +3253,21 @@ $langCMeta['course_numberOfUnits'] = "Number of units";
 $langCMeta['course_unit_title'] = "Unit title";
 $langCMeta['course_unit_description'] = "Unit description";
 $langCMeta['course_unit_keywords'] = "Unit keywords";
-$langCMeta['course_confirmCurriculum'] = "The online $langsCourse covers 100% of the curriculum";
+$langCMeta['course_confirmCurriculum'] = "The online course covers 100% of the curriculum";
 $langCMeta['course_confirmVideolectures'] = "The video lectures cover 80% of the curriculum";
-$langWithoutCopyright = "Without Copyright";
+$langWithoutCopyright = "Copyright free";
 $langLicenseUnset = 'No license specified';
 $langCommercialUse = "Commercial Use";
-$langAllowModification = "Allow modification";
-$langDoNotReply = "If you reply directly to this message, your reply won't be received by the correct recipient. To reply, please click";
+$langAllowModification = "Allow modifications";
+$langDoNotReply = "If you respond directly to the above message, the reply will go to the wrong person. To reply, click";
 $langdbpassencr = "Password field encryption";
 $langDisplay = "Display";
 $langLast = "Last";
 $langFirst = "First";
 $langTotalResults = "total results";
-$langDisplayed = "Displaying";
-$langTill = "to";
-$langDelAllWorkSubs = "Delete all $langsCourse assignments' submissions";
+$langDisplayed = "Displayed";
+$langTill = "till";
+$langDelAllWorkSubs = "Delete all course assignments' submissions";
 $langPurgeExercise = "Delete Exercise";
 $langPurgeExerciseSuccess = "Exercise successfully deleted.";
 $langConfirmPurgeExercise = "Exercise Delete Confirmation";
@@ -3385,8 +3389,8 @@ $langGradeTooBig = "The grade you submitted surpasses the maximum allowed grade 
 $langFreeText = "Free Text";
 $langResults2 = "results";
 $m['max_grade'] = 'Max grade';
-$langUserDeleted = "User unregistered from $langsCourse";
-$langGiveRightEditor = "$langEditor right";
+$langUserDeleted = "User deleted";
+$langGiveRightEditor = "Add co-admin right";
 $langWikiLockInfo = "<p>The page you try to save is locked, as it is been processed by some other user. Please try again later.</p>";
 $langWikiLockTimeRemaining = "Remaining edit lock time: ";
 $langWikiLockTimeEnd = "The edit lock for this wiki page has expired. You can continue editing, however you may not be able to save your changes immediately";
@@ -3468,16 +3472,16 @@ $langBBBScheduleSessionInfo = "The teleconference titled ";
 $langBBBScheduleSessionInfo2 = "was scheduled for ";
 $langBBBScheduleSessionInfoJoin = "Connect to the $langsCourse environment to watch by clicking here ";
 $langPollResultsDeleted = "Questionnaire results deleted successfully.";
-$langPollResultsAccess = "You dont have access rights to Questionnaire results.";
-$langPollAlreadyParticipated = "You have already participated in the Questionnaire.";
-$langPollAnonymize = "Anonymize results";
+$langPollResultsAccess = "You are not allowed to acccess questionnaire results";
+$langPollAlreadyParticipated = "You have already participated in questionnaire";
+$langPollAnonymize = "Anonymize";
 $langTemporarySaveNotice = "You have temporarily saved the following attempts of exercise";
 $langTemporarySaveNotice2 = "There is a temporarily saved attempt that needs to be finished and that will be loaded if you continue. Do you want to continuew?";
 $langPendingExercise = "There are attempts that need to be graded in exercise";
 $langAttemptPaused = "Temporarly Saved";
 $langCMeta['course_subthematic'] = "Thematic scientific sub-area";
 $langCMeta['asfa'] = "Athens School of Fine Arts";
-$langCMeta['auth'] = "Aristotle University of Thessaloniki";
+$langCMeta['auth'] = "Aristotle University of Thessalonica";
 $langCMeta['aua'] = "Agricultural University Of Athens";
 $langCMeta['duth'] = "Democritus University of Thrace";
 $langCMeta['ihu'] = "International Hellenic University";
@@ -3518,24 +3522,24 @@ $langCMeta['natural'] = "Natural Sciences";
 $langCMeta['agricultural'] = "Agricultural Sciences";
 $langCMeta['engineering'] = "Engineering and Technology";
 $langCMeta['social'] = "Social Sciences";
-$langCMeta['medical'] = "Medicine, Science and Health Professions";
-$langCMeta['humanities'] = "Humanities and Arts";
+$langCMeta['medical'] = "Medical and Health Sciences";
+$langCMeta['humanities'] = "Humanities";
 $langCMeta['othersubsubj'] = "Other Sub-Discipline";
 $langCMeta['othernatural'] = "Other Natural Sciences";
 $langCMeta['maths'] = "Mathematics";
-$langCMeta['cis'] = "Computer Science, Information Technology, Telecommunications";
+$langCMeta['cis'] = "Computer and Information Sciences";
 $langCMeta['phys'] = "Physical Sciences";
 $langCMeta['chem'] = "Chemical Sciences";
 $langCMeta['environ'] = "Earth and Related Environmental Sciences";
 $langCMeta['biology'] = "Biological Sciences";
 $langCMeta['otheragri'] = "Other Agricultural Sciences";
-$langCMeta['agrifor'] = "Agriculture, Forestry and Fisheries";
+$langCMeta['agrifor'] = "Agriculture, Forestry, and Fisheries";
 $langCMeta['animal'] = "Animal and Dairy Science";
 $langCMeta['veterin'] = "Veterinary Science";
 $langCMeta['agribio'] = "Agricultural Biotechnology";
 $langCMeta['othereng'] = "Other Engineering and Technologies";
 $langCMeta['civil'] = "Civil Engineering";
-$langCMeta['eeeeie'] = "Science in Electrical Engineering";
+$langCMeta['eeeeie'] = "Electrical Engineering, Electronic Engineering, Information Engineering";
 $langCMeta['mechan'] = "Mechanical Engineering";
 $langCMeta['chemic'] = "Chemical Engineering";
 $langCMeta['mateng'] = "Materials Engineering";
@@ -3543,7 +3547,7 @@ $langCMeta['medeng'] = "Medical Engineering";
 $langCMeta['enveng'] = "Environmental Engineering";
 $langCMeta['othersoc'] = "Other Social Sciences";
 $langCMeta['psych'] = "Psychology";
-$langCMeta['ecobi'] = "Economics and Business Administration";
+$langCMeta['ecobi'] = "Economics and Business";
 $langCMeta['edusoc'] = "Educational Sciences";
 $langCMeta['sociology'] = "Sociology";
 $langCMeta['law'] = "Law";
@@ -3726,7 +3730,7 @@ $langIndexCreation = "Index creation";
 $langUpgradeMulUsernames = 'The following changes were performed due to users with conflicting usernames:';
 $langUpgradeChangeUsername = "Username changed from %s to %s";
 $langNoStats = "No statistics available";
-$langCatVideoDirectory = "Multimedia file categories";
+$langCatVideoDirectory = "Categorized multimedia files";
 $langCatVideoDirectoryCreated = "Category added";
 $langMyProfile = "Μy Profile";
 $m['with_deadline'] = "With Submission Deadline";
@@ -4060,8 +4064,8 @@ $langMaxFileSizeExceeded = 'File size exceeds maximum upload limit.';
 $langLabel2 = "Label";
 $langimportLearningPathSort = "Import";
 $langMultiRegCourseUser = 'Users registration in $langsCourses';
-$langCourseCodes = "$langCourses Codes";
-$langAskManyUsersToCourses = "$langCourses and users must exist in order to register them in $langsCourses. Type usernames and $langsCourses codes one per line.";
+$langCourseCodes = "Course Codes";
+$langAskManyUsersToCourses = "<strong>Note</strong>:<br /> Courses must exist and user must have an account in order to register in them. Type usernames and passwords per line.";
 $langWorksDelConfirm = "This assignment will be deleted. Are you sure?";
 $langWikiDescriptionShort = "Description";
 $langWikiNoModifications = "No modifications";
@@ -4069,7 +4073,7 @@ $langWikiLastModification = "Last modification";
 $langExerciseStartHelpBlock = "Click if you want to assign a different (i.e. future) Exercise Start Date";
 $langExerciseEndHelpBlock = "Click if you want to assign an Exercise End Date";
 $lang_hide_login_link = "Don't display login form link in pages";
-$langCourseNotExist = "$langCourse code doesn't exist.";
+$langCourseNotExist = "Course code doesn't exist";
 $langWikiCreateWiki = "Wiki creation";
 $langWikiNoDescription = "No description available";
 $m['delete_work'] = 'Delete';
@@ -4177,8 +4181,8 @@ $langEnableMyDocs = 'Activate personal documents';
 $langMyDocsQuota = 'Personal documents quota';
 $langMyDocs = 'Personal Documents';
 $langAuthWarnInactive = 'Caution: Inactive authentication method';
-$langCitation = "$langCourse Citations";
-$langAccessed = "Retrieved on ";
+$langCitation = 'Cite this course';
+$langAccessed = 'Retrieved %s, from %s';
 $langDropBoxInbox = "Inbox";
 $langDropBoxOutbox = "Outbox";
 $langAvailableGradebooks = 'Available Gradebooks';
@@ -4766,7 +4770,7 @@ $langSiteTitle = 'Platform title';
 $langSiteDescr = 'Home page description';
 $langOpenMeetingsDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p>
 <p>OpenMeetings does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with an OpenMeetings installation plase select <a href='openmeetingsconf.php'>Settings</a>.</p>";
-$langWebConfDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p>
+$langWebConfDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> platform which is a complete system of direct web-based communication and collaboration between $langsOfTeachers and $langsOfStudents.</p>
 <p>WebConf does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a WebConf installation plase select <a href='webconf.php'>Settings</a>.</p>";
 $langOpenMeetingsConf = "OpenMeetings settings";
 $langAddOpenMeetingsServerInfo = "New OpenMeetings server info";
@@ -5005,8 +5009,8 @@ $langInactiveCourseCategories = "Inactive categories";
 $langActiveCourseCategories = "Active categories";
 $langUnplagShortDescription = "Connection with UnPlag service. The UnPlag plagiarism detection is a commercial service. Please visit <a href=\"https://unicheck.com\">https://unicheck.com</a> for more information.";
 $langUnplagLongDescription = "Connection with UnPlag plagiarism detection service";
-$langNameOfLang['slovene'] = 'Slovene';
-$langNameOfLang['slovak'] = 'Slovak';
+$langNameOfLang['slovene'] = "Slovenian";
+$langNameOfLang['slovak'] = "Slovak";
 $langNameOfLang['dutch'] = 'Dutch';
 $langUserExpiresFieldEmpty = "User expires date is not set or empty! ";
 $langNoAccountPleaseRegister = "Don't have an account? Please %sregister%s.";
@@ -5168,3 +5172,210 @@ $lang_block_duration_alt_account = "Disable user account expiration with alterna
 $lang_message_block_duration_account = "User accounts never expire.";
 $langHtmlFile = "Html file";
 $langRubricCreated = "Rubrique created successfully";
+$langDefaultMatchingOpt1 = "Athens";
+$langDefaultMatchingOpt2 = "London";
+$langTurnitinShortDescription = "Connect with plagiarism Service. 
+Plagiarism service is a commercial product by Turnitin. For further information take a look at <a href=\"https://turnitin.com\">https://turnitin.com</a>";
+$langWebVersion = "uses";
+$langConfigFile = "Configuration File";
+$langTutorialDesc = "Also, in the link below, you will find useful tutorials for using and administrating the Open eClass platform with practical examples. These tutorials are available in three different formats: a) tutorials with pictures, b) video presentations and c) SCORM Packages.";
+$langTutorial = "Platform Tutorials";
+$langStat4eClass = "Platform Statistics";
+$langParentEmail = "Secondary email address";
+$langFaculteCatalog = "List of Faculties";
+$langCourseDelFull = "Course Deletion";
+$langUserWithId = "The user with id";
+$langAdminAnVis = "Visible";
+$langMultiCourseUser = "Multiple user registration in courses";
+$langConference = "Teleconference";
+$langVideo_content = "<p align='justify'>The video activated by the ".$langsTeacher." will be presented here.</p>";
+$langTeleconference_content1 = "<p align='justify'>Net meeting application for live chat will be activated by the $langsTeacher in this window.</p>";
+$langTeleconference_content_noIE = "<p align='justify'>Teleconference is activated only if the browser is IE.</p>";
+$langPresantation_content = "<p align='center'>A web page selected by the ".$langsTeacher." will be presented in this window.</p>";
+$langNoAliens = "Only platform registered users can access 'Chat'!";
+$langNameOfTheLink = "Link name";
+$langAddAsBookmark = 'Add to bookmarks';
+$langModifInfo = "Course Administration";
+$langPurgedExerciseResults = "Exercise results have been deleted";
+$langAntique = "History of Ancient Philosophy";
+$langSocraticIrony = "Socratic irony is...";
+$langRidiculise = "Ridiculise one\'s interlocutor in order to have him concede he is wrong.";
+$langNoPsychology = "No. Socratic irony is not a matter of psychology, it concerns argumentation.";
+$langAdmitError = "Admit one\'s own errors to invite one\'s interlocutor to do the same.";
+$langNoSeduction = "No. Socratic irony is not a seduction strategy or a method based on the example.";
+$langForce = "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.";
+$langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\"means \"ask questions\"";
+$langContradiction = "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.";
+$langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.";
+$langLinkSite = "Link to a site";
+$langStats = "Statistics";
+$langCreateCourseStep1Title = "Basic information about the course";
+$langPrivate = "Private (Access is granted only to ".$langsStudents." added in the course Users List)";
+$dropbox_lang['generalError'] = "An error has occurred. Please contact the platform administrator.";
+$dropbox_lang['badFormData'] = 'Sending of file failed: Data in wrong format. Please contact the platform administrator.';
+$dropbox_lang['noUserSelected'] = 'Please select recipient';
+$dropbox_lang['tooBig'] = 'You have not selected any file to upload or the file size exceeds the allowable limit.';
+$dropbox_lang['uploadError'] = 'An error occurred while uploading the file. Please contact the platform administrator.';
+$dropbox_lang['quotaError'] = "There is not enough disk space because of dropbox quota restrictions! File
+uploading failed!";
+$dropbox_lang['uploadFile'] = "New message";
+$dropbox_lang['authors'] = 'Sender';
+$dropbox_lang['sendTo'] = 'Send to';
+$dropbox_lang['receivedTitle'] = 'Incoming messages';
+$dropbox_lang['sentTitle'] = 'Outcoming messages';
+$dropbox_lang['all'] = "Notice: Files will be removed only from your list";
+$dropbox_lang['workDelete'] = 'Delete from the list';
+$dropbox_lang['sentBy'] = 'Send from';
+$dropbox_lang['sentTo'] = 'It was sent to';
+$dropbox_lang['sentOn'] = '';
+$dropbox_lang['anonymous'] = 'anonymous';
+$dropbox_lang['lastUpdated'] = 'Last updated';
+$dropbox_lang['lastResent'] = 'Last resent on';
+$dropbox_lang['tableEmpty'] = "There are no messages";
+$dropbox_lang['overwriteFile'] = 'Do you want to replace the previous file you sent';
+$dropbox_lang['orderBy'] = "Order by ";
+$dropbox_lang['lastDate'] = "date last sent";
+$dropbox_lang['firstDate'] = "date first sent";
+$dropbox_lang['title'] = "title";
+$dropbox_lang['size'] = "filesize";
+$dropbox_lang['author'] = "author";
+$dropbox_lang['sender'] = "sender";
+$dropbox_lang['file'] = "Messages - Files";
+$dropbox_lang['fileSize'] = "Size";
+$dropbox_lang['col_recipient'] = "Recipient";
+$dropbox_lang['recipient'] = "recipient";
+$dropbox_lang['docAdd'] = 'Mesages sent successfully';
+$dropbox_lang['fileDeleted'] = 'Selected file has been deleted from the Dropbox.';
+$dropbox_lang['backList'] = 'Back';
+$dropbox_lang['justUploadInSelect'] = '--- Upload a file ---';
+$dropbox_lang['justUploadInList'] = 'Uploaded file from';
+$dropbox_lang['mailingJustUploadNoOther'] = 'Cannot upload a file while sending to other recipients ';
+$dropbox_lang['mailtousers'] = "Notify users (via email)";
+$dropbox_lang['mailnotify'] = "you have been sent a new message. You will find it in 'Message Exchange' after logging in to the platform or by clicking the link below:";
+$dropbox_lang['newDropboxFile'] = "New message notification";
+$langListFaculteActions = "List of Faculties/Departments - Actions";
+$langGroupsProperties = "Groups settings";
+$langEditGroup = "Edit this group";
+$langUncompulsory = "(optional)";
+$langGroupStudentsInGroup = "".$langsStudents." registered in groups";
+$langGroupStudentsRegistered = "".$langsStudents." registered to course";
+$langGroupNoGroup = "unassigned ".$langsStudents."";
+$langGroupUsersList = "Users";
+$langInfoAboutEclass = "Info about $siteName";
+$langListFaculte = "Faculties / Departments - Actions";
+$langWelcomeToEclass = "Welcome to $siteName!";
+$langStep2 = "Step 2 of 6";
+$langStep3 = "Step 3 of 6";
+$langStep4 = "Step 4 of 6";
+$langStep5 = "Step 5 of 6";
+$langStep6 = "Step 6 of 6";
+$langStep7 = "Step 7 of 7";
+$langLicence = "License";
+$langWillWriteConfig = "Settings below will be written to the <em>config</em> table of the platform main database";
+$langMCU = "MCU (Multipoint Conferencing Unit)";
+$langVod = "Vod Server";
+$langAddOnExpl = "If you want to support video streaming, keep in mind that a streaming server must be installed.";
+$langExpPhpMyAdmin = "Open eClass <b><u>DOESN'T</u></b> include any more a copy of the <a href=\"http://www.phpmyadmin.net\"target=_blank>phpMyAdmin</a> web-based MySQL database administration tool. Please install it yourself if required.";
+$langWithPHP = "with PHP Support";
+$lang_case_insensitive_usernames = "Case insensitive user names";
+$lang_betacms = "Connect platform to BetaCMS repository";
+$lang_secondary_email = "Activate secondary email address";
+$langDefaultAdminSurname = 'of platform';
+$langPassEmail1 = "Your password has been reset. Your new password is:";
+$langPassEmail2 = "For security reasons, please change your password as soon as you login to the platform.";
+$m['restricted'] = 'Open Courses with Registration (Account Required)';
+$m['legopen'] = 'Open Course';
+$m['legclosed'] = 'Closed Course';
+$m['linactive'] = 'Inactive Course';
+$langPerso = "Portfolio view";
+$langMyPersoLessons = "MY COURSES";
+$langMyPersoDocs = "MY LATEST DOCUMENTS";
+$langMyPersoAgenda = "MY AGENDA";
+$langMyPersoForum = "MY FORUMS - LATEST SUBMISSION";
+$langPollCreationError = "<p class='caution'>Questionnaire creation error. Please try again.</p>";
+$langPollHasEnded = "Has expired";
+$langPollEmptyAnswers = "<p class='caution'>Error! There are no answers in question</p>";
+$langTipCaptcha = "Type code as it is displayed ";
+$langDereg = "has been unregistered from this course";
+$langEmailToParent = "Send email to secondary email address";
+$langEmailBody = "Email Body";
+$langContactWithParent = "Contact with secondary email recipient";
+$langParentOf = "Parent of";
+$langSentItems = "messages sent to";
+$langGiveRightΕditor = "Add co-admin right";
+$langExecTimeUpgrade = "WARNING! For the upgrade script to run successfully make sure that the value of php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> file is larger than 300 (= 5 minutes). Modify the variable and restart the upgrade process";
+$langConfigFound = "Found the following info in <tt>config.php</tt>.";
+$langConfigMod = "Feel free to modify them.";
+$langDeleteLink = "Are you sure you want to delete this link";
+$langUserBriefcase = "User portfolio";
+$langPersonalisedBriefcase = "Personalised portfolio";
+$langCopyrightFooter = "<span class='smaller'>Copyright Notice</span>";
+$langReregisterImpossible = "Registration to this course is closed and you won't be able to re-register.";
+$langGDRequired = "The GD library is required!";
+$langWikiConflictHowTo = "<p><strong>Edit conflict</strong> : The page you are editing seems to have been changed since the last time you modified it.<br /><br />
+What should be done now?<ul>
+<li>You can copy/paste your modifications in a text editor (like notepad), click on 'edit last version' option and try to add your modifications to the new version of the page.</li>
+<li>You can also click on cancel to cancel your changes.</li>
+</ul></p>";
+$langWikiEditConflict = "Edit conflict";
+$m['expired'] = "has&nbsp;expired";
+$langGroupWorkSubmitted1 = "NOT submitted";
+$langErrorConnectPostDatabase = "An Error Occured. Could not connect to database.";
+$langBrowseBCMSRepo = "BetaCMS Bridge";
+$langNeedAllowUrlInclude = "You need to enable the allow_url_include php ini setting in order to get the BetaCMS Bridge to work";
+$langNeedAllowUrlFopen = "You need to enable the allow_url_fopen php ini setting in order to get the BetaCMS Bridge to work";
+$langFailConnectBetaCMSBridge = "Failure: couldn't connect to remote Bridge";
+$langBetaCMSLogout = "Logout from BetaCMS";
+$langBetaCMSCreateNewLesson = "Create new Lesson on BetaCMS";
+$langBetaCMSId = "Lesson Id";
+$langBetaCMSTitle = "Lesson Title";
+$langBetaCMSDescription = "Lesson Description";
+$langBetaCMSKeywords = "Lesson Keywords";
+$langBetaCMSCopyright = "Lesson Copyright";
+$langBetaCMSAuthors = "Lesson Authors";
+$langBetaCMSProject = "Lesson Project";
+$langBetaCMSComments = "Lesson Comments";
+$langBetaCMSActions = "Actions";
+$langBetaCMSLoginProperties = "BetaCMS Repository and PHP Bridge Properties";
+$langBetaCMSBridgeHost = "Bridge Host";
+$langBetaCMSContext = "Bridge Context";
+$langBetaCMSHost = "BetaCMS Host";
+$langBetaCMSRepository = "BetaCMS Repository";
+$langBetaCMSUsername = "BetaCMS Username";
+$langBetaCMSPassword = "BetaCMS Password";
+$langBetaCMSLessonCreatedOK = "Lesson created successfully!";
+$langBetaCMSLessonCreateFail = "Failure while creating lesson";
+$langBetaCMSRedirectAfterImport = "Please proceed to the create course module to import the course. If your browser doesn't  automatically redirect you, press";
+$langBetaCMSRedirectHere = "here";
+$langBetaCMSEclassLessonObjectView = "eClass Lesson Object View";
+$langBetaCMSTotalNumber = "total number";
+$langBetaCMSUnits = "Units";
+$langBetaCMSUnitTitle = "$langCourse unit Title";
+$langBetaCMSUnitDescription = "Unit Description";
+$langBetaCMSScormFiles = "Scorm Files";
+$langBetaCMSSourceFilename = "Source Filename";
+$langBetaCMSMimeType = "Mime Type";
+$langBetaCMSCalculatedSize = "Calculated Size";
+$langBetaCMSDocumentFiles = "Documents";
+$langBetaCMSUnitScormFiles = "Unit Scorm Files";
+$langBetaCMSUnitDocumentFiles = "Unit Document Files";
+$langBetaCMSUnitTexts = "Unit Texts";
+$langBetaCMSText = "Text";
+$langExerciseEndTime = "Time is up.";
+$langExerciseEndTimeResults = "Time is up. Your answers will be now submitted.";
+$langEmptyPollTitle = "Please enter Questionnaire title";
+$langExternalFileLink = 'External File';
+$langToHim = "To";
+$langCMeta['envbio'] = "Environmental Biotechnology";
+$langCMeta['indbio'] = "Industrial Biotechnology";
+$langCMeta['nanotech'] = "Nano-Technology";
+$langPollPurged = "Questionnaire results have been purged.";
+$lang_error_db = "The platform is unable to create new databases. Unable to continue!";
+$langMonthsToAdd = 'Months to add';
+$langUsersActivated = 'User accounts having their expiration extended:';
+$langGroupFull = "full group";
+$langScoreDiffers = 'The recorded exercise score is different to the currently calculated one. Would you like to regrade the exercise?';
+$langRegrade = 'Regrade';
+$langNewScoreRecorded = 'The recalculated score was recorded';
+$langQuestionStoredScore = 'Recorded Question Score';
+$langContactAdminForInfo = "Please contact the platform administrator for more information.";
