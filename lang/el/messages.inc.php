@@ -5439,7 +5439,6 @@ $langWebConfServer = "Wowza server";
 $langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της εγκατάστασης Wowza";
 
 // Mindmap
-$langMindmap = "Εννοιολογική χαρτογράφηση";
 $langMindMap = "Εννοιολογικός χάρτης";
 $langScreenshot = "Στιγμιότυπο οθόνης";
 $langOpenEx = "Άνοιγμα παραδείγματος";
@@ -5468,7 +5467,7 @@ $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
 $langPleaseEnterName = "Παρακαλώ εισάγετε όνομα"; 
-$langMindMapSaved = "Η εννοιολογική χαρτογράφηση αποθηκεύθηκε";
+$langMindMapSaved = "Ο εννοιολογικός χάρτης αποθηκεύθηκε";
 
 
 /* * *********************************************
