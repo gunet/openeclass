@@ -5439,7 +5439,7 @@ $langWebConfServer = "Wowza server";
 $langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της εγκατάστασης Wowza";
 
 // Mindmap
-$langMindMap = "Εννοιολογικός χάρτης";
+$langMindmap = "Εννοιολογικός χάρτης";
 $langScreenshot = "Στιγμιότυπο οθόνης";
 $langOpenEx = "Άνοιγμα παραδείγματος";
 $langEditEn = "Ενεργοποίηση τροποποίησης";
