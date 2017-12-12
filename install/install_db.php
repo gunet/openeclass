@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -373,7 +373,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `document` (
     `subsystem_id` INT(11) DEFAULT NULL,
     `path` VARCHAR(255) NOT NULL,
     `extra_path` VARCHAR(255) NOT NULL DEFAULT '',
-    `filename` VARCHAR(255) NOT NULL,
+    `filename` VARCHAR(255) NOT NULL COLLATE utf8_bin,
     `visible` TINYINT(4) NOT NULL DEFAULT 1,
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `comment` TEXT,
@@ -395,7 +395,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `group_properties` (
     `course_id` INT(11) NOT NULL,
     `group_id` INT(11) NOT NULL PRIMARY KEY,
     `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
-    `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
     `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
     `forum` TINYINT(4) NOT NULL DEFAULT 1,
     `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
@@ -838,34 +837,34 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_category` (
         `sortorder`  INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
-            (1, '$langPersInfo', 0),
-            (2, '$langEduEmpl', -1),
-            (3, '$langAchievements', -2),
-            (4, '$langGoalsSkills', -3),
-            (5, '$langContactInfo', -4)");
+        (1, '$langPersInfo', 0),
+        (2, '$langEduEmpl', -1),
+        (3, '$langAchievements', -2),
+        (4, '$langGoalsSkills', -3),
+        (5, '$langContactInfo', -4)");
 
 $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
-            (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
-            (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
-            (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
-            (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
-            (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
-            (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
-            (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
-            (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
-            (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
-            (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
-            (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
-            (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
-            (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
-            (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
-            (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
-            (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
-            (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
-            (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
-            (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
-            (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
-            (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
+        (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
+        (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
+        (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
+        (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
+        (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
+        (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
+        (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
+        (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
+        (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
+        (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
+        (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
+        (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
+        (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
+        (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
+        (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
+        (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
+        (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
+        (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
+        (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
+        (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
+        (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -942,7 +941,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pid` INT(11) NOT NULL DEFAULT 0,
-    `question_text` VARCHAR(250) NOT NULL DEFAULT '',
+    `question_text` TEXT NOT NULL,
     `qtype` tinyint(3) UNSIGNED NOT NULL,
     `q_position` INT(11) DEFAULT 1,
     `q_scale` INT(11) NULL DEFAULT NULL) $tbl_options");
@@ -976,7 +975,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `lang` VARCHAR(10) NOT NULL DEFAULT '',
     `notification` TINYINT(4) DEFAULT 0,
     `ip_lock` TEXT,
-    `password_lock` VARCHAR(255) $tbl_options");
+    `password_lock` VARCHAR(255) NOT NULL DEFAULT '') $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -991,6 +990,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `grade` FLOAT DEFAULT NULL,
 	`grade_rubric` TEXT,
     `grade_comments` TEXT NOT NULL,
+    `grade_comments_filepath` VARCHAR(200) NOT NULL DEFAULT '',
+    `grade_comments_filename` VARCHAR(200) NOT NULL DEFAULT '',
     `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
     `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
     `group_id` INT( 11 ) DEFAULT NULL,
@@ -1003,6 +1004,19 @@ $db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
     `scales` text NOT NULL,
     `course_id` int(11) NOT NULL,
     KEY `course_id` (`course_id`)) $tbl_options");
+
+// rubric table based on grading scales
+
+$db->query("CREATE TABLE IF NOT EXISTS `rubric` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(200) NOT NULL,
+    `scales` text NOT NULL,
+    `description` text,
+    `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
+    `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+    `course_id` int(11) NOT NULL,
+    KEY `course_id` (`course_id`)) $tbl_options");
+
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
     `user_id` int(11) NOT NULL,
@@ -1548,12 +1562,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     PRIMARY KEY (`id`),
     KEY `idx_tc_servers` (`hostname`)) $tbl_options");
 
+
 $db->query("CREATE TABLE `tc_attendance` (
     `id` int(11) NOT NULL DEFAULT '0',
     `meetingid` varchar(20) NOT NULL,
     `bbbuserid` varchar(20) DEFAULT NULL,
     `totaltime` int(11) NOT NULL DEFAULT '0',
-    `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+    `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`,`meetingid`),
     KEY `id` (`id`),
     KEY `meetingid` (`meetingid`)) $tbl_options");
@@ -1569,23 +1584,22 @@ $db->query("CREATE TABLE `tc_log` (
     KEY `userid` (`bbbuserid`),
     KEY `fullName` (`fullName`)) $tbl_options");
 
-$db->query("CREATE TABLE IF NOT EXISTS `rubric` (            
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(200) NOT NULL,
-    `scales` text NOT NULL,
-    `description` text,
-    `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
-    `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-    `course_id` int(11) NOT NULL)
-    $tbl_options");            
-
-
 $db->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) NOT NULL,
     `external_server` int(11) NOT NULL,
     PRIMARY KEY (`id`),
     KEY (`external_server`, `course_id`)) $tbl_options");
+
+// plagiarism tool table
+$db->query("CREATE TABLE `ext_plag_connection` (
+        `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+        `type` int(1) unsigned NOT NULL DEFAULT '1',
+        `file_id` int(11) NOT NULL,
+        `remote_file_id` int(11) DEFAULT NULL,
+        `submission_id` int(11) DEFAULT NULL,
+        PRIMARY KEY (`id`)) $tbl_options");
+
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
     `setting_id` INT(11) NOT NULL,
@@ -1727,9 +1741,25 @@ $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
     FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `order` INT(11) NOT NULL DEFAULT 0,
+    `heading` TEXT NOT NULL,
+    `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `activity_content` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `heading_id` INT(11) NOT NULL DEFAULT 0,
+    `content` TEXT NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+    FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
+    UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `widget` (
                 `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `class` varchar(400) NOT NULL) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
                 `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `widget_id` int(11) unsigned NOT NULL,
@@ -1753,6 +1783,30 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `user_id` varchar(255) default '0',
     `group_id` varchar(255) default '0',
     PRIMARY KEY (`conf_id`,`course_id`)) $tbl_options");
+
+// Course Category tables
+$db->query("CREATE TABLE IF NOT EXISTS `category` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` TEXT NOT NULL,
+    `ordering` INT(11),
+    `multiple` BOOLEAN NOT NULL DEFAULT TRUE,
+    `searchable` BOOLEAN NOT NULL DEFAULT TRUE,
+    `active` BOOLEAN NOT NULL DEFAULT TRUE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `category_value` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `category_id` INT(11) NOT NULL REFERENCES category(id),
+    `name` TEXT NOT NULL,
+    `ordering` INT(11),
+    `active` BOOLEAN NOT NULL DEFAULT TRUE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `course_category` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL REFERENCES course(id),
+    `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
+    ) $tbl_options");
 
 // Gamification Tables
 $db->query("CREATE TABLE `certificate_template` (

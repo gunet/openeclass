@@ -3583,33 +3583,34 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `name` varchar(255) not null,
             `description` text,
             `filename` varchar(255),
-            `orientation` varchar(10), 
+            `orientation` varchar(10),
             PRIMARY KEY(`id`)
-        )");
+        ) $tbl_options");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `badge_icon` (
                 `id` mediumint(8) not null auto_increment primary key,
                 `name` varchar(255) not null,
                 `description` text,
                 `filename` varchar(255)
-        )");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate` (
-          `id` int(11) not null auto_increment primary key,
-          `course_id` int(11) not null,
-          `issuer` varchar(255) not null default '',
-          `template` mediumint(8),
-          `title` varchar(255) not null,
-          `description` text,
-          `autoassign` tinyint(1) not null default 1,
-          `active` tinyint(1) not null default 1,
-          `created` datetime,
-          `expires` datetime,
-          `bundle` int(11) not null default 0,
-          index `certificate_course` (`course_id`),
-          foreign key (`course_id`) references `course` (`id`),
-          foreign key (`template`) references `certificate_template`(`id`)
         ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE `certificate` (
+            `id` int(11) not null auto_increment primary key,
+            `course_id` int(11) not null,
+            `issuer` varchar(255) not null default '',
+            `template` mediumint(8),
+            `title` varchar(255) not null,
+            `description` text,
+            `message` text,
+            `autoassign` tinyint(1) not null default 1,
+            `active` tinyint(1) not null default 1,
+            `created` datetime,
+            `expires` datetime,
+            `bundle` int(11) not null default 0,
+            index `certificate_course` (`course_id`),
+            foreign key (`course_id`) references `course` (`id`),
+            foreign key (`template`) references `certificate_template`(`id`)
+          ) $tbl_options");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `badge` (
             `id` int(11) not null auto_increment primary key,
@@ -3626,7 +3627,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `bundle` int(11) not null default 0,
             index `badge_course` (`course_id`),
             foreign key (`course_id`) references `course` (`id`)
-          )");
+          ) $tbl_options");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate` (
           `id` int(11) not null auto_increment primary key,
@@ -3712,12 +3713,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `template_id` INT(11),
             PRIMARY KEY (`id`)
         ) $tbl_options");
-        
+
         // install predefined cert templates
         installCertTemplates($webDir);
         // install badge icons
         installBadgeIcons($webDir);
-                               
+
         // tc attendance tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
             `id` int(11) NOT NULL DEFAULT '0',
@@ -3749,8 +3750,29 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // restore admin user white list
         Database::get()->query("UPDATE user SET whitelist=NULL where username='admin'");
-        
+
     }
+            
+    // upgrade queries for version 4.0    
+    if (version_compare($oldversion, '4.0', '<')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `class` varchar(400) NOT NULL) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `widget_id` int(11) unsigned NOT NULL,
+                `widget_area_id` int(11) NOT NULL,
+                `options` text NOT NULL,
+                `position` int(3) NOT NULL,
+                `user_id` int(11) NULL,
+                `course_id` int(11) NULL,
+                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
+    }
+    
+    
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
