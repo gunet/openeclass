@@ -355,9 +355,10 @@ if (count($exercise_question_ids) > 0) {
 
                 if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
                     list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
+                } else {
+                    $answer = standard_text_escape($answer);
                 }
 
-                $answer = standard_text_escape($answer);
                 $answerComment = standard_text_escape($answerComment);
 
                 $grade = 0;
