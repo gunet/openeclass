@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.4
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -44,7 +44,7 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label'
     )
 ));
-    
+
 // is picture set ?
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
 $questionDescription = standard_text_escape($questionDescription);
@@ -59,21 +59,24 @@ $tool_content .= "
         <p>$questionDescription</p>
         ".(($okPicture)? "<div class='text-center'><img src='../../$picturePath/quiz-$questionId'></div>":"")."
       </div>
-    </div>    
+    </div>
 ";
 
-if ($questionType != 6) {
+if ($questionType != FREE_TEXT) {
+    
+    $addon = '';
+    if ($questionType == MATCHING) {
+        $sql = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $questionId);
+        if (!$sql) $addon = "&amp;htopic=4";
+    }
+    
     $tool_content .= "
         <div class='panel panel-info'>
           <div class='panel-heading'>
-            <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;".icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$questionId")."</h3>
+            <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;".icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$questionId$addon")."</h3>
           </div>
-<!--      <div class='panel-body'>
-            Answers should be placed here
-          </div>
--->          
-        </div>    
-    ";   
+        </div>
+    ";
 }
 
 $tool_content .= "<div class='pull-right'><a href='$linkback'>$textback</a></div>";

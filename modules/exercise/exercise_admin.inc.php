@@ -135,9 +135,11 @@ if (isset($_POST['submitExercise'])) {
     $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
     $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
-    $exerciseIPLock = trim(Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : $objExercise->selectIPLock());
-    $exerciseIPLockOptions = implode('',
-        array_map(function ($item) { return $item? ('<option selected>' . q($item) . '</option>'): ''; }, explode(',', $exerciseIPLock)));
+    $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : explode(',', $objExercise->selectIPLock());
+    $exerciseIPLockOptions = implode('', array_map(
+        function ($item) {
+            return $item? ('<option selected>' . q(trim($item)) . '</option>'): '';
+        }, $exerciseIPLock));
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
         if ($objExercise->selectAssignToSpecific()) {

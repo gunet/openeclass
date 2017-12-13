@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.7
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2017  Greek Universities Network - GUnet
@@ -26,25 +26,40 @@ $questionId = $objQuestion->selectId();
 $questionTypeWord = $objQuestion->selectTypeWord($answerType);
 
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
+$newAnswer = $deleteAnswer = false;
+
+$htopic = 0;
+if (isset($_GET['htopic'])) { //new question
+    $htopic = $_GET['htopic'];
+}
 if (isset($_POST['submitAnswers'])) {
     $submitAnswers = $_POST['submitAnswers'];
 }
 if (isset($_POST['buttonBack'])) {
     $buttonBack = $_POST['buttonBack'];
 }
+if (isset($_POST['nbrAnswers'])) {
+    $nbrAnswers = intval($_POST['nbrAnswers']);
+}
+if (isset($_POST['lessAnswers'])) {
+    $deleteAnswer = true;
+}
+if (isset($_POST['moreAnswers'])) {
+    $newAnswer = true;
+}
 
+function fix_float($str) {
+    return str_replace(',', '.', $str);
+}
 // the answer form has been submitted
 if (isset($submitAnswers) || isset($buttonBack)) {
-    if (isset($_POST['nbrAnswers'])) {
-        $nbrAnswers = intval($_POST['nbrAnswers']);
-    }
+        
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-        $questionWeighting = $nbrGoodAnswers = 0;
-
+        $questionWeighting = $nbrGoodAnswers = 0;        
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             $reponse[$i] = trim($_POST['reponse'][$i]);
             $comment[$i] = trim($_POST['comment'][$i]);
-            $weighting[$i] = $_POST['weighting'][$i];
+            $weighting[$i] = fix_float($_POST['weighting'][$i]);
 
             if ($answerType == UNIQUE_ANSWER) {
                 $goodAnswer = @($_POST['correct'] == $i) ? 1 : 0;
@@ -66,11 +81,9 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
             // check if field is empty
             if (!isset($reponse[$i]) || ($reponse[$i] === '')) {
-                $msgErr = $langGiveAnswers;
-                // clears answers already recorded into the Answer object
-                $objAnswer->cancel();
+                $msgErr = $langGiveAnswers;                
                 break;
-            } else {
+            } else {                
                 // add answer into object
                 $objAnswer->createAnswer(purify($reponse[$i]), $goodAnswer, purify($comment[$i]), $weighting[$i], $i);
             }
@@ -78,9 +91,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
         if (empty($msgErr)) {
             if (!$nbrGoodAnswers) {
-                $msgErr = ($answerType == UNIQUE_ANSWER) ? $langChooseGoodAnswer : $langChooseGoodAnswers;
-                // clears answers already recorded into the Answer object
-                $objAnswer->cancel();
+                $msgErr = ($answerType == UNIQUE_ANSWER) ? $langChooseGoodAnswer : $langChooseGoodAnswers;                
             } else {
                 // save the answers into the data base
                 $objAnswer->save();
@@ -90,15 +101,17 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $editQuestion = $questionId;
             }
         }
-    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-        $reponse = trim($_POST['reponse']);
-        if (isset($_POST['weighting']) and isset($_POST['blanksDefined'])) {
+        
+    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {                        
+        $reponse = trim($_POST['reponse']);   
+        if (isset($_POST['weighting']) and isset($_POST['blanksDefined'])) {            
             // a blank can't have a negative weighting
             $weighting = array_map('abs', $_POST['weighting']);
+            $weighting = array_map('fix_float', $weighting);
             // separate text and weightings by '::'
             $reponse .= '::' . implode(',', $weighting);
             $questionWeighting = array_sum($weighting);
-            $objAnswer->createAnswer($reponse, 0, '', 0, 0);
+            $objAnswer->createAnswer($reponse, 0, '', 0, 1);
             $objAnswer->save();
             $objQuestion->updateWeighting($questionWeighting);
             if (isset($exerciseId)) {
@@ -107,7 +120,6 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $editQuestion = $questionId;
             $blanksDefined = true;
         }
-
         if (isset($buttonBack) or isset($blanksDefined)) {
             if (isset($exerciseId)) {
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
@@ -121,87 +133,95 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $msgErr = $langGiveText;
         } elseif (!preg_match('/\[.+\]/', $reponse)) {
             $msgErr = $langDefineBlanks;
-        } else {
+        } else {            
             // now we're going to give a weighting to each blank
             $displayBlanks = true;
             unset($submitAnswers);
             $blanks = Question::getBlanks($_POST['reponse']);
         }
     } elseif ($answerType == MATCHING) {
+        
+        if (isset($_POST['match'])) { // check for blank matches
+            if ($_POST['match'] != array_filter($_POST['match'])) {
+                Session::Messages($langGiveAnswers, 'alert-warning');
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");    
+            }
+        }
+
+        if (isset($_POST['option'])) { // check for blank options
+            if ($_POST['option'] != array_filter($_POST['option'])) {
+                Session::Messages($langGiveAnswers, 'alert-warning');
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
+            }
+        }
+                                
         for ($i = 1; $i <= $_POST['nbrOptions']; $i++) {
             $option[$i] = trim($_POST['option'][$i]);
-            // checks if field is empty
-            if (empty($option[$i])) {
-                $msgErr = $langFillLists;
-                // clears options already recorded into the Answer object
-                $objAnswer->cancel();
-                break;
-            } else {
-                // adds the option into the object
-                $objAnswer->createAnswer($option[$i], 0, '', 0, $i);
-            }
         }
+        
+        $data_sel = $data_weighting = array();
         $questionWeighting = 0;
-        if (empty($msgErr)) {
-            for ($j = 1; $j <= $_POST['nbrMatches']; $i++, $j++) {
-                $match[$i] = trim($_POST['match'][$i]);
-                $weighting[$i] = abs($_POST['weighting'][$i]);
-                $sel[$i] = intval($_POST['sel'][$i]);
-                $questionWeighting += $weighting[$i];
-                // check if field is empty
-                if (empty($match[$i])) {
-                    $msgErr = $langFillLists;
-                    // clears matches already recorded into the Answer object
-                    $objAnswer->cancel();
-                    break;
-                } else {
-                    // add the answer into the object
-                    $objAnswer->createAnswer($match[$i], $sel[$i], '', $weighting[$i], $i);
-                }
+        // merge arrays $_POST['options'] + $_POST['match']
+        $temp_data = array_merge($option, $_POST['match']);
+        for ($k = 0; $k < count($temp_data); $k++) {
+            // start keys of previous array from index 1
+            $data[$k+1] = $temp_data[$k];
+            if (in_array($temp_data[$k], $_POST['match'])) {
+                $index = key($_POST['match']);
+                // update keys of array $_POST['sel']
+                $data_sel[$k+1] = $_POST['sel'][$index];
+                // update keys of array $_POST['weighting']
+                $data_weighting[$k+1] = abs(fix_float($_POST['weighting'][$index]));
+                next($_POST['match']);
+                $questionWeighting += $data_weighting[$k+1];
+            } else {
+                $data_sel[$k+1] = $data_weighting[$k+1] = '';
             }
         }
-        if (empty($msgErr)) {
-            // all answers have been recorded, so we save them into the data base
-            $objAnswer->save();
-            // sets the total weighting of the question
-            $objQuestion->updateWeighting($questionWeighting);
-            $objQuestion->save($exerciseId);
-            $editQuestion = $questionId;
+
+        // update object Answer with new data
+        for ($k = 1; $k <= count($data); $k++) {
+            $objAnswer->createAnswer($data[$k], $data_sel[$k], '', $data_weighting[$k], $k);
         }
+        
+        // save object answer into database
+        $objAnswer->save();
+        // update object question
+        $objQuestion->updateWeighting($questionWeighting);
+        $objQuestion->save($exerciseId);
+        $editQuestion = $questionId;
+        
     } elseif ($answerType == TRUE_FALSE) {
         $questionWeighting = $nbrGoodAnswers = 0;
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             $comment[$i] = trim($_POST['comment'][$i]);
-            $goodAnswer = ($_POST['correct'] == $i) ? 1 : 0;
+            $goodAnswer = (isset($_POST['correct']) && $_POST['correct'] == $i) ? 1 : 0;
 
             if ($goodAnswer) {
                 $nbrGoodAnswers++;
                 // a good answer can't have a negative weighting
-                $weighting[$i] = abs($_POST['weighting'][$i]);
+                $weighting[$i] = abs(fix_float($_POST['weighting'][$i]));
                 // calculates the sum of answer weighting
                 if ($weighting[$i]) {
                     $questionWeighting += $weighting[$i];
                 }
             } else {
                 // a bad answer can't have a positive weighting
-                $weighting[$i] = -abs($_POST['weighting'][$i]);
+                $weighting[$i] = abs(fix_float($_POST['weighting'][$i]));
             }
             // checks if field is empty
             if (!isset($_POST['reponse'][$i]) || ($_POST['reponse'][$i] === '')) {
-                $msgErr = $langGiveAnswers;
-                // clears answers already recorded into the Answer object
-                $objAnswer->cancel();
+                $msgErr = $langGiveAnswers;                
                 break;
             } else {
                 // adds the answer into the object
+                $reponse[$i] = purify(trim($_POST['reponse'][$i]));
                 $objAnswer->createAnswer($reponse[$i], $goodAnswer, purify($comment[$i]), $weighting[$i], $i);
             }
         }
         if (empty($msgErr)) {
             if (!$nbrGoodAnswers) {
-                $msgErr = ($answerType == TRUE_FALSE) ? $langChooseGoodAnswer : $langChooseGoodAnswers;
-                // clears answers already recorded into the Answer object
-                $objAnswer->cancel();
+                $msgErr = ($answerType == TRUE_FALSE) ? $langChooseGoodAnswer : $langChooseGoodAnswers;                
             } else {
                 // saves the answers into the data base
                 $objAnswer->save();
@@ -212,7 +232,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
     }
-    if (!isset($_POST['setWeighting'])) {
+    if (empty($msgErr) and !isset($_POST['setWeighting'])) {
         if (isset($exerciseId)) {
             Session::Messages($langQuestionReused, 'alert-success');
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
@@ -221,59 +241,83 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
     }
 }
-if (isset($_GET['modifyAnswers'])) {
+
+if (isset($_GET['modifyAnswers'])) {   
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-        if (!isset($nbrAnswers)) {
+        
+        if (($htopic == 2) or ($htopic == 1)) {
+            $nbrAnswers = 2; // default            
+        } elseif ($newAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers']+1;
+        } else {
             $nbrAnswers = $objAnswer->selectNbrAnswers();
-            $reponse = Array();
-            $comment = Array();
-            $weighting = Array();
+        }
+        if ($deleteAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers']-1;            
+            if ($nbrAnswers < 2) { // minimum 2 answers
+               $nbrAnswers = 2;
+            }
+        }
+        
+        $reponse = array();
+        $comment = array();
+        $weighting = array();
 
-            // initializing
+        // initializing
+        if ($answerType == MULTIPLE_ANSWER) {
+            $correct = array();
+        } else {
+            $correct = 0;
+        }               
+        for ($i = 1; $i <= $nbrAnswers; $i++) {
+            $reponse[$i] = $objAnswer->selectAnswer($i);
+            $comment[$i] = $objAnswer->selectComment($i);
+            $weighting[$i] = $objAnswer->selectWeighting($i);
+
             if ($answerType == MULTIPLE_ANSWER) {
-                $correct = Array();
-            } else {
-                $correct = 0;
+                $correct[$i] = $objAnswer->isCorrect($i);
+            } elseif ($objAnswer->isCorrect($i)) {
+                $correct = $i;
             }
-            for ($i = 1; $i <= $nbrAnswers; $i++) {
-                $reponse[$i] = $objAnswer->selectAnswer($i);
-                $comment[$i] = $objAnswer->selectComment($i);
-                $weighting[$i] = $objAnswer->selectWeighting($i);
-
-                if ($answerType == MULTIPLE_ANSWER) {
-                    $correct[$i] = $objAnswer->isCorrect($i);
-                } elseif ($objAnswer->isCorrect($i)) {
-                    $correct = $i;
-                }
-            }
-        }
-        if (isset($_POST['lessAnswers'])) {
-            $nbrAnswers--;
-        }
-        if (isset($_POST['moreAnswers'])) {                      
-            $nbrAnswers++;
         }        
-        // minimum 2 answers
-        if ($nbrAnswers < 2) {
-            $nbrAnswers = 2;
-        }
+        
     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-        if (!isset($submitAnswers) && !isset($buttonBack)) {
+        if (!isset($submitAnswers) && !isset($buttonBack)) {            
             if (!(isset($_POST['setWeighting']) and $_POST['setWeighting'])) {
-                $reponse = $objAnswer->selectAnswer(1);
-                list($reponse, $weighting) = explode('::', $reponse);
+                $reponse = $objAnswer->selectAnswer(1);                
+                list($reponse, $weighting) = explode('::', $reponse);                
                 $weighting = explode(',', $weighting);
             } else {
                 $weighting = explode(',', $_POST['str_weighting']);
             }
         }
-    } elseif ($answerType == MATCHING) {
-        if (!isset($_POST['nbrOptions']) or !isset($_POST['nbrMatches'])) {
-            $option = Array();
-            $match = Array();
-            $sel = Array();
+    } elseif ($answerType == MATCHING) {                
+        
+        $option = $match = $sel = array();
+        if (isset($_POST['option'])) {
+            $option = $_POST['option'];    
+        }
+        if (isset($_POST['match'])) {
+           $match = $_POST['match']; 
+        }
+        if (isset($_POST['sel'])) {
+            $sel = $_POST['sel'];
+        }                
+        if (isset($_POST['weighting'])) {
+            $weighting = fix_float($_POST['weighting']);
+        }                        
+        
+        if ($htopic == 4) { // new matching question
+            $nbrOptions = $nbrMatches = 2; // default options
+                // option
+            for ($k = 1; $k <= $nbrOptions; $k++) {
+                $objAnswer->createAnswer(${"langDefaultMatchingOpt$k"}, 0, '', 0, $k, true);
+                // match
+                $objAnswer->createAnswer(${"langDefaultMakeCorrespond$k"}, $k, '', 1, $k + $nbrMatches, true);
+            }                        
+        } else { // question exists
             $nbrOptions = $nbrMatches = 0;
-            // fills arrays with data from data base
+            // fills arrays from data base
             for ($i = 1; $i <= $objAnswer->selectNbrAnswers(); $i++) {
                 // it is a match
                 if ($objAnswer->isCorrect($i)) {
@@ -281,74 +325,49 @@ if (isset($_GET['modifyAnswers'])) {
                     $sel[$i] = $objAnswer->isCorrect($i);
                     $weighting[$i] = $objAnswer->selectWeighting($i);
                     $nbrMatches++;
-                }
-                // it is an option
-                else {
+                } else { // it is an option                
                     $option[$i] = $objAnswer->selectAnswer($i);
                     $nbrOptions++;
                 }
             }
-        } else {
-            $nbrOptions = intval($_POST['nbrOptions']);
-            $nbrMatches = intval($_POST['nbrMatches']);
-            $option = $_POST['option'];
-            $match = $_POST['match'];
-            $sel = $_POST['sel'];
-            $weighting = $_POST['weighting'];
+            if (isset($_POST['nbrOptions'])) {
+                $nbrOptions = $_POST['nbrOptions'];
+            }
+            if (isset($_POST['nbrMatches'])) {
+                $nbrMatches = $_POST['nbrMatches'];
+            }
         }
-
+                        
         if (isset($_POST['lessOptions'])) {
-            // keeps the correct sequence of array keys when removing an option from the list
-            for ($i = $nbrOptions + 1, $j = 1; $nbrOptions > 2 && $j <= $nbrMatches; $i++, $j++) {
-                $match[$i - 1] = $match[$i];
-                $sel[$i - 1] = $sel[$i];
-                $weighting[$i - 1] = $weighting[$i];
+            $nbrOptions = $_POST['nbrOptions']-1;
+            if ($nbrOptions < 2) {
+                $nbrOptions = 2;
             }
-
-            unset($match[$i - 1]);
-            unset($sel[$i - 1]);
-
-            $nbrOptions--;
         }
 
-        if (isset($_POST['moreOptions'])) {
-            // keeps the correct sequence of array keys when adding an option into the list
-            for ($i = $nbrMatches + $nbrOptions; $i > $nbrOptions; $i--) {
-                $match[$i + 1] = $match[$i];
-                $sel[$i + 1] = $sel[$i];
-                $weighting[$i + 1] = $weighting[$i];
-            }
-
-            unset($match[$i + 1]);
-            unset($sel[$i + 1]);
-
+        if (isset($_POST['moreOptions'])) {            
             $nbrOptions++;
         }
-
-        if (isset($_POST['lessMatches'])) {
-            $nbrMatches--;
+        
+        if (isset($_POST['lessMatches'])) {            
+            $nbrMatches = $_POST['nbrMatches']-1;
+            // minimum 2 matches
+            if ($nbrMatches < 2) {
+                $nbrMatches = 2;
+            }
         }
-
+        
         if (isset($_POST['moreMatches'])) {
             $nbrMatches++;
         }
-
-        // minimum 2 options
-        if ($nbrOptions < 2) {
-            $nbrOptions = 2;
-        }
-
-        // minimum 2 matches
-        if ($nbrMatches < 2) {
-            $nbrMatches = 2;
-        }
-    } elseif ($answerType == TRUE_FALSE) {
+        
+        
+    } elseif ($answerType == TRUE_FALSE) {        
         if (!isset($nbrAnswers)) {
-            $nbrAnswers = $objAnswer->selectNbrAnswers();
-            //$nbrAnswers = 2;
-            $reponse = Array();
-            $comment = Array();
-            $weighting = Array();
+            $nbrAnswers = $objAnswer->selectNbrAnswers();            
+            $reponse = array();
+            $comment = array();
+            $weighting = array();
             $correct = 0;
             for ($i = 1; $i <= $nbrAnswers; $i++) {
                 $reponse[$i] = $objAnswer->selectAnswer($i);
@@ -357,11 +376,7 @@ if (isset($_GET['modifyAnswers'])) {
                 if ($objAnswer->isCorrect($i)) {
                     $correct = $i;
                 }
-            }
-        }
-        // minimum 2 answers
-        if ($nbrAnswers < 2) {
-            $nbrAnswers = 2;
+            }            
         }
     }
     $tool_content .= "<div class='panel panel-primary'>
@@ -378,48 +393,62 @@ if (isset($_GET['modifyAnswers'])) {
                       </div>
                       <div class='panel-body'>";
 
-    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {        
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {                
+        if (!empty($msgErr)) {
+            $tool_content .= "<div class='alert alert-danger'>$msgErr</div>";
+        }
+        
         $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
-            <input type='hidden' name='formSent' value='1' />
-            <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
+            <input type='hidden' name='formSent' value='1'>
+            <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
             <fieldset>
             <table class='table table-striped table-hover'>";
-        // if there is an error message
-        if (!empty($msgErr)) {
-            $tool_content .= "<tr><td colspan='5'><div class='alert alert-danger'>$msgErr</div></td></tr>";
-        }
-        $tool_content .= "
-                    <tr>
+        $tool_content .= "<tr>
                       <th class='text-right'></th>
                       <th class='text-center'>$langTrue</th>
                       <th class='text-center'>$langAnswer</th>
                       <th class='text-center'>$langComment</th>
-                      <th class='text-center'>$langQuestionWeighting</th>
+                      <th class='text-center'>$langScore</th>
                     </tr>";
+        
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             $tool_content .="<tr><td class='text-right' valign='top'>$i.</td>";
             if ($answerType == UNIQUE_ANSWER) {
-                $tool_content .= "<td class='text-center'><input type='radio' value=\"" . $i . "\" name=\"correct\" ";
-                if (isset($correct) and $correct == $i) {
-                    $tool_content .= "checked=\"checked\" /></td>";
+                $tool_content .= "<td class='text-center'><input type='radio' value=\"" . $i . "\" name='correct' ";
+                if ((isset($correct) and $correct == $i) or (isset($_POST['correct']) and ($_POST['correct'] == $i))) {
+                    $tool_content .= "checked='checked'></td>";
                 } else {
                     $tool_content .= "></td>";
                 }
-            } else {
-                $tool_content .= "<td class='text-center'><input type='checkbox' value=\"1\" name=\"correct[" . $i . "]\" ";
-                if ((isset($correct[$i])) && ($correct[$i])) {
-                    $tool_content .= "checked=\"checked\"></td>";
+            } else {                
+                $tool_content .= "<td class='text-center'><input type='checkbox' value='1' name=\"correct[" . $i . "]\" ";
+                if ((isset($correct[$i]) && ($correct[$i]) or (isset($_POST['correct'][$i]) and $_POST['correct'][$i]))) {
+                    $tool_content .= "checked='checked'></td>";
                 } else {
                     $tool_content .= " /></td>";
                 }
             }
 
-            $thisWeighting = isset($weighting[$i]) ? $weighting[$i] : 0;
-            $tool_content .= "
-                <td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, @$reponse[$i], true) . "</td>
-                <td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, @$comment[$i], true) . "</td>
-                <td class='text-center'><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
+            if (isset($_POST['weighting'][$i])) {
+                $thisWeighting = $_POST['weighting'][$i];
+            } else if (isset($weighting[$i])) {
+                $thisWeighting = $weighting[$i];
+            } else {
+                $thisWeighting = 0;
+            }
+                                                            
+            if (isset($_POST['reponse'][$i])) {
+                $tool_content .= "<td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, $_POST['reponse'][$i], true) . "</td>";
+            } else {
+                $tool_content .= "<td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, $reponse[$i], true) . "</td>";
+            }
+            if (isset($_POST['comment'][$i])) {
+                $tool_content .= "<td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, $_POST['comment'][$i], true) . "</td>";
+            } else {
+                $tool_content .= "<td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, $comment[$i], true) . "</td>";
+            }            
+            $tool_content .= "<td class='text-center'><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";                        
         }
         $tool_content .= "<tr>
                 <td class='text-left' colspan='3'><strong>$langSurveyAddAnswer :</strong>&nbsp;
@@ -431,18 +460,16 @@ if (isset($_GET['modifyAnswers'])) {
             </table>";
     }
 
-    elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+    elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {        
         $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
-        $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>";
+        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>";
         $tempSW = isset($_POST['setWeighting']) ? $_POST['setWeighting'] : '';
         $tool_content .= "
-              <input type='hidden' name='formSent' value='1' />\n
-              <input type='hidden' name='setWeighting' value='$tempSW'>\n";
+              <input type='hidden' name='formSent' value='1' />
+              <input type='hidden' name='setWeighting' value='$tempSW'>";
         if (!isset($displayBlanks)) {
             $str_weighting = isset($weighting)? implode(',', $weighting): '';
-            $tool_content .= "
-              <input type='hidden' name='str_weighting' value='$str_weighting'>
+            $tool_content .= "<input type='hidden' name='str_weighting' value='$str_weighting'>
               <fieldset>
                 <table class='table'>
                   <tr>
@@ -466,7 +493,7 @@ if (isset($_GET['modifyAnswers'])) {
                   </tr>";
             }
             $tool_content .= "</table>";
-        } else {
+        } else {            
             $tool_content .= "
                 <input type='hidden' name='blanksDefined' value='true'>
                 <input type='hidden' name='reponse' value='" . q($_POST['reponse']) . "'>";
@@ -495,31 +522,23 @@ if (isset($_GET['modifyAnswers'])) {
     }
 
     elseif ($answerType == MATCHING) {
+        
+        if (!empty($msgErr)) {
+            $tool_content .= "<div class='alert alert-warning'>$msgErr</div>";
+        }
+        
         $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
             <input type='hidden' name='formSent' value='1'>
             <input type='hidden' name='nbrOptions' value='$nbrOptions'>
             <input type='hidden' name='nbrMatches' value='$nbrMatches'>
             <fieldset>
-                <table class='table'>";
-
-        // if there is an error message
-        if (!empty($msgErr)) {
-            $tool_content .= "<tr>
-              <td colspan='4'>
-                <table class='table'>
-                <tr>
-                  <td>$msgErr</td>
-                </tr>
-                </table>
-              </td>
-            </tr>";
-        }
-        $optionsList = Array();
+            <table class='table'>";
+        $optionsList = array();        
         // create an array with the option letters
         for ($i = 1, $j = 'A'; $i <= $nbrOptions; $i++, $j++) {
             $optionsList[$i] = $j;
-        }
+        }                
 
         $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
               <td class='text-center' colspan='2'><b>$langMakeCorrespond</b></td>
@@ -529,24 +548,25 @@ if (isset($_GET['modifyAnswers'])) {
               <td><b>$langColumnA:</b> <span style='valign:middle;'>$langMoreLessChoices:</span> <input type='submit' name='moreMatches' value='+' />&nbsp;
               <input type='submit' name='lessMatches' value='-' /></td>
               <td><div align='text-right'>$langColumnB</div></td>
-              <td>$langQuestionWeighting</td>
-            </tr>";
-
-        for ($j = 1; $j <= $nbrMatches; $i++, $j++) {
-            if (!count($match)) {
-                $optionText = ${'langDefaultMakeCorrespond' . $j}; // Default example option
+              <td>$langScore</td>
+            </tr>";        
+        $i = $objAnswer->getFirstMatchingPosition();
+        for ($j = 1; $j <= $nbrMatches; $i++, $j++) {        
+            if (isset($_POST['match'][$i])) {
+                $optionText = htmlspecialchars($_POST['match'][$i]);
             } elseif (isset($match[$i])) {
-                $optionText = str_replace('{', '&#123;', htmlspecialchars($match[$i]));
+                $optionText = htmlspecialchars($match[$i]);
+            } elseif (!count($match)) {
+                $optionText = ${'langDefaultMakeCorrespond' . $j}; // Default example option
             } else {
                 $optionText = '';
             }
             $optionWeight = isset($weighting[$i])? q($weighting[$i]): 1;
-
-            $tool_content .= "
-            <tr>
-              <td class='text-right'><b>$j</b></td>
+                                    
+            $tool_content .= "<tr>
+              <td class='text-right'><strong>$j</strong></td>
               <td><input class='form-control' type='text' name='match[$i]' value='$optionText'></td>
-              <td><div class='text-right'><select class='form-control' name='sel[$i]'>";
+              <td><div class='text-right'><select class='form-control' name='sel[$i]'>";            
             foreach ($optionsList as $key => $val) {
                 $tool_content .= "<option value='" . q($key) . "'";
                 if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) {
@@ -571,16 +591,20 @@ if (isset($_GET['modifyAnswers'])) {
           </td>
           <td>&nbsp;</td>
         </tr>";
-
-        foreach ($optionsList as $key => $val) {
+        
+        foreach ($optionsList as $key => $val) {            
             $tool_content .= "<tr>
-                      <td class='text-right'><b>" . q($val) . "</b></td>
+                      <td class='text-right'><strong>" . q($val) . "</strong></td>
                       <td><input class='form-control' type='text' " .
-                    "name=\"option[" . $key . "]\" size='58' value=\"";
-            if (!isset($_POST['formSent']) && !isset($_POST['option'][$key])) {
+                    "name=\"option[" . $key . "]\" size='58' value=\"";            
+            if (isset($_POST['option'][$key])) {
+                $tool_content .= htmlspecialchars($_POST['option'][$key]);
+            } elseif (isset($option[$key])) {
+                $tool_content .= htmlspecialchars($option[$key]);            
+            } elseif (($val == 'A') or ($val == 'B')) { // default option
                 $tool_content .= ${"langDefaultMatchingOpt$val"};
             } else {
-                @$tool_content .= str_replace('{', '&#123;', htmlspecialchars($_POST['option'][$key]));
+                $tool_content .= '';
             }
 
             $tool_content .= "\" /></td>
@@ -600,7 +624,7 @@ if (isset($_GET['modifyAnswers'])) {
         // if there is an error message
         if (!empty($msgErr)) {
             $tool_content .= "<div class='alert alert-danger'>$msgErr</div>";
-        }
+        }        
         $setChecked[1] = (isset($correct) and $correct == 1) ? " checked='checked'" : '';
         $setChecked[2] = (isset($correct) and $correct == 2) ? " checked='checked'" : '';
         $setWeighting[1] = isset($weighting[1]) ? q($weighting[1]) : 0;
@@ -612,12 +636,12 @@ if (isset($_GET['modifyAnswers'])) {
             <tr>
               <td colspan='2'><b>$langAnswer</b></td>
               <td class='text-center'><b>$langComment</b></td>
-              <td class='text-center'><b>$langQuestionWeighting</b></td>
+              <td class='text-center'><b>$langScore</b></td>
             </tr>
             <tr>
-              <td valign='top' width='30'>$langCorrect</td>
-              <td valign='top' width='1'><input type='radio' value='1' name='correct'$setChecked[1]></td>
-              <td>" . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
+              <td width='30'>$langCorrect</td>
+              <td><input type='radio' value='1' name='correct'$setChecked[1]></td>
+              <td width='80%'>"  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
               <td><input class='form-control' type='text' name='weighting[1]' value='$setWeighting[1]'></td>
             </tr>
             <tr>

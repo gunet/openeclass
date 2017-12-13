@@ -32,6 +32,7 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
+require_once 'modules/group/group_functions.php';
 require_once 'game.php';
 
 $pageName = $langExercicesView;
@@ -65,8 +66,8 @@ if (isset($_COOKIE['inExercise'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
-//Identifying ajax request that cancels an active attempt
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+// Identifying ajax request that cancels an active attempt
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         if ($_POST['action'] == 'refreshSession') {
             // Does nothing just refreshes the session
             exit();
@@ -84,19 +85,19 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
 }
 
-//Checks if an exercise ID exists in the URL
-//and if so it gets the exercise object either by the session (if it exists there)
-//or by initializing it using the exercise ID
-if (isset($_REQUEST['exerciseId'])) {    
+// Check if an exercise ID exists in the URL
+// and if so it gets the exercise object either by the session (if it exists there)
+// or by initializing it using the exercise ID
+if (isset($_REQUEST['exerciseId'])) {
     $exerciseId = intval($_REQUEST['exerciseId']);
-    //  Checks if exercise object exists in the Session
+    // Check if exercise object exists in session
     if (isset($_SESSION['objExercise'][$exerciseId])) {
         $objExercise = $_SESSION['objExercise'][$exerciseId];
-    } else {        
+    } else {
         // construction of Exercise
         $objExercise = new Exercise();
         // if the specified exercise is disabled (this only applies to students)
-        // or doesn't exist redirects and shows error
+        // or doesn't exist, redirect and show error
         if (!$objExercise->read($exerciseId) || (!$is_editor && $objExercise->selectStatus($exerciseId)==0)) {
             session::Messages($langExerciseNotFound);
             redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
@@ -108,11 +109,36 @@ if (isset($_REQUEST['exerciseId'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
-//Initialize attempts timestamp
-if(isset($_POST['attempt_value']) && !isset($_GET['eurId'])){
+// If the exercise is assigned to specific users / groups
+if ($objExercise->assign_to_specific and !$is_editor) {
+    $assignees = Database::get()->queryArray('SELECT user_id, group_id
+        FROM exercise_to_specific WHERE exercise_id = ?d', $exerciseId);
+    $accessible = false;
+    foreach ($assignees as $item) {
+        if ($item->user_id == $uid) {
+            $accessible = true;
+            break;
+        } elseif ($item->group_id) {
+            if (!isset($groups)) {
+                $groups = user_group_info($uid, $course_id);
+            }
+            if (isset($groups[$item->group_id])) {
+                $accessible = true;
+                break;
+            }
+        }
+    }
+    if (!$accessible) {
+        Session::Messages($langNoAccessPrivilages);
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    }
+}
+
+// Initialize attempts timestamp
+if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
     $attempt_value = $_POST['attempt_value'];
-}elseif (isset($_GET['eurId'])) { //reinitialize paused attempt
-    //If there is a paused attempt get it
+} elseif (isset($_GET['eurId'])) { // reinitialize paused attempt
+    // If there is a paused attempt get it
     $paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining FROM exercise_user_record WHERE eurid = ?d AND eid = ?d AND attempt_status = ?d AND uid = ?d", $_GET['eurId'], $exerciseId, ATTEMPT_PAUSED, $uid);
     if ($paused_attempt) {
         $objDateTime = new DateTime($paused_attempt->record_start_date);
@@ -126,7 +152,7 @@ if(isset($_POST['attempt_value']) && !isset($_GET['eurId'])){
 }
 
 if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
-    //If the exercise is password protected
+    // If the exercise is password protected
     $password = $objExercise->selectPasswordLock();
     if ($password && !$is_editor) {
         if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
@@ -138,9 +164,8 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
             }
         }
     }
-
 }
-//If the exercise is IP protected
+// If the exercise is IP protected
 $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
     $user_ip = Log::get_client_ip();
@@ -149,17 +174,17 @@ if ($ips && !$is_editor){
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
 }
-// if the user has clicked on the "Cancel" button
-// ends the exercise and returns to the exercise list
+// If the user has clicked on the "Cancel" button,
+// end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
-        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-        $exercisetotalweight = $objExercise->selectTotalWeighting();
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
-                WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
-        Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-        unset_exercise_var($exerciseId);
-        Session::Messages($langAttemptWasCanceled);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
+    $exercisetotalweight = $objExercise->selectTotalWeighting();
+    Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
+        WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
+    Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+    unset_exercise_var($exerciseId);
+    Session::Messages($langAttemptWasCanceled);
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
 load_js('tools.js');
@@ -178,9 +203,10 @@ $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
 $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
 
-//exercise has ended or hasn't been enabled yet due to declared dates
-if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) {
-    //if that happens during an active attempt
+// exercise has ended or hasn't been enabled yet due to declared dates or was submmitted automatically due to expiring time
+$autoSubmit = isset($_POST['autoSubmit']) && $_POST['autoSubmit'] == 'true';
+if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) or $autoSubmit) {
+    // if that happens during an active attempt
     if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
@@ -207,14 +233,14 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise
 }
 
 
-//If question list exists in the Session get it for there
-//else get it using the apropriate object method and save it to the session
+// If question list exists in the Session get it for there
+// else get it using the apropriate object method and save it to the session
 if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
 } else {
-    if (isset($paused_attempt)) {        
+    if (isset($paused_attempt)) {
         $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id ORDER BY question_id ASC", $paused_attempt->eurid);
-        $i=1;
+        $i = 1;
         foreach ($record_question_ids as $row) {
             $questionList[$i] = $row->question_id;
             $i++;
@@ -236,7 +262,7 @@ $nbrQuestions = count($questionList);
 
 // determine begin time:
 // either from a previews attempt meaning that user hasn't sumbited his answers permanantly
-// 		and exerciseTimeConstrain hasn't yet passed,
+// and exerciseTimeConstrain hasn't yet passed,
 // either start a new attempt and count now() as begin time.
 
 if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || isset($paused_attempt)) {
@@ -245,13 +271,13 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     $recordStartDate = Database::get()->querySingle("SELECT record_start_date FROM exercise_user_record WHERE eurid = ?d", $eurid)->record_start_date;
     $recordStartDate = strtotime($recordStartDate);
     // if exerciseTimeConstrain has not passed yet calculate the remaining time
-    if ($exerciseTimeConstraint>0) {
-        $timeleft = isset($paused_attempt) ? $paused_attempt->secs_remaining : ($exerciseTimeConstraint*60) - ($temp_CurrentDate - $recordStartDate);
+    if ($exerciseTimeConstraint > 0) {
+        $timeleft = isset($paused_attempt) ? $paused_attempt->secs_remaining : ($exerciseTimeConstraint * 60) - ($temp_CurrentDate - $recordStartDate);
     }
 } elseif (!isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) && $nbrQuestions > 0) {
     $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
 
-    // Check if allowed number of attempts surpassed and if so redirect
+    // Check if allowed number of attempts exceeded and if so redirect
    if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseMaxAttemptsReached);
@@ -274,10 +300,12 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
          }
         // count this as an attempt by saving it as an incomplete record, if there are any available attempts left
         $start = date('Y-m-d H:i:s', $attempt_value);
+        if ($exerciseTimeConstraint) {
+            $timeleft = $exerciseTimeConstraint * 60;
+        }
         $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status)
-                        VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt+1)->lastInsertID;
+                        VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt + 1)->lastInsertID;
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
-        $timeleft = $exerciseTimeConstraint*60;
    }
 }
 if ($exercise_EndDate) {
@@ -288,49 +316,32 @@ if ($exercise_EndDate) {
         $timeleft = $exerciseTimeLeft;
     }
 }
-if (isset($timeleft)) {
-    // Automatically submit 10 sec before expiration to account for delays etc.
-    $timeleft -= 10;
-}
-//if there are answers in the session get them
-    if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
-            $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
-    } else {
-        if (isset($paused_attempt)) {
-            $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value]= $objExercise->get_attempt_results_array($eurid);
-        } else {
-            $exerciseResult = array();
-        }
-    }
 
-$questionNum = count($exerciseResult)+1;
+// If there are answers in the session get them
+if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
+    $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
+} else {
+    if (isset($paused_attempt)) {
+        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $objExercise->get_attempt_results_array($eurid);
+    } else {
+        $exerciseResult = array();
+    }
+}
+
+$questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
+    $time_expired = false;
     $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
-
-    // checking if user's time is more than exercise's time constrain
-    if (isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {    
-        $nowTime = new DateTime();
-        $startTime = new DateTime();
-        if (isset($paused_attempt)) {            
-            if (is_object($exercise_EndDate)) {
-                $startTime->setTimestamp(strtotime($exercise_EndDate->format("Y-m-d H:i:s")));
-            } else {
-                $startTime->setTimestamp($exercise_EndDate);
-            }
-        } else {
-            $startTime->setTimestamp($recordStartDate);
-        }
-        $endTime = new DateTime($startTime->format('Y-m-d H:i:s'));
-        $interval = isset($paused_attempt) ? 'PT'.$paused_attempt->secs_remaining.'S' :'PT'.$exerciseTimeConstraint.'M';
-        $endTime->add(new DateInterval($interval));
-        if ($endTime < $nowTime) {
-            $time_expired = TRUE;
+    // checking if user's time expired
+    if (isset($timeleft)) {
+        $timeleft += 1; // Add 1 sec for leniency when submitting
+        if ($timeleft < 0) {
+            $time_expired = true;
         }
     }
 
     // inserts user's answers in the database and adds them in the $exerciseResult array which is returned
-
     $action = isset($paused_attempt) ? 'update' : 'insert';
 
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
@@ -339,7 +350,7 @@ if (isset($_POST['formSent'])) {
 
     // if it is a non-sequential exercice OR
     // if it is a sequnential exercise in the last question OR the time has expired
-    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
+    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || $time_expired)) {
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -359,9 +370,9 @@ if (isset($_POST['formSent'])) {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }
 
-        //If time expired in sequential exercise we must add to the DB the non-given answers
+        // If time expired in sequential exercise we must add to the DB the non-given answers
         // to the questions the student didn't had the time to answer
-        if (isset($time_expired) && $time_expired && $exerciseType == 2) {
+        if ($time_expired && $exerciseType == 2) {
             $objExercise->save_unanswered();
         }
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
@@ -381,7 +392,7 @@ if (isset($_POST['formSent'])) {
         unset($objExercise);
         unset_exercise_var($exerciseId);
         // if time expired set flashdata
-        if (isset($time_expired) && $time_expired) {
+        if ($time_expired) {
             Session::Messages($langExerciseExpiredTime);
         } else {
             Session::Messages($langExerciseCompleted, 'alert-success');
@@ -392,7 +403,7 @@ if (isset($_POST['formSent'])) {
     // keeps the exercise in a pending/uncompleted state and returns to the exercise list
     if (isset($_POST['buttonSave']) && $exerciseTempSave) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-        $secs_remaining = isset($_POST['secsRemaining']) ? $_POST['secsRemaining'] : 0;
+        $secs_remaining = isset($timeleft) ? $timeleft : 0;
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
         if ($objExercise->isRandom()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
@@ -400,27 +411,39 @@ if (isset($_POST['formSent'])) {
         } else {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }
-        //if we are currently in a previously paused attempt (so this is not the first pause), unanswered are already saved in the DB and they onky need an update
+        // If we are currently in a previously paused attempt (so this is not
+        // the first pause), unanswered are already saved in the DB and they
+        // only need an update
         if (!isset($paused_attempt)) {
-            $objExercise->save_unanswered(0); //passing 0 to save like unanswered
+            $objExercise->save_unanswered(0); // passing 0 to save like unanswered
         }
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?d, total_weighting = ?d, attempt_status = ?d, secs_remaining = ?d
                 WHERE eurid = ?d", $totalScore, $totalWeighting, ATTEMPT_PAUSED, $secs_remaining, $eurid);
+        if ($exerciseType == 2 and isset($_POST['choice']) and is_array($_POST['choice'])) {
+            // for sequential exercises, return to current question
+            // by setting is_answered to a special value
+            $qid = array_keys($_POST['choice']);
+            Database::get()->query('UPDATE exercise_answer_record SET is_answered = 2
+                WHERE eurid = ?d AND question_id = ?d', $eurid, $qid);
+        }
         unset_exercise_var($exerciseId);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-//    else {
-//        redirect_to_home_page("modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId");
-//    }
-} // end of submit
+}
 
-
+if (isset($timeleft)) {
+    // Submit 10 sec earlier to account for delays when submitting etc.
+    $timeleft -= 10;
+    if ($timeleft <= 1) {
+        $timeleft = 1;
+    }
+}
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" .
-      (isset($timeleft) && $timeleft > 0 ?
-        "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>" . $timeleft . "</span></div>" : '') .
+    (isset($timeleft)?
+        "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>$timeleft</span></div>" : '') .
       q_math($exerciseTitle) . "</h3>
   </div>";
 if (!empty($exerciseDescription_temp)) {
@@ -437,32 +460,75 @@ $tool_content .= "
   <input type='hidden' name='attempt_value' value='$attempt_value'>
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions'>";
 
-if (isset($timeleft) && $timeleft>0) {
+if (isset($timeleft) && $timeleft > 0) {
   $tool_content .= "<input type='hidden' name='secsRemaining' id='secsRemaining' value='$timeleft' />";
 }
 $i = 0;
+$answeredIds = array();
+if (isset($exerciseResult)) {
+    $answered_question_ids = array_keys($exerciseResult);
+}
+
+$savedQuestion = null;
+if ($exerciseType == 2) {
+    $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
+    $r = Database::get()->querySingle('SELECT question_id FROM exercise_answer_record
+        WHERE eurid = ?d AND is_answered = 2 LIMIT 1', $eurid);
+    if ($r) {
+        $savedQuestion = $r->question_id;
+        Database::get()->query('UPDATE exercise_answer_record SET is_answered = 1
+            WHERE eurid = ?d AND is_answered = 2', $eurid);
+    }
+}
+
 foreach ($questionList as $questionId) {
     $i++;
-    // for sequential exercises
-    if ($exerciseType == 2) {
-        // if it is not the right question, goes to the next loop iteration
-        if (isset($exerciseResult)) {
-            $answered_question_ids = array_keys($exerciseResult);
-        } else {
-            $answered_question_ids = array();
-        }
-        if (in_array($questionId, $answered_question_ids)) {
+    // for sequential exercises, if this is not the right question,
+    // continue to the next loop iteration
+    if ($exerciseType == 2 and isset($answered_question_ids) and
+        $questionId != $savedQuestion and
+        in_array($questionId, $answered_question_ids)) {
             continue;
+    }
+
+    // check if question is actually answered
+    $question = new Question();
+    $question->read($questionId);
+    if (isset($exerciseResult[$questionId])) {
+        $type = $question->type;
+        $answer = $exerciseResult[$questionId];
+        if ($type == FREE_TEXT) {
+            if (trim($answer) !== '') {
+                $answeredIds[] = $questionId;;
+            }
+        } elseif ($type == TRUE_FALSE or $type == UNIQUE_ANSWER) {
+            if ($answer) {
+                $answeredIds[] = $questionId;
+            }
+        } elseif ($type == FILL_IN_BLANKS or $type == FILL_IN_BLANKS_TOLERANT) {
+            if (is_array($answer)) {
+                foreach ($answer as $id => $blank) {
+                    if (trim($blank) !== '') {
+                        $answeredIds[] = $questionId;
+                        break;
+                    }
+                }
+            }
+        } elseif ($type == MULTIPLE_ANSWER) {
+            unset($answer[0]);
+            if (count($answer)) {
+                $answeredIds[] = $questionId;
+            }
+        } elseif ($type == MATCHING) {
+            if (array_filter($answer)) {
+                $answeredIds[] = $questionId;
+            }
         }
     }
 
-    // shows the question and its answers
-    $question = new Question();
-    $question->read($questionId);
-
+    // show the question and its answers
     showQuestion($question, $exerciseResult);
 
-    $tool_content .= "<br>";
     // for sequential exercises
     if ($exerciseType == 2) {
         // quits the loop
@@ -492,50 +558,25 @@ if (!$questionList) {
 }
 $tool_content .= "</form>";
 if ($questionList) {
-$refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
-$head_content .= "<script type='text/javascript'>
-                $(window).bind('beforeunload', function(){
-                    var date = new Date();
-                    date.setTime(date.getTime()+(30*1000));
-                    var expires = '; expires='+date.toGMTString();
-                    document.cookie = 'inExercise=$exerciseId'+expires;
-                    return '" . js_escape($langLeaveExerciseWarning) ."';
-                });
-                $(window).bind('unload', function(){
-                    $.ajax({
-                      type: 'POST',
-                      url: '',
-                      data: { action: 'endExerciseNoSubmit', eid: $exerciseId, eurid: $eurid},
-                      async: false
-                    });
-                });
-    		$(document).ready(function(){
-                    timer = $('#progresstime');
-                    timer.time = timer.text();
-                    timer.text(secondsToHms(timer.time--));
-                    hidden_timer = $('#secsRemaining');
-                    hidden_timer.time = timer.time;
-                    setInterval(function() {
-                        hidden_timer.val(hidden_timer.time--);
-                        if (hidden_timer.time + 1 == 0) {
-                            clearInterval();
-                        }
-                    }, 1000);
-    		    countdown(timer, function() {
-    		        $('.exercise').submit();
-    		    });
-                    $('.exercise').submit(function(){
-                            $(window).unbind('beforeunload');
-                            $(window).unbind('unload');
-                            document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-                    });
-                    setInterval(function() {
-                        $.ajax({
-                          type: 'POST',
-                          data: { action: 'refreshSession'}
-                        });
-                    }, $refresh_time);
-    		});
-                $(exercise_enter_handler);</script>";
+    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
+    // Enable check for unanswered questions when displaying more than one question
+    $head_content .= "<script type='text/javascript'>
+        $(function () {
+            exercise_init_countdown({
+                warning: '". js_escape($langLeaveExerciseWarning) ."',
+                unansweredQuestions: '". js_escape($langUnansweredQuestions) ."',
+                oneUnanswered: '". js_escape($langUnansweredQuestionsWarningOne) ."',
+                manyUnanswered: '". js_escape($langUnansweredQuestionsWarningMany) ."',
+                question: '". js_escape($langUnansweredQuestionsQuestion) ."',
+                submit: '". js_escape($langSubmit) ."',
+                goBack: '". js_escape($langGoBackToEx) ."',
+                refreshTime: $refresh_time,
+                exerciseId: $exerciseId,
+                answeredIds: ". json_encode($answeredIds) .",
+                attemptsAllowed: {$objExercise->attemptsAllowed},
+                eurid: $eurid
+            });
+        });
+</script>";
 }
 draw($tool_content, 2, null, $head_content);

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,8 +18,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-
 
 
 if (!class_exists('Answer')):
@@ -36,22 +34,13 @@ if (!class_exists('Answer')):
      */
     class Answer {
 
-        var $questionId;
-        // these are arrays
+        var $questionId;        
         var $answer;
         var $correct;
         var $comment;
         var $weighting;
         var $position;
-        // these arrays are used to save temporarily new answers
-        // then they are moved into the arrays above or deleted in the event of cancellation
-        var $new_answer;
-        var $new_correct;
-        var $new_comment;
-        var $new_weighting;
-        var $new_position;
-        var $nbrAnswers;
-        var $new_nbrAnswers;
+        var $nbrAnswers;        
 
         /**
          * constructor of the class
@@ -60,34 +49,16 @@ if (!class_exists('Answer')):
          * @param - integer $questionId - question ID that answers belong to
          */
         public function __construct($questionId) {
-            $this->questionId = $questionId;
+            $this->questionId = $questionId;            
+            $this->nbrAnswers = 2;
             $this->answer = array();
             $this->correct = array();
             $this->comment = array();
             $this->weighting = array();
             $this->position = array();
-
-            // clears $new_* arrays
-            $this->cancel();
-
-            // fills arrays
-            $this->read();            
-        }        
-
-        /**
-         * clears $new_* arrays
-         *
-         * @author - Olivier Brouckaert
-         */
-        function cancel() {
-            $this->new_answer = array();
-            $this->new_correct = array();
-            $this->new_comment = array();
-            $this->new_weighting = array();
-            $this->new_position = array();
-
-            $this->new_nbrAnswers = 0;
-        }
+            
+            $this->read();
+        }       
 
         /**
          * reads answer informations from the data base
@@ -98,27 +69,40 @@ if (!class_exists('Answer')):
             $questionId = $this->questionId;
             $result = Database::get()->queryArray("SELECT answer, correct, comment, weight, r_position
                             FROM exercise_answer WHERE question_id = ?d ORDER BY r_position", $questionId);
-            $i = 1;
-            // foreach record found
-            foreach ($result as $object) {
-                $this->answer[$i] = $object->answer;
-                $this->correct[$i] = $object->correct;
-                $this->comment[$i] = $object->comment;
-                $this->weighting[$i] = $object->weight;
-                $this->position[$i] = $object->r_position;
-
-                $i++;
+            if ($result) { // found result ?
+                $i = 1;                
+                foreach ($result as $object) {
+                    $this->answer[$i] = $object->answer;
+                    $this->correct[$i] = $object->correct;
+                    $this->comment[$i] = $object->comment;
+                    $this->weighting[$i] = $object->weight;
+                    $this->position[$i] = $object->r_position;
+                    $i++;
+                }
+                $this->nbrAnswers = $i - 1;
+            } else { // new answer
+                for ($i = 1; $i <= 2; $i++) {
+                    $this->answer[$i] = '';
+                    if ($this->getQuestionType() == MATCHING) {
+                        $this->correct[$i] = 1;
+                    } else {
+                        $this->correct[$i] = 0;    
+                    }                    
+                    $this->comment[$i] = '';
+                    $this->weighting[$i] = 0.00;
+                    $this->position[$i] = 0;
+                }                
             }
-            $this->nbrAnswers = $i - 1;
         }
 
+                        
         /**
          * returns the number of answers in this question
          *
          * @author - Olivier Brouckaert
          * @return - integer - number of answers
          */
-        function selectNbrAnswers() {
+        public function selectNbrAnswers() {
             return $this->nbrAnswers;
         }
 
@@ -128,7 +112,7 @@ if (!class_exists('Answer')):
          * @author - Olivier Brouckaert
          * @return - integer - the question ID
          */
-        function selectQuestionId() {
+        public function selectQuestionId() {
             return $this->questionId;
         }
 
@@ -139,17 +123,14 @@ if (!class_exists('Answer')):
          * @param - integer $id - answer ID
          * @return - string - answer title
          */
-        function selectAnswer($id) {
+        public function selectAnswer($id) {            
             if (isset($this->answer[$id])) {
                 return $this->answer[$id];
             } else {
-                return '::0';
+                return '';
             }
         }
-             
-        function selectAnswers() {
-            return $this->answer;
-        }
+
         /**
          * tells if answer is correct or not
          *
@@ -157,7 +138,7 @@ if (!class_exists('Answer')):
          * @param - integer $id - answer ID
          * @return - integer - 0 if bad answer, not 0 if good answer
          */
-        function isCorrect($id) {
+        public function isCorrect($id) {
             return $this->correct[$id];
         }
 
@@ -168,7 +149,7 @@ if (!class_exists('Answer')):
          * @param - integer $id - answer ID
          * @return - string - answer comment
          */
-        function selectComment($id) {
+        public function selectComment($id) {
             return $this->comment[$id];
         }
 
@@ -179,7 +160,7 @@ if (!class_exists('Answer')):
          * @param - integer $id - answer ID
          * @return - float - answer weighting
          */
-        function selectWeighting($id) {
+        public function selectWeighting($id) {
             return $this->weighting[$id];
         }
 
@@ -190,10 +171,19 @@ if (!class_exists('Answer')):
          * @param - integer $id - answer ID
          * @return - integer - answer position
          */
-        function selectPosition($id) {
+        public function selectPosition($id) {
             return $this->position[$id];
         }
 
+        
+        public function getFirstMatchingPosition() {
+            $pos = Database::get()->querySingle("SELECT r_position FROM exercise_answer "
+                    . "WHERE question_id = ?d "
+                    . "AND correct > 0 "
+                    . "ORDER BY r_position ASC LIMIT 1", $this->questionId)->r_position;
+            return $pos;
+        }
+        
         /**
          * creates a new answer
          *
@@ -204,54 +194,49 @@ if (!class_exists('Answer')):
          * @param - float $weighting - answer weighting
          * @param - integer $position - answer position
          */
-        function createAnswer($answer, $correct, $comment, $weighting, $position) {
-            $this->new_nbrAnswers++;
-
-            $id = $this->new_nbrAnswers;
-
-            $this->new_answer[$id] = $answer;
-            $this->new_correct[$id] = $correct;
-            $this->new_comment[$id] = $comment;
-            $this->new_weighting[$id] = $weighting;
-            $this->new_position[$id] = $position;
+        public function createAnswer($answer, $correct, $comment, $weighting, $position, $newEmptyAnswer = false) {
+            
+            if ($newEmptyAnswer) {
+                $this->nbrAnswers = $this->nbrAnswers + 1;
+                $id = $this->nbrAnswers;
+                Database::get()->querySingle("INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) 
+                    VALUES (?d, ?s, ?d, ?s, ?f, ?d)", $this->questionId, $answer, $correct, $comment, $weighting, $position);
+            } else {
+                $this->nbrAnswers = $position;
+                $id = $position;                
+            }            
+            $this->answer[$id] = $answer;
+            $this->correct[$id] = $correct;
+            $this->comment[$id] = $comment;
+            $this->weighting[$id] = $weighting;
+            $this->position[$id] = $position;                       
         }
 
         /**
-         * records answers into the data base
+         * save answers into the data base
          *
          * @author - Olivier Brouckaert
          */
-        function save() {
+        public function save() {
 
-            $questionId = intval($this->questionId);
+            $questionId = $this->questionId;
             // removes old answers before inserting of new ones
-            Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);
+           Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);            
             // inserts new answers into data base
-            $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";
-
-            for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
+            $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";           
+            
+            for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                   $data_array[] = $questionId;
-                  $data_array[] = $this->new_answer[$i];
-                  $data_array[] = $this->new_correct[$i];
-                  $data_array[] = $this->new_comment[$i];
-                  $data_array[] = $this->new_weighting[$i];
-                  $data_array[] = $this->new_position[$i];
+                  $data_array[] = $this->answer[$i];
+                  $data_array[] = $this->correct[$i];
+                  $data_array[] = $this->comment[$i];
+                  $data_array[] = $this->weighting[$i];
+                  $data_array[] = $this->position[$i];
                 $sql .= "(?d, ?s, ?d, ?s, ?f, ?d),";
             }
-            $sql = substr($sql, 0, -1);
-            Database::get()->query($sql,$data_array);
-
-            // moves $new_* arrays
-            $this->answer = $this->new_answer;
-            $this->correct = $this->new_correct;
-            $this->comment = $this->new_comment;
-            $this->weighting = $this->new_weighting;
-            $this->position = $this->new_position;
-
-            $this->nbrAnswers = $this->new_nbrAnswers;
-
-            // clears $new_* arrays
-            $this->cancel();
+            $sql = substr($sql, 0, -1);            
+            Database::get()->query($sql, $data_array);
+                       
         }
 
         /**
@@ -260,7 +245,7 @@ if (!class_exists('Answer')):
          * @author - Olivier Brouckaert
          * @param - integer $newQuestionId - ID of the new question
          */
-        function duplicate($newQuestionId) {
+        public function duplicate($newQuestionId) {
 
             // if at least one answer
             if ($this->nbrAnswers) {
@@ -282,10 +267,17 @@ if (!class_exists('Answer')):
                 Database::get()->query($sql,$data_array);
             }
         }
+        
+        /**
+         * @brief get question type (e.g. multiple choice, matching etc)
+         * @return type
+         */
+        private function getQuestionType() {
+            
+            $question_type = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $this->selectQuestionId())->type;            
+            return $question_type;            
+            
+        }
 
     }
-
-    
-
-    
 endif;

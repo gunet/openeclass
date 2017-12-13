@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -26,6 +26,9 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
 
     $questionId = $objQuestionTmp->id;
     $questionWeight = $objQuestionTmp->selectWeighting();
+    if ($questionWeight == 0) { // don't display incomplete questions
+        return;
+    }
     $answerType = $objQuestionTmp->selectType();
 
     $message = $langInfoGrades;
@@ -41,13 +44,13 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
     $questionTypeWord = $objQuestionTmp->selectTypeWord($answerType);
     $tool_content .= "
-            <div class='panel panel-success'>
+            <div class='panel panel-success qPanel' id='qPanel$questionId'>
               <div class='panel-heading'>
                 <h3 class='panel-title'>$langQuestion : $i ($questionWeight $message)".(($exerciseType == 2) ? " / " . $nbrQuestions : "")."</h3>
               </div>
               <div class='panel-body'>
                     <h4>
-                        <small>$questionTypeWord</small><br>" . q_math($questionName) . " 
+                        <small>$questionTypeWord</small><br>" . q_math($questionName) . "
                     </h4>
                     $questionDescription
                     <div class='text-center'>
@@ -70,13 +73,12 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         $cpt1 = 'A';
         $cpt2 = 1;
         $Select = array();
-        $tool_content .= "
-                      <table class='table-default'>
-                      <tr>
-                        <th>$langColumnA</th>
-                        <th>$langMakeCorrespond</th>
-                        <th>$langColumnB</th>
-                      </tr>";
+        $tool_content .= "<table class='table-default'>
+                            <tr>
+                              <th>$langColumnA</th>
+                              <th>$langMakeCorrespond</th>
+                              <th>$langColumnB</th>
+                            </tr>";
     }
 
     if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
@@ -85,6 +87,9 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
+        if (is_null($answer) or $answer == '') {  // don't display blank or empty answers            
+            continue;
+        }        
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
@@ -130,21 +135,19 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
             if (!$answerCorrect) {
                 // options (A, B, C, ...) that will be put into the list-box
                 $Select[$answerId]['Lettre'] = $cpt1++;
-                // answers that will be shown at the right side
-                $Select[$answerId]['Reponse'] = standard_text_escape($answer);
+                // answers that will be shown at the right side                
+                $Select[$answerId]['Reponse'] = standard_text_escape($answer);                
             } else {
-                $tool_content .= "
-				    <tr>
-				      <td><b>${cpt2}.</b> " . standard_text_escape($answer) . "</td>
-				      <td><div align='left'>
-				       <select name='choice[${questionId}][${answerId}]'>
-					 <option value='0'>--</option>";
+                $tool_content .= "<tr>
+                                  <td><b>${cpt2}.</b> " . standard_text_escape($answer) . "</td>
+                                  <td><div align='left'>
+                                   <select name='choice[${questionId}][${answerId}]'>
+                                     <option value='0'>--</option>";
 
                 // fills the list-box
                 foreach ($Select as $key => $val) {
-                $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';
-                    $tool_content .= "
-					<option value=\"" . q($key) . "\" $selected>${val['Lettre']}</option>";
+                    $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';
+                    $tool_content .= "<option value=\"" . q($key) . "\" $selected>${val['Lettre']}</option>";
                 }
                 $tool_content .= "</select></div></td><td width='200'>";
                 if (isset($Select[$cpt2])) {
@@ -152,17 +155,16 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                 } else {
                     $tool_content .= '&nbsp;';
                 }
-
                 $tool_content .= "</td></tr>";
                 $cpt2++;
                 // if the left side of the "matching" has been completely shown
                 if ($answerId == $nbrAnswers) {
                     // if it remains answers to shown at the right side
                     while (isset($Select[$cpt2])) {
-                            $tool_content .= "<tr class='even'>                                                
+                            $tool_content .= "<tr class='even'>
                                               <td>&nbsp;</td>
                                               <td>&nbsp;</td>
-                                              <td>" . "<b>" . q($Select[$cpt2]['Lettre']) . ".</b> " . q($Select[$cpt2]['Reponse']) . "</td>                                                
+                                              <td>" . "<strong>" . q($Select[$cpt2]['Lettre']) . ".</strong> " . q($Select[$cpt2]['Reponse']) . "</td>
                                           </tr>";
                         $cpt2++;
                     } // end while()
@@ -195,5 +197,6 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     unset($objAnswerTmp);
     // destruction of the Question object
     unset($objQuestionTmp);
+    
     return $nbrAnswers;
 }
