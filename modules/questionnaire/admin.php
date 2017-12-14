@@ -29,7 +29,6 @@ require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
 load_js('tools.js');
-load_js('sortable/Sortable.min.js');
 
 $toolName = $langQuestionnaire;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
@@ -57,28 +56,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     exit;
 }
-
-$head_content .= "<script>
-    $(document).ready(function(){
-        Sortable.create(pollAnswers,{
-            handle: '.fa-arrows',
-            animation: 150,
-            onEnd: function (evt) {
-                var itemEl = $(evt.item);
-                var idReorder = itemEl.attr('data-id');
-                var prevIdReorder = itemEl.prev().attr('data-id');
-                $.ajax({
-                  type: 'post',
-                  dataType: 'text',
-                  data: {
-                        toReorder: idReorder,
-                        prevReorder: prevIdReorder,
-                    }
-                });
-            }
-        });
-    });
-</script>";
 
 if (isset($_POST['submitPoll'])) {
     $v = new Valitron\Validator($_POST);
@@ -862,6 +839,31 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                   'button-class' => 'btn-success')
             ),false);
         if ($questions) {
+            
+            load_js('sortable/Sortable.min.js');
+            
+            $head_content .= "<script>
+                $(document).ready(function(){
+                    Sortable.create(pollAnswers,{
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onEnd: function (evt) {
+                            var itemEl = $(evt.item);
+                            var idReorder = itemEl.attr('data-id');
+                            var prevIdReorder = itemEl.prev().attr('data-id');
+                            $.ajax({
+                              type: 'post',
+                              dataType: 'text',
+                              data: {
+                                    toReorder: idReorder,
+                                    prevReorder: prevIdReorder,
+                                }
+                            });
+                        }
+                    });
+                });
+            </script>";
+                        
             $tool_content .= "<table class='table-default'>
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
