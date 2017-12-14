@@ -24,7 +24,7 @@ include 'exercise.class.php';
 include 'question.class.php';
 include 'answer.class.php';
 
-$require_course_admin = TRUE;
+$require_editor = TRUE;
 $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
@@ -144,12 +144,12 @@ if (isset($fromExercise)) {
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
             'button-class' => 'btn-success'),
-                    array('title' => $langImportQTI,
+        array('title' => $langImportQTI,
             'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
             'icon' => 'fa-download',
             'level' => 'primary-label',
             'button-class' => 'btn-success'),
-                    array('title' => $langExportQTI,
+        array('title' => $langExportQTI,
             'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
             'icon' => 'fa-upload',
             'level' => 'primary-label',
@@ -303,18 +303,19 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
                 $answerType = "$langFillBlanks ($langFillBlanksTolerant)";
             }
             $tool_content .= "<tr>";
-            if (!isset($fromExercise)) {
-                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
+            if (!isset($fromExercise)) {                                
+                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
             } else {
-                $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br>" . $answerType . "</td>";
+                $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br>" . $answerType . "</td>";
             }
+            
             $tool_content .= "<td class='option-btn-cell'>".
                 action_button(array(
                     array('title' => $langEditChange,
-                          'url' => "admin.php?course=$course_code&amp;editQuestion=" . $row->id,
-                          'icon-class' => 'warnLink',
+                          'url' => "admin.php?course=$course_code&amp;modifyAnswers=" . $row->id,
+                          'icon-class' => 'warnLink', 
                           'icon-extra' => ((count($exercise_ids)>0)?
-                                " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),
+                                " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),                          
                           'icon' => 'fa-edit',
                           'show' => !isset($fromExercise)),
                     array('title' => $langReuse,
