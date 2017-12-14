@@ -253,7 +253,13 @@ if ($nbrQuestions) {
     foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
         $objQuestionTmp->read($id);
-         
+                         
+        $addon = '';
+        if ($objQuestionTmp->selectType() == MATCHING) {
+            $sql = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $id);
+            if (!$sql) $addon = "&amp;htopic=4";
+        }
+    
         $tool_content .= "<tr>
 			<td align='right' width='1'>" . $i . ".</td>
 			<td> " . q_math($objQuestionTmp->selectTitle()) . "<br />
@@ -261,7 +267,7 @@ if ($nbrQuestions) {
 			<td class='option-btn-cell'>".            
                     action_button(array(
                         array('title' => $langEditChange,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon",
                                 'icon-class' => 'warnLink',
                                 'icon-extra' => $objQuestionTmp->selectNbrExercises()>1? "data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "",
                                 'icon' => 'fa-edit'),

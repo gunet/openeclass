@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,9 +25,11 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once 'exercise.lib.php';
 
+$require_editor = true;
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'exercises';
+
 if (isset($_GET['htopic'])) {
     $htopic = $_GET['htopic'];
     switch ($htopic) {
@@ -53,11 +55,6 @@ $picturePath = "courses/$course_code/image";
 // the 4 types of answers
 $aType = array($langUniqueSelect, $langMultipleSelect, "$langFillBlanks ($langFillBlanksStrict)", $langMatching, $langTrueFalse, $langFreeText, "$langFillBlanks ($langFillBlanksTolerant)");
 
-if (!$is_editor) {
-    Session::Messages($langNotAllowed);
-    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-}
-
 // construction of the Exercise object
 $objExercise = new Exercise();
 if (isset($_GET['exerciseId'])) {
@@ -67,14 +64,13 @@ if (isset($_GET['exerciseId'])) {
 }
 
 // intializes the Question object
-if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
+if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
     // construction of the Question object
     $objQuestion = new Question();
+    
     // reads question data
-    if (isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
-        if (isset($_GET['editQuestion'])) {
-            $question_id = intval($_GET['editQuestion']);
-        } elseif (isset($_GET['modifyQuestion'])) {
+    if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
+        if (isset($_GET['modifyQuestion'])) {
             $question_id = intval($_GET['modifyQuestion']);
         } elseif (isset($_GET['modifyAnswers'])) {
             $question_id = intval($_GET['modifyAnswers']);
@@ -85,7 +81,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
         }
 
-        if (isset($_GET['editQuestion'])) {
+        if (isset($_GET['modifyAnswers'])) {           
             //clone and redirect to edit
             if (isset($_GET['clone'])) {
                 // if user comes from an exercise page
@@ -105,32 +101,29 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
                     $objQuestion->addToList($exerciseId);
                     // copies answers from the old qustion to the new
                     $objAnswer = new Answer($question_id);
-                    $objAnswer->duplicate($new_question_id);
-                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&editQuestion=$new_question_id");
+                    $objAnswer->duplicate($new_question_id);                
                 // if user comes from question pool
                 } else {
                     $new_question_id = $objQuestion->duplicate();
                     $objAnswer = new Answer($question_id);
-                    $objAnswer->duplicate($new_question_id);
-                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&editQuestion=$question_id");
+                    $objAnswer->duplicate($new_question_id);                
                 }
+            } else {
+                $objAnswer = new Answer($question_id);                
             }
+            include 'answer_admin.inc.php';
             $pageName = $langQuestionManagement;
             $navigation[] = array(
                 'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
                 'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
-            );
-            include('question_admin.inc.php');
-        } elseif (isset($_GET['modifyAnswers'])) {
-            $objAnswer = new Answer($question_id);
-            include('answer_admin.inc.php');
+            );            
         } else {
             $pageName = $langInfoQuestion;
             $navigation[] = array(
                 'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
                 'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
             );
-            include('statement_admin.inc.php');
+            include 'statement_admin.inc.php';
         }
     } else {
         $pageName = $langNewQu;
@@ -138,7 +131,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
             'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
             'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
             );
-        include('statement_admin.inc.php');
+        include 'statement_admin.inc.php';
     }
 } elseif (isset($_GET['importIMSQTI'])) {
     $pageName = $langNewQu;
@@ -146,7 +139,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
       'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
       'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
     );
-    include('imsqti.inc.php');
+    include 'imsqti.inc.php';
 } else {
     if (isset($_GET['NewExercise'])) {
         $pageName = $langNewEx;
@@ -156,9 +149,9 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
     } else {
         $pageName = $objExercise->selectTitle();
     }
-    include('exercise_admin.inc.php');
+    include 'exercise_admin.inc.php';
     if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {
-        include('question_list_admin.inc.php');
+        include 'question_list_admin.inc.php';
     }
 }
 
