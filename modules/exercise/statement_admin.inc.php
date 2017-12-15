@@ -75,7 +75,8 @@ $(function() {
 </script>
  ";
 // the question form has been submitted
-if (isset($_POST['submitQuestion'])) {
+if (isset($_POST['submitQuestion'])) { 
+            
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('questionName'));
     $v->labels(array(
@@ -135,7 +136,11 @@ if (isset($_POST['submitQuestion'])) {
         if ($answerType == FREE_TEXT) {
             $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
         } else {
-            $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId&htopic=$answerType";
+            if (isset($_GET['modifyQuestion'])) { // existing question
+                $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId";
+            } else { // new question
+                $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId&htopic=$answerType";
+            }
         }
         redirect_to_home_page($redirect_url);
     } else {
