@@ -346,9 +346,9 @@ if ($searching) {
             INNER JOIN category ON category_value.category_id = category.id
             WHERE course_id = ?d
             ORDER BY category.ordering, category_value.ordering',
-            function ($item) use ($t, $valTitles, $catNames) {
+            function ($item) use ($t, $valTitles, $catTitles) {
                 $t->set_var('resultMetaIcon', 'fa-plus-circle');
-                $t->set_var('resultMetaLabel', q($catNames[$item->category_id] . ': ' . $valTitles[$item->category_value_id]));
+                $t->set_var('resultMetaLabel', q($catTitles[$item->category_id] . ': ' . $valTitles[$item->category_value_id]));
                 $t->parse('resultMeta', 'resultMetaBlock', true);
             }, $course->course_id);
 
