@@ -210,17 +210,19 @@ if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analy
 $searching = false;
 $valTitles = $catTitles = $catNames = array();
 $t->set_var('formAction', $urlAppend . 'main/toolbox.php');
-$categories = Database::get()->queryArray("SELECT * FROM category WHERE active = 1 AND searchable = 1 ORDER BY ordering, id");
+$categories = Database::get()->queryArray("SELECT * FROM category WHERE active = 1 ORDER BY ordering, id");
 foreach ($categories as $category) {
     $catName = 'cat' . $category->id;
     $catNames[$category->id] = $catName;
-    $catTitles[$category->id] = $catTitle = q(getSerializedMessage($category->name));
-    if (isset($_GET[$catName])) {
-        $searching = true;
+    if ($category->searchable) {
+        $catTitles[$category->id] = $catTitle = q(getSerializedMessage($category->name));
+        if (isset($_GET[$catName])) {
+            $searching = true;
+        }
+        $t->set_var('selectFieldLabel', $catTitle);
+        $t->set_var('selectFieldName', $catName . '[]');
+        $t->set_var('selectFieldId', 'modules' . $catName);
     }
-    $t->set_var('selectFieldLabel', $catTitle);
-    $t->set_var('selectFieldName', $catName . '[]');
-    $t->set_var('selectFieldId', 'modules' . $catName);
     $values = Database::get()->queryArray("SELECT * FROM category_value
           WHERE category_id = ?d AND active = 1
           ORDER BY ordering, id", $category->id);
@@ -228,12 +230,14 @@ foreach ($categories as $category) {
         $valTitles[$value->id] = $valTitle = q(getSerializedMessage($value->name));
         $t->set_var('selectOptionTitle', $valTitle);
         $t->set_var('selectOptionValue', $value->id);
-        if (isset($_GET[$catName]) and in_array($value->id, $_GET[$catName])) {
-            $t->set_var('selectOptionSelected', 'selected');
-        } else {
-            $t->set_var('selectOptionSelected', '');
+        if ($category->searchable) {
+            if (isset($_GET[$catName]) and in_array($value->id, $_GET[$catName])) {
+                $t->set_var('selectOptionSelected', 'selected');
+            } else {
+                $t->set_var('selectOptionSelected', '');
+            }
+            $t->parse('selectOption', 'selectOptionBlock', true);
         }
-        $t->parse('selectOption', 'selectOptionBlock', true);
     }
 
     $t->parse('selectField', 'selectFieldBlock', true);
