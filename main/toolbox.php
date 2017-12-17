@@ -348,7 +348,7 @@ if ($searching) {
             ORDER BY category.ordering, category_value.ordering',
             function ($item) use ($t, $valTitles) {
                 $t->set_var('resultMetaIcon', 'fa-plus-circle');
-                $t->set_var('resultMetaLabel', q($valTitles[$item->category_value_id]));
+                $t->set_var('resultMetaLabel', q($catNames[$item->category_id] . ': ' . $valTitles[$item->category_value_id]));
                 $t->parse('resultMeta', 'resultMetaBlock', true);
             }, $course->course_id);
 
