@@ -214,8 +214,8 @@ $categories = Database::get()->queryArray("SELECT * FROM category WHERE active =
 foreach ($categories as $category) {
     $catName = 'cat' . $category->id;
     $catNames[$category->id] = $catName;
+    $catTitles[$category->id] = $catTitle = q(getSerializedMessage($category->name));
     if ($category->searchable) {
-        $catTitles[$category->id] = $catTitle = q(getSerializedMessage($category->name));
         if (isset($_GET[$catName])) {
             $searching = true;
         }
