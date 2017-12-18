@@ -3594,7 +3594,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `filename` varchar(255)
         ) $tbl_options");
 
-        Database::get()->query("CREATE TABLE `certificate` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate` (
             `id` int(11) not null auto_increment primary key,
             `course_id` int(11) not null,
             `issuer` varchar(255) not null default '',
