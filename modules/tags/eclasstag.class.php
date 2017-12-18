@@ -26,7 +26,7 @@ class eClassTag {
     private $name;
 
     public function __construct($name = '') {
-        $this->name = $name;
+        $this->name = canonicalize_whitespace($name);
     }
     public function getID() {
         return $this->id;
@@ -81,7 +81,7 @@ class eClassTag {
                                         q: term
                                     };
                                 },
-                                results: function(data, page) {
+                                processResults: function(data, page) {
                                     return {results: data};
                                 }
                             }
@@ -92,16 +92,16 @@ class eClassTag {
                 <div class='form-group'>
                     <label for='tags' class='col-sm-2 control-label'>$langTags:</label>
                     <div class='col-sm-10'>
-                        <select id='tags' class='form-control' name='tags' multiple>
+                        <select id='tags' class='form-control' name='tags[]' multiple>
                         </select>
                     </div>
                 </div>
         ";
         return $input_field;
     }
-    public function findOrCreate(){
-       if($this->name){
-            if($tag === $this->exists()) {
+    public function findOrCreate() {
+       if ($this->name){
+            if ($tag = $this->exists()) {
                 $this->id = $tag->id;
                 return $this->id;
             } else {
