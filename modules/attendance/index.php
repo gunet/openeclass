@@ -44,11 +44,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                                 WHERE user.id = course_user.user_id
                                                 AND course_user.course_id = ?d
                                                 AND course_user.status = " . USER_STUDENT . "
-                                            AND user.id NOT IN (SELECT uid FROM attendance_users WHERE attendance_id = $_REQUEST[attendance_id]) ORDER BY surname", $course_id);
+                                            AND user.id NOT IN (SELECT uid FROM attendance_users WHERE attendance_id = ?d) ORDER BY surname", $course_id, $_REQUEST[attendance_id]);
             $data[0] = $d1;
             // users who already participate in attendance
             $d2 = Database::get()->queryArray("SELECT uid AS id, givenname, surname FROM user, attendance_users
-                                        WHERE attendance_users.uid = user.id AND attendance_id = $_REQUEST[attendance_id] ORDER BY surname");
+                                        WHERE attendance_users.uid = user.id AND attendance_id = ?d ORDER BY surname", $_REQUEST[attendance_id]);
             $data[1] = $d2;
         }
     }
