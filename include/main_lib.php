@@ -2104,7 +2104,7 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'fullscreen,pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code,textcolor,colorpicker',
+    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking template wordcount advlist emoticons preview searchreplace table insertdatetime code textcolor colorpicker lists advlist',
     entity_encoding: 'raw',
     relative_urls: false,
     link_class_list: [
@@ -2116,10 +2116,10 @@ tinymce.init({
     // Menubar options
     menu : 'false',
     // Toolbar options
-    toolbar1: 'toggle | bold | italic | underline | forecolor | backcolor | emoticons | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
-    toolbar2: 'strikethrough | superscript | subscript | table | undo | redo | pastetext | cut | copy | paste | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
+    toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview',
+    toolbar2: 'outdent indent | emoticons strikethrough superscript subscript table | pastetext cut copy paste | removeformat | formatselect | fontsizeselect | searchreplace undo redo | code',
     // Replace values for the template plugin
-     // Toolbar options
+    // Toolbar options
     //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
