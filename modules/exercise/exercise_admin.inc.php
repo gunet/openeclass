@@ -67,7 +67,6 @@ if (isset($_POST['submitExercise'])) {
     ));
     if($v->validate()) {
         $exerciseTitle = trim($_POST['exerciseTitle']);
-        $randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($_POST['exerciseDescription']);
         $objExercise->updateType($_POST['exerciseType']);
@@ -88,9 +87,8 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTempSave($_POST['exerciseTempSave']);
         $objExercise->updateTimeConstraint($_POST['exerciseTimeConstraint']);
         $objExercise->updateAttemptsAllowed($_POST['exerciseAttemptsAllowed']);
-        if (isset($_POST['randomQuestions'])) {
-            $objExercise->setRandom($_POST['randomQuestions']);
-        }
+        $randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
+        $objExercise->setRandom($randomQuestions);
         $objExercise->updateResults($_POST['dispresults']);
         $objExercise->updateScore($_POST['dispscore']);
         $objExercise->updateAssignToSpecific($_POST['assign_to_specific']);
@@ -682,15 +680,15 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 <div class='col-sm-9'>
                     $exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit
                 </div>
-            </div>
+            </div>" . ($randomQuestions? "
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langRandomQuestions:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    $langSelection $randomQuestions $langFromRandomQuestions
+                    " . ($randomQuestions >= 32767 ? $langYes: "$langSelection $randomQuestions $langFromRandomQuestions") . "
                 </div>
-            </div>
+            </div>" : '') . "
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langAnswers:</strong>
