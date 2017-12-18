@@ -101,12 +101,14 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->assignTo(filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
 
-        //tags
+        // tags
+        $moduleTag = new ModuleElement($exerciseId);
         if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
-            $moduleTag = new ModuleElement($exerciseId);
-            $moduleTag->syncTags($tagsArray);
+            $moduleTag->syncTags($_POST['tags']);
+        } else {
+            $moduleTag->syncTags(array());
         }
+
 
         redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);
     } else {

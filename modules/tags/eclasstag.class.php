@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,48 +17,51 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 class eClassTag {
-    
+
     private $id;
     private $name;
-        
+
     public function __construct($name = '') {
-        $this->name = $name;
+        $this->name = canonicalize_whitespace($name);
     }
     public function getID() {
         return $this->id;
-    }    
+    }
     public function setName($name) {
         $this->name = $name;
-    }   
+    }
     public function getName() {
         return $this->name;
     }
     public static function tagInput($id = null) {
         global $langTags, $head_content, $course_code;
-        
+
         // initialize the tags
-        $answer = '';
-        if (isset($id)) {
+        if ($id) {
             require_once 'modules/tags/moduleElement.class.php';
             $moduleTag = new ModuleElement($id);
 
             $tags_init = $moduleTag->getTags();
-            foreach ($tags_init as $key => $tag) {
-                $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"" . js_escape($tag) . "\"},";
-                $answer = $answer . $arrayTemp;
-            }
-        }        
+            $answer = implode(',', array_map(function ($tag) {
+                return '{id:"' . js_escape($tag) . '", text:"' . js_escape($tag) . '", selected: true}';
+            }, $tags_init));
+        } else {
+            $answer = '';
+        }
         $head_content .= "
             <script>
                 $(function () {
                     $('#tags').select2({
+                            data: [".$answer."],
                             minimumInputLength: 2,
                             tags: true,
-                            tokenSeparators: [', '],
+                            tokenSeparators: [','],
+                            width: '100%',
+                            selectOnClose: true,
                             createSearchChoice: function(term, data) {
                               if ($(data).filter(function() {
                                 return this.text.localeCompare(term) === 0;
@@ -78,27 +81,27 @@ class eClassTag {
                                         q: term
                                     };
                                 },
-                                results: function(data, page) {
+                                processResults: function(data, page) {
                                     return {results: data};
                                 }
                             }
                     });
-                    $('#tags').select2('data', [".$answer."]);
-                });                
+                });
             </script>";
         $input_field = "
                 <div class='form-group'>
                     <label for='tags' class='col-sm-2 control-label'>$langTags:</label>
                     <div class='col-sm-10'>
-                        <input type='hidden' id='tags' class='form-control' name='tags' value=''>
+                        <select id='tags' class='form-control' name='tags[]' multiple>
+                        </select>
                     </div>
-                </div>             
+                </div>
         ";
         return $input_field;
-    }  
-    public function findOrCreate(){
-       if($this->name){
-            if($tag === $this->exists()) {
+    }
+    public function findOrCreate() {
+       if ($this->name){
+            if ($tag = $this->exists()) {
                 $this->id = $tag->id;
                 return $this->id;
             } else {
@@ -112,5 +115,5 @@ class eClassTag {
     private function exists() {
         $tag = Database::get()->querySingle('SELECT * FROM tag WHERE name = ?s', $this->name);
         return $tag;
-    }    
+    }
 }
