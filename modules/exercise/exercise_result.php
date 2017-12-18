@@ -448,9 +448,8 @@ if (count($exercise_question_ids) > 0) {
                             } elseif (!$thisChoice) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
                             } else {
-                                $choice[$answerId] = "<span class='text-danger'>
-                                                                <del>" . q($matching[$choice[$answerId]]) . "</del>
-                                                                </span>";
+                                $choice[$answerId] = "<span class='text-danger'><del>" .
+                                    $matching[$choice[$answerId]] . "</del></span>";
                             }
                         } else {
                             $matching[$answerId] = $answer;
@@ -520,7 +519,8 @@ if (count($exercise_question_ids) > 0) {
                             $tool_content .= "
                                                 <tr class='even'>
                                                   <td>" . standard_text_escape($answer) . "</td>
-                                                  <td>" . $choice[$answerId] ." / <span class='text-success'><b>" . q($matching[$answerCorrect]) . "</b></span></td>
+                                                  <td>" . $choice[$answerId] ." / <span class='text-success'><b>" .
+                                                          $matching[$answerCorrect] . "</b></span></td>
                                                 </tr>";
                         }
                     }
@@ -615,7 +615,7 @@ if ($showScore) {
 }
 $tool_content .= "
   <br/>
-  <div align='center'>" . (($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
+  <div class='text-center'>" . (($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
   "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>" : '')."
   <a class='btn btn-default' href='index.php?course=$course_code'>$langReturn</a>
   </div>";
