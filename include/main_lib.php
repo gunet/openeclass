@@ -325,7 +325,11 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-datetimepicker') {
             $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
             js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
-            $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+            if ($language != 'en') {
+                $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+            } else {             
+                $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";            
+            }
         } elseif ($file == 'bootstrap-timepicker') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
             $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';

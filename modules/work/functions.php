@@ -126,8 +126,9 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
         if ($row->file_path != $new_filename) {
             @unlink("$GLOBALS[workPath]/$row->file_path");
         }
+        $ass_cid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = ?d", $id)->course_id;
         Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
-        triggerGame($row->course_id, $row->uid, $id);
+        triggerGame($ass_cid, $row->uid, $id);
         if ($GLOBALS['uid'] == $row->uid) {
             $return .= $m['deleted_work_by_user'];
         } else {
