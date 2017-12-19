@@ -886,7 +886,7 @@ if ($can_upload or $user_upload) {
                                         $group_sql AND
                                         format <> '.dir' AND
                                         path=?s", $replacePath);
-        if ($result and (!uploading_as_user or $result->lock_user_id == $uid)) {
+        if ($result and (!$uploading_as_user or $result->lock_user_id == $uid)) {
             $docId = $result->id;
             $oldpath = $result->path;
             $oldformat = $result->format;
