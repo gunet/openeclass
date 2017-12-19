@@ -2119,7 +2119,7 @@ $langGroupFilledGroups = "Οι ομάδες χρηστών έχουν συμπλ
 $langGroupInfo = "Στοιχεία Ομάδας";
 
 // group - email
-$langEmailGroup = "Αποστολή e-mail στην ομάδα";
+$langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
 $langTypeMessage = "Πληκτρολογήστε το μήνυμά σας παρακάτω";
 $langSend = "Αποστολή";
 $langEmailSuccess = "Το e-mail σας στάλθηκε με επιτυχία !";
