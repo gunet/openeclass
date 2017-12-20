@@ -159,113 +159,112 @@ if (isset($_POST['submit'])) {
         }
         $msgURL = $urlServer . 'modules/message/index.php?mid=' . $msg->id;
         $errormail = FALSE;
-        if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients of dropbox file
+        if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients
             if ($course_id != 0 || isset($_POST['course'])) {//message in course context
+                $list_of_recipients = array();
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
-
                 foreach ($recipients as $userid) {
-                    if (get_user_email_notification($userid, $cid)) {
-                        $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
-                        $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
-                        $datetime = date('l jS \of F Y h:i:s A');
-                        $course_code = course_id_to_code($cid);
-                        $header_dropbox_message = "
-                            <!-- Header Section -->
-                            <div id='mail-header'>
-                                <div>
-                                    <br>
-                                    <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
-                                        <ul id='forum-category'>
-                                            <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
-                                            <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
-                                        </ul>
-                                </div>
-                            </div>";
-
-                        $main_dropbox_message = "
-                            <!-- Body Section -->
-                            <div id='mail-body'>
-                                <br>
-                                <div><b>$langSubject:</b> <span>$subject</span></div><br>
-                                <div><b>$langMailBody:</b></div>
-                                <div id='mail-body-inner'>
-                                    " . $_POST['body']. "
-                                </div><br/>";
-                        if ($filesize > 0) {
-                            $main_dropbox_message .= "<div><a href='${urlServer}modules/message/message_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a></div><br/>";
-                        }
-                        $main_dropbox_message .= "
-                            </div>";
-
-                        $footer_dropbox_message = "
-                            <!-- Footer Section -->
-                            <div id='mail-footer'>
-                                <br>
-                                <div id='alert'><small><b class='notice'>$langNote:</b> $langDoNotReply <a href='$msgURL'>$langHere</a>.</small></div>
-                                                <br>
-                                <div>
-                                    <small>" . sprintf($langLinkUnsubscribe, $c) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a></small>
-                                </div>
-                            </div>";
-
-                        $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
-
-                        $plain_body_dropbox_message = html2text($body_dropbox_message);
-                        $emailaddr = uid_to_email($userid);
-                        if (valid_email($emailaddr)) { // if email address is valid
-                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
-                        } else {
-                            $errormail = TRUE;
-                        }
+                    $emailaddr = uid_to_email($userid);
+                    if (get_user_email_notification($userid, $cid) and valid_email($emailaddr)) {
+                        array_push($list_of_recipients, $emailaddr);
                     }
                 }
+                $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
+                $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
+                $datetime = date('l jS \of F Y h:i:s A');
+                $course_code = course_id_to_code($cid);
+                $header_dropbox_message = "
+                    <!-- Header Section -->
+                    <div id='mail-header'>
+                        <div>
+                            <br>
+                            <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
+                                <ul id='forum-category'>
+                                    <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
+                                    <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
+                                </ul>
+                        </div>
+                    </div>";
+
+                $main_dropbox_message = "
+                    <!-- Body Section -->
+                    <div id='mail-body'>
+                        <br>
+                        <div><b>$langSubject:</b> <span>$subject</span></div><br>
+                        <div><b>$langMailBody</b></div>
+                        <div id='mail-body-inner'>
+                            " . $_POST['body']. "
+                        </div><br/>";
+                if ($filesize > 0) {
+                    $main_dropbox_message .= "<div><a href='${urlServer}modules/message/message_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a></div><br/>";
+                }
+                $main_dropbox_message .= "
+                    </div>";
+
+                $footer_dropbox_message = "
+                    <!-- Footer Section -->
+                    <div id='mail-footer'>
+                        <br>
+                        <div id='alert'><small><b class='notice'>$langNote:</b> $langDoNotReply <a href='$msgURL'>$langHere</a>.</small></div>
+                                        <br>
+                        <div>
+                            <small>" . sprintf($langLinkUnsubscribe, $c) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a></small>
+                        </div>
+                    </div>";
+
+                $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
+
+                $plain_body_dropbox_message = html2text($body_dropbox_message);
+                send_mail_multipart('', '', '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
+                
             } else {//message in personal context
                 $subject_dropbox = $langNewDropboxFile;
+                $list_of_recipients = array();
                 foreach ($recipients as $userid) {
-                    if (get_user_email_notification($userid)) {
-                        $datetime = date('l jS \of F Y h:i:s A');
-                        $header_dropbox_message = "
-                            <!-- Header Section -->
-                            <div id='mail-header'>
-                                <div>
-                                    <br>
-                                    <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
-                                        <ul id='forum-category'>
-                                            <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
-                                            <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
-                                        </ul>
-                                </div>
-                            </div>";
-
-                        $main_dropbox_message = "
-                            <!-- Body Section -->
-                            <div id='mail-body'>
-                                <br>
-                                <div><b>$langSubject:</b> <span>$subject</span></div><br>
-                                <div><b>$langMailBody</b></div>
-                                <div id='mail-body-inner'>
-                                    " . $_POST['body']. "
-                                </div><br/>
-                            </div>";
-
-                        $footer_dropbox_message = "
-                            <!-- Footer Section -->
-                            <div id='mail-footer'>
-                                <br>
-                                <div id='alert'><small><b class='notice'>$langNote:</b> $langDoNotReply <a href='$msgURL'>$langHere</a>.</small></div>
-                            </div>";
-
-                        $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
-                        $plain_body_dropbox_message = html2text($body_dropbox_message);
-                        $emailaddr = uid_to_email($userid);
-                        if (valid_email($emailaddr)) { // if email address is valid
-                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
-                        } else {
-                            $errormail = TRUE;
-                        }
+                    $emailaddr = uid_to_email($userid);
+                    if (get_user_email_notification($userid, $cid) and valid_email($emailaddr)) {
+                        array_push($list_of_recipients, $emailaddr);
                     }
                 }
+                $datetime = date('l jS \of F Y h:i:s A');
+                $header_dropbox_message = "
+                    <!-- Header Section -->
+                    <div id='mail-header'>
+                        <div>
+                            <br>
+                            <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
+                                <ul id='forum-category'>
+                                    <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
+                                    <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
+                                </ul>
+                        </div>
+                    </div>";
+
+                $main_dropbox_message = "
+                    <!-- Body Section -->
+                    <div id='mail-body'>
+                        <br>
+                        <div><b>$langSubject:</b> <span>$subject</span></div><br>
+                        <div><b>$langMailBody</b></div>
+                        <div id='mail-body-inner'>
+                            " . $_POST['body']. "
+                        </div><br/>
+                    </div>";
+
+                $footer_dropbox_message = "
+                    <!-- Footer Section -->
+                    <div id='mail-footer'>
+                        <br>
+                        <div id='alert'><small><b class='notice'>$langNote:</b> $langDoNotReply <a href='$msgURL'>$langHere</a>.</small></div>
+                    </div>";
+
+                $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
+                $plain_body_dropbox_message = html2text($body_dropbox_message);
+                $emailaddr = uid_to_email($userid);
+
+                send_mail_multipart('', '', '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
+                        
             }
         }
         if (!$errormail) {
