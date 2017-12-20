@@ -110,7 +110,8 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
 function sendMessage($message) {
     global $langMailError;
 
-    if ($email_bounces = get_config('email_bounces')) {
+    $email_bounces = get_config('email_bounces');
+    if ($email_bounces) {
         $message->setReturnPath($email_bounces);
     }
 
