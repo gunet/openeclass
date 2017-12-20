@@ -228,9 +228,9 @@ foreach ($categories as $category) {
           ORDER BY ordering, id", $category->id);
     foreach ($values as $value) {
         $valTitles[$value->id] = $valTitle = q(getSerializedMessage($value->name));
-        $t->set_var('selectOptionTitle', $valTitle);
-        $t->set_var('selectOptionValue', $value->id);
         if ($category->searchable) {
+            $t->set_var('selectOptionTitle', $valTitle);
+            $t->set_var('selectOptionValue', $value->id);
             if (isset($_GET[$catName]) and in_array($value->id, $_GET[$catName])) {
                 $t->set_var('selectOptionSelected', 'selected');
             } else {
@@ -240,7 +240,9 @@ foreach ($categories as $category) {
         }
     }
 
-    $t->parse('selectField', 'selectFieldBlock', true);
+    if ($category->searchable) {
+        $t->parse('selectField', 'selectFieldBlock', true);
+    }
     $t->set_var('selectOption', '');
 }
 
