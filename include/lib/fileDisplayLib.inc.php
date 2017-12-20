@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,32 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ==========================================================================
-  fileDisplayLib.inc.php
-  @last update: 30-06-2006 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.3 licensed under GPL
-  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-  original file: fileDisplayLib.inc.php Revision: 1.2
-
-  Claroline authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>
-  Hugues Peeters    <peeters@ipm.ucl.ac.be>
-  Christophe Gesche <gesche@ipm.ucl.ac.be>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+ * @brief strip submit value
+ * @param type $submitArray
  */
-
-/* * ***************************************
-  GENERIC FUNCTION :STRIP SUBMIT VALUE
- * *************************************** */
-
 function stripSubmitValue(&$submitArray) {
     while ($array_element = each($submitArray)) {
         $name = $array_element['key'];
@@ -53,16 +30,14 @@ function stripSubmitValue(&$submitArray) {
     }
 }
 
-/*
- * Define the image to display for each file extension
- * This needs an existing image repository to work
- *
+ /**
+ * @brief  Define the image to display for each file extension
+  * This needs an existing image repository to work
  * @author - Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - fileName (string) - name of a file
- * @retrun - the gif image to chose
+ * @return - image filename
  */
-
 function choose_image($fileName) {
     static $type, $image;
 
@@ -117,16 +92,14 @@ function choose_image($fileName) {
         }
     }
 
-    return 'default';
+    return 'fa-file';
 }
 
-/*
- * Transform the file size in a human readable format
- *
- * @author - ???
- * @param  - fileSize (int) - size of the file in bytes
+/**
+ * @brief Transform the file size in a human readable format
+ * @param type $fileSize
+ * @return string
  */
-
 function format_file_size($fileSize) {
     if ($fileSize >= 1073741824) {
         $fileSize = round($fileSize / 1073741824 * 100) / 100 . " GB";
@@ -141,13 +114,11 @@ function format_file_size($fileSize) {
     return $fileSize;
 }
 
-/*
- * Transform the file path in a url
- *
- * @param - filePaht (string) - relative local path of the file on the Hard disk
- * @return - relative url
+/**
+ * @brief Transform the file path in a url
+ * @param type $filePath
+ * @return type
  */
-
 function format_url($filePath) {
     $stringArray = explode("/", $filePath);
 
@@ -200,7 +171,7 @@ function public_file_path($disk_path, $filename = null) {
 }
 
 /**
- * Generate download URL for documents
+ * @brief Generate download URL for documents
  * @global type $course_code
  * @global type $urlServer
  * @global type $group_id
@@ -237,7 +208,6 @@ function file_url($path, $filename = null, $courseCode = null) {
 }
 
 /**
- *
  * @global type $course_code
  * @global type $urlServer
  * @global type $group_id
@@ -267,7 +237,8 @@ function file_playurl($path, $filename = null, $courseCode = null) {
 }
 
 /**
- * Initialize copyright/license global arrays for documents
+ * @brief Initialize copyright/license global arrays for documents
+ * @global type $language
  */
 function copyright_info_init() {
     global $language;
