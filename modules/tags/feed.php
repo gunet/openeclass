@@ -30,7 +30,7 @@ $q = $_GET['q']['term'];
 $taglist = Database::get()->queryArray("SELECT id, name FROM tag WHERE name LIKE ?s ORDER BY name", "%$q%");
 if ($taglist) {
     foreach ($taglist as $tag) {
-        $tags[] = array('id' => $tag->name, 'name' => $tag->name);
+        $tags[] = array('id' => $tag->name, 'text' => $tag->name);
     }
 } else {
     $tags = array();
