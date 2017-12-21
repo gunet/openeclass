@@ -247,44 +247,41 @@ if ($is_editor) {
             Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
         } elseif ($_POST['specific_gradebook_users'] == 1) { // specific users
             $active_gradebook_users = '';
-            $extra_sql_not_in = "";
-            $extra_sql_in = "";
-            if (isset($_POST['specific'])) {
-                foreach ($_POST['specific'] as $u) {
-                    $active_gradebook_users .= $u . ",";
-                }
+            if (isset($_POST['specific']) and count($_POST['specific'])) {
+                $active_gradebook_users = $_POST['specific'];
+                $sql_placeholders = '(' . implode(', ', array_fill(0, count($active_gradebook_users), '?d')) . ')';
+                $users = Database::get()->queryArray("SELECT uid FROM gradebook_users
+                    WHERE gradebook_id = ?d AND uid NOT IN $sql_placeholders", $gradebook_id, $active_gradebook_users);
+            } else {
+                $users = Database::get()->queryArray('SELECT uid FROM gradebook_users
+                    WHERE gradebook_id = ?d', $gradebook_id);
             }
-            $active_gradebook_users = substr($active_gradebook_users, 0, -1);
-            if ($active_gradebook_users) {
-                $extra_sql_not_in .= " NOT IN ($active_gradebook_users)";
-                $extra_sql_in .= " IN ($active_gradebook_users)";
+            foreach ($users as $u) {
+                delete_gradebook_user($gradebook_id, $u->uid);
             }
-            $gu = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
-                                                AND uid$extra_sql_not_in", $gradebook_id);
-            foreach ($gu as $u) {
-                delete_gradebook_user($gradebook_id, $u);
-            }
-            $log_details = array('id' => $gradebook_id, 'title' => get_gradebook_title($gradebook_id), 'action' => 'delete users', 'user_count' => count($gu),'users' => $gu);
+            $log_details = array('id' => $gradebook_id, 'title' => get_gradebook_title($gradebook_id), 'action' => 'delete users', 'user_count' => count($users), 'users' => $users);
             Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
 
-            $already_inserted_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
-                                                AND uid$extra_sql_in", $gradebook_id);
             $already_inserted_ids = [];
-            foreach ($already_inserted_users as $already_inserted_user) {
-                array_push($already_inserted_ids, $already_inserted_user->uid);
-            }
-            if (isset($_POST['specific'])) {
-                foreach ($_POST['specific'] as $u) {
+            if (isset($active_gradebook_users)) {
+                $already_inserted_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
+                    AND uid IN $sql_placeholders", $gradebook_id, $active_gradebook_users);
+                $already_inserted_ids = [];
+                foreach ($already_inserted_users as $already_inserted_user) {
+                    array_push($already_inserted_ids, $already_inserted_user->uid);
+                }
+                $added_users = array();
+                foreach ($active_gradebook_users as $u) {
                     if (!in_array($u, $already_inserted_ids)) {
                         $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid)
-                                SELECT $gradebook_id, user_id FROM course_user
-                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
+                                SELECT ?d, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $gradebook_id, $course_id, $u);
                         update_user_gradebook_activities($gradebook_id, $u);
-                        $distinct_users_count++;
+                        $added_users[] = $u;
                     }
                 }
             }
-            $log_details = array('id'=>$gradebook_id,'title'=>  get_gradebook_title($gradebook_id),'action' => 'add users','user_count'=> $distinct_users_count, 'users'=>$_POST['specific']);
+            $log_details = array('id' => $gradebook_id, 'title'=> get_gradebook_title($gradebook_id), 'action' => 'add users', 'user_count'=> count($added_users), 'users' => $added_users);
             Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
         } else { // if we want all users between dates
             $usersstart = new DateTime($_POST['UsersStart']);
