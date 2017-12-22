@@ -2077,8 +2077,9 @@ function openDocsPicker(field_name, url, type, win) {
         height: 600,
         resizable: 'yes',
         inline: 'yes',
-        close_previous: 'no',
-        popup_css: false
+        close_previous: 'no',        
+        popup_css: false,
+        buttons: [{text: 'Cancel', onclick: 'close'}]
     }, {
         window: win,
         input: field_name
