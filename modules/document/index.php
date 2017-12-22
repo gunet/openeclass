@@ -85,7 +85,7 @@ if ($is_in_tinymce) {
     $menuTypeID = 5;
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
-    $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
+    $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;    
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
