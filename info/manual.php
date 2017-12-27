@@ -45,22 +45,22 @@ $data['general_tutorials'] = [
             'detail_descr' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langFinalDesc,
-                    'url' => "$url/$language:detail_descr"
+                    'url' => "$url/$language:detail_description"
                 ],
             'short_descr' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langShortDesc,
-                    'url' => "$url/$language:short_descr"
+                    'url' => "$url/$language:short_description"
                 ],
             'mant' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langManT,
-                    'url' => "$url/$language:mant"
+                    'url' => "$url/$language:teacher"
                 ],
             'mans' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langManS,
-                    'url' => "$url/$language:mans"
+                    'url' => "$url/$language:student"
                 ]
         ]
 ];
@@ -72,32 +72,32 @@ $data['teacher_tutorials'] = [
             'create_account' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langCreateAccount,
-                    'url' => "$url/$language:create_account"
+                    'url' => "$url/$language:wizards"
                 ],
             'create_course' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langCourseCreate,
-                    'url' => "$url/$language:create_course"
+                    'url' => "$url/$language:wizards"
                 ],
             'portfolio_management' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langUserPortfolio,
-                    'url' => "$url/$language:portfolio_management"
+                    'url' => "$url/$language:wizards"
                 ],
             'course_management' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langAdministratorCourse,
-                    'url' => "$url/$language:course_management"
+                    'url' => "$url/$language:wizards"
                 ],
             'forum_management' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langAdministratorForum,
-                    'url' => "$url/$language:forum_management"
+                    'url' => "$url/$language:wizards"
                 ],
             'group_management' =>
                 [
                     'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langAdministratorGroup,
-                    'url' => "$url/$language:group_management"
+                    'url' => "$url/$language:wizards"
                 ]
         ]
 ];
