@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.5
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,20 +37,20 @@ $tool_content .= action_bar(array(
                             ),false);
 $tool_content .= "<div class='list-group'>
     <li class='list-group-item list-header'>$langGeneralTutorials</li>
-   ". manlink($langFinalDesc, 'detail_descr', $language)
-    . manlink($langShortDesc, 'short_descr', $language)
-    . manlink($langManT, 'mant', $language)
-    . manlink($langManS, 'mans', $language) . "
+   ". manlink($langFinalDesc, 'detail_description', $language)
+    . manlink($langShortDesc, 'short_description', $language)
+    . manlink($langManT, 'teacher', $language)
+    . manlink($langManS, 'student', $language) . "
 </div>";
 
 $tool_content .= "<div class='list-group'>
     <li class='list-group-item list-header'>$langTeacherTutorials</li>
-   ". manlink($langCreateAccount, 'create_account', $language)
-    . manlink($langCourseCreate, 'create_course', $language)
-    . manlink($langUserPortfolio, 'portfolio_management', $language)
-    . manlink($langAdministratorCourse, 'course_management', $language)
-    . manlink($langAdministratorForum, 'forum_management', $language)
-    . manlink($langAdministratorGroup, 'group_management', $language) . "
+   ". manlink($langCreateAccount, 'wizards', $language)
+    . manlink($langCourseCreate, 'wizards', $language)
+    . manlink($langUserPortfolio, 'wizards', $language)
+    . manlink($langAdministratorCourse, 'wizards', $language)
+    . manlink($langAdministratorForum, 'wizards', $language)
+    . manlink($langAdministratorGroup, 'wizards', $language) . "
 </div>";
 
 $tool_content .= "<div class='list-group'>

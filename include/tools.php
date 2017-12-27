@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,29 +19,19 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Tool Component
- *
+/**  
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This component creates an array of the tools that are displayed on the left
- * side column .
- *
+ * @abstract This component creates an array of the tools that are displayed on the left side column 
  */
 
 require_once 'modules/tc/functions.php';
 require_once 'modules/message/class.mailbox.php';
 
-/*
- * Function getSideMenu
- *
- * Offers an upper-layer logic. Decides what function should be called to
- * create the needed tools array
- *
+/** 
+ * @brief Offers an upper-layer logic. Decides what function should be called to
+ * create the needed tools array 
  * @param int $menuTypeID Type of menu to generate
- * @param bool $rich Whether to include rich text notifications in title
- *
+ * @param bool $rich Whether to include rich text notifications in title 
  */
 
 function getSideMenu($menuTypeID, $rich=true) {
@@ -79,17 +69,13 @@ function getSideMenu($menuTypeID, $rich=true) {
     return $menu;
 }
 
-/*
- * Function getToolsArray
- *
- * Queries the database for tool information in accordance
+/** 
+ * @brief Queries the database for tool information in accordance
  * to the parameter passed.
- *
  * @param string $cat Type of lesson tools
  * @return array of course_module objects
  * @see function lessonToolsMenu
  */
-
 function getToolsArray($cat) {
     global $course_code;
 
@@ -140,7 +126,7 @@ function getToolsArray($cat) {
 
 
 /**
- * get course external links
+ * @brief get course external links
  * @global type $course_id
  * @return boolean
  */
@@ -159,16 +145,12 @@ function getExternalLinks() {
 }
 
 /**
- * Function loggedInMenu
  *
- * Creates a multi-dimensional array of the user's tools
+ * @brief Creates a multi-dimensional array of the user's tools
  * when the user is signed in, and not at a lesson specific tool,
  * in regard to the user's user level.
- *
  * (student | professor | platform administrator)
- *
  * @param bool $rich Whether to include rich text notifications in title
- *
  * @return array
  */
 function loggedInMenu($rich=true) {
@@ -350,11 +332,8 @@ function loggedInMenu($rich=true) {
 }
 
 /**
- * Function loggedOutMenu
- *
- * Creates a multi-dimensional array of the user's tools/links
- * for the menu presented when the user is not logged in.
- * *
+ * @brief Creates a multi-dimensional array of the user's tools/links
+ * for the menu presented when the user is not logged in. 
  * @return array
  */
 function loggedOutMenu() {
@@ -417,8 +396,7 @@ function loggedOutMenu() {
 }
 
 /**
- * Creates the administrator menu
- *
+ * @brief Creates the administrator menu 
  * @global type $language
  * @global type $urlServer
  * @global type $is_admin
@@ -640,7 +618,7 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langAdminManual']);
         $manual_language = ($language == 'el')? $language: 'en';
-        array_push($sideMenuLink, "http://docs.openeclass.org/doku.php?id=$manual_language:admin_doc");
+        array_push($sideMenuLink, "http://docs.openeclass.org/$manual_language/admin");
         array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuSubGroup, $sideMenuText);
@@ -652,15 +630,12 @@ function adminMenu() {
     return $sideMenuGroup;
 }
 
-/**
- * Function lessonToolsMenu
+/** 
  *
- * Creates a multi-dimensional array of the user's tools
+ * @brief Creates a multi-dimensional array of the user's tools
  * in regard to the user's user level
- * (student | professor | platform administrator)
- *
- * @param bool $rich Whether to include rich text notifications in title
- *
+ * (student | professor | platform administrator) 
+ * @param bool $rich Whether to include rich text notifications in title 
  * @return array
  */
 function lessonToolsMenu($rich=true) {
@@ -815,12 +790,10 @@ function lessonToolsMenu($rich=true) {
     return $sideMenuGroup;
 }
 
-/**
- * Function pickerMenu
+/** 
  *
- * Creates a multi-dimensional array of the user's tools/links
- * for the menu presented for the embedded theme.
- * *
+ * @brief Creates a multi-dimensional array of the user's tools/links
+ * for the menu presented for the embedded theme. 
  * @return array
  */
 function pickerMenu() {
@@ -917,11 +890,11 @@ function pickerMenu() {
 }
 
 /**
- * display number of open courses
+ * @brief display number of open courses
  * @global type $urlServer
  */
 function openCoursesExtra() {
-    global $urlAppend, $themeimg, $openCoursesExtraHTML;
+    global $urlAppend, $openCoursesExtraHTML;
 
     if (!isset($openCoursesExtraHTML) and !defined('UPGRADE')) {
         setOpenCoursesExtraHTML();
@@ -946,7 +919,7 @@ function openCoursesExtra() {
 }
 
 /**
- * display extras left
+ * @brief display extras left
  * @global type $langExtrasLeft
  * @global type $leftNavExtras
  */
@@ -959,7 +932,12 @@ function displayExtrasLeft() {
     }
 }
 
-// Get number of new documents for current user
+/**
+ * @brief Get number of new documents for current user
+ * @global type $session
+ * @param type $course_id
+ * @return int
+ */
 function get_new_document_count($course_id) {
     global $session;
 
