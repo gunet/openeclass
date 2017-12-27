@@ -216,14 +216,14 @@ if (isset($_POST['submit'])) {
                 $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
 
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
-                send_mail_multipart('', '', '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
+                send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
                 
             } else {//message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 $list_of_recipients = array();
                 foreach ($recipients as $userid) {
                     $emailaddr = uid_to_email($userid);
-                    if (get_user_email_notification($userid, $cid) and valid_email($emailaddr)) {
+                    if (valid_email($emailaddr)) {
                         array_push($list_of_recipients, $emailaddr);
                     }
                 }
@@ -263,7 +263,7 @@ if (isset($_POST['submit'])) {
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 $emailaddr = uid_to_email($userid);
 
-                send_mail_multipart('', '', '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
+                send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
                         
             }
         }

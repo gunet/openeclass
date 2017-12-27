@@ -126,7 +126,7 @@ function sendMessage($message) {
 
 // Determine the correct From: header
 function fromHeader($from, $from_address) {
-    global $langVia, $siteName, $charset;
+    global $langVia, $siteName;
 
     if (empty($from_address) or !get_config('email_from')) {
         $from_address = get_config('email_sender');
