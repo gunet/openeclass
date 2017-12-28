@@ -1815,14 +1815,14 @@ $db->query("CREATE TABLE `certificate_template` (
     `description` text,
     `filename` varchar(255),
     `orientation` varchar(10)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `badge_icon` (
     `id` mediumint(8) not null auto_increment primary key,
     `name` varchar(255) not null,
     `description` text,
     `filename` varchar(255)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `certificate` (
   `id` int(11) not null auto_increment primary key,
@@ -1838,9 +1838,9 @@ $db->query("CREATE TABLE `certificate` (
   `expires` datetime,
   `bundle` int(11) not null default 0,
   index `certificate_course` (`course_id`),
-  foreign key (`course_id`) references `course` (`id`),  
+  foreign key (`course_id`) references `course` (`id`),
   foreign key (`template`) references `certificate_template`(`id`)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `badge` (
   `id` int(11) not null auto_increment primary key,
@@ -1856,8 +1856,8 @@ $db->query("CREATE TABLE `badge` (
   `expires` datetime,
   `bundle` int(11) not null default 0,
   index `badge_course` (`course_id`),
-  foreign key (`course_id`) references `course` (`id`)  
-)");
+  foreign key (`course_id`) references `course` (`id`)
+) $tbl_options");
 
 $db->query("CREATE TABLE `user_certificate` (
   `id` int(11) not null auto_increment primary key,
@@ -1871,7 +1871,7 @@ $db->query("CREATE TABLE `user_certificate` (
   unique key `user_certificate` (`user`, `certificate`),
   foreign key (`user`) references `user`(`id`),
   foreign key (`certificate`) references `certificate` (`id`)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `user_badge` (
   `id` int(11) not null auto_increment primary key,
@@ -1885,7 +1885,7 @@ $db->query("CREATE TABLE `user_badge` (
   unique key `user_badge` (`user`, `badge`),
   foreign key (`user`) references `user`(`id`),
   foreign key (`badge`) references `badge` (`id`)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `certificate_criterion` (
   `id` int(11) not null auto_increment primary key,
@@ -1896,7 +1896,7 @@ $db->query("CREATE TABLE `certificate_criterion` (
   `threshold` decimal(7,2),
   `operator` varchar(20),
   foreign key (`certificate`) references `certificate`(`id`)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `badge_criterion` (
   `id` int(11) not null auto_increment primary key,
@@ -1907,7 +1907,7 @@ $db->query("CREATE TABLE `badge_criterion` (
   `threshold` decimal(7,2),
   `operator` varchar(20),
   foreign key (`badge`) references `badge`(`id`)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `user_certificate_criterion` (
   `id` int(11) not null auto_increment primary key,
@@ -1917,7 +1917,7 @@ $db->query("CREATE TABLE `user_certificate_criterion` (
   unique key `user_certificate_criterion` (`user`, `certificate_criterion`),
   foreign key (`user`) references `user`(`id`),
   foreign key (`certificate_criterion`) references `certificate_criterion`(`id`)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `user_badge_criterion` (
   `id` int(11) not null auto_increment primary key,
@@ -1927,7 +1927,7 @@ $db->query("CREATE TABLE `user_badge_criterion` (
   unique key `user_badge_criterion` (`user`, `badge_criterion`),
   foreign key (`user`) references `user`(`id`),
   foreign key (`badge_criterion`) references `badge_criterion`(`id`)
-)");
+) $tbl_options");
 
 $db->query("CREATE TABLE `certified_users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
