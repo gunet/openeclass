@@ -3244,7 +3244,7 @@ td {
             }
 
             &+.panel {
-                
+
             }
 
             .panel-heading {
@@ -3277,7 +3277,7 @@ td {
 
             }
 
-        }  
+        }
     }
 }
 
@@ -3334,14 +3334,14 @@ td {
     padding-bottom: 40px;
 }
 
-h4
+.certificate_panel h4
 {
     font-family: Roboto;
 }
-a{
+.certificate_panel a {
     color: inherit;
 }
-a:hover
+.certificate_panel a:hover
 {
     text-decoration: none;
     color: inherit;
@@ -3492,7 +3492,7 @@ a:hover
 }
 
 .course_completion_panel_percentage
-{                
+{
     bottom:15px;
     right:15px;
     font-size:20px;
@@ -3504,10 +3504,10 @@ a:hover
     background: #FFFFFF;
     color: #AAAAAA;
     line-height: 38px;
-    font-weight: 600;                
+    font-weight: 600;
 }
 .state_success
-{                
+{
     color: #11D888;
 }
 
