@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.6');
+define('ECLASS_VERSION', '3.6.1');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
