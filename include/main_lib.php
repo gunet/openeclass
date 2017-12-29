@@ -396,9 +396,10 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
 
     $course_code_link = "";
 
-    if (count($user) == 0) {
-        return '-';
-    } elseif (is_array($user)) {
+    if (is_array($user)) {
+        if (count($user) == 0) {
+            return '-';
+        }
         $begin = true;
         $html = '';
         foreach ($user as $user_data) {
@@ -1094,6 +1095,21 @@ function visible_module($module_id) {
                                 WHERE module_id = ?d AND
                                 course_id = ?d", $module_id, $course_id)->visible;
     if ($v == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @brief check if a module is disabled
+ * @param type $module_id
+ * @return boolean
+ */
+function is_module_disable($module_id) {
+
+    $q = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
+    if ($q) {
         return true;
     } else {
         return false;

@@ -55,7 +55,7 @@ function view($view_file, $view_data = array()) {
     $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
     $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
     $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
-    $require_editor;
+    $require_editor, $langHomePage;
 
         // negative course_id might be set in common documents
     if ($course_id < 1) {
@@ -120,13 +120,20 @@ function view($view_file, $view_data = array()) {
     $breadcrumbs = array();
     if (!$is_embedonce and !$is_mobile and $current_module_dir != '/') {
         // Breadcrumb landing page link
-        if ($landingUrl = get_config('landing_url')) {
+        $homepageSet = get_config('homepage');
+        $showStart = true;
+        if ($homepageSet == 'external' and ($landingUrl = get_config('landing_url'))) {
             $landingPageName = get_config('landing_name');
             if (!$landingPageName) {
                 $landingPageName = trans('langHomePage');
             }
             $item['bread_text'] = $landingPageName;
             $item['bread_href'] = $landingUrl;
+            array_push($breadcrumbs, $item);
+            unset($item);
+        } elseif ($homepageSet == 'toolbox') {
+            $item['bread_text'] = get_config('toolbox_name', $langHomePage);
+            $item['bread_href'] = $urlAppend . 'main/toolbox.php';
             array_push($breadcrumbs, $item);
             unset($item);
         }
