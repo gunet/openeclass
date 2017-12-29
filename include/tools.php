@@ -155,7 +155,7 @@ function getExternalLinks() {
  */
 function loggedInMenu($rich=true) {
     global $uid, $is_admin, $is_power_user, $is_usermanage_user,
-    $is_departmentmanage_user, $urlServer, $course_code, $session;
+    $is_departmentmanage_user, $urlServer, $session;
 
     $sideMenuGroup = array();
 
@@ -656,18 +656,15 @@ function lessonToolsMenu($rich=true) {
     if ($is_editor || $is_course_admin) {
         $tools_sections =
             array(array('type' => 'Public',
-                        'title' => $GLOBALS['langActiveTools'],
-                        'iconext' => '_on.png',
+                        'title' => $GLOBALS['langActiveTools'],                        
                         'class' => 'active'),
                   array('type' => 'PublicButHide',
-                        'title' => $GLOBALS['langInactiveTools'],
-                        'iconext' => '_off.png',
+                        'title' => $GLOBALS['langInactiveTools'],                        
                         'class' => 'inactive'));
     } else {
         $tools_sections =
             array(array('type' => 'Public',
-                        'title' => $GLOBALS['langCourseOptions'],
-                        'iconext' => '_on.png',
+                        'title' => $GLOBALS['langCourseOptions'],                        
                         'class' => 'active'));
     }
 
@@ -732,7 +729,7 @@ function lessonToolsMenu($rich=true) {
 
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
                             '/?course=' . $course_code));
-            array_push($sideMenuImg, $modules[$mid]['image'] . $section['iconext']);
+            array_push($sideMenuImg, $modules[$mid]['image']);
             array_push($sideMenuID, $mid);
         }
         array_push($sideMenuSubGroup, $sideMenuText);
@@ -778,7 +775,7 @@ function lessonToolsMenu($rich=true) {
             array_push($sideMenuText, $adm_mod['title']);
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $adm_mod['link'] .
                             '/?course=' . $course_code));
-            array_push($sideMenuImg, $adm_mod['image'] . $section['iconext']);
+            array_push($sideMenuImg, $adm_mod['image']);
         }
 
         array_push($sideMenuSubGroup, $sideMenuText);

@@ -5392,6 +5392,45 @@ $langThemeClouds = "Σύννεφα";
 $langPleaseEnterName = "Παρακαλώ εισάγετε όνομα"; 
 $langMindMapSaved = "Η εννοιολογική χαρτογράφηση αποθηκεύθηκε";
 
+/* * *********************************************
+ * coursecategory.php
+ * ********************************************* */
+$langCourseCategoryActions = "Κατηγορίες Μεταδεδομένων";
+$langCourseCategoryAdd = "Προσθήκη κατηγορίας";
+$langCourseCategoryDel = "Διαγραφή κατηγορίας";
+$langCourseCategoryEdit = "Επεξεργασία κατηγορίας";
+$langAllCourseCategories = "Κατηγορίες Μεταδεδομένων";
+$langEmptyCourseCategoryName = "Αφήσατε το όνομα κενό! Δοκιμάστε ξανά";
+$langCourseCategoryProErase = "Υπάρχουν τιμές που ανήκουν σε αυτή την κατηγορία μεταδεδομένων";
+$langCourseCategoryNoErase = "Η διαγραφή της κατηγορίας μεταδεδομένων δεν είναι δυνατή.";
+$langCourseCategoryErase = "Η κατηγορία μεταδεδομένων διαγράφηκε";
+$langEditCourseCategorySuccess = "Η επεξεργασία πραγματοποιήθηκε επιτυχώς";
+$langCourseCategory2 = "(π.χ. Μέγεθος Ομάδας)";
+$langCourseCategoryMultiple = "Πολλαπλότητα";
+$langCourseCategoryMultiple2 = "Η κατηγορία μεταδεδομένων θα έχει πολλαπλές τιμές";
+$langCourseCategorySearchable = "Αναζητήσιμη";
+$langCourseCategorySearchable2 = "Η κατηγορία μεταδεδομένων θα συμμετέχει στην ειδική εργαλειοθήκη αναζήτησης";
+$langCourseCategoryActive = "Ενεργή";
+$langCourseCategoryActive2 = "Η κατηγορία μεταδεδομένων θα εμφανίζεται στους χρήστες";
+$langCourseCategoryOrdering = "Ταξινόμηση";
+$langCourseCategoryOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
+$langEditCourseCategoryValues = "Επεξεργασία τιμών";
+$langCourseCategoryValues = "Τιμές Κατηγοριών Μεταδεδομένων";
+$langCourseCategoryValueAdd = "Προσθήκη τιμής κατηγορίας";
+$langCourseCategoryValueDel = "Διαγραφή τιμής κατηγορίας";
+$langCourseCategoryValueEdit = "Επεξεργασία τιμής κατηγορίας";
+$langAllCourseCategoryValues = "Τιμές Κατηγοριών Μεταδεδομένων";
+$langEmptyCourseCategoryValueName= "Αφήσατε το όνομα κενό! Δοκιμάστε ξανά";
+$langCourseCategoryValueErase = "Η τιμή της κατηγορίας μεταδεδομένων διαγράφηκε";
+$langEditCourseCategoryValueSuccess = "Η επεξεργασία πραγματοποιήθηκε επιτυχώς";
+$langCourseCategoryValue2 = "(π.χ. 1 - 30)";
+$langCourseCategoryValueOrdering = "Ταξινόμηση";
+$langCourseCategoryValueOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
+$langCourseCategoryValueActive = "Ενεργή";
+$langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδεδομένων θα εμφανίζεται στους χρήστες";
+$langInactiveCourseCategories = "Ανενεργές κατηγορίες";
+$langActiveCourseCategories = "Ενεργές κατηγορίες";
+
 // Messages for WebConf
 $langWebConf = "Ρυθμίσεις \"Wowza\" του $siteName";
 $langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή Wowza";
