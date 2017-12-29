@@ -4,7 +4,7 @@
  * ========================================================================
  * Open eClass 4.0 - E-learning and Course Management System
  * ========================================================================
-  Copyright(c) 2003-2016  Greek Universities Network - GUnet
+  Copyright(c) 2003-2018  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
 
   Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -107,6 +107,7 @@ define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_LTI_CONSUMER', 49);
+define('MODULE_ID_REQUEST', 50);
 
 // user modules
 

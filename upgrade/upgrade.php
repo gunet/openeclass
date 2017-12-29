@@ -3594,7 +3594,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `filename` varchar(255)
         ) $tbl_options");
 
-        Database::get()->query("CREATE TABLE `certificate` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate` (
             `id` int(11) not null auto_increment primary key,
             `course_id` int(11) not null,
             `issuer` varchar(255) not null default '',
@@ -3770,6 +3770,38 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
                  FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
                  FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
+        
+        // `request` tables (aka `ticketing`)
+        Database::get()->query("CREATE TABLE IF NOT EXISTS request (
+                id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                course_id INT(11) NOT NULL,  
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                creator_id INT(11) NOT NULL,
+                state TINYINT(4) NOT NULL,
+                `type` TINYINT(4) NOT NULL,
+                open_date DATETIME,
+                close_date DATETIME,
+               PRIMARY KEY(id)) $tbl_options");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS request_watcher (
+                id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                req_id INT(11) NOT NULL,
+                uid INT(11) NOT NULL,
+                `type` TINYINT(4) NOT NULL,
+                notification TINYINT(4) NOT NULL,
+                PRIMARY KEY(id)) $tbl_options");
+        
+        Database::get()->query("CREATE TABLE request_action (
+                id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                req_id INT(11) NOT NULL,
+                uid INT(11) NOT NULL,
+                old_state TINYINT(4) NOT NULL,
+                new_state TINYINT(4) NOT NULL,
+                filename VARCHAR(256),
+                real_filename VARCHAR(255),
+                comment TEXT,
+                PRIMARY KEY(id)) $tbl_options");        
     }
     
     

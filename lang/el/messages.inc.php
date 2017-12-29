@@ -5456,3 +5456,7 @@ $langLTIAppUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε μ
 $langLTIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
 $langNewLTIAppSessionDesc = "Σύντομη περιγραφή";
 $langLTIAppActions = "Ενέργειες";
+
+
+// ticketing (aka request)
+$langRequests = "Αιτήματα";

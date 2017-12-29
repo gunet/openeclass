@@ -1943,6 +1943,39 @@ $db->query("CREATE TABLE `certified_users` (
   `template_id` INT(11),
   PRIMARY KEY (`id`)) $tbl_options");
 
+
+$db->query("CREATE TABLE request (
+    id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    course_id INT(11) NOT NULL,  
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    creator_id INT(11) NOT NULL,
+    state TINYINT(4) NOT NULL,
+    `type` TINYINT(4) NOT NULL,
+    open_date DATETIME,
+    close_date DATETIME,
+   PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE request_watcher (
+    id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    req_id INT(11) NOT NULL,
+    uid INT(11) NOT NULL,
+    `type` TINYINT(4) NOT NULL,
+    notification TINYINT(4) NOT NULL,
+    PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE request_action (
+    id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    req_id INT(11) NOT NULL,
+    uid INT(11) NOT NULL,
+    old_state TINYINT(4) NOT NULL,
+    new_state TINYINT(4) NOT NULL,
+    filename VARCHAR(256),
+    real_filename VARCHAR(255),
+    comment TEXT,   
+    PRIMARY KEY(id)) $tbl_options");
+      
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();
