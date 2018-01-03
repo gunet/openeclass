@@ -21,12 +21,12 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.4.99');
+define('ECLASS_VERSION', '4.0-dev');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
 
-// mPDF library temporary file path and font path 
+// mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
     define("_MPDF_TEMP_PATH", $webDir . '/courses/temp/pdf/');
     define("_MPDF_TTFONTDATAPATH", $webDir . '/courses/temp/pdf/');
@@ -329,8 +329,8 @@ function load_js($file, $init='') {
             js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
             if ($language != 'en') {
                 $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
-            } else {             
-                $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";            
+            } else {
+                $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";
             }
         } elseif ($file == 'bootstrap-timepicker') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
@@ -445,7 +445,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
     $token = token_generate($user->id, true);
     $student_name = $user->surname || $user->givenname ? q($user->surname) . " " .  q($user->givenname) : $user->username;
     if (!empty($code)) {
-      $course_code_link = "&amp;course=$GLOBALS[course_code]"; 
+      $course_code_link = "&amp;course=$GLOBALS[course_code]";
     }
     return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token'>" .
             $student_name . "</a>" .
@@ -828,12 +828,12 @@ function user_exists($login) {
  * @return boolean
  */
 function is_inactive_user($uid) {
-    
-    $qry = Database::get()->querySingle("SELECT * FROM user 
-                            WHERE id = ?d 
+
+    $qry = Database::get()->querySingle("SELECT * FROM user
+                            WHERE id = ?d
                         AND expires_at < " . DBHelper::timeAfter() . "", $uid);
     if ($qry) {
-        return true;        
+        return true;
     } else {
         return false;
     }
@@ -1278,9 +1278,9 @@ function resource_access($visible, $public) {
  * @return boolean
  */
 function resource_belongs_to_progress_data($module, $resource_id) {
-         
+
     global $course_id;
-    
+
     // check if module belongs to certificate
     $sql = Database::get()->querySingle("SELECT * FROM certificate_criterion JOIN certificate "
                                             . "ON certificate.id = certificate_criterion.certificate "
@@ -1292,12 +1292,12 @@ function resource_belongs_to_progress_data($module, $resource_id) {
     // check if module belongs to badge
     $sql2 = Database::get()->querySingle("SELECT * FROM badge_criterion JOIN badge "
                                             . "ON badge.id = badge_criterion.badge "
-                                            . "WHERE course_id = ?d AND module = ?d AND resource = ?d", 
+                                            . "WHERE course_id = ?d AND module = ?d AND resource = ?d",
                                         $course_id, $module, $resource_id);
     if ($sql2) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -1605,26 +1605,26 @@ function delete_course($cid) {
         return;
     }
     $course_code = course_id_to_code($cid);
-    
-    
+
+
     Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion IN
                             (SELECT id FROM badge_criterion WHERE badge IN
                             (SELECT id FROM badge WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM badge_criterion WHERE badge IN 
+    Database::get()->query("DELETE FROM badge_criterion WHERE badge IN
                             (SELECT id FROM badge WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM user_badge WHERE badge IN 
-                            (SELECT id FROM badge WHERE course_id = ?d)", $cid);    
+    Database::get()->query("DELETE FROM user_badge WHERE badge IN
+                            (SELECT id FROM badge WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM badge WHERE course_id = ?d", $cid);
-    
-    Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN 
-                            (SELECT id FROM certificate_criterion WHERE certificate IN 
+
+    Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN
+                            (SELECT id FROM certificate_criterion WHERE certificate IN
                             (SELECT id FROM certificate WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM certificate_criterion WHERE certificate IN 
+    Database::get()->query("DELETE FROM certificate_criterion WHERE certificate IN
                             (SELECT id FROM certificate WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM user_certificate WHERE certificate IN 
+    Database::get()->query("DELETE FROM user_certificate WHERE certificate IN
                              (SELECT id FROM certificate WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM certificate WHERE course_id = ?d", $cid);
-               
+
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM document WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
@@ -1763,23 +1763,23 @@ function deleteUser($id, $log) {
     global $webDir;
 
     $u = intval($id);
-       
+
     if (!isset($webDir) or empty($webDir)) { // security
         return false;
     }
     if ($u == 1) { // don't delete admin user
         return false;
-    } else {        
+    } else {
         // validate if this is an existing user
-        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) {            
+        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) {
             Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
             // delete user assignments (if any)
-            $assignment_data = Database::get()->queryArray("SELECT assignment_id, file_path FROM assignment_submit WHERE uid = ?d", $u);            
+            $assignment_data = Database::get()->queryArray("SELECT assignment_id, file_path FROM assignment_submit WHERE uid = ?d", $u);
             if (count($assignment_data) > 0) { // if assignments found
                 foreach ($assignment_data as $data) {
                     $courseid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = $data->assignment_id")->course_id;
-                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);                
+                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
                 }
             }
             Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);
@@ -1832,11 +1832,11 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM `link` WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM eportfolio_fields_data WHERE user_id = ?d", $u);
-            
+
             // delete user images (if any)
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_256.*"));
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_32.*"));
-            
+
             //delete user e-portfolio files (if any)
             array_map('unlink', glob("$webDir/courses/eportfolio/userbios/{$u}/bio.pdf"));
             array_map('unlink', glob("$webDir/courses/eportfolio/work_submissions/{$u}/*"));
@@ -1849,7 +1849,7 @@ function deleteUser($id, $log) {
             if (is_dir("$webDir/courses/eportfolio/mydocs/{$u}")) {
                 rmdir("$webDir/courses/eportfolio/mydocs/{$u}");
             }
-            
+
             return true;
         } else {
             return false;
@@ -2049,7 +2049,7 @@ function openDocsPicker(field_name, url, type, win) {
         height: 600,
         resizable: 'yes',
         inline: 'yes',
-        close_previous: 'no',        
+        close_previous: 'no',
         popup_css: false,
         buttons: [{text: 'Cancel', onclick: 'close'}]
     }, {

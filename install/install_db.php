@@ -988,7 +988,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `submission_text` MEDIUMTEXT NULL DEFAULT NULL,
     `comments` TEXT NOT NULL,
     `grade` FLOAT DEFAULT NULL,
-	`grade_rubric` TEXT,
+    `grade_rubric` TEXT,
     `grade_comments` TEXT NOT NULL,
     `grade_comments_filepath` VARCHAR(200) NOT NULL DEFAULT '',
     `grade_comments_filename` VARCHAR(200) NOT NULL DEFAULT '',
@@ -1943,10 +1943,10 @@ $db->query("CREATE TABLE `certified_users` (
   `template_id` INT(11),
   PRIMARY KEY (`id`)) $tbl_options");
 
-
-$db->query("CREATE TABLE request (
-    id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    course_id INT(11) NOT NULL,  
+// `request` tables (aka `ticketing`)
+$db->query("CREATE TABLE IF NOT EXISTS request (
+    id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    course_id INT(11) NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     creator_id INT(11) NOT NULL,
@@ -1954,27 +1954,33 @@ $db->query("CREATE TABLE request (
     `type` TINYINT(4) NOT NULL,
     open_date DATETIME,
     close_date DATETIME,
-   PRIMARY KEY(id)) $tbl_options");
+    PRIMARY KEY(id),
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+    FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
 
-$db->query("CREATE TABLE request_watcher (
+$db->query("CREATE TABLE IF NOT EXISTS request_watcher (
     id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    req_id INT(11) NOT NULL,
-    uid INT(11) NOT NULL,
+    request_id INT(11) UNSIGNED NOT NULL,
+    user_id INT(11) NOT NULL,
     `type` TINYINT(4) NOT NULL,
     notification TINYINT(4) NOT NULL,
-    PRIMARY KEY(id)) $tbl_options");
+    PRIMARY KEY(id),
+    FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
 
-$db->query("CREATE TABLE request_action (
+$db->query("CREATE TABLE IF NOT EXISTS request_action (
     id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    req_id INT(11) NOT NULL,
-    uid INT(11) NOT NULL,
+    request_id INT(11) UNSIGNED NOT NULL,
+    user_id INT(11) NOT NULL,
     old_state TINYINT(4) NOT NULL,
     new_state TINYINT(4) NOT NULL,
     filename VARCHAR(256),
     real_filename VARCHAR(255),
-    comment TEXT,   
-    PRIMARY KEY(id)) $tbl_options");
-      
+    comment TEXT,
+    PRIMARY KEY(id),
+    FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';

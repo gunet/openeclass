@@ -3344,8 +3344,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
 
         // hierarchy extra fields
-        Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
-        Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
+        if (!DBHelper::fieldExists('hierarchy', 'description')) {
+            Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
+            Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
+        }
 
         Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
         Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
@@ -3417,6 +3419,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.6', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.6'));
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `order` INT(11) NOT NULL DEFAULT 0,
@@ -3752,9 +3756,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE user SET whitelist=NULL where username='admin'");
 
     }
-            
-    // upgrade queries for version 4.0    
+
+    // upgrade queries for version 4.0
     if (version_compare($oldversion, '4.0', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
                 `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `class` varchar(400) NOT NULL) $tbl_options");
@@ -3770,11 +3776,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
                  FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
                  FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
-        
+
         // `request` tables (aka `ticketing`)
         Database::get()->query("CREATE TABLE IF NOT EXISTS request (
                 id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                course_id INT(11) NOT NULL,  
+                course_id INT(11) NOT NULL,
                 title VARCHAR(255) NOT NULL,
                 description TEXT,
                 creator_id INT(11) NOT NULL,
@@ -3782,29 +3788,34 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `type` TINYINT(4) NOT NULL,
                 open_date DATETIME,
                 close_date DATETIME,
-               PRIMARY KEY(id)) $tbl_options");
-        
+               PRIMARY KEY(id),
+               FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+               FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS request_watcher (
                 id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                req_id INT(11) NOT NULL,
-                uid INT(11) NOT NULL,
+                request_id INT(11) UNSIGNED NOT NULL,
+                user_id INT(11) NOT NULL,
                 `type` TINYINT(4) NOT NULL,
                 notification TINYINT(4) NOT NULL,
-                PRIMARY KEY(id)) $tbl_options");
-        
-        Database::get()->query("CREATE TABLE request_action (
+                PRIMARY KEY(id),
+                FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS request_action (
                 id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                req_id INT(11) NOT NULL,
-                uid INT(11) NOT NULL,
+                request_id INT(11) UNSIGNED NOT NULL,
+                user_id INT(11) NOT NULL,
                 old_state TINYINT(4) NOT NULL,
                 new_state TINYINT(4) NOT NULL,
                 filename VARCHAR(256),
                 real_filename VARCHAR(255),
                 comment TEXT,
-                PRIMARY KEY(id)) $tbl_options");        
+                PRIMARY KEY(id),
+                FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
     }
-    
-    
+
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
