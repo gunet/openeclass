@@ -47,7 +47,7 @@
             <div class='table-responsive'>
                 <table class='table-default'>
                     <tr class='list-header'>
-                        <th class='text-left'>{!! trans('langLessonCode') !!}</th>
+                        <th class='text-left'>{!! trans('langCourseCode') !!}</th>
                     @if (isset($isInOpenCoursesMode))
                         <th class='text-left' width='220'>{!! trans('langTeacher') !!}</th>
                         <th width='30'>{!! trans('langOpenCoursesLevel') !!}</th>

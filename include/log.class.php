@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -369,9 +369,9 @@ class Log {
      * @global type $langActivate
      * @global type $langDeactivate
      * @global type $langBlogComment
-     * @global type $langBlogRating
+     * @global type $langBlogRatingLog
      * @global type $langsCourseSharing
-     * @global type $langBlogSharing
+     * @global type $langBlogSharingLog
      * @global type $langsCourseSharing
      * @global type $langCourseComment
      * @global type $langCourseAnonymousRating
@@ -386,8 +386,8 @@ class Log {
 
         global $langCourseStatusChange, $langIn, $langClosedCourse,
                $langRegCourse, $langOpenCourse, $langInactiveCourse,
-               $langActivate, $langDeactivate, $langBlogComment, $langBlogRating,
-               $langsCourseSharing, $langBlogSharing, $langCourseSharing,
+               $langActivate, $langDeactivate, $langBlogComment, $langBlogRatingLog,
+               $langsCourseSharing, $langBlogSharingLog, $langCourseSharing,
                $langCourseComment, $langsCourseAnonymousRating, $langsCourseRating,
                $langForumRating, $langCourseSocialBookmarks, $langCourseAbuseReport;
 
@@ -415,10 +415,10 @@ class Log {
                     $mes = "$lm $langBlogComment";
                     break;
                 case SETTING_BLOG_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
-                    $mes = "$lm $langBlogRating";
+                    $mes = "$lm $langBlogRatingLog";
                     break;
                 case SETTING_BLOG_SHARING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
-                    $mes = "$lm $langBlogSharing";
+                    $mes = "$lm $langBlogSharingLog";
                     break;
                 case SETTING_COURSE_SHARING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
                     $mes = "$lm $langsCourseSharing";
