@@ -4,7 +4,7 @@
  * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -286,7 +286,7 @@ if ($all_set) {
         // User Message
         $tool_content .= "<div class='alert alert-success'>" .
                 ($prof ? $langDearProf : $langDearUser) .
-                "!<br />$success</div><p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+                "!<br />$success</div><p>$infoprof<br /><br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
     }
     else {
         // email needs verification -> mail user
@@ -328,7 +328,7 @@ if ($all_set) {
         $tool_content .= "<div class='alert alert-success'>" .
                 ($prof ? $langDearProf : $langDearUser) .
                 "<br />$langMailVerificationSuccess
-            $langMailVerificationSuccess2</div><br /><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+            $langMailVerificationSuccess2</div><br /><p>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
     }
     draw($tool_content, 0);
     exit();

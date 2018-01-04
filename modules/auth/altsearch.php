@@ -4,7 +4,7 @@
  * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -209,7 +209,7 @@ if ($is_valid) {
     $tool_content .= $init_auth ? ("<div class='alert alert-success'>$langTheUser $ldapfound.</div>") : '';
     if (@(!empty($_SESSION['was_validated']['uname_exists']) and $_POST['p'] != 1)) {
         $tool_content .= "<div class='alert alert-danger'>$langUserFree<br />
-                                <br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
+                                <br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
         draw($tool_content, 0, null, $head_content);
         exit();
     }
@@ -348,7 +348,7 @@ if ($is_valid) {
             $tool_content .= "<div class='alert alert-success'>" .
                     ($prof ? $langDearProf : $langDearUser) .
                     "!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
-                                                <p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+                                                <p>$langMailVerificationSuccess4.<br /><br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
         }
     } elseif (empty($_SESSION['uname_app_exists'])) {
         $email_verification_required = get_config('email_verification_required');
@@ -458,11 +458,11 @@ if ($is_valid) {
             $tool_content .= "<div class='alert alert-success'>" .
                     ($prof ? $langDearProf : $langDearUser) .
                     "!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
-                                        <p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer'
+                                        <p>$langMailVerificationSuccess4.<br /><br />$langClick <a href='$urlServer'
                                         class='mainpage'>$langHere</a> $langBackPage</p>";
         }
     } elseif (!empty($_SESSION['uname_app_exists'])) {
-        $tool_content .= "<div class='alert alert-danger'>$langUserFree3<br><br>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langUserFree3<br><br>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
     }
 }
 draw($tool_content, 0);
