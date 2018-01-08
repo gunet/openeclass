@@ -20,50 +20,39 @@
  * ======================================================================== */
 
 
-// Disable modules admin page
+// New course default modules admin page
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'modules/create_course/functions.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$pageName = $langDisableModules;
+$navigation[] = array('url' => 'modules.php', 'name' => $langModules);
+$pageName = $langDefaultModules;
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
-    Database::get()->query('DELETE FROM module_disable');
-    $arr = array();
-    if (isset($_POST['moduleDisable'])) {
-        foreach ($_POST['moduleDisable'] as $key => &$value){
-          $arr[getDirectReference($key)] = $value;
-        }
-        $optArray = implode(', ', array_fill(0, count($_POST['moduleDisable']), '(?d)'));
-        Database::get()->query('INSERT INTO module_disable (module_id) VALUES ' . $optArray, array_keys($arr));
+    if (isset($_POST['module'])) {
+        $default = array_map(getDirectReference, array_keys($_POST['module']));
+        set_config('default_modules', serialize($default));
     }
     Session::Messages($langWikiEditionSucceed, 'alert-success');
-    redirect_to_home_page('modules/admin/modules.php');
+    redirect_to_home_page('modules/admin/modules_default.php');
 } else {
     $data['disabled'] = [];
     foreach (Database::get()->queryArray('SELECT module_id FROM module_disable') as $item) {
         $data['disabled'][] = $item->module_id;
     }
-    $data['action_bar'] = action_bar(
-                        [
-                            [ 'title' => $langDefaultModules,
-                              'url' => $urlAppend . 'modules/admin/modules_default.php',
-                              'icon' => 'fa-check-square-o',
-                              'level' => 'primary-label' ],
-                            [ 'title' => $langBack,
-                              'url' => $urlAppend . 'modules/admin/index.php',
-                              'icon' => 'fa-reply',
-                              'level' => 'primary-label' ]
-                        ], false);
-
-    $alwaysEnabledModules = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
-    foreach ($alwaysEnabledModules as $alwaysEnabledModule) {
-        unset($modules[$alwaysEnabledModule]);
-    }
     $data['modules'] = $modules;
+    $data['default'] = default_modules();
+
+    $data['action_bar'] = action_bar(
+        [
+            [ 'title' => $langBack,
+              'url' => $urlAppend . 'modules/admin/modules.php',
+              'icon' => 'fa-reply',
+              'level' => 'primary-label' ]
+        ], false);
+    $data['menuTypeID'] = 3;
+    view('admin.other.modules_default', $data);
 }
-$data['menuTypeID'] = 3;
-view('admin.other.modules', $data);

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -115,32 +115,35 @@ function create_course_dirs($code) {
  * @param type $cid
  */
 function create_modules($cid) {
-    $vis_module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS,
-        MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION, MODULE_ID_MESSAGE,);
+    global $modules;
 
-    $invis_module_ids = array(MODULE_ID_VIDEO, MODULE_ID_ASSIGN,
-        MODULE_ID_FORUM, MODULE_ID_EXERCISE,
-        MODULE_ID_GRADEBOOK, MODULE_ID_ATTENDANCE, MODULE_ID_GROUPS,
-        MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
-        MODULE_ID_CHAT, MODULE_ID_QUESTIONNAIRE,
-        MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BLOG, 
-        MODULE_ID_TC, MODULE_ID_WALL, MODULE_ID_LTI_CONSUMER, MODULE_ID_PROGRESS);
+    $module_ids[1] = default_modules();
+    $module_ids[0] = array_diff(array_keys($modules), $module_ids[1]);
 
-    $vis_placeholders = array();
-    $vis_args = array();
-    foreach ($vis_module_ids as $mid) {
-        $vis_placeholders[] = "(?d, 1, ?d)";
-        $vis_args[] = intval($mid);
-        $vis_args[] = intval($cid);
+    $args = $placeholders = array();
+    foreach (array(0, 1) as $vis) {
+        foreach ($module_ids[$vis] as $mid) {
+            $placeholders[] = '(?d, ?d, ?d)';
+            $args[] = array($mid, $vis, $cid);
+        }
     }
-    $invis_placeholders = array();
-    $invis_args = array();
-    foreach ($invis_module_ids as $mid) {
-        $invis_placeholders[] = "(?d, 0, ?d)";
-        $invis_args[] = intval($mid);
-        $invis_args[] = intval($cid);
-    }
+    Database::get()->query("INSERT IGNORE INTO course_module
+        (module_id, visible, course_id) VALUES " .
+        implode(', ', $placeholders), $args);
+}
 
-    Database::get()->query("INSERT INTO course_module (module_id, visible, course_id) VALUES " . implode(', ', $vis_placeholders), $vis_args);
-    Database::get()->query("INSERT INTO course_module (module_id, visible, course_id) VALUES " . implode(', ', $invis_placeholders), $invis_args);
+/**
+ * @brief default modules enabled in new courses
+ */
+function default_modules() {
+    // Modules enabled by default in new courses
+    $default_module_defaults = array(MODULE_ID_AGENDA, MODULE_ID_LINKS,
+        MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION,
+        MODULE_ID_MESSAGE);
+
+    if ($def = get_config('default_modules')) {
+        return unserialize($def);
+    } else {
+        return $default_module_defaults;
+    }
 }
