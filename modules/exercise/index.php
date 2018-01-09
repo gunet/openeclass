@@ -36,6 +36,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/search/indexer.class.php';
+
 ModalBoxHelper::loadModalBox();
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -89,7 +90,8 @@ if ($is_editor) {
 
     if (isset($_GET['exerciseId'])) {
         $exerciseId = $_GET['exerciseId'];
-    }
+    }    
+    
     if (!empty($_GET['choice'])) {
         // construction of Exercise
         $objExerciseTmp = new Exercise();
@@ -251,7 +253,7 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
+            $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
             $eid = getIndirectReference($row->id);
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;

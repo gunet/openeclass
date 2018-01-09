@@ -19,6 +19,24 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @brief display question
+ * @global type $tool_content
+ * @global type $picturePath
+ * @global type $langNoAnswer
+ * @global type $langQuestion
+ * @global type $langColumnA
+ * @global type $langColumnB
+ * @global type $langMakeCorrespond
+ * @global type $langInfoGrades
+ * @global type $i
+ * @global type $exerciseType
+ * @global type $nbrQuestions
+ * @global type $langInfoGrade
+ * @param type $objQuestionTmp
+ * @param type $exerciseResult
+ * @return type
+ */
 function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
     $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades, $i,
@@ -58,8 +76,8 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                     </div>";
 
     // construction of the Answer object
-    $objAnswerTmp = new Answer($questionId);
-    $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
+    $answer = new Answer($questionId);
+    $nbrAnswers = $answer->selectNbrAnswers();
 
     if ($answerType == FREE_TEXT) {
             $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
@@ -85,13 +103,13 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         $tool_content .= "<div class='form-inline' style='line-height:2.2;'>";
     }
 
-    for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-        $answer = $objAnswerTmp->selectAnswer($answerId);
+    for ($answer_id = 1; $answer_id <= $nbrAnswers; $answer_id++) {
+        $answer = $answer->selectAnswer($answer_id);
         if (is_null($answer) or $answer == '') {  // don't display blank or empty answers            
             continue;
         }        
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
-        $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+        $answerCorrect = $answer->isCorrect($answer_id);
         if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = Question::blanksSplitAnswer($answer);
@@ -106,7 +124,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         }
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {
-            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
+            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answer_id) ? 'checked="checked"' : '';
             $tool_content .= "
                         <div class='radio'>
                           <label>
@@ -117,7 +135,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         }
         // multiple answers
         elseif ($answerType == MULTIPLE_ANSWER) {
-            $checked = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == 1) ? 'checked="checked"' : '';
+            $checked = (isset($exerciseResult[$questionId][$answer_id]) && $exerciseResult[$questionId][$answer_id] == 1) ? 'checked="checked"' : '';
             $tool_content .= "
                         <div class='checkbox'>
                           <label>
@@ -134,9 +152,9 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         elseif ($answerType == MATCHING) {
             if (!$answerCorrect) {
                 // options (A, B, C, ...) that will be put into the list-box
-                $Select[$answerId]['Lettre'] = $cpt1++;
+                $Select[$answer_id]['Lettre'] = $cpt1++;
                 // answers that will be shown at the right side                
-                $Select[$answerId]['Reponse'] = standard_text_escape($answer);                
+                $Select[$answer_id]['Reponse'] = standard_text_escape($answer);                
             } else {
                 $tool_content .= "<tr>
                                   <td><b>${cpt2}.</b> " . standard_text_escape($answer) . "</td>
@@ -146,7 +164,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
 
                 // fills the list-box
                 foreach ($Select as $key => $val) {
-                    $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';
+                    $selected = (isset($exerciseResult[$questionId][$answer_id]) && $exerciseResult[$questionId][$answer_id] == $key) ? 'selected="selected"' : '';
                     $tool_content .= "<option value=\"" . q($key) . "\" $selected>${val['Lettre']}</option>";
                 }
                 $tool_content .= "</select></div></td><td width='200'>";
@@ -158,7 +176,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                 $tool_content .= "</td></tr>";
                 $cpt2++;
                 // if the left side of the "matching" has been completely shown
-                if ($answerId == $nbrAnswers) {
+                if ($answer_id == $nbrAnswers) {
                     // if it remains answers to shown at the right side
                     while (isset($Select[$cpt2])) {
                             $tool_content .= "<tr class='even'>
@@ -171,7 +189,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                 }  // end if()
             }
         } elseif ($answerType == TRUE_FALSE) {
-            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
+            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answer_id) ? 'checked="checked"' : '';
             $tool_content .= "
                         <div class='radio'>
                           <label>
@@ -194,9 +212,141 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                 </div>
             </div>";
     // destruction of the Answer object
-    unset($objAnswerTmp);
+    unset($answer);
     // destruction of the Question object
     unset($objQuestionTmp);
     
     return $nbrAnswers;
+}
+
+
+/**
+ * @brief exercise teacher view
+ * @global type $tool_content
+ * @global type $langQuestion
+ * @global type $picturePath
+ * @global type $langAnswer
+ * @global type $langComment
+ * @global type $langQuestionScore
+ * @global type $langYourTotalScore
+ * @global type $langChoice
+ * @global type $langCorrespondsTo
+ * @param type $exercise_id
+ */
+function display_exercise($exercise_id) {
+    
+    global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo, 
+           $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore;
+    
+    $exercise = new Exercise();    
+    $exercise->read($exercise_id);
+
+    $tool_content .= "<div class='panel panel-primary'>
+            <div class='panel-heading'>
+              <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "</h3>
+            </div>
+            <div class='panel-body'>" . $exercise->selectDescription() . "</div>
+        </div>";
+    
+    $question_list = $exercise->selectQuestionList();
+    $totalWeighting = $exercise->selectTotalWeighting();
+    $i = 0;
+    foreach ($question_list as $qid) {
+        $i++;
+        $question = new Question();
+        $question->read($qid);        
+        $questionName = $question->selectTitle();
+        $questionDescription = $question->selectDescription();
+        $questionWeighting = $question->selectWeighting();
+        $answerType = $question->selectType();
+        
+        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+            $colspan = 3;
+        } elseif ($answerType == MATCHING) {
+            $colspan = 2;
+        } else {
+            $colspan = 1;
+        }
+        
+        $tool_content .= "
+            <table class = 'table-default'>
+            <tr class='active'>
+              <td colspan='${colspan}'><strong><u>$langQuestion</u>: $i</strong></td>
+            </tr>
+            <tr>
+              <td colspan='${colspan}'>";
+        $tool_content .= "
+            <strong>" . q_math($questionName) . "</strong>
+            <br>" . standard_text_escape($questionDescription) . "<br><br>
+            </td></tr>";
+        
+        if (file_exists($picturePath . '/quiz-' . $qid)) {
+            $tool_content .= "<tr><td class='text-center' colspan='${colspan}'><img src='../../$picturePath/quiz-" . $qid . "'></td></tr>";
+        }
+        
+        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+            $tool_content .= "
+                <tr>
+                  <td colspan='2'><strong>$langAnswer</strong></td>
+                  <td><strong>$langComment</strong></td>
+                </tr>";
+        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+            $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
+        } elseif ($answerType == MATCHING) {
+            $tool_content .= "
+                <tr>
+                  <td><b>$langChoice</b></td>
+                  <td><b>$langCorrespondsTo</b></td>
+                </tr>";
+        }
+                
+        if ($answerType != FREE_TEXT) {
+            $answer = new Answer($qid);
+            $nbrAnswers = $answer->selectNbrAnswers();
+
+            for ($answer_id = 1; $answer_id <= $nbrAnswers; $answer_id++) {
+                $answerTitle = $answer->selectAnswer($answer_id);
+                $answerComment = standard_text_escape($answer->selectComment($answer_id));
+                $answerCorrect = $answer->isCorrect($answer_id);
+                $answerWeighting = $answer->selectWeighting($answer_id);
+
+                if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
+                    list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
+                } else {
+                    $answerTitle = standard_text_escape($answerTitle);
+                }                                
+                
+                if ($answerType != MATCHING || $answerCorrect) {
+                    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+                        $tool_content .= "<tr><td style='width: 70px;'><div align='center'>";
+                        if ($answerCorrect) {
+                            $icon_choice= "fa-check-square-o";
+                        } else {
+                            $icon_choice = "fa-square-o";
+                        }
+                        $tool_content .= icon($icon_choice)."</div>";
+                        $tool_content .= "</td><td>" . standard_text_escape($answerTitle) . "</td>
+                                               <td style='width: 200px;'>" . $answerComment . "</td>
+                                        </tr>";
+                    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+                        $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . "</td></tr>";
+                    } else {                                                
+                        $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
+                        $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "</td>";
+                        $tool_content .= "</tr>";
+                    }
+                }
+            }
+        }
+        $tool_content .= "<tr class='active'><th colspan='$colspan'>";        
+        $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";        
+        $tool_content .= "</th></tr>";
+        $tool_content .= "</table>";
+        
+        unset($answer);        
+    }
+    $tool_content .= "<br>
+            <table class='table-default'>
+            <tr><td class='text-right'><strong>$langYourTotalScore: $totalWeighting</strong></td></tr>
+            </table>";
 }
