@@ -140,6 +140,9 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
       'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
     );
     include 'imsqti.inc.php';
+    
+} elseif (isset($_GET['preview'])) { // exercise preview
+    display_exercise($exerciseId);
 } else {
     if (isset($_GET['NewExercise'])) {
         $pageName = $langNewEx;
