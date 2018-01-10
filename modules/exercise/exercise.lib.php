@@ -44,9 +44,6 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
 
     $questionId = $objQuestionTmp->id;
     $questionWeight = $objQuestionTmp->selectWeighting();
-    if ($questionWeight == 0) { // don't display incomplete questions
-        return;
-    }
     $answerType = $objQuestionTmp->selectType();
 
     $message = $langInfoGrades;
@@ -105,9 +102,9 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
-        if (is_null($answer) or $answer == '') {  // don't display blank or empty answers            
+        if (is_null($answer) or $answer == '') {  // don't display blank or empty answers
             continue;
-        }        
+        }
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
@@ -153,8 +150,8 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
             if (!$answerCorrect) {
                 // options (A, B, C, ...) that will be put into the list-box
                 $Select[$answerId]['Lettre'] = $cpt1++;
-                // answers that will be shown at the right side                
-                $Select[$answerId]['Reponse'] = standard_text_escape($answer);                
+                // answers that will be shown at the right side
+                $Select[$answerId]['Reponse'] = standard_text_escape($answer);
             } else {
                 $tool_content .= "<tr>
                                   <td><b>${cpt2}.</b> " . standard_text_escape($answer) . "</td>
@@ -215,7 +212,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     unset($objAnswerTmp);
     // destruction of the Question object
     unset($objQuestionTmp);
-    
+
     return $nbrAnswers;
 }
 
@@ -237,11 +234,11 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
  * @param type $exercise_id
  */
 function display_exercise($exercise_id) {
-    
-    global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo, 
-           $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore, 
+
+    global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
+           $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore,
            $langScore, $course_code, $langBack;
-    
+
     $tool_content .= action_bar(array(
         array('title' => $langBack,
               'url' => "index.php?course=$course_code",
@@ -249,8 +246,8 @@ function display_exercise($exercise_id) {
               'level' => 'primary-label'
         )
     ));
-    
-    $exercise = new Exercise();    
+
+    $exercise = new Exercise();
     $exercise->read($exercise_id);
 
     $tool_content .= "<div class='panel panel-primary'>
@@ -259,19 +256,19 @@ function display_exercise($exercise_id) {
             </div>
             <div class='panel-body'>" . $exercise->selectDescription() . "</div>
         </div>";
-    
+
     $question_list = $exercise->selectQuestionList();
     $totalWeighting = $exercise->selectTotalWeighting();
     $i = 0;
     foreach ($question_list as $qid) {
         $i++;
         $question = new Question();
-        $question->read($qid);        
+        $question->read($qid);
         $questionName = $question->selectTitle();
         $questionDescription = $question->selectDescription();
         $questionWeighting = $question->selectWeighting();
         $answerType = $question->selectType();
-        
+
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
             $colspan = 3;
         } elseif ($answerType == MATCHING) {
@@ -279,7 +276,7 @@ function display_exercise($exercise_id) {
         } else {
             $colspan = 1;
         }
-        
+
         $tool_content .= "
             <table class = 'table-default'>
             <tr class='active'>
@@ -291,11 +288,11 @@ function display_exercise($exercise_id) {
             <strong>" . q_math($questionName) . "</strong>
             <br>" . standard_text_escape($questionDescription) . "<br><br>
             </td></tr>";
-        
+
         if (file_exists($picturePath . '/quiz-' . $qid)) {
             $tool_content .= "<tr><td class='text-center' colspan='$colspan'><img src='../../$picturePath/quiz-" . $qid . "'></td></tr>";
         }
-        
+
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
             $tool_content .= "
                 <tr>
@@ -311,7 +308,7 @@ function display_exercise($exercise_id) {
                   <td><b>$langCorrespondsTo</b></td>
                 </tr>";
         }
-                
+
         if ($answerType != FREE_TEXT) {
             $answer = new Answer($qid);
             $nbrAnswers = $answer->selectNbrAnswers();
@@ -322,12 +319,12 @@ function display_exercise($exercise_id) {
                 $answerCorrect = $answer->isCorrect($answer_id);
                 $answerWeighting = $answer->selectWeighting($answer_id);
 
-                if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {                    
-                    list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);                    
+                if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
+                    list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
                 } else {
-                    $answerTitle = standard_text_escape($answerTitle);                    
-                }                                
-                
+                    $answerTitle = standard_text_escape($answerTitle);
+                }
+
                 if ($answerType != MATCHING || $answerCorrect) {
                     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                         $tool_content .= "<tr><td style='width: 70px;'><div align='center'>";
@@ -342,7 +339,7 @@ function display_exercise($exercise_id) {
                                         </tr>";
                     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                         $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: $answerWeighting)</small></strong></td></tr>";
-                    } else {                                                
+                    } else {
                         $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
                         $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>";
                         $tool_content .= "</tr>";
@@ -350,12 +347,12 @@ function display_exercise($exercise_id) {
                 }
             }
         }
-        $tool_content .= "<tr class='active'><th colspan='$colspan'>";        
-        $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";        
+        $tool_content .= "<tr class='active'><th colspan='$colspan'>";
+        $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
         $tool_content .= "</th></tr>";
         $tool_content .= "</table>";
-        
-        unset($answer);        
+
+        unset($answer);
     }
     $tool_content .= "<br>
             <table class='table-default'>
