@@ -142,6 +142,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
     include 'imsqti.inc.php';
     
 } elseif (isset($_GET['preview'])) { // exercise preview
+    $pageName = $langSee;
     display_exercise($exerciseId);
 } else {
     if (isset($_GET['NewExercise'])) {

@@ -222,6 +222,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
  * @global type $tool_content
  * @global type $course_code
  * @global type $langBack
+ * @global type $langModify
  * @global type $langQuestion
  * @global type $picturePath
  * @global type $langAnswer
@@ -237,7 +238,7 @@ function display_exercise($exercise_id) {
 
     global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore,
-           $langScore, $course_code, $langBack;
+           $langScore, $course_code, $langBack, $langModify;
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -252,7 +253,11 @@ function display_exercise($exercise_id) {
 
     $tool_content .= "<div class='panel panel-primary'>
             <div class='panel-heading'>
-              <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "</h3>
+              <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "
+                <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
+                  <span class='fa fa-edit' data-toggle='tooltip' data-original-title='$langModify'></span>
+                </a>
+              </h3>
             </div>
             <div class='panel-body'>" . $exercise->selectDescription() . "</div>
         </div>";
@@ -280,7 +285,12 @@ function display_exercise($exercise_id) {
         $tool_content .= "
             <table class = 'table-default'>
             <tr class='active'>
-              <td colspan='$colspan'><strong><u>$langQuestion</u>: $i</strong></td>
+              <td colspan='$colspan'>
+                <strong><u>$langQuestion</u>: $i</strong>
+                <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
+                  <span class='fa fa-edit' data-toggle='tooltip' data-original-title='$langModify'></span>
+                </a>
+                </td>
             </tr>
             <tr>
               <td colspan='$colspan'>";
@@ -304,8 +314,8 @@ function display_exercise($exercise_id) {
         } elseif ($answerType == MATCHING) {
             $tool_content .= "
                 <tr>
-                  <td><b>$langChoice</b></td>
-                  <td><b>$langCorrespondsTo</b></td>
+                  <td><strong>$langChoice</strong></td>
+                  <td><strong>$langCorrespondsTo</strong></td>
                 </tr>";
         }
 
@@ -334,13 +344,14 @@ function display_exercise($exercise_id) {
                             $icon_choice = "fa-square-o";
                         }
                         $tool_content .= icon($icon_choice)."</div>";
-                        $tool_content .= "</td><td>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
-                                               <td style='width: 200px;'>" . $answerComment . "</td>
+                        $tool_content .= "</td><td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
+                                               <td style='width: 250px;'>" . $answerComment . "</td>
                                         </tr>";
                     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-                        $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: $answerWeighting)</small></strong></td></tr>";
+                        $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . "</small></strong>
+                                          </td></tr>";
                     } else {
-                        $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
+                        $tool_content .= "<tr><td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>";
                         $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>";
                         $tool_content .= "</tr>";
                     }
