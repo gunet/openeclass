@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,25 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ===========================================================================
-  details.php
-  @last update: 05-12-2006 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7 licensed under GPL
-  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-  original file: tracking/learnPath_details.php Revision: 1.19
-
-  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-  ==============================================================================
-  @Description: This script displays the stats of all users of a course
-  for his progression into the chosen learning path
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+ * @file details.php
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+ * @author Piraux Sebastien <pir@cerdecam.be>
+ * @brief Displays course user progress in specific LP
  */
 
 $require_current_course = TRUE;
@@ -49,62 +35,88 @@ require_once 'include/lib/learnPathLib.inc.php';
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 $toolName = $langStatsOfLearnPath;
 
-// path id can not be empty, return to the list of learning paths
-if (empty($_REQUEST['path_id'])) {
+if (empty($_REQUEST['path_id'])) { // path id can not be empty
     header("Location: ./index.php?course=$course_code");
     exit();
+} else {
+    $path_id = intval($_REQUEST['path_id']);
 }
 
-$path_id = intval($_REQUEST['path_id']);
+load_js('datatables');
+
+$head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+            $('#lpu_progress').DataTable ({
+                'sPaginationType': 'full_numbers',
+                'bAutoWidth': true,
+                'searchDelay': 1000,
+                'order' : [[1, 'desc']],
+                'oLanguage': {
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '" . $langNoResult . "',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
+                   }
+               }
+            });
+            $('.dataTables_filter input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
+        });
+        </script>";
 
 // get infos about the learningPath
 $learnPathName = Database::get()->querySingle("SELECT `name` FROM `lp_learnPath` WHERE `learnPath_id` = ?d AND `course_id` = ?d", $path_id, $course_id);
 
 if ($learnPathName) {
-    // display title
     $titleTab['subTitle'] = htmlspecialchars($learnPathName->name);
-
-    // display a list of user and their respective progress
-    $sql = "SELECT U.`surname`, U.`givenname`, U.`id`
-		FROM `user` AS U,
-		     `course_user` AS CU
-		WHERE U.`id` = CU.`user_id`
-		AND CU.`course_id` = $course_id
-		ORDER BY U.`surname` ASC, U.`givenname` ASC";
-
-    @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
-
-    $usersList = get_limited_list($sql, 30);
-
     $pageName = $langLearnPath.": ".disp_tool_title($titleTab);
     
     $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "index.php",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label'))); 
-    
-    // display tab header
-    $tool_content .= '' . "\n\n"
-            . '    <div class="table-responsive"><table class="table-default">' . "\n"
-            . '    <tr class="list-header">' . "\n"
-            . '      <th class="text-left">' . $langStudent . '</th>' . "\n"
-            . '      <th width="5px">' . $langProgress . '</th>' . "\n"
-            . '    </tr>' . "\n";
-
-    // display tab content
+                      'level' => 'primary-label')));
+        
+    $tool_content .= "<div class='table-responsive'>
+                    <table id='lpu_progress' class='table-default'>
+                    <thead>
+                        <tr class='list-header'>
+                            <th class='text-left'>$langStudent</th>
+                            <th width='5px;'>$langProgress</th>
+                        </tr>
+                    </thead>";
+        
+    $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`
+		FROM `user` AS U,
+		     `course_user` AS CU
+		WHERE U.`id` = CU.`user_id`
+		AND CU.`course_id` = ?d
+		ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
+        
+    $tool_content .= "<tbody>";
     foreach ($usersList as $user) {
         $lpProgress = get_learnPath_progress($path_id, $user->id);
-        $tool_content .= "\n    <tr>";
-        $tool_content .= '' . "\n"
-                . '      <td><a href="detailsUserPath.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '&amp;path_id=' . $path_id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>' . "\n"
-                . '      <td align="right">'
-                . disp_progress_bar($lpProgress, 1)
-                . '</td>' . "\n"
-                . '    </tr>' . "\n";
-    }
-    // foot of table
-    $tool_content .= '    ' . "\n\n" . '    </table></div>' . "\n\n";
+        $tool_content .= "<tr>";
+        $tool_content .= "<td>
+                            <a href='detailsUserPath.php?course=$course_code&amp;uInfo=$user->id&amp;path_id=$path_id'>" . q($user->surname) . " " . q($user->givenname) . "</a>
+                        </td>
+                        <td align='right'>"
+                            . disp_progress_bar($lpProgress, 1) .
+                        "</td>";
+        $tool_content .= "</tr>";
+    }    
+    $tool_content .= "</tbody></table></div>";
 }
 
 draw($tool_content, 2, null, $head_content);

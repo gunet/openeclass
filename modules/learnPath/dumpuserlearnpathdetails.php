@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -32,16 +32,13 @@ if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
 $csv->filename = $course_code . "_learning_path_user_stats.csv";
-
 $csv->outputRecord($langStudent, $langAm, $langGroup, $langProgress);
 
-// display a list of user and their respective progress
-$sql = "SELECT U.`surname`, U.`givenname`, U.`id`
+$usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`
 		FROM `user` AS U, `course_user` AS CU
 		WHERE U.`id`= CU.`user_id`
-		AND CU.`course_id` = $course_id
-		ORDER BY U.`surname` ASC, U.`givenname` ASC";
-$usersList = get_limited_list($sql, 500000);
+		AND CU.`course_id` = ?d
+		ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
 foreach ($usersList as $user) {
     $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
     $iterator = 1;
