@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,23 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ===========================================================================
-  detailsUserPath.php
-  @last update: 30-06-2006 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7 licensed under GPL
-  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-  original file: tracking/lp_modules_details.php Revision: 1.20
-  ==============================================================================
-  @Description: This script presents the student's progress for a learning
-  path to the teacher.
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+ * @file details.php
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+ * @author Piraux Sebastien <pir@cerdecam.be>
+ * @brief Displays student's progress for a LP  
  */
 
 $require_current_course = TRUE;
@@ -47,6 +35,12 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 $navigation[] = array("url" => "details.php?course=$course_code&amp;path_id=" . $_REQUEST['path_id'], "name" => $langStatsOfLearnPath);
 $pageName = $langTrackUser;
+
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "detailsUser.php?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')),false);
 
 if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
     header("Location: ./index.php?course=$course_code");
@@ -81,9 +75,9 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 		AND LPM.`learnPath_id` = ?d
 		AND LPM.`visible` = 1
 		AND LPM.`module_id` = M.`module_id`
-		AND M.`course_id` = ?d
-	GROUP BY LPM.`module_id`
-	ORDER BY LPM.`rank`";
+		AND M.`course_id` = ?d                
+        ORDER BY LPM.`rank`";	
+	
 $moduleList = Database::get()->queryArray($sql, $_REQUEST['uInfo'], $_REQUEST['path_id'], $course_id);
 
 $extendedList = array();
@@ -122,35 +116,25 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
     }
 }
 
-$tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => "detailsUser.php?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')),false);
-
 $tool_content .= "
         <div class='row margin-bottom-thin'>
             <div class='col-xs-12'>
-                <div>
-                    <b>$langLearnPath:</b> <span class='text-muted'>$LPname</span>
-                </div>
-                <div>
-                    <b>$langStudent:</b> <span class='text-muted'>".q($uDetails->surname) . "&nbsp;" . q($uDetails->givenname) . " (" . q($uDetails->email).")</span>
+                <div class='alert alert-info'>
+                    <strong>$langLearnPath:</strong> <span class='text-muted'>$LPname</span><br>
+                    <strong>$langStudent:</sstrong> <span class='text-muted'>".q($uDetails->surname) . "&nbsp;" . q($uDetails->givenname) . " (" . q($uDetails->email).")</span>
                 </div>
             </div>
-        </div>
-        ";
-// -------------------- table header ----------------------------
-$tool_content .= '<div class="table-responsive">
-    <table class="table-default">' . "\n"
-        // ------------------- some user details --------------------------
-        . '    <tr class="list-header">' . "\n"
-        . '      <th colspan="' . ($maxDeep + 1) . '">' . $langLearningObjects . '</th>' . "\n"
-        . '      <th>' . $langLastSessionTimeSpent . '</th>' . "\n"
-        . '      <th>' . $langTotalTimeSpent . '</th>' . "\n"
-        . '      <th>' . $langLessonStatus . '</th>' . "\n"
-        . '      <th>' . $langProgress . '</th>' . "\n"
-        . '    </tr>' . "\n";
+        </div>";
+
+$tool_content .= "<div class='table-responsive'>
+    <table class='table-default'>
+        <tr class='list-header'>
+            <th colspan=" . ($maxDeep + 1) . ">$langLearningObjects</th>
+            <th>$langLastSessionTimeSpent</th>
+            <th>$langTotalTimeSpent</th>
+            <th>$langLessonStatus</th>
+            <th>$langProgress</th>
+        </tr>";
 
 // ---------------- display list of elements ------------------------
 foreach ($flatElementList as $module) {
@@ -194,10 +178,10 @@ foreach ($flatElementList as $module) {
             $moduleImg = choose_image(basename($module['path']));
         }
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= icon($moduleImg, $contentType_alt) . q($module['name']) . '</small>';
+        $tool_content .= icon($moduleImg, $contentType_alt) . "&nbsp;&nbsp;" . q($module['name']) . '</small>';
     }
 
-    $tool_content .= '</td>' . "\n";
+    $tool_content .= "</td>";
 
     if ($module['contentType'] == CTSCORM_) {
         $session_time = preg_replace("/\.[0-9]{0,2}/", "", $module['session_time']);
@@ -218,11 +202,11 @@ foreach ($flatElementList as $module) {
         }
     }
     //-- session_time
-    $tool_content .= '      <td>' . $session_time . '</td>' . "\n";
+    $tool_content .= "<td>$session_time</td>";
     //-- total_time
-    $tool_content .= '      <td>' . $total_time . '</td>' . "\n";
+    $tool_content .= "<td>$total_time</td>";
     //-- status
-    $tool_content .= '      <td>';
+    $tool_content .= "<td>";
     if ($module['contentType'] == CTEXERCISE_ && $module['lesson_status'] != "") {
         if ($module['lesson_status'] == "NOT ATTEMPTED") {
             $tool_content .= $langNotAttempted;
@@ -256,13 +240,13 @@ foreach ($flatElementList as $module) {
             $tool_content .= strtolower($module['lesson_status']);
         }
     }
-    $tool_content .= '</td>' . "\n";
+    $tool_content .= "</td>";
     //-- progression
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
-        $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n";
+        $tool_content .= "<td align='right' width='120'>" . disp_progress_bar($progress, 1) . "</td>";
     } else { // label
-        $tool_content .= '      <td>&nbsp;</td>' . "\n";
+        $tool_content .= "<td>&nbsp;</td>";
     }
 
     if ($progress > 0) {
@@ -272,24 +256,23 @@ foreach ($flatElementList as $module) {
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
     }
 
-    $tool_content .= '    </tr>' . "\n";
+    $tool_content .= "</tr>";
 }
 
 if ($moduleNb == 0) {
-    $tool_content .= '    <tr class="odd">' . "\n" . '<td align="center" colspan="5">' . $langNoModule . '</td>' . "\n" . '    </tr>' . "\n";
+    $tool_content .= "<tr><td class='text-center' colspan='5'>$langNoModule</td></tr>";
 } elseif ($moduleNb > 0) {
     // display global stats
-    $tool_content .= '    <tr class="odd">' . "\n"
-            . '      <th colspan="' . ($maxDeep + 1) . '">&nbsp;</th>' . "\n"
-            . '      <th align="right">' . (($global_time != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . '</th>' . "\n"
-            . '      <th align="center">' . (($global_time != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;') . '</th>' . "\n"
-            . '<th align="right"><small>' . $langGlobalProgress . '</small></th>' . "\n"
-            . '<th align="right">'
+    $tool_content .= "<tr>
+            <th colspan=" . ($maxDeep + 1) . ">&nbsp;</th>
+            <th align='right'>" . (($global_time != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . "</th>
+            <th align='center'>" . (($global_time != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;') . "</th>
+            <th align='right'><small>" . $langGlobalProgress . "</small></th>
+            <th align='right'>"
             . disp_progress_bar(round($globalProg / ($moduleNb)), 1)
-            . '</th>' . "\n"
-            . '    </tr>';
+            . "</th></tr>";
 }
-$tool_content .= "\n</table></div>\n";
+$tool_content .= "</table></div>";
 
 draw($tool_content, 2, null, $head_content);
 
