@@ -5529,3 +5529,12 @@ $langLTIAppActions = "Ενέργειες";
 
 // ticketing (aka request)
 $langRequests = "Αιτήματα";
+$langNewRequest = "Νέο αίτημα";
+$langRequestCreated = 'Το αίτημα δημιουργήθηκε.';
+$langWatchers = 'Παρατηρητές';
+$langRequestStateNew = 'Νέο';
+$langRequestStateAssigned = 'Ανειλημμένο';
+$langRequestStateLocked = 'Κλειδωμένο';
+$langRequestStateClosed = 'Κλειστό';
+$langOpenedOn = 'Δημιουργία';
+$langUpdatedOn = 'Τροποποίηση';

@@ -3786,11 +3786,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 creator_id INT(11) NOT NULL,
                 state TINYINT(4) NOT NULL,
                 `type` TINYINT(4) NOT NULL,
-                open_date DATETIME,
+                open_date DATETIME NOT NULL,
+                change_date DATETIME NOT NULL,
                 close_date DATETIME,
-               PRIMARY KEY(id),
-               FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-               FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
+                PRIMARY KEY(id),
+                FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS request_watcher (
                 id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -3799,6 +3800,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `type` TINYINT(4) NOT NULL,
                 notification TINYINT(4) NOT NULL,
                 PRIMARY KEY(id),
+                UNIQUE KEY (request_id, user_id),
                 FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
 
@@ -3806,6 +3808,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
                 request_id INT(11) UNSIGNED NOT NULL,
                 user_id INT(11) NOT NULL,
+                ts DATETIME NOT NULL,
                 old_state TINYINT(4) NOT NULL,
                 new_state TINYINT(4) NOT NULL,
                 filename VARCHAR(256),
