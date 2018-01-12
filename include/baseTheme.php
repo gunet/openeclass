@@ -54,7 +54,7 @@ function view($view_file, $view_data = array()) {
     $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
     $require_editor, $langHomePage;
 
-        // negative course_id might be set in common documents
+    // negative course_id might be set in common documents
     if ($course_id < 1) {
         unset($course_id);
         unset($course_code);
@@ -72,7 +72,13 @@ function view($view_file, $view_data = array()) {
     unset($_SESSION['embedonce']);
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-    //die($current_module_dir);
+    $default_open_group = 0; // Open first tool group by default
+    foreach ($toolArr as $tool_group_id => $tool_group) {
+        if (in_array($current_module_dir, array_map(module_path, $tool_group[2]))) {
+            $default_open_group = $tool_group_id;
+        }
+    }
+
     $eclass_version = ECLASS_VERSION;
     $template_base = $urlAppend . 'template/' . $theme;
     if (isset($_SESSION['uname'])) {
@@ -211,7 +217,7 @@ function view($view_file, $view_data = array()) {
     }
 
     // if $require_help is true (set by each tool) display the help link
-    if ($require_help == true) {        
+    if ($require_help == true) {
         $head_content .= "
         <script>
         $(function() {
@@ -302,7 +308,7 @@ function view($view_file, $view_data = array()) {
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
-            'show_toggle_student_view', 'themeimg', 'currentCourseName');
+            'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group');
     $data = array_merge($global_data, $view_data);
     echo $blade->view()->make($view_file, $data)->render();
 }

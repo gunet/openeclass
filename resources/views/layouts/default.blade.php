@@ -35,17 +35,17 @@
 
      <!-- BootBox -->
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js?v={{ $eclass_version }}"></script>
-    
+
     <!-- SlimScroll -->
     <script src="{{ $urlAppend }}js/jquery.slimscroll.min.js"></script>
     <!-- BlockUI -->
     <script src="{{ $urlAppend }}js/blockui-master/jquery.blockUI.js"></script>
     <script>
         $(function() {
-            $('.blockUI').click(function() { 
-                $.blockUI({ message: "<h4><span class='fa fa-refresh fa-spin'></span> {{ trans('langPleaseWait') }}</h4>" }); 
-            }); 
-        });     
+            $('.blockUI').click(function() {
+                $.blockUI({ message: "<h4><span class='fa fa-refresh fa-spin'></span> {{ trans('langPleaseWait') }}</h4>" });
+            });
+        });
     </script>
     <script>
     bootbox.setDefaults({
@@ -68,12 +68,12 @@
 
 </head>
 
-<body>    
+<body>
     @if (!$is_mobile)
         <div class="{{ $container }} header_container">
             <div class="row" id="header_section">
                 <div id="bgr-cheat-header" class="hidden-xs hidden-sm col-md-2"></div>
-                <div class="col-xs-12 col-sm-12 col-md-10 nav-container">               
+                <div class="col-xs-12 col-sm-12 col-md-10 nav-container">
                     <nav id="header" class="navbar navbar-default" role="navigation">
                         <button class="navbar-toggle pull-left">
                             <span class="fa fa-bars" style='color: #777;'></span>
@@ -99,7 +99,7 @@
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_courses.php"><span class="fa fa-graduation-cap fa-fw"></span>{!! trans('langMyCourses') !!}</a>
-                                        </li>                                    
+                                        </li>
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/message/index.php"><span class="fa fa-envelope-o fa-fw"></span>{!! trans('langMyDropBox') !!}</a>
                                         </li>
@@ -112,12 +112,12 @@
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/notes/index.php"><span class="fa fa-edit fa-fw"></span>{!! trans('langNotes') !!}</a>
                                         </li>
-                                        @if (get_config('personal_blog')) 
+                                        @if (get_config('personal_blog'))
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/blog/index.php?user_id={{ $uid }}&token={{ token_generate('personal_blog' . $uid) }}"><span class="fa fa-columns fa-fw"></span>{!! trans('langMyBlog') !!}</a>
                                         </li>
                                         @endif
-                                        @if (get_config('eportfolio_enable')) 
+                                        @if (get_config('eportfolio_enable'))
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&token={{ token_generate('eportfolio' . $uid) }}"><span class="fa fa-star fa-fw"></span>{{ trans('langMyePortfolio') }}</a>
                                         </li>
@@ -132,7 +132,7 @@
                                         </li>
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_widgets.php"><span class="fa fa-magic fa-fw"></span>{!! trans('langMyWidgets') !!}</a>
-                                        </li>                                        
+                                        </li>
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/usage/?t=u"><span class="fa fa-area-chart fa-fw"></span>{!! trans('langMyStats') !!}</a>
                                         </li>
@@ -152,7 +152,7 @@
                                         </a>
                                     </li>
                                 @endif
-                            @endif    
+                            @endif
                         </ul>
                     </nav>
                 </div>
@@ -183,7 +183,7 @@
                                         <a href='{{ $urlServer }}courses/{{ $course_code }}/'>{!! $section_title !!}</a>
                                     @else
                                         {!! $section_title !!}
-                                    @endif                                    
+                                    @endif
                                 </h1>
                                 @if (isset($course_id) && isset($professor))
                                     <h2 class='page-subtitle'>{!! $professor !!}</h2>
@@ -196,7 +196,7 @@
                                             @if ($require_help)
                                                 <a id='help-btn' href='{{ $urlAppend }}modules/help/help.php?topic={{ $helpTopic }}&amp;language={{ $language }}&amp;subtopic={{ $helpSubTopic }}'>
                                                     <span class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'></span>
-                                                </a>                                            
+                                                </a>
                                             @endif
                                             @if(defined('RSS'))
                                                 <a href='{{ $urlAppend.RSS }}'>
@@ -205,7 +205,7 @@
                                             @endif
                                             @if ($is_editor and isset($course_code) and display_activation_link($module_id))
                                                 <a href='{{$urlAppend . 'main/module_toggle.php?course='. $course_code . '&amp;module_id='. $module_id }}' id='module_toggle' data-state='{{ $module_visibility ? 0 : 1 }}' data-toggle='tooltip' data-placement='top' title='{{ $module_visibility ? trans('langDeactivate') : trans('langActivate') }}'><span class='fa tiny-icon {{ $module_visibility ? 'fa-minus-square tiny-icon-red' : 'fa-check-square tiny-icon-green' }}'></span></a>
-                                            @endif                                            
+                                            @endif
                                         </h2>
                                     </div>
                                 </div>
@@ -214,7 +214,7 @@
 
 
                             <div class='col-xs-3'>
-                                @if ($show_toggle_student_view)                                      
+                                @if ($show_toggle_student_view)
                                 <div class='pull-right'>
                                     <form method='post' action='{{ $urlAppend }}main/student_view.php?course={{ $course_code }}' id='student-view-form'>
                                         <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-toggle='tooltip' data-placement='top' title='{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}'>
@@ -228,7 +228,7 @@
                         </div>
                         @if ($messages)
                             <div class='row'>
-                                <div class='col-xs-12'>{!! $messages !!}</div>                                   
+                                <div class='col-xs-12'>{!! $messages !!}</div>
                             </div>
                         @endif
                         @yield('content')
@@ -236,7 +236,7 @@
                 </div>
             </div>
 
-            <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar float-menu">            
+            <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar float-menu">
                 <div class="logo">
                     <a href='{{ $urlAppend }}'>
                     <img class="img-responsive hidden-xs hidden-sm" src="{{ $logo_img }}" alt='{{ $pageTitle }} logo'>
@@ -255,10 +255,10 @@
                     </form>
                 </div>
                 @endif
-                <div class="panel-group" id="sidebar-accordion">                   
+                <div class="panel-group" id="sidebar-accordion">
                     <div class="panel">
                         @foreach ($toolArr as $key => $tool_group)
-                        
+
                         <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{{ $key }}">
                             <div class="panel-heading">
                                 <div class="panel-title h3">
@@ -267,7 +267,7 @@
                                 </div>
                             </div>
                         </a>
-                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse {{ $tool_group[0]['class'] }}">
+                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' in': '' }}">
                             @foreach ($tool_group[1] as $key2 => $tool)
                             <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}" {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                                 <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>
@@ -293,7 +293,7 @@
                                 <div class="panel-body">
                                     <div class="panel-group innerpanel" id="accordion-right">
                                         <div id="innerpanel-container">
-                                        @foreach ($sidebar_courses as $key => $sidebar_course) 
+                                        @foreach ($sidebar_courses as $key => $sidebar_course)
                                         <div class="panel panel-default">
                                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right" data-target="#collapse{{ $key }}-right">
                                                 <div class="panel-title lesson-title clearfix">
@@ -368,16 +368,16 @@
 
         <!-- BEGIN footerBlock -->
         <div class="row" id="footer_section">
-        @if (!$is_mobile)              
+        @if (!$is_mobile)
             <!-- BEGIN normalViewOpenDiv -->
             <div id="bgr-cheat-footer" class="hidden-xs hidden-sm col-md-2"></div>
             <div class="col-xs-12 col-sm-12 col-md-10">
             <!-- END normalViewOpenDiv -->
-        @else            
+        @else
             <!-- BEGIN mobileViewOpenDiv -->
             <div class="col-xs-12">
             <!-- END mobileViewOpenDiv -->
-        @endif        
+        @endif
                 <div id="scrollToTop">
                     <span class='fa fa-caret-square-o-up fa-2x'></span>
                 </div>
