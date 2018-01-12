@@ -353,7 +353,7 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
         $require_current_course, $require_course_admin, $require_help, $siteName,
         $switchLangURL, $theme, $themeimg, $is_course_admin,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
-        $theme_settings, $language, $saved_is_editor, $langProfileImage,
+        $language, $saved_is_editor, $langProfileImage,
         $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);

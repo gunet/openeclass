@@ -283,9 +283,9 @@ function load_js($file, $init='') {
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
             $file = 'datatables/media/js/dataTables.bootstrap.js';
-    } elseif ($file == 'datatables_tabletools') {
-       $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
-       $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
+        } elseif ($file == 'datatables_tabletools') {
+            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
+            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
         } elseif ($file == 'jszip') {
             $file = 'jszip/dist/jszip.js';
         } elseif ($file == 'pdfmake') {

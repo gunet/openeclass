@@ -33,7 +33,7 @@ require_once 'main/notifications/notifications.inc.php';
 header('Content-Type: application/json; charset=UTF-8');
 
 function getSidebarNotifications() {
-    global $modules, $admin_modules, $theme_settings, $urlAppend;
+    global $modules, $admin_modules, $urlAppend;
     $notifications_html = array();
     if (isset($_GET['courseIDs']) and count($_GET['courseIDs'])) {
         $t = new Template();
@@ -45,11 +45,10 @@ function getSidebarNotifications() {
             foreach ($notifications as $n) {
                 $modules_array = (isset($modules[$n->module_id]))? $modules: $admin_modules;
                 if (isset($modules_array[$n->module_id]) &&
-                    isset($modules_array[$n->module_id]['image']) &&
-                    isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])) {
+                    isset($modules_array[$n->module_id]['image'])) {
                     
                     $sideBarCourseNotifyCount = $n->notcount;
-                    $sideBarCourseNotifyIcon = $theme_settings['icon_map'][$modules_array[$n->module_id]['image']];
+                    $sideBarCourseNotifyIcon = $modules_array[$n->module_id]['image'];
                     $sideBarCourseNotifyURL = $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .'/?course=' . $course_code;
                     $sideBarCourseNotifyTitle = q($modules_array[$n->module_id]['title']);
                     $course_notifications .= "<a href='$sideBarCourseNotifyURL' class='item' title='$sideBarCourseNotifyTitle' data-toggle='tooltip'><i class='fa $sideBarCourseNotifyIcon'></i><span class='count'>$sideBarCourseNotifyCount</span></a>";

@@ -1,42 +1,9 @@
 <?php
-$theme_settings = array(
-    'js_loaded' => array('jquery'),
-    'classes' => array('tool_active' => 'active',
-                      'group_active' => 'in'),
-    'icon_map' => array(
-        'arrow' => 'fa-caret-right',
-        'announcements' => 'fa-bullhorn',
-        'calendar' => 'fa-calendar-o',
-        'dropbox' => 'fa-envelope-o',
-        'docs' => 'fa-folder-open-o',
-        'links' => 'fa-link',
-        'description' => 'fa-info-circle',
-        'forum' => 'fa-comments',
-        'assignments' => 'fa-flask',
-        'exercise' => 'fa-pencil-square-o',
-        'questionnaire' => 'fa-question-circle',
-        'ebook' => 'fa-book',
-        'videos' => 'fa-film',
-        'groups' => 'fa-users',
-        'lp' => 'fa-ellipsis-h',
-        'conference' => 'fa-exchange',
-        'glossary' => 'fa-list',
-        'wiki' => 'fa-wikipedia-w',
-        'blog' => 'fa-columns',
-        'course_info' => 'fa-cogs',
-        'users' => 'fa-user',
-        'tooladmin' => 'fa-cogs',
-        'usage' => 'fa-area-chart',
-        'attendance' => 'fa-check-square-o',
-        'gradebook' => 'fa-sort-numeric-desc',
-        'abuse' => 'fa-flag',
-    ),
-);
 
 function template_callback($template, $menuTypeID, $embed)
 {
     global $uid, $session, $native_language_names_init, $course_id, $professor,
-           $modules, $admin_modules, $theme_settings, $langChooseLang;
+           $modules, $admin_modules, $langChooseLang;
 
     if ($uid and !defined('UPGRADE')) {
         if (!$embed) {
@@ -51,7 +18,7 @@ function template_callback($template, $menuTypeID, $embed)
             Database::get()->queryFunc("SELECT id, code, title, prof_names, public_code
                 FROM course, course_user
                 WHERE course.id = course_id AND course.visible != " . COURSE_INACTIVE . " AND user_id = ?d
-                ORDER BY reg_date DESC", function ($c) use ($template, $modules, $admin_modules, $theme_settings) {
+                ORDER BY reg_date DESC", function ($c) use ($template, $modules, $admin_modules) {
                     global $urlAppend;
                     static $counter = 1;
 
