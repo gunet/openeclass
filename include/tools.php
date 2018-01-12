@@ -19,19 +19,19 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**  
+/**
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @abstract This component creates an array of the tools that are displayed on the left side column 
+ * @abstract This component creates an array of the tools that are displayed on the left side column
  */
 
 require_once 'modules/tc/functions.php';
 require_once 'modules/message/class.mailbox.php';
 
-/** 
+/**
  * @brief Offers an upper-layer logic. Decides what function should be called to
- * create the needed tools array 
+ * create the needed tools array
  * @param int $menuTypeID Type of menu to generate
- * @param bool $rich Whether to include rich text notifications in title 
+ * @param bool $rich Whether to include rich text notifications in title
  */
 
 function getSideMenu($menuTypeID, $rich=true) {
@@ -69,7 +69,7 @@ function getSideMenu($menuTypeID, $rich=true) {
     return $menu;
 }
 
-/** 
+/**
  * @brief Queries the database for tool information in accordance
  * to the parameter passed.
  * @param string $cat Type of lesson tools
@@ -283,7 +283,7 @@ function loggedInMenu($rich=true) {
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
         array_push($sideMenuImg, "gradebook");
     }
-    
+
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_PROGRESS)) {
         array_push($sideMenuText, $GLOBALS['langMyCertificates']);
         array_push($sideMenuLink, $urlServer . "main/mycertificates.php");
@@ -293,7 +293,7 @@ function loggedInMenu($rich=true) {
     if (get_config('personal_blog')) {
         array_push($sideMenuText, $GLOBALS['langMyBlog']);
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
-        array_push($sideMenuImg, "blog");
+        array_push($sideMenuImg, "fa-list-alt");
     }
 
     if (get_config('eportfolio_enable')) {
@@ -334,7 +334,7 @@ function loggedInMenu($rich=true) {
 
 /**
  * @brief Creates a multi-dimensional array of the user's tools/links
- * for the menu presented when the user is not logged in. 
+ * for the menu presented when the user is not logged in.
  * @return array
  */
 function loggedOutMenu() {
@@ -397,7 +397,7 @@ function loggedOutMenu() {
 }
 
 /**
- * @brief Creates the administrator menu 
+ * @brief Creates the administrator menu
  * @global type $language
  * @global type $urlServer
  * @global type $is_admin
@@ -631,12 +631,12 @@ function adminMenu() {
     return $sideMenuGroup;
 }
 
-/** 
+/**
  *
  * @brief Creates a multi-dimensional array of the user's tools
  * in regard to the user's user level
- * (student | professor | platform administrator) 
- * @param bool $rich Whether to include rich text notifications in title 
+ * (student | professor | platform administrator)
+ * @param bool $rich Whether to include rich text notifications in title
  * @return array
  */
 function lessonToolsMenu($rich=true) {
@@ -657,15 +657,15 @@ function lessonToolsMenu($rich=true) {
     if ($is_editor || $is_course_admin) {
         $tools_sections =
             array(array('type' => 'Public',
-                        'title' => $GLOBALS['langActiveTools'],                        
+                        'title' => $GLOBALS['langActiveTools'],
                         'class' => 'active'),
                   array('type' => 'PublicButHide',
-                        'title' => $GLOBALS['langInactiveTools'],                        
+                        'title' => $GLOBALS['langInactiveTools'],
                         'class' => 'inactive'));
     } else {
         $tools_sections =
             array(array('type' => 'Public',
-                        'title' => $GLOBALS['langCourseOptions'],                        
+                        'title' => $GLOBALS['langCourseOptions'],
                         'class' => 'active'));
     }
 
@@ -788,10 +788,10 @@ function lessonToolsMenu($rich=true) {
     return $sideMenuGroup;
 }
 
-/** 
+/**
  *
  * @brief Creates a multi-dimensional array of the user's tools/links
- * for the menu presented for the embedded theme. 
+ * for the menu presented for the embedded theme.
  * @return array
  */
 function pickerMenu() {
