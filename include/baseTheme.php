@@ -74,7 +74,7 @@ function view($view_file, $view_data = array()) {
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
     $default_open_group = 0; // Open first tool group by default
     foreach ($toolArr as $tool_group_id => $tool_group) {
-        if (in_array($current_module_dir, array_map(module_path, $tool_group[2]))) {
+        if (in_array($current_module_dir, array_map('module_path', $tool_group[2]))) {
             $default_open_group = $tool_group_id;
         }
     }
@@ -88,7 +88,7 @@ function view($view_file, $view_data = array()) {
         $eclass_leftnav_extras = $GLOBALS['leftNavExtras'];
     }
 
-    //Check if there are any messages to display
+    // Check if there are any messages to display
     $messages = Session::getMessages();
 
     if (!$toolName and $pageName) {
