@@ -281,7 +281,7 @@ function loggedInMenu($rich=true) {
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_GRADEBOOK)) {
         array_push($sideMenuText, $GLOBALS['langGradeTotal']);
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
-        array_push($sideMenuImg, "gradebook");
+        array_push($sideMenuImg, "fa-sort-numeric-desc");
     }
 
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_PROGRESS)) {
@@ -293,7 +293,7 @@ function loggedInMenu($rich=true) {
     if (get_config('personal_blog')) {
         array_push($sideMenuText, $GLOBALS['langMyBlog']);
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
-        array_push($sideMenuImg, "fa-list-alt");
+        array_push($sideMenuImg, "fa-columns");
     }
 
     if (get_config('eportfolio_enable')) {
@@ -307,7 +307,7 @@ function loggedInMenu($rich=true) {
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
         array_push($sideMenuText, q($GLOBALS['langMyDocs']));
         array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php'));
-        array_push($sideMenuImg, 'docs.png');
+        array_push($sideMenuImg, 'fa-folder-open');
     }
 
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
