@@ -801,8 +801,8 @@ function create_restored_course($restoreThis, $course_code, $course_lang, $cours
         ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'attendance_book', array(
             'map' => array(
-                'attendance_activity_id' => $attendance_activities_map,
-                'uid' => $userid_map
+            'attendance_activity_id' => $attendance_activities_map,
+            'uid' => $userid_map
             ),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
@@ -828,18 +828,49 @@ function create_restored_course($restoreThis, $course_code, $course_lang, $cours
         ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'gradebook_book', array(
             'map' => array(
-                'gradebook_activity_id' => $gradebook_activities_map,
-                'uid' => $userid_map
+            'gradebook_activity_id' => $gradebook_activities_map,
+            'uid' => $userid_map
             ),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'gradebook_users', array(
             'map' => array(
-                'gradebook_id' => $gradebook_map,
-                'uid' => $userid_map
+            'gradebook_id' => $gradebook_map,
+            'uid' => $userid_map
             ),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
+        
+        // Certificate
+        $certificate_map = restore_table($restoreThis, 'certificate', array(
+            'set' => array('course_id' => $new_course_id),
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'certificate_criterion', array(
+            'map' => array('certificate' => $certificate_map),
+            'map_function' => 'certificate_criterion_map_function',
+            'map_function_data' => array($document_map, $video_map, $videolink_map, 
+                                         $blog_map, $forum_map, $forum_topic_map,
+                                         $lp_learnPath_map, $ebook_map, $poll_map, 
+                                         $wiki_map, $assignments_map, $exercise_map),
+            'delete' => array('id')
+            ), $url_prefix_map, $backupData, $restoreHelper);
+            
+        
+        // Badge
+        $badge_map = restore_table($restoreThis, 'badge', array(
+            'set' => array('course_id' => $new_course_id),
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);        
+        restore_table($restoreThis, 'badge_criterion', array(
+            'map' => array('badge' => $badge_map),
+            'map_function' => 'badge_criterion_map_function',
+            'map_function_data' => array($document_map, $video_map, $videolink_map, 
+                                         $blog_map, $forum_map, $forum_topic_map, 
+                                         $lp_learnPath_map, $ebook_map, $poll_map, 
+                                         $wiki_map, $assignments_map, $exercise_map),
+            'delete' => array('id')
+            ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Notes
         restore_table($restoreThis, 'note', array(
@@ -1425,6 +1456,119 @@ function attendance_gradebook_activities_map_function(&$data, $maps) {
     }
     return true;
 }
+
+function certificate_criterion_map_function(&$data, $maps) {
+    list($document_map, $video_map, $videolink_map,
+         $blog_map, $comment_map, $forum_map, $forum_topic_map,
+         $lp_learnPath_map, $ebook_map, $poll_map, $wiki_map, 
+         $assignments_map, $exercise_map) = $maps;
+    
+    $type = $data['activity_type'];
+    switch ($type) {
+        case 'document': $data['resource'] = $document_map[$data['resource']];
+                    $data['module'] = MODULE_ID_DOCS;
+                    break;
+        case 'video': $data['resource'] = $video_map[$data['resource']];
+                    $data['module'] = MODULE_ID_VIDEO;
+                    break;
+        case 'videolink': $data['resource'] = $videolink_map[$data['resource']];
+                    $data['module'] = MODULE_ID_VIDEO;
+                    break;
+        case 'blog': $data['resource'] = $blog_map[$data['resource']];
+                    $data['module'] = MODULE_ID_BLOG;
+                    break;
+        /*case 'blogpost': $data['resource'] = $blog_map[$data['resource']];
+                    $data['module'] = MODULE_ID_COMMENTS;
+                    break; */
+        case 'forum': $data['resource'] = $forum_map[$data['resource']];
+                    $data['module'] = MODULE_ID_FORUM;
+                    break;
+        case 'forumtopic': $data['resource'] = $forum_topic_map[$data['resource']];
+                    $data['module'] = MODULE_ID_FORUM;
+                    break;
+        case 'learning path': $data['resource'] = $lp_learnPath_map[$data['resource']];
+                    $data['module'] = MODULE_ID_LP;
+                    break;
+        case 'ebook': $data['resource'] = $ebook_map[$data['resource']];
+                    $data['module'] = MODULE_ID_EBOOK;
+                    break;
+        case 'questionnaire': $data['resource'] = $poll_map[$data['resource']];
+                    $data['module'] = MODULE_ID_QUESTIONNAIRE;
+                    break;
+        case 'wiki': $data['resource'] = $wiki_map[$data['resource']];
+                    $data['module'] = MODULE_ID_WIKI;
+                    break;
+        case 'assignment': $data['resource'] = $assignments_map[$data['resource']];
+                    $data['module'] = MODULE_ID_ASSIGN;
+                    break;
+        case 'exercise': $data['resource'] = $exercise_map[$data['resource']];
+                    $data['module'] = MODULE_ID_EXERCISE;
+                    break;
+        case 'courseparticipation': $data['resource'] = null;
+                    $data['module'] = MODULE_ID_USAGE;
+                    break;
+        default:
+                break;
+    }    
+    return true;
+}
+
+function badge_criterion_map_function(&$data, $maps) {
+    list($document_map, $video_map, $videolink_map,
+         $blog_map, $comment_map, $forum_map, $forum_topic_map,
+         $lp_learnPath_map, $ebook_map, $poll_map, $wiki_map, 
+         $assignments_map, $exercise_map) = $maps;
+    
+    $type = $data['activity_type'];
+    switch ($type) {
+        case 'document': $data['resource'] = $document_map[$data['resource']];
+                    $data['module'] = MODULE_ID_DOCS;
+                    break;
+        case 'video': $data['resource'] = $video_map[$data['resource']];
+                    $data['module'] = MODULE_ID_VIDEO;
+                    break;
+        case 'videolink': $data['resource'] = $videolink_map[$data['resource']];
+                    $data['module'] = MODULE_ID_VIDEO;
+                    break;
+        case 'blog': $data['resource'] = $blog_map[$data['resource']];
+                    $data['module'] = MODULE_ID_BLOG;
+                    break;
+        /*case 'blogpost': $data['resource'] = $blog_map[$data['resource']];
+                    $data['module'] = MODULE_ID_COMMENTS;
+                    break; */
+        case 'forum': $data['resource'] = $forum_map[$data['resource']];
+                    $data['module'] = MODULE_ID_FORUM;
+                    break;
+        case 'forumtopic': $data['resource'] = $forum_topic_map[$data['resource']];
+                    $data['module'] = MODULE_ID_FORUM;
+                    break;
+        case 'learning path': $data['resource'] = $lp_learnPath_map[$data['resource']];
+                    $data['module'] = MODULE_ID_LP;
+                    break;
+        case 'ebook': $data['resource'] = $ebook_map[$data['resource']];
+                    $data['module'] = MODULE_ID_EBOOK;
+                    break;
+        case 'questionnaire': $data['resource'] = $poll_map[$data['resource']];
+                    $data['module'] = MODULE_ID_QUESTIONNAIRE;
+                    break;
+        case 'wiki': $data['resource'] = $wiki_map[$data['resource']];
+                    $data['module'] = MODULE_ID_WIKI;
+                    break;
+        case 'assignment': $data['resource'] = $assignments_map[$data['resource']];
+                    $data['module'] = MODULE_ID_ASSIGN;
+                    break;
+        case 'exercise': $data['resource'] = $exercise_map[$data['resource']];
+                    $data['module'] = MODULE_ID_EXERCISE;
+                    break;
+        case 'courseparticipation': $data['resource'] = null;
+                    $data['module'] = MODULE_ID_USAGE;
+                    break;            
+        default:
+                break;
+    }    
+    return true;
+}
+
 
 function notes_map_function(&$data, $maps) {
     // opoy yparxei if isset, isxyei h:

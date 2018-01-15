@@ -143,7 +143,19 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'abuse_report' => $sql_course,                     
         'wall_post' => $sql_course,
         'wall_post_resources' => "post_id IN (SELECT id FROM wall_post WHERE course_id = $course_id)",
-        'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)");
+        'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)",
+        'activity_heading' => 'true',
+        'activity_content' => $sql_course,
+        'certificate' => $sql_course,
+        'certificate_criterion' => "certificate IN (SELECT id FROM certificate WHERE course_id = $course_id)",
+        'certificate_template' => 'true',
+        'badge' => $sql_course,
+        'badge_criterion' => "badge IN (SELECT id FROM badge WHERE course_id = $course_id)",
+        'badge_icon' => 'true',
+        'category' => 'true',
+        'category_value' => 'true',
+        'course_category' => $sql_course
+        );
 
     foreach ($archive_conditions as $table => $condition) {
         backup_table($archivedir, $table, $condition);
@@ -166,8 +178,8 @@ function archiveTables($course_id, $course_code, $archivedir) {
  * @param type $course_code
  */
 function doArchive($course_id, $course_code) {
-    global $webDir, $langError;
-    
+    global $webDir, $tool_content;
+
     $basedir = "$webDir/courses/archive/$course_code";
     file_exists($basedir) or make_dir($basedir);
 
