@@ -109,12 +109,12 @@
                         <span class='help-block'>{{ trans('lang_message_block_duration_account') }}</span>
                     </div>
                 </div>
-             @elseif
+            @else
                 <div class='input-append date form-group'>
                     <label class='col-sm-2 control-label'>{{ trans('langExpirationDate') }}:</label>
                     <div class='col-sm-10'>
                         <div class='input-group'>
-                        <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $expirationDatevalue }}'>
+                            <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $expirationDatevalue }}'>
                             <span class='input-group-addon'><i class='fa fa-calendar'></i></span>
                         </div>
                     </div>
