@@ -146,9 +146,15 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)",
         'activity_heading' => 'true',
         'activity_content' => $sql_course,
+        'certificate' => $sql_course,
+        'certificate_criterion' => "certificate IN (SELECT id FROM certificate WHERE course_id = $course_id)",
+        'certificate_template' => 'true',
+        'badge' => $sql_course,
+        'badge_criterion' => "badge IN (SELECT id FROM badge WHERE course_id = $course_id)",
+        'badge_icon' => 'true',
         'category' => 'true',
         'category_value' => 'true',
-        'course_category' => $sql_course,
+        'course_category' => $sql_course
         );
 
     foreach ($archive_conditions as $table => $condition) {
@@ -171,7 +177,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
  * @param string $course_code
  */
 function doArchive($course_id, $course_code) {
-    global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
+    global $webDir, $tool_content;
 
     $basedir = "$webDir/courses/archive/$course_code";
     file_exists($basedir) or make_dir($basedir);
