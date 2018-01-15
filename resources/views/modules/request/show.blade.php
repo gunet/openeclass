@@ -34,7 +34,7 @@
                             </div>
                             <div class='col-xs-12 col-sm-4'>
                                 @foreach ($watchers as $user)
-                                    {!! display_user($user->user_id) !!}
+                                    {!! display_user($user) !!}
                                 @endforeach
                             </div>
                         @endif
@@ -44,7 +44,7 @@
                             </div>
                             <div class='col-xs-12 col-sm-4'>
                                 @foreach ($assigned as $user)
-                                    {!! display_user($user->user_id) !!}
+                                    {!! display_user($user) !!}
                                 @endforeach
                             </div>
                         @endif
@@ -81,46 +81,66 @@
                                                                 strtotime($comment->ts)) }}
                                 </div>
                             </div>
+                            @if ($comment->real_filename)
+                                <div class='row'>
+                                    <div class='col-xs-12 col-sm-2'>
+                                        <b>{{ trans('langAttachedFile') }}:</b>
+                                    </div>
+                                    <div class='col-xs-12 col-sm-10'>
+                                        <a href='{{ commentFileLink($comment) }}'>{{ $comment->filename }}</a>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class='row'>
+                                <div class='col-xs-12 col-sm-2'>
+                                    <b>{{ trans('langComment') }}:</b>
+                                </div>
+                                <div class='col-xs-12 col-sm-10'>
+                                    {!! $comment->comment !!}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             @endforeach
         @endif
 
-        <div class='col-md-12'>
-            <form class='form-horizontal' role='form' method='post' action='{{ $updateUrl }}' enctype='multipart/form-data'>
-                <fieldset>
-                    <div class='form-group'>
-                        <label class='col-sm-2 control-label'>{{ trans('langFrom') }}:</label>
-                        <div class='col-sm-10'>
-                            <p class='form-control-static'>{{ $commenterName }}<p>
+        @if ($can_comment)
+            <div class='col-md-12'>
+                <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
+                    <fieldset>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>{{ trans('langFrom') }}:</label>
+                            <div class='col-sm-10'>
+                                <p class='form-control-static'>{{ $commenterName }}<p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class='form-group'>
-                        <label for='requestComment' class='col-sm-2 control-label'>{{ trans('langComment') }}:</label>
-                        <div class='col-sm-10'>
-                            {!! $commentEditor !!}
+                        <div class='form-group'>
+                            <label for='requestComment' class='col-sm-2 control-label'>{{ trans('langComment') }}:</label>
+                            <div class='col-sm-10'>
+                                {!! $commentEditor !!}
+                            </div>
                         </div>
-                    </div>
 
-                    <div class='form-group'>
-                        <label for='requestFile' class='col-sm-2 control-label'>{{ trans('langAttachedFile') }}:</label>
-                        <div class='col-sm-10'>
-                            <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
-                            <input type='file' name='requestFile'>
+                        <div class='form-group'>
+                            <label for='requestFile' class='col-sm-2 control-label'>{{ trans('langAttachedFile') }}:</label>
+                            <div class='col-sm-10'>
+                                <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
+                                <input type='file' name='requestFile'>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class='form-group'>
-                        <div class='col-xs-offset-2 col-xs-10'>
-                            <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
-                            <a class='btn btn-default' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                        <div class='form-group'>
+                            <div class='col-xs-offset-2 col-xs-10'>
+                                <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                                <a class='btn btn-default' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                            </div>
                         </div>
-                    </div>
-                    {!! generate_csrf_token_form_field() !!}
-                </fieldset>
-            </form>
-        </div>
+                        {!! generate_csrf_token_form_field() !!}
+                    </fieldset>
+                </form>
+            </div>
+        @endif
     </div>
 @endsection

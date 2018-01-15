@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass
  * E-learning and Course Management System
@@ -25,6 +24,7 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/request/functions.php';
 
 $toolName = $langRequests;
@@ -38,18 +38,55 @@ if (isset($_GET['id'])) {
     if (!$request) {
         redirect_to_home_page($backUrl);
     }
+
+    $data['request'] = $request;
+    $data['watchers'] = getWatchers($id, REQUEST_WATCHER);
+    $data['assigned'] = getWatchers($id, REQUEST_ASSIGNED);
+    $data['backUrl'] = $backUrl;
+    $data['targetUrl'] = $backUrl . '&id=' . $id;
+    $can_modify = $is_editor || $request->creator_id == $uid ||
+        in_array($uid, $data['assigned']);
+    $can_comment = $can_modify || in_array($uid, $data['watchers']);
+
+    if (isset($_POST['requestComment'])) {
+        $comment = purify($_POST['requestComment']);
+        $fileName = $filePath = null;
+        if (isset($_FILES['requestFile']) and is_uploaded_file($_FILES['requestFile']['tmp_name'])) {
+            validateUploadedFile($_FILES['requestFile']['name']);
+            $workPath = $webDir . "/courses/" . $course_code . "/request";
+            $filePath = safe_filename();
+            if (!(is_dir($workPath) or make_dir($workPath))) {
+                Session::Messages($langGeneralError, 'alert-danger');
+                redirect_to_home_page($data['targetUrl']);
+            }
+            if (move_uploaded_file($_FILES['requestFile']['tmp_name'], "$workPath/$filePath")) {
+                $fileName = $_FILES['requestFile']['name'];
+            } else {
+                Session::Messages($langGeneralError, 'alert-danger');
+                redirect_to_home_page($data['targetUrl']);
+            }
+            $r = Database::get()->query('INSERT INTO request_action
+                SET request_id = ?d, user_id = ?d, ts = NOW(),
+                    old_state = ?d, new_state = ?d,
+                    filename = ?s, real_filename = ?s,
+                    comment = ?s',
+                $id, $uid, $request->state, $request->state,
+                $fileName, $filePath, $comment);
+            if ($r) {
+                redirect_to_home_page($data['targetUrl']);
+            }
+        }
+    }
+
     $data['action_bar'] = action_bar([
             [ 'title' => $langBack,
               'url' => $backUrl,
               'icon' => 'fa-reply',
               'level' => 'primary-label' ]
         ], false);
-    $data['request'] = $request;
-    $data['backUrl'] = $backUrl;
-    $data['targetUrl'] = $backUrl . '&id=' . $id;
-    $data['watchers'] = getWatchers($id, REQUEST_WATCHER);
-    $data['assigned'] = getWatchers($id, REQUEST_ASSIGNED);
     $data['state'] = $stateLabels[$request->state];
+    $data['can_modify'] = $can_modify;
+    $data['can_comment'] = $can_comment;
     $data['commenterName'] = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
     $data['commentEditor'] = rich_text_editor('requestComment', 4, 20, '');
     $data['comments'] = Database::get()->queryArray('SELECT * FROM request_action
@@ -58,6 +95,7 @@ if (isset($_GET['id'])) {
 
     $navigation[] = array('url' => $backUrl, 'name' => $langRequests);
     $pageName = $request->title;
+    enableCheckFileSize();
 
     view('modules.request.show', $data);
 } else {

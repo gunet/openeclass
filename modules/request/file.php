@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass
  * E-learning and Course Management System
@@ -20,32 +19,23 @@
  * ========================================================================
  */
 
-define('REQUEST_STATE_NEW', 1);
-define('REQUEST_STATE_ASSIGNED', 2);
-define('REQUEST_STATE_LOCKED', 3);
-define('REQUEST_STATE_CLOSED', 4);
-define('REQUEST_ASSIGNED', 1);
-define('REQUEST_WATCHER', 2);
+$require_login = true;
+$require_current_course = true;
 
-$stateLabels = [
-    REQUEST_STATE_NEW => $langRequestStateNew,
-    REQUEST_STATE_ASSIGNED => $langRequestStateAssigned,
-    REQUEST_STATE_LOCKED => $langRequestStateLocked,
-    REQUEST_STATE_CLOSED => $langRequestStateClosed
-];
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'modules/request/functions.php';
 
-function getWatchers($rid, $type) {
-    return array_map(function ($item) {
-            return $item->user_id;
-        }, Database::get()->queryArray("SELECT user_id
-                FROM request_watcher
-                WHERE request_id = ?d AND type = ?d
-                ORDER BY id", $rid, $type));
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+    $comment = Database::get()->querySingle('SELECT * FROM request, request_action
+        WHERE request_id = ?d AND course_id = ?d AND request.id = request_id',
+        $id, $course_id);
+    if (!$comment or !$comment->real_filename) {
+        not_found($_SERVER['REQUEST_URI']);
+    }
+    $filePath = "$webDir/courses/$course_code/request/" . $comment->real_filename;
+    send_file_to_client($filePath, $comment->filename, 'inline', true);
+} else {
+    not_found($_SERVER['REQUEST_URI']);
 }
-
-function commentFileLink($comment) {
-    global $urlAppend, $course_code;
-
-    return $urlAppend . 'modules/request/file.php?course=' . $course_code . '&id=' . $comment->id;
-}
-
