@@ -22,7 +22,7 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
-require_once 'include/lib/fileManageLib.inc.php';
+//require_once 'include/lib/fileManageLib.inc.php';
 //Default Styles
 $defaults = array(
                 'rgba(35,44,58,1)' => array('leftNavBgColor','bgColor'),
@@ -105,10 +105,10 @@ if (isset($_POST['import'])) {
                 unlink("$webDir/courses/theme_data/$file_name");
                 $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
                 unlink("$webDir/courses/theme_data/temp/theme_options.txt");
-                $theme_options = unserialize(base64_decode($base64_str));                
+                $theme_options = unserialize(base64_decode($base64_str));
                 $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
-                @rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
-                copyDirTo("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
+                rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
+                recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
                 Session::Messages($langThemeInstalled);
             }
