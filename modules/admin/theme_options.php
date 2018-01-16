@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,13 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
-
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
 //Default Styles
 $defaults = array(
                 'rgba(35,44,58,1)' => array('leftNavBgColor','bgColor'),
