@@ -4,7 +4,7 @@
  * ========================================================================
  * Open eClass 3.6 - E-learning and Course Management System
  * ========================================================================
-  Copyright(c) 2003-2017  Greek Universities Network - GUnet
+  Copyright(c) 2003-2018  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
 
   Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.6.1');
+define('ECLASS_VERSION', '3.6.2');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
