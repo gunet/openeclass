@@ -26,6 +26,13 @@ require_once 'courseindexer.class.php';
 $pageName = $langSearch;
 $courses_list = array();
 
+
+if (isset($uid) and $uid) {
+    $menuTypeId = 1;
+} else {
+    $menuTypeId = 0;    
+}
+
 // exit if search is disabled
 if (!get_config('enable_search')) {
     $tool_content .= action_bar(array(
@@ -36,7 +43,7 @@ if (!get_config('enable_search')) {
                                       'button-class' => 'btn-default')
                             ),false);
     $tool_content .= "<div class='alert alert-info'>$langSearchDisabled</div>";
-    draw($tool_content, 0);
+    draw($tool_content, $menuTypeId, null, $head_content);
     exit();
 }
 
@@ -48,7 +55,7 @@ if (!register_posted_variables(array('search_terms' => false,
             'search_terms_coursecode' => false,
             'search_terms_description' => false), 'any')) {
     $tool_content .= CourseIndexer::getDetailedSearchForm();
-    draw($tool_content, 0);
+    draw($tool_content, $menuTypeId, null, $head_content);
     exit();
 }
 
@@ -205,4 +212,4 @@ var courses = ".(json_encode($courses_list)).";
 
 load_js('tools.js');
 
-draw($tool_content, 0, null, $head_content);
+draw($tool_content, $menuTypeId, null, $head_content);
