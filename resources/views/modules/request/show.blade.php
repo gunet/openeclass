@@ -81,6 +81,16 @@
                                                                 strtotime($comment->ts)) }}
                                 </div>
                             </div>
+                            @if ($comment->old_state != $comment->new_state)
+                                <div class='row'>
+                                    <div class='col-xs-12 col-sm-2'>
+                                        <b>{{ trans('langChangeState') }}:</b>
+                                    </div>
+                                    <div class='col-xs-12 col-sm-10'>
+                                        <b>{{ $states[$comment->new_state] }}</b> ({{ trans('langFrom') }}: {{ $states[$comment->old_state] }})
+                                    </div>
+                                </div>
+                            @endif
                             @if ($comment->real_filename)
                                 <div class='row'>
                                     <div class='col-xs-12 col-sm-2'>
@@ -91,14 +101,16 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class='row'>
-                                <div class='col-xs-12 col-sm-2'>
-                                    <b>{{ trans('langComment') }}:</b>
+                            @if ($comment->comment)
+                                <div class='row'>
+                                    <div class='col-xs-12 col-sm-2'>
+                                        <b>{{ trans('langComment') }}:</b>
+                                    </div>
+                                    <div class='col-xs-12 col-sm-10'>
+                                        {!! standard_text_escape($comment->comment) !!}
+                                    </div>
                                 </div>
-                                <div class='col-xs-12 col-sm-10'>
-                                    {!! $comment->comment !!}
-                                </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -115,6 +127,19 @@
                                 <p class='form-control-static'>{{ $commenterName }}<p>
                             </div>
                         </div>
+
+                        @if ($can_modify)
+                            <div class='form-group'>
+                                <label for'newState' class='col-sm-2 control-label'>{{ trans('langChangeState') }}:</label>
+                                <div class='col-sm-10'>
+                                    <select class='form-control' name='newState' id='newState'>
+                                        @foreach ($states as $stateId => $stateName)
+                                            <option value='{{ $stateId }}'@if ($stateId == $request->state) selected @endif>{{ $stateName }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
 
                         <div class='form-group'>
                             <label for='requestComment' class='col-sm-2 control-label'>{{ trans('langComment') }}:</label>

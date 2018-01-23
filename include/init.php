@@ -4,7 +4,7 @@
  * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -64,13 +64,14 @@ add_xxsfilter_headers();
 add_nosniff_headers();
 
 //add_hsts_headers();
-if (is_readable('config/config.php')) {
-    require_once 'config/config.php';
-} else {
-    require_once 'include/not_installed.php';
+
+try {
+    @include_once 'config/config.php';
+} catch (Exception $e) {
+    include_once 'include/not_installed.php';
 }
 if (!isset($mysqlServer)) {
-    require_once 'include/not_installed.php';
+    include_once 'include/not_installed.php';
 }
 
 // Initialize global debug mechanism
@@ -141,18 +142,14 @@ $uid = $session->user_id;
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
-require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/HTMLPurifier_Filter_MyIframe.php';
 $purifier = new HTMLPurifier();
 $purifier->config->set('Cache.SerializerPath', $webDir . '/courses/temp');
 $purifier->config->set('Attr.AllowedFrameTargets', array('_blank'));
 $purifier->config->set('HTML.SafeObject', true);
 $purifier->config->set('Output.FlashCompat', true);
 $purifier->config->set('HTML.FlashAllowFullScreen', true);
-// iframes config: http://stackoverflow.com/questions/4739284/htmlpurifier-iframe-vimeo-and-youtube-video
-$purifier->config->set('HTML.SafeIframe', true);
-$purifier->config->set('URI.SafeIframeRegexp', MultimediaHelper::getPurifierSafeIframeRegexp());
-$purifier->config->set('HTML.AllowedElements', array('iframe'));
-$purifier->config->set('HTML.AllowedAttributes','iframe@src,iframe@allowfullscreen,iframe@width,iframe@height');
+$purifier->config->set('Filter.Custom', array(new HTMLPurifier_Filter_MyIframe()));
 $purifier->config->set('HTML.DefinitionID', 'html5-definitions');
 if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
     // http://htmlpurifier.org/phorum/read.php?2,7417,7417
@@ -169,10 +166,6 @@ if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
       'src' => 'URI',
       'type' => 'Text',
     ));
-    // iframes config: http://stackoverflow.com/questions/4739284/htmlpurifier-iframe-vimeo-and-youtube-video
-    $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
-    $def->addAttribute('iframe', 'width', 'Length');
-    $def->addAttribute('iframe', 'height', 'Length');
 }
 // PHP Math Publisher
 require_once 'include/phpmathpublisher/mathpublisher.php';
@@ -346,49 +339,47 @@ if (isset($require_current_course) and $require_current_course) {
         // The admin and power users can see all courses as adminOfCourse
         if ($is_admin or $is_power_user) {
             $status = USER_TEACHER;
-        } else {
+        } elseif ($uid) {
             $stat = Database::get()->querySingle("SELECT status FROM course_user
                                                            WHERE user_id = ?d AND
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
-            } else {
+            } elseif ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
                 // the department manager has rights to the courses of his department(s)
-                if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
-                    require_once 'include/lib/hierarchy.class.php';
-                    require_once 'include/lib/course.class.php';
-                    require_once 'include/lib/user.class.php';
+                require_once 'include/lib/hierarchy.class.php';
+                require_once 'include/lib/course.class.php';
+                require_once 'include/lib/user.class.php';
 
-                    $treeObj = new Hierarchy();
-                    $courseObj = new Course();
-                    $userObj = new User();
+                $treeObj = new Hierarchy();
+                $courseObj = new Course();
+                $userObj = new User();
 
-                    $atleastone = false;
-                    $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
-                    $depIds = $courseObj->getDepartmentIds($course_id);
-                    foreach ($depIds as $depId) {
-                        if (in_array($depId, $subtrees)) {
-                            $atleastone = true;
-                            break;
-                        }
-                    }
-
-                    if ($atleastone) {
-                        $status = 1;
-                        $is_course_admin = true;
-                        $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
+                $atleastone = false;
+                $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
+                $depIds = $courseObj->getDepartmentIds($course_id);
+                foreach ($depIds as $depId) {
+                    if (in_array($depId, $subtrees)) {
+                        $atleastone = true;
+                        break;
                     }
                 }
-            }
 
+                if ($atleastone) {
+                    $status = 1;
+                    $is_course_admin = true;
+                    $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
+                }
+            }
         }
 
         if ($visible != COURSE_OPEN) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
-            } elseif ($status == 0 and ( $visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
-                $toolContent_ErrorExists = $langLoginRequired;
-            } elseif ($status == 5 and $visible == COURSE_INACTIVE) {
+            } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
+                Session::Messages($langLoginRequired, 'alert-info');
+                redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
+            } elseif ($status != USER_TEACHER and $visible == COURSE_INACTIVE) {
                 $toolContent_ErrorExists = $langCheckProf;
             }
         }
@@ -452,6 +443,7 @@ $modules = array(
     MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
     MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-ticket')
 );
+
 // ----------------------------------------
 // course admin modules
 // ----------------------------------------
@@ -463,6 +455,7 @@ $admin_modules = array(
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-cogs'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
 );
+
 // -------------------------------------------
 // modules which can't be enabled or disabled
 // -------------------------------------------
@@ -481,7 +474,6 @@ $static_modules = array(
     MODULE_ID_SHARING => array('title' => $langCourseSharing, 'link' => 'sharing'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReport, 'link' => 'abuse_report'),
     MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes'));
-
 
 // the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {

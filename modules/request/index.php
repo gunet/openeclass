@@ -65,16 +65,21 @@ if (isset($_GET['id'])) {
                 Session::Messages($langGeneralError, 'alert-danger');
                 redirect_to_home_page($data['targetUrl']);
             }
-            $r = Database::get()->query('INSERT INTO request_action
+        }
+        if (isset($_POST['newState']) and isset($stateLabels[$_POST['newState']])) {
+            $newState = $_POST['newState'];
+        } else {
+            $newState = $request->state;
+        }
+        if ($comment or $fileName or $newState != $request->state) {
+            Database::get()->query('INSERT INTO request_action
                 SET request_id = ?d, user_id = ?d, ts = NOW(),
                     old_state = ?d, new_state = ?d,
                     filename = ?s, real_filename = ?s,
                     comment = ?s',
-                $id, $uid, $request->state, $request->state,
+                $id, $uid, $request->state, $newState,
                 $fileName, $filePath, $comment);
-            if ($r) {
-                redirect_to_home_page($data['targetUrl']);
-            }
+            redirect_to_home_page($data['targetUrl']);
         }
     }
 
@@ -92,6 +97,7 @@ if (isset($_GET['id'])) {
     $data['comments'] = Database::get()->queryArray('SELECT * FROM request_action
         WHERE request_id = ?d
         ORDER BY ts', $id);
+    $data['states'] = $stateLabels;
 
     $navigation[] = array('url' => $backUrl, 'name' => $langRequests);
     $pageName = $request->title;

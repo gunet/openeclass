@@ -5538,3 +5538,4 @@ $langRequestStateLocked = 'Κλειδωμένο';
 $langRequestStateClosed = 'Κλειστό';
 $langOpenedOn = 'Δημιουργία';
 $langUpdatedOn = 'Τροποποίηση';
+$langChangeState = 'Αλλαγή κατάστασης σε';
