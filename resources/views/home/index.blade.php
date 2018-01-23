@@ -30,7 +30,7 @@
                                                     @if ($j != $i)
                                                         <button type='button' data-target='{{ $j }}' class='option-btn-login hide'>{{ $otherAuth['title'] }}</button>
                                                     @endif
-                                                @endforeach                                            
+                                                @endforeach
                                             @else
                                             <a href='{{ $urlAppend }}main/login_form.php' class='btn btn-default option-btn-login'>{{ trans('langAlternateLogin') }}</a>
                                             @endif
@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                                 @endif
-                            </div>    
+                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                 <div class='panel'>
                     <div class='panel-body'>
                         <ul class='front-announcements'>
-                            @foreach ($announcements as $announcement) 
+                            @foreach ($announcements as $announcement)
                                 <li>
                                     <div>
                                         <a class='announcement-title' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
@@ -76,28 +76,28 @@
                                         - {{ claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) }} -
                                     </span>
                                     {!! standard_text_escape(ellipsize_html("<div class='announcement-main'>$announcement->body</div>", 500, "<div class='announcements-more'><a href='modules/announcements/main_ann.php?aid=$announcement->id'>".trans('langMore')." &hellip;</a></div>")) !!}
-                                </li>                                
+                                </li>
                             @endforeach
                         </ul>
                     </div>
-                </div>                
+                </div>
             @endif
         </div>
         <div class='col-md-4'>
             @if ($extra_right)
                 <div class='panel'>
                     <div class='panel-body'>
-                        {{ trans('langExtrasRight') }}
+                        {!! $extra_right !!}
                     </div>
                 </div>
-            @endif           
+            @endif
             @if ($online_users > 0)
                 <div class='panel'>
                     <div class='panel-body'>
                         <span class='fa fa-group space-after-icon'></span> &nbsp;{{ trans('langOnlineUsers') }}: {{ $online_users }}
                     </div>
                 </div>
-            @endif            
+            @endif
             @if (get_config('opencourses_enable'))
                 @if ($openCoursesExtraHTML)
                     <div class='panel opencourses'>
@@ -105,20 +105,20 @@
                             {!! $openCoursesExtraHTML !!}
                         </div>
                     </div>
-                @endif               
+                @endif
                 <div class='panel opencourses-national'>
                     <a href='http://opencourses.gr' target='_blank'>
                         {{ trans('langNationalOpenCourses') }}
                     </a>
                 </div>
-            @endif            
+            @endif
             <div class='panel' id='openeclass-banner'>
                 <div class='panel-body'>
                     <a href='http://www.openeclass.org/' target='_blank'>
                         <img class='img-responsive center-block' src='{{ $themeimg }}/open_eclass_banner.png' alt='Open eClass Banner'>
                     </a>
                 </div>
-            </div>            
+            </div>
             @if (get_config('enable_mobileapi'))
             <div class='panel mobile-apps'>
                 <div class='panel-body'>
