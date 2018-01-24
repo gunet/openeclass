@@ -85,6 +85,7 @@ $data['verified_mail'] = isset($_GET['verified_mail']) ? intval($_GET['verified_
 $data['email'] = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
 $data['reg_flag'] = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 $data['user_registered_at'] = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
+$data['user_expires_until'] = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
 
 //Preparing form data
 $data['usertype_data'] = array(
