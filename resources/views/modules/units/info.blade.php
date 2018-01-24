@@ -27,7 +27,22 @@
                             {!! $descriptionEditor !!}
                         </div>
                     </div>
-
+                    
+                    <div class='form-group'>
+                        <label for='unitduration' class='col-sm-2 control-label'>{{ trans('langDuration') }}
+                            <span class='help-block'>{{ trans('langOptional') }}</span>
+                        </label>
+                        <label for='unitduration' class='col-sm-1 control-label'>{{ trans('langFrom2') }}</label>
+                        <div class='col-sm-4'>
+                            <input type='text' class='form-control' id='unitdurationform' name='unitdurationfrom' value=''>
+                        </div>
+                        <label for='unitduration' class='col-sm-1 control-label'>{{ trans('langUntil') }}</label>
+                        <div class='col-sm-4'>
+                            <input type='text' class='form-control' id='unitdurationto' name='unitdurationto' value=''>
+                        </div>
+                        
+                    </div>
+                    
                     {!! $tagInput !!}
 
                     <div class='form-group'>

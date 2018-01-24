@@ -2210,6 +2210,73 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
     return;
 }
 
+/**
+ * @brief Return the maximum order for course units in a course
+ * @param type $course_id
+ * @return int
+ */
+function units_maxorder($course_id) {
+    $maxorder = Database::get()->querySingle("SELECT MAX(`order`) AS max_order
+                    FROM course_units WHERE course_id = ?d", $course_id)->max_order;
+
+    if ($maxorder <= 0) {
+        return 0;
+    }
+    return $maxorder;
+}
+
+
+/**
+ * 
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $webDir
+ * @return type
+ */
+function handle_unit_info_edit() {
+    global $course_id, $course_code, $webDir;
+
+    $title = $_REQUEST['unittitle'];
+    $descr = $_REQUEST['unitdescr'];
+    if (isset($_REQUEST['unit_id'])) { // update course unit
+        $unit_id = $_REQUEST['unit_id'];
+        Database::get()->query("UPDATE course_units SET
+                                        title = ?s,
+                                        comments = ?s
+                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
+        // tags
+        if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->syncTags($tagsArray);
+        }
+        $successmsg = trans('langCourseUnitModified');
+    } else { // add new course unit
+        $order = units_maxorder($course_id) + 1;
+        $q = Database::get()->query("INSERT INTO course_units SET
+                                  title = ?s, comments = ?s, visible = 1,
+                                 `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
+        $successmsg = trans('langCourseUnitAdded');
+        $unit_id = $q->lastInsertID;
+        // tags
+        if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->attachTags($tagsArray);
+        }
+    }
+    // update index
+    require_once 'modules/search/indexer.class.php';
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    // refresh course metadata
+    require_once 'modules/course_metadata/CourseXML.php';
+    CourseXMLElement::refreshCourse($course_id, $course_code);
+    
+    Session::Messages($successmsg, 'alert-success');
+    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
+}
+
 
 function math_unescape($matches) {
     return html_entity_decode($matches[0]);

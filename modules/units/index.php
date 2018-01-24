@@ -49,8 +49,9 @@ if (isset($_REQUEST['id'])) {
     $id = intval($_REQUEST['id']);
 }
 
-$pageName = ''; // delete $pageName set in doc_init.php
 $toolName = $langCourseUnits;
+$pageName = ''; // delete $pageName set in doc_init.php
+
 $lang_editor = $language;
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
@@ -92,11 +93,6 @@ if (isset($id) and $id !== false) {
 
 
 // Links for next/previous unit
-if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
-    $access_check = '';
-} else {
-    $access_check = "AND public = 1";
-}
 foreach (array('previous', 'next') as $i) {
     if ($i == 'previous') {
         $op = '<=';
@@ -104,19 +100,27 @@ foreach (array('previous', 'next') as $i) {
     } else {
         $op = '>=';
         $dir = '';
+    }        
+
+    if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
+        $access_check = '';
+    } else {
+        $access_check = "AND public = 1";
     }
+    
     $q = Database::get()->querySingle("SELECT id, title, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
-                             AND `order` $op ?d
+                             AND `order` $op $info->order
                              AND `order` >= 0
                              $visibility_check
                              $access_check
                        ORDER BY `order` $dir
-                       LIMIT 1", $info->order, $course_id, $id);
+                       LIMIT 1", $course_id, $id);
+       
     if ($q) {
         $data[$i . 'Title'] = $q->title;
-        $data[$i . 'Link'] = $urlAppend . "?course=$course_code&id=" . $q->id;
+        $data[$i . 'Link'] = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&id=" . $q->id;
     } else {
         $data[$i . 'Link'] = null;
     }
@@ -130,67 +134,3 @@ $data['units'] = Database::get()->queryArray("SELECT id, title FROM course_units
              ORDER BY `order`", $course_id);
 
 view('modules.units.index', $data);
-
-
-/**
- *
- * @global type $langCourseUnitModified
- * @global type $langCourseUnitAdded
- * @global type $course_id
- * @global type $course_code
- * @global type $webDir
- * @return type
- */
-function handle_unit_info_edit() {
-    global $course_id, $course_code, $webDir;
-
-    $title = $_REQUEST['unittitle'];
-    $descr = $_REQUEST['unitdescr'];
-    if (isset($_REQUEST['unit_id'])) { // update course unit
-        $unit_id = $_REQUEST['unit_id'];
-        Database::get()->query("UPDATE course_units SET
-                                        title = ?s,
-                                        comments = ?s
-                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
-        // tags
-        if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
-            $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->syncTags($tagsArray);
-        }
-        $successmsg = trans('langCourseUnitModified');
-    } else { // add new course unit
-        $order = units_maxorder(course_id) + 1;
-        $q = Database::get()->query("INSERT INTO course_units SET
-                                  title = ?s, comments = ?s, visible = 1,
-                                 `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
-        $successmsg = trans('langCourseUnitAdded');
-        $unit_id = $q->lastInsertID;
-        // tags
-        if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
-            $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->attachTags($tagsArray);
-        }
-    }
-    // update index
-    require_once 'modules/search/indexer.class.php';
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    // refresh course metadata
-    require_once 'modules/course_metadata/CourseXML.php';
-    CourseXMLElement::refreshCourse($course_id, $course_code);
-}
-
-/**
- * Return the maximum order for course units in a course
- */
-function units_maxorder($course_id) {
-    $maxorder = Database::get()->querySingle("SELECT MAX(`order`) AS max_order
-                    FROM course_units WHERE course_id = ?d", $course_id)->max_order;
-
-    if ($maxorder <= 0) {
-        return 0;
-    }
-    return $maxorder;
-}
