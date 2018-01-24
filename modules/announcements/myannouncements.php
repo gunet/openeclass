@@ -138,5 +138,5 @@ $head_content .= "
     </script>
 ";
 
-
+$data['menuTypeID'] = 1;
 view('modules.announcements.myann_index', $data);
