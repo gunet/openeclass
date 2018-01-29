@@ -110,11 +110,16 @@ foreach ($result as $row) {
     $sid = $row->uid;
     $theStudent = Database::get()->querySingle("SELECT surname, givenname, am FROM user WHERE id = ?d", $sid);
 
-    $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(a.record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, a.record_end_date,
-                CASE b.time_constraint 
-                WHEN 0 THEN TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date))
-                ELSE b.time_constraint*60-a.secs_remaining END AS time_duration, a.total_score, a.total_weighting, a.eurid, a.attempt_status
-                FROM `exercise_user_record` a, exercise b WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id$extra_sql ORDER BY a.record_start_date DESC", $sid, $exerciseId);
+    $result2 = Database::get()->queryArray("SELECT
+                    DATE_FORMAT(a.record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
+                    a.record_end_date,
+                    IF (attempt_status = 1 OR b.time_constraint = 0,
+                        TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date)),
+                        b.time_constraint*60-a.secs_remaining) AS time_duration,
+                    a.total_score, a.total_weighting, a.eurid, a.attempt_status
+                FROM `exercise_user_record` a, exercise b
+                WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id$extra_sql
+                ORDER BY a.record_start_date DESC", $sid, $exerciseId);
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<tr><td colspan='".($is_editor ? 5 : 4)."'>";
