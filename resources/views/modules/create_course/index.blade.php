@@ -47,59 +47,8 @@
         $('#cc').hide();
     }
 
-    $(document).ready(function() {
-        $('input[name=start_date]').datepicker({
-            format: 'yyyy-mm-dd',
-            language: '{{ $language }}',
-            autoclose: true
-        }).on('changeDate', function(e){
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                date2.setDate(date2.getDate() + 7);
-                $('input[name=finish_date]').datepicker('setDate', date2);
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }else{
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }
-        });
-
-        $('input[name=finish_date]').datepicker({
-            format: 'yyyy-mm-dd',
-            language: '{{ $language }}',
-            autoclose: true
-        }).on('changeDate', function(e){
-            var dt1 = $('input[name=start_date]').datepicker('getDate');
-            var dt2 = $('input[name=finish_date]').datepicker('getDate');
-            if (dt2 <= dt1) {
-                var minDate = $('input[name=finish_date]').datepicker('startDate');
-                $('input[name=finish_date]').datepicker('setDate', minDate);
-            }            
-        });
-        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=start_date]').datepicker('setDate', new Date());
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            date2.setDate(date2.getDate() + 7);
-            $('input[name=finish_date]').datepicker('setDate', date2);
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }else{
-            var date2 = $('input[name=finish_date]').datepicker('getDate');
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }
-        
-        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=finish_date]').datepicker("setDate", 7);
-        }
-        
-        $('#weeklyDates').hide();
-        
-        $('input[name=view_type]').change(function () {
-            if ($('#weekly').is(":checked")) {
-                $('#weeklyDates').show();
-            } else {
-                $('#weeklyDates').hide();
-            }
-        }).change();    
-        
+    $(document).ready(function() {        
+                        
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
         });
@@ -190,20 +139,12 @@
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='view_type' value='weekly' id='weekly'>
-                        {{ trans('langCourseWeeklyFormat') }}
+                        <input type='radio' name='view_type' value='wall' id='wall'>
+                        {{ trans('langCourseWallFormat') }}
                       </label>
                     </div>                         
                 </div>
-            </div>
-            <div class='form-group' id='weeklyDates'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                      {{ trans('langStartDate') }} <input class='dateInForm form-control' type='text' name='start_date' value='' readonly>
-                </div>
-                <div class='col-sm-10 col-sm-offset-2'>
-                      {{ trans('langEndDate') }} <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
-                </div>                
-            </div>
+            </div>            
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>{{ trans('langOpenCoursesLicense') }}:</label>
                 <div class='col-sm-10'>

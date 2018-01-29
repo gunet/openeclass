@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -175,13 +175,7 @@ if (!isset($_POST['create_course'])) {
 
     if (ctype_alnum($_POST['view_type'])) {
         $view_type = $_POST['view_type'];        
-    }
-    if (empty($_POST['start_date'])) {
-        $_POST['start_date'] = NULL;
-    }
-    if (empty($_POST['finish_date'])) {
-        $_POST['finish_date'] = NULL;
-    }
+    }    
     if (empty($_POST['public_code'])) {
         $public_code = $code;
     } else {
@@ -202,8 +196,8 @@ if (!isset($_POST['create_course'])) {
                         dropbox_quota = ?f,
                         password = ?s,
                         view_type = ?s,
-                        start_date = ?t,
-                        finish_date = ?t,
+                        start_date = " . DBHelper::timeAfter() . ",
+                        finish_date = " . DBHelper::timeAfter(31536000) . ",
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
@@ -213,49 +207,11 @@ if (!isset($_POST['create_course'])) {
             intval($course_license), $prof_names, $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
             $dropbox_quota * 1024 * 1024, $password, $view_type,
-            $_POST['start_date'], $_POST['finish_date'], $description);
+            $description);
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
         Session::Messages($langGeneralError);
         redirect_to_home_page('modules/create_course/create_course.php');
-    }
-
-    //===================course format and start and finish date===============
-    if ($view_type == "weekly") {
-
-        // get the last inserted id as the course id
-        $course_id = $new_course_id;
-
-        $begin = new DateTime($_POST['start_date']);
-
-        // check if there is no end date
-        if (!isset($_POST['finish_date']) or empty($_POST['finish_date'])) {
-            $end = new DateTime($begin->format("Y-m-d"));
-            $end->add(new DateInterval('P26W'));
-        } else {
-            $end = new DateTime($_POST['finish_date']);
-        }
-
-        $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
-
-        foreach ($daterange as $date) {            
-            //new weeks
-            //get the end week day
-            $endWeek = new DateTime($date->format("Y-m-d"));
-            $endWeek->modify('+6 day');
-            //value for db
-            $startWeekForDB = $date->format("Y-m-d");
-            if ($endWeek->format("Y-m-d") < $end->format("Y-m-d")) {
-                $endWeekForDB = $endWeek->format("Y-m-d");
-            } else {
-                $endWeekForDB = $end->format("Y-m-d");
-            }
-            $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view");
-            if ($q) {
-                $order =  max(0, $q->maxorder) + 1;                
-                Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week, `order`) VALUES (?d, ?t, ?t, ?d)", $course_id, $startWeekForDB, $endWeekForDB, $order);
-            }
-        }
     }
     
     // create course modules
