@@ -155,7 +155,7 @@ if ($runQuery) {
 
 if (count($courses) > 0) {
     $tool_content .= "<div class='row'><div class='col-xs-12'><div class='table-responsive'><table class='table-default'>        
-                <tr class='list-header'><th class='text-left'>" . q($m['lessoncode']) . "</th>";
+                <tr class='list-header'><th class='text-left'>" . q($langCourseCode) . "</th>";
 
     if ($isInOpenCoursesMode) {
         $tool_content .= "<th class='text-left' width='220'>" . q($langTeacher) . "</th>
