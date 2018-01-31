@@ -1601,11 +1601,10 @@ function course_id_to_public_code($cid) {
 function delete_course($cid) {
     global $webDir;
 
-    if (!isset($webDir) or empty($webDir)) { // security
+    $course_code = course_id_to_code($cid);
+    if (!isset($webDir) or !$webDir or !$course_code) { // security check
         return;
     }
-    $course_code = course_id_to_code($cid);
-
 
     Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion IN
                             (SELECT id FROM badge_criterion WHERE badge IN
@@ -2810,7 +2809,7 @@ function removeDir($dirPath) {
 
     // Don't delete root directories
     $dirPath = rtrim($dirPath, '/\\');
-    if ($dirPath == $webDir or $dirPath === '') {
+    if ($dirPath == $webDir or $dirPath == "$webDir/courses" or $dirPath == "$webDir/video" or $dirPath === '/' or !is_dir($webDir)) {
         return false;
     }
 
