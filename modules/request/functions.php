@@ -27,6 +27,13 @@ define('REQUEST_STATE_CLOSED', 4);
 define('REQUEST_ASSIGNED', 1);
 define('REQUEST_WATCHER', 2);
 
+define('REQUEST_FIELD_TEXTBOX', 1);
+define('REQUEST_FIELD_TEXTAREA', 2);
+define('REQUEST_FIELD_DATE', 3);
+define('REQUEST_FIELD_MENU', 4);
+define('REQUEST_FIELD_LINK', 5);
+define('REQUEST_FIELD_MENU_EDITABLE', 6);
+
 $stateLabels = [
     REQUEST_STATE_NEW => $langRequestStateNew,
     REQUEST_STATE_ASSIGNED => $langRequestStateAssigned,

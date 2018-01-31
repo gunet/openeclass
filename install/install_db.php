@@ -1944,42 +1944,65 @@ $db->query("CREATE TABLE `certified_users` (
   PRIMARY KEY (`id`)) $tbl_options");
 
 // `request` tables (aka `ticketing`)
+$db->query("CREATE TABLE IF NOT EXISTS request_type (
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` MEDIUMTEXT NOT NULL,
+    `description` MEDIUMTEXT NULL DEFAULT NULL) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS request (
-    id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    course_id INT(11) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    creator_id INT(11) NOT NULL,
-    state TINYINT(4) NOT NULL,
-    `type` TINYINT(4) NOT NULL,
-    open_date DATETIME NOT NULL,
-    change_date DATETIME NOT NULL,
-    close_date DATETIME,
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `course_id` INT(11) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `creator_id` INT(11) NOT NULL,
+    `state` TINYINT(4) NOT NULL,
+    `type` TINYINT(4) DEFAULT NULL,
+    `open_date` DATETIME NOT NULL,
+    `change_date` DATETIME NOT NULL,
+    `close_date` DATETIME,
     PRIMARY KEY(id),
     FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+    FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE,
     FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `request_custom_field` (
+    `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `type_id` INT(11) UNSIGNED NOT NULL,
+    `name` MEDIUMTEXT NOT NULL,
+    `description` MEDIUMTEXT NULL DEFAULT NULL,
+    `datatype` INT(11) NOT NULL,
+    `sortorder` INT(11) NOT NULL DEFAULT 0,
+    FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `request_field_data` (
+    `id` INT(11) UNSIGNED NULL AUTO_INCREMENT PRIMARY KEY,
+    `request_id` INT(11) UNSIGNED NOT NULL,
+    `field_id` INT(11) UNSIGNED NOT NULL,
+    `data` TEXT NOT NULL,
+    FOREIGN KEY (field_id) REFERENCES request_custom_field(id) ON DELETE CASCADE,
+    UNIQUE KEY (`request_id`, `field_id`)) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS request_watcher (
-    id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    request_id INT(11) UNSIGNED NOT NULL,
-    user_id INT(11) NOT NULL,
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `request_id` INT(11) UNSIGNED NOT NULL,
+    `user_id` INT(11) NOT NULL,
     `type` TINYINT(4) NOT NULL,
-    notification TINYINT(4) NOT NULL,
+    `notification` TINYINT(4) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY (request_id, user_id),
     FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS request_action (
-    id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    request_id INT(11) UNSIGNED NOT NULL,
-    user_id INT(11) NOT NULL,
-    ts DATETIME NOT NULL,
-    old_state TINYINT(4) NOT NULL,
-    new_state TINYINT(4) NOT NULL,
-    filename VARCHAR(256),
-    real_filename VARCHAR(255),
-    comment TEXT,
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `request_id` INT(11) UNSIGNED NOT NULL,
+    `user_id` INT(11) NOT NULL,
+    `ts` DATETIME NOT NULL,
+    `old_state` TINYINT(4) NOT NULL,
+    `new_state` TINYINT(4) NOT NULL,
+    `filename` VARCHAR(256),
+    `real_filename` VARCHAR(255),
+    `comment` TEXT,
     PRIMARY KEY(id),
     FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");

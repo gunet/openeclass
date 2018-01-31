@@ -35,7 +35,7 @@ if (isset($_POST['requestTitle'])) {
     if ($title) {
         $result = Database::get()->query('INSERT INTO request
             SET course_id = ?d, title = ?s, description = ?s,
-                creator_id = ?d, state = ?d, type = 0,
+                creator_id = ?d, state = ?d, type_id = NULL,
                 open_date = NOW(), change_date = NOW(), close_date = NULL',
             $course_id, $title, $requestDescription,
             $uid, REQUEST_STATE_NEW);

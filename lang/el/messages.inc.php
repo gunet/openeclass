@@ -5539,3 +5539,7 @@ $langRequestStateClosed = 'Κλειστό';
 $langOpenedOn = 'Δημιουργία';
 $langUpdatedOn = 'Τροποποίηση';
 $langChangeState = 'Αλλαγή κατάστασης σε';
+$langChangeAssignees = 'Αλλαγή ανάθεσης σε: %s (από: %s)';
+$langChangeWatchers = 'Αλλαγή παρατηρητών σε: %s (από: %s)';
+$langTakeRequest = 'Ανάληψη αιτήματος';
+$langRequestTaken = 'Ο χρήστης %s ανέλαβε το αίτημα.';

@@ -47,8 +47,75 @@ if (isset($_GET['id'])) {
     $can_modify = $is_editor || $request->creator_id == $uid ||
         in_array($uid, $data['assigned']);
     $can_comment = $can_modify || in_array($uid, $data['watchers']);
+    $data['can_assign_to_self'] = !in_array($uid, $data['assigned']) &&
+        ($is_editor ||
+         (!$data['assigned'] && in_array($uid, $data['watchers'])));
+    if (count($_POST) and !(isset($_POST['token']) and validate_csrf_token($_POST['token']))) {
+        csrf_token_error();
+    }
 
-    if (isset($_POST['requestComment'])) {
+    if ($can_modify) {
+        load_js('select2');
+        $data['course_users'] = Database::get()->queryArray("SELECT user_id,
+                CONCAT(surname, ' ', givenname) name, email
+            FROM course_user JOIN user ON user_id = user.id
+            WHERE course_id = ?d
+            ORDER BY surname, givenname", $course_id);
+        $course_user_ids = array_map(function ($item) {
+                return $item->user_id;
+            }, $data['course_users']);
+
+        if (isset($_POST['assignTo'])) {
+            if (array_diff($_POST['assignTo'], $course_user_ids)) {
+                Session::Messages($langGeneralError, 'alert-danger');
+                redirect_to_home_page($data['targetUrl']);
+            }
+            Database::get()->query('DELETE FROM request_watcher
+                WHERE request_id = ?d AND type = ?d',
+                $id, REQUEST_ASSIGNED);
+            $args = array_map(function ($item) use ($id) {
+                    return [$id, $item, REQUEST_ASSIGNED];
+                }, $_POST['assignTo']);
+            $placeholders = implode(', ', array_fill(0, count($_POST['assignTo']), '(?d, ?d, ?d)'));
+            Database::get()->query("INSERT INTO request_watcher
+                (request_id, user_id, type) VALUES $placeholders",
+                $args);
+            $_POST['requestComment'] = sprintf(trans('langChangeAssignees'),
+                formatUsers($_POST['assignTo']) . '<br>',
+                formatUsers($data['assigned']));
+        } elseif (isset($_POST['watchers'])) {
+            if (array_diff($_POST['watchers'], $course_user_ids)) {
+                Session::Messages($langGeneralError, 'alert-danger');
+                redirect_to_home_page($data['targetUrl']);
+            }
+            Database::get()->query('DELETE FROM request_watcher
+                WHERE request_id = ?d AND type = ?d',
+                $id, REQUEST_WATCHER);
+            $args = array_map(function ($item) use ($id) {
+                    return [$id, $item, REQUEST_WATCHER];
+                }, $_POST['watchers']);
+            $placeholders = implode(', ', array_fill(0, count($_POST['watchers']), '(?d, ?d, ?d)'));
+            Database::get()->query("INSERT INTO request_watcher
+                (request_id, user_id, type) VALUES $placeholders",
+                $args);
+            $_POST['requestComment'] = sprintf(trans('langChangeWatchers'),
+                formatUsers($_POST['watchers']) . '<br>',
+                formatUsers($data['watchers']));
+        }
+    }
+
+    if ($data['can_assign_to_self'] and isset($_POST['assignToSelf'])) {
+        Database::get()->query('DELETE FROM request_watcher
+            WHERE request_id = ?d AND (user_id = ?d OR type = ?d)',
+            $id, $uid, REQUEST_ASSIGNED);
+        Database::get()->query('INSERT INTO request_watcher
+            SET request_id = ?d, user_id = ?d, type = ?d',
+            $id, $uid, REQUEST_ASSIGNED);
+        $_POST['requestComment'] = sprintf(trans('langRequestTaken'),
+            '<b>' . q("$_SESSION[givenname] $_SESSION[surname]") . '</b>');
+    }
+
+    if ($can_comment and isset($_POST['requestComment'])) {
         $comment = purify($_POST['requestComment']);
         $fileName = $filePath = null;
         if (isset($_FILES['requestFile']) and is_uploaded_file($_FILES['requestFile']['tmp_name'])) {
@@ -117,4 +184,14 @@ if (isset($_GET['id'])) {
     $data['listUrl'] = $urlAppend . 'modules/request/list.php?course=' . $course_code;
 
     view('modules.request.index', $data);
+}
+
+function formatUsers($userData) {
+    return implode(', ', array_map(function ($user) {
+            if (is_object($user)) {
+                return '<b>' . $user->name . '</b>';
+            } else {
+                return '<b>' . uid_to_name($user) . '</b>';
+            }
+        }, $userData));
 }

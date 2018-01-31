@@ -59,6 +59,23 @@
             </div>
         </div>
 
+        @if ($can_modify or $can_assign_to_self)
+            <div class='col-md-12'>
+                <form role='form' method='post' action='{{ $targetUrl }}'>
+                    <p>
+                    {!! generate_csrf_token_form_field() !!}
+                    @if ($can_assign_to_self)
+                        <button class='btn btn-default' type='submit' name='assignToSelf'>{{ trans('langTakeRequest') }}</button>
+                    @endif
+                    @if ($can_modify)
+                        <button class='btn btn-default' type='button' data-toggle='modal' data-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
+                        <button class='btn btn-default' type='button' data-toggle='modal' data-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
+                    @endif
+                    </p>
+                </form>
+            </div>
+        @endif
+
         @if ($comments)
             @foreach ($comments as $comment)
                 <div class='col-md-12'>
@@ -130,7 +147,7 @@
 
                         @if ($can_modify)
                             <div class='form-group'>
-                                <label for'newState' class='col-sm-2 control-label'>{{ trans('langChangeState') }}:</label>
+                                <label for='newState' class='col-sm-2 control-label'>{{ trans('langChangeState') }}:</label>
                                 <div class='col-sm-10'>
                                     <select class='form-control' name='newState' id='newState'>
                                         @foreach ($states as $stateId => $stateName)
@@ -168,4 +185,75 @@
             </div>
         @endif
     </div>
+
+    @if ($can_modify)
+        <div class='modal fade' id='assigneesModal' tabindex='-1' role='dialog' aria-labelledby='assigneesModalLabel' aria-hidden='true'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <button type='button' class='close' data-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
+                            <span aria-hidden='true'>&times;</span>
+                        </button>
+                        <div class='modal-title h4' id='assigneesModalLabel'>{{ trans("m['WorkAssignTo']") }}...</div>
+                    </div>
+                    <form method='post' action='{{ $targetUrl }}'>
+                        {!! generate_csrf_token_form_field() !!}
+                        <div class='modal-body'>
+                            <select class='form-control' name='assignTo[]' multiple id='assignTo'>
+                                @foreach ($course_users as $cu)
+                                    <option value='{{ $cu->user_id }}'
+                                    @if (in_array($cu->user_id, $assigned))
+                                        selected
+                                    @endif>{{$cu->name}} ({{$cu->email}})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='btn btn-default' class='close' data-dismiss='modal'>{{ trans('langCancel') }}</button>
+                            <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class='modal fade' id='watchersModal' tabindex='-1' role='dialog' aria-labelledby='watchersModalLabel' aria-hidden='true'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <button type='button' class='close' data-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
+                            <span aria-hidden='true'>&times;</span>
+                        </button>
+                        <div class='modal-title h4' id='watchersModalLabel'>{{ trans("langWatchers") }}...</div>
+                    </div>
+                    <form method='post' action='{{ $targetUrl }}'>
+                        {!! generate_csrf_token_form_field() !!}
+                        <div class='modal-body'>
+                            <select class='form-control' name='watchers[]' multiple id='watchersInput'>
+                                @foreach ($course_users as $cu)
+                                    <option value='{{ $cu->user_id }}'
+                                    @if (in_array($cu->user_id, $watchers))
+                                        selected
+                                    @endif>{{$cu->name}} ({{$cu->email}})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='btn btn-default' class='close' data-dismiss='modal'>{{ trans('langCancel') }}</button>
+                            <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(function() {
+                $("#assignTo").select2({
+                    dropdownParent: $("#assigneesModal")
+                });
+                $("#watchersInput").select2({
+                    dropdownParent: $("#watchersModal")
+                });
+            });
+        </script>
+    @endif
 @endsection
