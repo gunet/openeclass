@@ -41,7 +41,7 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
     if (!token_validate($id, $_GET['token'], 3600)) {
         forbidden($_SERVER['REQUEST_URI']);
     }
-    $pageName = $langUserProfile;
+    $toolName = $langUserProfile;    
 } else {
     $id = $uid;
 }
@@ -92,7 +92,8 @@ if ($userdata) {
                     array('title' => $langProfileSendMail,
                         'url' => $urlAppend . "modules/message/index.php?upload=1&amp;id=$id",
                         'icon' => 'fa-envelope',
-                        'level' => 'primary-label')
+                        'level' => 'primary-label',
+                        'button-class' => 'btn-success')
                     ));
         }
     }
@@ -192,12 +193,6 @@ if ($userdata) {
                     </div> <!-- end of row -->
                 </div> <!-- end of col-xs-12 profile-pers-info -->
             </div> <!-- end of pers_info row -->";
-    if (!empty($userdata->description)) {
-        $tool_content .= "<div id='profile-about-me' class='row'>
-                            <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-                            <h4>$langProfileAboutMe</h4><div>
-                                ".standard_text_escape($userdata->description)."</div></div></div>";
-    }
     $tool_content .= "
     <div id='profile-departments' class='row'>
         <div class='col-xs-12 col-sm-10 col-sm-offset-2'>
@@ -215,6 +210,13 @@ if ($userdata) {
             </div>
         </div>
     </div>";
+        
+    if (!empty($userdata->description)) {
+    $tool_content .= "<div id='profile-about-me' class='row'>
+                        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
+                        <h4>$langProfileAboutMe</h4><div>
+                            ".standard_text_escape($userdata->description)."</div></div></div>";
+    }
        
     // get completed certificates with public url
     $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
