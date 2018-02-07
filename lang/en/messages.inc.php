@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2017-12-11 15:14:01
+// Generated 2018-02-07 12:46:59
 
 $langYes = "Yes";
 $langNo = "No";
@@ -549,7 +549,7 @@ $langForums = "Forum";
 $langExercices = "Exercises";
 $langAddPageHome = "Upload Webpage";
 $langModifyInfo = "Course Administration";
-$langDropBox = "Message Exchange";
+$langDropBox = "Messages";
 $langLearnPath = "Learning Path";
 $langWiki = "Wiki";
 $langToolManagement = "Tool Management";
@@ -2419,7 +2419,7 @@ $langOptionalCfgSetting = "Optional Settings";
 $langToReqOpen = "Users can freely register themselves without the administration approval";
 $lang_email_required = "$langsOfStudent email address is required during registration";
 $lang_am_required = "$langsOfStudent ID is required during registration";
-$lang_dropbox_allow_student_to_student = "Allow file exchange between $langsOfStudents in 'Message Exchange'";
+$lang_dropbox_allow_student_to_student = "Allow messages between $langsOfStudents in 'Messages'";
 $lang_dont_display_login_form = "Don't display login form in platform home page";
 $lang_block_username_change = "Don't allow users to change their 'username'";
 $lang_display_captcha = "Display captcha during users registration";
@@ -2455,7 +2455,7 @@ $langJQUncheckAll = 'Unselect All';
 $langcas_logout = "CAS logout page";
 $langDocQuota = "Documents quota";
 $langVideoQuota = "Video quota";
-$langDropboxQuota = "Message Exchange quota";
+$langDropboxQuota = "Messages Quota";
 $langGroupQuota = "Group quota";
 $langAlternateLogin = "Alternate login";
 $langEnterPlatform = "Enter platform by clicking here";
@@ -4936,7 +4936,7 @@ $langResourceBelongsToCert = "Resource belongs to certificate or badge.";
 $langTemplateBelongsToCert = "Template has been used by certificate.";
 $langIconBelongsToBadge = "The icon has beed used by some badge.";
 $langProgressBasicInfo = "Basic info";
-$langCourseCompletion = "$langsOfCourse completion";
+$langCourseCompletion = "$langOfCourse Completion";
 $langCourseCompletionCreated = "$langsOfCourse completion created";
 $langCourseCompletionMessage = "$langCourse completed successfully";
 $langCertAddress = "Certificate public url";
@@ -4995,3 +4995,4 @@ $langRegrade = 'Regrade';
 $langNewScoreRecorded = 'The recalculated score was recorded';
 $langQuestionStoredScore = 'Recorded Question Score';
 $langContactAdminForInfo = "Please contact the platform administrator for more information.";
+$langContactAdminAuth = "Contact with admin";
