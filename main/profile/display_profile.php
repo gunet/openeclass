@@ -63,7 +63,7 @@ if ($data['userdata']) {
         $passurl = $urlServer . 'main/profile/password.php';
         $data['action_bar'] =
             action_bar(array(
-                array('title' => $langEditProfile,
+                array('title' => $langModify,
                     'url' => "profile.php",
                     'icon' => 'fa-edit',
                     'level' => 'primary-label'),
@@ -76,11 +76,17 @@ if ($data['userdata']) {
                     'url' => "emailunsubscribe.php",
                     'icon' => 'fa-envelope',
                     'level' => 'primary',
-                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses']))),
+                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses'])))                
+                ));
+        
+        
+        $data['action_bar_unreg'] =
+            action_bar(array(                
                 array('title' => $langUnregUser,
                     'url' => "../unreguser.php",
                     'icon' => 'fa-times',
-                    'level' => 'primary')
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-danger')
                 ));
     } else {
         if (get_config('dropbox_allow_personal_messages')) {
@@ -103,7 +109,7 @@ if ($data['userdata']) {
 
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle');
 
-    $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
+    $data['cert_completed'] = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
                                         . "FROM certified_users "
                                         . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
     
@@ -118,7 +124,7 @@ if ($data['userdata']) {
             . "AND b.active = 1 "
             . "AND b.bundle != -1 "
             . "AND (b.expires IS NULL OR b.expires > NOW())";
-    $sql2 = Database::get()->queryArray($gameQ, $uid);
+    $data['badge_completed'] = Database::get()->queryArray($gameQ, $uid);
     
 }
 
