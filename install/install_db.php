@@ -159,29 +159,6 @@ $db->query("CREATE TABLE `course` (
   `course_image` VARCHAR(400) NULL,
   PRIMARY KEY  (`id`)) $tbl_options");
 
-$db->query("CREATE TABLE `course_weekly_view` (
-  `id` INT(11) NOT NULL auto_increment,
-  `course_id` INT(11) NOT NULL,
-  `title` VARCHAR(255) NOT NULL DEFAULT '',
-  `comments` MEDIUMTEXT,
-  `start_week` DATE NOT NULL,
-  `finish_week` DATE NOT NULL,
-  `visible` TINYINT(4) NOT NULL DEFAULT 1,
-  `public` TINYINT(4) NOT NULL DEFAULT 1,
-  `order` INT(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`id`)) $tbl_options");
-
-$db->query("CREATE TABLE `course_weekly_view_activities` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-    `course_weekly_view_id` INT(11) NOT NULL ,
-    `title` VARCHAR(255) NOT NULL DEFAULT '',
-    `comments` MEDIUMTEXT,
-    `res_id` INT(11) NOT NULL,
-    `type` VARCHAR(255) NOT NULL DEFAULT '',
-    `visible` TINYINT(4),
-    `order` INT(11) NOT NULL DEFAULT 0,
-    `date` DATETIME NOT NULL) $tbl_options");
-
 $db->query("CREATE TABLE `course_user` (
       `course_id` INT(11) NOT NULL DEFAULT 0,
       `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -1467,6 +1444,8 @@ $db->query("CREATE TABLE `course_units` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
     `comments` MEDIUMTEXT,
+    `start_date` DATE,
+    `weekly_date` DATE,
     `visible` TINYINT(4),
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `order` INT(11) NOT NULL DEFAULT 0,

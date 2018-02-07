@@ -3840,6 +3840,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 PRIMARY KEY(id),
                 FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+        
+        // course units upgrade
+        if (!DBHelper::fieldExists('course_units', 'start_week')) {
+            Database::get()->query("ALTER TABLE course_unit ADD start_week DATE after comments");
+        }
+        if (!DBHelper::fieldExists('course_units', 'end_week')) {
+            Database::get()->query("ALTER TABLE course_unit ADD end_week DATE after comments");
+        }        
+        
+        //Database::get()->query("DROP TABLE course_weekly");
+        //Database::get()->query("DROP TABLE course_weekly_view_activities");
+        
+        
     }
 
 
