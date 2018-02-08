@@ -94,9 +94,9 @@
                     </div>
                 </div>
             @if (get_config('email_verification_required'))
-                <div class='form-group$messageClass'>
+                <div class='form-group {{ $messageClass }}'>
                     <label class='col-sm-2 control-label'>{{ trans('langVerifiedMail') }}</label>
-                    <div class='col-sm-10 form-control-static'>{{ $message }}</div>
+                    <div class='col-sm-10 form-control-static'>{!! $message !!}</div>
                 </div>
             @endif
             @if (!get_config('restrict_owndep'))
@@ -113,8 +113,13 @@
             </div>
             <div class='form-group'>
                 <label for='picture' class='col-sm-2 control-label'>{{ $message_pic }}</label>
-                <div class='col-sm-10'><span>{{ $picture }}{{$delete }}</span>{!! fileSizeHidenInput() !!}
-                    <input type='file' name='userimage' size='30'></div>
+                <div class='col-sm-10'>
+                    <span>
+                        {!! $picture !!} {!! $delete !!}
+                    </span>
+                    {!! fileSizeHidenInput() !!}
+                    <input type='file' name='userimage' size='30'>
+                </div>
             </div>
             <div class='form-group'>
                 <label for='desription' class='col-sm-2 control-label'>{{ trans('langProfileAboutMe') }}:</label>

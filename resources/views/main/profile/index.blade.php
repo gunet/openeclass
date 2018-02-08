@@ -50,16 +50,7 @@
                         </div>
                         </div>
                         <div class="col-sm-6">
-                            @if (get_config('personal_blog'))                                                        
-                                <div>
-                                    <a href='{{ $urlServer }}modules/blog/index.php?user_id={{ $id }}&token={{ token_generate("personal_blog" . $id) }}'>{{ trans('langUserBlog') }}</a>
-                                </div>                                                        
-                            @endif
-                            @if (get_config('eportfolio_enable'))                        
-                                <div>
-                                    <a href='{{ $urlServer }}/main/eportfolio/index.php?id={{ $id }}&token={{ token_generate("eportfolio" . $id) }}'>{{ trans('langUserePortfolio') }}</a>
-                                </div>                        
-                            @endif
+                            {!! $action_bar_blog_portfolio !!}
                         </div>
                     </div>
                     <div class="row">
@@ -139,7 +130,7 @@
                                 <div class="profile-content-panel-text">
                                     <p>
                                     @if (!empty($userdata->description))
-                                        {{ standard_text_escape($userdata->description) }}
+                                        {!! standard_text_escape($userdata->description) !!}
                                     @endif
                                     </p>
                                 </div>
@@ -157,21 +148,28 @@
         <div class='col-sm-10' style='padding-top:20px;'><h4>{{ trans('langMyCertificates') }}</h4></div>
             <div class='row'>
                 <div class='badge-container'>
-                $tool_content .= "<div class='clearfix'>
-                @foreach ($cert_completed as $key => $certificate)           
-                    <div class='col-xs-12 col-sm-4 col-xl-2'>
-                    <a style='display:inline-block; width: 100%' <a href='../out.php?i={{ $certificate->identifier }}'>
-                        <div class='certificate_panel' style='width:210px; height:120px;'>
-                            <h4 class='certificate_panel_title' style='font-size:15px; margin-top:2px;'>{{ $certificate->cert_title }}</h4>
-                            <div style='font-size:10px;'>{{ claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) }}</div>
-                            <div class='certificate_panel_issuer' style='font-size:11px;'>{{ $certificate->cert_issuer }}</div>
-                        </a>
-                            <div class='certificate_panel_state'>
-                                <i class='fa fa-check-circle fa-inverse state_success'></i>
+                <div class='clearfix'>
+                    @foreach ($cert_completed as $key => $certificate)           
+                        <div class='col-xs-12 col-sm-4 col-xl-2'>
+                        <a style='display:inline-block; width: 100%;' href='../out.php?i={{ $certificate->identifier }}'>
+                            <div class='certificate_panel' style='width:210px; height:120px;'>
+                                <h4 class='certificate_panel_title' style='font-size:15px; margin-top:2px;'>
+                                    {{ $certificate->cert_title }}
+                                </h4>
+                                <div style='font-size:10px;'>
+                                    {{ claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) }}
+                                </div>
+                                <div class='certificate_panel_issuer' style='font-size:11px;'>
+                                    {{ $certificate->cert_issuer }}
+                                </div>
+
+                                <div class='certificate_panel_state'>
+                                    <i class='fa fa-check-circle fa-inverse state_success'></i>
+                                </div>
                             </div>
+                        </a>
                         </div>
-                    </div>
-                @endforeach                    
+                    @endforeach                    
                 </div>
             </div>
         </div>

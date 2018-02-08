@@ -424,7 +424,7 @@ if (get_config('email_verification_required')) {
     switch ($user_email_status) {
         case EMAIL_VERIFICATION_REQUIRED:
         case EMAIL_UNVERIFIED:
-            $messageClass = ' alert alert-warning';
+            $data['messageClass'] = ' alert alert-warning';
             $link = "<a href = '{$urlAppend}modules/auth/mail_verify_change.php?from_profile=true'>$langHere</a>.";
             $data['message'] = "$langMailNotVerified $link";
             break;

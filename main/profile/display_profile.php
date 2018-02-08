@@ -26,6 +26,7 @@ include '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
+require_once 'include/lib/textLib.inc.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $data['tree'] = new Hierarchy();
@@ -75,10 +76,26 @@ if ($data['userdata']) {
                 array('title' => $langEmailUnsubscribe,
                     'url' => "emailunsubscribe.php",
                     'icon' => 'fa-envelope',
-                    'level' => 'primary',
-                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses'])))                
+                    'level' => 'primary-label',
+                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses'])))
                 ));
+                        
         
+        $data['action_bar_blog_portfolio'] =
+            action_bar(array(                
+                array('title' => $langUserBlog,
+                    'url' => "../../modules/blog/index.php?user_id=$uid&token=" . token_generate("personal_blog" . $uid) . "",
+                    'icon' => 'fa-columns',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success',
+                    'show' => get_config('personal_blog')),
+                array('title' => $langMyePortfolio,
+                    'url' => "../eportfolio/index.php?id=$uid&token=" . token_generate("eportfolio" . $uid) . "",
+                    'icon' => 'fa-briefcase',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success',
+                    'show' => get_config('eportfolio_enable')
+                )));
         
         $data['action_bar_unreg'] =
             action_bar(array(                
