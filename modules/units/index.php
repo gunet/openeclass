@@ -85,6 +85,13 @@ if (isset($id) and $id !== false) {
         $data['pageName'] = $info->title;
         $data['comments'] = trim($info->comments);
         $data['unitId'] = $info->id;
+        $data['course_start_week'] = $data['course_finish_week'] = '';
+        if (!(($info->start_week == '0000-00-00') or (is_null($info->start_week)))) {
+            $data['course_start_week'] = "$langFrom2 " . nice_format($info->start_week);
+        }        
+        if (!(($info->finish_week == '0000-00-00') or (is_null($info->finish_week)))) {
+            $data['course_finish_week'] = "$langTill " . nice_format($info->finish_week);
+        }
     } else {
         Session::Messages($langUnknownResType);
         redirect_to_home_page("courses/$course_code/");
@@ -108,7 +115,7 @@ foreach (array('previous', 'next') as $i) {
         $access_check = "AND public = 1";
     }
     
-    $q = Database::get()->querySingle("SELECT id, title, public FROM course_units
+    $q = Database::get()->querySingle("SELECT id, title, start_week, finish_week, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
                              AND `order` $op $info->order

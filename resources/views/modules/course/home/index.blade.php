@@ -145,11 +145,11 @@
                 <div class='row'>
                     <div class='col-md-12'>
                         <div class='content-title pull-left h3'>
-                            {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
+                            {{ trans('langCourseUnits') }}
                         </div>                         
-                <a class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
-                    <span class='fa fa-question-circle'></span>
-                </a>
+                            <a class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
+                                <span class='fa fa-question-circle'></span>
+                            </a>
                         @if ($is_editor and $course_info->view_type == 'units')
                             <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='{{ trans('langAddUnit') }}'>
                                 <span class='fa fa-plus-circle'></span>
@@ -170,86 +170,68 @@
                                     <div class='col-xs-12'>
                                         <div class='item-content'>
                                             <div class='item-header clearfix'>
-                                                <div class='item-title h4'>
-                                                    @if ($course_info->view_type == 'weekly')
-                                                        <a {!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/weeks/?course={{ $course_code }}&amp;id={{ $course_unit->id }}&amp;cnt={{ $count_index }}'>
-                                                            @if(!empty($course_unit->title))
-                                                                {{ $course_unit->title }}
-                                                            @else
-                                                                {{ $count_index.trans('langor') }} {{ trans('langsWeek') }}
-                                                            @endif
-                                                            ({{ trans('langFrom2') }} {{ nice_format($course_unit->start_week) }} {{ trans('langTill') }} {{ nice_format($course_unit->finish_week) }})
-                                                        </a>
-                                                    @else
-                                                        <a{!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
-                                                            {{ $course_unit->title }}
-                                                        </a>
-                                                    @endif
+                                                <div class='item-title h4'>                                                    
+                                                    <a {!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
+                                                        {{ $course_unit->title }}
+                                                    </a>
+                                                    <span class='help-block'>
+                                                        <?php
+                                                            if (!(($course_unit->start_week == '0000-00-00') or (is_null($course_unit->start_week)))) {
+                                                                echo $GLOBALS['langFrom2'];
+                                                                echo "&nbsp;";
+                                                                echo nice_format($course_unit->start_week);
+                                                            }
+                                                        ?>
+                                                        <?php
+                                                            if (!(($course_unit->finish_week == '0000-00-00') or (is_null($course_unit->finish_week)))) {
+                                                                echo $GLOBALS['langTill'];
+                                                                echo "&nbsp;";
+                                                                echo nice_format($course_unit->finish_week);
+                                                            }
+                                                        ?>
+                                                    </span>
                                                 </div>
                                                 @if ($is_editor)
-                                                    <div class='item-side'>
-                                                    @if ($course_info->view_type == 'weekly')
-                                                        <!-- actions for course weekly format -->
+                                                    <div class='item-side'>                                                    
                                                         {!! action_button([
-                                                                [
-                                                                    'title' => trans('langEditChange'),
-                                                                    'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$course_unit->id&amp;cnt=$count_index",
-                                                                    'icon' => 'fa-edit'
-                                                                ],
-                                                                [
-                                                                    'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
-                                                                    'url' => "$_SERVER[REQUEST_URI]?visW=". getIndirectReference($course_unit->id),
-                                                                    'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
-                                                                ],
-                                                                [
-                                                                  'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
-                                                                  'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
-                                                                  'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
-                                                                  'show' => $course_info->visible == COURSE_OPEN
-                                                                ]
-                                                            ]) !!}
-
-                                                    @else
-                                                        {!! action_button([
-                                                                [
-                                                                    'title' => trans('langEditChange'),
-                                                                    'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$course_unit->id",
-                                                                    'icon' => 'fa-edit'
-                                                                ],
-                                                                [
-                                                                    'title' => trans('langDown'),
-                                                                    'level' => 'primary',
-                                                                    'url' => "$_SERVER[REQUEST_URI]?down=". getIndirectReference($course_unit->id),
-                                                                    'icon' => 'fa-arrow-down',
-                                                                    'disabled' => $key + 1 == count($course_units)
-                                                                ],
-                                                                [
-                                                                    'title' => trans('langUp'),
-                                                                    'level' => 'primary',
-                                                                    'url' => "$_SERVER[REQUEST_URI]?up=". getIndirectReference($course_unit->id),
-                                                                    'icon' => 'fa-arrow-up',
-                                                                    'disabled' => $key == 0
-                                                                ],
-                                                                [
-                                                                    'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
-                                                                    'url' => "$_SERVER[REQUEST_URI]?vis=". getIndirectReference($course_unit->id),
-                                                                    'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
-                                                                ],
-                                                                [
-                                                                    'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
-                                                                    'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
-                                                                    'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
-                                                                    'show' => $course_info->visible == COURSE_OPEN
-                                                                ],
-                                                                [
-                                                                    'title' => trans('langDelete'),
-                                                                    'url' => "$_SERVER[REQUEST_URI]?del=". getIndirectReference($course_unit->id),
-                                                                    'icon' => 'fa-times',
-                                                                    'class' => 'delete',
-                                                                    'confirm' => trans('langCourseUnitDeleteConfirm')
-                                                                ]
-                                                            ]) !!}
-                                                    @endif
+                                                            [
+                                                                'title' => trans('langEditChange'),
+                                                                'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$course_unit->id",
+                                                                'icon' => 'fa-edit'
+                                                            ],
+                                                            [
+                                                                'title' => trans('langDown'),
+                                                                'level' => 'primary',
+                                                                'url' => "$_SERVER[REQUEST_URI]?down=". getIndirectReference($course_unit->id),
+                                                                'icon' => 'fa-arrow-down',
+                                                                'disabled' => $key + 1 == count($course_units)
+                                                            ],
+                                                            [
+                                                                'title' => trans('langUp'),
+                                                                'level' => 'primary',
+                                                                'url' => "$_SERVER[REQUEST_URI]?up=". getIndirectReference($course_unit->id),
+                                                                'icon' => 'fa-arrow-up',
+                                                                'disabled' => $key == 0
+                                                            ],
+                                                            [
+                                                                'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
+                                                                'url' => "$_SERVER[REQUEST_URI]?vis=". getIndirectReference($course_unit->id),
+                                                                'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
+                                                            ],
+                                                            [
+                                                                'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
+                                                                'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
+                                                                'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
+                                                                'show' => $course_info->visible == COURSE_OPEN
+                                                            ],
+                                                            [
+                                                                'title' => trans('langDelete'),
+                                                                'url' => "$_SERVER[REQUEST_URI]?del=". getIndirectReference($course_unit->id),
+                                                                'icon' => 'fa-times',
+                                                                'class' => 'delete',
+                                                                'confirm' => trans('langCourseUnitDeleteConfirm')
+                                                            ]
+                                                        ]) !!}                                                    
                                                     </div>
                                                 @endif
                                             </div>

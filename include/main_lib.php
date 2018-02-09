@@ -2237,12 +2237,21 @@ function handle_unit_info_edit() {
 
     $title = $_REQUEST['unittitle'];
     $descr = $_REQUEST['unitdescr'];
+    if (!empty($_REQUEST['unitdurationfrom'])) {
+            $unitdurationfrom = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationfrom'])->format('Y-m-d');
+    }
+    if (!empty($_REQUEST['unitdurationto'])) {
+        $unitdurationto = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationto'])->format('Y-m-d');
+    }
     if (isset($_REQUEST['unit_id'])) { // update course unit
         $unit_id = $_REQUEST['unit_id'];
         Database::get()->query("UPDATE course_units SET
-                                        title = ?s,
-                                        comments = ?s
-                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
+                                        title = ?s,                                        
+                                        comments = ?s,
+                                        start_week = ?s,
+                                        finish_week = ?s
+                                    WHERE id = ?d AND course_id = ?d", 
+                            $title, $descr, $unitdurationfrom, $unitdurationto, $unit_id, $course_id);
         // tags
         if (isset($_POST['tags'])) {
             $tagsArray = explode(',', $_POST['tags']);
@@ -2250,11 +2259,17 @@ function handle_unit_info_edit() {
             $moduleTag->syncTags($tagsArray);
         }
         $successmsg = trans('langCourseUnitModified');
-    } else { // add new course unit
-        $order = units_maxorder($course_id) + 1;
+    } else { // add new course unit                
+        $order = units_maxorder($course_id) + 1;                
         $q = Database::get()->query("INSERT INTO course_units SET
-                                  title = ?s, comments = ?s, visible = 1,
-                                 `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
+                                  title = ?s, 
+                                  comments = ?s, 
+                                  start_week = ?s,
+                                  finish_week = ?s,
+                                  visible = 1,
+                                 `order` = ?d, course_id = ?d", $title, $descr, 
+                                        $unitdurationfrom, $unitdurationto, 
+                                        $order, $course_id);
         $successmsg = trans('langCourseUnitAdded');
         $unit_id = $q->lastInsertID;
         // tags

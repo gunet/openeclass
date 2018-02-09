@@ -2,15 +2,12 @@
 
 @push('head_styles')
 <link href="{{ $urlAppend }}js/jstree3/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
-<link href="{{ $urlAppend }}js/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" type='text/css' rel='stylesheet'>
 @endpush
 
 @push('head_scripts')
 <script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
 <script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
 <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
-<script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/js/bootstrap-datepicker.min.js'></script>
-<script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/locales/bootstrap-datepicker.{{ $language }}.min.js'></script>
 
 <script type='text/javascript'>
 

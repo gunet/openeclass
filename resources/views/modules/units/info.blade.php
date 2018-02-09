@@ -1,5 +1,27 @@
 @extends('layouts.default')
 
+
+@push('head_styles')
+    <link href="{{ $urlAppend }}js/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" type='text/css' rel='stylesheet'>
+@endpush
+
+@push('head_scripts')
+    <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/js/bootstrap-datepicker.min.js'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/locales/bootstrap-datepicker.{{ $language }}.min.js'></script>
+    
+    <script type='text/javascript'>
+            $(function() {
+                $('#unitdurationfrom, #unitdurationto').datepicker({
+                    format: 'dd-mm-yyyy',
+                    pickerPosition: 'bottom-right',
+                    language: '".$language."',
+                    autoclose: true    
+                });
+            });
+    </script>            
+@endpush
+
 @section('content')
     {!! action_bar(array(
             array('title' => trans('langBack'),
@@ -34,13 +56,12 @@
                         </label>
                         <label for='unitduration' class='col-sm-1 control-label'>{{ trans('langFrom2') }}</label>
                         <div class='col-sm-4'>
-                            <input type='text' class='form-control' id='unitdurationform' name='unitdurationfrom' value=''>
+                            <input type='text' class='form-control' id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}'>
                         </div>
                         <label for='unitduration' class='col-sm-1 control-label'>{{ trans('langUntil') }}</label>
                         <div class='col-sm-4'>
-                            <input type='text' class='form-control' id='unitdurationto' name='unitdurationto' value=''>
-                        </div>
-                        
+                            <input type='text' class='form-control' id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}'>
+                        </div>                        
                     </div>
                     
                     {!! $tagInput !!}

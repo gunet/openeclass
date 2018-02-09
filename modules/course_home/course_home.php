@@ -40,7 +40,6 @@ require_once 'modules/rating/class.rating.php';
 require_once 'modules/comments/class.comment.php';
 require_once 'modules/comments/class.commenting.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
-require_once 'modules/weeks/functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
@@ -67,16 +66,6 @@ if ($is_editor) {
             CourseXMLElement::refreshCourse($course_id, $course_code);
             Session::Messages($langCourseUnitDeleted, 'alert-success');
             redirect_to_home_page("courses/$course_code/");
-        } else {
-            $res_id = intval(getDirectReference($_GET['del']));
-            if (($id = check_admin_unit_resource($res_id))) {
-                Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);
-                Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-                CourseXMLElement::refreshCourse($course_id, $course_code);
-                Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
-                redirect_to_home_page("courses/$course_code/");
-            }
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
         $id = intval(getDirectReference($_REQUEST['vis']));
@@ -86,46 +75,23 @@ if ($is_editor) {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $id);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
-        redirect_to_home_page("courses/$course_code/");
-    } elseif (isset($_REQUEST['visW'])) { // modify visibility of the Week
-        $id = intval(getDirectReference($_REQUEST['visW']));
-        $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view WHERE id = ?d", $id)->visible;
-        $newvis = ($vis == 1) ? 0 : 1;
-        Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
-        redirect_to_home_page("courses/$course_code/");
-    } elseif (isset($_REQUEST['access'])) {
-        if ($course_info->view_type == 'weekly') {
-            $id = intval(getDirectReference($_REQUEST['access']));
-            $access = Database::get()->querySingle("SELECT `public` FROM course_weekly_view WHERE id = ?d", $id);
-            $newaccess = ($access->public == '1') ? '0' : '1';
-            Database::get()->query("UPDATE course_weekly_view SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
-        } else {
-            $id = intval(getDirectReference($_REQUEST['access']));
-            $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
-            $newaccess = ($access->public == '1') ? '0' : '1';
-            Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
-        }
+        redirect_to_home_page("courses/$course_code/");    
+    } elseif (isset($_REQUEST['access'])) {        
+        $id = intval(getDirectReference($_REQUEST['access']));
+        $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
+        $newaccess = ($access->public == '1') ? '0' : '1';
+        Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);        
         redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['down'])) {
         $id = intval(getDirectReference($_REQUEST['down'])); // change order down
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
-        } else {
-            $res_id = intval(getDirectReference($_REQUEST['down']));
-            if (($id = check_admin_unit_resource($res_id))) {
-                move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
-            }
-        }
+        } 
         redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['up'])) { // change order up
         $id = intval(getDirectReference($_REQUEST['up']));
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
-        } else {
-            $res_id = intval(getDirectReference($_REQUEST['up']));
-            if (($id = check_admin_unit_resource($res_id))) {
-                move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
-            }
         }
         redirect_to_home_page("courses/$course_code/");
     }
@@ -504,24 +470,23 @@ if ($is_editor) {
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
     if ($last_id) {
         $last_id = $last_id->id;
-    }
-    if ($course_info->view_type == 'weekly') {
-        $query = "SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d";
-    } else {
-        $query = "SELECT id, title, comments, visible, public FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
-    }
-} else {
-    if ($course_info->view_type == 'weekly') {
-        $query = "SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d AND visible = 1";
-    } else {
-        $query = "SELECT id, title, comments, visible, public FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
-    }
+    }    
+    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
+            . "WHERE course_id = ?d "
+            . "AND `order` >= 0 "
+            . "ORDER BY `order`";
+    
+} else {    
+    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
+            . "WHERE course_id = ?d "
+            . "AND visible = 1 "
+            . "AND `order` >= 0 "
+            . "ORDER BY `order`";   
 }
+$data['course_units'] = $sql = Database::get()->queryArray($query, $course_id);
+$total_cunits = count($sql);
 
-    $data['course_units'] = $sql = Database::get()->queryArray($query, $course_id);
-    $total_cunits = count($sql);
-
-// Contentbox: Thematikes enotites
+// Contentbox: Course Units
 // Contentbox: Calendar
 // Contentbox: Announcements
 if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple')) {
