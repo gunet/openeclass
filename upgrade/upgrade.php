@@ -3806,6 +3806,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `description` MEDIUMTEXT NULL DEFAULT NULL,
                 `datatype` INT(11) NOT NULL,
                 `sortorder` INT(11) NOT NULL DEFAULT 0,
+                `values` MEDIUMTEXT DEFAULT NULL,
                 FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE) $tbl_options");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field_data` (

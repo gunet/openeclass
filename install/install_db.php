@@ -1944,13 +1944,14 @@ $db->query("CREATE TABLE IF NOT EXISTS request (
     FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE,
     FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
 
-$db->query("CREATE TABLE IF NOT EXISTS `request_custom_field` (
+$db->query("CREATE TABLE IF NOT EXISTS `request_field` (
     `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `type_id` INT(11) UNSIGNED NOT NULL,
     `name` MEDIUMTEXT NOT NULL,
     `description` MEDIUMTEXT NULL DEFAULT NULL,
     `datatype` INT(11) NOT NULL,
     `sortorder` INT(11) NOT NULL DEFAULT 0,
+    `values` MEDIUMTEXT DEFAULT NULL,
     FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `request_field_data` (

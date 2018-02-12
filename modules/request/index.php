@@ -39,6 +39,18 @@ if (isset($_GET['id'])) {
         redirect_to_home_page($backUrl);
     }
 
+    if ($request->type_id) {
+        $data['type'] = Database::get()->querySingle('SELECT * FROM request_type
+            WHERE id = ?d', $request->type_id);
+        $data['field_data'] = Database::get()->queryArray('SELECT request_field.id AS field_id, name, data, datatype
+            FROM request
+                JOIN request_field ON request.type_id = request_field.type_id
+                LEFT JOIN request_field_data ON request.id = request_field_data.request_id AND
+                          request_field.id = request_field_data.field_id
+            WHERE request.id = ?d ORDER BY sortorder', $request->id);
+    } else {
+        $data['field_data'] = null;
+    }
     $data['request'] = $request;
     $data['watchers'] = getWatchers($id, REQUEST_WATCHER);
     $data['assigned'] = getWatchers($id, REQUEST_ASSIGNED);
@@ -56,6 +68,7 @@ if (isset($_GET['id'])) {
 
     if ($can_modify) {
         load_js('select2');
+        $data['editUrl'] = $urlAppend . 'modules/request/edit.php?course=' . $course_code . '&id=' . $id;
         $data['course_users'] = Database::get()->queryArray("SELECT user_id,
                 CONCAT(surname, ' ', givenname) name, email
             FROM course_user JOIN user ON user_id = user.id
@@ -65,7 +78,10 @@ if (isset($_GET['id'])) {
                 return $item->user_id;
             }, $data['course_users']);
 
-        if (isset($_POST['assignTo'])) {
+        if (isset($_POST['assignmentSubmit'])) {
+            if (!isset($_POST['assignTo'])) {
+                $_POST['assignTo'] = [];
+            }
             if (array_diff($_POST['assignTo'], $course_user_ids)) {
                 Session::Messages($langGeneralError, 'alert-danger');
                 redirect_to_home_page($data['targetUrl']);
@@ -80,10 +96,22 @@ if (isset($_GET['id'])) {
             Database::get()->query("INSERT INTO request_watcher
                 (request_id, user_id, type) VALUES $placeholders",
                 $args);
+            if ($request->state == REQUEST_STATE_ASSIGNED and count($args) == 0) {
+                Database::get()->query('UPDATE request
+                    SET state = ?d, change_date = NOW() WHERE id = ?d',
+                    REQUEST_STATE_NEW, $id);
+                $_POST['newState'] = REQUEST_STATE_NEW;
+            } else {
+                Database::get()->query('UPDATE request
+                    SET change_date = NOW() WHERE id = ?d', $id);
+            }
             $_POST['requestComment'] = sprintf(trans('langChangeAssignees'),
                 formatUsers($_POST['assignTo']) . '<br>',
                 formatUsers($data['assigned']));
-        } elseif (isset($_POST['watchers'])) {
+        } elseif (isset($_POST['watchersSubmit'])) {
+            if (!isset($_POST['watchers'])) {
+                $_POST['watchers'] = [];
+            }
             if (array_diff($_POST['watchers'], $course_user_ids)) {
                 Session::Messages($langGeneralError, 'alert-danger');
                 redirect_to_home_page($data['targetUrl']);
@@ -111,6 +139,12 @@ if (isset($_GET['id'])) {
         Database::get()->query('INSERT INTO request_watcher
             SET request_id = ?d, user_id = ?d, type = ?d',
             $id, $uid, REQUEST_ASSIGNED);
+        if ($request->state == REQUEST_STATE_NEW) {
+            Database::get()->query('UPDATE request
+                SET state = ?d, change_date = NOW() WHERE id = ?d',
+                REQUEST_STATE_ASSIGNED, $id);
+        }
+        $_POST['newState'] = REQUEST_STATE_ASSIGNED;
         $_POST['requestComment'] = sprintf(trans('langRequestTaken'),
             '<b>' . q("$_SESSION[givenname] $_SESSION[surname]") . '</b>');
     }
@@ -187,6 +221,9 @@ if (isset($_GET['id'])) {
 }
 
 function formatUsers($userData) {
+    if (!count($userData)) {
+        return '<span class="not_visible"> - </span>';
+    }
     return implode(', ', array_map(function ($user) {
             if (is_object($user)) {
                 return '<b>' . $user->name . '</b>';

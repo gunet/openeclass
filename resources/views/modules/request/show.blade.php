@@ -7,14 +7,19 @@
         <div class='col-md-12'>
             <div class='panel panel-default'>
                 <div class='panel-heading'>
-                    <h4>{{ $request->title }}</h4>
+                    <h4>{{ $request->title }}
+                        @if ($request->type_id)
+                            <small><br>{{ $type->name }}</small>
+                        @endif
+                    </h4>
                     <div class='announcement-date'>{{
                         claro_format_locale_date(trans('dateFormatLong') . ' ' . trans('timeNoSecFormat'),
-                                                 strtotime($request->open_date)) }}</div>
+                                                 strtotime($request->open_date)) }}
+                    </div>
                 </div>
                 <div class='panel-body'>
                     <div class='row'>
-                        <div class='col-xs-12 col-sm-2'>
+                        <div class='col-xs-12 col-sm-2 text-right'>
                             <b>{{ trans('langNewBBBSessionStatus') }}:</b>
                         </div>
                         <div class='col-xs-12 col-sm-4'>
@@ -22,14 +27,14 @@
                         </div>
                     </div>
                     <div class='row'>
-                        <div class='col-xs-12 col-sm-2'>
+                        <div class='col-xs-12 col-sm-2 text-right'>
                             <b>{{ trans('langFrom') }}:</b>
                         </div>
                         <div class='col-xs-12 col-sm-4'>
                             {!! display_user($request->creator_id) !!}
                         </div>
                         @if ($watchers)
-                            <div class='col-xs-12 col-sm-2'>
+                            <div class='col-xs-12 col-sm-2 text-right'>
                                 <b>{{ trans('langWatchers') }}:</b>
                             </div>
                             <div class='col-xs-12 col-sm-4'>
@@ -39,7 +44,7 @@
                             </div>
                         @endif
                         @if ($assigned)
-                            <div class='col-xs-12 col-sm-2'>
+                            <div class='col-xs-12 col-sm-2 text-right'>
                                 <b>{{ trans("m['WorkAssignTo']") }}:</b>
                             </div>
                             <div class='col-xs-12 col-sm-4'>
@@ -50,6 +55,23 @@
                         @endif
                         </div>
                     <hr>
+                    @if ($field_data)
+                        @foreach ($field_data as $field)
+                            <div class='row'>
+                                <div class='col-xs-12 col-sm-2 text-right'>
+                                    <b>{{ getSerializedMessage($field->name) }}:</b>
+                                </div>
+                                <div class='col-xs-12 col-sm-10'>
+                                    @if (is_null($field->data))
+                                        <span class='not_visible'> - </span>
+                                    @else
+                                        {{ $field->data }}
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                        <hr>
+                    @endif
                     <div class='row'>
                         <div class='col-xs-12'>
                             {!! $request->description !!}
@@ -70,6 +92,7 @@
                     @if ($can_modify)
                         <button class='btn btn-default' type='button' data-toggle='modal' data-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
                         <button class='btn btn-default' type='button' data-toggle='modal' data-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
+                        <a class='btn btn-default' href='{{ $editUrl }}'>{{ trans("langElaboration") }}...</a>
                     @endif
                     </p>
                 </form>
@@ -210,7 +233,7 @@
                         </div>
                         <div class='modal-footer'>
                             <button type='button' class='btn btn-default' class='close' data-dismiss='modal'>{{ trans('langCancel') }}</button>
-                            <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                            <button class='btn btn-primary' type='submit' name='assignmentSubmit'>{{ trans('langSubmit') }}</button>
                         </div>
                     </form>
                 </div>
@@ -239,7 +262,7 @@
                         </div>
                         <div class='modal-footer'>
                             <button type='button' class='btn btn-default' class='close' data-dismiss='modal'>{{ trans('langCancel') }}</button>
-                            <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                            <button class='btn btn-primary' type='submit' name='watchersSubmit'>{{ trans('langSubmit') }}</button>
                         </div>
                     </form>
                 </div>

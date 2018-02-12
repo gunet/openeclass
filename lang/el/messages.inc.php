@@ -5530,6 +5530,7 @@ $langLTIAppActions = "Ενέργειες";
 // ticketing (aka request)
 $langRequests = "Αιτήματα";
 $langNewRequest = "Νέο αίτημα";
+$langEditRequest = "Επεξεργασία αιτήματος";
 $langRequestCreated = 'Το αίτημα δημιουργήθηκε.';
 $langWatchers = 'Παρατηρητές';
 $langRequestStateNew = 'Νέο';
@@ -5543,3 +5544,5 @@ $langChangeAssignees = 'Αλλαγή ανάθεσης σε: %s (από: %s)';
 $langChangeWatchers = 'Αλλαγή παρατηρητών σε: %s (από: %s)';
 $langTakeRequest = 'Ανάληψη αιτήματος';
 $langRequestTaken = 'Ο χρήστης %s ανέλαβε το αίτημα.';
+$langRequestBasicType = 'Βασικό αίτημα';
+$langRequestFieldChange = 'Αλλαγή πεδίου %s σε: %s';
