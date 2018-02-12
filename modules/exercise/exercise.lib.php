@@ -104,8 +104,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         if (is_null($answer) or $answer == '') {  // don't display blank or empty answers
             continue;
-        }
-        $answer = mathfilter($answer, 12, '../../courses/mathimg/');
+        }        
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
