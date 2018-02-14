@@ -74,12 +74,14 @@ if (isset($_GET['submit'])) {
  * @global type $langTitle
  * @global type $langYes
  * @global type $langNo
+ * @global type $langHasExpiredS
  * @return type
  */
 function show_assignments() {
 
-    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langYes, $langNo,
-           $langWorks, $course_id, $course_code, $themeimg, $langCancel, $urlServer, $langTitle;
+    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content,
+            $langYes, $langNo, $langWorks, $course_id, $course_code, 
+            $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS;
     
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -107,11 +109,11 @@ function show_assignments() {
         $table_content .= "<tr><td width='1%'>
 			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
 			<td><div align='left'><a href='index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a></td>
-			<td align='center'>" . nice_format($row->deadline);
+			<td align='center'>" . nice_format($row->deadline, true, '');
                         if ($row->time > 0) {
                             $table_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
                         } else if($row->deadline){
-                            $table_content .= "<br> (<small><span class='expired'>$m[expired]</span></small>)";
+                            $table_content .= "<br> (<small><span class='text-danger'>$langHasExpiredS</span></small>)";
                         }
 
         $table_content .= "</div></td><td align='center'>";
