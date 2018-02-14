@@ -4,7 +4,7 @@
     {!! isset($action_bar) ?  $action_bar : '' !!}
     @if ($app->getName() == 'turnitin') 
         <div class='text-center alert alert-warning'>Δεν έχει υλοποιηθεί ακόμα.</div>
-    @elseif
+    @else
         <div class='row extapp'>
             <div class='col-xs-12'>
                 <div class='form-wrapper'>

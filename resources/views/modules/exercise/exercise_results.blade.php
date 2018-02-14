@@ -6,8 +6,8 @@
           <h3 class='panel-title'>{!! q_math($exercise->exercise) !!}</h3>
         </div>
         <div class='panel-body'>
-        @if ($exercise->selectParsedDescription())
-            {!! $exercise->selectParsedDescription() !!}
+        @if ($exercise->selectDescription())
+            {!! standard_text_escape($exercise->selectDescription()) !!}
             <hr>
         @endif
             <div class='row'>
