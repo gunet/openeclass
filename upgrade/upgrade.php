@@ -3844,10 +3844,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         
         // course units upgrade
         if (!DBHelper::fieldExists('course_units', 'start_week')) {
-            Database::get()->query("ALTER TABLE course_unit ADD start_week DATE after comments");
+            Database::get()->query("ALTER TABLE course_units ADD start_week DATE after comments");
         }
         if (!DBHelper::fieldExists('course_units', 'end_week')) {
-            Database::get()->query("ALTER TABLE course_unit ADD end_week DATE after comments");
+            Database::get()->query("ALTER TABLE course_units ADD end_week DATE after comments");
         }        
         
         //Database::get()->query("DROP TABLE course_weekly");
