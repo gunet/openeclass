@@ -68,6 +68,24 @@ class action {
                         day = '" . $today . "'
                         $lu", $uid, $module_id, $course_id);
         }
+
+        $this->triggerGame($uid, $course_id);
+    }
+
+    private function triggerGame ($uid, $course_id) {
+        global $is_admin, $is_course_admin, $is_editor;
+
+        if ($is_admin || $is_course_admin || $is_editor) {
+            return;
+        }
+
+        require_once 'modules/progress/CourseParticipationEvent.php';
+        $eventData = new stdClass();
+        $eventData->uid = $uid;
+        $eventData->courseId = $course_id;
+        $eventData->activityType = CourseParticipationEvent::ACTIVITY;
+        $eventData->module = MODULE_ID_USAGE;
+        CourseParticipationEvent::trigger(CourseParticipationEvent::STATSAPPENDED, $eventData);
     }
 
     // ophelia 2006-08-02: per month and per course

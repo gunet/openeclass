@@ -26,6 +26,7 @@ class CourseParticipationEvent extends BasicEvent {
 
     const ACTIVITY = 'courseparticipation';
     const LOGGEDIN = 'loggedin';
+    const STATSAPPENDED = 'statsappended';
 
     public function __construct() {
         parent::__construct();
@@ -55,6 +56,24 @@ class CourseParticipationEvent extends BasicEvent {
                         $this->emit(parent::PREPARERULES);
                     }
                 }
+            }
+
+        });
+
+        $this->on(self::STATSAPPENDED, function ($data) {
+
+            // fetch usage duration for specific course/user from DB and use it as threshold
+            $result = Database::get()->querySingle("SELECT SUM(duration) AS duration "
+                . " FROM actions_daily "
+                . " WHERE user_id = ?d "
+                . " AND course_id = ?d", $data->uid, $data->courseId);
+
+            if ($result && intval($result->duration) > 0) {
+                $threshold = floatval($result->duration / 3600); // turn seconds to hours
+
+                $this->setEventData($data);
+                $this->context['threshold'] = $threshold;
+                $this->emit(parent::PREPARERULES);
             }
 
         });
