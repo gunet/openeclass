@@ -6,9 +6,9 @@
             <tr>
                 <th>{!! q_math($exercise->exercise)  !!}</th>
             </tr>
-            @if ($exercise->selectParsedDescription())
+            @if ($exercise->selectDescription())
                 <tr>
-                    <td>{!! $exercise->selectParsedDescription() !!}</td>
+                    <td>{!! standard_text_escape($exercise->selectDescription()) !!}</td>
                 </tr>
             @endif
         </table>

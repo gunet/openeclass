@@ -9,7 +9,7 @@
                     @if ($question)
                         <b>{!! q_math($question->question) !!}</b>
                         <br>
-                        {!! standard_text_escape($question->selectParsedDescription()) !!}
+                        {!! standard_text_escape($question->selectDescription()) !!}
                         <br><br>
                     @else
                         <div class='alert alert-warning'>{{ trans('langQuestionAlreadyDeleted') }}</div>
@@ -43,7 +43,7 @@
                     @endif
                 @endif
                          
-                @foreach ($question->answers->selectAnswers() as $key => $answer)
+                @foreach ($question->answers->selectAnswer() as $key => $answer)
                     @if ($showResults)
                         @if ($question->type != MATCHING || $question->answers->isCorrect($key))
                             @if (in_array($question->type, [UNIQUE_ANSWER, MULTIPLE_ANSWER, TRUE_FALSE]))

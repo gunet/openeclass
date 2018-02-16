@@ -9,7 +9,7 @@
                     @if ($question)
                         <b>{!! q_math($question->question) !!}</b>
                         <br>
-                        {!! standard_text_escape($question->selectParsedDescription()) !!}
+                        {!! standard_text_escape($question->selectDescription()) !!}
                         <br><br>
                     @else
                         <div class='alert alert-warning'>{{ trans('langQuestionAlreadyDeleted') }}</div>
