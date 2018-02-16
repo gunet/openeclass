@@ -496,8 +496,7 @@ class Template {
         }
 
         // quote the replacement strings to prevent bogus stripping of special chars
-        reset($this->varvals);
-        while (list($k, $v) = each($this->varvals)) {
+        foreach($this->varvals as $k => $v) {
             $varvals_quoted[$k] = preg_replace(array('/\\\\/', '/\$/'), array('\\\\\\\\', '\\\\$'), $v);
         }
 

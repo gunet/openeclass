@@ -377,7 +377,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
 
     $course_code_link = "";
 
-    if (count($user) == 0) {
+    if (is_array($user) and count($user) == 0) {
         return '-';
     } elseif (is_array($user)) {
         $begin = true;
