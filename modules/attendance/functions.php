@@ -39,7 +39,7 @@ function display_attendances() {
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langAvailableAttendances, $langNoAttendances, $is_editor,
            $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd, $uid;
-    
+
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
     } else {
@@ -123,25 +123,25 @@ function register_user_presences($attendance_id, $actID) {
     global $tool_content, $course_id, $course_code,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
-    
+
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
     $tool_content .= "<div class='alert alert-info'>" . q($result->title) . "</div>";
-    
-    if(isset($_POST['bookUsersToAct'])) {        
+
+    if(isset($_POST['bookUsersToAct'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
         //get all the active users
-        $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM attendance_users WHERE attendance_id = ?d", $attendance_id);        
+        $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
         if ($activeUsers) {
             foreach ($activeUsers as $result) {
                 $userInp = intval(@$_POST[$result->userID]); //get the record from the teacher (input name is the user id)
                 // //check if there is record for the user for this activity
                 $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_book
                                                         WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $result->userID);
-                if($checkForBook->count) { //update                    
+                if($checkForBook->count) { //update
                     Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE attendance_activity_id = ?d AND uid = ?d", $userInp, $actID, $result->userID);
-                } else {  //insert                    
+                } else {  //insert
                     Database::get()->query("INSERT INTO attendance_book SET uid = ?d,
                                                     attendance_activity_id = ?d, attend = ?d, comments = ?s", $result->userID, $actID, $userInp, '');
                 }
@@ -150,7 +150,7 @@ function register_user_presences($attendance_id, $actID) {
             redirect_to_home_page("modules/attendance/index.php");
         }
     }
-    
+
     //display users
     $resultUsers = Database::get()->queryArray("SELECT attendance_users.id AS recID, attendance_users.uid AS userID,
                                                 user.surname AS surname, user.givenname AS name, user.am AS am, course_user.reg_date AS reg_date
@@ -182,7 +182,7 @@ function register_user_presences($attendance_id, $actID) {
                 <td class='text-center'>$cnt</td>
                 <td> " . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>" . nice_format($resultUser->reg_date, true, true) . "</td>                
+                <td class='text-center'>" . nice_format($resultUser->reg_date, true, true) . "</td>
                 <td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
                 //check if the user has attendace for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
@@ -227,7 +227,7 @@ function register_user_presences($attendance_id, $actID) {
  * @global type $langAttendanceNoActMessage1
  * @global type $langAttendanceActivity
  * @global type $langHere
- * @global type $langAttendanceNoActMessage3 
+ * @global type $langAttendanceNoActMessage3
  * @global type $langcsvenc2
  * @global type $langConfig
  * @global type $langUsers
@@ -243,8 +243,8 @@ function display_attendance_activities($attendance_id) {
 
     global $tool_content, $course_code, $attendance, $langAttendanceInsMan,
            $langAttendanceActList, $langTitle, $langType, $langAttendanceActivityDate,
-           $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut, 
-           $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1, 
+           $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut,
+           $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1,
            $langHere, $langAttendanceNoActMessage3, $langcsvenc2, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
            $langAdd, $langExport, $langBack, $langNoRegStudent, $langBBB;
@@ -476,7 +476,7 @@ function attendance_display_available_assignments($attendance_id) {
 
 /**
  * @brief display available tc sessions for adding them to attendance
- * @global type $tool_content 
+ * @global type $tool_content
  * @global type $course_id
  * @global type $course_code
  * @global type $langAttendanceNoActMessageTc
@@ -486,17 +486,17 @@ function attendance_display_available_assignments($attendance_id) {
  * @param type $attendance_id
  */
 function attendance_display_available_tc($attendance_id) {
-    
+
     global $tool_content, $course_code, $course_id, $langGradebookActivityDate,
             $langTitle, $langAdd, $langAttendanceNoActMessageTc;
-    
+
     $checkForTc = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?d
                                                 AND active = '1'
                                                 AND (end_date IS NULL OR end_date >= " . DBHelper::timeAfter() . ")
                                                 AND id NOT IN
                                             (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1
                                                         AND attendance_id = ?d)", $course_id, $attendance_id);
-        
+
     $checkForTcNumber = count($checkForTc);
 
     if ($checkForTcNumber > 0) {
@@ -505,9 +505,9 @@ function attendance_display_available_tc($attendance_id) {
         $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
-        foreach ($checkForTc as $data) {                                    
+        foreach ($checkForTc as $data) {
             $tool_content .= "<tr><td><b>" . q($data->title) . "</b></td>";
-            $tool_content .= "<td>".nice_format($data->start_date, true) . "</td>";                    
+            $tool_content .= "<td>".nice_format($data->start_date, true) . "</td>";
             $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
         } // end of while
         $tool_content .= "</tr></table></div></div></div>";
@@ -532,7 +532,21 @@ function add_attendance_other_activity($attendance_id) {
 
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd,
-           $langAdd, $langSave, $langAttendanceActivityDate;
+           $langAdd, $langSave, $langAttendanceActivityDate,
+           $language, $head_content;;
+
+    load_js('bootstrap-datetimepicker');
+    $head_content .= "
+    <script type='text/javascript'>
+    $(function() {
+        $('#startdatepicker').datetimepicker({
+            format: 'dd-mm-yyyy hh:ii',
+            pickerPosition: 'bottom-right',
+            language: '$language',
+            autoclose: true
+        });
+    });
+    </script>";
 
     $date_error = Session::getError('date');
     $tool_content .= "<div class='row'>
@@ -549,7 +563,8 @@ function add_attendance_other_activity($attendance_id) {
                         $titleToModify = Session::has('actTitle') ? Session::get('actTitle') : $modifyActivity->title;
                         $contentToModify = Session::has('actDesc') ? Session::get('actDesc') : $modifyActivity->description;
                         $attendanceActivityToModify = $id;
-                        $date = Session::has('date') ? Session::get('date') : $modifyActivity->date;
+                        $date = Session::has('date') ? Session::get('date') :
+                            DateTime::createFromFormat('Y-m-d H:i:s', $modifyActivity->date)->format('d-m-Y H:i:s');
                         $module_auto_id = $modifyActivity->module_auto_id;
                         $auto = $modifyActivity->auto;
                     }  else { //new activity
@@ -622,7 +637,7 @@ function add_attendance_other_activity($attendance_id) {
  */
 function add_attendance_activity($attendance_id, $id, $type) {
 
-    global $course_id;    
+    global $course_id;
     $actTitle = "";
     if ($type == GRADEBOOK_ACTIVITY_ASSIGNMENT) { //  add  assignments
         //checking if it's new or not
@@ -684,7 +699,7 @@ function add_attendance_activity($attendance_id, $id, $type) {
             }
         }
     }
-    
+
     if ($type == GRADEBOOK_ACTIVITY_TC) { // add tc
         $checkForTc = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d
                                                 AND active = '1'
@@ -692,7 +707,7 @@ function add_attendance_activity($attendance_id, $id, $type) {
                                                 AND id NOT IN
                                             (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 4
                                                         AND attendance_id = ?d) AND id = ?d", $course_id, $attendance_id, $id);
-        
+
         if ($checkForTc) {
             $module_auto_id = $checkForTc->id;
             $module_auto_type = 4; // 4 for tc
@@ -706,13 +721,13 @@ function add_attendance_activity($attendance_id, $id, $type) {
                                         SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s,
                                         module_auto_id = ?d, auto = ?d, module_auto_type = ?d",
                                     $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
-            $sql = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);            
+            $sql = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
             foreach ($sql as $u) {
                 $TcUserRecord = Database::get()->querySingle("SELECT * FROM tc_attendance WHERE meetingid = ?s "
                                                             . "AND bbbuserid = (SELECT bbbuserid "
                                                                                 . "FROM tc_log "
                                                                                 . "WHERE fullName = '" . uid_to_name($u->uid) . "' "
-                                                                                . "AND meetingid = ?s ORDER BY `date` LIMIT 1)", $meetingid, $meetingid);              
+                                                                                . "AND meetingid = ?s ORDER BY `date` LIMIT 1)", $meetingid, $meetingid);
                 if ($TcUserRecord) {
                     update_attendance_book($u->uid, $id, GRADEBOOK_ACTIVITY_TC);
                 }
@@ -724,7 +739,7 @@ function add_attendance_activity($attendance_id, $id, $type) {
 
 
 /**
- * 
+ *
  * @param type $attendance_id
  * @param type $uid
  */

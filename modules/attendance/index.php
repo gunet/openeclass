@@ -476,7 +476,7 @@ if ($is_editor) {
         $display = FALSE;
     }
     //UPDATE/INSERT DB: new activity from exersices, assignments, learning paths, teleconference
-    elseif(isset($_GET['addCourseActivity'])) {        
+    elseif(isset($_GET['addCourseActivity'])) {
         $id = $_GET['addCourseActivity'];
         $type = intval($_GET['type']);
         $actt = add_attendance_activity($attendance_id, $id, $type);
@@ -488,7 +488,7 @@ if ($is_editor) {
     }
 
     //UPDATE/INSERT DB: add or edit activity to attendance module (edit concerns and course activities like lps)
-    elseif(isset($_POST['submitAttendanceActivity'])) {        
+    elseif(isset($_POST['submitAttendanceActivity'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('date', array('date'));
         $v->labels(array(
@@ -498,7 +498,8 @@ if ($is_editor) {
             $actTitle = isset($_POST['actTitle']) ? trim($_POST['actTitle']) : "";
             $actDesc = purify($_POST['actDesc']);
             $auto = isset($_POST['auto']) ? $_POST['auto'] : "";
-            $actDate = !empty($_POST['date']) ? $_POST['date'] : null;
+            $actDate = empty($_POST['date']) ? null :
+                DateTime::createFromFormat('d-m-Y H:i', $_POST['date'])->format('Y-m-d H:i');
             $visible = isset($_POST['visible']) ? 1 : 0;
             if ($_POST['id']) {
                 //update
