@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,26 +22,25 @@
 
 $require_current_course = TRUE;
 $require_editor = true;
-include '../../include/baseTheme.php';
- $DEBUGQ = print_r($_POST,true)."<br>";
- //register_posted_variables()
-//Session::Messages("<pre>".print_r($_POST,true)."</pre>");
+include '../../include/baseTheme.php'; 
 
 $toolName = $langGradeRubrics;
 $pageName = $langGradeRubrics;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
 
 if (isset($_GET['delete'])) { // delete rubric
-	$rubric_used = Database::get()->querySingle("SELECT COUNT(*) as count FROM `assignment`, `assignment_submit` "
-                . "WHERE `assignment`.`grading_scale_id` = ?d AND `assignment`.`course_id` = ?d AND `assignment`.`id` = `assignment_submit`.`assignment_id` AND `assignment_submit`.`grade` IS NOT NULL", $_GET['delete'], $course_id)->count;
-	if ($rubric_used) {
+    $rubric_used = Database::get()->querySingle("SELECT COUNT(*) as count FROM `assignment`, `assignment_submit` "
+            . "WHERE `assignment`.`grading_scale_id` = ?d "
+            . "AND `assignment`.`course_id` = ?d "
+            . "AND `assignment`.`id` = `assignment_submit`.`assignment_id` "
+            . "AND `assignment_submit`.`grade` IS NOT NULL", $_GET['delete'], $course_id)->count;
+    if ($rubric_used) {
         $tool_content .= "<div class='alert alert-info'>$langRubricNotDelete</div>";
+    } else {
+        Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
+        Session::Messages($langRubricDeleted, 'alert-success');
+        redirect_to_home_page("modules/work/rubrics.php");
     }
-	else{
-		Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
-		Session::Messages($langRubricDeleted, 'alert-success');
-		redirect_to_home_page("modules/work/rubrics.php");
-	}
 }
 
 // submit rubric
@@ -61,15 +60,15 @@ if (isset($_POST['submitRubric'])) {
         $sum_weight = 0;
         $criteria = array();
         foreach ($_POST['title'] as $crit => $item_criterio) {
-                $criteria[$crit]['title_name'] = $item_criterio;
-                $criteria[$crit]['crit_weight'] = $_POST['weight'][$crit];
-                foreach ($_POST['scale_item_name'][$crit] as $key => $item_name) {
-                    $criteria[$crit]['crit_scales'][$key]['scale_item_name'] = $item_name;
-                    $criteria[$crit]['crit_scales'][$key]['scale_item_value'] = $_POST['scale_item_value'][$crit][$key];
-                }
+            $criteria[$crit]['title_name'] = $item_criterio;
+            $criteria[$crit]['crit_weight'] = $_POST['weight'][$crit];
+            foreach ($_POST['scale_item_name'][$crit] as $key => $item_name) {
+                $criteria[$crit]['crit_scales'][$key]['scale_item_name'] = $item_name;
+                $criteria[$crit]['crit_scales'][$key]['scale_item_value'] = $_POST['scale_item_value'][$crit][$key];
+            }
             $sum_weight += $criteria[$crit]['crit_weight'];
         }		
-        if ($sum_weight != 100){
+        if ($sum_weight != 100) {
             Session::flashPost()->Messages($langRubricWeight);
             redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
         } else {
@@ -82,15 +81,13 @@ if (isset($_POST['submitRubric'])) {
             } else {
                 Database::get()->query("INSERT INTO rubric (name, scales, description, preview_rubric, points_to_graded, course_id) VALUES (?s, ?s, ?s, ?d, ?d, ?d)", $name, $serialized_criteria, $desc, $preview_rubric, $points_to_graded, $course_id);
             }
-        }
+        }        
+        Session::Messages($langRubricCreated, 'alert-success');
        redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
-    } else {
-		//$DEBUGQ .= "	ELSE ERROR	";
+    } else {	
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
     }
-} else {
-		//$DEBUGQ .= print_r($_POST,true);
 }
 
 if (isset($_GET['rubric_id'])) {
@@ -101,102 +98,96 @@ if (isset($_GET['rubric_id'])) {
         $(document).ready(function() {
 		var j = -1;
 		var trc=-1;
-			var ins_scale = function (par){
-				if(trc==-1){
-				   trc=$(\"a[id^='remScale']\").size();
-				}
-				else{
-				   trc++;
-				}
-			console.log(par.attr('id').substr(8));
-						var rowCount = $('#scale_table tbody tr').length;
-						$('#scale_table'+par.attr('id').substr(8)+' tbody').append(
-							'<tr>'+
-							'<td class=\'form-group\'>'+
-							'<input type=\'text\' name=\'scale_item_name['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' required>'+
-							'</td>'+
-							'<td class=\'form-group\'>'+
-							'<input type=\'number\' name=\'scale_item_value['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
-							'</td>'+
-							'<td class=\'text-center\'>'+
-							'<a href=\'#\' class=\'removeScale\' id=\'remScale'+trc+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a>'+
-							'</td>'+
-							'</tr>'
-						);
-						$('#remScale'+ trc +'').bind('click', function(){del_scale($(this));});
-						
-					};
+                var ins_scale = function (par){
+                if(trc==-1) {
+                   trc=$(\"a[id^='remScale']\").size();
+                } else {
+                   trc++;
+                }                
+                var rowCount = $('#scale_table tbody tr').length;
+                $('#scale_table'+par.attr('id').substr(8)+' tbody').append(
+                        '<tr>'+
+                        '<td class=\'form-group\'>'+
+                        '<input type=\'text\' name=\'scale_item_name['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' required>'+
+                        '</td>'+
+                        '<td class=\'form-group\'>'+
+                        '<input type=\'number\' name=\'scale_item_value['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
+                        '</td>'+
+                        '<td class=\'text-center\'>'+
+                        '<a href=\'#\' class=\'removeScale\' id=\'remScale'+trc+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a>'+
+                        '</td>'+
+                        '</tr>'
+                );
+                $('#remScale'+ trc +'').bind('click', function(){del_scale($(this));});
+        };
 					
-            $('a[id^=\'addScale\']').on('click', function(){ins_scale($(this));});
-           
-			var del_scale  =  function (par){	
-				par.closest('tr').remove();
-			}
+            $('a[id^=\'addScale\']').on('click', function(){ins_scale($(this));});           
+                var del_scale  =  function (par){	
+                    par.closest('tr').remove();
+                }
 			
-			var del_crit  =  function (par){	
-			console.log(par);
-				par.closest('div[id^=\'critDiv\']').remove();
-			}
-			$('a[id^=\'remCrit\']').on('click', function(){del_crit($(this));});
-			$('a[id^=\'remScale\']').on('click', function(){del_scale($(this));});
-			//$('table[id^=\'scale_table\'] a').on('click', function(){del_scale($(this));});
-            
-			$('#addCriteria').on('click', function() {
-				if(j==-1){
-				   j=$(\"div[id^='critDiv']\").size();
-				}
-				else{
-				   j++;
-				}
-				$('#inserthere').before(
-						'<div id=\'critDiv'+ j +'\'>'+	
-						'<div class=\'form-group\'>'+
-                        '   <label for=\'title\' class=\'col-sm-2 control-label\'>Κριτήριο:</label>'+
-                        '    <div class=\'col-sm-3\'>'+
-                        '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+     
-                        '    </div>'+
-						'   <label for=\'weight\' class=\'col-sm-3 control-label\'>Ποσοστό Συμμετοχής (%):</label>'+
-                        '    <div class=\'col-sm-1\'>'+
-                        '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+     
-                        '    </div>'+
-						'    <div class=\'col-sm-1\'><a href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a></div>'+
-                        '</div>'+
-                        '<div class=\'form-group\'>'+
-                        '    <label class=\'col-sm-2 control-label\'>Κλίμακες:</label>'+
-                        '    <div class=\'col-sm-10\'>'+
-                        '        <div class=\'table-responsive\'>'+
-                        '            <table class=\'table-default\' id=\'scale_table'+ j +'\'>'+
-                        '                <thead>'+
-                        '                    <tr>'+
-                        '                        <th style=\'width:47%\'>Λεκτικό</th>'+
-                        '                        <th style=\'width:47%\'>Τιμή</th>'+
-                        '                        <th class=\'text-center option-btn-cell\' style=\'width:5%\'><span class=\'fa fa-gears\'></span></th>'+
-                        '                    </tr>'+
-                        '                </thead>'+
-                        '                <tbody>'+
-						'					<tr>'+
-						'						<td class=\'form-group\'>'+
-						'							<input type=\'text\' name=\'scale_item_name['+j+'][]\' class=\'form-control\' value=\'\' required>'+
-						'						</td>'+
-						'						<td class=\'form-group\'>'+
-						'							<input type=\'number\' name=\'scale_item_value['+j+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
-						'						</td>'+
-						'						<td class=\'text-center\'>'+
-						'						</td>'+
-						'					</tr>'+				
-                        '                </tbody>'+
-                        '            </table>'+
-                        '        </div>'+
-                        '    </div>'+
-                        '    <div class=\'col-xs-offset-2 col-sm-10\'>'+
-                        '         <a class=\'btn btn-xs btn-success margin-top-thin\' id=\'addScale'+ j +'\'>Προσθήκη</a>'+
-                        '    </div>'+
-						'	</div>'+
-						'</div>'
-				);
-				$('#remCrit'+ j +'').bind('click', function(){del_crit($(this));});
-				$('#addScale'+ j +'').bind('click', function(){ins_scale($(this));});
-			});
+            var del_crit  =  function (par){	            
+                par.closest('div[id^=\'critDiv\']').remove();
+            }
+            $('a[id^=\'remCrit\']').on('click', function(){del_crit($(this));});
+            $('a[id^=\'remScale\']').on('click', function(){del_scale($(this));});
+            //$('table[id^=\'scale_table\'] a').on('click', function(){del_scale($(this));});
+
+            $('#addCriteria').on('click', function() {
+                if(j==-1) {
+                   j=$(\"div[id^='critDiv']\").size();
+                } else {
+                   j++;
+                }
+                $('#inserthere').before(
+                                    '<div id=\'critDiv'+ j +'\'>'+	
+                                    '<div class=\'form-group\'>'+
+            '   <label for=\'title\' class=\'col-sm-2 control-label\'>". js_escape($langRubricCrit). ":</label>'+
+            '    <div class=\'col-sm-3\'>'+
+            '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+     
+            '    </div>'+
+                '<label for=\'weight\' class=\'col-sm-3 control-label\'>" . js_escape($langGradebookWeight). " (%):</label>'+
+            '    <div class=\'col-sm-2\'>'+
+            '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+     
+            '    </div>'+
+            '    <div class=\'col-sm-1\'><a href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a></div>'+
+            '</div>'+
+            '<div class=\'form-group\'>'+
+            '    <label class=\'col-sm-2 control-label\'>" . js_escape($langScales). ":</label>'+
+            '    <div class=\'col-sm-10\'>'+
+            '        <div class=\'table-responsive\'>'+
+            '            <table class=\'table-default\' id=\'scale_table'+ j +'\'>'+
+            '                <thead>'+
+            '                    <tr>'+
+            '                        <th style=\'width:47%\'>" . js_escape($langWording). "</th>'+
+            '                        <th style=\'width:47%\'>" . js_escape($langValue). "</th>'+
+            '                        <th class=\'text-center option-btn-cell\' style=\'width:5%\'><span class=\'fa fa-gears\'></span></th>'+
+            '                    </tr>'+
+            '                </thead>'+
+            '                <tbody>'+
+                                '<tr>'+
+                                '<td class=\'form-group\'>'+
+                                '<input type=\'text\' name=\'scale_item_name['+j+'][]\' class=\'form-control\' value=\'\' required>'+
+                                '</td>'+
+                                '<td class=\'form-group\'>'+
+                                '<input type=\'number\' name=\'scale_item_value['+j+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
+                                '</td>'+
+                                '<td class=\'text-center\'>'+
+                                '</td>'+
+                                '</tr>'+				
+            '                </tbody>'+
+            '            </table>'+
+            '        </div>'+
+            '    </div>'+
+            '    <div class=\'col-xs-offset-2 col-sm-10\'>'+
+            '         <a class=\'btn btn-xs btn-success margin-top-thin\' id=\'addScale'+ j +'\'>" . js_escape($langAdd) . "</a>'+
+            '    </div>'+
+            '	</div>'+
+            '</div>'
+            );
+            $('#remCrit'+ j +'').bind('click', function(){del_crit($(this));});
+            $('#addScale'+ j +'').bind('click', function(){ins_scale($(this));});
+            });
         });
     </script>
     ";
@@ -220,7 +211,7 @@ if (isset($_GET['rubric_id'])) {
         $unserialized_criteria = unserialize($rubric_data->scales);
         $desc = $rubric_data->description;
         $cc = -1;
-        foreach ($unserialized_criteria as $crit => $title){
+        foreach ($unserialized_criteria as $crit => $title) {            
             $crit_rows .= "
                 <div id='critDiv$crit'>
                 <div class='form-group'>
@@ -251,23 +242,24 @@ if (isset($_GET['rubric_id'])) {
                                     </tr>
                                 </thead>
                                 <tbody>";
-                                if(is_array($title['crit_scales']))
-                                $i=0;
-                                foreach ($title['crit_scales'] as $key => $scale) {
-                                    $cc++;
-                                    $crit_rows .= "<tr>
-                                        <td class='form-group'><input name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required='".($rubric_used ? ' disabled' : '')."' type='text'>
-                                        </td>
-                                        <td class='form-group'><input name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required='".($rubric_used ? ' disabled' : '')."' type='number'>
-                                        </td>";
-                                    if($i == 0) {
-                                        $crit_rows .= "<td class='text-center'></td>";
-                                    } else {
-                                        $crit_rows .= "<td class='text-center'><a href='#' class='removeScale' id='remScale$cc$i'><span class='fa fa-times' style='color:red'></span></a>
-                                        </td>";
+                                if(is_array($title['crit_scales'])) {
+                                    $i = 0;
+                                    foreach ($title['crit_scales'] as $key => $scale) {
+                                        $cc++;
+                                        $crit_rows .= "<tr>
+                                            <td class='form-group'><input name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required='".($rubric_used ? ' disabled' : '')."' type='text'>
+                                            </td>
+                                            <td class='form-group'><input name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required='".($rubric_used ? ' disabled' : '')."' type='number'>
+                                            </td>";
+                                        if ($i == 0) {
+                                            $crit_rows .= "<td class='text-center'></td>";
+                                        } else {
+                                            $crit_rows .= "<td class='text-center'><a href='#' class='removeScale' id='remScale$cc$i'><span class='fa fa-times' style='color:red'></span></a>
+                                            </td>";
+                                        }
+                                        $crit_rows .= "</tr>";
+                                        $i++;
                                     }
-                                    $crit_rows .= "</tr>";
-                                    $i++;
                                 }
                 $crit_rows .= "</tbody>
                                 </table>
@@ -278,7 +270,7 @@ if (isset($_GET['rubric_id'])) {
                         </div>
                 </div>	
             </div>";
-        }	
+        }
     }
 	
     if ($rubric_used) {
@@ -436,22 +428,22 @@ if (isset($_GET['rubric_id'])) {
         ),
     ),false);
     
-	$rubrics = Database::get()->queryArray("SELECT * FROM rubric WHERE course_id = ?d", $course_id);
+    $rubrics = Database::get()->queryArray("SELECT * FROM rubric WHERE course_id = ?d", $course_id);
     if ($rubrics) {
-	 if  (!isset($_GET['preview'])){
-        $table_content = "";
-        foreach ($rubrics as $rubric) {
-			$rubric_id = $rubric->id;
-            $criteria = unserialize($rubric->scales);
-            $criteria_list = "";
-            foreach ($criteria as $ci => $criterio) {
-                $criteria_list .= "<li>$criterio[title_name] <b>($criterio[crit_weight])</b></li>";
-                if(is_array($criterio['crit_scales']))
-                foreach ($criterio['crit_scales'] as $si=>$scale){
-                        $criteria_list .= "<ul><li>$scale[scale_item_name] ( $scale[scale_item_value] )</li></ul>";
+	 if  (!isset($_GET['preview'])) {
+            $table_content = "";
+            foreach ($rubrics as $rubric) {
+                $rubric_id = $rubric->id;
+                $criteria = unserialize($rubric->scales);
+                $criteria_list = "";
+                foreach ($criteria as $ci => $criterio) {
+                    $criteria_list .= "<li>$criterio[title_name] <b>($criterio[crit_weight])</b></li>";
+                    if(is_array($criterio['crit_scales']))
+                    foreach ($criterio['crit_scales'] as $si=>$scale){
+                            $criteria_list .= "<ul><li>$scale[scale_item_name] ( $scale[scale_item_value] )</li></ul>";
+                    }
                 }
-            }				
-            $table_content .= "<tr>
+                $table_content .= "<tr>
                             <td><a href='rubrics.php?course=$course_code&amp;preview=$rubric_id'>$rubric->name</a></td>
 							<td>$rubric->description</td>";
                             /*<td>
@@ -459,7 +451,7 @@ if (isset($_GET['rubric_id'])) {
                                     $criteria_list
                                 </ul>
                             </td>*/
-            $table_content .= "<td class='option-btn-cell'>
+                $table_content .= "<td class='option-btn-cell'>
                             ".action_button(array(
                                 array(
                                     'title' => $langEdit,
@@ -475,10 +467,8 @@ if (isset($_GET['rubric_id'])) {
                                 ))."
                             </td>
                         </tr>";
-        }
-
-        $tool_content .= "
-            <div class='table-responsive '>
+            }
+            $tool_content .= "<div class='table-responsive '>
                 <table class='table-default'>
                     <thead>
                         <tr>
@@ -524,8 +514,7 @@ function show_rubric ($rubric_id) {
         $langEdit,$langDelete,$langConfirmDelete;
 
     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
-
-    $table_content = "";
+    
     $criteria = unserialize($rubric->scales);
     $criteria_list = "";
     foreach ($criteria as $ci => $criterio) {

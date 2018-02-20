@@ -74,26 +74,43 @@ function get_assignment_submit_details($sid) {
     return Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
 }
 
-function get_course_title() {
-    global $course_id;
-    $course = Database::get()->querySingle("SELECT title FROM course WHERE id = ?d",$course_id);
-    return $course->title;
-}
 
 function get_submission_rank($assign_id,$grade, $submission_date) {
     return Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE (grade > ?f OR (grade = ?f AND submission_date < ?t)) AND assignment_id = ?d",$grade,$grade, $submission_date,$assign_id)->count+1;
 }
 
+/**
+ * 
+ * @global type $course_code
+ * @global string $tool_content
+ * @global type $langAutoJudgeInput
+ * @global type $langAutoJudgeOutput
+ * @global type $langAutoJudgeExpectedOutput
+ * @global type $langOperator
+ * @global type $langAutoJudgeWeight
+ * @global type $langAutoJudgeResult
+ * @global type $langAutoJudgeResultsFor
+ * @global type $langAutoJudgeRank
+ * @global type $langAutoJudgeDownloadPdf
+ * @global type $langBack
+ * @global type $langGradebookGrade
+ * @param type $id
+ * @param type $sid
+ * @param type $assign
+ * @param type $sub
+ * @param type $auto_judge_scenarios
+ * @param type $auto_judge_scenarios_output
+ */
 function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
-    global $m, $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
+    global $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
         $langAutoJudgeExpectedOutput, $langOperator, $langAutoJudgeWeight,
         $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
-        $langAutoJudgeDownloadPdf, $langBack;
+        $langAutoJudgeDownloadPdf, $langBack, $langGradebookGrade;
     
     $tool_content = "
         <table  style='table-layout: fixed; width: 99%' class='table-default'>
         <tr> <td> <b>$langAutoJudgeResultsFor</b>: ".  q(uid_to_name($sub->uid))."</td> </tr>
-        <tr> <td> <b>".$m['grade']."</b>: $sub->grade /$assign->max_grade </td>
+        <tr> <td><b>$langGradebookGrade</b>: $sub->grade /$assign->max_grade </td>
              <td><b> $langAutoJudgeRank</b>: ".get_submission_rank($assign->id,$sub->grade, $sub->submission_date)." </td>
         </tr>
           <tr> <td> <b>$langAutoJudgeInput</b> </td>
@@ -134,7 +151,7 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
 }
 
 /**
- * 
+ * @brief download report as pdf file
  * @global type $langAutoJudgeInput
  * @global type $langAutoJudgeOutput
  * @global type $langAutoJudgeExpectedOutput
@@ -146,20 +163,30 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
  * @global type $langAssignment
  * @global type $langStudent
  * @global type $langAutoJudgeRank
+ * @global type $course_id
  * @param type $assign
  * @param type $sub
  * @param type $auto_judge_scenarios
  * @param type $auto_judge_scenarios_output
  */
 function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
-    global $langAutoJudgeInput, $langAutoJudgeOutput,
+    global $langAutoJudgeInput, $langAutoJudgeOutput, $course_id,
         $langAutoJudgeExpectedOutput, $langOperator,
         $langAutoJudgeWeight, $langAutoJudgeResult, $langGradebookGrade,
         $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank;
 
-    // create new PDF document
-    $pdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
-    // set document information    
+    $pdf = new \Mpdf\Mpdf([
+        'mode' => 'utf-8',
+        'format' => 'A4-L',
+        'tempDir' => _MPDF_TEMP_PATH,
+        'margin_left' => 0,
+        'margin_right' => 0,
+        'margin_top' => 0,
+        'margin_bottom' => 0,
+        'margin_header' => 0,
+        'margin_footer' => 0,
+    ]);
+    // set document information     
     $pdf->SetTitle('Auto Judge Report');
     $pdf->SetSubject('Auto Judge Report');        
     // set some language-dependent strings (optional)
@@ -232,7 +259,7 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
 
     <table class="first">
       <tr>
-        <th>' . $langCourse . '</th><td>' . q(get_course_title()) . '</td>
+        <th>' . $langCourse . '</th><td>' . q(course_id_to_title($course_id)) . '</td>
       </tr>
       <tr>
         <th>' . $langAssignment . '</th><td>' . q($assign->title) . '</td>
@@ -248,7 +275,7 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
       </tr>
     </table>';
 
-    $pdf->WriteHTML($report_details);    
+    $pdf->WriteHTML($report_details);
     $pdf->WriteHTML($report_table);
     $pdf->Output('auto_judge_report_'.q(uid_to_name($sub->uid)).'.pdf', 'F');
 }

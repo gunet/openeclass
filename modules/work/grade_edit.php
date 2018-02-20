@@ -77,7 +77,7 @@ function show_edit_form($id, $sid, $assign) {
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
 	
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
-    if (count($sub) > 0) {
+    if ($sub) {
         $uid_2_name = display_user($sub->uid);
         if (!empty($sub->group_id)) {
             $group_submission = "($m[groupsubmit] $m[ofgroup] " .
