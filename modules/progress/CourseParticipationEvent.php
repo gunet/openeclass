@@ -62,11 +62,15 @@ class CourseParticipationEvent extends BasicEvent {
 
         $this->on(self::STATSAPPENDED, function ($data) {
 
+            if (!$this->criterionIsEnabled($data->courseId)) {
+                return;
+            }
+
             // fetch usage duration for specific course/user from DB and use it as threshold
-            $result = Database::get()->querySingle("SELECT SUM(duration) AS duration "
-                . " FROM actions_daily "
-                . " WHERE user_id = ?d "
-                . " AND course_id = ?d", $data->uid, $data->courseId);
+            $result = Database::get()->querySingle("SELECT SUM(duration) AS duration 
+                 FROM actions_daily 
+                 WHERE user_id = ?d 
+                 AND course_id = ?d", $data->uid, $data->courseId);
 
             if ($result && intval($result->duration) > 0) {
                 $threshold = floatval($result->duration / 3600); // turn seconds to hours
@@ -77,6 +81,26 @@ class CourseParticipationEvent extends BasicEvent {
             }
 
         });
+    }
+
+    private function criterionIsEnabled($courseId) {
+        $existsC = Database::get()->querySingle("select count(c.id) as chk 
+                 from certificate c 
+                 join certificate_criterion cc on (cc.certificate = c.id) 
+                 where c.course_id = ?d 
+                 and cc.activity_type = ?s", $courseId, self::ACTIVITY);
+
+        $existsB = Database::get()->querySingle("select count(b.id) as chk 
+                 from badge b 
+                 join badge_criterion bc on (bc.badge = b.id) 
+                 where b.course_id = ?d 
+                 and bc.activity_type = ?s", $courseId, self::ACTIVITY);
+
+        if ( ($existsC && $existsC->chk > 0) || ($existsB && $existsB->chk > 0) ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
