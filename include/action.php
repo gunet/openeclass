@@ -36,6 +36,24 @@ class action {
         if ($action_type_id != $exit) {
             $this->appendStats($uid, $module_id, $course_id, 1, DEFAULT_MAX_DURATION, DEFAULT_MAX_DURATION, true);
         }
+
+        $this->triggerGame($uid, $course_id);
+    }
+
+    private function triggerGame ($uid, $course_id) {
+        global $is_admin, $is_course_admin, $is_editor;
+
+        if ($is_admin || $is_course_admin || $is_editor) {
+            return;
+        }
+
+        require_once 'modules/progress/CourseParticipationEvent.php';
+        $eventData = new stdClass();
+        $eventData->uid = $uid;
+        $eventData->courseId = $course_id;
+        $eventData->activityType = CourseParticipationEvent::ACTIVITY;
+        $eventData->module = MODULE_ID_USAGE;
+        CourseParticipationEvent::trigger(CourseParticipationEvent::STATSAPPENDED, $eventData);
     }
 
     private function appendStats($uid, $module_id, $course_id, $hits, $diffduration, $induration, $update_lastdt = false) {
