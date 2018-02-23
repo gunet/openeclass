@@ -32,7 +32,7 @@ require_once 'modules/message/class.msg.php';
  * @brief display user courses
  * @global type $session
  * @global array $lesson_ids
- * @global type $urlServer 
+ * @global type $urlServer
  * @global type $langUnregCourse
  * @global type $langAdm
  * @global type $langNotEnrolledToLessons
@@ -57,27 +57,27 @@ function getUserLessonInfo($uid) {
                              course.prof_names professor,
                              course.lang,
                              course.visible,
-                             course_user.status status	                        
+                             course_user.status status
                        FROM course, course_user, user
                        WHERE course.id = course_user.course_id AND
                              course_user.user_id = ?d AND
                              user.id = ?d
                        ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
     } else {
-        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
+        $myCourses = Database::get()->queryArray('SELECT course.id course_id,
                              course.code code,
                              course.public_code,
                              course.title title,
                              course.prof_names professor,
                              course.lang,
                              course.visible,
-                             course_user.status status                                
+                             course_user.status status
                        FROM course, course_user, user
                        WHERE course.id = course_user.course_id AND
                              course_user.user_id = ?d AND
                              user.id = ?d AND
-                             course.visible != ?d
-                       ORDER BY course.title, course.prof_names", $uid, $uid, COURSE_INACTIVE);
+                             (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
+                       ORDER BY course.title, course.prof_names', $uid, $uid);
     }
 
     //getting user's lesson info
@@ -113,21 +113,21 @@ function getUserLessonInfo($uid) {
             $lesson_content .= "<div class='alert alert-info'>$langWelcomeSelect $langWelcomeProfPerso</div>";
         } else {
             $lesson_content .= "<div class='alert alert-info'>$langWelcomeSelect $langWelcomeStudPerso</div>";
-        }        
+        }
     }
     return $lesson_content;
 }
 
 /**
- * @brief get last month course announcements 
+ * @brief get last month course announcements
  * @global type $urlAppend
  * @global type $langMore
  * @global type $dateFormatLong
  * @global type $langNoAnnouncementsExist
  * @param type $param
  * @return string
- */ 
-function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null) {
+ */
+function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
     global $urlAppend, $dateFormatLong, $langAdminAn;
 
@@ -137,7 +137,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
         $sql_append = 'LIMIT 5';
     }
 
-    if (!is_null($filter)) {
+    if (!empty($filter)) {
         $admin_filter_sql = 'AND admin_announcement.title LIKE ?s';
         $course_filter_sql = 'AND announcement.title LIKE ?s';
         $filter_param = '%' . $filter . '%';
@@ -152,7 +152,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
         $q = Database::get()->queryArray("
                                 SELECT admin_announcement.title,
                                              admin_announcement.`date` AS an_date,
-                                             admin_announcement.id                                            
+                                             admin_announcement.id
                                 FROM admin_announcement
                                 WHERE admin_announcement.visible = 1
                                         AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
@@ -180,10 +180,10 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
                                 AND announcement.`date` >= ?s
                                 AND course_module.module_id = ?d
                                 AND course_module.visible = 1 $course_filter_sql)
-                                UNION 
+                                UNION
                                 (SELECT admin_announcement.title,
                                              admin_announcement.`date` AS admin_an_date,
-                                             admin_announcement.id, admin_announcement.body AS content, '', ''                                             
+                                             admin_announcement.id, admin_announcement.body AS content, '', ''
                                 FROM admin_announcement
                                 WHERE   admin_announcement.visible = 1
                                         AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
@@ -192,60 +192,47 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
                                 ) ORDER BY an_date DESC
                          $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $filter_param, $last_month, $filter_param);
     }
-    if ($q && is_null($to_ajax)) { // if announcements exist
+    if ($to_ajax) {
+        $arr_an = array();
+        foreach ($q as $arr_q) {
+            $arr_an[] = $arr_q;
+        }
+        return $arr_an;
+    } else {
         $ann_content = '';
         foreach ($q as $ann) {
-
-            if( isset($ann->code) & $ann->code !='' ) {
-
+            if (isset($ann->code) & $ann->code != '') {
                 $course_title = q(ellipsize($ann->course_title, 80));
                 $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
-
                 $ann_content .= "
                     <li class='list-item'>
                         <div class='item-wholeline'>
                                 <div class='text-title'>
                                     <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                 </div>
-        
                             <div class='text-grey'>$course_title</div>
-                            
                             <div>$ann_date</div>
                         </div>
                     </li>";
-
             } else {
-
                 $ann_url = $urlAppend . 'main/system_announcements.php/?an_id=' . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
-
                 $ann_content .= "
                 <li class='list-item'>
                     <div class='item-wholeline'>
                             <div class='text-title'>
                                 <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                             </div>
-    
+
                         <div class='text-grey'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
-                        
+
                         <div>$ann_date</div>
                     </div>
                 </li>";
-
             }
-
-
         }
         return $ann_content;
-    } elseif ($q && !is_null($to_ajax)) {
-        foreach ($q as $arr_q) {
-            $arr_an[] = $arr_q;
-        }
-
-        return $arr_an;
-    } else {
-        return '';
     }
 }
 
@@ -259,11 +246,11 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
  * @return string
  */
 function getUserMessages() {
-           
+
     global $uid, $urlServer, $langFrom, $dateFormatLong;
-    
-    $message_content = '';    
-               
+
+    $message_content = '';
+
     $mbox = new Mailbox($uid, 0);
     $msgs = $mbox->getInboxMsgs('', 5);
     foreach ($msgs as $message) {
@@ -274,15 +261,15 @@ function getUserMessages() {
         }
         $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
         $message_content .= "<li class='list-item'>
-                                <div class='item-wholeline'>                                    
+                                <div class='item-wholeline'>
                                     <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
                                         <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
-                                    </div>                                    
+                                    </div>
                                     <div class='text-grey'>$course_title</div>
                                     <div>$message_date</div>
                                 </div>
                             </li>";
-    }    
+    }
     return $message_content;
 }
 

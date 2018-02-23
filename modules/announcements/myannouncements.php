@@ -32,6 +32,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $offset = intval($_GET['iDisplayStart']);
 
     $announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
+
     $data['iTotalDisplayRecords'] =  count($announcements);
     if (!isset($_GET['sSearch']) or $_GET['sSearch'] === '') {
         $data['iTotalRecords'] = count(getUserAnnouncements($lesson_ids, 'more', 'to_ajax'));
