@@ -93,9 +93,9 @@ function getUserLessonInfo($uid) {
                 $visclass = "not_visible";
             }
             $lesson_content .= "<tr class='$visclass'>
-              <td class='text-left'>
-              <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
-              <div class='smaller'>" . q($data->professor) . "</div></td>";
+			  <td class='text-left'>
+			  <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
+			  <div class='smaller'>" . q($data->professor) . "</div></td>";
             $lesson_content .= "<td class='text-center right-cell'>";
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
@@ -127,7 +127,7 @@ function getUserLessonInfo($uid) {
  * @param type $param
  * @return string
  */
-function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null) {
+function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
     global $urlAppend, $dateFormatLong, $langAdminAn;
 
@@ -137,7 +137,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
         $sql_append = 'LIMIT 5';
     }
 
-    if (!is_null($filter)) {
+    if (!empty($filter)) {
         $admin_filter_sql = 'AND admin_announcement.title LIKE ?s';
         $course_filter_sql = 'AND announcement.title LIKE ?s';
         $filter_param = '%' . $filter . '%';
@@ -192,34 +192,32 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
                                 ) ORDER BY an_date DESC
                          $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $filter_param, $last_month, $filter_param);
     }
-    if ($q && is_null($to_ajax)) { // if announcements exist
+    if ($to_ajax) {
+        $arr_an = array();
+        foreach ($q as $arr_q) {
+            $arr_an[] = $arr_q;
+        }
+        return $arr_an;
+    } else {
         $ann_content = '';
         foreach ($q as $ann) {
-
-            if( isset($ann->code) & $ann->code !='' ) {
-
+            if (isset($ann->code) & $ann->code != '') {
                 $course_title = q(ellipsize($ann->course_title, 80));
                 $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
-
                 $ann_content .= "
                     <li class='list-item'>
                         <div class='item-wholeline'>
                                 <div class='text-title'>
                                     <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                 </div>
-
                             <div class='text-grey'>$course_title</div>
-
                             <div>$ann_date</div>
                         </div>
                     </li>";
-
             } else {
-
                 $ann_url = $urlAppend . 'main/system_announcements.php/?an_id=' . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
-
                 $ann_content .= "
                 <li class='list-item'>
                     <div class='item-wholeline'>
@@ -232,20 +230,9 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null)
                         <div>$ann_date</div>
                     </div>
                 </li>";
-
             }
-
-
         }
         return $ann_content;
-    } elseif ($q && !is_null($to_ajax)) {
-        foreach ($q as $arr_q) {
-            $arr_an[] = $arr_q;
-        }
-
-        return $arr_an;
-    } else {
-        return '';
     }
 }
 
