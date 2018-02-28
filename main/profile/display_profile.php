@@ -41,7 +41,7 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
     if (!token_validate($id, $_GET['token'], 3600)) {
         forbidden($_SERVER['REQUEST_URI']);
     }
-    $toolName = $langUserProfile;    
+    $toolName = $langUserProfile;
 } else {
     $id = $uid;
 }
@@ -64,9 +64,9 @@ if ($userdata) {
     }
     if ($uid == $id) {
         $passurl = $urlServer . 'main/profile/password.php';
-        $tool_content .=
+        $action_bar_content =
             action_bar(array(
-                array('title' => $langEditProfile,
+                array('title' => $langModify,
                     'url' => "profile.php",
                     'icon' => 'fa-edit',
                     'level' => 'primary-label'),
@@ -79,15 +79,11 @@ if ($userdata) {
                     'url' => "emailunsubscribe.php",
                     'icon' => 'fa-envelope',
                     'level' => 'primary',
-                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses']))),
-                array('title' => $langUnregUser,
-                    'url' => "../unreguser.php",
-                    'icon' => 'fa-times',
-                    'level' => 'primary')
+                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses'])))
                 ));
     } else {
         if (get_config('dropbox_allow_personal_messages')) {
-            $tool_content .=
+            $action_bar_content =
                 action_bar(array(
                     array('title' => $langProfileSendMail,
                         'url' => $urlAppend . "modules/message/index.php?upload=1&amp;id=$id",
@@ -97,6 +93,15 @@ if ($userdata) {
                     ));
         }
     }
+
+    $action_bar_unreg =
+            action_bar(array(
+                array('title' => $langUnregUser,
+                    'url' => "../unreguser.php",
+                    'icon' => 'fa-times',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-danger')
+                ));
 
     // hybridauth providers information. available only for the current user.
     $providers = '';
@@ -113,178 +118,227 @@ if ($userdata) {
         }
     }
 
-    if (get_config('personal_blog')) {
-        $perso_blog_html = "<div class='row'>
-                                <div class='col-xs-12'>
-                                    <div>
-                                        <a href='".$urlServer."modules/blog/index.php?user_id=$id'>$langUserBlog</a>
-                                    </div>
-                                </div>
-                            </div>";
-    } else {
-        $perso_blog_html = '';
-    }
-    if (get_config('eportfolio_enable')) {
-        $eportfolio_html = "<div class='row'>
-                                <div class='col-xs-12'>
-                                    <div>
-                                        <a href='".$urlServer."main/eportfolio/index.php?id=$id&token=".token_generate("eportfolio" . $id)."'>$langUserePortfolio</a>
-                                    </div>
-                                </div>
-                        </div>";
-        } else {
-            $eportfolio_html = '';
-        }
-    $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div class='panel panel-default'>
+    $action_bar_blog_portfolio =
+            action_bar(array(
+                array('title' => $langUserBlog,
+                    'url' => "../../modules/blog/index.php?user_id=$uid&token=" . token_generate("personal_blog" . $uid) . "",
+                    'icon' => 'fa-columns',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success',
+                    'show' => get_config('personal_blog')),
+                array('title' => $langMyePortfolio,
+                    'url' => "../eportfolio/index.php?id=$uid&token=" . token_generate("eportfolio" . $uid) . "",
+                    'icon' => 'fa-briefcase',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success',
+                    'show' => get_config('eportfolio_enable')
+                )));
+
+        $tool_content .= "<div class='row'>
+            <div class='col-xs-12'>
+            <div class='panel panel-default'>
                 <div class='panel-body'>
-                    <div id='pers_info' class='row'>
-                        <div class='col-xs-12 col-sm-2'>
-                            <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
-                        </div>
-                        <div class='col-xs-12 col-sm-10 profile-pers-info'>
-                            <div class='row profile-pers-info-name'>
-                                <div class='col-xs-12'>
-                                    <div>" . q("$userdata->givenname $userdata->surname") . "</div>
-                                    <div class='not_visible'>(".q($userdata->username).")</div>
+                    <div class='inner-heading clearfix'>
+                        $action_bar_content
+                    </div>
+                    <div class='row'>
+                        <div class='col-sm-6'>
+                            <div class='row'>
+                                <div class='col-xs-4'>
+                                    <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
+                                </div>
+                                <div class='col-xs-8'>
+                                    <div class='profile-name'>" .q("$userdata->givenname $userdata->surname") . "</div>
+                                    <div class='not_visible'><strong>$userdata->username</strong></div>
                                 </div>
                             </div>
-                            $perso_blog_html
-                            $eportfolio_html
-                            <div class='row'>
-                                <div class='col-xs-6'>
-                                    <h4>$langProfilePersInfo</h4>
-                                    <div class='profile-pers-info'>
-                                        <span class='tag'>$langEmail :</span>";
-                if (!empty($userdata->email) and allow_access($userdata->email_public)) {
-                    $tool_content .= " <span class='tag-value'>" . mailto($userdata->email) . "</span>";
-                } else {
-                    $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
-                }
+                        </div>
+                        <div class='col-sm-6'>
+                            $action_bar_blog_portfolio
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-sm-6'>
+                            <div class='profile-content-panel'>
+                                <div class='profile-content-panel-title'>
+                                    $langProfilePersInfo
+                                </div>
+                                <div class='profile-content-panel-text'>
+                                    <div style='line-height:26px;'>
+                                    <span style='font-weight: bold; color: #888;'>
+                                        $langEmail:
+                                    </span>";
+                                    if (!empty($userdata->email) and allow_access($userdata->email_public)) {
+                                        $tool_content .= mailto($userdata->email);
+                                    } else {
+                                        $tool_content .= "<span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                                    }
+                                    $tool_content .= $providers;
+                                    $tool_content .= "</div>
+                                        <div style='line-height:26px;'>
+                                        <span style='font-weight: bold; color: #888;'>
+                                            $langPhone:
+                                        </span>";
+                                        if (!empty($userdata->phone) and allow_access($userdata->phone_public)) {
+                                            $tool_content .= $userdata->phone;
+                                        } else {
+                                            $tool_content .= "<span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                                        }
+                                    $tool_content .= "</div>
+                                        <div style='line-height:26px;'>
+                                        <span style='font-weight: bold; color: #888;'>
+                                            $langStatus:
+                                        </span>";
+                                        if ($userdata->status == USER_TEACHER) {
+                                            $tool_content .= $langTeacher;
+                                        } else {
+                                            $tool_content .= $langStudent;
+                                        }
+                                        $tool_content .= "
+                                        </div>
+                                        <div style='line-height:26px;'>
+                                        <span style='font-weight: bold; color: #888;'>
+                                            $langAm:
+                                        </span>";
+                                        if (!empty($userdata->am) and allow_access($userdata->am_public)) {
+                                            $tool_content .= $userdata->am;
+                                        } else {
+                                            $tool_content .= "<span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                                        }
+                                    $tool_content .= "</div>";
+                                    $tool_content .= "<div style='line-height:26px;'>
+                                        <span style='font-weight: bold; color: #888;'>
+                                            $langFaculty:
+                                        </span>";
+                                        $departments = $user->getDepartmentIds($id);
+                                        $i = 1;
+                                        foreach ($departments as $dep) {
+                                            $br = ($i < count($departments)) ? '<br/>' : '';
+                                            $tool_content .= $tree->getFullPath($dep) . $br;
+                                            $i++;
+                                        }
+
+                                    $tool_content .= "</div>
+                                    <div style='line-height:26px;'>
+                                        <span style='font-weight: bold; color: #888;'>
+                                            $langProfileMemberSince:
+                                        </span>" . nice_format($userdata->registered_at, true) . "
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-sm-6'>
+                            <div class='profile-content-panel'>
+                                <div class='profile-content-panel-title'>
+                                    $langProfileAboutMe
+                                </div>
+                                <div class='profile-content-panel-text'>
+                                    <p>";
+                                    if (!empty($userdata->description)) {
+                                        $tool_content .= standard_text_escape($userdata->description);
+                                    }
+                                    $tool_content .= "</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+                    $tool_content .= "<div class='pull-left'>" .
+                            render_profile_fields_content(array('user_id' => $id))
+                    . "</div>";
                 $tool_content .= "</div>
-                                  <div class='profile-pers-info'>
-                                    <span class='tag'>$langPhone :</span>";
-                if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
-                    $tool_content .= " <span class='tag-value'>" . q($userdata->phone) . "</span>";
-                } else {
-                    $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
-                }
-                $tool_content .= "</div>
-                                  <div class='profile-pers-info'><span class='tag'>$langStatus :</span>";
-                if (!empty($userdata->status)) { // Status
-                    $message_status = (q($userdata->status)==1)?$langTeacher:$langStudent;
-                    $tool_content .= " <span class='tag-value'>$message_status</span>";
-                } else {
-                    $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
-                }
-                $tool_content .= "</div>
-                                  <div class='profile-pers-info-data'>
-                                    <span class='tag'>$langAm :</span>";
-                if (!empty($userdata->am) and allow_access($userdata->am_public)) {
-                    $tool_content .= " <span class='tag-value'>" . q($userdata->am) . "</span>";
-                } else {
-                    $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
-                }
-                $tool_content .= $providers;
-                $tool_content .= "</div>
-                        </div> <!-- end of col-xs-6 -->
-                    </div> <!-- end of row -->
-                </div> <!-- end of col-xs-12 profile-pers-info -->
-            </div> <!-- end of pers_info row -->";
-    $tool_content .= "
-    <div id='profile-departments' class='row'>
-        <div class='col-xs-12 col-sm-10 col-sm-offset-2'>
-            <div class='profile-pers-info'><span class='tag'>$langFaculty : </span>";
-            $departments = $user->getDepartmentIds($id);
-                $i = 1;
-                foreach ($departments as $dep) {
-                    $br = ($i < count($departments)) ? '<br/>' : '';
-                    $tool_content .= $tree->getFullPath($dep) . $br;
-                    $i++;
-                }
-        $tool_content .= "</div>
-            <div class='profile-pers-info'>
-                <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>" . nice_format($userdata->registered_at, true) . "</span>
             </div>
         </div>
     </div>";
-        
-    if (!empty($userdata->description)) {
-    $tool_content .= "<div id='profile-about-me' class='row'>
-                        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-                        <h4>$langProfileAboutMe</h4><div>
-                            ".standard_text_escape($userdata->description)."</div></div></div>";
-    }
-       
+
     // get completed certificates with public url
     $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
                                         . "FROM certified_users "
                                         . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
-    
+
     if (count($sql) > 0) {
-        $tool_content .= "<hr>";
+        $tool_content .= "<div class='panel panel-default'>
+                          <div class='panel-body'>";
         $tool_content .= "<div class='col-sm-10' style='padding-top:20px;'><h4>$langMyCertificates</h4></div>";
         $tool_content .= "<div class='row'>";
-        $tool_content .= "<div class='badge-container'>";                
+        $tool_content .= "<div class='badge-container'>";
         $tool_content .= "<div class='clearfix'>";
-        foreach ($sql as $key => $certificate) {            
+        foreach ($sql as $key => $certificate) {
             $tool_content .= "<div class='col-xs-12 col-sm-4 col-xl-2'>";
             $tool_content .= "<a style='display:inline-block; width: 100%' <a href='../out.php?i=$certificate->identifier'>";
             $tool_content .= "<div class='certificate_panel' style='width:210px; height:120px;'>
                     <h4 class='certificate_panel_title' style='font-size:15px;  margin-top:2px;'>$certificate->cert_title</h4>
                     <div style='font-size:10px;'>" . claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) . "</div>
-                    <div class='certificate_panel_issuer' style='font-size:11px;'>$certificate->cert_issuer</div>";                    
-            $tool_content .= "</a>";            
+                    <div class='certificate_panel_issuer' style='font-size:11px;'>$certificate->cert_issuer</div>";
+            $tool_content .= "</a>";
             $tool_content .= "<div class='certificate_panel_state'>
                 <i class='fa fa-check-circle fa-inverse state_success'></i>
             </div>";
             $tool_content .= "</div>";
             $tool_content .= "</div>";
-        }                    
+        }
         $tool_content .= "</div></div></div>";
+        $tool_content .= "</div></div>";
     }
-        
+
     //get completed badges
     $gameQ = "SELECT a.*, b.title,"
             . " b.description, b.issuer, b.active, b.created, b.id, b.course_id"
             . " FROM user_badge a "
             . " JOIN badge b ON (a.badge = b.id) "
             . " WHERE a.user = ?d "
-            . "AND a.completed = 1 "            
+            . "AND a.completed = 1 "
             . "AND b.active = 1 "
             . "AND b.bundle != -1 "
             . "AND (b.expires IS NULL OR b.expires > NOW())";
-    $sql2 = Database::get()->queryArray($gameQ, $uid);            
+    $sql2 = Database::get()->queryArray($gameQ, $uid);
     if (count($sql2) > 0) {
-        $tool_content .= "<hr>";
+        $tool_content .= "<div class='panel panel-default'>
+                          <div class='panel-body'>";
         $tool_content .= "<div class='col-sm-10' style='padding-bottom:30px;'><h4>$langBadges</h4></div>";
         $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='badge-container'>";
         $tool_content .= "<div class='clearfix'>";
         foreach ($sql2 as $key => $badge) {
-            $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 
+            $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id =
                                                  (SELECT icon FROM badge WHERE id = ?d)", $badge->id)->filename;
             $tool_content .= "<div class='col-xs-6 col-sm-4'>";
             $tool_content .= "<a href='../../modules/progress/index.php?course=".course_id_to_code($badge->course_id)."&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>
                 <img class='center-block' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename' width='100' height='100'>
                 <h5 class='text-center' style='padding-top: 10px;'>
                     " . ellipsize($badge->title, 40) . "
-                </h5>";            
-            $tool_content .= "</a></div>";                                       
+                </h5>";
+            $tool_content .= "</a></div>";
         }
         $tool_content .= "</div></div></div>";
+        $tool_content .= "</div></div>";
     }
-        
-    //render custom profile fields content
-    $tool_content .= render_profile_fields_content(array('user_id' => $id));
-    $tool_content .= "</div>
+
+    if ($uid == $id) {
+        $tool_content .= "<div class='row'>
+            <div class='col-xs-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <div class='row'>
+                            <div class='col-sm-8'>
+                                <div class='profile-content-panel-title'>
+                                    $langUnregUser
+                                </div>
+                                <div class='profile-content-panel-text'>
+                                    $langExplain
+                                </div>
+                            </div>
+                            <div class='col-sm-4'>
+                                $action_bar_unreg
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>";
+    }
 }
-draw($tool_content, 1);
+draw($tool_content, 1, 'profile');
 
 /**
  * check access to user profiles
