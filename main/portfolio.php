@@ -21,7 +21,7 @@
 
 /**
  * @file portfolio.php
- * @brief This component creates the content of the start page when the user is logged in 
+ * @brief This component creates the content of the start page when the user is logged in
  */
 
 $require_login = true;
@@ -77,9 +77,9 @@ jQuery(document).ready(function() {
                'sNext':     '&rsaquo;',
                'sLast':     '&raquo;'
            }
-       }    
+       }
   });
-  $('div.all_courses').html('<a class=\"btn btn-xs btn-default\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses</a>');  
+  $('div.all_courses').html('<a class=\"btn btn-xs btn-default\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses</a>');
   jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();
@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
                                 $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                                 }
         });
-        
+
         $(".btn-group button[data-calendar-nav]").each(function() {
             var $this = $(this);
             $this.click(function() {
@@ -118,14 +118,14 @@ jQuery(document).ready(function() {
 ."});
 ".
 'function show_month(day,month,year){
-    $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});    
+    $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});
 }
 </script>';
 
 require_once 'perso.php';
 
 $tool_content .= action_bar(array(
-        array('title' => $langRegCourses, 
+        array('title' => $langRegCourses,
               'url' => $urlAppend . 'modules/auth/courses.php',
               'icon' => 'fa-check',
               'level' => 'primary-label',
@@ -145,7 +145,7 @@ $tool_content .= "
                     <h2 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h2>
                     <div class='panel'>
                         <div class='panel-body'>
-                            {%LESSON_CONTENT%}                        
+                            {%LESSON_CONTENT%}
                         </div>
                     </div>
                 </div>
@@ -227,9 +227,6 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, username, e
                 email_public, phone_public, am_public
             FROM user
             WHERE id = ?d", $uid);
-$numUsersRegistered = Database::get()->querySingle("SELECT COUNT(*) AS numUsers
-        FROM course_user cu1, course_user cu2
-        WHERE cu1.course_id = cu2.course_id AND cu1.user_id = ?d AND cu1.status = ?d AND cu2.status <> ?d;", $uid, USER_TEACHER, USER_TEACHER)->numUsers;
 $lastVisit = Database::get()->querySingle("SELECT * FROM loginout
                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
 if ($lastVisit) {
