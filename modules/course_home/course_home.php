@@ -432,7 +432,7 @@ if ($is_editor) {
             $newaccess = ($access->public == '1') ? '0' : '1';
             Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
         }
-        redirect_to_home_page("courses/$course_code/#unit_$_REQUEST[vis]");
+        redirect_to_home_page("courses/$course_code/#unit_$_REQUEST[access]");
     } elseif (isset($_REQUEST['down'])) {
         $id = intval(getDirectReference($_REQUEST['down'])); // change order down
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
