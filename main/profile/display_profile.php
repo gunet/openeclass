@@ -242,9 +242,8 @@ if ($userdata) {
                             </div>
                         </div>
                     </div>";
-                    $tool_content .= "<div class='pull-left'>" .
-                            render_profile_fields_content(array('user_id' => $id))
-                    . "</div>";
+                    // custom profile fields
+                    $tool_content .= render_profile_fields_content(array('user_id' => $id));
                 $tool_content .= "</div>
             </div>
         </div>
