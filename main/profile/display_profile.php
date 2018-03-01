@@ -44,6 +44,7 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
     $data['id'] = $uid;
 }
 
+$data['action_bar_blog_portfolio'] = '';
 $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
                                             has_icon, description, password,
                                             email_public, phone_public, am_public

@@ -144,7 +144,8 @@
     </div>
 
 @if (count($cert_completed) > 0)
-        <hr>
+	    <div class="panel panel-default">
+        <div class="panel-body">
         <div class='col-sm-10' style='padding-top:20px;'><h4>{{ trans('langMyCertificates') }}</h4></div>
             <div class='row'>
                 <div class='badge-container'>
@@ -173,9 +174,12 @@
                 </div>
             </div>
         </div>
+        </div>
+        </div>
     @endif            
     @if (count($badge_completed) > 0) 
-        <hr>
+	    <div class="panel panel-default">
+        <div class="panel-body">
         <div class='col-sm-10' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
             <div class='row'>
                 <div class='badge-container'>
@@ -194,9 +198,12 @@
                 </div>
             </div>
         </div>
+        </div>
+        </div>
     @endif
 
-    
+
+@if ($uid == $id)    
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default">
@@ -219,5 +226,6 @@
             </div>
         </div>
     </div>
+@endif
 
 @endsection
