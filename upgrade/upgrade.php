@@ -3753,6 +3753,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     }
 
+    // upgrade queries for version 3.6.3
+    if (version_compare($oldversion, '3.6.3', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.6.3'));
+
+        Database::get()->query('ALTER TABLE tc_session
+            CHANGE external_users external_users TEXT DEFAULT NULL');
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 
