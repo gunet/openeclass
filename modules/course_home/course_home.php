@@ -1,3 +1,4 @@
+
 <?php
 
 /* ========================================================================
@@ -418,6 +419,7 @@ if ($is_editor) {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $id);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
+        redirect_to_home_page("courses/$course_code/#unit_$_REQUEST[vis]");
     } elseif (isset($_REQUEST['access'])) {
         if ($course_viewType == 'weekly') {
             $id = intval(getDirectReference($_REQUEST['access']));
@@ -430,6 +432,7 @@ if ($is_editor) {
             $newaccess = ($access->public == '1') ? '0' : '1';
             Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
         }
+        redirect_to_home_page("courses/$course_code/#unit_$_REQUEST[vis]");
     } elseif (isset($_REQUEST['down'])) {
         $id = intval(getDirectReference($_REQUEST['down'])); // change order down
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
@@ -685,7 +688,7 @@ if (count($categoryItems)) {
 } else {
     $categoryDisplay = '';
 }
-// offline course button 
+// offline course button
 //<li class='access pull-right'><a href='{$urlAppend}modules/offline/index.php?course={$course_code}'><span class='fa fa-fw' data-toggle='tooltip' data-placement='top' title='Offline'></span><span>D</span></a></li>
 $tool_content .= "
 $action_bar
@@ -704,7 +707,7 @@ $action_bar
 
                         ($uid? ("<li class='access pull-right'><a href='{$urlAppend}modules/user/" .
                                 ($is_course_admin? '': 'userslist.php') .
-                                "?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>"): '') . "                        
+                                "?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>"): '') . "
                     </ul>
                 </div>
                 $left_column
@@ -762,7 +765,6 @@ if ($total_cunits > 0) {
         $access = $cu->public;
         // Visibility icon
         $vis = $cu->visible;
-        $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
         $class_vis = ($vis == 0) ? 'not_visible' : '';
         if ($course_info->view_type == 'weekly') {
             if (!empty($cu->title)) {
@@ -774,7 +776,8 @@ if ($total_cunits > 0) {
         } else {
             $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
         }
-        $cunits_content .= "<div class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
+        $cu_indirect = getIndirectReference($cu->id);
+        $cunits_content .= "<div id='unit_$cu_indirect' class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
                               <div class='item-content'>
                                 <div class='item-header clearfix'>
                                   <div class='item-title h4'>$href</div>";
@@ -786,10 +789,10 @@ if ($total_cunits > 0) {
                               'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id&amp;cnt=$count_index",
                               'icon' => 'fa-edit'),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[REQUEST_URI]?visW=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                              'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
                               'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
                               'show' => $visible == COURSE_OPEN),)) .
                     '</div>';
@@ -803,14 +806,14 @@ if ($total_cunits > 0) {
                               'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
                               'icon' => 'fa-edit'),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[REQUEST_URI]?vis=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                              'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
                               'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
                               'show' => $visible == COURSE_OPEN),
                         array('title' => $langDelete,
-                              'url' => "$_SERVER[REQUEST_URI]?del=". getIndirectReference($cu->id)."&order=".$cu->order,
+                              'url' => "$_SERVER[REQUEST_URI]?del=$cu_indirect&order=".$cu->order,
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langCourseUnitDeleteConfirm))) .
@@ -903,8 +906,8 @@ if ($course_info->view_type == 'activity') {
         <div class='row'>
             <div class='col-md-12'>
                 <h3 class='content-title pull-left'>$unititle</h3>";
-    
-    //help icon 
+
+    //help icon
     $head_content .= "
         <script>
         $(function() {
