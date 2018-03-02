@@ -258,20 +258,21 @@
                             <input type="hidden" name="toolbox" value="true">
                             <div class="form-group">
                                 <label class="hidden" for="inputName">{%langName%}</label>
-                                <input type="text" class="form-control" name="givenname_form" id="inputName" placeholder="{%langName%}" value="{%givennameValue%}">
+                                <input type="text" class="form-control" name="{%FIELD_GIVENNAME%}" id="inputName" placeholder="{%langName%}" value="{%givennameValue%}">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputSurname">{%langSurname%}</label>
-                                <input type="text" class="form-control" name="surname_form" id="inputSurname" placeholder="{%langSurname%}" value="{%surnameValue%}">
+                                <input type="text" class="form-control" name="{%FIELD_SURNAME%}" id="inputSurname" placeholder="{%langSurname%}" value="{%surnameValue%}">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputUsername">{%langUsername%}</label>
-                                <input type="text" class="form-control" name="uname" id="inputUsername" placeholder="{%langUsername%}" value="{%usernameValue%}">
+                                <input type="text" class="form-control" name="{%FIELD_USERNAME%}" id="inputUsername" placeholder="{%langUsername%}" value="{%usernameValue%}">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputEmail">{%langEmail%}</label>
-                                <input type="email" class="form-control" name="email" id="inputEmail" placeholder="{%langEmail%}" value="{%emailValue%}">
+                                <input type="email" class="form-control" name="{%FIELD_EMAIL%}" id="inputEmail" placeholder="{%langEmail%}" value="{%emailValue%}">
                             </div>
+                            <!-- BEGIN registerPasswordBlock -->
                             <div class="form-group">
                                 <label class="hidden" for="inputPassword">{%langPass%}</label>
                                 <input type="password" class="form-control" name="password1" id="inputPassword" placeholder="{%langPass%}" autocomplete="new-password">
@@ -280,6 +281,7 @@
                                 <label class="hidden" for="inputPassword1">{%langConfirmation%}</label>
                                 <input type="password" class="form-control" name="password" id="inputPassword1" placeholder="{%langConfirmation%}" autocomplete="new-password">
                             </div>
+                            <!-- END registerPasswordBlock -->
                             <button type="submit" name="submit" class="btn btn-primary btn-block">{%langSubmit%}</button>
                         </form>
                     </div>
