@@ -106,7 +106,7 @@ if (user_app_exists($username)) {
 
 if ($display_captcha) {
     // captcha check
-    include 'include/securimage/securimage.php';    
+    include 'include/securimage/securimage.php';
     $securimage = new Securimage();
     if ($securimage->check($captcha_code) == false) {
         $errors[] = $langCaptchaWrong;

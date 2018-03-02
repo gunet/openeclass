@@ -234,12 +234,15 @@
                     {%loginForm%}
                 </div>
             </div>
+            <!-- BEGIN registerLinkBlock -->
             <div class="modal-footer">
                 {%noAccountPleaseRegister%}
             </div>
+            <!-- END registerLinkBlock -->
         </div>
     </div>
 </div>
+<!-- BEGIN registerModalBlock -->
 <div class="modal fade" id="registerModalContent" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -271,11 +274,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputPassword">{%langPass%}</label>
-                                <input type="password" class="form-control" name="password1" id="inputPassword" placeholder="{%langPass%}">
+                                <input type="password" class="form-control" name="password1" id="inputPassword" placeholder="{%langPass%}" autocomplete="new-password">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputPassword1">{%langConfirmation%}</label>
-                                <input type="password" class="form-control" name="password" id="inputPassword1" placeholder="{%langConfirmation%}">
+                                <input type="password" class="form-control" name="password" id="inputPassword1" placeholder="{%langConfirmation%}" autocomplete="new-password">
                             </div>
                             <button type="submit" name="submit" class="btn btn-primary btn-block">{%langSubmit%}</button>
                         </form>
@@ -288,6 +291,7 @@
         </div>
     </div>
 </div>
+<!-- END registerModalBlock -->
 <div class="modal fade" id="lostPassModalContent" tabindex="-1" role="dialog" aria-labelledby="lostPassModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

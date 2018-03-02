@@ -40,7 +40,17 @@ $t->set_block('resultBlock', 'resultMetaBlock', 'resultMeta');
 $t->set_block('main', 'selectFieldBlock', 'selectField');
 $t->set_block('selectFieldBlock', 'selectOptionBlock', 'selectOption');
 $t->set_var('URL_PATH', $urlAppend);
-$t->set_var('registrationUrl', $urlAppend . 'modules/auth/newuser.php');
+$eclass_stud_reg = get_config('eclass_stud_reg');
+if (get_config('user_registration') and $eclass_stud_reg) {
+    if ($eclass_stud_reg == 2) {
+        $t->set_var('registrationUrl', $urlAppend . 'modules/auth/newuser.php');
+    } else {
+        $t->set_var('registrationUrl', $urlAppend . 'modules/auth/formuser.php?auth=');
+    }
+} else {
+    $t->set_block('main', 'registerLinkBlock', 'delete');
+    $t->set_block('main', 'registerModalBlock', 'delete');
+}
 $t->set_var('TOOLBOX_PATH', $urlAppend . "template/$theme/toolbox/");
 $t->set_var('template_base', $urlAppend . 'template/' . $theme);
 $t->set_var('PAGE_TITLE', q($siteName));
