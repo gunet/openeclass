@@ -335,6 +335,8 @@ if ($searching) {
         $args[] = $_GET['department'];
     }
 
+    $query .= ' ORDER BY title';
+
     $courses = Database::get()->queryArray($query, $args);
     foreach ($courses as $course) {
         $t->set_var('resultLink', $urlAppend . 'courses/' . $course->code . '/');
