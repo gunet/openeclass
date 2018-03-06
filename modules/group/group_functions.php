@@ -246,7 +246,7 @@ function showgroupsofcategory($catid) {
 
     foreach ($q as $row) {
         $tool_content .= "<tr><td style='padding-left: 25px;'>";
-        $group_id = $row->id;        
+        $group_id = $row->id;
         initialize_group_info($group_id);
         if ($is_editor) {
             $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
@@ -317,7 +317,7 @@ function showgroupsofcategory($catid) {
                 if (!$allow_unreg) {
                     $tool_content .= '&mdash;';
                 } else {
-                    $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
+                    $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=".getIndirectReference($group_id)."", " style='color:#d9534f;'");
                 }
             }
             $tool_content .= "</td>";
