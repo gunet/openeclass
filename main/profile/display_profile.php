@@ -44,7 +44,7 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
     $data['id'] = $uid;
 }
 
-$data['action_bar_blog_portfolio'] = '';
+$data['action_bar_blog_portfolio'] = $data['action_bar'] = $data['action_bar_unreg'] = '';
 $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
                                             has_icon, description, password,
                                             email_public, phone_public, am_public
@@ -80,10 +80,10 @@ if ($data['userdata']) {
                     'level' => 'primary-label',
                     'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses'])))
                 ));
-                        
-        
+
+
         $data['action_bar_blog_portfolio'] =
-            action_bar(array(                
+            action_bar(array(
                 array('title' => $langUserBlog,
                     'url' => "../../modules/blog/index.php?user_id=$uid&token=" . token_generate("personal_blog" . $uid) . "",
                     'icon' => 'fa-columns',
@@ -97,9 +97,9 @@ if ($data['userdata']) {
                     'button-class' => 'btn-success',
                     'show' => get_config('eportfolio_enable')
                 )));
-        
+
         $data['action_bar_unreg'] =
-            action_bar(array(                
+            action_bar(array(
                 array('title' => $langUnregUser,
                     'url' => "../unreguser.php",
                     'icon' => 'fa-times',
@@ -130,20 +130,20 @@ if ($data['userdata']) {
     $data['cert_completed'] = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
                                         . "FROM certified_users "
                                         . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
-    
-    
+
+
     //get completed badges
     $gameQ = "SELECT a.*, b.title,"
             . " b.description, b.issuer, b.active, b.created, b.id, b.course_id"
             . " FROM user_badge a "
             . " JOIN badge b ON (a.badge = b.id) "
             . " WHERE a.user = ?d "
-            . "AND a.completed = 1 "            
+            . "AND a.completed = 1 "
             . "AND b.active = 1 "
             . "AND b.bundle != -1 "
             . "AND (b.expires IS NULL OR b.expires > NOW())";
     $data['badge_completed'] = Database::get()->queryArray($gameQ, $uid);
-    
+
 }
 
 $data['menuTypeID'] = 1;
@@ -157,7 +157,7 @@ view('main.profile.index', $data);
  */
 
 function allow_access($level) {
-        
+
     if ($level == ACCESS_USERS) { // if we have allowed it
         return true;
     } elseif ($_SESSION['status'] == USER_TEACHER) { // if we are teacher
