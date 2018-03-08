@@ -35,6 +35,7 @@ $user = new User();
 $toolName = $langMyProfile;
 
 $userdata = array();
+$action_bar_content = '';
 
 if (isset($_GET['id']) and isset($_GET['token'])) {
     $id = intval($_GET['id']);
