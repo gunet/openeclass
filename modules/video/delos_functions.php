@@ -180,6 +180,7 @@ function generateDelosSignedToken() {
         "url" => getDelosLmsURL(),
         "rid" => $course_code,
         "exp" => $exp_time_in_seconds,
+        "redirect_url" => $GLOBALS['urlServer'] . "modules/video/index.php?course=$course_code&amp;form_input=opendelos",
     );
     $stringifiedData = json_encode($data);
     $encodedData = base64url_encode($stringifiedData);
@@ -370,7 +371,7 @@ delosform;
     if (!$checkAuth) {
         $authUrl = (isCASUser()) ? getDelosURL() . getDelosRLoginCASAPI() : getDelosURL() . getDelosRLoginAPI();
         $authUrl .= "?token=" . getDelosSignedToken();
-        $authHref = "<a href='$authUrl' class='fileModal' target='_blank' title='$langOpenDelosAuth'>$langOpenDelosRequireAuthHere</a>";
+        $authHref = "<a href='$authUrl' title='$langOpenDelosAuth'>$langOpenDelosRequireAuthHere</a>";
         $html .= "<tr><td colspan='6'><div class='alert alert-warning' role='alert'>" . $langOpenDelosRequireAuth . " " .  $authHref . "</div></td></tr>";
     } else {
         if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources") && count($jsonPrivateObj->resources) > 0) {
