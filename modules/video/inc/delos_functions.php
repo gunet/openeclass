@@ -171,6 +171,7 @@ function generateDelosSignedToken() {
         "url" => getDelosLmsURL(),
         "rid" => $course_code,
         "exp" => $exp_time_in_seconds,
+        "redirect_url" => $GLOBALS['urlServer'] . "modules/video/index.php?course=$course_code&amp;form_input=opendelos",
     );
     $stringifiedData = json_encode($data);
     $encodedData = base64url_encode($stringifiedData);

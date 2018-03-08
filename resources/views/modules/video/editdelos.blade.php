@@ -63,7 +63,7 @@
                             $authUrl .= "?token=" . getDelosSignedToken();
                         ?>
                         <tr><td colspan='6'><div class='alert alert-warning' role='alert'>
-                            {{ trans('langOpenDelosRequireAuth') }}&nbsp;<a href='{{ $authUrl }}' class='fileModal' target='_blank' title='{{ trans('langOpenDelosAuth') }}'>{{ trans('langOpenDelosRequireAuthHere') }}</a>
+                            {{ trans('langOpenDelosRequireAuth') }}&nbsp;<a href='{{ $authUrl }}' title='{{ trans('langOpenDelosAuth') }}'>{{ trans('langOpenDelosRequireAuthHere') }}</a>
                         </div></td></tr>
                     @else
                         @if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources") && count($jsonPrivateObj->resources) > 0)
