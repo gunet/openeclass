@@ -133,12 +133,21 @@ if (isset($_GET['id'])) {
     }
 
     if ($data['can_assign_to_self'] and isset($_POST['assignToSelf'])) {
+        $notification = Database::get()->querySingle('SELECT notification
+            FROM request_watcher
+            WHERE request_id = ?d AND user_id = ?d',
+            $id, $uid);
+        if ($notification) {
+            $old_notification = $notification->notification;
+        } else {
+            $old_notification = 1;
+        }
         Database::get()->query('DELETE FROM request_watcher
             WHERE request_id = ?d AND (user_id = ?d OR type = ?d)',
             $id, $uid, REQUEST_ASSIGNED);
         Database::get()->query('INSERT INTO request_watcher
-            SET request_id = ?d, user_id = ?d, type = ?d',
-            $id, $uid, REQUEST_ASSIGNED);
+            SET request_id = ?d, user_id = ?d, type = ?d, notification = ?d',
+            $id, $uid, REQUEST_ASSIGNED, $old_notification);
         if ($request->state == REQUEST_STATE_NEW) {
             Database::get()->query('UPDATE request
                 SET state = ?d, change_date = NOW() WHERE id = ?d',
@@ -173,6 +182,15 @@ if (isset($_GET['id'])) {
             $newState = $request->state;
         }
         if ($comment or $fileName or $newState != $request->state) {
+            if ($newState != $request->state and $newState == REQUEST_STATE_CLOSED) {
+                $sql_close = ', close_date = NOW()';
+            } else {
+                $sql_close = '';
+            }
+            Database::get()->query("UPDATE request
+                SET state = ?d, change_date = NOW() $sql_close
+                WHERE id = ?d",
+                $newState, $id);
             Database::get()->query('INSERT INTO request_action
                 SET request_id = ?d, user_id = ?d, ts = NOW(),
                     old_state = ?d, new_state = ?d,

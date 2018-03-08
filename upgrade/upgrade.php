@@ -3761,6 +3761,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '4.0', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
 
+        Database::get()->query('ALTER TABLE tc_session
+                  CHANGE external_users external_users TEXT DEFAULT NULL');
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
                 `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `class` varchar(400) NOT NULL) $tbl_options");

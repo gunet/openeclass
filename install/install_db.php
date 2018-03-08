@@ -1524,7 +1524,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `mod_pw` varchar(255) DEFAULT NULL,
     `att_pw` varchar(255) DEFAULT NULL,
     `unlock_interval` int(11) DEFAULT NULL,
-    `external_users` varchar(255) DEFAULT NULL,
+    `external_users` text DEFAULT NULL,
     `participants` varchar(1000) DEFAULT NULL,
     `record` enum('true','false') DEFAULT 'false',
     `sessionUsers` int(11) DEFAULT 0,
