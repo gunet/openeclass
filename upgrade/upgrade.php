@@ -3777,6 +3777,20 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                  FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
                  FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
 
+
+
+        // lti
+        Database::get()->query("CREATE TABLE IF NOT EXISTS lti_apps (
+                    `id` int(11) NOT NULL AUTO_INCREMENT,
+                    `course_id` INT(11) NOT NULL,
+                    `title` VARCHAR(255) DEFAULT NULL,
+                    `description` TEXT,
+                    `lti_provider_url` VARCHAR(255) DEFAULT NULL,
+                    `lti_provider_key` VARCHAR(255) DEFAULT NULL,
+                    `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
+                    `enabled` ENUM('0','1') DEFAULT NULL,
+                    PRIMARY KEY (`id`)) $tbl_options");
+
         // `request` tables (aka `ticketing`)
         Database::get()->query("CREATE TABLE IF NOT EXISTS request_type (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
