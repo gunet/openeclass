@@ -251,6 +251,7 @@ if ($u) {
         }
         $tool_content .= "</div></div>";
         $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
+        $reg_date_format = $reg_date? $reg_date->format("d-m-Y H:i"): '-';
         $exp_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
         $last_login = Database::get()->querySingle('SELECT `when` FROM loginout
             WHERE id_user = ?d ORDER BY idLog DESC LIMIT 1', $u);
@@ -262,7 +263,7 @@ if ($u) {
         $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langRegistrationDate:</label>
-                <div class='col-sm-10'><p class='form-control-static'>" . $reg_date->format("d-m-Y H:i") . "</p></div>
+                <div class='col-sm-10'><p class='form-control-static'>$reg_date_format</p></div>
             </div>
             <div class='input-append date form-group'>
                 <label class='col-sm-2 control-label'>$langExpirationDate:</label>
