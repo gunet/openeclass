@@ -286,6 +286,8 @@ function httpGetRequest($url, $headers = array()) {
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     $response = curl_exec($ch);
     if(!curl_errno($ch)) {
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
