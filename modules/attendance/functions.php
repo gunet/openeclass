@@ -533,7 +533,7 @@ function add_attendance_other_activity($attendance_id) {
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd,
            $langAdd, $langSave, $langAttendanceActivityDate,
-           $language, $head_content;;
+           $language, $head_content;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -559,12 +559,15 @@ function add_attendance_other_activity($attendance_id) {
                         $id  = filter_var(getDirectReference($_GET['modify']), FILTER_VALIDATE_INT);
                         //All activity data (check if it's in this attendance)
                         $modifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
-                        //if ($modifyActivity) {
                         $titleToModify = Session::has('actTitle') ? Session::get('actTitle') : $modifyActivity->title;
                         $contentToModify = Session::has('actDesc') ? Session::get('actDesc') : $modifyActivity->description;
                         $attendanceActivityToModify = $id;
-                        $date = Session::has('date') ? Session::get('date') :
-                            DateTime::createFromFormat('Y-m-d H:i:s', $modifyActivity->date)->format('d-m-Y H:i:s');
+                        if (Session::has('date')) {
+                            $date = Session::get('date');
+                        }
+                        if ($modifyActivity->date) {
+                            $date = DateTime::createFromFormat('Y-m-d H:i:s', $modifyActivity->date)->format('d-m-Y H:i:s');
+                        }
                         $module_auto_id = $modifyActivity->module_auto_id;
                         $auto = $modifyActivity->auto;
                     }  else { //new activity
