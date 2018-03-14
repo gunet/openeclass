@@ -22,7 +22,7 @@
 
 // Allow unlimited time for creating the archive
 set_time_limit(0);
-ini_set('display_errors', '0');
+ini_set('display_errors', '1');
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
@@ -126,6 +126,7 @@ $bladeData['themeimg'] = $bladeData['urlAppend'] . 'template/default/img';
 $bladeData['logo_img'] = $bladeData['themeimg'] . '/eclass-new-logo.png';
 $bladeData['logo_img_small'] = $bladeData['themeimg'] . '/logo_eclass_small.png';
 $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
+
 
 ///////////////
 // documents //
