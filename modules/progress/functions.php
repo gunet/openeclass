@@ -2002,7 +2002,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                                                 AND certificate_criterion.certificate = ?d
                                                                 AND user = ?d", $element_id, $user_id);
         // incomplete user resources
-        $sql2 = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d
+        $sql2 = Database::get()->queryArray("SELECT id, threshold, operator FROM certificate_criterion WHERE certificate = ?d
                                                     AND id NOT IN
                                             (SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion
                                                 ON user_certificate_criterion.certificate_criterion = certificate_criterion.id
@@ -2016,7 +2016,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                                                 AND badge_criterion.badge = ?d
                                                                 AND user = ?d", $element_id, $user_id);
         // incomplete user resources
-        $sql2 = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d
+        $sql2 = Database::get()->queryArray("SELECT id, threshold, operator FROM badge_criterion WHERE badge = ?d
                                                     AND id NOT IN
                                             (SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion
                                                 ON user_badge_criterion.badge_criterion = badge_criterion.id
@@ -2090,12 +2090,19 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 </div>";
 	}
 	foreach ($sql2 as $user_criterion) {
-		$resource_data = get_resource_details($element, $user_criterion);
+		$resource_data = get_resource_details($element, $user_criterion->id);
 		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+
+                if (!empty($user_criterion->operator)) {
+                    $op = get_operators();
+                    $op_content = $op[$user_criterion->operator];
+                } else {
+                    $op_content = "&mdash;";
+                }
 		$tool_content .= "
                 <div class='row res-table-row not_visible'>
                     <div class='col-sm-9'>$activity</div>
-                    <div class='col-sm-3 text-center'>" . icon('fa-hourglass-2') . "</div>
+                    <div class='col-sm-3 text-center'>$op_content&nbsp;" . $user_criterion->threshold . "</div>
                 </div>";
 	}
 	$tool_content .= "
