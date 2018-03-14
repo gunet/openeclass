@@ -349,6 +349,9 @@ function load_js($file, $init='') {
     } elseif ($file == 'bootstrap-colorpicker') {
         $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
         $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
+    } elseif ($file == 'bootstrap-combobox') {
+        $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
+        $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
     }   elseif ($file == 'spectrum') {
         $head_content .= css_link('spectrum/spectrum.css');
         $file = 'spectrum/spectrum.js';

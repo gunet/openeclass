@@ -65,7 +65,11 @@
                                     @if (is_null($field->data))
                                         <span class='not_visible'> - </span>
                                     @else
-                                        {{ $field->data }}
+                                        @if ($field->datatype == REQUEST_FIELD_DATE)
+                                            {{ claro_format_locale_date('%A, %d-%m-%Y', strtotime($field->data)) }}
+                                        @else
+                                            {{ $field->data }}
+                                        @endif
                                     @endif
                                 </div>
                             </div>

@@ -45,11 +45,23 @@ if (isset($_GET['id'])) {
                 LEFT JOIN request_field_data ON request.id = request_field_data.request_id AND
                           request_field.id = request_field_data.field_id
             WHERE request.id = ?d ORDER BY sortorder', function ($field) use (&$data) {
+                if ($field->datatype == REQUEST_FIELD_DATE and $field->data) {
+                    $tmpDate = DateTime::createFromFormat('Y-m-d', $field->data);
+                    if ($tmpDate) {
+                        $field->data = $tmpDate->format('d-m-Y');
+                    } else {
+                        $field->data = null;
+                    }
+                }
                 $data['field_data'][$field->field_id] = $field;
                 $data['field_data'][$field->field_id]->name = getSerializedMessage($field->name);
                 if ($field->values) {
                     $data['field_data'][$field->field_id]->values = array_map('getSerializedMessage',
                         unserialize($field->values));
+                    if ($field->data and 
+                        !in_array($field->data, $data['field_data'][$field->field_id]->values)) {
+                            $data['field_data'][$field->field_id]->values[] = $field->data;
+                    }
                 }
             }, $request->id);
     } else {
@@ -99,6 +111,14 @@ if (isset($_GET['id'])) {
         if ($data['field_data']) {
             foreach ($data['field_data'] as $field) {
                 $name = 'field_' . $request->type_id . '_' . $field->field_id;
+                if (isset($_POST[$name]) and $field->datatype == REQUEST_FIELD_DATE) {
+                    $tmpDate = DateTime::createFromFormat('d-m-Y', $_POST[$name]);
+                    if ($tmpDate) {
+                        $_POST[$name] = $tmpDate->format('Y-m-d');
+                    } else {
+                        $_POST[$name] = null;
+                    }
+                }
                 if (isset($_POST[$name]) and $_POST[$name] != $field->data) {
                     $newData = $_POST[$name];
                     Database::get()->query('INSERT INTO request_field_data
@@ -124,15 +144,16 @@ if (isset($_GET['id'])) {
         }
     }
 
-    $data['action_bar'] = action_bar(
-        [
-            [ 'title' => $langBack,
-              'url' => $data['backUrl'],
-              'icon' => 'fa-reply',
-              'level' => 'primary-label' ]
-        ], false);
+    $data['action_bar'] = action_bar([
+        [ 'title' => $langBack,
+          'url' => $data['backUrl'],
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ]], false);
 
     $data['descriptionEditor'] = rich_text_editor('requestDescription', 4, 20, $request->description);
+
+    load_js('bootstrap-datepicker');
+    load_js('bootstrap-combobox');
 
     view('modules.request.edit', $data);
 

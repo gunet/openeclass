@@ -144,6 +144,10 @@ Bootstrap DateTimePicker distributed under Apache License, Version 2.0
         Copyright 2012 Stefan Petre
         http://www.malot.fr/bootstrap-datetimepicker
 
+Bootstrap Combobox distributed under Apache License, Version 2.0
+        Copyright 2012 Daniel Farrell
+        https://github.com/danielfarrell/bootstrap-combobox
+
 Bootstrap distributed under Apache License Version 2.0
         http://www.malot.fr/bootstrap-datetimepicker/
 
