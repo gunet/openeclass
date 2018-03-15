@@ -21,7 +21,8 @@
 require_once 'minit.php';
 
 if ($uid) {
-    header('Location: eclass-token:' . session_id());
+    $username = Database::get()->querySingle('SELECT username FROM user WHERE id = ?d', $uid)->username;
+    header('Location: eclass-token:' . $username . '|' . session_id());
 } else {
     echo RESPONSE_FAILED;
 }
