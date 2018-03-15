@@ -22,7 +22,7 @@
 
 // Allow unlimited time for creating the archive
 set_time_limit(0);
-ini_set('display_errors', '1');
+ini_set('display_errors', '0');
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
@@ -31,10 +31,15 @@ require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
 require_once 'include/lib/textLib.inc.php'; // textLib has functions required by templates
 require_once 'backport_functions.php'; // backported functions from eclass default branch
 require_once 'override_functions.php'; // overridden functions
 require_once 'offline_functions.php';
+
+$tree = new Hierarchy();
+$course = new Course();
 
 $viewsDir = $webDir . '/modules/offline/views';
 $cacheDir = $webDir . '/courses/'. $course_code . '/temp/' . safe_filename();
@@ -83,14 +88,36 @@ $data = [
     'downloadPath' => null,
     'is_in_tinymce' => false,
     'can_upload' => false,
+    'full_description' => '',
+    'truncated_text' => ''
 ];
 
-$data['course_info'] = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
+$data['course_info'] = $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = ?d", $course_id)->numUsers;
+
+if ($course_info->description) {
+    $description = standard_text_escape($course_info->description);
+    // Text button for read more & read less
+    $postfix_truncate_more = "<a href='#' class='more_less_btn'>$langReadMore &nbsp;<span class='fa fa-arrow-down'></span></a>";
+    $postfix_truncate_less = "<a href='#' class='more_less_btn'>$langReadLess &nbsp;<span class='fa fa-arrow-up'></span></a>";
+
+    // Create full description text & truncated text
+    $data['full_description'] = $description.$postfix_truncate_less;
+    $data['truncated_text'] = ellipsize_html($description, 1000, $postfix_truncate_more);
+}
+
+$departments = $course->getDepartmentIds($course_id);
+$i = 1;
+foreach ($departments as $dep) {
+    $br = ($i < count($departments)) ? '<br>' : '';
+    $data['departments'] .= $tree->getFullPath($dep) . $br;
+    $i++;
+}
+
 $section_title = $currentCourseName;
 $toolArr = lessonToolsMenu_offline(true, $data['urlAppend']);
 $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
@@ -120,7 +147,7 @@ fclose($fp);
 // modules //
 /////////////
 mkdir($downloadDir . '/modules');
-$bladeData['urlAppend'] = '../../';
+$bladeData['lessonStatus'] = '../../';
 $bladeData['template_base'] = $bladeData['urlAppend'] . 'template/default';
 $bladeData['themeimg'] = $bladeData['urlAppend'] . 'template/default/img';
 $bladeData['logo_img'] = $bladeData['themeimg'] . '/eclass-new-logo.png';

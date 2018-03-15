@@ -3,7 +3,7 @@
 @section('content')
 <style>
     .course_completion_panel_percentage
-        {                
+        {
             bottom:15px;
             right:15px;
             font-size:20px;
@@ -15,10 +15,10 @@
             background: #FFFFFF;
             color: #AAAAAA;
             line-height: 38px;
-            font-weight: 600;                
+            font-weight: 600;
         }
         .state_success
-        {                
+        {
             color: #11D888;
         }
 </style>
@@ -51,12 +51,6 @@
                             <li class='access pull-right'>
                                 <a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>
                                     <span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='{{ trans('langCitation') }}'></span>
-                                    <span class='hidden'>.</span>
-                                </a>
-                            </li>
-                            <li class='access pull-right'>
-                                <a href='{{ $urlAppend }}modules/user/{{ $is_course_admin ? '' : 'userslist.php' }}?course={{ $course_code }}'>
-                                    <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='{{ $numUsers }} {{ trans('langRegistered') }}'></span>
                                     <span class='hidden'>.</span>
                                 </a>
                             </li>
@@ -95,12 +89,7 @@
                             <div class='col-xs-6'>
                                 <strong>{{ trans('langCode') }}:</strong> {{ $course_info->public_code }}<br>
                                 <strong>{{ trans('langFaculty') }}:</strong>
-                                @foreach ($departments as $key => $department)
-                                    {!! $tree->getFullPath($department) !!}
-                                    @if ($key+1 < count($departments))
-                                        <br>
-                                    @endif
-                                @endforeach
+                                {!! $departments !!}
                              </div>
                             <div class='col-xs-6'>
                                 @if ($course_info->course_license)
@@ -112,30 +101,7 @@
                         </div>
                     </div>
                 </div>
-                @if(isset($rating_content) || isset($social_content) || isset($comment_content))
-                    <div class='panel-footer'>
-                        <div class='row'>
-                        @if(isset($rating_content))
-                            <div class='col-sm-6'>
-                                {!! $rating_content !!}
-                            </div>
-                        @endif
-                        @if(isset($social_content) || isset($comment_content))
-                           <div class='text-right{{ isset($rating_content) ? " col-xs-6" : " col-xs-12" }}'>
-                                @if(isset($comment_content))
-                                    {!! $comment_content !!}
-                                @endif
-                                @if(isset($social_content) && isset($comment_content))
-                                    &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
-                                @endif
-                                @if(isset($social_content))
-                                    {!! $social_content !!}
-                                @endif
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            @endif
+
             </div>
         </div>
     </div>
@@ -146,7 +112,7 @@
                     <div class='col-md-12'>
                         <div class='content-title pull-left h3'>
                             {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
-                        </div>                         
+                        </div>
                 <a class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
                     <span class='fa fa-question-circle'></span>
                 </a>
@@ -190,7 +156,7 @@
                                                     <div class='item-side'>
                                                     @if ($course_info->view_type == 'weekly')
                                                         <!-- actions for course weekly format -->
-                                                        {!! action_button([
+                                                        {!! $action_button([
                                                                 [
                                                                     'title' => trans('langEditChange'),
                                                                     'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$course_unit->id&amp;cnt=$count_index",
@@ -210,7 +176,7 @@
                                                             ]) !!}
 
                                                     @else
-                                                        {!! action_button([
+                                                        {!! $action_button([
                                                                 [
                                                                     'title' => trans('langEditChange'),
                                                                     'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$course_unit->id",
@@ -288,7 +254,7 @@
                                         @else
                                             <div class='course_completion_panel_percentage'>
                                                 {{ $percentage }}
-                                            </div>                                            
+                                            </div>
                                         @endif
                                         </a>
                                     </div>
