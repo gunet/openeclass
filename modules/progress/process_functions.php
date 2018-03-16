@@ -725,6 +725,28 @@ function delete_certificate($element, $element_id) {
     return true;
 }
 
+/**
+ * @brief purge course completion
+ * @param type $element
+ * @param type $element_id
+ */
+function purge_course_completion($element, $element_id) {
+
+    global $course_id;
+    if ($element == 'badge') {
+        Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion IN
+                                (SELECT id FROM badge_criterion WHERE badge IN
+                                (SELECT id FROM badge WHERE id = ?d AND course_id = ?d))", $element_id, $course_id);
+        Database::get()->query("DELETE FROM badge_criterion WHERE badge IN
+                                (SELECT id FROM badge WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
+        Database::get()->query("DELETE FROM user_badge WHERE badge IN
+                                (SELECT id FROM badge WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
+        Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+    }
+
+    return true;
+}
+
 
 /**
  * @brief delete certificate / badge activity

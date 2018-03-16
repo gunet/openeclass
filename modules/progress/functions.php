@@ -227,12 +227,14 @@ function display_badges() {
  * @global type $langDeactivate
  * @global type $langActive
  * @global type $langInactive
+ * @global type $langPurge
+ * @global type $langConfirmPurgeCourseCompletion
  */
 function display_course_completion() {
     global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, $langCourseCompletion,
-           $langActivate, $langDeactivate,
-           $langActive, $langInactive;
+           $langActivate, $langDeactivate, $langPurge,
+           $langActive, $langInactive, $langConfirmPurgeCourseCompletion;
 
     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge "
                                     . "WHERE course_id = ?d AND bundle = -1", $course_id);
@@ -273,7 +275,12 @@ function display_course_completion() {
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $langConfirmDelete)
+                        'confirm' => $langConfirmDelete),
+                    array('title' => $langPurge,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
+                        'icon' => 'fa-times',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmPurgeCourseCompletion)
                     ))
                 ."</div>
                 </div>";
