@@ -1415,6 +1415,8 @@ $langProgressBasicInfo = "Βασικά Στοιχεία";
 $langCourseCompletion = "Ολοκλήρωση $langsOfCourse";
 $langCourseCompletionCreated = "Η ολοκλήρωση $langsOfCourse δημιουργήθηκε";
 $langCourseCompletionMessage = "Το $langsCourse ολοκληρώθηκε με επιτυχία";
+$langDeleteCourseActivities = "Διαγραφή δραστηριοτήτων";
+$langPurge = "Πλήρης διαγραφή";
 $langCertAddress = "Δημόσια διεύθυνση πιστοποιητικού";
 $langCertificateDeadline = "Λήξη πιστοποιητικού";
 $langCertDeadlineHelp = "κάντε κλικ για να ορίσετε (προαιρετικά) ημερομηνία λήξης πιστοποιητικού";
@@ -3458,7 +3460,7 @@ $langMailVerificationClick = "Παρακαλούμε πατήστε στη πα�
 $langMailVerificationSubject = "Επιβεβαίωση Αίτησης Δημιουργίας Λογαριασμού $siteName";
 $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαριασμού $siteName";
 $langMailVerificationSuccess = "Θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε.";
-$langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. Μόλις η επιβεβαίωση ολοκληρωθεί, θα σας σταλεί δεύτερο e-mail 
+$langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. Μόλις η επιβεβαίωση ολοκληρωθεί, θα σας σταλεί δεύτερο e-mail
                                 από την ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName,
                         με τα στοιχεία σας";
 $langMailVerificationNote = "(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)";
@@ -5414,8 +5416,8 @@ $langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνε
 <p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
 $langUnplagShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Unicheck (πρώην Unplag). Δείτε περισσότερες πληροφορίες στο <a href=\"https://unicheck.com\">https://unicheck.com</a>";
 $langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής.";
-$langTurnitinShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). 
-Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Turnitin. 
+$langTurnitinShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism).
+Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Turnitin.
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://turnitin.com\">https://turnitin.com</a>";
 
 // Messages for OpenMeetings
@@ -5466,7 +5468,7 @@ $langThemeOrange = "Πορτοκαλί";
 $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
-$langPleaseEnterName = "Παρακαλώ εισάγετε όνομα"; 
+$langPleaseEnterName = "Παρακαλώ εισάγετε όνομα";
 $langMindMapSaved = "Ο εννοιολογικός χάρτης αποθηκεύθηκε";
 
 

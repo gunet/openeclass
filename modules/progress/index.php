@@ -50,7 +50,7 @@ load_js('jquery');
 
 /*@$head_content .= "
 <script type='text/javascript'>
-$(function() {    
+$(function() {
     var oTable = $('#users_table{$course_id}').DataTable ({
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -160,7 +160,7 @@ if (isset($_REQUEST['badge_id'])) {
 }
 
 if ($is_editor) {
-    
+
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     if(isset($_GET['edit'])) {
@@ -181,8 +181,8 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
-    } elseif(isset($_GET['add'])) { // add certificate activity        
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);        
+    } elseif(isset($_GET['add'])) { // add certificate activity
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $pageName = "$langAdd $langOfGradebookActivity";
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -216,13 +216,13 @@ if ($is_editor) {
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
     } elseif (isset($_GET['progressall'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);        
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $pageName = "$langProgress $langsOfStudents";
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));        
+                  'level' => 'primary-label')));
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
     } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
@@ -239,19 +239,19 @@ if ($is_editor) {
     }
     $tool_content .= "</div></div>";
     //end of the top menu
-        
+
     if (isset($_GET['vis'])) { // activate or deactivate certificate / badge
         if (has_activity($element, $element_id) > 0) {
-            update_visibility($element, $element_id, $_GET['vis']);        
+            update_visibility($element, $element_id, $_GET['vis']);
             Session::Messages($langGlossaryUpdated, 'alert-success');
         } else {
             Session::Messages($langNotActivated, 'alert-warning');
         }
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
-    }        
+    }
     if (isset($_POST['newCertificate']) or isset($_POST['newBadge'])) {  // add a new certificate / badge
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title'));                        
+        $v->rule('required', array('title'));
         $v->labels(array(
             'title' => "$langTheField $langTitle",
         ));
@@ -259,7 +259,7 @@ if ($is_editor) {
             $table = (isset($_POST['newCertificate'])) ? 'certificate' : 'badge';
             $icon  = $_POST['template'];
             $expires = null;
-            if (isset($_POST['enablecertdeadline'])) {             
+            if (isset($_POST['enablecertdeadline'])) {
                 $expires = date_format(date_create_from_format('d-m-Y H:i', $_POST['enddatepicker']), 'Y-m-d H:i');
             }
             add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires);
@@ -271,11 +271,11 @@ if ($is_editor) {
         }
     } elseif (isset($_POST['edit_element'])) { // modify certificate / badge
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title'));                        
+        $v->rule('required', array('title'));
         $v->labels(array(
             'title' => "$langTheField $langTitle",
         ));
-        if($v->validate()) {            
+        if($v->validate()) {
             modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer']);
             Session::Messages("$langQuotaSuccess", 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
@@ -303,7 +303,7 @@ if ($is_editor) {
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_document'])) { // add document activity in certificate
         add_document_to_certificate($element, $element_id);
-        Session::Messages("$langQuotaSuccess", 'alert-success');        
+        Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_multimedia'])) { // add multimedia activity in certificate
         add_multimedia_to_certificate($element, $element_id);
@@ -342,7 +342,7 @@ if ($is_editor) {
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     }
-    
+
     elseif (isset($_GET['del_cert_res'])) { // delete certificate / badge activity
         if (resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user
             Session::Messages("$langUsedCertRes", "alert-warning");
@@ -352,7 +352,7 @@ if ($is_editor) {
             Session::Messages("$langAttendanceDel", "alert-success");
             redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
         }
-    } elseif (isset($_GET['del_cert'])) {  //  delete certificate 
+    } elseif (isset($_GET['del_cert'])) {  //  delete certificate
         if (delete_certificate('certificate', $_GET['del_cert'])) {
             Session::Messages("$langGlossaryDeleted", "alert-success");
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
@@ -365,14 +365,19 @@ if ($is_editor) {
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
             Session::Messages("$langUsedCertRes", "alert-warning");
-        }        
+        }
+    } elseif (isset($_GET['purge_cc'])) { // purge course completion
+        if (purge_course_completion('badge', $_GET['purge_cc'])) {
+            Session::Messages("$langGlossaryDeleted", "alert-success");
+        }
+        //redirect_to_home_page("modules/progress/index.php?course=$course_code");
     } elseif (isset($_GET['newcert'])) {  // create new certificate
         certificate_settings('certificate');
         $display = FALSE;
     }  elseif (isset($_GET['newbadge'])) {  // create new badge
         certificate_settings('badge');
         $display = FALSE;
-    } elseif (isset($_GET['newcc'])) { // create course completion (special type of badge)          
+    } elseif (isset($_GET['newcc'])) { // create course completion (special type of badge)
         add_certificate('badge', $langCourseCompletion, '', $langCourseCompletionMessage, '', q(get_config('institution')), 0, -1, null);
         Session::Messages("$langCourseCompletionCreated", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
@@ -393,7 +398,7 @@ if ($is_editor) {
         display_user_progress_details($element, $element_id, $_GET['u']);
         $display = FALSE;
     }
-} elseif (isset($_GET['u'])) { // student view        
+} elseif (isset($_GET['u'])) { // student view
         $tool_content .= action_bar(array(
 	        array('title' => $langPrint,
 	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
@@ -409,10 +414,10 @@ if ($is_editor) {
 
 if (isset($display) and $display == TRUE) {
     if ($is_editor) {
-        if (isset($element_id)) {            
+        if (isset($element_id)) {
             $pageName = $element_title;
             // display certificate settings and resources
-            display_activities($element, $element_id);            
+            display_activities($element, $element_id);
         } else { // display all certificate
                 display_course_completion();
 	        display_badges();
@@ -433,12 +438,12 @@ if (isset($display) and $display == TRUE) {
             } else {
                 if (!is_cert_visible($element, $element_id)) { // security check
                     redirect_to_home_page();
-                }            
+                }
                 $pageName = $element_title;
                 // display detailed user progress
                 display_user_progress_details($element, $element_id, $uid);
             }
-        } else {            
+        } else {
             // display certificate (student view)
             student_view_progress();
             exit;
