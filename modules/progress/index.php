@@ -342,7 +342,7 @@ if ($is_editor) {
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     }
-
+    // actions
     elseif (isset($_GET['del_cert_res'])) { // delete certificate / badge activity
         if (resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user
             Session::Messages("$langUsedCertRes", "alert-warning");
@@ -366,8 +366,13 @@ if ($is_editor) {
         } else {
             Session::Messages("$langUsedCertRes", "alert-warning");
         }
-    } elseif (isset($_GET['purge_cc'])) { // purge course completion
-        if (purge_course_completion('badge', $_GET['purge_cc'])) {
+    } elseif (isset($_GET['purge_cc'])) { // purge badge
+        if (purge_certificate('badge', $_GET['purge_cc'])) {
+            Session::Messages("$langGlossaryDeleted", "alert-success");
+        }
+        redirect_to_home_page("modules/progress/index.php?course=$course_code");
+    } elseif (isset($_GET['purge_cert'])) { // purge certificate
+        if (purge_certificate('certificate', $_GET['purge_cert'])) {
             Session::Messages("$langGlossaryDeleted", "alert-success");
         }
         redirect_to_home_page("modules/progress/index.php?course=$course_code");

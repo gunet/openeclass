@@ -26,7 +26,7 @@
  * @global type $course_id
  * @global type $tool_content
  * @global type $course_code
- * @global type $langDelete
+ * @global type $langDeleteCourseActivities
  * @global type $langConfirmDelete
  * @global type $langCreateDuplicate
  * @global type $langNoCertificates
@@ -36,14 +36,17 @@
  * @global type $langViewShow
  * @global type $langEditChange
  * @global type $langSee
+ * @global type $langPurge
+ * @global type $langConfirmPurgeCert
  * @global type $urlServer
  */
 function display_certificates() {
 
-    global $course_id, $tool_content, $course_code, $urlServer,
-           $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
-           $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange,
-           $langNewCertificate, $langCertificates, $langActivate, $langDeactivate, $langSee;
+    global $course_id, $tool_content, $course_code, $urlServer, $langPurge,
+           $langDeleteCourseActivities, $langConfirmDelete, /*$langCreateDuplicate,*/
+           $langNoCertificates, $langActive, $langInactive, $langNewCertificate,
+           $langEditChange, $langNewCertificate, $langCertificates, $langActivate,
+           $langDeactivate, $langSee, $langConfirmPurgeCert;
 
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
@@ -101,11 +104,16 @@ function display_certificates() {
                     array('title' => $langSee,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
                         'icon' => 'fa-search'),
-                    array('title' => $langDelete,
+                    array('title' => $langDeleteCourseActivities,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $langConfirmDelete)
+                        'confirm' => $langConfirmDelete),
+                    array('title' => $langPurge,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$data->id",
+                        'icon' => 'fa-times',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmPurgeCert)
                 ))
                 ."</div>
             </div>";
@@ -127,7 +135,7 @@ function display_certificates() {
  * @global type $course_code
  * @global type $is_editor
  * @global type $urlServer
- * @global type $langDelete
+ * @global type $langDeleteCourseActivities
  * @global type $langConfirmDelete
  * @global type $langCreateDuplicate
  * @global type $langNoBadges
@@ -136,16 +144,16 @@ function display_certificates() {
  * @global type $langViewHide
  * @global type $langViewShow
  * @global type $langEditChange
-
- * @global type $langSee
+ * @global type $langConfirmBadge
+ * @global type $langPurge
  */
 function display_badges() {
 
     global $course_id, $tool_content, $course_code, $is_editor,
-           $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
-           $langNoBadges, $langEditChange, $langBadges,
+           $langDeleteCourseActivities, $langConfirmDelete, /*$langCreateDuplicate,*/
+           $langNoBadges, $langEditChange, $langBadges, $langPurge,
            $langActivate, $langDeactivate, $langNewBadge,
-           $langActive, $langInactive, $urlServer;
+           $langActive, $langInactive, $urlServer, $langConfirmPurgeBadge;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND bundle >= 0", $course_id);
@@ -198,11 +206,16 @@ function display_badges() {
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
                             ($data->active ? '0' : '1'),
                         'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,
+                    array('title' => $langDeleteCourseActivities,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $langConfirmDelete)
+                        'confirm' => $langConfirmDelete),
+                    array('title' => $langPurge,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
+                        'icon' => 'fa-times',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmPurgeBadge)
                 ))
                 ."</div></div>";
         }
