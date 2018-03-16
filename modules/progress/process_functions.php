@@ -726,14 +726,14 @@ function delete_certificate($element, $element_id) {
 }
 
 /**
- * @brief purge course completion
+ * @brief purge certificate and / or badges
  * @param type $element
  * @param type $element_id
  */
-function purge_course_completion($element, $element_id) {
+function purge_certificate($element, $element_id) {
 
     global $course_id;
-    if ($element == 'badge') {
+    if ($element == 'badge') { // purge badges
         Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion IN
                                 (SELECT id FROM badge_criterion WHERE badge IN
                                 (SELECT id FROM badge WHERE id = ?d AND course_id = ?d))", $element_id, $course_id);
@@ -742,6 +742,15 @@ function purge_course_completion($element, $element_id) {
         Database::get()->query("DELETE FROM user_badge WHERE badge IN
                                 (SELECT id FROM badge WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
         Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+    } else { // purge certificates
+        Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN
+                            (SELECT id FROM certificate_criterion WHERE certificate IN
+                            (SELECT id FROM certificate WHERE id = ?d AND course_id = ?d))", $element_id, $course_id);
+        Database::get()->query("DELETE FROM certificate_criterion WHERE certificate IN
+                                (SELECT id FROM certificate WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
+        Database::get()->query("DELETE FROM user_certificate WHERE certificate IN
+                                 (SELECT id FROM certificate WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
+        Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     }
 
     return true;
