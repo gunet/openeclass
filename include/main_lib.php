@@ -2262,21 +2262,21 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
 }
 
 /**
- *
- * @global null $maxorder
  * @global type $course_id
  */
-function units_set_maxorder() {
+function units_get_maxorder() {
 
-    global $maxorder, $course_id;
+    global $course_id;
 
-    $q = Database::get()->querySingle("SELECT MAX(`order`) as max_order FROM course_units WHERE course_id = ?d", $course_id);
+    $q = Database::get()->querySingle("SELECT MAX(`order`) AS max_order FROM course_units
+            WHERE course_id = ?d", $course_id);
 
     $maxorder = $q->max_order;
 
-    if ($maxorder <= 0) {
-        $maxorder = null;
+    if ($maxorder == null or $maxorder <=0) {
+        $maxorder = 1;
     }
+    return $maxorder;
 }
 
 /**
@@ -2291,6 +2291,7 @@ function handle_unit_info_edit() {
 
     $title = $_REQUEST['unittitle'];
     $descr = $_REQUEST['unitdescr'];
+    $unitdurationfrom = $unitdurationto = null;
     if (!empty($_REQUEST['unitdurationfrom'])) {
             $unitdurationfrom = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationfrom'])->format('Y-m-d');
     }
@@ -2314,7 +2315,7 @@ function handle_unit_info_edit() {
         }
         $successmsg = trans('langCourseUnitModified');
     } else { // add new course unit
-        $order = units_maxorder($course_id) + 1;
+        $order = units_get_maxorder()+1;
         $q = Database::get()->query("INSERT INTO course_units SET
                                   title = ?s,
                                   comments = ?s,
