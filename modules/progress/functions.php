@@ -220,7 +220,7 @@ function display_badges() {
  * @global type $course_id
  * @global type $tool_content
  * @global type $course_code
- * @global type $langDelete
+ * @global type $langDeleteCourseActivities
  * @global type $langConfirmDelete
  * @global type $langCourseCompletion
  * @global type $langActivate
@@ -232,7 +232,7 @@ function display_badges() {
  */
 function display_course_completion() {
     global $course_id, $tool_content, $course_code,
-           $langDelete, $langConfirmDelete, $langCourseCompletion,
+           $langDeleteCourseActivities, $langConfirmDelete, $langCourseCompletion,
            $langActivate, $langDeactivate, $langPurge,
            $langActive, $langInactive, $langConfirmPurgeCourseCompletion;
 
@@ -271,7 +271,7 @@ function display_course_completion() {
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
                             ($data->active ? '0' : '1'),
                         'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,
+                    array('title' => $langDeleteCourseActivities,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
                         'icon' => 'fa-times',
                         'class' => 'delete',

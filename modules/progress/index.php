@@ -370,7 +370,7 @@ if ($is_editor) {
         if (purge_course_completion('badge', $_GET['purge_cc'])) {
             Session::Messages("$langGlossaryDeleted", "alert-success");
         }
-        //redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code");
     } elseif (isset($_GET['newcert'])) {  // create new certificate
         certificate_settings('certificate');
         $display = FALSE;
