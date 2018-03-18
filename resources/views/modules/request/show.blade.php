@@ -103,6 +103,50 @@
             </div>
         @endif
 
+        @if ($can_comment)
+            <div class='col-md-12'>
+                <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
+                    <fieldset>
+                        @if ($can_modify)
+                            <div class='form-group'>
+                                <label for='newState' class='col-sm-2 control-label'>{{ trans('langChangeState') }}:</label>
+                                <div class='col-sm-10'>
+                                    <select class='form-control' name='newState' id='newState'>
+                                        @foreach ($states as $stateId => $stateName)
+                                            <option value='{{ $stateId }}'@if ($stateId == $request->state) selected @endif>{{ $stateName }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class='form-group'>
+                            <label for='requestComment' class='col-sm-2 control-label'>{{ trans('langComment') }}:</label>
+                            <div class='col-sm-10'>
+                                {!! $commentEditor !!}
+                            </div>
+                        </div>
+
+                        <div class='form-group'>
+                            <label for='requestFile' class='col-sm-2 control-label'>{{ trans('langAttachedFile') }}:</label>
+                            <div class='col-sm-10'>
+                                <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
+                                <input type='file' name='requestFile'>
+                            </div>
+                        </div>
+
+                        <div class='form-group'>
+                            <div class='col-xs-offset-2 col-xs-10'>
+                                <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                                <a class='btn btn-default' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                            </div>
+                        </div>
+                        {!! generate_csrf_token_form_field() !!}
+                    </fieldset>
+                </form>
+            </div>
+        @endif
+
         @if ($comments)
             @foreach ($comments as $comment)
                 <div class='col-md-12'>
@@ -161,56 +205,6 @@
             @endforeach
         @endif
 
-        @if ($can_comment)
-            <div class='col-md-12'>
-                <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
-                    <fieldset>
-                        <div class='form-group'>
-                            <label class='col-sm-2 control-label'>{{ trans('langFrom') }}:</label>
-                            <div class='col-sm-10'>
-                                <p class='form-control-static'>{{ $commenterName }}<p>
-                            </div>
-                        </div>
-
-                        @if ($can_modify)
-                            <div class='form-group'>
-                                <label for='newState' class='col-sm-2 control-label'>{{ trans('langChangeState') }}:</label>
-                                <div class='col-sm-10'>
-                                    <select class='form-control' name='newState' id='newState'>
-                                        @foreach ($states as $stateId => $stateName)
-                                            <option value='{{ $stateId }}'@if ($stateId == $request->state) selected @endif>{{ $stateName }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
-
-                        <div class='form-group'>
-                            <label for='requestComment' class='col-sm-2 control-label'>{{ trans('langComment') }}:</label>
-                            <div class='col-sm-10'>
-                                {!! $commentEditor !!}
-                            </div>
-                        </div>
-
-                        <div class='form-group'>
-                            <label for='requestFile' class='col-sm-2 control-label'>{{ trans('langAttachedFile') }}:</label>
-                            <div class='col-sm-10'>
-                                <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
-                                <input type='file' name='requestFile'>
-                            </div>
-                        </div>
-
-                        <div class='form-group'>
-                            <div class='col-xs-offset-2 col-xs-10'>
-                                <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
-                                <a class='btn btn-default' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                            </div>
-                        </div>
-                        {!! generate_csrf_token_form_field() !!}
-                    </fieldset>
-                </form>
-            </div>
-        @endif
     </div>
 
     @if ($can_modify)

@@ -42,10 +42,12 @@
                 <div class='modal-body'>
                     <select class='form-control' name='watchers[]' multiple id='watchersInput'>
                         @foreach ($course_users as $cu)
-                            <option value='{{ $cu->user_id }}'
-                            @if (in_array($cu->user_id, $watchers))
-                                selected
-                            @endif>{{$cu->name}} ({{$cu->email}})</option>
+                            @unless (in_array($cu->user_id, $assigned))
+                                <option value='{{ $cu->user_id }}'
+                                @if (in_array($cu->user_id, $watchers))
+                                    selected
+                                @endif>{{$cu->name}} ({{$cu->email}})</option>
+                            @endunless
                         @endforeach
                     </select>
                 </div>

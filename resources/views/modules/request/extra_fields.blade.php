@@ -17,10 +17,10 @@
                         name='field_{{ $type_id }}_{{ $field_id }}'
                         id='field_{{ $type_id }}_{{ $field_id }}'>@if (isset($field_description->data)){{ $field_description->data }}@endif</textarea>
                 @elseif ($field_description->datatype == REQUEST_FIELD_DATE)
-                    <input class='form-control date-picker'
-                    valuename='field_{{ $type_id }}_{{ $field_id }}2
-                    id='field_{{ $type_id }}_{{ $field_id }}' type='text'
-                        @if (isset($field_description->data))
+                    <input type='text' class='form-control date-picker'
+                        id='field_{{ $type_id }}_{{ $field_id }}'
+                        name='field_{{ $type_id }}_{{ $field_id }}'
+                        @if (isset($field_description->data) and $field_description->data)
                             value='{{ $field_description->data }}'
                         @endif
                     >

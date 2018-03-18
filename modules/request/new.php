@@ -38,12 +38,13 @@ if (isset($_POST['requestTitle'])) {
             $type_id = Database::get()->querySingle('SELECT id
                 FROM request_type WHERE id = ?d', $_POST['requestType'])->id;
         }
+        $state = isset($_POST['assignTo'])? REQUEST_STATE_ASSIGNED: REQUEST_STATE_NEW;
         $result = Database::get()->query('INSERT INTO request
             SET course_id = ?d, title = ?s, description = ?s,
                 creator_id = ?d, state = ?d, type_id = ?d,
                 open_date = NOW(), change_date = NOW(), close_date = NULL',
             $course_id, $title, $requestDescription,
-            $uid, REQUEST_STATE_NEW, $type_id);
+            $uid, $state, $type_id);
         if ($result) {
             $rid = $result->lastInsertID;
             $watchers = [];
@@ -73,6 +74,14 @@ if (isset($_POST['requestTitle'])) {
                     WHERE type_id = ?d', function ($field) use ($type_id, $rid, &$field_data) {
                         $field_name = 'field_' . $type_id . '_' . $field->id;
                         if (isset($_POST[$field_name])) {
+                            if ($field->datatype == REQUEST_FIELD_DATE) {
+                                $tmpDate = DateTime::createFromFormat('d-m-Y', $_POST[$field_name]);
+                                if ($tmpDate) {
+                                    $_POST[$field_name] = $tmpDate->format('Y-m-d');
+                                } else {
+                                    $_POST[$field_name] = null;
+                                }
+                            }
                             $field_data[] = [$rid, $field->id, $_POST[$field_name]];
                         }
                     }, $type_id);
@@ -117,15 +126,19 @@ if ($data['request_types']) {
         $fields = Database::get()->queryArray(
             'SELECT * FROM request_field WHERE type_id = ?d ORDER BY sortorder',
             $type->id);
-        $data['request_fields'][$type->id] = array_map(function ($item) {
-            if ($item->values) {
-                $item->values = array_map('getSerializedMessage', unserialize($item->values));
+        foreach ($fields as $field) {
+            if ($field->values) {
+                $field->values = array_map('getSerializedMessage', unserialize($field->values));
             }
-            $item->name = getSerializedMessage($item->name);
-            return $item;
-        }, $fields);
+            $field->name = getSerializedMessage($field->name);
+            $field->data = null;
+            $data['request_fields'][$type->id][$field->id] = $field;
+        }
     }
 }
 
 load_js('select2');
+load_js('bootstrap-datepicker');
+load_js('bootstrap-combobox');
+
 view('modules.request.new', $data);

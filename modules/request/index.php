@@ -90,21 +90,21 @@ if (isset($_GET['id'])) {
                 WHERE request_id = ?d AND type = ?d',
                 $id, REQUEST_ASSIGNED);
             $args = array_map(function ($item) use ($id) {
-                    return [$id, $item, REQUEST_ASSIGNED];
+                    return [$id, $item, REQUEST_ASSIGNED, 1];
                 }, $_POST['assignTo']);
-            $placeholders = implode(', ', array_fill(0, count($_POST['assignTo']), '(?d, ?d, ?d)'));
+            $placeholders = implode(', ', array_fill(0, count($_POST['assignTo']), '(?d, ?d, ?d, ?d)'));
             Database::get()->query("INSERT INTO request_watcher
-                (request_id, user_id, type) VALUES $placeholders",
-                $args);
+                (request_id, user_id, type, notification) VALUES $placeholders
+                ON DUPLICATE KEY UPDATE type = ?d",
+                $args, REQUEST_ASSIGNED);
             if ($request->state == REQUEST_STATE_ASSIGNED and count($args) == 0) {
-                Database::get()->query('UPDATE request
-                    SET state = ?d, change_date = NOW() WHERE id = ?d',
-                    REQUEST_STATE_NEW, $id);
                 $_POST['newState'] = REQUEST_STATE_NEW;
-            } else {
-                Database::get()->query('UPDATE request
-                    SET change_date = NOW() WHERE id = ?d', $id);
+            } elseif ($request->state == REQUEST_STATE_NEW) {
+                $_POST['newState'] = REQUEST_STATE_ASSIGNED;
             }
+            Database::get()->query('UPDATE request
+                SET state = ?d, change_date = NOW() WHERE id = ?d',
+                $_POST['newState'], $id);
             $_POST['requestComment'] = sprintf(trans('langChangeAssignees'),
                 formatUsers($_POST['assignTo']) . '<br>',
                 formatUsers($data['assigned']));
@@ -120,11 +120,11 @@ if (isset($_GET['id'])) {
                 WHERE request_id = ?d AND type = ?d',
                 $id, REQUEST_WATCHER);
             $args = array_map(function ($item) use ($id) {
-                    return [$id, $item, REQUEST_WATCHER];
+                    return [$id, $item, REQUEST_WATCHER, 1];
                 }, $_POST['watchers']);
-            $placeholders = implode(', ', array_fill(0, count($_POST['watchers']), '(?d, ?d, ?d)'));
+            $placeholders = implode(', ', array_fill(0, count($_POST['watchers']), '(?d, ?d, ?d, ?d)'));
             Database::get()->query("INSERT INTO request_watcher
-                (request_id, user_id, type) VALUES $placeholders",
+                (request_id, user_id, type, notification) VALUES $placeholders",
                 $args);
             $_POST['requestComment'] = sprintf(trans('langChangeWatchers'),
                 formatUsers($_POST['watchers']) . '<br>',
