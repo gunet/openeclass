@@ -823,7 +823,7 @@ class Log {
      * @global type $langsOfGroupTutor
      * @global type $langGiveRight
      * @global type $langRemovedRight
-     * @global type $langRemoveRightAdmin    
+     * @global type $langRemoveRightAdmin
      * @global type $langRemoveRightAdmin
      * @global type $langUnCourse
      * @global type $langTheU
@@ -838,7 +838,7 @@ class Log {
         $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor;
 
         $details = unserialize($details);
-        
+
         switch ($details['right']) {
             case '+5': $content = $langNewUser;
                        $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
@@ -875,7 +875,7 @@ class Log {
                 break;
             case '+10': $content = "$langAddGUser&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
                 break;
-        }        
+        }
         return $content;
     }
 
@@ -890,9 +890,14 @@ class Log {
         global $langLinkName;
 
         $details = unserialize($details);
+        $content = '';
 
-        $content = "URL: " . q($details['link']);
-        $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
+        if (!empty($details['link'])) {
+            $content .= "URL: " . q($details['link']);
+        }
+        if (!empty($details['name_link'])) {
+            $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
+        }
 
         return $content;
     }
@@ -959,18 +964,18 @@ class Log {
      */
     private function wall_action_details($details) {
         global $langContent, $langWallExtVideoLink;
-    
+
         $details = unserialize($details);
-    
+
         $content = '';
-    
+
         if (!empty($details['content'])) {
             $content .= "$langContent: &laquo".q($details['content'])."&raquo<br/>";
         }
         if (!empty($details['extvideo'])) {
             $content .= "$langWallExtVideoLink: &laquo".q($details['extvideo'])."&raquo<br/>";
         }
-    
+
         return $content;
     }
 
@@ -1235,9 +1240,9 @@ class Log {
      * @return string
      */
     private function tc_action_details($details) {
-        
+
         global $langTitle, $langDescription, $langType;
-        
+
         $d = unserialize($details);
         $content = '';
         if (isset($d['tc_type'])) {
@@ -1247,9 +1252,9 @@ class Log {
         if (isset($d['desc'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription " . "&laquo" . $d['desc']. "&raquo";
         }
-        
+
         return $content;
-                
+
     }
     /**
      * @global type $langInsert
@@ -1293,7 +1298,7 @@ class Log {
             if (array_key_exists($key, $_SERVER)) {
                 foreach (explode(',', $_SERVER[$key]) as $ip) {
                     $ip = trim($ip);
-                        
+
                     if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
                         return $ip;
                     }
