@@ -715,7 +715,7 @@ require_once 'include/lib/references.class.php';
     function get_course_events($scope = "month", $startdate = null, $enddate = null){
 
         global $course_id, $is_editor, $uid;
-        
+
         //form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
@@ -749,9 +749,9 @@ require_once 'include/lib/references.class.php';
         if ($is_editor) {
             $q_extra = '';
         } else {
-            $q_extra = "AND ag.visible = 1";    
+            $q_extra = "AND ag.visible = 1";
         }
-        $dc = str_replace('start','ag.start',$datecond);        
+        $dc = str_replace('start','ag.start',$datecond);
         $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(addtime(ag.start, if(ag.duration = '', '0:00', ag.duration)), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                 . "FROM agenda ag JOIN course c ON ag.course_id=c.id "
                 . "WHERE ag.course_id =?d $q_extra"
@@ -761,11 +761,11 @@ require_once 'include/lib/references.class.php';
         //big blue button
         if(!empty($q)){
             $q .= " UNION ";
-        }                
+        }
         if ($is_editor) {
             $q_extra = '';
         } else {
-            $q_extra = "AND tc.active = 1";    
+            $q_extra = "AND tc.active = 1";
         }
         $dc = str_replace('start','tc.start_date', $datecond);
         $q .= "SELECT tc.id, tc.title, tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date + time('01:00:00'), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-special' class, 'teleconference' event_type,  c.code course "
@@ -782,7 +782,7 @@ require_once 'include/lib/references.class.php';
         if ($is_editor) {
             $q_extra = '';
         } else {
-            $q_extra = "AND ass.active = 1";    
+            $q_extra = "AND ass.active = 1";
         }
         $dc = str_replace('start','ass.deadline', $datecond);
         $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
@@ -793,7 +793,7 @@ require_once 'include/lib/references.class.php';
                 . "WHERE cu.user_id = ?d AND ass.course_id = ?d AND (cu.status = 1 OR ass.assign_to_specific = '0' OR (ass.assign_to_specific = 1 AND ass_sp.assignment_id IS NOT NULL)) $q_extra"
                 . $dc;
         $q_args = array_merge($q_args, array($uid, $uid, $uid), $q_args_templ);
-        
+
         //exercises
         if(!empty($q)){
             $q .= " UNION ";
@@ -801,7 +801,7 @@ require_once 'include/lib/references.class.php';
         if ($is_editor) {
             $q_extra = '';
         } else {
-            $q_extra = "AND ex.active = 1";    
+            $q_extra = "AND ex.active = 1";
         }
         $dc = str_replace('start','ex.end_date',$datecond);
         $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
@@ -811,7 +811,7 @@ require_once 'include/lib/references.class.php';
                 . "WHERE cu.user_id =?d AND ex.course_id =?d AND (cu.status = 1 OR ex.assign_to_specific = 0 OR (ex.assign_to_specific = 1 AND ets.exercise_id IS NOT NULL)) $q_extra"
                 . $dc;
         $q_args = array_merge($q_args, array($uid, $uid, $uid), $q_args_templ);
-        
+
         if(empty($q))
         {
             return null;

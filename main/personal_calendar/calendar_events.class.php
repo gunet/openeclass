@@ -147,7 +147,7 @@ class Calendar_Events {
                 . "'personal' event_type, 'personal' event_group FROM personal_calendar WHERE user_id = ?d";
         $order_by_clause =  " ORDER BY `start`";
         if (!is_null($startdate) && !is_null($enddate)) {
-            $datecond = " AND start>=?t AND start<=?t";
+            $datecond = " AND start >= ?t AND start <= ?t";
             return Database::get()->queryArray($select_from_where_clause.$datecond.$order_by_clause, $user_id, $startdate, $enddate);
         } elseif (!is_null($startdate)) {
             $datecond = " AND ";
@@ -178,18 +178,27 @@ class Calendar_Events {
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
                                  "day" => "date_format(?t".',"%Y-%m-%d") = date_format(start,"%Y-%m-%d")');
         if (!is_null($startdate) && !is_null($enddate)) {
-            $datecond = " AND start>=?t AND start<=?t";
+            $datecond = " AND start >= ?t AND start <= ?t";
         } elseif (!is_null($startdate)) {
             $datecond = " AND ";
             $datecond .= (array_key_exists($scope, $dateconditions))? $dateconditions[$scope]:$dateconditions["month"];
         } else {
             $datecond = "";
         }
+        $student_groups = array_map(function ($item) {
+            return $item->group_id;
+        }, Database::get()->queryArray('SELECT group_id
+            FROM group_members, `group`
+            WHERE group_id = `group`.id AND user_id = ?d', $uid));
+        if (count($student_groups)) {
+            $group_sql_template = 'OR group_id IN (' . implode(', ', array_fill(0, count($student_groups), '?d')) . ')';
+        } else {
+            $group_sql_template = '';
+        }
         //retrieve events from various tables according to user preferences on what type of events to show
-        $q = "";
+        $q = '';
         $q_args = array();
-        $q_args_templ = array();
-        $q_args_templ[] = $user_id;
+        $q_args_templ = array($user_id);
         if (!is_null($startdate)) {
            $q_args_templ[] = $startdate;
         }
@@ -211,10 +220,8 @@ class Calendar_Events {
                     $q .= " UNION ";
                 }
                 $dc = str_replace('start', 'adm.start', $datecond);
-
                 $q .= "SELECT id, title, start, date_format(start, '%Y-%m-%d') startdate, duration, date_format(addtime(start, time(duration)), '%Y-%m-%d %H:%i') `end`, content, 'admin' event_group, 'event-success' class, 'admin' event_type, null as course FROM admin_calendar adm "
                         . "WHERE (visibility_level >= $st OR user_id = ?d) " . $dc;
-
                 $q_args = array_merge($q_args, $q_args_templ);
             }
             if (Calendar_Events::$calsettings->show_course == 1) {
@@ -225,7 +232,7 @@ class Calendar_Events {
                 $dc = str_replace('start', 'ag.start', $datecond);
                 $q .= "SELECT ag.id, CONCAT(c.title,': ',ag.title), ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(addtime(ag.start, time(ag.duration)), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                         . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                        . "WHERE cu.user_id =?d AND (ag.visible = 1 OR cu.status = 1) AND ag.visible = 1 "
+                        . "WHERE cu.user_id = ?d AND (ag.visible = 1 OR cu.status = 1) AND ag.visible = 1 "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
 
@@ -236,7 +243,7 @@ class Calendar_Events {
                 $dc = str_replace('start', 'tc.start_date', $datecond);
                 $q .= "SELECT tc.id, CONCAT(c.title,': ',tc.title), tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(tc.start_date, interval 1 hour), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                         . "FROM tc_session tc JOIN course_user cu ON tc.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                        . "WHERE cu.user_id =?d AND tc.active='1' "
+                        . "WHERE cu.user_id = ?d AND tc.active = 1 "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
             }
@@ -248,10 +255,9 @@ class Calendar_Events {
                 $dc = str_replace('start', 'ass.deadline', $datecond);
                 $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(ass.deadline, interval 1 hour), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                         . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
-                        . "WHERE cu.user_id =?d AND (assign_to_specific = '0' OR  ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
+                        . "WHERE cu.user_id = ?d AND (assign_to_specific = 0 OR ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
                         . $dc;
-                $q_args = array_merge($q_args, array($user_id));
-                $q_args = array_merge($q_args, $q_args_templ);
+                $q_args = array_merge($q_args, array($user_id), $q_args_templ);
 
                 // exercises
                 if (!empty($q)) {
@@ -643,26 +649,35 @@ class Calendar_Events {
      */
     public static function get_current_course_events($scope = "month", $startdate = null, $enddate = null) {
 
-        global $course_id;
-        //form date range condition
+        global $course_id, $uid;
+        // form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
                                  "day" => "date_format(?t".',"%Y-%m-%d") = date_format(start,"%Y-%m-%d")');
         if (!is_null($startdate) && !is_null($enddate)) {
-            $datecond = " AND start>=?t AND start<=?t";
+            $datecond = " AND start >= ?t AND start <= ?t";
         }
         elseif (!is_null($startdate)) {
             $datecond = " AND ";
-            $datecond .= (array_key_exists($scope, $dateconditions))? $dateconditions[$scope]:$dateconditions["month"];
+            $datecond .= (array_key_exists($scope, $dateconditions))? $dateconditions[$scope]: $dateconditions['month'];
         }
         else{
             $datecond = "";
         }
-        //retrieve events from various tables according to user preferences on what type of events to show
-        $q = "";
+        $student_groups = array_map(function ($item) {
+            return $item->group_id;
+        }, Database::get()->queryArray('SELECT group_id
+            FROM group_members, `group`
+            WHERE group_id = `group`.id AND course_id = ?d AND user_id = ?d', $course_id, $uid));
+        if (count($student_groups)) {
+            $group_sql_template = 'OR group_id IN (' . implode(', ', array_fill(0, count($student_groups), '?d')) . ')';
+        } else {
+            $group_sql_template = '';
+        }
+        // retrieve events from various tables according to user preferences on what type of events to show
+        $q = '';
         $q_args = array();
-        $q_args_templ = array();
-        $q_args_templ[] = $course_id;
+        $q_args_templ = array($course_id);
         if (!is_null($startdate)) {
            $q_args_templ[] = $startdate;
         }
@@ -670,7 +685,7 @@ class Calendar_Events {
            $q_args_templ[] = $enddate;
         }
 
-        //agenda
+        // agenda
         if (!empty($q)) {
             $q .= " UNION ";
         }
@@ -681,7 +696,7 @@ class Calendar_Events {
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
-        //big blue button
+        // big blue button
         if (!empty($q)) {
             $q .= " UNION ";
         }
@@ -694,7 +709,7 @@ class Calendar_Events {
         $q_args = array_merge($q_args, $q_args_templ);
 
 
-        //assignements
+        // assignements
         if (!empty($q)) {
             $q .= " UNION ";
         }
@@ -702,10 +717,12 @@ class Calendar_Events {
         $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline, '%Y-%m-%d') startdate, '00:00' duration, date_format(addtime(ass.deadline, time('00:00:01')), '%Y-%m-%d %H:%i') `end`, concat(ass.description, '\n', '(deadline: ', deadline, ')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                 . "FROM assignment ass JOIN course c ON ass.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
                 . "WHERE ass.course_id =?d AND ass.active = 1 "
-                . $dc;
-        $q_args = array_merge($q_args, $q_args_templ);
+                . $dc .
+                "AND (assign_to_specific = '0' OR ass_sp.user_id = ?d) "
+                ;
+        $q_args = array_merge($q_args, $q_args_templ, array($uid));
 
-        //exercises
+        // exercises
         if (!empty($q)) {
             $q .= " UNION ";
         }
@@ -825,7 +842,7 @@ class Calendar_Events {
             Calendar_Events::set_calendar_view_preference($calendar_type);
             $view_func = $calendar_type."_calendar";
         }
-        else{
+        else {
             $view_func = Calendar_Events::$calsettings->view_type."_calendar";
         }
         if (is_null($month) || is_null($year) || $month<0 || $month>12 || $year<1990 || $year>2099) {
@@ -1367,7 +1384,7 @@ class Calendar_Events {
        }
 
        $events = array();
-       if ($eventlist and count($eventlist > 0)) {
+       if (isset($eventlist)) {
             foreach ($eventlist as $event) {
                 $event->title = q($event->title);
                 $event->content = q($event->content);
