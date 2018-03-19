@@ -275,56 +275,7 @@
                             </div>
                         </div>
                     </div>
-                @endif
-                <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                    <div class='content-title h3'>{{ trans('langCalendar') }}</div>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            {!! $user_personal_calendar !!}
-                        </div>
-                        <div class='panel-footer'>
-                            <div class='row'>
-                                <div class='col-sm-6 event-legend'>
-                                <div>
-                                    <span class='event event-important'></span>
-                                    <span>{{ trans('langAgendaDueDay') }}</span>
-                                </div>
-                                <div>
-                                    <span class='event event-info'></span>
-                                    <span>{{ trans('langAgendaCourseEvent') }}</span>
-                                </div>
-                            </div>
-                            <div class='col-sm-6 event-legend'>
-                                <div>
-                                    <span class='event event-success'></span>
-                                    <span>{{ trans('langAgendaSystemEvent') }}</span>
-                                </div>
-                                <div>
-                                    <span class='event event-special'></span>
-                                    <span>{{ trans('langAgendaPersonalEvent') }}</span>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                    <div class='content-title h3'>{{ trans('langAnnouncements') }}</div>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            <ul class='tablelist'>
-                                {!! course_announcements() !!}
-                            </ul>
-                        </div>
-                        <div class='panel-footer clearfix'>
-                            <div class='pull-right'>
-                                <a href='{{ $urlAppend }}modules/announcements/?course={{ $course_code}}'>
-                                    <small>{{ trans('langMore') }}&hellip;</small>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endif                
                 <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
                     {!! $course_home_sidebar_widgets !!}
                 </div>
