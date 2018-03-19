@@ -67,10 +67,10 @@ $head_content .= "<script type='text/javascript'>
 
 
         sdate = $('#user_date_start').datepicker('getDate');
-        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();        
+        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
         edate = $('#user_date_end').datepicker('getDate');
-        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();        
-        module = $('#u_module_id option:selected').val();        
+        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();
+        module = $('#u_module_id option:selected').val();
         refresh_oldstats_course_plot(startdate, enddate, $course_id, module);
     });
 
@@ -107,7 +107,7 @@ function xAxisTicksAdjust()
 {
 	var xmin = sdate;
 	var xmax = edate;
-	
+
         dayMilliseconds = 24*60*60*1000;
         diffInDays = (edate-sdate)/dayMilliseconds;
         xTicks = new Array();
@@ -127,7 +127,7 @@ function xAxisTicksAdjust()
                         xTicks.push(tickval);
                         cur = tick.getMonth();
                     }
-            }    
+            }
         }
         else if(interval == 7){
             xminMonday = new Date(xmin.getTime() - xmin.getUTCDay()*dayMilliseconds);
@@ -145,8 +145,8 @@ function xAxisTicksAdjust()
                         xTicks.push(tickval);
                     }
                     i++;
-                    
-            } 
+
+            }
         }
         else if(interval == 30){
             xMinVal = xmin.getFullYear()+'-'+(xmin.getMonth()+1)+'-15';
@@ -157,7 +157,7 @@ function xAxisTicksAdjust()
                     tick.setMonth(tick.getMonth() + 1);
                     tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-15';
                     xTicks.push(tickval);
-            } 
+            }
         }
         else if(interval == 365){
             xMinVal = xmin.getFullYear()+'-06-30';
@@ -168,7 +168,7 @@ function xAxisTicksAdjust()
                     tick.setFullYear(tick.getFullYear() + 1);
                     tickval = tick.getFullYear()+'-06-30';
                     xTicks.push(tickval);
-            }     
+            }
         }
 }
 "
@@ -241,7 +241,7 @@ foreach ($result as $row) {
 $min_t = date("d-m-Y", $min_time);
 
 $made_chart = true;
-$usage_defaults = array(    
+$usage_defaults = array(
     'u_module_id' => -1
 );
 
@@ -290,8 +290,10 @@ $tool_content .= '<div class="form-group">
         <label class="col-sm-2 control-label">' . $langModule . ':</label>
         <div class="col-sm-10"><select name="u_module_id" id="u_module_id" class="form-control">' . $mod_opts . '</select></div>
   </div>
-  <div class="col-sm-offset-2 col-sm-10">
-    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+      </div>
     </div>
 </form></div>';
 

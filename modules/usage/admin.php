@@ -114,10 +114,10 @@ $tschema = "<thead><tr>"
         . "<th colspan='3'>$langUsers</th>"
         . "<th colspan='4'>$langCourses</th>"
         . "</tr><tr>";
-foreach($langStatsUserStatus as $us){
+foreach(array($langTeachers, $langStudents, $langVisitors) as $us){
     $tschema .= "<th>$us</th>";
 }
-foreach($langCourseVisibility as $ct){
+foreach(array($langTypesInactive, $langTypesAccessControlled, $langTypesOpen, $langTypesClosed) as $ct){
     $tschema .= "<th>$ct</th>";
 }
 $tschema .= "</tr></thead>"
