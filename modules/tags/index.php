@@ -36,9 +36,8 @@ require_once 'include/action.php';
 
 // Special case for static modules
 $modules[MODULE_ID_UNITS] = array('title' => $langCourseUnits, 'link' => 'units', 'image' => '');
-$modules[MODULE_ID_WEEKS] = array('title' => $langCourseWeeklyFormat, 'link' => 'weeks', 'image' => '');
 
-if (isset($_GET['tag']) && strlen($_GET['tag'])) {   
+if (isset($_GET['tag']) && strlen($_GET['tag'])) {
     $tag = $_GET['tag'];
     $tag_elements = Database::get()->queryArray("SELECT * FROM `tag_element_module`, `tag` WHERE `tag`.`name` = ?s AND `tag`.`id` =  `tag_element_module`.`tag_id` AND `tag_element_module`.`course_id` = ?d ORDER BY module_id", $tag, $course_id);
     $toolName = "$langTag: $tag";
@@ -54,11 +53,11 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
                         <div class='panel-heading'>
                             " . $modules[$tag->module_id]['title'] . "
                         </div>
-                        <div class='panel-body'>";            
+                        <div class='panel-body'>";
         }
         if($tag->module_id == MODULE_ID_ANNOUNCE){
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);
-            $link = "<a href='../../modules/announcements/?course=".$course_code."&amp;an_id=".$tag->element_id."'>$announce->title</a><br>";            
+            $link = "<a href='../../modules/announcements/?course=".$course_code."&amp;an_id=".$tag->element_id."'>$announce->title</a><br>";
         }
         if($tag->module_id == MODULE_ID_ASSIGN){
             $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
@@ -72,26 +71,15 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
             $unit = Database::get()->querySingle("SELECT title FROM course_units WHERE id = ?d ", $tag->element_id);
             $link = "<a href='../../modules/units/index.php?course=".$course_code."&amp;id=".$tag->element_id."'>$unit->title</a><br>";
         }
-        if($tag->module_id == MODULE_ID_WEEKS){
-            $unit = Database::get()->querySingle("SELECT * FROM course_weekly_view WHERE id = ?d", $tag->element_id);               
-            if(empty($unit->title)) {
-                $previous_weeks = Database::get()->querySingle("SELECT COUNT(*) AS week_number FROM course_weekly_view WHERE course_id = ?d AND start_week < ?t", $unit->course_id, $unit->start_week);
-                $week_number = $previous_weeks ? ($previous_weeks->week_number + 1) : 1;
-                $title = "$week_number$langOr $langsWeek ($langFrom2 ".nice_format($unit->start_week)." $langTill ".nice_format($unit->finish_week).")"; 
-            } else {
-                $title = q($unit->title) . " ($langFrom2 ".nice_format($unit->start_week)." $langTill ".nice_format($unit->finish_week).")";
-            }
-            $link = "<a href='../../modules/weeks/index.php?course=".$course_code."&amp;id=".$tag->element_id."'>$title</a><br>";
-        }            
         $tool_content .= "
                     <ul>
                         <li>$link</li>
                     </ul>
                 ";
         $latest_module_id = $tag->module_id;
-    }       
+    }
         $tool_content .= "</div></div>";
 }
-    
-    
+
+
 draw($tool_content, 2, null, $head_content);

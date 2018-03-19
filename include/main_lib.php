@@ -102,7 +102,6 @@ define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
 define('MODULE_ID_SHARING', 40);
-define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_WALL', 46);
