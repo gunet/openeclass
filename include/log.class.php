@@ -157,7 +157,7 @@ class Log {
             $tool_content .= "<tbody>";
             // display logs
             foreach ($sql as $r) {
-                $tool_content .= "<tr>";                
+                $tool_content .= "<tr>";
                 $tool_content .= "<td><span style='display:none;'>$r->ts</span>" . nice_format($r->ts, true) . "<s/</td>";
                 if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
                     $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
@@ -847,7 +847,7 @@ class Log {
 
         if (isset($details['multiple'])) {
             if ($type == LOG_DELETE) {
-                $content = "$langDelUsers &mdash; $langParams: " . 
+                $content = "$langDelUsers &mdash; $langParams: " .
                     implode(', ', $details['params']) . '<br>' .
                     display_user($details['uid']);
             }
@@ -905,9 +905,14 @@ class Log {
         global $langLinkName;
 
         $details = unserialize($details);
+        $content = '';
 
-        $content = "URL: " . q($details['link']);
-        $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
+        if (!empty($details['link'])) {
+            $content .= "URL: " . q($details['link']);
+        }
+        if(!empty($details['name_link'])) {
+            $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
+        }
 
         return $content;
     }

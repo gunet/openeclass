@@ -1384,7 +1384,7 @@ class Calendar_Events {
        }
 
        $events = array();
-       if (count($eventlist > 0)) {
+       if (isset($eventlist)) {
             foreach ($eventlist as $event) {
                 $event->title = q($event->title);
                 $event->content = q($event->content);
