@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -241,7 +241,7 @@ class Calendar_Events {
                     $q .= " UNION ";
                 }
                 $dc = str_replace('start', 'tc.start_date', $datecond);
-                $q .= "SELECT tc.id, CONCAT(c.title,': ',tc.title), tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(tc.start_date, interval 1 hour), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+                $q .= "SELECT tc.id, CONCAT(c.title,': ',tc.title), tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(tc.start_date, interval 1 minute), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                         . "FROM tc_session tc JOIN course_user cu ON tc.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
                         . "WHERE cu.user_id = ?d AND tc.active = 1 "
                         . $dc;
@@ -253,7 +253,7 @@ class Calendar_Events {
                     $q .= " UNION ";
                 }
                 $dc = str_replace('start', 'ass.deadline', $datecond);
-                $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(ass.deadline, interval 1 hour), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+                $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(ass.deadline, interval 1 minute), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                         . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
                         . "WHERE cu.user_id = ?d AND (assign_to_specific = 0 OR ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
                         . $dc;
