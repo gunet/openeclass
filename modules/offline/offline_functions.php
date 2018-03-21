@@ -46,7 +46,7 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
                                         editable, copyrighted, comment,
                                         IF((title = '' OR title IS NULL), filename, title) AS sort_key
                                 FROM document
-                                WHERE 
+                                WHERE
                                       course_id = ?d AND
                                       path LIKE ?s AND
                                       path NOT LIKE ?s ORDER BY sort_key COLLATE utf8_unicode_ci", $course_id, $curDirPath . "/%", $curDirPath . "/%/%");
@@ -134,5 +134,35 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
     $docout = $blade->view()->make('modules.document.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/document' . $curDirName . '/index.html', 'w');
     fwrite($fp, $docout);
+    fclose($fp);
+}
+
+
+/**
+ * @brief render announcements
+ * @global type $blade
+ * @global type $course_id
+ * @global type $downloadDir
+ * @param type $bladeData
+ */
+function offline_announcements($bladeData) {
+    global $blade, $course_id, $downloadDir;
+
+    $bladeData['urlAppend'] = '../';
+    $bladeData['template_base'] = '../template/default';
+    $bladeData['themeimg'] = '../template/default/img';
+    $bladeData['logo_img'] = '../template/default/img/eclass-new-logo.png';
+    $bladeData['logo_img_small'] = '../template/default/img/logo_eclass_small.png';
+
+    $bladeData['result'] = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d
+                                                AND visible = 1
+                                                AND (start_display <= NOW() OR start_display IS NULL)
+                                                AND (stop_display >= NOW() OR stop_display IS NULL)
+                                            ORDER BY `order` DESC , `date` DESC", $course_id);
+
+
+    $out = $blade->view()->make('modules.announcements', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/announcements.html', 'w');
+    fwrite($fp, $out);
     fclose($fp);
 }

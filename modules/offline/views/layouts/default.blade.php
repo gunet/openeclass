@@ -110,29 +110,16 @@
                                     <h2 class='page-subtitle'>{!! $professor !!}</h2>
                                 @endif
                                 @if (!defined('HIDE_TOOL_TITLE'))
-                                <div class='row'>
-                                    <div class='col-md-12'>
-                                        <h2 class='page-subtitle'>
-                                            {{ $toolName }}
-                                            @if ($is_editor and isset($course_code) and display_activation_link($module_id))
-                                                <a href='{{$urlAppend . 'main/module_toggle.php?course='. $course_code . '&amp;module_id='. $module_id }}' id='module_toggle' data-state='{{ $module_visibility ? 0 : 1 }}' data-toggle='tooltip' data-placement='top' title='{{ $module_visibility ? trans('langDeactivate') : trans('langActivate') }}'><span class='fa tiny-icon {{ $module_visibility ? 'fa-minus-square tiny-icon-red' : 'fa-check-square tiny-icon-green' }}'></span></a>
-                                            @endif
-                                        </h2>
+                                    <div class='row'>
+                                        <div class='col-md-12'>
+                                            <h2 class='page-subtitle'>
+                                                {{ $toolName }}
+                                            </h2>
+                                        </div>
                                     </div>
-                                </div>
                                 @endif
                             </div>
-
-
-                            <div class='col-xs-3'>
-
-                            </div>
                         </div>
-                        @if ($messages)
-                            <div class='row'>
-                                <div class='col-xs-12'>{!! $messages !!}</div>
-                            </div>
-                        @endif
                         @yield('content')
                     </div>
                 </div>

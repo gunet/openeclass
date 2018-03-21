@@ -161,6 +161,12 @@ $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 offline_documents('', '', $bladeData);
 
 /////////////
+// announcements
+///////////////
+offline_announcements($bladeData);
+
+
+/////////////
 // statics //
 /////////////
 copyDirTo($webDir . "/template", $downloadDir);
