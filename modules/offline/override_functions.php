@@ -32,8 +32,7 @@
  * @return array
  */
 function lessonToolsMenu_offline($rich=true, $urlAppend) {
-    global $langExternalLinks,
-           $modules, $admin_modules, $offline_course_modules;
+    global $langExternalLinks, $offline_course_modules;
 
     $sideMenuGroup = array();
     $sideMenuSubGroup = array();
@@ -68,11 +67,13 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
         usort($offline_course_modules, function ($a, $b) {
             return strcoll($a['title'], $b['title']);
         });
-
         foreach ($offline_course_modules as $mid) {
             array_push($sideMenuText, q($mid['title']));
-            array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] .
-                '/index.html'));
+            if ($mid['link'] == 'document') {
+                array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '/index.html'));
+            } else {
+                array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '.html'));
+            }
             array_push($sideMenuImg, $mid['image'] . $section['iconext']);
             array_push($sideMenuID, $mid);
         }
@@ -104,7 +105,6 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
         array_push($sideMenuSubGroup, $sideMenuImg);
         array_push($sideMenuGroup, $sideMenuSubGroup);
     }
-
     return $sideMenuGroup;
 }
 

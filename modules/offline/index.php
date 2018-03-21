@@ -131,7 +131,6 @@ $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
     'show_toggle_student_view', 'themeimg', 'currentCourseName');
 $bladeData = array_merge($global_data, $data);
 
-
 use Philo\Blade\Blade;
 $blade = new Blade($viewsDir, $cacheDir);
 

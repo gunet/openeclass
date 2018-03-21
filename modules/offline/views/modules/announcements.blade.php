@@ -7,8 +7,6 @@
     $(document).ready(function() {
 
         var oTable = $('#ann_table').DataTable ({
-            'bStateSave': true,
-            'bProcessing': true,
             'sScrollX': true,
             'responsive': true,
             'searchDelay': 1000,
@@ -65,17 +63,34 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="table-responsive">
-                <strong>still working on this... </strong>
-                <!-- <table id='ann_table' class='table-default'>
+                <table id='ann_table' class='table-default'>
                     <thead>
                         <tr class='list-header'>
+                            <th>{{ trans('langID') }}</th>
                             <th>{{ trans('langAnnouncement') }}</th>
                             <th>{{ trans('langDate') }}</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
-                </table> -->
+                    <tbody>
+                        @foreach ($result as $ann)
+                            <tr>
+                                <td>{{ $ann->id }}</td>
+                                <td><div class='table_td'>
+                                        <div class='table_td_header clearfix'>
+                                            <a href="announcement_{{ $ann->id }}.html"> {!! standard_text_escape($ann->title) !!}</a>
+                                        </div>
+                                        <div class='table_td_body' data-id='{{$ann->id}}'>{!! standard_text_escape($ann->content) !!} </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ claro_format_locale_date(trans('dateFormatLong'), strtotime($ann->date)) }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+
 @endsection

@@ -33,6 +33,13 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
     global $blade, $webDir, $course_id, $course_code, $downloadDir,
            $langDownloadDir, $langSave, $copyright_titles, $copyright_links;
 
+
+    $bladeData['urlAppend'] = '../../';
+    $bladeData['template_base'] = '../../template/default';
+    $bladeData['themeimg'] = '../../template/default/img';
+    $bladeData['logo_img'] = '../../template/default/img/eclass-new-logo.png';
+    $bladeData['logo_img_small'] = '../../template/default/img/logo_eclass_small.png';
+
     // doc init
     $basedir = $webDir . '/courses/' . $course_code . '/document';
     if (!file_exists($downloadDir . '/modules/document' . $curDirName)) {
@@ -132,7 +139,7 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
     }
     $bladeData['fileInfo'] = array_merge($dirs, $files);
     $docout = $blade->view()->make('modules.document.index', $bladeData)->render();
-    $fp = fopen($downloadDir . '/modules/document' . $curDirName . '/index.html', 'w');
+    $fp = fopen($downloadDir . '/modules/document' .$curDirName . '/index.html', 'w');
     fwrite($fp, $docout);
     fclose($fp);
 }
