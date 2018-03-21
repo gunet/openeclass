@@ -79,7 +79,7 @@ if (isset($_POST['requestTitle'])) {
                                 if ($tmpDate) {
                                     $_POST[$field_name] = $tmpDate->format('Y-m-d');
                                 } else {
-                                    $_POST[$field_name] = null;
+                                    $_POST[$field_name] = '';
                                 }
                             }
                             $field_data[] = [$rid, $field->id, $_POST[$field_name]];
@@ -92,6 +92,7 @@ if (isset($_POST['requestTitle'])) {
                         $field_data);
                 }
             }
+
             Session::Messages(trans('langRequestCreated'), 'alert-success');
             redirect_to_home_page("modules/request/?course=$course_code&id=$rid");
         }
