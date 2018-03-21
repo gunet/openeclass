@@ -62,7 +62,7 @@
                                     <b>{{ getSerializedMessage($field->name) }}:</b>
                                 </div>
                                 <div class='col-xs-12 col-sm-10'>
-                                    @if (is_null($field->data))
+                                    @if (is_null($field->data) or $field->data === '')
                                         <span class='not_visible'> - </span>
                                     @else
                                         @if ($field->datatype == REQUEST_FIELD_DATE)
