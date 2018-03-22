@@ -1,27 +1,6 @@
 @extends('layouts.default')
 
 @section('content')
-<style>
-    .course_completion_panel_percentage
-        {
-            bottom:15px;
-            right:15px;
-            font-size:20px;
-            padding: 10px 10px;
-            width: 72px; /* original was width: 40px; */
-            height: 72px; /* original was height: 40px;*/
-            border: 6px solid #AAAAAA;
-            border-radius: 40px;
-            background: #FFFFFF;
-            color: #AAAAAA;
-            line-height: 38px;
-            font-weight: 600;
-        }
-        .state_success
-        {
-            color: #11D888;
-        }
-</style>
     {!! isset($action_bar) ?  $action_bar : '' !!}
     <div class='row margin-top-thin margin-bottom-fat'>
         <div class='col-md-12'>
@@ -29,18 +8,12 @@
 
                 <div class='panel-body'>
                     <div id='course-title-wrapper' class='course-info-title clearfix'>
-                        <div class='pull-left h4'>{{ trans('langDescription') }}</div>
-                        @if ($is_editor)
-                            <div class='access access-edit pull-left'>
-                                <a href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
-                                    <span class='fa fa-pencil' style='line-height: 30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία πληροφοριών'></span>
-                                    <span class='hidden'>.</span>
-                                </a>
-                            </div>
-                        @endif
+                        <div class='pull-left h4'>
+                            {{ trans('langDescription') }}
+                        </div>
                         <ul class='course-title-actions clearfix pull-right list-inline'>
                             <li class='access pull-right'>
-                                <a href='javascript:void(0);' style='color: #23527C;''>
+                                <a href='javascript:void(0);' style='color: #23527C;'>
                                     <span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='{{ $course_info_popover }}'></span>
                                     <span class='hidden'>.</span>
                                 </a>
@@ -63,25 +36,23 @@
                             </div>
                         </div>
                     @endif
-                    <div class='col-xs-12{{ $course_info->home_layout == 1 ? ' col-sm-7' : ''}}'>
-                        <div class=''>
-                            <div class='course_info'>
-                                @if ($course_info->description)
-                                    <!--Hidden html text to store the full description text & the truncated desctiption text so as to be accessed by javascript-->
-                                    <div id='not_truncated' class='hidden'>
-                                        {!! $full_description !!}
-                                    </div>
-                                    <div id='truncated' class='hidden'>
-                                        {!! $truncated_text !!}
-                                    </div>
-                                    <!--Show the description text-->
-                                    <div id='descr_content' class='is_less'>
-                                        {!! $truncated_text !!}
-                                    </div>
-                                @else
-                                    <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
-                                @endif
-                            </div>
+                    <div class='col-xs-12'>
+                        <div class='course_info'>
+                            @if ($course_info->description)
+                                <!--Hidden html text to store the full description text & the truncated desctiption text so as to be accessed by javascript-->
+                                <div id='not_truncated' class='hidden'>
+                                    {!! $full_description !!}
+                                </div>
+                                <div id='truncated' class='hidden'>
+                                    {!! $truncated_text !!}
+                                </div>
+                                <!--Show the description text-->
+                                <div id='descr_content' class='is_less'>
+                                    {!! $truncated_text !!}
+                                </div>
+                            @else
+                                <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                            @endif
                         </div>
                     </div>
                     <div class='col-xs-12 course-below-wrapper'>
@@ -101,185 +72,65 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
     <div class='row'>
-        @if (!$alter_layout)
-            <div class='col-md-8 course-units'>
-                <div class='row'>
-                    <div class='col-md-12'>
-                        <div class='content-title pull-left h3'>
-                            {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
-                        </div>
-                <a class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
-                    <span class='fa fa-question-circle'></span>
-                </a>
-                        @if ($is_editor and $course_info->view_type == 'units')
-                            <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='{{ trans('langAddUnit') }}'>
-                                <span class='fa fa-plus-circle'></span>
-                                <span class='hidden'>.</span>
-                            </a>
-                        @endif
+        <div class='col-md-12 course-units'>
+            <div class='row'>
+                <div class='col-md-12'>
+                    <div class='content-title pull-left h3'>
+                        {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
                     </div>
+                        <a class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
+                            <span class='fa fa-question-circle'></span>
+                        </a>
                 </div>
-                <div class='row boxlist no-list'>
-                    @if ($course_units)
-                        <?php $count_index = 0;?>
-                        @foreach ($course_units as $key => $course_unit)
-                            @if ($course_unit->visible == 1)
-                               <?php $count_index++; ?>
-                            @endif
-                            <div class='col-xs-12'>
-                                <div class='panel clearfix'>
-                                    <div class='col-xs-12'>
-                                        <div class='item-content'>
-                                            <div class='item-header clearfix'>
-                                                <div class='item-title h4'>
-                                                    @if ($course_info->view_type == 'weekly')
-                                                        <a {!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/weeks/?course={{ $course_code }}&amp;id={{ $course_unit->id }}&amp;cnt={{ $count_index }}'>
-                                                            @if(!empty($course_unit->title))
-                                                                {{ $course_unit->title }}
-                                                            @else
-                                                                {{ $count_index.trans('langor') }} {{ trans('langsWeek') }}
-                                                            @endif
-                                                            ({{ trans('langFrom2') }} {{ nice_format($course_unit->start_week) }} {{ trans('langTill') }} {{ nice_format($course_unit->finish_week) }})
-                                                        </a>
-                                                    @else
-                                                        <a{!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
+            </div>
+            <div class='row boxlist no-list'>
+                @if ($course_units)
+                    <?php $count_index = 0;?>
+                    @foreach ($course_units as $key => $course_unit)
+                        <?php $count_index++; ?>
+                        <div class='col-xs-12'>
+                            <div class='panel clearfix'>
+                                <div class='col-xs-12'>
+                                    <div class='item-content'>
+                                        <div class='item-header clearfix'>
+                                            <div class='item-title h4'>
+                                                @if ($course_info->view_type == 'weekly')
+                                                    <a href="{{ $urlAppend }}modules/weeks/?course={{ $course_code }}&amp;id={{ $course_unit->id }}&amp;cnt={{ $count_index }}">
+                                                        @if(!empty($course_unit->title))
                                                             {{ $course_unit->title }}
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                                @if ($is_editor)
-                                                    <div class='item-side'>
-                                                    @if ($course_info->view_type == 'weekly')
-                                                        <!-- actions for course weekly format -->
-                                                        {!! $action_button([
-                                                                [
-                                                                    'title' => trans('langEditChange'),
-                                                                    'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$course_unit->id&amp;cnt=$count_index",
-                                                                    'icon' => 'fa-edit'
-                                                                ],
-                                                                [
-                                                                    'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
-                                                                    'url' => "$_SERVER[REQUEST_URI]?visW=". getIndirectReference($course_unit->id),
-                                                                    'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
-                                                                ],
-                                                                [
-                                                                  'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
-                                                                  'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
-                                                                  'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
-                                                                  'show' => $course_info->visible == COURSE_OPEN
-                                                                ]
-                                                            ]) !!}
-
-                                                    @else
-                                                        {!! $action_button([
-                                                                [
-                                                                    'title' => trans('langEditChange'),
-                                                                    'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$course_unit->id",
-                                                                    'icon' => 'fa-edit'
-                                                                ],
-                                                                [
-                                                                    'title' => trans('langDown'),
-                                                                    'level' => 'primary',
-                                                                    'url' => "$_SERVER[REQUEST_URI]?down=". getIndirectReference($course_unit->id),
-                                                                    'icon' => 'fa-arrow-down',
-                                                                    'disabled' => $key + 1 == count($course_units)
-                                                                ],
-                                                                [
-                                                                    'title' => trans('langUp'),
-                                                                    'level' => 'primary',
-                                                                    'url' => "$_SERVER[REQUEST_URI]?up=". getIndirectReference($course_unit->id),
-                                                                    'icon' => 'fa-arrow-up',
-                                                                    'disabled' => $key == 0
-                                                                ],
-                                                                [
-                                                                    'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
-                                                                    'url' => "$_SERVER[REQUEST_URI]?vis=". getIndirectReference($course_unit->id),
-                                                                    'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
-                                                                ],
-                                                                [
-                                                                    'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
-                                                                    'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
-                                                                    'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
-                                                                    'show' => $course_info->visible == COURSE_OPEN
-                                                                ],
-                                                                [
-                                                                    'title' => trans('langDelete'),
-                                                                    'url' => "$_SERVER[REQUEST_URI]?del=". getIndirectReference($course_unit->id),
-                                                                    'icon' => 'fa-times',
-                                                                    'class' => 'delete',
-                                                                    'confirm' => trans('langCourseUnitDeleteConfirm')
-                                                                ]
-                                                            ]) !!}
-                                                    @endif
-                                                    </div>
+                                                        @else
+                                                            {{ $count_index.trans('langor') }} {{ trans('langsWeek') }}
+                                                        @endif
+                                                        ({{ trans('langFrom2') }} {{ nice_format($course_unit->start_week) }} {{ trans('langTill') }} {{ nice_format($course_unit->finish_week) }})
+                                                    </a>
+                                                @else
+                                                    <a href="modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}">
+                                                        {{ $course_unit->title }}
+                                                    </a>
                                                 @endif
                                             </div>
-                                            <div class='item-body'>
-                                                {!! $course_unit->comments == ' ' ? '' : standard_text_escape($course_unit->comments) !!}
-                                            </div>
+                                        </div>
+                                        <div class='item-body'>
+                                            {!! $course_unit->comments == ' ' ? '' : standard_text_escape($course_unit->comments) !!}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                    @else
+                        </div>
+                    @endforeach
+                @else
                     <div class='col-sm-12'>
                         <div class='panel'>
                             <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
                         </div>
                     </div>
-                    @endif
-                </div>
-                {!! $course_home_main_area_widgets !!}
-            </div>
-        @endif
-
-        <div class='col-md-{{ $cunits_sidebar_columns }}'>
-            <div class='row'>
-                @if (isset($course_completion_id) and $course_completion_id > 0)
-                    <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                        <div class='content-title h3'>{{ trans('langCourseCompletion') }}</div>
-                        <div class='panel'>
-                            <div class='panel-body'>
-                                <div class='text-center'>
-                                    <div class='col-sm-12'>
-                                        <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
-                                        @if ($percentage == '100%')
-                                            <i class='fa fa-check-circle fa-5x state_success'></i>
-                                        @else
-                                            <div class='course_completion_panel_percentage'>
-                                                {{ $percentage }}
-                                            </div>
-                                        @endif
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 @endif
-                @if (isset($level) && !empty($level))
-                    <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                        <div class='content-title h3'>{{ trans('langOpenCourseShort') }}</div>
-                        <div class='panel'>
-                            <div class='panel-body'>
-                                {!! $opencourses_level !!}
-                            </div>
-                            <div class='panel-footer'>
-                                {!! $opencourses_level_footer !!}
-                            </div>
-                        </div>
-                    </div>
-                @endif                
-                <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
-                    {!! $course_home_sidebar_widgets !!}
-                </div>
             </div>
+            {!! $course_home_main_area_widgets !!}
         </div>
     </div>
     <div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>

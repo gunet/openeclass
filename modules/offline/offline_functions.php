@@ -173,3 +173,22 @@ function offline_announcements($bladeData) {
     fwrite($fp, $out);
     fclose($fp);
 }
+
+
+/**
+ * @brief get course units
+ * @global type $course_id
+ */
+function offline_course_units() {
+
+    global $course_id;
+
+    $data = Database::get()->queryArray("SELECT id, title, comments, visible, public, `order` FROM course_units
+                                WHERE course_id = ?d
+                                AND visible = 1
+                                AND `order` >= 0
+                                ORDER BY `order`", $course_id);
+
+
+    return $data;
+}
