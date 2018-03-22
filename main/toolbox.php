@@ -301,10 +301,10 @@ if ($searching) {
     } else {
         $sql_department = '';
     }
-    $query = 'SELECT DISTINCT(a.course_id), a.title, a.code, a.description, a.lang'
+    $query = 'SELECT DISTINCT(a.course_id), a.title, a.code, a.description, a.lang, a.visible'
              . " FROM $sql_department ("
              . '  SELECT'
-             . '   c.id AS course_id, c.title, c.code, c.description, c.lang';
+             . '   c.id AS course_id, c.title, c.code, c.description, c.lang, c.visible';
     $where = array();
     $args = array();
 
@@ -369,6 +369,9 @@ if ($searching) {
         $t->set_var('resultTitle', q($course->title));
         $t->set_var('resultContent', standard_text_escape($course->description));
         $t->set_var('resultMeta', '');
+        if ($course->visible != COURSE_OPEN and !$uid) {
+            $t->set_var('resultExtra', ' class="course-not-open"');
+        }
 
         Database::get()->queryFunc('SELECT category_id, category_value_id
             FROM course_category
@@ -406,6 +409,19 @@ if ($searching) {
     $t->set_var('totalUsers', $totalUsers);
     $t->set_var('totalVisits', $totalVisits);
     $t->parse('stats', 'statsBlock', false);
+}
+
+if (!$uid) {
+    $urlAppendLen = strlen($urlAppend);
+    $head_content .= "<script>var urlCourse;
+    $(function () {
+        $('a.course-not-open').click(function (e) {
+            urlCourse = $(this).attr('href').substr($urlAppendLen);
+            e.preventDefault();
+            $('.nextUrl').attr('value', urlCourse);
+            $('#loginModalContent').modal();
+        });
+    });</script>";
 }
 
 $t->set_var('HEAD_EXTRAS', $head_content);
