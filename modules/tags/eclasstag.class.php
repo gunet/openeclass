@@ -75,12 +75,6 @@ class eClassTag {
                             ajax: {
                                 url: '../tags/feed.php',
                                 dataType: 'json',
-                                data: function(term, page) {
-                                    return {
-                                        course: '" . js_escape($course_code) . "',
-                                        q: term
-                                    };
-                                },
                                 processResults: function(data, page) {
                                     return {results: data};
                                 }
