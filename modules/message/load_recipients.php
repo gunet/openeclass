@@ -29,7 +29,7 @@ if (isset($_POST['course'])) {
         $jsonarr = array();
         $cid = course_code_to_id($_POST['course']);
         $student_to_student_allow = get_config('dropbox_allow_student_to_student');
-        
+
         $sql = "SELECT COUNT(*) as c FROM course_user WHERE course_id = ?d AND user_id = ?d AND (status = ?d OR editor = ?d)";
         $res = Database::get()->querySingle($sql, $cid, $uid, USER_TEACHER, 1);
         if ($res->c != 0) {
@@ -37,7 +37,7 @@ if (isset($_POST['course'])) {
         } else {
             $is_editor = false;
         }
-        
+
         if ($is_editor || $student_to_student_allow == 1) {
             $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
                     FROM user u, course_user cu
@@ -50,7 +50,7 @@ if (isset($_POST['course'])) {
             // find course groups (if any)
             $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d ORDER BY name";
             $result_g = Database::get()->queryArray($sql_g, $cid);
-            
+
             foreach ($result_g as $res_g)
             {
             $jsonarr['_'.$res_g->id] = q($res_g->name);
@@ -64,19 +64,19 @@ if (isset($_POST['course'])) {
                         AND (cu.status = ?d OR cu.editor = ?d)
                         AND u.id != ?d
                         ORDER BY UPPER(u.surname), UPPER(u.givenname)";
-            
+
             $res = Database::get()->queryArray($sql, $cid, USER_TEACHER, 1, $uid);
-            
+
             //check if user is group tutor
             $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm`
                 WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d AND `gm`.is_tutor = ?d";
-            
+
             $result_g = Database::get()->queryArray($sql_g, $cid, $uid, 1);
             foreach ($result_g as $res_g)
             {
                 $jsonarr['_'.$res_g->id] = q($res_g->name);
             }
-            
+
             //find user's group and their tutors
             $tutors = array();
             $sql_g = "SELECT `group`.id FROM `group`, group_members
@@ -97,7 +97,7 @@ if (isset($_POST['course'])) {
                 }
             }
         }
-        
+
         foreach ($res as $r) {
             if (isset($tutors) && !empty($tutors)) {
                 if (isset($tutors[$r->user_id])) {
@@ -129,22 +129,22 @@ if (isset($_POST['course'])) {
                 FROM user u, course_user cu
                 WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
                 AND cu.user_id = u.id
-                AND cu.status != ?d
+                AND cu.status != ". USER_GUEST . "
                 AND u.id != ?d
                 AND (u.surname LIKE ?s OR u.username LIKE ?s)
                 ORDER BY name
                 LIMIT 10";
-        $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
+        $res = Database::get()->queryArray($sql, $uid, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
     }
-    
+
     $jsonarr["items"] = array();
     $i = 0;
-    
+
     foreach ($res as $r) {
         $jsonarr["items"][$i] = new stdClass();
         $jsonarr["items"][$i]->id = $r->user_id;
         $jsonarr["items"][$i]->text = q($r->name)." (".q($r->username).")";
-        
+
         $i++;
     }
     header('Content-Type: application/json');
