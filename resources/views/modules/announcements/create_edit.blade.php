@@ -1,14 +1,5 @@
 @extends('layouts.default')
 
-@push('head_styles')
-<link rel='stylesheet' type='text/css' href="/js/select2-3.5.1/select2.css" />
-<link rel='stylesheet' type='text/css' href="/js/select2-3.5.1/select2-bootstrap.css" />
-@endpush
-
-@push('head_scripts')
-<script src="/js/select2-3.5.1/select2.min.js"></script>
-@endpush
-
 @section('content')
 
     {!! $action_bar !!}
@@ -32,10 +23,10 @@
                         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>{{ trans('langEmailOption') }}:</label></div>
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>
-                                <select class='form-control' name='recipients[]' multiple id='select-recipients'>
+                                <select class='form-control' name='recipients[]' multiple='multiple' id='select-recipients'>
                                     <option value='-1' selected>{{ trans('langAllUsers') }}</option>
                                     @foreach ($course_users as $cu)
-                                    <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
+                                        <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
                                     @endforeach
                                 </select>
                                 <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>

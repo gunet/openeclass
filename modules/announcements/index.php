@@ -39,6 +39,19 @@ $action->record(MODULE_ID_ANNOUNCE);
 $public_code = course_id_to_public_code($course_id);
 $toolName = $langAnnouncements;
 
+define_rss_link();
+
+// STICKY ANNOUNCEMENT
+if ($is_editor && isset($_POST['pin_announce'])) {
+    if (isset($_GET['pin']) && ($_GET['pin'] == 1)) {
+        $top_order = Database::get()->querySingle("SELECT MAX(`order`) as max from announcement WHERE course_id = ?d", $course_id)->max + 1;
+        Database::get()->query("UPDATE announcement SET `order` = ?d  where id = ?d and course_id = ?d", $top_order, $_GET['pin_an_id'], $course_id);
+    } elseif (isset($_GET['pin']) && ($_GET['pin'] == 0)) {
+        Database::get()->query("UPDATE announcement SET `order` = 0  where id = ?d and course_id = ?d", $_GET['pin_an_id'], $course_id);
+    }
+    exit();
+}
+
 // Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['action']) && $is_editor) {
@@ -184,18 +197,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit();
 }
 
-// STICKY ANNOUNCEMENT
-if ($is_editor && isset($_POST['pin_announce'])) {
-    if (isset($_GET['pin']) && ($_GET['pin'] == 1)) {
-        $top_order = Database::get()->querySingle("SELECT MAX(`order`) as max from announcement WHERE course_id = ?d", $course_id)->max + 1;
-        Database::get()->query("UPDATE announcement SET `order` = ?d  where id = ?d and course_id = ?d", $top_order, $_GET['pin_an_id'], $course_id);
-    } elseif (isset($_GET['pin']) && ($_GET['pin'] == 0)) {
-        Database::get()->query("UPDATE announcement SET `order` = 0  where id = ?d and course_id = ?d", $_GET['pin_an_id'], $course_id);
-    }
-    exit();
-}
 
-define_rss_link();
 ModalBoxHelper::loadModalBox();
 add_units_navigation(TRUE);
 
@@ -262,12 +264,12 @@ if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
     if ($is_editor) {
         $head_content .= "<script type='text/javascript'>
         $(document).ready(function () {
-            
+
             var langEmptyGroupName = \"' . $langEmptyAnTitle . '\";
-            
+
             $('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
             $('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
-    
+
             $('input[name=startdate_active]').on('click', function() {
                 if ($('input[name=startdate_active]').prop('checked')) {
                     $('input[name=enddate_active]').prop('disabled', false);
@@ -277,7 +279,7 @@ if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
                     $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
                 }
             });
-    
+
             $('.input-group-addon input[type=checkbox]').on('click', function(){
             var prop = $(this).parents('.input-group').children('input').prop('disabled');
                 if(prop){
@@ -286,7 +288,7 @@ if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
                     $(this).parents('.input-group').children('input').prop('disabled', true);
                 }
             });
-    
+
             $('#select-recipients').select2();
             $('#selectAll').click(function(e) {
                 e.preventDefault();
@@ -369,6 +371,7 @@ if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
         $data['startdate_error'] = Session::getError('startdate', "<span class='help-block'>:message</span>");
         $data['enddate_error'] = Session::getError('enddate', "<span class='help-block'>:message</span>");
 
+        load_js('select2');
         load_js('bootstrap-datetimepicker');
         $head_content .= "
             <script type='text/javascript'>
@@ -595,8 +598,8 @@ if ($is_editor && isset($_POST['submitAnnouncement'])) {
             }
         } else {
             Session::Messages($langAnnAdd, 'alert-success');
+            redirect_to_home_page("modules/announcements/index.php?course=$course_code");
         }
-        redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/announcements/index.php?course=$course_code&addAnnounce=1");
