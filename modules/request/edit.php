@@ -106,7 +106,9 @@ if (isset($_GET['id'])) {
                 $request->description . '</p>';
         }
         if ($args) {
-            Database::get()->query('UPDATE request SET ' . implode(', ', $query), $args);
+            Database::get()->query('UPDATE request
+                SET ' . implode(', ', $query) . 'WHERE id = ?d',
+                $args, $id);
         }
         if ($data['field_data']) {
             foreach ($data['field_data'] as $field) {
