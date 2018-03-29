@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2018-02-07 12:46:59
+// Generated 2018-03-29 10:11:35
 
 $langYes = "Yes";
 $langNo = "No";
@@ -4996,3 +4996,8 @@ $langNewScoreRecorded = 'The recalculated score was recorded';
 $langQuestionStoredScore = 'Recorded Question Score';
 $langContactAdminForInfo = "Please contact the platform administrator for more information.";
 $langContactAdminAuth = "Contact with admin";
+$langDeleteCourseActivities = "Delete activities";
+$langPurge = "Purge activities";
+$langConfirmPurgeCourseCompletion = "Caution: The completion record for all users in this course will be deleted.";
+$langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
+$langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";

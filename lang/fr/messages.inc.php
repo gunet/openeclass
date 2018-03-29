@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2017-12-11 15:14:03
+// Generated 2018-03-29 10:11:39
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -2609,7 +2609,7 @@ $langJQUncheckAll = 'Effacer tout';
 $langcas_logout = "Adresse de la page de déconnexion";
 $langDocQuota = "Limite d'espace de stockage (quota) du cours pour les «Documents»";
 $langVideoQuota = "Limite d'espace de stockage (quota) du cours  pour les «Vidéos»";
-$langDropboxQuota = "Message Exchange quota";
+$langDropboxQuota = "Messages Quota";
 $langGroupQuota = "Limite d'espace de stockage (quota) du cours pour les «Groupes d'utilisateurs»";
 $langAlternateLogin = "Connexion alternative";
 $langEnterPlatform = "Pour entrer sur la plateforme cliquez";
@@ -5123,7 +5123,7 @@ $langResourceBelongsToCert = "Resource belongs to certificate or badge.";
 $langTemplateBelongsToCert = "Template has been used by certificate.";
 $langIconBelongsToBadge = "The icon has beed used by some badge.";
 $langProgressBasicInfo = "Basic info";
-$langCourseCompletion = "$langsOfCourse completion";
+$langCourseCompletion = "$langOfCourse Completion";
 $langCourseCompletionCreated = "$langsOfCourse completion created";
 $langCourseCompletionMessage = "$langCourse completed successfully";
 $langCertAddress = "Certificate public url";
@@ -5182,3 +5182,9 @@ $langRegrade = 'Regrade';
 $langNewScoreRecorded = 'The recalculated score was recorded';
 $langQuestionStoredScore = 'Recorded Question Score';
 $langContactAdminForInfo = "Please contact the platform administrator for more information.";
+$langContactAdminAuth = "Contact with admin";
+$langDeleteCourseActivities = "Delete activities";
+$langPurge = "Purge activities";
+$langConfirmPurgeCourseCompletion = "Caution: The completion record for all users in this course will be deleted.";
+$langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
+$langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";

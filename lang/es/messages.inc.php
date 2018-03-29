@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2017-12-11 15:14:02
+// Generated 2018-03-29 10:11:36
 
 $langYes = "Si";
 $langNo = "No";
@@ -2391,7 +2391,7 @@ $langOptionalCfgSetting = "Optional Settings";
 $langToReqOpen = "Users can freely register themselves without the administration approval";
 $lang_email_required = "$langsOfStudent email address is required during registration";
 $lang_am_required = "$langsOfStudent ID is required during registration";
-$lang_dropbox_allow_student_to_student = "Allow file exchange between $langsOfStudents in 'Message Exchange'";
+$lang_dropbox_allow_student_to_student = "Allow messages between $langsOfStudents in 'Messages'";
 $lang_dont_display_login_form = "Don't display login form in platform home page";
 $lang_block_username_change = "Don't allow users to change their 'username'";
 $lang_display_captcha = "Display captcha during users registration";
@@ -2427,7 +2427,7 @@ $langJQUncheckAll = "Deseleccionar todos";
 $langcas_logout = "CAS logout page";
 $langDocQuota = "Documents quota";
 $langVideoQuota = "Video quota";
-$langDropboxQuota = "Message Exchange quota";
+$langDropboxQuota = "Messages Quota";
 $langGroupQuota = "Group quota";
 $langAlternateLogin = "Alternate login";
 $langEnterPlatform = "Enter platform by clicking here";
@@ -4908,7 +4908,7 @@ $langResourceBelongsToCert = "Resource belongs to certificate or badge.";
 $langTemplateBelongsToCert = "Template has been used by certificate.";
 $langIconBelongsToBadge = "The icon has beed used by some badge.";
 $langProgressBasicInfo = "Basic info";
-$langCourseCompletion = "$langsOfCourse completion";
+$langCourseCompletion = "$langOfCourse Completion";
 $langCourseCompletionCreated = "$langsOfCourse completion created";
 $langCourseCompletionMessage = "$langCourse completed successfully";
 $langCertAddress = "Certificate public url";
@@ -4967,3 +4967,9 @@ $langRegrade = 'Regrade';
 $langNewScoreRecorded = 'The recalculated score was recorded';
 $langQuestionStoredScore = 'Recorded Question Score';
 $langContactAdminForInfo = "Please contact the platform administrator for more information.";
+$langContactAdminAuth = "Contact with admin";
+$langDeleteCourseActivities = "Delete activities";
+$langPurge = "Purge activities";
+$langConfirmPurgeCourseCompletion = "Caution: The completion record for all users in this course will be deleted.";
+$langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
+$langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
