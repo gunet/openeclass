@@ -439,7 +439,7 @@ $modules = array(
     MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-list'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
-    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-exchange'),    
+    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-exchange'),
     MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),
     MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-trophy'),
     MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
@@ -454,7 +454,7 @@ $admin_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'fa-user'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'fa-area-chart'),
     MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
-    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-cogs'),
+    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-wrench'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
 );
 
@@ -467,7 +467,7 @@ $static_modules = array(
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
     MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets'),
     MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
-    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),    
+    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
     MODULE_ID_SEARCH => array('title' => $langSearch, 'link' => 'search'),
     MODULE_ID_CONTACT => array('title' => $langContact, 'link' => 'contact'),
     MODULE_ID_COMMENTS => array('title' => $langComments, 'link' => 'comments'),

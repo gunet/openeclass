@@ -96,7 +96,8 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_MINDMAP . ",
                                           " . MODULE_ID_REQUEST . ",
                                           " . MODULE_ID_PROGRESS . ",
-                                          " . MODULE_ID_LP . ") AND
+                                          " . MODULE_ID_LP . ",
+                                          " . MODULE_ID_TC . ") AND
                         module_id NOT IN (SELECT module_id FROM module_disable)";
             if (!check_guest()) {
                 if (isset($_SESSION['uid']) and $_SESSION['uid']) {
@@ -641,7 +642,7 @@ function adminMenu() {
  */
 function lessonToolsMenu($rich=true) {
     global $uid, $is_editor, $is_course_admin, $courses,
-           $course_code, $langAdministrationTools, $langExternalLinks,
+           $course_code, $langAdministrationTools,
            $modules, $admin_modules, $urlAppend, $status, $course_id;
 
     $sideMenuGroup = array();
@@ -670,6 +671,7 @@ function lessonToolsMenu($rich=true) {
     }
 
     foreach ($tools_sections as $section) {
+
         $result = getToolsArray($section['type']);
 
         $sideMenuSubGroup = array();
@@ -707,7 +709,7 @@ function lessonToolsMenu($rich=true) {
                 continue;
             }
 
-            // if we are in dropbox or announcements add (if needed) mail address status
+            // if we are in messages or announcements add (if needed) mail address status
             if ($rich and ($mid == MODULE_ID_MESSAGE or $mid == MODULE_ID_ANNOUNCE)) {
                 if ($mid == MODULE_ID_MESSAGE) {
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
@@ -733,34 +735,26 @@ function lessonToolsMenu($rich=true) {
             array_push($sideMenuImg, $modules[$mid]['image']);
             array_push($sideMenuID, $mid);
         }
+
+        if ($section['type'] == 'Public') {
+            $result2 = getExternalLinks();
+            if ($result2) { // display external links (if any)
+                foreach ($result2 as $ex_link) {
+                    array_push($sideMenuText, q($ex_link->title));
+                    array_push($sideMenuLink, q($ex_link->url));
+                    array_push($sideMenuImg, 'fa-external-link');
+                    array_push($sideMenuID, -1);
+                }
+            }
+        }
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
         array_push($sideMenuSubGroup, $sideMenuID);
         array_push($sideMenuGroup, $sideMenuSubGroup);
     }
-    $result2 = getExternalLinks();
-    if ($result2) { // display external link (if any)
-        $sideMenuSubGroup = array();
-        $sideMenuText = array();
-        $sideMenuLink = array();
-        $sideMenuImg = array();
-        $arrMenuType = array('type' => 'text',
-                             'text' => $langExternalLinks,
-                             'class' => 'external');
-        array_push($sideMenuSubGroup, $arrMenuType);
 
-        foreach ($result2 as $ex_link) {
-            array_push($sideMenuText, q($ex_link->title));
-            array_push($sideMenuLink, q($ex_link->url));
-            array_push($sideMenuImg, 'fa-external-link');
-        }
-
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
-    }
     if ($is_course_admin) {  // display course admin tools
         $sideMenuSubGroup = array();
         $sideMenuText = array();
