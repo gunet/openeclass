@@ -25,12 +25,12 @@ $theme_settings = array(
         'blog' => 'fa-columns',
         'course_info' => 'fa-cogs',
         'users' => 'fa-user',
-        'tooladmin' => 'fa-cogs',
-        'usage' => 'fa-cogs',
+        'tooladmin' => 'fa-wrench',
+        'usage' => 'fa-area-chart',
         'attendance' => 'fa-check-square-o',
         'gradebook' => 'fa-sort-numeric-desc',
         'abuse' => 'fa-flag',
-		'mindmap' => 'fa-sitemap',
+        'mindmap' => 'fa-sitemap',
     ),
 );
 
