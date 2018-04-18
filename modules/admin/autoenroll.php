@@ -61,10 +61,9 @@ if (isset($_GET['delete'])) {
             multiInsert('autoenroll_rule_department',
                 'rule, department', $rule, $_POST['department']);
         }
-        if (isset($_POST['courses']) and !empty($_POST['courses'])) {
-            $courses = explode(',', $_POST['courses']);
+        if (isset($_POST['courses']) and is_array($_POST['courses'])) {
             multiInsert('autoenroll_course',
-                'rule, course_id', $rule, $courses);
+                'rule, course_id', $rule, $_POST['courses']);
         }
         if (isset($_POST['rule_deps'])) {
             multiInsert('autoenroll_department',
@@ -96,16 +95,16 @@ if (isset($_GET['delete'])) {
             Database::get()->queryArray(
                 'SELECT department FROM autoenroll_rule_department WHERE rule = ?d', $rule));
 
-        $courses = implode(',',
-            array_map(function ($course) {
-                return "{id: {$course->course_id}, text: '" .
-                    js_escape($course->title . ' (' . $course->public_code . ')') .
-                    "'}";
-                },
-                Database::get()->queryArray(
+        $courses = array_map(function ($course) {
+            return "<option value='$course->course_id' selected>" .
+                q($course->title . ' (' . $course->public_code . ')') .
+                "</option>";
+            },
+            Database::get()->queryArray(
                     'SELECT course_id, title, public_code FROM autoenroll_course, course
                          WHERE autoenroll_course.course_id = course.id AND
-                               rule = ?d', $rule)));
+                               rule = ?d', $rule));
+        $coursesOptions = implode($courses);
         $ruleInput = "<input type='hidden' name='id' value='$_GET[edit]'>";
 
         $deps = array_map(function ($dep) { return $dep->department_id; },
@@ -156,21 +155,14 @@ if (isset($_GET['delete'])) {
     $head_content .= $jsTree . "
       <script>
         $(function () {
-          $('#courses').select2({
+          $('#courses-select').select2({
             minimumInputLength: 2,
             tags: true,
-            tokenSeparators: [', '],
             ajax: {
               url: 'coursefeed.php',
-              dataType: 'json',
-              data: function(term, page) {
-                return { q: term };
-              },
-              results: function(data, page) {
-                return { results: data };
-              }
+              dataType: 'json'
             }
-          }).select2('data', [$courses]);
+          });
 
           $('#ndAdd2').click(function() {
             $('#treeCourseModal').modal('show');
@@ -271,9 +263,9 @@ if (isset($_GET['delete'])) {
               <div class='col-sm-9 form-control-static'>$htmlTree</div>
             </div>
             <div class='form-group'>
-              <label for='title' class='col-sm-3 control-label'>$langAutoEnrollCourse:</label>
+              <label for='courses-select' class='col-sm-3 control-label'>$langAutoEnrollCourse:</label>
               <div class='col-sm-9'>
-                <input class='form-control' type='hidden' id='courses' name='courses' value=''>
+                <select id='courses-select' class='form-control' name='courses[]' multiple>$coursesOptions</select>
               </div>
             </div>
             <div class='form-group'>
