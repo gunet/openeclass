@@ -19,29 +19,17 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ============================================================================
-  class.wiki2xhtml.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
+/**
+  @file class.wiki2xhtml.php
+  @author: Open eClass Team <eclass@gunet.gr>
   based on DotClear version 3.1d licensed under GPL
   copyright (c) 2004 Olivier Meunier and contributors.
-
-  original file: class.wiki2xhtml Revision: 1.1.2.2
-
-  DotClear contributors: Stephanie Booth
-  Mathieu Pillard
-  Christophe Bonijol
-  Jean-Charles Bagneris
-  Nicolas Chachereau
-  Jérôme Lipowicz
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+                    DotClear contributors: Stephanie Booth
+                    Mathieu Pillard
+                    Christophe Bonijol
+                    Jean-Charles Bagneris
+                    Nicolas Chachereau
+                    Jérôme Lipowicz
  */
 
 class wiki2xhtml {
@@ -154,15 +142,15 @@ class wiki2xhtml {
         # Correction des caract�res faits par certains traitement
         # de texte comme Word
         /*if ($this->getOpt('active_fix_word_entities')) {
-            $wR = array(   
+            $wR = array(
             '‹' => '&#8249;',
             '›' => '&#8250;',
             '…' => '&#8230;',
             '–' => '&#8211;',
             '—' => '&#8212;',
-            '‚' => '&#8218;', 
+            '‚' => '&#8218;',
             '�›' => '&#1EBB;', // ); // e with hook from UTF-8 Unicode
-                   
+
             '' => '&#402;',
             '„' => '&#8222;',
             '†' => '&#8224;',
@@ -593,7 +581,7 @@ class wiki2xhtml {
                             break;
                         case 'color':
                             $res = $this->__parseColor($res,$tag,$attr,$type);
-                            break;	
+                            break;
                         default :
                             $res = $this->__inlineWalk($res);
                             break;
@@ -965,34 +953,4 @@ class wiki2xhtml {
 
         return $res;
     }
-
-    /*
-      function debug()
-      {
-      $mode = $type = NULL;
-      $max = count($this->T);
-
-      $res =
-      '<table border="1">'.
-      '<tr><th>p-mode</th><th>p-type</th><th>mode</th><th>type</th><th>chaine</th></tr>';
-
-      for ($i=0; $i<$max; $i++)
-      {
-      $pre_mode = $mode;
-      $pre_type = $type;
-
-      $line = $this->__getLine($i,$type,$mode);
-
-      $res .=
-      '<tr><td>'.$pre_mode.'</td><td>'.$pre_type.'</td>'.
-      '<td>'.$mode.'</td><td>'.$type.'</td><td>'.$line.'</td></tr>';
-
-      }
-      $res .= '</table>';
-
-      return $res;
-      }
-      // */
 }
-
-?>

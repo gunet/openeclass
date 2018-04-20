@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,24 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ============================================================================
-  class.wikipage.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7.9 licensed under GPL
-  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-
-  original file: class.wikipage Revision: 1.12.2.4
-
-  Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+  @file class.wikipage.php
+  @author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
  */
 
 define("PAGE_NO_TITLE_ERROR", "Missing title");
@@ -44,7 +30,6 @@ define("PAGE_ALREADY_EXISTS_ERROR", "Page already exists");
 define("PAGE_CANNOT_BE_UPDATED_ERROR", "Page cannot be updated");
 define("PAGE_NOT_FOUND_ERROR", "Page not found");
 
-// TODO rewrite WikiPage as a subclass of DatabaseConnection ?
 
 /**
  * This class represents page of a Wiki
@@ -154,7 +139,7 @@ class WikiPage {
 
         $that = $this;
         Database::get()->query($sql, function ($errormsg) use ($that) {
-                    $that->setError($errormsg); 
+                    $that->setError($errormsg);
                 }, $this->getPageId());
 
         if (!$this->hasError()) {
@@ -165,7 +150,7 @@ class WikiPage {
 
             $that = $this;
             Database::get()->query($sql, function ($errormsg) use ($that) {
-                    $that->setError($errormsg); 
+                    $that->setError($errormsg);
                 }, $this->getPageId());
 
             $this->_setPageId(0);
@@ -201,10 +186,10 @@ class WikiPage {
                         . "(`wiki_id`, `owner_id`,`title`,`ctime`, `last_mtime`) "
                         . "VALUES(?d,?d,?s,?t,?t)"
                 ;
-                
+
                 $that = $this;
                 $result = Database::get()->query($sql, function ($errormsg) use ($that) {
-                    $that->setError($errormsg); 
+                    $that->setError($errormsg);
                 }, $this->getWikiId(), $this->getOwnerId(), $this->getTitle(), $this->getCreationTime(), $this->getLastEditTime());
 
                 // 2nd update pageId
@@ -247,7 +232,7 @@ class WikiPage {
             return null;
         }
     }
-	
+
     /**
      * Check if a page exists in the wiki
      * @param string title page title
@@ -260,7 +245,7 @@ class WikiPage {
                 . "WHERE BINARY `title` = ?s "
                 . "AND `wiki_id` = ?d"
         ;
-        
+
         $result = Database::get()->querySingle($sql, $title, $this->getWikiId());
         if($result->c > 0) {
             return true;
@@ -288,7 +273,7 @@ class WikiPage {
                 . "AND c.`id` = p.`last_version` "
                 . "AND `wiki_id` = ?d"
         ;
-        
+
         $params = array($title, $this->getWikiId());
 
         return $this->_updatePageFields($sql, 'loadPage', $params);
@@ -311,7 +296,7 @@ class WikiPage {
         ;
 
         $params = array($versionId);
-        
+
         if ($this->_updatePageFields($sql, 'loadPageVersion', $params)) {
             $this->_setCurrentVersionId($versionId);
             return true;
@@ -365,12 +350,12 @@ class WikiPage {
 
         $that = $this;
         $result = Database::get()->query($sql, function ($errormsg) use ($that) {
-                    $that->setError($errormsg); 
+                    $that->setError($errormsg);
                 }, $this->getPageId(), $this->getEditorId(), $this->getLastEditTime(), $this->getContent(), $changelog);
 
         // update last version id
         $lastVersionId = $result->lastInsertID;
-        
+
         $this->_setLastVersionId($lastVersionId);
         $this->_setCurrentVersionId($lastVersionId);
 
@@ -382,7 +367,7 @@ class WikiPage {
         ;
 
         Database::get()->query($sql, function ($errormsg) use ($that) {
-                $that->setError($errormsg); 
+                $that->setError($errormsg);
             }, $this->getLastVersionId(), $this->getLastEditTime(), $this->getPageId());
 
         return !$this->hasError();
@@ -395,12 +380,12 @@ class WikiPage {
      * @return boolean true on success, false on failure
      */
     function _updatePageFields($sql, $orig, $params) {
-        
+
         $that = $this;
-        
+
         if ($orig == 'loadPage') {
             $page = Database::get()->querySingle($sql, function ($errormsg) use ($that) {
-                    $that->setError($errormsg); 
+                    $that->setError($errormsg);
                 }, $params[0], $params[1]);
         } elseif ($orig == 'loadPageVersion' || $orig == 'loadPageById') {
             $page = Database::get()->querySingle($sql, function ($errormsg) use ($that) {
@@ -523,9 +508,7 @@ class WikiPage {
     function getPageId() {
         return $this->pageId;
     }
-
-    // private accessors
-
+    
     function _setPageId($pageId) {
         $this->pageId = $pageId;
     }
@@ -539,16 +522,10 @@ class WikiPage {
     }
 
     // static methods
-
     function stripSlashesForWiki($str) {
-#            return str_replace( '\\', "\\",
-#                    str_replace( '\"', '"',
-#                    str_replace( "\'", "'", $str ) ) );
 
         return str_replace('\\', "\\", str_replace('\"', '"', $str));
-		
+
     }
 
 }
-
-?>
