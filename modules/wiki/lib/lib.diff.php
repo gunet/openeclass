@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,24 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ============================================================================
-  lib.diff.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7.9 licensed under GPL
-  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-
-  original file: lib.diff Revision: 1.12.2.2
-
-  Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+  @file lib.diff.php
+  @author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
  */
 
 define("DIFF_EQUAL", "=");
@@ -150,23 +136,15 @@ function format_line($line, $type, $value, $skip_empty = false) {
     switch ($type) {
         case DIFF_EQUAL: {
                 return $line . ' : ' . ' = <span class="diffEqual" >' . q($value) . '</span><br />' . "\n";
-
-                break;
             }
         case DIFF_MOVED: {
                 return $line . ' : ' . ' M <span class="diffMoved" >' . q($value) . '</span><br />' . "\n";
-
-                break;
             }
         case DIFF_ADDED: {
                 return $line . ' : ' . ' + <span class="diffAdded" >' . q($value) . '</span><br />' . "\n";
-
-                break;
             }
         case DIFF_DELETED: {
                 return $line . ' : ' . ' - <span class="diffDeleted" >' . q($value) . '</span><br />' . "\n";
-
-                break;
             }
     }
 }
@@ -187,80 +165,21 @@ function format_table_line($line, $type, $value, $skip_empty = false) {
                 return '<tr><td>' . $line . '&nbsp;:&nbsp;' . '&nbsp;=</td><td><span class="diffEqual" >'
                         . q($value) . '</span></td></tr>' . "\n"
                 ;
-
-                break;
             }
         case DIFF_MOVED: {
                 return '<tr><td>' . $line . '&nbsp;:&nbsp;' . '&nbsp;M</td><td><span class="diffMoved" >'
                         . q($value) . '</span></td></tr>' . "\n"
                 ;
-
-                break;
             }
         case DIFF_ADDED: {
                 return '<tr><td>' . $line . '&nbsp;:&nbsp;' . '&nbsp;+</td><td><span class="diffAdded" >'
                         . q($value) . '</span></td></tr>' . "\n"
                 ;
-
-                break;
             }
         case DIFF_DELETED: {
                 return '<tr><td>' . $line . '&nbsp;:&nbsp;' . '&nbsp;-</td><td><span class="diffDeleted" >'
                         . q($value) . '</span></td></tr>' . "\n"
                 ;
-
-                break;
             }
     }
 }
-
-if (!function_exists('array_diff_assoc')) {
-
-    /**
-     * Replace array_diff_assoc()
-     *
-     * @link        http://php.net/function.array_diff_assoc
-     * @author      Aidan Lister <aidan@php.net>
-     * @since       PHP 4.3.0
-     * @require     PHP 4.0.0 (user_error)
-     */
-    function array_diff_assoc() {
-        // Check we have enough arguments
-        $args = func_get_args();
-        $count = count($args);
-        if (count($args) < 2) {
-            trigger_error('Wrong parameter count for array_diff_assoc()', E_USER_WARNING);
-            return;
-        }
-
-        // Check arrays
-        for ($i = 0; $i < $count; $i++) {
-            if (!is_array($args[$i])) {
-                trigger_error('array_diff_assoc() Argument #' . ($i + 1) . ' is not an array', E_USER_WARNING);
-                return;
-            }
-        }
-
-        // Get the comparison array
-        $array_comp = array_shift($args);
-        --$count;
-
-        // Traverse values of the first array
-        foreach ($array_comp as $key => $value) {
-            // Loop through the other arrays
-            for ($i = 0; $i < $count; $i++) {
-                // Loop through this arrays key/value pairs and compare
-                foreach ($args[$i] as $comp_key => $comp_value) {
-                    if ((string) $key === (string) $comp_key && (string) $value === (string) $comp_value) {
-
-                        unset($array_comp[$key]);
-                    }
-                }
-            }
-        }
-
-        return $array_comp;
-    }
-
-}
-?>

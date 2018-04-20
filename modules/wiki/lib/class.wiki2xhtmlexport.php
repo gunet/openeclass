@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /* ========================================================================
  * Open eClass
@@ -20,16 +20,10 @@
  * ========================================================================
  */
 
-/* * ===========================================================================
- class.wiki2xhtmlexport.php
-
- based on Claroline version 1.11 licensed under GPL
- copyright (c) 2001-2012 Universite catholique de Louvain (UCL)
-
- original file: class.wiki2xhtmlexport.php Revision: 14585
-
- Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================
+/**
+@file class.wiki2xhtmlexport.php
+@author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
 */
 
 require_once dirname(__FILE__) . '/class.wiki2xhtmlrenderer.php';
@@ -65,7 +59,7 @@ class WikiToSingleHTMLExporter extends Wiki2xhtmlRenderer
     public function export()
     {
         global $langWikiMainPage, $langWikiPageNotLoaded;
-		
+
         $pageList = $this->wiki->allPagesByCreationDate();
 
         $result = $this->_htmlHeader();

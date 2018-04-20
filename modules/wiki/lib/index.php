@@ -19,25 +19,5 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ============================================================================
-  index.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7.9 licensed under GPL
-  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-
-  original file: index Revision: 1.2
-
-  Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
- */
-
 header("Location:../../../");
 exit();

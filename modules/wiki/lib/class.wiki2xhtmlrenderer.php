@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,28 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ============================================================================
-  class.wiki2xhtmlrenderer.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7.9 licensed under GPL, updated from version 1.11
-  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-
-  original file: class.wiki2xhtmlrenderer Revision: 1.8.2.6
-
-  Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+  @file class.wiki2xhtmlrenderer.php
+  @author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
  */
-
-
-
 
 require_once dirname(__FILE__) . '/wiki2xhtml/class.wiki2xhtml.php';
 require_once dirname(__FILE__) . '/class.wikistore.php';
@@ -89,7 +72,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
         // use tables
         $this->setOpt('active_tables', 1);
     }
-	
+
     /**
      * Overwrite wiki2xhtml __getLine method
      * @access private
@@ -188,13 +171,13 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             # table row
             elseif( preg_match('/^\s*\|\|(.*)\|\|\s*$/', $line, $cap) ) {
                 $type = null;
-                
+
                 $line = trim($cap[1]);
 
                 $line = $this->__inlineWalk($line);
-                
+
                 $line = $this->_parseTableLine($line);
-            } 
+            }
             else {
                 $type = 'p';
                 $line = trim($line);
@@ -208,12 +191,12 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
 
         return $line;
     }
-	
+
     function _parseTableLine($line) {
         $cell = array();
         $offset = 0;
         $th = false;
-        
+
         while (strlen($line) > 0)
         {
             if (false !== ($pos = strpos($line,'|', $offset))) {
@@ -223,7 +206,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                 }
                 else{
                     $r = substr($line, 0, $pos);
-                    
+
                     if (strpos($r,'!') === 0) {
                         $th = true;
                         $cell[] = substr($r,1);
@@ -231,14 +214,14 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                     else{
                         $cell[] = $r;
                     }
-                    
+
                     $line = substr($line, $pos+1);
                     $offset = 0;
                 }
             }
             else{
                 $r = $line;
-                
+
                 if (strpos($r,'!') === 0) {
                     $th = true;
                     $cell[] = substr($r,1);
@@ -251,9 +234,9 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                 $offset = 0;
             }
         }
-        
+
         $ret = '';
-        
+
         if (true === $th) {
             $ret = '<tr><th>';
             $ret .= implode('</th><th>', $cell);
@@ -264,10 +247,10 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             $ret .= implode('</td><td>', $cell);
             $ret .= '</td></tr>';
         }
-        
+
         return $ret;
     }
-	
+
     /**
      * Parse WikiWords and create hypertext reference to wiki page
      *
@@ -297,7 +280,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             ;
         }
     }
-	
+
     /**
      * Parse and execute wiki2xhtml macros
      *
@@ -307,14 +290,14 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
      * @see class.wiki2xhtml.php
      * @return string macro execution result
      */
-    function parseMacro($str,&$tag,&$attr,&$type) { 
+    function parseMacro($str,&$tag,&$attr,&$type) {
         $tag = '';
         $attr = '';
-        
+
         $trimmedStr = trim($str,'"');
-        
+
         $matches = array();
-        
+
         if (preg_match('/^color([0-9])/',$trimmedStr,$matches)) {
             $colorCodeList = array(
                 0 => '#DD0000',
@@ -328,7 +311,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                 8 => '#804020',
                 9 => '#990022',
             );
-            
+
             $colorCode = isset($colorCodeList[(int)$matches[1]]) ? $colorCodeList[(int)$matches[1]] : '#000000';
             $trimmedStr = 'color';
         }
@@ -336,7 +319,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             $colorCode = $matches[ 1 ];
             $trimmedStr = 'color';
         }
-        
+
         switch($trimmedStr)
         {
             // link to main page
@@ -372,7 +355,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                 break;
             }
         }
-        
+
         return $str;
     }
 
@@ -422,7 +405,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                 $img_size = @getimagesize($path_img);
             }
 
-            $attr = ' src="' . $this->protectAttr($this->protectUrls($url)) . '"'; 
+            $attr = ' src="' . $this->protectAttr($this->protectUrls($url)) . '"';
 			$attr .= (count($data) > 1 ) ? ' alt="' . $this->protectAttr($content) . '"' : ' alt=""';
             $attr .= ($lang ) ? ' lang="' . $lang . '"' : '';
             $attr .= ($title ) ? ' title="' . $this->protectAttr($title) . '"' : '';
@@ -458,12 +441,12 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
      */
     function render($txt) {
         $ret = preg_replace( '/\\\\((\!|\|)+)/', '$1', $this->transform($txt ) );
-        
+
         foreach ( $this->addAtEnd as $line )
         {
             $ret .= $line . "\n";
         }
-        
+
         return $ret;
     }
 
@@ -480,7 +463,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
 		if ($langWikiMainPage == $pageName){
             $pageName = '__MainPage__';
         }
-		
+
         // allow links to use wikiwords for wiki page locations
         if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern')) {
             $pageName = preg_replace('/¶¶¶'.$this->getOpt('words_pattern').'¶¶¶/msU', '$1', $pageName);
@@ -493,7 +476,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             $fragment = $matches[1];
             $pageName = preg_replace( '/(#\w+)$/', '', $pageName );
         }*/
-		
+
         if ($this->wiki->pageExists($pageName)) {
             return ' href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
                     . '&amp;action=show&amp;title=' . rawurlencode($pageName)
@@ -578,14 +561,14 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
         $this->escape_table = $this->all_tags;
         array_walk($this->escape_table, create_function('&$a', '$a = \'\\\\\'.$a;'));
     }
-	
+
     function __parseColor($str, &$tag, &$attr, &$type) {
         $n_str = $this->__inlineWalk($str);
         $data = $this->__splitTagsAttr($n_str );
-        
+
         $tag = "span";
         $type= "open";
-        
+
         if (count($data) == 1) {
             $content = $str;
             $attr = ' style="color: #000000"';
@@ -594,10 +577,8 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             $attr = ' style="color: ' . trim( $data[ 0 ] ) .'"';
             $content = $data[ 1 ];
         }
-        
+
         return $content;
     }
 
 }
-
-?>

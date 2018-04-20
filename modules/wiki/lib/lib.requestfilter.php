@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,25 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/* * ===========================================================================
-  lib.requestfilter.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7.9 licensed under GPL
-  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-
-  original file: lib.requestfilter Revision: 1.6.2.2
-
-  Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+  @file lib.requestfilter.php
+  @author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
  */
 
 /**
@@ -267,5 +252,3 @@ function filter_table($varName, $validValuesList, $tblName, $case_insensitive = 
         return false;
     }
 }
-
-?>

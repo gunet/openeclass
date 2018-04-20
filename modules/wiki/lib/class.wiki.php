@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,18 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* * ===========================================================================
-  class.wiki.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7.9 licensed under GPL
-  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-
-  original file: class.wiki Revision: 1.12.2.5
-
-  Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
+/**
+  @file class.wiki.php
+  @author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
  */
 
 require_once dirname(__FILE__) . "/class.wikipage.php";
@@ -48,6 +40,7 @@ class Wiki {
     var $desc;
     var $accessControlList;
     var $groupId;
+    var $visible;
     // error handling
     var $error = '';
 
@@ -140,8 +133,23 @@ class Wiki {
         return $this->wikiId;
     }
 
-    // load and save
+    /**
+     * @brief set visibility
+     * @param type $visible
+     */
+    function setVisibility($visible) {
+        $this->visible = $visible;
+    }
 
+    /**
+     * @brief get visibility
+     * @return type
+     */
+    function getVisibility() {
+        return $this->visible;
+    }
+
+    // load and save
     /**
      * Load a Wiki
      * @param int wikiId ID of the Wiki
@@ -162,18 +170,18 @@ class Wiki {
     function loadProperties($wikiId) {
         global $course_id;
 
-        $sql = "SELECT `id`, `title`, `description`, `group_id` "
-                . "FROM `wiki_properties` "
-                . "WHERE `id` = ?d "
-                . "AND `course_id` = ?d"
-        ;
-        
+        $sql = "SELECT id, title, description, group_id, visible
+                FROM wiki_properties
+                    WHERE id = ?d
+                    AND course_id = ?d";
+
         $result = Database::get()->querySingle($sql, $wikiId, $course_id);
 
         $this->setWikiId($result->id);
         $this->setTitle($result->title);
         $this->setDescription($result->description);
         $this->setGroupId($result->group_id);
+        $this->setVisibility($result->visible);
     }
 
     /**
@@ -186,7 +194,7 @@ class Wiki {
                 . "FROM `wiki_acls` "
                 . "WHERE `wiki_id` = ?d"
         ;
-        
+
         $result = Database::get()->queryArray($sql, $wikiId);
 
         $acl = array();
@@ -229,7 +237,7 @@ class Wiki {
         $result = Database::get()->querySingle($sql, function ($errormsg) use ($that) {
             	    $that->setError($errormsg);
                 }, $this->getWikiId());
-        
+
         // wiki already exists
         if ($result->c > 0) {
             $acl = $this->getACL();
@@ -271,21 +279,15 @@ class Wiki {
     }
 
     /**
-     * Save the properties of the Wiki
+     * @brief save wiki properties
      */
     function saveProperties() {
         global $course_id;
 
         // new wiki
         if ($this->getWikiId() === 0) {
-            // INSERT PROPERTIES
-            $sql = "INSERT INTO `"
-                    . "wiki_properties"
-                    . "`("
-                    . "`course_id`, `title`,`description`,`group_id`"
-                    . ") "
-                    . "VALUES(?d,?s,?s,?d)"
-            ;
+            $sql = "INSERT INTO wiki_properties (course_id, title, description, group_id, visible)
+                    VALUES (?d, ?s, ?s, ?d, 1)";
 
             // GET WIKIID
             $that = $this;
@@ -301,29 +303,31 @@ class Wiki {
         }
         // Wiki already exists
         else {
-            // UPDATE PROPERTIES
-            $sql = "UPDATE `wiki_properties` "
-                    . "SET "
-                    . "`title` = ?s, "
-                    . "`description` = ?s, "
-                    . "`group_id` = ?d "
-                    . "WHERE `id` = ?d"
-                    . " AND `course_id` = ?d"
-            ;
+            $sql = "UPDATE wiki_properties SET
+                                    title = ?s,
+                                    description = ?s,
+                                    group_id = ?d,
+                                    visible = ?d
+                        WHERE `id` = ?d
+                        AND `course_id` = ?d";
 
             $that = $this;
             Database::get()->query($sql, function ($errormsg) use ($that) {
             	        $that->setError($errormsg);
-                    }, $this->getTitle(), $this->getDescription(), $this->getGroupId(), $this->getWikiId(), $course_id);
+                    }, $this->getTitle(),
+                       $this->getDescription(),
+                       $this->getGroupId(),
+                       $this->getVisibility(),
+                       $this->getWikiId(),
+                       $course_id);
             $log_action = LOG_MODIFY;
         }
-        //record action                
+        //record action
         Log::record($course_id, MODULE_ID_WIKI, $log_action, array('wiki_id' => $this->getWikiId(),
-            'title' => $this->getTitle(),
-            'description' => $this->getDescription()));
+                                                                   'title' => $this->getTitle(),
+                                                                   'visible' => $this->getVisibility(),
+                                                                   'description' => $this->getDescription()));
     }
-
-    // utility methods
 
     /**
      * Check if a page exists in the wiki
@@ -339,7 +343,7 @@ class Wiki {
         ;
 
         $result = Database::get()->querySingle($sql, $title, $this->wikiId);
-        
+
         if($result->c > 0) {
             return true;
         } else {
@@ -362,7 +366,7 @@ class Wiki {
         ;
 
         $result = Database::get()->querySingle($sql, $title, $course_id);
-        
+
         if($result->c > 0) {
             return true;
         } else {
@@ -385,7 +389,7 @@ class Wiki {
         ;
 
         $result = Database::get()->querySingle($sql, $id, $course_id);
-        
+
         if($result->c > 0) {
             return true;
         } else {
@@ -405,10 +409,10 @@ class Wiki {
                 . "WHERE `wiki_id` = ?d "
                 . "ORDER BY `title` ASC"
         ;
-        
+
         return Database::get()->queryArray($sql, $this->getWikiId());
     }
-	
+
 	/**
      * Get all the pages of this wiki (at this time the method returns
      * only the titles of the pages...) ordered by creation date
@@ -445,11 +449,11 @@ class Wiki {
 
         return Database::get()->queryArray($sql, $this->getWikiId());
     }
-	
+
 	public function getNumberOfPages() {
         $sql = "
-            SELECT count( `id` ) as `pages` 
-            FROM `wiki_pages` 
+            SELECT count( `id` ) as `pages`
+            FROM `wiki_pages`
             WHERE `wiki_id` = ?d";
 
         $result = Database::get()->querySingle($sql, $this->getWikiId());
@@ -478,5 +482,3 @@ class Wiki {
     }
 
 }
-
-?>

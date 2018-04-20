@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,16 +20,10 @@
  * ========================================================================
  */
 
-/* * ===========================================================================
- class.wikisearchengine.php
-
- based on Claroline version 1.11 licensed under GPL
- copyright (c) 2001-2012 Universite catholique de Louvain (UCL)
-
- original file: class.wiki2xhtmlexport.php Revision: 14094
-
- Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================
+/**
+ @file class.wikisearchengine.php
+ @author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
 */
 
 !defined ( "CLWIKI_SEARCH_ANY" ) && define ( "CLWIKI_SEARCH_ANY", "CLWIKI_SEARCH_ANY" );
@@ -58,17 +52,17 @@ class WikiSearchEngine {
         $searchArr = $this->makePageSearchQuery( $pattern, null, $mode );
 
         $sql =  "
-            SELECT 
+            SELECT
                 p.`id`, p.`wiki_id`, p.`title`, c.`content`
-            FROM 
-                `wiki_properties` AS w, 
-                `wiki_pages` AS p, 
-                `wiki_pages_content` AS c 
-            WHERE 
+            FROM
+                `wiki_properties` AS w,
+                `wiki_pages` AS p,
+                `wiki_pages_content` AS c
+            WHERE
                 p.`wiki_id` = ?d
-            AND " 
+            AND "
                 .$searchArr[0];
-		
+
 		return Database::get()->queryArray($sql, $wikiId, $searchArr[1]);
     }
 
@@ -108,7 +102,7 @@ class WikiSearchEngine {
                 break;
             }
         }
-        
+
         $ret = array($keywords, $impl);
 
         return $ret;
@@ -126,10 +120,10 @@ class WikiSearchEngine {
         $searchTitleArr = array();
         $searchPageArr = array();
         $ret_array = array();
-        
+
         $ret_array[0] = ''; //search string
         $ret_array[1] = array(); //search query arguments
-        
+
         //helper arrays to store arguments before putting them in correct order
         $groupstr_args = array();
         $searchTitleArr_args = array();
@@ -164,10 +158,10 @@ class WikiSearchEngine {
         $searchStr = "( ".$groupstr." AND c.`id` = p.`last_version` AND " . $searchTitle . " ) OR "
             . "( ".$groupstr." AND c.`id` = p.`last_version` AND " . $searchPage . " )"
             ;
-        
+
         $ret_array[0] = "($searchStr)";
         $ret_array[1] = array_merge($groupstr_args, $searchTitleArr_args, $groupstr_args, $searchPageArr_args);
-        
+
         return $ret_array;
     }
 

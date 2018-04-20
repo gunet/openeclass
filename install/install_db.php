@@ -668,7 +668,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
     `course_id` INT(11) NOT NULL,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
     `description` TEXT NULL,
-    `group_id` INT(11) NOT NULL DEFAULT 0) $tbl_options");
+    `group_id` INT(11) NOT NULL DEFAULT 0,
+    visible TINYINT(4) UNSIGNED NOT NULL DEFAULT '1') $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
     `wiki_id` INT(11) UNSIGNED NOT NULL,

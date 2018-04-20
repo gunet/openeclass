@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,27 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ===========================================================================
-  index.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7.9 licensed under GPL
-  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-
-  original file: wiki Revision: 1.53.2.1
-
-  Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+  @brief main page of wiki subsystem
+  @author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
  */
-
-$tlabelReq = 'CLWIKI__';
 
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -61,7 +45,6 @@ if (is_object($result) && $result->wiki == 1) {
 } else {
     $is_groupAllowed = false;
 }
-
 
 $toolName = $langWiki;
 
@@ -97,13 +80,12 @@ require_once 'lib/lib.wikidisplay.php';
 // filter request variables
 // filter allowed actions using user status
 if ($is_editor) {
-    $valid_actions = array('list', 'rqEdit', 'exEdit', 'exDelete', 'exExport');
+    $valid_actions = array('list', 'rqEdit', 'exEdit', 'exDelete', 'exExport', 'visible', 'invisible');
 } else {
     $valid_actions = array('list');
 }
 
 $_CLEAN = filter_by_key('action', $valid_actions, 'R', false);
-
 $action = ( isset($_CLEAN['action']) ) ? $_CLEAN['action'] : 'list';
 
 $wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
@@ -118,16 +100,29 @@ $wikiList = array();
 // --------- Start of command processing ----------------
 
 switch ($action) {
+    case 'visible':
+            $w = new wiki();
+            $w->load($wikiId);
+            $w->setVisibility(1);
+            $w->save();
+            redirect_to_home_page("modules/wiki/index.php?course=$course_code");
+        break;
+    case 'invisible':
+            $w = new wiki();
+            $w->load($wikiId);
+            $w->setVisibility(0);
+            $w->save();
+            redirect_to_home_page("modules/wiki/index.php?course=$course_code");
+        break;
     case 'exExport':
     {
         require_once "lib/class.wiki2xhtmlexport.php";
 
-        if (!$wikiStore->wikiIdExists($wikiId)){
+        if (!$wikiStore->wikiIdExists($wikiId)) {
             $message = $langWikiInvalidWikiId;
             $action = "error";
             $style = "caution";
-        }
-        else{
+        } else {
             $wiki = $wikiStore->loadWiki($wikiId);
             $wikiTitle = $wiki->getTitle();
             $renderer = new WikiToSingleHTMLExporter($wiki);
@@ -146,7 +141,6 @@ switch ($action) {
             echo $contents;
             exit;
         }
-
         break;
     }
     // execute delete
@@ -193,13 +187,9 @@ switch ($action) {
             $wikiTitle = (isset($_POST['title'])) ? strip_tags($_POST['title']) : '';
             $wikiDesc = (isset($_POST['desc'])) ? strip_tags($_POST['desc']) : '';
 
-
             $acl = (isset($_POST['acl'])) ? $_POST['acl'] : null;
-
             // initialise access control list
-
             $wikiACL = WikiAccessControl::emptyWikiACL();
-
             if (is_array($acl)) {
                 foreach ($acl as $key => $value) {
                     if ($value == 'on') {
@@ -280,7 +270,6 @@ switch ($action) {
 }
 
 // ------------ End of command processing ---------------
-// javascript
 
 if ($action == 'rqEdit') {
     $jspath = $urlAppend . 'modules/wiki/lib/javascript';
@@ -289,7 +278,6 @@ if ($action == 'rqEdit') {
 }
 
 // Breadcrumps
-
 switch ($action) {
     case "rqEdit": {
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId", 'name' => $langWiki);
@@ -299,13 +287,12 @@ switch ($action) {
         }
     case "list":
     default: {
-            $pageName = $langWiki;
-        }
+        $pageName = $langWiki;
+    }
 }
 
 
 // --------- Start of display ----------------
-// toolTitle
 
 $toolTitle = array();
 
@@ -322,13 +309,11 @@ switch ($action) {
                 $toolTitle['mainTitle'] = $langWikiTitleEdit;
                 $toolTitle['subTitle'] = $wikiTitle;
             }
-
             break;
         }
     // list wiki
     case "list": {
             $toolTitle['mainTitle'] = sprintf($langWikiTitlePattern, $langWikiList);
-
             break;
         }
 }
@@ -345,12 +330,9 @@ switch ($action) {
         }
     // list wiki
     case "list": {
-            // if admin, display add new wiki link
-
             if (!empty($message)) {
                 $tool_content .= "<div class='alert alert-success'>$message</div>";
             }
-
             if ($is_editor) {
                 $tool_content .= action_bar(array(
                         array('title' => $langBack,
@@ -358,8 +340,8 @@ switch ($action) {
                               'icon' => 'fa-reply',
                               'level' => 'primary-label',
                               'show' => isset($_GET['action'])),
-                        array('title' => $langWikiCreateNewWiki,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId &amp;action=rqEdit",
+                        array('title' => $langWikiCreateWiki,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;action=rqEdit",
                               'icon' => 'fa-plus-circle',
                               'level' => 'primary-label',
                               'button-class' => 'btn-success',
@@ -370,40 +352,41 @@ switch ($action) {
             // wiki list not empty
             if (is_array($wikiList) && count($wikiList) > 0) {
 
-                $tool_content .= '<div class="row"><div class="col-md-12"><div class="table-responsive"><table class="table-default">' . "\n";
-
-                // if admin, display title, edit and delete
+                $tool_content .= "<div class='row'>
+                                  <div class='col-md-12'>
+                                  <div class='table-responsive'>
+                                  <table class='table-default'>";
+                $tool_content .= "<tr class='list-header'>
+                                    <th class='text-left' style='width: 30%;'>$langTitle</th>
+                                    <th class='text-center'>$langDescription</th>
+                                    <th class='text-center'>$langPages</th>";
                 if ($is_editor) {
-                    $tool_content .= "
-                                    <tr class='list-header'>
-                                        <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langDescription</th>
-                                        <th class='text-center'>$langPages</th>
-                                        <th class='text-center'>" .icon('fa-gears'). "</th>
-                                    </tr>";
+                    $tool_content .= "<th class='text-center'>" .icon('fa-gears'). "</th>";
+                } else {
+                    $tool_content .= "<th class='text-center'>$langWikiLastModification</th>";
                 }
-                // else display title only
-                else {
-                    $tool_content .= "
-                                    <tr class='list-header'>
-                                        <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langDescription</th>
-                                        <th class='text-center'>$langWikiNumberOfPages</th>
-                                        <th class='text-center'>$langWikiLastModification</th>
-                                    </tr>";
-                }
-                $k = 0;
+                $tool_content .= "</tr>";
+
                 foreach ($wikiList as $entry) {
+                    if ($entry->visible == 1) {
+                        $vis_class = '';
+                        $vis_message = $langViewHide;
+                        $vis_icon = 'fa-eye-slash';
+                        $vis_action = 'invisible';
+                    } else {
+                        $vis_class = 'not_visible';
+                        $vis_message = $langViewShow;
+                        $vis_icon = 'fa-eye';
+                        $vis_action = 'visible';
+                    }
                     // display title for all users
-
-
-                    $tool_content .= '<tr><td>';
+                    $tool_content .= "<tr class = '$vis_class'><td>";
                     // display direct link to main page
                     $tool_content .= '<a class="item" href="page.php?course=' . $course_code . '&amp;wikiId='
                             . $entry->id . '&amp;action=show'
                             . '">'
                             . $entry->title . '</a>';
-                    $tool_content .= '</td>' . "\n";
+                    $tool_content .= '</td>';
 
                     $tool_content .= '<td class="text-center">';
                     if (!empty($entry->description)) {
@@ -417,29 +400,30 @@ switch ($action) {
                                                 " . $wikiStore->getNumberOfPagesInWiki($entry->id) . "
                                             </a>
                                         </td>";
-
-
                     if ($is_editor) {
                         $tool_content.= "<td class='option-btn-cell'>";
                         $tool_content .=
-                                 action_button(array(
-                                array(  'title' => $langEditChange,
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=rqEdit",
-                                        'icon' => 'fa-edit'),
-                                array(  'title' => $langWikiRecentChanges,
-                                        'url' => "page.php?course=$course_code&amp;wikiId=$entry->id &amp;action=recent",
-                                        'icon' => "fa-clock-o"),
-                                array(  'title' => $langWikiExport,
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exExport",
-                                        'icon' => "fa-download"),
-                                array(  'title' => $langDelete,
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exDelete",
-                                        'icon' => 'fa-times',
-                                        'class' => 'delete',
-                                        'confirm' => $langWikiDeleteWiki)
+                                action_button(array(
+                                    array('title' => $langEditChange,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=rqEdit",
+                                          'icon' => 'fa-edit'),
+                                    array('title' => $vis_message,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=$vis_action",
+                                          'icon' => $vis_icon),
+                                    array('title' => $langWikiRecentChanges,
+                                          'url' => "page.php?course=$course_code&amp;wikiId=$entry->id&amp;action=recent",
+                                          'icon' => "fa-clock-o"),
+                                    array('title' => $langWikiExport,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exExport",
+                                          'icon' => "fa-download"),
+                                    array('title' => $langDelete,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exDelete",
+                                          'icon' => 'fa-times',
+                                          'class' => 'delete',
+                                          'confirm' => $langWikiDeleteWiki)
                                 ));
                         $tool_content.= "</td>";
-                    } else {
+                    } else { // student view
                         $last_modification = current($wikiStore->loadWiki($entry->id)->recentChanges());
                         if ($last_modification){
                             $tool_content .= "<td class='text-center'>
@@ -450,27 +434,20 @@ switch ($action) {
                             $tool_content .= "<td class='text-center not_visible'>$langWikiNoModifications</td>";
                         }
                     }
-
-                    $tool_content .= '</tr>' . "\n";
-                    $k++;
+                    $tool_content .= '</tr>';
                 }
-                $tool_content .= '</table></div></div></div>' . "\n" . "\n";
+                $tool_content .= '</table></div></div></div>';
             }
             // wiki list empty
             else {
-                $tool_content .= '<div class="alert alert-warning">' . $langWikiNoWiki . '</div>' . "\n";
+                $tool_content .= '<div class="alert alert-warning">' . $langWikiNoWiki . '</div>';
             }
-
             break;
         }
-    default: {
-            trigger_error("Invalid action supplied to " . $_SERVER['SCRIPT_NAME']
-                    , E_USER_ERROR
-            );
-        }
+    default:
+        break;
 }
 
 // ------------ End of display ---------------
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
-

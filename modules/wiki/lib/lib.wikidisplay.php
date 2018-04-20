@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,25 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/* ===========================================================================
-  lib.wikidisplay.php
-  @last update: 15-05-2007 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7.9 licensed under GPL
-  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-
-  original file: lib.wikidisplay Revision: 1.21.2.2
-
-  Claroline authors: Frederic Minne <zefredz@gmail.com>
-  ==============================================================================
-  @Description:
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
+/**
+  @file lib.wikidisplay.php
+  @author: Frederic Minne <zefredz@gmail.com>
+           Open eClass Team <eclass@gunet.gr>
  */
 
 require_once dirname(__FILE__) . "/class.wiki2xhtmlarea.php";
@@ -72,7 +57,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
             <br>
             <div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='POST' action='$script' name='editform' id='editform'>";
-  
+
     if ($showWikiToolBar === true) {
         $wikiarea = new Wiki2xhtmlArea($content, 'wiki_content', 80, 15, null);
         $out .= "<div class='form-group'><div class='col-xs-12'>". $wikiarea->toHTML() . "</div></div>";
@@ -82,13 +67,13 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
                     ". q($content) ."
                 </textarea>";
     }
-	
+
     //notes
     $out .= "<div class='form-group'>
                 <label for='changelog' class='col-sm-2 control-label'>$langNote:</label>
-                <div class='col-sm-10'>    
+                <div class='col-sm-10'>
                     <input class='form-control' type='text'  id='changelog' value='".q($changelog)."' name='changelog' size='70' maxlength='200' wrap='virtual'>
-                </div>        
+                </div>
             </div>";
     //end notes
 
@@ -205,12 +190,9 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
  * @return string html code of the wiki properties form
  */
 function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $groupId = 0, $acl = null, $script = null) {
-    global $langWikiDescriptionForm, $langWikiDescriptionFormText, $langWikiTitle
-    , $langWikiDescription, $langWikiAccessControl, $langWikiAccessControlText
-    , $langWikiCourseMembers, $langWikiGroupMembers, $langWikiOtherUsers
-    , $langWikiOtherUsersText, $langWikiReadPrivilege, $langWikiEditPrivilege
-    , $langWikiCreatePrivilege, $langCancel, $langSave, $langBack
-    , $course_code;
+
+    global $langWikiTitle, $langWikiDescription,
+            $langCancel, $langSave, $langBack, $course_code;
 
     $title = ( $title != '' ) ? $title : '';
 
@@ -241,18 +223,18 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
               'icon' => 'fa-reply',
               'level' => 'primary-label',)
     ));
-                
+
     $form .= "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='POST' id='wikiProperties' action='$script'>
                     <fieldset>
                         <input type='hidden' name='wikiId' value='$wikiId'>
                         <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->
-                        <input type='hidden' name='gid' value='$groupId'>                             
+                        <input type='hidden' name='gid' value='$groupId'>
                         <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
                             <label for='title' class='col-sm-2 control-label'>$langWikiTitle:</label>
                             <div class='col-sm-10'>
                                 <input name='title' type='text' class='form-control' id='wikiTitle' value='".q($title) ."' placeholder='$langWikiTitle'>
-                                <span class='help-block'>".Session::getError('title')."</span>    
+                                <span class='help-block'>".Session::getError('title')."</span>
                             </div>
                         </div>
                         <div class='form-group'>

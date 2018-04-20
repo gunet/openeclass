@@ -3757,6 +3757,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     }
 
+    // upgrade queries for version 3.7
+    if (version_compare($oldversion, '3,7', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.7'));
+
+        if (!DBHelper::fieldExists('wiki_properties', 'visible')) {
+            Database::get()->query("ALTER TABLE `wiki_properties`
+                ADD `visible` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1'");
+        }
+    }
+
     // upgrade queries for version 4.0
     if (version_compare($oldversion, '4.0', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
@@ -3895,7 +3905,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
 
     }
-
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
