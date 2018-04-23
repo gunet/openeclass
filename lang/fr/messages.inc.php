@@ -920,7 +920,6 @@ $langGroupSettingsModified = "Les paramètres du groupe d'utilisateurs ont été
 $langNameSurname = "Prénom Nom";
 $langEmail = "e-mail";
 $langGroupNoTutor = "personne";
-$langGroupNone = "n'existe pas";
 $langGroupNoneMasc = "personne";
 $langAddTutors = "Gestion de la liste d'utilisateurs";
 $langForumGroup = "Forum du groupe";
@@ -1096,9 +1095,9 @@ $langDBSetting = "Paramètres de MySQL";
 $langMainLang = "Langue Principale de l'installation";
 $langLastCheck = "Dernière vérification avant l'installation";
 $langRequirements = "Exigences du système";
-$langInstallEnd = "Installation terminée" 
+$langInstallEnd = "Installation terminée"
 ;
-$langModuleNotInstalled = "Non installé" 
+$langModuleNotInstalled = "Non installé"
 ;
 $langReadHelp = "Lire plus";
 $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
@@ -1130,7 +1129,7 @@ $langLDAPBaseDn = "Base DN du Serveur LDAP";
 $langChooseLang = "Choisissez la langue";
 $langBeforeInstall1 = "Avant de procéder à l'installation, veuillez imprimer et lire attentivement les";
 $langBeforeInstall2 = "De plus, vous trouverez des informations générales concernant la plateforme";
-$langInstallInstr = "Instructions d'installation" 
+$langInstallInstr = "Instructions d'installation"
 ;
 $langAddComment = "Ajouter / Modifier un commentaire";
 $langLearningModule = "Section";
@@ -1191,7 +1190,7 @@ $langDocumentAsModule = "Utiliser un document";
 $langDocumentAsModuleLabel = "de Document";
 $langDocumentInModule = "Document dans un module";
 $langEXERCISETypeDesc = "Exercice de la plateforme";
-$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape." 
+$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape."
 ;
 $langErrorAssetNotFound = "Élément introuvable :";
 $langErrorCopyAttachedFile = "Impossible de copier le fichier : ";
@@ -1927,9 +1926,9 @@ $langNewId = "Nouveau identifiant"
 $langUsersWillAdd = "Les utilisateurs du cours seront ajoutés";
 $langErrorLang = "Erreur ! Aucune langue trouvée !"
 ;
-$langDoSearch = "Poursuivre la recherche" 
+$langDoSearch = "Poursuivre la recherche"
 ;
-$langSearch_terms = "Critères de recherche :" 
+$langSearch_terms = "Critères de recherche :"
 ;
 $langSearchIn = "Recherche dans :";
 $langSearchWith = "Recherche selon des critères :";
@@ -2035,7 +2034,7 @@ $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
 $langNoAdminAccess = '<b>The page you tried to access requires a valid username and password.</b><br/>
-The system has automatically redirected you to the start page to login. 
+The system has automatically redirected you to the start page to login.
 This could have been caused by a mistyped URL or due to session timeout.';
 $langLoginRequired = '
         <b>You are not registered to the course and therefore you cannot use the corresponding module.</b>
@@ -2698,7 +2697,7 @@ $langOtherOptions = "Autres paramètres";
 $langDefaultQuota = "Espace de stockage de nouveaux cours";
 $langCreateBackup = "Créer une copie de sauvegarde des paramètres";
 $langInvalidMail = "ont une adresse e-mail invalide ou n'ont pas d'adresse e-mail";
-$langLinkUnsubscribe = "Note: You have received this email because you are registered to course '%s'.<br /> 
+$langLinkUnsubscribe = "Note: You have received this email because you are registered to course '%s'.<br />
 To stop receiving messages from this course, click";
 $langEmailUnsubscribe = "Notifications du cours";
 $langInfoUnsubscribe = "Vous pouvez modifier la réception de notifications par e-mail des cours ci-dessous. Si vous ne souhaitez pas recevoir des e-mails d'un cours donné, désélectionnez-le et cliquez sur 'Soumettre'.  <br />(N.B. Vous n'allez pas vous désincrire du cours).";
@@ -2803,7 +2802,7 @@ $langManageUser = "Administrateur des utilisateurs";
 $langHelpAdministrator = "L'administrateur peut gérer toute la plateforme";
 $langHelpPowerUser = "L'administrateur assistant gère les cours et les utilisateurs";
 $langHelpManageUser = "L'administrateur d'utilisateurs gère les utilisateurs";
-$langLinkUnsubscribeFromPlatform = "Note: You are receiving this message because you are registered to '%s'.<br /> 
+$langLinkUnsubscribeFromPlatform = "Note: You are receiving this message because you are registered to '%s'.<br />
  If you don't wish to receive any more email messages click";
 $langEmailUnsubscribeWarning = "Vous avez désactivé la possibilité de recevoir des e-mails via la plateforme. Vous ne pouvez pas régler les paramètres de réception de messages pour des cours spécifiques avant de l'avoir reactivée.";
 $langCourseInactive = "L'accés au cours est réservé aux $langTeachers du cours";
@@ -3150,9 +3149,9 @@ $langCMeta['help_course_type'] = "Select";
 $langCMeta['course_credithours'] = "Semester Credit hours";
 $langCMeta['help_course_credithours'] = "Indicate the number of teaching hours of the course during the semester";
 $langCMeta['course_coTeaching'] = "Co-Teaching";
-$langCMeta['help_course_coTeaching'] = "Select accordingly: 
-    <ul><li> if your colleague is participating in the course opening</li> 
-    <li> if your corresponding faculty is autonomous</li> 
+$langCMeta['help_course_coTeaching'] = "Select accordingly:
+    <ul><li> if your colleague is participating in the course opening</li>
+    <li> if your corresponding faculty is autonomous</li>
     <li> teaching hours which correspond to your department</li></ul>";
 $langCMeta['course_coTeachingColleagueOpensCourse'] = "Colleague participation in the course opening";
 $langCMeta['course_coTeachingAutonomousDepartment'] = "Autonomous department";
@@ -3162,16 +3161,16 @@ $langCMeta['course_targetGroup'] = "Target group";
 $langCMeta['help_course_targetGroup'] = "E.g. students/Alumni of the Department.
     Interested in a thematic area. ";
 $langCMeta['course_credits'] = "Credits";
-$langCMeta['help_course_credits'] = "As stated in the curriculum. Only visible to students, not to the general public. 
+$langCMeta['help_course_credits'] = "As stated in the curriculum. Only visible to students, not to the general public.
     This information may be ignored by faculty members, instead inserted by the local support team ";
 $langCMeta['course_description'] = "Course description";
 $langCMeta['course_contents'] = "Course contents";
-$langCMeta['help_course_contents'] = "Verbal description is proposed in order to include the following: 
+$langCMeta['help_course_contents'] = "Verbal description is proposed in order to include the following:
     <ul><li>Contents structure (course outline) and </li>
     <li> course topics</li></ul>";
 $langCMeta['course_objectives'] = "Course Objectives";
 $langCMeta['help_course_objectives'] = "Summary description that includes the following:
-    <ul><li> Course objectives – expected and learning outcomes</li> 
+    <ul><li> Course objectives – expected and learning outcomes</li>
     <li> what the learner is expected to know, understand and can do after successful completion of the course </li></ul>";
 $langCMeta['course_keywords'] = "Keywords";
 $langCMeta['course_coursePhoto'] = "Proposed photo for the course";
@@ -3181,51 +3180,51 @@ $langCMeta['course_format'] = "Types of educational material";
 $langCMeta['help_course_format'] = "Select (more than one) the course's educational types";
 $langCMeta['course_featuredBooks'] = "Featured writings";
 $langCMeta['course_structure'] = "Course Structure";
-$langCMeta['help_course_structure'] = "Only available to students, not in the general public <br/> 
-    Structure and teaching frequency 
+$langCMeta['help_course_structure'] = "Only available to students, not in the general public <br/>
+    Structure and teaching frequency
     <ul><li> office hours</li>
-    <li>Lectures (e.g. 2 times a week, 3 hours) for 13 weeks </li> 
+    <li>Lectures (e.g. 2 times a week, 3 hours) for 13 weeks </li>
     <li>Tutorials (Recitations) (once a week, 2 hours) </li>
-    <li>Practical activities</li> 
+    <li>Practical activities</li>
     <li>Other</li></ul>";
 $langCMeta['course_teachingMethod'] = "Course teaching method";
-$langCMeta['help_course_teachingMethod'] = "Only available to students not in the general public<br/> 
-    Description of teaching and learning methods used. 
+$langCMeta['help_course_teachingMethod'] = "Only available to students not in the general public<br/>
+    Description of teaching and learning methods used.
     E.g. seat-tilt and supplementary-supporting teaching education through asynchronous learning platform.
     Practical Activities. ";
 $langCMeta['course_assessmentMethod'] = "Course assesment method";
 $langCMeta['help_course_assessmentMethod'] = "Only available to students not in the general public<br/>
-    Description of evaluation, grading methods and evaluation criteria used. 
-    One can refer to the following: 
-    <ul><li>Examinations</li> 
-    <li>Assignments and advances</li> 
+    Description of evaluation, grading methods and evaluation criteria used.
+    One can refer to the following:
+    <ul><li>Examinations</li>
+    <li>Assignments and advances</li>
     <li>Permissible material during exams</li>
     <li>Formerly exam questions</li></ul>";
 $langCMeta['course_prerequisites'] = "Course prerequisites";
 $langCMeta['help_course_prerequisites'] = "Description to include the following:
-    <ul><li> Prerequisite knowledge and preparation requirements</li> 
+    <ul><li> Prerequisite knowledge and preparation requirements</li>
     <li>Links to course prerequisites </li></ul>";
 $langCMeta['course_literature'] = "Additional recommended literature and study material";
-$langCMeta['help_course_literature'] = "Description in order to cover the following: 
+$langCMeta['help_course_literature'] = "Description in order to cover the following:
 <ul><li>Texts and books</li>
 <li>Writings </li>
 <li>Bibliography</li>
 <li>Online readings</li>
 <li>Internet sources</li>
 <li>Library resources</li>
-<li>Related 3rd party open courses</li> 
-<li>Articles</li> 
+<li>Related 3rd party open courses</li>
+<li>Articles</li>
 <li>Videos and movies</li></ul>
 each proposal is recommended to be accompanied by a short commentary on its purpose and usefulness";
 $langCMeta['course_recommendedComponents'] = "Other recommended courses of the faculty related to the curriculum";
 $langCMeta['course_assignments'] = "Course assignments";
 $langCMeta['help_course_assignments'] = "Description in order to cover the following:
     <ul><li>Assignments (homework)</li>
-    <li>Assessments</li> 
+    <li>Assessments</li>
     <li>Grading: how the final grade is calculated</li></ul>";
 $langCMeta['course_requirements'] = "Course requirements";
-$langCMeta['help_course_requirements'] = "Ddescription in order to include the following: 
-    <ul><li> Technical requirements </li> 
+$langCMeta['help_course_requirements'] = "Ddescription in order to include the following:
+    <ul><li> Technical requirements </li>
     <li> Other requirements, assignments (homework)</li></ul>";
 $langCMeta['course_remarks'] = "Remarks";
 $langCMeta['course_acknowledgments'] = "Course acknowledgements";
@@ -3233,7 +3232,7 @@ $langCMeta['help_course_acknowledgments'] = "E.g. towards a publishing house or 
 $langCMeta['course_eudoxusCode'] = "Course code in 'Eudoxus'";
 $langCMeta['course_eudoxusURL'] = "Course url in Eudoxus";
 $langCMeta['course_kalliposURL'] = "Writings link (Kallipos)";
-$langCMeta['help_course_kalliposURL'] = "In case an e-textbook under the programme Callippus is developed. 
+$langCMeta['help_course_kalliposURL'] = "In case an e-textbook under the programme Callippus is developed.
     For more information, check the link at http://www.kallipos.gr";
 $langCMeta['course_thematic'] = "Thematic scientific area";
 $langCMeta['help_course_thematic'] = "Thematic classification according to library standards. The filling may be done in conjunction with the corresponding library of the department or faculty.";
@@ -4709,7 +4708,7 @@ $scolles21 = "I understand other students";
 $scolles22 = "students understand me";
 $scolles23 = "I understand the tutor";
 $scolles24 = "tutor understands me";
-$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the 
+$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the
 				learning environment which has been shaped from the participants. It consists from 24 questions. Each question has as answer a number from 1 (Almost never) to 5 (Almost always)";
 $langCollesLegend = "1 (Almost Never), 2 (Rarely), 3 (Sometimes), 4 (Often), 5 (Almost Always)";
 $colles_detail_answer = "Here you can see the student's replies";
@@ -4817,8 +4816,7 @@ $langNodeSubscribed = "Subscribers visibility";
 $langNodeSubscribed2 = "The $langsFaculty will show up only for its subscribers";
 $langNodeHidden = "Hidden";
 $langNodeHidden2 = "The $langsFaculty will remain hidden from all users";
-$langMindmap = "Mind Mapping";
-$langMindMap = "Mind Map";
+$langMindmap = "Mind Map";
 $langScreenshot = "Screenshot";
 $langOpenEx = "Open Example";
 $langEditEn = "Activate Edit Mode";
@@ -5174,7 +5172,7 @@ $langHtmlFile = "Html file";
 $langRubricCreated = "Rubrique created successfully";
 $langDefaultMatchingOpt1 = "Athens";
 $langDefaultMatchingOpt2 = "London";
-$langTurnitinShortDescription = "Connect with plagiarism Service. 
+$langTurnitinShortDescription = "Connect with plagiarism Service.
 Plagiarism service is a commercial product by Turnitin. For further information take a look at <a href=\"https://turnitin.com\">https://turnitin.com</a>";
 $langGroupFull = "full group";
 $langScoreDiffers = 'The recorded exercise score is different to the currently calculated one. Would you like to regrade the exercise?';

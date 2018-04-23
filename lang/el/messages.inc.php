@@ -2105,7 +2105,6 @@ $langEmail = "E-mail";
 $langGroupTooManyMembers = "Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω).
 	Η σύνθεση της ομάδας δεν άλλαξε";
 $langGroupNoTutor = "κανένας";
-$langGroupNone = "δεν υπάρχει";
 $langGroupNoneMasc = "Δεν υπάρχουν $langsStudents στην ομάδα";
 $langAddTutors = "Διαχείριση καταλόγου χρηστών";
 $langForumGroup = "Περιοχή συζητήσεων της ομάδας";

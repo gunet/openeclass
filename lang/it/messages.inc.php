@@ -240,8 +240,8 @@ $langChangeUser = "Connettersi come un altro utente";
 $langChangeUserNotFound = 'Non è stato trovato nessun conto con username "%s"';
 $langMultiRegUser = "Creare molti conti di utenti";
 $langMultiRegUserInfo = "<p>Compila nella area seguente un elenco con i dati degli utenti, una riga per ogni utente che desideri creare.
-</p> 
-<p>L' ordine dei dati degli utenti è impostato nel campo che sta prima dell' area,  e le etichette possibili sono:</p> 
+</p>
+<p>L' ordine dei dati degli utenti è impostato nel campo che sta prima dell' area,  e le etichette possibili sono:</p>
 <ul>
 <li><tt>first</tt>: Nome</li>
 <li><tt>last</tt>: Cognome</li>
@@ -426,9 +426,9 @@ $langSaveMessage = "La chiacchierata è salvata nei Documenti";
 $langSaveErrorMessage = "Errore. La chiacchierata non è salvata.";
 $langNoGuest = "Gli utenti ospiti non possono utilizzare il modulo 'Chiacchierata'!";
 $langCopyright = "Avviso di copyright";
-$langCopyrightNotice = ' 
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003-2011<br> &nbsp; <br> 
-La piattaforma '. $siteName. ' è basata sulla piattaforma di sorgente di codice aperta <a href="http://www.openeclass.org" target=_blank>Open eClass</a> che è un sistema integrato di gestione di corsi elettronici ed è la proposta della Rete Accademica GUnet  per il supporto del servizio e-learning asincrono. È sviluppata e supportata attivamente dal gruppo di E-leargning Asincrono di GUnet ed è <a href="http://download.eclass.gunet.gr" target="blank">gratuitamente distribuito</a> come software di sorgente di codice aperto (open source) conformato  alla GNU General Public License (GNU GPL). <br><br> 
+$langCopyrightNotice = '
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003-2011<br> &nbsp; <br>
+La piattaforma '. $siteName. ' è basata sulla piattaforma di sorgente di codice aperta <a href="http://www.openeclass.org" target=_blank>Open eClass</a> che è un sistema integrato di gestione di corsi elettronici ed è la proposta della Rete Accademica GUnet  per il supporto del servizio e-learning asincrono. È sviluppata e supportata attivamente dal gruppo di E-leargning Asincrono di GUnet ed è <a href="http://download.eclass.gunet.gr" target="blank">gratuitamente distribuito</a> come software di sorgente di codice aperto (open source) conformato  alla GNU General Public License (GNU GPL). <br><br>
 Il contenuto dei corsi elettronici che sono ospitati dalla piattaforma  '. $siteName. ', ed anche i diritti (copyright) di questo materiale, appartengono ai loro autori e la GUnet non ci pretende dei diritti. Per qualsiasi utilizzo o ripubblica del contenuto ti preghiamo di contattare i responsabili dei corsi rispettivi.
 ';
 $langCourseProgram = "Descrizione del Corso";
@@ -863,7 +863,6 @@ $langGroupSettingsModified = "Le impostazioni del gruppo di utenti sono modifica
 $langNameSurname = "Nome/Cognome";
 $langEmail = "E-mail";
 $langGroupNoTutor = "nessuno";
-$langGroupNone = "Non c' è nessuna";
 $langGroupNoneMasc = "nessun";
 $langAddTutors = "Gestire l' elenco di utenti";
 $langForumGroup = "Forum del gruppo";
@@ -1209,7 +1208,7 @@ $langProgress = "Progresso";
 $langQuitViewer = "Ritornare alla lista";
 $langRawHasBeenChanged = "Il grado minimo per la promozione è modificato";
 $langSCORMTypeDesc = "Contenuto SCORM personalizzato";
-$langScormIntroTextForDummies = "I pacchetti importati devono consistere di un file zip ed essere compatibili con: 
+$langScormIntroTextForDummies = "I pacchetti importati devono consistere di un file zip ed essere compatibili con:
    <ul class='right smaller'>
      <li> το SCORM 2004 ή</li>
      <li> το SCORM 1.2.</li>
@@ -1539,7 +1538,7 @@ $langAddedU = "è aggiunto. Una email gli è appena inviata ";
 $langAndP = "e la loro password";
 $langAddAU = "Aggiungere un utente";
 $langAdmR = "Autorizzazione di Gestore";
-$langAddHereSomeCourses = "<p>Per registrarsi/cancellarsi da un corso, seleziona prima la $langsFaculty alla quale appartieni, e dopo seleziona o deseleziona il corso<br>. 
+$langAddHereSomeCourses = "<p>Per registrarsi/cancellarsi da un corso, seleziona prima la $langsFaculty alla quale appartieni, e dopo seleziona o deseleziona il corso<br>.
 <p>Per salvare le tue preferenze, clicca su 'Inviare Modifiche'</p><br>";
 $langDeleteUser = "Sei sicuro che vuoi eliminare l' utente";
 $langDeleteUser2 = "da questo corso";
@@ -1568,7 +1567,7 @@ $langUserRights = "Autorizzazioni degli utenti";
 $langNow = "adesso";
 $langOneByOne = "Aggiungere un utente";
 $langUserMany = "Importare una lista di utenti tramite un file di testo";
-$langUserAddExplanation = "ogni riga del file che invii deve contenere 5 campi: 
+$langUserAddExplanation = "ogni riga del file che invii deve contenere 5 campi:
 <b>Nome&nbsp;&nbsp;&nbsp;Cognome&nbsp;&nbsp;&nbsp;
        Username&nbsp;&nbsp;&nbsp;Password&nbsp;
         &nbsp;&nbsp;Email</b> e saranno divisi con tab.
@@ -1578,7 +1577,7 @@ $langUserNumber = "numero";
 $langRemoveRight = "Rimuovere un' autorizzazione";
 $langUserOneByOneExplanation = "Lui (lei) riceverà una notifica via e-mail con la username e la password";
 $langBackUser = "Ritornare alla lista degli utenti";
-$langUserAlreadyRegistered = "Un utente con gli stessi nome/cognome si è già iscritto in questo corso. 
+$langUserAlreadyRegistered = "Un utente con gli stessi nome/cognome si è già iscritto in questo corso.
             Non puoi iscriverlo(la) di nuovo.";
 $langAddedToCourse = "è già iscritto nella piattaforma, ma non in questo corso. Adesso ci si è iscritto.";
 $langGroupUserManagement = "Gestire Gruppi di Utenti";
@@ -1870,27 +1869,27 @@ $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ore: %R';
 $timeNoSecFormat = '%R';
 $langNoAdminAccess = "
-<b>La pagina che tenti di accedere richiede una username ed una password.</b> 
+<b>La pagina che tenti di accedere richiede una username ed una password.</b>
 <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu faccia login prima di procedere con altre azioni. Probabilmente la tua sessione è scaduta.";
-$langLoginRequired = "<b>Non sei iscritto nel corso e quindi si non puoi utilizzare il modulo rispettivo.</b> 
+$langLoginRequired = "<b>Non sei iscritto nel corso e quindi si non puoi utilizzare il modulo rispettivo.</b>
 <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu ti registri nel corso (se il corso è aperto per registrazioni).";
 $langSessionIsLost = "
-<b>La tua sessione è scaduta.</b> 
+<b>La tua sessione è scaduta.</b>
 <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui il login prima di procedere con altre azioni.";
 $langCheckProf = "
-<b>L' azione che hai tentato di eseguire richiede l' autorizzazione $langsOfTeacher.</b> 
+<b>L' azione che hai tentato di eseguire richiede l' autorizzazione $langsOfTeacher.</b>
 <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui di nuovo il login";
 $langLessonDoesNotExist = "
-<b>Il corso al quale hai tentato di accedere non esiste. </b> 
+<b>Il corso al quale hai tentato di accedere non esiste. </b>
 <br>Questo può accadere perché si hai eseguito un'azione non consentita o a causa di un problema tecnico sulla piattaforma.";
 $langCheckAdmin = "
-         <b>L' azione che hai tentato di eseguire richiede l' autorizzazione del gestore.</b> 
+         <b>L' azione che hai tentato di eseguire richiede l' autorizzazione del gestore.</b>
          <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui di nuovo il login.";
 $langCheckGuest = "
-         <b>L' azione che hai tentato di eseguire non è possibile con l' autorizzazione dell' utente ospite.</b> 
+         <b>L' azione che hai tentato di eseguire non è possibile con l' autorizzazione dell' utente ospite.</b>
          <br>Per motivi di sicurezza la piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui di nuovo il login.";
 $langCheckPublicTools = "
-    <b>Hai cercato di accedere ad uno strumento di corso inattivo.</b> 
+    <b>Hai cercato di accedere ad uno strumento di corso inattivo.</b>
     <br>Per motivi di sicurezza la piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui di nuovo il login.";
 $langWarnShibUser = "
         <b>Avviso:</b> Perché la tua certificazione è effettuata tramite Shibboleth, non sei scollegato dalla piattaforma!
@@ -2497,10 +2496,10 @@ $langOtherOptions = "Altre impostazioni";
 $langDefaultQuota = "Quota predefinito dei Corsi Nuovi";
 $langCreateBackup = "Creare un backup delle impostazioni";
 $langInvalidMail = "hanno un indirizzo email non valido o non ne hanno alcuno";
-$langLinkUnsubscribe = "Nota: hai ricevuto questo messaggio perché sei iscritto nel corso '%s'. <br/> 
+$langLinkUnsubscribe = "Nota: hai ricevuto questo messaggio perché sei iscritto nel corso '%s'. <br/>
 Se non vuoi ricevere più tali messaggi e-mail da questo corso, fai clic";
 $langEmailUnsubscribe = "Notifiche del corso";
-$langInfoUnsubscribe = "Puoi scegliere tra i seguenti corsi dai quali desideri ricevere delle notifiche. Se non desideri ricevere e-mail da un certo corso, deselezionalo e fai clic su 'Inviare'. <br/> 
+$langInfoUnsubscribe = "Puoi scegliere tra i seguenti corsi dai quali desideri ricevere delle notifiche. Se non desideri ricevere e-mail da un certo corso, deselezionalo e fai clic su 'Inviare'. <br/>
 (Nota: non ti cancelli dalla lezione ).";
 $langEmailUnsubSuccess = "Non riceverai più messaggi e-mail dal corso '%s'";
 $langEmailFromCourses = "Ricevere e-mail dai miei corsi";
@@ -2527,7 +2526,7 @@ $langMailVerificationClick = "Fai clic sul link seguente:";
 $langMailVerificationSubject = "Confermare la richiesta di registrazione $siteName";
 $langMailChangeVerificationSubject = "Confermare l' indirizzo e-mail $siteName";
 $langMailVerificationSuccess = "Per completare il processo di registrazione, devi confermare il tuo indirizzo e-mail.";
-$langMailVerificationSuccess2 = "Per questa ragione, prego controlla subito la tua posta elettronica, dove ti sarà inviata un messaggio e-mail di conferma. 
+$langMailVerificationSuccess2 = "Per questa ragione, prego controlla subito la tua posta elettronica, dove ti sarà inviata un messaggio e-mail di conferma.
                                 <br/> In seguito, ti verrà inviata una e-mail dal Gruppo di Gestione della Piattaforma di E-learning Asincrono $siteName, con le istruzioni per completare la registrazione. <br/><br/> <small> (Nota: se non ricevi il messaggio controlla la tua cartella di posta indesiderata - Cartella Junk )</small>.";
 $langMailVerificationBody1 = "Ti ringraziamo per la tua registrazione in $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
 $langMailVerificationChangeBody = "Per attivare il tuo conto, il tuo indirizzo e-mail va verificato.\n\n$langMailVerificationClick\n%s";
@@ -2556,13 +2555,13 @@ $langMailVerificationChanged = "È cambiata";
 $langMailVerificationChangedNo = "Non hai selezionato alcuna modifica";
 $langMailVerificationChangedNoAdmin = "Non ci sono utenti o non è consentito modificare l' utente gestore";
 $langCheckCourseAdmin = "
-        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore del corso.</b> 
+        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore del corso.</b>
         <br>La piattaforma ti ha automaticamente reindirizzato alla home page per fare Login di nuovo.";
 $langCheckPowerUser = "
-        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore degli utenti e dei corsi.</b> 
+        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore degli utenti e dei corsi.</b>
         <br>La piattaforma ti ha automaticamente reindirizzato alla home page per fare Login di nuovo.";
 $langCheckUserManageUser = "
-        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore degli utenti.</b> 
+        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore degli utenti.</b>
         <br>La piattaforma ti ha automaticamente reindirizzato alla home page per fare Login di nuovo.";
 $langCheckMailVerify = "
         <b>$langMailVerificationSuccess</b>";
@@ -2589,9 +2588,9 @@ $langManageUser = "Gestore utenti";
 $langHelpAdministrator = "Il gestore può gestire l' intera piattaforma";
 $langHelpPowerUser = "L'assistente gestore può gestire gli utenti e i corsi";
 $langHelpManageUser = "Il gestore degli utenti può gestire solo gli utenti";
-$langLinkUnsubscribeFromPlatform = "Nota: hai ricevuto questo messaggio perché ti sei registrato nella piattaforma '%s'. <br/> 
+$langLinkUnsubscribeFromPlatform = "Nota: hai ricevuto questo messaggio perché ti sei registrato nella piattaforma '%s'. <br/>
   Se non desideri ricevere più tali messaggi e-mail fai clic su";
-$langEmailUnsubscribeWarning = "Hai disattivato la ricezione di messaggi e-mail dalla piattaforma. 
+$langEmailUnsubscribeWarning = "Hai disattivato la ricezione di messaggi e-mail dalla piattaforma.
 Non è possibile impostare la ricezione di messaggi e-mail da certi corsi, senza averla riattivata.";
 $langCourseInactive = "L' accesso al corso è consentito solo agli $langsTeachers del corso";
 $langCourseInactiveShort = "Corso inattivo";
@@ -2736,7 +2735,7 @@ $langUserMergeTarget = "Username con cui desideri fondere";
 $langUserMergeForbidden = "Non è possibile fondere $langTeachers con non $langTeachers. Prego, seleziona un altro utente.";
 $langUserMergeAdminForbidden = "La fusione tra gestori è vietata.";
 $langUserMergeSuccess = "La fusione del conto '%s' con il '%s' è completato. Il secondo conto è mantenuto.";
-$langSearchDisabled = "Il motore di ricerca è disabilitato. 
+$langSearchDisabled = "Il motore di ricerca è disabilitato.
         Per ulteriori informazioni contatta i gestori della piattaforma.";
 $langWikiUrlImage = "URL immagine";
 $langPwStrengthTooShort = "Molto breve";
@@ -2926,9 +2925,9 @@ $langCMeta['help_course_type'] = "Select";
 $langCMeta['course_credithours'] = "Semester Credit hours";
 $langCMeta['help_course_credithours'] = "Indicate the number of teaching hours of the course during the semester";
 $langCMeta['course_coTeaching'] = "Co-Teaching";
-$langCMeta['help_course_coTeaching'] = "Select accordingly: 
-    <ul><li> if your colleague is participating in the course opening</li> 
-    <li> if your corresponding faculty is autonomous</li> 
+$langCMeta['help_course_coTeaching'] = "Select accordingly:
+    <ul><li> if your colleague is participating in the course opening</li>
+    <li> if your corresponding faculty is autonomous</li>
     <li> teaching hours which correspond to your department</li></ul>";
 $langCMeta['course_coTeachingColleagueOpensCourse'] = "Colleague participation in the course opening";
 $langCMeta['course_coTeachingAutonomousDepartment'] = "Autonomous department";
@@ -2938,16 +2937,16 @@ $langCMeta['course_targetGroup'] = "Target group";
 $langCMeta['help_course_targetGroup'] = "E.g. students/Alumni of the Department.
     Interested in a thematic area. ";
 $langCMeta['course_credits'] = "Credits";
-$langCMeta['help_course_credits'] = "As stated in the curriculum. Only visible to students, not to the general public. 
+$langCMeta['help_course_credits'] = "As stated in the curriculum. Only visible to students, not to the general public.
     This information may be ignored by faculty members, instead inserted by the local support team ";
 $langCMeta['course_description'] = "Course description";
 $langCMeta['course_contents'] = "Course contents";
-$langCMeta['help_course_contents'] = "Verbal description is proposed in order to include the following: 
+$langCMeta['help_course_contents'] = "Verbal description is proposed in order to include the following:
     <ul><li>Contents structure (course outline) and </li>
     <li> course topics</li></ul>";
 $langCMeta['course_objectives'] = "Course Objectives";
 $langCMeta['help_course_objectives'] = "Summary description that includes the following:
-    <ul><li> Course objectives – expected and learning outcomes</li> 
+    <ul><li> Course objectives – expected and learning outcomes</li>
     <li> what the learner is expected to know, understand and can do after successful completion of the course </li></ul>";
 $langCMeta['course_keywords'] = "Keywords";
 $langCMeta['course_coursePhoto'] = "Proposed photo for the course";
@@ -2957,51 +2956,51 @@ $langCMeta['course_format'] = "Types of educational material";
 $langCMeta['help_course_format'] = "Select (more than one) the course's educational types";
 $langCMeta['course_featuredBooks'] = "Featured writings";
 $langCMeta['course_structure'] = "Course Structure";
-$langCMeta['help_course_structure'] = "Only available to students, not in the general public <br/> 
-    Structure and teaching frequency 
+$langCMeta['help_course_structure'] = "Only available to students, not in the general public <br/>
+    Structure and teaching frequency
     <ul><li> office hours</li>
-    <li>Lectures (e.g. 2 times a week, 3 hours) for 13 weeks </li> 
+    <li>Lectures (e.g. 2 times a week, 3 hours) for 13 weeks </li>
     <li>Tutorials (Recitations) (once a week, 2 hours) </li>
-    <li>Practical activities</li> 
+    <li>Practical activities</li>
     <li>Other</li></ul>";
 $langCMeta['course_teachingMethod'] = "Course teaching method";
-$langCMeta['help_course_teachingMethod'] = "Only available to students not in the general public<br/> 
-    Description of teaching and learning methods used. 
+$langCMeta['help_course_teachingMethod'] = "Only available to students not in the general public<br/>
+    Description of teaching and learning methods used.
     E.g. seat-tilt and supplementary-supporting teaching education through asynchronous learning platform.
     Practical Activities. ";
 $langCMeta['course_assessmentMethod'] = "Course assesment method";
 $langCMeta['help_course_assessmentMethod'] = "Only available to students not in the general public<br/>
-    Description of evaluation, grading methods and evaluation criteria used. 
-    One can refer to the following: 
-    <ul><li>Examinations</li> 
-    <li>Assignments and advances</li> 
+    Description of evaluation, grading methods and evaluation criteria used.
+    One can refer to the following:
+    <ul><li>Examinations</li>
+    <li>Assignments and advances</li>
     <li>Permissible material during exams</li>
     <li>Formerly exam questions</li></ul>";
 $langCMeta['course_prerequisites'] = "Course prerequisites";
 $langCMeta['help_course_prerequisites'] = "Description to include the following:
-    <ul><li> Prerequisite knowledge and preparation requirements</li> 
+    <ul><li> Prerequisite knowledge and preparation requirements</li>
     <li>Links to course prerequisites </li></ul>";
 $langCMeta['course_literature'] = "Additional recommended literature and study material";
-$langCMeta['help_course_literature'] = "Description in order to cover the following: 
+$langCMeta['help_course_literature'] = "Description in order to cover the following:
 <ul><li>Texts and books</li>
 <li>Writings </li>
 <li>Bibliography</li>
 <li>Online readings</li>
 <li>Internet sources</li>
 <li>Library resources</li>
-<li>Related 3rd party open courses</li> 
-<li>Articles</li> 
+<li>Related 3rd party open courses</li>
+<li>Articles</li>
 <li>Videos and movies</li></ul>
 each proposal is recommended to be accompanied by a short commentary on its purpose and usefulness";
 $langCMeta['course_recommendedComponents'] = "Other recommended courses of the faculty related to the curriculum";
 $langCMeta['course_assignments'] = "Course assignments";
 $langCMeta['help_course_assignments'] = "Description in order to cover the following:
     <ul><li>Assignments (homework)</li>
-    <li>Assessments</li> 
+    <li>Assessments</li>
     <li>Grading: how the final grade is calculated</li></ul>";
 $langCMeta['course_requirements'] = "Course requirements";
-$langCMeta['help_course_requirements'] = "Ddescription in order to include the following: 
-    <ul><li> Technical requirements </li> 
+$langCMeta['help_course_requirements'] = "Ddescription in order to include the following:
+    <ul><li> Technical requirements </li>
     <li> Other requirements, assignments (homework)</li></ul>";
 $langCMeta['course_remarks'] = "Remarks";
 $langCMeta['course_acknowledgments'] = "Course acknowledgements";
@@ -3009,7 +3008,7 @@ $langCMeta['help_course_acknowledgments'] = "E.g. towards a publishing house or 
 $langCMeta['course_eudoxusCode'] = "Course code in 'Eudoxus'";
 $langCMeta['course_eudoxusURL'] = "Course url in Eudoxus";
 $langCMeta['course_kalliposURL'] = "Writings link (Kallipos)";
-$langCMeta['help_course_kalliposURL'] = "In case an e-textbook under the programme Callippus is developed. 
+$langCMeta['help_course_kalliposURL'] = "In case an e-textbook under the programme Callippus is developed.
     For more information, check the link at http://www.kallipos.gr";
 $langCMeta['course_thematic'] = "Thematic scientific area";
 $langCMeta['help_course_thematic'] = "Thematic classification according to library standards. The filling may be done in conjunction with the corresponding library of the department or faculty.";
@@ -4485,7 +4484,7 @@ $scolles21 = "I understand other students";
 $scolles22 = "students understand me";
 $scolles23 = "I understand the tutor";
 $scolles24 = "tutor understands me";
-$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the 
+$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the
 				learning environment which has been shaped from the participants. It consists from 24 questions. Each question has as answer a number from 1 (Almost never) to 5 (Almost always)";
 $langCollesLegend = "1 (Almost Never), 2 (Rarely), 3 (Sometimes), 4 (Often), 5 (Almost Always)";
 $colles_detail_answer = "Here you can see the student's replies";
@@ -4593,8 +4592,7 @@ $langNodeSubscribed = "Subscribers visibility";
 $langNodeSubscribed2 = "The $langsFaculty will show up only for its subscribers";
 $langNodeHidden = "Hidden";
 $langNodeHidden2 = "The $langsFaculty will remain hidden from all users";
-$langMindmap = "Mind Mapping";
-$langMindMap = "Mind Map";
+$langMindmap = "Mind Map";
 $langScreenshot = "Screenshot";
 $langOpenEx = "Open Example";
 $langEditEn = "Activate Edit Mode";
@@ -4950,7 +4948,7 @@ $langHtmlFile = "Html file";
 $langRubricCreated = "Rubrique created successfully";
 $langDefaultMatchingOpt1 = "Athens";
 $langDefaultMatchingOpt2 = "London";
-$langTurnitinShortDescription = "Connect with plagiarism Service. 
+$langTurnitinShortDescription = "Connect with plagiarism Service.
 Plagiarism service is a commercial product by Turnitin. For further information take a look at <a href=\"https://turnitin.com\">https://turnitin.com</a>";
 $langGroupFull = "full group";
 $langScoreDiffers = 'The recorded exercise score is different to the currently calculated one. Would you like to regrade the exercise?';
