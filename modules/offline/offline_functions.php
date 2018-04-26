@@ -29,21 +29,14 @@ function zip_offline_directory($zip_filename, $downloadDir) {
     }
 }
 
-function offline_documents($curDirPath, $curDirName, $bladeData) {
+function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) {
     global $blade, $webDir, $course_id, $course_code, $downloadDir,
            $langDownloadDir, $langSave, $copyright_titles, $copyright_links;
 
-
-    $bladeData['urlAppend'] = '../../';
-    $bladeData['template_base'] = '../../template/default';
-    $bladeData['themeimg'] = '../../template/default/img';
-    $bladeData['logo_img'] = '../../template/default/img/eclass-new-logo.png';
-    $bladeData['logo_img_small'] = '../../template/default/img/logo_eclass_small.png';
-
     // doc init
     $basedir = $webDir . '/courses/' . $course_code . '/document';
-    if (!file_exists($downloadDir . '/modules/document' . $curDirName)) {
-        mkdir($downloadDir . '/modules/document' . $curDirName);
+    if (!file_exists($downloadDir . '/modules/' . $curDirName)) {
+        mkdir($downloadDir . '/modules/' . $curDirName);
     }
 
     $files = $dirs = array();
@@ -70,7 +63,7 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
         } else {
             $size = file_exists($path) ? filesize($path): 0;
             if (file_exists($path) && !$is_dir) {
-                copy($path, $downloadDir . '/modules/document' . $curDirName . '/' . $row->filename);
+                copy($path, $downloadDir . '/modules/' . $curDirName . '/' . $row->filename);
             }
         }
 
@@ -96,7 +89,7 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
         }
 
         if (!$row->extra_path or $info['common_doc_path']) { // Normal or common document
-            $download_url = $row->filename;
+            $download_url = $curDirPrefix . '/' . $row->filename;
         } else { // External document
             $download_url = $row->extra_path;
         }
@@ -109,7 +102,7 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
         $info['copyrighted'] = false;
         if ($is_dir) {
             $info['icon'] = 'fa-folder';
-            $info['url'] = $row->filename . "/index.html";
+            $info['url'] = $curDirPrefix . '/' . $row->filename . ".html";
             $newData = $bladeData;
             $newData['urlAppend'] .= '../';
             $newData['template_base'] = $newData['urlAppend'] . 'template/default';
@@ -117,13 +110,12 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
             $newData['logo_img'] = $newData['themeimg'] . '/eclass-new-logo.png';
             $newData['logo_img_small'] = $newData['themeimg'] . '/logo_eclass_small.png';
             $newData['toolArr'] = lessonToolsMenu_offline(true, $newData['urlAppend']);
-            offline_documents($row->path, $curDirName . '/' . $row->filename, $newData);
+            offline_documents($row->path, $curDirName . '/' . $row->filename, $row->filename, $newData);
 
             $dirs[] = (object) $info;
         } else {
             $info['icon'] = choose_image('.' . $row->format);
             $GLOBALS['group_sql'] = "course_id = $course_id AND subsystem = " . MAIN;
-            $info['url'] = file_url($row->path, $row->filename);
             $info['link'] = "<a href='$download_url' title='".q($row->filename)."'>" . $row->filename . "</a>";
 
             $copyid = $row->copyrighted;
@@ -139,7 +131,7 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
     }
     $bladeData['fileInfo'] = array_merge($dirs, $files);
     $docout = $blade->view()->make('modules.document.index', $bladeData)->render();
-    $fp = fopen($downloadDir . '/modules/document' .$curDirName . '/index.html', 'w');
+    $fp = fopen($downloadDir . '/modules/' . $curDirName . '.html', 'w');
     fwrite($fp, $docout);
     fclose($fp);
 }

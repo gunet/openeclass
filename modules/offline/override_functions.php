@@ -69,11 +69,7 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
         });
         foreach ($offline_course_modules as $mid) {
             array_push($sideMenuText, q($mid['title']));
-            if ($mid['link'] == 'document') {
-                array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '/index.html'));
-            } else {
-                array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '.html'));
-            }
+            array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '.html'));
             array_push($sideMenuImg, $mid['image'] . $section['iconext']);
             array_push($sideMenuID, $mid);
         }

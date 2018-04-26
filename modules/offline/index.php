@@ -150,6 +150,7 @@ fclose($fp);
 /////////////
 mkdir($downloadDir . '/modules');
 $bladeData['lessonStatus'] = '../../';
+$bladeData['urlAppend'] = '../';
 $bladeData['template_base'] = $bladeData['urlAppend'] . 'template/default';
 $bladeData['themeimg'] = $bladeData['urlAppend'] . 'template/default/img';
 $bladeData['logo_img'] = $bladeData['themeimg'] . '/eclass-new-logo.png';
@@ -160,7 +161,7 @@ $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 ///////////////
 // documents //
 ///////////////
-offline_documents('', '', $bladeData);
+offline_documents('', 'document', 'document', $bladeData);
 
 /////////////
 // announcements
