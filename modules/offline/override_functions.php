@@ -129,38 +129,3 @@ function make_clickable_path($path) {
     }
     return $out;
 }
-
-/**
- * @brief Link for sortable table headings
- * @global type $sort
- * @global type $reverse
- * @global type $curDirPath
- * @global type $base_url
- * @global type $themeimg
- * @global type $langUp
- * @global type $langDown
- * @param type $label
- * @param type $this_sort
- * @return type
- */
-function headlink($label, $this_sort) {
-    global $sort, $reverse, $curDirPath, $base_url, $themeimg, $langUp, $langDown;
-
-    if (empty($curDirPath)) {
-        $path = '/';
-    } else {
-        $path = $curDirPath;
-    }
-    if ($sort == $this_sort) {
-        $this_reverse = !$reverse;
-        $indicator = " <img src='$themeimg/arrow_" .
-            ($reverse ? 'up' : 'down') . ".png' alt='" .
-            ($reverse ? $langUp : $langDown) . "'>";
-    } else {
-        $this_reverse = $reverse;
-        $indicator = '';
-    }
-    return '<a href="' . $base_url . 'openDir=' . $path .
-        '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
-        '">' . $label . $indicator . '</a>';
-}

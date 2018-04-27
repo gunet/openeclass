@@ -38,10 +38,10 @@
                 <div class='table-responsive'>
                     <table class='table-default'>
                         <tr class='list-header'>
-                            <th class='text-left' width='60'>{!! headlink(trans('langType'), 'type') !!}</th>
-                            <th class='text-left'>{!! headlink(trans('langName'), 'name') !!}</th>
+                            <th class='text-left' width='60'>{!! trans('langType') !!}</th>
+                            <th class='text-left'>{!! trans('langName') !!}</th>
                             <th class='text-left'>{{ trans('langSize') }}</th>
-                            <th class='text-left'>{!! headlink(trans('langDate'), 'date') !!}</th>
+                            <th class='text-left'>{!! trans('langDate') !!}</th>
                         </tr>
 
                         @forelse ($fileInfo as $file)
