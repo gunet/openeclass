@@ -22,11 +22,31 @@
 
 function zip_offline_directory($zip_filename, $downloadDir) {
     global $public_code;
-    $zipfile = new PclZip($zip_filename);
-    $v = $zipfile->create($downloadDir, PCLZIP_OPT_REMOVE_PATH, $downloadDir, PCLZIP_OPT_ADD_PATH, $public_code . '-offline');
-    if ($v === 0) {
-        die("error: " . $zipfile->errorInfo(true));
+    $zipfile = new ZipArchive();
+    if ($zipfile->open($zip_filename, ZipArchive::CREATE) !== true) {
+        die("error: cannot open $zip_filename");
     }
+
+    // Create recursive directory iterator
+    /** @var SplFileInfo[] $files */
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($downloadDir),
+        RecursiveIteratorIterator::LEAVES_ONLY
+    );
+
+    foreach ($files as $name => $file) {
+        // Skip directories (they will be added automatically)
+        if (!$file->isDir()) {
+            // Get real and relative path for current file
+            $filePath = $file->getRealPath();
+            $relativePath = remove_filename_unsafe_chars($public_code . '-offline') . "/" . substr($filePath, strlen($downloadDir) + 1);
+
+            // Add current file to archive
+            $zipfile->addFile($filePath, $relativePath);
+        }
+    }
+
+    $zipfile->close();
 }
 
 function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) {
