@@ -130,6 +130,7 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
         }
     }
     $bladeData['fileInfo'] = array_merge($dirs, $files);
+    $bladeData['curDirPath'] = $curDirPath;
     $docout = $blade->view()->make('modules.document.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/' . $curDirName . '.html', 'w');
     fwrite($fp, $docout);

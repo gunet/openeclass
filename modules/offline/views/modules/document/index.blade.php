@@ -21,9 +21,6 @@
                         @endif
                         <div>
                             {!! make_clickable_path($curDirPath) !!}
-                            @if ($downloadPath)
-                               &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
-                            @endif
                         </div>
                         @if ($curDirName and $dirComment)
                             <div>{{ $dirComment }}</div>

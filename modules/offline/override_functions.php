@@ -113,19 +113,25 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
  * @return type
  */
 function make_clickable_path($path) {
-    global $langRoot, $base_url, $group_sql;
+    global $langRoot, $group_sql;
 
-    $cur = $out = '';
+    $out = '';
+    $depth = count(explode('/', $path));
+    $i = 1;
     foreach (explode('/', $path) as $component) {
-        if (empty($component)) {
-            $out = "<a href='{$base_url}openDir=/'>$langRoot</a>";
-        } else {
-            $cur .= rawurlencode("/$component");
-            $row = Database::get()->querySingle("SELECT filename FROM document
-                                        WHERE path LIKE '%/$component' AND $group_sql");
-            $dirname = $row->filename;
-            $out .= " &raquo; <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
+        $dotsprefix = "";
+        for ($j = 1; $j <= $depth-$i; $j++) {
+            $dotsprefix .= "../";
         }
+
+        if (empty($component)) {
+            $out = "<a href='" . $dotsprefix . "document.html'>$langRoot</a>";
+        } else {
+            $row = Database::get()->querySingle("SELECT filename FROM document WHERE path LIKE '%/$component' AND $group_sql");
+            $dirname = $row->filename;
+            $out .= " &raquo; <a href='" . $dotsprefix . $dirname . ".html'>" . q($dirname) . "</a>";
+        }
+        $i++;
     }
     return $out;
 }
