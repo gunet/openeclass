@@ -108,7 +108,7 @@
                                                         ({{ trans('langFrom2') }} {{ nice_format($course_unit->start_week) }} {{ trans('langTill') }} {{ nice_format($course_unit->finish_week) }})
                                                     </a>
                                                 @else
-                                                    <a href="modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}">
+                                                    <a href="modules/units/{{ $course_unit->id }}.html">
                                                         {{ $course_unit->title }}
                                                     </a>
                                                 @endif

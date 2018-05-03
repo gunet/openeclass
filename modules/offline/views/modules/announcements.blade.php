@@ -72,7 +72,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($result as $ann)
+                        @foreach ($announcements as $ann)
                             <tr>
                                 <td>{{ $ann->id }}</td>
                                 <td><div class='table_td'>

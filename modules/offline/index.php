@@ -92,7 +92,7 @@ $data = [
     'truncated_text' => ''
 ];
 
-$data['course_info'] = $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
+$data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
@@ -130,13 +130,13 @@ $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
     'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
     'show_toggle_student_view', 'themeimg', 'currentCourseName');
 $bladeData = array_merge($global_data, $data);
-
-// course units
-$bladeData['course_units'] = offline_course_units();
+$bladeData['pageTitle'] = $course_info->title;
 
 use Philo\Blade\Blade;
 $blade = new Blade($viewsDir, $cacheDir);
 
+// course units
+$bladeData['course_units'] = $course_units = offline_course_units();
 /////////////////
 // course home //
 /////////////////
@@ -158,16 +158,16 @@ $bladeData['logo_img_small'] = $bladeData['themeimg'] . '/logo_eclass_small.png'
 $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
 
+offline_unit_resources($bladeData, $downloadDir);
 ///////////////
 // documents //
 ///////////////
 offline_documents('', 'document', 'document', $bladeData);
 
-/////////////
+////////////////
 // announcements
-///////////////
+////////////////
 offline_announcements($bladeData);
-
 
 /////////////
 // statics //

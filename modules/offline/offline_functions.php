@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -174,7 +174,7 @@ function offline_announcements($bladeData) {
     $bladeData['logo_img'] = '../template/default/img/eclass-new-logo.png';
     $bladeData['logo_img_small'] = '../template/default/img/logo_eclass_small.png';
 
-    $bladeData['result'] = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d
+    $bladeData['announcements'] = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d
                                                 AND visible = 1
                                                 AND (start_display <= NOW() OR start_display IS NULL)
                                                 AND (stop_display >= NOW() OR stop_display IS NULL)
@@ -202,6 +202,46 @@ function offline_course_units() {
                                 AND `order` >= 0
                                 ORDER BY `order`", $course_id);
 
-
     return $data;
+}
+
+/**
+ * @brief get unit resources from a given course unit
+ * @param type $unit_id
+ */
+function offline_unit_resources($bladeData, $downloadDir) {
+
+    global $course_id, $blade;
+
+    $bladeData['urlAppend'] = '../../';
+    $bladeData['template_base'] = '../../template/default';
+    $bladeData['themeimg'] = '../../template/default/img';
+    $bladeData['logo_img'] = '../../template/default/img/eclass-new-logo.png';
+    $bladeData['logo_img_small'] = '../../template/default/img/logo_eclass_small.png';
+
+    $data = Database::get()->queryArray("SELECT id, title, comments, visible, public, `order` FROM course_units
+                                WHERE course_id = ?d
+                                AND visible = 1
+                                AND `order` >= 0
+                                ORDER BY `order`", $course_id);
+
+    if (count($data) > 0) {
+        if (!file_exists($downloadDir . '/modules/units/')) {
+           mkdir($downloadDir . '/modules/units/');
+        }
+        foreach ($data as $cu) {
+            $bladeData['course_unit_title'] = $cu->title;
+            $bladeData['course_unit_comments'] = $cu->comments;
+            $bladeData['unit_resources'] = Database::get()->queryArray("SELECT title, comments, res_id, `type` FROM unit_resources "
+                                . "WHERE unit_id = ?d AND visible = 1 "
+                                . "AND `type` NOT IN ('poll', 'work', 'forum')"
+                                . "ORDER BY `order`", $cu->id);
+            $out = $blade->view()->make('modules.unit', $bladeData)->render();
+            //echo($out);
+            $fp = fopen($downloadDir . '/modules/units/' . $cu->id . '.html', 'w');
+            fwrite($fp, $out);
+            //fclose($fp);
+        }
+    }
+
 }

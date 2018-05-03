@@ -73,3 +73,79 @@ function course_announcements() {
     }
     return "<li class='list-item'><span class='item-wholeline'><div class='text-title not_visible'> - $langNoAnnounce - </div></span></li>";
 }
+
+/**
+ * @brief display link for given unit resource
+ * @param type $type
+ * @param type $res_id
+ * @return string
+ */
+function get_unit_resource_link($type, $res_id) {
+
+    $link = '';
+    switch ($type) {
+        case 'doc':
+            $doc = Database::get()->querySingle("SELECT filename FROM document WHERE id = ?d", $res_id)->filename;
+            $link = "../document/$doc";
+            break;
+        case 'video':
+            $link = "../video/";
+            break;
+        case 'link':
+            $link = Database::get()->querySingle("SELECT url FROM link WHERE id = ?d", $res_id)->url;
+            break;
+        case 'videolink':
+            $link = Database::get()->querySingle("SELECT url FROM videolink WHERE id = ?d", $res_id)->url;
+            break;
+        case 'exercise':
+            $link = "../exercise/$res_id.html";
+            break;
+        case 'wiki':
+            $link = "../wiki/$res_id.html";
+            break;
+    }
+    return $link;
+
+}
+
+/**
+ * @brief display icon for given unit resource
+ * @param type $type
+ * @param type $res_id
+ * @return string
+ */
+function get_unit_resource_icon($type, $res_id) {
+
+    $icon = '';
+    switch ($type) {
+        case 'doc':
+            $icon = 'fa-folder-open-o';
+            break;
+        case 'video':
+            $icon = 'fa-film';
+            break;
+        case 'link':
+        case 'videolink':
+            $icon = 'fa-link';
+            break;
+        case 'exercise':
+            $icon = 'fa-pencil-square-o';
+            break;
+        case 'wiki':
+            $icon = 'fa-wikipedia';
+            break;
+        case 'glossary':
+            $icon = 'fa-list';
+            break;
+        case 'blog':
+            $icon = 'fa-columns';
+            break;
+        case 'calendar':
+            $icon = 'fa-calendar-o';
+            break;
+        case 'forum':
+            $icon = 'fa-comments';
+            break;
+    }
+    return "fa $icon";
+}
