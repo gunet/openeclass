@@ -231,6 +231,27 @@ function offline_unit_resources($bladeData, $downloadDir) {
            mkdir($downloadDir . '/modules/units/');
         }
         foreach ($data as $cu) {
+            $bladeData['next_unit_title'] = $bladeData['next_unit_link'] = $bladeData['prev_unit_title'] = $bladeData['prev_unit_link'] = '';
+            $cu_next = Database::get()->querySingle("SELECT id, title FROM course_units WHERE course_id = ?d "
+                                       . "AND visible = 1 "
+                                       . "AND `order` > ?d "
+                                       . "ORDER BY `order` ASC "
+                                       . "LIMIT 1"
+                                       , $course_id, $cu->order);
+            if ($cu_next) {
+                $bladeData['next_unit_title'] = $cu_next->title;
+                $bladeData['next_unit_link'] = $cu_next->id . ".html";
+            }
+            $cu_prev = Database::get()->querySingle("SELECT id, title FROM course_units WHERE course_id = ?d "
+                                       . "AND visible = 1 "
+                                       . "AND `order` < ?d "
+                                       . "ORDER BY `order` DESC "
+                                       . "LIMIT 1"
+                                       , $course_id, $cu->order);
+            if ($cu_prev) {
+                $bladeData['prev_unit_title'] = $cu_prev->title;
+                $bladeData['prev_unit_link'] = $cu_prev->id . ".html";
+            }
             $bladeData['course_unit_title'] = $cu->title;
             $bladeData['course_unit_comments'] = $cu->comments;
             $bladeData['unit_resources'] = Database::get()->queryArray("SELECT title, comments, res_id, `type` FROM unit_resources "
@@ -238,10 +259,9 @@ function offline_unit_resources($bladeData, $downloadDir) {
                                 . "AND `type` NOT IN ('poll', 'work', 'forum')"
                                 . "ORDER BY `order`", $cu->id);
             $out = $blade->view()->make('modules.unit', $bladeData)->render();
-//            echo($out);
+            //echo($out);
             $fp = fopen($downloadDir . '/modules/units/' . $cu->id . '.html', 'w');
             fwrite($fp, $out);
-            //fclose($fp);
         }
     }
 

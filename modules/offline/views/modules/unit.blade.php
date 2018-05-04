@@ -5,17 +5,25 @@
     <div class='row'>
         <div class='col-md-12'>
             <h2 class='page-subtitle'>
-                    {{ trans('langCourseUnits') }}
+                {{ trans('langCourseUnits') }}
             </h2>
         </div>
     </div>
 
     <div class='row'>
         <div class='col-md-12'>
-          <div class='form-wrapper course_units_pager clearfix'>
-            &nbsp;
-            <a class='pull-right' title='Θέμα 2' href='/openeclass/modules/units/index.php?course=TMA100&amp;id=2'>{{ $course_unit_title }}<i class='fa fa-arrow-right space-before-icon'></i></a>
-          </div>
+            <div class='form-wrapper course_units_pager clearfix'>
+                @if (!empty($prev_unit_title))
+                    <a class='pull-left' title='{{ $prev_unit_title }}' href='{{ $prev_unit_link }}'><i class='fa fa-arrow-left space-after-icon'></i>{{ $prev_unit_title }}</a>
+                @else
+                    &nbsp;
+                @endif
+                @if (!empty($next_unit_title))
+                    <a class='pull-right' title='{{ $next_unit_title }}' href='{{ $next_unit_link }}'>{{ $next_unit_title }}<i class='fa fa-arrow-right space-before-icon'></i></a>
+                @else
+                    &nbsp;
+                @endif
+            </div>
         </div>
     </div>
 
