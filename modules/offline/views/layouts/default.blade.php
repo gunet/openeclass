@@ -127,7 +127,7 @@
 
             <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar float-menu">
                 <div class="logo">
-                    <a href='{{ $urlAppend }}'>
+                    <a href='{{ $urlAppend }}index.html'>
                     <img class="img-responsive hidden-xs hidden-sm" src="{{ $logo_img }}" alt='{{ $pageTitle }} logo'>
                     </a>
                 </div>

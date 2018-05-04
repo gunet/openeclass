@@ -49,6 +49,22 @@ function zip_offline_directory($zip_filename, $downloadDir) {
     $zipfile->close();
 }
 
+/**
+ * @brief get / render documents
+ * @global type $blade
+ * @global type $webDir
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $downloadDir
+ * @global type $langDownloadDir
+ * @global type $langSave
+ * @global type $copyright_titles
+ * @global type $copyright_links
+ * @param type $curDirPath
+ * @param type $curDirName
+ * @param type $curDirPrefix
+ * @param type $bladeData
+ */
 function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) {
     global $blade, $webDir, $course_id, $course_code, $downloadDir,
            $langDownloadDir, $langSave, $copyright_titles, $copyright_links;
@@ -159,7 +175,7 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
 
 
 /**
- * @brief render announcements
+ * @brief get / render announcements
  * @global type $blade
  * @global type $course_id
  * @global type $downloadDir
@@ -173,18 +189,40 @@ function offline_announcements($bladeData) {
     $bladeData['themeimg'] = '../template/default/img';
     $bladeData['logo_img'] = '../template/default/img/eclass-new-logo.png';
     $bladeData['logo_img_small'] = '../template/default/img/logo_eclass_small.png';
+    $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
-    $bladeData['announcements'] = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d
+    $bladeData['announcements'] = $announcements = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d
                                                 AND visible = 1
                                                 AND (start_display <= NOW() OR start_display IS NULL)
                                                 AND (stop_display >= NOW() OR stop_display IS NULL)
                                             ORDER BY `order` DESC , `date` DESC", $course_id);
 
 
-    $out = $blade->view()->make('modules.announcements', $bladeData)->render();
+    $out = $blade->view()->make('modules.announcements.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/announcements.html', 'w');
     fwrite($fp, $out);
-    fclose($fp);
+
+    if (count($announcements > 0)) {
+        if (!file_exists($downloadDir . '/modules/announcement/')) {
+            mkdir($downloadDir . '/modules/announcement/');
+        }
+    //    foreach ($announcements as $a) {
+        foreach ($announcements as $a) {
+            $bladeData['urlAppend'] = '../../';
+            $bladeData['template_base'] = '../../template/default';
+            $bladeData['themeimg'] = '../../template/default/img';
+            $bladeData['logo_img'] = '../../template/default/img/eclass-new-logo.png';
+            $bladeData['logo_img_small'] = '../../template/default/img/logo_eclass_small.png';
+            $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
+            $bladeData['ann_title'] = $a->title;
+            $bladeData['ann_body'] = $a->content;
+            $bladeData['ann_date'] = $a->date;
+            $out = $blade->view()->make('modules.announcements.ann', $bladeData)->render();
+            $fp = fopen($downloadDir . '/modules/announcement/' . $a->id . '.html', 'w');
+            fwrite($fp, $out);
+        }
+    }
+
 }
 
 
@@ -206,8 +244,10 @@ function offline_course_units() {
 }
 
 /**
- * @brief get unit resources from a given course unit
+ * @brief get / render unit resources from a given course unit
  * @param type $unit_id
+ * @global type $course_id
+ * @global type $blade
  */
 function offline_unit_resources($bladeData, $downloadDir) {
 
@@ -227,8 +267,8 @@ function offline_unit_resources($bladeData, $downloadDir) {
                                 ORDER BY `order`", $course_id);
 
     if (count($data) > 0) {
-        if (!file_exists($downloadDir . '/modules/units/')) {
-           mkdir($downloadDir . '/modules/units/');
+        if (!file_exists($downloadDir . '/modules/unit/')) {
+           mkdir($downloadDir . '/modules/unit/');
         }
         foreach ($data as $cu) {
             $bladeData['next_unit_title'] = $bladeData['next_unit_link'] = $bladeData['prev_unit_title'] = $bladeData['prev_unit_link'] = '';
@@ -259,10 +299,8 @@ function offline_unit_resources($bladeData, $downloadDir) {
                                 . "AND `type` NOT IN ('poll', 'work', 'forum')"
                                 . "ORDER BY `order`", $cu->id);
             $out = $blade->view()->make('modules.unit', $bladeData)->render();
-            //echo($out);
-            $fp = fopen($downloadDir . '/modules/units/' . $cu->id . '.html', 'w');
+            $fp = fopen($downloadDir . '/modules/unit/' . $cu->id . '.html', 'w');
             fwrite($fp, $out);
         }
     }
-
 }
