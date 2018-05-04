@@ -460,17 +460,17 @@ $static_modules = array(
 // modules for offline course
 // -------------------------------------------
 $offline_course_modules = array(
-    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'calendar'),
-    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'links'),
-    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'docs'),
-    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'videos'),
-    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'announcements'),
-    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'exercise'),
-    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'glossary'),
-    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'ebook'),
-    MODULE_ID_DESCRIPTION => array('title' => $langCourseDescription, 'link' => 'course_description', 'image' => 'description'),
-    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
-    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog')
+    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-calendar'),
+    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-link'),
+    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-folder-open-o'),
+    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-film'),
+    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-bullhorn'),
+    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-pencil-square-o'),
+    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
+    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'),
+    MODULE_ID_DESCRIPTION => array('title' => $langCourseDescription, 'link' => 'course_description', 'image' => 'fa-info-circle'),
+    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia'),
+    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-columns')
 );
 
 

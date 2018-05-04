@@ -46,9 +46,8 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
 
     $tools_sections =
         array(array('type' => 'Public',
-            'title' => $GLOBALS['langCourseOptions'],
-            'iconext' => '_on.png',
-            'class' => 'active'));
+                    'title' => $GLOBALS['langCourseOptions'],
+                    'class' => 'active'));
 
     foreach ($tools_sections as $section) {
 
@@ -58,8 +57,8 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
         $sideMenuImg = array();
         $sideMenuID = array();
         $arrMenuType = array('type' => 'text',
-            'text' => $section['title'],
-            'class' => $section['class']);
+                            'text' => $section['title'],
+                            'class' => $section['class']);
         array_push($sideMenuSubGroup, $arrMenuType);
 
         // sort array according to title (respect locale)
@@ -70,7 +69,7 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
         foreach ($offline_course_modules as $mid) {
             array_push($sideMenuText, q($mid['title']));
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '.html'));
-            array_push($sideMenuImg, $mid['image'] . $section['iconext']);
+            array_push($sideMenuImg, $mid['image']);
             array_push($sideMenuID, $mid);
         }
         array_push($sideMenuSubGroup, $sideMenuText);

@@ -119,7 +119,7 @@ function get_unit_resource_icon($type, $res_id) {
     $icon = '';
     switch ($type) {
         case 'doc':
-            $icon = 'fa-folder-open-o';
+            $icon = 'fa-file';
             break;
         case 'video':
             $icon = 'fa-film';
