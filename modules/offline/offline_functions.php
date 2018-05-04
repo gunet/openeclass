@@ -218,6 +218,7 @@ function offline_unit_resources($bladeData, $downloadDir) {
     $bladeData['themeimg'] = '../../template/default/img';
     $bladeData['logo_img'] = '../../template/default/img/eclass-new-logo.png';
     $bladeData['logo_img_small'] = '../../template/default/img/logo_eclass_small.png';
+    $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
     $data = Database::get()->queryArray("SELECT id, title, comments, visible, public, `order` FROM course_units
                                 WHERE course_id = ?d
@@ -237,7 +238,7 @@ function offline_unit_resources($bladeData, $downloadDir) {
                                 . "AND `type` NOT IN ('poll', 'work', 'forum')"
                                 . "ORDER BY `order`", $cu->id);
             $out = $blade->view()->make('modules.unit', $bladeData)->render();
-            //echo($out);
+//            echo($out);
             $fp = fopen($downloadDir . '/modules/units/' . $cu->id . '.html', 'w');
             fwrite($fp, $out);
             //fclose($fp);

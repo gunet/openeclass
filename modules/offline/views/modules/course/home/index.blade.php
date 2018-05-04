@@ -58,14 +58,15 @@
                     <div class='col-xs-12 course-below-wrapper'>
                         <div class='row text-muted course-below-info'>
                             <div class='col-xs-6'>
-                                <strong>{{ trans('langCode') }}:</strong> {{ $course_info->public_code }}<br>
-                                <strong>{{ trans('langFaculty') }}:</strong>
+                                <strong>{{ trans('langCode') }}: </strong> {{ $course_info->public_code }}<br>
+                                <strong>{{ trans('langFaculty') }}: </strong>
                                 {!! $departments !!}
                              </div>
                             <div class='col-xs-6'>
                                 @if ($course_info->course_license)
                                     <div class ='text-center'>
-                                        <span>{!! copyright_info($course_id) !!}</span>
+                                        <strong>{{ trans('langLicense') }}:</strong><br>
+                                        <span>{!! copyright_info($course_id, 0) !!}</span>
                                     </div>
                                 @endif
                             </div>

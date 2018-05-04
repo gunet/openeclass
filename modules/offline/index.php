@@ -157,13 +157,14 @@ $bladeData['logo_img'] = $bladeData['themeimg'] . '/eclass-new-logo.png';
 $bladeData['logo_img_small'] = $bladeData['themeimg'] . '/logo_eclass_small.png';
 $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
-
+////////////////
+// unit resources
+////////////////
 offline_unit_resources($bladeData, $downloadDir);
 ///////////////
 // documents //
 ///////////////
 offline_documents('', 'document', 'document', $bladeData);
-
 ////////////////
 // announcements
 ////////////////
