@@ -42,6 +42,46 @@ function trans($var_name, $var_array = []) {
 }
 
 /**
+ * @brief slightly modified from fileDisplayLib.inc.php
+ * @staticvar type $seen_paths
+ * @param type $disk_path
+ * @param type $filename
+ * @return type
+ */
+function custom_public_file_path($disk_path, $filename = null) {
+    static $seen_paths;
+    $dirpath = dirname($disk_path);
+
+    if ($dirpath == '/') {
+        $dirname = '';
+    } else {
+        if (!isset($seen_paths[$disk_path])) {
+            $components = explode('/', $dirpath);
+            array_shift($components);
+            $partial_path = '';
+            $dirname = '';
+            foreach ($components as $c) {
+                $partial_path .= '/' . $c;
+                if (!isset($seen_paths[$partial_path])) {
+                    $name = Database::get()->querySingle("SELECT filename FROM document WHERE path = ?s", $partial_path)->filename;
+                    $dirname .= '/' . file_url_escape($name);
+                    $seen_paths[$partial_path] = $dirname;
+                } else {
+                    $dirname = $seen_paths[$partial_path];
+                }
+            }
+        } else {
+            $dirname = $seen_paths[$partial_path];
+        }
+    }
+    if (!isset($filename)) {
+        $filename = Database::get()->querySingle("SELECT filename FROM document WHERE path = ?s", $disk_path)->filename;
+    }
+    return $dirname . '/' . file_url_escape($filename);
+}
+
+
+/**
  * @brief fetch course announcements
  * @global type $course_id
  * @global type $course_code
@@ -85,8 +125,8 @@ function get_unit_resource_link($type, $res_id) {
     $link = '';
     switch ($type) {
         case 'doc':
-            $doc = Database::get()->querySingle("SELECT filename FROM document WHERE id = ?d", $res_id)->filename;
-            $link = "../document/$doc";
+            $doc = Database::get()->querySingle("SELECT path, filename FROM document WHERE id = ?d", $res_id);
+            $link = "../document/" . custom_public_file_path($doc->path, $doc->filename);
             break;
         case 'video':
             $link = "../video/";

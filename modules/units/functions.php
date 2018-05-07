@@ -768,7 +768,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
         if (!$r) { // check if it was deleted
             if (!$is_editor) {
                 return '';
-            } else {                
+            } else {
                 $imagelink = icon('fa-times');
                 $forumlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
             }
@@ -1240,7 +1240,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
  */
 function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEditChange, $langDelete,
-    $langAddToCourseHome, $langConfirmDelete, $course_code, 
+    $langAddToCourseHome, $langConfirmDelete, $course_code,
     $langViewHide, $langViewShow, $langReorder;
 
     static $first = true;
