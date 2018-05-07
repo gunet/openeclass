@@ -4260,6 +4260,7 @@ $langInstallMsg = "Please wait! Installation may take a few minutes.";
 $langReadMore = "More";
 $langReadLess = "Less";
 $langNoInfoAvailable = "No information available";
+$langDownloadCourse = "Download $langsCourse";
 $langCourseUserRequests = "$langCourse registration user requests";
 $langCourseUserRequestsDisabled = "User registration requests supported only for non-closed $langsCourses.";
 $langContactIntroFooter = "If you reply to this message, the answer will be addressed to this user.";
