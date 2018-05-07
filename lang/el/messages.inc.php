@@ -1006,6 +1006,7 @@ $langCourseInvalidDepartmentPrompt = "Παρακαλούμε %s μεταφέρε
 $langReadMore = "Περισσότερα";
 $langReadLess = "Λιγότερα";
 $langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
+$langDownloadCourse = "Κατέβασμα του μαθήματος";
 
 /* * *******************************************
  * course_info.php

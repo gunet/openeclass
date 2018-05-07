@@ -688,8 +688,9 @@ if (count($categoryItems)) {
 } else {
     $categoryDisplay = '';
 }
-// offline course button
-//<li class='access pull-right'><a href='{$urlAppend}modules/offline/index.php?course={$course_code}'><span class='fa fa-fw' data-toggle='tooltip' data-placement='top' title='Offline'></span><span>D</span></a></li>
+
+$offline_course = get_config('offline_course');
+
 $tool_content .= "
 $action_bar
 <div class='row margin-top-thin margin-bottom-fat'>
@@ -707,7 +708,13 @@ $action_bar
 
                         ($uid? ("<li class='access pull-right'><a href='{$urlAppend}modules/user/" .
                                 ($is_course_admin? '': 'userslist.php') .
-                                "?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>"): '') . "
+                                "?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>"): '') .
+                        ($offline_course?
+                                "<li class='access pull-right'>
+                                    <a href='{$urlAppend}modules/offline/index.php?course={$course_code}'>
+                                        <span class='fa fa-download fa-fw' data-toggle='tooltip' data-placement='top' title='$langDownloadCourse'></span>
+                                    </a>
+                                </li>" : '') . "
                     </ul>
                 </div>
                 $left_column
