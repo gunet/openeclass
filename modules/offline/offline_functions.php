@@ -202,7 +202,7 @@ function offline_announcements($bladeData) {
     $fp = fopen($downloadDir . '/modules/announcements.html', 'w');
     fwrite($fp, $out);
 
-    if (count($announcements > 0)) {
+    if (is_array($announcements) && !empty($announcements) && count($announcements > 0)) {
         if (!file_exists($downloadDir . '/modules/announcement/')) {
             mkdir($downloadDir . '/modules/announcement/');
         }
@@ -223,6 +223,41 @@ function offline_announcements($bladeData) {
         }
     }
 
+}
+
+
+/**
+ * @brief get / render videos
+ * @param array $bladeData
+ */
+function offline_videos($bladeData) {
+    global $blade, $course_id, $downloadDir, $webDir, $course_code;
+
+    // video file copy
+    $basedir = $webDir . '/video/' . $course_code;
+    mkdir($downloadDir . '/modules/video');
+
+    $result = Database::get()->queryArray("select * from video WHERE course_id = ?d AND visible = 1", $course_id);
+    foreach ($result as $row) {
+        copy($basedir . $row->path, $downloadDir . '/modules/video/' . $row->url);
+    }
+
+    // module business logic
+    $bladeData['is_editor'] = $is_editor = false;
+    $bladeData['is_in_tinymce'] = $is_in_tinymce = false;
+    $bladeData['filterv'] = $filterv = 'WHERE true';
+    $bladeData['filterl'] = $filterl = 'WHERE true';
+    $bladeData['order'] = $order = 'ORDER BY title';
+    $bladeData['compatiblePlugin'] = $compatiblePlugin = true;
+    $bladeData['count_video'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d", $course_id)->count;
+    $bladeData['count_video_links'] = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d", $course_id)->count;
+    $bladeData['num_of_categories'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
+    $bladeData['items'] = getLinksOfCategory(0, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin); // uncategorized items
+    $bladeData['categories'] = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
+
+    $out = $blade->view()->make('modules.video.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/video.html', 'w');
+    fwrite($fp, $out);
 }
 
 

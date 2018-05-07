@@ -169,6 +169,10 @@ offline_documents('', 'document', 'document', $bladeData);
 // announcements
 ////////////////
 offline_announcements($bladeData);
+////////////////
+// video
+////////////////
+offline_videos($bladeData);
 
 /////////////
 // statics //
