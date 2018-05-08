@@ -94,7 +94,8 @@ function get_unit_resource_link($type, $res_id) {
             $link = "../document/" . public_file_path($doc->path, $doc->filename);
             break;
         case 'video':
-            $link = "../video/";
+            $link = Database::get()->querySingle("SELECT url FROM video WHERE id = ?d", $res_id)->url;
+            $link = "../video/" . $link;
             break;
         case 'link':
             $link = Database::get()->querySingle("SELECT url FROM link WHERE id = ?d", $res_id)->url;
@@ -103,10 +104,10 @@ function get_unit_resource_link($type, $res_id) {
             $link = Database::get()->querySingle("SELECT url FROM videolink WHERE id = ?d", $res_id)->url;
             break;
         case 'exercise':
-            $link = "../exercise/$res_id.html";
+            $link = "../exercise/index.html";
             break;
         case 'wiki':
-            $link = "../wiki/$res_id.html";
+            $link = "../wiki/index.html";
             break;
     }
     return $link;
