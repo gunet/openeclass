@@ -43,6 +43,7 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
 
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
+    $mids = array();
 
     $tools_sections =
         array(array('type' => 'Public',
@@ -61,16 +62,25 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
                             'class' => $section['class']);
         array_push($sideMenuSubGroup, $arrMenuType);
 
+        foreach ($offline_course_modules as $key => $value) {
+            $mids[$key] = $offline_course_modules[$key]['link'];
+        }
         // sort array according to title (respect locale)
         setlocale(LC_COLLATE, $GLOBALS['langLocale']);
-        usort($offline_course_modules, function ($a, $b) {
+        $offline_modules = $offline_course_modules;
+        usort($offline_modules, function ($a, $b) {
             return strcoll($a['title'], $b['title']);
         });
-        foreach ($offline_course_modules as $mid) {
-            array_push($sideMenuText, q($mid['title']));
-            array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '.html'));
-            array_push($sideMenuImg, $mid['image']);
-            array_push($sideMenuID, $mid);
+        foreach ($offline_modules as $m) {
+            $mid = array_search($m['link'], $mids);
+            if (!visible_module($mid)) {
+                continue;
+            }
+            array_push($sideMenuText, q($m['title']));
+            array_push($sideMenuLink, q($urlAppend . 'modules/' . $m['link'] . '.html'));
+            array_push($sideMenuImg, $m['image']);
+            array_push($sideMenuID, $m);
+
         }
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);

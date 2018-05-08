@@ -206,7 +206,7 @@ function offline_announcements($bladeData) {
         if (!file_exists($downloadDir . '/modules/announcement/')) {
             mkdir($downloadDir . '/modules/announcement/');
         }
-    //    foreach ($announcements as $a) {
+   
         foreach ($announcements as $a) {
             $bladeData['urlAppend'] = '../../';
             $bladeData['template_base'] = '../../template/default';
