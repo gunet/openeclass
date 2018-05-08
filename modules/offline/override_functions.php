@@ -32,7 +32,7 @@
  * @return array
  */
 function lessonToolsMenu_offline($rich=true, $urlAppend) {
-    global $langExternalLinks, $offline_course_modules;
+    global $langExternalLinks, $offline_course_modules, $langCourseTools;
 
     $sideMenuGroup = array();
     $sideMenuSubGroup = array();
@@ -47,7 +47,7 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
 
     $tools_sections =
         array(array('type' => 'Public',
-                    'title' => $GLOBALS['langCourseOptions'],
+                    'title' => $langCourseTools,
                     'class' => 'active'));
 
     foreach ($tools_sections as $section) {

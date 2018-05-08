@@ -206,7 +206,7 @@ function offline_announcements($bladeData) {
         if (!file_exists($downloadDir . '/modules/announcement/')) {
             mkdir($downloadDir . '/modules/announcement/');
         }
-   
+
         foreach ($announcements as $a) {
             $bladeData['urlAppend'] = '../../';
             $bladeData['template_base'] = '../../template/default';
@@ -338,4 +338,72 @@ function offline_unit_resources($bladeData, $downloadDir) {
             fwrite($fp, $out);
         }
     }
+}
+
+
+
+function offline_exercises($bladeData) {
+    global $blade, $downloadDir;
+
+    $out = $blade->view()->make('modules.exercise.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/exercise.html', 'w');
+    fwrite($fp, $out);
+}
+
+function offline_ebook($bladeData) {
+    global $blade, $downloadDir;
+
+    $out = $blade->view()->make('modules.ebook.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/ebook.html', 'w');
+    fwrite($fp, $out);
+
+}
+
+function offline_agenda($bladeData) {
+    global $blade, $downloadDir;
+
+    $out = $blade->view()->make('modules.agenda.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/agenda.html', 'w');
+    fwrite($fp, $out);
+}
+
+function offline_blog($bladeData) {
+    global $blade, $downloadDir;
+
+    $out = $blade->view()->make('modules.blog.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/blog.html', 'w');
+    fwrite($fp, $out);
+
+}
+
+function offline_description($bladeData) {
+    global $blade, $downloadDir;
+
+    $out = $blade->view()->make('modules.course_description.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/course_description.html', 'w');
+    fwrite($fp, $out);
+}
+
+function offline_link($bladeData) {
+    global $blade, $downloadDir;
+
+    $out = $blade->view()->make('modules.link.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/link.html', 'w');
+    fwrite($fp, $out);
+}
+
+function offline_wiki($bladeData) {
+    global $blade, $downloadDir;
+
+    $out = $blade->view()->make('modules.wiki.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/wiki.html', 'w');
+    fwrite($fp, $out);
+}
+
+function offline_glossary($bladeData) {
+    global $blade, $downloadDir;
+
+    $out = $blade->view()->make('modules.glossary.index', $bladeData)->render();
+    $fp = fopen($downloadDir . '/modules/glossary.html', 'w');
+    fwrite($fp, $out);
 }

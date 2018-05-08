@@ -174,6 +174,19 @@ offline_announcements($bladeData);
 ////////////////
 offline_videos($bladeData);
 
+
+///////////////////
+// not implemented yet
+offline_exercises($bladeData);
+offline_ebook($bladeData);
+offline_agenda($bladeData);
+offline_blog($bladeData);
+offline_description($bladeData);
+offline_link($bladeData);
+offline_wiki($bladeData);
+offline_glossary($bladeData);
+//////////////////////////
+
 /////////////
 // statics //
 /////////////

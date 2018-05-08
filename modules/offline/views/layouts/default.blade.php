@@ -135,23 +135,21 @@
                 <div class="panel-group" id="sidebar-accordion">
                     <div class="panel">
                         @foreach ($toolArr as $key => $tool_group)
-
-                        <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{{ $key }}">
-                            <div class="panel-heading">
-                                <div class="panel-title h3">
-                                    <span class="fa fa-chevron-right"></span>
-                                    <span>{{ $tool_group[0]['text'] }}</span>
+                            <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion">
+                                <div class="panel-heading">
+                                    <div class="panel-title h3">
+                                        <span class="fa fa-chevron-right"></span>
+                                        <span>{{ $tool_group[0]['text'] }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse {{ $tool_group[0]['class'] }}">
-                            @foreach ($tool_group[1] as $key2 => $tool)
-                            <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}" {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : ""}}>
-                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>
-                                <span>{!! $tool !!}</span>
                             </a>
+                            @foreach ($tool_group[1] as $key2 => $tool)
+                                <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}" {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : ""}}>
+                                    <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>
+                                    <span>{!! $tool !!}</span>
+                                </a>
                             @endforeach
-                        </div>
+
                         @endforeach
                     </div>
                     {{ isset($eclass_leftnav_extras) ? $eclass_leftnav_extras : "" }}
