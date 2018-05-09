@@ -12,9 +12,13 @@ if (stripos($_SERVER['REQUEST_URI'], '%5c') !== false) {
 }
 session_start();
 
-// save current course
+// save current course and student_view status
 if (isset($_SESSION['dbname'])) {
     define('old_dbname', $_SESSION['dbname']);
+}
+
+if (isset($_SESSION['student_view'])) {
+    define('old_student_view', $_SESSION['student_view']);
 }
 
 $unit = false;
@@ -66,6 +70,10 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/document/doc_init.php';
 require_once 'modules/progress/ViewingEvent.php';
+
+if (defined('old_student_view')) {
+    $_SESSION['student_view'] = old_student_view;
+}
 
 doc_init();
 if ($not_found) {

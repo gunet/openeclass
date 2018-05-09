@@ -64,7 +64,7 @@ $uploading_as_user = !$can_upload && $user_upload;
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
-    $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
+    $diskQuotaDocument = $diskUsed + parseSize(ini_get('upload_max_filesize'));
 } elseif (defined('MY_DOCUMENTS')) {
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
         redirect_to_home_page();
