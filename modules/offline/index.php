@@ -95,12 +95,8 @@ $data = [
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
-$data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
-                FROM course_user
-                WHERE course_id = ?d", $course_id)->numUsers;
-
 if ($course_info->description) {
-    $description = standard_text_escape($course_info->description);
+    $description = preg_replace('|src=(["\']).*/modules/document/file.php/'.$course_code.'/(.*)\1|','src=\1modules/document/\2\1', standard_text_escape($course_info->description));
     // Text button for read more & read less
     $postfix_truncate_more = "<a href='#' class='more_less_btn'>$langReadMore &nbsp;<span class='fa fa-arrow-down'></span></a>";
     $postfix_truncate_less = "<a href='#' class='more_less_btn'>$langReadLess &nbsp;<span class='fa fa-arrow-up'></span></a>";

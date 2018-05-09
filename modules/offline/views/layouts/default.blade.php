@@ -100,11 +100,7 @@
                         <div class="row title-row margin-top-thin">
                             <div class="col-xs-9">
                                 <h1 class='page-title'>
-                                    @if ($menuTypeID == 2 && $pageName)
-                                        <a href='{{ $urlServer }}courses/{{ $course_code }}/'>{!! $section_title !!}</a>
-                                    @else
-                                        {!! $section_title !!}
-                                    @endif
+                                    <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                 </h1>
                                 @if (isset($course_id) && isset($professor))
                                     <h2 class='page-subtitle'>{!! $professor !!}</h2>
