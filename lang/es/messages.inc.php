@@ -624,7 +624,7 @@ $langSubject = "Materia";
 $langAuthor = "Autor";
 $langCopyrighted = "Copyright";
 $langCopyrightedFree = "Gratis";
-$langCopyrightedNotFree = "Protejido";
+$langCopyrightedNotFree = "Protegido";
 $langCopyrightedUnknown = "Desconocido";
 $langChangeMetadata = "Modifficar la información del documento";
 $langEditMeta = "Modificar<br>Información";
@@ -4495,7 +4495,7 @@ $scolles21 = "I understand other students";
 $scolles22 = "students understand me";
 $scolles23 = "I understand the tutor";
 $scolles24 = "tutor understands me";
-$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the 
+$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the
 				learning environment which has been shaped from the participants. It consists from 24 questions. Each question has as answer a number from 1 (Almost never) to 5 (Almost always)";
 $langCollesLegend = "1 (Almost Never), 2 (Rarely), 3 (Sometimes), 4 (Often), 5 (Almost Always)";
 $colles_detail_answer = "Here you can see the student's replies";
