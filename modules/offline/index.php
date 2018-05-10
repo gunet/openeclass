@@ -127,6 +127,8 @@ $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
     'show_toggle_student_view', 'themeimg', 'currentCourseName');
 $bladeData = array_merge($global_data, $data);
 $bladeData['pageTitle'] = $course_info->title;
+$bladeData['professor'] = $course_info->prof_names;
+$bladeData['course_date'] = claro_format_locale_date($dateTimeFormatLong, strtotime('now'));
 
 use Philo\Blade\Blade;
 $blade = new Blade($viewsDir, $cacheDir);

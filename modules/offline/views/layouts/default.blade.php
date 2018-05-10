@@ -102,9 +102,8 @@
                                 <h1 class='page-title'>
                                     <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                 </h1>
-                                @if (isset($course_id) && isset($professor))
-                                    <h2 class='page-subtitle'>{!! $professor !!}</h2>
-                                @endif
+                                <h2 class='page-subtitle'>{{ $professor }}</h2>
+                                <h6 class='help-block'>{{ $course_date }}</h6>
                                 @if (!defined('HIDE_TOOL_TITLE'))
                                     <div class='row'>
                                         <div class='col-md-12'>
