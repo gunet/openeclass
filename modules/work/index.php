@@ -3635,8 +3635,11 @@ function submit_grade_comments($args) {
             $langFormErrors, $workPath, $langGradebookGrade;
 
     $id = $args['assignment'];
+    $grading_type = 0;
     $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
-    $grading_type = $rubric->grading_type;
+    if ($rubric) {
+        $grading_type = 2;
+    }
     $sid = $args['submission'];
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
 
