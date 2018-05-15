@@ -534,9 +534,9 @@ require_once 'include/lib/references.class.php';
 
         $events = get_list_course_events($display, 'DESC');
 
-        if (count($events) > 0) {
+        if (is_array($events)) {
             return event_list($events, 'DESC');
-        }else{
+        } else {
             return "<div class='alert alert-warning text-center'>$langNoEvents</div>";
         }
     }
