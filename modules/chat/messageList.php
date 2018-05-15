@@ -159,7 +159,6 @@ if (isset($_GET['store']) && $is_editor) {
         $thisLine = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $thisLine);
         $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');
         $str_1 = explode(' !@#$ ', $newline);
-
         //New message system (3.0 generated conferences)
         if (isset($str_1[1])) {
             if (trim($str_1[1]) == "systemMsgClear" || trim($str_1[1]) == "systemMsgSave") {
@@ -176,12 +175,16 @@ if (isset($_GET['store']) && $is_editor) {
                             </div>
                       </div>\n";
             } else {
-                $user_id = (int) trim($str_1[1]);
+                $user_id = intval(trim($str_1[1]));
                 $str_2 = explode(' - ', $str_1[0]);
                 $datetime = $str_2[0];
                 $str_3 = explode(' : ', $str_2[1]);
                 $username = $str_3[0];
-                $usertext = $str_3[1];
+                if (isset($str_3[1])) {
+                    $usertext = $str_3[1];
+                } else {
+                    $usertext = '';
+                }
                 $token = token_generate($user_id, true);
                 echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
                             <div class='col-xs-12'>
