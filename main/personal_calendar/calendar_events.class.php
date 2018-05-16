@@ -213,7 +213,6 @@ class Calendar_Events {
                         . "WHERE user_id = ?d " . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
             }
-            $st = ($is_admin)? 0: $_SESSION['status'];
             if (Calendar_Events::$calsettings->show_admin == 1) {
                 //admin
                 if (!empty($q)) {
@@ -221,7 +220,7 @@ class Calendar_Events {
                 }
                 $dc = str_replace('start', 'adm.start', $datecond);
                 $q .= "SELECT id, title, start, date_format(start, '%Y-%m-%d') startdate, duration, date_format(addtime(start, time(duration)), '%Y-%m-%d %H:%i') `end`, content, 'admin' event_group, 'event-success' class, 'admin' event_type, null as course FROM admin_calendar adm "
-                        . "WHERE (visibility_level >= $st OR user_id = ?d) " . $dc;
+                        . "WHERE user_id = ?d " . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
             }
             if (Calendar_Events::$calsettings->show_course == 1) {
