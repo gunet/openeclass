@@ -52,15 +52,17 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
     $message = Swift_Message::newInstance($subject)
         ->setFrom(fromHeader($from, $from_address));
 
-    if (count($to_address) > 1) {
-        if (isset($emailAnnounce) and !empty($emailAnnounce)) {
-            $message->setTo(array($emailAnnounce => $to));
-        }
-        $message->setBcc($to_address);
-    } else {
-        if (is_array($to_address)) {
+    if (is_array($to_address)) {
+        if (count($to_address) > 1) {
+            if (isset($emailAnnounce) and !empty($emailAnnounce)) {
+                $message->setTo(array($emailAnnounce => $to));
+            }
+            $message->setBcc($to_address);
+        } else {
             $to_address = $to_address[0];
+            $message->setTo(array($to_address => $to));
         }
+    } else {
         $message->setTo(array($to_address => $to));
     }
 
