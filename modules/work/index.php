@@ -3823,9 +3823,7 @@ function send_file($id, $file_type) {
         if ($file_type == 1) {
             $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
             // don't show file if: assignment nonexistent, not editor, not active assignment, module not visible
-            if (count($info) == 0 or
-                !($is_editor or
-                  ($info->active and visible_module(MODULE_ID_ASSIGN)))) {
+            if (!$info or !($is_editor or ($info->active and visible_module(MODULE_ID_ASSIGN)))) {
                 return false;
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);
