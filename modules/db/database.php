@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 define("DB_TYPE", "MYSQL");
@@ -87,7 +87,7 @@ final class Database {
     }
 
     /**
-     * Get a Database object which does not point to a specific database. 
+     * Get a Database object which does not point to a specific database.
      * This is useful to perform DBMS queries, such as creating/destroying a database.
      * @return Database|null The database object
      */
@@ -130,7 +130,7 @@ final class Database {
     }
 
     /** This is a transactional version of queryNT.
-     * 
+     *
      * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
@@ -142,7 +142,7 @@ final class Database {
     }
 
     /** This is a non-transactional version of query.
-     * 
+     *
      * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
@@ -391,14 +391,15 @@ final class Database {
                         $func_affected_rows++;
         }
         /* Close transaction, if required */
-        if ($isTransactional)
+        if ($isTransactional) {
             $this->dbh->commit();
+        }
         Database::dbg("Succesfully performed query", $statement, $init_time, null, Debug::INFO);
         return $result;
     }
 
     /**
-     * Safely start a transaction and clean up if an error was produced. If this 
+     * Safely start a transaction and clean up if an error was produced. If this
      * method is called when we are already in a transaction, no new transaction
      * will be started.
      * @param callable $function The code inside this function will be called
