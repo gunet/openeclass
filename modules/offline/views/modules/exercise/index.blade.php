@@ -59,7 +59,11 @@
                     </td>
                     <td class='smaller' align='center'>
                         {!! nice_format(date("Y-m-d H:i", strtotime($exer->start_date)), true) !!} /
+                        @if (isset($exer->end_date))
                         {!! nice_format(date("Y-m-d H:i", strtotime($exer->end_date)), true) !!}
+                        @else
+                            -
+                        @endif
                     </td>
                 </tr>
             @endforeach
