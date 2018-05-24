@@ -202,7 +202,7 @@ function offline_announcements($bladeData) {
     $fp = fopen($downloadDir . '/modules/announcements.html', 'w');
     fwrite($fp, $out);
 
-    if (is_array($announcements) && !empty($announcements) && count($announcements > 0)) {
+    if (is_array($announcements) && !empty($announcements) && count($announcements) > 0) {
         if (!file_exists($downloadDir . '/modules/announcement/')) {
             mkdir($downloadDir . '/modules/announcement/');
         }
