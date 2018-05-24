@@ -344,7 +344,9 @@ function offline_unit_resources($bladeData, $downloadDir) {
 
 
 function offline_exercises($bladeData) {
-    global $blade, $downloadDir;
+    global $blade, $downloadDir, $course_id;
+
+    $bladeData['exercises'] = $exercises = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY start_date DESC", $course_id);
 
     $out = $blade->view()->make('modules.exercise.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/exercise.html', 'w');
