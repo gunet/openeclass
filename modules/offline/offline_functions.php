@@ -281,6 +281,7 @@ function offline_course_units() {
 /**
  * @brief get / render unit resources from a given course unit
  * @param type $unit_id
+ * @param type $downloadDir
  * @global type $course_id
  * @global type $blade
  */
@@ -400,10 +401,58 @@ function offline_wiki($bladeData) {
     fwrite($fp, $out);
 }
 
-function offline_glossary($bladeData) {
-    global $blade, $downloadDir;
+/**
+ * @brief get glossary terms
+ * @global type $blade
+ * @global type $course_id
+ * @param array $bladeData
+ * @param type $downloadDir
+ */
+function offline_glossary($bladeData, $downloadDir) {
+    global $blade, $course_id;
 
-    $out = $blade->view()->make('modules.glossary.index', $bladeData)->render();
-    $fp = fopen($downloadDir . '/modules/glossary.html', 'w');
-    fwrite($fp, $out);
+    $categories = $prefixes = array();
+    Database::get()->queryFunc("SELECT id, name, description, `order`
+                          FROM glossary_category WHERE course_id = ?d
+                          ORDER BY name", function ($cat) use (&$categories) {
+                            $categories[intval($cat->id)] = $cat->name;
+                        }, $course_id);
+    $bladeData['categories'] = $categories;
+
+
+    Database::get()->queryFunc("SELECT DISTINCT UPPER(LEFT(term, 1)) AS prefix
+                          FROM glossary WHERE course_id = ?d
+                          ORDER BY prefix", function ($prefix) use (&$prefixes) {
+        $prefix = remove_accents($prefix->prefix);
+        if (array_search($prefix, $prefixes) === false) {
+            $prefixes[] = $prefix;
+        }
+    }, $course_id);
+
+    if (count($prefixes) > 1) {
+        $html_prefix = '';
+        $begin = true;
+        foreach ($prefixes as $letter) {
+            $html_prefix .= ($begin ? '' : ' | ') .
+                    ($begin ? "<a href='glossary.html'>" : "<a href='glossary_" . preg_replace('/%/', '_', urlencode($letter)) . ".html'>" ) .
+                    q($letter) . "</a>";
+            $bladeData['prefixes'] = $html_prefix;
+            $begin = false;
+        }
+        $begin = true;
+        foreach ($prefixes as $letter) {
+            $bladeData['glossary'] = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
+                                FROM glossary WHERE course_id = ?d AND term LIKE '$letter%'
+                                GROUP BY term, definition, url, notes, category_id, id
+                                ORDER BY term", $course_id);
+            $out = $blade->view()->make('modules.glossary.index', $bladeData)->render();
+            if ($begin) {
+                $fp = fopen($downloadDir . "/modules/glossary.html", 'w');
+            } else {
+                $fp = fopen($downloadDir . "/modules/glossary_" . preg_replace('/%/', '_', urlencode($letter)) . ".html", 'w');
+            }
+            fwrite($fp, $out);
+            $begin = false;
+        }
+    }
 }

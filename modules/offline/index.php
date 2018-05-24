@@ -171,7 +171,10 @@ offline_announcements($bladeData);
 // video
 ////////////////
 offline_videos($bladeData);
-
+///////////////
+// glossary
+///////////////
+offline_glossary($bladeData, $downloadDir);
 
 ///////////////////
 // not implemented yet
@@ -182,7 +185,6 @@ offline_blog($bladeData);
 offline_description($bladeData);
 offline_link($bladeData);
 offline_wiki($bladeData);
-offline_glossary($bladeData);
 //////////////////////////
 
 /////////////
