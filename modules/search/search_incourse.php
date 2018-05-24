@@ -24,7 +24,7 @@
  * @file search_incourse.php
  * @brief search inside a course
  */
- 
+
 
 $require_current_course = TRUE;
 $guest_allowed = true;
@@ -68,7 +68,7 @@ if (isset($_GET['all'])) {
 }
 
 if (isset($_REQUEST['search_terms'])) {
-    $search_terms = addslashes($_REQUEST['search_terms']);
+    $search_terms = trim($_REQUEST['search_terms']);
 }
 
 if (empty($search_terms)) {
@@ -83,7 +83,7 @@ if (empty($search_terms)) {
             <label for='search_terms' class='col-sm-2 control-label'>$langOR:</label>
             <div class='col-sm-10'>
                 <input name='search_terms' type='text' class='form-control'>
-            </div>                
+            </div>
         </div>
         <div class='form-group'>
             <label for='search_terms' class='col-sm-2 control-label'>$langSearchIn:</label>
@@ -95,7 +95,7 @@ if (empty($search_terms)) {
                             <input type='checkbox' name='announcements' checked>
                             $langAnnouncements
                           </label>
-                        </div>                       
+                        </div>
                     </div>
                     <div class='col-xs-6 col-sm-4'>
                         <div class='checkbox'>
@@ -103,7 +103,7 @@ if (empty($search_terms)) {
                             <input type='checkbox' name='agenda' checked>
                             $langAgenda
                           </label>
-                        </div>                    
+                        </div>
                     </div>
                     <div class='col-xs-6 col-sm-4'>
                         <div class='checkbox'>
@@ -111,7 +111,7 @@ if (empty($search_terms)) {
                             <input type='checkbox' name='course_units' checked>
                             $langCourseUnits
                           </label>
-                        </div>                    
+                        </div>
                     </div>
                     <div class='col-xs-6 col-sm-4'>
                         <div class='checkbox'>
@@ -119,42 +119,42 @@ if (empty($search_terms)) {
                             <input type='checkbox' name='documents' checked>
                             $langDoc
                           </label>
-                        </div>                    
-                    </div> 
+                        </div>
+                    </div>
                     <div class='col-xs-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='forums' checked>
                             $langForums
                           </label>
-                        </div>                    
-                    </div> 
+                        </div>
+                    </div>
                     <div class='col-xs-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='exercises' checked>
                             $langExercices
                           </label>
-                        </div>                    
-                    </div>  
+                        </div>
+                    </div>
                     <div class='col-xs-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='video' checked>
                             $langVideo
                           </label>
-                        </div>                    
-                    </div>  
+                        </div>
+                    </div>
                     <div class='col-xs-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='links' checked>
                             $langLinks
                           </label>
-                        </div>                    
-                    </div>                      
+                        </div>
+                    </div>
                 </div>
-            </div>                
+            </div>
         </div>
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
@@ -175,7 +175,7 @@ if (empty($search_terms)) {
                           'icon' => 'fa-search',
                           'level' => 'primary-label',
                           'button-class' => 'btn-success',)));
-    
+
     $announceHits = array();
     $agendaHits = array();
     $documentHits = array();
@@ -188,7 +188,7 @@ if (empty($search_terms)) {
     $vlinkHits = array();
     $unitHits = array();
     $uresHits = array();
-    
+
     $idxQ = Indexer::buildQuery($_POST);
     $allHits = $idx->searchRaw($idxQ);
     foreach ($allHits as $hit) {
@@ -257,7 +257,7 @@ if (empty($search_terms)) {
                 break;
         }
     }
-    
+
     $search_results = '';
     $results_count = 0;
     // search in announcements
@@ -482,7 +482,7 @@ if (empty($search_terms)) {
                 </tr>";
             $videos = Database::get()->queryArray("SELECT id, title, description FROM video WHERE id in " . inIdsFromHits($videoHits));
             $videoUrls = urlsFromHits($videoHits);
-            
+
             $numLine = 0;
             foreach ($videos as $video) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
@@ -496,7 +496,7 @@ if (empty($search_terms)) {
             $search_results .= "</table>";
             $found = true;
         }
-        
+
         $vlinkHitsCount = count($vlinkHits);
         if ($vlinkHitsCount > 0) {
             $results_count += $vlinkHitsCount;
@@ -549,7 +549,7 @@ if (empty($search_terms)) {
             $search_results .= "</table>";
             $found = true;
         }
-        
+
         $uresHitsCount = count($uresHits);
         if ($uresHitsCount > 0) {
             $results_count += $uresHitsCount;
@@ -576,7 +576,7 @@ if (empty($search_terms)) {
         }
     }
     $tool_content .= "
-        <div class='alert alert-info'>$langDoSearch:&nbsp;<label> '$search_terms'</label><br><small>$results_count $langResults2</small></div>
+        <div class='alert alert-info'>$langDoSearch:&nbsp;<label> '" . q($search_terms) . "'</label><br><small>$results_count $langResults2</small></div>
     ";
     $tool_content .= $search_results;
     // else ... no results found
