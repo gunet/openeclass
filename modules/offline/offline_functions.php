@@ -385,13 +385,46 @@ function offline_description($bladeData) {
     fwrite($fp, $out);
 }
 
-function offline_link($bladeData) {
-    global $blade, $downloadDir;
+/**
+ * @brief get course links
+ * @global type $blade
+ * @global type $course_id
+ * @param type $bladeData
+ * @param type $downloadDir
+ */
+function offline_links($bladeData, $downloadDir) {
+    global $blade, $course_id;
+
+    $bladeData['numberofzerocategory'] = $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND (category = 0 OR category IS NULL)", $course_id));
+    if ($numberofzerocategory !== 0) {
+        $bladeData['result_zero_category'] = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = 0 ORDER BY `order`", $course_id);
+    }
+    $bladeData['resultcategories'] = $resultcategories = Database::get()->queryArray("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", $course_id);
+    $bladeData['aantalcategories'] = $aantalcategories = count($resultcategories);
+
+    foreach ($resultcategories as $cat) {
+        $cat_data = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d ORDER BY `order`", $course_id, $cat->id);
+        if (count($cat_data) > 0) {
+            foreach ($cat_data as $link_data) {
+                $bladeData['result_link_category'][$cat->id] = $cat_data;
+            }
+        }
+    }
+
+    $bladeData['social_bookmarks_enabled'] = $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
+    if ($social_bookmarks_enabled == 1) {
+        $bladeData['numberofsocialcategory'] = $numberofsocialcategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -2));
+        if ($numberofsocialcategory !== 0) {
+            $bladeData['result_social_category'] = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = -2 ORDER BY `order`", $course_id);
+        }
+    }
 
     $out = $blade->view()->make('modules.link.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/link.html', 'w');
     fwrite($fp, $out);
 }
+
+
 
 function offline_wiki($bladeData) {
     global $blade, $downloadDir;

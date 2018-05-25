@@ -34,6 +34,7 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/textLib.inc.php'; // textLib has functions required by templates
+require_once 'include/course_settings.php';
 require_once 'backport_functions.php'; // backported functions from eclass default branch
 require_once 'override_functions.php'; // overridden functions
 require_once 'offline_functions.php';
@@ -175,6 +176,10 @@ offline_videos($bladeData);
 // glossary
 ///////////////
 offline_glossary($bladeData, $downloadDir);
+//////////////
+// links
+//////////////
+offline_links($bladeData, $downloadDir);
 
 ///////////////////
 // not implemented yet
@@ -183,7 +188,6 @@ offline_ebook($bladeData);
 offline_agenda($bladeData);
 offline_blog($bladeData);
 offline_description($bladeData);
-offline_link($bladeData);
 offline_wiki($bladeData);
 //////////////////////////
 
