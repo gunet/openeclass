@@ -351,6 +351,41 @@ function offline_exercises($bladeData) {
     $out = $blade->view()->make('modules.exercise.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/exercise.html', 'w');
     fwrite($fp, $out);
+
+    if (is_array($exercises) && !empty($exercises) && count($exercises) > 0) {
+        if (!file_exists($downloadDir . '/modules/exercise/')) {
+            mkdir($downloadDir . '/modules/exercise/');
+        }
+
+        foreach ($exercises as $e) {
+            $bladeData['urlAppend'] = '../../';
+            $bladeData['template_base'] = '../../template/default';
+            $bladeData['themeimg'] = '../../template/default/img';
+            $bladeData['logo_img'] = '../../template/default/img/eclass-new-logo.png';
+            $bladeData['logo_img_small'] = '../../template/default/img/logo_eclass_small.png';
+            $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
+
+            // TODO
+            $quiz = new Exercise();
+            if (!$quiz->read($e->id)) {
+                continue;
+            }
+            $questionList = $quiz->selectQuestionList();
+            $questions = array();
+            foreach ($questionList as $questionId) {
+                $question = new Question();
+                if (!$question->read($questionId)) {
+                    continue;
+                }
+                $questions[] = $question;
+            }
+            $bladeData['questions'] = $questions;
+
+            $out = $blade->view()->make('modules.exercise.exer', $bladeData)->render();
+            $fp = fopen($downloadDir . '/modules/exercise/' . $e->id . '.html', 'w');
+            fwrite($fp, $out);
+        }
+    }
 }
 
 function offline_ebook($bladeData) {

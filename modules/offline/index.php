@@ -34,6 +34,11 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/textLib.inc.php'; // textLib has functions required by templates
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'modules/exercise/exercise.class.php';
+require_once 'modules/exercise/question.class.php';
+require_once 'modules/exercise/answer.class.php';
+require_once 'modules/exercise/exercise.lib.php';
 require_once 'include/course_settings.php';
 require_once 'backport_functions.php'; // backported functions from eclass default branch
 require_once 'override_functions.php'; // overridden functions
