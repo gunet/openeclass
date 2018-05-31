@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
         WHERE id = ?d AND course_id = ?d',
         $id, $course_id);
     if (!$request) {
-        redirect_to_home_page($backUrl);
+        redirect_to_home_page($backUrl, true);
     }
 
     if ($request->type_id) {
@@ -84,7 +84,7 @@ if (isset($_GET['id'])) {
             }
             if (array_diff($_POST['assignTo'], $course_user_ids)) {
                 Session::Messages($langGeneralError, 'alert-danger');
-                redirect_to_home_page($data['targetUrl']);
+                redirect_to_home_page($data['targetUrl'], true);
             }
             Database::get()->query('DELETE FROM request_watcher
                 WHERE request_id = ?d AND type = ?d',
@@ -114,7 +114,7 @@ if (isset($_GET['id'])) {
             }
             if (array_diff($_POST['watchers'], $course_user_ids)) {
                 Session::Messages($langGeneralError, 'alert-danger');
-                redirect_to_home_page($data['targetUrl']);
+                redirect_to_home_page($data['targetUrl'], true);
             }
             Database::get()->query('DELETE FROM request_watcher
                 WHERE request_id = ?d AND type = ?d',
@@ -167,13 +167,13 @@ if (isset($_GET['id'])) {
             $filePath = safe_filename();
             if (!(is_dir($workPath) or make_dir($workPath))) {
                 Session::Messages($langGeneralError, 'alert-danger');
-                redirect_to_home_page($data['targetUrl']);
+                redirect_to_home_page($data['targetUrl'], true);
             }
             if (move_uploaded_file($_FILES['requestFile']['tmp_name'], "$workPath/$filePath")) {
                 $fileName = $_FILES['requestFile']['name'];
             } else {
                 Session::Messages($langGeneralError, 'alert-danger');
-                redirect_to_home_page($data['targetUrl']);
+                redirect_to_home_page($data['targetUrl'], true);
             }
         }
         if (isset($_POST['newState']) and isset($stateLabels[$_POST['newState']])) {
@@ -198,7 +198,7 @@ if (isset($_GET['id'])) {
                     comment = ?s',
                 $id, $uid, $request->state, $newState,
                 $fileName, $filePath, $comment);
-            redirect_to_home_page($data['targetUrl']);
+            redirect_to_home_page($data['targetUrl'], true);
         }
     }
 

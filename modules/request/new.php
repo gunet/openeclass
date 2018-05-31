@@ -93,6 +93,11 @@ if (isset($_POST['requestTitle'])) {
                 }
             }
 
+            if (isset($_POST['send_mail'])) {
+
+
+            }
+
             Session::Messages(trans('langRequestCreated'), 'alert-success');
             redirect_to_home_page("modules/request/?course=$course_code&id=$rid");
         }

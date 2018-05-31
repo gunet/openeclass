@@ -28,8 +28,8 @@ require_once 'modules/request/functions.php';
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $comment = Database::get()->querySingle('SELECT * FROM request, request_action
-        WHERE request_id = ?d AND course_id = ?d AND request.id = request_id',
+    $comment = Database::get()->querySingle('SELECT filename, real_filename FROM request, request_action
+        WHERE request_action.id = ?d AND course_id = ?d AND request.id = request_id',
         $id, $course_id);
     if (!$comment or !$comment->real_filename) {
         not_found($_SERVER['REQUEST_URI']);

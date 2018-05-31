@@ -29,6 +29,16 @@
                     @endif
 
                     <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <div class='checkbox'>
+                                <label>
+                                    <input type='checkbox' name='send_mail' value='on' checked> {{ trans('langSendInfoMail') }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='form-group'>
                         <div class='col-xs-offset-2 col-xs-10'>
                             <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
                             <a class='btn btn-default' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
