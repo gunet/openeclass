@@ -3666,6 +3666,7 @@ function submit_grade_comments($args) {
             $grade = $r_grade/100;
         } else {
             $grade = $args['grade'];
+            $grade_rubric = '';
         }
         $comment = $args['comments'];
         if (isset($_FILES['comments_file']) and is_uploaded_file($_FILES['comments_file']['tmp_name'])) { // upload comments file
@@ -3836,7 +3837,7 @@ function send_file($id, $file_type) {
         }
     } else {
         $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
-        if (count($info)==0) {
+        if (!$info) {
             return false;
         }
         if ($info->group_id) {
