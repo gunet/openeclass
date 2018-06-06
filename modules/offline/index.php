@@ -185,6 +185,10 @@ offline_glossary($bladeData, $downloadDir);
 // links
 //////////////
 offline_links($bladeData, $downloadDir);
+/////////////
+// description
+/////////////
+offline_description($bladeData, $downloadDir);
 
 ///////////////////
 // not implemented yet
@@ -192,7 +196,6 @@ offline_exercises($bladeData);
 offline_ebook($bladeData);
 offline_agenda($bladeData);
 offline_blog($bladeData);
-offline_description($bladeData);
 offline_wiki($bladeData);
 //////////////////////////
 

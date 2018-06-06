@@ -414,8 +414,22 @@ function offline_blog($bladeData) {
 
 }
 
-function offline_description($bladeData) {
-    global $blade, $downloadDir;
+
+
+/**
+ * @brief get course description
+ * @global type $blade
+ * @global type $course_id
+ * @param array $bladeData
+ * @param type $downloadDir
+ */
+function offline_description($bladeData, $downloadDir) {
+    global $blade, $course_id;
+
+    $bladeData['course_description'] = Database::get()->queryArray("SELECT id, title, comments, type, visible FROM course_description "
+                                . "WHERE course_id = ?d "
+                                . "AND visible = 1 "
+                                . "ORDER BY `order`", $course_id);
 
     $out = $blade->view()->make('modules.course_description.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/course_description.html', 'w');
