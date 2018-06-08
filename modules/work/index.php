@@ -1055,15 +1055,12 @@ function submit_work($id, $on_behalf_of = null) {
             $stud_comments = $_POST['stud_comments'];
             $grade = NULL;
         }
-			if (isset($_POST['grade_rubric'])){
-			$grade_rubric = serialize($_POST['grade_rubric']);
-			}
-			else{
-			$grade_rubric = "";
-			}
+            if (isset($_POST['grade_rubric'])){
+                $grade_rubric = serialize($_POST['grade_rubric']);
+            } else {
+                $grade_rubric = "";
+            }
             $grade_comments = $grade_ip = "";
-
-
 
         if (!$row->group_submissions || array_key_exists($group_id, $gids)) {
             $data = array(
@@ -1075,7 +1072,7 @@ function submit_work($id, $on_behalf_of = null) {
                 $submission_text,
                 $stud_comments,
                 $grade,
-				$grade_rubric,
+                $grade_rubric,
                 $grade_comments,
                 $grade_ip,
                 $group_id
@@ -2261,23 +2258,21 @@ function show_edit_assignment($id) {
 
 /**
  * @brief delete assignment
- * @global type $tool_content
  * @global string $workPath
  * @global type $course_code
  * @global type $webDir
- * @global type $langBack
- * @global type $langDeleted
  * @global type $course_id
  * @param type $id
  */
 function delete_assignment($id) {
 
-    global $tool_content, $workPath, $course_code, $webDir, $langBack, $langDeleted, $course_id;
+    global $workPath, $course_code, $webDir, $course_id;
 
     $secret = work_secret($id);
-    $row = Database::get()->querySingle("SELECT title,assign_to_specific FROM assignment WHERE course_id = ?d
+    $row = Database::get()->querySingle("SELECT title, assign_to_specific FROM assignment WHERE course_id = ?d
                                         AND id = ?d", $course_id, $id);
     if (count($row) > 0) {
+        $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
         if (Database::get()->query("DELETE FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows > 0){
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($uids as $user_id) {
@@ -2289,7 +2284,7 @@ function delete_assignment($id) {
             move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
 
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
-                'title' => $row->title));
+                                                                        'title' => $row->title));
             return true;
         }
         return false;
@@ -2298,48 +2293,48 @@ function delete_assignment($id) {
 }
 /**
  * @brief delete assignment's submissions
- * @global type $tool_content
  * @global string $workPath
  * @global type $course_code
  * @global type $webDir
- * @global type $langBack
- * @global type $langDeleted
  * @global type $course_id
  * @param type $id
  */
 function purge_assignment_subs($id) {
 
-    global $tool_content, $workPath, $webDir, $langBack, $langDeleted, $langAssignmentSubsDeleted, $course_code, $course_id;
+    global $workPath, $webDir, $course_code, $course_id;
 
     $secret = work_secret($id);
-        $row = Database::get()->querySingle("SELECT title,assign_to_specific FROM assignment WHERE course_id = ?d
-                                        AND id = ?d", $course_id, $id);
-        if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
-            foreach ($uids as $user_id) {
-                triggerGame($course_id, $user_id, $id);
-            }
-            if ($row->assign_to_specific) {
-                Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
-            }
-            move_dir("$workPath/$secret",
-            "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
-            return true;
+    $row = Database::get()->querySingle("SELECT title, assign_to_specific FROM assignment WHERE course_id = ?d
+                                    AND id = ?d", $course_id, $id);
+    $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
+    if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
+        foreach ($uids as $user_id) {
+            triggerGame($course_id, $user_id, $id);
         }
-        return false;
+        if ($row->assign_to_specific) {
+            Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
+        }
+        move_dir("$workPath/$secret",
+        "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
+        return true;
+    }
+    return false;
 }
 /**
  * @brief delete user assignment
  * @global type $course_id
  * @global type $course_code
  * @global type $webDir
+ * @global type $uid
  * @param type $id
  */
 function delete_user_assignment($id) {
-    global $course_code, $webDir;
+    global $course_code, $webDir, $course_id;
 
     $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?d", $id);
+    $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $id)->uid;
     if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
-        triggerGame($row->course_id, $row->uid, $id);
+        triggerGame($course_id, $quserid, $id);
         if ($filename->file_path) {
             $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
             if (!my_delete($file)) {
@@ -2352,14 +2347,13 @@ function delete_user_assignment($id) {
 }
 /**
  * @brief delete teacher assignment file
- * @global string $tool_content
  * @global type $course_id
  * @global type $course_code
  * @global type $webDir
  * @param type $id
  */
 function delete_teacher_assignment_file($id) {
-    global $tool_content, $course_code, $webDir;
+    global $course_code, $webDir;
 
     $filename = Database::get()->querySingle("SELECT file_path FROM assignment WHERE id = ?d", $id);
     $file = $webDir . "/courses/" . $course_code . "/work/admin_files/" . $filename->file_path;

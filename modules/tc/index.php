@@ -116,7 +116,7 @@ $head_content .= "<script type='text/javascript'>
         $('#popupattendance1').click(function() {
 	     window.open($(this).prop('href'), '', 'height=200,width=500,scrollbars=no,status=no');
 	     return false;
-	});    
+	});
 
         $('#select-groups').select2();
         $('#selectAll').click(function(e) {
@@ -191,7 +191,7 @@ if ($is_editor) {
         }
     }
 } else {
-    $tool_content .= action_bar(array(                
+    $tool_content .= action_bar(array(
                 array('title' => $langParticipate,
                           'url' => "tcuserduration.php?course=$course_code&amp;u=true",
                           'icon' => 'fa-clock-o',
@@ -222,7 +222,12 @@ elseif(isset($_POST['update_bbb_session'])) {
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], true, getDirectReference($_POST['id']));
+    if (isset($_POST['external_users'])) {
+        $ext_users = implode(',', $_POST['external_users']);
+    } else {
+        $ext_users = null;
+    }
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $ext_users, $record, $_POST['sessionUsers'], true, getDirectReference($_POST['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -249,14 +254,11 @@ elseif(isset($_GET['choice']))
             $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
             if ($tc_type == 'bbb') { // if tc server is `bbb`
                 $mod_pw = $sess->mod_pw;
-                $record = $sess->record;                
-                if ($serv->enable_recordings == 'false') { // check if tc_server has enable recordings
-                    $record = false;
-                }                
+                $record = $sess->record;
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
                     create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
-                }               
-                if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)                                        
+                }
+                if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
                 } else {
                     $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $mod_pw);
@@ -305,7 +307,7 @@ elseif(isset($_GET['choice']))
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], false);
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], implode(',', $_POST['external_users']), $record, $_POST['sessionUsers'], false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
