@@ -344,7 +344,7 @@ function offline_unit_resources($bladeData, $downloadDir) {
 
 
 function offline_exercises($bladeData) {
-    global $blade, $downloadDir, $course_id;
+    global $blade, $downloadDir, $course_id, $webDir, $langScore, $langExerciseDone;
 
     $bladeData['exercises'] = $exercises = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY start_date DESC", $course_id);
 
@@ -357,6 +357,10 @@ function offline_exercises($bladeData) {
             mkdir($downloadDir . '/modules/exercise/');
         }
 
+        $basedir = $webDir . '/modules/learnPath/export/';
+        copy($basedir . 'scores.js', $downloadDir . '/modules/exercise/scores.js');
+        copy($basedir . 'APIWrapper.js', $downloadDir . '/modules/exercise/APIWrapper.js');
+
         foreach ($exercises as $e) {
             $bladeData['urlAppend'] = '../../';
             $bladeData['template_base'] = '../../template/default';
@@ -365,7 +369,6 @@ function offline_exercises($bladeData) {
             $bladeData['logo_img_small'] = '../../template/default/img/logo_eclass_small.png';
             $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
-            // TODO
             $quiz = new Exercise();
             if (!$quiz->read($e->id)) {
                 continue;
@@ -380,6 +383,8 @@ function offline_exercises($bladeData) {
                 $questions[] = $question;
             }
             $bladeData['questions'] = $questions;
+            $bladeData['langScore'] = $langScore;
+            $bladeData['langExerciseDone'] = $langExerciseDone;
 
             $out = $blade->view()->make('modules.exercise.exer', $bladeData)->render();
             $fp = fopen($downloadDir . '/modules/exercise/' . $e->id . '.html', 'w');
