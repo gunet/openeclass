@@ -27,6 +27,7 @@ require_once 'modules/progress/RatingEvent.php';
 
 $is_link = false;
 $is_wallpost = false;
+$rateEventActivity = null;
 
 if ($_GET['rtype'] == 'blogpost') {
 	$setting_id = SETTING_BLOG_RATING_ENABLE;
@@ -34,8 +35,10 @@ if ($_GET['rtype'] == 'blogpost') {
     $setting_id = SETTING_COURSE_RATING_ENABLE;
 } elseif ($_GET['rtype'] == 'forum_post') {
     $setting_id = SETTING_FORUM_RATING_ENABLE;
+    $rateEventActivity = RatingEvent::FORUM_ACTIVITY;
 } elseif ($_GET['rtype'] == 'link') {
     $is_link = true; //there is no rating setting for social bookmarks, rating is always enabled
+    $rateEventActivity = RatingEvent::SOCIALBOOKMARK_ACTIVITY;
 } elseif ($_GET['rtype'] == 'wallpost') {
     $is_wallpost = true; //there is no rating setting for wall posts, rating is always enabled
 }
