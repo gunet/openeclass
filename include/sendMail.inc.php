@@ -24,9 +24,9 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body) {
     if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
         return true;
     }
-    
-    $message = Swift_Message::newInstance($subject, $body)
-        ->setFrom(fromHeader($from, $from_address));
+
+    $message = new Swift_Message($subject, $body);
+    $message->setFrom(fromHeader($from, $from_address));
     if (count($to_address) > 1) {
         $message->setBcc($to_address);
     } else {
@@ -45,12 +45,12 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
     if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
         return true;
     }
-    
+
     $emailAnnounce = get_config('email_announce');
     $body_html = add_host_to_urls($body_html);
 
-    $message = Swift_Message::newInstance($subject)
-        ->setFrom(fromHeader($from, $from_address));
+    $message = new Swift_Message($subject);
+    $message->setFrom(fromHeader($from, $from_address));
 
     if (is_array($to_address)) {
         if (count($to_address) > 1) {
@@ -71,7 +71,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
     $message->setBody($body_plain, 'text/plain')
         ->addPart("<html>
 <head>
-  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+  <meta http-equiv='Content-Type' content='text/html; charset='UTF-8'>
   <title>message</title>
   <style type='text/css'>
     /* General Styles */
@@ -128,7 +128,7 @@ function sendMessage($message) {
 
 // Determine the correct From: header
 function fromHeader($from, $from_address) {
-    global $langVia, $siteName, $charset;
+    global $langVia, $siteName;
 
     if (empty($from_address) or !get_config('email_from')) {
         $from_address = get_config('email_sender');
@@ -143,7 +143,7 @@ function fromHeader($from, $from_address) {
 // Add the correct Reply-To: header if needed
 function addReplyTo($message, $from, $from_address) {
     global $emailAdministrator;
-        
+
     // Don't include reply-to if it has been provided by caller
     if ($message->getReplyTo()) {
         return;
@@ -158,10 +158,10 @@ function addReplyTo($message, $from, $from_address) {
 function getMailer() {
     static $mailer;
 
-    if (!isset($transport)) {
+    if (!isset($mailer)) {
         $type = get_config('email_transport');
         if ($type == 'smtp') {
-            $transport = Swift_SmtpTransport::newInstance(get_config('smtp_host'), get_config('smtp_server'));
+            $transport = new Swift_SmtpTransport(get_config('smtp_server'), get_config('smtp_port'));
             $username = get_config('smtp_username');
             if ($username) {
                 $transport->setUsername($username)->setPassword(get_config('smtp_password'));
@@ -171,18 +171,18 @@ function getMailer() {
                 $transport->setEncryption($encryption);
             }
         } elseif ($type == 'sendmail') {
-            $transport = Swift_SendmailTransport::newInstance(get_config('sendmail_command'));
+            $transport = new Swift_SendmailTransport(get_config('sendmail_command'));
         } else {
-            $transport = Swift_MailTransport::newInstance();
+            $transport = new Swift_MailTransport();
         }
-        $mailer = Swift_Mailer::newInstance($transport);
+        $mailer = new Swift_Mailer($transport);
     }
     return $mailer;
 }
 
 /**
- * Make sure URLs appearing in href and src attributes in HTML include a host. 
- * 
+ * Make sure URLs appearing in href and src attributes in HTML include a host.
+ *
  * @param string $html  - The HTML snippet to canonicalize
  * @return string       - The canonicalized HTML
  */
