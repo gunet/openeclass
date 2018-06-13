@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,7 +40,6 @@ $pageName = $lang_remind_pass;
 define('TOKEN_VALID_TIME', 3600);
 
 $data['emailhelpdesk'] = q(get_config('email_helpdesk'));
-$data['homelink'] = "<br><p><a href='$urlAppend'>$langHome</a></p>\n";
 
 function password_is_editable($password) {
     global $auth_ids;
@@ -171,16 +169,14 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                     a.user_id IS NULL AND
                     (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $data['email'], $data['userName']);
     }
-} else {
-    /*     * *** Email address entry form **** */
-    $data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
 }
+
+$data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+          'url' => $urlServer,
+          'icon' => 'fa-reply',
+          'level' => 'primary-label',
+          'button-class' => 'btn-default')), false);
 
 $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
 

@@ -11,7 +11,6 @@
         pwStrengthStrong: '{!! js_escape(trans('langPwStrengthStrong')) !!}',
     };
 
-
     $(document).ready(function() {
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
@@ -29,11 +28,11 @@
     @if(isset($is_valid))
         @if(isset($user_pass_updated))
             <div class="alert alert-success"><p>{!! trans('langAccountResetSuccess1') !!}</p></div>
-            {{ $homelink }}
         @elseif(isset($user_pass_notupdate))
             <div class='alert alert-warning'>
                 <ul>
-                    <li>{!! implode("</li>\n<li>", $error_messages) !!}
+                    <li>
+                        {!! implode("</li>\n<li>", $error_messages) !!}
                     </li>
                 </ul>
             </div>
@@ -65,7 +64,6 @@
         @endif
     @else
         <div class='alert alert-danger'>{!! trans('langAccountResetInvalidLink') !!}</div>
-        {{ $homelink }}
     @endif
 @elseif(isset($_POST['send_link']))
     @if($res_first_attempt)
@@ -74,9 +72,11 @@
                 <div class="col-xs-12">
                     <div class='alert alert-danger'>
                         <p><strong>{!! trans('langPassCannotChange1') !!}</strong></p>
-                        <p>{!! trans('langPassCannotChange2') !!} {!! get_auth_info($auth) !!}
-                            {!! trans('langPassCannotChange3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a> {!! trans('langPassCannotChange4') !!}</p>
-                        $homelink
+                        <p>
+                            {!! trans('langPassCannotChange2') !!} {!! get_auth_info($auth) !!}
+                            {!! trans('langPassCannotChange3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>
+                            {!! trans('langPassCannotChange4') !!}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -88,15 +88,16 @@
                         <div class='alert alert-danger'>
                             <p><strong>{!! trans('langAccountEmailError1') !!}</strong></p>
                             <p>{!! trans('langAccountEmailError2') !!} {{ $email }}.</p>
-                            <p>{!! trans('langAccountEmailError3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}'</a>.</p></div>
-                        {{ $homelink }}
+                            <p>{!! trans('langAccountEmailError3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}'</a>.</p>
+                        </div>
                     </div>
                 </div>
             @elseif(!isset($auth))
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class='alert alert-success'>{!! trans('lang_pass_email_ok') !!} <strong>{!! q($email) !!}</strong>
-                        </div>{{ $homelink }}
+                        <div class='alert alert-success'>
+                            {!! trans('lang_pass_email_ok') !!} <strong>{!! q($email) !!}</strong>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -108,16 +109,15 @@
                     <div class='alert alert-danger'>
                         <p>{!! trans('langLostPassPending') !!}</p>
                     </div>
-                    {{ $homelink }}
                 </div>
             </div>
         @else
             <div class="row">
                 <div class="col-xs-12">
                     <div class='alert alert-danger'>
-                        <p><strong>{!! trans('langAccountNotFound1') !!} ({!! q("$userName / $email") !!}")</strong></p>
-                        <p>{!! trans('langAccountNotFound2') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>, {!! trans('langAccountNotFound3') !!}</p></div>
-                    {{ $homelink }}
+                        <p><strong>{{ trans('langAccountNotFound1') }} ({{ "$userName / $email" }})</strong></p>
+                        <p>{{ trans('langAccountNotFound2') }} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>, {{ trans('langAccountNotFound3') }}</p>
+                    </div>
                 </div>
             </div>
         @endif
@@ -156,5 +156,4 @@
 @endif
 
 @endsection
-    
-    
+
