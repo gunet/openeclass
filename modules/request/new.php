@@ -123,8 +123,6 @@ if (isset($_POST['requestTitle'])) {
                                 $tmpDate);
                         }
                         if ($field->datatype == REQUEST_FIELD_TEXTAREA) {
-                            $field_data_display = $_POST[$field_name];
-                        } elseif ($field->datatype == REQUEST_FIELD_TEXTBOX) {
                             $field_data_display = '<pre>' . q($_POST[$field_name]) . '</pre>';
                         } else {
                             $field_data_display = " <span class='left-space'>" .
