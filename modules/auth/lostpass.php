@@ -22,10 +22,8 @@
  * Password reset component
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
  * @abstract This component resets the user's password after verifying
- * his/hers  information through a challenge/response system.
+ *     their information through a challenge/response system.
  *
  */
 use Hautelook\Phpass\PasswordHash;
@@ -119,14 +117,12 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     $data['found_editable_password'] = false;
     if ($data['res_first_attempt']) {
         if (password_is_editable($data['res_first_attempt']->password)) {
+            $id = $data['res_first_attempt']->id;
+            $token = token_generate('password' . $id, true);
+            $resetUrl = $urlServer . "modules/auth/lostpass.php?u=$id&amp;h=$token";
             $data['found_editable_password'] = true;
-            //prepare instruction for password reset
-            $text = $langPassResetIntro . $data['emailhelpdesk'];
-            $text .= $langHowToResetTitle;
-            $text .= $langPassResetGoHere;
-            $text .= $urlServer . "modules/auth/lostpass.php?u=$data[res_first_attempt]->id&h=" .
-                    token_generate('password' . $data['res_first_attempt']->id, true);
 
+            // prepare instruction for password reset
             $header_html_topic_notify = "<!-- Header Section -->
             <div id='mail-header'>
                 <br>
@@ -141,17 +137,15 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                 <br>
                 <div><b>$langHowToResetTitle</b></div><br>
                 <div id='mail-body-inner'>
-                    $langPassResetGoHere<br><br><a href='$urlServer"."modules/auth/lostpass.php?u=$data[res_first_attempt]->id&h=" .
-                token_generate('password' . $data['res_first_attempt']->id, true)."'>$urlServer"."modules/auth/lostpass.php?u=$data[res_first_attempt]->id&h=" .
-                    token_generate('password' . $data['res_first_attempt']->id, true)."</a>
+                    $langPassResetGoHere<br><br><a href='$resetUrl'>$resetUrl</a>
                 </div>
             </div>";
 
-            $text = $header_html_topic_notify.$body_html_topic_notify;
+            $text = $header_html_topic_notify . $body_html_topic_notify;
 
             $plainText = html2text($text);
             // store the timestamp of this action (password reminding and token generation)
-            Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $data['res_first_attempt']->id);
+            Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $id);
         } else { //other type of auth...
             $data['auth'] = array_search($data['res_first_attempt']->password, $auth_ids) or 1;
         }
@@ -178,6 +172,6 @@ $data['action_bar'] = action_bar(array(
           'level' => 'primary-label',
           'button-class' => 'btn-default')), false);
 
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
+$data['menuTypeID'] = 0;
 
 view('modules.auth.lostpass', $data);

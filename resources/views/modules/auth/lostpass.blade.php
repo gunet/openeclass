@@ -47,7 +47,7 @@
                         <table class='table-default'>
                             <tr>
                                 <th>{!! trans('langNewPass1') !!}</th>
-                                <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
+                                <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span></td>
                             </tr>
                             <tr>
                                 <th>{!! trans('langNewPass2') !!}</th>
@@ -88,7 +88,7 @@
                         <div class='alert alert-danger'>
                             <p><strong>{!! trans('langAccountEmailError1') !!}</strong></p>
                             <p>{!! trans('langAccountEmailError2') !!} {{ $email }}.</p>
-                            <p>{!! trans('langAccountEmailError3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}'</a>.</p>
+                            <p>{!! trans('langAccountEmailError3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>.</p>
                         </div>
                     </div>
                 </div>
