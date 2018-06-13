@@ -131,7 +131,7 @@ if (isset($_POST['requestTitle'])) {
                                 q($_POST[$field_name]) . "</span>";
                         }
                         $fields_text .= "<div><b>" . q($field->name) .
-                            ":</b>" . $field_data_display . "<br>";
+                            ":</b> " . $field_data_display . "<br>";
                     }, $type_id);
                 if (count($field_data)) {
                     $placeholders = implode(', ', array_fill(0, count($field_data), '(?d, ?d, ?s)'));
