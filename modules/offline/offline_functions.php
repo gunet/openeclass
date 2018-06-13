@@ -342,6 +342,16 @@ function offline_unit_resources($bladeData, $downloadDir) {
 }
 
 
+/**
+ * @brief get / render course exercises
+ * @global type $blade
+ * @global type $downloadDir
+ * @global type $course_id
+ * @global type $webDir
+ * @global type $langScore
+ * @global type $langExerciseDone
+ * @param type $bladeData
+ */
 
 function offline_exercises($bladeData) {
     global $blade, $downloadDir, $course_id, $webDir, $langScore, $langExerciseDone;

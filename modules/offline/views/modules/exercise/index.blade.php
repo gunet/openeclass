@@ -9,7 +9,6 @@
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
-                'order' : [[1, 'desc']],
                 'oLanguage': {
                     'sLengthMenu':   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                     'sZeroRecords':  '{{ trans('langNoResult') }}',
@@ -47,7 +46,6 @@
             <thead>
             <tr class='list-header'>
                 <th>{{ trans('langExerciseName') }}</th>
-                <th class='text-center'>{{ trans('langStart') }} / {{ trans('langFinish') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -56,14 +54,6 @@
                     <td>
                         <a href="exercise/{{ $exer->id }}.html">{!! standard_text_escape($exer->title) !!}</a>
                         {!! standard_text_escape($exer->description) !!}
-                    </td>
-                    <td class='smaller' align='center'>
-                        {!! nice_format(date("Y-m-d H:i", strtotime($exer->start_date)), true) !!} /
-                        @if (isset($exer->end_date))
-                        {!! nice_format(date("Y-m-d H:i", strtotime($exer->end_date)), true) !!}
-                        @else
-                            -
-                        @endif
                     </td>
                 </tr>
             @endforeach
