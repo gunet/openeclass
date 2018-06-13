@@ -24,6 +24,8 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/request/functions.php';
+require_once 'include/lib/textLib.inc.php';
+require_once 'include/sendMail.inc.php';
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
@@ -137,11 +139,67 @@ if (isset($_GET['id'])) {
         }
         if ($comment) {
             Database::get()->query('INSERT INTO request_action
-                SET request_id = d?, user_id = ?d, ts = NOW(),
+                SET request_id = ?d, user_id = ?d, ts = NOW(),
                     old_state = ?d, new_state = ?d, comment = ?s',
                 $request->id, $uid, $request->state, $request->state,
                 $comment);
+
             Session::Messages(trans('langFaqEditSuccess'), 'alert-success');
+
+            if (isset($_POST['send_mail'])) {
+                $recipients = [];
+                if (get_user_email_notification($request->creator_id, $course_id)) {
+                    $email = uid_to_email($request->creator_id);
+                    if ($email) {
+                        $recipients[] = $email;
+                    }
+                }
+                $watchers = Database::get()->queryArray('SELECT user_id
+                    FROM request_watcher WHERE request_id = ?d',
+                    $request->id);
+                foreach ($watchers as $watcher) {
+                    if (get_user_email_notification($watcher->user_id, $course_id)) {
+                        $email = uid_to_email($watcher->user_id);
+                        if ($email) {
+                            $recipients[] = $email;
+                        }
+                    }
+                }
+                $recipients = array_unique($recipients);
+
+                $datetime = claro_format_locale_date($dateTimeFormatShort);
+                $emailSubject = $langEditRequest . ': ' . $request->title;
+                $emailContent = "
+                <!-- Header Section -->
+                  <div id='mail-header'>
+                      <br>
+                      <div>
+                          <div id='header-title'>" . q($langEditRequest) . ": <a href='{$urlServer}modules/request/?course=$course_code&amp;id=$rid'>" . q($request->title) . "</a>.</div>
+                          <ul id='forum-category'> <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
+                              <li><span><b>$langdate:</b></span> <span class='left-space'>$datetime</span></li>
+                          </ul>
+                      </div>
+                  </div>
+                  <!-- Body Section -->
+                  <div id='mail-body'>
+                      <br>
+                      <div><b>$langChangeDescription</b></div>
+                      <div id='mail-body-inner'>
+                          $comment
+                      </div>
+                  </div>
+                  <!-- Footer Section -->
+                  <div id='mail-footer'>
+                      <br>
+                      <div>
+                          <small>" . sprintf($langLinkUnsubscribe, q($currentCourseName)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                      </div>
+                  </div>";
+                $emailBody = html2text($emailContent);
+                send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'],
+                    '', $recipients, $emailSubject, $emailBody, $emailContent);
+            }
+
             redirect_to_home_page("modules/request/?course=$course_code&id=" . $request->id);
         }
     }
