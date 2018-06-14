@@ -39,26 +39,26 @@
         @endif
         @if(!$change_ok)
             <div class='form-wrapper'>
-                <form method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
+                <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                     <input type='hidden' name='u' value='{{ $userUID }}'>
                     <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
-                    <fieldset>
-                        <legend>{!! trans('langPassword') !!}</legend>
-                        <table class='table-default'>
-                            <tr>
-                                <th>{!! trans('langNewPass1') !!}</th>
-                                <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span></td>
-                            </tr>
-                            <tr>
-                                <th>{!! trans('langNewPass2') !!}</th>
-                                <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
-                            </tr>
-                            <tr>
-                                <th>&nbsp;</th>
-                                <td><input class='btn btn-primary' type='submit' name='submit' value='{!! trans('langModify') !!}'></td>
-                            </tr>
-                        </table>
-                    </fieldset>
+                    <div class="form-group">
+                        <label  class='col-sm-2 control-label'>{!! trans('langNewPass1') !!}</label>
+                        <div class="col-sm-10">
+                            <input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{!! trans('langNewPass2') !!}</label>
+                        <div class="col-sm-10">
+                            <input type='password' size='40' name='newpass1' value='' autocomplete='off'>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-offset-2 col-sm-10'>
+                            <input class='btn btn-primary' type='submit' name='submit' value="{!! trans('langModify') !!}">
+                        </div>
+                    </div>
                 </form>
             </div>
         @endif
@@ -132,7 +132,7 @@
         <div class="col-xs-12">
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
-                    <div class='row'><div class='col-sm-8'><legend>{!! trans('langUserData') !!}</legend></div></div>
+                    <div class='row'><div class='col-sm-8'><h4>{!! trans('langUserData') !!}</h4></div></div>
                     <div class='form-group'>
                         <div class='col-sm-8'>
                             <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='{!! trans('lang_username') !!}'>
