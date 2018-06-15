@@ -30,11 +30,7 @@
             <div class="alert alert-success"><p>{!! trans('langAccountResetSuccess1') !!}</p></div>
         @elseif(isset($user_pass_notupdate))
             <div class='alert alert-warning'>
-                <ul>
-                    <li>
-                        {!! implode("</li>\n<li>", $error_messages) !!}
-                    </li>
-                </ul>
+                {!! implode("\n", $error_messages) !!}
             </div>
         @endif
         @if(!$change_ok)
@@ -145,7 +141,7 @@
                     </div>
                     <div class='form-group'>
                         <div class='col-sm-8'>
-                            <button class='btn btn-primary' type='submit' name='send_link' value='$lang_pass_submit'>{!! trans('lang_pass_submit') !!}</button>
+                            <button class='btn btn-primary' type='submit' name='send_link' value='{{ $lang_pass_submit }}'>{!! trans('lang_pass_submit') !!}</button>
                             <button class='btn btn-default' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
                         </div>
                     </div>

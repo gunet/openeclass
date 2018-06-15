@@ -59,39 +59,26 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         $data['is_valid'] = true;
         if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                 count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
+
+            $data['action_bar'] = action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => $urlServer,
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
+
             $hasher = new PasswordHash(8, false);
             $q1 = Database::get()->query("UPDATE user SET password = ?s
                                                       WHERE id = ?d",
                     $hasher->HashPassword($_POST['newpass']), $data['userUID']);
             if ($q1->affectedRows > 0) {
                 $data['user_pass_updated'] = true;
-                $data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
+
                 $data['change_ok'] = true;
             }
         } elseif (count($error_messages)) {
-            $data['$user_pass_notupdate'] = true;
-            $data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
-        }
-        if (!$data['change_ok']) {
-            $data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
+            $data['user_pass_notupdate'] = true;
         }
     } else {
         $data['action_bar'] = action_bar(array(
@@ -173,5 +160,5 @@ $data['action_bar'] = action_bar(array(
           'button-class' => 'btn-default')), false);
 
 $data['menuTypeID'] = 0;
-
+$data['error_messages'] = $error_messages;
 view('modules.auth.lostpass', $data);
