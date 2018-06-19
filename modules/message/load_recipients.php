@@ -129,17 +129,16 @@ if (isset($_POST['course'])) {
                 FROM user u, course_user cu
                 WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
                 AND cu.user_id = u.id
-                AND cu.status != ". USER_GUEST . "
+                AND cu.status != ?d
                 AND u.id != ?d
                 AND (u.surname LIKE ?s OR u.username LIKE ?s)
                 ORDER BY name
                 LIMIT 10";
-        $res = Database::get()->queryArray($sql, $uid, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
+        $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
     }
 
     $jsonarr["items"] = array();
     $i = 0;
-
     foreach ($res as $r) {
         $jsonarr["items"][$i] = new stdClass();
         $jsonarr["items"][$i]->id = $r->user_id;
@@ -150,3 +149,4 @@ if (isset($_POST['course'])) {
     header('Content-Type: application/json');
     echo json_encode($jsonarr);
 }
+

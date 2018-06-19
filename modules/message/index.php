@@ -211,7 +211,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 </div>
             </div>";
     if ($type == 'cm' && $course_id == 0) {//course message from central interface
-        //find user's courses with dropbox module activated
+        //find user's courses with message module (aka dropbox) activated
         $sql = "SELECT course.code code, course.title title
                 FROM course, course_user, course_module
                 WHERE course.id = course_user.course_id
@@ -362,7 +362,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 
         $head_content .= "<script type='text/javascript'>
                             $(document).ready(function () {
-
                                 $('#recipients').select2({
                                     placeholder:'$langSearch',
                                     multiple: true,
@@ -371,9 +370,11 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                         url: 'load_recipients.php?autocomplete=1',
                                         dataType: 'json',
                                         quietMillis: 250,
-                                        results: function (data, page) { // parse the results into the format expected by Select2.
+                                        processResults: function (data) { // parse the results into the format expected by Select2.
                                             // since we are using custom formatting functions we do not need to alter the remote JSON data
-                                            return { results: data.items };
+                                            return {
+                                                results: data.items
+                                            };
                                         },
                                         cache: true
                                      },
@@ -398,9 +399,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                             <div class='form-group'>
                                 <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
                                 <div class='col-sm-10'>
-                                    <select id='recipients' class='form-control' name='recipients[]' multiple>
-                                    </select
-                                    <span class='help-block'>$langSearchSurname</span>
+                                    <select name='recipients' class='form-control' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                 </div>
                             </div>";
         }
