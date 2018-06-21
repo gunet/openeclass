@@ -43,14 +43,14 @@ $link = $urlServer . 'modules/blog/rss.php?c=' . urlencode($course_code);
 if (isset($_GET['token'])) {
     $link .= '&amp;uid=' . $_GET['uid'] . '&amp;token=' . $_GET['token'];
 }
-    
+
 header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
 echo "<atom:link href='$link' rel='self' type='application/rss+xml' />";
 echo "<title>$langCourseBlog " . q($title) . "</title>";
-echo "<link>{$urlServer}courses/" . q($code) . "/</link>";
+echo "<link>{$urlServer}courses/" . q($course_code) . "/</link>";
 echo "<description>$langBlogPosts</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>$language</language>";
