@@ -248,6 +248,22 @@ class Calendar_Events {
                         . "WHERE cu.user_id = ?d AND tc.active = 1 "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
+
+                // requests
+                if (!empty($q)) {
+                    $q .= " UNION ";
+                }
+                $dc = str_replace('start', 'rfd.data', $datecond);
+                $q .= "SELECT req.id, concat(c.title, ?s, req.title), concat(rfd.data, ' 08:00:00') start, rfd.data startdate, '00:00' duration, concat(rfd.data, ' 08:00:01') `end`, concat(req.description, '\n', '(deadline: ', rfd.data, ')') content, 'course' event_group, 'event-info' class, 'request' event_type, c.code course "
+                        . "FROM request req JOIN course c ON req.course_id = c.id
+                                JOIN request_field_data rfd ON rfd.request_id = req.id
+                                JOIN request_field rf ON rf.id = rfd.field_id
+                                LEFT JOIN request_watcher rw ON req.id = rw.request_id
+                           WHERE req.state NOT IN (?d, ?d)
+                                AND (req.creator_id = ?d OR rw.user_id = ?d) "
+                        . $dc;
+                $q_args = array_merge($q_args, [': ' . trans('langSingleRequest') . ': ',
+                    REQUEST_STATE_LOCKED, REQUEST_STATE_CLOSED, $uid], $q_args_templ);
             }
             if (Calendar_Events::$calsettings->show_deadline == 1) {
                 // assignments
