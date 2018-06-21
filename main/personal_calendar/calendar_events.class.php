@@ -36,6 +36,7 @@
 require_once 'include/log.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/references.class.php';
+require_once 'modules/request/functions.php';
 
 class Calendar_Events {
 
@@ -51,7 +52,8 @@ class Calendar_Events {
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
             'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
-            'teleconference' => 'modules/tc/?course=thiscourse');
+            'teleconference' => 'modules/tc/?course=thiscourse',
+            'request' => 'modules/request/?course=thiscourse&id=thisid');
 
     /** @staticvar object with user calendar settings
     */
@@ -732,7 +734,23 @@ class Calendar_Events {
                 . "WHERE ex.course_id = ?d AND ex.active = 1 "
                 . $dc
                 . "AND (assign_to_specific = 0 OR ex_sp.user_id = ?d $group_sql_template) ";
-        $q_args = array_merge($q_args, $q_args_templ, array($uid), $student_groups);
+        $q_args = array_merge($q_args,  $q_args_templ, array($uid), $student_groups);
+
+        // requests
+        if (!empty($q)) {
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start', 'rfd.data', $datecond);
+        $q .= "SELECT req.id, concat(?s, req.title), concat(rfd.data, ' 08:00:00') start, rfd.data startdate, '00:00' duration, concat(rfd.data, ' 08:00:01') `end`, concat(req.description, '\n', '(deadline: ', rfd.data, ')') content, 'course' event_group, 'event-info' class, 'request' event_type, c.code course "
+                . "FROM request req JOIN course c ON req.course_id = c.id
+                        JOIN request_field_data rfd ON rfd.request_id = req.id
+                        JOIN request_field rf ON rf.id = rfd.field_id
+                        LEFT JOIN request_watcher rw ON req.id = rw.request_id
+                   WHERE req.course_id = ?d AND req.state NOT IN (?d, ?d)
+                        AND (req.creator_id = ?d OR rw.user_id = ?d) "
+                . $dc;
+        $q_args = array_merge($q_args, [trans('langSingleRequest') . ': ', $course_id,
+            REQUEST_STATE_LOCKED, REQUEST_STATE_CLOSED, $uid], $q_args_templ);
 
         if (empty($q))
         {

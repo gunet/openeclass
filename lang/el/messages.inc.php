@@ -5531,6 +5531,7 @@ $langLTIAppActions = "Ενέργειες";
 
 // ticketing (aka request)
 $langRequests = "Αιτήματα";
+$langSingleRequest = 'Αίτημα';
 $langNewRequest = "Νέο αίτημα";
 $langEditRequest = "Επεξεργασία αιτήματος";
 $langRequestCreated = 'Το αίτημα δημιουργήθηκε.';
