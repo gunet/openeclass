@@ -208,8 +208,8 @@ $data['targetUrl'] = $urlAppend . 'modules/request/new.php?course=' . $course_co
 $data['course_users'] = Database::get()->queryArray("SELECT user_id,
         CONCAT(surname, ' ', givenname) name, email
     FROM course_user JOIN user ON user_id = user.id
-    WHERE course_id = ?d AND user_id <> ?d
-    ORDER BY surname, givenname", $course_id, $uid);
+    WHERE course_id = ?d
+    ORDER BY surname, givenname", $course_id);
 $data['request_types'] = Database::get()->queryArray('SELECT * FROM request_type ORDER BY id');
 if ($data['request_types']) {
     foreach ($data['request_types'] as $type) {

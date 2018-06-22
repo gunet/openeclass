@@ -58,7 +58,9 @@
                         <div class='col-sm-10'>
                             <select class='form-control' name='requestWatchers[]' multiple id='requestWatchers'>
                                 @foreach ($course_users as $cu)
-                                    <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
+                                    @if ($uid != $cu->user_id)
+                                        <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
