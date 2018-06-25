@@ -73,15 +73,12 @@ if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SER
     }
 }
 
-if(!empty($langLanguageCode)){
-    load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
-}
-load_js('bootstrap-calendar-master/js/calendar.js');
+load_js('bootstrap-calendar');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('sortable/Sortable.min.js');
 
 ModalBoxHelper::loadModalBox();
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
+$head_content .= "
 <script type='text/javascript'>
     $(document).ready(function() {";
 
