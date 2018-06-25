@@ -74,7 +74,7 @@ class Log {
     }
 
     /**
-     * display users logging
+     * @brief display users logging
      * Note: $module_id = $course_id = 0 means other logging (e.g. modify user profile, course creation etc.)
      * @param int $course_id (-1 means all courses)
      * @param type $user_id (-1 means all users)
@@ -90,7 +90,7 @@ class Log {
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
             $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
-            $langModifyInfo, $langAbuseReport, $langWall;
+            $langModifyInfo, $langAbuseReport;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -370,7 +370,6 @@ class Log {
      * @global type $langDeactivate
      * @global type $langBlogComment
      * @global type $langBlogRatingLog
-     * @global type $langsCourseSharing
      * @global type $langBlogSharingLog
      * @global type $langsCourseSharing
      * @global type $langCourseComment
@@ -386,8 +385,8 @@ class Log {
 
         global $langCourseStatusChange, $langIn, $langClosedCourse,
                $langRegCourse, $langOpenCourse, $langInactiveCourse,
-               $langActivate, $langDeactivate, $langBlogComment, $langBlogRatingLog,
-               $langsCourseSharing, $langBlogSharingLog, $langCourseSharing,
+               $langActivate, $langDeactivate, $langBlogComment,
+               $langBlogSharingLog, $langBlogRatingLog,
                $langCourseComment, $langsCourseAnonymousRating, $langsCourseRating,
                $langForumRating, $langCourseSocialBookmarks, $langCourseAbuseReport;
 
