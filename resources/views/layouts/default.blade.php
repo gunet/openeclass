@@ -213,7 +213,7 @@
                             </div>
 
 
-                            <div class='col-xs-3'>
+                            <div class='col-xs-3 hidden-print'>
                                 @if ($show_toggle_student_view)
                                 <div class='pull-right'>
                                     <form method='post' action='{{ $urlAppend }}main/student_view.php?course={{ $course_code }}' id='student-view-form'>
