@@ -1385,7 +1385,11 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
                                     $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);
             $users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
             foreach ($users as $user) {
-                $exerciseUserRecord = Database::get()->querySingle("SELECT total_score, total_weighting FROM exercise_user_record WHERE eid = ?d AND uid = $user->uid ORDER BY total_score/total_weighting DESC limit 1", $id);
+                $exerciseUserRecord = Database::get()->querySingle("SELECT total_score, total_weighting FROM exercise_user_record "
+                                                . "WHERE eid = ?d "
+                                                . "AND uid = $user->uid "
+                                                . "AND attempt_status = " . ATTEMPT_COMPLETED . "
+                                                ORDER BY total_score/total_weighting DESC limit 1", $id);
                 if ($exerciseUserRecord) {
                     update_gradebook_book($user->uid, $id, $exerciseUserRecord->total_score/$exerciseUserRecord->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE, $gradebook_id);
                 }
@@ -1437,6 +1441,7 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
                     . "FROM exercise_user_record "
                     . "WHERE eid = ?d "
                     . "AND uid = $uid "
+                    . "AND attempt_status = " . ATTEMPT_COMPLETED . " "
                     . "AND record_end_date <= '$gradebook->end_date' "
                     . "AND record_end_date >= '$gradebook->start_date' "
                     . "ORDER BY total_score/total_weighting DESC limit 1", $gradebookActivity->module_auto_id);
