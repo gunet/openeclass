@@ -77,7 +77,7 @@
                     <nav id="header" class="navbar navbar-default" role="navigation">
                         <button class="navbar-toggle pull-left">
                             <span class="fa fa-bars" style='color: #777;'></span>
-                            <span class="sr-only">$langMenu</span>
+                            <span class="sr-only">{{ $langMenu }}</span>
                         </button>
                         <a href='{{ $urlAppend }}' class="navbar-brand small-logo">
                             <img class="img-responsive hidden-md hidden-lg" src="{{ $logo_img_small }}" style="height: 36px;margin-top:8px;" alt='{{ $pageTitle }} logo'>
@@ -87,7 +87,7 @@
                                 <li>
                                     <a href="{{ $urlAppend }}main/portfolio.php">
                                         <span class="fa fa-home"></span>
-                                        <span class="sr-only">{!! trans('langPortfolio') !!}</span>
+                                        <span class="sr-only">{{ trans('langPortfolio') }}</span>
                                     </a>
                                 </li>
                                 <li id="profile_menu_dropdown" class="dropdown">

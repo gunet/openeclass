@@ -1,11 +1,11 @@
 function act_confirm() {
-    $('.confirmAction').on('click', function (e) {
+    $('body').on('click', '.confirmAction', function (e) {
         var message = $(this).attr('data-message');
         var title = $(this).attr('data-title');
         var cancel_text = $(this).attr('data-cancel-txt');
         var action_text = $(this).attr('data-action-txt');
         var action_btn_class = $(this).attr('data-action-class');
-        var form = $(this).closest('form').attr('action');
+        var form = $(this).closest('form');
         bootbox.dialog({
             message: message,
             title: title,
@@ -18,7 +18,7 @@ function act_confirm() {
                     label: action_text,
                     className: action_btn_class,
                     callback: function () {
-                        window.location = form;
+                        form.submit();
                     }
                 }
             }

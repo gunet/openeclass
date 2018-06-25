@@ -3649,10 +3649,10 @@ function action_button($options, $secondary_menu_options = array()) {
                 $primary_form_end = $form_end;
                 $form_begin = $form_end = '';
                 $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger";
             } else {
                 $icon_class .= " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger";
                 $primary_icon_class = '';
             }
             $url = '#';

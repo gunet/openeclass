@@ -5535,6 +5535,7 @@ $langSingleRequest = 'Αίτημα';
 $langNewRequest = "Νέο αίτημα";
 $langEditRequest = "Επεξεργασία αιτήματος";
 $langRequestCreated = 'Το αίτημα δημιουργήθηκε.';
+$langRequestDeleted = 'Το αίτημα διαγράφτηκε.';
 $langWatchers = 'Παρατηρητές';
 $langRequestState = 'Κατάσταση αιτήματος';
 $langRequestStateNew = 'Νέο';

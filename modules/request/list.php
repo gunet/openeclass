@@ -76,13 +76,24 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     $data['data'] = array();
     foreach ($result as $request) {
+        if ($is_editor) {
+            $indirectId = getIndirectReference($request->id);
+            $delete_button = action_button([[
+                'icon' => 'fa-times text-danger',
+                'class' => 'delete',
+                'title' => $langDelete,
+                'confirm' => $langConfirmDelete,
+                'level' => 'primary',
+                'url' => $urlAppend . "modules/request/delete.php?id=$indirectId" ]]);
+        }
+
         $data['data'][] = [
             '0' => "<a href='{$urlAppend}modules/request/?course=$course_code&amp;id={$request->id}'>" .
                 standard_text_escape($request->title) . "</a>",
             '1' => $stateLabels[$request->state],
             '2' => format_ts($request->open_date),
             '3' => format_ts($request->change_date),
-            '4' => '&nbsp;'];
+            '4' => $is_editor? $delete_button: '&nbsp;'];
     }
 
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
