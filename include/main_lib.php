@@ -2328,9 +2328,8 @@ function handle_unit_info_edit() {
         $unit_id = $q->lastInsertID;
         // tags
         if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
             $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->attachTags($tagsArray);
+            $moduleTag->attachTags($_POST['tags']);
         }
     }
     // update index
@@ -3589,7 +3588,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         return "<div class='row action_bar'>
                     <div class='col-sm-12 clearfix'>
                         $page_title
-                        <div class='margin-top-thin margin-bottom-fat pull-right'>
+                        <div class='margin-top-thin margin-bottom-fat pull-right hidden-print'>
                             <div class='btn-group'>
                             $out
                             $action_button
