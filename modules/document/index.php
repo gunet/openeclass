@@ -1171,12 +1171,12 @@ foreach ($result as $row) {
                 array('title' => $langAddResePortfolio,
                       'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=mydocs&amp;rid=".$row->id,
                       'icon' => 'fa-star',
-                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
+                      'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                 array('title' => $langDelete,
                       'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
-                      'icon' => 'fa-times',
                       'class' => 'delete',
-                      'confirm' => "$langConfirmDelete {$row->filename}")));
+                      'icon' => 'fa-times text-danger',
+                      'confirm' => $langConfirmDelete . ' ' . q($row->filename))));
         } elseif ($uid or $row->format != '.dir') {
             $info['action_button'] = icon('fa-download', $downloadMessage, $download_url);
         }

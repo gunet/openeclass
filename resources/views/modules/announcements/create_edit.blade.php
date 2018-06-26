@@ -7,13 +7,13 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="form-wrapper">
-                <form class="form-horizontal" role="form" method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
+                <form class="form-horizontal" role="form" method="post" action="{{ $submitUrl }}">
                     <fieldset>
                         <div class="form-group {{ $antitle_error }}">
                             <label for="AnnTitle" class="col-sm-2 control-label">{{ trans('langAnnTitle') }}:</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" name="antitle" value="{{ $titleToModify }}"/>
-                                <span class='help-block'>{{ $antitle_error }}</span>
+                                <span class='help-block'>{{ Session::getError('antitle') }}</span>
                             </div>
                         </div>
                         <div class='form-group'>
@@ -74,11 +74,65 @@
                                 <button type="submit" class="btn btn-primary" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
                                 <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-default">{{ trans('langCancel') }}</a>
                             </div>
-                            <input type='hidden' name='id' value='{{ trans('AnnouncementToModify') }}'>
+                            <input type='hidden' name='id' value='{{ $announce_id }}'>
                         </div>
                     </fieldset>
                 </form>
             </div>
         </div>
     </div>
+
 @endsection
+
+@push('footer_scripts')
+    <script>
+        $(function () {
+            var langEmptyGroupName = '{{ js_escape(trans('langEmptyAnTitle')) }}';
+
+            $('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
+            $('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
+
+            $('input[name=startdate_active]').on('click', function() {
+                if ($('input[name=startdate_active]').prop('checked')) {
+                    $('input[name=enddate_active]').prop('disabled', false);
+                } else {
+                    $('input[name=enddate_active]').prop('disabled', true);
+                    $('input[name=enddate_active]').prop('checked', false);
+                    $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
+                }
+            });
+
+            $('.input-group-addon input[type=checkbox]').on('click', function(){
+                var prop = $(this).parents('.input-group').children('input').prop('disabled');
+                if(prop){
+                    $(this).parents('.input-group').children('input').prop('disabled', false);
+                } else {
+                    $(this).parents('.input-group').children('input').prop('disabled', true);
+                }
+            });
+
+            $('#select-recipients').select2();
+            $('#selectAll').click(function(e) {
+                e.preventDefault();
+                var stringVal = [];
+                $('#select-recipients').find('option').each(function(){
+                    stringVal.push($(this).val());
+                });
+                $('#select-recipients').val(stringVal).trigger('change');
+            });
+            $('#removeAll').click(function(e) {
+                e.preventDefault();
+                var stringVal = [];
+                $('#select-recipients').val(stringVal).trigger('change');
+            });
+
+            $('#startdate, #enddate').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
+                language: '{{ $language }}',
+                autoclose: true
+            });
+
+        });
+    </script>
+@endpush

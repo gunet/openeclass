@@ -170,6 +170,13 @@
 
     {!! $action_bar !!}
 
+    @if ($showSubscribeWarning)
+        <div class='alert alert-warning'>
+            {{ trans('langNoUserEmailNotification') }}
+            (<a href='{{ $subscribeUrl }}'>{{ trans('langModify') }}</a>)
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-xs-12">
             <div class="table-responsive">
