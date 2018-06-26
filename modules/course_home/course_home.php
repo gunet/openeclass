@@ -75,18 +75,18 @@ if ($is_editor) {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $id);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
-        redirect_to_home_page("courses/$course_code/");    
-    } elseif (isset($_REQUEST['access'])) {        
+        redirect_to_home_page("courses/$course_code/");
+    } elseif (isset($_REQUEST['access'])) {
         $id = intval(getDirectReference($_REQUEST['access']));
         $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
         $newaccess = ($access->public == '1') ? '0' : '1';
-        Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);        
+        Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
         redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['down'])) {
         $id = intval(getDirectReference($_REQUEST['down'])); // change order down
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
-        } 
+        }
         redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['up'])) { // change order up
         $id = intval(getDirectReference($_REQUEST['up']));
@@ -123,15 +123,11 @@ $helpTopic = 'course_home';
 
 add_units_navigation(TRUE);
 
-load_js('tools.js');
-if(!empty($langLanguageCode)){
-    load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
-}
-load_js('bootstrap-calendar-master/js/calendar.js');
+load_js('bootstrap-calendar');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 
 ModalBoxHelper::loadModalBox();
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
+$head_content .= "
 <script type='text/javascript'>
     $(document).ready(function() {  "
 //Calendar stuff
@@ -166,7 +162,7 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 
     ."})
     </script>";
- 
+
 $head_content .= "
         <script>
         $(function() {
@@ -386,11 +382,11 @@ switch ($visible) {
 if ($uid and !$is_editor) {
     $data['course_completion_id'] = $course_completion_id = has_course_completion(); // is course completion enabled?
     if ($course_completion_id) {
-        $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);        
-        $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";         
+        $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
+        $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
     }
 }
-    
+
 // display opencourses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 if (isset($level) && !empty($level)) {
@@ -417,7 +413,7 @@ if (isset($level) && !empty($level)) {
     });
 
 /* ]]> */
-</script>";                        
+</script>";
     $data['opencourses_level'] = "
         <div class='row'>
             <div class='col-xs-4'>
@@ -470,18 +466,18 @@ if ($is_editor) {
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
     if ($last_id) {
         $last_id = $last_id->id;
-    }    
+    }
     $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
             . "WHERE course_id = ?d "
             . "AND `order` >= 0 "
             . "ORDER BY `order`";
-    
-} else {    
+
+} else {
     $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
             . "WHERE course_id = ?d "
             . "AND visible = 1 "
             . "AND `order` >= 0 "
-            . "ORDER BY `order`";   
+            . "ORDER BY `order`";
 }
 $data['course_units'] = $sql = Database::get()->queryArray($query, $course_id);
 $total_cunits = count($sql);
