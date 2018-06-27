@@ -1,11 +1,15 @@
 function act_confirm() {
-    $('body').on('click', '.confirmAction', function (e) {
+    $('.confirmAction').on('click', function (e) {
         var message = $(this).attr('data-message');
         var title = $(this).attr('data-title');
         var cancel_text = $(this).attr('data-cancel-txt');
         var action_text = $(this).attr('data-action-txt');
         var action_btn_class = $(this).attr('data-action-class');
         var form = $(this).closest('form');
+
+        e.preventDefault();
+        e.stopPropagation();
+
         bootbox.dialog({
             message: message,
             title: title,

@@ -27,8 +27,8 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/request/functions.php';
 require_once 'include/log.class.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' and isset($_GET['id'])) {
-    $id = getDirectReference($_GET['id']);
+if (isset($_POST['id'])) {
+    $id = getDirectReference($_POST['id']);
     $request = Database::get()->querySingle('SELECT * FROM request
         WHERE id = ?d AND course_id = ?d',
         $id, $course_id);
@@ -38,7 +38,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' and isset($_GET['id'])) {
             'title' => $request->title,
             'content' => $request->description ]);
         Database::get()->querySingle('DELETE FROM request WHERE id = ?d', $id);
-        Session::Messages(trans('langRequestDeleted'), 'alert-info');
     }
 }
-redirect_to_home_page("modules/request/?course=$course_code");

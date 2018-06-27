@@ -79,12 +79,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($is_editor) {
             $indirectId = getIndirectReference($request->id);
             $delete_button = action_button([[
-                'icon' => 'fa-times text-danger',
-                'class' => 'delete',
                 'title' => $langDelete,
-                'confirm' => $langConfirmDelete,
-                'level' => 'primary',
-                'url' => $urlAppend . "modules/request/delete.php?id=$indirectId" ]]);
+                'class' => 'delete delete_btn',
+                'icon' => 'fa-times',
+                'link-attrs' => "data-id='$indirectId'"]]);
         }
 
         $data['data'][] = [

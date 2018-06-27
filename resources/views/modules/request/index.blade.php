@@ -88,6 +88,32 @@
             $(document).on('change', '#closedRequests', function (e) {
                 oTable.ajax.reload();
             });
+            $(document).on( 'click','.delete_btn', function (e) {
+                e.preventDefault();
+                var row_id = $(this).data('id');
+                bootbox.confirm('{{ js_escape(trans('langConfirmDelete')) }}', function(result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ $deleteUrl }}',
+                            datatype: 'json',
+                            data: {
+                                id: row_id
+                            },
+                            success: function(data){
+                                var info = oTable.page.info();
+                                var page_number = info.page;
+                                oTable.draw(false);
+                            },
+                            error: function(xhr, textStatus, error){
+                                console.log(xhr.statusText);
+                                console.log(textStatus);
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 @endsection

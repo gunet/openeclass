@@ -168,10 +168,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         'icon-class' => 'vis_btn',
                         'icon-extra' => "data-vis='$visible' data-id='$myrow->id'"),
                     array('title' => $langDelete,
-                        'class' => 'delete',
+                        'class' => 'delete delete_btn',
                         'icon' => 'fa-times',
-                        'icon-class' => 'delete_btn',
-                        'icon-extra' => "data-id='$myrow->id'")
+                        'link-attrs' => "data-id='$myrow->id'")
                 )));
             $iterator++;
         }

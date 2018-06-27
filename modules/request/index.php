@@ -234,6 +234,7 @@ if (isset($_GET['id'])) {
               'level' => 'primary-label' ]
         ], false);
     $data['listUrl'] = $urlAppend . 'modules/request/list.php?course=' . $course_code;
+    $data['deleteUrl'] = $urlAppend . 'modules/request/delete.php?course=' . $course_code;
 
     view('modules.request.index', $data);
 }

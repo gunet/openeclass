@@ -3623,90 +3623,73 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  *
  */
 function action_button($options, $secondary_menu_options = array()) {
-    global $langConfirmDelete, $langCancel, $langDelete;
-    $out_primary = $out_secondary = array();
-    $primary_form_begin = $primary_form_end = $primary_icon_class = '';
-    foreach (array_reverse($options) as $option) {
-        $level = isset($option['level'])? $option['level']: 'secondary';
+    $primary_form_begin = $primary_form_end = $secondary = $primary = '';
+    foreach ($options as $option) {
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-        if (isset($option['class'])) {
-            $class = ' ' . $option['class'];
-        } else {
-            $class = '';
-        }
-        if (isset($option['btn_class'])) {
-            $btn_class = ' ' . $option['btn_class'];
-        } else {
-            $btn_class = ' btn-default';
-        }
-        if (isset($option['link-attrs'])) {
-            $link_attrs = ' ' . $option['link-attrs'];
-        } else {
-            $link_attrs = '';
-        }
-        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $icon_class = "class='list-group-item $class$disabled";
-        if (isset($option['icon-class'])) {
-            $icon_class .= " " . $option['icon-class'];
-        }
-        if (isset($option['confirm'])) {
-            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
-            $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $form_begin = "<form method=post action='$option[url]'>";
-            $form_end = '</form>';
-            if ($level == 'primary-label' or $level == 'primary') {
-                $primary_form_begin = $form_begin;
-                $primary_form_end = $form_end;
-                $form_begin = $form_end = '';
-                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger";
-            } else {
-                $icon_class .= " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger";
-                $primary_icon_class = '';
-            }
-            $url = '#';
-        } else {
-            $icon_class .= "'";
-            $confirm_extra = $form_begin = $form_end = '';
-            $url = isset($option['url'])? $option['url']: '#';
-        }
-        if (isset($option['icon-extra'])) {
-            $icon_class .= ' ' . $option['icon-extra'];
-        }
 
-        if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "<span class='hidden'>.</span></a>");
-        } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'>.</span></a>");
+        $icon = isset($option['icon'])? $option['icon']: 'question-circle-o';
+        $level = isset($option['level'])? $option['level']: null;
+        $class = isset($option['class'])? " $option[class]": '';
+        $btn_class = isset($option['btn-class'])? $option['btn-class']: 'btn-default';
+        $link_attrs = isset($option['link-attrs'])? $option['link-attrs']: '';
+        $icon_class = isset($option['icon-class'])? $option['icon-class']: '';
+        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
+        $url = isset($option['url'])? $option['url']: null;
+        $form_begin = $form_end = '';
+        if (isset($option['confirm'])) {
+            $btn_class .= ' confirmAction';
+            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : trans('langConfirmDelete'));
+            $accept = q(isset($option['confirm_button']) ? $option['confirm_button'] : trans('langDelete'));
+            $form_begin = "<form method=post action='$url'>";
+            $form_end = '</form>';
+            $url = null;
+            $link_attrs .= " data-title='$title' data-message='" . q($option['confirm']) .
+                "' data-cancel-txt='" . trans('langCancel') .
+                "' data-action-txt='$accept' data-action-class='btn-danger'";
+        }
+        if ($level == 'primary-label' or $level == 'primary') {
+            if ($level == 'primary') {
+                $link_attrs .= " data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "'";
+                $btn_label = '';
+            } else {
+                $icon .= ' space-after-icon';
+                $btn_label = q($option['title']) . "<span class='hidden'>.</span>";
+            }
+            $element = ($url? "<a href='$url' class='btn $btn_class$disabled' $link_attrs>":
+                "<button class='btn $btn_class$disabled' $link_attrs>") . 
+                "<span class='fa $icon$icon_class'>$btn_label</span>" .
+                ($url? '</a>': '</button>');
+            $primary_form_begin = $form_begin;
+            $primary_form_end = $form_end;
+            $primary .= $element;
         } else {
-            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
+            $url = $url? $url: '#';
+            $class .= isset($option['confirm'])? ' confirmAction': '';
+            $secondary .= $form_begin .
+                "<a href='$url' class='list-group-item$class'$link_attrs>" .
+                "<span class='fa $icon $icon_class'></span> " . q($option['title']) .
+                '</a>' . $form_end;
         }
     }
-    $primary_buttons = "";
-    if (count($out_primary)) {
-        $primary_buttons = implode('', $out_primary);
-    }
-    $action_button = "";
-    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
-    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
-    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
-    if (count($out_secondary)) {
-        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
-        $action_button = "
+
+    if ($secondary) {
+        $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
+        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : 'fa-gear';
+        $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : 'btn-default';
+        $action_list = q("<div class='list-group' id='action_button_menu'>" . $secondary . "</div>");
+        $secondary = "
                 <a tabindex='1' class='menu-popover btn $secondary_btn_class' data-container='body' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
-                $primary_buttons
-                $action_button
-          </div>" . $primary_form_end;
+         "<div class='btn-group btn-group-sm' role='group'>" .
+         $primary . $secondary .
+         '</div>' . $primary_form_end;
 }
 
 /**

@@ -26,7 +26,7 @@ if (!isset($require_current_course)) {
 }
 
 if (!isset($require_login)) {
-	$require_login = defined('MY_DOCUMENTS') or defined('COMMON_DOCUMENTS');
+    $require_login = defined('MY_DOCUMENTS') or defined('COMMON_DOCUMENTS');
 }
 
 $guest_allowed = true;
@@ -1175,7 +1175,7 @@ foreach ($result as $row) {
                 array('title' => $langDelete,
                       'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                       'class' => 'delete',
-                      'icon' => 'fa-times text-danger',
+                      'icon' => 'fa-times',
                       'confirm' => $langConfirmDelete . ' ' . q($row->filename))));
         } elseif ($uid or $row->format != '.dir') {
             $info['action_button'] = icon('fa-download', $downloadMessage, $download_url);
