@@ -31,6 +31,8 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langC
 
 if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
 
+set_time_limit(0);
+
 doArchive($course_id, $course_code);
 
 $tool_content .= "
