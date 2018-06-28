@@ -3871,7 +3871,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         if (!DBHelper::fieldExists('user', 'public_blog')) {
             Database::get()->query("ALTER TABLE user
-                ADD public_blog TINYINT(1) NOT NULL DEFAULT 0) $tbl_options");
+                ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
         }
 
         // course units upgrade
