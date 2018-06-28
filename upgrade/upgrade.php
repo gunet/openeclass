@@ -3869,6 +3869,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
 
+        if (!DBHelper::fieldExists('user', 'public_blog')) {
+            Database::get()->query("ALTER TABLE user
+                ADD public_blog TINYINT(1) NOT NULL DEFAULT 0) $tbl_options");
+        }
+
         // course units upgrade
         if (!DBHelper::fieldExists('course_units', 'finish_week')) {
             Database::get()->query("ALTER TABLE course_units ADD finish_week DATE after comments");
@@ -3893,8 +3898,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             foreach ($r as $cunitid) {
                 Database::get()->query("INSERT INTO unit_resources
                                 (unit_id, title, comments, res_id, `type`, visible, `order`, `date`)
-                            SELECT $cunitid, title, comments, res_id, `type`, visible, `order`, `date`
-                                FROM course_weekly_view_activities ORDER BY unit_id");
+                            SELECT ?d, title, comments, res_id, `type`, visible, `order`, `date`
+                                FROM course_weekly_view_activities ORDER BY unit_id", $cunitid->id);
             }
             // update course with new view type (=units)
             Database::get()->query("UPDATE course SET view_type = 'units' WHERE id = ?d", $courseid);
