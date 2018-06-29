@@ -55,9 +55,9 @@ $xml_url = $bbb_url."api/getMeetings?checksum=".sha1("getMeetings".$salt);
 $bbb = new BigBlueButton($salt, $bbb_url);
 $xml = $bbb->getMeetingInfo($xml_url);
 // ... for each meeting room scan connected users
-foreach ($xml -> meetings -> meeting as $row) {
-    $meet_id = $row -> meetingID;
-    $moder_pw = $row -> moderatorPW;        
+foreach ($xml->meetings->meeting as $row) {
+    $meet_id = $row->meetingID;
+    $moder_pw = $row->moderatorPW;        
     /****************************************************/
     /*		write attendes in SQL database		*/
     /****************************************************/    
@@ -84,7 +84,7 @@ function xml2sql($room_xml, $bbb) {
     $xml = $bbb->getMeetingInfo($room_xml);    
     $xml_meet_id = $xml->meetingID;   //meetingID of specific bbb request meeting room
 
-    foreach ($xml -> attendees -> attendee as $row) {
+    foreach ($xml->attendees->attendee as $row) {
             $bbbuserid = strval($row->userID);
             $fullName = strval($row->fullName);
             $meetingid = strval($xml_meet_id);            
