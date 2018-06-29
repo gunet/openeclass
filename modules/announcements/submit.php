@@ -89,16 +89,8 @@ if (isset($_POST['submitAnnouncement'])) {
                     WHERE id = ?d",
                 $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
             $log_type = LOG_MODIFY;
-            $message = "<div class='alert alert-success'>$langAnnModify</div>";
-
-            if (isset($_POST['tags'])) {
-                $tagsArray = explode(',', $_POST['tags']);
-                $moduleTag = new ModuleElement($id);
-                $moduleTag->syncTags($tagsArray);
-            }
+            $message = $langAnnModify;
         } else { // add new announcement
-
-            // insert
             $id = Database::get()->query("INSERT INTO announcement
                                              SET content = ?s,
                                                  title = ?s, `date` = " . DBHelper::timeAfter() . ",
@@ -107,11 +99,11 @@ if (isset($_POST['submitAnnouncement'])) {
                                                  stop_display = ?t,
                                                  visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
             $log_type = LOG_INSERT;
-
-            if (isset($_POST['tags'])) {
-                $moduleTag = new ModuleElement($id);
-                $moduleTag->attachTags($_POST['tags']);
-            }
+            $message = $langAnnAdd;
+        }
+        if (isset($_POST['tags'])) {
+            $moduleTag = new ModuleElement($id);
+            $moduleTag->syncTags($_POST['tags']);
         }
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
@@ -210,7 +202,7 @@ if (isset($_POST['submitAnnouncement'])) {
                 Session::Messages("$langInvalidMail $invalid", 'alert-warning');
             }
         }
-        Session::Messages($langAnnAdd, 'alert-success');
+        Session::Messages($message, 'alert-success');
         redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());

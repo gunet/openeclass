@@ -25,14 +25,14 @@ $require_editor = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
-require_once 'modules/tags/moduleElement.class.php';
+require_once 'modules/tags/eclasstag.class.php';
 
 // Create or edit announcement
 if (isset($_GET['modify'])) {
     $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id=?d", $_GET['modify']);
     if ($announce) {
         $data['announce_id'] = $announce->id;
-        $contentToModify = $announce->content;
+        $contentToModify = Session::has('newContent') ? Session::get('newContent') : $announce->content;
         $data['titleToModify'] = Session::has('antitle') ? Session::get('antitle') : q($announce->title);
         if ($announce->start_display) {
             $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $announce->start_display);
@@ -80,11 +80,9 @@ if (isset($_GET['modify'])) {
     $data['end_disabled'] = Session::has('startdate_active') ? '' : 'disabled';
     $data['showUntil'] = Session::has('enddate') ? Session::get('enddate') : '';
     $data['titleToModify'] = Session::has('antitle') ? Session::get('antitle') : '';
+    $contentToModify = Session::has('newContent') ? Session::get('newContent') : '';
 }
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langAnnouncements);
-
-if (!isset($AnnouncementToModify)) $AnnouncementToModify = '';
-if (!isset($contentToModify)) $contentToModify = '';
 
 $antitle_error = Session::getError('antitle', "<span class='help-block'>:message</span>");
 $data['startdate_error'] = Session::getError('startdate', "<span class='help-block'>:message</span>");
@@ -95,11 +93,10 @@ load_js('bootstrap-datetimepicker');
 
 $data['action_bar'] = action_bar([
     [ 'title' => $langBack,
-    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-    'icon' => 'fa-reply',
-    'level' => 'primary-label'
-]
-    ]);
+      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+      'icon' => 'fa-reply',
+      'level' => 'primary-label' ]
+]);
 
 $data['antitle_error'] = ($antitle_error ? " has-error" : "");
 $data['contentToModify'] = rich_text_editor('newContent', 4, 20, $contentToModify);
@@ -111,7 +108,7 @@ $data['course_users'] = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u
     AND u.email<>''
     AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
 
-$data['tags'] = eClassTag::tagInput($AnnouncementToModify);
+$data['tags'] = eClassTag::tagInput(isset($announce)? $announce->id: null);
 $data['startdate_error'] = $data['startdate_error'] ? " has-error" : "";
 $data['enddate_error'] = $data['enddate_error'] ? " has-error" : "";
 $data['submitUrl'] = $urlAppend . 'modules/announcements/submit.php?course=' . $course_code;

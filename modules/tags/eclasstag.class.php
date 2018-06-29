@@ -20,6 +20,8 @@
  * ========================================================================
  */
 
+require_once 'modules/tags/moduleElement.class.php';
+
 class eClassTag {
 
     private $id;
@@ -40,23 +42,24 @@ class eClassTag {
     public static function tagInput($id = null) {
         global $langTags, $head_content, $course_code;
 
-        // initialize the tags
-        if ($id) {
-            require_once 'modules/tags/moduleElement.class.php';
+        // Tags saved in session due to form error
+        if (Session::has('tags')) {
+            $tags_init = Session::get('tags');
+        } elseif ($id) {
+            // initialize the tags from existing module element
             $moduleTag = new ModuleElement($id);
-
-            $tags_init = $moduleTag->getTags();
-            $answer = implode(',', array_map(function ($tag) {
-                return '{id:"' . js_escape($tag) . '", text:"' . js_escape($tag) . '", selected: true}';
-            }, $tags_init));
+            $tags_init = array_values($moduleTag->getTags());
         } else {
-            $answer = '';
+            $tags_init = [];
         }
+        $answer = json_encode(array_map(function ($tag) {
+            return ['id' => $tag, 'text' => $tag, 'selected' => true];
+        }, $tags_init));
         $head_content .= "
             <script>
                 $(function () {
                     $('#tags').select2({
-                            data: [".$answer."],
+                            data: $answer,
                             minimumInputLength: 2,
                             tags: true,
                             tokenSeparators: [','],
