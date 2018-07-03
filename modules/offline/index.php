@@ -43,6 +43,7 @@ require_once 'include/course_settings.php';
 require_once 'backport_functions.php'; // backported functions from eclass default branch
 require_once 'override_functions.php'; // overridden functions
 require_once 'offline_functions.php';
+require_once 'offline_imscp.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -204,6 +205,8 @@ offline_wiki($bladeData);
 /////////////
 copyDirTo($webDir . "/template", $downloadDir);
 copyDirTo($webDir . "/js", $downloadDir);
+copy($webDir . '/modules/learnPath/export/imscp_v1p2.xsd', $downloadDir . '/imscp_v1p2.xsd');
+offline_create_manifest($downloadDir);
 
 /////////
 // zip //
