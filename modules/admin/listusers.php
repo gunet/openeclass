@@ -338,11 +338,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         } else {
             $iuid = getIndirectReference($logs->id);
             $changetip = q("$langChangeUserAs $logs->username");
+            $profileUrl = $urlAppend .
+                "main/profile/display_profile.php?id=$logs->id&amp;token=" .
+                token_generate($logs->id, true);
             $icon_content = action_button(array(
                 array(
                     'title' => $langEditChange,
                     'icon' => 'fa-edit',
                     'url' => "edituser.php?u=$logs->id"
+                ),
+                array(
+                    'title' => $langDisplayProfile,
+                    'icon' => 'fa-user',
+                    'url' => $profileUrl
                 ),
                 array(
                     'title' => $langActions,
