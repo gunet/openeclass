@@ -32,11 +32,11 @@
                     activate_input_password ();
             }
     }
-    
+
     var lang = {
         pwStrengthTooShort: "{{ js_escape(trans('langPwStrengTooShort')) }}",
         pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
-        pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}", 
+        pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}",
         pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
     }
 
@@ -73,7 +73,7 @@
             if (dt2 <= dt1) {
                 var minDate = $('input[name=finish_date]').datepicker('startDate');
                 $('input[name=finish_date]').datepicker('setDate', minDate);
-            }            
+            }
         });
         if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
             $('input[name=start_date]').datepicker('setDate', new Date());
@@ -85,21 +85,21 @@
             var date2 = $('input[name=finish_date]').datepicker('getDate');
             $('input[name=finish_date]').datepicker('setStartDate', date2);
         }
-        
+
         if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
             $('input[name=finish_date]').datepicker("setDate", 7);
         }
-        
+
         $('#weeklyDates').hide();
-        
+
         $('input[name=view_type]').change(function () {
             if ($('#weekly').is(":checked")) {
                 $('#weeklyDates').show();
             } else {
                 $('#weeklyDates').hide();
             }
-        }).change();    
-        
+        }).change();
+
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
         });
@@ -133,43 +133,43 @@
 
 @section('content')
 
-<div id='operations_container'>
-{!! $action_bar !!}
-</div>
+    <div id='operations_container'>
+        {!! $action_bar !!}
+    </div>
 
     <div class='form-wrapper'>
-	<form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'> 
-	<fieldset>
-	<div class='form-group'>
+        <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
+        <fieldset>
+        <div class='form-group'>
             <label for='fcode' class='col-sm-2 control-label'>{{ trans('langCode') }}</label>
             <div class='col-sm-10'>
                 <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
             </div>
         </div>
-        <div class='form-group'>	    
+        <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>{{ trans('langCourseTitle') }}:</label>
             <div class='col-sm-10'>
-		<input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>
-	    </div>
+                <input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>
+            </div>
         </div>
         <div class='form-group'>
             <label for='titulary' class='col-sm-2 control-label'>{{ trans('langTeachers') }}:</label>
             <div class='col-sm-10'>
-		<input type='text' class='form-control' name='titulary' id='titulary' value='{{ $titulary}} '>
-	    </div>
+                <input type='text' class='form-control' name='titulary' id='titulary' value='{{ $titulary}} '>
+            </div>
         </div>
         <div class='form-group'>
-	    <label for='Faculty' class='col-sm-2 control-label'>{{ trans('langFaculty') }}:</label>
+            <label for='Faculty' class='col-sm-2 control-label'>{{ trans('langFaculty') }}:</label>
             <div class='col-sm-10'>
-                {!! $buildusernode !!}                
-            </div>                
+                {!! $buildusernode !!}
+            </div>
         </div>
         <div class='form-group'>
             <label for='course_keywords' class='col-sm-2 control-label'>{{ trans('langCourseKeywords') }}</label>
             <div class='col-sm-10'>
                 <input type='text' class='form-control' name='course_keywords' id='course_keywords' value='{{ $course_keywords }}'>
             </div>
-        </div>        
+        </div>
         <div class='form-group'>
             <label class='col-sm-2 control-label'> {{ trans('langCourseFormat') }}:</label>
             <div class='col-sm-10'>
@@ -187,25 +187,25 @@
                 </div>
                 <div class='radio'>
                   <label>
-                    <input type='radio' name='view_type' value='weekly' id='weekly' {{ $course_type_weekly }}>
-                    {{ trans('langCourseWeeklyFormat') }}
+                    <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
+                    {{ trans('langCourseWallFormat') }}
                   </label>
-                </div>                         
-            </div>                    
+                </div>
+            </div>
         </div>
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2' id='weeklyDates'>
                 {{ trans('langStartDate') }}
-                <input class='dateInForm form-control' type='text' name='start_date' value='{{ $start_date }}' readonly>                       
+                <input class='dateInForm form-control' type='text' name='start_date' value='{{ $start_date }}' readonly>
                 {{ trans('langEndDate') }}
-                <input class='dateInForm form-control' type='text' name='finish_date' value='{{ $finish_date }}' readonly>                        
+                <input class='dateInForm form-control' type='text' name='finish_date' value='{{ $finish_date }}' readonly>
             </div>
         </div>
-            
-    @if (isset($isOpenCourseCertified)) {
-        <input type='hidden' name='course_license' value='{{ getIndirectReference($course_license) }}'>
-    @endif
-    
+
+        @if (isset($isOpenCourseCertified)) {
+            <input type='hidden' name='course_license' value='{{ getIndirectReference($course_license) }}'>
+        @endif
+
         <div class='form-group'>
             <label class='col-sm-2 control-label'>{{ trans('langOpenCoursesLicense') }}:</label>
             <div class='col-sm-10'>
@@ -226,11 +226,11 @@
                     <input id='cc_license' type='radio' name='l_radio' value='cc' {{ $cc_checked}} $disabledVisibility>
                     {{ trans("langCMeta['course_license']") }}
                   </label>
-                </div>                         
-            </div>                    
+                </div>
+            </div>
         </div>
         <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2' id='cc'>            
+            <div class='col-sm-10 col-sm-offset-2' id='cc'>
                 {!! $license_selection !!}
             </div>
         </div>
@@ -268,8 +268,8 @@
                         </span>&nbsp;{{ trans('langInactiveCourse') }}
                     <span class='help-block'><small>{{ trans('langCourseInactiveShort') }}</small></span>
                   </label>
-                </div>                   
-            </div>            
+                </div>
+            </div>
         </div>
         <div class='form-group'>
             <label for='coursepassword' class='col-sm-2 control-label'>{{ trans('langOptPassword') }}:</label>
@@ -279,7 +279,7 @@
             <div class='col-sm-2 text-center padding-thin'>
                 <span id='result'></span>
             </div>
-        </div>                        
+        </div>
         <div class='form-group'>
             <label for='Options' class='col-sm-2 control-label'>{{ trans('langLanguage') }}:</label>
             <div class='col-sm-10'>
@@ -299,7 +299,7 @@
                   <label>
                         <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_disable }} {{ $log_course_user_requests_inactive }}> {{ trans('langDeactivate') }}
                   </label>
-                </div>                    
+                </div>
             </div>
         </div>
         <div class='form-group'>
@@ -315,8 +315,8 @@
                         <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {{ $sharing_radio_dis }}> {{ trans('langSharingDis') }}
                         <span class='help-block'><small>{{ $sharing_dis_label }}</small></span>
                   </label>
-                </div>                  
-            </div>                    
+                </div>
+            </div>
         </div>
         <div class='form-group'>
             <label class='col-sm-2 control-label'>{{ trans('langForum') }}:</label>
@@ -328,12 +328,12 @@
                 </div>
                 <div class='radio'>
                   <label>
-                        <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}> {{ trans('langDisableForumNotifications') }}                        
+                        <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}> {{ trans('langDisableForumNotifications') }}
                   </label>
-                </div>                  
-            </div>                    
+                </div>
+            </div>
         </div>
-    
+
         <div class='form-group'>
         <label class='col-sm-2 control-label'>
             {{ trans('langCourseRating') }}:
@@ -348,7 +348,7 @@
                   <label>
                         <input type='radio' value='0' name='r_radio' {{ $checkRatingDis }}> {{ trans('langRatingDis') }}
                   </label>
-                </div>                   
+                </div>
             </div>
         </div>
         <div class='form-group'>
@@ -362,10 +362,10 @@
                 <div class='radio'>
                   <label>
                         <input type='radio' value='0' name='ran_radio' {{ $checkAnonRatingDis }} {{ $anon_rating_radio_dis }}> {{ trans('langRatingAnonDis') }}
-                        <span class='help-block'><small>{{ $anon_rating_dis_label }}</small></span>     
+                        <span class='help-block'><small>{{ $anon_rating_dis_label }}</small></span>
                   </label>
-                </div>                   
-            </div>                    
+                </div>
+            </div>
         </div>
         <div class='form-group'>
             <label class='col-sm-2 control-label'>{{ trans('langCourseCommenting') }}:</label>
@@ -379,8 +379,8 @@
                   <label>
                         <input type='radio' value='0' name='c_radio' {{ $checkCommentDis }}> {{ trans('langCommentsDis') }}
                   </label>
-                </div>                   
-            </div>                    
+                </div>
+            </div>
         </div>
         <div class='form-group'>
             <label class='col-sm-2 control-label'>{{ trans('langAbuseReport') }}:</label>
@@ -394,8 +394,8 @@
                   <label>
                         <input type='radio' value='0' name='ar_radio' {{ $checkAbuseReportDis }}> {{ trans('langAbuseReportDis') }}
                   </label>
-                </div>                   
-            </div>                    
+                </div>
+            </div>
         </div>
         {!! showSecondFactorChallenge() !!}
         <div class='form-group'>
