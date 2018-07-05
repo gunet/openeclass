@@ -152,6 +152,11 @@ define('ATTEMPT_CANCELED', 4);
 define('TEXTFIELD_FILL', 1);
 define('LISTBOX_FILL', 2); //
 
+// questionnaire (aka poll) types
+define('POLL_NORMAL', 0);
+define('POLL_COLLES', 1);
+define('POLL_ATTLS', 2);
+
 // gradebook activity type
 define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
 define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
