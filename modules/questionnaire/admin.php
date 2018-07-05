@@ -52,7 +52,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     if (isset($_POST['toReorder'])) {
         reorder_table('poll_question', 'pid', $pid, $_POST['toReorder'],
-            isset($_POST['prevReorder'])? $_POST['prevReorder']: null, 'pqid', 'q_position');        
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null, 'pqid', 'q_position');
     }
     exit;
 }
@@ -92,9 +92,9 @@ if (isset($_POST['submitPoll'])) {
                         (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results,type, assign_to_specific)
                         VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific)->lastInsertID;
 
-            if($PollSurveyType == 1) {
+            if ($PollSurveyType == POLL_COLLES) {
                 createcolles($pid);
-            }   elseif($PollSurveyType == 2) {
+            }   elseif($PollSurveyType == POLL_ATTLS) {
                 createattls($pid);
             }
             Session::Messages($langPollCreated, 'alert-success');
@@ -211,7 +211,7 @@ if (isset($_GET['pid'])) {
     $pageName = $poll->name;
     $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE pid = ?d", $pid)->count;
     if ($attempt_counter>0) {
-        Session::Messages($langThereAreParticipants);        
+        Session::Messages($langThereAreParticipants);
     }
 } else {
     if (!isset($_GET['newPoll'])) {
@@ -449,19 +449,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='general_type' name='survey_type' value='0'".($PollSurveyType == 0 ? " checked" : "").">
+                        <input type='radio' id='general_type' name='survey_type' value='0'".($PollSurveyType == POLL_NORMAL ? " checked" : "").">
                         <span>$langGeneralSurvey </span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == 1 ? " checked" : "").">
+                        <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
                         <span>$langCollesSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$colles_desc'></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == 2 ? " checked" : "").">
+                        <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
                         <span>$langATTLSSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$rate_scale'></span>
                       </label>
                     </div>
@@ -839,9 +839,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                   'button-class' => 'btn-success')
             ),false);
         if ($questions) {
-            
+
             load_js('sortable/Sortable.min.js');
-            
+
             $head_content .= "<script>
                 $(document).ready(function(){
                     Sortable.create(pollAnswers,{
@@ -863,7 +863,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     });
                 });
             </script>";
-                        
+
             $tool_content .= "<table class='table-default'>
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
