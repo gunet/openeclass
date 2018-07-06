@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,9 +19,9 @@
  * ======================================================================== */
 
 $require_login = true;
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
+$require_help = true;
 $helpTopic = 'course_users';
 
 require_once '../../include/baseTheme.php';
@@ -30,7 +29,7 @@ require_once 'include/log.class.php';
 require_once 'include/course_settings.php';
 require_once 'include/lib/textLib.inc.php';
 
-//Identifying ajax request
+// DataTables AJAX request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     if (isset($_POST['action']) && $_POST['action'] == 'delete') {
         $unregister_gid = intval(getDirectReference($_POST['value']));
@@ -146,41 +145,32 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
             }
         }
+        $idIndirect = getIndirectReference($myrow->id);
+        $urlBase = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;";
         $user_role_controls = action_button(array(
-            array(
-              'title' => $langUnregCourse,
+            [ 'title' => $langUnregCourse,
               'level' => 'primary',
-              'url' => '#',
               'icon' => 'fa-times',
-              'btn_class' => 'delete_btn btn-default'
-            ),
-            array(
-                'title' => $langGiveRightTutor,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
-            ),
-            array(
-                'title' => $langGiveRightEditor,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
-            ),
-            array(
-                'title' => $langGiveRightAdmin,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
-                'icon' => $myrow->status != '1' ? "fa-square-o" : "fa-check-square-o",
-                'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
-            ),
-            array(
-                'title' => $langGiveRightReviewer,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=". getIndirectReference($myrow->id),
-                'icon' => $myrow->reviewer != '1' ? "fa-square-o" : "fa-check-square-o",
-                'disabled' => $myrow->id == $_SESSION["uid"],
-                'show' => get_config('opencourses_enable') &&
-                            (
-                                ($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1') ||
-                                ($myrow->id != $_SESSION["uid"] && $is_opencourses_reviewer && $is_admin)
-                            )
-            )
+              'link-attrs' => "data-id='$idIndirect'",
+              'btn-class' => 'delete delete_btn btn-default' ],
+            [ 'title' => $langGiveRightTutor,
+              'url' => $urlBase . ($myrow->tutor ? 'remove' : 'give') . 'Tutor=' . $idIndirect,
+              'icon' => $myrow->tutor ? 'fa-check-square-o' : 'fa-square-o' ],
+            [ 'title' => $langGiveRightEditor,
+              'url' => $urlBase . ($myrow->editor ? 'remove' : 'give') . 'Editor=' . $idIndirect,
+              'icon' => $myrow->editor ? 'fa-check-square-o' : 'fa-square-o' ],
+            [ 'title' => $langGiveRightAdmin,
+              'url' => $urlBase . ($myrow->status == '1' ? 'remove' : 'give') . 'Admin=' . $idIndirect,
+              'icon' => $myrow->status != '1' ? 'fa-square-o' : 'fa-check-square-o',
+              'disabled' => $myrow->id == $uid ||
+                            ($myrow->id != $uid && get_config('opencourses_enable') && $myrow->reviewer) ],
+            [ 'title' => $langGiveRightReviewer,
+              'url' => $urlBase . ($myrow->reviewer == '1' ? 'remove' : 'give') . 'Reviewer=' . $idIndirect,
+              'icon' => $myrow->reviewer != '1' ? 'fa-square-o' : 'fa-check-square-o',
+              'disabled' => $myrow->id == $uid,
+              'show' => get_config('opencourses_enable') && (
+                    ($myrow->id == $uid && $myrow->reviewer == '1') ||
+                    ($myrow->id != $uid && $is_opencourses_reviewer && $is_admin)) ]
         ));
         $user_roles = array();
         ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langStudent);
@@ -200,7 +190,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a></small></div>
                             <div class='text-muted'><small>$am_message</small></div>
                         </div>";
-        $roleColumn = "<div class='text-muted'>".str_replace(', ', ',<br>', $user_role_string)."</div>";        
+        $roleColumn = "<div class='text-muted'>".str_replace(', ', ',<br>', $user_role_string)."</div>";
         // search for inactive users
         $inactive_user = is_inactive_user($myrow->id);
         //setting datables column data
@@ -224,108 +214,6 @@ $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;
 $toolName = $langUsers;
 load_js('tools.js');
 load_js('datatables');
-$head_content .= "
-<script type='text/javascript'>
-        $(document).ready(function() {
-           var oTable = $('#users_table{$course_id}').DataTable ({
-                initComplete: function () {
-                    var api = this.api();
-                    var column = api.column(1);
-                    var select = $('<select id=\'select_role\'>'+
-                                        '<option value=\'0\'>-- $langAllUsers --</option>'+
-                                        '<option value=\'teacher\'>$langTeacher</option>'+
-                                        '<option value=\'student\'>$langStudent</option>'+
-                                        '<option value=\'editor\'>$langEditor</option>'+
-                                        '<option value=\'tutor\'>$langTutor</option>'+
-                                        ".(get_config('opencourses_enable') ? "'<option value=\'reviewer\'>$langOpenCoursesReviewer</option>'+" : "")."
-                                    '</select>')
-                                    .appendTo( $(column.footer()).empty() );
-                },
-                'createdRow': function(row, data, dataIndex) {
-                    if (data[5] == 1) {
-                        $(row). addClass('not_visible');
-                    }
-                },
-                'bStateSave': true,
-                'bProcessing': true,
-                'bServerSide': true,
-                'sScrollX': true,
-                'drawCallback': function( oSettings ) {
-                    tooltip_init();
-                    popover_init();
-                },
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],
-                'sPaginationType': 'full_numbers',
-                'bSort': true,
-                'aaSorting': [[0, 'desc']],
-                'aoColumnDefs': [{'sClass':'option-btn-cell', 'aTargets':[-1]}, {'bSortable': false, 'aTargets': [ 1 ] }, { 'sClass':'text-center', 'bSortable': false, 'aTargets': [ 2 ] }, { 'bSortable': false, 'aTargets': [ 4 ] }],
-                'oLanguage': {
-                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '" . $langNoResult . "',
-                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                       'sInfoFiltered': '',
-                       'sInfoPostFix':  '',
-                       'sSearch':       '',
-                       'sUrl':          '',
-                       'oPaginate': {
-                           'sFirst':    '&laquo;',
-                           'sPrevious': '&lsaquo;',
-                           'sNext':     '&rsaquo;',
-                           'sLast':     '&raquo;'
-                       }
-                   }
-            });
-            // Apply the filter
-            $(document).on('change', 'select#select_role', function (e) {
-                oTable
-                    .column( $(this).parent().index()+':visible' )
-                    .search($('select#select_role').val())
-                    .draw();
-            });
-            $(document).on( 'click','.delete_btn', function (e) {
-                e.preventDefault();
-                var row_id = $(this).closest('tr').attr('id');
-                bootbox.confirm('" . js_escape($langDeleteUser) . " " . js_escape($langDeleteUser2) . "', function(result) {
-                    if (result) {
-                        $.ajax({
-                          type: 'POST',
-                          url: '',
-                          datatype: 'json',
-                          data: {
-                            action: 'delete',
-                            value: row_id
-                          },
-                          success: function(data){
-                            var info = oTable.page.info();
-                            var per_page = info.length;
-                            var page_number = info.page;
-                            if(info.recordsDisplay % info.length == 1){
-                                if(page_number!=0) {
-                                    page_number--;
-                                }
-                            }
-                            $('#tool_title').after('<p class=\"success\">$langUserDeleted</p>');
-                            $('.success').delay(3000).fadeOut(1500);
-                            oTable.page(page_number).draw(false);
-                          },
-                          error: function(xhr, textStatus, error){
-                              console.log(xhr.statusText);
-                              console.log(textStatus);
-                              console.log(error);
-                          }
-                        });
-                    }
-                });
-            });
-            $('.dataTables_filter input').attr({style: 'width:200px', class:'form-control input-sm', placeholder: '$langName, Username, Email'});
-            $('.success').delay(3000).fadeOut(1500);
-        });
-        </script>";
 
 $limit_sql = '';
 // Handle user removal / status change
@@ -399,74 +287,51 @@ if (get_config('opencourses_enable')) {
     }
 }
 
-// show help link and link to Add new user, search new user and management page of groups
-$num_requests = '';
-$course_user_requests = FALSE;
-if (course_status($course_id) == COURSE_CLOSED) {
-    if (!setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
-        $num_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id)->cnt;
-        $course_user_requests = TRUE;
-    }
+if (course_status($course_id) == COURSE_CLOSED and
+    !setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
+        $num_requests = Database::get()->querySingle('SELECT COUNT(*) AS cnt
+            FROM course_user_request
+            WHERE course_id = ?d AND status = 1', $course_id)->cnt;
+        $course_user_requests = true;
+} else {
+    $num_requests = '';
+    $course_user_requests = false;
 }
 
-$tool_content .=
-        action_bar(array(
-            array('title' => $langOneUser,
-                'url' => "adduser.php?course=$course_code",
-                'icon' => 'fa-plus-circle',
-                'button-class' => 'btn-success',
-                'level' => 'primary-label'),
-            array('title' => $langManyUsers,
-                'url' => "muladduser.php?course=$course_code",
-                'icon' => 'fa-plus-circle',
-                'button-class' => 'btn-success',
-                'level' => 'primary-label'),
-            array('title' => $langAddGUser,
-                'url' => "guestuser.php?course=$course_code",
-                'icon' => 'fa-plane',
-                'show' => get_config('course_guest') != 'off'),
-            array('title' => "$num_requests $langsUserRequests",
-                  'url' => "course_user_requests.php?course=$course_code",
-                  'icon' => 'fa-child',
-                  'level' => 'primary-label',
-                  'show' => $course_user_requests),
-            array('title' => $langGroupUserManagement,
-                'url' => "../group/index.php?course=$course_code",
-                'icon' => 'fa-users'),
-            array('title' => $langDumpUser,
-                'url' => "dumpuser.php?course=$course_code",
-                'icon' => 'fa-file-archive-o'),
-            array('title' => "$langDumpUser ($langcsvenc2)",
-                'url' => "dumpuser.php?course=$course_code&amp;enc=UTF-8",
-                'icon' => 'fa-file-archive-o'),
-            array('title' => $langDelUsers,
-                'url' => "../course_info/refresh_course.php?course=$course_code&amp;from_user=true",
-                'icon' => 'fa-times',
-                'button-class' => 'btn-danger')
-        ));
+$data['ajaxUrl'] = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+$data['action_bar'] = action_bar([
+    [ 'title' => $langOneUser,
+      'url' => "adduser.php?course=$course_code",
+      'icon' => 'fa-plus-circle',
+      'button-class' => 'btn-success',
+      'level' => 'primary-label' ],
+    [ 'title' => $langManyUsers,
+      'url' => "muladduser.php?course=$course_code",
+      'icon' => 'fa-plus-circle',
+      'button-class' => 'btn-success',
+      'level' => 'primary-label' ],
+    [ 'title' => $langAddGUser,
+      'url' => "guestuser.php?course=$course_code",
+      'icon' => 'fa-plane',
+      'show' => get_config('course_guest') != 'off' ],
+    [ 'title' => $num_requests . ' ' . trans('langsUserRequests'),
+      'url' => "course_user_requests.php?course=$course_code",
+      'icon' => 'fa-child',
+      'level' => 'primary-label',
+      'show' => $course_user_requests ],
+    [ 'title' => $langGroupUserManagement,
+      'url' => $urlAppend . "modules/group/index.php?course=$course_code",
+      'icon' => 'fa-users' ],
+    [ 'title' => $langDumpUser,
+      'url' => "dumpuser.php?course=$course_code",
+      'icon' => 'fa-file-archive-o' ],
+    [ 'title' => "$langDumpUser ($langcsvenc2)",
+      'url' => "dumpuser.php?course=$course_code&amp;enc=UTF-8",
+      'icon' => 'fa-file-archive-o' ],
+    [ 'title' => $langDelUsers,
+      'url' => "../course_info/refresh_course.php?course=$course_code&amp;from_user=true",
+      'icon' => 'fa-times',
+      'button-class' => 'btn-danger' ]
+]);
 
-
-$tool_content .= "
-    <table id='users_table{$course_id}' class='table-default'>
-        <thead>
-            <tr>
-              <th>$langSurnameName</th>
-              <th class='text-center'>$langRole</th>
-              <th class='text-center'>$langGroup</th>
-              <th class='text-center' width='80'>$langRegistrationDateShort</th>
-              <th class='text-center'>".icon('fa-gears')."</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </tfoot>
-    </table>";
-draw($tool_content, 2, null, $head_content);
+view('modules.user.index', $data);

@@ -3396,7 +3396,7 @@ $langNoSuchRequest = "Δεν υπάρχει κάποια σχετική αίτη
 $langTeacherRequestHasRejected = "Η αίτηση του $langsOfTeacher απορρίφθηκε";
 $langRequestMessageHasSent = " και στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση ";
 $langRequestHasRejected = "Η αίτησή σας για εγγραφή στην πλατφόρμα $siteName απορρίφθηκε.";
-$langRegistrationDateShort = "Ημερομηνία <br />εγγραφής";
+$langRegistrationDateShort = "Ημερομηνία εγγραφής";
 $langRegistrationDate = "Ημερομηνία εγγραφής";
 $langCreationDate = "Ημερομηνία δημιουργίας";
 $langExpirationDate = "Ημερομηνία λήξης";
@@ -5531,6 +5531,7 @@ $langLTIAppActions = "Ενέργειες";
 
 // ticketing (aka request)
 $langRequests = "Αιτήματα";
+$langMyRequests = "Τα αιτήματά μου";
 $langSingleRequest = 'Αίτημα';
 $langNewRequest = "Νέο αίτημα";
 $langEditRequest = "Επεξεργασία αιτήματος";
