@@ -98,46 +98,51 @@
 
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_courses.php"><span class="fa fa-graduation-cap fa-fw"></span>{!! trans('langMyCourses') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_courses.php"><span class="fa fa-graduation-cap fa-fw"></span>{{ trans('langMyCourses') }}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/message/index.php"><span class="fa fa-envelope-o fa-fw"></span>{!! trans('langMyDropBox') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/message/index.php"><span class="fa fa-envelope-o fa-fw"></span>{{ trans('langMyDropBox') }}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><span class="fa fa-bullhorn fa-fw"></span>{!! trans('langMyAnnouncements') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><span class="fa fa-bullhorn fa-fw"></span>{{ trans('langMyAnnouncements') }}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/personal_calendar/index.php"><span class="fa fa-calendar fa-fw"></span>{!! trans('langMyAgenda') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/personal_calendar/index.php"><span class="fa fa-calendar fa-fw"></span>{{ trans('langMyAgenda') }}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/notes/index.php"><span class="fa fa-edit fa-fw"></span>{!! trans('langNotes') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/notes/index.php"><span class="fa fa-edit fa-fw"></span>{{ trans('langNotes') }}</a>
                                         </li>
+                                        @unless (is_module_disable(MODULE_ID_REQUEST))
+                                        <li role="presentation">
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/request/myrequests.php"><span class="fa fa-ticket fa-fw"></span>{{ trans('langMyRequests') }}</a>
+                                        </li>
+                                        @endunless
                                         @if (get_config('personal_blog'))
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/blog/index.php?user_id={{ $uid }}&token={{ token_generate('personal_blog' . $uid) }}"><span class="fa fa-columns fa-fw"></span>{!! trans('langMyBlog') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/blog/index.php?user_id={{ $uid }}&amp;token={{ token_generate('personal_blog' . $uid) }}"><span class="fa fa-columns fa-fw"></span>{{ trans('langMyBlog') }}</a>
                                         </li>
                                         @endif
                                         @if (get_config('eportfolio_enable'))
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&token={{ token_generate('eportfolio' . $uid) }}"><span class="fa fa-star fa-fw"></span>{{ trans('langMyePortfolio') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&amp;token={{ token_generate('eportfolio' . $uid) }}"><span class="fa fa-star fa-fw"></span>{{ trans('langMyePortfolio') }}</a>
                                         </li>
                                         @endif
                                         @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')))
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/mydocs/index.php"><span class="fa fa-folder-open-o fa-fw"></span>{!! trans('langMyDocs') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/mydocs/index.php"><span class="fa fa-folder-open-o fa-fw"></span>{{ trans('langMyDocs') }}</a>
                                         </li>
                                         @endif
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/profile/display_profile.php"><span class="fa fa-user fa-fw"></span>{!! trans('langMyProfile') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/profile/display_profile.php"><span class="fa fa-user fa-fw"></span>{{ trans('langMyProfile') }}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_widgets.php"><span class="fa fa-magic fa-fw"></span>{!! trans('langMyWidgets') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_widgets.php"><span class="fa fa-magic fa-fw"></span>{{ trans('langMyWidgets') }}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/usage/?t=u"><span class="fa fa-area-chart fa-fw"></span>{!! trans('langMyStats') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/usage/?t=u"><span class="fa fa-area-chart fa-fw"></span>{{ trans('langMyStats') }}</a>
                                         </li>
                                         <li role="presentation" style="border-top: 1px solid #ddd">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}index.php?logout=yes"><span class="fa fa-unlock fa-fw"></span>{!! trans('langLogout') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}index.php?logout=yes"><span class="fa fa-unlock fa-fw"></span>{{ trans('langLogout') }}</a>
                                         </li>
                                     </ul>
                                 </li>

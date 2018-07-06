@@ -56,3 +56,26 @@ function commentFileLink($comment) {
     return $urlAppend . 'modules/request/file.php?course=' . $course_code . '&id=' . $comment->id;
 }
 
+function format_ts($datetime) {
+    $ts = strtotime($datetime);
+    $hour = 60 * 60;
+    $day = 60 * 60 * 24;
+    $output = '';
+    $diff = time() - $ts;
+    if ($diff > $day) {
+        $days = intval($diff / $day);
+        $output = sprintf($days == 1? trans('langDayAgo'): trans('langDaysAgo'), $days);
+    } elseif ($diff > $hour) {
+        $hours = ceil($diff / 60 / 60);
+        $output = sprintf($hours == 1? trans('langHourAgo'): trans('langHoursAgo'), $hours);
+    } elseif ($diff > 0) {
+        $mins = ceil($diff / 60 / 60);
+        $output = sprintf($mins == 1? trans('langMinuteAgo'): trans('langMinutesAgo'), $mins);
+    }
+
+    if ($output) {
+        $output = '<br><span class="small">' . $output . '</span>';
+    }
+
+    return date('Y-m-d', $ts) . $output;
+}
