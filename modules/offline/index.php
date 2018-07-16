@@ -59,12 +59,23 @@ $real_filename = remove_filename_unsafe_chars($public_code . '-offline.zip');
 /////////////////////////////
 // generic and course data //
 /////////////////////////////
+$logo_img = "./template/default/img/eclass-new-logo.png";
+$logo_img_small = "./template/default/img/logo_eclass_small.png";
+
+$theme_data = get_theme_options();
+
+$styles_str = $theme_data['styles'];
+if (!empty($theme_data['logo_img'])) {
+    $logo_img = $theme_data['logo_img'];
+}
+if (!empty($theme_data['logo_img_small'])) {
+    $logo_img_small = $theme_data['logo_img_small'];
+}
+
 $data = [
     'urlAppend' => './',
     'template_base' => './template/default',
     'themeimg' => './template/default/img',
-    'logo_img' => './template/default/img/eclass-new-logo.png',
-    'logo_img_small' => './template/default/img/logo_eclass_small.png',
     'is_mobile' => false,
     'eclass_version' => ECLASS_VERSION,
     'course_info_popover' => null,
@@ -128,7 +139,7 @@ $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
     'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam',
     'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
     'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
-    'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
+    'messages', 'breadcrumbs', 'logo_img', 'logo_img_small', 'styles_str',
     'is_mobile', 'current_module_dir','search_action', 'require_current_course',
     'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
     'show_toggle_student_view', 'themeimg', 'currentCourseName');
@@ -158,8 +169,18 @@ $bladeData['lessonStatus'] = '../../';
 $bladeData['urlAppend'] = '../';
 $bladeData['template_base'] = $bladeData['urlAppend'] . 'template/default';
 $bladeData['themeimg'] = $bladeData['urlAppend'] . 'template/default/img';
-$bladeData['logo_img'] = $bladeData['themeimg'] . '/eclass-new-logo.png';
-$bladeData['logo_img_small'] = $bladeData['themeimg'] . '/logo_eclass_small.png';
+
+if (!empty($theme_data['logo_img'])) {
+    $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
+} else {
+    $bladeData['logo_img'] = $bladeData['themeimg'] . '/eclass-new-logo.png';
+}
+if (!empty($theme_data['logo_img_small'])) {
+    $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
+} else {
+    $bladeData['logo_img_small'] = $bladeData['themeimg'] . '/logo_eclass_small.png';
+}
+
 $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
 ////////////////
@@ -204,6 +225,7 @@ offline_wiki($bladeData);
 // statics //
 /////////////
 copyDirTo($webDir . "/template", $downloadDir);
+copyDirTo($webDir . "/courses/theme_data", $downloadDir);
 copyDirTo($webDir . "/js", $downloadDir);
 copy($webDir . '/modules/learnPath/export/imscp_v1p2.xsd', $downloadDir . '/imscp_v1p2.xsd');
 offline_create_manifest($downloadDir);
