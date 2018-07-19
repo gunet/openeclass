@@ -78,11 +78,11 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
     }
 
     $files = $dirs = array();
-    $result = Database::get()->queryArray("SELECT id, path, filename, format,
+    $result = Database::get()->queryArray("SELECT id, path, TRIM(filename) AS filename, format,
                                         title, extra_path, course_id,
                                         date_modified, public, visible,
                                         editable, copyrighted, comment,
-                                        IF((title = '' OR title IS NULL), filename, title) AS sort_key
+                                        IF((title = '' OR title IS NULL), TRIM(filename), title) AS sort_key
                                 FROM document
                                 WHERE
                                       course_id = ?d AND
@@ -109,7 +109,7 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
             'is_dir' => $is_dir,
             'size' => format_file_size($size),
             'title' => $row->sort_key,
-            'filename' => $row->filename,
+            'filename' => trim($row->filename),
             'format' => $row->format,
             'path' => $row->path,
             'extra_path' => $row->extra_path,

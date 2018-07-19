@@ -20,7 +20,6 @@
  * ========================================================================
  */
 
-require_once "include/lib/fileDisplayLib.inc.php";
 
 function trans($var_name, $var_array = []) {
     if (preg_match("/\['.+'\]/", $var_name)) {
