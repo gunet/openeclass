@@ -415,7 +415,7 @@ if (empty($search_terms)) {
             $search_results .= "
                 <table class='table-default'>
                 <tr>
-                  <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
+                  <th colspan='2' class='left'>$langForum ($langTopics - $langMessages):</th>
                         </tr>";
             $ftopics = Database::get()->queryArray("SELECT id, title FROM forum_topic WHERE id in " . inIdsFromHits($forumTopicHits));
             $ftopicUrls = urlsFromHits($forumTopicHits);

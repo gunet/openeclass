@@ -263,7 +263,7 @@ if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
 	<table class='table-default'>
 	<tr class='list-header'>
-	  <th class='forum_td'>&nbsp;$langSubject</th>
+	  <th class='forum_td'>&nbsp;$langTopics</th>
 	  <th class='text-center forum_td'>$langAnswers</th>
 	  <th class='text-center forum_td'>$langSender</th>
 	  <th class='text-center forum_td'>$langSeen</th>
