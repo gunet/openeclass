@@ -36,9 +36,44 @@ $tool_content .= action_bar(array(
 $tool_content .= "
     <div class='row'>
         <div class='col-md-12'>
-        <div class='panel'><div class='panel-body'>
-            $langOnlineUsers : <b>" . getOnlineUsers() . "</b>
-                </div></div>
+            <div class='panel'>
+                <div class='panel-body'>
+                    $langOnlineUsers : <b>" . getOnlineUsers() . "</b>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>$langQuickLinks</h3>
+                </div>
+                <div class='panel-body'>" .
+                    action_button(array(
+                        array('title' => $langSearchUser,
+                            'url' => "searchuser.php",
+                            'icon' => 'fa-search',
+                            'level' => 'primary-label'),
+                        array('title' => $langSearchCourse,
+                            'url' => "searchcours.php",
+                            'icon' => 'fa-search',
+                            'level' => 'primary-label'),
+                        array('title' => $langConfig,
+                            'url' => "eclassconf.php",
+                            'icon' => 'fa-cogs',
+                            'level' => 'primary-label'),
+                        array('title' => $langThemeSettings,
+                            'url' => "theme_options.php",
+                            'icon' => 'fa-tasks',
+                            'level' => 'primary-label'),
+                        array('title' => $langExternalTools,
+                            'url' => "extapp.php",
+                            'icon' => 'fa-wrench',
+                            'level' => 'primary-label')
+                        )) .
+                "</div>
+            </div>
         </div>
     </div>
     <div class='row'>
@@ -46,11 +81,11 @@ $tool_content .= "
             <div class='panel panel-default'>
                 <div class='panel-heading'>
                     <h3 class='panel-title'>$langPlatformIdentity</h3>
-                </div>                
-                <div class='panel-body'>                
+                </div>
+                <div class='panel-body'>
                     <div class='row margin-bottom-thin'>
                     <div class='col-sm-3'>
-                        " . icon('fa-check') . " <strong>$langWebServerVersion</strong> 
+                        " . icon('fa-check') . " <strong>$langWebServerVersion</strong>
                     </div>
                     <div class='col-sm-9'>
                         <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em>
@@ -69,9 +104,9 @@ $tool_content .= "
                                     </div>
                                   </div>";
                 }
-                $tool_content .= "$info_icon <strong>$langPHPVersion</strong></div>";                
+                $tool_content .= "$info_icon <strong>$langPHPVersion</strong></div>";
                 $tool_content .= "<div class='col-sm-9'>";
-                $tool_content .= "<em>" . PHP_VERSION . "</em>";                
+                $tool_content .= "<em>" . PHP_VERSION . "</em>";
                 $tool_content .= "</div></div>";
                 $tool_content .= $info_text;
                 $tool_content .= "<div class='row margin-bottom-thin'>
@@ -148,7 +183,7 @@ $tool_content .= "
                 </div>
                 <div class='col-sm-8'>
                     $prof_request_msg
-                </div>                        
+                </div>
             </div>
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-4'>
@@ -156,7 +191,7 @@ $tool_content .= "
                 </div>
                 <div class='col-sm-8'>
                     $last_course_info
-                </div>                        
+                </div>
             </div>
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-4'>
@@ -164,7 +199,7 @@ $tool_content .= "
                 </div>
                 <div class='col-sm-8'>
                     $last_prof_info
-                </div>                        
+                </div>
             </div>
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-4'>
@@ -172,7 +207,7 @@ $tool_content .= "
                 </div>
                 <div class='col-sm-8'>
                     $last_stud_info
-                </div>                        
+                </div>
             </div>
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-4'>
@@ -184,8 +219,8 @@ $tool_content .= "
                       <li><b>" . $lastregisteredprofs . "</b> $langTeachers</li>
                       <li><b>" . $lastregisteredstuds . "</b> $langStudents </li>
                     </ul>
-                </div>                        
-            </div>                 
+                </div>
+            </div>
         </div>
     </div>";
 
@@ -198,7 +233,7 @@ if (get_config('enable_indexing')) {
     $numDocs = $idx->getIndex()->numDocs();
     $isOpt = (!$idx->getIndex()->hasDeletions()) ? $langYes : $langNo;
 
-    
+
     $tool_content .= "
     <div class='panel panel-default'>
         <div class='panel-heading'>
@@ -211,7 +246,7 @@ if (get_config('enable_indexing')) {
                 </div>
                 <div class='col-sm-9'>
                     $numDocs
-                </div>                        
+                </div>
             </div>
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-3'>
@@ -221,20 +256,20 @@ if (get_config('enable_indexing')) {
                     $isOpt
                 </div>
             </div>";
-if ($idx->getIndex()->hasDeletions()) {   
-    $tool_content .= "        
+if ($idx->getIndex()->hasDeletions()) {
+    $tool_content .= "
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-9 col-sm-offset-3'>
                     <a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a>
-                </div>            
+                </div>
             </div>";
 }
 $tool_content .= "
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-9 col-sm-offset-3'>
                     <a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a>
-                </div>            
-            </div>    
+                </div>
+            </div>
         </div>
     </div>";
     $tool_content .= modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
@@ -257,13 +292,13 @@ if (count($res) >= 1) {
                 <div class='col-sm-9'>
                     $langCronLastRun
                     <div class='row'>";
-                
+
 foreach ($res as $row) {
     $tool_content .= "<div class='col-xs-6'>" . $row->name . "</div><div class='col-xs-6'>" . $row->last_run . "</div>";
-}    
+}
 $tool_content .= "</div>
                 </div>
-            </div>        
+            </div>
         </div>
     </div>";
 }
@@ -275,11 +310,11 @@ $head_content = <<<EOF
 
 var optwindow = null;
 var reidxwindow = null;
-                
+
 function optpopup(url, w, h) {
     var left = (screen.width/2)-(w/2);
     var top = (screen.height/2)-(h/2);
-    
+
     if (optwindow == null || optwindow.closed) {
         optwindow = window.open(url, 'optpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
         if (window.focus && optwindow !== null) {
@@ -288,14 +323,14 @@ function optpopup(url, w, h) {
     } else {
         optwindow.focus();
     }
-    
+
     return false;
 }
-                
+
 function reidxpopup(url, w, h) {
     var left = (screen.width/2)-(w/2);
     var top = (screen.height/2)-(h/2);
-    
+
     if (reidxwindow == null || reidxwindow.closed) {
         reidxwindow = window.open(url, 'reidxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
         if (window.focus && reidxwindow !== null) {
@@ -304,32 +339,32 @@ function reidxpopup(url, w, h) {
     } else {
         reidxwindow.focus();
     }
-    
+
     return false;
 }
- 
+
 $(document).ready(function() {
-    
+
     $('#confirmReindexDialog').modal({
         show: false,
         keyboard: false,
         backdrop: 'static'
     });
-        
+
     $("#confirmReindexCancel").click(function() {
         $("#confirmReindexDialog").modal("hide");
     });
-        
+
     $("#confirmReindexOk").click(function() {
         $("#confirmReindexDialog").modal("hide");
         reidxpopup('../search/idxpopup.php?reindex', 600, 500);
     });
-    
+
     $('#reindex_link').click(function(event) {
         event.preventDefault();
         $("#confirmReindexDialog").modal("show");
     });
-    
+
 });
 
 /* ]]> */
