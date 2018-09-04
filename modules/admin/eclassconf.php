@@ -345,6 +345,9 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['privacy_policy_text'])) {
         set_config('privacy_policy_text', $_POST['privacy_policy_text']);
     }
+    if (isset($_POST['privacy_policy_text_en'])) {
+        set_config('privacy_policy_text_en', $_POST['privacy_policy_text_en']);
+    }
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -1402,6 +1405,12 @@ $tool_content .= "
                                         <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langText :</label>
                                         <div class='col-sm-10'>
                                             ".rich_text_editor('privacy_policy_text', 5, 20, get_config('privacy_policy_text', $langPrivacyPolicyDefaultText))."
+                                        </div>
+                                    </div>
+                                    <div class='form-group'>
+                                        <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langText ($langEnglish):</label>
+                                        <div class='col-sm-10'>
+                                            ".rich_text_editor('privacy_policy_text_en', 5, 20, get_config('privacy_policy_text_en', $langPrivacyPolicyDefaultTextEn))."
                                         </div>
                                     </div>
                                     <div class='form-group'>

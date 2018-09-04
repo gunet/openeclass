@@ -17,7 +17,11 @@ $tool_content .= "<div class='row'>"
                     . "<div class='panel'>"
                     . "<div class='panel-body'>";
 
-$tool_content .= get_config('privacy_policy_text');
+if ($language == 'el') {
+    $tool_content .= get_config('privacy_policy_text');
+} else {
+    $tool_content .= get_config('privacy_policy_text_en');
+}
 
 $tool_content .= "</div>"
             . "</div>"

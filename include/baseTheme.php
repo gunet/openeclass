@@ -78,7 +78,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName,
         $theme, $themeimg,
-        $toolContent_ErrorExists, $urlAppend, $urlServer,
+        $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor,
         $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
 
