@@ -66,11 +66,11 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $session, $course_code, $course_id, $helpTopic, $helpSubTopic, 
+    global $session, $course_code, $course_id, $helpTopic, $helpSubTopic,
         $is_editor, $langActivate, $langNote,$langPleaseWait,
-        $langAdmin, $langAdvancedSearch, 
+        $langAdmin, $langAdvancedSearch,
         $langChooseLang, $langDeactivate, $langProfileMenu,
-        $langEclass, $langHelp, $langUsageTerms,
+        $langEclass, $langHelp, $langUsageTerms, $langPrivacyPolicy,
         $langHomePage, $langLogin, $langLogout, $langMyAgenda,
         $langMyPersoAnnouncements, $langMyCourses,
         $langPortfolio, $langSearch,
@@ -329,7 +329,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('SECTION_TITLE', $langUserPortfolio);
         $sectionName = $langUserPortfolio;
     } else {
-        $homepagetitle = get_config('homepage_title');        
+        $homepagetitle = get_config('homepage_title');
         if (isset($homepagetitle)) {
             $t->set_var('SECTION_TITLE', $homepagetitle);
             $sectionName = $homepagetitle;
@@ -422,8 +422,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 if (isset($homebreadcrumb)) {
                     $t->set_var('BREAD_TEXT', $homebreadcrumb);
                 } else {
-                    $t->set_var('BREAD_TEXT', get_config('defaultHomepageBcrmp', $langHomePage));    
-                }                
+                    $t->set_var('BREAD_TEXT', get_config('defaultHomepageBcrmp', $langHomePage));
+                }
                 $t->set_var('BREAD_HREF', $urlAppend);
                 $showStart = true;
             }
@@ -576,7 +576,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     // if $require_help is true (set by each tool) display the help link
-    if ($require_help == true) {        
+    if ($require_help == true) {
         $head_content .= "
         <script>
         $(function() {
@@ -590,10 +590,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         $help_link_icon = "
         <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?language=$language&amp;topic=$helpTopic&amp;subtopic=$helpSubTopic\">
-            <span class='pull-right text-info fa fa-question-circle fa-2x' data-toggle='tooltip' data-placement='top' title='$langHelp'>                
+            <span class='pull-right text-info fa fa-question-circle fa-2x' data-toggle='tooltip' data-placement='top' title='$langHelp'>
             </span>
         </a>";
-       
+
         $t->set_var('HELP_LINK_ICON', $help_link_icon);
         $t->set_var('LANG_HELP', $langHelp);
     } else {
@@ -635,6 +635,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('COPYRIGHT', 'Open eClass © 2003-' . date('Y'));
     $t->set_var('TERMS_URL', $urlAppend .'info/terms.php');
     $t->set_var('LANG_TERMS', $langUsageTerms);
+    if (get_config('activate_privacy_policy_text')) {
+        $t->set_var('LANG_PRIVACY_POLICY', $langPrivacyPolicy);
+        $t->set_var('PRIVACY_POLICY_URL', $urlAppend .'info/privacy_policy.php');
+    } else {
+        $t->set_var('LANG_PRIVACY_POLICY', '');
+    }
 
     // Remove tool title block from selected pages
     if (defined('HIDE_TOOL_TITLE')) {

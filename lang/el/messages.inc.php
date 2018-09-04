@@ -197,6 +197,8 @@ $langSureToDelRule = "Θέλετε σίγουρα να διαγραφεί ο κ�
 $langActivityCourse = 'Μαθήματα-Δραστηριότητες';
 $langNoActivityHeadings = 'Δεν υπάρχουν τίτλοι κατηγοριών δραστηριοτήτων';
 $langActivityCourseAdd = 'Προσθήκη τίτλου κατηγορίας δραστηριότητας';
+$langQuickLinks = "Γρήγοροι σύνδεσμοι";
+
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";
@@ -646,6 +648,10 @@ $langEnableMyDocs = 'Ενεργοποίηση προσωπικών αρχείω�
 $langMyDocsQuota = 'Όριο αποθηκευτικού χώρου προσωπικών αρχείων';
 $langEmailAnnounce = "Διεύθυνση κοινοποίησης ανακοινώσεων";
 $langEmailBounces = 'Διεύθυνση λήψης σφαλμάτων (bounces)';
+$langPrivacyPolicy = "Πολιτική Απορρήτου";
+$langPrivacyPolicyLegend = "Αλλαγή Πολιτικής Απορρήτου";
+$langPrivacyPolicyDefaultText = "Πολιτική Απορρήτου του GUNet.";
+$langText = "Κείμενο";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
