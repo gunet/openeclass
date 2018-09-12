@@ -352,6 +352,7 @@ $langListUsers = "Λίστα Χρηστών";
 $langTakeBackup = "Λήψη Αντιγράφου Ασφαλείας";
 $langStatsCourse = "Στατιστικά $langOfCourse";
 $langActivityEdit = 'Επεξεργασία δραστηριότητας';
+$langCoursePrerequisites = "Προαπαιτούμενα";
 
 // course_info.php
 $langCourseEditSuccess = "Τα στοιχεία του $langsOfCourse άλλαξαν με επιτυχία!";
@@ -5707,3 +5708,19 @@ $langCourseCategoryValueActive = "Ενεργή";
 $langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδεδομένων θα εμφανίζεται στους χρήστες";
 $langInactiveCourseCategories = "Ανενεργές κατηγορίες";
 $langActiveCourseCategories = "Ενεργές κατηγορίες";
+
+// Course Prerequisites
+$langPrerequisites = "Προαπαιτούμενα";
+$langNewCoursePrerequisite = "Προσθήκη Προαπαιτούμενου";
+$langNoCoursePrerequisites = "Δεν υπάρχουν προαπαιτούμενα";
+$langRemovePrerequisite = "Διαγραφή Προαπαιτούμενου";
+$langDelWarnCoursePrerequisite = "Επιβεβαίωση διαγραφής προαπαιτούμενου";
+$langNewCoursePrerequisiteSuccess = "Το προαπαιτούμενο δημιουργήθηκε με επιτυχία!";
+$langDelCoursePrerequisiteSuccess = "Το προαπαιτούμενο διαγράφηκε με επιτυχία!";
+$langNewCoursePrerequisiteHelp1 = "Σημείωση";
+$langNewCoursePrerequisiteHelp2 = "Για να προστεθεί ένα μάθημα ως προαπαιτούμενο, θα πρέπει να διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος. Αν δεν διαθέτει, παρακαλούμε επικοινωνήστε με τον καθηγητή του μαθήματος.";
+$langNewCoursePrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε ένα έγκυρο μάθημα.";
+$langNewCoursePrerequisiteFailSelf = "Αδυναμία προσθήκης, το μάθημά σας δεν μπορεί να επιλεχθεί ως προαπαιτούμενο του εαυτού του.";
+$langNewCoursePrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, το μάθημα που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
+$langNewCoursePrerequisiteFailBadgeMissing = "Αδυναμία προσθήκης, το μάθημα που επιλέξατε δεν διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος.";
+$langPrerequisitesNotComplete = "Τα προαπαιτούμενα μαθήματα για εγγραφή δεν έχουν ολοκληρωθεί";

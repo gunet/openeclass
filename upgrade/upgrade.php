@@ -3761,6 +3761,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             CHANGE external_users external_users TEXT DEFAULT NULL');
     }
 
+    // upgrade queries for version 3.6.5
+    if (version_compare($oldversion, '3.6.5', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.6.5'));
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_prerequisite` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `course_id` int(11) not null,
+                `prerequisite_course` int(11) not null,
+                PRIMARY KEY (`id`)
+            ) $tbl_options");
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 
