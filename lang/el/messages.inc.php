@@ -197,6 +197,7 @@ $langSureToDelRule = "Θέλετε σίγουρα να διαγραφεί ο κ�
 $langActivityCourse = 'Μαθήματα-Δραστηριότητες';
 $langNoActivityHeadings = 'Δεν υπάρχουν τίτλοι κατηγοριών δραστηριοτήτων';
 $langActivityCourseAdd = 'Προσθήκη τίτλου κατηγορίας δραστηριότητας';
+$langQuickLinks = "Γρήγοροι σύνδεσμοι";
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";

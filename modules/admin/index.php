@@ -34,6 +34,29 @@ $data['action_bar'] = action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary-label')),false);
 
+$data['action_button'] = action_button(array(
+                    array('title' => $langSearchUser,
+                        'url' => "search_user.php",
+                        'icon' => 'fa-search',
+                        'level' => 'primary-label'),
+                    array('title' => $langSearchCourse,
+                        'url' => "searchcours.php",
+                        'icon' => 'fa-search',
+                        'level' => 'primary-label'),
+                    array('title' => $langConfig,
+                        'url' => "eclassconf.php",
+                        'icon' => 'fa-cogs',
+                        'level' => 'primary-label'),
+                    array('title' => $langThemeSettings,
+                        'url' => "theme_options.php",
+                        'icon' => 'fa-tasks',
+                        'level' => 'primary-label'),
+                    array('title' => $langExternalTools,
+                        'url' => "extapp.php",
+                        'icon' => 'fa-wrench',
+                        'level' => 'primary-label')
+                    ));
+
 $data['validPHP'] = version_compare(PHP_VERSION, '5.4.0') >= 0;
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;
@@ -65,7 +88,7 @@ if (get_config('enable_indexing')) {
     $data['numDocs'] = $idx->getIndex()->numDocs();
     $data['isOpt'] = (!$idx->getIndex()->hasDeletions()) ? $langYes : $langNo;
     $data['idxHasDeletions'] = $idx->getIndex()->hasDeletions();
-    
+
 
     $data['idxModal'] = modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
 }
@@ -78,11 +101,11 @@ $head_content = <<<EOF
 
 var optwindow = null;
 var reidxwindow = null;
-                
+
 function optpopup(url, w, h) {
     var left = (screen.width/2)-(w/2);
     var top = (screen.height/2)-(h/2);
-    
+
     if (optwindow == null || optwindow.closed) {
         optwindow = window.open(url, 'optpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
         if (window.focus && optwindow !== null) {
@@ -91,14 +114,14 @@ function optpopup(url, w, h) {
     } else {
         optwindow.focus();
     }
-    
+
     return false;
 }
-                
+
 function reidxpopup(url, w, h) {
     var left = (screen.width/2)-(w/2);
     var top = (screen.height/2)-(h/2);
-    
+
     if (reidxwindow == null || reidxwindow.closed) {
         reidxwindow = window.open(url, 'reidxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
         if (window.focus && reidxwindow !== null) {
@@ -107,32 +130,32 @@ function reidxpopup(url, w, h) {
     } else {
         reidxwindow.focus();
     }
-    
+
     return false;
 }
- 
+
 $(document).ready(function() {
-    
+
     $('#confirmReindexDialog').modal({
         show: false,
         keyboard: false,
         backdrop: 'static'
     });
-        
+
     $("#confirmReindexCancel").click(function() {
         $("#confirmReindexDialog").modal("hide");
     });
-        
+
     $("#confirmReindexOk").click(function() {
         $("#confirmReindexDialog").modal("hide");
         reidxpopup('../search/idxpopup.php?reindex', 600, 500);
     });
-    
+
     $('#reindex_link').click(function(event) {
         event.preventDefault();
         $("#confirmReindexDialog").modal("show");
     });
-    
+
 });
 
 /* ]]> */

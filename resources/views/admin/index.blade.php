@@ -15,12 +15,24 @@
         <div class='col-md-12'>
             <div class='panel panel-default'>
                 <div class='panel-heading'>
+                    <h3 class='panel-title'>{{ trans('langQuickLinks') }}</h3>
+                </div>
+                <div class='panel-body'>
+                    {!! $action_button !!}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
                     <div class='panel-title h3'>{{ trans('langPlatformIdentity') }}</div>
-                </div>                
-                <div class='panel-body'>                
+                </div>
+                <div class='panel-body'>
                     <div class='row margin-bottom-thin'>
                         <div class='col-sm-3'>
-                            {!! icon('fa-check') !!} <strong>{{ trans('langWebServerVersion') }}</strong> 
+                            {!! icon('fa-check') !!} <strong>{{ trans('langWebServerVersion') }}</strong>
                         </div>
                         <div class='col-sm-9'>
                             <em>{{ $_SERVER['SERVER_SOFTWARE'] }}</em>
@@ -30,9 +42,9 @@
                         <div class='col-sm-3'>
                             {!! $validPHP ? icon('fa-check') : icon('fa-ban') !!}
                             <strong>{{ trans('langPHPVersion') }}</strong>
-                        </div>                
+                        </div>
                         <div class='col-sm-9'>
-                            <em>{{ PHP_VERSION }}</em>                
+                            <em>{{ PHP_VERSION }}</em>
                         </div>
                     </div>
                     @if (!$validPHP)
@@ -40,7 +52,7 @@
                             <div class='col-sm-12'>
                                 <div class='alert alert-danger'>{{ trans('langWarnAboutPHP') }}</div>
                             </div>
-                        </div>                    
+                        </div>
                     @endif
                     <div class='row margin-bottom-thin'>
                         <div class='col-sm-3'>
@@ -76,7 +88,7 @@
                             @else
                                 {{ trans('langNoOpenRequests') }}
                             @endif
-                        </div>                        
+                        </div>
                     </div>
                     <div class='row margin-bottom-thin'>
                         <div class='col-sm-4'>
@@ -89,16 +101,16 @@
                             @else
                                 {{ trans('langNoCourses') }}
                             @endif
-                        </div>                        
+                        </div>
                     </div>
                     <div class='row margin-bottom-thin'>
                         <div class='col-sm-4'>
                             <strong>{{ trans('langLastProf') }}</strong>
                         </div>
                         <div class='col-sm-8'>
-                            <b>{{ $lastProfReg->givenname . " " . $lastProfReg->surname }}</b> 
+                            <b>{{ $lastProfReg->givenname . " " . $lastProfReg->surname }}</b>
                             ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
-                        </div>                        
+                        </div>
                     </div>
                     <div class='row margin-bottom-thin'>
                         <div class='col-sm-4'>
@@ -106,12 +118,12 @@
                         </div>
                         <div class='col-sm-8'>
                             @if ($lastStudReg)
-                                <b>{{ $lastStudReg->givenname . " " . $lastStudReg->surname }}</b> 
-                                ({{ $lastStudReg->username . ", " . date("j/n/Y H:i", strtotime($lastStudReg->registered_at)) }})                            
+                                <b>{{ $lastStudReg->givenname . " " . $lastStudReg->surname }}</b>
+                                ({{ $lastStudReg->username . ", " . date("j/n/Y H:i", strtotime($lastStudReg->registered_at)) }})
                             @else
                                 {{ trans('langLastStudNone') }}
                             @endif
-                        </div>                        
+                        </div>
                     </div>
                     <div class='row margin-bottom-thin'>
                         <div class='col-sm-4'>
@@ -121,18 +133,18 @@
                         {{ trans('langAfterLastLogin') }}
                             <ul class='custom_list'>
                               <li>
-                                  <b>{{ $lastregisteredprofs }}</b> 
+                                  <b>{{ $lastregisteredprofs }}</b>
                                   {{ trans('langTeachers') }}
                               </li>
                               <li>
-                                  <b>{{ $lastregisteredstuds }}</b> 
-                                  {{ trans('langStudents') }} 
+                                  <b>{{ $lastregisteredstuds }}</b>
+                                  {{ trans('langStudents') }}
                               </li>
                             </ul>
-                        </div>                        
-                    </div>                 
+                        </div>
+                    </div>
                 </div>
-            </div>            
+            </div>
             <div class='panel panel-default'>
                 <div class='panel-heading'>
                     <div class='panel-title h3'>{{ trans('langIndexInfo') }}</div>
@@ -144,7 +156,7 @@
                         </div>
                         <div class='col-sm-9'>
                             {{ $numDocs }}
-                        </div>                        
+                        </div>
                     </div>
                     <div class='row margin-bottom-thin'>
                         <div class='col-sm-3'>
@@ -154,18 +166,18 @@
                             {{ $isOpt }}
                         </div>
                     </div>
-                    @if ($idxHasDeletions) 
+                    @if ($idxHasDeletions)
                         <div class='row margin-bottom-thin'>
                             <div class='col-sm-9 col-sm-offset-3'>
                                 <a href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
-                            </div>            
-                        </div>                    
+                            </div>
+                        </div>
                     @endif
                     <div class='row margin-bottom-thin'>
                         <div class='col-sm-9 col-sm-offset-3'>
                             <a id='reindex_link' href='../search/idxpopup.php?reindex'>{{ trans('langReindex') }}</a>
-                        </div>            
-                    </div>    
+                        </div>
+                    </div>
                 </div>
             </div>
             {!! $idxModal !!}
@@ -194,5 +206,5 @@
             </div>
             @endif
         </div>
-    </div>    
+    </div>
 @endsection
