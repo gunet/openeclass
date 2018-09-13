@@ -93,7 +93,7 @@ function new_prereq() {
                 minimumInputLength: 2,
                 tags: true,
                 ajax: {
-                  url: '{$urlServer}modules/admin/coursefeed.php',
+                  url: '{$urlServer}modules/course_prerequisites/coursefeed.php',
                   dataType: 'json'
                 }
             });
