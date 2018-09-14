@@ -2712,6 +2712,7 @@ $langManageDepartment = "Department Manager";
 $langHelpManageDepartment = "Manages departments they are responsible for";
 $langMonthsUnit = 'months';
 $langCourseSettings = "$langCourse Settings";
+$langCourseOfflineSettings = "$langCourse download";
 $langMinPasswordLen = 'Minimum password length (characters)';
 $langInsert = "Insert";
 $langCreateCourseNotAllowedNode = 'The $langFaculty you have selected is not acceptable. Please try again.';

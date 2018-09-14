@@ -635,6 +635,7 @@ $langViaAltAuthMethods = "μέσω εναλλακτικών τρόπων πισ�
 $langMonthsUnit = "σε μήνες";
 $langMinPasswordLen = "Ελάχιστο μέγεθος συνθηματικού";
 $langCourseSettings = "Ρυθμίσεις $langsOfCourses";
+$langCourseOfflineSettings = "Κατέβασμα $langsOfCourse";
 $langLoginFailCheck = "Έλεγχος αποτυχημένων εισόδων";
 $langEnableLoginFailCheck = "Ενεργοποίηση ελέγχου αποτυχημένων εισόδων";
 $langLoginFailThreshold = "Αριθμός επιτρεπτών αποτυχημένων εισόδων";

@@ -52,7 +52,7 @@ $tool_content .= "
                 <div class='panel-body'>" .
                     action_button(array(
                         array('title' => $langSearchUser,
-                            'url' => "searchuser.php",
+                            'url' => "search_user.php",
                             'icon' => 'fa-search',
                             'level' => 'primary-label'),
                         array('title' => $langSearchCourse,

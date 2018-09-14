@@ -333,7 +333,6 @@ if (isset($_POST['submit'])) {
     set_config('site_name', $_POST['formsiteName']);
     set_config('phone', $_POST['formtelephone']);
     set_config('email_helpdesk', $_POST['formemailhelpdesk']);
-    set_config('homepage', $_POST['']);
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
     set_config('postaddress', $_POST['formpostaddress']);
@@ -404,6 +403,7 @@ if (isset($_POST['submit'])) {
         'opencourses_enable' => true,
         'mydocs_student_enable' => true,
         'mydocs_teacher_enable' => true,
+        'offline_course' => true,
         'activate_privacy_policy_text' => true
         );
 
@@ -905,6 +905,8 @@ else {
     $cbox_insert_xml_metadata = get_config('insert_xml_metadata') ? 'checked' : '';
     $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
     $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
+    $cbox_offline_course = get_config('offline_course') ? 'checked' : '';
+
     $tool_content .= "
             <div class='panel panel-primary' id='six'>
                 <div class='panel-heading'>
@@ -942,6 +944,12 @@ else {
                                     <label>
                                         <input type='checkbox' name='allow_teacher_clone_course' value='1' $cbox_allow_teacher_clone_course>
                                         $lang_allow_teacher_clone_course
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='offline_course' value='1' $cbox_offline_course>
+                                        $langCourseOfflineSettings
                                     </label>
                                 </div>
                            </div>
