@@ -22,7 +22,7 @@
 
 // Allow unlimited time for creating the archive
 set_time_limit(0);
-ini_set('display_errors', '1');
+//ini_set('display_errors', '1');
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
@@ -44,6 +44,13 @@ require_once 'backport_functions.php'; // backported functions from eclass defau
 require_once 'override_functions.php'; // overridden functions
 require_once 'offline_functions.php';
 require_once 'offline_imscp.php';
+
+// security check
+$offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
+if (!$offline_course) {
+    Session::Messages($langForbidden, 'aleρτ-warning');
+    redirect_to_home_page('');
+}
 
 $tree = new Hierarchy();
 $course = new Course();

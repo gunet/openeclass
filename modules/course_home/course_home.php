@@ -686,7 +686,7 @@ if (count($categoryItems)) {
     $categoryDisplay = '';
 }
 
-$offline_course = get_config('offline_course');
+$offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
 
 $tool_content .= "
 $action_bar

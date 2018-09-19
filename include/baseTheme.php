@@ -46,7 +46,7 @@ if (isset($toolContent_ErrorExists)) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         redirect_to_home_page("main/login_form.php?next=" . urlencode($next));
     } else {
-        redirect_to_home_page('main/portfolio.php');
+        redirect_to_home_page('');
     }
 }
 
