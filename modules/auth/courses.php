@@ -152,7 +152,6 @@ var lang = {
         unregCourse: '" . js_escape($langUnregCourse) . "',
         reregisterImpossible: '" . js_escape("$langConfirmUnregCours $m[unsub]") . "',
         invalidCode: '" . js_escape($langInvalidCode) . "',
-        prereqsNotComplete: '" . js_escape($langPrerequisitesNotComplete) . "',
 };
 var courses = ".(json_encode($courses_list)).";
 </script>";
@@ -268,26 +267,7 @@ function expanded_faculte($facid, $uid) {
         } else {
             $codelink = $course_title;
         }
-
-        $coursePrerequisites = "";
-        $prereqsCnt = 0;
-        $result = Database::get()->queryArray("SELECT c.*
-                                 FROM course_prerequisite cp 
-                                 JOIN course c on (c.id = cp.prerequisite_course) 
-                                 WHERE cp.course_id = ?d 
-                                 ORDER BY c.title", $cid);
-        foreach ($result as $row) {
-            $prereqTitle = q($row->title . " (" . $row->public_code . ")");
-            if ($prereqsCnt > 0) {
-                $coursePrerequisites .= ", ";
-            }
-            $coursePrerequisites .= $prereqTitle;
-            $prereqsCnt++;
-        }
-        if ($prereqsCnt > 0) {
-            $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langPrerequisites'] . ": " . $coursePrerequisites . "</small>";
-        }
-
+       
         $retString .= "<td align='center'>";
         $requirepassword = '';
         $vis_class = ($mycours->visible == 0) ? 'class="reg_closed"' : '';
@@ -314,7 +294,7 @@ function expanded_faculte($facid, $uid) {
             $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
-                   <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$requirepassword $coursePrerequisites</td>
+                   <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$requirepassword</td>
                    <td>" . q($mycours->t) . "</td>
                    <td class='text-center'>" . $course_access_icons[$mycours->visible] . "</td></tr>";        
     }, intval($facid), COURSE_INACTIVE);

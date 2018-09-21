@@ -105,7 +105,6 @@ define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
-define('MODULE_ID_COURSEPREREQUISITE', 49);
 
 // user modules
 
