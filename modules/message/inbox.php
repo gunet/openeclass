@@ -40,7 +40,7 @@ if (isset($_GET['mid'])) {
 
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
-    if (!$msg->error) {        
+    if (!$msg->error) {
 
         $urlstr = '';
         if ($course_id != 0) {
@@ -162,7 +162,7 @@ if (isset($_GET['mid'])) {
             }
             $out .= generate_csrf_token_form_field() . "
                 <fieldset>
-                <legend>$langReply</legend>
+                <h4>$langReply</h4>
                     <div class='form-group'>
                         <label for='senderName' class='col-sm-2 control-label'>$langSender:</label>
                         <div class='col-sm-10'>
@@ -179,7 +179,7 @@ if (isset($_GET['mid'])) {
                     <div class='form-group'>
                         <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
                         <div class='col-sm-10'>
-                            ".rich_text_editor('body', 4, 20, '')."                            
+                            ".rich_text_editor('body', 4, 20, '')."
                         </div>
                     </div>";
 
@@ -224,12 +224,10 @@ $out .=         "
                 </fieldset>";
 
             $out .= "
-                 <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+                <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div>";
-                
-                load_js('select2');
-             
-                $out .= 
+            
+                $out .=
                  "<script type='text/javascript'>
                         $(document).ready(function () {
 
@@ -251,21 +249,6 @@ $out .=         "
                                 $('.row.title-row').next('.row').show();
                                 $('#dropboxTabs .nav.nav-tabs').show();
                             });
-
-                            $('#select-recipients').select2();
-                            $('#selectAll').click(function(e) {
-                                e.preventDefault();
-                                var stringVal = [];
-                                $('#select-recipients').find('option').each(function(){
-                                    stringVal.push($(this).val());
-                                });
-                                $('#select-recipients').val(stringVal).trigger('change');
-                            });
-                            $('#removeAll').click(function(e) {
-                                e.preventDefault();
-                                var stringVal = [];
-                                $('#select-recipients').val(stringVal).trigger('change');
-                            });
                         });
 
                         </script>";
@@ -280,7 +263,7 @@ $out .=         "
 
                     $(document).off("click", ".delete_in");
 
-                    $(document).on("click", ".delete_in_inner", function (e) {                    
+                    $(document).on("click", ".delete_in_inner", function (e) {
                          e.preventDefault();
                          var id = $(this).children("a").data("id");
                          var string = "mid="+id;

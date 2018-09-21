@@ -27,6 +27,7 @@ require_once 'modules/progress/RatingEvent.php';
 
 $is_link = false;
 $is_wallpost = false;
+$rateEventActivity = null;
 
 if ($_GET['rtype'] == 'blogpost') {
 	$setting_id = SETTING_BLOG_RATING_ENABLE;
@@ -34,8 +35,10 @@ if ($_GET['rtype'] == 'blogpost') {
     $setting_id = SETTING_COURSE_RATING_ENABLE;
 } elseif ($_GET['rtype'] == 'forum_post') {
     $setting_id = SETTING_FORUM_RATING_ENABLE;
+    $rateEventActivity = RatingEvent::FORUM_ACTIVITY;
 } elseif ($_GET['rtype'] == 'link') {
     $is_link = true; //there is no rating setting for social bookmarks, rating is always enabled
+    $rateEventActivity = RatingEvent::SOCIALBOOKMARK_ACTIVITY;
 } elseif ($_GET['rtype'] == 'wallpost') {
     $is_wallpost = true; //there is no rating setting for wall posts, rating is always enabled
 }
@@ -46,24 +49,24 @@ if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
         $rtype = $_GET['rtype'];
         $rid = intval($_GET['rid']);
         $value = intval($_GET['value']);
-        
+
         //response array
         $response = array();
-        
+
         $rating = new Rating($widget, $rtype, $rid);
         $had_rated = $rating->userHasRated($uid);
         $action = $rating->castRating($value, $uid);
         triggerGame($course_id, $uid, $rateEventActivity);
-        
+
         if ($widget == 'up_down') {
             $up_value = $rating->getUpRating();
             $down_value = $rating->getDownRating();
-            
+
             $response[0] = $up_value;//positive rating
             $response[1] = $down_value;//negative rating
             $response[2] = $action;//new rating or deletion of old one
             $response[3] = $langUserHasRated;//necessary string
-            
+
             if ($had_rated === false && $value == 1) {
                 $response[4] = $urlServer."modules/rating/thumbs_up_active.png";
                 $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
@@ -84,10 +87,10 @@ if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
                     }
                 }
             }
-            
+
         } elseif ($widget == 'thumbs_up') {
             $up_value = $rating->getThumbsUpRating();
-            
+
             $response[0] = $up_value;//positive rating
             $response[1] = $action;//new rating or deletion of old one
             $response[2] = $langUserHasRated;//necessary string
@@ -98,9 +101,9 @@ if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
             }
         } elseif ($widget == 'fivestar') {
             $response[0] = "";
-            
+
             $num_ratings = $rating->getRatingsNum();
-            
+
             if ($num_ratings['fivestar'] != 0) {
                 $avg = $rating->getFivestarRating();
                 $response[0] .= '<small class="text-muted">&nbsp;('.$avg.')</small>';
@@ -108,15 +111,15 @@ if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
             } else {
                 $response[1] = 0;
             }
-            
+
             if ($num_ratings['fivestar'] == 1) {
                 $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVote.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
             } else {
                 $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVotes.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
             }
-            
+
         }
-        
+
         echo json_encode($response);
     }
 }

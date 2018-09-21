@@ -31,9 +31,13 @@ if (defined('FILE_PHP__PLAY_MODE')) {
 
 session_start();
 
-// save current course
+// save current course and student_view status
 if (isset($_SESSION['course_code'])) {
     define('old_course_code', $_SESSION['course_code']);
+}
+
+if (isset($_SESSION['student_view'])) {
+    define('old_student_view', $_SESSION['student_view']);
 }
 
 // lpmode is used for learning path
@@ -80,6 +84,10 @@ require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/document/doc_init.php';
+
+if (defined('old_student_view')) {
+    $_SESSION['student_view'] = old_student_view;
+}
 
 if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {
     // check user's access to cours

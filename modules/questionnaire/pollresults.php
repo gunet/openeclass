@@ -4,7 +4,7 @@
  * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -104,20 +104,22 @@ $head_content .= "<script type='text/javascript'>
 
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
     redirect_to_home_page();
+} else {
+    $pid = intval($_GET['pid']);
 }
-$pid = intval($_GET['pid']);
 $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
-$PollType = $thePoll ->type;
+if (!$thePoll) {
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
+$PollType = $thePoll->type;
 if (!$is_editor && !$thePoll->show_results) {
     Session::Messages($langPollResultsAccess);
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
 }
-if(!$thePoll){
-    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
-}
+
 $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
-if(!$total_participants) {
-    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+if (!$total_participants) {
+   redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 $export_box = "";
 if ($is_editor) {
@@ -193,7 +195,7 @@ $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid 
 $j=1;
 $chart_data = array();
 $chart_counter = 0;
-if ($PollType == 0) {
+if ($PollType == POLL_NORMAL) {
     foreach ($questions as $theQuestion) {
         $this_chart_data = array();
         if ($theQuestion->qtype == QTYPE_LABEL) {
@@ -236,32 +238,32 @@ if ($PollType == 0) {
                             <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
-                    if(isset($answer->answer_text)){
+                    if (isset($answer->answer_text)) {
                         $q_answer = q_math($answer->answer_text);
                         $aid = $answer->aid;
                     } else {
                         $q_answer = $langPollUnknown;
                         $aid = -1;
                     }
-                    $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage;                    
+                    $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage;
                     if ($thePoll->anonymized != 1) {
-                        $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname, 
-                                                            submit_date AS s 
+                        $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname,
+                                                            submit_date AS s
                                                     FROM poll_user_record, poll_answer_record, user
-                                                        WHERE poll_user_record.id = poll_answer_record.poll_user_record_id 
-                                                        AND poll_answer_record.qid = ?d 
-                                                        AND poll_answer_record.aid = ?d 
+                                                        WHERE poll_user_record.id = poll_answer_record.poll_user_record_id
+                                                        AND poll_answer_record.qid = ?d
+                                                        AND poll_answer_record.aid = ?d
                                                         AND user.id = poll_user_record.uid)
                                                 UNION
                                                     (SELECT poll_user_record.email AS fullname, submit_date AS s
-                                                    FROM poll_user_record, poll_answer_record 
+                                                    FROM poll_user_record, poll_answer_record
                                                         WHERE poll_answer_record.qid = ?d
                                                         AND poll_answer_record.aid = ?d
                                                         AND poll_user_record.email IS NOT NULL
                                                         AND poll_user_record.email_verification = 1
                                                         AND poll_answer_record.poll_user_record_id = poll_user_record.id)
                                                     ORDER BY s DESC
-                                                ", $theQuestion->pqid, $aid, $theQuestion->pqid, $aid);                                                
+                                                ", $theQuestion->pqid, $aid, $theQuestion->pqid, $aid);
                         foreach($names as $name) {
                           $names_array[] = $name->fullname;
                         }
@@ -311,16 +313,16 @@ if ($PollType == 0) {
 
                     if ($thePoll->anonymized != 1) {
                         // Gets names for registered users and emails for unregistered
-                        $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname, 
-                                                            submit_date AS s 
+                        $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname,
+                                                            submit_date AS s
                                                     FROM poll_user_record, poll_answer_record, user
-                                                        WHERE poll_user_record.id = poll_answer_record.poll_user_record_id 
-                                                        AND poll_answer_record.qid = ?d 
-                                                        AND poll_answer_record.answer_text = ?s  
+                                                        WHERE poll_user_record.id = poll_answer_record.poll_user_record_id
+                                                        AND poll_answer_record.qid = ?d
+                                                        AND poll_answer_record.answer_text = ?s
                                                         AND user.id = poll_user_record.uid)
                                                 UNION
                                                     (SELECT poll_user_record.email AS fullname, submit_date AS s
-                                                    FROM poll_user_record, poll_answer_record 
+                                                    FROM poll_user_record, poll_answer_record
                                                         WHERE poll_answer_record.qid = ?d
                                                         AND poll_answer_record.answer_text = ?s
                                                         AND poll_user_record.email IS NOT NULL
@@ -379,24 +381,24 @@ if ($PollType == 0) {
                 foreach ($answers as $answer) {
                     if (!$thePoll->anonymized) {
                         // Gets names for registered users and emails for unregistered
-                        
-                        $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname, 
-                                                            submit_date AS s 
+
+                        $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname,
+                                                            submit_date AS s
                                                     FROM poll_user_record, poll_answer_record, user
-                                                        WHERE poll_user_record.id = poll_answer_record.poll_user_record_id 
-                                                        AND poll_answer_record.qid = ?d 
-                                                        AND poll_answer_record.answer_text = ?s  
+                                                        WHERE poll_user_record.id = poll_answer_record.poll_user_record_id
+                                                        AND poll_answer_record.qid = ?d
+                                                        AND poll_answer_record.answer_text = ?s
                                                         AND user.id = poll_user_record.uid)
                                                 UNION
                                                     (SELECT poll_user_record.email AS fullname, submit_date AS s
-                                                    FROM poll_user_record, poll_answer_record 
+                                                    FROM poll_user_record, poll_answer_record
                                                         WHERE poll_answer_record.qid = ?d
                                                         AND poll_answer_record.answer_text = ?s
                                                         AND poll_user_record.email IS NOT NULL
                                                         AND poll_user_record.email_verification = 1
                                                         AND poll_answer_record.poll_user_record_id = poll_user_record.id)
                                                     ORDER BY s DESC
-                                                ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);                        
+                                                ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
                         foreach($names as $name) {
                           $names_array[] = $name->fullname;
                         }
@@ -420,24 +422,25 @@ if ($PollType == 0) {
                             $extra_column
                     </tr>";
                     $k++;
-                    if (!$thePoll->anonymized) unset($names_array);
+                    if (!$thePoll->anonymized) {
+                        unset($names_array);
+                    }
                 }
                 if ($k>4) {
-                 $tool_content .= "
+                    $tool_content .= "
                     <tr>
-                            <td colspan='".($thePoll->anonymized ? 2 : 3)."'><a href='#' class='trigger_names' data-type='fill' id='show'>$langViewShow</a></td>
+                        <td colspan='".($thePoll->anonymized ? 2 : 3)."'><a href='#' class='trigger_names' data-type='fill' id='show'>$langViewShow</a></td>
                     </tr>";
                 }
-
                 $tool_content .= '</tbody></table><br>';
             }
             $tool_content .= "</div></div>";
         }
     }
-} elseif($PollType == 1) { // Colles poll
-    redirect_to_home_page("modules/questionnaire/colles.php?course=$course_code");
-} elseif($PollType == 2) { // ATTLES poll
-    redirect_to_home_page("modules/questionnaire/attls.php");
+} elseif ($PollType == POLL_COLLES) {
+    redirect_to_home_page("modules/questionnaire/colles.php?course=$course_code&pid=$pid");
+} elseif ($PollType == POLL_ATTLS) {
+    redirect_to_home_page("modules/questionnaire/attls.php?course=$course_code&pid=$pid");
 }
 // display page
 draw($tool_content, 2, null, $head_content);

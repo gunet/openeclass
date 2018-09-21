@@ -100,15 +100,10 @@
                         <div class="row title-row margin-top-thin">
                             <div class="col-xs-9">
                                 <h1 class='page-title'>
-                                    @if ($menuTypeID == 2 && $pageName)
-                                        <a href='{{ $urlServer }}courses/{{ $course_code }}/'>{!! $section_title !!}</a>
-                                    @else
-                                        {!! $section_title !!}
-                                    @endif
+                                    <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                 </h1>
-                                @if (isset($course_id) && isset($professor))
-                                    <h2 class='page-subtitle'>{!! $professor !!}</h2>
-                                @endif
+                                <h2 class='page-subtitle'>{{ $professor }}</h2>
+                                <h6 class='help-block'>{{ $course_date }}</h6>
                                 @if (!defined('HIDE_TOOL_TITLE'))
                                     <div class='row'>
                                         <div class='col-md-12'>
@@ -127,7 +122,7 @@
 
             <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar float-menu">
                 <div class="logo">
-                    <a href='{{ $urlAppend }}'>
+                    <a href='{{ $urlAppend }}index.html'>
                     <img class="img-responsive hidden-xs hidden-sm" src="{{ $logo_img }}" alt='{{ $pageTitle }} logo'>
                     </a>
                 </div>
@@ -135,23 +130,21 @@
                 <div class="panel-group" id="sidebar-accordion">
                     <div class="panel">
                         @foreach ($toolArr as $key => $tool_group)
-
-                        <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{{ $key }}">
-                            <div class="panel-heading">
-                                <div class="panel-title h3">
-                                    <span class="fa fa-chevron-right"></span>
-                                    <span>{{ $tool_group[0]['text'] }}</span>
+                            <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion">
+                                <div class="panel-heading">
+                                    <div class="panel-title h3">
+                                        <span class="fa fa-chevron-right"></span>
+                                        <span>{{ $tool_group[0]['text'] }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse {{ $tool_group[0]['class'] }}">
-                            @foreach ($tool_group[1] as $key2 => $tool)
-                            <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}" {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>
-                                <span>{!! $tool !!}</span>
                             </a>
+                            @foreach ($tool_group[1] as $key2 => $tool)
+                                <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}" {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : ""}}>
+                                    <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>
+                                    <span>{!! $tool !!}</span>
+                                </a>
                             @endforeach
-                        </div>
+
                         @endforeach
                     </div>
                     {{ isset($eclass_leftnav_extras) ? $eclass_leftnav_extras : "" }}

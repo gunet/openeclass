@@ -3,7 +3,7 @@
  * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,8 +19,6 @@
  * ======================================================================== */
 
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
@@ -335,7 +333,6 @@ if (isset($_POST['submit'])) {
     set_config('site_name', $_POST['formsiteName']);
     set_config('phone', $_POST['formtelephone']);
     set_config('email_helpdesk', $_POST['formemailhelpdesk']);
-    set_config('homepage', $_POST['']);
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
     set_config('postaddress', $_POST['formpostaddress']);
@@ -344,6 +341,12 @@ if (isset($_POST['submit'])) {
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
+    if (isset($_POST['privacy_policy_text'])) {
+        set_config('privacy_policy_text', $_POST['privacy_policy_text']);
+    }
+    if (isset($_POST['privacy_policy_text_en'])) {
+        set_config('privacy_policy_text_en', $_POST['privacy_policy_text_en']);
+    }
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -399,7 +402,9 @@ if (isset($_POST['submit'])) {
         'course_metadata' => true,
         'opencourses_enable' => true,
         'mydocs_student_enable' => true,
-        'mydocs_teacher_enable' => true
+        'mydocs_teacher_enable' => true,
+        'offline_course' => true,
+        'activate_privacy_policy_text' => true
         );
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -494,7 +499,7 @@ else {
         $disable_display_captcha = 'disabled';
         $message_display_captcha = '<div>' . $lang_display_captcha_unsupported . '</div>';
     }
-    
+
     $cbox_block_duration_account = get_config('block_duration_account') ? 'checked' : '';
     $cbox_block_duration_alt_account = get_config('block_duration_alt_account') ? 'checked' : '';
     $tool_content .= "
@@ -710,7 +715,7 @@ else {
         $sel = array();
         $selectable_langs = array();
         $cbox_dont_display_login_form = get_config('dont_display_login_form') ? 'checked' : '';
-        $cbox_hide_login_link = get_config('hide_login_link') ? 'checked' : '';        
+        $cbox_hide_login_link = get_config('hide_login_link') ? 'checked' : '';
         foreach ($language_codes as $langcode => $langname) {
             if (in_array($langcode, $langdirs)) {
                 $loclangname = $langNameOfLang[$langname];
@@ -900,6 +905,8 @@ else {
     $cbox_insert_xml_metadata = get_config('insert_xml_metadata') ? 'checked' : '';
     $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
     $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
+    $cbox_offline_course = get_config('offline_course') ? 'checked' : '';
+
     $tool_content .= "
             <div class='panel panel-primary' id='six'>
                 <div class='panel-heading'>
@@ -937,6 +944,12 @@ else {
                                     <label>
                                         <input type='checkbox' name='allow_teacher_clone_course' value='1' $cbox_allow_teacher_clone_course>
                                         $lang_allow_teacher_clone_course
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='offline_course' value='1' $cbox_offline_course>
+                                        $langCourseOfflineSettings
                                     </label>
                                 </div>
                            </div>
@@ -1385,8 +1398,50 @@ $tool_content .= "
                         </div>
                     </fieldset>
                 </div>
-            </div>
-            ". generate_csrf_token_form_field() ."
+            </div>";
+
+    $cbox_activate_privacy_policy_text = get_config('activate_privacy_policy_text') ? 'checked' : '';
+    $tool_content .= "<div class='panel panel-primary' id='fourteen'>
+                        <div class='panel-heading'>
+                            <h2 class='panel-title'>$langPrivacyPolicy</h2>
+                        </div>
+                        <div class='panel-body'>
+                            <div class='margin-bottom-fat margin-top-fat'><strong>$langPrivacyPolicyLegend</strong></div>
+                            <fieldset>
+                                <div class='landing-default'>
+                                    <div class='form-group'>
+                                        <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langText :</label>
+                                        <div class='col-sm-10'>
+                                            ".rich_text_editor('privacy_policy_text', 5, 20, get_config('privacy_policy_text', $langPrivacyPolicyDefaultText))."
+                                        </div>
+                                    </div>
+                                    <div class='form-group'>
+                                        <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langText ($langEnglish):</label>
+                                        <div class='col-sm-10'>
+                                            ".rich_text_editor('privacy_policy_text_en', 5, 20, get_config('privacy_policy_text_en', $langPrivacyPolicyDefaultTextEn))."
+                                        </div>
+                                    </div>
+                                    <div class='form-group'>
+                                        <label for='theme' class='col-sm-2 control-label'>$langViewShow: </label>
+                                        <div class='col-sm-10'>
+                                            <div class='checkbox'>
+                                                <label>
+                                                    <input id='hide_login_check' type='checkbox' name='activate_privacy_policy_text' value='1' $cbox_activate_privacy_policy_text>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <div class='col-sm-12'>
+                                        <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>";
+
+            $tool_content .= generate_csrf_token_form_field() ."
         </form>
     </div>";
     $head_content .= "
@@ -1430,6 +1485,7 @@ $tool_content .= "
                 <li><a href='#eleven'>$langUploadWhitelist</a></li>
                 <li><a href='#twelve'>$langLogActions</a></li>
                 <li><a href='#thirteen'>$langLoginFailCheck</a></li>
+                <li><a href='#fourteen'>$langPrivacyPolicy</a></li>
             </ul>
         </div>
     </div>";

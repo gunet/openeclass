@@ -116,7 +116,7 @@ if ($total_categories > 0) {
         }
         $tool_content .= "<div class='table-responsive' style='margin-bottom:30px;'><table class='table-default'>";
         $tool_content .= "<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
-       
+
         $tool_content .= action_button(
                 array(
                     array(
@@ -154,7 +154,7 @@ if ($total_categories > 0) {
         $tool_content .= "</div></caption>";
         $tool_content .= "<tr class='list-header'>
             <td class='forum_td'>$langForums</td>
-            <td class='text-center forum_td' width='100'>$langSubjects</td>
+            <td class='text-center forum_td' width='100'>$langTopics</td>
             <td class='text-center forum_td' width='100'>$langPosts</td>
             <td class='text-center forum_td'>$langLastPost</td>
             <th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
@@ -213,7 +213,7 @@ if ($total_categories > 0) {
                                 $forum_action_notify = FALSE;
                             }
                         }
-                        $tool_content .= "<tr><td>";                        
+                        $tool_content .= "<tr><td>";
                         if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
                             if ($forum_action_notify) {
                                 $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='" . q($langNotify) . "'><i class='fa fa-envelope'></i></span>";
@@ -230,7 +230,7 @@ if ($total_categories > 0) {
                             "<td class='text-center'>$total_posts</td>" .
                             "<td class='text-center'>";
                         if ($total_topics > 0 && $total_posts > 0) {
-                            $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;";                        
+                            $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;";
                             if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
                                 $tool_content .= "<a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>".icon('fa-comment-o', $langLastPost) ."</a>";
                             }
@@ -264,7 +264,7 @@ if ($total_categories > 0) {
                                     'icon' => 'fa-times',
                                     'class' => 'delete',
                                     'confirm' => $langConfirmDelete,
-                                    'show' => $is_editor))    
+                                    'show' => $is_editor))
                                 );
                             }
                 } else {

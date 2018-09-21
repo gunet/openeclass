@@ -46,6 +46,31 @@ if ($q) {
     $visible = $q->visible;
     $course_password = $q->password;
     if ($state == 'true') {
+
+        // check for prerequisites
+        $prereq1 = Database::get()->queryArray("SELECT cp.prerequisite_course
+                                 FROM course_prerequisite cp 
+                                 WHERE cp.course_id = ?d", $cid);
+        if (count($prereq1) > 0) {
+            $completion = true;
+
+            foreach ($prereq1 as $prereqCourseId) {
+                $prereq2 = Database::get()->queryArray("SELECT id 
+                                  FROM user_badge 
+                                  WHERE user = ?d 
+                                  AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND bundle = -1) 
+                                  AND completed = 1", $uid, $prereqCourseId);
+                if (count($prereq2) <= 0) {
+                    $completion = false;
+                    break;
+                }
+            }
+
+            if (!$completion) {
+                die('prereqsnotcomplete');
+            }
+        }
+
         if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
                 ($password === $course_password or $course_password === null)) {
             Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)

@@ -32,7 +32,7 @@
  * @return array
  */
 function lessonToolsMenu_offline($rich=true, $urlAppend) {
-    global $langExternalLinks, $offline_course_modules;
+    global $langExternalLinks, $offline_course_modules, $langCourseTools;
 
     $sideMenuGroup = array();
     $sideMenuSubGroup = array();
@@ -43,12 +43,12 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
 
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
+    $mids = array();
 
     $tools_sections =
         array(array('type' => 'Public',
-            'title' => $GLOBALS['langCourseOptions'],
-            'iconext' => '_on.png',
-            'class' => 'active'));
+                    'title' => $langCourseTools,
+                    'class' => 'active'));
 
     foreach ($tools_sections as $section) {
 
@@ -58,24 +58,29 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
         $sideMenuImg = array();
         $sideMenuID = array();
         $arrMenuType = array('type' => 'text',
-            'text' => $section['title'],
-            'class' => $section['class']);
+                            'text' => $section['title'],
+                            'class' => $section['class']);
         array_push($sideMenuSubGroup, $arrMenuType);
 
+        foreach ($offline_course_modules as $key => $value) {
+            $mids[$key] = $offline_course_modules[$key]['link'];
+        }
         // sort array according to title (respect locale)
         setlocale(LC_COLLATE, $GLOBALS['langLocale']);
-        usort($offline_course_modules, function ($a, $b) {
+        $offline_modules = $offline_course_modules;
+        usort($offline_modules, function ($a, $b) {
             return strcoll($a['title'], $b['title']);
         });
-        foreach ($offline_course_modules as $mid) {
-            array_push($sideMenuText, q($mid['title']));
-            if ($mid['link'] == 'document') {
-                array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '/index.html'));
-            } else {
-                array_push($sideMenuLink, q($urlAppend . 'modules/' . $mid['link'] . '.html'));
+        foreach ($offline_modules as $m) {
+            $mid = array_search($m['link'], $mids);
+            if (!visible_module($mid)) {
+                continue;
             }
-            array_push($sideMenuImg, $mid['image'] . $section['iconext']);
-            array_push($sideMenuID, $mid);
+            array_push($sideMenuText, q($m['title']));
+            array_push($sideMenuLink, q($urlAppend . 'modules/' . $m['link'] . '.html'));
+            array_push($sideMenuImg, $m['image']);
+            array_push($sideMenuID, $m);
+
         }
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
@@ -117,54 +122,89 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
  * @return type
  */
 function make_clickable_path($path) {
-    global $langRoot, $base_url, $group_sql;
+    global $langRoot, $group_sql;
 
-    $cur = $out = '';
+    $out = '';
+    $depth = count(explode('/', $path));
+    $i = 1;
     foreach (explode('/', $path) as $component) {
-        if (empty($component)) {
-            $out = "<a href='{$base_url}openDir=/'>$langRoot</a>";
-        } else {
-            $cur .= rawurlencode("/$component");
-            $row = Database::get()->querySingle("SELECT filename FROM document
-                                        WHERE path LIKE '%/$component' AND $group_sql");
-            $dirname = $row->filename;
-            $out .= " &raquo; <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
+        $dotsprefix = "";
+        for ($j = 1; $j <= $depth-$i; $j++) {
+            $dotsprefix .= "../";
         }
+
+        if (empty($component)) {
+            $out = "<a href='" . $dotsprefix . "document.html'>$langRoot</a>";
+        } else {
+            $row = Database::get()->querySingle("SELECT filename FROM document WHERE path LIKE '%/$component' AND $group_sql");
+            $dirname = $row->filename;
+            $out .= " &raquo; <a href='" . $dotsprefix . $dirname . ".html'>" . q($dirname) . "</a>";
+        }
+        $i++;
     }
     return $out;
 }
 
-/**
- * @brief Link for sortable table headings
- * @global type $sort
- * @global type $reverse
- * @global type $curDirPath
- * @global type $base_url
- * @global type $themeimg
- * @global type $langUp
- * @global type $langDown
- * @param type $label
- * @param type $this_sort
- * @return type
- */
-function headlink($label, $this_sort) {
-    global $sort, $reverse, $curDirPath, $base_url, $themeimg, $langUp, $langDown;
+function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin) {
+    $uncatresults = array();
 
-    if (empty($curDirPath)) {
-        $path = '/';
+    $vis_q = ($is_editor) ? '' : "AND visible = 1";
+    if ($cat_id > 0) {
+        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND category = ?d $vis_q $order", $course_id, $cat_id);
+        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl AND course_id = ?d AND category = ?d $vis_q $order", $course_id, $cat_id);
     } else {
-        $path = $curDirPath;
+        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND (category IS NULL OR category = 0) $vis_q $order", $course_id);
+        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl AND course_id = ?d AND (category IS NULL OR category = 0) $vis_q $order", $course_id);
     }
-    if ($sort == $this_sort) {
-        $this_reverse = !$reverse;
-        $indicator = " <img src='$themeimg/arrow_" .
-            ($reverse ? 'up' : 'down') . ".png' alt='" .
-            ($reverse ? $langUp : $langDown) . "'>";
-    } else {
-        $this_reverse = $reverse;
-        $indicator = '';
+
+    foreach ($results as $table => $result) {
+        foreach ($result as $myrow) {
+            $myrow->course_id = $course_id;
+            $resultObj = new stdClass();
+            $resultObj->myrow = $myrow;
+            $resultObj->table = $table;
+
+            if (resource_access($myrow->visible, $myrow->public) || $is_editor) {
+                switch ($table) {
+                    case 'video':
+                        $vObj = MediaResourceFactory::initFromVideo($myrow);
+                        if ($is_in_tinymce && !$compatiblePlugin) { // use Access/DL URL for non-modable tinymce plugins
+                            $vObj->setPlayURL($vObj->getAccessURL());
+                        }
+                        $resultObj->vObj = $vObj;
+                        $resultObj->link_href = "<a href='video/" . $vObj->getUrl() . "'>" . $vObj->getTitle() . "</a>";
+                        break;
+                    case "videolink":
+                        $resultObj->vObj = $vObj = MediaResourceFactory::initFromVideoLink($myrow);
+                        $resultObj->link_href = "<a href='" . $vObj->getUrl() . "'>" . $vObj->getTitle() . "</a>";
+                        break;
+                    default:
+                        exit;
+                }
+
+                $resultObj->row_class = (!$myrow->visible) ? 'not_visible' : 'visible' ;
+                $resultObj->extradescription = '';
+
+                if (!$is_in_tinymce and ( !empty($myrow->creator) or ! empty($myrow->publisher))) {
+                    $resultObj->extradescription .= '<br><small>';
+                    if ($myrow->creator == $myrow->publisher) {
+                        $resultObj->extradescription .= $GLOBALS['langcreator'] . ": " . q($myrow->creator);
+                    } else {
+                        $emit = false;
+                        if (!empty($myrow->creator)) {
+                            $resultObj->extradescription .= $GLOBALS['langcreator'] . ": " . q($myrow->creator);
+                            $emit = true;
+                        }
+                        if (!empty($myrow->publisher)) {
+                            $resultObj->extradescription .= ($emit ? ', ' : '') . $GLOBALS['langpublisher'] . ": " . q($myrow->publisher);
+                        }
+                    }
+                    $resultObj->extradescription .= "</small>";
+                }
+                $uncatresults[] = $resultObj;
+            }
+        }
     }
-    return '<a href="' . $base_url . 'openDir=' . $path .
-        '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
-        '">' . $label . $indicator . '</a>';
+
+    return ($uncatresults);
 }

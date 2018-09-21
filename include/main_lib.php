@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.6.3');
+define('ECLASS_VERSION', '3.6.4');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -105,6 +105,7 @@ define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
+define('MODULE_ID_COURSEPREREQUISITE', 49);
 
 // user modules
 
@@ -131,6 +132,7 @@ define('SETTING_GROUP_STUDENT_DESCRIPTION', 13);
 define('SETTING_COURSE_USER_REQUESTS_DISABLE', 20);
 define('SETTING_COURSE_FORUM_NOTIFICATIONS', 21);
 define('SETTING_DOCUMENTS_PUBLIC_WRITE', 22);
+define('SETTING_OFFLINE_COURSE', 23);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -151,6 +153,11 @@ define('ATTEMPT_CANCELED', 4);
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);
 define('LISTBOX_FILL', 2); //
+
+// questionnaire (aka poll) types
+define('POLL_NORMAL', 0);
+define('POLL_COLLES', 1);
+define('POLL_ATTLS', 2);
 
 // gradebook activity type
 define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
@@ -299,23 +306,36 @@ function load_js($file, $init='') {
             $file = 'waypoints/shortcuts/infinite.min.js';
         } elseif ($file == 'select2') {
             $head_content .= css_link('select2-4.0.3/css/select2.min.css') .
-                css_link('select2-4.0.3/css/select2-bootstrap.min.css') .
-                js_link('select2-4.0.3/js/select2.full.min.js');
+            css_link('select2-4.0.3/css/select2-bootstrap.min.css') .
+            js_link('select2-4.0.3/js/select2.full.min.js');
             $file = "select2-4.0.3/js/i18n/$language.js";
+        } elseif ($file == 'bootstrap-calendar') {
+            $file = 'bootstrap-calendar-master/js/calendar.js';
+            if ($language != 'en') {
+                switch ($language) {
+                    case 'el': $head_content .= js_link('bootstrap-calendar-master/js/language/el-GR.js'); break;
+                    case 'fr': $head_content .= js_link('bootstrap-calendar-master/js/language/fr-FR.js'); break;
+                    case 'de': $head_content .= js_link('bootstrap-calendar-master/js/language/de-DE.js'); break;
+                    case 'it': $head_content .= js_link('bootstrap-calendar-master/js/language/it-IT.js'); break;
+                    case 'es': $head_content .= js_link('bootstrap-calendar-master/js/language/es-ES.js'); break;
+                    default: break;
+                }
+            }
+            $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css');
         } elseif ($file == 'bootstrap-datetimepicker') {
             $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
             js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
             if ($language != 'en') {
                 $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
-            } else {             
-                $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";            
+            } else {
+                $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";
             }
         } elseif ($file == 'bootstrap-timepicker') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
             $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
         } elseif ($file == 'bootstrap-datepicker') {
             $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
-                js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
+            js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
             $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.min.js";
         } elseif ($file == 'bootstrap-validator') {
             $file = "bootstrap-validator/validator.js";
@@ -2076,7 +2096,7 @@ function openDocsPicker(field_name, url, type, win) {
         height: 600,
         resizable: 'yes',
         inline: 'yes',
-        close_previous: 'no',        
+        close_previous: 'no',
         popup_css: false,
         buttons: [{text: 'Cancel', onclick: 'close'}]
     }, {

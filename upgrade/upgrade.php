@@ -3761,7 +3761,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             CHANGE external_users external_users TEXT DEFAULT NULL');
     }
 
-
     // upgrade queries for version 3.7
     if (version_compare($oldversion, '3,7', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.7'));
@@ -3770,8 +3769,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `wiki_properties`
                 ADD `visible` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1'");
         }
-    }
+            
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_prerequisite` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `course_id` int(11) not null,
+                `prerequisite_course` int(11) not null,
+                PRIMARY KEY (`id`)
+            ) $tbl_options");
 
+    }
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);

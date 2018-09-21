@@ -84,6 +84,14 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     $res = Database::get()->querySingle("SELECT id FROM user WHERE id = ?d AND password NOT IN ('" . implode("', '", $auth_ids) . "')", $userUID);
     $error_messages = array();
     if ($valid and $res) {
+        $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => $urlServer,
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
+
         if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                 count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
             $hasher = new PasswordHash(8, false);
@@ -91,61 +99,41 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                                       WHERE id = ?d",
                     $hasher->HashPassword($_POST['newpass']), $userUID);
             if ($q1->affectedRows > 0) {
-                $tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
+
                 $tool_content = "<div class='alert alert-success'><p>$langAccountResetSuccess1</p></div>
                                                        $homelink";
                 $change_ok = true;
             }
         } elseif (count($error_messages)) {
-            $tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
-            $tool_content .= "<div class='alert alert-warning'><ul><li>" .
-                    implode("</li>\n<li>", $error_messages) .
-                    "</li></ul></div>";
+            $tool_content .= "<div class='alert alert-warning'>" .
+                                implode("\n", $error_messages) .
+                            "</div>";
         }
         if (!$change_ok) {
-            $tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
             $tool_content .= "
-            <div class='form-wrapper'>
-                <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-                <input type='hidden' name='u' value='$userUID'>
-                <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
-                <fieldset>
-                <legend>$langPassword</legend>
-                <table class='table-default'>
-                <tr>
-                   <th>$langNewPass1</th>
-                   <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
-                </tr>
-                <tr>
-                   <th>$langNewPass2</th>
-                   <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
-                </tr>
-                <tr>
-                   <th>&nbsp;</th>
-                   <td><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td>
-                </tr>
-                </table>
-                </fieldset>
-                </form>
-            </div>";
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
+                        <input type='hidden' name='u' value='$userUID'>
+                        <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>$langNewPass1</label>
+                            <div class='col-sm-10'>
+                                <input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>$langNewPass2</label>
+                            <div class='col-sm-10'>
+                                <input type='password' size='40' name='newpass1' value='' autocomplete='off'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-offset-2 col-sm-10'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+                            </div>
+                        </div>
+                    </form>
+                </div>";
         }
     } else {
         $tool_content .= action_bar(array(
@@ -275,7 +263,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     $tool_content .= "
 <div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-            <div class='row'><div class='col-sm-8'><legend>$langUserData</legend></div></div>
+            <div class='row'><div class='col-sm-8'><h4>$langUserData</h4></div></div>
             <div class='form-group'>
                 <div class='col-sm-8'>
                     <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='$lang_username'>

@@ -206,7 +206,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         $numOfAnnouncements = sizeof($announceArr);
         for ($i = 0; $i < $numOfAnnouncements; $i++) {
             $aid = $announceArr[$i]->id;
-            if (!is_null($announceArr[$i]->begin) && ($announceArr[$i]->date <= $announceArr[$i]->begin) ) {
+            if (!is_null($announceArr[$i]->begin) && ($announceArr[$i]->date <= $announceArr[$i]->begin)) {
                 $ann_date = $announceArr[$i]->begin;
             } else {
                 $ann_date = $announceArr[$i]->date;
@@ -215,19 +215,25 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     <li>
                     <div><a class='announcement-title' href='main/system_announcements.php?an_id=$aid'>" . q($announceArr[$i]->title) . "</a></div>
                     <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($ann_date)) . " -</span>
-                    <div class='announcement-main' data-id='$aid'>".$announceArr[$i]->body."</div></li>";
+                    <div class='announcement-main' data-id='$aid'>" . $announceArr[$i]->body . "</div></li>";
         }
     }
 
-        $tool_content .= "<div class='row'>
+    $tool_content .= "<div class='row'>
                             <div class='col-md-8'>";
-    if(get_config('defaultHomepageIntro', $langInfoAbout)) {
-        $tool_content .= "<div class='panel'>
-            <div class='panel-body'>" .
-            get_config('defaultHomepageIntro', $langInfoAbout)
-            . "</div>
-        </div>";
+
+    if (get_config('homepage_intro')) {
+        $info_message = get_config('homepage_intro');
+    } elseif (get_config('defaultHomepageIntro')) {
+        $info_message = get_config('defaultHomepageIntro');
+    } else {
+        $info_message = $langInfoAbout;
     }
+
+    $tool_content .= "<div class='panel'>
+        <div class='panel-body'>" . $info_message . "</div>
+    </div>";
+
 
         // display admin announcements
         if(!empty($ann_content)) {

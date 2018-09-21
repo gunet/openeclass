@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_current_course = TRUE;
@@ -37,7 +37,7 @@ load_js('validation.js');
 load_js('select2');
 
 $head_content .= "<script type='text/javascript'>
-    $(document).ready(function () {                       
+    $(document).ready(function () {
         $('#select-chatusers').select2();
         $('#selectAll').click(function(e) {
             e.preventDefault();
@@ -60,10 +60,10 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 if ($is_editor) {
     if (isset($_GET['visible'])) {
         if ($_GET['visible'] == 1) {
-            $status = 'active';            
+            $status = 'active';
         } else {
             $status = 'inactive';
-        }                
+        }
         $conf_id = $_GET['id'];
         Database::get()->querySingle("UPDATE conference SET status = ?s WHERE conf_id =?d",  $status, $conf_id);
     }
@@ -79,7 +79,7 @@ if ($is_editor) {
                 'level' => 'primary-label')));
 
         $tool_content .= "<div class='form-wrapper'>";
-        $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+        $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<fieldset>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>";
@@ -92,7 +92,7 @@ if ($is_editor) {
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
-        $tool_content .= "</div>";                
+        $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
@@ -102,7 +102,7 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
-                        
+
         $tool_content .= "<div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
             <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
@@ -147,10 +147,10 @@ if ($is_editor) {
     } else if (isset($_POST['submit'])) {
         $chat_user_id = $chat_group_id = 0; // default value
         $title = $_POST['title'];
-        $description = $_POST['description'];                
+        $description = $_POST['description'];
         if (isset($_POST['chat_users']) and count($_POST['chat_users']) > 0) {
             $chat_user_id = '';
-            foreach ($_POST['chat_users'] as $chatusers) {         
+            foreach ($_POST['chat_users'] as $chatusers) {
                 $chat_user_id .= "$chatusers" . ",";
             }
             $chat_user_id = mb_substr($chat_user_id, 0, -1);
@@ -164,10 +164,10 @@ if ($is_editor) {
             $conf_id = $_POST['conference_id'];
             Database::get()->querySingle("UPDATE conference SET conf_title= ?s,conf_description = ?s, status = ?s, user_id = ?s, group_id = ?s
                                             WHERE conf_id =?d", $title, $description, $status, $chat_user_id, $chat_group_id, $conf_id);
-        } else {                
-            Database::get()->querySingle("INSERT INTO conference (course_id, conf_title, conf_description, status, user_id, group_id) 
+        } else {
+            Database::get()->querySingle("INSERT INTO conference (course_id, conf_title, conf_description, status, user_id, group_id)
                                                 VALUES (?d, ?s, ?s, ?s, ?s, ?s)", $course_id, $title, $description, $status, $chat_user_id, $chat_group_id);
-        }    
+        }
         // Display result message
         Session::Messages($langAttendanceEdit,"alert-success");
         redirect_to_home_page("modules/chat/index.php");
@@ -180,34 +180,34 @@ if ($is_editor) {
             'url' => "index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-        
+
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
         $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
 
         $tool_content .= "<div class='form-wrapper'>";
-        $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-        $tool_content .= "<fieldset>";        
+        $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
+        $tool_content .= "<fieldset>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>";
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
-        $tool_content .= "</div>";        
-        $tool_content .= "</div>";        
-        
+        $tool_content .= "</div>";
+        $tool_content .= "</div>";
+
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescription:</label>";
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
-                                
+
         $tool_content .= "<div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <select class='form-control' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
-        
+
         if ($conf->user_id > 0) { // existing chat users (if exist)
-            $existing_chat_users = explode(',', $conf->user_id);        
+            $existing_chat_users = explode(',', $conf->user_id);
             foreach ($existing_chat_users as $ecu) {
                 $chat_users = Database::get()->querySingle("SELECT id, CONCAT(surname, ' ', givenname) AS name, username
                                                         FROM user WHERE id = $ecu
@@ -226,21 +226,21 @@ if ($is_editor) {
             $extra_sql = "";
             $tool_content .= "<option value='0' selected><h2>$langAllUsers</h2></option>";
         }
-        // remaining chat users 
+        // remaining chat users
         $other_chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) AS name, u.username
                                                     FROM course_user cu
                                                         JOIN user u ON cu.user_id=u.id
                                                     WHERE cu.course_id = ?d $extra_sql
-                                                    ORDER BY u.surname, u.givenname", $course_id);        
-                
-        foreach($other_chat_users as $cu) {            
-            $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->username) . ")</option>";            
+                                                    ORDER BY u.surname, u.givenname", $course_id);
+
+        foreach($other_chat_users as $cu) {
+            $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->username) . ")</option>";
         }
         $tool_content .= "</select>
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>";
-        
+
         $checked_status = ($conf->status == "active") ? 'checked' : '';
         $tool_content .= "<div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
@@ -250,8 +250,8 @@ if ($is_editor) {
                     </label>
                 </div>
             </div>
-        </div>";                        
-     
+        </div>";
+
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>";
         $tool_content .= "</fieldset></form></div>";
@@ -260,13 +260,13 @@ if ($is_editor) {
                     var chkValidator  = new Validator("confForm");
                     chkValidator.addValidation("title","req","'.$langChatTitleError.'");
                 //]]></script>';
-        }                    
+        }
 }
 if ($display == TRUE) {
     if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langAdd,
-                'url' => "index.php?add_conference",
+                'url' => "index.php?add_conference&amp;course_code=$course_code",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success')));
@@ -285,7 +285,7 @@ if ($display == TRUE) {
                     <th class = 'text-center' width='200'>$langStartDate</th>";
 
         if($is_editor){
-            $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>"; 
+            $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>";
         }
         $tool_content .="</tr></thead>";
         foreach ($q as $conf) {
@@ -305,7 +305,7 @@ if ($display == TRUE) {
                 $tool_content .= "<td class='option-btn-cell'>".
                     action_button(array(
                         array('title' => $langEdit,
-                              'url' => "$_SERVER[SCRIPT_NAME]?edit_conference=$conf->conf_id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?edit_conference=$conf->conf_id&amp;course=$course_code",
                               'icon' => 'fa-edit'),
                         array('title' => ($conf->status=='active') ? $langViewHide : $langViewShow,
                               'url' => "?course=$course_code&amp;id=$conf->conf_id" . (($conf->status == 'active') ? "&amp;visible=0" : "&amp;visible=1"),
@@ -325,5 +325,5 @@ if ($display == TRUE) {
          $tool_content .= "<div class='alert alert-warning'>$langNoChatAvailable</div>";
     }
 }
-   
+
 draw($tool_content, 2, null, $head_content);

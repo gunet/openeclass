@@ -66,18 +66,16 @@
                 <table id='ann_table' class='table-default'>
                     <thead>
                         <tr class='list-header'>
-                            <th>{{ trans('langID') }}</th>
                             <th>{{ trans('langAnnouncement') }}</th>
                             <th>{{ trans('langDate') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($result as $ann)
+                        @foreach ($announcements as $ann)
                             <tr>
-                                <td>{{ $ann->id }}</td>
                                 <td><div class='table_td'>
                                         <div class='table_td_header clearfix'>
-                                            <a href="announcement_{{ $ann->id }}.html"> {!! standard_text_escape($ann->title) !!}</a>
+                                            <a href="announcement/{{ $ann->id }}.html"> {!! standard_text_escape($ann->title) !!}</a>
                                         </div>
                                         <div class='table_td_body' data-id='{{$ann->id}}'>{!! standard_text_escape($ann->content) !!} </div>
                                     </div>

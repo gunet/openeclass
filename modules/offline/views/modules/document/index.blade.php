@@ -21,9 +21,6 @@
                         @endif
                         <div>
                             {!! make_clickable_path($curDirPath) !!}
-                            @if ($downloadPath)
-                               &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
-                            @endif
                         </div>
                         @if ($curDirName and $dirComment)
                             <div>{{ $dirComment }}</div>
@@ -38,14 +35,10 @@
                 <div class='table-responsive'>
                     <table class='table-default'>
                         <tr class='list-header'>
-                            <th class='text-left' width='60'>{!! headlink(trans('langType'), 'type') !!}</th>
-                            <th class='text-left'>{!! headlink(trans('langName'), 'name') !!}</th>
-
+                            <th class='text-left' width='60'>{!! trans('langType') !!}</th>
+                            <th class='text-left'>{!! trans('langName') !!}</th>
                             <th class='text-left'>{{ trans('langSize') }}</th>
-                            <th class='text-left'>{!! headlink(trans('langDate'), 'date') !!}</th>
-                            @unless ($is_in_tinymce)
-                                <th class='text-center'>{!! icon('fa-gears', trans('langCommands')) !!}</th>
-                            @endif
+                            <th class='text-left'>{!! trans('langDate') !!}</th>
                         </tr>
 
                         @forelse ($fileInfo as $file)
@@ -58,7 +51,6 @@
                                             {{ $file->updated_message }}
                                         </span>
                                     @endif
-                                    <input type='hidden' value='{{ $file->url }}'>
                                     @if ($file->is_dir)
                                         <a href='{{ $file->url }}'>{{ $file->title }}</a>
                                     @else
@@ -106,15 +98,10 @@
                                     <td>{{ $file->size }}</td>
                                     <td title='{{ $file->date_time }}' class='center'>{{ $file->date }}</td>
                                 @endif
-                                @unless ($is_in_tinymce)
-                                    <td class='{{ $can_upload? 'option-btn-cell': 'text-center'}}'>
-                                        {!! $file->action_button !!}
-                                    </td>
-                                @endif
                             </tr>
                         @empty
                             <tr>
-                                <td colspan='5'>
+                                <td colspan='4'>
                                     <p class='not_visible text-center'> - {{ trans('langNoDocuments') }} - </p>
                                 </td>
                             </tr>

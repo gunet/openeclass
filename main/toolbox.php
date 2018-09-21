@@ -43,13 +43,14 @@ $t->set_var('URL_PATH', $urlAppend);
 $eclass_stud_reg = get_config('eclass_stud_reg');
 if (get_config('user_registration') and $eclass_stud_reg) {
     if ($eclass_stud_reg == 2) {
+        $t->set_var('registerModalTitle', $langRegister);
         $t->set_var('registrationUrl', $urlAppend . 'modules/auth/newuser.php');
         $t->set_var('FIELD_GIVENNAME', 'givenname_form');
         $t->set_var('FIELD_SURNAME', 'surname_form');
         $t->set_var('FIELD_USERNAME', 'uname');
         $t->set_var('FIELD_EMAIL', 'email');
     } else {
-        $langRegister = $langUserAccountInfo1;
+        $t->set_var('registerModalTitle', $langUserAccountInfo1);
         $department = Database::get()->querySingle('SELECT id FROM hierarchy
             WHERE allow_user = 1 ORDER BY lft LIMIT 1')->id;
         $t->set_var('registrationUrl', $urlAppend . 'modules/auth/formuser.php?auth=');

@@ -182,7 +182,8 @@ if ($is_editor) {
                           'url' => "tc_attendance.php?course=$course_code",
                           'icon' => 'fa-group',
                           'level' => 'primary-label',
-                          'link-attrs' => "id=popupattendance1"),
+                          'link-attrs' => "id=popupattendance1",
+                          'show' => is_active_tc_server($tc_type, $course_id)),
                 array('title' => $langParticipate,
                           'url' => "tcuserduration.php?course=$course_code",
                           'icon' => 'fa-clock-o',
@@ -222,7 +223,12 @@ elseif(isset($_POST['update_bbb_session'])) {
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], implode(',', $_POST['external_users']), $record, $_POST['sessionUsers'], true, getDirectReference($_POST['id']));
+    if (isset($_POST['external_users'])) {
+        $ext_users = implode(',', $_POST['external_users']);
+    } else {
+        $ext_users = null;
+    }
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $ext_users, $record, $_POST['sessionUsers'], true, getDirectReference($_POST['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }

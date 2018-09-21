@@ -71,10 +71,11 @@ function does_exists($id, $type) {
                                 WHERE id = ?d", $id);
             break;
     }
-    if (!$sql)
+    if (!$sql) {
         return 0;
-    else
+    } else {
         return 1;
+    }
 }
 
 /*
@@ -195,7 +196,6 @@ function add_topic_link($pagenr, $total_reply_pages) {
  * @global type $langNote
  * @global type $langLinkUnsubscribe
  * @global type $langHere
- * @global type $charset
  * @global type $langMailBody
  * @global type $langMailSubject
  * @param type $forum_id
@@ -209,7 +209,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     global $logo, $langNewForumNotify, $course_code, $course_id, $langForumFrom,
         $uid, $langBodyForumNotify, $langInForums, $urlServer, $langdate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
-        $langLinkUnsubscribe, $langHere, $charset, $langMailBody, $langMailSubject;
+        $langLinkUnsubscribe, $langHere, $langMailBody, $langMailSubject;
 
     $subject_notify = "$logo - $langNewForumNotify";
     $category_id = forum_category($forum_id);

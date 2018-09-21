@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014 Greek Universities Network - GUnet
+ * Copyright 2003-2018 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -23,6 +23,7 @@
  * Open eClass 3.x standard stuff
  */
 $require_current_course = true;
+$require_login = true;
 $require_help = true;
 $helpTopic = 'forum';
 require_once '../../include/baseTheme.php';
@@ -106,7 +107,7 @@ if (isset($_POST['submit'])) {
     triggerForumGame($course_id, $uid, ForumEvent::NEWPOST);
     triggerTopicGame($course_id, $uid, ForumTopicEvent::NEWPOST, $topic);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $this_post);
-    $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 
+    $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
                         INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
                         INNER JOIN forum ON forum.id = forum_topic.forum_id
                         WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $uid, $course_id);
@@ -119,7 +120,7 @@ if (isset($_POST['submit'])) {
     $result = Database::get()->query("UPDATE forum SET num_posts = num_posts+1,
                     last_post_id = ?d
 		WHERE id = ?d
-                    AND course_id = ?d", $this_post, $forum_id, $course_id);    
+                    AND course_id = ?d", $this_post, $forum_id, $course_id);
 
     $subject = Database::get()->querySingle('SELECT title FROM forum_topic WHERE id = ?d', $topic)->title;
     notify_users($forum_id, $forum_name, $topic, $subject, $message, $time);
@@ -142,17 +143,17 @@ if (isset($_POST['submit'])) {
     if (!isset($reply)) {
         $reply = '';
     }
-    
+
     if (isset($_GET['parent_post'])) {
         $parent_post_text = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $parent_post)->post_text;
         $tool_content .= "<blockquote><p><h5>$parent_post_text</h5></p></blockquote>";
     }
-    
+
     $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
             <input type='hidden' name='parent_post' value='$parent_post'>
             <fieldset>
-            
+
             <div class='form-group'>
               <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
               <div class='col-sm-10'>
@@ -164,7 +165,7 @@ if (isset($_POST['submit'])) {
                     <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                     <a class='btn btn-default' href='viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id'>$langCancel</a>
                 </div>
-            </div>              
+            </div>
         </fieldset>
 	</form>
     </div>";

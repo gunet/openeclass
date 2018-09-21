@@ -73,15 +73,12 @@ if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SER
     }
 }
 
-if(!empty($langLanguageCode)){
-    load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
-}
-load_js('bootstrap-calendar-master/js/calendar.js');
+load_js('bootstrap-calendar');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('sortable/Sortable.min.js');
 
 ModalBoxHelper::loadModalBox();
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
+$head_content .= "
 <script type='text/javascript'>
     $(document).ready(function() {";
 
@@ -688,8 +685,9 @@ if (count($categoryItems)) {
 } else {
     $categoryDisplay = '';
 }
-// offline course button
-//<li class='access pull-right'><a href='{$urlAppend}modules/offline/index.php?course={$course_code}'><span class='fa fa-fw' data-toggle='tooltip' data-placement='top' title='Offline'></span><span>D</span></a></li>
+
+$offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
+
 $tool_content .= "
 $action_bar
 <div class='row margin-top-thin margin-bottom-fat'>
@@ -707,7 +705,13 @@ $action_bar
 
                         ($uid? ("<li class='access pull-right'><a href='{$urlAppend}modules/user/" .
                                 ($is_course_admin? '': 'userslist.php') .
-                                "?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>"): '') . "
+                                "?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>"): '') .
+                        ($offline_course?
+                                "<li class='access pull-right'>
+                                    <a href='{$urlAppend}modules/offline/index.php?course={$course_code}'>
+                                        <span class='fa fa-download fa-fw' data-toggle='tooltip' data-placement='top' title='$langDownloadCourse'></span>
+                                    </a>
+                                </li>" : '') . "
                     </ul>
                 </div>
                 $left_column

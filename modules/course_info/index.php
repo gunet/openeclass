@@ -362,6 +362,7 @@ if (isset($_POST['submit'])) {
                       'prof_names' => $_POST['titulary'],
                       'lang' => $session->language));
 
+            // update course settings
             if (isset($_POST['s_radio'])) {
                 setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
             }
@@ -377,6 +378,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['ar_radio'])) {
                 setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
             }
+            if (isset($_POST['enable_offline_course'])) {
+                setting_set(SETTING_OFFLINE_COURSE, $_POST['enable_offline_course'], $course_id);
+            }
             if (isset($_POST['disable_log_course_user_requests'])) {
                 setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
             }
@@ -386,7 +390,7 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['enable_docs_public_write'])) {
                 setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['enable_docs_public_write'], $course_id);
             }
-
+            //-------------------------
             Session::Messages($langModifDone,'alert-success');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
@@ -539,6 +543,20 @@ if (isset($_POST['submit'])) {
     } else {
         $checkAbuseReportDis = 'checked ';
         $checkAbuseReportEn = '';
+    }
+    // OFFLINE COURSE
+    if (!get_config('offline_course')) {
+        $log_offline_course_inactive = ' disabled';
+    } else {
+        $log_offline_course_inactive = '';
+    }
+
+    if (setting_get(SETTING_OFFLINE_COURSE, $course_id)) {
+        $log_offline_course_enable = 'checked';
+        $log_offline_course_disable = '';
+    } else {
+        $log_offline_course_enable = '';
+        $log_offline_course_disable = 'checked';
     }
     // LOG COURSE USER REQUESTS
     if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
@@ -723,6 +741,24 @@ if (isset($_POST['submit'])) {
                 <label for='Options' class='col-sm-2 control-label'>$langLanguage:</label>
                 <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"', $language) . "</div>
         </div>
+
+        <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langCourseOfflineSettings:</label>
+            <div class='col-sm-10'>
+                <div class='radio'>
+                  <label>
+                        <input type='radio' value='1' name='enable_offline_course' $log_offline_course_enable $log_offline_course_inactive> $langActivate
+                        <span class='help-block'><small>$langCourseOfflineLegend</small></span>
+                  </label>
+                </div>
+                <div class='radio'>
+                  <label>
+                        <input type='radio' value='0' name='enable_offline_course' $log_offline_course_disable $log_offline_course_inactive> $langDeactivate
+                  </label>
+                </div>
+            </div>
+        </div>
+
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseUserRequests:</label>
                 <div class='col-sm-10'>

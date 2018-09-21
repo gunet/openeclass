@@ -1925,6 +1925,12 @@ $db->query("CREATE TABLE `certified_users` (
   `template_id` INT(11),
   PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `course_prerequisite` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) not null,
+  `prerequisite_course` int(11) not null,
+  PRIMARY KEY (`id`)) $tbl_options");
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();

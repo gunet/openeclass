@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -301,7 +301,7 @@ if ($u) {
                           <img src='$themeimg/$lcProvider.png' alt='$langLoginVia'><br>$providerName<br>
                           <button type='submit' name='delete_ext_uid' value='$ext_uid_item->auth_id'>$langProviderDeleteConnection</button>
                         </div>";
-                
+
             }
             $tool_content .= "</div></div></div>";
         }
@@ -318,9 +318,9 @@ if ($u) {
         </fieldset>
         ". generate_csrf_token_form_field() ."
         </form>
-        </div>";        
-        $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status
-                            FROM course AS a                            
+        </div>";
+        $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status, b.editor
+                            FROM course AS a
                             LEFT JOIN course_user AS b ON a.id = b.course_id
                             WHERE b.user_id = ?s ORDER BY b.status", $u);
         // user is registered to courses
@@ -352,7 +352,11 @@ if ($u) {
                     $tool_content .= "</td><td align='center'>---</td></tr>\n";
                 } else {
                     if ($logs->status == USER_STUDENT) {
-                        $tool_content .= $langStudent;
+                        if ($logs->editor == 1) {
+                            $tool_content .= $langEditor;
+                        } else {
+                            $tool_content .= $langStudent;
+                        }
                     } else {
                         $tool_content .= $langVisitor;
                     }
@@ -378,9 +382,8 @@ if ($u) {
         $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
         $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
         if (isset($_POST['user_date_expires_at'])) {
-            if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) )
-	        {
-		        Session::Messages($langUserExpiresFieldEmpty, 'alert-warning');
+            if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) ) {
+                Session::Messages($langUserExpiresFieldEmpty, 'alert-warning');
                 redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
             }
             $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
@@ -396,10 +399,10 @@ if ($u) {
                                                  username = ?s", $u, $username)) {
             $user_exist = TRUE;
         }
-        
+
         //check for validation errors in custom profile fields
         $cpf_check = cpf_validate_format();
-        
+
         // check if there are empty fields
         if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
             Session::Messages($langFieldsMissing, 'alert-danger');

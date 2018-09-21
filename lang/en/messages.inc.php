@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2018-03-29 10:11:35
+// Generated 2018-05-29 15:28:38
 
 $langYes = "Yes";
 $langNo = "No";
@@ -15,7 +15,7 @@ $langUptime = "Platform is operating since";
 $langTotalHits = "Total hits";
 $langLast30daysLogins = "Total logins on the platform during the last 30 days";
 $langTotalCourses = "Number of courses";
-$langInfo = "Platform Identity";
+$langInfo = "About";
 $langAboutCourses = "The platform supports as a whole";
 $langAboutUsers = "The platform has";
 $langOperation = "Operation";
@@ -82,7 +82,7 @@ $langAdminProf = "".$langTeachers."administration";
 $langAdminCours = "Course Administration";
 $langGenAdmin = "Other Tools";
 $langBackAdmin = "Back to admin page";
-$langPlatformIdentity = "Platform Identity";
+$langPlatformIdentity = "About";
 $langStoixeia = "Platform Information";
 $langThereAre = "There are";
 $langThereIs = "There is";
@@ -181,14 +181,14 @@ $langCourseDelConfirm = "Course Deletion Confirmation";
 $langCourseDelConfirm2 = "are you sure you want to delete course with code";
 $langNoticeDel = "NOTE: Course deletion will also unregister ".$langsOfStudentss." from this course, along with course faculty correspondence and course material.";
 $langCourseEdit = "Course Edit";
-$langCourseInfo = "Course Information";
-$langQuota = "Course Quota Boundaries";
+$langCourseInfo = "Settings";
+$langQuota = "Course Quota";
 $langCourseStatus = "Course Status";
 $langCurrentStatus = "Current state";
 $langListUsers = "User List";
 $langTakeBackup = "Backup";
 $langStatsCourse = "Course Statistics";
-$langCourseEditSuccess = "Course information modified with success!";
+$langCourseEditSuccess = "Course settings updated";
 $langCourseInfoEdit = "Modify Course Information";
 $langBackCourse = "Back to course homepage";
 $langOpenProfessorRequests = "$langTeachers Open Requests";
@@ -277,7 +277,7 @@ $langNoUserList = "No listed results";
 $langContactAdmin = "Send email to platform administrator";
 $langActivateAccount = "Please activate my account";
 $langLessonCode = "Course password";
-$langConfirmDelete = "Confirm delete of ";
+$langConfirmDelete = "Delete confirmation";
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
 $langConfirmDeleteQuestion2 = "from the course with id";
 $langTryDeleteAdmin = "You have tried to delete the user with user id = 1 (Admin)!";
@@ -314,7 +314,7 @@ $langDaySing = 'day';
 $langDayPlur = 'days';
 $langCleanupInfo = 'This operation will remove old files from the "temp", "archive", "garbage", and "tmpUnzipping" directories. Are you sure?';
 $langCleanup = 'Clean-up';
-$langModify = "Modification";
+$langModify = "Edit";
 $langAddModify = "Add / Modify";
 $langAddIntro = "Add introductory text";
 $langBackList = "Return to the list";
@@ -334,7 +334,7 @@ $langhour = 'hour';
 $langhours = 'hours';
 $langDateNow = "Today:";
 $langCalendar = "Calendar";
-$langAddEvent = "Add an event";
+$langAddEvent = "Add event";
 $langDetail = "Details";
 $langChooseDate = "Choose Date";
 $langOldToNew = "Oldest first";
@@ -374,7 +374,7 @@ $langEmailSent = "and emailed to registered ".$langsStudents."";
 $langEmailOption = "Send announcement (via email) to registered ".$langsStudents."";
 $langUp = "Up";
 $langDown = "Down";
-$langNoAnnounce = "No existing announcements";
+$langNoAnnounce = "There are no announcements";
 $langSureToDelAnnounce = "Are you sure you want to delete this announcement";
 $langSureToDelAnnounceAll = "Are you sure you want to delete all the announcements";
 $langAnn = "Announced at";
@@ -457,11 +457,11 @@ $langOneRegistered = "registered";
 $langIdentity = "About";
 $langCourseS = "course";
 $langCourseIden = "Course Info";
-$langBackupCourse = "Archive this course";
-$langModifDone = "The information has been modified";
+$langBackupCourse = "Course Archive";
+$langModifDone = "Course settings updated.";
 $langHome = "Back to Home Page";
 $langCode = "$langCourse code";
-$langDelCourse = "Course deletion";
+$langDelCourse = "Delete Course";
 $langDelUsers = "Unregister all users";
 $langCourseTitle = "Title";
 $langDescription = "Description";
@@ -469,7 +469,7 @@ $langConfidentiality = "Access Type";
 $langPrivOpen = "Private access, registration open";
 $langForbidden = "Action not allowed";
 $langConfTip = "Select the course type of access.";
-$langOptPassword = "Optional Password: ";
+$langOptPassword = "Optional password";
 $langNoCourseTitle = "You didn't type course title";
 $langModifGroups = "Groups";
 $langTheCourse = "Course";
@@ -480,7 +480,7 @@ $langTipLang = "Choose the course language.";
 $langTipLang2 = "Choose the platform (navigation) language.";
 $langConfirmDel = "Delete Confirmation";
 $langUserDel = "You are about to unregister all course users (they will not be deleted from other courses).<p>Do you really want to proceed?";
-$langRefreshCourse = "Refresh Course";
+$langRefreshCourse = "Course Refresh";
 $langRefreshInfo = "If you want to create a course for a new academic year, you can delete the old data courses.";
 $langRefreshInfo_A = "Choose the appropriate actions";
 $langUserDelCourse = "Delete users from course";
@@ -518,7 +518,7 @@ must have a valid account and be logged-in to the system. Please
 visit the <a href='%s'>login page</a>.";
 $langIntroMessage = "Compose your message";
 $langHeaderMessage = "Message from $langsStudent";
-$langDescrInfo = 'Brief course description (displayed on courses list)';
+$langDescrInfo = 'Brief course description';
 $langFieldsRequ = "All fields required";
 $langFieldsOptional = "Optional fields";
 $langFieldsOptionalNote = "note: you can change anything you wish later";
@@ -534,7 +534,7 @@ $langErrorDir = "Unable to create course subdirectory. The course was not create
 $langSubsystems = "Select the desired enabled modules";
 $langLanguageTip = "Select the language that will be used in the course's pages";
 $langAccess = "Course Access Type:";
-$langAvailableTypes = "Available Access Types";
+$langAvailableTypes = "Course access";
 $langModules = "Modules:";
 $langTestForum = "General forum";
 $langDelAdmin = "Discussion on all topics concerning this course";
@@ -552,8 +552,8 @@ $langModifyInfo = "Course Administration";
 $langDropBox = "Messages";
 $langLearnPath = "Learning Path";
 $langWiki = "Wiki";
-$langToolManagement = "Tool Management";
-$langUsage = "Usage Statistics";
+$langToolManagement = "Modules";
+$langUsage = "Statistics";
 $langVideoText = "You can upload any audio and video file type (.mov, .rm, .mpeg...), as long as your ".$langsStudents." have the corresponding plug-in to read them";
 $langGoogle = "Quick and powerful search engine";
 $langIntroductionText = "This is the introduction text of your course. To replace it by your own text, click below on <b>modify</b>.";
@@ -840,7 +840,7 @@ $langGroupManagement = "Group management";
 $langNewGroupCreateData = "Group(s) Data";
 $langNewGroupCreate = "Create new group(s)";
 $langNewGroups = "Number of new groups";
-$langNewGroupMembers = "Number of participants ";
+$langNewGroupMembers = "Number of participants";
 $langMax = "Max.";
 $langPlaces = "seats by groups (optional)";
 $langGroupPlacesThis = "seats (optional)";
@@ -877,8 +877,7 @@ $langGroupSettingsModified = "Group settings modified";
 $langNameSurname = "Name Surname";
 $langEmail = "Email";
 $langGroupNoTutor = "none";
-$langGroupNone = "none";
-$langGroupNoneMasc = "none";
+$langGroupNoneMasc = "There are no $langsStudents in group.";
 $langAddTutors = "Admin users list";
 $langForumGroup = "Forum of the group";
 $langMyGroup = "my group";
@@ -1258,8 +1257,8 @@ $langYourBestScore = "Your best performance";
 $lang_enroll = "Registration";
 $langimportLearningPath = "Import a learning path";
 $langScormErrorExport = "Error exporting SCORM package";
-$langActiveTools = "Active tools";
-$langAdministrationTools = "Administration tools";
+$langActiveTools = "Active modules";
+$langAdministrationTools = "$langCourse administration";
 $langAdministratorTools = "Administrator tools";
 $langCourseTools = "Course Tools";
 $langLinks = "Links";
@@ -1370,7 +1369,7 @@ $titreBloc = array(
     'Textbooks',
     'Additional info');
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
-$langMyPersoAnnouncements = "MY ANNOUNCEMENTS";
+$langMyPersoAnnouncements = "Latest announcements";
 $langAssignment = "Assignment";
 $langDeadline = "Deadline";
 $langNoEventsExist = "No events exist";
@@ -1397,7 +1396,7 @@ $langNoForums = "No Forums available";
 $langNewTopic = "New topic";
 $langTopicData = "Topic elements";
 $langTopicAnswer = "Topic Answer";
-$langGroupDocumentsLink = "Documents of the group ";
+$langGroupDocumentsLink = "Group Documents";
 $langNotify = "Notification via email if replies are posted";
 $langNotifyActions = "Notifications";
 $langGoToPage = "Go to page";
@@ -1412,7 +1411,6 @@ $langBodyForumNotify = "A new forum topic has been posted";
 $langBodyTopicNotify = "A new reply has been posted";
 $langBodyCatNotify = "A new forum has been added";
 $langOfForum = "of forum";
-$langSubjects = "Topics";
 $langPosts = "Posts";
 $langMessage = "Message";
 $langMessages = "Messages";
@@ -1555,7 +1553,7 @@ $langInvalidCharsPass = "You have used invalid characters in your password";
 $langInvalidCharsUsername = "You have used invalid characters in your username";
 $langProfileReg = "Your profile has been modified";
 $langOldPass = "Current password";
-$langChangePass = "Modify password";
+$langChangePass = "Change password";
 $langNewUser = "User Registration";
 $langModRight = "Modify admin rights of";
 $langNone = "None";
@@ -1579,7 +1577,7 @@ select the $langsFaculty and then select / unselect the desired course.</p>
 $langDeleteUser = "Are you sure you want to delete the user";
 $langDeleteUser2 = "from this course";
 $langSurnameName = "Full Name";
-$langAskUser = "First you must search for the user. User must already have an account in the platform.";
+$langAskUser = "Search for user you want to add. User must already have an account in the platform.";
 $langAskManyUsers = "<strong>Note</strong>:<br /> Users should already have an account in the platform, in order to register to your course. Enter the usernames or StudentID numbers on separate lines.";
 $langAddUser = "Add User";
 $langAddManyUsers = "Add many users";
@@ -1627,7 +1625,7 @@ $langIfYouWantToAddManyUsers = "If you want to add a list of users in
             your course, please contact your web administrator.";
 $langLastVisits = "My last visits";
 $langLastUserVisits = "Last Visits of User ";
-$langDumpUser = "User List:";
+$langDumpUser = "Export users";
 $langCsv = "in csv:";
 $langcsvenc1 = "windows encoding ((windows-1253)";
 $langcsvenc2 = "unicode encoding (UTF-8)";
@@ -1811,7 +1809,7 @@ $langDoSearch = "Proceed with search";
 $langSearch_terms = "Search criteria: ";
 $langSearchIn = "Search in: ";
 $langSearchWith = "Searching with criteria";
-$langNoResult = "No results...";
+$langNoResult = "No results.";
 $langIntroductionNote = "Introduction Note";
 $langForum = "Forum";
 $langOR = "At least one of the terms";
@@ -1901,7 +1899,7 @@ $langTool = "Tool";
 $langUploadPage = "Upload html page";
 $langAddExtLink = "Add external link to the left menu";
 $langOperations = "Operations on external links";
-$langInactiveTools = "Inactive tools";
+$langInactiveTools = "Inactive modules";
 $langSubmitChanges = "Submit changes";
 $iso639_2_code = "en";
 $langNameOfLang['greek'] = "Greek";
@@ -2045,7 +2043,7 @@ $langGroup = "group";
 $langIs = "is";
 $langLastname = "Last name";
 $langLegendRequiredFields = "<span class=\"required\">*</span> denotes required field";
-$langModifyProfile = "Modify my Profile";
+$langModifyProfile = "Profile edit";
 $langOfficialCode = "Administrative code";
 $langPersonalCourseList = "Personal course list";
 $langPreview = "Preview";
@@ -2391,6 +2389,7 @@ $langMetadata = "Metadata";
 $langMetadataMod = "Metadata modified";
 $langLearningResourceType = "Type of learning resource";
 $langTopic = "Topic";
+$langTopics = "Topics";
 $langSubTopic = "Subtopic";
 $langLevel = "Level";
 $langTypicalAgeRange = "Typical age";
@@ -2711,6 +2710,8 @@ $langManageDepartment = "Department Manager";
 $langHelpManageDepartment = "Manages departments they are responsible for";
 $langMonthsUnit = 'months';
 $langCourseSettings = "$langCourse Settings";
+$langCourseOfflineSettings = "$langCourse download";
+$langCourseOfflineLegend = "$langStudents can download $langsCourse in their computer.";
 $langMinPasswordLen = 'Minimum password length (characters)';
 $langInsert = "Insert";
 $langCreateCourseNotAllowedNode = 'The $langFaculty you have selected is not acceptable. Please try again.';
@@ -3506,7 +3507,7 @@ $lang_dropbox_allow_personal_messages = "Allow personal messages exchange in 'Dr
 $lang_login_form = "Login Form";
 $langExIncompatibleWithLP = "This exercise contains a \"Free Text\" question which is incompatible with the learning path module";
 $langLinkNotPermitted = "The link is not permitted";
-$langMyPersoMessages = "My latest messages";
+$langMyPersoMessages = "Latest messages";
 $langForumDefaultCat = "General Forums";
 $langEditTopic = "Edit Topic";
 $langChangeTopicForum = "Change Forum";
@@ -3559,7 +3560,7 @@ $langEmptyNoteTitle = "New note";
 $langEvent = "Event";
 $langLastUpdate = "Last update";
 $langModifNote = "Modify note";
-$langNoNote = "You haven't any notes.";
+$langNoNote = "There are no notes.";
 $langNoteAdd = "Note added.";
 $langNoteBody = "Note body";
 $langNoteDel = "Note deleted.";
@@ -3654,7 +3655,7 @@ $langBlogPostDelSucc = "Blog post was deleted succedfully";
 $langBlogPostDelFail = "Failed to delete blog post";
 $langBlogPostNotFound = "The blog post was not found";
 $langBlogAddPost = "Add blog post";
-$langBlogEmpty = "There are no blog posts";
+$langBlogEmpty = "There are no blog posts.";
 $langBlogNewerPosts = "Newer posts";
 $langBlogOlderPosts = "Older posts";
 $langBlogPostUser = " - written by user ";
@@ -3752,7 +3753,7 @@ $langCourseLayout = "Layout";
 $langCourseLayout1 = "2 Columns, With Image (default)";
 $langCourseLayout2 = "2 Columns, No Image";
 $langCourseLayout3 = "Full Width";
-$langCloneCourse = "Clone this $langsCourse";
+$langCloneCourse = "$langCourse Clone";
 $langGradebookInfoForUsers = 'Choose users to be tracked in gradebook';
 $langExportQTI = "IMS QTI Export";
 $langLPViewerToggleLeftTOC = "Toggle table of contents";
@@ -3765,11 +3766,11 @@ $langNoteSaved = "Submitted successfully";
 $langLoginBgGradient = "Login screen background gradient";
 $langLoginImg = "Login screen image";
 $langThemeOptionsName = "Theme Options Name";
-$langMyCoursesSide = "My $langCourses";
+$langMyCoursesSide = "My $langsCourses";
 $langMyMessagesSide = 'My Messages';
-$langQuickNotesSide = 'Quick Notes';
+$langQuickNotesSide = 'Short note';
 $langUsageTerms = 'Terms of Use';
-$langCompactProfile = "Compact Profile";
+$langCompactProfile = "Profile (brief)";
 $langCreateDuplicateIn = "Create duplicate in...";
 $langCurrentCourse = "Current $langCourse";
 $langCopySuccess = "Copy created successfully!";
@@ -3782,7 +3783,7 @@ $langRemoveFromCourseHome = "Remove from $langsCourse home page";
 $langNoAvailableBBBServers = "No BigBlueButton servers available";
 $langLoginImgPlacementSmall = "Small (left alignment)";
 $langLoginImgPlacementFull = "Full Width (width: 1091px, height: 315px)";
-$langNewMyMessagesSide = 'New Messages';
+$langNewMyMessagesSide = 'New message';
 $langNumOpenCoursesBanner = "open<br>$langsCourses";
 $langNumOpenCourseBanner = "open<br>$langsCourse";
 $langDropboxNumUnreadMessages = "Unread messages";
@@ -4179,7 +4180,7 @@ $langNoGroupInCategory = "No user groups in this category";
 $langGroupCatDel = "When you delete a category, all user groups in it will also be deleted. Are you sure you want to delete the category?";
 $langGroupCategoryDeleted = "The category and all user groups belonging to it were deleted";
 $langGroupDeleted = "User group deleted";
-$langCreationGroups = "Create multiple user groups";
+$langCreationGroups = "Create many groups";
 $langGroupAssignments = "Group Assignments";
 $langStart = "Start";
 $langTopicStored = "New topic is saved";
@@ -4251,7 +4252,7 @@ $langForumRating = "forum post ratings";
 $langCourseSocialBookmarks = "social bookmarks";
 $langCourseAbuseReport = "abuse reporting";
 $langCourseUserRequestReject = "Reject registration request";
-$langMultiMoveCourseInfo = "Select the new $langsFaculty where $langsCourses will be moved to.";
+$langMultiMoveCourseInfo = "Select new $langsFaculty where $langsCourses will be moved to.";
 $langMultiMoveCourses = "Multiple $langsCourse move";
 $langConfirmMultiMoveCourses = "Confirm move of $langsCourses to other $langsFaculty.";
 $langSearchInCourse = "Search in educational resources";
@@ -4259,7 +4260,7 @@ $langInstallMsg = "Please wait! Installation may take a few minutes.";
 $langReadMore = "More";
 $langReadLess = "Less";
 $langNoInfoAvailable = "No information available";
-$langCourseUserRequests = "User requests for registration to $langsCourse";
+$langCourseUserRequests = "$langCourse registration user requests";
 $langCourseUserRequestsDisabled = "User registration requests supported only for non-closed $langsCourses.";
 $langContactIntroFooter = "If you reply to this message, the answer will be addressed to this user.";
 $langLabelCourseUserRequest = "$langCourse registration request";
@@ -4267,7 +4268,7 @@ $langReasonReject = "Reason for rejection";
 $langRequestReasons = "Please enter your reasons to request registration to this $langsCourse.";
 $langGroupTeam = "General User Groups";
 $langInvalidNumericValue = "invalid field value";
-$langCreateOneGroup = "Create a group";
+$langCreateOneGroup = "Create one group";
 $langScoreDispLastAttempt = "Display score after last attempt of $langsStudent";
 $langScoreDispEndDate = "Display score after exercise's end date";
 $langGroupsAdded2 = "The groups have been added";
@@ -4447,6 +4448,101 @@ $langFaqReorderSuccess = "Reordering completed";
 $langTcCourseEnabled = "Teleconference enabled.";
 $langTcCourseDisabled = "Teleconference disabled.";
 $langEmailBounces = 'Delivery error (bounce) address';
+$langPrivacyPolicy = "Privacy Policy";
+$langPrivacyPolicyLegend = "Modify Privacy Policy";
+
+$langPrivacyPolicyDefaultTextEn = "
+<p>This Privacy Policy governs the manner in which ............ collects, uses, maintains and discloses information
+collected from users (each, a “User”) of  website and the Services it provides (“Sites”).
+</p>
+<h4><strong>Personal identification information</strong></h4>
+<p>We may collect personal identification information from Users in a variety of ways,
+including, but not limited to, when Users visit our site, fill out a form, respond to a survey,
+and in connection with other activities, services, features or resources we make available on our Site.
+Users may be asked for, as appropriate, name, email address, phone number. Users may, however,
+visit our Site anonymously. We will collect personal identification information from Users only
+if they voluntarily submit such information to us. Users can always refuse to supply personally
+identification information, except that it may prevent them from engaging in certain Site related activities.</p>
+
+<h4><strong>Non-personal identification information</strong></h4>
+
+<p>We may collect non-personal identification information about Users whenever
+they interact with our Site. Non-personal identification information may include
+the browser name, the type of computer and technical information about Users
+means of connection to our Site, such as the operating system and the Internet service providers
+utilized and other similar information.</p>
+
+<h4><strong>Web browser cookies</strong></h4>
+<p>Our Site may use “cookies” to enhance User experience. User’s web browser places cookies on their hard drive
+for record-keeping purposes and sometimes to track information about them. User may choose to set their
+web browser to refuse cookies, or to alert you when cookies are being sent. If they do so, note that some parts of the Site may not function properly.
+
+<h4><strong>How we use collected information</strong></h4>
+
+<p>.............. may collect and use Users personal information for the following purposes:</p>
+<ul>
+    <li>To run and operate our Sites</li>
+    <em>We may need your information display content on the Site correctly.</em>
+    <li>To improve customer service</li>
+    <em>Information you provide helps us respond to your customer service requests and support needs more efficiently.</em>
+    <li>To personalize user experience</li>
+    <em>We may use information in the aggregate to understand how our Users as a group use the services and resources provided on our Sites.</em>
+    <li>To send periodic emails</li>
+    <em>We may use the email address to send User information and updates pertaining to their order. It may also be used to respond to their inquiries, questions, and/or other requests.</em>
+</ul>
+
+<h4><strong>How we protect your information</strong></h4>
+
+<p>We adopt appropriate data collection, storage and processing practices and security measures to
+protect against unauthorized access, alteration, disclosure or destruction of your personal information,
+username, password, transaction information and data stored on our Site.</p>
+
+<h4><strong>Sharing your personal information</strong></h4>
+
+<p>We do not sell, trade, or rent Users personal identification information to others.
+We may share generic aggregated demographic information not linked to any personal identification
+information regarding visitors and users with our business partners, trusted affiliates and advertisers
+for the purposes outlined above.</p>
+
+<h4><strong>Electronic newsletters</strong></h4>
+
+<p>If User decides to opt-in to our mailing list, they will receive emails that may include company news,
+updates, related product or service information, etc. If at any time the User would like to
+unsubscribe from receiving future emails, we include detailed unsubscribe instructions at the bottom of
+each email or User may contact us via our Site.</p>
+
+<h4><strong>Third party websites</strong></h4>
+
+<p>Users may find advertising or other content on our Sites that link to the sites and services of our partners,
+suppliers, advertisers, sponsors, licensors and other third parties. We do not control the content or
+links that appear on these sites and are not responsible for the practices employed by websites
+linked to or from our Site. In addition, these sites or services, including their content and links,
+may be constantly changing. These sites and services may have their own privacy policies and customer
+service policies. Browsing and interaction on any other website, including websites which have a link to our Site,
+is subject to that website’s own terms and policies.</p>
+
+<h4><strong>Changes to this privacy policy</strong></h4>
+
+<p>.................. has the discretion to update this privacy policy at any time.
+When we do, we will post a notification on the main page of our Site, revise the updated date at the
+bottom of this page and send you an email. We encourage Users to frequently check this page for
+any changes to stay informed about how we are helping to protect the personal information we collect.
+You acknowledge and agree that it is your responsibility to review this privacy policy periodically and
+become aware of modifications.</p>
+
+<h4><strong>Your acceptance of these terms</strong></h4>
+
+<p>By using this Site, you signify your acceptance of this policy.
+If you do not agree to this policy, please do not use our Site. Your continued use of the Site following
+the posting of changes to this policy will be deemed your acceptance of those changes.</p>
+
+<h4><strong>Contacting us</strong></h4>
+
+<p>If you have any questions about this Privacy Policy, the practices of this site, or your dealings with this site,
+please contact us at .................</p>
+";
+
+$langText = "Text";
 $langAnnAddWithEmail = "The announcement was added and sent to ";
 $langReorder = "Reorder";
 $langActivateConference = "Enable teleconference";
@@ -4628,7 +4724,7 @@ $langNodeSubscribed = "Subscribers visibility";
 $langNodeSubscribed2 = "The $langsFaculty will show up only for its subscribers";
 $langNodeHidden = "Hidden";
 $langNodeHidden2 = "The $langsFaculty will remain hidden from all users";
-$langMindmap = "Mind Mapping";
+$langMindmap = "Mind Map";
 $langMindMap = "Mind Map";
 $langScreenshot = "Screenshot";
 $langOpenEx = "Open Example";
@@ -4672,6 +4768,7 @@ $langcas_altauth_use_mobile = "Only for access via mobile apps";
 $langActivityCourse = 'Activity Course Type';
 $langNoActivityHeadings = 'There are no activity category headings';
 $langActivityCourseAdd = 'Add Activity Category Heading';
+$langQuickLinks = "Quick Links";
 $langActivityEdit = 'Activity Edit';
 $langCourseActivityFormat = 'Activity Format';
 $langHomePageSettings = "Home Page Settings";
@@ -4999,3 +5096,19 @@ $langPurge = "Purge activities";
 $langConfirmPurgeCourseCompletion = "Caution: The completion record for all users in this course will be deleted.";
 $langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
 $langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
+$langDownloadCourse = "Download $langsCourse";
+$langCoursePrerequisites = "Prerequisites";
+$langNewCoursePrerequisite = "New Prerequisite";
+$langNoCoursePrerequisites = "No prerequisites exist";
+$langRemovePrerequisite = "Remove Prerequisite";
+$langDelWarnCoursePrerequisite = "Confirm prerequisite removal";
+$langPrerequisites = "Prerequisites";
+$langNewCoursePrerequisiteSuccess = "Prerequisite created successfully!";
+$langDelCoursePrerequisiteSuccess = "Prerequisite deleted successfully!";
+$langNewCoursePrerequisiteHelp1 = "Notice";
+$langNewCoursePrerequisiteHelp2 = "In order to add a prerequisite, that course is required to offer a Badge for completing the course. If it lacks the badge, please contact the course's teacher.";
+$langNewCoursePrerequisiteFailInvalid = "Failed to create, please choose a valid course.";
+$langNewCoursePrerequisiteFailSelf = "Failed to create, your own course cannot be chosen as a prerequisite to itself.";
+$langNewCoursePrerequisiteFailAlreadyIn = "Failed to create, the chosen course is already in the list of prerequisites.";
+$langNewCoursePrerequisiteFailBadgeMissing = "Failed to create, the chosen course lacks the Badge for completing the course.";
+$langPrerequisitesNotComplete = "The prerequisites courses have not been completed.";
