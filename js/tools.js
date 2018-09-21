@@ -232,9 +232,6 @@ function course_list_handler() {
                     text: title_span.text() }));
 
             } else {
-                if (result === 'prereqsnotcomplete') {
-                    alert(lang.prereqsNotComplete);
-                }
                 $('input[type=checkbox][value=' + cid + ']').prop('checked', false);
                 if (courses[cid][1] != 2) {
                     title_span.text(title_span.text());
