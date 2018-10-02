@@ -45,10 +45,10 @@ require_once 'include/lib/references.class.php';
 
     /**
      * Get event details given the event id
-     * @param int $eventid id in table agenda
+     * @param int $event_id id in table agenda
      * @return array event tuple
      */
-    function get_event($eventid, $cid = null){
+    function get_event($event_id, $cid = null){
         global $course_id;
         if(is_null($cid)){
             $cid = $course_id;
@@ -70,7 +70,7 @@ require_once 'include/lib/references.class.php';
     }
 
     /**
-     * Get calendar events for a given userincluding personal and course events
+     * Get calendar events for a given user including personal and course events
      * @param string $scope month|week|day the calendar selected view
      * @param string $agenda_events_only true|false show also events from other course modules or only agenda items
      * @param string $startdate mysql friendly formatted string representing the start of the time frame for which events are seeked
@@ -130,10 +130,10 @@ require_once 'include/lib/references.class.php';
             $dc = str_replace('start','tc.start_date',$datecond);
             $q .= "SELECT tc.id, tc.title, tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date + '00:00', '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                     . "FROM tc_session tc  "
-                    . "WHERE tc.course_id =?d "
+                    . "WHERE tc.course_id =?d AND tc.active = '1'"
                     . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
-            //assignements
+            //assignments
             if(!empty($q)){
                 $q .= " UNION ";
             }
@@ -764,7 +764,7 @@ require_once 'include/lib/references.class.php';
         if ($is_editor) {
             $q_extra = '';
         } else {
-            $q_extra = "AND tc.active = 1";
+            $q_extra = "AND tc.active = '1'";
         }
         $dc = str_replace('start','tc.start_date', $datecond);
         $q .= "SELECT tc.id, tc.title, tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date + time('01:00:00'), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-special' class, 'teleconference' event_type,  c.code course "
