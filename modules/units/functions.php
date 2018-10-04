@@ -9,7 +9,7 @@ require_once 'include/lib/multimediahelper.class.php';
 
 /**
  * @brief  Process resource actions
- * @global type $tool_content
+ * @global type $content
  * @global type $id
  * @global type $langResourceCourseUnitDeleted
  * @global type $langResourceUnitModified
@@ -18,7 +18,7 @@ require_once 'include/lib/multimediahelper.class.php';
  * @return string
  */
 function process_actions() {
-    global $tool_content, $id, $langResourceCourseUnitDeleted,
+    global $id, $langResourceCourseUnitDeleted,
         $langResourceUnitModified, $course_id, $course_code, $webDir,
         $head_content, $langBack, $urlAppend, $navigation, $pageName,
         $langEditChange, $langViMod;
@@ -34,13 +34,13 @@ function process_actions() {
                 WHERE id = ?d AND course_id = ?d", $id, $course_id);
             $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$id", 'name' => $q->title);
             $pageName = $langEditChange;
-            $tool_content .= action_bar(array(
+            $content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "{$urlAppend}modules/units/index.php?course=$course_code&amp;id=$id",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
-            $tool_content .= edit_res($res_id);
-            draw($tool_content, 2, null, $head_content);
+            $content .= edit_res($res_id);
+            draw($content, 2, null, $head_content);
             exit;
         }
     } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
@@ -122,17 +122,16 @@ function check_admin_unit_resource($resource_id) {
 
 
 /**
- * @brief Display resources for unit with id=$id
- * @global type $tool_content
+ * @brief Display resources for unit with id=$id 
  * @global type $max_resource_id
  * @param type $unit_id
  */
 function show_resources($unit_id) {
-    global $tool_content, $max_resource_id, $langAvailableUnitResources,
+    global $max_resource_id, $langAvailableUnitResources, 
            $is_editor, $head_content, $langDownload, $langPrint, $langCancel, $langFullScreen, $langNewTab;
 
     $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
-    if (count($req) > 0) {
+    if (count($req) > 0) {        
         load_js('screenfull/screenfull.min.js');
         $head_content .= "<script>
         $(function(){
@@ -199,86 +198,87 @@ function show_resources($unit_id) {
         });
         </script>";
         $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
-                                WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-        $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "<table class='table-default'>";
-        foreach ($req as $info) {
+                                WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;                                
+        echo "<div class='table-responsive'>";
+        echo "<table class='table-default'>";        
+        foreach ($req as $info) {            
             $info->comments = standard_text_escape($info->comments);
-            show_resource($info);
+            echo show_resource($info);
         }
-        $tool_content .= "</table>";
-        $tool_content .= "</div>";
+        echo "</table>";
+        echo "</div>";
     }
 }
 
 /**
- * @brief display unit resources
- * @global type $tool_content
+ * @brief display unit resources 
  * @global type $langUnknownResType
  * @global type $is_editor
  * @param type $info
  * @return type
  */
 function show_resource($info) {
-    global $tool_content, $langUnknownResType, $is_editor;
+    global $langUnknownResType, $is_editor;
       
     if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' . 
         return;
     }
+    $content = '';
     switch ($info->type) {
         case 'doc':
-            $tool_content .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
+            $content .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
             break;
         case 'text':
-            $tool_content .= show_text($info->comments, $info->id, $info->visible);
+            $content .= show_text($info->comments, $info->id, $info->visible);
             break;
         case 'description':
-            $tool_content .= show_description($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_description($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'lp':
-            $tool_content .= show_lp($info->title, $info->comments, $info->id, $info->res_id);
+            $content .= show_lp($info->title, $info->comments, $info->id, $info->res_id);
             break;
         case 'video':
         case 'videolink':
-            $tool_content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'videolinkcategory':
-            $tool_content .= show_videocat($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_videocat($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'exercise':
-            $tool_content .= show_exercise($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_exercise($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'work':
-            $tool_content .= show_work($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_work($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'topic':
         case 'forum':
-            $tool_content .= show_forum($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_forum($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'wiki':
-            $tool_content .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'poll':
-            $tool_content .= show_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'link':
-            $tool_content .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'linkcategory':
-            $tool_content .= show_linkcat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_linkcat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'ebook':
-            $tool_content .= show_ebook($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_ebook($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'section':
-            $tool_content .= show_ebook_section($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_ebook_section($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'subsection':
-            $tool_content .= show_ebook_subsection($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $content .= show_ebook_subsection($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         default:
-            $tool_content .= $langUnknownResType;
+            $content .= $langUnknownResType;
     }
+    return $content;
 }
 
 /**
@@ -347,17 +347,16 @@ function show_doc($title, $comments, $resource_id, $file_id) {
 
 /**
  * @brief display resource text
- * @global string $tool_content
+ * @global string $content
  * @param type $comments
  * @param type $resource_id
  * @param type $visibility
  */
 function show_text($comments, $resource_id, $visibility) {
-    global $tool_content;
-
+        
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
-    $tool_content .= "
+    $content = "
         <tr$class_vis>
           <td colspan='2'>$comments</td>" .
             actions('text', $resource_id, $visibility) .
@@ -367,18 +366,17 @@ function show_text($comments, $resource_id, $visibility) {
 
 /**
  * @brief display course description resource
- * @global string $tool_content
+ * @global string $content
  * @param type $title
  * @param type $comments
  * @param type $id
  * @param type $res_id
  * @param type $visibility
  */
-function show_description($title, $comments, $id, $res_id, $visibility) {
-    global $tool_content;
+function show_description($title, $comments, $id, $res_id, $visibility) {    
 
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
-    $tool_content .= "
+    $content = "
         <tr>
           <td colspan='2'>
             <div class='title'>" . q($title) . "</div>
@@ -459,7 +457,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
  * @brief display resource video
  * @global type $is_editor
  * @global type $course_id
- * @global string $tool_content
+ * @global string $content
  * @global type $langInactiveModule
  * @param type $table
  * @param type $title
@@ -470,7 +468,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
  * @return string
  */
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility) {
-    global $is_editor, $course_id, $tool_content, $langInactiveModule;
+    global $is_editor, $course_id, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
     if (!$module_visible and !$is_editor) {
@@ -513,7 +511,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         $comment_box = "";
     }
     $class_vis = ($visibility == 0 or !$module_visible or $status == 'del') ? ' class="not_visible"' : ' ';
-    $tool_content .= "
+    $content .= "
         <tr$class_vis>
           <td width='1'>".icon($imagelink)."</td>
           <td>$videolink $comment_box</td>" . actions('video', $resource_id, $visibility) . "
