@@ -617,7 +617,7 @@ $tool_content .= "
   <br/>
   <div class='text-center'>" . (($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
   "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>" : '')."
-  <a class='btn btn-default' href='index.php?course=$course_code'>$langReturn</a>
+  <a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>
   </div>";
 
 draw($tool_content, 2, null, $head_content);

@@ -61,8 +61,13 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     $tool_content .= "
             <div class='panel panel-success qPanel' id='qPanel$questionId'>
               <div class='panel-heading'>
-                <h3 class='panel-title'>$langQuestion : $i ($questionWeight $message)".(($exerciseType == 2) ? " / " . $nbrQuestions : "")."</h3>
-              </div>
+                <h3 class='panel-title'>$langQuestion : ";
+                if ($exerciseType == 2) {
+                    $tool_content .= "$i / $nbrQuestions ($questionWeight $message)";
+                } else {
+                    $tool_content .= "$i ($questionWeight $message)";
+                }                
+              $tool_content .= "</h3></div>
               <div class='panel-body'>
                     <h4>
                         <small>$questionTypeWord</small><br>" . q_math($questionName) . "
