@@ -220,8 +220,10 @@ class Calendar_Events {
                 }
                 $dc = str_replace('start', 'adm.start', $datecond);
                 $q .= "SELECT id, title, start, date_format(start, '%Y-%m-%d') startdate, duration, date_format(addtime(start, time(duration)), '%Y-%m-%d %H:%i') `end`, content, 'admin' event_group, 'event-success' class, 'admin' event_type, null as course FROM admin_calendar adm "
-                        . "WHERE user_id = ?d " . $dc;
-                $q_args = array_merge($q_args, $q_args_templ);
+                        . "WHERE visibility_level >= ?d " . $dc;
+                $q_admin_events_args = $q_args_templ;
+                $q_admin_events_args[0] = Calendar_Events::get_user_visibility_level();
+                $q_args = array_merge($q_args, $q_admin_events_args);
             }
             if (Calendar_Events::$calsettings->show_course == 1) {
                 // agenda
@@ -1444,4 +1446,15 @@ class Calendar_Events {
         return Database::get()->querySingle('SELECT recursion_period, recursion_end FROM '.$t.' WHERE id=?d',$eventid);
     }
 
+    public static function get_user_visibility_level() {
+        global $uid, $session, $is_admin;
+
+        if (!$uid) {
+            return 10;
+        } elseif ($is_admin or $is_power_user or $is_usermanage_user or $is_departmentmanage_user) {
+            return 0;
+        } else {
+            return $session->status;
+        }
+    }
 }
