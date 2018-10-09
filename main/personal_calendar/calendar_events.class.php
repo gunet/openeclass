@@ -215,7 +215,7 @@ class Calendar_Events {
                         . "WHERE user_id = ?d " . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
             }
-            $st = ($is_admin)? 0: $_SESSION['status'];
+            $st = Calendar_Events::get_user_visibility_level();
             if (Calendar_Events::$calsettings->show_admin == 1) {
                 //admin
                 if (!empty($q)) {
@@ -1479,4 +1479,15 @@ class Calendar_Events {
         return Database::get()->querySingle('SELECT recursion_period, recursion_end FROM '.$t.' WHERE id=?d',$eventid);
     }
 
+    public static function get_user_visibility_level() {
+        global $uid, $session, $is_admin;
+
+        if (!$uid) {
+            return 10;
+        } elseif ($is_admin or $is_power_user or $is_usermanage_user or $is_departmentmanage_user) {
+            return 0;
+        } else {
+            return $session->status;
+        }
+    }
 }
