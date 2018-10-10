@@ -231,7 +231,21 @@ function lti_app_details() {
             $canJoin = $row->enabled == '1';
             if ($canJoin) {
                 //print_r($_SESSION);die();
-                $joinLink = create_join_button($row->lti_provider_url,$row->lti_provider_key,$row->lti_provider_secret,$_SESSION['uid'],($is_editor==1) ? 'Instructor' : 'false',$row->id,$row->title,$row->description,$_SESSION['givenname'],$_SESSION['email'],$lis_person_sourcedid,$course_id,course_id_to_title($course_id),$course_code,$tool_consumer_instance_guid);
+                $joinLink = create_join_button(
+                	$row->lti_provider_url,
+	                $row->lti_provider_key,
+	                $row->lti_provider_secret,
+	                $_SESSION['uid'],($is_editor==1) ? 'Instructor' : 'false',
+	                $row->id,
+	                $row->title,
+	                $row->description,
+	                $_SESSION['givenname'],
+	                $_SESSION['email'],
+	                $lis_person_sourcedid,
+	                $course_id,
+	                course_id_to_title($course_id),
+	                $course_code,
+	                $tool_consumer_instance_guid);
             } else {
                 $joinLink = q($title);
             }
