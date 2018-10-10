@@ -184,6 +184,12 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
     }
 }
 
+// ----------------- sso transition ------------------
+if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
+    header("Location: {$urlServer}modules/auth/auth_transition.php");
+}
+// ----------------------------------------------------
+
 // check if we are admin or power user or manageuser_user
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_admin = true;
