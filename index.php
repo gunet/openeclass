@@ -28,6 +28,7 @@ session_start();
  *
  */
 
+
 use Hybrid\Auth;
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
@@ -105,6 +106,7 @@ if (isset($_GET['logout']) and $uid) {
 
 // if we try to login... then authenticate user.
 $warning = '';
+
 if (isset($_SESSION['shib_uname'])) {
     // authenticate via shibboleth
     shib_cas_login('shibboleth');
@@ -116,7 +118,7 @@ if (isset($_SESSION['shib_uname'])) {
     hybridauth_login();
 } else {
     // normal authentication
-    process_login();
+    process_login();    
 }
 
 // if the user logged in include the correct language files
@@ -150,8 +152,24 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             exit;
         }
     }
-    // if user is not guest redirect him to portfolio
-    header("Location: {$urlServer}main/portfolio.php");
+
+    // ----------------- sso transition ------------------
+    if (defined('SSO_TRANSITION')) {
+        require_once 'modules/auth/transition/Transition.class.php';
+        $auth_transition = new Transition($uid);
+        if ($uid == 1) { // exception for admin users
+            header("Location: {$urlServer}main/portfolio.php");
+        } else {
+            if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_APPROVED
+                or !$auth_transition->user_needs_transition()) {
+                    header("Location: {$urlServer}main/portfolio.php");
+            } else {
+                header("Location: {$urlServer}modules/auth/auth_transition.php");
+            }
+        }
+    } else { // end of sso transition
+        header("Location: {$urlServer}main/portfolio.php");
+    }
 } else {
     // redirect to landing page if defined
     $homepageSet = get_config('homepage');
