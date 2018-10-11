@@ -5710,7 +5710,7 @@ $langInactiveCourseCategories = "Ανενεργές κατηγορίες";
 $langActiveCourseCategories = "Ενεργές κατηγορίες";
 
 // Course Prerequisites
-$langPrerequisites = "Προαπαιτούμενα";
+$langCoursePrerequisites = "Προαπαιτούμενα";
 $langNewCoursePrerequisite = "Προσθήκη Προαπαιτούμενου";
 $langNoCoursePrerequisites = "Δεν υπάρχουν προαπαιτούμενα";
 $langRemovePrerequisite = "Διαγραφή Προαπαιτούμενου";

@@ -590,12 +590,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
 /**
  * @brief  Process login form submission
  * @global type $warning
- * @global type $surname
- * @global type $givenname
- * @global type $email
  * @global type $status
- * @global type $is_admin
- * @global type $language
  * @global type $session
  * @global type $langInvalidId
  * @global type $langAccountInactive1
@@ -604,14 +599,14 @@ function get_cas_attrs($phpCASattrs, $settings) {
  * @global type $langEnterPlatform
  * @global type $urlServer
  * @global type $langHere
+ * @global type $langInvalidAuth
  * @global array $auth_ids
  * @global type $inactive_uid
  * @global type $langTooManyFails
  * @global type $urlAppend
  */
 function process_login() {
-    global $warning, $surname, $givenname, $email, $status, $is_admin,
-        $language, $session, $langInvalidId, $langAccountInactive1,
+    global $warning, $session, $langInvalidId, $langAccountInactive1, $langInvalidAuth,
         $langAccountInactive2, $langNoCookies, $langEnterPlatform, $urlServer,
         $langHere, $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
 
@@ -670,7 +665,7 @@ function process_login() {
                             $auth_allow = login($myrow, $posted_uname, $pass);
                         }
                     } else {
-                        $tool_content .= "<br>$langInvalidAuth<br>";
+                        $warning .= "<div class='alert alert-warning'>$langInvalidAuth</div>";
                     }
                 }
             }
