@@ -86,19 +86,6 @@ class Transition {
     }
 
     /**
-     * @brief get user exception comments
-     */
-    public function get_sso_exception_comments() {
-        
-        $q = Database::get()->querySingle("SELECT comments FROM sso_exception WHERE uid = ?d", $this->userid);
-        if ($q) {
-            return $q->comments;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * @brief add exception comments to database
      * @param $comments
      */
@@ -111,4 +98,72 @@ class Transition {
                                           $this->userid, $comments);
     }
 
+
+    /**
+     * @brief update database with new exception status
+     * @param $eid
+     * @param $action
+     */
+    public static function change_exception_status($eid, $action) {
+
+        switch($action) {
+            case 'yes': Database::get()->query("UPDATE sso_exception 
+                                                 SET status = " .SSO_TRANSITION_EXCEPTION_APPROVED . " 
+                                                WHERE id = ?d", $eid);
+                        break;
+            case 'close': Database::get()->query("UPDATE sso_exception 
+                                                 SET status = " .SSO_TRANSITION_EXCEPTION_CLOSED . " 
+                                                WHERE id = ?d", $eid);
+                        break;
+            case 'reject': Database::get()->query("UPDATE sso_exception 
+                                                 SET status = " .SSO_TRANSITION_EXCEPTION_BLOCKED . " 
+                                                WHERE id = ?d", $eid);
+                        break;
+            default: break;
+        }
+    }
+
+    /**
+     * @brief display exception request status message
+     * @param $status
+     */
+    public static function exception_status($status) {
+
+        $message = '';
+
+        switch ($status) {
+            case SSO_TRANSITION_EXCEPTION_PENDING: $message = "Σε εκκρεμότητα";
+                break;
+            case SSO_TRANSITION_EXCEPTION_APPROVED: $message = "Έχει εξαιρεθεί";
+                break;
+            case SSO_TRANSITION_EXCEPTION_BLOCKED: $message = "Έχει αποκλεισθεί";
+                break;
+            case SSO_TRANSITION_EXCEPTION_CLOSED: $message = "Έχει απορριφθεί";
+                break;
+            default: break;
+        }
+        return $message;
+    }
+
+
+    /**
+     * @brief display appropriate table row style
+     * @param $status
+     * @return string
+     */
+    public static function row_style($status) {
+
+        $style = '';
+
+        switch ($status) {
+            case SSO_TRANSITION_EXCEPTION_CLOSED: $style = "warning";
+                break;
+            case SSO_TRANSITION_EXCEPTION_APPROVED: $style = "success";
+                break;
+            case SSO_TRANSITION_EXCEPTION_BLOCKED: $style = "danger";
+                break;
+            default: break;
+        }
+        return $style;
+    }
 }
