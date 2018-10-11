@@ -206,7 +206,7 @@ function lti_app_details() {
 
     load_js('trunk8');
 
-    $activeClause = $is_editor? '': "AND enabled = '1'";
+    $activeClause = ($is_editor) ? '' : "AND enabled = '1'";
     $result = Database::get()->queryArray("SELECT * FROM lti_apps
         WHERE course_id = ?s $activeClause ORDER BY id DESC", $course_id);
     if ($result) {
@@ -218,9 +218,11 @@ function lti_app_details() {
                              <tr class='list-header'>
                                <th style='width:30%'>$langTitle</th>
                                <th class='text-center'>$langNewLTIAppSessionDesc</th>
-                               <th class='text-center'>$langLTIAppActions</th>
-                               <th class='text-center'>".icon('fa-gears')."</th>
-                             </tr>";
+                               <th class='text-center'>$langLTIAppActions</th>";
+        if ($is_editor) {
+            $headings .= "         <th class='text-center'>" . icon('fa-gears') . "</th>";
+        }
+        $headings .= "       </tr>";
 
         foreach ($result as $row) {
             $id = $row->id;
@@ -235,18 +237,9 @@ function lti_app_details() {
                     $row->lti_provider_url,
                     $row->lti_provider_key,
                     $row->lti_provider_secret,
-                    $_SESSION['uid'],
-                    lti_get_ims_role(),
                     $row->id,
                     $row->title,
-                    $row->description,
-                    $_SESSION['givenname'],
-                    $_SESSION['email'],
-                    $lis_person_sourcedid,
-                    $course_id,
-                    course_id_to_title($course_id),
-                    $course_code,
-                    $tool_consumer_instance_guid
+                    $row->description
                 );
             } else {
                 $joinLink = q($title);
@@ -285,14 +278,7 @@ function lti_app_details() {
                     <td class='text-center'>$title</td>
                     <td>$desc</td>
                     <td class='text-center'>$joinLink</td>
-                    <td class='text-center'>";
-
-                    if ($canJoin) {
-                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank");
-                    } else {
-                        $tool_content .= "-</td>";
-                    }
-                    $tool_content .= "</tr>";
+                    </tr>";
             }
         }
         if ($headingsSent) {
@@ -309,10 +295,10 @@ function lti_app_details() {
 
 function disable_lti_app($id)
 {
-    global $langLTIAppDeleteSuccessful, $course_code;
+    global $langLTIAppUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE lti_apps set enabled='0' WHERE id=?d",$id);
-    Session::Messages($langLTIAppDeleteSuccessful, 'alert-success');
+    Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
     redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
 
@@ -321,59 +307,74 @@ function enable_lti_app($id)
     global $langLTIAppUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE lti_apps SET enabled='1' WHERE id=?d",$id);
-    Session::Messages($langBBBUpdateSuccessful, 'alert-success');
+    Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
     redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
 
 
 function delete_lti_app($id)
 {
-    global $langBBBDeleteSuccessful, $course_code;
+    global $langLTIAppDeleteSuccessful, $course_code;
 
     Database::get()->querySingle("DELETE FROM lti_apps WHERE id=?d",$id);
-    Session::Messages($langBBBDeleteSuccessful, 'alert-success');
+    Session::Messages($langLTIAppDeleteSuccessful, 'alert-success');
     redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
 
-function create_join_button($launch_url,$key,$secret,$uid,$role,$resource_link_id,$resource_link_title,$resource_link_description,$fullName,$email,$lis_person_sourcedid,$context_id,$context_title,$context_label,$tool_consumer_instance_guid)
+function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource_link_id, $resource_link_title, $resource_link_description)
 {
-    global $langLogIn;
-    $launch_data = array(
-            "user_id" => $uid,
-            "roles" => $role,
-            "resource_link_id" => $resource_link_id,
-            "resource_link_title" => $resource_link_title,
-            "resource_link_description" => $resource_link_description,
-            "lis_person_name_full" => $fullName,
-//            "lis_person_name_family" => "",
-//            "lis_person_name_given" => $givenName,
-            "lis_person_contact_email_primary" => $email,
-            "lis_person_sourcedid" => $lis_person_sourcedid,
-            "context_id" => $context_id,
-            "context_title" => $context_title,
-            "context_label" => $context_label,
-            "tool_consumer_instance_guid" => $tool_consumer_instance_guid,
-            "tool_consumer_instance_description" => "OpenEclass"
-    );
+    global $langLogIn, $course_id, $course_code, $language, $urlServer;
 
     $now = new DateTime();
+    $uid = $_SESSION['uid'];
+    $udata = user_get_data($uid);
+    $lis_person_name_given = $udata->givenname;
+    $lis_person_name_family = $udata->surname;
+    $lis_person_name_full = $udata->givenname . " " . $udata->surname;
+    if (strlen($udata->surname) <= 0 && strlen($udata->givenname) > 0) {
+        $lis_person_name_full = $udata->givenname;
+        $lis_person_name_family = "";
+        $lis_person_name_given = "";
+    }
 
-    $launch_data["lti_version"] = "LTI-1p0";
-    $launch_data["lti_message_type"] = "basic-lti-launch-request";
-
-    $launch_data["oauth_callback"] = "about:blank";
-    $launch_data["oauth_consumer_key"] = $key;
-    $launch_data["oauth_version"] = "1.0";
-    $launch_data["oauth_nonce"] = uniqid('', true);
-    $launch_data["oauth_timestamp"] = $now->getTimestamp();
-    $launch_data["oauth_signature_method"] = "HMAC-SHA1";
+    $launch_data = array(
+        "user_id" => $uid,
+        "roles" => lti_get_ims_role(),
+        "resource_link_id" => $resource_link_id,
+        "resource_link_title" => $resource_link_title,
+        "resource_link_description" => $resource_link_description,
+        "lis_person_name_full" => $lis_person_name_full,
+        "lis_person_name_family" => $lis_person_name_family,
+        "lis_person_name_given" => $lis_person_name_given,
+        "lis_person_contact_email_primary" => $_SESSION['email'],
+        "context_id" => $course_id,
+        "context_title" => course_id_to_title($course_id),
+        "context_label" => $course_code,
+        "context_type" => "CourseSection",
+        "lis_course_section_sourcedid" => $_SERVER['SERVER_NAME'] . ":" . $course_code,
+        "launch_presentation_locale" => $language,
+        "launch_presentation_return_url" => $urlServer . "courses/" . $course_code,
+        "tool_consumer_info_product_family_code" => "openeclass",
+        "tool_consumer_info_version" => ECLASS_VERSION,
+        "tool_consumer_instance_name" => $GLOBALS['siteName'],
+        "tool_consumer_instance_guid" => $_SERVER['SERVER_NAME'],
+        "tool_consumer_instance_description" => $GLOBALS['Institution'],
+        "lti_version" => "LTI-1p0",
+        "lti_message_type" => "basic-lti-launch-request",
+        "oauth_callback" => "about:blank",
+        "oauth_consumer_key" => $oauth_consumer_key,
+        "oauth_version" => "1.0",
+        "oauth_nonce" => uniqid('', true),
+        "oauth_timestamp" => $now->getTimestamp(),
+        "oauth_signature_method" => "HMAC-SHA1"
+    );
 
     $launch_data_keys = array_keys($launch_data);
     sort($launch_data_keys);
 
     $launch_params = array();
     foreach ($launch_data_keys as $key) {
-      array_push($launch_params, $key . "=" . rawurlencode($launch_data[$key]));
+        array_push($launch_params, $key . "=" . rawurlencode($launch_data[$key]));
     }
 
     $base_string = "POST&" . urlencode($launch_url) . "&" . rawurlencode(implode("&", $launch_params));
@@ -381,12 +382,11 @@ function create_join_button($launch_url,$key,$secret,$uid,$role,$resource_link_i
     $signature = base64_encode(hash_hmac("sha1", $base_string, $secret, true));
 
     $button ='<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" action="'.$launch_url.'">';
-        foreach ($launch_data as $k => $v )
-        {
-            $button .='<input type="hidden" name="'.$k.'" value="'.$v.'">';
-        }
-    $button .='<input type="hidden" name="oauth_signature" value="'.$signature.'">';
-    $button .='<button class="btn btn-primary" type="submit">'.$langLogIn.'</button>';
+    foreach ($launch_data as $k => $v) {
+        $button .='<input type="hidden" name="' . $k .'" value="' . $v . '">';
+    }
+    $button .='<input type="hidden" name="oauth_signature" value="' . $signature . '">';
+    $button .='<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
     $button .='</form>';
 
     return $button;  
