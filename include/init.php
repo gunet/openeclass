@@ -186,7 +186,7 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
 
 // ----------------- sso transition ------------------
 if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
-    header("Location: {$urlServer}modules/auth/auth_transition.php");
+    header("Location: {$urlServer}modules/auth/transition/auth_transition.php");
 }
 // ----------------------------------------------------
 

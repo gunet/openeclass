@@ -164,10 +164,11 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 or !$auth_transition->user_needs_transition()) {
                     header("Location: {$urlServer}main/portfolio.php");
             } else {
-                header("Location: {$urlServer}modules/auth/auth_transition.php");
+                header("Location: {$urlServer}modules/auth/transition/auth_transition.php");
             }
         }
     } else { // end of sso transition
+        // normal login
         header("Location: {$urlServer}main/portfolio.php");
     }
 } else {

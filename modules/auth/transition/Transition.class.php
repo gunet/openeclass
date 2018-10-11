@@ -52,27 +52,22 @@ class Transition {
                 $_SESSION['givenname'] = $_SESSION['cas_givenname'] = $attrs['givenname'];
             }
 
-            if (user_exists($_SESSION['cas_uname'])) { // check if user exists
-                unset($_SESSION['cas_uname']);
-                unset($_SESSION['cas_surname']);
-                unset($_SESSION['cas_givenname']);
-                Session::Messages("Ο χρήστης υπάρχει ήδη ή έχει πραγματοποιήσει μετάβαση!", 'alert-danger');
-                redirect("{$urlServer}index.php?logout=TRUE");
-            } else { // update user
-                Database::get()->query("UPDATE user SET username = ?s, 
-                                                    givenname = ?s, 
-                                                    surname = ?s, 
-                                                    password = 'cas' 
-                                                WHERE id = ?d",
-                    $_SESSION['uname'], $_SESSION['cas_givenname'],
-                    $_SESSION['cas_surname'], $this->userid);
+            if (user_exists($_SESSION['cas_uname'])) { // check if user exists. if yes rename non sso user to 'sso_$username'
+                Database::get()->query("UPDATE user SET username = CONCAT('sso_', '$_SESSION[cas_uname]')   
+                                                    WHERE username = ?s", $_SESSION['cas_uname']);
+            } // update user
+            Database::get()->query("UPDATE user SET username = ?s, 
+                                                givenname = ?s, 
+                                                surname = ?s, 
+                                                password = 'cas' 
+                                            WHERE id = ?d",
+                $_SESSION['uname'], $_SESSION['cas_givenname'],
+                $_SESSION['cas_surname'], $this->userid);
 
-                $_SESSION['uid'] = $this->userid;
-                header("Location: $urlServer");
-            }
+            $_SESSION['uid'] = $this->userid;
+            // print_a($_SESSION); die;
+            header("Location: $urlServer");
         }
-        //print_a($_SESSION);
-        //die;
     }
 
 

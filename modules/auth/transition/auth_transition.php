@@ -8,7 +8,7 @@
 
 $require_login = true;
 $transition_script = true;
-require_once '../../include/baseTheme.php';
+require_once '../../../include/baseTheme.php';
 require_once 'modules/auth/transition/Transition.class.php';
 $pageName = "Μετάβαση";
 
@@ -46,7 +46,7 @@ if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_BLO
 } else {  // intro message
     $tool_content .= "<div class='row'>
                     <div class='col-sm-12'>
-                        <div class='alert alert-info'>Βρισκόμαστε σε διαδικασία μετάβασης</div>
+                        <div class='alert alert-info'>Η διαδικασία μετάβασης έχει ξεκινήσει</div>
                         <div class='text-justify'>
                             <a href='$_SERVER[SCRIPT_NAME]?t=true' class='btn btn-success' role='button'>Μετάβαση</a>
                             <a href='$_SERVER[SCRIPT_NAME]?t=false' class='btn btn-warning' role='button'>Αίτημα εξαίρεσης</a>
