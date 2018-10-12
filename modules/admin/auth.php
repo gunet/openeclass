@@ -37,6 +37,41 @@ $tool_content .= action_bar(array(
                     'level' => 'primary-label')
                 ),false);
 
+// sso transition
+if (isset($_GET['transition'])) {
+    if ($_GET['transition'] == 'true') {
+        Session::Messages("ΠΡΟΣΟΧΗ! Θα ενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON). 
+                                Επιβεβαιώστε την ενέργειά σας. 
+                                <ul>
+                                <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=true'><strong>Ναι</strong></a></li>
+                                <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
+                                </ul>", 'alert-warning');
+    } else {
+        Session::Messages("ΠΡΟΣΟΧΗ! Θα απενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON). 
+                                Επιβεβαιώστε την ενέργειά σας. 
+                                <ul>
+                                <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=false'><strong>Ναι</strong></a></li>
+                                <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
+                                </ul>", 'alert-warning');
+    }
+    redirect_to_home_page('modules/admin/auth.php');
+}
+
+if (isset($_GET['do_transition'])) {
+    if ($_GET['do_transition'] == 'true') {
+        require_once 'modules/auth/transition/Transition.class.php';
+        set_config('sso_transition', true);
+        Transition::create_table();
+        Session::Messages("Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS ενεργοποιήθηκε.", 'alert-success');
+    } else if ($_GET['do_transition'] == 'false') {
+        set_config('sso_transition', false);
+        Session::Messages("Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS απενεργοποιήθηκε.", 'alert-success');
+    } else {
+        redirect_to_home_page('modules/admin/auth.php');
+    }
+}
+// end of sso transition
+
 if (isset($_GET['auth'])) {
     $auth = $_GET['auth'];
     if (isset($_GET['q'])) { // activate / deactivate authentication method
@@ -85,7 +120,6 @@ if (isset($_GET['auth'])) {
         }
     }
     $tool_content .= "</ul></div>";
-
     $authMethods = Database::get()->queryArray("SELECT * FROM auth ORDER BY auth_default DESC, auth_id");
     $tool_content .= "<div class='table-responsive'><table class='table-default'>";
     $tool_content .= "<th>$langAllAuthTypes</th><th class='text-right'>".icon('fa-gears', $langActions)."</th>";
@@ -119,7 +153,20 @@ if (isset($_GET['auth'])) {
             array('title' => $langConnTest,
                   'url' => "auth_test.php?auth=$auth_id",
                   'icon' => 'fa-plug',
-                  'show' => $auth_id != 1 && $info->auth_settings)));
+                  'show' => $auth_id != 1 && $info->auth_settings),
+            array('title' => "Ενεργοποίηση μετάβασης",
+                'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
+                'icon' => 'fa-bell',
+                'show' => !get_config('sso_transition')),
+            array('title' => "Απενεργοποίηση μετάβασης",
+                'url' => "$_SERVER[SCRIPT_NAME]?transition=false",
+                'icon' => 'fa-bell-slash',
+                'show' => !is_null(get_config('sso_transition')) && get_config('sso_transition')),
+            array('title' => "Αιτήματα εξαιρέσεων μετάβασης",
+                'url' => "../auth/transition/admin_auth_transition.php",
+                'icon' => 'fa-exclamation',
+                'show' => !is_null(get_config('sso_transition')) && get_config('sso_transition'))
+            ));
             $tool_content .= "</td><tr>";
     }
     $tool_content .= "</table></div>";

@@ -154,7 +154,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     }
 
     // ----------------- sso transition ------------------
-    if (defined('SSO_TRANSITION')) {
+    if (get_config('sso_transition')) {
         require_once 'modules/auth/transition/Transition.class.php';
         $auth_transition = new Transition($uid);
         if ($uid == 1) { // exception for admin users

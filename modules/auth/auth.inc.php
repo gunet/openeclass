@@ -1109,7 +1109,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
  * ************************************************************** */
 
 function alt_login($user_info_object, $uname, $pass, $mobile = false) {
-    global $warning, $auth_ids;
+    global $warning, $auth_ids, $langInvalidAuth;
 
     $_SESSION['canChangePassword'] = false;
     $auth = array_search($user_info_object->password, $auth_ids);
