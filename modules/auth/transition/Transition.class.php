@@ -65,7 +65,7 @@ class Transition {
                 $_SESSION['cas_surname'], $this->userid);
 
             $_SESSION['uid'] = $this->userid;
-            // print_a($_SESSION); die;
+            //print_a($_SESSION); die;
             header("Location: $urlServer");
         }
     }
@@ -108,16 +108,18 @@ class Transition {
 
         switch($action) {
             case 'yes': Database::get()->query("UPDATE sso_exception 
-                                                 SET status = " .SSO_TRANSITION_EXCEPTION_APPROVED . " 
+                                                 SET status = " . SSO_TRANSITION_EXCEPTION_APPROVED . " 
                                                 WHERE id = ?d", $eid);
                         break;
             case 'close': Database::get()->query("UPDATE sso_exception 
-                                                 SET status = " .SSO_TRANSITION_EXCEPTION_CLOSED . " 
+                                                 SET status = " . SSO_TRANSITION_EXCEPTION_CLOSED . " 
                                                 WHERE id = ?d", $eid);
                         break;
             case 'reject': Database::get()->query("UPDATE sso_exception 
-                                                 SET status = " .SSO_TRANSITION_EXCEPTION_BLOCKED . " 
+                                                 SET status = " . SSO_TRANSITION_EXCEPTION_BLOCKED . " 
                                                 WHERE id = ?d", $eid);
+                           Database::get()->query("UPDATE user SET expires_at = " . DBHelper::timeAfter() . " 
+                                                  WHERE id = (SELECT uid FROM sso_exception WHERE id = ?d)", $eid);
                         break;
             default: break;
         }
@@ -165,5 +167,20 @@ class Transition {
             default: break;
         }
         return $style;
+    }
+
+
+    /**
+     * @brief create table `sso_exception` if not exists
+     */
+    public static function create_table() {
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `sso_exception` 
+                                        ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, 
+                                          `uid` int(10) unsigned NOT NULL, 
+                                          `comments` text CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL, 
+                                          `status` tinyint(4) NOT NULL, 
+                                          `timestamp` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP, 
+                                          PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET utf8");
     }
 }

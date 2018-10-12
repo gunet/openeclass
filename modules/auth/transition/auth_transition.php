@@ -6,13 +6,18 @@
  * Time: 10:50 AM
  */
 
+// ------------ feel free to change it ----------
+define ('INTRO_SSO_MESSAGE', 'Η διαδικασία μετάβασης των λογαριασμών των χρηστών έχει ξεκινήσει! 
+                            Κάντε κλικ στο `Μετάβαση`. Θα μεταφερθείτε στην κεντρική σελίδα Πιστοποίησης Λογαριασμού 
+                            όπου θα δώσετε τα στοιχεία σας έτσι ώστε ο λογαριασμός σας στην πλατφόρμα να ενημερωθεί.');
+// ----------------------------------------------
 $require_login = true;
 $transition_script = true;
 require_once '../../../include/baseTheme.php';
 require_once 'modules/auth/transition/Transition.class.php';
 $pageName = "Μετάβαση";
 
-if (!defined('SSO_TRANSITION')) {
+if (!get_config('sso_transition')) {
     redirect("{$urlServer}index.php?logout=yes");
 }
 
@@ -46,7 +51,7 @@ if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_BLO
 } else {  // intro message
     $tool_content .= "<div class='row'>
                     <div class='col-sm-12'>
-                        <div class='alert alert-info'>Η διαδικασία μετάβασης έχει ξεκινήσει</div>
+                        <div class='alert alert-info'>" . INTRO_SSO_MESSAGE . "</div>
                         <div class='text-justify'>
                             <a href='$_SERVER[SCRIPT_NAME]?t=true' class='btn btn-success' role='button'>Μετάβαση</a>
                             <a href='$_SERVER[SCRIPT_NAME]?t=false' class='btn btn-warning' role='button'>Αίτημα εξαίρεσης</a>
@@ -66,7 +71,7 @@ function display_sso_exception_form($uid) {
 
     $firstname = uid_to_name($uid);
     $tool_content .= "
-        <div class='alert alert-info'>Παρακαλώ εξηγήστε τους λόγους εξαίρεσης.</div>
+        <div class='alert alert-info'>Παρακαλώ αναφέρατε τους λόγους εξαίρεσης.</div>
         <div class='form-wrapper'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?exception=TRUE' method='post'>
             <fieldset>
