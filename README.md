@@ -19,7 +19,7 @@ Installation of Open eClass requires a web server with support for PHP >= 5.6
 and a database server (MySQL or MariaDB). You can find detailed installation
 instructions as well as other manuals at the following address:
 
-http://docs.openeclass.org/en:manuals
+https://docs.openeclass.org/en/start
 
 GUnet Asychronous e-Learning Group
 October 2018
@@ -62,7 +62,7 @@ http://www.openeclass.org/
 PHP >= 5.6 και μια βάση δεδομένων (MySQL or MariaDB). Αναλυτικές οδηγίες εγκατάστασης
 και άλλα εγχειρίδια της πλατφόρμας μπορούν να βρεθούν στη διεύθυνση:
 
-http://docs.openeclass.org/el:manuals
+https://docs.openeclass.org/el/start
 
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Οκτώβριος 2017
+Οκτώβριος 2018
