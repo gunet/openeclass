@@ -157,15 +157,15 @@ if (isset($_GET['auth'])) {
             array('title' => "Ενεργοποίηση μετάβασης",
                 'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
                 'icon' => 'fa-bell',
-                'show' => !get_config('sso_transition')),
+                'show' => ($auth_name == 'cas' && !get_config('sso_transition'))),
             array('title' => "Απενεργοποίηση μετάβασης",
                 'url' => "$_SERVER[SCRIPT_NAME]?transition=false",
                 'icon' => 'fa-bell-slash',
-                'show' => !is_null(get_config('sso_transition')) && get_config('sso_transition')),
+                'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))),
             array('title' => "Αιτήματα εξαιρέσεων μετάβασης",
                 'url' => "../auth/transition/admin_auth_transition.php",
                 'icon' => 'fa-exclamation',
-                'show' => !is_null(get_config('sso_transition')) && get_config('sso_transition'))
+                'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition')))
             ));
             $tool_content .= "</td><tr>";
     }
