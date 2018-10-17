@@ -24,6 +24,7 @@
  */
 $require_current_course = true;
 $course_guest_allowed = true;
+$require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
@@ -40,6 +41,7 @@ $professor = $course->prof_names;
 $langUserPortfolio = q($course->title);
 
 if (isset($_POST['register'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if ($course->visible == COURSE_REGISTRATION or $course->visible == COURSE_OPEN) {
         if ($course->password !== '' and !(isset($_POST['pass']) and $course->password == $_POST['pass'])) {
             Session::Messages($langWrongPassCourse, 'alert-danger');
@@ -118,7 +120,8 @@ $tool_content .= action_bar(array(
           'level' => 'primary-label',
           'button-class' => 'btn-default')),false) . "
 <div class='row'><div class='panel'><div class='panel-body'>
-    <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>" .
+        generate_csrf_token_form_field() . "
         <fieldset>
             <div class='col-xs-12'>
             <div class='form-group'>
