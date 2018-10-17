@@ -24,6 +24,7 @@
  */
 $require_current_course = true;
 $course_guest_allowed = true;
+$require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
@@ -40,6 +41,7 @@ $professor = $course->prof_names;
 $langUserPortfolio = q($course->title);
 
 if (isset($_POST['register'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if ($course->visible == COURSE_REGISTRATION or $course->visible == COURSE_OPEN) {
         if ($course->password !== '' and !(isset($_POST['pass']) and $course->password == $_POST['pass'])) {
             Session::Messages($langWrongPassCourse, 'alert-danger');
@@ -52,16 +54,16 @@ if (isset($_POST['register'])) {
 
         // check for prerequisites
         $prereq1 = Database::get()->queryArray("SELECT cp.prerequisite_course
-                                 FROM course_prerequisite cp 
+                                 FROM course_prerequisite cp
                                  WHERE cp.course_id = ?d", $course_id);
         if (count($prereq1) > 0) {
             $completion = true;
 
             foreach ($prereq1 as $prereqCourseId) {
-                $prereq2 = Database::get()->queryArray("SELECT id 
-                                  FROM user_badge 
-                                  WHERE user = ?d 
-                                  AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND bundle = -1) 
+                $prereq2 = Database::get()->queryArray("SELECT id
+                                  FROM user_badge
+                                  WHERE user = ?d
+                                  AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND bundle = -1)
                                   AND completed = 1", $uid, $prereqCourseId);
                 if (count($prereq2) <= 0) {
                     $completion = false;
@@ -144,7 +146,8 @@ $tool_content .= action_bar(array(
           'level' => 'primary-label',
           'button-class' => 'btn-default')),false) . "
 <div class='row'><div class='panel'><div class='panel-body'>
-    <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>" .
+        generate_csrf_token_form_field() . "
         <fieldset>
             <div class='col-xs-12'>
             <div class='form-group'>
