@@ -157,7 +157,7 @@ var lang = {
         invalidCode: '" . js_escape($langInvalidCode) . "',
 };
 var courses = ".(json_encode($courses_list)).";
-</script>";
+</script>" . generate_csrf_token_form_field();
 
 load_js('tools.js');
 

@@ -101,12 +101,13 @@ $courses = Database::get()->queryArray("select c.*, cd.department "
         . " where c.id in (" . $inIds . ") order by field(id," . $inIds . ")");
 
 //////// PRINT RESULTS ////////
-$tool_content .= action_bar(array(
-                    array('title' => $langAdvancedSearch,
-                          'url' => "search.php",
-                          'icon' => 'fa-search',
-                          'level' => 'primary-label',
-                          'button-class' => 'btn-success',)));
+$tool_content .= generate_csrf_token_form_field() .
+    action_bar(array(
+        array('title' => $langAdvancedSearch,
+              'url' => "search.php",
+              'icon' => 'fa-search',
+              'level' => 'primary-label',
+              'button-class' => 'btn-success')));
 
 $tool_content .= "
     <div class='alert alert-info'>$langDoSearch";

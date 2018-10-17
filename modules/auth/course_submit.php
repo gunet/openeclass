@@ -26,6 +26,7 @@ require_once 'include/log.class.php';
 header('Content-Type: text/plain; charset=UTF-8');
 
 if (isset($_POST['cid']) and isset($_POST['state'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $cid = intval($_POST['cid']);
     $state = $_POST['state'];
     if (isset($_POST['password'])) {
