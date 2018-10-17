@@ -4221,6 +4221,7 @@ $langSubmissionDescr = "Ο " . $langsStudent . " %s, στις %s, έστειλε
 $langEndDeadline = "(η προθεσμία έχει λήξει)";
 $langWEndDeadline = "(η προθεσμία λήγει αύριο)";
 $langNEndDeadLine = "(η προθεσμία λήγει σήμερα)";
+$langWarnAboutDeadLine = "Προσοχή! Επειδή η ημερομηνία υποβολής έχει παρέλθει η εργασία σας θα θεωρηθεί εκπρόθεσμη!";
 $langDays = "ημέρες";
 $langDaysLeft = "απομένουν";
 $langGrades = "H βαθμολογία σας κατοχυρώθηκε με επιτυχία";
