@@ -971,7 +971,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
     } //checks for submission validity end here
-    if ($submit_ok) {
+    if ($submit_ok) {        
         $success_msgs = array();
         $error_msgs = array();
         //Preparing variables
@@ -2469,6 +2469,7 @@ function show_student_assignment($id) {
  * @global type $is_editor
  * @global type $langWorkOnlineText
  * @global type $langGradebookGrade
+ * @global type $langWarnAboutDeadLine
  * @param type $id
  * @param type $user_group_info
  * @param type $on_behalf_of
@@ -2479,14 +2480,16 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit,
     $langNotice3, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade;
+    $langGradebookGrade, $langWarnAboutDeadLine;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
     }
 
-    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);    
+    /*if ($assignment->late_submission) {
+        $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
+    }*/
     $group_select_hidden_input = $group_select_form = '';
     $is_group_assignment = is_group_assignment($id);
     if ($is_group_assignment) {
@@ -2669,6 +2672,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
  * @global type $langExportGrades
  * @global type $langDescription
  * @global type $langTitle
+ * @global type $langWarnAboutDeadLine
  * @param type $id
  * @param type $row
  */
@@ -2677,7 +2681,7 @@ function assignment_details($id, $row) {
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail,
-           $langEditChange, $langExportGrades, $langDescription, $langTitle;
+           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine;
 
     $preview_rubric = '';
     $grade_type = $row->grading_type;
@@ -2891,7 +2895,11 @@ function assignment_details($id, $row) {
         }
     $tool_content .= "
         </div>
-    </div>";
+    </div>";    
+    $cdate = date('Y-m-d H:i:s');
+    if ($row->deadline < $cdate && $row->late_submission && !$is_editor) {
+        $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
+    }
 }
 
 
