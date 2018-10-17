@@ -2206,6 +2206,7 @@ $langSubmissionDescr = "%s, on %s, submitted a file named \"%s\".";
 $langEndDeadline = "(deadline expired)";
 $langWEndDeadline = "(Deadline is tomorrrow)";
 $langNEndDeadLine = "(Deadline is today)";
+$langWarnAboutDeadLine = "Warning! Assignment deadline is over. Your submission is overdue!";
 $langDays = "days";
 $langDaysLeft = "left";
 $langGrades = "The grades were assigned successfully!";
