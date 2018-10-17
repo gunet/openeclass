@@ -215,7 +215,10 @@ function course_list_handler() {
     if (!$('#ind' + cid).length) {
         td.append(' <img id="ind' + cid + '" src="' + themeimg + '/ajax_loader.gif" alt="">');
     }
-    var submit_info = {cid: cid, state: $(this).prop('checked')};
+    var submit_info = {
+      cid: cid,
+      state: $(this).prop('checked'),
+      token: $('input[name=token]').val() };
     var passfield = $('input[name=pass' + cid + ']');
     if (passfield.length) {
         submit_info.password = passfield.val();
