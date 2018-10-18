@@ -1774,24 +1774,26 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
     $gradebookActivities = Database::get()->queryArray($sql, $params);
     if ($gradebookActivities) {
         foreach($gradebookActivities as $gradebookActivity){
-            $gradebook_book = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $gradebookActivity->id AND uid = ?d", $uid);
+            $gradebook_book = Database::get()->querySingle("SELECT grade
+                    FROM gradebook_book
+                    WHERE gradebook_activity_id = ?d AND uid = ?d",
+                $gradebookActivity->id, $uid);
             if ($gradebook_book) {
-                if (!is_null($grade) && ($grade > $gradebook_book->grade || $grade < $gradebook_book->grade && $activity == GRADEBOOK_ACTIVITY_ASSIGNMENT)) {
-                    Database::get()->query("UPDATE gradebook_book "
-                            . "SET grade = ?f "
-                            . "WHERE gradebook_activity_id = $gradebookActivity->id "
-                            . "AND uid = ?d",
-                            $grade, $uid);
-                } else {
-                    Database::get()->query("DELETE FROM gradebook_book "
-                            . "WHERE gradebook_activity_id = $gradebookActivity->id "
-                            . "AND uid = ?d",
-                            $uid);
+                if (is_null($grade)) {
+                    Database::get()->query('DELETE FROM gradebook_book
+                            WHERE gradebook_activity_id = ?d AND uid = ?d',
+                        $gradebookActivity->id, $uid);
+                } elseif ($grade > $gradebook_book->grade or
+                          ($grade < $gradebook_book->grade and $activity == GRADEBOOK_ACTIVITY_ASSIGNMENT)) {
+                    Database::get()->query('UPDATE gradebook_book
+                                                SET grade = ?f
+                                                WHERE gradebook_activity_id = ?d AND uid = ?d',
+                        $grade, $gradebookActivity->id, $uid);
                 }
-            } else {
-                Database::get()->query("INSERT INTO gradebook_book "
-                        . "SET gradebook_activity_id = $gradebookActivity->id, uid = ?d, grade = ?f, comments = ''",
-                        $uid, $grade);
+            } elseif (!is_null($grade)) {
+                Database::get()->query("INSERT INTO gradebook_book
+                            SET gradebook_activity_id = ?d, uid = ?d, grade = ?f, comments = ''",
+                    $gradebookActivity->id, $uid, $grade);
             }
         }
     }
