@@ -3773,9 +3773,9 @@ function submit_grades($grades_id, $grades, $email = false) {
                 $grade = is_numeric($grade['grade']) ? $grade['grade'] : null;
 
                 if ($val !== $grade) {
-                    if (Database::get()->query("UPDATE assignment_submit
+                    Database::get()->query("UPDATE assignment_submit
                                                 SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
-                                                WHERE id = ?d", $grade, Log::get_client_ip(), $sid)->affectedRows > 0) {
+                                                WHERE id = ?d", $grade, Log::get_client_ip(), $sid); 
                         $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
                         triggerGame($course_id, $quserid, $assignment->id);
                         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
@@ -3796,8 +3796,7 @@ function submit_grades($grades_id, $grades, $email = false) {
                         if ($email) {
                             grade_email_notify($grades_id, $sid, $grade, '');
                         }
-                        Session::Messages($langGrades, 'alert-success');
-                    }
+                        Session::Messages($langGrades, 'alert-success');                    
                 }
             }
         }
