@@ -1447,7 +1447,7 @@ class Calendar_Events {
     }
 
     public static function get_user_visibility_level() {
-        global $uid, $session, $is_admin;
+        global $uid, $session, $is_admin, $is_power_user, $is_usermanage_user, $is_departmentmanage_user;
 
         if (!$uid) {
             return 10;
