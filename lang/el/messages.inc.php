@@ -5725,3 +5725,21 @@ $langNewCoursePrerequisiteFailSelf = "Αδυναμία προσθήκης, το 
 $langNewCoursePrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, το μάθημα που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
 $langNewCoursePrerequisiteFailBadgeMissing = "Αδυναμία προσθήκης, το μάθημα που επιλέξατε δεν διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος.";
 $langPrerequisitesNotComplete = "Τα προαπαιτούμενα μαθήματα για εγγραφή δεν έχουν ολοκληρωθεί";
+
+// Messages for Lti Consumer
+$langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
+$langNewLTITool= "Προσθήκη νέας εφαρμογής LTI";
+$langLTIProviderUrl = "LTI Provider URL";
+$langLTIProviderKey = "LTI Provider Key";
+$langLTIProviderSecret = "LTI Provider Secret";
+$langNewLTIAppStatus = "Κατάσταση";
+$langNewLTIAppActive = "Ενεργή";
+$langNewLTIAppInActive = "Μη ενεργή";
+$langNoLTIApps = "Δεν υπάρχουν Εξωτερικές Εφαρμογές LTI προς χρήση";
+$langLTIAPPlertTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της Εφαρμογής LTI";
+$langLTIAPPlertURL = "Παρακαλώ πληκτρολογήστε το URL του LTI Provider";
+$langLTIAppAddSuccessful = "Η καταχώριση της Εξωτερικής Εφαρμογής LTI ολοκληρώθηκε επιτυχώς";
+$langLTIAppUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
+$langLTIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
+$langNewLTIAppSessionDesc = "Σύντομη περιγραφή";
+$langLTIAppActions = "Ενέργειες";

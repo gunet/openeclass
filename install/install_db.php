@@ -1101,6 +1101,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
     `exercise_id` INT(11) NOT NULL DEFAULT 0,
     PRIMARY KEY (question_id, exercise_id) ) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS lti_apps (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` INT(11) NOT NULL,
+    `title` VARCHAR(255) DEFAULT NULL,
+    `description` TEXT,
+    `lti_provider_url` VARCHAR(255) DEFAULT NULL,
+    `lti_provider_key` VARCHAR(255) DEFAULT NULL,
+    `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
+    `enabled` ENUM('0','1') DEFAULT NULL,
+    PRIMARY KEY (`id`)) $tbl_options");
+
 // hierarchy tables
 $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
     `id` int(11) NOT NULL auto_increment PRIMARY KEY,
