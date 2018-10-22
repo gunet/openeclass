@@ -1109,7 +1109,7 @@ $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `lti_provider_url` VARCHAR(255) DEFAULT NULL,
     `lti_provider_key` VARCHAR(255) DEFAULT NULL,
     `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
-    `enabled` ENUM('0','1') DEFAULT NULL,
+    `enabled` TINYINT(4) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`)) $tbl_options");
 
 // hierarchy tables
