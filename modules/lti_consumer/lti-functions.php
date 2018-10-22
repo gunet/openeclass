@@ -206,7 +206,7 @@ function lti_app_details() {
 
     load_js('trunk8');
 
-    $activeClause = ($is_editor) ? '' : "AND enabled = '1'";
+    $activeClause = ($is_editor) ? '' : "AND enabled = 1";
     $result = Database::get()->queryArray("SELECT * FROM lti_apps
         WHERE course_id = ?s $activeClause ORDER BY id DESC", $course_id);
     if ($result) {
@@ -230,7 +230,7 @@ function lti_app_details() {
 
             $desc = isset($row->description)? $row->description: '';
 
-            $canJoin = $row->enabled == '1';
+            $canJoin = $row->enabled == 1;
             if ($canJoin) {
                 //print_r($_SESSION);die();
                 $joinLink = create_join_button(
@@ -297,7 +297,7 @@ function disable_lti_app($id)
 {
     global $langLTIAppUpdateSuccessful, $course_code;
 
-    Database::get()->querySingle("UPDATE lti_apps set enabled='0' WHERE id=?d",$id);
+    Database::get()->querySingle("UPDATE lti_apps set enabled = 0 WHERE id = ?d",$id);
     Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
     redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
@@ -306,7 +306,7 @@ function enable_lti_app($id)
 {
     global $langLTIAppUpdateSuccessful, $course_code;
 
-    Database::get()->querySingle("UPDATE lti_apps SET enabled='1' WHERE id=?d",$id);
+    Database::get()->querySingle("UPDATE lti_apps SET enabled = 1 WHERE id = ?d",$id);
     Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
     redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
