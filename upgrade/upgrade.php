@@ -3344,8 +3344,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
 
         // hierarchy extra fields
-        Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
-        Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
+        if (!DBHelper::fieldExists('hierarchy', 'description')) {
+            Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
+            Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
+        }
 
         Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
         Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
@@ -3417,6 +3419,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.6', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.6'));
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `order` INT(11) NOT NULL DEFAULT 0,
@@ -3762,14 +3766,23 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     // upgrade queries for version 3.7
-    if (version_compare($oldversion, '3,7', '<')) {
+    if (version_compare($oldversion, '3.7', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.7'));
 
         if (!DBHelper::fieldExists('wiki_properties', 'visible')) {
             Database::get()->query("ALTER TABLE `wiki_properties`
                 ADD `visible` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1'");
         }
-            
+
+        // course units upgrade
+        if (!DBHelper::fieldExists('course_units', 'finish_week')) {
+            Database::get()->query("ALTER TABLE course_units ADD finish_week DATE after comments");
+        }
+        if (!DBHelper::fieldExists('course_units', 'start_week')) {
+            Database::get()->query("ALTER TABLE course_units ADD start_week DATE after comments");
+        }
+        
+        // course prerequisites
         Database::get()->query("CREATE TABLE IF NOT EXISTS `course_prerequisite` (
                 `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 `course_id` int(11) not null,
@@ -3777,7 +3790,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 PRIMARY KEY (`id`)
             ) $tbl_options");
 
-
+        // lti apps
         Database::get()->query("CREATE TABLE IF NOT EXISTS lti_apps (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
