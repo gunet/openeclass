@@ -820,12 +820,13 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
 
     $run_to = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s", $meeting_id)->running_at;
     if (isset($run_to)) {
-        if (!is_bbb_server_available($run_to)) { // if existing bbb server is busy try to find next one
+        $participants = get_tc_participants($meeting_id);
+        if (!is_bbb_server_available($run_to, $participants)) { // if existing bbb server is busy try to find next one
             $r = Database::get()->queryArray("SELECT id FROM tc_servers
                             WHERE `type`= 'bbb' AND enabled='true' AND id <> ?d ORDER BY weight ASC", $run_to);
             if (($r) and count($r) > 0) {
                 foreach ($r as $server) {
-                    if (is_bbb_server_available($server->id)) {
+                    if (is_bbb_server_available($server->id, $participants)) {
                         $run_to = $server->id;
                         Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE meeting_id = ?s", $run_to, $meeting_id);
                         break;
@@ -1289,15 +1290,21 @@ function is_configured_tc_server() {
  * @brief check if bbb server is available
  * @global type $course_id
  * @param type $server_id
+ * @param type $participants
  * @return boolean
  */
-function is_bbb_server_available($server_id) {
+function is_bbb_server_available($server_id, $participants)
+{
 
     global $course_id;
 
     //Get all course participants
-    $users_to_join = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user, user
+    if ($participants == 0) {
+        $users_to_join = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user, user
                                 WHERE course_user.course_id = ?d AND course_user.user_id = user.id", $course_id)->count;
+    } else { // get specific participants
+        $users_to_join = $participants;
+    }
 
     $row = Database::get()->querySingle("SELECT id, ip, server_key, api_url, max_rooms, max_users
                                     FROM tc_servers WHERE id = ?d AND enabled = 'true'", $server_id);
@@ -1380,4 +1387,22 @@ function get_tc_id($meeting_id) {
     
     return $result;
     
+}
+
+
+/**
+ * @brief get tc meeting participants
+ * @param $meeting_id
+ * @return int
+ */
+function get_tc_participants($meeting_id) {
+    $r = Database::get()->querySingle("SELECT participants FROM tc_session 
+                    WHERE meeting_id = ?s", $meeting_id)->participants;
+
+    if ($r == '0') {
+        return 0;
+    } else {
+        return count(explode(',', preg_replace('/_/','', $r)));
+    }
+
 }
