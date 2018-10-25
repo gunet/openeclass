@@ -1665,7 +1665,7 @@ $langInvalidNumericValue = "άκυρη τιμή πεδίου";
 $langGroupFull = "η ομάδα είναι πλήρης";
 
 //neos odhgos dhmiourgias mathimaton
-$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη λειτουργία 'Διαχείριση $langOfCourse'";
+$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη 'Διαχείριση $langOfCourse'";
 $langCreateCourse = "Οδηγός δημιουργίας $langsOfCourse";
 $langCreateCourseStep = "Βήμα";
 $langCreateCourseStep2 = "από";

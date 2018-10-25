@@ -66,7 +66,6 @@ if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SER
 }
 
 if (isset($_REQUEST['edit_submit'])) {
-    units_set_maxorder();
     $tool_content .= handle_unit_info_edit();
 }
 
@@ -163,8 +162,15 @@ if (isset($id) and $id !== false) {
     if ($info) {
         $pageName = $info->title;
         $comments = standard_text_escape(trim($info->comments));
+        $course_start_week = $course_finish_week = '';
+        if (!(($info->start_week == '0000-00-00') or (is_null($info->start_week)))) {
+            $course_start_week = " $langFrom2 " . nice_format($info->start_week);
+        }
+        if (!(($info->finish_week == '0000-00-00') or (is_null($info->finish_week)))) {
+            $course_finish_week = " $langTill " . nice_format($info->finish_week);
+        }
     } else {
-      $tool_content .= "<br>";
+        $tool_content .= "<br>";
         Session::Messages($langUnknownResType);
         redirect_to_home_page("courses/$course_code/");
     }
@@ -192,7 +198,7 @@ foreach (array('previous', 'next') as $i) {
         $access_check = "AND public = 1";
     }
 
-    $q = Database::get()->querySingle("SELECT id, title, public FROM course_units
+    $q = Database::get()->querySingle("SELECT id, title, start_week, finish_week, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
                              AND `order` $op $info->order
@@ -221,30 +227,37 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
             </div>
         </div>";
 }
-$moduleTag = new ModuleElement($id);
-$tags_list = $moduleTag->showTags();
+
 $tool_content .= "
   <div class='row'>
     <div class='col-md-12'>
       <div class='panel panel-default'>
-        <div class='panel-body'>
-          <div class='inner-heading'>
-            ".q($pageName)."
+          <div class='panel-heading'>
+                <div class='panel-title h3'>
+                    " . q($pageName) . "
+                    <h5 class='text-muted'>
+                        $course_start_week                                               
+                        $course_finish_week
+                    </h5>
+                </div>
           </div>
-          <div>
+        <div class='panel-body'>          
+         <div>
             $comments
-          </div>";
-      if (!empty($tags_list)) {
+         </div>";
+
+    $moduleTag = new ModuleElement($id);
+    $tags_list = $moduleTag->showTags();
+
+    if (!empty($tags_list)) {
         $tool_content .= "
           <div class='unit-tags'>
               <small><span class='text-muted'>$langTags:</span> $tags_list</small>
-          </div>
-          ";
+          </div>";
       }
 
-      $tool_content .="
-          <div class='unit-resources'>";
-            show_resources($id);
+      $tool_content .= "<div class='unit-resources'>";
+      show_resources($id);
       $tool_content .= "</div>";
 
     $tool_content .= "
@@ -267,17 +280,17 @@ $tool_content .= "
     <div class='row'>
         <div class='col-md-12'>
             <div class='form-wrapper'>
-                    <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
-                        <div class='form-group'>
-                            <label class='col-sm-8 control-label'>$langCourseUnits</label>
-                            <div class='col-sm-4'>
-                                <label class='hidden' for='id'>$langCourseUnits</label>
-                                <select name='id' id='id' class='form-control' onChange='document.unitselect.submit();'>
-                                    $course_units_options
-                                </select>
-                            </div>
+                <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
+                    <div class='form-group'>
+                        <label class='col-sm-8 control-label'>$langCourseUnits</label>
+                        <div class='col-sm-4'>
+                            <label class='hidden' for='id'>$langCourseUnits</label>
+                            <select name='id' id='id' class='form-control' onChange='document.unitselect.submit();'>
+                                $course_units_options
+                            </select>
                         </div>
-                    </form>
+                    </div>
+                </form>
             </div>
         </div>
     </div>";

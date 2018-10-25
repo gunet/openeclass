@@ -34,10 +34,24 @@ $pageName = $langEditUnit;
 
 load_js('tools.js');
 load_js('select2');
+load_js('bootstrap-datepicker');
 
+$head_content .= "
+    <script type='text/javascript'>
+        $(function() {
+            $('#unitdurationfrom, #unitdurationto').datepicker({
+                    format: 'dd-mm-yyyy',
+                    pickerPosition: 'bottom-right',
+                    language: '".$language."',
+                    autoclose: true    
+                });
+            });
+    </script>";
+
+$start_week = $finish_week = '';
 if (isset($_GET['edit'])) { // display form for editing course unit
     $id = $_GET['edit'];
-    $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_units WHERE id = ?d AND course_id = ?d",$id, $course_id);   
+    $cu = Database::get()->querySingle("SELECT id, title, comments, start_week, finish_week FROM course_units WHERE id = ?d AND course_id = ?d",$id, $course_id);
     if (!$cu) {
         Session::Messages($langUnknownResType);
         redirect_to_home_page("courses/$course_code/");
@@ -45,6 +59,12 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $unittitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
     $tagsInput = eClassTag::tagInput($id);
     $unitdescr = $cu->comments;
+    if (!(($cu->start_week == '0000-00-00') or (is_null($cu->start_week)))) {
+        $start_week = DateTime::createFromFormat('Y-m-d', $cu->start_week)->format('d-m-Y');
+    }
+    if (!(($cu->finish_week == '0000-00-00') or (is_null($cu->finish_week)))) {
+        $finish_week = DateTime::createFromFormat('Y-m-d', $cu->finish_week)->format('d-m-Y');
+    }
     $unit_id = $cu->id;
 } else {
     $pageName = $langAddUnit;
@@ -76,6 +96,19 @@ $tool_content .= "<div class='form-group'>
                 <div class='col-sm-10'>
                     " . rich_text_editor('unitdescr', 10, 20, $unitdescr) . "
                 </div>
+            </div>
+            <div class='form-group'>
+                <label for='unitduration' class='col-sm-2 control-label'>$langDuration
+                    <span class='help-block'>$langOptional</span>
+                </label>
+                <label for='unitduration' class='col-sm-1 control-label'>$langFrom2</label>
+                <div class='col-sm-4'>
+                    <input type='text' class='form-control' id='unitdurationfrom' name='unitdurationfrom' value='$start_week'>
+                </div>
+                <label for='unitduration' class='col-sm-1 control-label'>$langUntil</label>
+                <div class='col-sm-4'>
+                    <input type='text' class='form-control' id='unitdurationto' name='unitdurationto' value='$finish_week'>
+                </div>                        
             </div>
             " . $tagsInput . "
             <div class='form-group'>

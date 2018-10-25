@@ -60,10 +60,7 @@ if ($depadmin_mode) {
 
 load_js('jstree3');
 load_js('pwstrength.js');
-
-//Datepicker
 load_js('tools.js');
-load_js('bootstrap-datepicker');
 
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -104,58 +101,6 @@ $head_content .= <<<hContent
     }
 
     $(document).ready(function() {
-        $('input[name=start_date]').datepicker({
-            format: 'yyyy-mm-dd',
-            language: '$language',
-            autoclose: true
-        }).on('changeDate', function(e){
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                date2.setDate(date2.getDate() + 7);
-                $('input[name=finish_date]').datepicker('setDate', date2);
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }else{
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }
-        });
-
-        $('input[name=finish_date]').datepicker({
-            format: 'yyyy-mm-dd',
-            language: '$language',
-            autoclose: true
-        }).on('changeDate', function(e){
-            var dt1 = $('input[name=start_date]').datepicker('getDate');
-            var dt2 = $('input[name=finish_date]').datepicker('getDate');
-            if (dt2 <= dt1) {
-                var minDate = $('input[name=finish_date]').datepicker('startDate');
-                $('input[name=finish_date]').datepicker('setDate', minDate);
-            }
-        });
-
-        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=start_date]').datepicker('setDate', new Date());
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            date2.setDate(date2.getDate() + 7);
-            $('input[name=finish_date]').datepicker('setDate', date2);
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }else{
-            var date2 = $('input[name=finish_date]').datepicker('getDate');
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }
-
-        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=finish_date]').datepicker("setDate", 7);
-        }
-
-        $('#weeklyDates').hide();
-
-        $('input[name=view_type]').change(function () {
-            if ($('#weekly').is(":checked")) {
-                $('#weeklyDates').show();
-            } else {
-                $('#weeklyDates').hide();
-            }
-        }).change();
 
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
@@ -199,12 +144,6 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 if (isset($_POST['submit'])) {
     $view_type = $_POST['view_type'];
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    if (!isset($_POST['start_date']) or !$_POST['start_date']) {
-        $_POST['start_date'] = null;
-    }
-    if (!isset($_POST['start_date']) or !$_POST['finish_date']) {
-        $_POST['finish_date'] = null;
-    }
     if (empty($_POST['title'])) {
         $tool_content .= "<div class='alert alert-danger'>$langNoCourseTitle</div>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
@@ -252,83 +191,6 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        //===================course format and start and finish date===============
-        if ($view_type == 'weekly') {
-            if (is_null($_POST['start_date'])) {
-                Session::Messages($langCourseWeeklyFormatNotice);
-                redirect_to_home_page("modules/course_info/index.php?course=$course_code");
-            } else { // if there is start date create the weeks from that start date
-                // Number of the previous week records for this course
-                $previousWeeks = Database::get()->queryArray("SELECT id FROM course_weekly_view WHERE course_id = ?d", $course_id);
-                // count of previous weeks
-                if ($previousWeeks) {
-                    foreach ($previousWeeks as $previousWeek) {
-                        // array to hold all the previous records
-                        $previousWeeksArray[] = $previousWeek->id;
-                    }
-                    $countPreviousWeeks = count($previousWeeksArray);
-                } else {
-                    $countPreviousWeeks = 0;
-                }
-                // counter for the new records
-                $cnt = 1;
-                // counter for the old records
-                $cntOld = 0;
-
-                $begin = new DateTime($_POST['start_date']);
-
-                // check if there is no end date
-                if (is_null($_POST['finish_date'])) {
-                    $end = new DateTime($begin->format("Y-m-d"));
-                    $end->add(new DateInterval('P26W'));
-                } else {
-                    $end = new DateTime($_POST['finish_date']);
-                }
-
-                $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
-                foreach ($daterange as $date) {
-                    //===============================
-                    // new weeks
-                    // get the end week day
-                    $endWeek = new DateTime($date->format("Y-m-d"));
-                    $endWeek->modify('+6 day');
-
-                    // value for db
-                    $startWeekForDB = $date->format("Y-m-d");
-
-                    if ($endWeek->format("Y-m-d") < $end->format("Y-m-d")) {
-                        $endWeekForDB = $endWeek->format("Y-m-d");
-                    } else {
-                        $endWeekForDB = $end->format("Y-m-d");
-                    }
-                    //================================
-                    // update the DB or insert new weeks
-                    if ($cnt <= $countPreviousWeeks) {
-                        // update the weeks in DB
-                        Database::get()->query("UPDATE course_weekly_view SET start_week = ?t, finish_week = ?t WHERE course_id = ?d AND id = ?d", $startWeekForDB, $endWeekForDB, $course_id, $previousWeeksArray[$cntOld]);
-                        // update the cntOLD records
-                        $cntOld++;
-                    } else {
-                        $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view");
-                        if ($q) {
-                            $order =  max(0, $q->maxorder) + 1;
-                            Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week, `order`) VALUES (?d, ?t, ?t, ?d)", $course_id, $startWeekForDB, $endWeekForDB, $order);
-                        }
-                    }
-                    // update the counter
-                    $cnt++;
-                }
-                // check if left from the previous weeks and they are out of the new period
-                // if so delete them
-                if (--$cnt < $countPreviousWeeks) {
-                    $week2delete = $countPreviousWeeks - $cnt;
-                    for ($i = 0; $i < $week2delete; $i++) {
-                        Database::get()->query("DELETE FROM course_weekly_view WHERE id = ?d", $previousWeeksArray[$cntOld]);
-                        $cntOld++;
-                    }
-                }
-            }
-        }
 
         $old_deps = $course->getDepartmentIds($course_id);
         $deps_changed = count(array_diff($old_deps, $departments)) +
@@ -349,17 +211,18 @@ if (isset($_POST['submit'])) {
                                 prof_names = ?s,
                                 lang = ?s,
                                 password = ?s,
-                                view_type = ?s,
-                                start_date = ?t,
-                                finish_date = ?t
-                            WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);
+                                view_type = ?s                                
+                            WHERE id = ?d",
+                                $_POST['title'], $_POST['fcode'], $_POST['course_keywords'],
+                                $_POST['formvisible'], $course_license, $_POST['teacher_name'],
+                                $session->language, $password, $view_type, $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
                 array('title' => $_POST['title'],
                       'public_code' => $_POST['fcode'],
                       'visible' => $_POST['formvisible'],
-                      'prof_names' => $_POST['titulary'],
+                      'prof_names' => $_POST['teacher_name'],
                       'lang' => $session->language));
 
             // update course settings
@@ -443,14 +306,14 @@ if (isset($_POST['submit'])) {
     <div id='operations_container'>" . action_bar($action_bar_array) . "</div>";
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                           course_license, password, id, view_type, start_date, finish_date
+                           course_license, password, id, view_type 
                       FROM course WHERE code = ?s", $course_code);
     $title = $c->title;
     $visible = $c->visible;
     $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
     $visibleChecked[$visible] = " checked='checked'";
     $public_code = q($c->public_code);
-    $titulary = q($c->prof_names);
+    $teacher_name = q($c->prof_names);
     $languageCourse = $c->lang;
     $course_keywords = q($c->keywords);
     $password = q($c->password);
@@ -589,9 +452,9 @@ if (isset($_POST['submit'])) {
         </div>
         </div>
         <div class='form-group'>
-            <label for='titulary' class='col-sm-2 control-label'>$langTeachers:</label>
+            <label for='teacher_name' class='col-sm-2 control-label'>$langTeachers:</label>
             <div class='col-sm-10'>
-        <input type='text' class='form-control' name='titulary' id='titulary' value='$titulary'>
+        <input type='text' class='form-control' name='teacher_name' id='teacher_name' value='$teacher_name'>
         </div>
         </div>
         <div class='form-group'>
@@ -632,12 +495,6 @@ if (isset($_POST['submit'])) {
                         <input type='radio' name='view_type' value='units' id='units'".($c->view_type == "units" ? " checked" : "").">
                         $langWithCourseUnits
                       </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='view_type' value='weekly' id='weekly'".($c->view_type == "weekly" ? " checked" : "").">
-                        $langCourseWeeklyFormat
-                      </label>
                     </div>" . ($activities? ("
                     <div class='radio'>
                       <label>
@@ -645,16 +502,6 @@ if (isset($_POST['submit'])) {
                         $langCourseActivityFormat
                       </label>
                     </div>"): '') . "
-                </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2' id='weeklyDates'>
-                        $langStartDate
-                        <input class='dateInForm form-control' type='text' name='start_date' value='" .
-                            ($c->start_date ? $c->start_date : '')."' readonly>
-                        $langEndDate
-                        <input class='dateInForm form-control' type='text' name='finish_date' value='" .
-                            ($c->finish_date ? $c->finish_date : '')."' readonly>
                 </div>
             </div>";
 

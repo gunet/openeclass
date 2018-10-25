@@ -43,10 +43,7 @@ $toolName = $langCourseCreate;
 
 load_js('jstree3');
 load_js('pwstrength.js');
-
-//Datepicker
 load_js('tools.js');
-load_js('bootstrap-datepicker');
 
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -88,59 +85,7 @@ $head_content .= <<<hContent
     }
 
     $(document).ready(function() {
-
-        $('input[name=start_date]').datepicker({
-            format: 'yyyy-mm-dd',
-            language: '$language',
-            autoclose: true
-        }).on('changeDate', function(e){
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                date2.setDate(date2.getDate() + 7);
-                $('input[name=finish_date]').datepicker('setDate', date2);
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }else{
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }
-        });
-
-        $('input[name=finish_date]').datepicker({
-            format: 'yyyy-mm-dd',
-            language: '$language',
-            autoclose: true
-        }).on('changeDate', function(e){
-            var dt1 = $('input[name=start_date]').datepicker('getDate');
-            var dt2 = $('input[name=finish_date]').datepicker('getDate');
-            if (dt2 <= dt1) {
-                var minDate = $('input[name=finish_date]').datepicker('startDate');
-                $('input[name=finish_date]').datepicker('setDate', minDate);
-            }
-        });
-        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=start_date]').datepicker('setDate', new Date());
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            date2.setDate(date2.getDate() + 7);
-            $('input[name=finish_date]').datepicker('setDate', date2);
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }else{
-            var date2 = $('input[name=finish_date]').datepicker('getDate');
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }
-
-        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=finish_date]').datepicker("setDate", 7);
-        }
-
-        $('#weeklyDates').hide();
-
-        $('input[name=view_type]').change(function () {
-            if ($('#weekly').is(":checked")) {
-                $('#weeklyDates').show();
-            } else {
-                $('#weeklyDates').hide();
-            }
-        }).change();
-
+    
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
         });
@@ -292,12 +237,7 @@ if (!isset($_POST['create_course'])) {
                         $langWithCourseUnits
                       </label>
                     </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='view_type' value='weekly' id='weekly'>
-                        $langCourseWeeklyFormat
-                      </label>
-                    </div>" .
+                    " .
                     ($activities? "
                     <div class='radio'>
                       <label>
@@ -306,15 +246,7 @@ if (!isset($_POST['create_course'])) {
                       </label>
                     </div>": '') . "
                 </div>
-            </div>
-            <div class='form-group' id='weeklyDates'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                      $langStartDate <input class='dateInForm form-control' type='text' name='start_date' value='' readonly>
-                </div>
-                <div class='col-sm-10 col-sm-offset-2'>
-                      $langEndDate <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
-                </div>
-            </div>
+            </div>            
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langOpenCoursesLicense:</label>
                 <div class='col-sm-10'>
@@ -348,14 +280,14 @@ if (!isset($_POST['create_course'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input id='courseopen' type='radio' name='formvisible' value='2' checked>".
+                        <input id='courseopen' type='radio' name='formvisible' value='2'>".
                         $course_access_icons[COURSE_OPEN]." $langOpenCourse
                         <span class='help-block'><small>$langPublic</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input id='coursewithregistration' type='radio' name='formvisible' value='1'>".
+                        <input id='coursewithregistration' type='radio' name='formvisible' value='1' checked>".
                         $course_access_icons[COURSE_REGISTRATION]." $langRegCourse
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
@@ -465,12 +397,7 @@ if (!isset($_POST['create_course'])) {
     if (ctype_alnum($_POST['view_type'])) {
         $view_type = $_POST['view_type'];
     }
-    if (empty($_POST['start_date'])) {
-        $_POST['start_date'] = NULL;
-    }
-    if (empty($_POST['finish_date'])) {
-        $_POST['finish_date'] = NULL;
-    }
+
     if (empty($_POST['public_code'])) {
         $public_code = $code;
     } else {
@@ -491,60 +418,21 @@ if (!isset($_POST['create_course'])) {
                         dropbox_quota = ?f,
                         password = ?s,
                         view_type = ?s,
-                        start_date = ?t,
-                        finish_date = ?t,
+                        start_date = " . DBHelper::timeAfter() . ",
+                        finish_date = " . DBHelper::timeAfter(31536000) . ",
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
                         glossary_index = 1,
                         description = ?s",
             $code, $language, $title, $_POST['formvisible'],
-            intval($course_license), $prof_names, $public_code, $doc_quota * 1024 * 1024,
+            $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, $view_type,
-            $_POST['start_date'], $_POST['finish_date'], $description);
+            $dropbox_quota * 1024 * 1024, $password, $view_type, $description);
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
         Session::Messages($langGeneralError);
         redirect_to_home_page('modules/create_course/create_course.php');
-    }
-
-    //===================course format and start and finish date===============
-    if ($view_type == "weekly") {
-
-        // get the last inserted id as the course id
-        $course_id = $new_course_id;
-
-        $begin = new DateTime($_POST['start_date']);
-
-        // check if there is no end date
-        if (!isset($_POST['finish_date']) or empty($_POST['finish_date'])) {
-            $end = new DateTime($begin->format("Y-m-d"));
-            $end->add(new DateInterval('P26W'));
-        } else {
-            $end = new DateTime($_POST['finish_date']);
-        }
-
-        $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
-
-        foreach ($daterange as $date) {
-            //new weeks
-            //get the end week day
-            $endWeek = new DateTime($date->format("Y-m-d"));
-            $endWeek->modify('+6 day');
-            //value for db
-            $startWeekForDB = $date->format("Y-m-d");
-            if ($endWeek->format("Y-m-d") < $end->format("Y-m-d")) {
-                $endWeekForDB = $endWeek->format("Y-m-d");
-            } else {
-                $endWeekForDB = $end->format("Y-m-d");
-            }
-            $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view");
-            if ($q) {
-                $order =  max(0, $q->maxorder) + 1;
-                Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week, `order`) VALUES (?d, ?t, ?t, ?d)", $course_id, $startWeekForDB, $endWeekForDB, $order);
-            }
-        }
     }
 
     // create course modules
@@ -588,4 +476,3 @@ if (!isset($_POST['create_course'])) {
                                                'visible' => $_POST['formvisible']));
 } // end of submit
 draw($tool_content, 1, null, $head_content);
-

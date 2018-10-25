@@ -36,7 +36,6 @@ require_once 'include/action.php';
 
 // Special case for static modules
 $modules[MODULE_ID_UNITS] = array('title' => $langCourseUnits, 'link' => 'units', 'image' => '');
-$modules[MODULE_ID_WEEKS] = array('title' => $langCourseWeeklyFormat, 'link' => 'weeks', 'image' => '');
 
 if (isset($_GET['tag']) && strlen($_GET['tag'])) {   
     $tag = $_GET['tag'];
@@ -72,17 +71,6 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
             $unit = Database::get()->querySingle("SELECT title FROM course_units WHERE id = ?d ", $tag->element_id);
             $link = "<a href='../../modules/units/index.php?course=".$course_code."&amp;id=".$tag->element_id."'>$unit->title</a><br>";
         }
-        if($tag->module_id == MODULE_ID_WEEKS){
-            $unit = Database::get()->querySingle("SELECT * FROM course_weekly_view WHERE id = ?d", $tag->element_id);               
-            if(empty($unit->title)) {
-                $previous_weeks = Database::get()->querySingle("SELECT COUNT(*) AS week_number FROM course_weekly_view WHERE course_id = ?d AND start_week < ?t", $unit->course_id, $unit->start_week);
-                $week_number = $previous_weeks ? ($previous_weeks->week_number + 1) : 1;
-                $title = "$week_number$langOr $langsWeek ($langFrom2 ".nice_format($unit->start_week)." $langTill ".nice_format($unit->finish_week).")"; 
-            } else {
-                $title = q($unit->title) . " ($langFrom2 ".nice_format($unit->start_week)." $langTill ".nice_format($unit->finish_week).")";
-            }
-            $link = "<a href='../../modules/weeks/index.php?course=".$course_code."&amp;id=".$tag->element_id."'>$title</a><br>";
-        }            
         $tool_content .= "
                     <ul>
                         <li>$link</li>
@@ -92,6 +80,5 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
     }       
         $tool_content .= "</div></div>";
 }
-    
-    
+
 draw($tool_content, 2, null, $head_content);

@@ -100,7 +100,6 @@ define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
 define('MODULE_ID_SHARING', 40);
-define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
@@ -370,7 +369,6 @@ function load_js($file, $init='') {
     });
 
     $(document).on('click', '.read-less', function (event) {
-console.log('aaa');
         $(this).parent().trunk8();
         event.preventDefault();
     });
@@ -1716,9 +1714,6 @@ function delete_course($cid) {
                          (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM abuse_report WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM course_weekly_view_activities WHERE course_weekly_view_id IN
-                                (SELECT id FROM course_weekly_view WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM course_weekly_view WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id`
                             WHERE `comments`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `blog_post` ON `rating`.`rid` = `blog_post`.`id`
@@ -2258,45 +2253,52 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
 }
 
 /**
- *
- * @global null $maxorder
  * @global type $course_id
  */
-function units_set_maxorder() {
+function units_get_maxorder() {
 
-    global $maxorder, $course_id;
+    global $course_id;
 
-    $q = Database::get()->querySingle("SELECT MAX(`order`) as max_order FROM course_units WHERE course_id = ?d", $course_id);
+    $q = Database::get()->querySingle("SELECT MAX(`order`) AS max_order FROM course_units
+            WHERE course_id = ?d", $course_id);
 
     $maxorder = $q->max_order;
 
-    if ($maxorder <= 0) {
-        $maxorder = null;
+    if ($maxorder == null or $maxorder <=0) {
+        $maxorder = 1;
     }
+    return $maxorder;
 }
 
 /**
  *
- * @global type $langCourseUnitModified
- * @global type $langCourseUnitAdded
- * @global null $maxorder
  * @global type $course_id
  * @global type $course_code
- * @global type $webDir
+ * @global type $langCourseUnitModified
+ * @global type $langCourseUnitAdded
  * @return type
  */
 function handle_unit_info_edit() {
+    global $course_id, $course_code, $langCourseUnitModified, $webDir, $langCourseUnitAdded;
 
-    global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code, $webDir;
-    require_once 'modules/tags/moduleElement.class.php';
     $title = $_REQUEST['unittitle'];
-    $descr = purify($_REQUEST['unitdescr']);
+    $descr = $_REQUEST['unitdescr'];
+    $unitdurationfrom = $unitdurationto = null;
+    if (!empty($_REQUEST['unitdurationfrom'])) {
+            $unitdurationfrom = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationfrom'])->format('Y-m-d');
+    }
+    if (!empty($_REQUEST['unitdurationto'])) {
+        $unitdurationto = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationto'])->format('Y-m-d');
+    }
     if (isset($_REQUEST['unit_id'])) { // update course unit
         $unit_id = $_REQUEST['unit_id'];
         Database::get()->query("UPDATE course_units SET
                                         title = ?s,
-                                        comments = ?s
-                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
+                                        comments = ?s,
+                                        start_week = ?s,
+                                        finish_week = ?s
+                                    WHERE id = ?d AND course_id = ?d",
+                            $title, $descr, $unitdurationfrom, $unitdurationto, $unit_id, $course_id);
         // tags
         if (isset($_POST['tags'])) {
             $tagsArray = explode(',', $_POST['tags']);
@@ -2305,17 +2307,22 @@ function handle_unit_info_edit() {
         }
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
-        $order = $maxorder + 1;
+        $order = units_get_maxorder()+1;
         $q = Database::get()->query("INSERT INTO course_units SET
-                                  title = ?s, comments = ?s, visible = 1,
-                                 `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
+                                  title = ?s,
+                                  comments = ?s,
+                                  start_week = ?s,
+                                  finish_week = ?s,
+                                  visible = 1,
+                                 `order` = ?d, course_id = ?d", $title, $descr,
+                                        $unitdurationfrom, $unitdurationto,
+                                        $order, $course_id);
         $successmsg = $langCourseUnitAdded;
         $unit_id = $q->lastInsertID;
         // tags
         if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
             $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->attachTags($tagsArray);
+            $moduleTag->attachTags($_POST['tags']);
         }
     }
     // update index

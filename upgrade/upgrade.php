@@ -3781,7 +3781,33 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('course_units', 'start_week')) {
             Database::get()->query("ALTER TABLE course_units ADD start_week DATE after comments");
         }
-        
+
+        // courses with view type = 'weekly'
+        $q = Database::get()->queryArray("SELECT id FROM course WHERE view_type = 'weekly'");
+        foreach ($q as $courseid) {
+            // move weekly_course_units to course_units
+            Database::get()->query("INSERT INTO course_units
+                        (title, comments, start_week, finish_week, visible, public, `order`, course_id)
+                            SELECT start_week, comments, start_week, finish_week, visible, public, `order`, ?d
+                                FROM course_weekly_view
+                                WHERE course_id = ?d ORDER BY id", $courseid, $courseid);
+
+            // new course_unit_ids
+            $r = Database::get()->queryArray("SELECT id FROM course_units WHERE course_id = ?d ORDER BY id", $courseid);
+            // move weekly_course_unit_resources to course_unit_resources
+            foreach ($r as $cunitid) {
+                Database::get()->query("INSERT INTO unit_resources
+                                (unit_id, title, comments, res_id, `type`, visible, `order`, `date`)
+                            SELECT ?d, title, comments, res_id, `type`, visible, `order`, `date`
+                                FROM course_weekly_view_activities ORDER BY course_weekly_view_id", $cunitid->id);
+            }
+            // update course with new view type (=units)
+            Database::get()->query("UPDATE course SET view_type = 'units' WHERE id = ?d", $courseid);
+        }
+
+        //Database::get()->query("DROP TABLE course_weekly");
+        //Database::get()->query("DROP TABLE course_weekly_view_activities");
+
         // course prerequisites
         Database::get()->query("CREATE TABLE IF NOT EXISTS `course_prerequisite` (
                 `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
