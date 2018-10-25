@@ -342,7 +342,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         "roles" => lti_get_ims_role(),
         "resource_link_id" => $resource_link_id,
         "resource_link_title" => $resource_link_title,
-        "resource_link_description" => $resource_link_description,
+        "resource_link_description" => strip_tags($resource_link_description),
         "lis_person_name_full" => $lis_person_name_full,
         "lis_person_name_family" => $lis_person_name_family,
         "lis_person_name_given" => $lis_person_name_given,
