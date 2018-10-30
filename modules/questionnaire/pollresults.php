@@ -229,7 +229,7 @@ if ($PollType == POLL_NORMAL) {
                             WHERE a.qid = ?d
                             AND a.poll_user_record_id = c.id
                             AND (c.email_verification = 1 OR c.email_verification IS NULL)
-                            GROUP BY a.aid", $theQuestion->pqid);
+                            GROUP BY a.aid ORDER BY submit_date DESC", $theQuestion->pqid);
                 $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
                 $answers_table = "
                     <table class='table-default'>
@@ -297,7 +297,7 @@ if ($PollType == POLL_NORMAL) {
                         WHERE a.qid = ?d
                         AND a.poll_user_record_id = b.id
                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                        GROUP BY a.answer_text", $theQuestion->pqid);
+                        GROUP BY a.answer_text ORDER BY submit_date DESC", $theQuestion->pqid);
                 $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total "
                         . "FROM poll_answer_record "
                         . "WHERE qid= ?d", $theQuestion->pqid)->total;
@@ -369,7 +369,7 @@ if ($PollType == POLL_NORMAL) {
                                             WHERE a.qid = ?d
                                             AND a.poll_user_record_id = b.id
                                             AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                            GROUP BY a.answer_text", $theQuestion->pqid);
+                                            GROUP BY a.answer_text ORDER BY submit_date DESC", $theQuestion->pqid);
                 $tool_content .= "<table class='table-default'>
                         <tbody>
                         <tr>
