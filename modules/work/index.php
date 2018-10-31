@@ -1872,7 +1872,7 @@ function show_edit_assignment($id) {
     $WorkEnd = $row->deadline ? DateTime::createFromFormat('Y-m-d H:i:s', $row->deadline)->format('d-m-Y H:i') : NULL;
     $max_grade = Session::has('max_grade') ? Session::get('max_grade') : ($row->max_grade ? $row->max_grade : 10);
 
-    $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
+    $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : ($WorkStart ? 1 : 0);
     $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
     $checked = $row->notification ? 'checked' : '';
     $comments = trim($row->comments);
