@@ -2,15 +2,12 @@
 
 @push('head_styles')
 <link href="{{ $urlAppend }}js/jstree3/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
-<link href="{{ $urlAppend }}js/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" type='text/css' rel='stylesheet'>
 @endpush
 
 @push('head_scripts')
 <script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
 <script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
 <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
-<script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/js/bootstrap-datepicker.min.js'></script>
-<script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/locales/bootstrap-datepicker.{{ $language }}.min.js'></script>
 
 <script type='text/javascript'>
 
@@ -48,57 +45,6 @@
     }
 
     $(document).ready(function() {
-        $('input[name=start_date]').datepicker({
-            format: 'yyyy-mm-dd',
-            language: '{{ $language }}',
-            autoclose: true
-        }).on('changeDate', function(e){
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                date2.setDate(date2.getDate() + 7);
-                $('input[name=finish_date]').datepicker('setDate', date2);
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }else{
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }
-        });
-
-        $('input[name=finish_date]').datepicker({
-            format: 'yyyy-mm-dd',
-            language: '{{ $language }}',
-            autoclose: true
-        }).on('changeDate', function(e){
-            var dt1 = $('input[name=start_date]').datepicker('getDate');
-            var dt2 = $('input[name=finish_date]').datepicker('getDate');
-            if (dt2 <= dt1) {
-                var minDate = $('input[name=finish_date]').datepicker('startDate');
-                $('input[name=finish_date]').datepicker('setDate', minDate);
-            }
-        });
-        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=start_date]').datepicker('setDate', new Date());
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            date2.setDate(date2.getDate() + 7);
-            $('input[name=finish_date]').datepicker('setDate', date2);
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }else{
-            var date2 = $('input[name=finish_date]').datepicker('getDate');
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }
-
-        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=finish_date]').datepicker("setDate", 7);
-        }
-
-        $('#weeklyDates').hide();
-
-        $('input[name=view_type]').change(function () {
-            if ($('#weekly').is(":checked")) {
-                $('#weeklyDates').show();
-            } else {
-                $('#weeklyDates').hide();
-            }
-        }).change();
 
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
@@ -191,14 +137,6 @@
                     {{ trans('langCourseWallFormat') }}
                   </label>
                 </div>
-            </div>
-        </div>
-        <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2' id='weeklyDates'>
-                {{ trans('langStartDate') }}
-                <input class='dateInForm form-control' type='text' name='start_date' value='{{ $start_date }}' readonly>
-                {{ trans('langEndDate') }}
-                <input class='dateInForm form-control' type='text' name='finish_date' value='{{ $finish_date }}' readonly>
             </div>
         </div>
 
