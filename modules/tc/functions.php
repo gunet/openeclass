@@ -314,14 +314,13 @@ function bbb_session_form($session_id = 0) {
  */
 function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $minutes_before, $external_users, $record, $sessionUsers, $update, $session_id = '')
 {
-
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
         $langDescription, $course_code, $course_id, $urlServer, $tc_type;
 
     // Groups of participants per session
     $r_group = '';
-    if (isset($_POST['groups']) and count($_POST['groups'] > 0)) {
+    if (isset($_POST['groups']) and count($_POST['groups']) > 0) {
         foreach ($_POST['groups'] as $group) {
             $r_group .= "$group" .',';
         }
@@ -384,7 +383,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
     $new_att_pw = $q->att_pw;
     // if we have to notify users for new session
     if ($notifyUsers == "1") {
-        if (isset($_POST['groups']) and count($_POST['groups'] > 0)) {
+        if (isset($_POST['groups']) and count($_POST['groups']) > 0) {
             $recipients = array();
             if ($_POST['groups'][0] == 0) { // all users
                 $result = Database::get()->queryArray("SELECT cu.user_id, u.email FROM course_user cu
