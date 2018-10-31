@@ -4860,7 +4860,7 @@ $langBBBAddSuccessful = "Ο προγραμματισμός της νέας τη�
 $langBBBNoteEnableJoin = "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίες είναι σε εξέλιξη.";
 $langBBBNoteEnableJoinEditor = "Ο σύνδεσμος ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης.";
 $langBBBNoParticipation = "Δεν υπάρχει συμμετοχή σε καμμία τηλεσυνεργασία.";
-$langBBBNotifyUsers = "Ειδοποίηση $langsOfStudents για τον προγραμματισμό της τηλεδιάσκεψης";
+$langBBBNotifyUsers = "Ειδοποίηση συμμετεχόντων για τον προγραμματισμό της τηλεδιάσκεψης";
 $langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων";
 $langBBBNotifyExternalUsersHelpBlock = "Συμπληρώστε τις email διευθύνσεις των εξωτερικών συμμετεχόντων";
 
