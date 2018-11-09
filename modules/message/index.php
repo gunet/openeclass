@@ -269,7 +269,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
 
         if ($course_id != 0) {//course messages
-
             $student_to_student_allow = get_config('dropbox_allow_student_to_student');
 
             if ($is_editor || $student_to_student_allow == 1) {
