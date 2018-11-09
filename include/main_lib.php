@@ -2301,7 +2301,7 @@ function handle_unit_info_edit() {
                             $title, $descr, $unitdurationfrom, $unitdurationto, $unit_id, $course_id);
         // tags
         if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
+            $tagsArray = $_POST['tags'];
             $moduleTag = new ModuleElement($unit_id);
             $moduleTag->syncTags($tagsArray);
         }
