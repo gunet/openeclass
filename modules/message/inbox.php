@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,12 +30,14 @@ include '../../include/baseTheme.php';
 include 'include/lib/fileDisplayLib.inc.php';
 require_once("class.msg.php");
 
+$personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
+$student_to_student_allow = get_config('dropbox_allow_student_to_student');
+
 if (!isset($course_id)) {
     $course_id = 0;
 }
 
 if (isset($_GET['mid'])) {
-    $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
 
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
@@ -48,9 +49,12 @@ if (isset($_GET['mid'])) {
         }
         $out = action_bar(array(
                             array('title' => $langReply,
-                                  'url' => "javascript:void(0)",
                                   'icon' => 'fa-edit',
                                   'button-class' => 'btn-reply btn-default',
+                                  'level' => 'primary-label'),
+                            array('title' => $langForward,
+                                  'icon' => 'fa-forward',
+                                  'button-class' => 'btn-forward btn-default',
                                   'level' => 'primary-label'),
                             array('title' => $langBack,
                                   'url' => "inbox.php".$urlstr,
@@ -58,11 +62,11 @@ if (isset($_GET['mid'])) {
                                   'button-class' => 'back_index btn-default',
                                   'level' => 'primary-label'),
                             array('title' => $langDelete,
-                                    'url' => 'javascript:void(0)',
-                                    'icon' => 'fa-times',
-                                    'class' => 'delete_in_inner',
-                                    'link-attrs' => "data-id='$msg->id'")
+                                  'icon' => 'fa-times',
+                                  'class' => 'delete_in_inner',
+                                  'link-attrs' => "data-id='$msg->id'")
                         ));
+
         $recipients = '';
         foreach ($msg->recipients as $r) {
             if ($r != $msg->author_id) {
@@ -154,12 +158,6 @@ if (isset($_GET['mid'])) {
             } else {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
-            //hidden variables needed in case of a reply
-            foreach ($msg->recipients as $rec) {
-                if ($rec != $uid) {
-                    $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
-                }
-            }
             $out .= generate_csrf_token_form_field() . "
                 <fieldset>
                 <h4>$langReply</h4>
@@ -168,20 +166,131 @@ if (isset($_GET['mid'])) {
                         <div class='col-sm-10'>
                             <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
                         </div>
+                    </div>";
+
+            $out .= "
+            <div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
+            <div class='col-sm-10'>
+                <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
+
+            // mail sender
+            $out .= "<option value='$msg->id' selected>". uid_to_name($msg->author_id) . "</option>";
+
+            addRecipientOptions();
+
+            $out .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+            </div>
+        </div>";
+
+        $out .= "<div class='form-group'>
+                    <label for='message_title' class='col-sm-2 control-label'>$langSubject:</label>
+                    <div class='col-sm-10'>
+                        <input name='message_title' type='text' class='form-control' id='message_title' value='" .
+                            q($langMsgRe . ' ' . $msg->subject) . "'>
                     </div>
-                    <div class='form-group'>
-                        <label for='message_title' class='col-sm-2 control-label'>$langSubject:</label>
-                        <div class='col-sm-10'>
-                            <input name='message_title' type='text' class='form-control' id='message_title' value='" .
-                                q($langMsgRe . ' ' . $msg->subject) . "'>
-                        </div>
+                </div>
+                <div class='form-group'>
+                    <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
+                    <div class='col-sm-10'>
+                        ".rich_text_editor('body', 4, 20, '')."
                     </div>
-                    <div class='form-group'>
-                        <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
-                        <div class='col-sm-10'>
-                            ".rich_text_editor('body', 4, 20, '')."
+                </div>";
+
+        if ($course_id != 0) {
+            enableCheckFileSize();
+            $out .= "<div class='form-group'>
+                        <label for='body' class='col-sm-2 control-label'>$langFileName:</label>
+                        <div class='col-sm-10'>" .
+                            fileSizeHidenInput() . "
+                            <input type='file' name='file' size='35'>
                         </div>
                     </div>";
+        }
+
+        $out .= "
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                            <div class='checkbox'>
+                                <label>
+                                    <input type='checkbox' name='mailing' value='1' checked>
+                                    " . q($langMailToUsers) . "
+                                </label>
+                            </div>
+
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>".
+                        form_buttons(array(
+                            array(
+                                'text'  => $langSend,
+                                'name'  => 'submit',
+                                'value' => $langAddModify
+                            ),
+                            array(
+                                'href' => "javascript:void(0)",
+                                'id'   => "cancelReply"
+                            )
+                        ))
+                        ."
+                    </div>
+                </div>
+            </fieldset>";
+
+            $out .= "
+                <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+               </form></div>";
+
+            // forward form
+            $out .= "<div class='form-wrapper' id='forwardBox' style='display:none;'>";
+            if ($course_id == 0) {
+                $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                if ($msg->course_id != 0) { // thread belonging to a course viewed from the central ui
+                    $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
+                }
+            } else {
+                $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+            }
+            // hidden variables needed in case of a reply
+            foreach ($msg->recipients as $rec) {
+                if ($rec != $uid) {
+                    $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
+                }
+            }
+            $out .= generate_csrf_token_form_field() . "
+                <fieldset>
+                <h4>$langForward</h4>
+                    <div class='form-group'>
+                        <label for='senderName' class='col-sm-2 control-label'>$langSender:</label>
+                        <div class='col-sm-10'>
+                            <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
+                        </div>
+                    </div>
+                <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
+                <div class='col-sm-10'>
+                    <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients-forward'>";
+
+            addRecipientOptions();
+
+            $out .= "</select><a href='#' id='removeAllForward'>$langJQUncheckAll</a>
+                </div>
+            </div>
+
+            <div class='form-group'>
+                <label for='message_title' class='col-sm-2 control-label'>$langSubject:</label>
+                <div class='col-sm-10'>
+                    <input name='message_title' type='text' class='form-control' id='message_title' value='" .
+                        q($langMsgFw . ' ' . $msg->subject) . "'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
+                <div class='col-sm-10'>
+                    ".rich_text_editor('body', 4, 20, $msg->body)."
+                </div>
+            </div>";
 
             if ($course_id != 0) {
                 enableCheckFileSize();
@@ -193,7 +302,7 @@ if (isset($_GET['mid'])) {
                             </div>
                         </div>";
             }
-$out .=         "
+            $out .= "
                     <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
@@ -223,35 +332,93 @@ $out .=         "
                     </div>
                 </fieldset>";
 
-            $out .= "
-                <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+            $out .= "<div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div>";
-            
-                $out .=
-                 "<script type='text/javascript'>
-                        $(document).ready(function () {
 
-                            $('.row.title-row').next('.row').hide();
-                            $('#dropboxTabs .nav.nav-tabs').hide();
-                            $('.btn-reply').on('click', function(){
-                                $('#replyBox').show();
-                                $('html, body').animate({
-                                    scrollTop: $('#replyBox').offset().top
-                                }, 2000);
+            // ************* End of forward form ******************
+
+            $out .=
+                "<script type='text/javascript'>
+                    $(document).ready(function () {
+                        $('.row.title-row').next('.row').hide();
+                        $('#dropboxTabs .nav.nav-tabs').hide();
+                        $('.btn-reply').on('click', function(e) {
+                            e.preventDefault();
+                            $('#replyBox').show();
+                            $('html, body').animate({
+                                scrollTop: $('#replyBox').offset().top
+                            }, 500);
+                            $('#select-recipients').select2({
+                                placeholder: '".js_escape($langSearch)."',
+                                multiple: true,
+                                minimumInputLength: 3,
+                                ajax: {
+                                    url: 'load_recipients.php?autocomplete=1',
+                                    dataType: 'json',
+                                    quietMillis: 250,
+                                    processResults: function (data) {
+                                        return { results: data.items };
+                                    },
+                                },
+                                cache: true
                             });
-                            $('#cancelReply').on('click', function(){
-                                $('#replyBox').hide();
-                                $('html, body').animate({
-                                    scrollTop: $('#header_section').offset().top
-                                }, 2000);
-                            });
-                            $('.back_index').on('click', function(){
-                                $('.row.title-row').next('.row').show();
-                                $('#dropboxTabs .nav.nav-tabs').show();
-                            });
+                            return false;
                         });
-
-                        </script>";
+                        $('.btn-forward').on('click', function(e) {
+                            e.preventDefault();
+                            $('#forwardBox').show();
+                            $('html, body').animate({
+                                scrollTop: $('#forwardBox').offset().top
+                            }, 500);
+                            $('#select-recipients-forward').select2({
+                                placeholder: '".js_escape($langSearch)."',
+                                multiple: true,
+                                minimumInputLength: 3,
+                                ajax: {
+                                    url: 'load_recipients.php?autocomplete=1',
+                                    dataType: 'json',
+                                    quietMillis: 250,
+                                    processResults: function (data) {
+                                        return { results: data.items };
+                                    },
+                                },
+                                cache: true
+                            });
+                            return false;
+                        });
+                        $('#cancelReply').on('click', function(e){
+                            e.preventDefault();
+                            $('#replyBox').hide();
+                            $('html, body').animate({
+                                scrollTop: $('#header_section').offset().top
+                            }, 500);
+                            return false;
+                        });
+                        $('.back_index').on('click', function(){
+                            $('.row.title-row').next('.row').show();
+                            $('#dropboxTabs .nav.nav-tabs').show();
+                        });
+                        $('#selectAll').click(function(e) {
+                            e.preventDefault();
+                            var stringVal = [];
+                            $('#select-recipients').find('option').each(function(){
+                                stringVal.push($(this).val());
+                            });
+                            $('#select-recipients').val(stringVal).trigger('change');
+                            return false;
+                        });
+                        $('#removeAll').click(function(e) {
+                            e.preventDefault();
+                            $('#select-recipients').val([]).trigger('change');
+                            return false;
+                        });
+                        $('#removeAllForward').click(function(e) {
+                            e.preventDefault();
+                            $('#select-recipients-forward').val([]).trigger('change');
+                            return false;
+                        });
+                    });
+                </script>";
         }
         /******End of Reply Form ********/
 
@@ -377,7 +544,7 @@ $out .=         "
                      var id = $(this).data('id');
                      var string = 'mid='+id;
                      bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
-                     if(result) {
+                     if (result) {
                          $.ajax({
                           type: 'POST',
                           url: 'ajax_handler.php',
@@ -437,5 +604,90 @@ $out .=         "
                });
              </script>";
 }
+
 echo $out;
 
+function addRecipientOptions() {
+    global $course_id, $is_editor, $student_to_student_allow, $out;
+
+    if ($course_id != 0) { // course messages
+        if ($is_editor || $student_to_student_allow == 1) {
+            // select all users from this course except yourself
+            $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
+                        FROM user u, course_user cu
+                        WHERE cu.course_id = ?d
+                            AND cu.user_id = u.id
+                            AND cu.status != ?d
+                            AND u.id != ?d
+                        ORDER BY name";
+
+            $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+
+            // find course groups (if any)
+            $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d ORDER BY name";
+            $result_g = Database::get()->queryArray($sql_g, $course_id);
+            foreach ($result_g as $res_g) {
+                if (isset($_GET['group_id']) and $_GET['group_id'] == $res_g->id) {
+                    $selected_group = ' selected';
+                } else {
+                    $selected_group = '';
+                }
+                $out .= "<option value = '_$res_g->id' $selected_group>".q($res_g->name)."</option>";
+            }
+        } else {
+            // if user is student and student-student messages not allowed for course messages show teachers
+            $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
+                        FROM user u, course_user cu
+                        WHERE cu.course_id = ?d
+                            AND cu.user_id = u.id
+                            AND (cu.status = ?d OR cu.editor = ?d)
+                            AND u.id != ?d
+                        ORDER BY name";
+
+            $res = Database::get()->queryArray($sql, $course_id, USER_TEACHER, 1, $uid);
+
+            // check if user is group tutor
+            $sql_g = "SELECT g.id, g.name FROM `group` as g, group_members as gm
+                WHERE g.id = gm.group_id AND g.course_id = ?d AND gm.user_id = ?d AND gm.is_tutor = ?d";
+
+            $result_g = Database::get()->queryArray($sql_g, $course_id, $uid, 1);
+            foreach ($result_g as $res_g) {
+                $out .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
+            }
+
+            // find user's group and their tutors
+            $tutors = array();
+            $sql_g = "SELECT `group`.id FROM `group`, group_members
+                          WHERE `group`.course_id = ?d
+                              AND `group`.id = group_members.group_id
+                              AND `group_members`.user_id = ?d";
+            $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);
+            foreach ($result_g as $res_g) {
+                $sql_gt = "SELECT u.id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
+                              FROM user u, group_members g
+                              WHERE g.group_id = ?d
+                                  AND g.is_tutor = ?d
+                                  AND g.user_id = u.id
+                                  AND u.id != ?d";
+                $res_gt = Database::get()->queryArray($sql_gt, $res_g->id, 1, $uid);
+                foreach ($res_gt as $t) {
+                    $tutors[$t->id] = q($t->name)." (".q($t->username).")";
+                }
+            }
+        }
+
+        foreach ($res as $r) {
+            if (isset($tutors) && !empty($tutors)) {
+                if (isset($tutors[$r->user_id])) {
+                    unset($tutors[$r->user_id]);
+                }
+            }
+            $out .= "<option value='{$r->user_id}'>" . q($r->name) . " (".q($r->username).")</option>";
+        }
+        if (isset($tutors)) {
+            foreach ($tutors as $key => $value) {
+                $out .= "<option value=" . $key . ">" . q($value) . "</option>";
+            }
+        }
+    }
+}
