@@ -608,7 +608,7 @@ if (isset($_GET['mid'])) {
 echo $out;
 
 function addRecipientOptions() {
-    global $course_id, $is_editor, $student_to_student_allow, $out;
+    global $course_id, $is_editor, $student_to_student_allow, $out, $uid;
 
     if ($course_id != 0) { // course messages
         if ($is_editor || $student_to_student_allow == 1) {
