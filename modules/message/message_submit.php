@@ -137,7 +137,7 @@ if (isset($_POST['submit'])) {
             }
             $format = get_file_extension($filename);
             $real_filename = $filename;
-            $filename = safe_filename($format);            
+            $filename = safe_filename($format);
             if (!$error) {
                 $filename_final = $message_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);
@@ -217,7 +217,7 @@ if (isset($_POST['submit'])) {
 
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
-                
+
             } else {//message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 $list_of_recipients = array();
@@ -228,12 +228,14 @@ if (isset($_POST['submit'])) {
                     }
                 }
                 $datetime = date('l jS \of F Y h:i:s A');
+                $in_course = $require_current_course?
+                    " $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>": '';
                 $header_dropbox_message = "
                     <!-- Header Section -->
                     <div id='mail-header'>
                         <div>
                             <br>
-                            <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
+                            <div id='header-title'>$langNewDropboxFile$in_course.</div>
                                 <ul id='forum-category'>
                                     <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
                                     <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
@@ -264,7 +266,7 @@ if (isset($_POST['submit'])) {
                 $emailaddr = uid_to_email($userid);
 
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
-                        
+
             }
         }
         if (!$errormail) {

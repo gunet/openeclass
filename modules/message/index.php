@@ -33,6 +33,8 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
+load_js('select2');
+
 if ($is_admin and $require_current_course) {
     $require_course_admin = true; // hide role switcher
 }
@@ -56,7 +58,7 @@ if ($course_id != 0) {
 }
 
 // javascript functions
-$head_content = '<script type="text/javascript">
+$head_content .= '<script type="text/javascript">
                     function checkForm (frm) {
                         if (frm.elements["recipients[]"].selectedIndex < 0) {
                                 alert("' . $langNoUserSelected . '");
@@ -203,7 +205,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
-	<fieldset>
+        <fieldset>
             <div class='form-group'>
                 <label for='title' class='col-sm-2 control-label'>$langSender:</label>
                 <div class='col-sm-10'>
@@ -261,8 +263,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                          </div>";
     }
 
-    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
-    	$tool_content .= "
+    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
+        $tool_content .= "
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
             <div class='col-sm-10'>
@@ -274,12 +276,12 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             if ($is_editor || $student_to_student_allow == 1) {
                 //select all users from this course except yourself
                 $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
-                        FROM user u, course_user cu
-        			    WHERE cu.course_id = ?d
-                        AND cu.user_id = u.id
-                        AND cu.status != ?d
-                        AND u.id != ?d
-                        ORDER BY name";
+                            FROM user u, course_user cu
+                            WHERE cu.course_id = ?d
+                            AND cu.user_id = u.id
+                            AND cu.status != ?d
+                            AND u.id != ?d
+                            ORDER BY name";
 
                 $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
 
@@ -298,12 +300,12 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             } else {
                 //if user is student and student-student messages not allowed for course messages show teachers
                 $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
-                        FROM user u, course_user cu
-        			    WHERE cu.course_id = ?d
-                        AND cu.user_id = u.id
-                        AND (cu.status = ?d OR cu.editor = ?d)
-                        AND u.id != ?d
-                        ORDER BY name";
+                            FROM user u, course_user cu
+                            WHERE cu.course_id = ?d
+                            AND cu.user_id = u.id
+                            AND (cu.status = ?d OR cu.editor = ?d)
+                            AND u.id != ?d
+                            ORDER BY name";
 
                 $res = Database::get()->queryArray($sql, $course_id, USER_TEACHER, 1, $uid);
 
@@ -357,8 +359,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             </div>
         </div>";
     } elseif ($type == 'pm' && $course_id == 0) {//personal messages
-        load_js('select2');
-
         $head_content .= "<script type='text/javascript'>
                             $(document).ready(function () {
                                 $('#recipients').select2({
@@ -430,7 +430,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         </div>";
     }
 
-	$tool_content .= "
+    $tool_content .= "
         <div class='form-group'>
             <div class='col-xs-10 col-xs-offset-2'>
                 <div class='checkbox'>
@@ -459,8 +459,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         </fieldset>
         ". generate_csrf_token_form_field() ."
         </form></div>";
-	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
-        load_js('select2');
+    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
         $head_content .= "<script type='text/javascript'>
             $(document).ready(function () {
 
@@ -482,7 +481,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 
             </script>
         ";
-	}
+    }
 } else {//mailbox
     load_js('datatables');
     load_js('trunk8');
