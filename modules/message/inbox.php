@@ -175,7 +175,7 @@ if (isset($_GET['mid'])) {
                 <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
 
             // mail sender
-            $out .= "<option value='$msg->id' selected>". uid_to_name($msg->author_id) . "</option>";
+            $out .= "<option value='$msg->author_id' selected>". uid_to_name($msg->author_id) . "</option>";
 
             addRecipientOptions();
 
@@ -251,12 +251,6 @@ if (isset($_GET['mid'])) {
                 }
             } else {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
-            }
-            // hidden variables needed in case of a reply
-            foreach ($msg->recipients as $rec) {
-                if ($rec != $uid) {
-                    $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
-                }
             }
             $out .= generate_csrf_token_form_field() . "
                 <fieldset>
@@ -344,7 +338,8 @@ if (isset($_GET['mid'])) {
                         $('#dropboxTabs .nav.nav-tabs').hide();
                         $('.btn-reply').on('click', function(e) {
                             e.preventDefault();
-                            $('#replyBox').show();
+                            $('#forwardBox').hide();
+                            $('#replyBox').show();                            
                             $('html, body').animate({
                                 scrollTop: $('#replyBox').offset().top
                             }, 500);
@@ -366,6 +361,7 @@ if (isset($_GET['mid'])) {
                         });
                         $('.btn-forward').on('click', function(e) {
                             e.preventDefault();
+                            $('#replyBox').hide();
                             $('#forwardBox').show();
                             $('html, body').animate({
                                 scrollTop: $('#forwardBox').offset().top
