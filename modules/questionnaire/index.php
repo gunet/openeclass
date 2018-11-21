@@ -452,6 +452,6 @@ function printPolls() {
                 }
             }
         }
+        $tool_content .= "</table></div></div></div>";
     }
-    $tool_content .= "</table></div></div></div>";
 }
