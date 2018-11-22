@@ -20,16 +20,16 @@
  * ========================================================================
  */
 
+define('LTI_LAUNCHCONTAINER_EMBED', 1);
+define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
+define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
+
 
 function new_lti_app() {
 
-    global $course_id, $uid;
-    global $tool_content, $langAdd, $course_code;
-    global $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret, $langLTIProviderKey;
-    global $langNewLTIAppActive, $langNewLTIAppInActive;
-    global $langNewLTIAppStatus, $langBBBSessionAvailable;
-    global $langTitle;
-    global $langLTIAPPlertTitle, $langLTIAPPlertURL;
+    global $tool_content, $langAdd, $course_code, $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret,
+           $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
+           $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer;
 
     $textarea = rich_text_editor('desc', 4, 20, '');
     $tool_content .= "
@@ -66,7 +66,12 @@ function new_lti_app() {
                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' size='50' />
             </div>
         </div>";
+
         $tool_content .= "<div class='form-group'>
+                <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
+                <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  LTI_LAUNCHCONTAINER_EMBED) . "</div>
+            </div>
+            <div class='form-group'>
             <label for='active_button' class='col-sm-2 control-label'>$langNewLTIAppStatus:</label>
             <div class='col-sm-10'>
                     <div class='radio'>
@@ -99,31 +104,26 @@ function new_lti_app() {
         //]]></script>';
 }
 
-function add_update_lti_app($title, $desc, $url, $key, $secret, $status, $update = 'false', $session_id = '')
-{
-    global $langDescr, $course_code, $course_id, $urlServer;
+function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $update = 'false', $session_id = '')  {
+    global $course_id;
 
     if ($update == 'true') {
         Database::get()->querySingle("UPDATE lti_apps SET title=?s, description=?s, lti_provider_url=?s,
-                                        lti_provider_key=?s, lti_provider_secret=?s, enabled=?s WHERE id=?d",
-                                        $title, $desc, $url, $key, $secret, $status, $session_id);
-
+                                        lti_provider_key=?s, lti_provider_secret=?s, launchcontainer=?d, enabled=?s WHERE id=?d",
+                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $session_id);
     } else {
         $q = Database::get()->query("INSERT INTO lti_apps (course_id, title, description,
                                                             lti_provider_url, lti_provider_key, lti_provider_secret,
-                                                            enabled)
-                                                        VALUES (?d,?s,?s,?s,?s,?s,?s)",
-                                            $course_id, $title, $desc, $url, $key, $secret, $status);
+                                                            launchcontainer, enabled)
+                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s)",
+                                            $course_id, $title, $desc, $url, $key, $secret, $launchcontainer, $status);
     }
-
 }
 
 function edit_lti_app($session_id) {
-    global $tool_content, $langModify, $course_code, $course_id, $uid;
-    global $langNewLTIAppSessionDesc, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret;
-    global $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive,$langLTIAppAvailable;
-    global $langTitle;
-    global $langLTIAPPlertTitle, $langLTIAPPlertURL;
+    global $tool_content, $langModify, $langNewLTIAppSessionDesc, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
+           $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
+           $langLTILaunchContainer;
 
     $row = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $session_id);
 
@@ -147,25 +147,29 @@ function edit_lti_app($session_id) {
                         </div>
                     </div>";
         $tool_content .="<div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langLTIProviderUrl:</label>
+            <label for='lti_url' class='col-sm-2 control-label'>$langLTIProviderUrl:</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' name='lti_url' id='lti_url' value='$row->lti_provider_url' size='50' />
             </div>
         </div>
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langLTIProviderKey:</label>
+            <label for='lti_key' class='col-sm-2 control-label'>$langLTIProviderKey:</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' name='lti_key' id='lti_key' value='$row->lti_provider_key' size='50' />
             </div>
         </div>
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langLTIProviderSecret:</label>
+            <label for='lti_secret' class='col-sm-2 control-label'>$langLTIProviderSecret:</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' value='$row->lti_provider_secret' size='50' />
             </div>
         </div>";
 
     $tool_content .= "<div class='form-group'>
+                        <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
+                        <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  intval($row->launchcontainer)) . "</div>
+                    </div>
+                    <div class='form-group'>
                         <label for='active_button' class='col-sm-2 control-label'>$langNewLTIAppStatus:</label>
                         <div class='col-sm-10'>
                                 <div class='radio'>
@@ -208,7 +212,7 @@ function lti_app_details() {
 
     $activeClause = ($is_editor) ? '' : "AND enabled = 1";
     $result = Database::get()->queryArray("SELECT * FROM lti_apps
-        WHERE course_id = ?s $activeClause ORDER BY id DESC", $course_id);
+        WHERE course_id = ?s $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
     if ($result) {
         $headingsSent = false;
         $headings = "<div class='row'>
@@ -232,15 +236,19 @@ function lti_app_details() {
 
             $canJoin = $row->enabled == 1;
             if ($canJoin) {
-                //print_r($_SESSION);die();
-                $joinLink = create_join_button(
-                    $row->lti_provider_url,
-                    $row->lti_provider_key,
-                    $row->lti_provider_secret,
-                    $row->id,
-                    $row->title,
-                    $row->description
-                );
+                if ($row->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
+                    $joinLink = create_launch_button($row->id);
+                } else {
+                    $joinLink = create_join_button(
+                        $row->lti_provider_url,
+                        $row->lti_provider_key,
+                        $row->lti_provider_secret,
+                        $row->id,
+                        $row->title,
+                        $row->description,
+                        $row->launchcontainer
+                    );
+                }
             } else {
                 $joinLink = q($title);
             }
@@ -321,8 +329,17 @@ function delete_lti_app($id)
     redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
 
-function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource_link_id, $resource_link_title, $resource_link_description)
-{
+function create_launch_button($resource_link_id) {
+    global $urlServer, $course_code, $langLogIn;
+
+    $button = '<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" action="' . $urlServer . "modules/lti_consumer/launch.php?course=" . $course_code . "&amp;id=" . getIndirectReference($resource_link_id) . '">';
+    $button .= '<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
+    $button .= '</form>';
+
+    return $button;
+}
+
+function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource_link_id, $resource_link_title, $resource_link_description, $launchcontainer) {
     global $langLogIn, $course_id, $course_code, $language, $urlServer;
 
     $now = new DateTime();
@@ -336,23 +353,25 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         $lis_person_name_family = "";
         $lis_person_name_given = "";
     }
+    $launch_presentation_document_target = ($launchcontainer == LTI_LAUNCHCONTAINER_EMBED) ? 'iframe' : 'window';
 
     $launch_data = array(
         "user_id" => $uid,
         "roles" => lti_get_ims_role(),
-        "resource_link_id" => $resource_link_id,
+        "resource_link_id" => $_SERVER['SERVER_NAME'] . ":lti_tool:" . $resource_link_id,
         "resource_link_title" => $resource_link_title,
         "resource_link_description" => strip_tags($resource_link_description),
         "lis_person_name_full" => $lis_person_name_full,
         "lis_person_name_family" => $lis_person_name_family,
         "lis_person_name_given" => $lis_person_name_given,
         "lis_person_contact_email_primary" => $_SESSION['email'],
-        "context_id" => $course_id,
+        "context_id" => $_SERVER['SERVER_NAME'] . ":" . $course_id,
         "context_title" => course_id_to_title($course_id),
         "context_label" => $course_code,
         "context_type" => "CourseSection",
-        "lis_course_section_sourcedid" => $_SERVER['SERVER_NAME'] . ":" . $course_code,
+        "lis_course_section_sourcedid" => $_SERVER['SERVER_NAME'] . ":" . $course_id,
         "launch_presentation_locale" => $language,
+        "launch_presentation_document_target" => $launch_presentation_document_target,
         "launch_presentation_return_url" => $urlServer . "courses/" . $course_code,
         "tool_consumer_info_product_family_code" => "openeclass",
         "tool_consumer_info_version" => ECLASS_VERSION,
@@ -381,7 +400,8 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
     $secret = urlencode($secret) . "&";
     $signature = base64_encode(hash_hmac("sha1", $base_string, $secret, true));
 
-    $button ='<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" action="'.$launch_url.'">';
+    $formtarget = ($launchcontainer == LTI_LAUNCHCONTAINER_NEWWINDOW) ? 'target="_blank"' : '';
+    $button ='<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" ' . $formtarget . ' action="' . $launch_url . '">';
     foreach ($launch_data as $k => $v) {
         $button .='<input type="hidden" name="' . $k .'" value="' . $v . '">';
     }
@@ -415,4 +435,12 @@ function lti_get_ims_role() {
 	}
 
 	return join(',', $roles);
+}
+
+function lti_get_containers_selection() {
+    global $langLTILaunchContainerEmbed, $langLTILaunchContainerNewWindow, $langLTILaunchContainerExistingWindow;
+
+    return array(LTI_LAUNCHCONTAINER_EMBED => $langLTILaunchContainerEmbed,
+        LTI_LAUNCHCONTAINER_NEWWINDOW => $langLTILaunchContainerNewWindow,
+        LTI_LAUNCHCONTAINER_EXISTINGWINDOW => $langLTILaunchContainerExistingWindow);
 }

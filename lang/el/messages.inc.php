@@ -5728,7 +5728,7 @@ $langPrerequisitesNotComplete = "Τα προαπαιτούμενα μαθήμα�
 
 // Messages for Lti Consumer
 $langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
-$langNewLTITool= "Προσθήκη νέας εφαρμογής LTI";
+$langNewLTITool = "Προσθήκη νέας εφαρμογής LTI";
 $langLTIProviderUrl = "LTI Provider URL";
 $langLTIProviderKey = "LTI Provider Key";
 $langLTIProviderSecret = "LTI Provider Secret";
@@ -5743,3 +5743,7 @@ $langLTIAppUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε μ
 $langLTIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
 $langNewLTIAppSessionDesc = "Σύντομη περιγραφή";
 $langLTIAppActions = "Ενέργειες";
+$langLTILaunchContainer = "Περιβάλλον προβολής";
+$langLTILaunchContainerEmbed = "Ενσωματωμένο";
+$langLTILaunchContainerNewWindow = "Νέο παράθυρο";
+$langLTILaunchContainerExistingWindow = "Τρέχον παράθυρο";
