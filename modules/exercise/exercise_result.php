@@ -74,12 +74,16 @@ ModalBoxHelper::loadModalBox();
 
 load_js('tools.js');
 
+<<<<<<< mine
 
 if (isset($_GET['eurId'])) {
     $data['eurid'] = $eurid = $_GET['eurId'];
     $exercise_user_record = new userRecord();
     $exercise_user_record->find($eurid);
     $data['exercise_user_record'] = $exercise_user_record;
+    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, answer_record_id
+                                                         FROM exercise_answer_record WHERE eurid = ?d
+                                                         ORDER BY answer_record_id", $eurid);
     $data['user'] = $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
         //No record matches with this exercise user record id
@@ -88,7 +92,7 @@ if (isset($_GET['eurId'])) {
     }
     if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
        // student is not allowed to view other people's exercise results
-       // Nobody can see results of a paused exercise
+       // Nobody can see results of a paused exercise       
        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     $exercise = $exercise_user_record->exercise;
