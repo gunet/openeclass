@@ -310,12 +310,15 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
 }
 if ($exercise_EndDate) {
     $exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
-    if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or $exerciseTimeLeft < 3 * 3600) {
-        // Display countdown of exercise remaining time if less than
-        // user's remaining time or less than 3 hours away
-        $timeleft = $exerciseTimeLeft;
+    if ($exerciseTimeLeft < 3 * 3600) {
+            if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or !isset($timeleft)) {
+            // Display countdown of exercise remaining time if less than
+            // user's remaining time or less than 3 hours away    
+            $timeleft = $exerciseTimeLeft;
+        }
     }
 }
+
 
 // If there are answers in the session get them
 if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
@@ -557,6 +560,7 @@ if (!$questionList) {
     $tool_content .= "</div>";
 }
 $tool_content .= "</form>";
+
 if ($questionList) {
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     // Enable check for unanswered questions when displaying more than one question
@@ -573,7 +577,7 @@ if ($questionList) {
                 refreshTime: $refresh_time,
                 exerciseId: $exerciseId,
                 answeredIds: ". json_encode($answeredIds) .",
-                attemptsAllowed: {$objExercise->attemptsAllowed},
+                attemptsAllowed: $exerciseAllowedAttempts,
                 eurid: $eurid
             });
         });

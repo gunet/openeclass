@@ -74,20 +74,21 @@ ModalBoxHelper::loadModalBox();
 
 load_js('tools.js');
 
-
-if (isset($_GET['eurId'])) {
+if (isset($_GET['eurId'])) {    
     $eurid = $_GET['eurId'];
     $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d ORDER BY answer_record_id", $eurid);
+    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, answer_record_id
+                                                FROM exercise_answer_record WHERE eurid = ?d 
+                                                ORDER BY answer_record_id", $eurid);
     $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
-    if (!$exercise_user_record) {
+    if (!$exercise_user_record) {        
         //No record matches with this exercise user record id
         Session::Messages($langExerciseNotFound);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
        // student is not allowed to view other people's exercise results
-       // Nobody can see results of a paused exercise
+       // Nobody can see results of a paused exercise       
        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     $objExercise = new Exercise();
