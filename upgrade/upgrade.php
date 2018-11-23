@@ -3830,12 +3830,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // lti
         Database::get()->query("CREATE TABLE IF NOT EXISTS lti_apps (
                     `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `course_id` INT(11) NOT NULL,
+                    `course_id` INT(11) DEFAULT NULL,
                     `title` VARCHAR(255) DEFAULT NULL,
                     `description` TEXT,
                     `lti_provider_url` VARCHAR(255) DEFAULT NULL,
                     `lti_provider_key` VARCHAR(255) DEFAULT NULL,
                     `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
+                    `launchcontainer` INT(11) NOT NULL DEFAULT 1,
+                    `is_template` TINYINT(4) NOT NULL DEFAULT 0,
                     `enabled` TINYINT(4) NOT NULL DEFAULT 1,
                     PRIMARY KEY (`id`)) $tbl_options");
 
