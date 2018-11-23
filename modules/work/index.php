@@ -922,6 +922,7 @@ function edit_assignment($id) {
  * @global type $langAutoJudgeInvalidFileType
  * @global type $langAutoJudgeScenariosPassed
  * @global type $is_editor
+ * @global type $langExerciseNotPermit
  * @param type $id
  * @param type $on_behalf_of
  */
@@ -929,7 +930,7 @@ function submit_work($id, $on_behalf_of = null) {
     global $course_id, $uid, $langOnBehalfOfGroupComment,
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
-           $langAutoJudgeInvalidFileType,
+           $langAutoJudgeInvalidFileType, $langExerciseNotPermit,
            $langAutoJudgeScenariosPassed, $is_editor;
 
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
