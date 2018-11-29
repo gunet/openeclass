@@ -151,6 +151,7 @@ if ($course_info->password !== '') {
                                         '<div class=\"col-sm-12\">'+
                                             '<input type=\"password\" class=\"form-control\" id=\"password\" name=\"pass\">'+
                                             '<input type=\"hidden\" class=\"form-control\" name=\"register\" value=\"from-home\">'+
+                                            \"" . generate_csrf_token_form_field() . "\" +
                                         '</div>'+
                                     '</div>'+
                                   '</form>',
@@ -186,6 +187,7 @@ if ($course_info->password !== '') {
                 e.preventDefault();
                 $('<form method=\"POST\" action=\"$registerUrl\">' +
                   '<input type=\"hidden\" name=\"register\" value=\"true\">' +
+                  \"" . generate_csrf_token_form_field() . "\" +
                   '</form>').appendTo('body').submit();
               });
             });
