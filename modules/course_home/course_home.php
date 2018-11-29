@@ -202,47 +202,6 @@ $head_content .= "
                 }
             };
         </script>";
-if (!empty($course_info->password)) {
-    $head_content .= "
-        <script type='text/javascript'>
-            $(function() {
-                $('#passwordModal').on('click', function(e){
-                    e.preventDefault();
-                    bootbox.dialog({
-                        title: '$langLessonCode',
-                        message: '<form class=\"form-horizontal\" role=\"form\" action=\"\" method=\"POST\" id=\"password_form\">'+
-                                    '<div class=\"form-group\">'+
-                                        '<div class=\"col-sm-12\">'+
-                                            '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
-                                            '<input type=\"hidden\" class=\"form-control\" id=\"register\" name=\"register\">'+
-                                        '</div>'+
-                                    '</div>'+
-                                  '</form>',
-                        buttons: {
-                            cancel: {
-                                label: '$langCancel',
-                                className: 'btn-default'
-                            },
-                            success: {
-                                label: '$langSubmit',
-                                className: 'btn-success',
-                                callback: function (d) {
-                                    var password = $('#password').val();
-                                    if(password != '') {
-                                        $('#password_form').submit();
-                                    } else {
-                                        $('#password').closest('.form-group').addClass('has-error');
-                                        $('#password').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
-                                        return false;
-                                    }
-                                }
-                            }
-                        }
-                    });
-                })
-            });
-        </script>";
-}
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
     SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
@@ -438,27 +397,7 @@ if (isset($level) && !empty($level)) {
 
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
-
-} elseif ($uid) {
-    $myCourses = [];
-    Database::get()->queryFunc("SELECT course.code course_code, course.public_code public_code,
-                                   course.id course_id, status
-                              FROM course_user, course
-                             WHERE course_user.course_id = course.id
-                               AND user_id = ?d", function ($course) use (&$myCourses) {
-        $myCourses[$course->course_id] = $course;
-    }, $uid);
-    if (!in_array($course_id, array_keys($myCourses))) {
-        $action_bar = action_bar(array(
-            array('title' => $langRegister,
-                  'url' => "/courses/$course_code?register",
-                  'icon' => 'fa-check',
-                  'link-attrs' => !empty($course_info->password) ? "id='passwordModal'" : "",
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success')));
-    }
 }
-
 
 if ($is_editor) {
     $data['last_id'] = $last_id = Database::get()->querySingle("SELECT id FROM course_units
@@ -519,6 +458,27 @@ $course_home_page_sidebar = new \Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
 foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key => $widget) {
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
 }
+
+$data['action_bar'] = '';
+$data['registered'] = false;
+if ($uid) {
+    $r = Database::get()->querySingle('SELECT course.id FROM course_user, course
+        WHERE course_id = course.id AND
+              user_id = ?d AND course_id = ?d',
+        $uid, $course_id);
+    if (!$r) {
+        $data['action_bar'] = action_bar([[
+            'title' => trans('langRegister'),
+            'url' => $urlAppend . "modules/course_home/register.php?course=$course_code",
+            'icon' => 'fa-check',
+            'link-attrs' => "id='passwordModal'",
+            'level' => 'primary-label',
+            'button-class' => 'btn-success']]);
+    } else {
+        $data['registered'] = true;
+    }
+}
+
 view('modules.course.home.index', $data);
 
 /**

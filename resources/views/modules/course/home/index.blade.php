@@ -22,7 +22,7 @@
             color: #11D888;
         }
 </style>
-    {!! isset($action_bar) ?  $action_bar : '' !!}
+    {!! $action_bar !!}
     <div class='row margin-top-thin margin-bottom-fat'>
         <div class='col-md-12'>
             <div class='panel panel-default'>
@@ -368,4 +368,54 @@
         </div>
     </div>
     {!! $course_descriptions_modals !!}
+    @if (!$registered)
+        <script type='text/javascript'>
+            $(function() {
+                $('#passwordModal').on('click', function(e){
+                    var registerUrl = this.href;
+                    e.preventDefault();
+                    @if ($course_info->password !== '')
+                        bootbox.dialog({
+                            title: '{{ js_escape(trans('langLessonCode')) }}',
+                            message: '<form class="form-horizontal" role="form" action="' + registerUrl + '" method="POST" id="password_form">' +
+                                        '<div class="form-group">' +
+                                            '<div class="col-sm-12">' +
+                                                '<input type="text" class="form-control" id="password" name="password">' +
+                                                '<input type="hidden" id="register" name="register" value="from-home">' +
+                                                "{!! generate_csrf_token_form_field() !!}" +
+                                            '</div>' +
+                                        '</div>' +
+                                      '</form>',
+                            buttons: {
+                                cancel: {
+                                    label: '{{ js_escape(trans('langCancel')) }}',
+                                    className: 'btn-default'
+                                },
+                                success: {
+                                    label: '{{ js_escape(trans('langSubmit')) }}',
+                                    className: 'btn-success',
+                                    callback: function (d) {
+                                        var password = $('#password').val();
+                                        if(password != '') {
+                                            $('#password_form').submit();
+                                        } else {
+                                            $('#password').closest('.form-group').addClass('has-error');
+                                            $('#password').after('<span class="help-block">{{ js_escape(trans('langTheFieldIsRequired')) }}</span>');
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    @else
+                        $('<form method="POST" action="' + registerUrl + '">' +
+                              '<input type="hidden" name="register" value="from-home">' +
+                              "{!! generate_csrf_token_form_field() !!}" +
+                          '</form>').appendTo('body').submit();
+                    @endif
+                });
+            });
+        </script>";
+    @endif
+}
 @endsection
