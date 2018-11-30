@@ -5749,3 +5749,4 @@ $langLTILaunchContainerNewWindow = "Νέο παράθυρο";
 $langLTILaunchContainerExistingWindow = "Τρέχον παράθυρο";
 $langTurnitinConf = "Ρυθμίσεις \"Turnitin\" του $siteName";
 $langTurnitinEnabled = "Ενεργοποιημένο";
+$langNoAvailableTurnitinTemplates = "Δεν υπάρχουν διαθέσιμες εφαρμογές LTI.";

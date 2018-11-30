@@ -5137,3 +5137,4 @@ $langLTILaunchContainerNewWindow = "New window";
 $langLTILaunchContainerExistingWindow = "Current window";
 $langTurnitinConf = "$siteName Turnitin settings";
 $langTurnitinEnabled = "Enabled";
+$langNoAvailableTurnitinTemplates = "No LTI Tools available.";
