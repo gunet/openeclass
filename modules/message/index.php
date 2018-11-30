@@ -505,9 +505,14 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 
                             // trap links to open inside tabs
                             $('.tab-content').on('click', 'a', function(e) {
-                                if (e.currentTarget.className != 'outtabs' && e.currentTarget.className.indexOf('paginate_button') == -1) {
+                                var in_content = $(e.currentTarget).parents('.panel-body').length;
+                                if (!in_content && e.currentTarget.className != 'outtabs' &&
+                                    e.currentTarget.className.indexOf('paginate_bu  tton') == -1) {
                                     e.preventDefault();
                                     $(this).closest('.tab-pane').load(this.href);
+                                } else if (in_content) {
+                                    // open links in message bodies in new window
+                                    e.currentTarget.target = '_blank';
                                 }
                             });
 
