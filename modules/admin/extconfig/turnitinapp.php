@@ -29,17 +29,15 @@
 require_once 'genericparam.php';
 
 class TurnitinApp extends ExtApp {
-    const APIKEY = "apikey";
-    const APISECRET = "apisecret";
+
+    const NAME = "Turnitin";
 
     public function __construct() {
         parent::__construct();
-        $this->registerParam(new GenericParam($this->getName(), "API Key", TurnitinApp::APIKEY));
-        $this->registerParam(new GenericParam($this->getName(), "API Secret", TurnitinApp::APISECRET));
     }
 
     public function getDisplayName() {
-        return "Turnitin";
+        return self::NAME;
     }
 
     public function getShortDescription() {
@@ -48,5 +46,18 @@ class TurnitinApp extends ExtApp {
 
     public function getLongDescription() {
         return $GLOBALS['langUnplagLongDescription'];
+    }
+
+    public function getConfigUrl() {
+        return 'modules/admin/turnitinmoduleconf.php';
+    }
+
+    /**
+     * Return true if any TII servers are enabled, else false
+     *
+     * @return boolean
+     */
+    public function isConfigured() {
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM lti_apps WHERE enabled = true AND is_template = true AND course_id is null")->count > 0;
     }
 }

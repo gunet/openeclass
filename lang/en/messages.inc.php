@@ -4707,3 +4707,5 @@ $langLTILaunchContainer = "Launch container";
 $langLTILaunchContainerEmbed = "Embedded";
 $langLTILaunchContainerNewWindow = "New window";
 $langLTILaunchContainerExistingWindow = "Current window";
+$langTurnitinConf = "$siteName Turnitin settings";
+$langTurnitinEnabled = "Enabled";

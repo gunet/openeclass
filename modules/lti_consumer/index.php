@@ -85,12 +85,12 @@ if ($is_editor) {
 
 if (isset($_GET['add'])) {
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLtiConsumer);
-    new_lti_app();
+    new_lti_app(false, $course_code);
 }
 elseif(isset($_POST['update_lti_app']))
 {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'],'true',getDirectReference($_GET['id']));
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'],$course_id,false, true, getDirectReference($_GET['id']));
     Session::Messages($langLTIAppAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -104,6 +104,8 @@ elseif(isset($_GET['choice']))
             break;
         case 'do_delete':
             delete_lti_app(getDirectReference($_GET['id']));
+            Session::Messages($langLTIAppDeleteSuccessful, 'alert-success');
+            redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
             break;
         case 'do_disable':
             disable_lti_app(getDirectReference($_GET['id']));
@@ -117,7 +119,7 @@ elseif(isset($_GET['choice']))
 
 } elseif(isset($_POST['new_lti_app'])) { // new lti app
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status']);
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], $course_id);
     Session::Messages($langLTIAppAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");        
 }

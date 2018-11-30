@@ -25,16 +25,17 @@ define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
 
 
-function new_lti_app() {
-
-    global $tool_content, $langAdd, $course_code, $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret,
+function new_lti_app($is_template = false, $course_code) {
+    global $tool_content, $langAdd, $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer;
+
+    $urlext = ($is_template == false) ? '?course=' . $course_code : '';
 
     $textarea = rich_text_editor('desc', 4, 20, '');
     $tool_content .= "
         <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
+        <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]$urlext' method='post' >
         <fieldset>
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
@@ -104,19 +105,20 @@ function new_lti_app() {
         //]]></script>';
 }
 
-function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $update = 'false', $session_id = '')  {
-    global $course_id;
-
-    if ($update == 'true') {
-        Database::get()->querySingle("UPDATE lti_apps SET title=?s, description=?s, lti_provider_url=?s,
-                                        lti_provider_key=?s, lti_provider_secret=?s, launchcontainer=?d, enabled=?s WHERE id=?d",
+function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $course_id = null, $is_template = false, $update = false, $session_id = '')  {
+    if ($update == true) {
+        Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s,
+                                        lti_provider_key = ?s, lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s WHERE id = ?d",
                                         $title, $desc, $url, $key, $secret, $launchcontainer, $status, $session_id);
     } else {
-        $q = Database::get()->query("INSERT INTO lti_apps (course_id, title, description,
+        $firstparam = ($is_template == true) ? 'is_template' : 'course_id';
+        $firstarg = ($is_template == true) ? 1 : intval($course_id);
+
+        Database::get()->query("INSERT INTO lti_apps (" . $firstparam . ", title, description,
                                                             lti_provider_url, lti_provider_key, lti_provider_secret,
                                                             launchcontainer, enabled)
                                                         VALUES (?d,?s,?s,?s,?s,?s,?d,?s)",
-                                            $course_id, $title, $desc, $url, $key, $secret, $launchcontainer, $status);
+                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status);
     }
 }
 
@@ -322,11 +324,7 @@ function enable_lti_app($id)
 
 function delete_lti_app($id)
 {
-    global $langLTIAppDeleteSuccessful, $course_code;
-
     Database::get()->querySingle("DELETE FROM lti_apps WHERE id=?d",$id);
-    Session::Messages($langLTIAppDeleteSuccessful, 'alert-success');
-    redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
 
 function create_launch_button($resource_link_id) {

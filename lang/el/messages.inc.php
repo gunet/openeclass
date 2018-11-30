@@ -5534,6 +5534,8 @@ $langLTILaunchContainer = "Περιβάλλον προβολής";
 $langLTILaunchContainerEmbed = "Ενσωματωμένο";
 $langLTILaunchContainerNewWindow = "Νέο παράθυρο";
 $langLTILaunchContainerExistingWindow = "Τρέχον παράθυρο";
+$langTurnitinConf = "Ρυθμίσεις \"Turnitin\" του $siteName";
+$langTurnitinEnabled = "Ενεργοποιημένο";
 
 // ticketing (aka request)
 $langRequests = "Αιτήματα";
