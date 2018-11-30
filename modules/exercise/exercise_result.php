@@ -80,7 +80,7 @@ if (isset($_GET['eurId'])) {
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, answer_record_id
                                                 FROM exercise_answer_record WHERE eurid = ?d 
                                                 ORDER BY answer_record_id", $eurid);
-    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
+    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);    
     if (!$exercise_user_record) {        
         //No record matches with this exercise user record id
         Session::Messages($langExerciseNotFound);
@@ -196,49 +196,52 @@ if (!empty($exerciseDescription_temp)) {
         $tool_content .= $exerciseDescription_temp."<hr>";
     }
 }
+
+if (!isset($user)) {
+    $tool_content .= "
+        <div class='row'>
+            <div class='col-xs-6 col-md-3 text-right'>
+                <strong>$langSurname:</strong>
+            </div>
+            <div class='col-xs-6 col-md-3'>
+                " . q($user->surname) . "
+            </div>
+            <div class='col-xs-6 col-md-3 text-right'>
+                <strong>$langName:</strong>
+            </div>
+            <div class='col-xs-6 col-md-3'>
+                " . q($user->givenname) . "
+            </div>";
+            if ($user->am) {
+                $tool_content .= "
+            <div class='col-xs-6 col-md-3 text-right'>
+                <strong>$langAm:</strong>
+            </div>
+            <div class='col-xs-6 col-md-3'>
+                " . q($user->am) . "
+            </div>";
+            }
+            if ($user->phone) {
+                $tool_content .= "
+            <div class='col-xs-6 col-md-3 text-right'>
+                <strong>$langPhone:</strong>
+            </div>
+            <div class='col-xs-6 col-md-3'>
+                " . q($user->phone) . "
+            </div>";
+            }
+            if ($user->email) {
+                $tool_content .= "
+            <div class='col-xs-6 col-md-3 text-right'>
+                <strong>Email:</strong>
+            </div>
+            <div class='col-xs-6 col-md-3'>
+                " . q($user->email) . "
+            </div>";
+            }
+    $tool_content .= "</div>";
+}
 $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langSurname:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->surname) . "
-        </div>
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langName:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->givenname) . "
-        </div>";
-        if ($user->am) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langAm:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->am) . "
-        </div>";
-        }
-        if ($user->phone) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langPhone:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->phone) . "
-        </div>";
-        }
-        if ($user->email) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>Email:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->email) . "
-        </div>";
-        }
-$tool_content .= "
-      </div>
     </div>
   </div>
   <div class='row margin-bottom-fat'>
