@@ -1833,6 +1833,10 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM gradebook_users WHERE uid = ?d)", $u);
+            Database::get()->query("DELETE FROM gradebook_book WHERE uid = ?d)", $u);
+            Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d)", $u);
+            Database::get()->query("DELETE FROM attendance_book WHERE uid = ?d)", $u);
             Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
             Database::get()->query("DELETE dropbox_attachment FROM dropbox_attachment INNER JOIN dropbox_msg ON dropbox_attachment.msg_id = dropbox_msg.id
