@@ -3825,11 +3825,57 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `lti_provider_url` VARCHAR(255) DEFAULT NULL,
                 `lti_provider_key` VARCHAR(255) DEFAULT NULL,
                 `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
-                `launchcontainer` INT(11) NOT NULL DEFAULT 1,
+                `launchcontainer` TINYINT(4) NOT NULL DEFAULT 1,
                 `is_template` TINYINT(4) NOT NULL DEFAULT 0,
                 `enabled` TINYINT(4) NOT NULL DEFAULT 1,
                 PRIMARY KEY (`id`)
             ) $tbl_options");
+
+        if (!DBHelper::fieldExists('assignment', 'assignment_type')) {
+            Database::get()->query("ALTER TABLE assignment ADD assignment_type TINYINT NOT NULL DEFAULT '0' AFTER password_lock");
+        }
+        if (!DBHelper::fieldExists('assignment', 'lti_template')) {
+            Database::get()->query("ALTER TABLE assignment ADD lti_template INT(11) DEFAULT NULL AFTER assignment_type");
+        }
+        if (!DBHelper::fieldExists('assignment', 'launchcontainer')) {
+            Database::get()->query("ALTER TABLE assignment ADD launchcontainer TINYINT DEFAULT NULL AFTER lti_template");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_feedbackreleasedate')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_feedbackreleasedate DATETIME NULL DEFAULT NULL AFTER launchcontainer");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_internetcheck')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_internetcheck TINYINT NOT NULL DEFAULT '1' AFTER tii_feedbackreleasedate");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_institutioncheck')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_institutioncheck TINYINT NOT NULL DEFAULT '1' AFTER tii_internetcheck");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_journalcheck')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_journalcheck TINYINT NOT NULL DEFAULT '1' AFTER tii_institutioncheck");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_report_gen_speed')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_report_gen_speed TINYINT NOT NULL DEFAULT '0' AFTER tii_journalcheck");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_s_view_reports')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_s_view_reports TINYINT NOT NULL DEFAULT '0' AFTER tii_report_gen_speed");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_studentpapercheck')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_studentpapercheck TINYINT NOT NULL DEFAULT '1' AFTER tii_s_view_reports");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_submit_papers_to')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_submit_papers_to TINYINT NOT NULL DEFAULT '1' AFTER tii_studentpapercheck");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_use_biblio_exclusion')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_use_biblio_exclusion TINYINT NOT NULL DEFAULT '0' AFTER tii_submit_papers_to");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_use_quoted_exclusion')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_use_quoted_exclusion TINYINT NOT NULL DEFAULT '0' AFTER tii_use_biblio_exclusion");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_exclude_type')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_exclude_type VARCHAR(20) NOT NULL DEFAULT 'none' AFTER tii_use_quoted_exclusion");
+        }
+        if (!DBHelper::fieldExists('assignment', 'tii_exclude_value')) {
+            Database::get()->query("ALTER TABLE assignment ADD tii_exclude_value INT(11) NOT NULL DEFAULT '0' AFTER tii_exclude_type");
+        }
     }
 
     // update eclass version

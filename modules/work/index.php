@@ -29,6 +29,8 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'assignments';
 
+define('ASSIGNMENT_TYPE_ECLASS', 0);
+define('ASSIGNMENT_TYPE_TURNITIN', 1);
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
@@ -45,6 +47,8 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'include/lib/csv.class.php';
 require_once 'modules/plagiarism/plagiarism.php';
 require_once 'modules/progress/AssignmentEvent.php';
+require_once 'modules/lti_consumer/lti-functions.php';
+require_once 'modules/admin/extconfig/turnitinapp.php';
 
 // For colorbox, fancybox, shadowbox use
 require_once 'include/lib/modalboxhelper.class.php';
@@ -682,19 +686,61 @@ function add_assignment() {
         if ($assign_to_specific == 1 && empty($assigned_to)) {
             $assign_to_specific = 0;
         }
+        $assignment_type = $_POST['assignment_type'];
+
+        $lti_template = $_POST['lti_template'];
+        $launchcontainer = $_POST['lti_launchcontainer'];
+        $tii_feedbackreleasedate = isset($_POST['tii_feedbackreleasedate']) && !empty($_POST['tii_feedbackreleasedate']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['tii_feedbackreleasedate'])->format('Y-m-d H:i:s') : NULL;
+        $tii_internetcheck = isset($_POST['tii_internetcheck']) ? 1 : 0;
+        $tii_institutioncheck = isset($_POST['tii_institutioncheck']) ? 1 : 0;
+        $tii_journalcheck = isset($_POST['tii_journalcheck']) ? 1 : 0;
+        $tii_s_view_reports = isset($_POST['tii_s_view_reports']) ? 1 : 0;;
+        $tii_studentpapercheck = isset($_POST['tii_studentpapercheck']) ? 1 : 0;;
+        $tii_use_biblio_exclusion = isset($_POST['tii_use_biblio_exclusion']) ? 1 : 0;;
+        $tii_use_quoted_exclusion = isset($_POST['tii_use_quoted_exclusion']) ? 1 : 0;;
+        $tii_report_gen_speed = 0;
+        if (isset($_POST['tii_report_gen_speed']) && intval($_POST['tii_report_gen_speed']) == 1) {
+            $tii_report_gen_speed = 1;
+        } else if (isset($_POST['tii_report_gen_speed']) && intval($_POST['tii_report_gen_speed']) == 2) {
+            $tii_report_gen_speed = 2;
+        }
+        $tii_submit_papers_to = 1;
+        if (isset($_POST['tii_submit_papers_to']) && intval($_POST['tii_submit_papers_to']) == 0) {
+            $tii_submit_papers_to = 0;
+        } else if (isset($_POST['tii_submit_papers_to']) && intval($_POST['tii_submit_papers_to']) == 2) {
+            $tii_submit_papers_to = 2;
+        }
+        $tii_exclude_type = "none";
+        $tii_exclude_value = 0;
+        if (isset($_POST['tii_use_small_exclusion'])) {
+            $tii_exclude_type = $_POST['tii_exclude_type'];
+            $tii_exclude_value = intval($_POST['tii_exclude_value']);
+            if ($tii_exclude_type == "percentage" && $tii_exclude_value > 100) {
+                $tii_exclude_value = 100;
+            }
+        }
+
         if (make_dir("$workPath/$secret") and make_dir("$workPath/admin_files/$secret")) {
             $id = Database::get()->query("INSERT INTO assignment
                     (course_id, title, description, deadline, late_submission,
                     comments, submission_type, submission_date, secret_directory,
                     group_submissions, grading_type, max_grade, grading_scale_id,
                     assign_to_specific, auto_judge, auto_judge_scenarios, lang,
-                    notification, password_lock, ip_lock)
-                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s)",
+                    notification, password_lock, ip_lock, assignment_type, lti_template, 
+                    launchcontainer, tii_feedbackreleasedate, tii_internetcheck, tii_institutioncheck,
+                    tii_journalcheck, tii_report_gen_speed, tii_s_view_reports, tii_studentpapercheck,
+                    tii_submit_papers_to, tii_use_biblio_exclusion, tii_use_quoted_exclusion,
+                    tii_exclude_type, tii_exclude_value)
+                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t, 
+                ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d)",
                 $course_id, $title, $desc, $deadline, $late_submission, '',
                 $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $grade_type,
                 $max_grade, $grading_scale_id, $assign_to_specific, $auto_judge,
                 $auto_judge_scenarios, $lang, $notify_submission, $password_lock,
-                $ip_lock)->lastInsertID;
+                $ip_lock, $assignment_type, $lti_template, $launchcontainer, $tii_feedbackreleasedate,
+                $tii_internetcheck, $tii_institutioncheck, $tii_journalcheck, $tii_report_gen_speed,
+                $tii_s_view_reports, $tii_studentpapercheck, $tii_submit_papers_to, $tii_use_biblio_exclusion,
+                $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value)->lastInsertID;
 
             if ($id) {
                 // tags
@@ -855,12 +901,49 @@ function edit_assignment($id) {
             }
         }
         $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;
+        $assignment_type = $_POST['assignment_type'];
+        $lti_template = $_POST['lti_template'];
+        $launchcontainer = $_POST['lti_launchcontainer'];
+        $tii_feedbackreleasedate = isset($_POST['tii_feedbackreleasedate']) && !empty($_POST['tii_feedbackreleasedate']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['tii_feedbackreleasedate'])->format('Y-m-d H:i:s') : NULL;
+        $tii_internetcheck = isset($_POST['tii_internetcheck']) ? 1 : 0;
+        $tii_institutioncheck = isset($_POST['tii_institutioncheck']) ? 1 : 0;
+        $tii_journalcheck = isset($_POST['tii_journalcheck']) ? 1 : 0;
+        $tii_s_view_reports = isset($_POST['tii_s_view_reports']) ? 1 : 0;;
+        $tii_studentpapercheck = isset($_POST['tii_studentpapercheck']) ? 1 : 0;;
+        $tii_use_biblio_exclusion = isset($_POST['tii_use_biblio_exclusion']) ? 1 : 0;;
+        $tii_use_quoted_exclusion = isset($_POST['tii_use_quoted_exclusion']) ? 1 : 0;;
+        $tii_report_gen_speed = 0;
+        if (isset($_POST['tii_report_gen_speed']) && intval($_POST['tii_report_gen_speed']) == 1) {
+            $tii_report_gen_speed = 1;
+        } else if (isset($_POST['tii_report_gen_speed']) && intval($_POST['tii_report_gen_speed']) == 2) {
+            $tii_report_gen_speed = 2;
+        }
+        $tii_submit_papers_to = 1;
+        if (isset($_POST['tii_submit_papers_to']) && intval($_POST['tii_submit_papers_to']) == 0) {
+            $tii_submit_papers_to = 0;
+        } else if (isset($_POST['tii_submit_papers_to']) && intval($_POST['tii_submit_papers_to']) == 2) {
+            $tii_submit_papers_to = 2;
+        }
+        $tii_exclude_type = "none";
+        $tii_exclude_value = 0;
+        if (isset($_POST['tii_use_small_exclusion'])) {
+            $tii_exclude_type = $_POST['tii_exclude_type'];
+            $tii_exclude_value = intval($_POST['tii_exclude_value']);
+            if ($tii_exclude_type == "percentage" && $tii_exclude_value > 100) {
+                $tii_exclude_value = 100;
+            }
+        }
+
         Database::get()->query("UPDATE assignment SET title = ?s, description = ?s,
                 group_submissions = ?d, comments = ?s, submission_type = ?d,
                 deadline = ?t, late_submission = ?d, submission_date = ?t, grading_type = ?d, max_grade = ?f,
                 grading_scale_id = ?d, assign_to_specific = ?d, file_path = ?s, file_name = ?s,
                 auto_judge = ?d, auto_judge_scenarios = ?s, lang = ?s, notification = ?d,
-                password_lock = ?s, ip_lock = ?s
+                password_lock = ?s, ip_lock = ?s, assignment_type = ?d, lti_template = ?d, launchcontainer = ?d,
+                tii_feedbackreleasedate = ?t, tii_internetcheck = ?d, tii_institutioncheck = ?d,
+                tii_journalcheck = ?d, tii_report_gen_speed = ?d, tii_s_view_reports = ?d, tii_studentpapercheck = ?d,
+                tii_submit_papers_to = ?d, tii_use_biblio_exclusion = ?d, tii_use_quoted_exclusion = ?d,
+                tii_exclude_type = ?s, tii_exclude_value = ?d 
             WHERE course_id = ?d AND id = ?d",
             $title, $desc, $group_submissions, $comments, $submission_type,
             $deadline, $late_submission, $submission_date, $grade_type, $max_grade,
@@ -868,7 +951,10 @@ function edit_assignment($id) {
             $auto_judge, $auto_judge_scenarios, $lang, $notify_submission,
             $_POST['assignmentPasswordLock'],
             isset($_POST['assignmentIPLock'])? implode(',', $_POST['assignmentIPLock']): '',
-            $course_id, $id);
+            $assignment_type, $lti_template, $launchcontainer, $tii_feedbackreleasedate,
+            $tii_internetcheck, $tii_institutioncheck, $tii_journalcheck, $tii_report_gen_speed,
+            $tii_s_view_reports, $tii_studentpapercheck, $tii_submit_papers_to, $tii_use_biblio_exclusion,
+            $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $course_id, $id);
 
         Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
 
@@ -1261,7 +1347,14 @@ function new_assignment() {
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
            $langAutoJudgeAssertions, $langDescription, $langTitle, $langNotifyAssignmentSubmission,
-           $langPasswordUnlock, $langIPUnlock, $langDelete;
+           $langPasswordUnlock, $langIPUnlock, $langDelete, $langAssignmentType, $langAssignmentTypeEclass,
+           $langAssignmentTypeTurnitin, $langLTITemplate, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
+           $langTiiFeedbackReleaseDate, $langAssignmentFeedbackReleaseHelpBlock, $langTiiSubmissionSettings,
+           $langTiiSubmissionNoStore, $langTiiSubmissionStandard, $langTiiSubmissionInstitutional, $langTiiCompareAgainst,
+           $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
+           $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
+           $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
+           $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage, $langTiiExcludeValue;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -1276,6 +1369,13 @@ function new_assignment() {
     foreach ($rubrics as $rubric) {
         $rubric_options .= "<option value='$rubric->id'>$rubric->name</option>";
     }
+    $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true');
+    $lti_template_options = "";
+    foreach ($lti_templates as $lti) {
+        $lti_template_options .= "<option value='$lti->id'>$lti->title</option>";
+    }
+    $turnitinapp = ExtAppManager::getApp(strtolower(TurnitinApp::NAME));
+
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#scales').select2({ width: '100%' });
@@ -1324,10 +1424,149 @@ function new_assignment() {
                         .removeClass('hidden');
                 }
             });
-            $('#WorkEnd, #WorkStart').datetimepicker({
+            $('input[name=assignment_type]').on('change', function(e) {
+                var choice = $(this).val();
+                if (choice == 0) {
+                    // lti fields
+                    $('#lti_templates')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#lti_launchcontainer')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_feedbackreleasedate')
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_internetcheck')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    /*$('#tii_institutioncheck')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');*/
+                    $('#tii_journalcheck')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_report_gen_speed')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_s_view_reports')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_studentpapercheck')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    /*$('#tii_submit_papers_to')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');*/
+                    $('#tii_use_biblio_exclusion')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_use_quoted_exclusion')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_use_small_exclusion')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    
+                    // user groups
+                    $('#group_button')
+                        .prop('disabled', false);
+                    
+                    // grading type
+                    $('#scales_button')
+                        .prop('disabled', false);
+                    $('#rubrics_button')
+                        .prop('disabled', false);
+                    
+                } else if (choice == 1) {
+                    // lti fields
+                    $('#lti_templates')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#lti_launchcontainer')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_feedbackreleasedate')
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_internetcheck')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    /*$('#tii_institutioncheck')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');*/
+                    $('#tii_journalcheck')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_report_gen_speed')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_s_view_reports')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_studentpapercheck')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    /*$('#tii_submit_papers_to')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');*/
+                    $('#tii_use_biblio_exclusion')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_use_quoted_exclusion')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_use_small_exclusion')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    
+                    // user groups
+                    $('#user_button')
+                        .prop('checked', true)
+                        .trigger('click')
+                        .trigger('change');
+                    $('#group_button')
+                        .prop('disabled', true);
+                    
+                    // grading type
+                    $('#numbers_button')
+                        .prop('checked', true)
+                        .trigger('click')
+                        .trigger('change');
+                    $('#scales_button')
+                        .prop('disabled', true);
+                    $('#rubrics_button')
+                        .prop('disabled', true);
+                }
+            });
+            $('#WorkEnd, #WorkStart, #tii_feedbackreleasedate').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
-                language: '".$language."',
+                language: '" . $language . "',
                 autoclose: true
             });
             $('#enableWorkEnd, #enableWorkStart').change(function() {
@@ -1338,6 +1577,43 @@ function new_assignment() {
                 } else {
                     $('input#'+dateType).prop('disabled', true);
                     $('#late_sub_row').addClass('hide');
+                }
+            });
+            $('#enableWorkFeedbackRelease').change(function() {
+                if($(this).prop('checked')) {
+                    $('input#tii_feedbackreleasedate').prop('disabled', false);
+                    $('#late_sub_row').removeClass('hide');
+                } else {
+                    $('input#tii_feedbackreleasedate').prop('disabled', true);
+                }
+            });
+            $('#tii_use_small_exclusion').change(function() {
+                if($(this).prop('checked')) {
+                    $('#tii_exclude_type_words')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_exclude_type_percentage')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_exclude_value')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                } else {
+                    $('#tii_exclude_type_words')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_exclude_type_percentage')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_exclude_value')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
                 }
             });
             $('#assignmentIPLock').select2({
@@ -1352,9 +1628,9 @@ function new_assignment() {
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'level' => 'primary-label',
-              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-              'icon' => 'fa-reply')));
+            'level' => 'primary-label',
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+            'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
     $title = q(Session::has('title') ? Session::get('title') : '');
     $desc = Session::has('desc') ? Session::get('desc') : '';
@@ -1365,17 +1641,20 @@ function new_assignment() {
     $scale = Session::getError('scale');
     $rubric = Session::getError('rubric');
     $submission_type = Session::has('submission_type') ? Session::get('submission_type') : 0;
+    $assignment_type = Session::has('assignment_type') ? Session::get('assignment_type') : 0;
     $grading_type = Session::has('grading_type') ? Session::get('grading_type') : 0;
     $WorkStart = Session::has('WorkStart') ? Session::get('WorkStart') : (new DateTime('NOW'))->format('d-m-Y H:i');
     $WorkEnd = Session::has('WorkEnd') ? Session::get('WorkEnd') : "";
+    $WorkFeedbackRelease = Session::has('WorkFeedbackRelease') ? Session::get('WorkFeedbackRelease') : "";
     $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
     $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
+    $enableWorkFeedbackRelease = Session::has('enableWorkFeedbackRelease') ? Session::get('enableWorkFeedbackRelease') : ($WorkFeedbackRelease ? 1 : 0);
     $assignmentPasswordLock = Session::has('assignmentPasswordLock') ? Session::get('assignmentPasswordLock') : '';
     $assignmentIPLock = Session::has('assignmentIPLock') ? Session::get('assignmentIPLock') : array();
     $assignmentIPLockOptions = implode('', array_map(
         function ($item) {
             $item = trim($item);
-            return $item? ('<option selected>' . q($item) . '</option>'): '';
+            return $item ? ('<option selected>' . q($item) . '</option>') : '';
         }, $assignmentIPLock));
     enableCheckFileSize();
     $tool_content .= "
@@ -1383,10 +1662,10 @@ function new_assignment() {
         <div class='form-wrapper'>
         <form class='form-horizontal' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-            <div class='form-group ".($title_error ? "has-error" : "")."'>
+            <div class='form-group " . ($title_error ? "has-error" : "") . "'>
                 <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                 <div class='col-sm-10'>
-                  <input name='title' type='text' class='form-control' id='title' placeholder='$langTitle' value='".q($title)."'>
+                  <input name='title' type='text' class='form-control' id='title' placeholder='$langTitle' value='" . q($title) . "'>
                   <span class='help-block'>$title_error</span>
                 </div>
             </div>
@@ -1399,28 +1678,65 @@ function new_assignment() {
             <div class='form-group'>
                 <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
                 <div class='col-sm-10'>" .
-                  fileSizeHidenInput() . "
+        fileSizeHidenInput() . "
                   <input type='file' id='userfile' name='userfile'>
                 </div>
+            </div>";
+    if ($turnitinapp->isEnabled()) {
+        $tool_content .= "
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langAssignmentType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='assignment_type' value='0'" . ($assignment_type == 0 ? " checked" : "") . ">
+                         $langAssignmentTypeEclass
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='assignment_type' value='1'" . ($assignment_type == 1 ? " checked" : "") . ">
+                        $langAssignmentTypeTurnitin
+                      </label>
+                    </div>
+                    <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
+                </div>
             </div>
+            <div class='form-group hidden'>
+                <label for='title' class='col-sm-2 control-label'>$langLTITemplate:</label>
+                <div class='col-sm-10'>
+                  <select name='lti_template' class='form-control' id='lti_templates' disabled>
+                        $lti_template_options
+                  </select>
+                </div>
+            </div>
+            <div class='form-group hidden'>
+                <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
+                <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', LTI_LAUNCHCONTAINER_EMBED, 'id="lti_launchcontainer" disabled') . "</div>
+            </div>";
+    } else {
+        $tool_content .= "
+            <input type='hidden' name='assignment_type' value='0' />";
+    }
+    $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langGradeType:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='grading_type' value='0'". ($grading_type==0 ? " checked" : "") .">
+                        <input type='radio' id='numbers_button' name='grading_type' value='0'". ($grading_type==0 ? " checked" : "") .">
                          $langGradeNumbers
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") .">
+                        <input type='radio' id='scales_button' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") .">
                         $langGradeScales
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") .">
+                        <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") .">
                         $langGradeRubrics
                       </label>
                     </div>
@@ -1491,7 +1807,23 @@ function new_assignment() {
                    </div>
                    <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                 </div>
-            </div>
+            </div>";
+    if ($turnitinapp->isEnabled()) {
+        $tool_content .= "
+            <div class='input-append date form-group hidden".(Session::getError('WorkFeedbackRelease') ? " has-error" : "")."' id='feedbackreleasedatepicker' data-date='$WorkFeedbackRelease' data-date-format='dd-mm-yyyy'>
+                <label for='tii_feedbackreleasedate' class='col-sm-2 control-label'>$langTiiFeedbackReleaseDate:</label>
+                <div class='col-sm-10'>
+                   <div class='input-group'>
+                       <span class='input-group-addon'>
+                         <input style='cursor:pointer;' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'".($enableWorkFeedbackRelease ? ' checked' : '').">
+                       </span>
+                       <input class='form-control' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'".($enableWorkFeedbackRelease ? '' : ' disabled').">
+                   </div>
+                   <span class='help-block'>".(Session::hasError('WorkFeedbackRelease') ? Session::getError('WorkFeedbackRelease') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentFeedbackReleaseHelpBlock")."</span>
+                </div>
+            </div>";
+    }
+    $tool_content .= "
             <div class='form-group ". ($WorkEnd ? "" : "hide") ."' id='late_sub_row'>
                 <div class='col-xs-10 col-xs-offset-2'>
                     <div class='checkbox'>
@@ -1655,7 +1987,109 @@ function new_assignment() {
                     </select>
                 </div>
             </div>" .
-            eClassTag::tagInput() . "
+            eClassTag::tagInput();
+    if ($turnitinapp->isEnabled()) {
+        $tool_content .= "
+            <!--<div class='form-group hidden'>
+                <label for='tii_submit_papers_to' class='col-sm-2 control-label'>$langTiiSubmissionSettings:</label>
+                <div class='col-sm-10'>
+                  <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' disabled>
+                        <option value='0'>$langTiiSubmissionNoStore</option>
+                        <option value='1' selected>$langTiiSubmissionStandard</option>
+                        <option value='2'>$langTiiSubmissionInstitutional</option>
+                  </select>
+                </div>
+            </div>-->
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiCompareAgainst:</label>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' checked disabled>
+                        $langTiiStudentPaperCheck
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' checked disabled>
+                        $langTiiInternetCheck
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' checked disabled>
+                        $langTiiJournalCheck
+                      </label>
+                    </div>
+                    <!--<div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' checked disabled>
+                        $langTiiInstitutionCheck
+                      </label>
+                    </div>-->
+                </div>
+            </div>
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
+                <div class='col-sm-10'>
+                  <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' disabled>
+                        <option value='0' selected>$langTiiReportGenImmediatelyNoResubmit</option>
+                        <option value='1'>$langTiiReportGenImmediatelyWithResubmit</option>
+                        <option value='2'>$langTiiReportGenOnDue</option>
+                  </select>
+                </div>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' disabled>
+                        $langTiiSViewReports
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' disabled>
+                        $langTiiExcludeBiblio
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' disabled>
+                       $langTiiExcludeQuoted
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' disabled>
+                       $langTiiExcludeSmall
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' checked disabled>
+                        $langTiiExcludeTypeWords
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' disabled>
+                        $langTiiExcludeTypePercentage
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group hidden'>
+                <label for='tii_exclude_value' class='col-sm-2 control-label'>$langTiiExcludeValue:</label>
+                <div class='col-sm-10'>
+                    <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='0' disabled>
+                </div>
+            </div>";
+    }
+    $tool_content .= "
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>".
                 form_buttons(array(
@@ -1726,7 +2160,14 @@ function show_edit_assignment($id) {
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
-        $langPasswordUnlock, $langIPUnlock, $langDelete;
+        $langPasswordUnlock, $langIPUnlock, $langDelete, $langAssignmentType, $langAssignmentTypeEclass,
+        $langAssignmentTypeTurnitin, $langLTITemplate, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
+        $langTiiFeedbackReleaseDate, $langAssignmentFeedbackReleaseHelpBlock, $langTiiSubmissionSettings,
+        $langTiiSubmissionNoStore, $langTiiSubmissionStandard, $langTiiSubmissionInstitutional, $langTiiCompareAgainst,
+        $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
+        $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
+        $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
+        $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage, $langTiiExcludeValue;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -1777,7 +2218,146 @@ function show_edit_assignment($id) {
                         .closest('div.form-group')
                         .removeClass('hidden');
                 }});
-            $('#WorkEnd, #WorkStart').datetimepicker({
+            $('input[name=assignment_type]').on('change', function(e) {
+                var choice = $(this).val();
+                if (choice == 0) {
+                    // lti fields
+                    $('#lti_templates')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#lti_launchcontainer')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_feedbackreleasedate')
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_internetcheck')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    /*$('#tii_institutioncheck')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');*/
+                    $('#tii_journalcheck')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_report_gen_speed')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_s_view_reports')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_studentpapercheck')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    /*$('#tii_submit_papers_to')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');*/
+                    $('#tii_use_biblio_exclusion')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_use_quoted_exclusion')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_use_small_exclusion')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    
+                    // user groups
+                    $('#group_button')
+                        .prop('disabled', false);
+                    
+                    // grading type
+                    $('#scales_button')
+                        .prop('disabled', false);
+                    $('#rubrics_button')
+                        .prop('disabled', false);
+                    
+                } else if (choice == 1) {
+                    // lti fields
+                    $('#lti_templates')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#lti_launchcontainer')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_feedbackreleasedate')
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_internetcheck')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    /*$('#tii_institutioncheck')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');*/
+                    $('#tii_journalcheck')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_report_gen_speed')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_s_view_reports')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_studentpapercheck')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    /*$('#tii_submit_papers_to')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');*/
+                    $('#tii_use_biblio_exclusion')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_use_quoted_exclusion')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_use_small_exclusion')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    
+                    // user groups
+                    $('#user_button')
+                        .prop('checked', true)
+                        .trigger('click')
+                        .trigger('change');
+                    $('#group_button')
+                        .prop('disabled', true);
+                    
+                    // grading type
+                    $('#numbers_button')
+                        .prop('checked', true)
+                        .trigger('click')
+                        .trigger('change');
+                    $('#scales_button')
+                        .prop('disabled', true);
+                    $('#rubrics_button')
+                        .prop('disabled', true);
+                }
+            });
+            $('#WorkEnd, #WorkStart, #tii_feedbackreleasedate').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
                 language: '".$language."',
@@ -1793,6 +2373,43 @@ function show_edit_assignment($id) {
                     $('input#'+dateType).prop('disabled', true);
                     if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', true);
                     $('#late_sub_row').addClass('hide');
+                }
+            });
+            $('#enableWorkFeedbackRelease').change(function() {
+                if($(this).prop('checked')) {
+                    $('input#tii_feedbackreleasedate').prop('disabled', false);
+                    $('#late_sub_row').removeClass('hide');
+                } else {
+                    $('input#tii_feedbackreleasedate').prop('disabled', true);
+                }
+            });
+            $('#tii_use_small_exclusion').change(function() {
+                if($(this).prop('checked')) {
+                    $('#tii_exclude_type_words')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_exclude_type_percentage')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#tii_exclude_value')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                } else {
+                    $('#tii_exclude_type_words')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_exclude_type_percentage')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#tii_exclude_value')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
                 }
             });
             $('#assignmentIPLock').select2({
@@ -1816,6 +2433,10 @@ function show_edit_assignment($id) {
             return $item? ('<option selected>' . q($item) . '</option>'): '';
         }, $assignmentIPLock));
 
+    $assignment_type = ($row->assignment_type ? $row->assignment_type : 0);
+    $lti_hidden = ($assignment_type == 1) ? '' : ' hidden';
+    $lti_disabled = ($assignment_type == 1) ? '' : ' disabled';
+    $lti_group_disabled = ($assignment_type == 1) ? ' disabled' : '';
     $grading_type = ($row->grading_type ? $row->grading_type : 0);
     $scales = Database::get()->queryArray('SELECT * FROM grading_scale WHERE course_id = ?d', $course_id);
     $scale_options = '';
@@ -1827,6 +2448,12 @@ function show_edit_assignment($id) {
     foreach ($rubrics as $rubric) {
         $rubric_options .= "<option value='$rubric->id'".(($row->grading_scale_id == $rubric->id && $grading_type==2) ? " selected" : "").">$rubric->name</option>";
     }
+    $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true');
+    $lti_template_options = "";
+    foreach ($lti_templates as $lti) {
+        $lti_template_options .= "<option value='$lti->id'" . (($row->lti_template == $lti->id && $assignment_type == 1) ? " selected" : "") . ">$lti->title</option>";
+    }
+    $turnitinapp = ExtAppManager::getApp(strtolower(TurnitinApp::NAME));
     if ($row->assign_to_specific) {
         //preparing options in select boxes for assigning to speficic users/groups
         $assignee_options = '';
@@ -1871,10 +2498,12 @@ function show_edit_assignment($id) {
     }
     $WorkStart = $row->submission_date ? DateTime::createFromFormat('Y-m-d H:i:s', $row->submission_date)->format('d-m-Y H:i') : NULL;
     $WorkEnd = $row->deadline ? DateTime::createFromFormat('Y-m-d H:i:s', $row->deadline)->format('d-m-Y H:i') : NULL;
+    $WorkFeedbackRelease = $row->tii_feedbackreleasedate ? DateTime::createFromFormat('Y-m-d H:i:s', $row->tii_feedbackreleasedate)->format('d-m-Y H:i') : NULL;
     $max_grade = Session::has('max_grade') ? Session::get('max_grade') : ($row->max_grade ? $row->max_grade : 10);
 
     $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : ($WorkStart ? 1 : 0);
     $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
+    $enableWorkFeedbackRelease = Session::has('enableWorkFeedbackRelease') ? Session::get('enableWorkFeedbackRelease') : ($WorkFeedbackRelease ? 1 : 0);
     $checked = $row->notification ? 'checked' : '';
     $comments = trim($row->comments);
     $tool_content .= action_bar(array(
@@ -1925,25 +2554,62 @@ function show_edit_assignment($id) {
                 . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
                                      <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
+                </div>";
+    if ($turnitinapp->isEnabled()) {
+        $tool_content .= "
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langAssignmentType:</label>
+                    <div class='col-sm-10'>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='assignment_type' value='0'" . ($assignment_type == 0 ? " checked" : "") . ">
+                             $langAssignmentTypeEclass
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='assignment_type' value='1'" . ($assignment_type == 1 ? " checked" : "") . ">
+                            $langAssignmentTypeTurnitin
+                          </label>
+                        </div>
+                        <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
+                    </div>
                 </div>
+                <div class='form-group $lti_hidden'>
+                    <label for='title' class='col-sm-2 control-label'>$langLTITemplate:</label>
+                    <div class='col-sm-10'>
+                      <select name='lti_template' class='form-control' id='lti_templates' $lti_disabled>
+                            $lti_template_options
+                      </select>
+                    </div>
+                </div>
+                <div class='form-group $lti_hidden'>
+                    <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
+                    <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', $row->launchcontainer, 'id="lti_launchcontainer"' . $lti_disabled) . "</div>
+                </div>";
+    } else {
+        $tool_content .= "
+                <input type='hidden' name='assignment_type' value='0' />";
+    }
+    $tool_content .= "
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langGradeType:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='grading_type' value='0'". ($grading_type==0 ? " checked" : "") .">
+                            <input type='radio' id='numbers_button' name='grading_type' value='0'". ($grading_type==0 ? " checked" : "") .">
                              $langGradeNumbers
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") .">
+                            <input type='radio' id='scales_button' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") ." $lti_group_disabled>
                             $langGradeScales
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") .">
+                            <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") ." $lti_group_disabled>
                             $langGradeRubrics
                           </label>
                         </div>
@@ -2014,7 +2680,24 @@ function show_edit_assignment($id) {
                        </div>
                        <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                     </div>
+                </div>";
+    if ($turnitinapp->isEnabled()) {
+        $tool_content .= "
+                <div class='input-append date form-group $lti_hidden".(Session::getError('WorkFeedbackRelease') ? " has-error" : "")."' id='feedbackreleasedatepicker' data-date='$WorkFeedbackRelease' data-date-format='dd-mm-yyyy'>
+                    <label for='tii_feedbackreleasedate' class='col-sm-2 control-label'>$langTiiFeedbackReleaseDate:</label>
+                    <div class='col-sm-10'>
+                       <div class='input-group'>
+                           <span class='input-group-addon'>
+                             <input style='cursor:pointer;' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'".($enableWorkFeedbackRelease ? ' checked' : '').">
+                           </span>
+                           <input class='form-control' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'".($enableWorkFeedbackRelease ? '' : ' disabled').">
+                       </div>
+                       <span class='help-block'>".(Session::hasError('WorkFeedbackRelease') ? Session::getError('WorkFeedbackRelease') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentFeedbackReleaseHelpBlock")."</span>
+                    </div>
                 </div>
+        ";
+    }
+    $tool_content .= "
                 <div class='form-group ". ($WorkEnd ? "" : "hide") ."' id='late_sub_row'>
                     <div class='col-xs-10 col-xs-offset-2'>
                         <div class='checkbox'>
@@ -2046,7 +2729,7 @@ function show_edit_assignment($id) {
                         </div>
                         <div class='radio'>
                           <label>
-                            <input type='radio' id='group_button' name='group_submissions' value='1' ".(($row->group_submissions==1) ? 'checked' : '').">
+                            <input type='radio' id='group_button' name='group_submissions' value='1' ".(($row->group_submissions==1) ? 'checked' : '')." $lti_group_disabled>
                             $m[group_work]
                           </label>
                         </div>
@@ -2235,7 +2918,109 @@ function show_edit_assignment($id) {
                         </select>
                     </div>
                 </div>" .
-                eClassTag::tagInput($id) . "
+                eClassTag::tagInput($id);
+    if ($turnitinapp->isEnabled()) {
+        $tool_content .= "
+            <!--<div class='form-group $lti_hidden'>
+                <label for='tii_submit_papers_to' class='col-sm-2 control-label'>$langTiiSubmissionSettings:</label>
+                <div class='col-sm-10'>
+                  <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' $lti_disabled>
+                        <option value='0' " . (($row->tii_submit_papers_to == 0) ? 'selected' : '') . ">$langTiiSubmissionNoStore</option>
+                        <option value='1' " . (($row->tii_submit_papers_to == 1) ? 'selected' : '') . ">$langTiiSubmissionStandard</option>
+                        <option value='2' " . (($row->tii_submit_papers_to == 2) ? 'selected' : '') . ">$langTiiSubmissionInstitutional</option>
+                  </select>
+                </div>
+            </div>-->
+            <div class='form-group $lti_hidden'>
+                <label class='col-sm-2 control-label'>$langTiiCompareAgainst:</label>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' " . (($row->tii_studentpapercheck == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiStudentPaperCheck
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' " . (($row->tii_internetcheck == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiInternetCheck
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' " . (($row->tii_journalcheck == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiJournalCheck
+                      </label>
+                    </div>
+                    <!--<div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' " . (($row->tii_institutioncheck == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiInstitutionCheck
+                      </label>
+                    </div>-->
+                </div>
+            </div>
+            <div class='form-group $lti_hidden'>
+                <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
+                <div class='col-sm-10'>
+                  <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' $lti_disabled>
+                        <option value='0' " . (($row->tii_report_gen_speed == 0) ? 'selected' : '') . ">$langTiiReportGenImmediatelyNoResubmit</option>
+                        <option value='1' " . (($row->tii_report_gen_speed == 1) ? 'selected' : '') . ">$langTiiReportGenImmediatelyWithResubmit</option>
+                        <option value='2' " . (($row->tii_report_gen_speed == 2) ? 'selected' : '') . ">$langTiiReportGenOnDue</option>
+                  </select>
+                </div>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' " . (($row->tii_s_view_reports == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiSViewReports
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' " . (($row->tii_use_biblio_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiExcludeBiblio
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' " . (($row->tii_use_quoted_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
+                       $langTiiExcludeQuoted
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' " . (($row->tii_exclude_type != 'none') ? 'checked' : '') . " $lti_disabled>
+                       $langTiiExcludeSmall
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . "'>
+                <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' " . (($row->tii_exclude_type == 'words' || $row->tii_exclude_type == 'none') ? 'checked' : '') . " $lti_disabled>
+                        $langTiiExcludeTypeWords
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' " . (($row->tii_exclude_type == 'percentage') ? 'checked' : '') . " $lti_disabled>
+                        $langTiiExcludeTypePercentage
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . "'>
+                <label for='tii_exclude_value' class='col-sm-2 control-label'>$langTiiExcludeValue:</label>
+                <div class='col-sm-10'>
+                    <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='" . intval($row->tii_exclude_value) . "' $lti_disabled>
+                </div>
+            </div>";
+    }
+    $tool_content .= "
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>".
                     form_buttons(array(
@@ -2447,7 +3232,11 @@ function show_student_assignment($id) {
             }
         }
         if ($submit_ok) {
-            show_submission_form($id, $user_group_info, false, $submissions_exist);
+            if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
+                show_turnitin_integration($id);
+            } else {
+                show_submission_form($id, $user_group_info, false, $submissions_exist);
+            }
         }
     } else {
         redirect_to_home_page("modules/work/?course=$course_code");
@@ -2648,6 +3437,72 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
 }
 
+function show_turnitin_integration($id) {
+    global $tool_content, $head_content, $course_code, $langTurnitinIntegration;
+
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+    $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $assignment->lti_template);
+
+    if ($assignment->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
+        //$joinLink = create_launch_button($row->id);
+        $head_content .= <<<EOF
+<script type='text/javascript'>
+//<![CDATA[
+$(document).ready(function() {
+    
+    var lastHeight;
+    var padding = 15;
+    var frame = $("#contentframe");
+    
+    var resize = function(e) {
+        var viewportH = $(window).height();
+        var docH = $(document).height();
+        var minHeight = Math.min(docH, viewportH);
+        if (lastHeight !== minHeight) {
+            frame.css("height", viewportH - frame.offset().top - padding + "px");
+            lastHeight = minHeight;
+        }
+    };
+    
+    resize();
+
+    $(window).on('resize', function() {
+        resize();
+    });
+
+});
+//]]
+</script>
+EOF;
+
+        $tool_content .= '<iframe id="contentframe" 
+            src="' . "post_launch.php?course=" . $course_code . "&amp;id=" . $id . '" 
+            webkitallowfullscreen="" 
+            mozallowfullscreen="" 
+            allowfullscreen="" 
+            width="100%" 
+            height="600px" 
+            style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
+    } else {
+        $joinLink = create_join_button(
+            $lti->lti_provider_url,
+            $lti->lti_provider_key,
+            $lti->lti_provider_secret,
+            $assignment->id,
+            "assignment",
+            $assignment->title,
+            $assignment->description,
+            $assignment->launchcontainer,
+            $langTurnitinIntegration . ":&nbsp;&nbsp;",
+            $assignment
+        );
+
+        $tool_content .= "<div class='form-wrapper'>" . $joinLink . "</div>";
+    }
+}
+
+
+
 /**
  * @brief display assignment details
  * @global type $tool_content
@@ -2682,7 +3537,18 @@ function assignment_details($id, $row) {
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail,
-           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine;
+           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine, $langBack;
+
+    if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN && $row->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
+        if ($is_editor) {
+            $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'level' => 'primary-label',
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-reply')));
+        }
+        return;
+    }
 
     $preview_rubric = '';
     $grade_type = $row->grading_type;
@@ -2721,43 +3587,51 @@ function assignment_details($id, $row) {
         }
     }
     if ($is_editor) {
-        $tool_content .= action_bar(array(
-            array(
-                'title' => $langAddGrade,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add",
-                'icon' => 'fa-plus-circle',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success'
-            ),
-            array(
-                'title' => $langZipDownload,
-                'icon' => 'fa-file-archive-o',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id",
-                'level' => 'primary'
-            ),
-            array(
-                'title' => $langExportGrades,
-                'icon' => 'fa-file-excel-o',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=export"
-            ),
-            array(
-                'title' => $langGraphResults,
-                'icon' => 'fa-bar-chart',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true"
-            ),
-            array(
-                'title' => $m['WorkUserGroupNoSubmission'],
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
-                'icon' => 'fa-minus-square'
-            ),
-            array(
-                'title' => $langDelAssign,
-                'icon' => 'fa-times',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete",
-                'button-class' => "btn-danger",
-                'confirm' => "$langWorksDelConfirm"
-            )
-        ));
+        if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN && $row->launchcontainer != LTI_LAUNCHCONTAINER_EMBED) {
+            $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'level' => 'primary-label',
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-reply')));
+        } else {
+            $tool_content .= action_bar(array(
+                array(
+                    'title' => $langAddGrade,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'
+                ),
+                array(
+                    'title' => $langZipDownload,
+                    'icon' => 'fa-file-archive-o',
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id",
+                    'level' => 'primary'
+                ),
+                array(
+                    'title' => $langExportGrades,
+                    'icon' => 'fa-file-excel-o',
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=export"
+                ),
+                array(
+                    'title' => $langGraphResults,
+                    'icon' => 'fa-bar-chart',
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true"
+                ),
+                array(
+                    'title' => $m['WorkUserGroupNoSubmission'],
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
+                    'icon' => 'fa-minus-square'
+                ),
+                array(
+                    'title' => $langDelAssign,
+                    'icon' => 'fa-times',
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete",
+                    'button-class' => "btn-danger",
+                    'confirm' => "$langWorksDelConfirm"
+                )
+            ));
+        }
     }
     $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
     if ($row->time > 0) {
@@ -2961,6 +3835,10 @@ function show_assignment($id, $display_graph_results = false) {
         }
     } else {
         $order = 'surname';
+    }
+
+    if ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
+        show_turnitin_integration($id);
     }
 
     $count_of_assignments = Database::get()->querySingle("SELECT COUNT(*) AS count_of_assignments FROM assignment_submit
@@ -3243,6 +4121,9 @@ function show_non_submitted($id) {
 
     $nav[] = $works_url;
     assignment_details($id, $row);
+    if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
+        show_turnitin_integration($id);
+    }
     if ($row->group_submissions) {
         $groups = groups_with_no_submissions($id);
         $num_results = count($groups);

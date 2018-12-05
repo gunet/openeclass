@@ -246,6 +246,7 @@ function lti_app_details() {
                         $row->lti_provider_key,
                         $row->lti_provider_secret,
                         $row->id,
+                        "lti_tool",
                         $row->title,
                         $row->description,
                         $row->launchcontainer
@@ -337,7 +338,7 @@ function create_launch_button($resource_link_id) {
     return $button;
 }
 
-function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource_link_id, $resource_link_title, $resource_link_description, $launchcontainer) {
+function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource_link_id, $resource_link_type, $resource_link_title, $resource_link_description, $launchcontainer, $extrabutton = '', $extraobj = null) {
     global $langLogIn, $course_id, $course_code, $language, $urlServer;
 
     $now = new DateTime();
@@ -356,7 +357,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
     $launch_data = array(
         "user_id" => $uid,
         "roles" => lti_get_ims_role(),
-        "resource_link_id" => $_SERVER['SERVER_NAME'] . ":lti_tool:" . $resource_link_id,
+        "resource_link_id" => $_SERVER['SERVER_NAME'] . ":" . $resource_link_type . ":" . $resource_link_id,
         "resource_link_title" => $resource_link_title,
         "resource_link_description" => strip_tags($resource_link_description),
         "lis_person_name_full" => $lis_person_name_full,
@@ -386,6 +387,29 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         "oauth_signature_method" => "HMAC-SHA1"
     );
 
+    if ($extraobj != null) {
+        $launch_data['custom_startdate'] = gmstrftime("%Y-%m-%dT%TZ", strtotime($extraobj->submission_date));
+        if ($extraobj->deadline != NULL) {
+            $launch_data['custom_duedate'] = gmstrftime("%Y-%m-%dT%TZ", strtotime($extraobj->deadline));
+        }
+        if ($extraobj->tii_feedbackreleasedate != NULL) {
+            $launch_data['custom_feedbackreleasedate'] = gmstrftime("%Y-%m-%dT%TZ", strtotime($extraobj->tii_feedbackreleasedate));
+        }
+        $launch_data['custom_maxpoints'] = intval($extraobj->max_grade);
+        $launch_data['custom_late_accept_flag'] = intval($extraobj->late_submission);
+        $launch_data['custom_internetcheck'] = intval($extraobj->tii_internetcheck);
+        $launch_data['custom_journalcheck'] = intval($extraobj->tii_journalcheck);
+        $launch_data['custom_report_gen_speed'] = intval($extraobj->tii_report_gen_speed);
+        $launch_data['custom_s_view_reports'] = intval($extraobj->tii_s_view_reports);
+        $launch_data['custom_studentpapercheck'] = intval($extraobj->tii_studentpapercheck);
+        $launch_data['custom_use_biblio_exclusion'] = intval($extraobj->tii_use_biblio_exclusion);
+        $launch_data['custom_use_quoted_exclusion'] = intval($extraobj->tii_use_quoted_exclusion);
+        $launch_data['custom_exclude_type'] = $extraobj->tii_exclude_type;
+        $launch_data['custom_exclude_value'] = intval($extraobj->tii_exclude_value);
+        //$launch_data['custom_institutioncheck'] = intval($extraobj->tii_institutioncheck);
+        //$launch_data['custom_submit_papers_to'] = intval($extraobj->tii_submit_papers_to);
+    }
+
     $launch_data_keys = array_keys($launch_data);
     sort($launch_data_keys);
 
@@ -404,7 +428,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         $button .='<input type="hidden" name="' . $k .'" value="' . $v . '">';
     }
     $button .='<input type="hidden" name="oauth_signature" value="' . $signature . '">';
-    $button .='<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
+    $button .= $extrabutton . '<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
     $button .='</form>';
 
     return $button;  

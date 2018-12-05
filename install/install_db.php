@@ -952,7 +952,22 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `lang` VARCHAR(10) NOT NULL DEFAULT '',
     `notification` TINYINT(4) DEFAULT 0,
     `ip_lock` TEXT,
-    `password_lock` VARCHAR(255) NOT NULL DEFAULT '') $tbl_options");
+    `password_lock` VARCHAR(255) NOT NULL DEFAULT '',
+    `assignment_type` TINYINT NOT NULL DEFAULT '0',
+    `lti_template` INT(11) DEFAULT NULL,
+    `launchcontainer` TINYINT DEFAULT NULL,
+    `tii_feedbackreleasedate` DATETIME NULL DEFAULT NULL,
+    `tii_internetcheck` TINYINT NOT NULL DEFAULT '1',
+    `tii_institutioncheck` TINYINT NOT NULL DEFAULT '1',
+    `tii_journalcheck` TINYINT NOT NULL DEFAULT '1',
+    `tii_report_gen_speed` TINYINT NOT NULL DEFAULT '0',
+    `tii_s_view_reports` TINYINT NOT NULL DEFAULT '0',
+    `tii_studentpapercheck` TINYINT NOT NULL DEFAULT '1',
+    `tii_submit_papers_to` TINYINT NOT NULL DEFAULT '1',
+    `tii_use_biblio_exclusion` TINYINT NOT NULL DEFAULT '0',
+    `tii_use_quoted_exclusion` TINYINT NOT NULL DEFAULT '0',
+    `tii_exclude_type` VARCHAR(20) NOT NULL DEFAULT 'none',
+    `tii_exclude_value` INT(11) NOT NULL DEFAULT '0') $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1086,7 +1101,7 @@ $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `lti_provider_url` VARCHAR(255) DEFAULT NULL,
     `lti_provider_key` VARCHAR(255) DEFAULT NULL,
     `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
-    `launchcontainer` INT(11) NOT NULL DEFAULT 1,
+    `launchcontainer` TINYINT(4) NOT NULL DEFAULT 1,
     `is_template` TINYINT(4) NOT NULL DEFAULT 0,
     `enabled` TINYINT(4) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`)) $tbl_options");
