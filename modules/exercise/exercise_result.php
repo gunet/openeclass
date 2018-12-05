@@ -594,6 +594,20 @@ if ($regrade) {
         WHERE eurid = ?d', $totalScore, $totalWeighting, $eurid);
     update_gradebook_book($exercise_user_record->uid,
         $exercise_user_record->eid, $totalScore / $totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
+    
+    // find all duplicate wrong entries (for questions with type `unique answer)
+    $wrong_data = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record 
+                                            JOIN exercise_question 
+                                                ON question_id = id 
+                                                AND `type` = " . UNIQUE_ANSWER . " 
+                                                AND eurid = ?d 
+                                            GROUP BY eurid, question_id, answer_id 
+                                            HAVING COUNT(question_id) > 1", $eurid);
+    // delete all duplicate entries
+    foreach ($wrong_data as $d) {
+        $max_arid = Database::get()->querySingle("SELECT MAX(answer_record_id) AS max_arid FROM exercise_answer_record WHERE eurid=?d AND question_id=?d", $eurid, $d)->max_arid;
+        Database::get()->querySingle("DELETE FROM exercise_answer_record WHERE eurid=?d AND question_id=?d AND answer_record_id != ?d", $eurid, $d, $max_arid);
+    }
     Session::Messages($langNewScoreRecorded, 'alert-success');
     redirect_to_home_page("modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid");
 }
