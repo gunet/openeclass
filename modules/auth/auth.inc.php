@@ -535,6 +535,10 @@ function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = nul
             phpCAS::setNoCasServerValidation();
             $ret['error'] = "$langNotSSL";
         }
+        // Force renewal of CAS login during transition
+        if (isset($GLOBALS['transition_script'])) {
+             phpCAS::renewAuthentication();
+        }
         // Single Sign Out
         //phpCAS::handleLogoutRequests(true, $cas_real_hosts);
         // Force CAS authentication on any page that includes this file
