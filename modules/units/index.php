@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.5
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2016  Greek Universities Network - GUnet
@@ -153,13 +153,14 @@ if ($is_editor) {
 }
 
 if ($is_editor) {
-    $visibility_check = '';
+    $visibility_check = $check_start_week = '';
 } else {
     $visibility_check = "AND visible=1";
+    $check_start_week = " AND (start_week <= CURRENT_DATE() OR start_week IS NULL OR start_week = '0000-00-00')";
 }
 if (isset($id) and $id !== false) {
-    $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
-    if ($info) {
+    $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
+    if ($info) {        
         $pageName = $info->title;
         $comments = standard_text_escape(trim($info->comments));
         $course_start_week = $course_finish_week = '';
@@ -169,8 +170,7 @@ if (isset($id) and $id !== false) {
         if (!(($info->finish_week == '0000-00-00') or (is_null($info->finish_week)))) {
             $course_finish_week = " $langTill " . nice_format($info->finish_week);
         }
-    } else {
-        $tool_content .= "<br>";
+    } else {        
         Session::Messages($langUnknownResType);
         redirect_to_home_page("courses/$course_code/");
     }
@@ -193,11 +193,10 @@ foreach (array('previous', 'next') as $i) {
     }
 
     if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
-            $access_check = "";
+        $access_check = "";
     } else {
         $access_check = "AND public = 1";
-    }
-
+    }    
     $q = Database::get()->querySingle("SELECT id, title, start_week, finish_week, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
@@ -205,6 +204,7 @@ foreach (array('previous', 'next') as $i) {
                              AND `order` >= 0
                              $visibility_check
                              $access_check
+                             $check_start_week
                        ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
     if ($q) {
@@ -235,10 +235,10 @@ $tool_content .= "
           <div class='panel-heading'>
                 <div class='panel-title h3'>
                     " . q($pageName) . "
-                    <h5 class='text-muted'>
+                    <h6 class='text-muted'>
                         $course_start_week                                               
                         $course_finish_week
-                    </h5>
+                    </h6>
                 </div>
           </div>
         <div class='panel-body'>          
@@ -265,12 +265,12 @@ $tool_content .= "
       </div>
     </div>
   </div>";
-$q = Database::get()->queryArray("SELECT id, title FROM course_units
+$q = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
              WHERE course_id = ?d AND `order` > 0
-                   $visibility_check
+                   $visibility_check $check_start_week
              ORDER BY `order`", $course_id);
 $course_units_options ='';
-foreach ($q as $info) {
+foreach ($q as $info) {    
     $selected = ($info->id == $id) ? ' selected ' : '';
     $course_units_options .= "<option value='$info->id'$selected>" .
             htmlspecialchars(ellipsize($info->title, 50)) .

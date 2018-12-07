@@ -699,29 +699,41 @@ if ($total_cunits > 0) {
     $cunits_content .= "";
     $count_index = 0;
     foreach ($sql as $cu) {
+        $not_shown = false;
+        // check if course unit has started
+        if (!(($cu->start_week == '0000-00-00') or (is_null($cu->start_week))) and (date('Y-m-d') < $cu->start_week)) {
+            $not_shown = true;
+        }
+        // check visibility
         if ($cu->visible == 1) {
             $count_index++;
         }
         // access status
         $access = $cu->public;
-        // Visibility icon
+        // Visibility icon and class
         $vis = $cu->visible;
-        $class_vis = ($vis == 0) ? 'not_visible' : '';
-        $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
-        $cu_indirect = getIndirectReference($cu->id);
-        $cunits_content .= "<div id='unit_$cu_indirect' class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
-                              <div class='item-content'>
-                                <div class='item-header clearfix'>
-                                  <div class='item-title h4'>$href";
-                                    $cunits_content .= "<span class='help-block'>";
-                                    if (!(($cu->start_week == '0000-00-00') or (is_null($cu->start_week)))) {
-                                        $cunits_content .= "$langFrom2 " . nice_format($cu->start_week);
-                                    }
-                                    if (!(($cu->finish_week == '0000-00-00') or (is_null($cu->finish_week)))) {
-                                        $cunits_content .= " $langTill " . nice_format($cu->finish_week);
-                                    }
-                                    $cunits_content .= "</span>";
-          $cunits_content .= "</div>";
+        $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
+        $cu_indirect = getIndirectReference($cu->id);                
+        if (!$is_editor and $not_shown) {
+            continue;
+        } else {
+            $cunits_content .= "<div id='unit_$cu_indirect' class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
+            <div class='item-content'>
+              <div class='item-header clearfix'>
+                <div class='item-title h4'>
+                    <a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                    $cunits_content .= "<small><span class='help-block'>";
+                    if (!(($cu->start_week == '0000-00-00') or (is_null($cu->start_week)))) {
+                        $cunits_content .= "$langFrom2 " . nice_format($cu->start_week);
+                    }
+                    if (!(($cu->finish_week == '0000-00-00') or (is_null($cu->finish_week)))) {
+                        $cunits_content .= " $langTill " . nice_format($cu->finish_week);
+                    }
+                    $cunits_content .= "</span></small>";
+                $cunits_content .= "</div>";
+        }
+                
+        
         if ($is_editor) {
             $cunits_content .= "<div class='item-side'>
                                   <div class='reorder-btn'>
