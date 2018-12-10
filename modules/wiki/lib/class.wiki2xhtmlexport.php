@@ -247,7 +247,7 @@ td {
     /**
      * @see Wiki2xhtmlRenderer
      */
-    function _getWikiPageLink( $pageName, &$tag, &$attr)
+    function _getWikiPageLink($pageName)
     {
         // allow links to use wikiwords for wiki page locations
         if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern'))

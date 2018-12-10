@@ -576,7 +576,9 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
         $this->tag_pattern = $this->__getTagsPattern();
 
         $this->escape_table = $this->all_tags;
-        array_walk($this->escape_table, create_function('&$a', '$a = \'\\\\\'.$a;'));
+        array_walk($this->escape_table, function(&$a) {
+            $a = '\\\\'.$a;
+        });        
     }
 	
     function __parseColor($str, &$tag, &$attr, &$type) {
