@@ -288,8 +288,12 @@ class wiki2xhtml {
     }
 
     function __getTagsPattern($escape = false) {
-        $res = $this->all_tags;
-        array_walk($res, create_function('&$a', '$a = preg_quote($a,"/");'));
+        $res = $this->all_tags;        
+        array_walk($res, 
+            function(&$a) {
+                $a = preg_quote($a,"/");
+            }
+        );
 
         if (!$escape) {
             return '/(?<!\\\)(' . implode('|', $res) . ')/';
