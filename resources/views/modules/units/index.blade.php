@@ -67,14 +67,14 @@
                         @if ($previousLink)
                             <a class='btn btn-default pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
                                 <span class='fa fa-arrow-left space-after-icon'></span>
-                                {{ ellipsize($previousTitle, 30) }}                                
-                            </a>                            
+                                {{ ellipsize($previousTitle, 30) }}
+                            </a>
                         @endif
                         @if ($nextLink)
                             <a class='btn btn-default pull-right' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
                                 {{ ellipsize($nextTitle, 30) }}
                                 <span class='fa fa-arrow-right space-before-icon'></span>
-                            </a>                        
+                            </a>
                         @endif
                     </div>
                 </div>
@@ -87,11 +87,11 @@
             <div class='panel panel-default'>
                 <div class='panel-heading'>
                     <div class='panel-title h3'>{{ $pageName }}
-                        <h5 class='text-muted'>
-                            {{ $course_start_week }}                                               
+                        <h6 class='text-muted'>
+                            {{ $course_start_week }}
                             {{ $course_finish_week }}
-                        </h5>
-                    </div>                    
+                        </h6>
+                    </div>
                 </div>
                 <div class='panel-body'>
                     {!! standard_text_escape($comments) !!}

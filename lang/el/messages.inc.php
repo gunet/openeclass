@@ -359,7 +359,7 @@ $langBackCourse = "Επιστροφή στην αρχική σελίδα του 
 $langCourseFormat = "Mορφή $langsOfCourse";
 $langCourseWallFormat = "Μορφή τοίχου";
 $langCourseActivityFormat = 'Μορφή δραστηριότητας';
-$langWithCourseUnits = "$langCourse με θεματικές ενότητες";
+$langWithCourseUnits = "$langCourse με ενότητες (εβδομαδιαίες, θεματικές)";
 $langCourseSimpleFormat = 'Απλή μορφή';
 $langAddWeek = 'Προσθήκη εβδομάδας';
 $langEditWeek = 'Επεξεργασία εβδομάδας';
@@ -4329,20 +4329,20 @@ $langUpdates = "ενημερώσεις";
 /* * ********************************************************************
   units.php
  * ********************************************************************* */
-$langUnits = "Θεματικές ενότητες";
-$langAddUnit = "Προσθήκη θεματικής ενότητας";
-$langEditUnit = "Επεξεργασία θεματικής ενότητας";
+$langUnits = "Ενότητες";
+$langAddUnit = "Προσθήκη ενότητας";
+$langEditUnit = "Επεξεργασία ενότητας";
 $langEditUnitSection = "Επεξεργασία";
-$langUnitTitle = "Τίτλος θεματικής ενότητας";
+$langUnitTitle = "Τίτλος ενότητας";
 $langUnitDescr = "Σύντομη περιγραφή";
-$langUnitUnknown = "Άγνωστη θεματική ενότητα";
-$langEmptyUnitTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της θεματικής ενότητας";
-$langCourseUnits = "Θεματικές Ενότητες";
+$langUnitUnknown = "Άγνωστη ενότητα";
+$langEmptyUnitTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ενότητας";
+$langCourseUnits = "Ενότητες";
 $langCourseUnitDeleteConfirm = "Επιβεβαίωση διαγραφής";
-$langCourseUnitDeleted = "Η θεματική ενότητα διαγράφηκε";
-$langCourseUnitAdded = "Η θεματική ενότητα προστέθηκε";
+$langCourseUnitDeleted = "Η ενότητα διαγράφηκε";
+$langCourseUnitAdded = "Η ενότητα προστέθηκε";
 $langCourseUnitModified = "Τα στοιχεία της ενότητας τροποποιήθηκαν";
-$langResourceCourseUnitDeleted = "Ο πόρος της θεματικής ενότητας διαγράφηκε";
+$langResourceCourseUnitDeleted = "Ο πόρος της ενότητας διαγράφηκε";
 $langResourceUnitModified = "Τα στοιχεία του πόρου της ενότητας τροποποιήθηκαν";
 $langInsertText = "κειμένου";
 $langInsertDoc = "εγγράφου";
@@ -4357,7 +4357,7 @@ $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
 $langInsertPoll = "ερωτηματολογίου";
 $langInsertTcMeeting = "τηλεσυνεργασίας";
-$langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
+$langUnknownResType = "Πρόβλημα! Άγνωστος πόρος ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 $langAddToCourseHome = "Εμφάνιση στην κεντρική σελίδα του $langsOfCourse";
 $langSeenToCourseHome = "Εμφάνιζεται στην κεντρική σελίδα του $langsOfCourse";
@@ -4367,7 +4367,7 @@ $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
 $langInactiveModule = "ανενεργό υποσύστημα";
 $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
-$langNoUnits = "Δεν υπάρχουν θεματικές ενότητες";
+$langNoUnits = "Δεν υπάρχουν ενότητες";
 
 /* * ********************************************************************
   mail_verify.php

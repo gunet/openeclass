@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -74,13 +74,14 @@ if ($access) {
 if ($is_editor) {
     $data['editUrl'] = "info.php?course=$course_code&amp;edit=$id&amp;next=1";
     $data['insertBaseUrl'] = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
-    $visibility_check = '';
+    $visibility_check = $check_start_week = '';
 } else {
     $visibility_check = "AND visible=1";
+    $check_start_week = " AND (start_week <= CURRENT_DATE() OR start_week IS NULL OR start_week = '0000-00-00')";
 }
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units
-        WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
+        WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
     if ($info) {
         $data['pageName'] = $info->title;
         $data['comments'] = trim($info->comments);
@@ -88,7 +89,7 @@ if (isset($id) and $id !== false) {
         $data['course_start_week'] = $data['course_finish_week'] = '';
         if (!(($info->start_week == '0000-00-00') or (is_null($info->start_week)))) {
             $data['course_start_week'] = "$langFrom2 " . nice_format($info->start_week);
-        }        
+        }
         if (!(($info->finish_week == '0000-00-00') or (is_null($info->finish_week)))) {
             $data['course_finish_week'] = "$langTill " . nice_format($info->finish_week);
         }
@@ -107,14 +108,14 @@ foreach (array('previous', 'next') as $i) {
     } else {
         $op = '>=';
         $dir = '';
-    }        
+    }
 
     if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
         $access_check = '';
     } else {
         $access_check = "AND public = 1";
     }
-    
+
     $q = Database::get()->querySingle("SELECT id, title, start_week, finish_week, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
@@ -122,9 +123,10 @@ foreach (array('previous', 'next') as $i) {
                              AND `order` >= 0
                              $visibility_check
                              $access_check
+                             $check_start_week
                        ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
-       
+
     if ($q) {
         $data[$i . 'Title'] = $q->title;
         $data[$i . 'Link'] = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&id=" . $q->id;
@@ -135,9 +137,9 @@ foreach (array('previous', 'next') as $i) {
 
 $moduleTag = new ModuleElement($id);
 $data['tags'] = $moduleTag->showTags();
-$data['units'] = Database::get()->queryArray("SELECT id, title FROM course_units
+$data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
              WHERE course_id = ?d AND `order` > 0
-                   $visibility_check
+                   $visibility_check $check_start_week
              ORDER BY `order`", $course_id);
 
 view('modules.units.index', $data);

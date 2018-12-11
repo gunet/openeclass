@@ -3,7 +3,7 @@
 @section('content')
 <style>
     .course_completion_panel_percentage
-        {                
+        {
             bottom:15px;
             right:15px;
             font-size:20px;
@@ -15,10 +15,10 @@
             background: #FFFFFF;
             color: #AAAAAA;
             line-height: 38px;
-            font-weight: 600;                
+            font-weight: 600;
         }
         .state_success
-        {                
+        {
             color: #11D888;
         }
 </style>
@@ -146,7 +146,7 @@
                     <div class='col-md-12'>
                         <div class='content-title pull-left h3'>
                             {{ trans('langCourseUnits') }}
-                        </div>                         
+                        </div>
                             <a class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
                                 <span class='fa fa-question-circle'></span>
                             </a>
@@ -162,37 +162,49 @@
                     @if ($course_units)
                         <?php $count_index = 0;?>
                         @foreach ($course_units as $key => $course_unit)
+                            <?php
+                                $not_shown = false;
+                                if (!(($course_units->start_week == '0000-00-00') or (is_null($course_unit->start_week))) and (date('Y-m-d') < $course_unit->start_week)) {
+                                    $not_shown = true;
+                                }
+                            ?>
                             @if ($course_unit->visible == 1)
                                <?php $count_index++; ?>
                             @endif
-                            <div class='col-xs-12'>
-                                <div class='panel clearfix'>
-                                    <div class='col-xs-12'>
-                                        <div class='item-content'>
-                                            <div class='item-header clearfix'>
-                                                <div class='item-title h4'>                                                    
-                                                    <a {!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
-                                                        {{ $course_unit->title }}
-                                                    </a>
-                                                    <span class='help-block'>
-                                                        <?php
-                                                            if (!(($course_unit->start_week == '0000-00-00') or (is_null($course_unit->start_week)))) {
-                                                                echo $GLOBALS['langFrom2'];
-                                                                echo "&nbsp;";
-                                                                echo nice_format($course_unit->start_week);
-                                                            }
-                                                        ?>
-                                                        <?php
-                                                            if (!(($course_unit->finish_week == '0000-00-00') or (is_null($course_unit->finish_week)))) {
-                                                                echo $GLOBALS['langTill'];
-                                                                echo "&nbsp;";
-                                                                echo nice_format($course_unit->finish_week);
-                                                            }
-                                                        ?>
-                                                    </span>
-                                                </div>
+                            @if (!$is_editor and $not_shown)
+                                @continue;
+                            @else
+                                <div class='col-xs-12'>
+                                    <div class='panel clearfix'>
+                                        <div class='col-xs-12'>
+                                            <div class='item-content'>
+                                                <div class='item-header clearfix'>
+                                                    <div class='item-title h4'>
+                                                        <a {!! (!$course_unit->visible or $not_shown)? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
+                                                            {{ $course_unit->title }}
+                                                        </a>
+                                                        <small>
+                                                            <span class='help-block'>
+                                                            <?php
+                                                                if (!(($course_unit->start_week == '0000-00-00') or (is_null($course_unit->start_week)))) {
+                                                                    echo $GLOBALS['langFrom2'];
+                                                                    echo "&nbsp;";
+                                                                    echo nice_format($course_unit->start_week);
+                                                                }
+                                                            ?>
+                                                            <?php
+                                                                if (!(($course_unit->finish_week == '0000-00-00') or (is_null($course_unit->finish_week)))) {
+                                                                    echo $GLOBALS['langTill'];
+                                                                    echo "&nbsp;";
+                                                                    echo nice_format($course_unit->finish_week);
+                                                                }
+                                                            ?>
+                                                            </span>
+                                                        </small>
+                                                    </div>
+                            @endif
                                                 @if ($is_editor)
-                                                    <div class='item-side'>                                                    
+                                                    <div class='item-side'>
                                                         {!! action_button([
                                                             [
                                                                 'title' => trans('langEditChange'),
@@ -231,7 +243,7 @@
                                                                 'class' => 'delete',
                                                                 'confirm' => trans('langCourseUnitDeleteConfirm')
                                                             ]
-                                                        ]) !!}                                                    
+                                                        ]) !!}
                                                     </div>
                                                 @endif
                                             </div>
@@ -271,7 +283,7 @@
                                         @else
                                             <div class='course_completion_panel_percentage'>
                                                 {{ $percentage }}
-                                            </div>                                            
+                                            </div>
                                         @endif
                                         </a>
                                         </div>
