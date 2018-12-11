@@ -24,12 +24,12 @@
 $require_current_course = TRUE;
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'lti-functions.php';
+require_once 'modules/lti_consumer/lti-functions.php';
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
-$action->record(MODULE_ID_LTI_CONSUMER);
+$action->record(MODULE_ID_ASSIGN);
 /* * *********************************** */
 
 // guest user not allowed
@@ -37,21 +37,24 @@ if (check_guest()) {
     die();
 }
 
-$resource_link_id = getDirectReference($_GET['id']);
-$lti_app = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $resource_link_id);
-if (!$lti_app) {
+$resource_link_id = intval($_GET['id']);
+$assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $resource_link_id);
+$lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $assignment->lti_template);
+if (!$lti) {
     die();
 }
 
 echo create_join_button(
-    $lti_app->lti_provider_url,
-    $lti_app->lti_provider_key,
-    $lti_app->lti_provider_secret,
-    $lti_app->id,
-    "lti_tool",
-    $lti_app->title,
-    $lti_app->description,
-    $lti_app->launchcontainer
+    $lti->lti_provider_url,
+    $lti->lti_provider_key,
+    $lti->lti_provider_secret,
+    $assignment->id,
+    "assignment",
+    $assignment->title,
+    $assignment->description,
+    $assignment->launchcontainer,
+    '',
+    $assignment
 );
 
 echo '<script type="text/javascript">
