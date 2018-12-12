@@ -2020,6 +2020,12 @@ $langImportQTI = "Εισαγωγή από IMS QTI";
 $langExportQTI = "Εξαγωγή σε IMS QTI";
 $langIMSQTIUploadFile = "Εντοπισμός θέσης του αρχείου IMS QTI μάθησης στον Η/Υ σας (τοπικά)";
 $langExportWithAnswers = 'με απαντήσεις';
+$langCheckGrades = 'Έλεγχος βαθμολογιών';
+$langCheckGradesConsistent = 'Έλεγχος βαθμολογιών για ασυνέπειες';
+$langCheckFinished = 'Ο έλεγχος ολοκληρώθηκε.';
+$langRegradeAttemptsList = 'Εντοπίστηκαν ασυνέπειες στις βαθμολογίες και μπορεί να γίνει αναβαθμολόγηση στις παρακάτω προσπάθειες:';
+$langRegradeNotNeeded = 'Δεν απαιτείται αναβαθμολόγηση.';
+$langRegradeAll = 'Αναβαθμολόγηση όλων';
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";

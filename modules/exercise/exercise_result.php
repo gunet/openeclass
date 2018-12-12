@@ -33,55 +33,67 @@ require_once 'game.php';
 $pageName = $langExercicesResult;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
+# is this an AJAX request to check grades?
+$checking = false;
+$ajax_regrade = false;
+
 // picture path
 $picturePath = "courses/$course_code/image";
-//Identifying ajax request
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
-    $grade = $_POST['question_grade'];
-    $question_id = $_POST['question_id'];
-    $eurid = $_GET['eurId'];
-    Database::get()->query("UPDATE exercise_answer_record
-                SET weight = ?f WHERE eurid = ?d AND question_id = ?d",
-        $grade, $eurid, $question_id);
-    $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
-        FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
-        $eurid)->count;
-    if ($ungraded == 0) {
-        // if no more ungraded questions, set attempt as complete and
-        // recalculate sum of grades
-        Database::get()->query("UPDATE exercise_user_record
-            SET attempt_status = ?d,
-                total_score = (SELECT SUM(weight) FROM exercise_answer_record
-                                    WHERE eurid = ?d)
-            WHERE eurid = ?d",
-            ATTEMPT_COMPLETED, $eurid, $eurid);
-        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting FROM exercise_user_record WHERE eurid = ?d", $eurid);
-        // update gradebook
-        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+// Identifying ajax request
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
+    if (isset($_GET['check'])) {
+        $checking = true;
+        header('Content-Type: application/json');
+    } elseif (isset($_POST['regrade'])) {
+        $ajax_regrade = true;
     } else {
-        // else increment total by just this grade
-        Database::get()->query("UPDATE exercise_user_record
-            SET total_score = total_score + ?f WHERE eurid = ?d",
-            $grade, $eurid);
+        $grade = $_POST['question_grade'];
+        $question_id = $_POST['question_id'];
+        $eurid = $_GET['eurId'];
+        Database::get()->query("UPDATE exercise_answer_record
+                    SET weight = ?f WHERE eurid = ?d AND question_id = ?d",
+            $grade, $eurid, $question_id);
+        $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
+            FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
+            $eurid)->count;
+        if ($ungraded == 0) {
+            // if no more ungraded questions, set attempt as complete and
+            // recalculate sum of grades
+            Database::get()->query("UPDATE exercise_user_record
+                SET attempt_status = ?d,
+                    total_score = (SELECT SUM(weight) FROM exercise_answer_record
+                                        WHERE eurid = ?d)
+                WHERE eurid = ?d",
+                ATTEMPT_COMPLETED, $eurid, $eurid);
+            $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting FROM exercise_user_record WHERE eurid = ?d", $eurid);
+            // update gradebook
+            update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+        } else {
+            // else increment total by just this grade
+            Database::get()->query("UPDATE exercise_user_record
+                SET total_score = total_score + ?f WHERE eurid = ?d",
+                $grade, $eurid);
+        }
+        $eur = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
+        triggerGame($course_id, $uid, $eur->eid);
+        exit();
     }
-    $eur = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    triggerGame($course_id, $uid, $eur->eid);
-    exit();
 }
+
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 load_js('tools.js');
 
-if (isset($_GET['eurId'])) {    
+if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
     $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id 
+    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id
                                                         FROM exercise_answer_record WHERE eurid = ?d", $eurid);
     $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
-        //No record matches with this exercise user record id
+        // No record matches with this exercise user record id
         Session::Messages($langExerciseNotFound);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
@@ -93,7 +105,7 @@ if (isset($_GET['eurId'])) {
     $objExercise = new Exercise();
     $objExercise->read($exercise_user_record->eid);
 } else {
-    //exercise user recird id is not set
+    // exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
@@ -594,14 +606,14 @@ if ($regrade) {
         WHERE eurid = ?d', $totalScore, $totalWeighting, $eurid);
     update_gradebook_book($exercise_user_record->uid,
         $exercise_user_record->eid, $totalScore / $totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
-    
+
     // find all duplicate wrong entries (for questions with type `unique answer)
-    $wrong_data = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record 
-                                            JOIN exercise_question 
-                                                ON question_id = id 
-                                                AND `type` = " . UNIQUE_ANSWER . " 
-                                                AND eurid = ?d 
-                                            GROUP BY eurid, question_id, answer_id 
+    $wrong_data = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record
+                                            JOIN exercise_question
+                                                ON question_id = id
+                                                AND `type` = " . UNIQUE_ANSWER . "
+                                                AND eurid = ?d
+                                            GROUP BY eurid, question_id, answer_id
                                             HAVING COUNT(question_id) > 1", $eurid);
     // delete all duplicate entries
     foreach ($wrong_data as $d) {
@@ -609,14 +621,33 @@ if ($regrade) {
         Database::get()->querySingle("DELETE FROM exercise_answer_record WHERE eurid=?d AND question_id=?d AND answer_record_id != ?d", $eurid, $d, $max_arid);
     }
     Session::Messages($langNewScoreRecorded, 'alert-success');
-    redirect_to_home_page("modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid");
+    if ($ajax_regrade) {
+        echo json_encode(['result' => 'ok']);
+        exit;
+    } else {
+        redirect_to_home_page("modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid");
+    }
 }
 
 if ($is_editor and ($totalScore != $exercise_user_record->total_score or $totalWeighting != $exercise_user_record->total_weighting)) {
-    Session::Messages($langScoreDiffers .
-        "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
-            <button class='btn btn-default' type='submit' name='regrade' value='true'>$langRegrade</button>
-         </form>", 'alert-warning');
+    if ($checking) {
+        echo json_encode(['result' => 'regrade', 'eurid' => $eurid,
+            'title' => "$user->surname $user->givenname (" .
+                       $exercise_user_record->record_start_date . ')',
+            'url' => $urlAppend . "modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid"],
+            JSON_UNESCAPED_UNICODE);
+        exit;
+    } else {
+        Session::Messages($langScoreDiffers .
+            "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
+                <button class='btn btn-default' type='submit' name='regrade' value='true'>$langRegrade</button>
+             </form>", 'alert-warning');
+    }
+}
+
+if ($checking) {
+    echo json_encode(['result' => 'ok']);
+    exit;
 }
 
 if ($showScore) {
