@@ -3444,8 +3444,7 @@ function show_turnitin_integration($id) {
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $assignment->lti_template);
 
     if ($assignment->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
-        //$joinLink = create_launch_button($row->id);
-        $head_content .= <<<EOF
+        /*$head_content .= <<<EOF
 <script type='text/javascript'>
 //<![CDATA[
 $(document).ready(function() {
@@ -3473,7 +3472,7 @@ $(document).ready(function() {
 });
 //]]
 </script>
-EOF;
+EOF;*/
 
         $tool_content .= '<iframe id="contentframe" 
             src="' . "post_launch.php?course=" . $course_code . "&amp;id=" . $id . '" 
@@ -3481,7 +3480,7 @@ EOF;
             mozallowfullscreen="" 
             allowfullscreen="" 
             width="100%" 
-            height="600px" 
+            height="800px" 
             style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
     } else {
         $joinLink = create_join_button(
@@ -3539,17 +3538,6 @@ function assignment_details($id, $row) {
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail,
            $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine, $langBack;
 
-    if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN && $row->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
-        if ($is_editor) {
-            $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'level' => 'primary-label',
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                    'icon' => 'fa-reply')));
-        }
-        return;
-    }
-
     $preview_rubric = '';
     $grade_type = $row->grading_type;
     if ($grade_type == 0){
@@ -3587,51 +3575,43 @@ function assignment_details($id, $row) {
         }
     }
     if ($is_editor) {
-        if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN && $row->launchcontainer != LTI_LAUNCHCONTAINER_EMBED) {
-            $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'level' => 'primary-label',
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                    'icon' => 'fa-reply')));
-        } else {
-            $tool_content .= action_bar(array(
-                array(
-                    'title' => $langAddGrade,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add",
-                    'icon' => 'fa-plus-circle',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success'
-                ),
-                array(
-                    'title' => $langZipDownload,
-                    'icon' => 'fa-file-archive-o',
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id",
-                    'level' => 'primary'
-                ),
-                array(
-                    'title' => $langExportGrades,
-                    'icon' => 'fa-file-excel-o',
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=export"
-                ),
-                array(
-                    'title' => $langGraphResults,
-                    'icon' => 'fa-bar-chart',
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true"
-                ),
-                array(
-                    'title' => $m['WorkUserGroupNoSubmission'],
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
-                    'icon' => 'fa-minus-square'
-                ),
-                array(
-                    'title' => $langDelAssign,
-                    'icon' => 'fa-times',
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete",
-                    'button-class' => "btn-danger",
-                    'confirm' => "$langWorksDelConfirm"
-                )
-            ));
-        }
+        $tool_content .= action_bar(array(
+            array(
+                'title' => $langAddGrade,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'
+            ),
+            array(
+                'title' => $langZipDownload,
+                'icon' => 'fa-file-archive-o',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id",
+                'level' => 'primary'
+            ),
+            array(
+                'title' => $langExportGrades,
+                'icon' => 'fa-file-excel-o',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=export"
+            ),
+            array(
+                'title' => $langGraphResults,
+                'icon' => 'fa-bar-chart',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true"
+            ),
+            array(
+                'title' => $m['WorkUserGroupNoSubmission'],
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
+                'icon' => 'fa-minus-square'
+            ),
+            array(
+                'title' => $langDelAssign,
+                'icon' => 'fa-times',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete",
+                'button-class' => "btn-danger",
+                'confirm' => "$langWorksDelConfirm"
+            )
+        ));
     }
     $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
     if ($row->time > 0) {
