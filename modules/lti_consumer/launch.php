@@ -98,7 +98,7 @@ $tool_content .= '<iframe id="contentframe"
     mozallowfullscreen="" 
     allowfullscreen="" 
     width="100%" 
-    height="600px" 
+    height="800px" 
     style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
 
 add_units_navigation(TRUE);

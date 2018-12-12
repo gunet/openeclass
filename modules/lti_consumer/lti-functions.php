@@ -328,25 +328,31 @@ function delete_lti_app($id)
     Database::get()->querySingle("DELETE FROM lti_apps WHERE id=?d",$id);
 }
 
-function create_launch_button($resource_link_id) {
-    global $urlServer, $course_code, $langLogIn;
+function lti_build_signature($launch_url, $secret, $launch_data) {
+    $launch_data_keys = array_keys($launch_data);
+    sort($launch_data_keys);
 
-    $button = '<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" action="' . $urlServer . "modules/lti_consumer/launch.php?course=" . $course_code . "&amp;id=" . getIndirectReference($resource_link_id) . '">';
-    $button .= '<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
-    $button .= '</form>';
+    $launch_params = array();
+    foreach ($launch_data_keys as $key) {
+        array_push($launch_params, $key . "=" . rawurlencode($launch_data[$key]));
+    }
 
-    return $button;
+    $base_string = "POST&" . urlencode($launch_url) . "&" . rawurlencode(implode("&", $launch_params));
+    $secret = urlencode($secret) . "&";
+    $signature = base64_encode(hash_hmac("sha1", $base_string, $secret, true));
+
+    return $signature;
 }
 
-function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource_link_id, $resource_link_type, $resource_link_title, $resource_link_description, $launchcontainer, $extrabutton = '', $extraobj = null) {
-    global $langLogIn, $course_id, $course_code, $language, $urlServer;
+function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oauth_consumer_key, $resource_link_id, $resource_link_type, $resource_link_title, $resource_link_description, $launchcontainer, $extraobj = null) {
+    global $urlServer;
 
     $now = new DateTime();
-    $uid = $_SESSION['uid'];
     $udata = user_get_data($uid);
     $lis_person_name_given = $udata->givenname;
     $lis_person_name_family = $udata->surname;
     $lis_person_name_full = $udata->givenname . " " . $udata->surname;
+    $lis_person_contact_email_primary = $udata->email;
     if (strlen($udata->surname) <= 0 && strlen($udata->givenname) > 0) {
         $lis_person_name_full = $udata->givenname;
         $lis_person_name_family = "";
@@ -363,7 +369,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         "lis_person_name_full" => $lis_person_name_full,
         "lis_person_name_family" => $lis_person_name_family,
         "lis_person_name_given" => $lis_person_name_given,
-        "lis_person_contact_email_primary" => $_SESSION['email'],
+        "lis_person_contact_email_primary" => $lis_person_contact_email_primary,
         "context_id" => $_SERVER['SERVER_NAME'] . ":" . $course_id,
         "context_title" => course_id_to_title($course_id),
         "context_label" => $course_code,
@@ -408,19 +414,46 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         $launch_data['custom_exclude_value'] = intval($extraobj->tii_exclude_value);
         //$launch_data['custom_institutioncheck'] = intval($extraobj->tii_institutioncheck);
         //$launch_data['custom_submit_papers_to'] = intval($extraobj->tii_submit_papers_to);
+
+        if ($resource_link_type == "assignment") {
+            $assignment_secret = Database::get()->querySingle("SELECT secret_directory FROM assignment WHERE id = ?d", $resource_link_id)->secret_directory;
+            $token = token_generate($assignment_secret, true);
+            $launch_data['lis_result_sourcedid'] = $token . "-" . $resource_link_id . "-" . $uid;
+            $launch_data['ext_outcomes_tool_placement_url'] = $urlServer . "modules/work/tii_placement.php";
+        }
     }
 
-    $launch_data_keys = array_keys($launch_data);
-    sort($launch_data_keys);
+    return $launch_data;
+}
 
-    $launch_params = array();
-    foreach ($launch_data_keys as $key) {
-        array_push($launch_params, $key . "=" . rawurlencode($launch_data[$key]));
-    }
+function create_launch_button($resource_link_id) {
+    global $urlServer, $course_code, $langLogIn;
 
-    $base_string = "POST&" . urlencode($launch_url) . "&" . rawurlencode(implode("&", $launch_params));
-    $secret = urlencode($secret) . "&";
-    $signature = base64_encode(hash_hmac("sha1", $base_string, $secret, true));
+    $button = '<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" action="' . $urlServer . "modules/lti_consumer/launch.php?course=" . $course_code . "&amp;id=" . getIndirectReference($resource_link_id) . '">';
+    $button .= '<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
+    $button .= '</form>';
+
+    return $button;
+}
+
+function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource_link_id, $resource_link_type, $resource_link_title, $resource_link_description, $launchcontainer, $extrabutton = '', $extraobj = null) {
+    global $course_id, $course_code, $language, $uid, $langLogIn;
+
+    $launch_data = lti_prepare_launch_data(
+        $course_id,
+        $course_code,
+        $language,
+        $uid,
+        $oauth_consumer_key,
+        $resource_link_id,
+        $resource_link_type,
+        $resource_link_title,
+        $resource_link_description,
+        $launchcontainer,
+        $extraobj
+    );
+
+    $signature = lti_build_signature($launch_url, $secret, $launch_data);
 
     $formtarget = ($launchcontainer == LTI_LAUNCHCONTAINER_NEWWINDOW) ? 'target="_blank"' : '';
     $button ='<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" ' . $formtarget . ' action="' . $launch_url . '">';
@@ -432,6 +465,67 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
     $button .='</form>';
 
     return $button;  
+}
+
+function tii_post_request($url, $post_data, $download_file = false, $local_filename = '') {
+    $response = null;
+    $http_code = null;
+    $headers = array();
+    if (!extension_loaded('curl')) {
+        return array($response, $http_code, $headers);
+    }
+
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
+        $len = strlen($header);
+        $header = explode(':', $header, 2);
+        if (count($header) < 2) { // ignore invalid headers
+            return $len;
+        }
+
+        $name = strtolower(trim($header[0]));
+        if (!array_key_exists($name, $headers)) {
+            $headers[$name] = [trim($header[1])];
+        } else {
+            $headers[$name][] = trim($header[1]);
+        }
+
+        return $len;
+    });
+    if ($download_file) {
+        $fp = fopen($local_filename, 'w');
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+    }
+
+    $response = curl_exec($ch);
+    if(!curl_errno($ch)) {
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    }
+    curl_close($ch);
+    if ($download_file) {
+        fclose($fp);
+    }
+
+    return array($response, $http_code, $headers);
+}
+
+function lti_prepare_oauth_only_data($url, $oauth_consumer_key, $secret) {
+    $now = new DateTime();
+    $launch_data = array(
+        "oauth_consumer_key" => $oauth_consumer_key,
+        "oauth_version" => "1.0",
+        "oauth_nonce" => uniqid('', true),
+        "oauth_timestamp" => $now->getTimestamp(),
+        "oauth_signature_method" => "HMAC-SHA1"
+    );
+    $signature = lti_build_signature($url, $secret, $launch_data);
+    $launch_data['oauth_signature'] = $signature;
+    return $launch_data;
 }
 
 /**
