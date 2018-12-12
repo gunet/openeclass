@@ -5167,3 +5167,9 @@ $langTiiExcludeType = "Small match exclusion type";
 $langTiiExcludeTypeWords = "Words";
 $langTiiExcludeTypePercentage = "Percentage";
 $langTiiExcludeValue = "Set source exclusion threshold";
+$langCheckGrades = 'Check Grades';
+$langCheckGradesConsistent = 'Checking grades for inconsistencies';
+$langCheckFinished = 'Checking finished.';
+$langRegradeAttemptsList = 'Inconsistencies found in the following attempts, which can be automatically regraded:';
+$langRegradeNotNeeded = 'No need to regrade any attempts.';
+

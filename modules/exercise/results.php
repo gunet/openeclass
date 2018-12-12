@@ -34,8 +34,8 @@ $pageName = $langResults;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
-    $exerciseId = getDirectReference($_GET['exerciseId']);    
-    $exerciseIdIndirect = $_GET['exerciseId'];    
+    $exerciseId = getDirectReference($_GET['exerciseId']);
+    $exerciseIdIndirect = $_GET['exerciseId'];
 }
 // if the object is not in the session
 if (!isset($_SESSION['objExercise'][$exerciseId])) {
@@ -56,10 +56,10 @@ if (isset($_SESSION['objExercise'][$exerciseIdIndirect])) {
     $objExercise = $_SESSION['objExercise'][$exerciseIdIndirect];
 }
 
-if ($is_editor && isset($_GET['purgeAttempID'])) {    
-    $eurid = $_GET['purgeAttempID'];    
+if ($is_editor && isset($_GET['purgeAttempID'])) {
+    $eurid = $_GET['purgeAttempID'];
     $objExercise->purgeAttempt($exerciseIdIndirect, $eurid);
-    Session::Messages($langPurgeExerciseResultsSuccess);    
+    Session::Messages($langPurgeExerciseResultsSuccess);
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
 $exerciseTitle = $objExercise->selectTitle();
@@ -71,7 +71,7 @@ $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
 $cur_date = new DateTime("now");
 $end_date = new DateTime($objExercise->selectEndDate());
-$showScore = $displayScore == 1 
+$showScore = $displayScore == 1
             || $is_editor
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
@@ -79,17 +79,26 @@ $tool_content .= "
 <div class='table-responsive'>
     <table class='table-default'>
     <tr>
-    <th>" . q_math($exerciseTitle) . "</th>
+        <th>" . q_math($exerciseTitle) . "</th>
     </tr>";
-if($exerciseDescription_temp) {
+if ($exerciseDescription_temp) {
     $tool_content .= "
         <tr>
             <td>" . standard_text_escape($exerciseDescription_temp) . "</td>
         </tr>";
 }
-$tool_content .= "</table>
-</div><br>";
-$status = (isset($_GET['status'])) ? intval($_GET['status']) : ''; 
+$tool_content .= "</table></div>";
+
+if ($is_editor) {
+    $tool_content .= action_bar([
+        [ 'title' => $langCheckGrades,
+          'icon' => 'fa-bar-chart',
+          'class' => 'check-grades',
+          'level' => 'primary-label' ]
+    ]);
+}
+
+$status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect'>--- $langCurrentStatus ---</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>
@@ -165,7 +174,7 @@ foreach ($result as $row) {
                             break;
                         case 4:
                             $results_link = $langScoreDispEndDate;
-                            break;                        
+                            break;
                     }
                 }
             } else { // IF ATTEMPT ANYTHING BUT COMPLETED
@@ -181,9 +190,9 @@ foreach ($result as $row) {
                         // in an active exercise if a time constaint passes the exercise can safely be deleted
                         // if not it can be deleted after a day
                         if ($exerciseTimeConstraint) {
-                            $estimatedEndTime->add(new DateInterval('PT' . $exerciseTimeConstraint . 'M'));                            
+                            $estimatedEndTime->add(new DateInterval('PT' . $exerciseTimeConstraint . 'M'));
                         } else {
-                            $estimatedEndTime->add(new DateInterval('P1D')); 
+                            $estimatedEndTime->add(new DateInterval('P1D'));
                         }
                         if ($now > $estimatedEndTime) {
                             $row_class = " class='warning' data-toggle='tooltip' title='$langAttemptActiveButDeadMsg'";
@@ -191,7 +200,7 @@ foreach ($result as $row) {
                             if ($exerciseTimeConstraint) {
                                 $action_btn_state = false;
                             }
-                            $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";                        
+                            $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";
                         }
                     }
                 // IF ATTEMPT PENDING OR CANCELED
@@ -227,25 +236,120 @@ foreach ($result as $row) {
                         )
                     )) : "") . "</td>";
             }
-            $tool_content .= "            
-                </tr>";            
+            $tool_content .= "
+                </tr>";
             $k++;
         }
         $tool_content .= "</table></div><br>";
     }
 }
-$head_content .= "
+$tool_content .= "
     <script type='text/javascript'>
-            $(function(){
-              // bind change event to select
-              $('#status_filtering').bind('change', function () {
-                  var url = $(this).val(); // get selected value
-                  if (url) { // require a URL
-                      window.location = url; // redirect
-                  }
-                  return false;
+        $(function () {
+          // bind change event to select
+          $('#status_filtering').bind('change', function () {
+              var url = $(this).val(); // get selected value
+              if (url) { // require a URL
+                  window.location = url; // redirect
+              }
+              return false;
+          });
+        });
+    </script>";
+
+if ($is_editor) {
+    $tool_content .= "
+    <script type='text/javascript'>
+        $(function () {
+          $('.check-grades').click(function (e) {
+            var links = $('td a[href*=exercise_result]'),
+                count = links.length,
+                i = 0,
+                itemsToRegrade = [];
+            e.preventDefault();
+            var dialog = bootbox.dialog({
+              title: '" . js_escape($langCheckGradesConsistent) . "',
+              message: '<div class=\"progress\">' +
+                  '<div class=\"progress-bar progress-bar-striped active\" ' +
+                  'role=\"progressbar\" style=\"min-width: 4em; width: 0%;\">' +
+                  '0 / ' + count + '</div>'
               });
-            });
-    </script>        
-        ";
+            var urls = $('td a[href*=exercise_result]').map(function (i, el) {
+                return el.href + '&check=true';
+            }).get();
+            var regradeDialog;
+            var regradeCallback = function (item) {
+                if (item) {
+                    $.post(item.url, { regrade: true },
+                        function (data) {
+                            i++;
+                            regradeDialog.find('.progress-bar')
+                                .css({width: (i / count * 100) + '%'})
+                                .text(i + ' / ' + count);
+                            regradeCallback(itemsToRegrade.shift());
+                        });
+                    } else {
+                        window.location.replace('" . str_replace("'", "\\'", $_SERVER['REQUEST_URI']) . "');
+                    }
+            };
+            var gradeCallback = function (url) {
+                if (url) {
+                    $.get(url, function (data) {
+                        if (data['result'] != 'ok') {
+                            itemsToRegrade.push(data);
+                        }
+                        i++;
+                        dialog.find('.progress-bar')
+                            .css({width: (i / count * 100) + '%'})
+                            .text(i + ' / ' + count);
+                        gradeCallback(urls.shift());
+                    });
+                } else {
+                    dialog.modal('hide');
+                    if (itemsToRegrade.length === 0) {
+                        bootbox.alert({
+                            title: '" . js_escape($langCheckGradesConsistent) . "',
+                            message: '<p>" . js_escape($langCheckFinished . ' ' . $langRegradeNotNeeded) . "</p>',
+                            backdrop: true
+                        });
+                    } else {
+                        bootbox.confirm({
+                            title: '" . js_escape($langCheckGradesConsistent) . "',
+                            message: '<p>" . js_escape($langCheckFinished . ' ' . $langRegradeAttemptsList) . "</p><ul>' +
+                                itemsToRegrade.map(function (item) {
+                                    return '<li><a href=\"' + item.url + '\" target=\"_blank\">' + item.title + '</a></li>';
+                                }).join('') + '</ul>',
+                            buttons: {
+                                cancel: {
+                                    label: '" . js_escape($langCancel) . "'
+                                },
+                                confirm: {
+                                    label: '" . js_escape($langRegradeAll) . "'
+                                }
+                            },
+                            callback: function (result) {
+                                if (result) {
+                                    i = 0;
+                                    count = itemsToRegrade.length;
+                                    dialog.modal('hide');
+                                    regradeDialog = bootbox.dialog({
+                                      title: '" . js_escape($langRegradeAll) . "',
+                                      message: '<div class=\"progress\">' +
+                                          '<div class=\"progress-bar progress-bar-striped active\" ' +
+                                          'role=\"progressbar\" style=\"min-width: 4em; width: 0%;\">' +
+                                          '0 / ' + count + '</div>'
+                                      });
+                                    regradeCallback(itemsToRegrade.shift());
+                                }
+                            }
+                        });
+                    }
+                }
+            };
+            gradeCallback(urls.shift());
+          });
+        });
+    </script>";
+}
+
 draw($tool_content, 2, null, $head_content);
