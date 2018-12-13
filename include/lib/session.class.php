@@ -128,6 +128,9 @@ class Session {
                 }
             }
             if (!$_SESSION['document_timestamp_saved'][$course_id] and $save) {
+                if (!$this->login_timestamp) {
+                    $this->login_timestamp = date('Y-m-d H:i:s', time());
+                }
                 Database::get()->query('UPDATE course_user
                         SET document_timestamp = ?t
                         WHERE user_id = ?d AND course_id = ?d',
