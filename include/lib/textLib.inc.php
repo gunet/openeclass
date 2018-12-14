@@ -88,6 +88,9 @@ function make_clickable($text) {
 function claro_format_locale_date($dateFormat, $timeStamp = -1) {
     // Retrieve $langMonthNames and $langDay_of_weekNames
 
+    if (is_null($timeStamp) or $timeStamp == '') {
+        return '';
+    }
     $langMonthNames = $GLOBALS['langMonthNames'];
     $langDay_of_weekNames = $GLOBALS['langDay_of_weekNames'];
 

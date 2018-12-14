@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,7 +39,6 @@ if ($is_editor) {
 }
 $toolName = $langForums;
 
-$paging = true;
 $next = 0;
 if (isset($_GET['forum'])) {
     $forum_id = intval($_GET['forum']);
@@ -263,24 +262,17 @@ if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
 	<table class='table-default'>
 	<tr class='list-header'>
-	  <th class='forum_td'>&nbsp;$langTopics</th>
-	  <th class='text-center forum_td'>$langAnswers</th>
-	  <th class='text-center forum_td'>$langSender</th>
-	  <th class='text-center forum_td'>$langSeen</th>
-	  <th class='text-center forum_td'>$langLastMsg</th>
-	  <th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
+	  <th class='forum_td'>$langTopics</th>
+	  <th class='text-center'>$langAnswers</th>
+	  <th class='text-center'>$langSender</th>
+	  <th class='text-center'>$langSeen</th>
+	  <th class='text-center'>$langLastMsg</th>
+	  <th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>
 	</tr>";
     foreach ($result as $myrow) {
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
-        $last_post_datetime = $myrow->post_time;
-        list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
-        list($year, $month, $day) = explode("-", $last_post_date);
-        list($hour, $min, $sec) = explode(":", $last_post_time);
-        $last_post_time = mktime($hour, $min, $sec, $month, $day, $year);
-        if (!isset($last_visit)) {
-            $last_visit = 0;
-        }
+        $last_post_datetime = $myrow->post_time;        
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
         $pagination = '';
@@ -310,7 +302,7 @@ if (count($result) > 0) { // topics found
         $tool_content .= "<td class='text-center'>$replies</td>";
         $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "</td>";
         $tool_content .= "<td class='text-center'>$myrow->num_views</td>";
-        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time))."</td>";
+        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".claro_format_locale_date($dateTimeFormatShort, strtotime($last_post_datetime))."</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
 			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
         if ($sql) {
