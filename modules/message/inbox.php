@@ -282,7 +282,7 @@ if (isset($_GET['mid'])) {
             <div class='form-group'>
                 <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
                 <div class='col-sm-10'>
-                    ".rich_text_editor('body', 4, 20, $msg->body)."
+                    ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
                 </div>
             </div>";
 
@@ -345,8 +345,7 @@ if (isset($_GET['mid'])) {
                             }, 500);
                             $('#select-recipients').select2({
                                 placeholder: '".js_escape($langSearch)."',
-                                multiple: true,
-                                minimumInputLength: 3,
+                                multiple: true,                                
                                 ajax: {
                                     url: 'load_recipients.php?autocomplete=1',
                                     dataType: 'json',
@@ -368,8 +367,7 @@ if (isset($_GET['mid'])) {
                             }, 500);
                             $('#select-recipients-forward').select2({
                                 placeholder: '".js_escape($langSearch)."',
-                                multiple: true,
-                                minimumInputLength: 3,
+                                multiple: true,                                
                                 ajax: {
                                     url: 'load_recipients.php?autocomplete=1',
                                     dataType: 'json',
