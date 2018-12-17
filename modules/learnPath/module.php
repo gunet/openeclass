@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -211,7 +211,6 @@ $tool_content .= "</div>
 //############################ PROGRESS  AND  START LINK #############################\\
 
 /* Display PROGRESS */
-
 if ($module->contentType != CTLABEL_) { //
     if ($resultBrowsed && $module->contentType != CTLABEL_) {
         $contentType_img = selectImage($resultBrowsed->contentType);
@@ -287,24 +286,6 @@ if ($module->contentType != CTLABEL_) { //
             $raw = 100;
         }
 
-        // no sens to display a score in case of a document module
-//        if (($resultBrowsed->contentType != CTDOCUMENT_) &&
-//                ($resultBrowsed->contentType != CTLINK_) &&
-//                ($resultBrowsed->contentType != CTCOURSE_DESCRIPTION_) &&
-//                ($resultBrowsed->contentType != CTMEDIA_) &&
-//                ($resultBrowsed->contentType != CTMEDIALINK_)
-//        ) {
-//            $tool_content .= "<div class='row'>
-//                            <div class='col-sm-3'>
-//                                <strong>$langYourBestScore:</strong>
-//                            </div>
-//                            <div class='col-sm-9'>
-//                                " . disp_progress_bar($raw, 1) . "
-//                            </div>
-//                        </div>
-//                ";
-//        }
-
         //display lesson status
         // display a human readable string ...
 
@@ -350,15 +331,14 @@ if ($module->contentType != CTLABEL_) { //
         </div>
         <div class='col-sm-9'>";
     if ($module->startAsset_id != "" && $asset->asset_id == $module->startAsset_id) {
-        $tool_content .= '' . "\n"
-                . '        <form action="./viewer.php?course=' . $course_code . '" method="post">' . "\n"
-                . '        <input class="btn btn-primary" type="submit" value="' . $langStartModule . '" />' . "\n"
-                . '        </form>' . "\n";
+        $tool_content .= "<form action='./viewer.php?course=$course_code' method='post'> 
+                            <input class='btn btn-primary' type='submit' value='$langStartModule'>
+                        </form>";
     } else {
-        $tool_content .= '        <p><center>' . $langNoStartAsset . '</center></p>' . "\n";
+        $tool_content .= "<p style='align:center;'>$langNoStartAsset</p>";
     }
+    $tool_content .= "</div></div>";
 }// end if($module['contentType'] != CTLABEL_)
-$tool_content .= "</div></div>";
 
 $tool_content .= "</div></div>";
 
