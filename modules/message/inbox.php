@@ -182,7 +182,6 @@ if (isset($_GET['mid'])) {
             $out .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>";
-
         $out .= "<div class='form-group'>
                     <label for='message_title' class='col-sm-2 control-label'>$langSubject:</label>
                     <div class='col-sm-10'>
@@ -193,7 +192,7 @@ if (isset($_GET['mid'])) {
                 <div class='form-group'>
                     <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
                     <div class='col-sm-10'>
-                        ".rich_text_editor('body', 4, 20, '')."
+                        ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
                     </div>
                 </div>";
 
