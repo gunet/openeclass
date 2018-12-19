@@ -651,7 +651,7 @@ function add_assignment() {
         $title = $_POST['title'];
         $desc = $_POST['desc'];
         $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
-        $submission_type = $_POST['submission_type'];
+        $submission_type = isset($_POST['submission_type']) ? intval($_POST['submission_type']) : 0;
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
         $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;
@@ -686,10 +686,10 @@ function add_assignment() {
         if ($assign_to_specific == 1 && empty($assigned_to)) {
             $assign_to_specific = 0;
         }
-        $assignment_type = $_POST['assignment_type'];
+        $assignment_type = intval($_POST['assignment_type']);
 
-        $lti_template = $_POST['lti_template'];
-        $launchcontainer = $_POST['lti_launchcontainer'];
+        $lti_template = isset($_POST['lti_template']) ? $_POST['lti_template'] : NULL;
+        $launchcontainer = isset($_POST['lti_launchcontainer']) ? $_POST['lti_launchcontainer'] : NULL;
         $tii_feedbackreleasedate = isset($_POST['tii_feedbackreleasedate']) && !empty($_POST['tii_feedbackreleasedate']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['tii_feedbackreleasedate'])->format('Y-m-d H:i:s') : NULL;
         $tii_internetcheck = isset($_POST['tii_internetcheck']) ? 1 : 0;
         $tii_institutioncheck = isset($_POST['tii_institutioncheck']) ? 1 : 0;
@@ -793,7 +793,11 @@ function add_assignment() {
                     'secret' => $secret,
                     'group' => $group_submissions));
                 Session::Messages($langNewAssignSuccess, 'alert-success');
-                redirect_to_home_page("modules/work/index.php?course=$course_code");
+                if ($assignment_type == 1) {
+                    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                } else {
+                    redirect_to_home_page("modules/work/index.php?course=$course_code");
+                }
             } else {
                 @rmdir("$workPath/$secret");
                 Session::Messages($langGeneralError, 'alert-danger');
@@ -844,7 +848,7 @@ function edit_assignment($id) {
         $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
         $title = $_POST['title'];
         $desc = purify($_POST['desc']);
-        $submission_type = $_POST['submission_type'];
+        $submission_type = isset($_POST['submission_type']) ? intval($_POST['submission_type']) : 0;
         $submission_date = isset($_POST['WorkStart']) && !empty($_POST['WorkStart']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart'])->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
         $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
@@ -901,9 +905,9 @@ function edit_assignment($id) {
             }
         }
         $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;
-        $assignment_type = $_POST['assignment_type'];
-        $lti_template = $_POST['lti_template'];
-        $launchcontainer = $_POST['lti_launchcontainer'];
+        $assignment_type = intval($_POST['assignment_type']);
+        $lti_template = isset($_POST['lti_template']) ? $_POST['lti_template'] : NULL;
+        $launchcontainer = isset($_POST['lti_launchcontainer']) ? $_POST['lti_launchcontainer'] : NULL;
         $tii_feedbackreleasedate = isset($_POST['tii_feedbackreleasedate']) && !empty($_POST['tii_feedbackreleasedate']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['tii_feedbackreleasedate'])->format('Y-m-d H:i:s') : NULL;
         $tii_internetcheck = isset($_POST['tii_internetcheck']) ? 1 : 0;
         $tii_institutioncheck = isset($_POST['tii_institutioncheck']) ? 1 : 0;
@@ -986,7 +990,11 @@ function edit_assignment($id) {
                   'group' => $group_submissions));
 
         Session::Messages($langEditSuccess,'alert-success');
-        redirect_to_home_page("modules/work/index.php?course=$course_code");
+        if ($assignment_type == 1) {
+            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+        } else {
+            redirect_to_home_page("modules/work/index.php?course=$course_code");
+        }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");
@@ -1490,6 +1498,14 @@ function new_assignment() {
                     $('#rubrics_button')
                         .prop('disabled', false);
                     
+                    // submission type
+                    $('#file_button')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#online_button')
+                        .prop('disabled', false);
+                    
                 } else if (choice == 1) {
                     // lti fields
                     $('#lti_templates')
@@ -1560,6 +1576,14 @@ function new_assignment() {
                     $('#scales_button')
                         .prop('disabled', true);
                     $('#rubrics_button')
+                        .prop('disabled', true);
+                    
+                    // submission type
+                    $('#file_button')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#online_button')
                         .prop('disabled', true);
                 }
             });
@@ -1772,13 +1796,13 @@ function new_assignment() {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='submission_type' value='0'". ($submission_type ? '' : ' checked') .">
+                        <input type='radio' id='file_button' name='submission_type' value='0'". ($submission_type ? '' : ' checked') .">
                          $langWorkFile
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='submission_type' value='1'". ($submission_type ? ' checked' : '') .">
+                        <input type='radio' id='online_button' name='submission_type' value='1'". ($submission_type ? ' checked' : '') .">
                         $langWorkOnlineText
                       </label>
                     </div>
@@ -2284,6 +2308,14 @@ function show_edit_assignment($id) {
                     $('#rubrics_button')
                         .prop('disabled', false);
                     
+                    // submission type
+                    $('#file_button')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#online_button')
+                        .prop('disabled', false);
+                    
                 } else if (choice == 1) {
                     // lti fields
                     $('#lti_templates')
@@ -2354,6 +2386,14 @@ function show_edit_assignment($id) {
                     $('#scales_button')
                         .prop('disabled', true);
                     $('#rubrics_button')
+                        .prop('disabled', true);
+                    
+                    // submission type
+                    $('#file_button')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#online_button')
                         .prop('disabled', true);
                 }
             });
@@ -2435,6 +2475,7 @@ function show_edit_assignment($id) {
 
     $assignment_type = ($row->assignment_type ? $row->assignment_type : 0);
     $lti_hidden = ($assignment_type == 1) ? '' : ' hidden';
+    $subtype_hidden = ($assignment_type == 1) ?  ' hidden' : '';
     $lti_disabled = ($assignment_type == 1) ? '' : ' disabled';
     $lti_group_disabled = ($assignment_type == 1) ? ' disabled' : '';
     $grading_type = ($row->grading_type ? $row->grading_type : 0);
@@ -2640,18 +2681,18 @@ function show_edit_assignment($id) {
                       <span class='help-block'>$rubric_error</span>
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group $subtype_hidden'>
                     <label class='col-sm-2 control-label'>$langWorkSubType:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='submission_type' value='0'". ($row->submission_type ? '' : ' checked') .">
+                            <input type='radio' id='file_button' name='submission_type' value='0'". ($row->submission_type ? '' : ' checked') .">
                              $langWorkFile
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='submission_type' value='1' ". ($row->submission_type ? ' checked' : '') .">
+                            <input type='radio' id='online_button' name='submission_type' value='1' ". ($row->submission_type ? ' checked' : '') .">
                             $langWorkOnlineText
                           </label>
                         </div>
@@ -3057,7 +3098,7 @@ function delete_assignment($id) {
     $secret = work_secret($id);
     $row = Database::get()->querySingle("SELECT title, assign_to_specific FROM assignment WHERE course_id = ?d
                                         AND id = ?d", $course_id, $id);
-    if (count($row) > 0) {
+    if ($row != null) {
         $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
         if (Database::get()->query("DELETE FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows > 0){
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
