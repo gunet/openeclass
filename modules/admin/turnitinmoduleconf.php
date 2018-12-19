@@ -37,7 +37,7 @@ load_js('select2');
 
 if (isset($_GET['add_template'])) {
 
-    $pageName = $langNewLTITool;
+    $pageName = $langNewTIITool;
     $navigation[] = array('url' => 'turnitinmoduleconf.php', 'name' => $langTurnitinConf);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -45,19 +45,19 @@ if (isset($_GET['add_template'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 
-    new_lti_app(true, null);
+    new_lti_app(true, null, "https://api.turnitin.com/api/lti/1p0/assignment");
 
 } else if (isset($_GET['delete_template'])) {
 
     delete_lti_app(getDirectReference($_GET['delete_template']));
-    Session::Messages($langLTIAppDeleteSuccessful, 'alert-success');
+    Session::Messages($langTIIAppDeleteSuccessful, 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
 
 } else if (isset($_POST['new_lti_app'])) { // Create
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], null, true);
-    Session::Messages($langLTIAppAddSuccessful, 'alert-success');
+    Session::Messages($langTIIAppAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
 
 } else if (isset($_POST['update_lti_app'])) { // Update
@@ -65,7 +65,7 @@ if (isset($_GET['add_template'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], null, true, true, getDirectReference($_GET['id']));
     // Display result message
-    Session::Messages($langLTIAppAddSuccessful, 'alert-success');
+    Session::Messages($langTIIAppAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
 
 } else { // Display config edit form
@@ -84,7 +84,7 @@ if (isset($_GET['add_template'])) {
     } else { //display available TII templates
 
         $tool_content .= action_bar(array(
-            array('title' => $langNewLTITool,
+            array('title' => $langNewTIITool,
                 'url' => "turnitinmoduleconf.php?add_template",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',

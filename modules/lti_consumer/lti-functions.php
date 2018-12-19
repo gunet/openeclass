@@ -25,12 +25,13 @@ define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
 
 
-function new_lti_app($is_template = false, $course_code) {
+function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
     global $tool_content, $langAdd, $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer;
 
     $urlext = ($is_template == false) ? '?course=' . $course_code : '';
+    $urldefault = (strlen($lti_url_default) > 0) ? " value='$lti_url_default' " : '';
 
     $textarea = rich_text_editor('desc', 4, 20, '');
     $tool_content .= "
@@ -52,7 +53,7 @@ function new_lti_app($is_template = false, $course_code) {
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langLTIProviderUrl:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type='text' name='lti_url' id='lti_url' placeholder='$langLTIProviderUrl' size='50' />
+                <input class='form-control' type='text' name='lti_url' id='lti_url' placeholder='$langLTIProviderUrl' size='50' $urldefault />
             </div>
         </div>
         <div class='form-group'>
