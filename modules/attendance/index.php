@@ -259,7 +259,11 @@ if ($is_editor) {
             foreach ($users as $u) {
                 delete_attendance_user($attendance_id, $u->uid);
             }
-            $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'delete users', 'user_count' => count($gu), 'users' => $users);
+            $log_details = array('id' => $attendance_id, 
+                                 'title' => get_attendance_title($attendance_id), 
+                                 'action' => 'delete users', 
+                                 'user_count' => count($users), 
+                                 'users' => $users);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
 
             $already_inserted_ids = [];
