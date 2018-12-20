@@ -1958,19 +1958,19 @@ $db->query("CREATE TABLE IF NOT EXISTS request_type (
     `description` MEDIUMTEXT NULL DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS request (
-    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     `course_id` INT(11) NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `description` TEXT,
     `creator_id` INT(11) NOT NULL,
     `state` TINYINT(4) NOT NULL,
-    `type` TINYINT(4) DEFAULT NULL,
+    `type` INT(11) UNSIGNED NOT NULL,
     `open_date` DATETIME NOT NULL,
     `change_date` DATETIME NOT NULL,
     `close_date` DATETIME,
     PRIMARY KEY(id),
     FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-    FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE,
+    FOREIGN KEY (`type`) REFERENCES request_type(id) ON DELETE CASCADE,
     FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `request_field` (
@@ -1988,7 +1988,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `request_field_data` (
     `request_id` INT(11) UNSIGNED NOT NULL,
     `field_id` INT(11) UNSIGNED NOT NULL,
     `data` TEXT NOT NULL,
-    FOREIGN KEY (field_id) REFERENCES request_custom_field(id) ON DELETE CASCADE,
+    FOREIGN KEY (field_id) REFERENCES request_field(id) ON DELETE CASCADE,
     UNIQUE KEY (`request_id`, `field_id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS request_watcher (

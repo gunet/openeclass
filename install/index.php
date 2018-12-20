@@ -533,6 +533,8 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/eportfolio/work_submissions/index.php');
     mkdir_try('courses/eportfolio/mydocs');
     touch_try('courses/eportfolio/mydocs/index.php');
+    mkdir_try('storage');
+    mkdir_try('storage/views');
 
     if ($configErrorExists) {
         $tool_content .= "<div class='alert alert-danger'>" . implode('', $errorContent) . "</div>" .

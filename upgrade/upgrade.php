@@ -176,6 +176,8 @@ mkdir_or_error('courses/eportfolio/work_submissions');
 touch_or_error('courses/eportfolio/work_submissions/index.php');
 mkdir_or_error('courses/eportfolio/mydocs');
 touch_or_error('courses/eportfolio/mydocs/index.php');
+mkdir_try('storage');
+mkdir_try('storage/views');
 
 // ********************************************
 // upgrade config.php
@@ -3900,13 +3902,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `description` TEXT,
                 `creator_id` INT(11) NOT NULL,
                 `state` TINYINT(4) NOT NULL,
-                `type_id` INT(11) UNSIGNED DEFAULT NULL,
+                `type` INT(11) UNSIGNED NOT NULL,
                 `open_date` DATETIME NOT NULL,
                 `change_date` DATETIME NOT NULL,
                 `close_date` DATETIME,
                 PRIMARY KEY(id),
                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE,
+                FOREIGN KEY (`type`) REFERENCES request_type(id) ON DELETE CASCADE,
                 FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field` (
