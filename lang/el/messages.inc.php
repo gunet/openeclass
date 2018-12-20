@@ -5788,3 +5788,4 @@ $langTiiExcludeType = "Τύπος εξαίρεσης";
 $langTiiExcludeTypeWords = "Λέξεις";
 $langTiiExcludeTypePercentage = "Ποσοστό";
 $langTiiExcludeValue = "Τιμή εξαίρεσης";
+$langColmooc = "colMOOC";

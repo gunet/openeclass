@@ -106,6 +106,7 @@ define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_COURSEPREREQUISITE', 49);
 define('MODULE_ID_LTI_CONSUMER', 50);
+define('MODULE_ID_COLMOOC', 51);
 
 // user modules
 
