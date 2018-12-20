@@ -4734,7 +4734,7 @@ function send_file($id, $file_type) {
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);
         } elseif ($file_type == 2) { // download comments file
             $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
-            if (count($info)==0) {
+            if (!$info) {
                 return false;
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->grade_comments_filepath", $info->grade_comments_filename, null, true);
