@@ -5603,3 +5603,7 @@ $langHourAgo = '%d ώρα πριν';
 $langHoursAgo = '%d ώρες πριν';
 $langShowClosedRequests = 'Εμφάνιση κλειστών αιτημάτων';
 $langChangeDescription = 'Περιγραφή αλλαγών';
+
+// h5p
+$langH5P = 'Διαδραστικό περιεχόμενο';
+

@@ -109,6 +109,7 @@ define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_LTI_CONSUMER', 49);
 define('MODULE_ID_REQUEST', 50);
+define('MODULE_ID_H5P', 60);
 
 // user modules
 
