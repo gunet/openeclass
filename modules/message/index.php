@@ -182,7 +182,7 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
     exit;
 }
 
-if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
+if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     if ($course_id == 0) {
         if (isset($_GET['type']) && $_GET['type'] == 'cm') {
             $type = 'cm';
@@ -482,7 +482,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             </script>
         ";
     }
-} else {//mailbox
+} else { //mailbox
     load_js('datatables');
     load_js('trunk8');
     $head_content .= "<script type='text/javascript'>
@@ -518,6 +518,14 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 
                             // show 1st tab
                             $('#dropboxTabs a:first').tab('show');
+
+                            $('body').on('click', '.attachment-delete-button', function (e) {
+                                e.preventDefault();
+                                $('.attachment-section').fadeOut(300, function() {
+                                    $(this).remove();
+                                });
+                                return false;
+                            });
                         });
 
                     </script>";
