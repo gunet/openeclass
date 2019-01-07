@@ -287,16 +287,6 @@ if (isset($_GET['mid'])) {
                 </div>
             </div>";
 
-            if ($course_id != 0) {
-                enableCheckFileSize();
-                $out .= "<div class='form-group'>
-                            <label for='body' class='col-sm-2 control-label'>$langFileName:</label>
-                            <div class='col-sm-10'>" .
-                                fileSizeHidenInput() . "
-                                <input type='file' name='file' size='35'>
-                            </div>
-                        </div>";
-            }
             if ($msg->filename and $msg->filesize != 0) {
                 $out .= "
                     <div class='form-group attachment-section'>
@@ -314,6 +304,15 @@ if (isset($_GET['mid'])) {
                             <button class='pull-right btn btn-default attachment-delete-button'><span class='fa fa-times space-after-icon'></span>$langLessElements</button>
                         </div>
                     </div>";
+            } elseif ($course_id != 0) {
+                enableCheckFileSize();
+                $out .= "<div class='form-group'>
+                            <label for='body' class='col-sm-2 control-label'>$langFileName:</label>
+                            <div class='col-sm-10'>" .
+                                fileSizeHidenInput() . "
+                                <input type='file' name='file' size='35'>
+                            </div>
+                        </div>";
             }
             $out .= "
                     <div class='form-group'>
