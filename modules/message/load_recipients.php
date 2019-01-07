@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
 * E-learning and Course Management System
 * ========================================================================
-* Copyright 2003-2013  Greek Universities Network - GUnet
+* Copyright 2003-2019  Greek Universities Network - GUnet
 * A full copyright notice can be read in "/info/copyright.txt".
 * For a full list of contributors, see "credits.txt".
 *
@@ -118,23 +117,38 @@ if (isset($_POST['course'])) {
     }
 } elseif (isset($_GET['autocomplete']) && $_GET['autocomplete'] == 1) {
     if ($is_admin) {
-        $res = Database::get()->queryArray("SELECT id user_id, CONCAT(surname,' ', givenname) AS name, username
-            FROM user
-            WHERE id != ?d AND (surname LIKE ?s OR username LIKE ?s)
-            ORDER BY UPPER(surname), UPPER(givenname)
-            LIMIT 10",
-            $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
+        if (isset($_GET['q']) and $_GET['q'] !== '') {
+            $res = Database::get()->queryArray("SELECT id user_id, CONCAT(surname,' ', givenname) AS name, username
+                FROM user
+                WHERE id != ?d AND (surname LIKE ?s OR username LIKE ?s)
+                ORDER BY UPPER(surname), UPPER(givenname)",
+                $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
+        } else {
+            $res = Database::get()->queryArray("SELECT id user_id, CONCAT(surname,' ', givenname) AS name, username
+                FROM user
+                WHERE id != ?d
+                ORDER BY UPPER(surname), UPPER(givenname)",
+                $uid);
+        }
     } else {
-        $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
+        if (isset($_GET['q']) and $_GET['q'] !== '') {
+            $res = Database::get()->queryArray("SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
                 FROM user u, course_user cu
                 WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
                 AND cu.user_id = u.id
                 AND cu.status != ?d
                 AND u.id != ?d
                 AND (u.surname LIKE ?s OR u.username LIKE ?s)
-                ORDER BY name
-                LIMIT 10";
-        $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
+                ORDER BY name", $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");            
+        } else {
+            $res = Database::get()->queryArray("SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
+                FROM user u, course_user cu
+                WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d) 
+                AND cu.user_id = u.id 
+                AND cu.status != ?d 
+                AND u.id != ?d 
+                ORDER BY name", $uid, USER_GUEST, $uid );
+        }
     }
 
     $jsonarr["items"] = array();

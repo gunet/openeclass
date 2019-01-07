@@ -3,7 +3,7 @@
  * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -137,8 +137,10 @@ if (isset($_GET['mid'])) {
                                     $langAttachedFile
                                 </div>
                                 <div class='col-sm-10'>
-                                 <a href=\"message_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
-                    &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")
+                                  <a href='message_download.php?course=" .
+                                     course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank'>" .
+                                     q($msg->real_filename) . "</a>&nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
+                                     format_file_size($msg->filesize). ")
                                 </div>
                             </div>";
                }
@@ -281,7 +283,7 @@ if (isset($_GET['mid'])) {
             <div class='form-group'>
                 <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
                 <div class='col-sm-10'>
-                    ".rich_text_editor('body', 4, 20, $msg->body)."
+                    ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
                 </div>
             </div>";
 
@@ -295,6 +297,24 @@ if (isset($_GET['mid'])) {
                             </div>
                         </div>";
             }
+            if ($msg->filename and $msg->filesize != 0) {
+                $out .= "
+                    <div class='form-group attachment-section'>
+                        <label class='col-sm-2 control-label'>$langAttachedFile:</label>
+                        <div class='col-sm-8'>
+                            <p class='form-control-static'>
+                                <input type='hidden' name='keepAttachment' value='{$msg->id}'>
+                                <a href='message_download.php?course=" .
+                                course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank'>" .
+                                q($msg->real_filename) . "</a>&nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
+                                format_file_size($msg->filesize) . ")
+                            </p>
+                        </div>
+                        <div class='col-sm-2'>
+                            <button class='pull-right btn btn-default attachment-delete-button'><span class='fa fa-times space-after-icon'></span>$langLessElements</button>
+                        </div>
+                    </div>";
+            }
             $out .= "
                     <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
@@ -304,7 +324,6 @@ if (isset($_GET['mid'])) {
                                         " . q($langMailToUsers) . "
                                     </label>
                                 </div>
-
                         </div>
                     </div>
                     <div class='form-group'>
@@ -338,14 +357,13 @@ if (isset($_GET['mid'])) {
                         $('.btn-reply').on('click', function(e) {
                             e.preventDefault();
                             $('#forwardBox').hide();
-                            $('#replyBox').show();                            
+                            $('#replyBox').show();
                             $('html, body').animate({
                                 scrollTop: $('#replyBox').offset().top
                             }, 500);
                             $('#select-recipients').select2({
                                 placeholder: '".js_escape($langSearch)."',
                                 multiple: true,
-                                minimumInputLength: 3,
                                 ajax: {
                                     url: 'load_recipients.php?autocomplete=1',
                                     dataType: 'json',
@@ -368,7 +386,6 @@ if (isset($_GET['mid'])) {
                             $('#select-recipients-forward').select2({
                                 placeholder: '".js_escape($langSearch)."',
                                 multiple: true,
-                                minimumInputLength: 3,
                                 ajax: {
                                     url: 'load_recipients.php?autocomplete=1',
                                     dataType: 'json',

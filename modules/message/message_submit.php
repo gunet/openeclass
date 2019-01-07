@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -42,7 +41,7 @@ if (!isset($course_id) || !$course_id) {
     $diskQuotaDropbox = $d->dropbox_quota;
 }
 
-if (isset($_POST['course'])) {//for the case of course messages from central ui
+if (isset($_POST['course'])) { // for the case of course messages from central ui
     $cid = course_code_to_id($_POST['course']);
     if ($cid === false) {
         $cid = $course_id;
@@ -89,7 +88,7 @@ if (isset($_POST['submit'])) {
      * submit message
      */
     if (!$error) {
-        if (!is_array($_POST['recipients'])) { //in personal msg form select2 returns a comma delimited string instead of array
+        if (!is_array($_POST['recipients'])) { // in personal msg form select2 returns a comma delimited string instead of array
             $_POST['recipients'] = explode(',', $_POST['recipients']);
         }
         foreach ($_POST['recipients'] as $r) { // group ids have been prefixed with '_'
@@ -111,7 +110,22 @@ if (isset($_POST['submit'])) {
         } else {
             $subject = $langMessage;
         }
-        if (!$file_attached) { // no file attached
+        if (isset($_POST['keepAttachment'])) { // forwarding message with attachment
+            $sourceMsg = Database::get()->querySingle('SELECT filename, real_filename, filesize
+                FROM dropbox_msg, dropbox_index, dropbox_attachment
+                WHERE dropbox_msg.id = dropbox_attachment.msg_id AND
+                      dropbox_msg.id = dropbox_index.msg_id AND
+                      dropbox_msg.id = ?d AND recipient_id = ?d',
+                $_POST['keepAttachment'], $uid);
+            if ($sourceMsg) {
+                $real_filename = $sourceMsg->real_filename;
+                $filesize = $sourceMsg->filesize;
+                $format = get_file_extension($real_filename);
+                $filename = safe_filename($format);
+                copy("$message_dir/{$sourceMsg->filename}", "$message_dir/$filename");
+                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+            }
+        } elseif (!$file_attached) { // no file attached
             $filename = '';
             $real_filename = '';
             $filesize = 0;
@@ -144,7 +158,7 @@ if (isset($_POST['submit'])) {
                 @chmod($filename_final, 0644);
                 require_once 'modules/admin/extconfig/externals.php';
                 $connector = AntivirusApp::getAntivirus();
-                if($connector->isEnabled() == true ){
+                if ($connector->isEnabled() == true ){
                     $output=$connector->check($filename_final);
                     if($output->status==$output::STATUS_INFECTED){
                         AntivirusApp::block($output->output);
@@ -160,7 +174,7 @@ if (isset($_POST['submit'])) {
         $msgURL = $urlServer . 'modules/message/index.php?mid=' . $msg->id;
         $errormail = FALSE;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients
-            if ($course_id != 0 || isset($_POST['course'])) {//message in course context
+            if ($course_id != 0 || isset($_POST['course'])) {// message in course context
                 $list_of_recipients = array();
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
@@ -218,7 +232,7 @@ if (isset($_POST['submit'])) {
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
 
-            } else {//message in personal context
+            } else { // message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 $list_of_recipients = array();
                 foreach ($recipients as $userid) {
