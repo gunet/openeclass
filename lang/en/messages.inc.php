@@ -804,6 +804,7 @@ $langTotalScore = "Total score";
 $langNotRecorded = "Not recorded";
 $langHasExpired = "Has expired";
 $langHasExpiredS = "has expired";
+$langSuccessPercentage = "Percentage Success";
 $langSubTitle = "<br><strong>Tip: </strong>If you want to add a link to a page,
 		go to that page, cut and paste its address in the
 		URL bar on the top of your browser and insert it into the \"link\" field below.<br><br>";
