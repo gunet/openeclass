@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2016  Greek Universities Network - GUnet
@@ -23,8 +23,8 @@ $require_current_course = TRUE;
 $require_editor = true;
 
 include '../../include/baseTheme.php';
-include('exercise.class.php');
-include('question.class.php');
+include 'exercise.class.php';
+include 'question.class.php';
 
 $exerciseId = $_GET['exerciseId'];
 $objExercise = new Exercise();
@@ -48,7 +48,13 @@ $pendingAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM e
 $cancelledAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_CANCELED)->count; 
 $total_attempts = $completedAttempts + $pausedAttempts + $pendingAttempts + $cancelledAttempts;
 
-$grade_stats = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS unique_users, AVG(TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))) AS avg_time, AVG(total_score) AS avg_grade, MIN(total_score) AS min_grade, MAX(total_score) AS max_grade FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_COMPLETED);
+$grade_stats = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS unique_users, 
+                                                ROUND(AVG(TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))),1) AS avg_time, 
+                                                ROUND(AVG(total_score),2) AS avg_grade, 
+                                                MIN(total_score) AS min_grade, 
+                                                MAX(total_score) AS max_grade 
+                                            FROM exercise_user_record WHERE eid = ?d 
+                                                AND attempt_status = ?d", $exerciseId, ATTEMPT_COMPLETED);
 $max_grade = $grade_stats->max_grade;
 $min_grade = $grade_stats->min_grade;
 $avg_grade = $grade_stats->avg_grade;
@@ -134,17 +140,18 @@ $tool_content .= "
 //Questions Table
 $questionList = $objExercise->selectQuestionList();
 $tool_content .= "
-    <h3>$langQuestions</h3>
+    <h4>$langQuestions</h4>
     <div class='table-responsive'>
         <table class='table-default'>
             <thead>
                 <tr>
                     <th>$langTitle</th>
-                    <th>Ποσοστό Επιτυχίας</th>
+                    <th>$langSuccessPercentage</th>
                 </tr>
             </thead>
             <tbody>";
-foreach($questionList as $id){
+
+foreach($questionList as $id) {
     $objQuestionTmp = new Question();
     $objQuestionTmp->read($id);    
     $tool_content .= "
@@ -162,5 +169,5 @@ foreach($questionList as $id){
 $tool_content .= "
             </tbody>
         </table>
-    </div>";    
+    </div>";
 draw($tool_content, 2, null, $head_content);

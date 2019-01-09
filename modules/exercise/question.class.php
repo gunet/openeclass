@@ -572,11 +572,15 @@ if (!class_exists('Question')):
                     $j = 1;
                     $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
                     $q_incorrect_answers_sql .= ($i!=1) ? ' OR ' : '';
+                    $placeholder = "";
                     foreach ($correct_answers as $value) {
+                        $placeholder = "?s";
                         $q_correct_answers_sql .= ($j!=1) ? ' OR ' : '';
-                        $q_correct_answers_sql .= "(a.answer = $sql_binary_comparison'$value' AND a.answer_id = $i)";
+                        $q_correct_answers_sql .= "(a.answer = $sql_binary_comparison $placeholder AND a.answer_id = $i)";
+                        $query_vars[] = $value;
                         $q_incorrect_answers_sql .= ($j!=1) ? ' AND ' : '';
-                        $q_incorrect_answers_sql .= "(a.answer != $sql_binary_comparison'$value' AND a.answer_id = $i)";
+                        $q_incorrect_answers_sql .= "(a.answer != $sql_binary_comparison $placeholder AND a.answer_id = $i)";
+                        $query_vars[] = $value;
                         $j++;
                     }
                     $i++;
@@ -594,7 +598,7 @@ if (!class_exists('Question')):
                 // This query groups attempts and counts correct and incorrect answers
                 // then counts attempts where (correct answers == total anticipated correct attempts)
                 // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)
-                if ($q_correct_answers_cnt > 0) {
+                if ($q_correct_answers_cnt > 0) {                    
                     $correct_answer_attempts = Database::get()->querySingle("
                         SELECT COUNT(*) AS counter FROM (
                             SELECT a.eurid,
@@ -602,8 +606,8 @@ if (!class_exists('Question')):
                             SUM($q_incorrect_answers_sql) as incorrect_answer_cnt
                             FROM exercise_answer_record a, exercise_user_record b
                             WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status = ?d$extra_sql
-                            GROUP BY(a.eurid) HAVING correct_answer_cnt = $q_correct_answers_cnt AND incorrect_answer_cnt = 0
-                        )sub", $query_vars)->counter;
+                            GROUP BY(a.eurid) HAVING correct_answer_cnt = ?d AND incorrect_answer_cnt = 0
+                        ) AS sub", $query_vars, $q_correct_answers_cnt)->counter;                        
                 } else {
                     $correct_answer_attempts = 0;
                 }

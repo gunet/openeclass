@@ -2167,6 +2167,7 @@ $langTotalScore = "Συνολική βαθμολογία";
 $langNotRecorded = "μη καταγεγραμμένη";
 $langHasExpiredS = "έχει λήξει";
 $langHasExpired = "Έχει λήξει";
+$langSuccessPercentage = "Ποσοστό Επιτυχίας";
 
 // import exercise.php
 $langImportExercise = "Εισαγωγή Άσκησης";

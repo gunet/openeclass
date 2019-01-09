@@ -4759,6 +4759,8 @@ $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
 $langHasExpiredS = "has expired";
 $langHasExpired = "Expired";
+$langSuccessPercentage = "Percentage Success";
+
 $langExportGradebookWithUsers = "Extract user results";
 $langExportGradebook = "Extract gradebook results";
 $langRestrictions = "Restrictions";
