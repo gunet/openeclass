@@ -3397,12 +3397,20 @@ function show_student_assignments() {
     } else {
         $gids_sql_ready = "''";
     }
+    
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                 FROM assignment WHERE course_id = ?d AND active = '1' AND
-                                 (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
-                                    (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
-                                 )
-                                 ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
+                                FROM assignment WHERE course_id = ?d 
+                                    AND active = '1' AND
+                                    (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
+                                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d 
+                                            UNION 
+                                        SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                                    )
+                                ORDER BY                  
+                                CASE 
+                                    WHEN deadline IS NULL THEN 1 ELSE 0 
+                                END, title                                 
+                                ", $course_id, $uid);
 
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
