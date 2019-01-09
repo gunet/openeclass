@@ -3519,12 +3519,16 @@ function show_student_assignments() {
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign,
         $langNewAssign, $course_code, $course_id, $langWorksDelConfirm,
-        $langDaysLeft, $m, $langHasExpiredS, $langWarnForSubmissions,
+        $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions,
         $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics,
         $langPasswordUnlock, $langIPUnlock;
 
+        // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-              FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
+                                        FROM assignment WHERE course_id = ?d ORDER BY 
+                                            CASE 
+                                                WHEN deadline IS NULL THEN 1 ELSE 0 
+                                            END, title", $course_id);
     $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
@@ -3590,7 +3594,7 @@ function show_assignments() {
                             <td class='text-center'>$deadline";
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
-            } else if((int)$row->deadline){
+            } else if (intval($row->deadline)) {
                 $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
            $tool_content .= "</td>
