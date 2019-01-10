@@ -20,10 +20,10 @@
  * ======================================================================== */
 
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-include('exercise.lib.php');
+include 'exercise.class.php';
+include 'question.class.php';
+include 'answer.class.php';
+include 'exercise.lib.php';
 
 $require_current_course = TRUE;
 $guest_allowed = true;
@@ -46,7 +46,7 @@ if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
 
-function unset_exercise_var($exerciseId){
+function unset_exercise_var($exerciseId) {
     global $attempt_value;
     unset($_SESSION['objExercise'][$exerciseId]);
     unset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]);
@@ -202,6 +202,18 @@ $temp_CurrentDate = $recordStartDate = time();
 $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
 $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
+$choice = isset($_POST['choice']) ? $_POST['choice'] : '';
+
+// If there are answers in the session get them
+if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
+    $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
+} else {
+    if (isset($paused_attempt)) {
+        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $objExercise->get_attempt_results_array($eurid);
+    } else {
+        $exerciseResult = array();
+    }
+}
 
 // exercise has ended or hasn't been enabled yet due to declared dates or was submmitted automatically due to expiring time
 $autoSubmit = isset($_POST['autoSubmit']) && $_POST['autoSubmit'] == 'true';
@@ -210,6 +222,8 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_
     if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
+        $objExercise->save_unanswered();        
+        $objExercise->record_answers($choice, $exerciseResult, 'update');
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
         if ($objExercise->isRandom()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
@@ -217,13 +231,12 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_
         } else {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }
-        $objExercise->save_unanswered();
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                         total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
         unset_exercise_var($exerciseId);
-        Session::Messages($langExerciseExpiredTime);
+        Session::Messages($langExerciseExpiredTime);        
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     } else {
         unset_exercise_var($exerciseId);
@@ -320,22 +333,10 @@ if ($exercise_EndDate) {
 }
 
 
-// If there are answers in the session get them
-if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
-    $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
-} else {
-    if (isset($paused_attempt)) {
-        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $objExercise->get_attempt_results_array($eurid);
-    } else {
-        $exerciseResult = array();
-    }
-}
-
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
-    $time_expired = false;
-    $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
+    $time_expired = false;    
     // checking if user's time expired
     if (isset($timeleft)) {
         $timeleft += 1; // Add 1 sec for leniency when submitting

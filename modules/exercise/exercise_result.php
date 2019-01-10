@@ -284,7 +284,7 @@ if (count($exercise_question_ids) > 0) {
         $objQuestionTmp = new Question();
         $is_question = $objQuestionTmp->read($row->question_id);
         // gets the student choice for this question
-        $choice = $objQuestionTmp->get_answers_record($eurid);
+        $choice = $objQuestionTmp->get_answers_record($eurid);        
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
         $questionWeighting = $objQuestionTmp->selectWeighting();
@@ -331,7 +331,7 @@ if (count($exercise_question_ids) > 0) {
                       </tr>";
         }
 
-        if ($showResults && $choice) {
+        if ($showResults && !is_null($choice)) {
             if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                 $tool_content .= "
                             <tr class='even'>
@@ -559,7 +559,7 @@ if (count($exercise_question_ids) > 0) {
         }
 
         if ($showScore) {
-            if ($choice) {
+            if (!is_null($choice)) {
                 if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
                     // show input field
                     $tool_content .= "<span style='float:right;'>
