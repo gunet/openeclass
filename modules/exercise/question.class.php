@@ -471,6 +471,7 @@ if (!class_exists('Question')):
         function get_answers_record($eurid) {
             $type = $this->type;
             $question_id = $this->id;
+            $choice = null;
             $answers = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $question_id);
             if ($answers) {
                 $i = 1;
