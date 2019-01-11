@@ -551,7 +551,7 @@ if (!$questionList) {
         <br>
         <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary blockUI' type='submit' value='";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-        $tool_content .= "$langCont' />";
+        $tool_content .= "$langSubmit' />";
     } else {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
