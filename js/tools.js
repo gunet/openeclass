@@ -420,7 +420,7 @@ function exercise_init_countdown(params) {
                 // Check for empty tinyMCE instances
                 tinymce.get().forEach(function (e) {
                     if (e.getContent({format: 'text'}).trim() != '') {
-                        var id = questionId($(e.container));
+                        var id = questionId($(e.contentAreaContainer));
                         answered[id] = true;
                     }
                 });
