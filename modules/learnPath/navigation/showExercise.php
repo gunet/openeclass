@@ -215,7 +215,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
  . '<div id="content" style="padding:20px;">';
 
 echo ("
-  
+
 <div class='panel panel-primary'>
     <div class='panel-heading'>
         <h3 class='panel-title'>" . q($exerciseTitle) . "</h3>
@@ -226,7 +226,7 @@ if (!empty($exerciseDescription_temp)) {
     </div>");
 }
     echo ("</div>
-    
+
 
   <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
   <input type='hidden' name='formSent' value='1' />
@@ -261,7 +261,7 @@ foreach ($questionList as $questionId) {
             }
         }
     }
-    
+
     // shows the question and its answers
     echo ("<div class='panel panel-success'>
             <div class='panel-heading'>" . $langQuestion . ": " . $i . "</div>");
@@ -284,7 +284,7 @@ if (!$questionList) {
 } else {
     echo "<div class='panel'><div class='panel-body'><input class='btn btn-primary' type='submit' value=\"";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-        echo "$langCont\" />&nbsp;";
+        echo "$langContinue\" />&nbsp;";
     } else {
         echo $langNext . " &gt;" . "\" />";
     }
@@ -315,9 +315,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
     }
     $answerType = $objQuestionTmp->selectType();
 
-    if (!$onlyAnswers) {        
+    if (!$onlyAnswers) {
         $questionName = $objQuestionTmp->selectTitle();
-        $questionDescription = $objQuestionTmp->selectDescription();        
+        $questionDescription = $objQuestionTmp->selectDescription();
         echo "<b>" . q($questionName) . "</b><br />
                     ". standard_text_escape($questionDescription, '../../../courses/mathimg/') ."";
         if (file_exists($picturePath . '/quiz-' . $questionId)) {
@@ -361,7 +361,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                             " . $answer . "
                           </label>
                         </div>";
-                          
+
         }
         // multiple answers
         elseif ($answerType == MULTIPLE_ANSWER) {
@@ -423,7 +423,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     } // end while()
                 }  // end if()
             }
-            
+
         } elseif ($answerType == TRUE_FALSE) {
             echo "<div class='radio'>
                           <label>

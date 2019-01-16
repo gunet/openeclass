@@ -262,7 +262,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
           </div>
           <div class='form-group'>
             <div class='col-md-12'>
-              <input class='pull-right btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'>
+              <input class='pull-right btn btn-primary' name='submit2' value='$langContinue &raquo;' type='submit'>
                 </div>
               </div>
             </fieldset>

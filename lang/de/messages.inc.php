@@ -113,7 +113,6 @@ $langErrors = "Fehler:";
 $langMultEmail = "Mehrfache Darstellungen von e-mail Adressen";
 $langMultLoginPass = "mehrfache Paarungen LOGIN - PASS";
 $langOk = "In Ordnung";
-$langCont = "Weitermachen";
 $langNumUsers = "Anzahl von Teilnehmern der Plattform";
 $langNumGuest = "Anzahl von Gästen";
 $langRestoreCourse = "Rückgewinnung eines Kurses";
