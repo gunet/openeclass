@@ -317,11 +317,11 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         $tool_content .= "<div class='panel mobile-apps'>
                 <div class='panel-body'>
                 <div class='row'>
-                <div class='col-xs-6'>
-                <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id796936702' target=_blank><img src='$themeimg/appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a>
+                <div class='col-xs-6'>                
+                    <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank><img src='$themeimg/appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a>
                 </div>
                 <div class='col-xs-6'>
-                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='$themeimg/playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a>
+                    <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='$themeimg/playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a>
                 </div>
                 </div></div>
             </div>";
