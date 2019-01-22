@@ -286,10 +286,10 @@ if (count($res) > 0) {
                                     ."</div>
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
-                                            $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
+                                            $tool_content .= "<a class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
                                         }
                                         if ($next_id) {
-                                            $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
+                                            $tool_content .= "<a class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
                                         }
         $tool_content .=    "
                                     </div>
