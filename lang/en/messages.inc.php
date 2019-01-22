@@ -5108,3 +5108,4 @@ $langCheckFinished = 'Checking finished.';
 $langRegradeAttemptsList = 'Inconsistencies found in the following attempts, which can be automatically regraded:';
 $langRegradeNotNeeded = 'No need to regrade any attempts.';
 $langRegradeAll = 'Regrade all';
+$langGoToHomePage = 'Go to home page';

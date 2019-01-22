@@ -66,6 +66,7 @@ $langVisible = "Ορατή";
 $langInvisible = "Μη ορατή";
 $langNoAccountPleaseRegister = 'Δεν έχετε λογαριασμό; Παρακαλούμε %sεγγραφείτε%s.';
 $langAlreadyHaveAccount = "Έχετε ήδη λογαριασμό; %sΣυνδεθείτε%s";
+$langGoToHomePage = 'Μετάβαση στην αρχική σελίδα';
 
 // Toolbox
 $langNumEntryFound = 'Βρέθηκε %s αποτέλεσμα για την αναζήτησή σας';
@@ -5715,3 +5716,4 @@ $langCourseCategoryValueActive = "Ενεργή";
 $langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδεδομένων θα εμφανίζεται στους χρήστες";
 $langInactiveCourseCategories = "Ανενεργές κατηγορίες";
 $langActiveCourseCategories = "Ενεργές κατηγορίες";
+
