@@ -5176,3 +5176,4 @@ $langRegradeAttemptsList = 'Inconsistencies found in the following attempts, whi
 $langRegradeNotNeeded = 'No need to regrade any attempts.';
 $langRegradeAll = 'Regrade all';
 $langColmooc = "colMOOC";
+$langGoToHomePage = 'Go to home page';

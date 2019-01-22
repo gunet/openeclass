@@ -72,7 +72,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langChooseLang, $langDeactivate, $langProfileMenu,
         $langEclass, $langHelp, $langUsageTerms, $langPrivacyPolicy,
         $langHomePage, $langLogin, $langLogout, $langMyAgenda,
-        $langMyPersoAnnouncements, $langMyCourses,
+        $langMyPersoAnnouncements, $langMyCourses, $langGoToHomePage,
         $langPortfolio, $langSearch,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
@@ -632,6 +632,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
     }
 
+    $t->set_var('GO_TO_HOME', q($langGoToHomePage));
     $t->set_var('COPYRIGHT', 'Open eClass © 2003-' . date('Y'));
     $t->set_var('TERMS_URL', $urlAppend .'info/terms.php');
     $t->set_var('LANG_TERMS', $langUsageTerms);
