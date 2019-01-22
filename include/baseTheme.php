@@ -639,7 +639,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_PRIVACY_POLICY', $langPrivacyPolicy);
         $t->set_var('PRIVACY_POLICY_URL', $urlAppend .'info/privacy_policy.php');
     } else {
-        $t->set_var('LANG_PRIVACY_POLICY', '');
+        $t->set_block('mainBlock', 'privacyPolicyBlock', 'delete');
     }
 
     // Remove tool title block from selected pages

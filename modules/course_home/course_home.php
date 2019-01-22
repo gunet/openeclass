@@ -274,12 +274,12 @@ if (count($res) > 0) {
         if ($key + 1 < count($res)) $next_id = "hidden_" . ($key + 1);
         if ($key > 0) $previous_id = "hidden_" . ($key - 1);
 
-        $tool_content .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+        $tool_content .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel_$key' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
                                         <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <div class='modal-title h4' id='myModalLabel'>" . q($row->title) . "</div>
+                                        <div class='modal-title h4' id='myModalLabel_$key'>" . q($row->title) . "</div>
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
                                       standard_text_escape($row->comments)
@@ -511,13 +511,15 @@ if ($uid and !$is_editor) {
     }
 }
 
-$citation_text = "$professor.&nbsp;<i>$currentCourseName.</i>&nbsp;$langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) . "&nbsp;$langFrom2 {$urlServer}courses/$course_code/";
-$tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+$citation_text = q($professor) . ". <em>" . q($currentCourseName) .
+    ".</em> $langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) .
+    " $langFrom2 {$urlServer}courses/$course_code/";
+$tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='citationModalLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
                         <div class='modal-content'>
                             <div class='modal-header'>
                                 <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                <div class='modal-title h4' id='myModalLabel'>$langCitation</div>
+                                <div class='modal-title h4' id='citationModalLabel'>$langCitation</div>
                             </div>
                             <div class='modal-body'>".
                               standard_text_escape($citation_text)
@@ -718,8 +720,7 @@ $action_bar
                 </div>
                 $left_column
                 <div class='col-xs-12 $main_content_cols'>
-
-                    <div class=''>$main_content</div>
+                    $main_content
                 </div>
                 $categoryDisplay
                 <div class='col-xs-12 course-below-wrapper'>
@@ -958,7 +959,7 @@ if (isset($course_completion_id) and $course_completion_id > 0) {
                             <div class='center-block' style='display:inline-block;'>
                                 <a style='text-decoration:none;' href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&u=$uid'>";
                             if ($percentage == '100%') {
-                                $tool_content .= "<i class='fa fa-check-circle fa-5x state_success'></i>";
+                                $tool_content .= "<span class='fa fa-check-circle fa-5x state_success'></span>";
                             } else {
                                 $tool_content .= "<div class='course_completion_panel_percentage'>$percentage</div>";
                             }

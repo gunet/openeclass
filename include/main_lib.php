@@ -2954,7 +2954,7 @@ class HtmlCutString {
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
         $this->tempDiv = new DOMDocument('1.0', 'UTF-8');
-        $this->tempDiv->loadHTML('<?xml version="1.0" encoding="UTF-8" ?><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
+        $this->tempDiv->loadHTML('<?xml version="1.0" encoding="UTF-8" ?><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div>' . $string . '</div>', LIBXML_NONET | LIBXML_DTDLOAD | LIBXML_DTDATTR);
         // keep the characters count till now
         $this->charCount = 0;
         // put the postfix at the end
@@ -2970,7 +2970,7 @@ class HtmlCutString {
         $this->newDiv = new DomDocument;
         // cut the string by parsing through each element
         $this->searchEnd($this->tempDiv->documentElement, $this->newDiv);
-        $newhtml = $this->newDiv->saveHTML();
+        $newhtml = preg_replace(['/^.*<body>\s*/', '/\s*<\/body>$/'], '', $this->newDiv->saveHTML());
         if ($this->postfix)
             return $newhtml . $this->postfix_text;
         else
