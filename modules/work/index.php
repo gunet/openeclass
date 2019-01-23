@@ -3982,7 +3982,9 @@ function show_assignment($id, $display_graph_results = false) {
                             </a>";
                     }
                 } else {
-                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3'>";
+                    // disabled grade field if turnitin
+                    $grade_disabled = ($assign->assignment_type == 1) ? ' disabled': '';
+                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' $grade_disabled>";
                 }
 
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
@@ -4052,6 +4054,9 @@ function show_assignment($id, $display_graph_results = false) {
                 $i++;
             } //END of Foreach
 
+            // disabled grades submit if turnitin
+            $disabled_submit = ($assign->assignment_type == 1) ? ' disabled': '';
+
             $tool_content .= "
                     </tbody>
                 </table>
@@ -4066,7 +4071,7 @@ function show_assignment($id, $display_graph_results = false) {
                 </div>
             </div>
             <div class='pull-right'>
-                <button class='btn btn-primary' type='submit' name='submit_grades'>$langGradeOk</button>
+                <button class='btn btn-primary' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
             </div>
             </form>";
         } else {
