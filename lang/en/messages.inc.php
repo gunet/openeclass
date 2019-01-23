@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2018-05-29 15:28:38
+// Generated 2019-01-23 18:39:46
 
 $langYes = "Yes";
 $langNo = "No";
@@ -2207,7 +2207,6 @@ $langSubmissionDescr = "%s, on %s, submitted a file named \"%s\".";
 $langEndDeadline = "(deadline expired)";
 $langWEndDeadline = "(Deadline is tomorrrow)";
 $langNEndDeadLine = "(Deadline is today)";
-$langWarnAboutDeadLine = "Warning! Assignment deadline is over. Your submission is overdue!";
 $langDays = "days";
 $langDaysLeft = "left";
 $langGrades = "The grades were assigned successfully!";
@@ -2392,7 +2391,6 @@ $langMetadata = "Metadata";
 $langMetadataMod = "Metadata modified";
 $langLearningResourceType = "Type of learning resource";
 $langTopic = "Topic";
-$langTopics = "Topics";
 $langSubTopic = "Subtopic";
 $langLevel = "Level";
 $langTypicalAgeRange = "Typical age";
@@ -2713,8 +2711,6 @@ $langManageDepartment = "Department Manager";
 $langHelpManageDepartment = "Manages departments they are responsible for";
 $langMonthsUnit = 'months';
 $langCourseSettings = "$langCourse Settings";
-$langCourseOfflineSettings = "$langCourse download";
-$langCourseOfflineLegend = "$langStudents can download $langsCourse in their computer.";
 $langMinPasswordLen = 'Minimum password length (characters)';
 $langInsert = "Insert";
 $langCreateCourseNotAllowedNode = 'The $langFaculty you have selected is not acceptable. Please try again.';
@@ -4451,9 +4447,6 @@ $langFaqReorderSuccess = "Reordering completed";
 $langTcCourseEnabled = "Teleconference enabled.";
 $langTcCourseDisabled = "Teleconference disabled.";
 $langEmailBounces = 'Delivery error (bounce) address';
-$langPrivacyPolicy = "Privacy Policy";
-$langPrivacyPolicyLegend = "Modify Privacy Policy";
-$langText = "Text";
 $langAnnAddWithEmail = "The announcement was added and sent to ";
 $langReorder = "Reorder";
 $langActivateConference = "Enable teleconference";
@@ -4666,8 +4659,6 @@ $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
 $langHasExpiredS = "has expired";
 $langHasExpired = "Expired";
-$langSuccessPercentage = "Percentage Success";
-
 $langExportGradebookWithUsers = "Extract user results";
 $langExportGradebook = "Extract gradebook results";
 $langRestrictions = "Restrictions";
@@ -4681,7 +4672,6 @@ $langcas_altauth_use_mobile = "Only for access via mobile apps";
 $langActivityCourse = 'Activity Course Type';
 $langNoActivityHeadings = 'There are no activity category headings';
 $langActivityCourseAdd = 'Add Activity Category Heading';
-$langQuickLinks = "Quick Links";
 $langActivityEdit = 'Activity Edit';
 $langCourseActivityFormat = 'Activity Format';
 $langHomePageSettings = "Home Page Settings";
@@ -5010,10 +5000,19 @@ $langConfirmPurgeCourseCompletion = "Caution: The completion record for all user
 $langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
 $langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
 $langDownloadCourse = "Download $langsCourse";
+$langTopics = "Topics";
+$langGoToHomePage = 'Go to home page';
+$langQuickLinks = "Quick Links";
+$langCourseOfflineSettings = "$langCourse download";
+$langCourseOfflineLegend = "$langStudents can download $langsCourse in their computer.";
+$langPrivacyPolicy = "Privacy Policy";
+$langPrivacyPolicyLegend = "Modify Privacy Policy";
+$langText = "Text";
 $langCheckGrades = 'Check Grades';
 $langCheckGradesConsistent = 'Checking grades for inconsistencies';
 $langCheckFinished = 'Checking finished.';
 $langRegradeAttemptsList = 'Inconsistencies found in the following attempts, which can be automatically regraded:';
 $langRegradeNotNeeded = 'No need to regrade any attempts.';
 $langRegradeAll = 'Regrade all';
-$langGoToHomePage = 'Go to home page';
+$langSuccessPercentage = "Percentage Success";
+$langWarnAboutDeadLine = "Warning! Assignment deadline is over. Your submission is overdue!";

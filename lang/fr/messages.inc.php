@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2018-05-29 15:28:40
+// Generated 2019-01-23 18:39:48
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -1095,9 +1095,9 @@ $langDBSetting = "Paramètres de MySQL";
 $langMainLang = "Langue Principale de l'installation";
 $langLastCheck = "Dernière vérification avant l'installation";
 $langRequirements = "Exigences du système";
-$langInstallEnd = "Installation terminée"
+$langInstallEnd = "Installation terminée" 
 ;
-$langModuleNotInstalled = "Non installé"
+$langModuleNotInstalled = "Non installé" 
 ;
 $langReadHelp = "Lire plus";
 $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
@@ -1129,7 +1129,7 @@ $langLDAPBaseDn = "Base DN du Serveur LDAP";
 $langChooseLang = "Choisissez la langue";
 $langBeforeInstall1 = "Avant de procéder à l'installation, veuillez imprimer et lire attentivement les";
 $langBeforeInstall2 = "De plus, vous trouverez des informations générales concernant la plateforme";
-$langInstallInstr = "Instructions d'installation"
+$langInstallInstr = "Instructions d'installation" 
 ;
 $langAddComment = "Ajouter / Modifier un commentaire";
 $langLearningModule = "Section";
@@ -1190,7 +1190,7 @@ $langDocumentAsModule = "Utiliser un document";
 $langDocumentAsModuleLabel = "de Document";
 $langDocumentInModule = "Document dans un module";
 $langEXERCISETypeDesc = "Exercice de la plateforme";
-$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape."
+$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape." 
 ;
 $langErrorAssetNotFound = "Élément introuvable :";
 $langErrorCopyAttachedFile = "Impossible de copier le fichier : ";
@@ -1499,7 +1499,6 @@ $langBodyForumNotify = "Vous êtes informé(e) qu'un nouveau sujet a été ajout
 $langBodyTopicNotify = "Vous êtes informé(e) qu'un nouveau message a été ajouté";
 $langBodyCatNotify = "Un nouveau forum a été ajouté";
 $langOfForum = "du forum";
-$langTopics = "Sujets";
 $langPosts = "Posts";
 $langMessage = "Message";
 $langMessages = "Messages";
@@ -1926,9 +1925,9 @@ $langNewId = "Nouveau identifiant"
 $langUsersWillAdd = "Les utilisateurs du cours seront ajoutés";
 $langErrorLang = "Erreur ! Aucune langue trouvée !"
 ;
-$langDoSearch = "Poursuivre la recherche"
+$langDoSearch = "Poursuivre la recherche" 
 ;
-$langSearch_terms = "Critères de recherche :"
+$langSearch_terms = "Critères de recherche :" 
 ;
 $langSearchIn = "Recherche dans :";
 $langSearchWith = "Recherche selon des critères :";
@@ -3460,7 +3459,7 @@ $langNewBBBSessionInActive = "Invisible";
 $langBBBAddSuccessful = "New teleconference scheduled successfully";
 $langBBBNoteEnableJoin = "The link to join is active only for currently running teleconferences";
 $langBBBNoteEnableJoinEditor = "The link to join is activated 15 minutes before the scheduled start time";
-$langBBBNotifyUsers = "Notify users for teleconference schedule";
+$langBBBNotifyUsers = "Notify participants for teleconference schedule";
 $langBBBNotifyExternalUsers = "Notify external participants";
 $langBBBSessionAvailable = "Session availability";
 $langBBBMinutesBefore = "minutes before the scheduled start time";
@@ -4371,7 +4370,7 @@ $langStart = "Start";
 $langTopicStored = "New topic is saved";
 $langForumFrom = "From member";
 $langWithSuccess = "";
-$langUserCodename = "Username:";
+$langUserCodename = "Username";
 $langDirectoryCreateError = 'Unable to create subdirectory "%s".';
 $langInnoDBMissing = 'The MySQL database server does not support the InnoDB storage engine. You need to enable it before continuing, since it is necessary for proper platform operation.';
 $langErrorConnectDatabase = "Error connecting to database server:";
@@ -5186,3 +5185,19 @@ $langConfirmPurgeCourseCompletion = "Caution: The completion record for all user
 $langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
 $langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
 $langDownloadCourse = "Download $langsCourse";
+$langTopics = "Topics";
+$langGoToHomePage = 'Go to home page';
+$langQuickLinks = "Quick Links";
+$langCourseOfflineSettings = "$langCourse download";
+$langCourseOfflineLegend = "$langStudents can download $langsCourse in their computer.";
+$langPrivacyPolicy = "Privacy Policy";
+$langPrivacyPolicyLegend = "Modify Privacy Policy";
+$langText = "Text";
+$langCheckGrades = 'Check Grades';
+$langCheckGradesConsistent = 'Checking grades for inconsistencies';
+$langCheckFinished = 'Checking finished.';
+$langRegradeAttemptsList = 'Inconsistencies found in the following attempts, which can be automatically regraded:';
+$langRegradeNotNeeded = 'No need to regrade any attempts.';
+$langRegradeAll = 'Regrade all';
+$langSuccessPercentage = "Percentage Success";
+$langWarnAboutDeadLine = "Warning! Assignment deadline is over. Your submission is overdue!";

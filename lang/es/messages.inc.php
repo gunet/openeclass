@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2018-05-29 15:28:38
+// Generated 2019-01-23 18:39:47
 
 $langYes = "Si";
 $langNo = "No";
@@ -1387,7 +1387,6 @@ $langBodyForumNotify = "A new forum topic has been posted";
 $langBodyTopicNotify = "A new reply has been posted";
 $langBodyCatNotify = "A new forum has been added";
 $langOfForum = "of forum";
-$langTopics = "Topics";
 $langPosts = "Demo";
 $langMessage = 'Mensaje';
 $langMessages = 'Mensajes';
@@ -3245,7 +3244,7 @@ $langNewBBBSessionInActive = "Invisible";
 $langBBBAddSuccessful = "New teleconference scheduled successfully";
 $langBBBNoteEnableJoin = "The link to join is active only for currently running teleconferences";
 $langBBBNoteEnableJoinEditor = "The link to join is activated 15 minutes before the scheduled start time";
-$langBBBNotifyUsers = "Notify users for teleconference schedule";
+$langBBBNotifyUsers = "Notify participants for teleconference schedule";
 $langBBBNotifyExternalUsers = "Notify external participants";
 $langBBBSessionAvailable = "Session availability";
 $langBBBMinutesBefore = "minutes before the scheduled start time";
@@ -4156,7 +4155,7 @@ $langStart = "Start";
 $langTopicStored = "New topic is saved";
 $langForumFrom = "From member";
 $langWithSuccess = "";
-$langUserCodename = "Username:";
+$langUserCodename = "Username";
 $langDirectoryCreateError = 'Unable to create subdirectory "%s".';
 $langInnoDBMissing = 'The MySQL database server does not support the InnoDB storage engine. You need to enable it before continuing, since it is necessary for proper platform operation.';
 $langErrorConnectDatabase = "Error connecting to database server:";
@@ -4971,3 +4970,19 @@ $langConfirmPurgeCourseCompletion = "Caution: The completion record for all user
 $langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
 $langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
 $langDownloadCourse = "Download $langsCourse";
+$langTopics = "Topics";
+$langGoToHomePage = 'Go to home page';
+$langQuickLinks = "Quick Links";
+$langCourseOfflineSettings = "$langCourse download";
+$langCourseOfflineLegend = "$langStudents can download $langsCourse in their computer.";
+$langPrivacyPolicy = "Privacy Policy";
+$langPrivacyPolicyLegend = "Modify Privacy Policy";
+$langText = "Text";
+$langCheckGrades = 'Check Grades';
+$langCheckGradesConsistent = 'Checking grades for inconsistencies';
+$langCheckFinished = 'Checking finished.';
+$langRegradeAttemptsList = 'Inconsistencies found in the following attempts, which can be automatically regraded:';
+$langRegradeNotNeeded = 'No need to regrade any attempts.';
+$langRegradeAll = 'Regrade all';
+$langSuccessPercentage = "Percentage Success";
+$langWarnAboutDeadLine = "Warning! Assignment deadline is over. Your submission is overdue!";
