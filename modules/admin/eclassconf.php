@@ -341,11 +341,12 @@ if (isset($_POST['submit'])) {
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
-    if (isset($_POST['privacy_policy_text'])) {
-        set_config('privacy_policy_text', $_POST['privacy_policy_text']);
-    }
-    if (isset($_POST['privacy_policy_text_en'])) {
-        set_config('privacy_policy_text_en', $_POST['privacy_policy_text_en']);
+
+    foreach ($session->active_ui_languages as $langcode) {
+        $langVar = 'privacy_policy_text_' . $langcode;
+        if (isset($_POST[$langVar])) {
+            set_config($langVar, purify(trim($_POST[$langVar])));
+        }
     }
 
     $config_vars = array('email_required' => true,
@@ -1408,19 +1409,31 @@ $tool_content .= "
                         <div class='panel-body'>
                             <div class='margin-bottom-fat margin-top-fat'><strong>$langPrivacyPolicyLegend</strong></div>
                             <fieldset>
-                                <div class='landing-default'>
+                                <div class='landing-default'>";
+
+    foreach ($session->active_ui_languages as $langcode) {
+        $langname = $langNameOfLang[langcode_to_name($langcode)];
+        $policy = get_config('privacy_policy_text_' . $langcode);
+        if (!$policy) { 
+            $policyFile = "lang/$langcode/privacy.html";
+            if (file_exists($policyFile)) {
+                $policy = file_get_contents($policyFile);
+            } else {
+                $policy = get_config('privacy_policy_text_en');
+                if (!$policy) { 
+                    $policyFile = "lang/en/privacy.html";
+                }
+            }
+        }
+        $tool_content .= "
                                     <div class='form-group'>
-                                        <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langText :</label>
-                                        <div class='col-sm-10'>
-                                            ".rich_text_editor('privacy_policy_text', 5, 20, get_config('privacy_policy_text', $langPrivacyPolicyDefaultText))."
+                                        <label for='privacy_policy_text_$langcode' class='col-sm-2 control-label'>$langText:<br>($langname)</label>
+                                        <div class='col-sm-10'>" .
+                                            rich_text_editor("privacy_policy_text_$langcode", 5, 20, $policy) . "
                                         </div>
-                                    </div>
-                                    <div class='form-group'>
-                                        <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langText ($langEnglish):</label>
-                                        <div class='col-sm-10'>
-                                            ".rich_text_editor('privacy_policy_text_en', 5, 20, get_config('privacy_policy_text_en', $langPrivacyPolicyDefaultTextEn))."
-                                        </div>
-                                    </div>
+                                    </div>";
+    }
+    $tool_content .= "
                                     <div class='form-group'>
                                         <label for='theme' class='col-sm-2 control-label'>$langViewShow: </label>
                                         <div class='col-sm-10'>
