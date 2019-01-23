@@ -51,35 +51,7 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
 
     // extract sourcedid info
     $sourcedid = $data['lis_result_sourcedid'];
-    $sourcediddata = explode("-", $sourcedid);
-    if (count($sourcediddata) != 4) {
-        error_log("invalid lis_result_sourcedid, exiting ...");
-        die();
-    }
-    $token = $sourcediddata[0] . "-" . $sourcediddata[1];
-    $assignment_id = intval($sourcediddata[2]);
-    $uid = intval($sourcediddata[3]);
-
-    // locate/validate assignment, lti, user and token
-    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $assignment_id);
-    if (!$assignment) {
-        error_log("no assignment found, exiting...");
-        die();
-    }
-    if (!token_validate($assignment->secret_directory, $token, 3600)) {
-        error_log("invalid token, exiting...");
-        die();
-    }
-    $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $assignment->lti_template);
-    if (!$lti) {
-        error_log("no lti found, exiting...");
-        die();
-    }
-    $user = Database::get()->querySingle("SELECT * FROM user WHERE id  = ?d", $uid);
-    if (!$user) {
-        error_log("no user found, exiting...");
-        die();
-    }
+    list($assignment_id, $uid, $assignment, $lti, $user) = lti_verify_extract_sourcedid($sourcedid, 3600);
     $course_code = Database::get()->querySingle("SELECT code FROM course WHERE id = ?d", $assignment->course_id)->code;
 
     // POST to outcomes tool placement url
