@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2018-05-29 15:28:40
+// Generated 2019-01-23 18:41:56
 
 $langYes = "Sì";
 $langNo = "No";
@@ -113,6 +113,7 @@ $langErrors = "Errori:";
 $langMultEmail = "Visualizzazione di molti indirizzi E-mail";
 $langMultLoginPass = "Molte paia di LOGIN - PASS ";
 $langOk = "Ok";
+$langCont = "Continuare";
 $langNumUsers = "Numero di partecipanti nella piattaforma";
 $langNumGuest = "Numero di Ospiti";
 $langRestoreCourse = "Recupero di Corso";
@@ -239,8 +240,8 @@ $langChangeUser = "Connettersi come un altro utente";
 $langChangeUserNotFound = 'Non è stato trovato nessun conto con username "%s"';
 $langMultiRegUser = "Creare molti conti di utenti";
 $langMultiRegUserInfo = "<p>Compila nella area seguente un elenco con i dati degli utenti, una riga per ogni utente che desideri creare.
-</p>
-<p>L' ordine dei dati degli utenti è impostato nel campo che sta prima dell' area,  e le etichette possibili sono:</p>
+</p> 
+<p>L' ordine dei dati degli utenti è impostato nel campo che sta prima dell' area,  e le etichette possibili sono:</p> 
 <ul>
 <li><tt>first</tt>: Nome</li>
 <li><tt>last</tt>: Cognome</li>
@@ -425,9 +426,9 @@ $langSaveMessage = "La chiacchierata è salvata nei Documenti";
 $langSaveErrorMessage = "Errore. La chiacchierata non è salvata.";
 $langNoGuest = "Gli utenti ospiti non possono utilizzare il modulo 'Chiacchierata'!";
 $langCopyright = "Avviso di copyright";
-$langCopyrightNotice = '
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003-2011<br> &nbsp; <br>
-La piattaforma '. $siteName. ' è basata sulla piattaforma di sorgente di codice aperta <a href="http://www.openeclass.org" target=_blank>Open eClass</a> che è un sistema integrato di gestione di corsi elettronici ed è la proposta della Rete Accademica GUnet  per il supporto del servizio e-learning asincrono. È sviluppata e supportata attivamente dal gruppo di E-leargning Asincrono di GUnet ed è <a href="http://download.eclass.gunet.gr" target="blank">gratuitamente distribuito</a> come software di sorgente di codice aperto (open source) conformato  alla GNU General Public License (GNU GPL). <br><br>
+$langCopyrightNotice = ' 
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003-2011<br> &nbsp; <br> 
+La piattaforma '. $siteName. ' è basata sulla piattaforma di sorgente di codice aperta <a href="http://www.openeclass.org" target=_blank>Open eClass</a> che è un sistema integrato di gestione di corsi elettronici ed è la proposta della Rete Accademica GUnet  per il supporto del servizio e-learning asincrono. È sviluppata e supportata attivamente dal gruppo di E-leargning Asincrono di GUnet ed è <a href="http://download.eclass.gunet.gr" target="blank">gratuitamente distribuito</a> come software di sorgente di codice aperto (open source) conformato  alla GNU General Public License (GNU GPL). <br><br> 
 Il contenuto dei corsi elettronici che sono ospitati dalla piattaforma  '. $siteName. ', ed anche i diritti (copyright) di questo materiale, appartengono ai loro autori e la GUnet non ci pretende dei diritti. Per qualsiasi utilizzo o ripubblica del contenuto ti preghiamo di contattare i responsabili dei corsi rispettivi.
 ';
 $langCourseProgram = "Descrizione del Corso";
@@ -1207,7 +1208,7 @@ $langProgress = "Progresso";
 $langQuitViewer = "Ritornare alla lista";
 $langRawHasBeenChanged = "Il grado minimo per la promozione è modificato";
 $langSCORMTypeDesc = "Contenuto SCORM personalizzato";
-$langScormIntroTextForDummies = "I pacchetti importati devono consistere di un file zip ed essere compatibili con:
+$langScormIntroTextForDummies = "I pacchetti importati devono consistere di un file zip ed essere compatibili con: 
    <ul class='right smaller'>
      <li> το SCORM 2004 ή</li>
      <li> το SCORM 1.2.</li>
@@ -1378,7 +1379,6 @@ $langBodyForumNotify = "Ti informiamo che un nuovo argomento è aggiunto";
 $langBodyTopicNotify = "Ti informiamo che un nuovo messaggio è aggiunto";
 $langBodyCatNotify = "Un nuovo forum è aggiunto";
 $langOfForum = "del forum";
-$langTopics = "Argomenti";
 $langPosts = "Post";
 $langMessage = "Messaggio";
 $langMessages = "Messaggi";
@@ -1426,6 +1426,7 @@ $langSurveyAddAnswer = "Aggiungere Risposte";
 $langSurveyType = "Tipo";
 $langSurveyMC = "Scelta multipla";
 $langSurveyFillText = "Compilare il campo vuoto";
+$langSurveyContinue = "Continuare";
 $langSurveyMoreAnswers = "+ risposte";
 $langSurveyMoreQuestions = "+ domande";
 $langSurveyCreated = "L' indagine sui Profili degli Studenti è creata con successo.";
@@ -1454,6 +1455,7 @@ $langPollAddAnswer = "Aggiungere risposte";
 $langPollType = "Tipo";
 $langPollMC = "Scelta multipla";
 $langPollFillText = "Compilare il campo vuoto";
+$langPollContinue = "Continuare";
 $langPollMoreAnswers = "+";
 $langPollAddMultiple = "Nuova domanda a scelta multipla";
 $langPollAddFill = "Nuova domanda a compilare il campo vuoto";
@@ -1535,7 +1537,7 @@ $langAddedU = "è aggiunto. Una email gli è appena inviata ";
 $langAndP = "e la loro password";
 $langAddAU = "Aggiungere un utente";
 $langAdmR = "Autorizzazione di Gestore";
-$langAddHereSomeCourses = "<p>Per registrarsi/cancellarsi da un corso, seleziona prima la $langsFaculty alla quale appartieni, e dopo seleziona o deseleziona il corso<br>.
+$langAddHereSomeCourses = "<p>Per registrarsi/cancellarsi da un corso, seleziona prima la $langsFaculty alla quale appartieni, e dopo seleziona o deseleziona il corso<br>. 
 <p>Per salvare le tue preferenze, clicca su 'Inviare Modifiche'</p><br>";
 $langDeleteUser = "Sei sicuro che vuoi eliminare l' utente";
 $langDeleteUser2 = "da questo corso";
@@ -1564,7 +1566,7 @@ $langUserRights = "Autorizzazioni degli utenti";
 $langNow = "adesso";
 $langOneByOne = "Aggiungere un utente";
 $langUserMany = "Importare una lista di utenti tramite un file di testo";
-$langUserAddExplanation = "ogni riga del file che invii deve contenere 5 campi:
+$langUserAddExplanation = "ogni riga del file che invii deve contenere 5 campi: 
 <b>Nome&nbsp;&nbsp;&nbsp;Cognome&nbsp;&nbsp;&nbsp;
        Username&nbsp;&nbsp;&nbsp;Password&nbsp;
         &nbsp;&nbsp;Email</b> e saranno divisi con tab.
@@ -1574,7 +1576,7 @@ $langUserNumber = "numero";
 $langRemoveRight = "Rimuovere un' autorizzazione";
 $langUserOneByOneExplanation = "Lui (lei) riceverà una notifica via e-mail con la username e la password";
 $langBackUser = "Ritornare alla lista degli utenti";
-$langUserAlreadyRegistered = "Un utente con gli stessi nome/cognome si è già iscritto in questo corso.
+$langUserAlreadyRegistered = "Un utente con gli stessi nome/cognome si è già iscritto in questo corso. 
             Non puoi iscriverlo(la) di nuovo.";
 $langAddedToCourse = "è già iscritto nella piattaforma, ma non in questo corso. Adesso ci si è iscritto.";
 $langGroupUserManagement = "Gestire Gruppi di Utenti";
@@ -1866,27 +1868,27 @@ $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ore: %R';
 $timeNoSecFormat = '%R';
 $langNoAdminAccess = "
-<b>La pagina che tenti di accedere richiede una username ed una password.</b>
+<b>La pagina che tenti di accedere richiede una username ed una password.</b> 
 <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu faccia login prima di procedere con altre azioni. Probabilmente la tua sessione è scaduta.";
-$langLoginRequired = "<b>Non sei iscritto nel corso e quindi si non puoi utilizzare il modulo rispettivo.</b>
+$langLoginRequired = "<b>Non sei iscritto nel corso e quindi si non puoi utilizzare il modulo rispettivo.</b> 
 <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu ti registri nel corso (se il corso è aperto per registrazioni).";
 $langSessionIsLost = "
-<b>La tua sessione è scaduta.</b>
+<b>La tua sessione è scaduta.</b> 
 <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui il login prima di procedere con altre azioni.";
 $langCheckProf = "
-<b>L' azione che hai tentato di eseguire richiede l' autorizzazione $langsOfTeacher.</b>
+<b>L' azione che hai tentato di eseguire richiede l' autorizzazione $langsOfTeacher.</b> 
 <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui di nuovo il login";
 $langLessonDoesNotExist = "
-<b>Il corso al quale hai tentato di accedere non esiste. </b>
+<b>Il corso al quale hai tentato di accedere non esiste. </b> 
 <br>Questo può accadere perché si hai eseguito un'azione non consentita o a causa di un problema tecnico sulla piattaforma.";
 $langCheckAdmin = "
-         <b>L' azione che hai tentato di eseguire richiede l' autorizzazione del gestore.</b>
+         <b>L' azione che hai tentato di eseguire richiede l' autorizzazione del gestore.</b> 
          <br>La piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui di nuovo il login.";
 $langCheckGuest = "
-         <b>L' azione che hai tentato di eseguire non è possibile con l' autorizzazione dell' utente ospite.</b>
+         <b>L' azione che hai tentato di eseguire non è possibile con l' autorizzazione dell' utente ospite.</b> 
          <br>Per motivi di sicurezza la piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui di nuovo il login.";
 $langCheckPublicTools = "
-    <b>Hai cercato di accedere ad uno strumento di corso inattivo.</b>
+    <b>Hai cercato di accedere ad uno strumento di corso inattivo.</b> 
     <br>Per motivi di sicurezza la piattaforma ti ha automaticamente reindirizzato alla home page perché tu effettui di nuovo il login.";
 $langWarnShibUser = "
         <b>Avviso:</b> Perché la tua certificazione è effettuata tramite Shibboleth, non sei scollegato dalla piattaforma!
@@ -2491,10 +2493,10 @@ $langOtherOptions = "Altre impostazioni";
 $langDefaultQuota = "Quota predefinito dei Corsi Nuovi";
 $langCreateBackup = "Creare un backup delle impostazioni";
 $langInvalidMail = "hanno un indirizzo email non valido o non ne hanno alcuno";
-$langLinkUnsubscribe = "Nota: hai ricevuto questo messaggio perché sei iscritto nel corso '%s'. <br/>
+$langLinkUnsubscribe = "Nota: hai ricevuto questo messaggio perché sei iscritto nel corso '%s'. <br/> 
 Se non vuoi ricevere più tali messaggi e-mail da questo corso, fai clic";
 $langEmailUnsubscribe = "Notifiche del corso";
-$langInfoUnsubscribe = "Puoi scegliere tra i seguenti corsi dai quali desideri ricevere delle notifiche. Se non desideri ricevere e-mail da un certo corso, deselezionalo e fai clic su 'Inviare'. <br/>
+$langInfoUnsubscribe = "Puoi scegliere tra i seguenti corsi dai quali desideri ricevere delle notifiche. Se non desideri ricevere e-mail da un certo corso, deselezionalo e fai clic su 'Inviare'. <br/> 
 (Nota: non ti cancelli dalla lezione ).";
 $langEmailUnsubSuccess = "Non riceverai più messaggi e-mail dal corso '%s'";
 $langEmailFromCourses = "Ricevere e-mail dai miei corsi";
@@ -2521,7 +2523,7 @@ $langMailVerificationClick = "Fai clic sul link seguente:";
 $langMailVerificationSubject = "Confermare la richiesta di registrazione $siteName";
 $langMailChangeVerificationSubject = "Confermare l' indirizzo e-mail $siteName";
 $langMailVerificationSuccess = "Per completare il processo di registrazione, devi confermare il tuo indirizzo e-mail.";
-$langMailVerificationSuccess2 = "Per questa ragione, prego controlla subito la tua posta elettronica, dove ti sarà inviata un messaggio e-mail di conferma.
+$langMailVerificationSuccess2 = "Per questa ragione, prego controlla subito la tua posta elettronica, dove ti sarà inviata un messaggio e-mail di conferma. 
                                 <br/> In seguito, ti verrà inviata una e-mail dal Gruppo di Gestione della Piattaforma di E-learning Asincrono $siteName, con le istruzioni per completare la registrazione. <br/><br/> <small> (Nota: se non ricevi il messaggio controlla la tua cartella di posta indesiderata - Cartella Junk )</small>.";
 $langMailVerificationBody1 = "Ti ringraziamo per la tua registrazione in $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
 $langMailVerificationChangeBody = "Per attivare il tuo conto, il tuo indirizzo e-mail va verificato.\n\n$langMailVerificationClick\n%s";
@@ -2550,13 +2552,13 @@ $langMailVerificationChanged = "È cambiata";
 $langMailVerificationChangedNo = "Non hai selezionato alcuna modifica";
 $langMailVerificationChangedNoAdmin = "Non ci sono utenti o non è consentito modificare l' utente gestore";
 $langCheckCourseAdmin = "
-        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore del corso.</b>
+        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore del corso.</b> 
         <br>La piattaforma ti ha automaticamente reindirizzato alla home page per fare Login di nuovo.";
 $langCheckPowerUser = "
-        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore degli utenti e dei corsi.</b>
+        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore degli utenti e dei corsi.</b> 
         <br>La piattaforma ti ha automaticamente reindirizzato alla home page per fare Login di nuovo.";
 $langCheckUserManageUser = "
-        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore degli utenti.</b>
+        <b>L' azione che stai tentando di eseguire richiede dei privilegi del gestore degli utenti.</b> 
         <br>La piattaforma ti ha automaticamente reindirizzato alla home page per fare Login di nuovo.";
 $langCheckMailVerify = "
         <b>$langMailVerificationSuccess</b>";
@@ -2583,9 +2585,9 @@ $langManageUser = "Gestore utenti";
 $langHelpAdministrator = "Il gestore può gestire l' intera piattaforma";
 $langHelpPowerUser = "L'assistente gestore può gestire gli utenti e i corsi";
 $langHelpManageUser = "Il gestore degli utenti può gestire solo gli utenti";
-$langLinkUnsubscribeFromPlatform = "Nota: hai ricevuto questo messaggio perché ti sei registrato nella piattaforma '%s'. <br/>
+$langLinkUnsubscribeFromPlatform = "Nota: hai ricevuto questo messaggio perché ti sei registrato nella piattaforma '%s'. <br/> 
   Se non desideri ricevere più tali messaggi e-mail fai clic su";
-$langEmailUnsubscribeWarning = "Hai disattivato la ricezione di messaggi e-mail dalla piattaforma.
+$langEmailUnsubscribeWarning = "Hai disattivato la ricezione di messaggi e-mail dalla piattaforma. 
 Non è possibile impostare la ricezione di messaggi e-mail da certi corsi, senza averla riattivata.";
 $langCourseInactive = "L' accesso al corso è consentito solo agli $langsTeachers del corso";
 $langCourseInactiveShort = "Corso inattivo";
@@ -2730,7 +2732,7 @@ $langUserMergeTarget = "Username con cui desideri fondere";
 $langUserMergeForbidden = "Non è possibile fondere $langTeachers con non $langTeachers. Prego, seleziona un altro utente.";
 $langUserMergeAdminForbidden = "La fusione tra gestori è vietata.";
 $langUserMergeSuccess = "La fusione del conto '%s' con il '%s' è completato. Il secondo conto è mantenuto.";
-$langSearchDisabled = "Il motore di ricerca è disabilitato.
+$langSearchDisabled = "Il motore di ricerca è disabilitato. 
         Per ulteriori informazioni contatta i gestori della piattaforma.";
 $langWikiUrlImage = "URL immagine";
 $langPwStrengthTooShort = "Molto breve";
@@ -3233,7 +3235,7 @@ $langNewBBBSessionInActive = "Invisible";
 $langBBBAddSuccessful = "New teleconference scheduled successfully";
 $langBBBNoteEnableJoin = "The link to join is active only for currently running teleconferences";
 $langBBBNoteEnableJoinEditor = "The link to join is activated 15 minutes before the scheduled start time";
-$langBBBNotifyUsers = "Notify users for teleconference schedule";
+$langBBBNotifyUsers = "Notify participants for teleconference schedule";
 $langBBBNotifyExternalUsers = "Notify external participants";
 $langBBBSessionAvailable = "Session availability";
 $langBBBMinutesBefore = "minutes before the scheduled start time";
@@ -3342,7 +3344,7 @@ $langInactiveCourse = "Inactive $langsCourse";
 $langCourseFormat = "$langCourse format";
 $langCourseWeeklyFormatNotice = "To enable weekly format, you need to enter at least the $langsCourse start date";
 $langCourseWeeklyFormat = 'Weekly Format';
-$langWithCourseUnits = "$langCourse Unit Format";
+$langWithCourseUnits = "$langCourse Unit Format (weekly, topics)";
 $langCourseSimpleFormat = 'Simple format';
 $langAddWeek = 'Add week';
 $langEditWeek = 'Edit Week';
@@ -4144,7 +4146,7 @@ $langStart = "Start";
 $langTopicStored = "New topic is saved";
 $langForumFrom = "From member";
 $langWithSuccess = "";
-$langUserCodename = "Username:";
+$langUserCodename = "Username";
 $langDirectoryCreateError = 'Unable to create subdirectory "%s".';
 $langInnoDBMissing = 'The MySQL database server does not support the InnoDB storage engine. You need to enable it before continuing, since it is necessary for proper platform operation.';
 $langErrorConnectDatabase = "Error connecting to database server:";
@@ -4959,3 +4961,91 @@ $langConfirmPurgeCourseCompletion = "Caution: The completion record for all user
 $langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
 $langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
 $langDownloadCourse = "Download $langsCourse";
+$langTopics = "Topics";
+$langGoToHomePage = 'Go to home page';
+$langQuickLinks = "Quick Links";
+$langCourseOfflineSettings = "$langCourse download";
+$langCourseOfflineLegend = "$langStudents can download $langsCourse in their computer.";
+$langPrivacyPolicy = "Privacy Policy";
+$langPrivacyPolicyLegend = "Modify Privacy Policy";
+$langText = "Text";
+$langCheckGrades = 'Check Grades';
+$langCheckGradesConsistent = 'Checking grades for inconsistencies';
+$langCheckFinished = 'Checking finished.';
+$langRegradeAttemptsList = 'Inconsistencies found in the following attempts, which can be automatically regraded:';
+$langRegradeNotNeeded = 'No need to regrade any attempts.';
+$langRegradeAll = 'Regrade all';
+$langSuccessPercentage = "Percentage Success";
+$langWarnAboutDeadLine = "Warning! Assignment deadline is over. Your submission is overdue!";
+$langCoursePrerequisites = "Prerequisites";
+$langMsgFw = "Fw:";
+$langAssignmentFeedbackReleaseHelpBlock = "Click if you want to assign an assignment feedback release date";
+$langForward = "Forward";
+$langAssignmentType = "Assignment Type";
+$langAssignmentTypeEclass = "Eclass";
+$langAssignmentTypeTurnitin = "TurnItIn";
+$langNewCoursePrerequisite = "New Prerequisite";
+$langNoCoursePrerequisites = "No prerequisites exist";
+$langRemovePrerequisite = "Remove Prerequisite";
+$langDelWarnCoursePrerequisite = "Confirm prerequisite removal";
+$langNewCoursePrerequisiteSuccess = "Prerequisite created successfully!";
+$langDelCoursePrerequisiteSuccess = "Prerequisite deleted successfully!";
+$langNewCoursePrerequisiteHelp1 = "Notice";
+$langNewCoursePrerequisiteHelp2 = "In order to add a prerequisite, that course is required to offer a Badge for completing the course. If it lacks the badge, please contact the course's teacher.";
+$langNewCoursePrerequisiteFailInvalid = "Failed to create, please choose a valid course.";
+$langNewCoursePrerequisiteFailSelf = "Failed to create, your own course cannot be chosen as a prerequisite to itself.";
+$langNewCoursePrerequisiteFailAlreadyIn = "Failed to create, the chosen course is already in the list of prerequisites.";
+$langNewCoursePrerequisiteFailBadgeMissing = "Failed to create, the chosen course lacks the Badge for completing the course.";
+$langPrerequisitesNotComplete = "The prerequisites courses have not been completed.";
+$langLtiConsumer = "External LTI Tools";
+$langNewLTITool = "Add new LTI Tool";
+$langNewTIITool = "Add new TurnItIn (LTI) Tool";
+$langLTIProviderUrl = "LTI Provider URL";
+$langLTIProviderKey = "LTI Provider Key";
+$langLTIProviderSecret = "LTI Provider Secret";
+$langNewLTIAppStatus = "Status";
+$langNewLTIAppActive = "Active";
+$langNewLTIAppInActive = "Inactive";
+$langNoLTIApps = "No External LTI Tools are configured";
+$langLTIAPPlertTitle = "Please type the LTI Tool title";
+$langLTIAPPlertURL = "Please type the LTI Provider URL";
+$langLTIAppAddSuccessful = "LTI Tool add was successful";
+$langTIIAppAddSuccessful = "TurnItIn Tool add was successful";
+$langLTIAppUpdateSuccessful = "LTI Tool update was successful";
+$langLTIAppDeleteSuccessful = "LTI Tool removal was successful";
+$langTIIAppDeleteSuccessful = "TurnItIn Tool removal was successful";
+$langNewLTIAppSessionDesc = "Short description";
+$langLTIAppActions = "Actions";
+$langLTILaunchContainer = "Launch container";
+$langLTILaunchContainerEmbed = "Embedded";
+$langLTILaunchContainerNewWindow = "New window";
+$langLTILaunchContainerExistingWindow = "Current window";
+$langTurnitinConf = "$siteName Turnitin settings";
+$langTurnitinEnabled = "Enabled";
+$langNoAvailableTurnitinTemplates = "No LTI Tools available.";
+$langLTITemplate = "LTI Template";
+$langTurnitinIntegration = "TurnItIn Integration";
+$langTurnitinNewAssignNotice = "Notice: after creating a TurnItIn assignment, you must visit the assignment's page to connect with TurnItIn and initialize your options.";
+$langTiiFeedbackReleaseDate = "Feedback Release Date";
+$langTiiSubmissionSettings = "Submission settings";
+$langTiiSubmissionNoStore = "Do not store the submitted papers";
+$langTiiSubmissionStandard = "Standard paper repository";
+$langTiiSubmissionInstitutional = "Institutional repository";
+$langTiiCompareAgainst = "Compare against";
+$langTiiStudentPaperCheck = "Student paper repository";
+$langTiiInternetCheck = "Current and archived web site content";
+$langTiiJournalCheck = "Periodicals, journals and publications";
+$langTiiInstitutionCheck = "Institutional repository";
+$langTiiSimilarityReport = "Similarity Report";
+$langTiiReportGenImmediatelyNoResubmit = "Generate reports immediately (students cannot resubmit)";
+$langTiiReportGenImmediatelyWithResubmit = "Generate reports immediately (students can resubmit until due date): After 3 resubmissions, reports generate after 24 hours";
+$langTiiReportGenOnDue = "Generate reports on due date (students can resubmit until due date)";
+$langTiiSViewReports = "Allow students to view Similarity Reports";
+$langTiiExcludeBiblio = "Exclude bibliographic materials";
+$langTiiExcludeQuoted = "Exclude quoted materials";
+$langTiiExcludeSmall = "Exclude small sources";
+$langTiiExcludeType = "Small match exclusion type";
+$langTiiExcludeTypeWords = "Words";
+$langTiiExcludeTypePercentage = "Percentage";
+$langTiiExcludeValue = "Set source exclusion threshold";
+$langColmooc = "colMOOC";
