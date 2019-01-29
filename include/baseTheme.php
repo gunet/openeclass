@@ -639,7 +639,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if (get_config('activate_privacy_policy_text')) {
         $t->set_var('LANG_PRIVACY_POLICY', $langPrivacyPolicy);
         $t->set_var('PRIVACY_POLICY_URL', $urlAppend .'info/privacy_policy.php');
-    } else {
+    } elseif (!$is_embedonce) {
         $t->set_block('mainBlock', 'privacyPolicyBlock', 'delete');
     }
 
