@@ -1356,7 +1356,7 @@ function new_assignment() {
            $langOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
            $langAutoJudgeAssertions, $langDescription, $langTitle, $langNotifyAssignmentSubmission,
            $langPasswordUnlock, $langIPUnlock, $langDelete, $langAssignmentType, $langAssignmentTypeEclass,
-           $langAssignmentTypeTurnitin, $langLTITemplate, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
+           $langAssignmentTypeTurnitin, $langTiiApp, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
            $langTiiFeedbackReleaseDate, $langAssignmentFeedbackReleaseHelpBlock, $langTiiSubmissionSettings,
            $langTiiSubmissionNoStore, $langTiiSubmissionStandard, $langTiiSubmissionInstitutional, $langTiiCompareAgainst,
            $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
@@ -1727,7 +1727,7 @@ function new_assignment() {
                 </div>
             </div>
             <div class='form-group hidden'>
-                <label for='title' class='col-sm-2 control-label'>$langLTITemplate:</label>
+                <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
                 <div class='col-sm-10'>
                   <select name='lti_template' class='form-control' id='lti_templates' disabled>
                         $lti_template_options
@@ -2185,7 +2185,7 @@ function show_edit_assignment($id) {
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
         $langPasswordUnlock, $langIPUnlock, $langDelete, $langAssignmentType, $langAssignmentTypeEclass,
-        $langAssignmentTypeTurnitin, $langLTITemplate, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
+        $langAssignmentTypeTurnitin, $langTiiApp, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
         $langTiiFeedbackReleaseDate, $langAssignmentFeedbackReleaseHelpBlock, $langTiiSubmissionSettings,
         $langTiiSubmissionNoStore, $langTiiSubmissionStandard, $langTiiSubmissionInstitutional, $langTiiCompareAgainst,
         $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
@@ -2617,7 +2617,7 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='form-group $lti_hidden'>
-                    <label for='title' class='col-sm-2 control-label'>$langLTITemplate:</label>
+                    <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
                     <div class='col-sm-10'>
                       <select name='lti_template' class='form-control' id='lti_templates' $lti_disabled>
                             $lti_template_options
