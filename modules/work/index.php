@@ -804,7 +804,7 @@ function add_assignment() {
                 redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
             }
         } else {
-            Session::Mesages($langErrorCreatingDirectory);
+            Session::Messages($langErrorCreatingDirectory);
             redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
         }
     } else {
@@ -1384,6 +1384,9 @@ function new_assignment() {
     }
     $turnitinapp = ExtAppManager::getApp(strtolower(TurnitinApp::NAME));
 
+    $interval = new DateInterval('P1M');
+    $tii_fwddate = (new DateTime('NOW'))->add($interval)->format('d-m-Y H:i');
+
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#scales').select2({ width: '100%' });
@@ -1585,6 +1588,13 @@ function new_assignment() {
                         .addClass('hidden');
                     $('#online_button')
                         .prop('disabled', true);
+                    
+                    // dates
+                    $('#enableWorkStart').trigger('click');
+                    $('#enableWorkEnd').trigger('click');
+                    $('#enableWorkFeedbackRelease').trigger('click');
+                    $('#WorkEnd').val('$tii_fwddate');
+                    $('#tii_feedbackreleasedate').val('$tii_fwddate');
                 }
             });
             $('#WorkEnd, #WorkStart, #tii_feedbackreleasedate').datetimepicker({
