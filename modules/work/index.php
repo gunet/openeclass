@@ -3276,7 +3276,7 @@ function show_student_assignment($id) {
         } else {
             foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
                 $submissions_exist = true;
-                if ($sub->grade != '') {
+                if ($sub->grade != '' && $row->assignment_type != ASSIGNMENT_TYPE_TURNITIN) {
                     $submit_ok = false;
                 }
                 show_submission_details($sub->id);
