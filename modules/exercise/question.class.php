@@ -1,10 +1,10 @@
-<?php
+    <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,13 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-if (!class_exists('Question')):
-
-    /* >>>>>>>>>>>>>>>>>>>> CLASS QUESTION <<<<<<<<<<<<<<<<<<<< */
-
+if (!class_exists('Question')) {
+    
     /**
-     * This class allows to instantiate an object of type Question
+     * @brief This class allows to instantiate an object of type Question
      */
     class Question {
 
@@ -57,7 +54,7 @@ if (!class_exists('Question')):
         }
 
         /**
-         * reads question informations from the data base
+         * reads question information from the data base
          *
          * @author - Olivier Brouckaert
          * @param - integer $id - question ID
@@ -263,7 +260,6 @@ if (!class_exists('Question')):
                     // removes old answers
                     Database::get()->query("DELETE FROM `exercise_answer` WHERE question_id = ?d", $this->id);
                 }
-
                 $this->type = $type;
             }
         }
@@ -330,7 +326,7 @@ if (!class_exists('Question')):
 
             // if the question has got an ID and if the picture exists
             if ($this->id && file_exists($picturePath . '/quiz-' . $questionId)) {
-                return @copy($picturePath . '/quiz-' . $questionId, $picturePath . '/quiz-' . $this->id) ? true : false;
+                return copy($picturePath . '/quiz-' . $questionId, $picturePath . '/quiz-' . $this->id) ? true : false;
             }
 
             return false;
@@ -348,7 +344,7 @@ if (!class_exists('Question')):
 
             // if the question has got an ID and if the picture exists
             if ($this->id && file_exists($picturePath . '/quiz-' . $this->id)) {
-                return @copy($picturePath . '/quiz-' . $this->id, $picturePath . '/quiz-' . $questionId) ? true : false;
+                return copy($picturePath . '/quiz-' . $this->id, $picturePath . '/quiz-' . $questionId) ? true : false;
             }
 
             return false;
@@ -471,7 +467,6 @@ if (!class_exists('Question')):
             if ($answers) {
                 $i = 1;
                 foreach ($answers as $row) {
-
                     if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE) {
                         $choice = $row->answer_id;
                     } elseif ($type == MULTIPLE_ANSWER) {
@@ -483,7 +478,6 @@ if (!class_exists('Question')):
                     } elseif ($type == MATCHING) {
                         $choice[$row->answer] = $row->answer_id;
                     }
-
                     $i++;
                 }
                 return $choice;
@@ -590,7 +584,7 @@ if (!class_exists('Question')):
             }
             //FIND CORRECT ANSWER ATTEMPTS
             if ($type == FREE_TEXT) {
-                // This query gets answers which where graded with queston maximum grade
+                // This query gets answers which where graded with question maximum grade
                 $correct_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
                         FROM exercise_answer_record a, exercise_user_record b, exercise_question c
                         WHERE a.eurid = b.eurid AND a.question_id = c.id AND a.weight=c.weight AND a.question_id = ?d AND b.attempt_status=?d$extra_sql", $query_vars)->count;
@@ -599,7 +593,7 @@ if (!class_exists('Question')):
                 // This query groups attempts and counts correct and incorrect answers
                 // then counts attempts where (correct answers == total anticipated correct attempts)
                 // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)
-                if ($q_correct_answers_cnt > 0) {                    
+                if ($q_correct_answers_cnt > 0) {
                     $correct_answer_attempts = Database::get()->querySingle("
                         SELECT COUNT(*) AS counter FROM (
                             SELECT a.eurid,
@@ -608,7 +602,7 @@ if (!class_exists('Question')):
                             FROM exercise_answer_record a, exercise_user_record b
                             WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status = ?d$extra_sql
                             GROUP BY(a.eurid) HAVING correct_answer_cnt = ?d AND incorrect_answer_cnt = 0
-                        ) AS sub", $query_vars, $q_correct_answers_cnt)->counter;                        
+                        ) AS sub", $query_vars, $q_correct_answers_cnt)->counter;
                 } else {
                     $correct_answer_attempts = 0;
                 }
@@ -620,6 +614,24 @@ if (!class_exists('Question')):
             }
             return $successRate;
         }
+
+
+        /**
+         * @brief Calculate success rate only in FREE TEXT type questions
+         * @param type $exerciseId
+         */
+        function successRateInQuestion() {
+
+            $id = $this->id;
+            $question_weight = $this->weighting;
+
+            $answers_weight = Database::get()->querySingle("SELECT AVG(weight) AS weight FROM exercise_answer_record
+                                                            WHERE question_id = ?d", $id)->weight;
+            $successRate = round(($answers_weight/$question_weight)*100, 2);
+
+            return $successRate;
+        }
+
 
         /**
          * Split answer string from weighting string for fill-in-blanks answers
@@ -662,4 +674,4 @@ if (!class_exists('Question')):
         }
     }
 
-endif;
+}
