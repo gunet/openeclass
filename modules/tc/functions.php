@@ -624,7 +624,7 @@ function bbb_session_details() {
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
                     <td>
                         <div class='table_td'>
-                            <div class='table_td_header clearfix'>$joinLink</div> $warning_message_record
+                            <div class='table_td_header clearfix'>$joinLink $warning_message_record</div> 
                             <div class='table_td_body'>
                                 $desc
                             </div>
