@@ -3876,6 +3876,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('assignment', 'tii_exclude_value')) {
             Database::get()->query("ALTER TABLE assignment ADD tii_exclude_value INT(11) NOT NULL DEFAULT '0' AFTER tii_exclude_type");
         }
+                
+        // user consent
+        Database::get()->query("CREATE TABLE IF NOT EXISTS`user_consent` (
+            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+            `uid` int(11) NOT NULL,
+            `has_accepted` tinyint(4) NOT NULL,
+            PRIMARY KEY (`id`)
+          ) $tbl_options");
+        
     }
 
     // update eclass version

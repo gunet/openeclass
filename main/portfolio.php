@@ -33,6 +33,7 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
+require_once 'perso.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -46,10 +47,51 @@ load_js('bootstrap-calendar-master/js/calendar.js');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('datatables');
 
+
+$modalShow = '';
+if (get_config('activate_privacy_policy_text')) {
+    // display consent message to user if necessary
+    if ($_SESSION['langswitch'] != 'el') {
+        $consentMessage = get_config("privacy_policy_text_$_SESSION[langswitch]");
+    } else {
+        $consentMessage = get_config('privacy_policy_text');    
+    }
+
+    if (isset($_GET['a']) and $_GET['a'] == 1) {
+        update_user_accept_consent();
+    }
+
+    if (!user_has_accept_consent() and !isset($_GET['a']) and $_SESSION['status'] == USER_STUDENT) {
+        $tool_content .= "
+            <div class='modal fade' id='consentModal' tabindex='-1' role='dialog' aria-labelledby='consentModalLabel'>
+                <div class='modal-dialog' role='document'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                            <h4 class='modal-title' id='consentModalLabel'>$langUserConsent</h4>
+                        </div>
+                        <div class='modal-body' style='margin-left:20px; margin-right:20px;'>
+                            $consentMessage
+                        </div>
+                        <div class='modal-footer'>
+                            <a href='$_SERVER[SCRIPT_NAME]?a=1' class='btn btn-success' role='button'>$langAccept</a>
+                            <a href='$_SERVER[SCRIPT_NAME]?a=0' class='btn btn-danger' role='button'>$langNo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>";
+        $modalShow = "$('#consentModal').modal('show')";    
+    } else {
+        $modalShow = '';
+    }
+}
+
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />"
 ."<script type='text/javascript'>
 jQuery(document).ready(function() {
+    $modalShow
+
   jQuery('#portfolio_lessons').DataTable({
     'bLengthChange': false,
     'iDisplayLength': 5,
@@ -85,9 +127,9 @@ jQuery(document).ready(function() {
     var mypanel = $(this).next();
     mypanel.slideToggle(100);
     if($(this).hasClass('active')) {
-    $(this).removeClass('active');
+        $(this).removeClass('active');
     } else {
-    $(this).addClass('active');
+        $(this).addClass('active');
     }
   });"
   .'var calendar = $("#bootstrapcalendar").calendar({
@@ -120,10 +162,9 @@ jQuery(document).ready(function() {
 'function show_month(day,month,year){
     $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});
 }
+    
 </script>';
-
-require_once 'perso.php';
-
+            
 $tool_content .= action_bar(array(
         array('title' => $langRegCourses,
               'url' => $urlAppend . 'modules/auth/courses.php',

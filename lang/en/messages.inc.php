@@ -5008,6 +5008,7 @@ $langCourseOfflineLegend = "$langStudents can download $langsCourse in their com
 $langPrivacyPolicy = "Privacy Policy";
 $langPrivacyPolicyLegend = "Modify Privacy Policy";
 $langText = "Text";
+$langUserConsent = "$langOfStudent Consent";
 $langCheckGrades = 'Check Grades';
 $langCheckGradesConsistent = 'Checking grades for inconsistencies';
 $langCheckFinished = 'Checking finished.';

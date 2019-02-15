@@ -273,3 +273,30 @@ function getUserMessages() {
     return $message_content;
 }
 
+
+/**
+ * @brief check if user has accepted privacy policy
+ * @global type $uid
+ * @return boolean
+ */
+function user_has_accept_consent() {
+    global $uid;
+    
+    $q = Database::get()->querySingle("SELECT has_accepted FROM user_consent WHERE uid=?d", $uid);
+    if ($q) {
+        return true;
+    } else {
+        return false;
+    }
+    
+}
+
+
+/*
+ * @brief update user consent
+ */
+function update_user_accept_consent() {
+    global $uid;
+    
+    Database::get()->query("INSERT user_consent SET has_accepted = 1, uid=?d", $uid);
+}

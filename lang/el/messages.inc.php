@@ -652,6 +652,7 @@ $langEmailBounces = 'Διεύθυνση λήψης σφαλμάτων (bounces)'
 $langPrivacyPolicy = "Πολιτική Απορρήτου";
 $langPrivacyPolicyLegend = "Αλλαγή Πολιτικής Απορρήτου";
 $langText = "Κείμενο";
+$langUserConsent = "Συναίνεση $langsOfStudent";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";

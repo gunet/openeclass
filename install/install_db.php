@@ -1938,6 +1938,14 @@ $db->query("CREATE TABLE `course_prerequisite` (
   `prerequisite_course` int(11) not null,
   PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `user_consent` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `has_accepted` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`)
+) $tbl_options");
+
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();
