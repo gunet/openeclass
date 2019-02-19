@@ -49,7 +49,9 @@ if (isset($_POST['submitExercise'])) {
         //matches IPv4/6 and IPv4/6 CIDR ranges
         foreach ($value as $ip){
             $valid = isIPv4($ip) || isIPv4cidr($ip) || isIPv6($ip) || isIPv6cidr($ip);
-            if (!$valid) return false;
+            if (!$valid) {
+                return false;
+            }
         }
         return true;
     }, $langIPInvalid);
@@ -65,7 +67,7 @@ if (isset($_POST['submitExercise'])) {
         'exerciseStartDate' => "$langTheField $langStart",
         'exerciseIPLock' => "$langTheField IPs"
     ));
-    if($v->validate()) {
+    if($v->validate()) {                
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($_POST['exerciseDescription']);
@@ -76,11 +78,10 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
         if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
             $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate']);
-        } else {
-            $startDateTime_obj = new DateTime('NOW');
+            $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
+            $objExercise->updateStartDate($startDateTime_obj);
         }
-        $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
-        $objExercise->updateStartDate($startDateTime_obj);
+        
         $endDateTime_obj = isset($_POST['exerciseEndDate']) && !empty($_POST['exerciseEndDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseEndDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
@@ -600,8 +601,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         case 4:
             $disp_score_message = $langScoreDispEndDate;
             break;
-    }
-    $exerciseStartDate = $exerciseStartDate;
+    }    
     $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
@@ -708,16 +708,16 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 </div>
             </div>";
         $tags_list = $moduleTag->showTags();
-        if ($tags_list)
-            $tool_content .= "
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langTags:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $tags_list
-                </div>
-            </div>";
+        if ($tags_list) {
+            $tool_content .= "<div class='row margin-bottom-fat'>
+                                <div class='col-sm-3'>
+                                    <strong>$langTags:</strong>
+                                </div>
+                                <div class='col-sm-9'>
+                                    $tags_list
+                                </div>
+                              </div>";
+        }
 
     $tool_content .= "
         </div>
