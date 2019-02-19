@@ -147,7 +147,7 @@ if ($is_editor) {
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, ip_lock, password_lock FROM exercise "
+    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, time_constraint, attempts_allowed, ip_lock, password_lock FROM exercise "
                                 . "WHERE course_id = ?d "
                                 . "ORDER BY start_date DESC", $course_id);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
@@ -211,7 +211,8 @@ if (!$nbrExercises) {
     if ($is_editor) {
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th style='width: 190px;' class='text-center'>$langResults</th>
+                <th class='text-center' width='20%'>$langInfoExercise</th>
+                <th class='text-center' width='15%'>$langResults</th>
                 <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
@@ -219,11 +220,9 @@ if (!$nbrExercises) {
         $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th class='text-center'>$langStart / $langFinish</th>
-                <th class='text-center'>$langExerciseConstrain</th>
-                <th class='text-center'>$langExerciseAttemptsAllowed</th>
+                <th class='text-center' width='20%'>$langInfoExercise</th>
                 $resultsHeader
-              </tr>";
+              </tr>";        
     }
     $tool_content .= "</thead><tbody>";
     // For correction Form script
@@ -251,7 +250,7 @@ if (!$nbrExercises) {
         if (!$row->public) {
             $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
         }
-        // prof only
+        // prof only        
         if ($is_editor) {
             if (!empty($row->description)) {
                 $descr = "<br/>$row->description";
@@ -259,6 +258,22 @@ if (!$nbrExercises) {
                 $descr = '';
             }
             $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
+            $tool_content .= "<td><small>
+                            <div style='color:green;'>$langStart: " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</div>";
+            if (isset($row->end_date)) {
+                $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
+            }            
+                            
+            if ($row->time_constraint > 0) {
+                $tool_content .= "<div>$langDuration: {$row->time_constraint} $langExerciseConstrainUnit</div>";
+            }
+            // how many attempts we have.            
+            if ($row->attempts_allowed > 0) {
+                $tool_content .= "<div>$langAttempts: $row->attempts_allowed</div>";
+            }
+            $tool_content .= "</small></td>";
+                        
+            
             $eid = getIndirectReference($row->id);
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
@@ -267,9 +282,13 @@ if (!$nbrExercises) {
             $counter1 = count($TotalExercises);
 
             if ($NumOfResults) {
-                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a> |
-                <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
-                (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)</td>";
+                $tool_content .= "<td class='text-center'>"
+                        . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
+                           <div>
+                           <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
+                           (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)"
+                        . "</div>"
+                        . "</td>";
             } else {
                 $tool_content .= "<td class='text-center'>  &mdash; </td>";
             }
@@ -331,7 +350,6 @@ if (!$nbrExercises) {
 
             if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
 
-
                 $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
                                 . "FROM exercise_user_record "
                                 . "WHERE eid = ?d AND uid = ?d "
@@ -349,21 +367,22 @@ if (!$nbrExercises) {
             } else { // exercise has expired
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
             }
-            $tool_content .= $row->description . "</td><td class='smaller' align='center'>
-                                " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
-                                " . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</td>";
+            $tool_content .= $row->description . "</td>";
+            $tool_content .= "<td><small>
+                            <div style='color:green;'>$langStart: " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</div>";
+            if (isset($row->end_date)) {
+                $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
+            }            
+                            
             if ($row->time_constraint > 0) {
-                $tool_content .= "<td class='text-center'>{$row->time_constraint} $langExerciseConstrainUnit</td>";
-            } else {
-                $tool_content .= "<td class='text-center'> - </td>";
+                $tool_content .= "<div>$langDuration: {$row->time_constraint} $langExerciseConstrainUnit</div>";
             }
             // how many attempts we have.
             $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $row->id, $uid)->count;
             if ($row->attempts_allowed > 0) {
-                $tool_content .= "<td class='text-center'>$currentAttempt/$row->attempts_allowed</td>";
-            } else {
-                $tool_content .= "<td class='text-center'> - </td>";
+                $tool_content .= "<div>$langAttempts: $currentAttempt/$row->attempts_allowed</div>";
             }
+            $tool_content .= "</small></td>";
             if ($previousResultsAllowed) {
                 if ($row->score) {
                     // user last exercise score
@@ -376,7 +395,7 @@ if (!$nbrExercises) {
                     } else {
                         $tool_content .= "<td class='text-center''>&dash;</td>";
                     }
-                $tool_content .= "</tr>";
+                    $tool_content .= "</tr>";
                 } else {
                     $tool_content .= "<td class='text-center'>$langNotAvailable</td>";
                 }
