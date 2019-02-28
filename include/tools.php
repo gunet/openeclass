@@ -757,6 +757,19 @@ function lessonToolsMenu($rich=true) {
             }
         }
 
+        if ($section['type'] == 'Public') {
+            require_once 'modules/lti_consumer/lti-functions.php';
+            $result3 = getLTILinksForTools();
+            if ($result3) { // display lti apps as links (if any)
+                foreach ($result3 as $lti_link) {
+                    array_push($sideMenuText, q($lti_link->title));
+                    array_push($sideMenuLink, q($lti_link->url));
+                    array_push($sideMenuImg, q($lti_link->menulink));
+                    array_push($sideMenuID, -1);
+                }
+            }
+        }
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
