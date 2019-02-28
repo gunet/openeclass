@@ -237,7 +237,7 @@ function lti_app_details() {
 
             $desc = isset($row->description)? $row->description: '';
 
-            $canJoin = $row->enabled == 1;
+            $canJoin = ($row->enabled == 1 || $is_editor);
             if ($canJoin) {
                 if ($row->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
                     $joinLink = create_launch_button($row->id);
@@ -596,4 +596,44 @@ function lti_verify_extract_sourcedid($sourcedid, $ts_valid_time) {
     }
 
     return array($assignment_id, $uid, $assignment, $lti, $user);
+}
+
+function getLTILinksForTools() {
+    global $course_id, $course_code, $urlServer, $is_editor;
+
+    $activeClause = ($is_editor) ? '' : "AND enabled = 1";
+    $rows = Database::get()->queryArray("SELECT * FROM lti_apps
+        WHERE course_id = ?d $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
+
+    if ($rows) {
+        $result = array();
+        foreach ($rows as $row) {
+            $ret = new stdClass();
+            $ret->title = $row->title;
+
+            switch ($row->launchcontainer) {
+                case LTI_LAUNCHCONTAINER_EMBED:
+                    $ret->url = $urlServer . "modules/lti_consumer/launch.php?course=" . $course_code . "&id=" . getIndirectReference($row->id);
+                    $ret->menulink = 'fa-link';
+                    break;
+                case LTI_LAUNCHCONTAINER_NEWWINDOW:
+                    $ret->url = $urlServer . "modules/lti_consumer/load.php?course=" . $course_code . "&id=" . getIndirectReference($row->id);
+                    $ret->menulink = 'fa-external-link';
+                    break;
+                case LTI_LAUNCHCONTAINER_EXISTINGWINDOW:
+                    $ret->url = $urlServer . "modules/lti_consumer/load.php?course=" . $course_code . "&id=" . getIndirectReference($row->id);
+                    $ret->menulink = 'fa-link';
+                    break;
+                default:
+                    $ret->url = $urlServer . "modules/lti_consumer/launch.php?course=" . $course_code . "&id=" . getIndirectReference($row->id);
+                    $ret->menulink = 'fa-link';
+                    break;
+            }
+
+            $result[] = $ret;
+        }
+        return $result;
+    } else {
+        return false;
+    }
 }
