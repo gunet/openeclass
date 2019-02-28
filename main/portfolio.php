@@ -49,14 +49,9 @@ load_js('datatables');
 
 
 $modalShow = '';
-if (get_config('activate_privacy_policy_text')) {
-    // display consent message to user if necessary
-    if ($_SESSION['langswitch'] != 'el') {
-        $consentMessage = get_config("privacy_policy_text_$_SESSION[langswitch]");
-    } else {
-        $consentMessage = get_config('privacy_policy_text');    
-    }
-
+if (get_config('activate_privacy_policy_text')) { // display consent message to user if necessary        
+    
+    $consentMessage = get_config("privacy_policy_text_$_SESSION[langswitch]");
     if (isset($_GET['a']) and $_GET['a'] == 1) {
         update_user_accept_consent();
     }
