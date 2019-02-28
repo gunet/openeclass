@@ -584,12 +584,14 @@ function display_all_users_grades($gradebook_id) {
 
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID,
                                                             gradebook_users.uid as userID,
-                                                            user.am as am, DATE(course_user.reg_date) as reg_date
+                                                            user.am as am, user.surname, user.givenname,
+                                                            DATE(course_user.reg_date) as reg_date
                                                  FROM gradebook_users, user, course_user
                                                     WHERE gradebook_id = ?d
                                                     AND gradebook_users.uid = user.id
                                                     AND `user`.id = `course_user`.`user_id`
-                                                    AND `course_user`.`course_id` = ?d", $gradebook_id, $course_id);
+                                                    AND `course_user`.`course_id` = ?d 
+                                                    ORDER by surname,givenname", $gradebook_id, $course_id);
     if (count($resultUsers)> 0) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
