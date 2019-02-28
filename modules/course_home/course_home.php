@@ -459,6 +459,7 @@ if ($is_editor) {
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view WHERE id = ?d", $id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
+	redirect_to_home_page("courses/$course_code/#unit_$_REQUEST[visW]");
     }
 
 
@@ -796,7 +797,7 @@ if ($total_cunits > 0) {
                               'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id&amp;cnt=$count_index",
                               'icon' => 'fa-edit'),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
+                              'url' => "$_SERVER[REQUEST_URI]?visW=$cu_indirect",
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
                               'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
