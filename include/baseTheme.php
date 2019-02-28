@@ -815,6 +815,7 @@ function module_path($path) {
         }
     }
 
+    $original_path = $path;
     $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
                         array('/', '/', ''), $path);
@@ -845,7 +846,8 @@ function module_path($path) {
         return 'course_home';
     } elseif (strpos($path, '/lti_consumer/launch.php') !== false or
               strpos($path, '/lti_consumer/load.php') !== false) {
-        return $path;
+        $lti_path = str_replace(array($urlServer, $urlAppend, '&amp;'), array('/', '/', '&'), $original_path);
+        return $lti_path;
     }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
