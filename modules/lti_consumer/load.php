@@ -49,25 +49,7 @@ $head_content .= <<<EOF
 //<![CDATA[
 $(document).ready(function() {
     
-    var lastHeight;
-    var padding = 15;
-    var frame = $("#contentframe");
-    
-    var resize = function(e) {
-        var viewportH = $(window).height();
-        var docH = $(document).height();
-        var minHeight = Math.min(docH, viewportH);
-        if (lastHeight !== minHeight) {
-            frame.css("height", viewportH - frame.offset().top - padding + "px");
-            lastHeight = minHeight;
-        }
-    };
-    
-    resize();
-
-    $(window).on('resize', function() {
-        resize();
-    });
+    document.ltiLaunchForm.submit();
 
 });
 //]]
@@ -90,14 +72,16 @@ $tool_content .= action_bar(array(
     )
 ));
 
-$tool_content .= '<iframe id="contentframe" 
-    src="' . "post_launch.php?course=" . $course_code . "&amp;id=" . $_GET['id'] . '" 
-    webkitallowfullscreen="" 
-    mozallowfullscreen="" 
-    allowfullscreen="" 
-    width="100%" 
-    height="800px" 
-    style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
+$tool_content .= create_join_button(
+    $lti_app->lti_provider_url,
+    $lti_app->lti_provider_key,
+    $lti_app->lti_provider_secret,
+    $lti_app->id,
+    "lti_tool",
+    $lti_app->title,
+    $lti_app->description,
+    LTI_LAUNCHCONTAINER_EXISTINGWINDOW
+);
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
