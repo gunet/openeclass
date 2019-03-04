@@ -1238,7 +1238,7 @@ function register_user_grades($gradebook_id, $actID) {
                                                 FROM gradebook_users, user, course_user
                                                 WHERE gradebook_id = ?d AND gradebook_users.uid = user.id
                                                     AND `user`.id = `course_user`.`user_id`
-                                                    AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
+                                                    AND `course_user`.`course_id` = ?d ORDER BY surname,name", $gradebook_id, $course_id);
 
     if ($resultUsers) {
         $tool_content .= "<div class='form-wrapper'>
