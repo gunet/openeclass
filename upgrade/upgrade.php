@@ -211,7 +211,8 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     warnIfExtNotLoaded('dom');
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
-    warnIfExtNotLoaded("curl");
+    warnIfExtNotLoaded('curl');
+    warnIfExtNotLoaded('zip');
     $tool_content .= "</ul><h5>$langOptionalPHP</h5>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('soap');

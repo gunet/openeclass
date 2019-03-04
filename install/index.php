@@ -568,6 +568,7 @@ elseif (isset($_POST['install1'])) {
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
     warnIfExtNotLoaded('curl');
+    warnIfExtNotLoaded('zip');
     $tool_content .= "</ul><h3>$langOptionalPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('soap');
