@@ -657,26 +657,27 @@ if ($can_upload or $user_upload) {
 
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
+        $renameTo = canonicalize_whitespace($_POST['renameTo']);
         $sourceFile = getDirectReference($_POST['sourceFile']);
         $r = Database::get()->querySingle("SELECT id, filename, format FROM document
             WHERE $group_sql AND path = ?s", $sourceFile);
 
         if ($r->format != '.dir') {
-            validateRenamedFile($_POST['renameTo'], $menuTypeID);
+            validateRenamedFile($renameTo, $menuTypeID);
         }
 
         Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
-                          WHERE $group_sql AND path=?s", $_POST['renameTo'], $sourceFile);
+                          WHERE $group_sql AND path=?s", $renameTo, $sourceFile);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
         Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array(
             'path' => $sourceFile,
             'filename' => $r->filename,
-            'newfilename' => $_POST['renameTo']));
+            'newfilename' => $renameTo));
         if (hasMetaData($sourceFile, $basedir, $group_sql)) {
             if (Database::get()->query("UPDATE document SET filename = ?s WHERE $group_sql AND path = ?s",
-                    $_POST['renameTo'] . '.xml',
+                    $renameTo . '.xml',
                     $sourceFile . '.xml')->affectedRows > 0) {
-                metaRenameDomDocument($basedir . $sourceFile . '.xml', $_POST['renameTo']);
+                metaRenameDomDocument($basedir . $sourceFile . '.xml', $renameTo);
             }
         }
         $curDirPath = my_dirname($sourceFile);
