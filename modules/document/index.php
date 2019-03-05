@@ -669,29 +669,30 @@ if ($can_upload or $user_upload) {
         $r = Database::get()->querySingle("SELECT id, filename, format, lock_user_id FROM document WHERE $group_sql AND path = ?s", $_POST['sourceFile']);
 
         if ($r) {
+            $renameTo = canonicalize_whitespace($_POST['renameTo']);
             // Check if target filename already exists
             $curDirPath = my_dirname($_POST['sourceFile']);
             $fileExists = Database::get()->querySingle("SELECT id FROM document
                     WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
-                    "^$curDirPath/[^/]+$", $_POST['renameTo']);
+                    "^$curDirPath/[^/]+$", $renameTo);
             if ($fileExists) {
                 Session::Messages($langFileExists, 'alert-danger');
                 redirect_to_current_dir();
             }
             if ($r->format != '.dir') {
-                validateRenamedFile($_POST['renameTo'], $menuTypeID);
+                validateRenamedFile($renameTo, $menuTypeID);
             }
             Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
                               WHERE $group_sql AND path=?s",
-                        $_POST['renameTo'], $_POST['sourceFile']);
+                        $renameTo, $_POST['sourceFile']);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
             Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $_POST['sourceFile'],
                 'filename' => $r->filename,
-                'newfilename' => $_POST['renameTo']));
+                'newfilename' => $renameTo));
             if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
                 if (Database::get()->query("UPDATE document SET filename=?s WHERE $group_sql AND path = ?s",
-                    $_POST['renameTo'] . '.xml', $_POST['sourceFile'] . '.xml')->affectedRows > 0) {
-                    metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $_POST['renameTo']);
+                    $renameTo . '.xml', $_POST['sourceFile'] . '.xml')->affectedRows > 0) {
+                    metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $renameTo);
                 }
             }
             Session::Messages($langElRen, 'alert-success');
