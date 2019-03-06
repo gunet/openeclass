@@ -52,14 +52,21 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             Database::get()->query("DELETE FROM course_user
                                             WHERE user_id = ?d AND
                                                 course_id = ?d", $unregister_gid, $course_id);
-            Log::record($course_id, MODULE_ID_USERS, LOG_DELETE, array('uid' => $unregister_gid,
-                                                                       'right' => '-5'));
+                        
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $unregister_gid);
+            Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $unregister_gid);
+            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $unregister_gid);
+            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $unregister_gid);
+            
             if (check_guest($unregister_gid)) {
                 Database::get()->query("DELETE FROM user WHERE id = ?d", $unregister_gid);
             }
             Database::get()->query("DELETE FROM group_members
                                     WHERE user_id = ?d AND
                                           group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $unregister_gid, $course_id);
+            Log::record($course_id, MODULE_ID_USERS, LOG_DELETE, array('uid' => $unregister_gid,
+                                                                       'right' => '-5'));
+                        
         }
         exit();
     }
