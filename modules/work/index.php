@@ -3587,7 +3587,7 @@ function assignment_details($id, $row) {
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail,
-           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine, $langBack;
+           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine;
 
     $preview_rubric = '';
     $grade_type = $row->grading_type;
@@ -4804,9 +4804,10 @@ function download_assignments($id) {
         $secret = work_secret($id);
         $filename = "{$course_code}_work_$id.zip";
         chdir($workPath);
-        create_zip_index("$secret/index.html", $id);
-        $zip = new PclZip($filename);
+        create_zip_index("$secret/index.html", $id);                
         if ($sub_type == 1) { // free text assignment
+            $zip = new ZipArchive();
+            $zip->open("$filename", ZipArchive::CREATE);
             $sql = Database::get()->queryArray("SELECT uid, submission_text FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($sql as $data) {
                 $onlinetext = new \Mpdf\Mpdf([
@@ -4823,19 +4824,28 @@ function download_assignments($id) {
                 $onlinetext->WriteHTML($data->submission_text);
                 $pdfname = greek_to_latin(uid_to_name($data->uid)) . ".pdf";
                 $onlinetext->Output($pdfname, 'F');
-                $zip->add($pdfname);
-                unlink($pdfname);
+                $zip->addFile($pdfname);                
             }
-            $zip->add("$secret/index.html", PCLZIP_OPT_REMOVE_PATH, "$secret");
-        } else {
-            $flag = $zip->create($secret, "work_$id", $secret);
+            $zip->addFile("$secret/index.html", "index.html");
+        } else { // 'normal' assignment
+            $zip = new ZipArchive();
+            $zip->open("$filename", ZipArchive::CREATE);
+            foreach (glob("$secret/*") as $file) {
+                if (file_exists($file) and is_readable($file)) {
+                    $zip->addFile($file, "work_$id/".substr($file, strlen($secret)+1));
+                }
+            }                
         }
-        header("Content-Type: application/x-zip");
-        header("Content-Disposition: attachment; filename=$filename");
-        stop_output_buffering();
-        @readfile($filename);
-        @unlink($filename);
-        exit;
+        if ($zip->close()) {
+            header("Content-Type: application/zip");
+            header("Content-Disposition: attachment; filename=$filename");
+            header("Content-Length: " . filesize($filename));
+            stop_output_buffering();
+            readfile($filename);
+            unlink($filename);
+            exit;
+        }
+        
     } else {
         return false;
     }
