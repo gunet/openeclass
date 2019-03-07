@@ -66,10 +66,18 @@ if (!isset($_POST['doit'])) {
             Database::get()->query("DELETE FROM group_members
                                 WHERE user_id = ?d AND
                                   group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $_GET['u'], $cid);
-            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $_GET['u']);
-            Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $_GET['u']);
-            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $_GET['u']);
-            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $_GET['u']);
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND 
+                                     badge_criterion IN
+                                            (SELECT id FROM badge_criterion WHERE badge IN
+                                            (SELECT id FROM badge WHERE course_id = ?d))", $_GET['u'], $cid);
+            Database::get()->query("DELETE FROM user_badge WHERE user = ?d AND                 
+                                      badge IN (SELECT id FROM badge WHERE course_id = ?d)", $_GET['u'], $cid);
+            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d AND 
+                                    certificate_criterion IN
+                                    (SELECT id FROM certificate_criterion WHERE certificate IN
+                                        (SELECT id FROM certificate WHERE course_id = ?d))", $_GET['u'], $cid);
+            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND 
+                                 certificate IN (SELECT id FROM certificate WHERE course_id = ?d)", $_GET['u'], $cid);
             Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $_GET['u'],
                                                                  'right' => 0));
             $code = course_id_to_code($cid);
