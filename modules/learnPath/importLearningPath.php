@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,28 +19,16 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /* ===========================================================================
-  importLearningPath.php
-  @last update: 02-12-2013 by Sakis Agorastos
+  @file importLearningPath.php  
   @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
                  Sakis Agorastos <th_agorastos@hotmail.com>
-
-  based on Claroline version 1.7 licensed under GPL
-  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-  original file: importLearningPath.php Revision: 1.34.2.2
-
-  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-  Lederer Guillaume <led@cerdecam.be>
-  ==============================================================================
-  @Description: This script handles importing of SCORM packages.
+                 Piraux Sebastien <pir@cerdecam.be>
+                 Lederer Guillaume <led@cerdecam.be>
+  
+  @brief: This script handles importing of SCORM packages.
   It mainly parses imsmanifest.xml and extracts the SCOs
-  from the zip file.
-
-  @Comments:
-
-  @todo:
+  from the zip file.  
   ==============================================================================
  */
 
@@ -497,16 +485,9 @@ function replaceIdHiddenInput() {
     }
 }
 
-/* ======================================
-  CLAROLINE MAIN
-  ====================================== */
-
-// init msg arays
 $okMsgs = array();
 $errorMsgs = array();
-
 $maxFilledSpace = 1.0e10; // Max filled space: 10 GB
-
 $baseWorkDir = 'courses/' . $course_code . '/scormPackages/';
 
 if (!is_dir($baseWorkDir)) {
@@ -582,67 +563,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
      * Unzipping stage
      */ elseif (preg_match("/.zip$/i", $_FILES['uploadedPackage']['name'])) {
         array_push($okMsgs, $langOkFileReceived . basename($_FILES['uploadedPackage']['name']));
+        
+        $zipFile = new PclZip($_FILES['uploadedPackage']['tmp_name']);
+        $is_allowedToUnzip = true; // default initialisation
+        // Check the zip content (real size and file extension)
 
-        if (!function_exists('gzopen')) {
+        $zipContentArray = $zipFile->listContent();
+
+        if ($zipContentArray == 0) {
             $errorFound = true;
-            array_push($errorMsgs, $langErrorNoZlibExtension);
-        } else {
-            $zipFile = new PclZip($_FILES['uploadedPackage']['tmp_name']);
-            $is_allowedToUnzip = true; // default initialisation
-            // Check the zip content (real size and file extension)
+            array_push($errorMsgs, $langErrorReadingZipFile);
+        }
 
-            $zipContentArray = $zipFile->listContent();
+        $pathToManifest = ""; // empty by default because we can expect that the manifest.xml is in the root of zip file
+        $pathToManifestFound = false;
+        $realFileSize = 0;
 
-            if ($zipContentArray == 0) {
+        foreach ($zipContentArray as $thisContent) {
+            if (preg_match('/.(php[[:digit:]]?|phtml|pht)$/i', $thisContent['filename'])) {
                 $errorFound = true;
-                array_push($errorMsgs, $langErrorReadingZipFile);
-            }
-
-            $pathToManifest = ""; // empty by default because we can expect that the manifest.xml is in the root of zip file
-            $pathToManifestFound = false;
-            $realFileSize = 0;
-
-            foreach ($zipContentArray as $thisContent) {
-                if (preg_match('/.(php[[:digit:]]?|phtml|pht)$/i', $thisContent['filename'])) {
-                    $errorFound = true;
-                    array_push($errorMsgs, $langZipNoPhp);
-                    $is_allowedToUnzip = false;
-                    break;
-                }
-
-                if (strtolower(substr($thisContent['filename'], -15)) == "imsmanifest.xml") {
-                    // this check exists to find the less deep imsmanifest.xml in the zip if there are several imsmanifest.xml
-                    // if this is the first imsmanifest.xml we found OR path to the new manifest found is shorter (less deep)
-                    if (!$pathToManifestFound || ( count(explode('/', $thisContent['filename'])) < count(explode('/', $pathToManifest . "imsmanifest.xml")) )
-                    ) {
-                        $pathToManifest = substr($thisContent['filename'], 0, -15);
-                        $pathToManifestFound = true;
-                    }
-                }
-                $realFileSize += $thisContent['size'];
-            }
-
-            if (!isset($alreadyFilledSpace)) {
-                $alreadyFilledSpace = 0;
-            }
-
-            if (($realFileSize + $alreadyFilledSpace) > $maxFilledSpace) { // check the real size.
-                $errorFound = true;
-                array_push($errorMsgs, $langNoSpace);
+                array_push($errorMsgs, $langZipNoPhp);
                 $is_allowedToUnzip = false;
+                break;
             }
 
-            if ($is_allowedToUnzip && !$errorFound) {
-                // PHP extraction of zip file using zlib
-
-                chdir($baseWorkDir);
-                $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME, $pathToManifest . "imsmanifest.xml", PCLZIP_OPT_PATH, '', PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
-                if ($unzippingState == 0) {
-                    $errorFound = true;
-                    array_push($errorMsgs, $langErrortExtractingManifest);
+            if (strtolower(substr($thisContent['filename'], -15)) == "imsmanifest.xml") {
+                // this check exists to find the less deep imsmanifest.xml in the zip if there are several imsmanifest.xml
+                // if this is the first imsmanifest.xml we found OR path to the new manifest found is shorter (less deep)
+                if (!$pathToManifestFound || ( count(explode('/', $thisContent['filename'])) < count(explode('/', $pathToManifest . "imsmanifest.xml")) )
+                ) {
+                    $pathToManifest = substr($thisContent['filename'], 0, -15);
+                    $pathToManifestFound = true;
                 }
-            } //end of if ($is_allowedToUnzip)
-        } // end of if (!function_exists...
+            }
+            $realFileSize += $thisContent['size'];
+        }
+
+        if (!isset($alreadyFilledSpace)) {
+            $alreadyFilledSpace = 0;
+        }
+
+        if (($realFileSize + $alreadyFilledSpace) > $maxFilledSpace) { // check the real size.
+            $errorFound = true;
+            array_push($errorMsgs, $langNoSpace);
+            $is_allowedToUnzip = false;
+        }
+
+        if ($is_allowedToUnzip && !$errorFound) {
+            // PHP extraction of zip file using zlib
+
+            chdir($baseWorkDir);
+            $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME, $pathToManifest . "imsmanifest.xml", PCLZIP_OPT_PATH, '', PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
+            if ($unzippingState == 0) {
+                $errorFound = true;
+                array_push($errorMsgs, $langErrortExtractingManifest);
+            }
+        } //end of if ($is_allowedToUnzip)        
     } else {
         $errorFound = true;
         array_push($errorMsgs, $langErrorFileMustBeZip);
@@ -747,11 +723,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         if (sizeof($manifestData['items']) > 0) {
             // if there is items in manifest we look for sco type resources referenced in idientifierref
             foreach ($manifestData['items'] as $item) {
-                if (!isset($item['identifierref']) || $item['identifierref'] == '')
-                    break; // skip if no ressource reference in item (item is probably a chapter head)
-
+                if (!isset($item['identifierref']) || $item['identifierref'] == '') {
+                    break;
+                } // skip if no ressource reference in item (item is probably a chapter head)
                     
-// find the file in the zip file
+                // find the file in the zip file
                 $scoPathFound = false;
 
                 for ($i = 0; $i < sizeof($zipContentArray); $i++) {
@@ -1096,19 +1072,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       status messages
       -------------------------------------- */
     foreach ($okMsgs as $msg) {
-        $tool_content .= "<div class='text-success'>" . icon('fa-check', $langSuccessOk) . ' ' . $msg . '</div>';
+        $tool_content .= "<div class='alert alert-success'>" . icon('fa-check', $langSuccessOk) . ' ' . $msg . '</div>';
     }
 
     foreach ($errorMsgs as $msg) {
-        $tool_content .= "<div class='text-danger'>" . icon('fa-times', $langError) . ' ' . $msg . '</div>';
+        $tool_content .= "<div class='alert alert-danger'>" . icon('fa-times', $langError) . ' ' . $msg . '</div>';
     }
 
     // installation completed or not message
     if (!$errorFound) {
-        $tool_content .= "\n<br /><center><b>" . $langInstalled . "</b></center>";
-        $tool_content .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . $tempPathId . "\">" . $lpName . "</a></center>";
+        $tool_content .= "<div class='alert alert-info'>" . $langInstalled . "</div>";        
     } else {
-        $tool_content .= "\n<br /><center><b>" . $langNotInstalled . "</b></center>";
+        $tool_content .= "<div class='alert alert-warning'>" . $langNotInstalled . "</div>";
     }    
     
     $tool_content .=  action_bar(array(
@@ -1157,7 +1132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
                                     array(
-                                        'text' => $langSave,
+                                        'text' => $langImport,
                                         'value'=> $langImport
                                     ),
                                     array(
@@ -1195,12 +1170,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     }
 
 
-    $tool_content .= "\n<div class=\"fileman row\">";
-    $tool_content .= "\n<div class=\"col-xs-12\">";
-    $tool_content .= "\n<form class='form-wrapper' action='importFromDocument.php?course=$course_code' method='post'>";
-    $tool_content .= "\n  <h4 class='form-heading'>$langLearningPathImportFromDocuments</h4>";
-    $tool_content .= "\n  <table class=\"table-default\">";
-    $tool_content .= "\n  <tbody>";
+    $tool_content .= "<div class=\"fileman row\">";
+    $tool_content .= "<div class=\"col-xs-12\">";
+    $tool_content .= "<form class='form-wrapper' action='importFromDocument.php?course=$course_code' method='post'>";
+    $tool_content .= "<h4 class='form-heading'>$langLearningPathImportFromDocuments</h4>";
+    $tool_content .= "<table class='table-default'>";
+    $tool_content .= "<tbody>";
 
     if (count($documents) <= 0) {
         $tool_content .= "<tr class='nobrd'><td colspan='5'>$langScormEmptyDocsList</td></tr>";
@@ -1221,13 +1196,13 @@ $(document).ready(function() {
 </script>
 EOF;
 
-        $tool_content .= "\n  <tr>";
-        $tool_content .= "\n    <th width='50'>&nbsp;</th>";
-        $tool_content .= "\n    <th width='10%'><div align='center'><b>$langType</b></div></th>";
-        $tool_content .= "\n    <th><div align='left'><b>$langName</b></div></th>";
-        $tool_content .= "\n    <th width='15%'><div align='center'><b>$langSize</b></div></th>";
-        $tool_content .= "\n    <th width='15%'><div align='center'><b>$langDate</b></div></th>";
-        $tool_content .= "\n  </tr>";
+        $tool_content .= "<tr>";
+        $tool_content .= "<th width='50'>&nbsp;</th>";
+        $tool_content .= "<th width='10%'><div align='center'><b>$langType</b></div></th>";
+        $tool_content .= "<th><div align='left'><b>$langName</b></div></th>";
+        $tool_content .= "<th width='15%'><div align='center'><b>$langSize</b></div></th>";
+        $tool_content .= "<th width='15%'><div align='center'><b>$langDate</b></div></th>";
+        $tool_content .= "</tr>";
 
         foreach ($fileinfo as $entry) {
             if ($entry['is_dir']) { // do not handle directories
@@ -1256,27 +1231,27 @@ EOF;
                 $link_text .= " <img src='../document/img/copyrighted.png' />";
             }
 
-            $tool_content .= "\n  <tr$style>";
-            $tool_content .= "\n    <td><input type='radio' name='selectedDocument' value='" . $entry['path'] . "'/></td>";
-            $tool_content .= "\n    <td width='1%' valign='top' align='center' style='padding-top: 7px;'>" . icon($image, '') . "</td>";
-            $tool_content .= "\n    <td><div align='left'>$link_text";
+            $tool_content .= "<tr$style>";
+            $tool_content .= "<td><input type='radio' name='selectedDocument' value='" . $entry['path'] . "'/></td>";
+            $tool_content .= "<td width='1%' valign='top' align='center' style='padding-top: 7px;'>" . icon($image, '') . "</td>";
+            $tool_content .= "<td><div align='left'>$link_text";
 
             if (!empty($entry['comment'])) {
                 $tool_content .= "<br /><span class='commentDoc'>" . nl2br(htmlspecialchars($entry['comment'])) . "</span>\n";
             }
 
-            $tool_content .= "</div></td>\n";
+            $tool_content .= "</div></td>";
             $tool_content .= "<td><div align='center'>$size</div></td><td><div align='center'>$date</div></td></tr>";
         }
 
-        $tool_content .= "\n  <tr class='nobrd' style='height:10px;'>";
-        $tool_content .= "\n    <td colspan='2'></td>";
-        $tool_content .= "\n    <td colspan='3' class='right'></td>";
-        $tool_content .= "\n  </tr>";
+        $tool_content .= "<tr class='nobrd' style='height:10px;'>";
+        $tool_content .= "<td colspan='2'></td>";
+        $tool_content .= "<td colspan='3' class='right'></td>";
+        $tool_content .= "</tr>";
         
-        $tool_content .= "\n  <tr class='nobrd'>";
-        $tool_content .= "\n    <td colspan='2'></td>";
-        $tool_content .= "\n    <td colspan='3' class='right'>".form_buttons(array(
+        $tool_content .= "<tr class='nobrd'>";
+        $tool_content .= "<td colspan='2'></td>";
+        $tool_content .= "<td colspan='3' class='right'>".form_buttons(array(
                             array(
                                 'text' => $langSave,
                                 'value'=> $langImport
@@ -1285,14 +1260,14 @@ EOF;
                                 'href' => "index.php?course=$course_code",
                             )
                         ))."</td>";
-        $tool_content .= "\n  </tr>";
+        $tool_content .= "</tr>";
     }
 
-    $tool_content .= "\n  </tbody>";
-    $tool_content .= "\n  </table>";
-    $tool_content .= "\n</form>";
-    $tool_content .= "\n</div>";
-    $tool_content .= "\n</div>";
+    $tool_content .= "</tbody>";
+    $tool_content .= "</table>";
+    $tool_content .= "</form>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
 
     $tool_content .= "
             <div class='row'>
