@@ -479,51 +479,19 @@ function utf8_decode_if_is_utf8($str) {
     return seems_utf8($str) ? utf8_decode($str) : $str;
 }
 
-/* ======================================
-  CLAROLINE MAIN
-  ====================================== */
 
 function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExtraMessages = false) {
-    global $langUnamedPath;
-    global $langFileScormError;
-    global $langNotice;
-    global $langMaxFileSize;
-    global $langNoSpace;
-    global $langOkFileReceived;
-    global $langErrorNoZlibExtension;
-    global $langErrorReadingZipFile;
-    global $langZipNoPhp;
-    global $langErrortExtractingManifest;
-    global $langErrorFileMustBeZip;
-    global $langErrorOpeningManifest;
-    global $langOkManifestFound;
-    global $langErrorReadingManifest;
-    global $langOkManifestRead;
-    global $langErrorAssetNotFound;
-    global $langErrorNoModuleInPackage;
-    global $langErrorSql;
-    global $langOkChapterHeadAdded;
-    global $langUnamedModule;
-    global $langDefaultModuleComment;
-    global $langDefaultModuleAddedComment;
-    global $langOkModuleAdded;
-    global $langOkDefaultTitleUsed;
-    global $langDefaultLearningPathComment;
-    global $langOkDefaultCommentUsed;
-    global $langSuccessOk;
-    global $langError;
-    global $langInstalled;
-    global $langNotInstalled;
-    global $langBack;
-    global $errorFound;
-    global $elementsPile;
-    global $itemsPile;
-    global $manifestData;
-    global $iterator;
-    global $course_code;
-    global $course_id;
-    global $langErrorValidatingManifest;
-    global $urlServer;
+    global $langUnamedPath, $langNoSpace, $langOkFileReceived, $langErrorReadingZipFile, 
+            $langZipNoPhp, $langErrortExtractingManifest, $langErrorFileMustBeZip, 
+            $langErrorOpeningManifest, $langOkManifestFound, $langErrorReadingManifest,
+            $langOkManifestRead, $langErrorAssetNotFound, $langErrorNoModuleInPackage,
+            $langErrorSql, $langOkChapterHeadAdded, $langUnamedModule,
+            $langDefaultModuleComment, $langDefaultModuleAddedComment, $langOkModuleAdded,
+            $langOkDefaultTitleUsed, $langDefaultLearningPathComment,
+            $langOkDefaultCommentUsed, $langSuccessOk, $langError, $langInstalled,
+            $langNotInstalled, $errorFound, $elementsPile, $itemsPile, $manifestData,
+            $iterator, $course_code, $course_id,
+            $langErrorValidatingManifest, $urlServer;
 
     $pwd = getcwd();
 
@@ -570,73 +538,63 @@ function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExt
     if (!enough_size($scoFileSize, $baseWorkDir, $maxFilledSpace)) {
         $errorFound = true;
         array_push($errorMsgs, $langNoSpace);
-    }
-
-    /*
-     * Unzipping stage
-     */ elseif (preg_match("/.zip$/i", $scoFileName)) {
+    } elseif (preg_match("/.zip$/i", $scoFileName)) {
         array_push($okMsgs, $langOkFileReceived . basename($scoFileName));
+        
+        $zipFile = new PclZip($tempWorkDir . $scoFileName);
+        $is_allowedToUnzip = true; // default initialisation
+        // Check the zip content (real size and file extension)
+        $zipContentArray = $zipFile->listContent();
 
-        if (!function_exists('gzopen')) {
+        if ($zipContentArray == 0) {
             $errorFound = true;
-            array_push($errorMsgs, $langErrorNoZlibExtension);
-        } else {
-            $zipFile = new PclZip($tempWorkDir . $scoFileName);
-            $is_allowedToUnzip = true; // default initialisation
-            // Check the zip content (real size and file extension)
+            array_push($errorMsgs, $langErrorReadingZipFile);
+        }
 
-            $zipContentArray = $zipFile->listContent();
+        $pathToManifest = ""; // empty by default because we can expect that the manifest.xml is in the root of zip file
+        $pathToManifestFound = false;
+        $realFileSize = 0;
 
-            if ($zipContentArray == 0) {
+        foreach ($zipContentArray as $thisContent) {
+            if (preg_match('/.(php[[:digit:]]?|phtml)$/i', $thisContent['filename'])) {
                 $errorFound = true;
-                array_push($errorMsgs, $langErrorReadingZipFile);
-            }
-
-            $pathToManifest = ""; // empty by default because we can expect that the manifest.xml is in the root of zip file
-            $pathToManifestFound = false;
-            $realFileSize = 0;
-
-            foreach ($zipContentArray as $thisContent) {
-                if (preg_match('/.(php[[:digit:]]?|phtml)$/i', $thisContent['filename'])) {
-                    $errorFound = true;
-                    array_push($errorMsgs, $langZipNoPhp);
-                    $is_allowedToUnzip = false;
-                    break;
-                }
-
-                if (strtolower(substr($thisContent['filename'], -15)) == "imsmanifest.xml") {
-                    // this check exists to find the less deep imsmanifest.xml in the zip if there are several imsmanifest.xml
-                    // if this is the first imsmanifest.xml we found OR path to the new manifest found is shorter (less deep)
-                    if (!$pathToManifestFound || ( count(explode('/', $thisContent['filename'])) < count(explode('/', $pathToManifest . "imsmanifest.xml")) )
-                    ) {
-                        $pathToManifest = substr($thisContent['filename'], 0, -15);
-                        $pathToManifestFound = true;
-                    }
-                }
-                $realFileSize += $thisContent['size'];
-            }
-
-            if (!isset($alreadyFilledSpace)) {
-                $alreadyFilledSpace = 0;
-            }
-
-            if (($realFileSize + $alreadyFilledSpace) > $maxFilledSpace) { // check the real size.
-                $errorFound = true;
-                array_push($errorMsgs, $langNoSpace);
+                array_push($errorMsgs, $langZipNoPhp);
                 $is_allowedToUnzip = false;
+                break;
             }
 
-            if ($is_allowedToUnzip && !$errorFound) {
-                // PHP extraction of zip file using zlib
-
-                chdir($baseWorkDir);
-                $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME, $pathToManifest . "imsmanifest.xml", PCLZIP_OPT_PATH, '', PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
-                if ($unzippingState == 0) {
-                    $errorFound = true;
-                    array_push($errorMsgs, $langErrortExtractingManifest);
+            if (strtolower(substr($thisContent['filename'], -15)) == "imsmanifest.xml") {
+                // this check exists to find the less deep imsmanifest.xml in the zip if there are several imsmanifest.xml
+                // if this is the first imsmanifest.xml we found OR path to the new manifest found is shorter (less deep)
+                if (!$pathToManifestFound || ( count(explode('/', $thisContent['filename'])) < count(explode('/', $pathToManifest . "imsmanifest.xml")) )
+                ) {
+                    $pathToManifest = substr($thisContent['filename'], 0, -15);
+                    $pathToManifestFound = true;
                 }
-            } //end of if ($is_allowedToUnzip)
-        } // end of if (!function_exists...
+            }
+            $realFileSize += $thisContent['size'];
+        }
+
+        if (!isset($alreadyFilledSpace)) {
+            $alreadyFilledSpace = 0;
+        }
+
+        if (($realFileSize + $alreadyFilledSpace) > $maxFilledSpace) { // check the real size.
+            $errorFound = true;
+            array_push($errorMsgs, $langNoSpace);
+            $is_allowedToUnzip = false;
+        }
+
+        if ($is_allowedToUnzip && !$errorFound) {
+            // PHP extraction of zip file using zlib
+
+            chdir($baseWorkDir);
+            $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME, $pathToManifest . "imsmanifest.xml", PCLZIP_OPT_PATH, '', PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
+            if ($unzippingState == 0) {
+                $errorFound = true;
+                array_push($errorMsgs, $langErrortExtractingManifest);
+            }
+        } //end of if ($is_allowedToUnzip)
     } else {
         $errorFound = true;
         array_push($errorMsgs, $langErrorFileMustBeZip . ": " . basename($scoFileName));
@@ -744,9 +702,8 @@ function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExt
                 if (!isset($item['identifierref']) || $item['identifierref'] == '') {
                     break; // skip if no ressource reference in item (item is probably a chapter head)
                 }
-
                     
-// find the file in the zip file
+            // find the file in the zip file
                 $scoPathFound = false;
 
                 for ($i = 0; $i < sizeof($zipContentArray); $i++) {

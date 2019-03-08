@@ -1018,26 +1018,38 @@ if (!class_exists('ScormExport')):
         }
 
         /**
-         * Create the final zip file.
-         *
-         * @return False on error, True otherwise.
-         * @author Amand Tihon <amand@alrj.org>
+         * @brief Create the final zip file.         
+         * @return false on error, true otherwise.
          */
         function zip() {
-            global $langErrorCreatingScormArchive;
+            global $langErrorCreatingScormArchive;            
 
-            $list = 1;
-            $zipFile = new PclZip($this->destDir . '.zip');
-            $list = $zipFile->create($this->destDir, PCLZIP_OPT_REMOVE_PATH, $this->destDir);
+            $zipFile = new ZipArchive();
+            $zipFile->open($this->destDir . '.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            
+            // Create recursive directory iterator            
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($this->destDir),
+                RecursiveIteratorIterator::LEAVES_ONLY
+            );
 
-            if (!$list) {
+            foreach ($files as $name => $file) {
+                // Skip directories (they will be added automatically)
+                if (!$file->isDir()) {
+                    // Get real and relative path for current file
+                    $filePath = $file->getRealPath();
+                    $relativePath = substr($filePath, strlen($this->destDir) + 1);
+                    // Add current file to archive
+                    $zipFile->addFile($filePath, $relativePath);
+                }
+            }
+            
+            if (!$zipFile->close()) {
                 $this->error[] = $langErrorCreatingScormArchive;
                 return false;
             }
-
-            // Temporary directory can be deleted, now that the zip is made.
+            
             claro_delete_file($this->destDir);
-
             return true;
         }
 
