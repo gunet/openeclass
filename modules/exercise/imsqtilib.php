@@ -75,6 +75,10 @@ function qti_create_node($item) {
     }
 }
 
+/**
+ * @brief import question
+ * @param type $node
+ */
 function add_question($node) {
 
     $objQuestion = new Question();
@@ -95,15 +99,13 @@ function add_question($node) {
     $objQuestion->save();
 
     $questionId = $objQuestion->selectId();
-
-    $objAnswer = new Answer($questionId);
-    $tmp_answer = array();
-
+    
     if($node->answers) {
         foreach ($node->answers as $answer) {
+            $objAnswer = new Answer($questionId);
             $objAnswer->createAnswer($answer['answer'], $answer['correct'], $answer['feedback'], $answer['weight'], 1);
+            $objAnswer->save();
         }
-        $objAnswer->save();
     }
 }
 
@@ -308,6 +310,3 @@ function exportIMSQTI($result) {
 
         return $xml_qti->writeXML();
     }
-
-
-
