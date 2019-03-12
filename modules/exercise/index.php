@@ -147,7 +147,7 @@ if ($is_editor) {
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, time_constraint, attempts_allowed, ip_lock, password_lock FROM exercise "
+    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, temp_save, time_constraint, attempts_allowed, ip_lock, password_lock FROM exercise "
                                 . "WHERE course_id = ?d "
                                 . "ORDER BY start_date DESC", $course_id);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
@@ -158,7 +158,7 @@ if ($is_editor) {
         } else {
             $gids_sql_ready = "''";
         }
-    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
+    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, temp_save, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
             "FROM exercise WHERE course_id = ?d AND active = 1 "
             . "AND (assign_to_specific = '0' OR assign_to_specific != '0' AND id IN
                        (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d UNION SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ($gids_sql_ready))
@@ -271,6 +271,10 @@ if (!$nbrExercises) {
             if ($row->attempts_allowed > 0) {
                 $tool_content .= "<div>$langAttempts: $row->attempts_allowed</div>";
             }
+            // is temp save enabled?
+            if ($row->temp_save == 1) {
+                $tool_content .= "<div>$langTemporarySave: <span style='color:green;'>$langYes</span></div>";
+            }
             $tool_content .= "</small></td>";
                         
             
@@ -381,6 +385,10 @@ if (!$nbrExercises) {
             $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $row->id, $uid)->count;
             if ($row->attempts_allowed > 0) {
                 $tool_content .= "<div>$langAttempts: $currentAttempt/$row->attempts_allowed</div>";
+            }
+            // is temp save enabled?
+            if ($row->temp_save == 1) {
+                $tool_content .= "<div>$langTemporarySave: <span style='color:green;'>$langYes</span></div>";
             }
             $tool_content .= "</small></td>";
             if ($previousResultsAllowed) {
