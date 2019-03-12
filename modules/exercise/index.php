@@ -513,7 +513,7 @@ if ($is_editor) {
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
                 . "WHERE eur.eid IN (".implode(',', $ids_array).") AND ear.weight IS NULL "
                 . "AND exq.type = " . FREE_TEXT . " "
-                . "GROUP BY exq.id, eur.eid, eur.eurid");
+                . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position");
         $questionsEid = json_encode($question_types);
 
         $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th>$langTitle</th><th>$langChoice</th></tr></thead><tbody> " ;

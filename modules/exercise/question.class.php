@@ -365,7 +365,7 @@ if (!class_exists('Question')) {
             $weighting = $this->weighting;
             $type = $this->type;
             $difficulty = $this->difficulty;
-            $category = $this->category;
+            $category = $this->category;            
 
             // question already exists
             if ($id) {
@@ -375,8 +375,8 @@ if (!class_exists('Question')) {
             }
             // creates a new question
             else {
-                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
-                VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type, $difficulty, $category)->lastInsertID;
+                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, type, difficulty, category)
+                VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $type, $difficulty, $category)->lastInsertID;
             }
 
             // if the question is created in an exercise
