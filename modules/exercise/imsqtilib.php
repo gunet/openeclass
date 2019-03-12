@@ -98,13 +98,11 @@ function add_question($node) {
 
     $objQuestion->save();
 
-    $questionId = $objQuestion->selectId();
-    
-    if($node->answers) {
+    $questionId = $objQuestion->selectId();    
+    if($node->answers) {        
         foreach ($node->answers as $answer) {
             $objAnswer = new Answer($questionId);
-            $objAnswer->createAnswer($answer['answer'], $answer['correct'], $answer['feedback'], $answer['weight'], 1);
-            $objAnswer->save();
+            $objAnswer->createAnswer($answer['answer'], $answer['correct'], $answer['feedback'], $answer['weight'], 1, true);            
         }
     }
 }
