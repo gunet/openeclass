@@ -3877,6 +3877,37 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('assignment', 'tii_exclude_value')) {
             Database::get()->query("ALTER TABLE assignment ADD tii_exclude_value INT(11) NOT NULL DEFAULT '0' AFTER tii_exclude_type");
         }
+
+        // move question position to exercise and exercise_answer
+        // and make sure position is unique in each exercise / attempt
+        if (DBHelper::fieldExists('exercise_question', 'q_position')) {
+            Database::get()->query('ALTER TABLE exercise_with_questions ADD q_position INT(11) NOT NULL DEFAULT 1');
+            Database::get()->query('ALTER TABLE exercise_answer_record ADD q_position INT(11) NOT NULL DEFAULT 1');
+            Database::get()->query('UPDATE exercise_with_questions
+                JOIN exercise_question ON exercise_question.id = question_id
+                SET exercise_with_questions.q_position = exercise_question.q_position');
+            Database::get()->query('UPDATE exercise_answer_record
+                JOIN exercise_question ON exercise_question.id = question_id
+                SET exercise_answer_record.q_position = exercise_question.q_position');
+            $exercises = Database::get()->queryArray('SELECT exercise_id AS id
+                FROM exercise_with_questions GROUP by exercise_id, q_position HAVING COUNT(*) > 1');
+            foreach ($exercises as $exercise) {
+                $questions = Database::get()->queryArray('SELECT question_id AS id FROM exercise_with_questions
+                    WHERE exercise_id = ?d ORDER BY q_position', $exercise->id);
+                $i = 1;
+                foreach ($questions as $question) {
+                    Database::get()->query('UPDATE exercise_with_questions
+                        SET q_position = ?d WHERE exercise_id = ?d AND question_id = ?d',
+                        $i, $exercise->id, $question->id);
+                    Database::get()->query('UPDATE exercise_answer_record
+                        JOIN exercise_user_record USING (eurid)
+                        SET q_position = ?d WHERE eid = ?d AND question_id = ?d',
+                        $i, $exercise->id, $question->id);
+                    $i++;
+                }
+            }
+            Database::get()->query('ALTER TABLE exercise_question DROP q_position');
+        }
                 
         // user consent
         Database::get()->query("CREATE TABLE IF NOT EXISTS`user_consent` (

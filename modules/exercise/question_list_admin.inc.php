@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -244,11 +244,11 @@ if ($nbrQuestions) {
     $i = 1;
     $tool_content .= "
         <div class='table-responsive'>
-	    <table class='table-default'>
-	    <tr>
-	      <th colspan='2' class='text-left'>$langQuestionList</th>
-	      <th class='text-center'>".icon('fa-gears', $langActions)."</th>
-	    </tr>";
+        <table class='table-default'>
+        <tr>
+          <th colspan='2' class='text-left'>$langQuestionList</th>
+          <th class='text-center'>".icon('fa-gears', $langActions)."</th>
+        </tr>";
 
     foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
@@ -261,10 +261,10 @@ if ($nbrQuestions) {
         }
     
         $tool_content .= "<tr>
-			<td align='right' width='1'>" . $i . ".</td>
-			<td> " . q_math($objQuestionTmp->selectTitle()) . "<br />
-			" . $aType[$objQuestionTmp->selectType() - 1] . "</td>
-			<td class='option-btn-cell'>".            
+            <td align='right' width='1'>" . $i . ".</td>
+            <td> " . q_math($objQuestionTmp->selectTitle()) . "<br />
+            " . $aType[$objQuestionTmp->selectType() - 1] . "</td>
+            <td class='option-btn-cell'>".            
                     action_button(array(
                         array('title' => $langEditChange,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon",

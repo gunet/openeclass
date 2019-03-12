@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -292,7 +291,7 @@ if (!class_exists('Exercise')) {
          *
          * @author - Olivier Brouckaert
          * @return - array - if the exercise is not set to take questions randomly, returns the question list
-         * 					 without randomizing, otherwise, returns the list with questions selected randomly
+         *           without randomizing, otherwise, returns the list with questions selected randomly
          */
         function selectRandomList() {
             // if the exercise is not a random exercise, or if there are not at least 2 questions
@@ -521,47 +520,46 @@ if (!class_exists('Exercise')) {
             }
             // updates the question position
             foreach ($this->questionList as $position => $questionId) {
-                Database::get()->query("UPDATE `exercise_question` SET q_position = ?d
-                                WHERE course_id = ?d AND id = ?d", $position, $course_id, $questionId);
+                Database::get()->query("UPDATE `exercise_with_questions` SET q_position = ?d
+                                WHERE question_id = ?d AND exercise_id = ?d", $position, $questionId, $this->id);
+            }
+        }
+
+        /**
+         * swaps question with $id with the next or previous one
+         *
+         * @param - integer $id - question ID to move up or down
+         * @param - integer $offset - 1 to move down, -1 to move up
+         */
+        private function swapQuestionWith($id, $offset) {
+            $keys = array_keys($this->questionList);
+            $keyPositions = array_flip($keys);
+            $thisIndex = array_search($id, $this->questionList);
+            $thisPosition = $keyPositions[$thisIndex];
+            if (isset($keys[$thisPosition + $offset])) {
+                $nextIndex = $keys[$thisPosition + $offset];
+                $temp = $this->questionList[$nextIndex];
+                $this->questionList[$nextIndex] = $this->questionList[$thisIndex];
+                $this->questionList[$thisIndex] = $temp;
             }
         }
 
         /**
          * moves a question up in the list
          *
-         * @author - Olivier Brouckaert
          * @param - integer $id - question ID to move up
          */
         function moveUp($id) {
-            global $course_id;
-
-            $pos = Database::get()->querySingle("SELECT q_position FROM `exercise_question`
-                  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
-            if ($pos > 1) {
-                $temp = $this->questionList[$pos - 1];
-                $this->questionList[$pos - 1] = $this->questionList[$pos];
-                $this->questionList[$pos] = $temp;
-            }
-            return;
+            $this->swapQuestionWith($id, -1);
         }
 
         /**
          * moves a question down in the list
          *
-         * @author - Olivier Brouckaert
          * @param - integer $id - question ID to move down
          */
         function moveDown($id) {
-            global $course_id;
-
-            $pos = Database::get()->querySingle("SELECT q_position FROM `exercise_question`
-                  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
-            if ($pos < count($this->questionList)) {
-                $temp = $this->questionList[$pos + 1];
-                $this->questionList[$pos + 1] = $this->questionList[$pos];
-                $this->questionList[$pos] = $temp;
-            }
-            return;
+            $this->swapQuestionWith($id, 1);
         }
 
         /**
@@ -645,8 +643,10 @@ if (!class_exists('Exercise')) {
                     // $exerciseResult receives the content of the form.
                     // Each choice of the student is stored into the array $choice
                     $exerciseResult = $choice;
+                    $q_position = 1;
                     foreach ($exerciseResult as $key => $value) {
-                        $this->$action($key, $value);
+                        $this->$action($key, $value, 1, $q_position);
+                        $q_position++;
                     }
                 // else if one question per page
                 } else {
@@ -656,18 +656,29 @@ if (!class_exists('Exercise')) {
                     if (!isset($exerciseResult[$key])) {
                         // stores the user answer into the array
                         $value = $exerciseResult[$key] = $choice[$key];
-                        $this->$action($key, $value);
+                        $this->$action($key, $value, 1, $this->getAnswerPosition($key));
                     }
                 }
             }
             return $exerciseResult;
         }
+
+        /**
+         * @brief Get the position of the current question for question-per-page exercise
+         *
+         * @param integer $question_id
+         */
+        function getAnswerPosition($question_id) {
+            $attempt_value = $_POST['attempt_value'];
+            return array_search($question_id, $_SESSION['questionList'][$this->id][$attempt_value]);
+        }
+
         /**
          * keeps record of user answers
          */
         function get_attempt_results_array($eurid) {
             $exerciseResult = array();
-            $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0", $eurid);
+            $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0 ORDER BY q_position", $eurid);
             foreach ($results as $row) {
                 $objQuestionTmp = new Question();
                 // reads question informations
@@ -707,6 +718,7 @@ if (!class_exists('Exercise')) {
             }
             $questionList = $_SESSION['questionList'][$id][$attempt_value];
             $unanswered_questions = array_diff($questionList, $answered_question_ids);
+            $q_position = 1;
             foreach ($unanswered_questions as $question_id) {
                 // construction of the Question object
 
@@ -742,14 +754,15 @@ if (!class_exists('Exercise')) {
                 } else {
                     $value = 0;
                 }
-                $this->insert_answer_records($question_id, $value, $as_answered);
+                $this->insert_answer_records($question_id, $value, $as_answered, $q_position);
                 unset($value);
+                $q_position++;
             }
         }
         /**
          * Insert user answers
          */
-        private function insert_answer_records($key, $value, $as_answered = 1) {
+        private function insert_answer_records($key, $value, $as_answered, $q_position) {
             // construction of the Question object
            $objQuestionTmp = new Question();
            // reads question informations
@@ -760,12 +773,16 @@ if (!class_exists('Exercise')) {
            $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
            if ($objQuestionTmp->selectType() == FREE_TEXT) {
                if (!empty($value)) {
-                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, is_answered)
-                           VALUES (?d, ?d, ?s, ?d, ?d)", $eurid, $key, $value, 1, $as_answered);
+                   Database::get()->query("INSERT INTO exercise_answer_record
+                       (eurid, question_id, answer, answer_id, is_answered, q_position)
+                       VALUES (?d, ?d, ?s, ?d, ?d, ?d)",
+                       $eurid, $key, $value, 1, $as_answered, $q_position);
                } else {
                    $weight = ($as_answered == 1) ? 0 : NULL; // if the question is unanswered give 0 weight else give NULL
-                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
-                           VALUES (?d, ?d, ?s, ?d, ?f, ?d)", $eurid, $key, $value, 0, $weight, $as_answered);
+                   Database::get()->query("INSERT INTO exercise_answer_record
+                       (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                       VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                       $eurid, $key, $value, 0, $weight, $as_answered, $q_position);
                }
            } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS || $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
@@ -779,26 +796,33 @@ if (!class_exists('Exercise')) {
                    // Some more coding should be done if blank can have multiple answers
                    $canonical_choice = canonicalize_whitespace($objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
                        strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice);
-                   $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($blanks[$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $blanks[$row_key-1];
+                   $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
+                       strtr(mb_strtoupper($blanks[$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") :
+                       $blanks[$row_key-1];
                    $right_answers = array_map('canonicalize_whitespace', preg_split('/\s*\|\s*/', $canonical_match));
                    $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key-1] : 0;
-                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
-                               VALUES (?d, ?d, ?s, ?d, ?f, ?d)", $eurid, $key, $row_choice, $row_key, $weight, $as_answered);
+                   Database::get()->query("INSERT INTO exercise_answer_record
+                       (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                       VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                       $eurid, $key, $row_choice, $row_key, $weight, $as_answered, $q_position);
 
                }
            } elseif ($objQuestionTmp->selectType() == MULTIPLE_ANSWER) {
                if ($value == 0) {
                    $row_key = 0;
                    $answer_weight = 0;
-                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
-                                   VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $answer_weight, $as_answered);
+                   Database::get()->query("INSERT INTO exercise_answer_record
+                       (eurid, question_id, answer_id, weight, is_answered, q_position)
+                       VALUES (?d, ?d, ?d, ?f, ?d, ?d)",
+                       $eurid, $key, $row_key, $answer_weight, $as_answered, $q_position);
                } else {
                    $objAnswersTmp = new Answer($key);
                    foreach ($value as $row_key => $row_choice) {
                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
-                       Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
-                               VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $answer_weight, $as_answered);
-
+                       Database::get()->query("INSERT INTO exercise_answer_record
+                           (eurid, question_id, answer_id, weight, is_answered, q_position)
+                           VALUES (?d, ?d, ?d, ?f, ?d, ?d)",
+                           $eurid, $key, $row_key, $answer_weight, $as_answered, $q_position);
                        unset($answer_weight);
                    }
                    unset($objAnswersTmp);
@@ -814,8 +838,10 @@ if (!class_exists('Exercise')) {
                        $answer_weight = 0;
                    }
 
-                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
-                           VALUES (?d, ?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $row_choice, $answer_weight, $as_answered);
+                   Database::get()->query("INSERT INTO exercise_answer_record
+                       (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                       VALUES (?d, ?d, ?d, ?d, ?f, ?d, ?d)",
+                       $eurid, $key, $row_key, $row_choice, $answer_weight, $as_answered, $q_position);
                    unset($answer_weight);
                }
            } else {
@@ -825,15 +851,17 @@ if (!class_exists('Exercise')) {
                } else {
                    $answer_weight = 0;
                }
-               Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
-                       VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $value, $answer_weight, $as_answered);
+               Database::get()->query("INSERT INTO exercise_answer_record
+                   (eurid, question_id, answer_id, weight, is_answered, q_position)
+                   VALUES (?d, ?d, ?d, ?f, ?d, ?d)",
+                   $eurid, $key, $value, $answer_weight, $as_answered, $q_position);
            }
            unset($objQuestionTmp);
         }
         /**
          * Update user answers
          */
-        private function update_answer_records($key, $value) {
+        private function update_answer_records($key, $value, $dummy1, $dummy2) {
 
             // construction of the Question object
            $objQuestionTmp = new Question();

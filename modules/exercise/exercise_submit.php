@@ -25,7 +25,7 @@ include 'question.class.php';
 include 'answer.class.php';
 include 'exercise.lib.php';
 
-$require_current_course = TRUE;
+$require_current_course = true;
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
@@ -139,7 +139,8 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
     $attempt_value = $_POST['attempt_value'];
 } elseif (isset($_GET['eurId'])) { // reinitialize paused attempt
     // If there is a paused attempt get it
-    $paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining FROM exercise_user_record WHERE eurid = ?d AND eid = ?d AND attempt_status = ?d AND uid = ?d", $_GET['eurId'], $exerciseId, ATTEMPT_PAUSED, $uid);
+    $eurid = $_GET['eurId'];
+    $paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining FROM exercise_user_record WHERE eurid = ?d AND eid = ?d AND attempt_status = ?d AND uid = ?d", $eurid, $exerciseId, ATTEMPT_PAUSED, $uid);
     if ($paused_attempt) {
         $objDateTime = new DateTime($paused_attempt->record_start_date);
         $attempt_value = $objDateTime->getTimestamp();
@@ -222,7 +223,7 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_
     if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
-        $objExercise->save_unanswered();        
+        $objExercise->save_unanswered();
         $objExercise->record_answers($choice, $exerciseResult, 'update');
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
         if ($objExercise->isRandom()) {
@@ -236,7 +237,7 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                         total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
         unset_exercise_var($exerciseId);
-        Session::Messages($langExerciseExpiredTime);        
+        Session::Messages($langExerciseExpiredTime);
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     } else {
         unset_exercise_var($exerciseId);
@@ -252,7 +253,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
 } else {
     if (isset($paused_attempt)) {
-        $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id ORDER BY question_id ASC", $paused_attempt->eurid);
+        $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id ORDER BY q_position", $paused_attempt->eurid);
         $i = 1;
         foreach ($record_question_ids as $row) {
             $questionList[$i] = $row->question_id;
@@ -326,7 +327,7 @@ if ($exercise_EndDate) {
     if ($exerciseTimeLeft < 3 * 3600) {
             if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or !isset($timeleft)) {
             // Display countdown of exercise remaining time if less than
-            // user's remaining time or less than 3 hours away    
+            // user's remaining time or less than 3 hours away
             $timeleft = $exerciseTimeLeft;
         }
     }
@@ -336,7 +337,7 @@ if ($exercise_EndDate) {
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
-    $time_expired = false;    
+    $time_expired = false;
     // checking if user's time expired
     if (isset($timeleft)) {
         $timeleft += 1; // Add 1 sec for leniency when submitting

@@ -507,7 +507,7 @@ if ($is_editor) {
         $courses_options1 .= "</tbody></table>";
         $countResJs = json_encode($TotalExercises2);
 
-        $question_types = Database::get()->queryArray("SELECT exq.question, exq.q_position, eur.eid, eur.eurid as eurid "
+        $question_types = Database::get()->queryArray("SELECT exq.question, ear.q_position, eur.eid, eur.eurid as eurid "
                 . "FROM exercise_question AS exq "
                 . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
@@ -517,18 +517,18 @@ if ($is_editor) {
         $questionsEid = json_encode($question_types);
 
         $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th>$langTitle</th><th>$langChoice</th></tr></thead><tbody> " ;
-            foreach ($question_types as $row){
-                $q_position = $row->q_position;
-                $questions_table .= "<tr>"
-                    . "<td>$row->question</td>"
-                    . "<td> <input type=\'radio\' name=\'q_position\' value=\'$q_position\'><strong> $q_position </strong></td>"
-                    . "</tr>  ";
-            }
+        foreach ($question_types as $row){
+            $q_position = $row->q_position;
+            $questions_table .= "<tr>"
+                . "<td>$row->question</td>"
+                . "<td><input type='radio' name='q_position' value='$q_position'><strong> $q_position </strong></td>"
+                . "</tr>  ";
+        }
 
         $questions_table .= "</tbody></table>";
 
         // @brief distribute exercise grading --- not fully implemented
-         
+
         /*$head_content .= "
         $(document).on('click', '.distribution', function() {
             var exerciseid = $(this).data('exerciseid');

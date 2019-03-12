@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 if (!class_exists('Question')) {
-    
+
     /**
      * @brief This class allows to instantiate an object of type Question
      */
@@ -63,7 +63,7 @@ if (!class_exists('Question')) {
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, weight, q_position, type, difficulty, category
+            $object = Database::get()->querySingle("SELECT question, description, weight, type, difficulty, category
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -71,7 +71,6 @@ if (!class_exists('Question')) {
                 $this->question = $object->question;
                 $this->description = $object->description;
                 $this->weighting = $object->weight;
-                $this->position = $object->q_position;
                 $this->type = $object->type;
                 $this->difficulty = $object->difficulty;
                 $this->category = $object->category;
@@ -364,7 +363,6 @@ if (!class_exists('Question')) {
             $question = $this->question;
             $description = $this->description;
             $weighting = $this->weighting;
-            $position = $this->position;
             $type = $this->type;
             $difficulty = $this->difficulty;
             $category = $this->category;
@@ -372,13 +370,13 @@ if (!class_exists('Question')) {
             // question already exists
             if ($id) {
                 Database::get()->query("UPDATE `exercise_question` SET question = ?s, description = ?s,
-					weight = ?f, q_position = ?d, type = ?d, difficulty = ?d, category = ?d
-					WHERE course_id = $course_id AND id='$id'", $question, $description, $weighting, $position, $type, $difficulty, $category);
+                    weight = ?f, type = ?d, difficulty = ?d, category = ?d
+                    WHERE course_id = $course_id AND id='$id'", $question, $description, $weighting, $type, $difficulty, $category);
             }
             // creates a new question
             else {
                 $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
-				VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type, $difficulty, $category)->lastInsertID;
+                VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type, $difficulty, $category)->lastInsertID;
             }
 
             // if the question is created in an exercise
@@ -501,7 +499,7 @@ if (!class_exists('Question')) {
             $category = $this->category;
 
             $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
-						VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type, $difficulty, $category)->lastInsertID;
+                        VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type, $difficulty, $category)->lastInsertID;
 
             // duplicates the picture
             $this->exportPicture($id);

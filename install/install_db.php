@@ -1061,7 +1061,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
     `answer` text,
     `answer_id` int(11) NOT NULL,
     `weight` float(11,2) DEFAULT NULL,
-    `is_answered` TINYINT NOT NULL DEFAULT '1') $tbl_options");
+    `is_answered` TINYINT NOT NULL DEFAULT 1,
+    `q_position` INT(11) NOT NULL DEFAULT 1) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1069,7 +1070,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `question` TEXT,
     `description` TEXT,
     `weight` FLOAT(11,2) DEFAULT NULL,
-    `q_position` INT(11) DEFAULT 1,
     `type` INT(11) DEFAULT 1,
     `difficulty` INT(1) DEFAULT 0,
     `category` INT(11) DEFAULT 0) $tbl_options");
@@ -1086,11 +1086,12 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
     `correct` INT(11) DEFAULT NULL,
     `comment` TEXT,
     `weight` FLOAT(5,2),
-`r_position` INT(11) DEFAULT NULL ) $tbl_options");
+    `r_position` INT(11) DEFAULT NULL ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
     `question_id` INT(11) NOT NULL DEFAULT 0,
     `exercise_id` INT(11) NOT NULL DEFAULT 0,
+    `q_position` INT(11) NOT NULL DEFAULT 1,
     PRIMARY KEY (question_id, exercise_id) ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
