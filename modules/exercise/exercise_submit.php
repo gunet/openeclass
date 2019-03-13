@@ -253,7 +253,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
 } else {
     if (isset($paused_attempt)) {
-        $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id ORDER BY q_position", $paused_attempt->eurid);
+        $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id, q_position ORDER BY q_position", $paused_attempt->eurid);
         $i = 1;
         foreach ($record_question_ids as $row) {
             $questionList[$i] = $row->question_id;
