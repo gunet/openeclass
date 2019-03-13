@@ -99,7 +99,8 @@ if (isset($_GET['exerciseId'])) {
                 . "FROM exercise_question AS exq "
                 . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
-                . "WHERE eur.eid = ?d AND ear.weight IS NULL AND exq.type = 6 AND exq.id = ?d "
+                . "WHERE eur.eid = ?d AND ear.weight IS NULL "
+                . "AND exq.type = " . FREE_TEXT . " AND exq.id = ?d "
                 . "GROUP BY exq.id, eur.eurid", $exerciseId, $question_id);
         $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
 

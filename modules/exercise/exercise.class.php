@@ -977,8 +977,7 @@ if (!class_exists('Exercise')) {
             $timeConstraint = $this->timeConstraint;
             $attemptsAllowed = $this->attemptsAllowed;
             $random = $this->random;
-            $active = $this->active;
-            $public = $this->public;
+            $active = $this->active;            
             $results = $this->results;
             $score = $this->score;
             $ip_lock = $this->ip_lock;
@@ -996,15 +995,15 @@ if (!class_exists('Exercise')) {
             }
             if ($clone_course_id != $course_id) {
                 // copy questions and answers to new course question pool
-                Database::get()->queryFunc("SELECT question_id AS id FROM exercise_with_questions
+                Database::get()->queryFunc("SELECT question_id AS id, q_position FROM exercise_with_questions
                         WHERE exercise_id = ?d",
                     function ($question) use ($clone_id, $clone_course_id) {
                         $question_clone_id = Database::get()->query("INSERT INTO exercise_question
-                            (course_id, question, description, weight, q_position, type, difficulty, category)
-                            SELECT ?d, question, description, weight, q_position, type, difficulty, 0
+                            (course_id, question, description, weight, type, difficulty, category)
+                            SELECT ?d, question, description, weight, type, difficulty, 0
                                 FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
                         Database::get()->query("INSERT INTO exercise_with_questions
-                            (question_id, exercise_id) VALUES (?d, ?d)", $question_clone_id, $clone_id);
+                            (question_id, exercise_id, q_position) VALUES (?d, ?d, ?d)", $question_clone_id, $clone_id, $question->q_position);
                         Database::get()->query("INSERT INTO exercise_answer
                             (question_id, answer, correct, comment, weight, r_position)
                             SELECT ?d, answer, correct, comment, weight, r_position FROM exercise_answer
@@ -1015,8 +1014,8 @@ if (!class_exists('Exercise')) {
             } else {
                 // add question to new exercise
                 Database::get()->query("INSERT INTO `exercise_with_questions`
-                        (question_id, exercise_id)
-                        SELECT question_id, ?d FROM `exercise_with_questions`
+                        (question_id, exercise_id, q_position)
+                        SELECT question_id, ?d, q_position FROM `exercise_with_questions`
                             WHERE exercise_id = ?d", $clone_id, $id);
             }
         }
