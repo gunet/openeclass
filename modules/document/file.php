@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -156,10 +156,12 @@ if (file_exists($disk_path)) {
         }
         
         $is_android = false;
-        $useragent=$_SERVER['HTTP_USER_AGENT'];
-        if (preg_match('/(android).+mobile/i', $useragent)) {
-            $is_android = true;
-        }
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $useragent=$_SERVER['HTTP_USER_AGENT'];
+            if (preg_match('/(android).+mobile/i', $useragent)) {
+                $is_android = true;
+            }    
+        }        
         
         if ($is_in_lpmode && $is_android) {
             require_once 'include/lib/fileDisplayLib.inc.php';
@@ -177,8 +179,9 @@ if (file_exists($disk_path)) {
 
         $mediaPath = file_url($file_info->path, $file_info->filename);
         $mediaURL = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
-        if (defined('GROUP_DOCUMENTS'))
+        if (defined('GROUP_DOCUMENTS')) {
             $mediaURL = $urlServer . 'modules/group/index.php?course=' . $course_code . '&amp;group_id=' . $group_id . '&amp;download=' . $file_info->path;
+        }
         $token = token_generate($file_info->path, true);
         $mediaAccess = $mediaPath . '?token=' . $token;
 
