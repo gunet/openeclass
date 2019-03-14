@@ -53,9 +53,12 @@ if (isset($_COOKIE['inExercise'])) {
     setcookie("inExercise", "", time() - 3600);
 }
 
+// disable ordering for action button column
+$columnOrderable = $is_editor? ", { 'orderable': false }": '';
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#ex').DataTable ({
+                'columns': [ null, null, null$columnOrderable ],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
