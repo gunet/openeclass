@@ -282,8 +282,13 @@ if (isset($_GET['modifyAnswers'])) {
         if (!isset($submitAnswers) && !isset($buttonBack)) {
             if (!(isset($_POST['setWeighting']) and $_POST['setWeighting'])) {
                 $reponse = $objAnswer->selectAnswer(1);
-                list($reponse, $weighting) = explode('::', $reponse);
-                $weighting = explode(',', $weighting);
+                if ($reponse) {
+                    list($reponse, $weighting) = explode('::', $reponse);
+                    $weighting = explode(',', $weighting);
+                } else {
+                    $reponse = '';
+                    $weighting = [];
+                }
             } else {
                 $weighting = explode(',', $_POST['str_weighting']);
             }
