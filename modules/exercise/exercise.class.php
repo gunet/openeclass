@@ -520,8 +520,10 @@ if (!class_exists('Exercise')) {
             }
             // updates the question position
             foreach ($this->questionList as $position => $questionId) {
-                Database::get()->query("UPDATE `exercise_with_questions` SET q_position = ?d
-                                WHERE question_id = ?d AND exercise_id = ?d", $position, $questionId, $this->id);
+                Database::get()->query('INSERT INTO exercise_with_questions
+                    (exercise_id, question_id, q_position) VALUES (?d, ?d, ?d)
+                    ON DUPLICATE KEY UPDATE q_position = ?d',
+                    $this->id, $questionId, $position, $position);
             }
         }
 
@@ -578,12 +580,10 @@ if (!class_exists('Exercise')) {
                 } else {
                     $pos = max(array_keys($this->questionList)) + 1;
                 }
-
                 $this->questionList[$pos] = $questionId;
 
                 return true;
             }
-
             return false;
         }
 

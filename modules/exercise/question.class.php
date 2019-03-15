@@ -356,7 +356,7 @@ if (!class_exists('Question')) {
          * @author - Olivier Brouckaert
          * @param - integer $exerciseId - exercise ID if saving in an exercise
          */
-        function save($exerciseId = 0) {
+        function save($exerciseId = null) {
             global $course_id;
 
             $id = $this->id;
@@ -365,7 +365,7 @@ if (!class_exists('Question')) {
             $weighting = $this->weighting;
             $type = $this->type;
             $difficulty = $this->difficulty;
-            $category = $this->category;            
+            $category = $this->category;
 
             // question already exists
             if ($id) {
@@ -382,23 +382,10 @@ if (!class_exists('Question')) {
             // if the question is created in an exercise
             if ($exerciseId) {
                 // adds the exercise into the exercise list of this question
-                $this->addToList($exerciseId);
-            }
-        }
-
-        /**
-         * adds an exercise into the exercise list
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $exerciseId - exercise ID
-         */
-        function addToList($exerciseId) {
-            $id = $this->id;
-
-            // checks if the exercise ID is not in the list
-            if (!in_array($exerciseId, $this->exerciseList)) {
-                $this->exerciseList[] = $exerciseId;
-                Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id) VALUES (?d, ?d)", $id, $exerciseId);
+                $exercise = new Exercise();
+                $exercise->read($exerciseId);
+                $exercise->addToList($this->id);
+                $exercise->save();
             }
         }
 

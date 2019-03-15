@@ -83,7 +83,7 @@ if (isset($_POST['submitQuestion'])) {
         'questionName' => "$langTheField $langQuestion"
     ));
     if ($v->validate()) {
-        $questionName = trim($_POST['questionName']);
+        $questionName = canonicalize_whitespace($_POST['questionName']);
         $questionDescription = purify($_POST['questionDescription']);
         $answerType = intval($_POST['answerType']);
         // no name given

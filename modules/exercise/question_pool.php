@@ -118,16 +118,12 @@ elseif (isset($_GET['recup']) && isset($fromExercise)) {
     $recup = intval($_GET['recup']);
     // construction of the Question object
     $objQuestionTmp = new Question();
-    // if the question exists
-    if ($objQuestionTmp->read($recup)) {
-        // adds the exercise ID into the list of exercises for the current question
-        $objQuestionTmp->addToList($fromExercise);
+    // if the question exists, add it into the list of questions for the
+    // current exercise
+    if ($objQuestionTmp->read($recup) and $objExercise->addToList($recup)) {
+        Session::Messages($langQuestionReused, 'alert-success');
+        $objExercise->save();
     }
-    // destruction of the Question object
-    unset($objQuestionTmp);
-    // adds the question ID into the list of questions for the current exercise
-    $objExercise->addToList($recup);
-    Session::Messages($langQuestionReused, 'alert-success');
     redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");
 }
 
