@@ -3908,15 +3908,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
             Database::get()->query('ALTER TABLE exercise_question DROP q_position');
         }
-                
+
         // user consent
-        Database::get()->query("CREATE TABLE IF NOT EXISTS`user_consent` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `uid` int(11) NOT NULL,
-            `has_accepted` tinyint(4) NOT NULL,
-            PRIMARY KEY (`id`)
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_consent` (
+            id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id INT(11) NOT NULL,
+            has_accepted BOOL NOT NULL DEFAULT 0,
+            ts DATETIME,
+            PRIMARY KEY (id),
+            UNIQUE KEY (user_id),
+            FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
           ) $tbl_options");
-        
+
     }
 
     // update eclass version

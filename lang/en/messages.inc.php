@@ -998,6 +998,7 @@ $langInstallBullet3 = "Write Permissions in directory where Open eClass has extr
 $langCheckReq = "Checking required components";
 $langInfoLicence = "Open eClass is a free application distributed according to GNU General Public Licence (GPL). <br>Please read the license and click on 'Accept'";
 $langAccept = "Accept";
+$langLater = 'Later';
 $langEG = "e.g.";
 $langDBLogin = "Database Username";
 $langDBPassword = "Database Password";
@@ -5090,3 +5091,12 @@ $langTiiExcludeTypeWords = "Words";
 $langTiiExcludeTypePercentage = "Percentage";
 $langTiiExcludeValue = "Set source exclusion threshold";
 $langColmooc = "colMOOC";
+$langDisplayPrivacyPolicyLink = 'Display link to Privacy Policy in page footer';
+$langAskPrivacyPolicyConsent = 'Ask users to consent to Privacy Policy on login';
+$langPrivacyPolicyConsentAskAgain = 'The Privacy Policy text has been updated.
+    Would you like to ask users to consent to it again?';
+$langPrivacyPolicyConsentRedisplay = 'Request new consent';
+$langYouHaveConsentedToPrivacyPolicy = 'You have consented to the {Privacy Policy} on %date.';
+$langYouHaveRejectedPrivacyPolicy = 'You have rejected the {Privacy Policy} on %date.';
+$langYouHaveNotConsentedToPrivacyPolicy = 'You have not consented to the {Privacy Policy}.';
+

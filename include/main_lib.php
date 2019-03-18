@@ -1881,7 +1881,6 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM `link` WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM eportfolio_fields_data WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM user_consent WHERE uid = ?d", $u);
 
             // delete user images (if any)
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_256.*"));

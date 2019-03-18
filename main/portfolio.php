@@ -47,16 +47,28 @@ load_js('bootstrap-calendar-master/js/calendar.js');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('datatables');
 
-
+// display privacy policy consent message to user if necessary
 $modalShow = '';
-if (get_config('activate_privacy_policy_text')) { // display consent message to user if necessary        
-    
-    $consentMessage = get_config("privacy_policy_text_$_SESSION[langswitch]");
-    if (isset($_GET['a']) and $_GET['a'] == 1) {
-        update_user_accept_consent();
+if (get_config('activate_privacy_policy_text')) {
+    $consentMessage = get_config('privacy_policy_text_' . $session->language);
+    if (isset($_POST['accept_policy'])) {
+        if ($_POST['accept_policy'] == 'yes') {
+            user_accept_policy($uid);
+        } elseif ($_POST['accept_policy'] == 'no') {
+            user_accept_policy($uid, false);
+        } else {
+            $_SESSION['accept_policy_later'] = true;
+        }
+        if (isset($_POST['next']) and $_POST['next'] == 'profile') {
+            redirect_to_home_page('main/profile/display_profile.php#privacyPolicySection');
+        }
+        redirect_to_home_page();
     }
 
-    if (!user_has_accept_consent() and !isset($_GET['a']) and $_SESSION['status'] == USER_STUDENT) {
+    if ($_SESSION['status'] == USER_STUDENT and
+        get_config('activate_privacy_policy_consent') and
+        !isset($_SESSION['accept_policy_later']) and
+        !user_has_accepted_policy($uid)) {
         $tool_content .= "
             <div class='modal fade' id='consentModal' tabindex='-1' role='dialog' aria-labelledby='consentModalLabel'>
                 <div class='modal-dialog' role='document'>
@@ -69,24 +81,26 @@ if (get_config('activate_privacy_policy_text')) { // display consent message to 
                             $consentMessage
                         </div>
                         <div class='modal-footer'>
-                            <a href='$_SERVER[SCRIPT_NAME]?a=1' class='btn btn-success' role='button'>$langAccept</a>
-                            <a href='$_SERVER[SCRIPT_NAME]?a=0' class='btn btn-danger' role='button'>$langNo</a>
+                            <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+                                <button type='submit' class='btn btn-success' role='button' name='accept_policy' value='yes'>$langAccept</button>
+                                <button type='submit' class='btn btn-danger' role='button' name='accept_policy' value='no'>$langRejectRequest</button>
+                                <button type='submit' class='btn btn-default' role='button' name='accept_policy' value='later'>$langLater</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>";
-        $modalShow = "$('#consentModal').modal('show')";    
+        $modalShow = "$('#consentModal').modal('show')";
     } else {
         $modalShow = '';
     }
 }
 
 $head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />"
-."<script type='text/javascript'>
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
+<script type='text/javascript'>
 jQuery(document).ready(function() {
-    $modalShow
-
+  $modalShow
   jQuery('#portfolio_lessons').DataTable({
     'bLengthChange': false,
     'iDisplayLength': 5,
@@ -157,9 +171,9 @@ jQuery(document).ready(function() {
 'function show_month(day,month,year){
     $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});
 }
-    
+
 </script>';
-            
+
 $tool_content .= action_bar(array(
         array('title' => $langRegCourses,
               'url' => $urlAppend . 'modules/auth/courses.php',

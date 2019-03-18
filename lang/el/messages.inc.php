@@ -652,6 +652,14 @@ $langPrivacyPolicy = "Πολιτική Απορρήτου";
 $langPrivacyPolicyLegend = "Αλλαγή Πολιτικής Απορρήτου";
 $langText = "Κείμενο";
 $langUserConsent = "Συναίνεση $langsOfStudent";
+$langDisplayPrivacyPolicyLink = 'Εμφάνιση συνδέσμου προς την Πολιτική Απορρήτου στο κάτω μέρος των σελίδων';
+$langAskPrivacyPolicyConsent = 'Αίτημα συναίνεσης στην Πολιτική Απορρήτου από τους χρήστες κατά τη σύνδεση';
+$langPrivacyPolicyConsentAskAgain = 'Το κείμενο της Πολιτικής Απορρήτου έχει αλλάξει.
+    Επιθυμείτε να ξαναζητήσετε συναίνεση των χρηστών για το νέο κείμενο;';
+$langPrivacyPolicyConsentRedisplay = 'Νέο αίτημα συναίνεσης';
+$langYouHaveConsentedToPrivacyPolicy = 'Συναινέσατε στην {Πολιτική Απορρήτου} στις %date.';
+$langYouHaveRejectedPrivacyPolicy = 'Απορρίψατε την {Πολιτική Απορρήτου} στις %date.';
+$langYouHaveNotConsentedToPrivacyPolicy = 'Δεν έχετε συναινέσει στην {Πολιτική Απορρήτου}.';
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
@@ -2292,6 +2300,7 @@ $langCheckReq = "Έλεγχος προαπαιτούμενων προγραμμ�
 $langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL). <br />
                 Παρακαλούμε διαβάστε την άδεια και κάνετε κλικ στο 'Αποδοχή'";
 $langAccept = "Αποδοχή";
+$langLater = 'Αργότερα';
 $langEG = "π.χ.";
 $langDBLogin = "Όνομα Χρήστη για τη Βάση Δεδομένων";
 $langDBPassword = "Συνθηματικό για τη Βάση Δεδομένων";

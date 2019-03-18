@@ -1940,10 +1940,13 @@ $db->query("CREATE TABLE `course_prerequisite` (
   PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `user_consent` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL,
-  `has_accepted` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`)
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id INT(11) NOT NULL,
+  has_accepted BOOL NOT NULL DEFAULT 0,
+  ts DATETIME,
+  PRIMARY KEY (id),
+  UNIQUE KEY (user_id),
+  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) $tbl_options");
 
 

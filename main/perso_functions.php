@@ -275,28 +275,27 @@ function getUserMessages() {
 
 
 /**
- * @brief check if user has accepted privacy policy
+ * @brief check if user has accepted or rejected the current privacy policy
  * @global type $uid
  * @return boolean
  */
-function user_has_accept_consent() {
-    global $uid;
-    
-    $q = Database::get()->querySingle("SELECT has_accepted FROM user_consent WHERE uid=?d", $uid);
-    if ($q) {
+function user_has_accepted_policy($uid) {
+    $q = Database::get()->querySingle('SELECT ts FROM user_consent
+        WHERE user_id = ?d', $uid);
+    if ($q and $q->ts >= get_config('privacy_policy_timestamp')) {
         return true;
     } else {
         return false;
     }
-    
 }
 
 
 /*
  * @brief update user consent
  */
-function update_user_accept_consent() {
-    global $uid;
-    
-    Database::get()->query("INSERT user_consent SET has_accepted = 1, uid=?d", $uid);
+function user_accept_policy($uid, $accept = true) {
+    $accept = $accept? 1: 0;
+    Database::get()->query('INSERT INTO user_consent
+        (has_accepted, user_id, ts) VALUES (?d, ?d, NOW())
+        ON DUPLICATE KEY UPDATE has_accepted = ?d, ts = NOW()', $accept, $uid, $accept);
 }
