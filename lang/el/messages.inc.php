@@ -1391,6 +1391,7 @@ $langNoCertificates = "Δεν έχουν οριστεί πιστοποιητικ
 $langNoBadges = "Δεν έχουν οριστεί επιβραβεύσεις. Μπορείτε να ορίσετε πατώντας \"Νέα επιβράβευση\"";
 $langTemplate = "Πρότυπο";
 $langProgress = "Πρόοδος";
+$langOfCourseCompletion = "Δραστηριοτήτων ολοκλήρωσης $langsOfCourse";
 $langOfAssignment = "Εργασίας";
 $langOfBlog = "Ιστολογίου";
 $langOfMultimediaLinks = "Πολυμεσικών συνδέσμων";

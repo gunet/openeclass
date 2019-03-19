@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -341,6 +341,7 @@ function display_course_completion() {
  * @global type $langInsertWorkCap
  * @global type $langUsers
  * @global type $langValue
+ * @global type $langOfCourseCompletion
  * @param type $element
  * @param type $certificate_id
  */
@@ -354,7 +355,7 @@ function display_activities($element, $id) {
            $langOfLearningPath, $langDelete, $langEditChange,
            $langInsertWorkCap, $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
-           $langValue, $langOfForums;
+           $langValue, $langOfForums, $langOfCourseCompletion, $course_id;
     /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
 
     if ($element == 'certificate') {
@@ -380,7 +381,10 @@ function display_activities($element, $id) {
             ),
             false
         );
-
+    
+    // check if course completion is enable
+    $cc_enable = Database::get()->querySingle("SELECT active FROM badge "
+                                    . "WHERE course_id = ?d AND bundle = -1", $course_id)->active;
     // certificate details
     $tool_content .= display_settings($element, $id);
 
@@ -388,6 +392,10 @@ function display_activities($element, $id) {
     $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
 
     $addActivityBtn = action_button(array(
+        array('title' => "$langOfCourseCompletion",
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecompletion",
+            'icon' => 'fa fa-certificate',
+            'show' => $cc_enable),
         array('title' => "$langOfAssignment",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
@@ -539,6 +547,9 @@ function display_activities($element, $id) {
 function insert_activity($element, $element_id, $activity) {
 
     switch ($activity) {
+        case 'coursecompletion':
+            add_course_completion_to_certificate($element_id);
+            break;
         case AssignmentEvent::ACTIVITY:
             display_available_assignments($element, $element_id);
             break;
