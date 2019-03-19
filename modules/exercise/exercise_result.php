@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,9 +19,9 @@
  * ======================================================================== */
 
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+include 'exercise.class.php';
+include 'question.class.php';
+include 'answer.class.php';
 
 $require_current_course = TRUE;
 $guest_allowed = true;
@@ -64,18 +64,18 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     total_score = (SELECT SUM(weight) FROM exercise_answer_record
                                         WHERE eurid = ?d)
                 WHERE eurid = ?d",
-                ATTEMPT_COMPLETED, $eurid, $eurid);
-            $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting FROM exercise_user_record WHERE eurid = ?d", $eurid);
-            // update gradebook
-            update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+                ATTEMPT_COMPLETED, $eurid, $eurid);            
         } else {
             // else increment total by just this grade
             Database::get()->query("UPDATE exercise_user_record
                 SET total_score = total_score + ?f WHERE eurid = ?d",
                 $grade, $eurid);
-        }
-        $eur = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
-        triggerGame($course_id, $uid, $eur->eid);
+        }        
+        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting 
+                             FROM exercise_user_record WHERE eurid = ?d", $eurid);
+            // update gradebook
+        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);        
+        triggerGame($course_id, $uid, $data->eid);
         exit();
     }
 }
@@ -108,8 +108,8 @@ if (isset($_GET['eurId'])) {
     // exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
-if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
-$head_content .= "<script type='text/javascript'>
+if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
+    $head_content .= "<script type='text/javascript'>
             $(document).ready(function(){
                     function save_grade(elem){
                         var grade = parseFloat($(elem).val());
@@ -175,9 +175,8 @@ $head_content .= "<script type='text/javascript'>
                 </script>";
 }
 $exerciseTitle = $objExercise->selectTitle();
-$exerciseDescription = $objExercise->selectDescription();
-$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
+$exerciseDescription = nl2br(make_clickable($objExercise->selectDescription()));
+$exerciseDescription_temp = mathfilter(nl2br(make_clickable($exerciseDescription)), 12, "../../courses/mathimg/");
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
@@ -363,7 +362,7 @@ if (count($exercise_question_ids) > 0) {
 
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                 $answer = $objAnswerTmp->selectAnswer($answerId);
-                $answerComment = $objAnswerTmp->selectComment($answerId);
+                $answerComment = standard_text_escape($objAnswerTmp->selectComment($answerId));
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
 
@@ -372,9 +371,7 @@ if (count($exercise_question_ids) > 0) {
                 } else {
                     $answer = standard_text_escape($answer);
                 }
-
-                $answerComment = standard_text_escape($answerComment);
-
+                
                 $grade = 0;
                 switch ($answerType) {
                     // for unique answer
@@ -560,21 +557,21 @@ if (count($exercise_question_ids) > 0) {
 
         if ($showScore) {
             if (!is_null($choice)) {
-                if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
-                    // show input field
+                if ($answerType == FREE_TEXT && $is_editor) {
+                    if (isset($question_graded) && !$question_graded) {
+                        $value = '';                    
+                    } else {
+                        $value = round($questionScore, 2);
+                    }
                     $tool_content .= "<span style='float:right;'>
-                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
+                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]' value='$value'>
                                    <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
-                                   <b>/$questionWeighting</b></span>";
-                } else {
-                    $tool_content .= "<span style='float:right;'>
-                                    $langQuestionScore: <b>".round($questionScore, 2). " / $questionWeighting</b></span>";
+                                   <strong>/$questionWeighting</strong>
+                                    </span>";
                 }
             } else {
-                $tool_content .= "<span style='float:right;'>
-                                    $langQuestionScore: <b>$question_weight</b></span>";
+                $tool_content .= "<span style='float:right;'>$langQuestionScore: <b>$question_weight</b></span>";
             }
-
         }
         $tool_content .= "</th></tr>";
 
@@ -652,19 +649,20 @@ if ($checking) {
 
 if ($showScore) {
     $tool_content .= "
-    <br/>
+    <br>
     <table class='table-default'>
-    <tr>
-    <td class='text-right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
-      </td>
-    </tr>
+        <tr>
+            <td class='text-right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
+            </td>
+        </tr>
     </table>";
 }
-$tool_content .= "
-  <br/>
-  <div class='text-center'>" . (($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
-  "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>" : '')."
-  <a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>
-  </div>";
+$tool_content .= "  
+  <div class='text-center'>";
+    if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
+        $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>";
+    }
+  $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>
+</div>";
 
 draw($tool_content, 2, null, $head_content);
