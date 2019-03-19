@@ -366,6 +366,55 @@ function add_blogcomment_to_certificate($element, $element_id) {
     }
 }
 
+/**
+ * @brief add course completion as certificate
+ * @param type $element_id
+ */
+function add_course_completion_to_certificate($element_id) {
+    
+    global $langQuotaSuccess, $course_code;
+    
+    $badge_id = has_course_completion(); // get course completion id
+    
+    Database::get()->querySingle("INSERT INTO certificate_criterion (certificate, activity_type, module, resource, threshold, operator) 
+                                   SELECT ?d, activity_type, module, resource, threshold, operator 
+                                   FROM badge_criterion WHERE badge = ?d", $element_id, $badge_id);
+    // mapping badge_criterion_ids --->  cert_criterion_ids
+    $d1 = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d ORDER BY id", $element_id);
+    foreach ($d1 as $cert_criterion_ids) {
+        $cc_ids[] = $cert_criterion_ids->id;
+    }
+    $d2 = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d ORDER BY id", $badge_id);
+    foreach ($d2 as $badge_criterion_ids) {
+        $b_ids[] = $badge_criterion_ids->id;
+    }
+    $ids = array_combine($b_ids, $cc_ids);   
+    
+    // get user progress (if exists)
+    Database::get()->querySingle("INSERT INTO user_certificate (user, certificate, completed, completed_criteria, total_criteria, updated, assigned) 
+                                    SELECT user, ?d, completed, completed_criteria, total_criteria, updated, assigned 
+                                    FROM user_badge WHERE badge = ?d", $element_id, $badge_id);
+    $data = Database::get()->queryArray("SELECT user FROM user_certificate WHERE certificate = ?d", $element_id);
+    foreach ($data as $u) {
+        $d = Database::get()->queryArray("SELECT badge_criterion, created 
+                                    FROM user_badge_criterion JOIN badge_criterion 
+                                    ON badge_criterion.id=user_badge_criterion.badge_criterion 
+                                    AND badge_criterion.badge = ?d 
+                                    AND user = ?d", $badge_id, $u->user);
+        foreach ($d as $to_add) {
+            $index = $to_add->badge_criterion;
+            Database::get()->query("INSERT INTO user_certificate_criterion SET 
+                                        user = $u->user,
+                                        certificate_criterion = $ids[$index], 
+                                        created = '$to_add->created'");
+        }
+    }
+    
+    Session::Messages("$langQuotaSuccess", 'alert-success');
+    redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$element_id");
+    
+}
+
 
 /**
  * @brief get certificate title
@@ -409,7 +458,7 @@ function get_cert_expiration_day($element, $id) {
 /**
  * @brief get certificate issuer
  * @param type $element
- * @param type $certificate_id
+ * @param type $id
  * @return type
  */
 function get_cert_issuer($element, $id) {
