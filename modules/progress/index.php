@@ -134,7 +134,7 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcc=1",
                   'icon' => 'fa-navicon',
                   'level' => 'primary-label',
-                  'show' => !has_course_completion()),
+                  'show' => !is_course_completion_enabled()),
             array('title' => $langBack,
                   'url' => "{$urlServer}courses/$course_code/index.php",
                   'icon' => 'fa-reply',

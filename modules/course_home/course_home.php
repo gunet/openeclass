@@ -468,7 +468,7 @@ switch ($visible) {
 }
 
 if ($uid and !$is_editor) {
-    $course_completion_id = has_course_completion(); // is course completion enabled?
+    $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
         $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
         $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";

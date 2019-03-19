@@ -374,7 +374,7 @@ function add_course_completion_to_certificate($element_id) {
     
     global $langQuotaSuccess, $course_code;
     
-    $badge_id = has_course_completion(); // get course completion id
+    $badge_id = is_course_completion_active(); // get course completion id
     
     Database::get()->querySingle("INSERT INTO certificate_criterion (certificate, activity_type, module, resource, threshold, operator) 
                                    SELECT ?d, activity_type, module, resource, threshold, operator 
@@ -703,12 +703,28 @@ function update_visibility($element, $element_id, $visibility) {
 }
 
 /**
- * @brief check if we have created course completion badge
+ * @brief check if course completion badge is active
  * @global type $course_id
  * @return boolean
  */
-function has_course_completion() {
+function is_course_completion_active() {
 
+    global $course_id;
+
+    $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1", $course_id);
+    if ($sql) {
+        return $sql->id;
+    } else {
+        return 0;
+    }
+}
+
+/**
+ * @brief check if we have created course completion badge 
+ * @global type $course_id
+ * @return boolean
+ */
+function is_course_completion_enabled() {
     global $course_id;
 
     $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1", $course_id);
