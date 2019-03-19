@@ -3476,6 +3476,9 @@ $langOtherDepartments = "Εγγραφή σε $langsCourses άλλων τμημά
 $langNoLessonsAvailable = "Δεν υπάρχουν Διαθέσιμα $langCourses.";
 $langUserPermitions = "Δικαιώματα";
 $langUserWhitelist = "Whitelist Χρήστη";
+$langUserHasConsent = "Έχει συναινέσει";
+$langUserHasNoConsent = "Δεν έχει συναινέσει";
+$langUserConsentUnknown = "Δεν έχει συναινέσει ακόμα ή δεν το έχει δει";
 
 // formuser.php
 $langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού $langOfStudent";

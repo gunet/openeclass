@@ -277,8 +277,27 @@ if ($u) {
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langLastLogin:</label>
                 <div class='col-sm-10'><p class='form-control-static'>$last_login_date</p></div>
-            </div>
-        <div class='form-group'>
+            </div>";
+        // user consent
+        if (get_config('activate_privacy_policy_consent')) {
+            $q = Database::get()->querySingle("SELECT has_accepted FROM user_consent WHERE user_id = ?d", $u);
+            if ($q) {
+                if ($q->has_accepted) {
+                    $icon_consent = "<i class='fa fa-check' title='$langUserHasConsent'></i>";
+                } else {                
+                    $icon_consent = "<i class='fa fa-times' title='$langUserHasNoConsent'></i>";
+                }
+            } else {
+                $icon_consent = "<i class='fa fa-minus' title='$langUserConsentUnknown'></i>";
+            }             
+            $tool_content .= 
+            "<div class='form-group'>
+                <label class='col-sm-2 control-label'>$langUserHasConsent:</label>
+                <div class='col-sm-10'><p class='form-control-static'>$icon_consent</p></div>
+            </div>";
+        }
+        
+        $tool_content .= "<div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserID: </label>
           <div class='col-sm-10'><p class='form-control-static'>$u</p></div>
         </div>
