@@ -708,7 +708,8 @@ if (!class_exists('Exercise')) {
             $id = $this->id;
             $attempt_value = $_POST['attempt_value'];
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
-            $question_ids = Database::get()->queryArray('SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0', $eurid);
+            $question_ids = Database::get()->queryArray('SELECT DISTINCT question_id
+                FROM exercise_answer_record WHERE eurid = ?d', $eurid);
             if (count($question_ids) > 0) {
                 foreach ($question_ids as $row) {
                     $answered_question_ids[] = $row->question_id;
@@ -717,48 +718,47 @@ if (!class_exists('Exercise')) {
                 $answered_question_ids = array();
             }
             $questionList = $_SESSION['questionList'][$id][$attempt_value];
-            $unanswered_questions = array_diff($questionList, $answered_question_ids);
             $q_position = 1;
-            foreach ($unanswered_questions as $question_id) {
-                // construction of the Question object
-
-                $objQuestionTmp = new Question();
-                // reads question informations
-                $objQuestionTmp->read($question_id);
-                $question_type = $objQuestionTmp->selectType();
-                if ($question_type == MATCHING) {
-                    // construction of the Answer object
-                    $objAnswerTmp = new Answer($question_id);
-                    $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-                    for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-                        //must get answer id ONLY where correct value existS
-                        $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-                        if ($answerCorrect) {
-                            $value[$answerId] = 0;
+            foreach ($questionList as $question_id) {
+                if (!in_array($question_id, $answered_question_ids)) {
+                    $objQuestionTmp = new Question();
+                    $objQuestionTmp->read($question_id);
+                    $question_type = $objQuestionTmp->selectType();
+                    if ($question_type == MATCHING) {
+                        // construction of the Answer object
+                        $objAnswerTmp = new Answer($question_id);
+                        $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
+                        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                            // must get answer id ONLY where correct value exists
+                            $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+                            if ($answerCorrect) {
+                                $value[$answerId] = 0;
+                            }
                         }
+                        unset($objAnswerTmp);
+                    } else if ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
+                        // construction of the Answer object
+                        $objAnswerTmp = new Answer($question_id);
+                        $answer = $objAnswerTmp->selectAnswer(1);
+                        // construction of the Answer object
+                        list($answer, $answerWeighting) = explode('::', $answer);
+                        $answerWeighting = explode(',', $answerWeighting);
+                        $nbrAnswers = count($answerWeighting);
+                        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                            $value[$answerId] = '';
+                        }
+                    } elseif ($question_type == FREE_TEXT) {
+                        $value = '';
+                    } else {
+                        $value = 0;
                     }
-                    unset($objAnswerTmp);
-                } else if ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
-                    // construction of the Answer object
-                    $objAnswerTmp = new Answer($question_id);
-                    $answer = $objAnswerTmp->selectAnswer(1);
-                    // construction of the Answer object
-                    list($answer, $answerWeighting) = explode('::', $answer);
-                    $answerWeighting = explode(',', $answerWeighting);
-                    $nbrAnswers = count($answerWeighting);
-                    for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-                        $value[$answerId] = '';
-                    }
-                } elseif ($question_type == FREE_TEXT) {
-                    $value = '';
-                } else {
-                    $value = 0;
+                    $this->insert_answer_records($question_id, $value, $as_answered, $q_position);
+                    unset($value);
                 }
-                $this->insert_answer_records($question_id, $value, $as_answered, $q_position);
-                unset($value);
                 $q_position++;
             }
         }
+
         /**
          * Insert user answers
          */
