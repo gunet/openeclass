@@ -670,7 +670,8 @@ if (!class_exists('Exercise')) {
          */
         function getAnswerPosition($question_id) {
             $attempt_value = $_POST['attempt_value'];
-            return array_search($question_id, $_SESSION['questionList'][$this->id][$attempt_value]);
+            return 1 + array_search($question_id,
+                array_values($_SESSION['questionList'][$this->id][$attempt_value]));
         }
 
         /**
