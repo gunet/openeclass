@@ -333,7 +333,6 @@ if ($exercise_EndDate) {
     }
 }
 
-
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
@@ -350,12 +349,13 @@ if (isset($_POST['formSent'])) {
     $action = isset($paused_attempt) ? 'update' : 'insert';
 
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
+    $questionNum = count($exerciseResult) + 1;
 
     $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $exerciseResult;
 
     // if it is a non-sequential exercice OR
     // if it is a sequnential exercise in the last question OR the time has expired
-    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || $time_expired)) {
+    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum > $nbrQuestions || $time_expired)) {
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -548,16 +548,16 @@ if (!$questionList) {
                 <a href='index.php?course=$course_code' class='btn btn-default'>$langBack</a>
             </div>";
 } else {
+    if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
+        $submitLabel = $langSubmit;
+    } else {
+        $submitLabel = $langNext . ' &gt;';
+    }
     $tool_content .= "
         <br>
-        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary blockUI' type='submit' value='";
-    if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-        $tool_content .= "$langSubmit' />";
-    } else {
-        $tool_content .= $langNext . " &gt;" . "' />";
-    }
+        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary blockUI' type='submit' value='$submitLabel'>";
     if ($exerciseTempSave && !($exerciseType == 2 && ($questionNum == $nbrQuestions))) {
-        $tool_content .= "&nbsp;<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave' />";
+        $tool_content .= "&nbsp;<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
     }
     $tool_content .= "</div>";
 }
