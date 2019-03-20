@@ -1017,6 +1017,42 @@ if (!class_exists('Exercise')) {
                             WHERE exercise_id = ?d", $clone_id, $id);
             }
         }
+        
+        /**
+         * @brief run UPDATE queries for each item of the output
+         * @param type $correction_output
+         */
+        function distribution($correction_output) {                  
+            
+            $id = $this->id;
+            $stopped = 0;
+            $courses = json_decode($correction_output);
+            $TotalExercises = Database::get()->queryArray("SELECT eurid
+                    FROM exercise_user_record WHERE eid = ?d AND attempt_status = " . ATTEMPT_PENDING . "", $id);
+
+            foreach ($courses as $row) {
+                $teacherId = $row->teacher;
+                $disnumber = $row->grade;
+                for ($i = 0; $i < $disnumber; $i++) {
+                    $eurid = $TotalExercises[$stopped]->eurid;
+                    Database::get()->query("UPDATE exercise_user_record SET assigned_to = ?d WHERE eurid = ?d" , $teacherId, $eurid);
+                    //gia na min xrisimopooioume to i pou ksanaksekinaei apo to 0
+                    $stopped++;
+                }
+            }
+        }
+        
+        /**
+         * @brief run UPDATE queries for each eurid
+         */
+        function cancelDistribution() {
+            
+            $TotalExercises = Database::get()->queryArray("SELECT eurid
+                        FROM exercise_user_record WHERE  eid = ?d AND attempt_status = " . ATTEMPT_PENDING . "", $this->id);
+            foreach ($TotalExercises as $row) {
+                Database::get()->query("UPDATE exercise_user_record SET assigned_to = NULL WHERE eurid = ?d", $row->eurid);
+            }
+        }
     }
 
 }

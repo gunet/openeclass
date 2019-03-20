@@ -145,6 +145,15 @@ if ($is_editor) {
                     $objExerciseTmp->duplicate();
                     Session::Messages($langCopySuccess, 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                case 'distribution': //distribute answers
+                    $objExerciseTmp->distribution($_GET['correction_output']);
+                    Session::Messages($langDistributionSuccess, 'alert-success');
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                case 'cancelDistribution': //canceling distributed answers
+                    $objExerciseTmp->cancelDistribution();
+                    Session::Messages($langCancelDistributionSuccess, 'alert-success');
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+
             }
         }
         // destruction of Exercise
@@ -313,12 +322,12 @@ if (!$nbrExercises) {
                           'url' => "#",
                           'icon' => 'fa-pencil',
                           'show' => $counter1),
-                    /*array('title' => $langDistributeExercise,
+                    array('title' => $langDistributeExercise,
                           'icon-class' => 'distribution',
                           'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
                           'url' => "#",
                           'icon' => 'fa-exchange',
-                          'show' => $counter1),*/
+                          'show' => $counter1),
                     array('title' => $row->active ?  $langViewHide : $langViewShow,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable")."&amp;exerciseId=" . $row->id,
                           'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
@@ -530,9 +539,8 @@ if ($is_editor) {
 
         $questions_table .= "</tbody></table>";
 
-        // @brief distribute exercise grading --- not fully implemented
-
-        /*$head_content .= "
+        // @brief distribute exercise grading
+        $head_content .= "
         $(document).on('click', '.distribution', function() {
             var exerciseid = $(this).data('exerciseid');
 
@@ -595,8 +603,7 @@ if ($is_editor) {
                     }
                 }
             );
-        });";
-        */
+        });";        
         $head_content .= "
             $(document).on('click', '.by_question', function() {
                 var exerciseid = $(this).data('exerciseid');

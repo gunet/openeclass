@@ -115,8 +115,18 @@ if ($is_editor) {
 }
 $extra_sql = ($status !== '' ) ? ' AND attempt_status = '.$status : '';
 
-foreach ($result as $row) {
+foreach ($result as $row) {        
     $sid = $row->uid;
+    // check if there is exercise assigned to teacher
+    $testTheStudent = Database::get()->querySingle("SELECT assigned_to FROM `exercise_user_record` 
+                                     WHERE eid = ?d 
+                                     AND uid = ?d 
+                                     AND attempt_status = " . ATTEMPT_PENDING . "", $exerciseId, $sid);
+    if ($testTheStudent) {
+        if ($testTheStudent->assigned_to != $_SESSION['uid'] && isset($testTheStudent->assigned_to)) {
+            continue;
+        }
+    }    
     $theStudent = Database::get()->querySingle("SELECT surname, givenname, am FROM user WHERE id = ?d", $sid);
 
     $result2 = Database::get()->queryArray("SELECT
@@ -125,7 +135,7 @@ foreach ($result as $row) {
                     IF (attempt_status = 1 OR b.time_constraint = 0,
                         TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date)),
                         b.time_constraint*60-a.secs_remaining) AS time_duration,
-                    a.total_score, a.total_weighting, a.eurid, a.attempt_status
+                    a.total_score, a.total_weighting, a.eurid, a.attempt_status, a.assigned_to 
                 FROM `exercise_user_record` a, exercise b
                 WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id$extra_sql
                 ORDER BY a.record_start_date DESC", $sid, $exerciseId);
@@ -135,10 +145,11 @@ foreach ($result as $row) {
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
-            if ($theStudent->am == '')
+            if ($theStudent->am == '') {
                 $studentam = '-';
-            else
+            } else {
                 $studentam = $theStudent->am;
+            }
             $tool_content .= "<b>$langUser:</b> " . q($theStudent->surname) . " " . q($theStudent->givenname) . "  <div class='smaller'>($langAm: " . q($studentam) . ")</div>";
         }
         $tool_content .= "</td>
@@ -153,6 +164,11 @@ foreach ($result as $row) {
 
         $k = 0;
         foreach ($result2 as $row2) {
+            // check if there is exercise assigned to teacher
+            if ($row2->assigned_to != $_SESSION['uid'] && isset($row2->assigned_to)) {
+                continue;
+            }
+
             $row_class = "";
             $action_btn_state = true;
             if ($row2->attempt_status == ATTEMPT_COMPLETED) { // IF ATTEMPT COMPLETED

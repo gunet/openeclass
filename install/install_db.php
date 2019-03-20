@@ -1052,7 +1052,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
     `total_weighting` FLOAT(11,2) DEFAULT 0,
     `attempt` INT(11) NOT NULL DEFAULT 0,
     `attempt_status` tinyint(4) NOT NULL DEFAULT 1,
-    `secs_remaining` INT(11) NOT NULL DEFAULT '0') $tbl_options");
+    `secs_remaining` INT(11) NOT NULL DEFAULT '0',
+    `assigned_to` INT(11) DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
     `answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

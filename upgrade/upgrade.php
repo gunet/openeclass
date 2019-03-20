@@ -3908,6 +3908,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
             Database::get()->query('ALTER TABLE exercise_question DROP q_position');
         }
+        
+        
+        if (DBHelper::fieldExists('exercise_user_record', 'assigned_to')) {
+            Database::get()->query("ALTER TABLE `exercise_user_record`
+                    ADD `assigned_to` INT(11) DEFAULT NULL");
+        }
 
         // user consent
         Database::get()->query("CREATE TABLE IF NOT EXISTS `user_consent` (
