@@ -82,30 +82,30 @@ function confirmation(message) {
 
 
 function add_bookmark() {
-	// add a "rel" attrib if Opera 7+
-	if(window.opera) {
-		if ($("a.jqbookmark").attr("rel") != ""){ // don't overwrite the rel attrib if already set
-			$("a.jqbookmark").attr("rel","sidebar");
-		}
-	}
+  // add a "rel" attrib if Opera 7+
+  if(window.opera) {
+    if ($("a.jqbookmark").attr("rel") != ""){ // don't overwrite the rel attrib if already set
+      $("a.jqbookmark").attr("rel","sidebar");
+    }
+  }
 
-	$("a.jqbookmark").click(function(event){
-		event.preventDefault(); // prevent the anchor tag from sending the user off to the link
-		var url = this.href;
-		var title = this.title;
+  $("a.jqbookmark").click(function(event){
+    event.preventDefault(); // prevent the anchor tag from sending the user off to the link
+    var url = this.href;
+    var title = this.title;
 
-		if (window.sidebar) { // Mozilla Firefox Bookmark
-			window.sidebar.addPanel(title, url,"");
-		} else if( window.external ) { // IE Favorite
-			window.external.AddFavorite( url, title);
-		} else if(window.opera) { // Opera 7+
-			return false; // do nothing - the rel="sidebar" should do the trick
-		} else { // for Safari, Konq etc - browsers who do not support bookmarking scripts (that i could find anyway)
-			 alert('Unfortunately, this browser does not support the requested action,'
-			 + ' please bookmark this page manually.');
-		}
+    if (window.sidebar) { // Mozilla Firefox Bookmark
+      window.sidebar.addPanel(title, url,"");
+    } else if( window.external ) { // IE Favorite
+      window.external.AddFavorite( url, title);
+    } else if(window.opera) { // Opera 7+
+      return false; // do nothing - the rel="sidebar" should do the trick
+    } else { // for Safari, Konq etc - browsers who do not support bookmarking scripts (that i could find anyway)
+      alert('Unfortunately, this browser does not support the requested action,'
+        + ' please bookmark this page manually.');
+    }
 
-	});
+  });
 }
 
 function control_deactivate_off() {
@@ -235,6 +235,9 @@ function course_list_handler() {
                     text: title_span.text() }));
 
             } else {
+                if (result === 'prereqsnotcomplete') {
+                    alert(lang.prereqsNotComplete);
+                }
                 $('input[type=checkbox][value=' + cid + ']').prop('checked', false);
                 if (courses[cid][1] != 2) {
                     title_span.text(title_span.text());
@@ -256,25 +259,24 @@ function course_list_handler() {
 
 // User profile UI
 
-function profile_init()
-{
-        $(document).on('click', '#delete', function() {
-                if (confirm(lang.confirmDelete)) {
-                        var delBtn = $(this).closest("div");
-                        delBtn.find('span').remove();
-                        $("li#profile_menu_dropdown img").attr("src", "/openeclass/template/default/img/default_32.jpg");
-                        $.post('profile.php', { delimage: true });
-                }
-        });
+function profile_init() {
+    $(document).on('click', '#delete', function() {
+        if (confirm(lang.confirmDelete)) {
+            var delBtn = $(this).closest("div");
+            delBtn.find('span').remove();
+            $("li#profile_menu_dropdown img").attr("src", "/openeclass/template/default/img/default_32.jpg");
+            $.post('profile.php', { delimage: true });
+        }
+    });
 }
 
-function toggleMenu(mid){
-	menuObj = document.getElementById(mid);
+function toggleMenu(mid) {
+  menuObj = document.getElementById(mid);
 
-	if(menuObj.style.display=='none')
-		menuObj.style.display='block';
-	else
-		menuObj.style.display='none';
+  if(menuObj.style.display=='none')
+    menuObj.style.display='block';
+  else
+    menuObj.style.display='none';
 }
 
 function exercise_enter_handler() {
@@ -312,29 +314,193 @@ function exercise_enter_handler() {
         pivot2 = 0;
         while(inputs[pivot2].name != $(this)[0].name)
             pivot2++;
-        inputs[pivot2].select();
+        $(inputs[pivot2]).select();
         inputs.pivot = pivot2;
         ck = $(':checked');
         answers = [];
         for(i = 0; i < ck.length; i++) {
-        	ans = {
-        		name : ck[i].name,
-        		value : ck[i].value
-        	}
-        	answers.push(ans);
+          ans = {
+            name : ck[i].name,
+            value : ck[i].value
+          }
+          answers.push(ans);
         }
         localStorage["answers"] = JSON.stringify(answers);
     });
 }
 
+function exercise_init_countdown(params) {
+    var exerciseId = params.exerciseId,
+        eurid = params.eurid;
+
+    // Don't submit question on enter keypress in input field
+    $('.exercise input').keydown(function(event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                $(this).next('input').focus();
+            }
+        });
+
+    var continueSubmit = function () {
+        $(window).off();
+        document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        cancelCheck = true;
+        $('.exercise').off().submit();
+    }
+
+    $(window).on('beforeunload', function() {
+        var date = new Date();
+        date.setTime(date.getTime() + 30 * 1000);
+        var expires = '; expires=' + date.toGMTString();
+        document.cookie = 'inExercise=' + exerciseId + expires;
+        return params.warning;
+    });
+    $(window).on('unload', function() {
+        $.ajax({
+            type: 'POST',
+            url: '',
+            data: { action: 'endExerciseNoSubmit', eid: exerciseId, eurid: eurid },
+            async: false
+        });
+    });
+
+    var timer = $('#progresstime');
+    timer.time = timer.text();
+    timer.text(secondsToHms(timer.time--));
+    var hidden_timer = $('#secsRemaining');
+    hidden_timer.time = timer.time;
+    setInterval(function() {
+        hidden_timer.val(hidden_timer.time--);
+        if (hidden_timer.time + 1 == 0) {
+            clearInterval();
+        }
+    }, 1000);
+    countdown(timer, function() {
+        $('<input type="hidden" name="autoSubmit" value="true">').appendTo('.exercise');
+        continueSubmit();
+    });
+    setInterval(function() {
+        $.ajax({
+          type: 'POST',
+          data: { action: 'refreshSession'}
+        });
+    }, params.refreshTime);
+
+    // Keep track of which questions have been answered
+    var cancelCheck = false;
+    var answered = {};
+    if (params.answeredIds) {
+        params.answeredIds.forEach(function (id) {
+            answered[id] = true;
+        });
+    }
+
+    var questionId = function (el) {
+        return el.closest('.qPanel')[0].id.replace('qPanel', '');
+    }
+    var exerciseCheckUnanswered = function() {
+        var qids = $('.qPanel').map(function () {
+            return this.id.replace('qPanel', '');
+        }).get();
+        $('.qPanel :input').change(function () {
+            var el = $(this);
+            var id = questionId(el);
+            answered[id] = true;
+            if (el.attr('type') == 'text') {
+                // Text inputs are fill-in-blanks questions:
+                // if any remain empty, question remains unanswered
+                el.siblings('input').each(function () {
+                    if (this.value == '') {
+                        answered[id] = false;
+                    }
+                });
+            } else if (el.is('select')) {
+                // Selects are matching questions:
+                // if any remain unset, question remains unanswered
+                el.closest('.qPanel').find('select').each(function () {
+                    if (this.value == '0') {
+                        answered[id] = false;
+                    }
+                });
+            }
+        });
+        $('.exercise').submit(function (e) {
+            var unansweredCount = 0, firstUnanswered;
+
+            if ('tinymce' in window) {
+                // Check for empty tinyMCE instances
+                tinymce.get().forEach(function (e) {
+                    if (e.getContent({format: 'text'}).trim() != '') {
+                        var id = questionId($(e.contentAreaContainer));
+                        answered[id] = true;
+                    }
+                });
+            }
+            qids.forEach(function (id) {
+                if (!answered[id]) {
+                    if (!firstUnanswered) {
+                        firstUnanswered = id;
+                    }
+                    unansweredCount++;
+                }
+            });
+            if (!cancelCheck && unansweredCount) {
+                e.preventDefault();
+                var message = (unansweredCount === 1? params.oneUnanswered:
+                    params.manyUnanswered.replace('_', unansweredCount)) +
+                    ' ' + params.question;
+                bootbox.dialog({
+                    title: params.unansweredQuestions,
+                    message:
+                        '<div class="row">' +
+                          '<div class="col-md-12">' +
+                            '<h4>' + params.unansweredQuestions + '</h4>' +
+                            '<p>' + message + '</p>' +
+                          '</div>' +
+                        '</div>',
+                    buttons: {
+                        goBack: {
+                            label: params.goBack,
+                            className: 'btn-success',
+                            callback: function () {
+                                $.unblockUI();
+                                $('html').animate({
+                                    scrollTop: $('#qPanel' + firstUnanswered).offset().top + 'px'
+                                }, 'fast');
+                            }
+                        },
+                        submit: {
+                            label: params.submit,
+                            className: 'btn-warning',
+                            callback: continueSubmit
+                        },
+                    }
+                });
+            } else {
+                continueSubmit();
+            }
+        });
+    }
+    var checkUnanswered = $('.qPanel').length > 1 || params.attemptsAllowed >= 1;
+    $('.btn[name=buttonCancel], .btn[name=buttonSave]').click(continueSubmit);
+    if (checkUnanswered) {
+        exerciseCheckUnanswered();
+    } else {
+        $('.exercise').submit(function () {
+            $(window).off();
+            document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        });
+    }
+}
+
 function countdown(timer, callback) {
     int = setInterval(function() {
-    	timer.text(secondsToHms(timer.time--));
-        if (timer.time + 1 == 0) {
-            clearInterval(int);
-            // 600ms - width animation time
-            callback && setTimeout(callback, 600);
-        }
+      timer.text(secondsToHms(timer.time--));
+      if (timer.time + 1 == 0) {
+        clearInterval(int);
+        // 600ms - width animation time
+        callback && setTimeout(callback, 600);
+      }
     }, 1000);
 }
 
