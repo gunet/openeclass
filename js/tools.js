@@ -333,6 +333,14 @@ function exercise_init_countdown(params) {
     var exerciseId = params.exerciseId,
         eurid = params.eurid;
 
+    // Don't submit question on enter keypress in input field
+    $('.exercise input').keydown(function(event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                $(this).next('input').focus();
+            }
+        });
+
     var continueSubmit = function () {
         $(window).off();
         document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
