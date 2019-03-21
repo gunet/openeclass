@@ -653,13 +653,14 @@ if (!class_exists('Exercise')) {
                     // gets the question ID from $choice. It is the key of the array
                     list($key) = array_keys($choice);
                     // if the user didn't already answer this question
-                    if (!isset($exerciseResult[$key])) {
+                    if (!isset($exerciseResult[$key]) or $exerciseResult[$key] != $choice[$key]) {
                         // stores the user answer into the array
                         $value = $exerciseResult[$key] = $choice[$key];
                         $this->$action($key, $value, 1, $this->getAnswerPosition($key));
                     }
                 }
             }
+
             return $exerciseResult;
         }
 

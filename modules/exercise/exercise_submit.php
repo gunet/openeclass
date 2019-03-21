@@ -332,7 +332,6 @@ if ($exercise_EndDate) {
         }
     }
 }
-
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
@@ -468,7 +467,7 @@ $tool_content .= "
 if (isset($timeleft) && $timeleft > 0) {
   $tool_content .= "<input type='hidden' name='secsRemaining' id='secsRemaining' value='$timeleft' />";
 }
-$i = 0;
+
 $answeredIds = array();
 if (isset($exerciseResult)) {
     $answered_question_ids = array_keys($exerciseResult);
@@ -486,6 +485,7 @@ if ($exerciseType == 2) {
     }
 }
 
+$i = 0;
 foreach ($questionList as $questionId) {
     $i++;
     // for sequential exercises, if this is not the right question,
@@ -548,7 +548,7 @@ if (!$questionList) {
                 <a href='index.php?course=$course_code' class='btn btn-default'>$langBack</a>
             </div>";
 } else {
-    if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
+    if ($exerciseType == 1 || $nbrQuestions == $i) {
         $submitLabel = $langSubmit;
     } else {
         $submitLabel = $langNext . ' &gt;';
@@ -556,7 +556,7 @@ if (!$questionList) {
     $tool_content .= "
         <br>
         <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary blockUI' type='submit' value='$submitLabel'>";
-    if ($exerciseTempSave && !($exerciseType == 2 && ($questionNum == $nbrQuestions))) {
+    if ($exerciseTempSave && !($exerciseType == 2 && ($i == $nbrQuestions))) {
         $tool_content .= "&nbsp;<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
     }
     $tool_content .= "</div>";
