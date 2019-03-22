@@ -101,16 +101,18 @@ if ($is_editor) {
                     </label>
                 </div>
             </div>
-        </div>
-        <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <div class='checkbox'>
-                    <label>
-                        <input type='checkbox' name='chat_activity' > $langChatActivity
-                    </label>
-                </div>
-            </div>
         </div>";
+        if (get_config('enable_colmooc')) {
+            $tool_content .= "<div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='chat_activity' > $langChatActivity
+                        </label>
+                    </div>
+                </div>
+            </div>";
+        }
 
         $tool_content .= "<div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
             <div class='form-group'>
@@ -266,16 +268,18 @@ if ($is_editor) {
             </div>
         </div>";
 
-        $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
-        $tool_content .= "<div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <div class='checkbox'>
-                    <label>
-                        <input type='checkbox' name='chat_activity' $activity_status> $langChatActivity
-                    </label>
+        if (get_config('enable_colmooc')) {
+            $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
+            $tool_content .= "<div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='chat_activity' $activity_status> $langChatActivity
+                        </label>
+                    </div>
                 </div>
-            </div>
-        </div>";
+            </div>";
+        }
 
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>";
