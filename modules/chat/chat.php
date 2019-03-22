@@ -147,6 +147,12 @@ if (!$conference_activity) {
    " . generate_csrf_token_form_field() . "
    </form></div></div></div>";
 } else {
+    if ($is_editor && isset($_GET['create_agent'])) {
+        colmooc_create();
+        Database::get()->querySingle("UPDATE conference SET agent_created = true WHERE conf_id = ?d", $conference_id);
+        $conference_agent = true;
+    }
+
     $tool_content .= action_bar(array(
         array('title' => $langCreateAgent,
             'url' => "chat.php?conference_id=" . $conference_id . "&create_agent=1",
@@ -161,12 +167,6 @@ if (!$conference_activity) {
             'level' => 'primary-label'
         )
     ));
-
-    if ($is_editor && isset($_GET['create_agent'])) {
-        colmooc_create();
-        Database::get()->querySingle("UPDATE conference SET agent_created = true WHERE conf_id = ?d", $conference_id);
-        $conference_agent = true;
-    }
 
     if (!$is_editor) {
         colmooc_register_student();
