@@ -948,6 +948,8 @@ $langChatActive = "Ενεργή";
 $langChatInactive = "Ανενεργή";
 $langChatTitleError = "Παρακαλώ συμπληρώστε τον τίτλο της Κουβεντούλας";
 $langUntitledChat = "Ελεύθερη κουβεντούλα $langsOfCourse";
+$langChatActivity = "Συνομιλία Δραστηριότητας";
+$langCreateAgent = "Δημιουργία Agent";
 
 /* * ***************************************************************
  * copyright.php

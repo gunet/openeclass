@@ -101,6 +101,15 @@ if ($is_editor) {
                     </label>
                 </div>
             </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='chat_activity' > $langChatActivity
+                    </label>
+                </div>
+            </div>
         </div>";
 
         $tool_content .= "<div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
@@ -160,13 +169,18 @@ if ($is_editor) {
         } else {
             $status = 'inactive';
         }
+        if (isset($_POST['chat_activity'])) {
+            $chat_activity = true;
+        } else {
+            $chat_activity = false;
+        }
         if (isset($_POST['conference_id'])) {
             $conf_id = $_POST['conference_id'];
-            Database::get()->querySingle("UPDATE conference SET conf_title= ?s,conf_description = ?s, status = ?s, user_id = ?s, group_id = ?s
-                                            WHERE conf_id =?d", $title, $description, $status, $chat_user_id, $chat_group_id, $conf_id);
+            Database::get()->querySingle("UPDATE conference SET conf_title= ?s,conf_description = ?s, status = ?s, chat_activity = ?b, user_id = ?s, group_id = ?s
+                                            WHERE conf_id =?d", $title, $description, $status, $chat_activity, $chat_user_id, $chat_group_id, $conf_id);
         } else {
-            Database::get()->querySingle("INSERT INTO conference (course_id, conf_title, conf_description, status, user_id, group_id)
-                                                VALUES (?d, ?s, ?s, ?s, ?s, ?s)", $course_id, $title, $description, $status, $chat_user_id, $chat_group_id);
+            Database::get()->querySingle("INSERT INTO conference (course_id, conf_title, conf_description, status, chat_activity, user_id, group_id)
+                                                VALUES (?d, ?s, ?s, ?s, ?b, ?s, ?s)", $course_id, $title, $description, $status, $chat_activity, $chat_user_id, $chat_group_id);
         }
         // Display result message
         Session::Messages($langAttendanceEdit,"alert-success");
@@ -252,6 +266,17 @@ if ($is_editor) {
             </div>
         </div>";
 
+        $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
+        $tool_content .= "<div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='chat_activity' $activity_status> $langChatActivity
+                    </label>
+                </div>
+            </div>
+        </div>";
+
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>";
         $tool_content .= "</fieldset></form></div>";
@@ -273,7 +298,7 @@ if ($display == TRUE) {
 
         $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d ORDER BY conf_id DESC",$course_id);
     } else {
-        $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d AND status = 'active' ORDER BY conf_id DESC",$course_id);
+        $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d AND status = 'active' AND (chat_activity = false OR (chat_activity = true AND agent_created = TRUE)) ORDER BY conf_id DESC",$course_id);
     }
     if (count($q)>0) {
         $tool_content .= "<div class='table-responsive'>";

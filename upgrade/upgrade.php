@@ -3925,6 +3925,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
           ) $tbl_options");
 
+        // conferency chat activity and agent
+        Database::get()->query('ALTER TABLE conference ADD chat_activity boolean not null default false');
+        Database::get()->query('ALTER TABLE conference ADD agent_created boolean not null default false');
     }
 
     // update eclass version

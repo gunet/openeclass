@@ -1773,6 +1773,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `user_id` varchar(255) default '0',
     `group_id` varchar(255) default '0',
+    `chat_activity` boolean not null default false,
+    `agent_created` boolean not null default false, 
     PRIMARY KEY (`conf_id`,`course_id`)) $tbl_options");
 
 // Course Category tables

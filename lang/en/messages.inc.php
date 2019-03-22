@@ -5099,4 +5099,5 @@ $langPrivacyPolicyConsentRedisplay = 'Request new consent';
 $langYouHaveConsentedToPrivacyPolicy = 'You have consented to the {Privacy Policy} on %date.';
 $langYouHaveRejectedPrivacyPolicy = 'You have rejected the {Privacy Policy} on %date.';
 $langYouHaveNotConsentedToPrivacyPolicy = 'You have not consented to the {Privacy Policy}.';
-
+$langChatActivity = 'Chat Activity';
+$langCreateAgent = "Create Agent";

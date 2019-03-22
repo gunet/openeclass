@@ -30,12 +30,17 @@ $helpTopic = 'chat';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'modules/colmooc/functions.php';
 
 $coursePath = $webDir . '/courses/';
 $conference_id = $_GET['conference_id'];
-$q = Database::get()->querySingle("SELECT status FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
+$conference_activity = false;
+$conference_agent = false;
+$q = Database::get()->querySingle("SELECT status, chat_activity, agent_created FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
 if ($q) { // additional security
     $conference_status = $q->status;
+    $conference_activity = $q->chat_activity;
+    $conference_agent = $q->agent_created;
 } else {
     Session::Messages($langForbidden, "alert-danger");
     redirect_to_home_page("modules/chat/index.php?course=$course_code");
@@ -43,6 +48,10 @@ if ($q) { // additional security
 if (!is_valid_chat_user($uid, $conference_id, $conference_status)) {
   Session::Messages($langForbidden, "alert-danger");
   redirect_to_home_page("modules/chat/index.php?course=$course_code");
+}
+if (!is_valid_activity_user($conference_activity, $conference_agent)) {
+    Session::Messages($langForbidden, "alert-danger");
+    redirect_to_home_page("modules/chat/index.php?course=$course_code");
 }
 
   $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';
@@ -92,30 +101,31 @@ $head_content .= '<script type="text/javascript">
     }, 2000);        
 </script>';
 
-$tool_content .= action_bar(array(
-    array('title' => $langSave,
-        'url' => "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
-        'icon' => 'fa-plus-circle',
-        'level' => 'primary-label',
-        'button-class' => 'btn-success',
-        'link-attrs' => "target='messageList'",
-        'show' => $is_editor
-    ),
-    array('title' => $langBack,
+if (!$conference_activity) {
+    $tool_content .= action_bar(array(
+        array('title' => $langSave,
+            'url' => "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter(),
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success',
+            'link-attrs' => "target='messageList'",
+            'show' => $is_editor
+        ),
+        array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label'
-    ),
-    array('title' => $langWash,
-        'url' => "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
-        'icon' => 'fa-trash',
-        'level' => 'primary',
-        'link-attrs' => "target='messageList'",
-        'show' => $is_editor
+        ),
+        array('title' => $langWash,
+            'url' => "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter(),
+            'icon' => 'fa-trash',
+            'level' => 'primary',
+            'link-attrs' => "target='messageList'",
+            'show' => $is_editor
         )
-));
+    ));
 
-$tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
+    $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
    <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
    <form name='chatForm' action='messageList.php' method='POST' target='messageList' onSubmit='return prepare_message();'>
    <input type='hidden' name='course' value='$course_code'/>
@@ -134,8 +144,34 @@ $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
         </div>       
     </div>   
    </fieldset>
-   ". generate_csrf_token_form_field() ."
+   " . generate_csrf_token_form_field() . "
    </form></div></div></div>";
+} else {
+    $tool_content .= action_bar(array(
+        array('title' => $langCreateAgent,
+            'url' => "chat.php?conference_id=" . $conference_id . "&create_agent=1",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success',
+            'show' => $is_editor && !$conference_agent
+        ),
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+        )
+    ));
+
+    if ($is_editor && isset($_GET['create_agent'])) {
+        colmooc_create();
+        Database::get()->querySingle("UPDATE conference SET agent_created = true WHERE conf_id = ?d", $conference_id);
+        $conference_agent = true;
+    }
+
+    if (!$is_editor) {
+        colmooc_register_student();
+    }
+}
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
