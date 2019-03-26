@@ -42,14 +42,17 @@ function unpack_zip_inner($zipfile, $clone) {
     global $webDir, $uid;
     require_once 'include/lib/fileUploadLib.inc.php';
 
-    $zip = new PclZip($zipfile);
-    
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
     if (!is_dir($destdir)) {
         make_dir($destdir);
     }
-    chdir($destdir);
-    $zip->extract();
+
+    $zip = new ZipArchive;
+    if (!$zip->open($zipfile) or !$zip->extractTo($destdir)) {
+        Session::Messages($langGeneralError, 'alert-danger');
+        redirect_to_home_page('modules/course_info/restore_course.php');
+    }
+    $zip->close();
 
     $retArr = array();
     foreach (find_backup_folders($destdir) as $folder) {
@@ -976,7 +979,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             ),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
-        
+
         // Certificate
         $certificate_map = restore_table($restoreThis, 'certificate', array(
             'set' => array('course_id' => $new_course_id),
@@ -985,25 +988,25 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         restore_table($restoreThis, 'certificate_criterion', array(
             'map' => array('certificate' => $certificate_map),
             'map_function' => 'certificate_criterion_map_function',
-            'map_function_data' => array($document_map, $video_map, $videolink_map, 
+            'map_function_data' => array($document_map, $video_map, $videolink_map,
                                          $blog_map, $forum_map, $forum_topic_map,
-                                         $lp_learnPath_map, $ebook_map, $poll_map, 
+                                         $lp_learnPath_map, $ebook_map, $poll_map,
                                          $wiki_map, $assignments_map, $exercise_map),
             'delete' => array('id')
             ), $url_prefix_map, $backupData, $restoreHelper);
-            
-        
+
+
         // Badge
         $badge_map = restore_table($restoreThis, 'badge', array(
             'set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'
-        ), $url_prefix_map, $backupData, $restoreHelper);        
+        ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'badge_criterion', array(
             'map' => array('badge' => $badge_map),
             'map_function' => 'badge_criterion_map_function',
-            'map_function_data' => array($document_map, $video_map, $videolink_map, 
-                                         $blog_map, $forum_map, $forum_topic_map, 
-                                         $lp_learnPath_map, $ebook_map, $poll_map, 
+            'map_function_data' => array($document_map, $video_map, $videolink_map,
+                                         $blog_map, $forum_map, $forum_topic_map,
+                                         $lp_learnPath_map, $ebook_map, $poll_map,
                                          $wiki_map, $assignments_map, $exercise_map),
             'delete' => array('id')
             ), $url_prefix_map, $backupData, $restoreHelper);
@@ -1627,9 +1630,9 @@ function attendance_gradebook_activities_map_function(&$data, $maps) {
 function certificate_criterion_map_function(&$data, $maps) {
     list($document_map, $video_map, $videolink_map,
          $blog_map, $comment_map, $forum_map, $forum_topic_map,
-         $lp_learnPath_map, $ebook_map, $poll_map, $wiki_map, 
+         $lp_learnPath_map, $ebook_map, $poll_map, $wiki_map,
          $assignments_map, $exercise_map) = $maps;
-    
+
     $type = $data['activity_type'];
     switch ($type) {
         case 'document': $data['resource'] = $document_map[$data['resource']];
@@ -1676,16 +1679,16 @@ function certificate_criterion_map_function(&$data, $maps) {
                     break;
         default:
                 break;
-    }    
+    }
     return true;
 }
 
 function badge_criterion_map_function(&$data, $maps) {
     list($document_map, $video_map, $videolink_map,
          $blog_map, $comment_map, $forum_map, $forum_topic_map,
-         $lp_learnPath_map, $ebook_map, $poll_map, $wiki_map, 
+         $lp_learnPath_map, $ebook_map, $poll_map, $wiki_map,
          $assignments_map, $exercise_map) = $maps;
-    
+
     $type = $data['activity_type'];
     switch ($type) {
         case 'document': $data['resource'] = $document_map[$data['resource']];
@@ -1729,10 +1732,10 @@ function badge_criterion_map_function(&$data, $maps) {
                     break;
         case 'courseparticipation': $data['resource'] = null;
                     $data['module'] = MODULE_ID_USAGE;
-                    break;            
+                    break;
         default:
                 break;
-    }    
+    }
     return true;
 }
 

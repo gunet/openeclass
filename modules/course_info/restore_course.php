@@ -70,7 +70,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $tool_content .= "<tr><td>" . unpack_zip_show_files($pathToArchive) . "</td></tr>";
         $tool_content .= "</table></fieldset>";
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langFileNotFound</div>";
+        Session::Messages($langFileNotFound, 'alert-danger');
+        redirect_to_home_page('modules/course_info/restore_course.php');
     }
 } elseif (isset($_POST['create_restored_course'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
