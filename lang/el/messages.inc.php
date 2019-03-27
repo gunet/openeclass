@@ -5518,6 +5518,22 @@ $langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδε
 $langInactiveCourseCategories = "Ανενεργές κατηγορίες";
 $langActiveCourseCategories = "Ενεργές κατηγορίες";
 
+// Course Prerequisites
+$langCoursePrerequisites = "Προαπαιτούμενα";
+$langNewCoursePrerequisite = "Προσθήκη Προαπαιτούμενου";
+$langNoCoursePrerequisites = "Δεν υπάρχουν προαπαιτούμενα";
+$langRemovePrerequisite = "Διαγραφή Προαπαιτούμενου";
+$langDelWarnCoursePrerequisite = "Επιβεβαίωση διαγραφής προαπαιτούμενου";
+$langNewCoursePrerequisiteSuccess = "Το προαπαιτούμενο δημιουργήθηκε με επιτυχία!";
+$langDelCoursePrerequisiteSuccess = "Το προαπαιτούμενο διαγράφηκε με επιτυχία!";
+$langNewCoursePrerequisiteHelp1 = "Σημείωση";
+$langNewCoursePrerequisiteHelp2 = "Για να προστεθεί ένα $langsCourse ως προαπαιτούμενο, θα πρέπει να διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος. Αν δεν διαθέτει, παρακαλούμε επικοινωνήστε με τον $langsOfTeacher του $langsOfCourse.";
+$langNewCoursePrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε ένα έγκυρο $langsCourse.";
+$langNewCoursePrerequisiteFailSelf = "Αδυναμία προσθήκης, το $langsCourse σας δεν μπορεί να επιλεχθεί ως προαπαιτούμενο του εαυτού του.";
+$langNewCoursePrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, το $langsCourse που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
+$langNewCoursePrerequisiteFailBadgeMissing = "Αδυναμία προσθήκης, το $langsCourse που επιλέξατε δεν έχει ενεργοποιημένη την Ολοκλήρωσης μαθήματος.";
+$langPrerequisitesNotComplete = "Τα προαπαιτούμενα $langsCourses για εγγραφή δεν έχουν ολοκληρωθεί";    
+    
 // Messages for Lti Consumer
 $langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
 $langNewLTITool = "Προσθήκη νέας εφαρμογής LTI";
