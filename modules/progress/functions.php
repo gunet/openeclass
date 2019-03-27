@@ -2138,9 +2138,13 @@ function display_user_progress_details($element, $element_id, $user_id) {
                         </div>
                         <div class='row'>
                             <div class='col-sm-12'>
-                            	<div class='pn-info-title-sct'>$langTotalPercentCompleteness</div>
-                            	<div class='pn-info-text-sct'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>
-                                <div class='pn-info-title-sct'>$langDescription</div>
+                            	<div class='pn-info-title-sct'>$langTotalPercentCompleteness</div>";
+                                if ($user_data) {
+                                    $tool_content .= "<div class='pn-info-text-sct'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
+                                } else {
+                                    $tool_content .= "<div class='pn-info-text-sct'>0%</div>";
+                                }
+                                $tool_content .= "<div class='pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
                                 <div class='pn-info-title-sct'>$langpublisher</div>
                                 <div class='pn-info-text-sct'>" . get_cert_issuer($element, $element_id) . "</div>
@@ -2202,12 +2206,15 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 </div>";
 	}
 	$tool_content .= "
-                <div class='row res-table-header'>
-                    <div class='col-sm-9'>$langTotalPercentCompleteness</div>
-                    <div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>
-                </div>";
-
-	$tool_content .= "
+            <div class='row res-table-header'>
+                <div class='col-sm-9'>$langTotalPercentCompleteness</div>";
+                if ($user_data) {
+                    $tool_content .= "<div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";
+                } else {
+                    $tool_content .= "<div class='col-sm-3 text-center'><em>0%</em></div>";
+                }
+            $tool_content .= "</div>";
+            $tool_content .= "
                     </div></div>
                 </div>
             </div>

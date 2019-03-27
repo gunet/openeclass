@@ -285,7 +285,7 @@ function expanded_faculte($facid, $uid) {
             $prereqsCnt++;
         }
         if ($prereqsCnt > 0) {
-            $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langPrerequisites'] . ": " . $coursePrerequisites . "</small>";
+            $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langCoursePrerequisites'] . ": " . $coursePrerequisites . "</small>";
         }
 
         $retString .= "<td align='center'>";

@@ -5556,12 +5556,12 @@ $langDelWarnCoursePrerequisite = "Επιβεβαίωση διαγραφής πρ
 $langNewCoursePrerequisiteSuccess = "Το προαπαιτούμενο δημιουργήθηκε με επιτυχία!";
 $langDelCoursePrerequisiteSuccess = "Το προαπαιτούμενο διαγράφηκε με επιτυχία!";
 $langNewCoursePrerequisiteHelp1 = "Σημείωση";
-$langNewCoursePrerequisiteHelp2 = "Για να προστεθεί ένα μάθημα ως προαπαιτούμενο, θα πρέπει να διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος. Αν δεν διαθέτει, παρακαλούμε επικοινωνήστε με τον καθηγητή του μαθήματος.";
-$langNewCoursePrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε ένα έγκυρο μάθημα.";
-$langNewCoursePrerequisiteFailSelf = "Αδυναμία προσθήκης, το μάθημά σας δεν μπορεί να επιλεχθεί ως προαπαιτούμενο του εαυτού του.";
-$langNewCoursePrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, το μάθημα που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
-$langNewCoursePrerequisiteFailBadgeMissing = "Αδυναμία προσθήκης, το μάθημα που επιλέξατε δεν διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος.";
-$langPrerequisitesNotComplete = "Τα προαπαιτούμενα μαθήματα για εγγραφή δεν έχουν ολοκληρωθεί";
+$langNewCoursePrerequisiteHelp2 = "Για να προστεθεί ένα $langsCourse ως προαπαιτούμενο, θα πρέπει να διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος. Αν δεν διαθέτει, παρακαλούμε επικοινωνήστε με τον $langsOfTeacher του $langsOfCourse.";
+$langNewCoursePrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε ένα έγκυρο $langsCourse.";
+$langNewCoursePrerequisiteFailSelf = "Αδυναμία προσθήκης, το $langsCourse σας δεν μπορεί να επιλεχθεί ως προαπαιτούμενο του εαυτού του.";
+$langNewCoursePrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, το $langsCourse που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
+$langNewCoursePrerequisiteFailBadgeMissing = "Αδυναμία προσθήκης, το $langsCourse που επιλέξατε δεν έχει ενεργοποιημένη την Ολοκλήρωσης μαθήματος.";
+$langPrerequisitesNotComplete = "Τα προαπαιτούμενα $langsCourses για εγγραφή δεν έχουν ολοκληρωθεί";
 
 // Messages for Lti Consumer
 $langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
