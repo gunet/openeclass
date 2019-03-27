@@ -449,6 +449,7 @@ function exercise_init_countdown(params) {
                 var message = (unansweredCount === 1? params.oneUnanswered:
                     params.manyUnanswered.replace('_', unansweredCount)) +
                     ' ' + params.question;
+                $.unblockUI();
                 bootbox.dialog({
                     title: params.unansweredQuestions,
                     message:
@@ -463,7 +464,6 @@ function exercise_init_countdown(params) {
                             label: params.goBack,
                             className: 'btn-success',
                             callback: function () {
-                                $.unblockUI();
                                 $('html').animate({
                                     scrollTop: $('#qPanel' + firstUnanswered).offset().top + 'px'
                                 }, 'fast');
