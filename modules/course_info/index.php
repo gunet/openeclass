@@ -643,12 +643,12 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='1' name='f_radio' $checkForumEn> $langActivateForumNotifications
+                            <input type='radio' value='1' name='f_radio' $checkForumEn> $langDisableForumNotifications
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='f_radio' $checkForumDis> $langDisableForumNotifications
+                            <input type='radio' value='0' name='f_radio' $checkForumDis> $langActivateForumNotifications
                       </label>
                     </div>
                 </div>

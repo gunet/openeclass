@@ -376,8 +376,8 @@ $langForumRating = "αξιολόγησης συζητήσεων";
 $langCourseSocialBookmarks = "συλλογικών συνδέσμων";
 $langCourseAbuseReport = "αναφορά κατάχρησης";
 $langForumNotifications = "Ενημέρωση $langsOfStudents";
-$langActivateForumNotifications = "Ενεργοποίηση ενημέρωσης $langsOfStudents";
-$langDisableForumNotifications = "Aπενεργοποίηση ενημέρωσης $langsOfStudents";
+$langActivateForumNotifications = "Ενεργοποίηση ενημέρωσης $langsOfStudents (μέσω email)";
+$langDisableForumNotifications = "Aπενεργοποίηση ενημέρωσης $langsOfStudents (μέσω email)";
 $langPublicDocumentManagement = 'Δημόσια διαχείριση εγγράφων';
 $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστολή και διαχείριση αρχείων στα «Έγγραφα» από όλους τους εγγεγραμμένους χρήστες.';
 
