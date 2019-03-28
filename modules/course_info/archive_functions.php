@@ -196,18 +196,37 @@ function doArchive($course_id, $course_code) {
     $zipfile = $basedir . "/$course_code-$backup_date_short.zip";
 
     // create zip file
-    $zipCourse = new PclZip($zipfile);
-    $result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive") &&
-        $zipCourse->add("$webDir/courses/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html") &&
-        $zipCourse->add("$webDir/video/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
-
+    $zip = new ZipArchive;
+    if ($zip->open($zipfile, ZipArchive::CREATE) !== true) {
+        Session::Messages($langGeneralError, 'alert-danger');
+        redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
+    }
+    $result = $zip->addGlob($archivedir . '/*', GLOB_NOSORT, [
+            'remove_path' => "$webDir/courses/archive" ]) &&
+        addDir($zip, "$webDir/courses/$course_code", "$course_code/$backup_date/html") &&
+        addDir($zip, "$webDir/video/$course_code", "$course_code/$backup_date/video_files");
+    $zip->close();
     removeDir($archivedir);
 
     if (!$result) {
-        $tool_content .= "Error: " . $zipCourse->errorInfo(true);
-        draw($tool_content, 2);
-        exit;
+        Session::Messages($langGeneralError, 'alert-danger');
+        redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
     }
+}
+
+function addDir($zip, $path, $newPath) {
+    $result = true;
+    $dir = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
+    $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
+    foreach ($iterator as $name => $item) {
+        $basename = str_replace($path, $newPath, $name);
+        if ($item->isFile()) {
+            $result = $result && $zip->addFile($name, $basename);
+        } else {
+            $result = $result && $zip->addEmptyDir($basename);
+        }
+    }
+    return $result;
 }
 
 /**
