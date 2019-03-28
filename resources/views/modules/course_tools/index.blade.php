@@ -77,5 +77,15 @@
         </table>
     </div>
 
+    <div class='panel panel-default panel-action-btn-default'>
+        <div class='panel-heading list-header'>
+            <span class='panel-title' style='line-height: 50px;'>{{ trans('langLtiConsumer') }}</span>
+            <span class='pull-right' style='padding:8px;'>
+            <a class='btn btn-success' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
+            <span class='fa fa-plus-circle'></span>{{ trans('langNewLTITool') }}</a>
+        </div>
+    </div>
+
+{!! lti_app_details() !!}
 
 @endsection

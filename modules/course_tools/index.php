@@ -27,6 +27,7 @@ $require_login = true;
 
 include '../../include/baseTheme.php';
 require_once 'include/log.class.php';
+require_once 'modules/lti_consumer/lti-functions.php';
 
 $toolName = $langToolManagement;
 $page_url = 'modules/course_tools/?course=' . $course_code;
@@ -98,7 +99,7 @@ if (isset($_GET['action'])) { // add external link
     $helpTopic = 'Module';
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'>
-            <fieldset>            
+            <fieldset>
             <div class='form-group'>
                 <label for='link' class='col-sm-2 control-label'>$langLink:</label>
                 <div class='col-sm-10'>
@@ -109,15 +110,15 @@ if (isset($_GET['action'])) { // add external link
                 <label for-'name_link' class='col-sm-2 control-label'>$langLinkName:</label>
                 <div class='col-sm-10'>
                     <input class='form-control' type='text' name='name_link' size='50'>
-                </div>              
+                </div>
             </div>
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
               <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
-            </div>  
+            </div>
             </div>
             </fieldset>
-            ". generate_csrf_token_form_field() ." 
+            ". generate_csrf_token_form_field() ."
             </form>
           </div>";
     draw($tool_content, 2, null, $head_content);
@@ -139,8 +140,6 @@ $data['csrf'] = generate_csrf_token_form_field();
 $data['q'] = Database::get()->queryArray("SELECT id, url, title FROM link
                         WHERE category = -1 AND
                         course_id = ?d", $course_id);
-
-
 
 
 view('modules.course_tools.index', $data);

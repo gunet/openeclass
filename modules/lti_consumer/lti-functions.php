@@ -205,6 +205,9 @@ function edit_lti_app($session_id) {
                     //]]></script>';
 }
 
+/**
+ * @brief display available lti apps (if any)
+ */
 function lti_app_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
         $langConfirmDelete, $langNewLTIAppSessionDesc, $langNote,
@@ -227,9 +230,9 @@ function lti_app_details() {
                                <th class='text-center'>$langNewLTIAppSessionDesc</th>
                                <th class='text-center'>$langLTIAppActions</th>";
         if ($is_editor) {
-            $headings .= "         <th class='text-center'>" . icon('fa-gears') . "</th>";
+            $headings .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
-        $headings .= "       </tr>";
+        $headings .= "</tr>";
 
         foreach ($result as $row) {
             $id = $row->id;
@@ -268,14 +271,14 @@ function lti_app_details() {
                     <td class='option-btn-cell'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
+                                    'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
                                     'icon' => 'fa-edit'),
                             array(  'title' => $row->enabled? $langDeactivate : $langActivate,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_".
+                                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
                                              ($row->enabled? 'disable' : 'enable'),
                                     'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash'),
                             array(  'title' => $langDelete,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
+                                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
                                     'icon' => 'fa-times',
                                     'class' => 'delete',
                                     'confirm' => $langConfirmDelete)
@@ -311,7 +314,7 @@ function disable_lti_app($id)
 
     Database::get()->querySingle("UPDATE lti_apps set enabled = 0 WHERE id = ?d",$id);
     Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
-    redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
+    redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
 }
 
 function enable_lti_app($id)
@@ -320,7 +323,7 @@ function enable_lti_app($id)
 
     Database::get()->querySingle("UPDATE lti_apps SET enabled = 1 WHERE id = ?d",$id);
     Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
-    redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
+    redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
 }
 
 
