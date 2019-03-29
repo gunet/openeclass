@@ -1103,7 +1103,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
     } else {
         $auth_allow = 4; // means wrong password
         Log::record(0, 0, LOG_LOGIN_FAILURE,
-            array('uname' => $posted_uname, 'pass' => $pass));
+            array('uname' => $posted_uname));
     }
 
     return $auth_allow;
@@ -1169,8 +1169,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
         } else {
             $auth_allow = 2;
             // log invalid logins
-            Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $uname,
-                                                       'pass' => $pass));
+            Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $uname));
         }
         if ($auth_allow == 1) {
             $userObj = new User();
