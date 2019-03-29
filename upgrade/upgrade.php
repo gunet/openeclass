@@ -176,8 +176,6 @@ mkdir_or_error('courses/eportfolio/work_submissions');
 touch_or_error('courses/eportfolio/work_submissions/index.php');
 mkdir_or_error('courses/eportfolio/mydocs');
 touch_or_error('courses/eportfolio/mydocs/index.php');
-mkdir_try('storage');
-mkdir_try('storage/views');
 
 // ********************************************
 // upgrade config.php
@@ -265,7 +263,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
           </div>
           <div class='form-group'>
             <div class='col-md-12'>
-              <input class='pull-right btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'>
+              <input class='pull-right btn btn-primary' name='submit2' value='$langContinue &raquo;' type='submit'>
                 </div>
               </div>
             </fieldset>
@@ -3760,6 +3758,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     }
 
+    // upgrade queries for version 3.6.3
+    if (version_compare($oldversion, '3.6.3', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.6.3'));
+
+        Database::get()->query('ALTER TABLE tc_session
+            CHANGE external_users external_users TEXT DEFAULT NULL');
+    }
+
     // upgrade queries for version 3.7
     if (version_compare($oldversion, '3.7', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.7'));
@@ -3781,68 +3787,58 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         $q = Database::get()->queryArray("SELECT id FROM course WHERE view_type = 'weekly'");
         foreach ($q as $courseid) {
             // move weekly_course_units to course_units
-            Database::get()->query("INSERT INTO course_units
+            $result = Database::get()->query("INSERT INTO course_units
                         (title, comments, start_week, finish_week, visible, public, `order`, course_id)
                             SELECT start_week, comments, start_week, finish_week, visible, public, `order`, ?d
                                 FROM course_weekly_view
                                 WHERE course_id = ?d ORDER BY id", $courseid, $courseid);
+            $unit_map = [];
+            $current_id = Database::get()->querySingle("SELECT MAX(id) AS max_id FROM course_units")->max_id;
+            Database::get()->queryFunc("SELECT id FROM course_weekly_view
+                                WHERE course_id = ?d ORDER BY id DESC LIMIT ?d",
+                function ($item) use (&$unit_map, &$current_id) {
+                    $unit_map[$current_id] = $item->id;
+                    $current_id--;
+                },
+                $courseid, $result->affectedRows);
 
-            // new course_unit_ids
-            $r = Database::get()->queryArray("SELECT id FROM course_units WHERE course_id = ?d ORDER BY id", $courseid);
             // move weekly_course_unit_resources to course_unit_resources
-            foreach ($r as $cunitid) {
+            foreach ($unit_map as $unit_id => $weekly_id) {
                 Database::get()->query("INSERT INTO unit_resources
                                 (unit_id, title, comments, res_id, `type`, visible, `order`, `date`)
                             SELECT ?d, title, comments, res_id, `type`, visible, `order`, `date`
-                                FROM course_weekly_view_activities ORDER BY unit_id", $cunitid->id);
+                                FROM course_weekly_view_activities 
+                                WHERE course_weekly_view_id = ?d", $unit_id, $weekly_id);
             }
             // update course with new view type (=units)
             Database::get()->query("UPDATE course SET view_type = 'units' WHERE id = ?d", $courseid);
         }
 
-        //Database::get()->query("DROP TABLE course_weekly");
-        //Database::get()->query("DROP TABLE course_weekly_view_activities");
+        Database::get()->query("DROP TABLE course_weekly");
+        Database::get()->query("DROP TABLE course_weekly_view_activities");
 
-    }
+        // course prerequisites
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_prerequisite` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `course_id` int(11) not null,
+                `prerequisite_course` int(11) not null,
+                PRIMARY KEY (`id`)
+            ) $tbl_options");
 
-    // upgrade queries for version 4.0
-    if (version_compare($oldversion, '4.0', '<')) {
-        updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
-
-        Database::get()->query('ALTER TABLE tc_session
-                  CHANGE external_users external_users TEXT DEFAULT NULL');
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `class` varchar(400) NOT NULL) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `widget_id` int(11) unsigned NOT NULL,
-                `widget_area_id` int(11) NOT NULL,
-                `options` text NOT NULL,
-                `position` int(3) NOT NULL,
-                `user_id` int(11) NULL,
-                `course_id` int(11) NULL,
-                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
-
-
-
-        // lti
+        // lti apps
         Database::get()->query("CREATE TABLE IF NOT EXISTS lti_apps (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `course_id` INT(11) DEFAULT NULL,
-                    `title` VARCHAR(255) DEFAULT NULL,
-                    `description` TEXT,
-                    `lti_provider_url` VARCHAR(255) DEFAULT NULL,
-                    `lti_provider_key` VARCHAR(255) DEFAULT NULL,
-                    `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
-                    `launchcontainer` TINYINT(4) NOT NULL DEFAULT 1,
-                    `is_template` TINYINT(4) NOT NULL DEFAULT 0,
-                    `enabled` TINYINT(4) NOT NULL DEFAULT 1,
-                    PRIMARY KEY (`id`)) $tbl_options");
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `course_id` INT(11) DEFAULT NULL,
+                `title` VARCHAR(255) DEFAULT NULL,
+                `description` TEXT,
+                `lti_provider_url` VARCHAR(255) DEFAULT NULL,
+                `lti_provider_key` VARCHAR(255) DEFAULT NULL,
+                `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
+                `launchcontainer` TINYINT(4) NOT NULL DEFAULT 1,
+                `is_template` TINYINT(4) NOT NULL DEFAULT 0,
+                `enabled` TINYINT(4) NOT NULL DEFAULT 1,
+                PRIMARY KEY (`id`)
+            ) $tbl_options");
 
         if (!DBHelper::fieldExists('assignment', 'assignment_type')) {
             Database::get()->query("ALTER TABLE assignment ADD assignment_type TINYINT NOT NULL DEFAULT '0' AFTER password_lock");
@@ -3890,76 +3886,56 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE assignment ADD tii_exclude_value INT(11) NOT NULL DEFAULT '0' AFTER tii_exclude_type");
         }
 
-        // `request` tables (aka `ticketing`)
-        Database::get()->query("CREATE TABLE IF NOT EXISTS request_type (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `name` MEDIUMTEXT NOT NULL,
-                `description` MEDIUMTEXT NULL DEFAULT NULL) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS request (
-                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `course_id` INT(11) NOT NULL,
-                `title` VARCHAR(255) NOT NULL,
-                `description` TEXT,
-                `creator_id` INT(11) NOT NULL,
-                `state` TINYINT(4) NOT NULL,
-                `type` INT(11) UNSIGNED NOT NULL,
-                `open_date` DATETIME NOT NULL,
-                `change_date` DATETIME NOT NULL,
-                `close_date` DATETIME,
-                PRIMARY KEY(id),
-                FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                FOREIGN KEY (`type`) REFERENCES request_type(id) ON DELETE CASCADE,
-                FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field` (
-                `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                `type_id` INT(11) UNSIGNED NOT NULL,
-                `name` MEDIUMTEXT NOT NULL,
-                `description` MEDIUMTEXT NULL DEFAULT NULL,
-                `datatype` INT(11) NOT NULL,
-                `sortorder` INT(11) NOT NULL DEFAULT 0,
-                `values` MEDIUMTEXT DEFAULT NULL,
-                FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field_data` (
-                `id` INT(11) UNSIGNED NULL AUTO_INCREMENT PRIMARY KEY,
-                `request_id` INT(11) UNSIGNED NOT NULL,
-                `field_id` INT(11) UNSIGNED NOT NULL,
-                `data` TEXT NOT NULL,
-                FOREIGN KEY (field_id) REFERENCES request_field(id) ON DELETE CASCADE,
-                UNIQUE KEY (`request_id`, `field_id`)) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS request_watcher (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `request_id` INT(11) UNSIGNED NOT NULL,
-                `user_id` INT(11) NOT NULL,
-                `type` TINYINT(4) NOT NULL,
-                `notification` TINYINT(4) NOT NULL,
-                PRIMARY KEY (id),
-                UNIQUE KEY (request_id, user_id),
-                FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS request_action (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `request_id` INT(11) UNSIGNED NOT NULL,
-                `user_id` INT(11) NOT NULL,
-                `ts` DATETIME NOT NULL,
-                `old_state` TINYINT(4) NOT NULL,
-                `new_state` TINYINT(4) NOT NULL,
-                `filename` VARCHAR(256),
-                `real_filename` VARCHAR(255),
-                `comment` TEXT,
-                PRIMARY KEY(id),
-                FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
-
-        if (!DBHelper::fieldExists('user', 'public_blog')) {
-            Database::get()->query("ALTER TABLE user
-                ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
+        // move question position to exercise and exercise_answer
+        // and make sure position is unique in each exercise / attempt
+        if (DBHelper::fieldExists('exercise_question', 'q_position')) {
+            Database::get()->query('ALTER TABLE exercise_with_questions ADD q_position INT(11) NOT NULL DEFAULT 1');
+            Database::get()->query('ALTER TABLE exercise_answer_record ADD q_position INT(11) NOT NULL DEFAULT 1');
+            Database::get()->query('UPDATE exercise_with_questions
+                JOIN exercise_question ON exercise_question.id = question_id
+                SET exercise_with_questions.q_position = exercise_question.q_position');
+            Database::get()->query('UPDATE exercise_answer_record
+                JOIN exercise_question ON exercise_question.id = question_id
+                SET exercise_answer_record.q_position = exercise_question.q_position');
+            $exercises = Database::get()->queryArray('SELECT exercise_id AS id
+                FROM exercise_with_questions GROUP by exercise_id, q_position HAVING COUNT(*) > 1');
+            foreach ($exercises as $exercise) {
+                $questions = Database::get()->queryArray('SELECT question_id AS id FROM exercise_with_questions
+                    WHERE exercise_id = ?d ORDER BY q_position', $exercise->id);
+                $i = 1;
+                foreach ($questions as $question) {
+                    Database::get()->query('UPDATE exercise_with_questions
+                        SET q_position = ?d WHERE exercise_id = ?d AND question_id = ?d',
+                        $i, $exercise->id, $question->id);
+                    Database::get()->query('UPDATE exercise_answer_record
+                        JOIN exercise_user_record USING (eurid)
+                        SET q_position = ?d WHERE eid = ?d AND question_id = ?d',
+                        $i, $exercise->id, $question->id);
+                    $i++;
+                }
+            }
+            Database::get()->query('ALTER TABLE exercise_question DROP q_position');
         }
 
+        if (!DBHelper::fieldExists('exercise_user_record', 'assigned_to')) {
+            Database::get()->query("ALTER TABLE `exercise_user_record`
+                    ADD `assigned_to` INT(11) DEFAULT NULL");
+        }
+
+        // user consent
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_consent` (
+            id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id INT(11) NOT NULL,
+            has_accepted BOOL NOT NULL DEFAULT 0,
+            ts DATETIME,
+            PRIMARY KEY (id),
+            UNIQUE KEY (user_id),
+            FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+          ) $tbl_options");
+
+        // conferency chat activity and agent
+        Database::get()->query('ALTER TABLE conference ADD chat_activity boolean not null default false');
+        Database::get()->query('ALTER TABLE conference ADD agent_created boolean not null default false');
     }
 
     // update eclass version
