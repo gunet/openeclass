@@ -516,7 +516,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $courseDir = "${webDir}/courses/$new_course_code";
         $videoDir = "${webDir}/video/$new_course_code";
         $oldCourseDir = $restoreThis . '/html';
-        // move_dir($oldCourseDir, $courseDir);
+        move_dir($oldCourseDir, $courseDir);
 
         if ($clone_course) {
             recurse_copy($webDir . '/video/' . $GLOBALS['currentCourseCode'], $webDir . '/video/' . $new_course_code);
