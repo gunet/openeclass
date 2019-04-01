@@ -154,12 +154,12 @@ function add_prereq($prereqId) {
         return;
     }
 
-    // check badge for completion exists
+    // check if badge for course completion exists
     $result = Database::get()->queryArray("SELECT id
                                  FROM badge  
                                  WHERE course_id = ?d
-                                 AND bundle = -1", $course_id);
-    if (count($result) > 0) {
+                                 AND bundle = -1 AND active = 1", $prereqId);
+    if (!$result) {
         Session::Messages($langNewCoursePrerequisiteFailBadgeMissing, 'alert-danger');
         return;
     }
