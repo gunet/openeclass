@@ -429,7 +429,7 @@ class Hierarchy {
         if ($offset > 0) {
             $offset -= 1;
         }
-
+        $langEmptyNodeSelect = js_escape($langEmptyNodeSelect);
         $js = <<<jContent
 <script type="text/javascript">
 /* <![CDATA[ */
