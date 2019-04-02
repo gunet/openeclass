@@ -3783,13 +3783,33 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE course_units ADD start_week DATE after comments");
         }
 
-        // courses with view type = 'weekly'
+        // -------------------------------------------------------------------------------
+        // Upgrade course units. Merge course weekly view type with course unit view type
+        // -------------------------------------------------------------------------------
+
+        // For all courses with view type = 'weekly'
         $q = Database::get()->queryArray("SELECT id FROM course WHERE view_type = 'weekly'");
         foreach ($q as $courseid) {
-            // move weekly_course_units to course_units
+            // Clean up: Check if course has any (simple) course units.
+            // If yes then delete them since they are not appeared anywhere and we don't want to have stale db records.
+            $s = Database::get()->queryArray("SELECT id FROM course_units WHERE course_id = ?d", $courseid);
+            foreach ($s as $oldcu) {
+                Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $oldcu);
+            }
+            Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $courseid);
+
+            // Now we can continue
+            // Move weekly_course_units to course_units
             $result = Database::get()->query("INSERT INTO course_units
                         (title, comments, start_week, finish_week, visible, public, `order`, course_id)
-                            SELECT start_week, comments, start_week, finish_week, visible, public, `order`, ?d
+                            SELECT CASE WHEN (title = '' OR title IS NULL) 
+                                THEN 
+                                  TRIM(CONCAT_WS(' ','$langWeek', DATE_FORMAT(start_week, '%d-%m-%Y')))
+                                ELSE 
+                                  title  
+                                END 
+                              AS title, 
+                              comments, start_week, finish_week, visible, public, `order`, ?d
                                 FROM course_weekly_view
                                 WHERE course_id = ?d ORDER BY id", $courseid, $courseid);
             $unit_map = [];
@@ -3813,9 +3833,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             // update course with new view type (=units)
             Database::get()->query("UPDATE course SET view_type = 'units' WHERE id = ?d", $courseid);
         }
-
-        Database::get()->query("DROP TABLE course_weekly");
+        // drop tables
+        Database::get()->query("DROP TABLE course_weekly_view");
         Database::get()->query("DROP TABLE course_weekly_view_activities");
+        // end of upgrading course units
 
         // course prerequisites
         Database::get()->query("CREATE TABLE IF NOT EXISTS `course_prerequisite` (
