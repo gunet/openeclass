@@ -64,7 +64,7 @@ function checkrequired(which, entry) {
         }
     }
     if (!pass) {
-        alert(langEmptyGroupName);
+        alert("Αφήσατε κάποιο από τα υποχρεωτικά πεδία κενό!");
         return false;
     } else {
         return true;
