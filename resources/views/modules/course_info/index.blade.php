@@ -261,12 +261,12 @@
             <div class='col-sm-10'>
                 <div class='radio'>
                   <label>
-                        <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}> {{ trans('langActivateForumNotifications') }}
+                        <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}> {{ trans('langDisableForumNotifications') }}
                   </label>
                 </div>
                 <div class='radio'>
                   <label>
-                        <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}> {{ trans('langDisableForumNotifications') }}
+                        <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}> {{ trans('langActivateForumNotifications') }}
                   </label>
                 </div>
             </div>

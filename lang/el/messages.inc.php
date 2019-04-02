@@ -375,8 +375,8 @@ $langForumRating = "αξιολόγησης συζητήσεων";
 $langCourseSocialBookmarks = "συλλογικών συνδέσμων";
 $langCourseAbuseReport = "αναφορά κατάχρησης";
 $langForumNotifications = "Ενημέρωση $langsOfStudents";
-$langActivateForumNotifications = "Ενεργοποίηση ενημέρωσης $langsOfStudents";
-$langDisableForumNotifications = "Aπενεργοποίηση ενημέρωσης $langsOfStudents";
+$langActivateForumNotifications = "Ενεργοποίηση ενημέρωσης $langsOfStudents (μέσω email)";
+$langDisableForumNotifications = "Aπενεργοποίηση ενημέρωσης $langsOfStudents (μέσω email)";
 $langPublicDocumentManagement = 'Δημόσια διαχείριση εγγράφων';
 $langPublicDocumentManagementExplanation = 'Επιτρέπεται απόστολή και διαχείριση αρχείων στα «Έγγραφα» από όλους τους εγγεγραμμένους χρήστες';
 
@@ -5532,8 +5532,8 @@ $langNewCoursePrerequisiteFailInvalid = "Αδυναμία προσθήκης, π
 $langNewCoursePrerequisiteFailSelf = "Αδυναμία προσθήκης, το $langsCourse σας δεν μπορεί να επιλεχθεί ως προαπαιτούμενο του εαυτού του.";
 $langNewCoursePrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, το $langsCourse που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
 $langNewCoursePrerequisiteFailBadgeMissing = "Αδυναμία προσθήκης, το $langsCourse που επιλέξατε δεν έχει ενεργοποιημένη την Ολοκλήρωσης μαθήματος.";
-$langPrerequisitesNotComplete = "Τα προαπαιτούμενα $langsCourses για εγγραφή δεν έχουν ολοκληρωθεί";    
-    
+$langPrerequisitesNotComplete = "Τα προαπαιτούμενα $langsCourses για εγγραφή δεν έχουν ολοκληρωθεί";
+
 // Messages for Lti Consumer
 $langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
 $langNewLTITool = "Προσθήκη νέας εφαρμογής LTI";
@@ -5551,7 +5551,7 @@ $langLTIAppAddSuccessful = "Η καταχώριση της Εξωτερικής 
 $langTIIAppAddSuccessful = "Η καταχώριση της TurnItIn Εφαρμογής ολοκληρώθηκε επιτυχώς";
 $langLTIAppUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
 $langLTIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
-$langTIIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";    
+$langTIIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
 $langNewLTIAppSessionDesc = "Σύντομη περιγραφή";
 $langLTIAppActions = "Ενέργειες";
 $langLTILaunchContainer = "Περιβάλλον προβολής";
