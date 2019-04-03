@@ -5101,3 +5101,6 @@ $langYouHaveRejectedPrivacyPolicy = 'You have rejected the {Privacy Policy} on %
 $langYouHaveNotConsentedToPrivacyPolicy = 'You have not consented to the {Privacy Policy}.';
 $langChatActivity = 'Chat Activity';
 $langCreateAgent = "Create Agent";
+$langNewEclassVersion = 'New Open eClass platform release';
+$langNewEclassVersionInfo = 'A new version of the Open eClass platform, %s,
+    is available.  Please visit the project webpage %s for upgrade information.';

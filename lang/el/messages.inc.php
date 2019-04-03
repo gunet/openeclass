@@ -199,7 +199,10 @@ $langActivityCourse = 'Μαθήματα-Δραστηριότητες';
 $langNoActivityHeadings = 'Δεν υπάρχουν τίτλοι κατηγοριών δραστηριοτήτων';
 $langActivityCourseAdd = 'Προσθήκη τίτλου κατηγορίας δραστηριότητας';
 $langQuickLinks = "Γρήγοροι σύνδεσμοι";
-
+$langNewEclassVersion = 'Νέα έκδοση πλατφόρμας Open eClass';
+$langNewEclassVersionInfo = 'Μια νέα έκδοση της πλατφόρμας Open eClass, %s,
+είναι διαθέσιμη. Παρακαλούμε επισκεφθείτε την ιστοσελίδα %s για πληροφορίες
+αναβάθμισης.';
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";

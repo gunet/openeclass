@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,13 +19,33 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_usermanage_user = TRUE;
+$require_usermanage_user = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modalconfirmation.php';
 
 $pageName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
+
+$release_alert = '';
+$release_info = get_eclass_release();
+if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0) {
+    $release_alert = "
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-success'>
+                <div class='panel-heading'>
+                    $langNewEclassVersion
+                </div>
+                <div class='panel-body'>" .
+                    sprintf($langNewEclassVersionInfo,
+                        '<b>' . q($release_info->release) . '</b>',
+                        '<a href="https://www.openeclass.org/" target="_blank">www.openeclass.org</a>') . "
+                </div>
+            </div>
+        </div>
+    </div>";
+}
 
 // Construct a table with platform identification info
 $tool_content .= action_bar(array(
@@ -34,6 +54,7 @@ $tool_content .= action_bar(array(
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
 $tool_content .= "
+    $release_alert
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel'>
@@ -371,3 +392,25 @@ $(document).ready(function() {
 </script>
 EOF;
 draw($tool_content, 3, null, $head_content);
+
+function get_eclass_release() {
+    $ts = get_config('eclass_release_timestamp');
+    if (!$ts or time() - $ts > 24 * 3600) {
+        set_config('eclass_release_timestamp', time());
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://resources.openeclass.org/current.json');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        if ($result) {
+            set_config('eclass_release_info', $result);
+            return json_decode($result);
+        } else {
+            return null;
+        }
+    }
+    return json_decode(get_config('eclass_release_info'));
+
+}
