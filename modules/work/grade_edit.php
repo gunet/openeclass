@@ -20,6 +20,10 @@
  * ======================================================================== */
 
 $require_current_course = true;
+$require_help = true;
+$helpTopic = 'assignments';
+$helpSubTopic = 'grades';
+
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';

@@ -259,7 +259,8 @@ if ($nbrQuestions) {
             $sql = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $id);
             if (!$sql) $addon = "&amp;htopic=4";
         }
-    
+
+        $addon = "&amp;htopic=" . $objQuestionTmp->selectType();    
         $tool_content .= "<tr>
 			<td align='right' width='1'>" . $i . ".</td>
 			<td> " . q_math($objQuestionTmp->selectTitle()) . "<br />

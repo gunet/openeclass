@@ -21,6 +21,9 @@
  */
 $require_current_course = TRUE;
 $require_editor = true;
+$require_help = true;
+$helpTopic = 'assignments';
+$helpSubTopic = 'scale';
 
 include '../../include/baseTheme.php';
 
