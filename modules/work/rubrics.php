@@ -22,6 +22,9 @@
 
 $require_current_course = TRUE;
 $require_editor = true;
+$require_help = true;
+$helpTopic = 'assignments';
+$helpSubTopic = 'rubric';
 include '../../include/baseTheme.php'; 
 
 $toolName = $langGradeRubrics;
