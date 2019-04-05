@@ -2131,6 +2131,7 @@ tinymce.init({
     // General options
     selector: 'textarea.mceEditor',
     language: '$language',
+    cache_suffix: '?v=" . ECLASS_VERSION . "',
     theme: 'modern',
     skin: 'light',
     image_advtab: true,
