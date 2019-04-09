@@ -25,6 +25,7 @@ syntax: regexp
 \.rej$
 \.conflict\~$
 \.map$
+\..*\.swp$
 
 \.git$
 \.gitignore$
