@@ -32,6 +32,8 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
+use Hybrid\Auth;
+
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $auth = intval($_REQUEST['auth']);
 }
@@ -64,29 +66,28 @@ if ($auth == 7) { // CAS
         redirect_to_home_page('secure/index.php');
     }
 } elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
-    require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+    include_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
     $provider = $auth_ids[$auth];
-	try {
-		$hybridauth = new Hybrid_Auth($config);
-		$adapter = $hybridauth->authenticate($provider);
-		$user_data = $adapter->getUserProfile();
+    try {
+        $hybridauth = new Hybrid_Auth($config);
+        $adapter = $hybridauth->authenticate($provider);
+        $user_data = $adapter->getUserProfile();
         Session::Messages($langConnYes, 'alert-success');
-		Session::Messages("<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
-	} catch (Exception $e) {
-		Session::Messages($e->getMessage(), 'alert-danger');
-		switch($e->getCode()) {
-			case 0: Session::Messages($GLOBALS['langProviderError1']); break;
-			case 1: Session::Messages($GLOBALS['langProviderError2']); break;
-			case 2: Session::Messages($GLOBALS['langProviderError3']); break;
-			case 3: Session::Messages($GLOBALS['langProviderError4']); break;
-			case 4: Session::Messages($GLOBALS['langProviderError5']); break;
-			case 5: Session::Messages($GLOBALS['langProviderError6']); break;
-			case 6: Session::Messages($GLOBALS['langProviderError7']); $adapter->logout(); break;
-			case 7: Session::Messages($GLOBALS['langProviderError8']); $adapter->logout(); break;
-		}
-	}
+        Session::Messages("<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
+    } catch (Exception $e) {
+        Session::Messages($e->getMessage(), 'alert-danger');
+        switch ($e->getCode()) {
+            case 0: Session::Messages($GLOBALS['langProviderError1']); break;
+            case 1: Session::Messages($GLOBALS['langProviderError2']); break;
+            case 2: Session::Messages($GLOBALS['langProviderError3']); break;
+            case 3: Session::Messages($GLOBALS['langProviderError4']); break;
+            case 4: Session::Messages($GLOBALS['langProviderError5']); break;
+            case 5: Session::Messages($GLOBALS['langProviderError6']); break;
+            case 6: Session::Messages($GLOBALS['langProviderError7']); $adapter->logout(); break;
+            case 7: Session::Messages($GLOBALS['langProviderError8']); $adapter->logout(); break;
+        }
+    }
 }
 
 $toolName = $langConnTest . ' (' . $auth_ids[$auth] . ')';
