@@ -32,6 +32,8 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
+use Hybrid\Auth;
+
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $data['auth'] = $auth = intval($_REQUEST['auth']);
 }
@@ -64,8 +66,7 @@ if ($auth == 7) { // CAS
         redirect_to_home_page('secure/index.php');
     }
 } elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
-    require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+    include_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
     $provider = $auth_ids[$auth];
     try {
@@ -91,10 +92,10 @@ if ($auth == 7) { // CAS
 
 $toolName = $langConnTest . ' (' . $auth_ids[$auth] . ')';
 
-register_posted_variables(array(
+register_posted_variables([
     'token' => true,
     'submit' => true,
-    'test_username' => true), 'all');
+    'test_username' => true], 'all');
 
 $data['test_username'] = $test_username;
 $data['test_password'] = '';
