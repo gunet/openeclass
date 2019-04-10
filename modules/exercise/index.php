@@ -624,7 +624,7 @@ if ($is_editor) {
                                 className: 'btn-default'
                             },
                             success: {
-                                label: '" .js_escape($langEdit) . "',
+                                label: '" .js_escape($langGradeCorrect) . "',
                                 className: 'btn-success',
                                 callback: function (a) {
                                     window.location.href = 'results_by_question.php?course=$course_code&exerciseId='+ exerciseid[0];
