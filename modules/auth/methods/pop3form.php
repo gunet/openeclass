@@ -19,6 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+if (!isset($auth_data['pop3host'])) {
+    $auth_data['pop3host'] = '';
+}
 $tool_content .= "
         <div class='form-group'>
             <label for='pop3host' class='col-sm-2 control-label'>$langpop3host:</label>

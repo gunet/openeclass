@@ -581,7 +581,7 @@ if ($is_editor) {
                 }
                 Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
                 if ($invalid > 0) { // info about invalid emails (if exist)
-                    Session::Messages("$langInvalidMail $invalid", 'alert-warning');
+                    Session::Messages("$langInvalidMail: $invalid", 'alert-warning');
                 }
             } else {
                 Session::Messages($langAnnAdd, 'alert-success');

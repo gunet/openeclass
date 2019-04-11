@@ -65,7 +65,7 @@ $langOfCourse = "Μαθήματος";
 $langsCourse = "μάθημα";
 $langsCourses = "μαθήματα";
 $langsOfCourse = "μαθήματος";
-$langsOfCourses = "μαθημάτων";        
+$langsOfCourses = "μαθημάτων";
 
 $langFaculty = "Κατηγορία";
 $langOfFaculty = "Κατηγορίας";
@@ -75,10 +75,6 @@ $langFaculties = "Κατηγορίες";
 $langsFaculty = "κατηγορία";
 $langsOfFaculty = "κατηγορίας";
 $langsFaculties = "κατηγορίες";
-
-$langpres = "Προπτυχιακά";
-$langposts = "Μεταπτυχιακά";
-$langothers = "Άλλα";
 
 $langpre = "Προπτυχιακό";
 $langpost = "Μεταπτυχιακό";

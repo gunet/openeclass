@@ -38,7 +38,7 @@ $tool_content .= "<div class='row'><div class='col-sm-12'><div class='panel'><di
 <div><label>$langInstituteShortName:&nbsp;</label><a href='".canonicalize_url($InstitutionUrl)."' target='_blank' class='mainpage'>$Institution</a></div>
 <div><label>$langCampusName:&nbsp;</label>$siteName&nbsp;</div>
 <div><label>$langVersion:&nbsp;</label><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></div>
-<div><label>$langSupportUser&nbsp;</label>" . q(get_config('admin_name')) . "</div>
+<div><label>$langSupportUser:&nbsp;</label>" . q(get_config('admin_name')) . "</div>
 </div></div></div>";
 $a = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count;
 $a1 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_OPEN)->count;
