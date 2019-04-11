@@ -164,7 +164,7 @@
                         @foreach ($course_units as $key => $course_unit)
                             <?php
                                 $not_shown = false;
-                                if (!(($course_units->start_week == '0000-00-00') or (is_null($course_unit->start_week))) and (date('Y-m-d') < $course_unit->start_week)) {
+                                if (!(($course_unit->start_week == '0000-00-00') or (is_null($course_unit->start_week))) and (date('Y-m-d') < $course_unit->start_week)) {
                                     $not_shown = true;
                                 }
                             ?>
