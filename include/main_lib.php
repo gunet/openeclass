@@ -19,9 +19,7 @@
  * @brief General useful functions for eClass.
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
- * @authors many....
  */
-
 
 define('ECLASS_VERSION', '4.0-dev');
 
@@ -107,8 +105,9 @@ define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
-define('MODULE_ID_LTI_CONSUMER', 49);
-define('MODULE_ID_REQUEST', 50);
+define('MODULE_ID_COURSEPREREQUISITE', 49);
+define('MODULE_ID_LTI_CONSUMER', 50);
+define('MODULE_ID_REQUEST', 51);
 
 // user modules
 
@@ -135,6 +134,7 @@ define('SETTING_GROUP_STUDENT_DESCRIPTION', 13);
 define('SETTING_COURSE_USER_REQUESTS_DISABLE', 20);
 define('SETTING_COURSE_FORUM_NOTIFICATIONS', 21);
 define('SETTING_DOCUMENTS_PUBLIC_WRITE', 22);
+define('SETTING_OFFLINE_COURSE', 23);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -238,7 +238,7 @@ function widget_css_link($file, $folder) {
 }
 
 /**
- * @brief include a JavaScript file from the main js directory
+ * @brief  include a JavaScript file from the main js directory
  * @global type $head_content
  * @global type $language
  * @global type $langReadMore
@@ -420,16 +420,16 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
     $course_code_link = "";
 
     if (is_array($user) and count($user) == 0) {
-            return '-';
+        return '-';
     } elseif (is_array($user)) {
         $begin = true;
         $html = '';
         foreach ($user as $user_data) {
-                if ($begin) {
-                    $begin = false;
-                } else {
-                    $html .= '<br>';
-                }
+            if ($begin) {
+                $begin = false;
+            } else {
+                $html .= '<br>';
+            }
             if (isset($user->user_id)) {
                 $html .= display_user($user_data->user_id, $print_email);
             } else {
@@ -750,11 +750,14 @@ function check_guest($id = FALSE) {
 function check_editor($user_id = null, $cid = null) {
     global $uid, $course_id, $is_admin;
 
+    if (is_null($user_id) and isset($uid)) {
+        $user_id = $uid;
+    }
+    if (!$user_id) {
+        return false;
+    }
     if ($is_admin) {
         return true;
-    }
-    if (!isset($user_id) and isset($uid)) {
-        $user_id = $uid;
     }
     if (!isset($cid) and isset($course_id)) {
         $cid = $course_id;
@@ -928,9 +931,9 @@ function imap_literal($s) {
  */
 function new_code($fac) {
 
-    $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
-        FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d) GROUP BY code", $fac);
-    if ($gencode) {
+ $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
+       FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d) GROUP BY code", $fac);
+   if ($gencode) {
         do {
             $code = $gencode->code . $gencode->generator;
             $gencode->generator += 1;
@@ -1222,14 +1225,14 @@ function cp737_to_utf8($s) {
                                "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
                                "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
                                "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
                                "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
                                "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
                                "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
                                "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
                                "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
                                "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
                                "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
                                "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
@@ -1735,9 +1738,6 @@ function delete_course($cid) {
                          (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM abuse_report WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM course_weekly_view_activities WHERE course_weekly_view_id IN
-                                (SELECT id FROM course_weekly_view WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM course_weekly_view WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id`
                             WHERE `comments`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `blog_post` ON `rating`.`rid` = `blog_post`.`id`
@@ -1854,6 +1854,10 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM gradebook_users WHERE uid = ?d)", $u);
+            Database::get()->query("DELETE FROM gradebook_book WHERE uid = ?d)", $u);
+            Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d)", $u);
+            Database::get()->query("DELETE FROM attendance_book WHERE uid = ?d)", $u);
             Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
             Database::get()->query("DELETE dropbox_attachment FROM dropbox_attachment INNER JOIN dropbox_msg ON dropbox_attachment.msg_id = dropbox_msg.id
@@ -2985,7 +2989,7 @@ class HtmlCutString {
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
         $this->tempDiv = new DOMDocument('1.0', 'UTF-8');
-        $this->tempDiv->loadHTML('<?xml version="1.0" encoding="UTF-8" ?><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
+        $this->tempDiv->loadHTML('<?xml version="1.0" encoding="UTF-8" ?><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div>' . $string . '</div>', LIBXML_NONET | LIBXML_DTDLOAD | LIBXML_DTDATTR);
         // keep the characters count till now
         $this->charCount = 0;
         // put the postfix at the end
@@ -3001,7 +3005,7 @@ class HtmlCutString {
         $this->newDiv = new DomDocument;
         // cut the string by parsing through each element
         $this->searchEnd($this->tempDiv->documentElement, $this->newDiv);
-        $newhtml = $this->newDiv->saveHTML();
+        $newhtml = preg_replace(['/^.*<body>\s*/', '/\s*<\/body>$/'], '', $this->newDiv->saveHTML());
         if ($this->postfix)
             return $newhtml . $this->postfix_text;
         else
