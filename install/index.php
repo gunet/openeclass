@@ -105,11 +105,13 @@ if (isset($_POST['welcomeScreen'])) {
     $dbHostForm = 'localhost';
     $dbUsernameForm = 'root';
     $dbNameForm = 'eclass';
-    $dbMyAdmin = '';
+    $dbMyAdmin = $emailForm = '';     
     $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']) ? 'https://' : 'http://') .
             $_SERVER['SERVER_NAME'] .
             str_replace('/install/index.php', '/', $_SERVER['SCRIPT_NAME']);
-    $emailForm = $_SERVER['SERVER_ADMIN'];
+    if (isset($_SERVER['SERVER_ADMIN'])) { // only for apache
+        $emailForm = $_SERVER['SERVER_ADMIN'];
+    }    
     $nameForm = $langDefaultAdminName;
     $loginForm = 'admin';
     $passForm = genPass();
