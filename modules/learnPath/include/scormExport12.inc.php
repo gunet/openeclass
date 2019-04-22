@@ -142,7 +142,6 @@ if (!class_exists('ScormExport')):
 
             /* Build various directories' names */
 
-            // Replace ',' too, because pclzip doesn't support it.
             $this->destDir = $webDir . "/courses/" . $course_code . '/temp/'
                     . str_replace(',', '_', replace_dangerous_char($this->name));
             $this->srcDirDocument = $webDir . "/courses/" . $course_code . "/document";
