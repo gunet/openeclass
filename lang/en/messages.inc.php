@@ -4584,6 +4584,7 @@ $langAvailableWebConfServers = "Available Wowza servers";
 $langWebConfServer = "Wowza server";
 $langWebConfServerAlertHostname = "Please enter the hostname where Wowza is installed";
 $langLearnPathDeleted = 'The Learning Path was deleted';
+$langZipError = "Error : Zip file couldn't be extracted!";
 $langAdminPinnedOff = "Unpin announcement";
 $langAdminPinnedOn = "Pin announcement";
 $langAdminPinned = "Pinned announcement";

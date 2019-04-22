@@ -58,7 +58,7 @@ $errorFound = false;
 
 /*
  * Function used by the SAX xml parser when the parser meets a opening tag
- * exemple :
+ * example :
  *          <manifest identifier="samplescorm" version"1.1">
  *      will give
  *          $name == "manifest"
@@ -223,21 +223,18 @@ function elementData($parser, $data) {
     global $manifestData;
     global $flagTag;
     global $iterator;
-    global $dialogBox;
     global $errorFound;
     global $langErrorReadingXMLFile;
-    global $zipFile;
-    global $errorMsgs, $okMsgs;
+    global $errorMsgs;
     global $pathToManifest;
     global $langErrorOpeningXMLFile;
-    global $charset;
+
 
 // -----------------------------------
 // when eclass is full utf 8 restore this
 // -----------------------------------------
 
     $data = trim(($data));
-    //$data = trim(iconv("utf-8", $charset, $data));
 
     if (!isset($data)) {
         $data = "";
@@ -284,16 +281,13 @@ function elementData($parser, $data) {
                 xml_set_character_data_handler($xml_parser, "elementData");
 
                 $file = rawurldecode($data); //url of secondary manifest files is relative to the position of the base imsmanifest.xml
-                // PHP extraction of zip file using zlib
-                $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME, $pathToManifest . $file, PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
-                if (!($fp = @fopen($file, "r"))) {
-                    $file = str_replace("\\", "/", $file); // kanoume mia dokimh mhn tyxon do8hke la8os dir separator, antistrefontas tis ka8etous. ta windows paizoun kai me to unix dir separator
-
-                    $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME, $pathToManifest . $file, PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
-                    if (!($fp = @fopen($file, "r"))) {
-                        $errorFound = true;
-                        array_push($errorMsgs, $langErrorOpeningXMLFile . $pathToManifest . $file);
-                    }
+                $zipFile = new ZipArchive();
+                if ($zipFile->open($pathToManifest . $file) == TRUE) {
+                     if ($zipFile->extractTo($pathToManifest)) {
+                         $zipFile->close();
+                     }
+                } else {
+                    array_push($errorMsgs, $langErrorOpeningXMLFile . $pathToManifest . $file);
                 }
 
                 if (!$errorFound) {
@@ -438,7 +432,7 @@ function compareArrays($array1, $array2) {
 }
 
 /**
- * This function return true if $Str could be UTF-8, false otehrwise
+ * This function return true if $Str could be UTF-8, false otherwise
  *
  * function found @ http://www.php.net/manual/en/function.utf8-encode.php
  */
@@ -561,68 +555,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
     /*
      * Unzipping stage
-     */ elseif (preg_match("/.zip$/i", $_FILES['uploadedPackage']['name'])) {
+     */
+    elseif (preg_match("/.zip$/i", $_FILES['uploadedPackage']['name'])) {
+
         array_push($okMsgs, $langOkFileReceived . basename($_FILES['uploadedPackage']['name']));
-        
-        $zipFile = new PclZip($_FILES['uploadedPackage']['tmp_name']);
+
+        $zipFile = new ZipArchive();
         $is_allowedToUnzip = true; // default initialisation
-        // Check the zip content (real size and file extension)
-
-        $zipContentArray = $zipFile->listContent();
-
-        if ($zipContentArray == 0) {
-            $errorFound = true;
-            array_push($errorMsgs, $langErrorReadingZipFile);
-        }
 
         $pathToManifest = ""; // empty by default because we can expect that the manifest.xml is in the root of zip file
         $pathToManifestFound = false;
-        $realFileSize = 0;
 
-        foreach ($zipContentArray as $thisContent) {
-            if (preg_match('/.(php[[:digit:]]?|phtml|pht)$/i', $thisContent['filename'])) {
-                $errorFound = true;
-                array_push($errorMsgs, $langZipNoPhp);
-                $is_allowedToUnzip = false;
-                break;
-            }
-
-            if (strtolower(substr($thisContent['filename'], -15)) == "imsmanifest.xml") {
-                // this check exists to find the less deep imsmanifest.xml in the zip if there are several imsmanifest.xml
-                // if this is the first imsmanifest.xml we found OR path to the new manifest found is shorter (less deep)
-                if (!$pathToManifestFound || ( count(explode('/', $thisContent['filename'])) < count(explode('/', $pathToManifest . "imsmanifest.xml")) )
-                ) {
-                    $pathToManifest = substr($thisContent['filename'], 0, -15);
-                    $pathToManifestFound = true;
+        $zipname = $_FILES['uploadedPackage']['name'];
+        $files_in_zip = array();
+        if (move_uploaded_file($_FILES['uploadedPackage']['tmp_name'], "$webDir/$baseWorkDir/$zipname")) {
+            if ($zipFile->open("$webDir/$baseWorkDir/$zipname") == TRUE) {
+                for ($i = 0; $i < $zipFile->numFiles; $i++) {
+                    $stat = $zipFile->statIndex($i);
+                    $files_in_zip[$i] = $stat['name'];
+                    validateUploadedFile($files_in_zip[$i]);
                 }
-            }
-            $realFileSize += $thisContent['size'];
-        }
 
-        if (!isset($alreadyFilledSpace)) {
-            $alreadyFilledSpace = 0;
-        }
-
-        if (($realFileSize + $alreadyFilledSpace) > $maxFilledSpace) { // check the real size.
-            $errorFound = true;
-            array_push($errorMsgs, $langNoSpace);
-            $is_allowedToUnzip = false;
-        }
-
-        if ($is_allowedToUnzip && !$errorFound) {
-            // PHP extraction of zip file using zlib
-
-            chdir($baseWorkDir);
-            $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME, $pathToManifest . "imsmanifest.xml", PCLZIP_OPT_PATH, '', PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
-            if ($unzippingState == 0) {
+                if ($zipFile->extractTo("$webDir/$baseWorkDir")) {
+                    $zipFile->close();
+                } else {
+                    $errorFound = true;
+                    array_push($errorMsgs, $langZipError);
+                }
+            } else {
                 $errorFound = true;
-                array_push($errorMsgs, $langErrortExtractingManifest);
+                array_push($errorMsgs, $langErrorFileMustBeZip);
             }
-        } //end of if ($is_allowedToUnzip)        
-    } else {
-        $errorFound = true;
-        array_push($errorMsgs, $langErrorFileMustBeZip);
+        }
     }
+
+    chdir($baseWorkDir);
+
     // find xmlmanifest (must be in root else ==> cancel operation, delete files)
     // parse xml manifest to find :
     // package name - learning path name
@@ -719,6 +687,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     } //if (!$errorFound)
     // check if all starts assets files exist in the zip file
     if (!$errorFound) {
+
         array_push($okMsgs, $langOkManifestRead);
         if (sizeof($manifestData['items']) > 0) {
             // if there is items in manifest we look for sco type resources referenced in idientifierref
@@ -726,11 +695,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                 if (!isset($item['identifierref']) || $item['identifierref'] == '') {
                     break;
                 } // skip if no ressource reference in item (item is probably a chapter head)
-                    
+
                 // find the file in the zip file
                 $scoPathFound = false;
 
-                for ($i = 0; $i < sizeof($zipContentArray); $i++) {
+                for ($i = 0; $i < sizeof($files_in_zip); $i++) {
                     if (isset($manifestData['scos'][$item['identifierref']]['xml:base'])) {
                         $extraPath = $manifestData['scos'][$item['identifierref']]['xml:base'];
                     } else if (isset($manifestData['assets'][$item['identifierref']]['xml:base'])) {
@@ -739,8 +708,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                         $extraPath = "";
                     }
 
-                    if (isset($zipContentArray[$i]["filename"]) &&
-                            ( ( isset($manifestData['scos'][$item['identifierref']]['href']) && $zipContentArray[$i]["filename"] == $pathToManifest . $extraPath . $manifestData['scos'][$item['identifierref']]['href']) || (isset($manifestData['assets'][$item['identifierref']]['href']) && $zipContentArray[$i]["filename"] == $pathToManifest . $extraPath . $manifestData['assets'][$item['identifierref']]['href'])
+                    if (isset($files_in_zip[$i]) &&
+                            ( ( isset($manifestData['scos'][$item['identifierref']]['href']) && $files_in_zip[$i] == $pathToManifest . $extraPath . $manifestData['scos'][$item['identifierref']]['href']) || (isset($manifestData['assets'][$item['identifierref']]['href']) && $files_in_zip[$i] == $pathToManifest . $extraPath . $manifestData['assets'][$item['identifierref']]['href'])
                             )
                     ) {
                         $scoPathFound = true;
@@ -771,8 +740,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
                 $scoPathFound = false;
 
-                for ($i = 0; $i < sizeof($zipContentArray); $i++) {
-                    if ($zipContentArray[$i]["filename"] == $sco['href']) {
+                for ($i = 0; $i < sizeof($files_in_zip); $i++) {
+                    if ($files_in_zip[$i] == $sco['href']) {
                         $scoPathFound = true;
                         break;
                     }
@@ -794,11 +763,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     // insert corresponding entries in database
 
     if (!$errorFound) {
-        // PCLZIP_OPT_PATH is the path where files will be extracted ( '' )
-        // PLZIP_OPT_REMOVE_PATH suppress a part of the path of the file ( $pathToManifest )
-        // the result is that the manifest is in th eroot of the path_# directory and all files will have a path related to the root
-        $unzippingState = $zipFile->extract(PCLZIP_OPT_PATH, '', PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
-
         // insert informations in DB :
         //        - 1 learning path ( already added because we needed its id to create the package directory )
         //        - n modules
@@ -1145,129 +1109,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             </div>
         </div>
     ";
-
-
-    /*     * ***************************************
-     *  IMPORT SCORM DIRECTLY FROM DOCUMENTS
-     * *************************************** */
-    $basedir = $webDir . '/courses/' . $course_code . '/document';
-    /*     * * Retrieve file info for current directory from database and disk ** */
-    $documents = Database::get()->queryArray("SELECT * FROM document WHERE format= 'zip' AND course_id = ?d ORDER BY filename", $course_id);
-
-    $fileinfo = array();
-    foreach ($documents as $row) {
-        $fileinfo[] = array(
-            'is_dir' => is_dir($basedir . $row->path),
-            'size' => filesize($basedir . $row->path),
-            'title' => $row->title,
-            'filename' => $row->filename,
-            'format' => $row->format,
-            'path' => $row->path,
-            'visible' => ($row->visible == 1),
-            'comment' => $row->comment,
-            'copyrighted' => $row->copyrighted,
-            'date' => $row->date_modified);
-    }
-
-
-    $tool_content .= "<div class=\"fileman row\">";
-    $tool_content .= "<div class=\"col-xs-12\">";
-    $tool_content .= "<form class='form-wrapper' action='importFromDocument.php?course=$course_code' method='post'>";
-    $tool_content .= "<h4 class='form-heading'>$langLearningPathImportFromDocuments</h4>";
-    $tool_content .= "<table class='table-default'>";
-    $tool_content .= "<tbody>";
-
-    if (count($documents) <= 0) {
-        $tool_content .= "<tr class='nobrd'><td colspan='5'>$langScormEmptyDocsList</td></tr>";
-    } else {
-        // JS code to enable clicking anywhere in the table to trigger the radio button
-
-        $head_content .= <<<EOF
-<script type='text/javascript'>
-$(document).ready(function() {
-
-    $('tr').click(function(event) {
-        if (event.target.type !== 'radio') {
-            $(':radio', this).trigger('click');
-        }
-    });
-
-});
-</script>
-EOF;
-
-        $tool_content .= "<tr>";
-        $tool_content .= "<th width='50'>&nbsp;</th>";
-        $tool_content .= "<th width='10%'><div align='center'><b>$langType</b></div></th>";
-        $tool_content .= "<th><div align='left'><b>$langName</b></div></th>";
-        $tool_content .= "<th width='15%'><div align='center'><b>$langSize</b></div></th>";
-        $tool_content .= "<th width='15%'><div align='center'><b>$langDate</b></div></th>";
-        $tool_content .= "</tr>";
-
-        foreach ($fileinfo as $entry) {
-            if ($entry['is_dir']) { // do not handle directories
-                continue;
-            }
-
-            $cmdDirName = $entry['path'];
-            $copyright_icon = '';
-            $image = choose_image('.' . $entry['format']);
-            $size = format_file_size($entry['size']);
-            $date = nice_format($entry['date'], true, true);
-
-            if ($entry['visible']) {
-                $style = '';
-            } else {
-                $style = ' class="invisible"';
-            }
-
-            if (empty($entry['title'])) {
-                $link_text = $entry['filename'];
-            } else {
-                $link_text = $entry['title'];
-            }
-
-            if ($entry['copyrighted']) {
-                $link_text .= " <img src='../document/img/copyrighted.png' />";
-            }
-
-            $tool_content .= "<tr$style>";
-            $tool_content .= "<td><input type='radio' name='selectedDocument' value='" . $entry['path'] . "'/></td>";
-            $tool_content .= "<td width='1%' valign='top' align='center' style='padding-top: 7px;'>" . icon($image, '') . "</td>";
-            $tool_content .= "<td><div align='left'>$link_text";
-
-            if (!empty($entry['comment'])) {
-                $tool_content .= "<br /><span class='commentDoc'>" . nl2br(htmlspecialchars($entry['comment'])) . "</span>\n";
-            }
-
-            $tool_content .= "</div></td>";
-            $tool_content .= "<td><div align='center'>$size</div></td><td><div align='center'>$date</div></td></tr>";
-        }
-
-        $tool_content .= "<tr class='nobrd' style='height:10px;'>";
-        $tool_content .= "<td colspan='2'></td>";
-        $tool_content .= "<td colspan='3' class='right'></td>";
-        $tool_content .= "</tr>";
-        
-        $tool_content .= "<tr class='nobrd'>";
-        $tool_content .= "<td colspan='2'></td>";
-        $tool_content .= "<td colspan='3' class='right'>".form_buttons(array(
-                            array(
-                                'text' => $langSave,
-                                'value'=> $langImport
-                            ),
-                            array(
-                                'href' => "index.php?course=$course_code",
-                            )
-                        ))."</td>";
-        $tool_content .= "</tr>";
-    }
-
-    $tool_content .= "</tbody>";
-    $tool_content .= "</table>";
-    $tool_content .= "</form>";
-    $tool_content .= "</div>";
-    $tool_content .= "</div>";
 
     $tool_content .= "
             <div class='row'>
