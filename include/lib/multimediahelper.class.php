@@ -227,12 +227,8 @@ class MultimediaHelper {
                 $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
                 break;
             case "mp4":
-                if (self::isUsingFirefox()) {
-                    $ret .= self::serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension);
-                } else {
-                    $mime = get_mime_type("." . $extension);
-                    $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
-                }
+                $mime = get_mime_type("." . $extension);
+                $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
                 break;
             case "f4v":
             case "m4v":
