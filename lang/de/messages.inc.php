@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2019-04-11 16:17:47
+// Generated 2019-04-25 12:39:01
 
 $langYes = "Ja";
 $langNo = "Nein";

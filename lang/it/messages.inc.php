@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2019-04-11 16:17:48
+// Generated 2019-04-25 12:39:02
 
 $langYes = "Sì";
 $langNo = "No";
@@ -2636,7 +2636,7 @@ $langNodeCode1 = "$langFaculty Code";
 $langNodeName = "$langFaculty Name";
 $langNodeParent = "Parent $langFaculty";
 $langNodeParent2 = "(where the $langFaculty will belong to)";
-$langNodeAllowCourse = '$langCourses allowed';
+$langNodeAllowCourse = "$langCourses allowed";
 $langNodeAllowCourse2 = "(check whether $langsCourses can belong to the $langFaculty)";
 $langNodeAllowUser = 'Users allowed';
 $langNodeAllowUser2 = "(check whether users can belong to the $langFaculty)";

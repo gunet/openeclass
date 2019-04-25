@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2019-04-11 16:17:45
+// Generated 2019-04-25 12:38:59
 
 $langYes = "Yes";
 $langNo = "No";
@@ -2674,7 +2674,7 @@ $langNodeCode1 = "$langFaculty Code";
 $langNodeName = "$langFaculty Name";
 $langNodeParent = "Parent $langFaculty";
 $langNodeParent2 = "(where the $langFaculty will belong to)";
-$langNodeAllowCourse = '$langCourses allowed';
+$langNodeAllowCourse = "$langCourses allowed";
 $langNodeAllowCourse2 = "(check whether $langsCourses can belong to the $langFaculty)";
 $langNodeAllowUser = 'Users allowed';
 $langNodeAllowUser2 = "(check whether users can belong to the $langFaculty)";
@@ -4584,7 +4584,6 @@ $langAvailableWebConfServers = "Available Wowza servers";
 $langWebConfServer = "Wowza server";
 $langWebConfServerAlertHostname = "Please enter the hostname where Wowza is installed";
 $langLearnPathDeleted = 'The Learning Path was deleted';
-$langZipError = "Error : Zip file couldn't be extracted!";
 $langAdminPinnedOff = "Unpin announcement";
 $langAdminPinnedOn = "Pin announcement";
 $langAdminPinned = "Pinned announcement";
