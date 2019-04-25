@@ -132,7 +132,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         </tr>
         <tr>
         <td colspan='${colspan}'>
-        <b>" . q($questionName) . "</b>
+        <b>" . q_math($questionName) . "</b>
         <br />" .
         standard_text_escape($questionDescription)
         . "<br/><br/>

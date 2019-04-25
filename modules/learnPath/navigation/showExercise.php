@@ -256,7 +256,7 @@ foreach ($questionList as $questionId) {
                 $questionName = $objQuestionTmp->selectTitle();
                 // destruction of the Question object
                 unset($objQuestionTmp);
-                echo '<div class\"alert1\" ' . $langAlreadyAnswered . ' &quot;' . q($questionName) . '&quot;</div>';
+                echo '<div class\"alert1\" ' . $langAlreadyAnswered . ' &quot;' . q_math($questionName) . '&quot;</div>';
                 break;
             }
         }
@@ -318,7 +318,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
     if (!$onlyAnswers) {
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
-        echo "<b>" . q($questionName) . "</b><br />" .
+        echo "<b>" . q_math($questionName) . "</b><br />" .
             standard_text_escape($questionDescription);
         if (file_exists($picturePath . '/quiz-' . $questionId)) {
             echo "<img src='$urlServer/$picturePath/quiz-$questionId' />";
