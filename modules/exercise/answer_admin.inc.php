@@ -606,7 +606,8 @@ if (isset($_GET['modifyAnswers'])) {
              } elseif (isset($option[$key])) {
                  $tool_content .= htmlspecialchars($option[$key]);
              } elseif (($val == 'A') or ($val == 'B')) { // default option
-                 $tool_content .= ${"langDefaultMatchingOpt$val"};
+                 $valNum = ($val == 'A')? 1: 2;
+                 $tool_content .= ${"langDefaultMatchingOpt$valNum"};
              } else {
                  $tool_content .= '';
              }
