@@ -200,7 +200,7 @@ if (@$_POST['questionNum']) {
     $QUERY_STRING = "questionNum=$questionNum";
 }
 
-$exerciseDescription_temp = standard_text_escape($exerciseDescription, '../../../courses/mathimg/');
+$exerciseDescription_temp = standard_text_escape($exerciseDescription);
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w3.org/TR/html4/frameset.dtd">'
  . "\n<html>\n"
@@ -318,8 +318,8 @@ function showQuestion($questionId, $onlyAnswers = false) {
     if (!$onlyAnswers) {
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
-        echo "<b>" . q($questionName) . "</b><br />
-                    ". standard_text_escape($questionDescription, '../../../courses/mathimg/') ."";
+        echo "<b>" . q($questionName) . "</b><br />" .
+            standard_text_escape($questionDescription);
         if (file_exists($picturePath . '/quiz-' . $questionId)) {
             echo "<img src='$urlServer/$picturePath/quiz-$questionId' />";
         }
@@ -344,13 +344,14 @@ function showQuestion($questionId, $onlyAnswers = false) {
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
-        $answer = mathfilter($answer, 12, '../../courses/mathimg/');
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-        if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+        if (in_array($answerType, [UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, TRUE_FALSE])) {
+            $answer = standard_text_escape($answer);
+        } elseif ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
-            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer, '../../../courses/mathimg/'));
+            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer));
         }
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {
@@ -409,16 +410,11 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     // if it remains answers to shown at the right side
                     while (isset($select[$cpt2])) {
                         echo "<tr class='even'>
-                                                <td colspan='2'>
-                                                  <table>
-                                                  <tr>
-                                                    <td width='60%' colspan='2'>&nbsp;</td>
-                                                    <td width='40%' align='right' valign='top'>" .
-                        "<b>" . $select[$cpt2]['Lettre'] . ".</b> " . $select[$cpt2]['Reponse'] . "</td>
-                                                  </tr>
-                                                  </table>
-                                                </td>
-                                              </tr>";
+                                <td width='60%' colspan='2'>&nbsp;</td>
+                                <td width='40%' valign='top'>" .
+                                    "<b>" . $select[$cpt2]['Lettre'] . ".</b> " .
+                                            $select[$cpt2]['Reponse'] . "</td>
+                              </tr>";
                         $cpt2++;
                     } // end while()
                 }  // end if()

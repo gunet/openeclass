@@ -2347,9 +2347,12 @@ function math_unescape($matches) {
 }
 
 // Standard function to prepare some HTML text, possibly with math escapes, for display
-function standard_text_escape($text, $mathimg = '../../courses/mathimg/') {
-    global $purifier;
+function standard_text_escape($text, $mathimg = null) {
+    global $purifier, $urlAppend;
 
+    if (is_null($mathimg)) {
+        $mathimg = $urlAppend . 'courses/mathimg/';
+    }
     $text = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $text);
     $html = $purifier->purify(mathfilter($text, 12, $mathimg));
 

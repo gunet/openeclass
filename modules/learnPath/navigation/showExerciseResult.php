@@ -88,7 +88,7 @@ echo "<div class='panel panel-primary'>
         </div>";
 if ($exerciseDescription) {
    echo "<div class='panel-body'>
-        " . standard_text_escape($exerciseDescription, '../../../courses/mathimg/') . "
+        " . standard_text_escape($exerciseDescription) . "
         </div>";
   }
 echo "</div>";
@@ -134,7 +134,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         <td colspan='${colspan}'>
         <b>" . q($questionName) . "</b>
         <br />" .
-        standard_text_escape($questionDescription, '../../../courses/mathimg/')
+        standard_text_escape($questionDescription)
         . "<br/><br/>
         </td>
         </tr>";
@@ -166,13 +166,12 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
-        $answerComment = $objAnswerTmp->selectComment($answerId);       
+        $answerComment = $objAnswerTmp->selectComment($answerId);
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
-        // support for math symbols
-        $answer = mathfilter($answer, 12, "$webDir/courses/mathimg/");
-        //$answerComment = mathfilter($answerComment, 12, "$webDir/courses/mathimg/");
-
+        if (in_array($answerType, [UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, TRUE_FALSE])) {
+            $answer = standard_text_escape($answer);
+        }
         switch ($answerType) {
             // for unique answer
             case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
@@ -190,13 +189,13 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 break;
             // for fill in the blanks
             case FILL_IN_BLANKS :
-            case FILL_IN_BLANKS_TOLERANT :    
+            case FILL_IN_BLANKS_TOLERANT :
                 // splits text and weightings that are joined with the char '::'
                 list($answer, $answerWeighting) = explode('::', $answer);
                 // splits weightings that are joined with a comma
                 $answerWeighting = explode(',', $answerWeighting);
                 // we save the answer because it will be modified
-                $temp = $answer;
+                $temp = q_math($answer);
                 $answer = '';
                 $j = 0;
                 // the loop will stop at the end of the text
@@ -266,26 +265,26 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         } // end switch()
         if ($displayResults == 1) {
             if ($answerType != MATCHING || $answerCorrect) {
-                if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {                    
-                    echo "<tr><td><div align='center'>";                    
+                if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+                    echo "<tr><td><div align='center'>";
                     if ($studentChoice) {
                         $icon_choice= "fa-check-square-o";
                     } else {
                         $icon_choice = "fa-square-o";
                     }
                     echo icon($icon_choice);
-                    echo "</div></div></td><td><div align='center'>";                    
+                    echo "</div></div></td><td><div align='center'>";
                     if ($answerCorrect) {
                         $icon_choice= "fa-check-square-o";
                     } else {
                         $icon_choice = "fa-square-o";
                     }
-                    echo icon($icon_choice) . "</div>";                    
+                    echo icon($icon_choice) . "</div>";
                     echo ("</td>
-                            <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
+                            <td>" . standard_text_escape($answer) . "</td>
                             <td>");
                     if ($studentChoice) {
-                        echo standard_text_escape($answerComment, '../../../courses/mathimg/');
+                        echo standard_text_escape($answerComment);
                     } else {
                         echo ('&nbsp;');
                     }
@@ -293,12 +292,12 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                     echo ("
                         <tr>
-                          <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
+                          <td>" . standard_text_escape($answer) . "</td>
                         </tr>");
                 } else {
                     echo ("
                         <tr>
-                          <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
+                          <td>" . standard_text_escape($answer) . "</td>
                           <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
                         </tr>");
                 }
