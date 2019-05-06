@@ -770,7 +770,7 @@ if ($total_cunits > 0) {
 
 // Content Box: Course Units
 // Content Box: Calendar
-// Content Gox: Announcements
+// Content Box: Announcements
 $displayCalendar = Database::get()->querySingle('SELECT MAX(visible) AS vis FROM course_module
                             WHERE course_id = ?d AND module_id IN (?d, ?d, ?d, ?d)',
                             $course_id, MODULE_ID_AGENDA, MODULE_ID_EXERCISE,
@@ -797,8 +797,7 @@ if ($course_info->view_type == 'activity') {
                     <span class='fa fa-edit fa-fw'></span>" . q($langActivityEdit) . "</a>
             </div>";
     }
-    $tool_content .= "
-            <div class='col-md-12'>";
+    $tool_content .= "<div class='col-md-12'>";
     $qVisible = ($is_editor? '': 'AND visible = 1');
     $items = Database::get()->queryArray("SELECT activity_content.id, heading, content
         FROM activity_heading
@@ -997,8 +996,10 @@ function course_announcements() {
     if (visible_module(MODULE_ID_ANNOUNCE)) {
         $q = Database::get()->queryArray("SELECT title, `date`, id
                             FROM announcement
-                            WHERE course_id = ?d AND
-                                  visible = 1
+                            WHERE course_id = ?d 
+                                AND visible = 1
+                                AND (start_display <= NOW() OR start_display IS NULL) 
+                                AND (stop_display >= NOW() OR stop_display IS NULL)
                             ORDER BY `date` DESC LIMIT 5", $course_id);
         if ($q) { // if announcements exist
             $ann_content = '';
