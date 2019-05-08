@@ -84,8 +84,11 @@ if (isset($_POST['submit_doc'])) {
     insert_link($id);
 } elseif (isset($_POST['submit_ebook'])) {
     insert_ebook($id);
+} elseif (isset($_POST['submit_chat'])) {
+    insert_chat($id);
+} elseif (isset($_POST['submit_tc'])) {
+    insert_tc($id);
 }
-
 
 switch ($_GET['type']) {
     case 'work': $pageName = "$langAdd $langInsertWork";
@@ -131,6 +134,14 @@ switch ($_GET['type']) {
     case 'wiki': $pageName = "$langAdd $langInsertWiki";
         include 'insert_wiki.php';
         list_wikis();
+        break;
+    case 'chat': $pageName = "$langAdd $langInsertChat";
+        include "insert_chat.php";
+        list_chats();
+        break;
+    case 'tc': $pageName = "$langAdd $langInsertTcMeeting";
+        include "insert_tc.php";
+        list_tcs();
         break;
     default: break;
 }
@@ -534,6 +545,62 @@ function insert_ebook($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
+
+
+/**
+ * @brief insert chat resource in course units resources
+ */
+function insert_chat($id) {
+
+    global $course_code, $course_id;
+    if(isset($_POST['chat'])){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['chat'] as $chat_id) {
+            $order++;
+            $chat = Database::get()->querySingle("SELECT * FROM conference
+                            WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
+            $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='chat', title = ?s, comments = ?s,
+                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                $id, $chat->conf_title, $chat->conf_description, $order, $chat->conf_id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+    }
+    header('Location: index.php?course=' . $course_code . '&id=' . $id);
+    exit;
+}
+
+
+/**
+ * @param $id
+ * @brief insert tc resource in course units resources
+ */
+function insert_tc($id) {
+    global $course_code, $course_id;
+
+    if(isset($_POST['tc'])){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['tc'] as $tc_id) {
+            $order++;
+            $tc = Database::get()->querySingle("SELECT * FROM tc_session
+                            WHERE course_id = ?d AND id = ?d", $course_id, $tc_id);
+            $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='tc', title = ?s, comments = ?s,
+                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                $id, $tc->title, $tc->description, $order, $tc->id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+    }
+    header('Location: index.php?course=' . $course_code . '&id=' . $id);
+    exit;
+}
+
+
+
 
 /**
  * @brief insert common docs

@@ -129,8 +129,9 @@ function check_admin_unit_resource($resource_id) {
  * @param type $unit_id
  */
 function show_resources($unit_id) {
-    global $tool_content, $max_resource_id, $langAvailableUnitResources,
-           $is_editor, $head_content, $langDownload, $langPrint, $langCancel, $langFullScreen, $langNewTab;
+    global $tool_content, $max_resource_id,
+           $head_content, $langDownload, $langPrint, $langCancel,
+           $langFullScreen, $langNewTab;
 
     $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
     if (count($req) > 0) {
@@ -297,6 +298,12 @@ function show_resource($info) {
         case 'subsection':
             $tool_content .= show_ebook_subsection($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
+        case 'chat':
+            $tool_content .= show_chat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            break;
+        case 'tc':
+            $tool_content .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            break;
         default:
             $tool_content .= $langUnknownResType;
     }
@@ -432,7 +439,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
+
     $class_vis = (!$module_visible) ?
             ' class="not_visible"' : ' ';
 
@@ -498,9 +505,6 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     if (!$module_visible and !$is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
-            ' class="not_visible"' : ' ';
 
     $row = Database::get()->querySingle("SELECT * FROM `$table` WHERE course_id = ?d AND id = ?d", $course_id, $video_id);
     if ($row) {
@@ -636,7 +640,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
+    $class_vis = $imagelink = $link = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
 
@@ -696,7 +700,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
+
     $title = q($title);
     $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
     if (!$exercise) { // check if it was deleted
@@ -757,7 +761,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = '';
+
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $title = q($title);
     if ($type == 'forum') {
@@ -815,7 +819,6 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
         return '';
     }
 
-    $imagelink = $link = $class_vis = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     $title = q($title);
@@ -824,9 +827,8 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
-            $wikilink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+            $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
         $link = "<a href='${urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&amp;pid=$poll_id&amp;UseCase=1'>";
@@ -878,7 +880,6 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         return '';
     }
 
-    $comment_box = $imagelink = $link = $class_vis = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     $title = q($title);
@@ -887,7 +888,6 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $wikilink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
@@ -935,7 +935,6 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
@@ -943,7 +942,6 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
         }
@@ -1006,7 +1004,6 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
         }
@@ -1062,7 +1059,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
+
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     $title = q($title);
@@ -1071,7 +1068,6 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
@@ -1186,7 +1182,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
+
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     if ($deleted) {
@@ -1206,7 +1202,6 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
         $imagelink = $link . "</a>" .icon('fa-book'). "";
     }
 
-
     if (!empty($comments)) {
         $comment_box = "<br />$comments";
     } else {
@@ -1218,6 +1213,115 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
           <td width='3'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('section', $resource_id, $visibility) . "
         </tr>";
+}
+
+/**
+ * @brief display chat resources
+ * @param $title
+ * @param $comments
+ * @param $resource_id
+ * @param $chat_id
+ * @param $visibility
+ * @return string
+ */
+function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
+    global $urlServer, $is_editor,
+           $langWasDeleted, $langInactiveModule, $course_id, $course_code;
+
+    $module_visible = visible_module(MODULE_ID_CHAT); // checks module visibility
+
+    if (!$module_visible and !$is_editor) {
+        return '';
+    }
+
+    $title = q($title);
+    $chat = Database::get()->querySingle("SELECT * FROM conference WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
+    if (!$chat) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-times');
+            $chatlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+        }
+    } else {
+        if (!$is_editor and $chat->status == 'inactive') {
+            return '';
+        }
+        $link = "<a href='${urlServer}modules/chat/chat.php?conference_id=$chat_id'>";
+        $chatlink = $link . "$title</a>";
+        if (!$module_visible) {
+            $chatlink .= " <i>($langInactiveModule)</i>";
+        }
+        $imagelink = $link . "</a>" .icon('fa-exchange') . "";
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br />$comments";
+    } else {
+        $comment_box = '';
+    }
+    $class_vis = ($chat->status == 'inactive' or !$module_visible) ?
+        ' class="not_visible"' : ' ';
+    return "
+        <tr$class_vis data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td>$chatlink $comment_box</td>" .
+        actions('chat', $resource_id, $visibility) . '
+        </tr>';
+}
+
+
+/**
+ * @brief display tc resources
+ * @param $title
+ * @param $comments
+ * @param $resource_id
+ * @param $tc_id
+ * @param $visibility
+ * @return string
+ */
+function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
+    global $urlServer, $is_editor,
+           $langWasDeleted, $langInactiveModule, $course_id, $course_code;
+
+    $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
+
+    if (!$module_visible and !$is_editor) {
+        return '';
+    }
+
+    $tc = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d AND id = ?d", $course_id, $tc_id);
+    if (!$tc) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-times');
+            $tclink = "<span class='not_visible'>" .q($title) ." ($langWasDeleted)</span>";
+        }
+    } else {
+        if (!$is_editor and !$tc->active) {
+            return '';
+        }
+        $tclink = q($title);
+        if (!$module_visible) {
+            $tclink .= " <i>($langInactiveModule)</i>";
+        }
+        $imagelink = icon('fa-exchange');
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br>$comments";
+    } else {
+        $comment_box = '';
+    }
+    $class_vis = (!$tc->active or !$module_visible) ?
+        ' class="not_visible"' : ' ';
+    return "
+        <tr$class_vis data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td>$tclink $comment_box</td>" .
+        actions('tc', $resource_id, $visibility) . '
+        </tr>';
 }
 
 /**

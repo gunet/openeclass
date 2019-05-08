@@ -4393,6 +4393,7 @@ $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
 $langInsertPoll = "ερωτηματολογίου";
 $langInsertTcMeeting = "τηλεσυνεργασίας";
+$langInsertChat = "κουβεντούλας";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 $langAddToCourseHome = "Εμφάνιση στην κεντρική σελίδα του $langsOfCourse";
@@ -4456,6 +4457,7 @@ $langGlossaryOverLimit = "Το πλήθος όρων του γλωσσαρίου
 
 $langEBookEditStructure = 'Επεξεργασία';
 $langEBook = 'Ηλεκτρονικό βιβλίο';
+$langEBooks = 'Ηλεκτρονικά βιβλία';
 $langEBookCreate = "Δημιουργία Ηλεκτρονικού Βιβλίου";
 $langEBookEdit = 'Διόρθωση Ηλεκτρονικού Βιβλίου';
 $langEBookInfo = 'Στοιχεία Ηλεκτρονικού Βιβλίου';
