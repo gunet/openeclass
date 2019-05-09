@@ -265,7 +265,7 @@ function show_resource($info) {
             $tool_content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'videolinkcategory':
-            $tool_content .= show_videocat($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_videocat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'exercise':
             $tool_content .= show_exercise($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
@@ -551,7 +551,6 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
  * @global type $is_editor
  * @global type $course_id
  * @global type $langInactiveModule
- * @param array $table
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -559,7 +558,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
  * @param type $visibility
  * @return string
  */
-function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id, $visibility)
+function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visibility)
 {
     global $is_editor, $course_id, $langInactiveModule;
 
@@ -569,7 +568,7 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
         return '';
     }
     $linkcontent = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible)?
+    $class_vis = (!$module_visible)?
                  ' class="not_visible"': ' ';
     $vlcat = Database::get()->querySingle("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videolinkcat_id, $course_id);
     $content = "
@@ -585,10 +584,11 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
     foreach (array('video', 'videolink') as $table) {
         $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d AND course_id = ?d", $vlcat->id, $course_id);
         foreach ($sql2 as $row) {
-            if (!$is_editor and (!resource_access(1, $row->public))) {
-                return '';
+            if (!$is_editor) {
+                if (!resource_access(1, $row->public) or $row->visible == 0) {
+                    continue;
+                }
             }
-            $status = $row->public;
 
             if ($table == 'video') {
                 $vObj = MediaResourceFactory::initFromVideo($row);
@@ -601,12 +601,8 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
                 $videolink .= " <i>($langInactiveModule)</i>";
             }
 
-            $class_vis = ($visibility == 0 or !$module_visible or $status == 'del')? ' class="not_visible"': ' ';
-            $ltitle = q($row->title == ''? $row->url: $row->title);
-            $linkcontent .= '<br>' . icon('fa-film') . "&nbsp;&nbsp;$videolink";
-            if (!$module_visible) {
-                $linkcontent .= " <i>($langInactiveModule)</i>";
-            }
+            $class_vis = ($row->visible == 0 or !$module_visible)? ' class="not_visible"': ' ';
+            $linkcontent .= "<div $class_vis>" . icon('fa-film') . "&nbsp;&nbsp;$videolink</div>";
         }
     }
 
@@ -637,12 +633,10 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
     $langWasDeleted, $course_id, $course_code, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_ASSIGN); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
+    if (!$module_visible and !$is_editor) {
         return '';
     }
-    $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';
+    $class_vis = (!$module_visible) ? ' class="not_visible"' : ' ';
 
     $title = q($title);
     $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
@@ -650,11 +644,17 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
+        if ($work->active == '0') {
+            if (!$is_editor) {
+                return '';
+            } else {
+                $class_vis = " class='not_visible'";
+            }
+        }
         $link = "<a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$work_id&amp;unit=$id'>";
         $exlink = $link . "$title</a>";
         if (!$module_visible) {
@@ -664,7 +664,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
     }
 
     if (!empty($comments)) {
-        $comment_box = "<br />$comments";
+        $comment_box = "<br>$comments";
     } else {
         $comment_box = '';
     }
@@ -697,7 +697,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     $langWasDeleted, $course_id, $course_code, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_EXERCISE); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
+    if (!$module_visible and !$is_editor) {
         return '';
     }
 
@@ -758,7 +758,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
     global $id, $urlServer, $is_editor, $course_code, $langWasDeleted;
 
     $module_visible = visible_module(MODULE_ID_FORUM); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
+    if (!$module_visible and !$is_editor) {
         return '';
     }
 
