@@ -100,7 +100,7 @@ if ($is_editor) {
                                              (SELECT id FROM ebook_section WHERE ebook_id = ?d)", $id);
                 Database::get()->query("DELETE FROM ebook_section WHERE ebook_id = ?d", $id);
                 Database::get()->query("DELETE FROM ebook WHERE id = ?d", $id);
-                $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
+                $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $id;
                 my_delete($basedir);
                 Database::get()->query("DELETE FROM document WHERE
                                      subsystem = " . EBOOK . " AND
@@ -127,12 +127,11 @@ if ($is_editor) {
                 <div class='form-group'>
                     <label for='fileUpload' class='col-sm-2 control-label'>$langZipFile:</label>
                     <div class='col-sm-10'>
-                      <input type='file' name='file' id='fileUpload'>
- $langOptional
+                      <input type='file' name='file' id='fileUpload'><small class='help-block'>$langOptional</small>
                     </div>
                 </div>
                 <div class='row'>
-                      <div class='infotext-sm col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+                      <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2 '>".
@@ -181,14 +180,11 @@ if (!$q && !isset($_GET['create'])) {
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'><thead>
      <tr class='list-header'>
-       <th class = 'text-left'>$langEBook</th>" .
+       <th class = 'text-left'>$langEBooks</th>" .
             ($is_editor ?
                     "<th class='text-center option-btn-cell'>".icon('fa-gears')."</th>" :
                     '') . "
      </tr></thead><tbody id='tosort'>";
-
-    $k = 0;
-    $num = count($q);
     foreach ($q as $r) {
         $vis_class = $r->visible ? '' : 'not_visible';
         if (is_null($r->sid)) {
@@ -201,9 +197,9 @@ if (!$q && !isset($_GET['create'])) {
         }
         $tool_content .= "<tr class = '$vis_class' data-id='$r->id'>
                 <td>$title_link</td>".
-                   tools($r->id, $k, $num, $r->visible) .
+                   tools($r->id, $r->visible) .
                 "</tr>";
-        $k++;
+
     }
     $tool_content .= "</tbody></table>";
     $tool_content .= "</div>";
@@ -222,19 +218,16 @@ draw($tool_content, 2, null, $head_content);
  * @global type $course_code
  * @global type $langViewHide
  * @param type $id
- * @param type $k
- * @param type $num
  * @param type $vis
  * @return string
  */
-function tools($id, $k, $num, $vis) {
+function tools($id, $vis) {
     global $is_editor, $langEditChange, $langDelete, $langViewShow,
            $langEBookDelConfirm, $course_code, $langViewHide;
 
     if (!$is_editor) {
         return '';
     } else {
-        $num--;
         $content = "<td class='option-btn-cell' style='width: 90px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
                 vertical-align: bottom;'><span class='fa fa-arrows' style='cursor: pointer;'></span></div><div class='pull-left'>";
         $content .= action_button(array(
