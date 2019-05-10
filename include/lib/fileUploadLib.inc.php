@@ -258,43 +258,92 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir) {
 
 /**
  * @brief A page that shows a table with statistic data and a gauge bar
- * @global type $pageName
+ * @global type $langQuotaUsed
+ * @global type $langQuotaPercentage
+ * @global type $langQuotaTotal
+ * @global type $langBack
+ * @global type $langQuotaBar
+ * @global type $course_code
+ * @global type $subsystem
+ * @global type $group_id
+ * @global type $ebook_id
  * @param type $quota
  * @param type $used
+ * @return string
  */
-function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
-    global $pageName;
+function showquota($quota, $used, $backPath=null) {
 
-    if ($menuTypeID) {
-        $data['menuTypeID'] = $menuTypeID;
-    }
+    global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, $langQuotaBar,
+    $course_code, $subsystem, $group_id, $ebook_id, $pageName;
 
+    $retstring = '';
+
+    // pososto xrhsimopoioumenou xorou se %
     if ($quota == 0) {
-        $data['diskUsedPercentage'] = ($used > 0)? '100': '0';
+        $diskUsedPercentage = ($used > 0)? '100%': '0%';
     } else {
-        $data['diskUsedPercentage'] = round(($used / $quota) * 100);
+        $diskUsedPercentage = round(($used / $quota) * 100) . '%';
     }
-    $data['quota'] = format_bytesize($quota / 1024);
-    $data['used'] = format_bytesize($used / 1024);
-    $pageName = trans('langQuotaBar');
-    if (is_null($backPath)) {
-        $backPath = documentBackLink('');
-    }
-    $data['backButton'] = action_bar(array(
-                    array('title' => trans('langBack'),
+    // morfopoihsh tou synolikou diathesimou megethous tou quota
+    $quota = format_bytesize($quota / 1024);
+    // morfopoihsh tou synolikou megethous pou xrhsimopoieitai
+    $used = format_bytesize($used / 1024);
+    // telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
+    // ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
+    $pageName = $langQuotaBar;
+    if( !is_null($backPath) ){
+        $retstring .= action_bar(array(
+                    array('title' => $langBack,
                           'url' => $backPath,
                           'icon' => 'fa-reply',
                           'level' => 'primary-label')));
-    view('modules.document.quota', $data);
+    } else {
+    $retstring .= action_bar(array(
+                    array('title' => $langBack,
+                          'url' => documentBackLink($backPath),
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label')));
+    }
+    $retstring .= "
+    <div class='row'><div class='col-sm-12'>
+    <div class='form-wrapper'>
+    <form class='form-horizontal' role='form'>
+      <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langQuotaUsed:</label>
+        <div class='col-sm-9'>
+          <p class='form-control-static'>$used</p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langQuotaPercentage:</label>
+        <div class='col-sm-9'>
+            <div class='progress'>
+              <p class='progress-bar active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $diskUsedPercentage;'>
+                $diskUsedPercentage
+              </p>
+            </div>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langQuotaTotal:</label>
+        <div class='col-sm-9'>
+              <p class='form-control-static'>$quota</p>
+        </div>
+      </div>
+    </form>
+    </div></div></div>";
+    $tmp_cwd = getcwd();
+
+    return $retstring;
 }
 
 // Actions to do before extracting file from zip archive
 // Create database entries and set extracted file path to
 // a new safe filename
-function process_extracted_file($p_event, &$p_header) {
+function process_extracted_file($file_in_zip) {
     global $uploadPath, $realFileSize, $basedir, $course_id,
-            $subsystem, $subsystem_id, $uploadPath, $group_sql,
-            $uploading_as_user;
+        $subsystem, $subsystem_id, $uploadPath, $group_sql,
+        $uploading_as_user;
 
     $replace = !$uploading_as_user && isset($_POST['replace']);
 
@@ -309,21 +358,21 @@ function process_extracted_file($p_event, &$p_header) {
     $file_copyrighted = isset($_POST['file_copyrighted'])? $_POST['file_copyrighted']: '';
     $file_comment = isset($_POST['file_comment'])? $_POST['file_comment']: '';
     $file_description = isset($_POST['file_description'])? $_POST['file_description']: '';
-    $realFileSize += $p_header['size'];
-    $stored_filename = $p_header['stored_filename'];
+    $stored_filename = $file_in_zip['name'];
     if (invalid_utf8($stored_filename)) {
         $stored_filename = cp737_to_utf8($stored_filename);
     }
     $path_components = explode('/', $stored_filename);
     $filename = array_pop($path_components);
-    $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
+    $file_date = date("Y\-m\-d G\:i\:s", $file_in_zip['mtime']);
     $path = make_path($uploadPath, $path_components);
-    if ($p_header['folder']) {
+    // is a directory ?
+    if (substr($file_in_zip['name'], -1 == '/') and $file_in_zip['size'] == 0) {
         // Directory has been created by make_path(),
         // only need to update the index
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        return 0;
+        return null;
     } else {
         // Check if file already exists
         $result = Database::get()->querySingle("SELECT id, path, visible FROM document
@@ -337,12 +386,12 @@ function process_extracted_file($p_event, &$p_header) {
             $vis = $result->visible;
             if ($replace) {
                 // Overwrite existing file
-                $p_header['filename'] = $basedir . $file_path;
+                $new_filename_in_zip = $basedir . $file_path;
                 Database::get()->query("UPDATE document
                                                  SET date_modified = ?t
                                                  WHERE $group_sql AND
                                                        id = ?d", $file_date, $old_id);
-                return 1;
+                return $new_filename_in_zip;
             } else {
                 // Rename existing file
                 $backup_n = 1;
@@ -392,8 +441,9 @@ function process_extracted_file($p_event, &$p_header) {
             'filename' => $filename,
             'comment' => $file_comment));
         // File will be extracted with new encoded filename
-        $p_header['filename'] = $basedir . $path;
-        return 1;
+        //$new_filename_in_zip = $basedir . $path;
+        $new_filename_in_zip = substr($path, 1);
+        return $new_filename_in_zip;
     }
 }
 
@@ -405,38 +455,34 @@ function make_path($path, $path_components) {
     global $basedir, $givenname, $surname, $path_already_exists, $course_id, $group_sql, $subsystem, $subsystem_id;
 
     $path_already_exists = true;
-    $depth = 1 + substr_count($path, '/');
     foreach ($path_components as $component) {
-        $q = Database::get()->querySingle("SELECT path, visible, format,
-                                      (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
-                                      FROM document
-                                      WHERE $group_sql AND
-                                            filename = ?s AND
-                                            path LIKE ?s HAVING depth = $depth", $component, ($path . '%'));
+        $q = Database::get()->querySingle("SELECT path FROM document
+                WHERE $group_sql AND filename = ?s AND path REGEXP ?s",
+                $component, "^$path/[^/]+$");
         if ($q) {
             // Path component already exists in database
+            $path_already_exists = true;
             $path = $q->path;
-            $depth++;
         } else {
             // Path component must be created
+            $path_already_exists = false;
             $path .= '/' . safe_filename();
             make_dir($basedir . $path);
             $id = Database::get()->query("INSERT INTO document SET
-                                          course_id = ?d,
+                      course_id = ?d,
                       subsystem = ?d,
-                                          subsystem_id = ?d,
-                                          path = ?s,
-                                          filename = ?s,
-                                          visible = 1,
-                                          creator = ?s,
-                                          date = NOW(),
-                                          date_modified = NOW(),
-                                          format = '.dir'"
-                            , $course_id, $subsystem, $subsystem_id, $path, $component, ($givenname . $surname))->lastInsertID;
+                      subsystem_id = ?d,
+                      path = ?s,
+                      filename = ?s,
+                      visible = 1,
+                      creator = ?s,
+                      date = NOW(),
+                      date_modified = NOW(),
+                      format = '.dir'",
+                $course_id, $subsystem, $subsystem_id, $path, $component, ($givenname . $surname))->lastInsertID;
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
                 'path' => $path,
                 'filename' => $component));
-            $path_already_exists = false;
         }
     }
     return $path;
@@ -494,10 +540,10 @@ function validateUploadedZipFile($listContent, $menuTypeID = 2) {
         $filename = basename($entry['filename']);
 
         if (!isWhitelistAllowed($filename)) {
-            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed <b>". q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
+            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed <b>". q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";            
             draw($tool_content, $menuTypeID, null, $head_content);
             exit;
-        }
+        }        
     }
 }
 
@@ -511,7 +557,7 @@ function isWhitelistAllowed($filename) {
     global $is_editor, $uid;
 
     $wh = get_config('student_upload_whitelist');
-    $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';
+    $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';    
     $wh3 = fetchUserWhitelist($uid);
 
     $wh .= (strlen($wh2) > 0) ? ', ' . $wh2 : '';

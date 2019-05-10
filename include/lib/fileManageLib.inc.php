@@ -321,19 +321,42 @@ function directory_selection($source_value, $command, $entryToExclude, $director
  * @param type $include_invisible
  */
 function zip_documents_directory($zip_filename, $downloadDir, $include_invisible = false) {
-    global $basedir, $group_sql;
+    global $basedir, $group_sql, $map_filenames, $path_visibility;
 
     create_map_to_real_filename($downloadDir, $include_invisible);
     $GLOBALS['basedir_length'] = strlen($basedir);
     $topdir = ($downloadDir == '/') ? $basedir : ($basedir . $downloadDir);
+    $zipFile = new ZipArchive();
+    $zipFile->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+    // Create recursive directory iterator
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($topdir),
+        RecursiveIteratorIterator::LEAVES_ONLY
+    );
 
-    $zipfile = new PclZip($zip_filename);
-    $v = $zipfile->create($topdir, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename');
-    if ($v === 0) {
-        die("error: " . $zipfile->errorInfo(true));
+    foreach ($files as $name => $file) {
+        // Skip directories (they will be added automatically)
+        if (!$file->isDir()) {
+            // Get real and filename to be added for current file
+            $filePath = $file->getRealPath();
+            $relativePath = substr($filePath, strlen($topdir));
+            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
+                continue; // skip invisible files for student
+            } else {
+                // Add current file to archive
+                $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));
+            }
+        }
+    }
+    if (!$zipFile->close()) {
+        die("Error while creating ZIP file!");
     }
 
-    $real_paths = array();
+     /** TO DO
+      * support for downloading common documents
+      */
+
+    /*$real_paths = array();
     if (isset($GLOBALS['common_docs'])) {
         foreach ($GLOBALS['common_docs'] as $path => $real_path) {
             $filename = $GLOBALS['map_filenames'][$path];
@@ -344,7 +367,7 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
     $v = $zipfile->add($real_paths, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
     if ($v === 0) {
         die("error: " . $zipfile->errorInfo(true));
-    }
+    }*/
 }
 
 
@@ -439,7 +462,7 @@ function common_doc_path($extra_path, $full = false) {
 }
 
 // PclZip callback function to store filenames with real filenames
-function convert_to_real_filename($p_event, &$p_header) {
+/*function convert_to_real_filename($p_event, &$p_header) {
     global $map_filenames, $path_visibility, $basedir_length;
 
     $filename = substr($p_header['filename'], $basedir_length);
@@ -451,7 +474,7 @@ function convert_to_real_filename($p_event, &$p_header) {
 
     return 1;
 }
-
+*/
 // PclZip callback function to store common documents with real filenames
 function convert_to_real_filename_common($p_event, &$p_header) {
     global $common_filenames;

@@ -309,17 +309,39 @@ if ($can_upload or $user_upload) {
             redirect_to_current_dir();
         } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $fileName)) {
             /* ** Unzipping stage ** */
-            $zipFile = new PclZip($userFile);
-            // check for file type in zip contents
-            validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
+            $files_in_zip = array();
+            $zipFile = new ZipArchive();
             $realFileSize = 0;
-            $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
-            if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-                Session::Messages($langNoSpace, 'alert-danger');
+            if ($zipFile->open($userFile) == TRUE) {
+                // check for file type in zip contents
+                for ($i = 0; $i < $zipFile->numFiles; $i++) {
+                    $stat = $zipFile->statIndex($i);
+                    $files_in_zip[$i] = $stat['name'];
+                    if (!empty(my_basename($files_in_zip[$i]))) {
+                        validateUploadedFile(my_basename($files_in_zip[$i]), $menuTypeID);
+                    }
+                }
+                // extract files
+                for ($i = 0; $i < $zipFile->numFiles; $i++) {
+                    $stat = $zipFile->statIndex($i);
+                    $realFileSize += $stat["size"]; // check for free space
+                    if ($diskUsed + $realFileSize > $diskQuotaDocument) {
+                        Session::Messages($langNoSpace, 'alert-danger');
+                        redirect_to_current_dir();
+                    }
+                    $extracted_file_name = process_extracted_file($stat);
+                    if (!is_null($extracted_file_name)) {
+                        $zipFile->renameName($stat["name"], $extracted_file_name);
+                        $zipFile->extractTo("$webDir/courses/$course_code/document/", $extracted_file_name);
+                    }
+                }
+                $zipFile->close();
             } else {
-                $session->setDocumentTimestamp($course_id);
-                Session::Messages($langDownloadAndZipEnd, 'alert-success');
+                Session::Messages($langErrorFileMustBeZip, 'alert-warning');
+                redirect_to_current_dir();
             }
+            $session->setDocumentTimestamp($course_id);
+            Session::Messages($langDownloadAndZipEnd, 'alert-success');
             redirect_to_current_dir();
         } else {
             $fileName = canonicalize_whitespace($fileName);
