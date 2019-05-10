@@ -43,15 +43,15 @@ if ($q) { // additional security
     $conference_agent = $q->agent_created;
 } else {
     Session::Messages($langForbidden, "alert-danger");
-    redirect_to_home_page("modules/chat/index.php?course=$course_code");
+    redirect_to_home_page();
 }
 if (!is_valid_chat_user($uid, $conference_id, $conference_status)) {
   Session::Messages($langForbidden, "alert-danger");
-  redirect_to_home_page("modules/chat/index.php?course=$course_code");
+    redirect_to_home_page();
 }
 if (!is_valid_activity_user($conference_activity, $conference_agent)) {
     Session::Messages($langForbidden, "alert-danger");
-    redirect_to_home_page("modules/chat/index.php?course=$course_code");
+    redirect_to_home_page();
 }
 
   $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';
