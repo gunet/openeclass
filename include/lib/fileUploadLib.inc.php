@@ -340,7 +340,7 @@ function showquota($quota, $used, $backPath=null) {
 // Actions to do before extracting file from zip archive
 // Create database entries and set extracted file path to
 // a new safe filename
-function process_extracted_file($p_event, &$p_header) {
+function process_extracted_file($file_in_zip) {
     global $uploadPath, $realFileSize, $basedir, $course_id,
         $subsystem, $subsystem_id, $uploadPath, $group_sql,
         $uploading_as_user;
@@ -358,21 +358,21 @@ function process_extracted_file($p_event, &$p_header) {
     $file_copyrighted = isset($_POST['file_copyrighted'])? $_POST['file_copyrighted']: '';
     $file_comment = isset($_POST['file_comment'])? $_POST['file_comment']: '';
     $file_description = isset($_POST['file_description'])? $_POST['file_description']: '';
-    $realFileSize += $p_header['size'];
-    $stored_filename = $p_header['stored_filename'];
+    $stored_filename = $file_in_zip['name'];
     if (invalid_utf8($stored_filename)) {
         $stored_filename = cp737_to_utf8($stored_filename);
     }
     $path_components = explode('/', $stored_filename);
-    $filename = array_pop($path_components);    
-    $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
+    $filename = array_pop($path_components);
+    $file_date = date("Y\-m\-d G\:i\:s", $file_in_zip['mtime']);
     $path = make_path($uploadPath, $path_components);
-    if ($p_header['folder']) {
+    // is a directory ?
+    if (substr($file_in_zip['name'], -1 == '/') and $file_in_zip['size'] == 0) {
         // Directory has been created by make_path(),
         // only need to update the index
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        return 0;
+        return null;
     } else {
         // Check if file already exists
         $result = Database::get()->querySingle("SELECT id, path, visible FROM document
@@ -386,12 +386,12 @@ function process_extracted_file($p_event, &$p_header) {
             $vis = $result->visible;
             if ($replace) {
                 // Overwrite existing file
-                $p_header['filename'] = $basedir . $file_path;
+                $new_filename_in_zip = $basedir . $file_path;
                 Database::get()->query("UPDATE document
                                                  SET date_modified = ?t
                                                  WHERE $group_sql AND
                                                        id = ?d", $file_date, $old_id);
-                return 1;
+                return $new_filename_in_zip;
             } else {
                 // Rename existing file
                 $backup_n = 1;
@@ -441,8 +441,9 @@ function process_extracted_file($p_event, &$p_header) {
             'filename' => $filename,
             'comment' => $file_comment));
         // File will be extracted with new encoded filename
-        $p_header['filename'] = $basedir . $path;
-        return 1;
+        //$new_filename_in_zip = $basedir . $path;
+        $new_filename_in_zip = substr($path, 1);
+        return $new_filename_in_zip;
     }
 }
 
