@@ -348,26 +348,17 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
             }
         }
     }
+    // support for common documents
+    if (isset($GLOBALS['common_docs'])) {
+        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
+            $common_filename = $GLOBALS['map_filenames'][$path];
+            $zipFile->addFile($real_path, substr($common_filename, 1));
+
+        }
+    }
     if (!$zipFile->close()) {
         die("Error while creating ZIP file!");
     }
-
-     /** TO DO
-      * support for downloading common documents
-      */
-
-    /*$real_paths = array();
-    if (isset($GLOBALS['common_docs'])) {
-        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
-            $filename = $GLOBALS['map_filenames'][$path];
-            $GLOBALS['common_filenames'][$real_path] = $filename;
-            $real_paths[] = $real_path;
-        }
-    }
-    $v = $zipfile->add($real_paths, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
-    if ($v === 0) {
-        die("error: " . $zipfile->errorInfo(true));
-    }*/
 }
 
 
@@ -460,29 +451,6 @@ function common_doc_path($extra_path, $full = false) {
         return false;
     }
 }
-
-// PclZip callback function to store filenames with real filenames
-/*function convert_to_real_filename($p_event, &$p_header) {
-    global $map_filenames, $path_visibility, $basedir_length;
-
-    $filename = substr($p_header['filename'], $basedir_length);
-    if (!isset($path_visibility[$filename]) or ! $path_visibility[$filename] or ! isset($map_filenames[$filename])) {
-        return 0;
-    }
-
-    $p_header['stored_filename'] = substr(greek_to_latin($map_filenames[$filename]), 1);
-
-    return 1;
-}
-*/
-// PclZip callback function to store common documents with real filenames
-function convert_to_real_filename_common($p_event, &$p_header) {
-    global $common_filenames;
-
-    $p_header['stored_filename'] = substr(greek_to_latin($common_filenames[$p_header['filename']]), 1);
-    return 1;
-}
-
 //------------------------------------------------------------------------------
 /* --------------- backported functions from Claroline 1.7.x --------------- */
 
