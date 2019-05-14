@@ -88,19 +88,6 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
 }
 
 /*
- * Cheks a file or a directory actually exist at this location
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - filePath (string) - path of the presume existing file or dir
- * @return - boolean TRUE if the file or the directory exists
- *           boolean FALSE otherwise.
- */
-
-function check_name_exist($filePath) {
-    return file_exists($filePath);
-}
-
-/*
  * Delete a file or a directory
  *
  * @author - Hugues Peeters
@@ -135,7 +122,7 @@ function my_rename($filePath, $newFileName) {
     $path = @$baseWorkDir . dirname($filePath);
     $oldFileName = my_basename($filePath);
 
-    if (check_name_exist($path . "/" . $newFileName) && $newFileName != $oldFileName) {
+    if (file_exists($path . "/" . $newFileName) && $newFileName != $oldFileName) {
         return false;
     } else {
         /** * check if the new name has an extension ***/
@@ -161,9 +148,9 @@ function my_rename($filePath, $newFileName) {
  */
 
 function move($source, $target) {
-    if (check_name_exist($source)) {
+    if (file_exists($source)) {
         $fileName = my_basename($source);
-        if (check_name_exist($target . "/" . $fileName)) {
+        if (file_exists($target . "/" . $fileName)) {
             return false;
         } else { /*         * * File case ** */
             if (is_file($source)) {

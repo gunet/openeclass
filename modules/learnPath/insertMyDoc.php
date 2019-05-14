@@ -124,7 +124,7 @@ if (isset($_POST['submitInsertedDocument'])) {
         $filenameDocument = $sql_doc->filename;
         $sourceDoc = $sql_doc->path;        
         $basename = $webDir . '/courses/' . $course_code . '/document' . $sourceDoc;        
-        if (check_name_exist($basename)) { // source file exists ?
+        if (file_exists($basename)) { // source file exists ?
             // check if a module of this course already used the same document
             $sql = "SELECT *
                     FROM `lp_module` AS M, `lp_asset` AS A
