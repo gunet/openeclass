@@ -22,7 +22,6 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
-//require_once 'include/lib/fileManageLib.inc.php';
 //Default Styles
 $defaults = array(
                 'rgba(35,44,58,1)' => array('leftNavBgColor','bgColor'),
@@ -67,15 +66,26 @@ if (isset($_GET['export'])) {
         $export_data_file = 'courses/theme_data/theme_options.txt';
         file_put_contents('courses/theme_data/theme_options.txt', $export_data);
         $filename = "courses/theme_data/".replace_dangerous_char(greek_to_latin($theme_name)).".zip";
-        
         $file_list = array("courses/theme_data/theme_options.txt");
-        if (isset($styles['bgImage'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[bgImage]");
-        if (isset($styles['imageUpload'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUpload]");
-        if (isset($styles['imageUploadSmall'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadSmall]");
-        if (isset($styles['loginImg'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
-        
-        $zip = new PclZip($filename);
-        $zip->create($file_list, PCLZIP_OPT_REMOVE_PATH, 'courses/theme_data');
+        if (isset($styles['bgImage'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[bgImage]");
+        }
+        if (isset($styles['imageUpload'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUpload]");
+        }
+        if (isset($styles['imageUploadSmall'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadSmall]");
+        }
+        if (isset($styles['loginImg'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
+        }
+
+        $zipFile = new ZipArchive();
+        $zipFile->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        foreach ($file_list as $file_to_add) {
+            $zipFile->addFile($webDir . "/" . $file_to_add, str_replace("courses/theme_data/", '', $file_to_add));
+        }
+        $zipFile->close();
         header("Content-Type: application/x-zip");
         header("Content-Disposition: attachment; filename=$filename");
         stop_output_buffering();
@@ -85,11 +95,15 @@ if (isset($_GET['export'])) {
         exit;
 }
 if (isset($_POST['import'])) {
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        csrf_token_error();
+    }
     validateUploadedFile($_FILES['themeFile']['name'], 2);
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
         $file_name = $_FILES['themeFile']['name'];        
-        if(!is_dir('courses/theme_data')) make_dir('courses/theme_data');
+        if (!is_dir('courses/theme_data')) {
+            make_dir('courses/theme_data');
+        }
         if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
             require_once 'modules/admin/extconfig/externals.php';
             $connector = AntivirusApp::getAntivirus();
@@ -99,10 +113,9 @@ if (isset($_POST['import'])) {
                     AntivirusApp::block($output->output);
                 }
             }
-            $archive = new PclZip("$webDir/courses/theme_data/$file_name");
-            if ($archive->extract(PCLZIP_OPT_PATH, 'courses/theme_data/temp') == 0) {
-                die("Error : ".$archive->errorInfo(true));
-            } else {
+            $archive = new ZipArchive();
+            if ($archive->open("courses/theme_data/$file_name") == TRUE) {
+                $archive->extractTo('courses/theme_data/temp');
                 unlink("$webDir/courses/theme_data/$file_name");
                 $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
                 unlink("$webDir/courses/theme_data/temp/theme_options.txt");
@@ -112,7 +125,10 @@ if (isset($_POST['import'])) {
                 recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
                 Session::Messages($langThemeInstalled);
+            } else {
+                die("Error while unzipping file !");
             }
+            $archive->close();
         }
     } else {
         Session::Messages($langUnwantedFiletype);
@@ -120,7 +136,9 @@ if (isset($_POST['import'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_POST['optionsSave'])) {
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        csrf_token_error();
+    }
     upload_images();
     clear_default_settings();
     $serialized_data = serialize($_POST);
@@ -198,7 +216,7 @@ if (isset($_POST['optionsSave'])) {
                                     '<form id=\"uploadThemeForm\" class=\"form-horizontal\" role=\"form\" enctype=\"multipart/form-data\" method=\"post\">'+
                                         '<div class=\"form-group\">'+
                                         '<div class=\"col-sm-12\">'+
-                                            '<input id=\"themeFile\" name=\"themeFile\" type=\"file\" class=\"form-control\">'+
+                                            '<input id=\"themeFile\" name=\"themeFile\" type=\"file\">'+
                                             '<input name=\"import\" type=\"hidden\">'+
                                         '</div>'+
                                         '</div>". addslashes(generate_csrf_token_form_field()) ."'+
