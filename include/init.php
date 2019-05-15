@@ -171,9 +171,6 @@ if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
 }
 // PHP Math Publisher
 require_once 'include/phpmathpublisher/mathpublisher.php';
-// temp directory for pclzip
-define('PCLZIP_TEMPORARY_DIR', $webDir . '/courses/temp/');
-
 // include_messages
 require "$webDir/lang/$language/common.inc.php";
 $extra_messages = "config/{$language_codes[$language]}.inc.php";
