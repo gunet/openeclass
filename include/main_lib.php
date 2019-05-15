@@ -23,9 +23,6 @@
  */
 define('ECLASS_VERSION', '3.7.1');
 
-// better performance while downloading very large files
-define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
-
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
     define("_MPDF_TEMP_PATH", $webDir . '/courses/temp/pdf/');
