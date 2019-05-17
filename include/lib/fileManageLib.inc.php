@@ -346,8 +346,7 @@ function directory_selection($source_value, $command, $entryToExclude, $director
 function zip_documents_directory($zip_filename, $downloadDir, $include_invisible = false) {
     global $basedir, $group_sql, $map_filenames, $path_visibility;
 
-    create_map_to_real_filename($downloadDir, $include_invisible);
-    $GLOBALS['basedir_length'] = strlen($basedir);
+    create_map_to_real_filename($downloadDir, $include_invisible);    
     $topdir = ($downloadDir == '/') ? $basedir : ($basedir . $downloadDir);
     $zipFile = new ZipArchive();
     $zipFile->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -355,22 +354,21 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
     $files = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($topdir),
         RecursiveIteratorIterator::LEAVES_ONLY
-    );
-
+    );    
     foreach ($files as $name => $file) {
         // Skip directories (they will be added automatically)
         if (!$file->isDir()) {
             // Get real and filename to be added for current file
             $filePath = $file->getRealPath();
-            $relativePath = substr($filePath, strlen($topdir));
-            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
+            $relativePath = substr($filePath, strlen($basedir));
+            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {            
                 continue; // skip invisible files for student
             } else {
                 // Add current file to archive
-                $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));
+                $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));                
             }
         }
-    }
+    }    
     // support for common documents
     if (isset($GLOBALS['common_docs'])) {
         foreach ($GLOBALS['common_docs'] as $path => $real_path) {
