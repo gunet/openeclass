@@ -120,14 +120,7 @@ if (($auth != 7) and ($auth != 6)) {
                             ))
                             ;
 } else {
-    $tool_content .= form_buttons(array(
-        array(
-            'text' => q($langCheck),
-            'name' => 'is_submit',
-            'value'=> q($langCheck)
-        )
-    ))
-    ;
+    redirect_to_home_page("modules/auth/altsearch.php?auth=$v&is_submit=true");
 }
 
 $tool_content .= "</div></div>";
