@@ -318,7 +318,8 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
     $files = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($topdir),
         RecursiveIteratorIterator::LEAVES_ONLY
-    );    
+    );
+
     foreach ($files as $name => $file) {
         // Skip directories (they will be added automatically)
         if (!$file->isDir()) {
@@ -331,8 +332,17 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
                 // Add current file to archive
                 $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));                
             }
+        } else { // empty directory
+            $filePath = $file->getRealPath();
+            $relativePath = substr($filePath, strlen($basedir));
+            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
+                continue; // skip invisible files for student
+            } else {
+                $zipFile->addEmptyDir(substr($map_filenames[$relativePath], 1));
+            }
         }
-    }    
+    }
+
     // support for common documents
     if (isset($GLOBALS['common_docs'])) {
         foreach ($GLOBALS['common_docs'] as $path => $real_path) {
