@@ -628,6 +628,7 @@ $langGroupSpace = "Group area";
 $langGroupSpaceLink = "Group area";
 $langGroupForumLink = "Group forum";
 $langZipNoPhp = "The zip file can not contain .PHP files";
+$langZipError = "Error : Zip file couldn't be extracted!";
 $langUncompress = "Unzip file (.zip) on server";
 $langDownloadAndZipEnd = "Zip file uploaded and uncompressed";
 $langParentDir = "parent directory";
