@@ -498,6 +498,8 @@ function course_announcements() {
                             FROM announcement
                             WHERE course_id = ?d AND
                                   visible = 1
+                                AND (start_display <= NOW() OR start_display IS NULL) 
+                                AND (stop_display >= NOW() OR stop_display IS NULL)
                             ORDER BY `date` DESC LIMIT 5", $course_id);
         if ($q) { // if announcements exist
             $ann_content = '';
