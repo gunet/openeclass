@@ -2629,6 +2629,7 @@ $langimportLearningPath = "Εισαγωγή γραμμής μάθησης";
 $langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πακέτου SCORM";
 $langLPViewerToggleLeftTOC = "Εναλλαγή εμφάνισης περιεχομένων";
 $langLearnPathDeleted = 'Η γραμμή μάθησης διαγράφηκε';
+$langZipError = "Το αρχείο δεν μπόρεσε να αποσυμπιεστεί";
 
 $langDistribute = "Διαμοιρασμός";
 $langCancelDistribute = "Ακύρωση διαμοιρασμού";
