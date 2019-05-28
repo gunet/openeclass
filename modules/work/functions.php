@@ -370,11 +370,16 @@ function show_submission_details($id) {
                     </div>
                 </div>";
             if ($assignment->submission_type == 0) {
+                if (isset($_GET['unit'])) {
+                    $get_link = "<a href='../units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id'>";
+                } else {
+                    $get_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>";
+                }
                 $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong>" . $langFileName . ":</strong>
                     </div>
-                        <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
+                        <div class='col-sm-9'>$get_link" . q($sub->file_name) . "</a>
                     </div>
                 </div>";
             } else {
@@ -386,16 +391,16 @@ function show_submission_details($id) {
                     </div>
                 </div>";
             }
-            if(AutojudgeApp::getAutojudge()->isEnabled()) {
-            $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
-            $tool_content .= "
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>" . $langAutoJudgeEnable . ":</strong>
-                </div>
-                <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
-                </div>
-            </div>";
+            if (AutojudgeApp::getAutojudge()->isEnabled()) {
+                $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
+                $tool_content .= "
+                <div class='row margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong>" . $langAutoJudgeEnable . ":</strong>
+                    </div>
+                    <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
+                    </div>
+                </div>";
             }
         table_row($m['comments'], $sub->comments, true);
         $tool_content .= "</div></div>";

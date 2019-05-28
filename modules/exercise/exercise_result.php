@@ -662,7 +662,12 @@ $tool_content .= "
     if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
         $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>";
     }
-  $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>
-</div>";
+    if (isset($_REQUEST['unit'])) {
+        $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&id=$_REQUEST[unit]'>$langBack</a>";
+    } else {
+        $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>";
+    }
+
+$tool_content .= "</div>";
 
 draw($tool_content, 2, null, $head_content);
