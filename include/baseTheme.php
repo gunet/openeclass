@@ -56,8 +56,15 @@ function view($view_file, $view_data = array()) {
 
     // negative course_id might be set in common documents
     if ($course_id < 1) {
-        unset($course_id);
-        unset($course_code);
+        $course_code = $course_id = null;
+    }
+
+    if (!isset($course_id)) {
+        $course_code = $course_id = null;
+    }
+
+    if (!isset($module_id)) {
+        $module_id = $module_visibility = null;
     }
 
     $pageTitle = $siteName;
@@ -231,16 +238,16 @@ function view($view_file, $view_data = array()) {
     }
 
     // Add Theme Options styles
-    $logo_img = $themeimg.'/eclass-new-logo.png';
-    $logo_img_small = $themeimg.'/logo_eclass_small.png';
+    $logo_img = $themeimg . '/eclass-new-logo.png';
+    $logo_img_small = $themeimg . '/logo_eclass_small.png';
     $container = 'container';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+    $styles_str = '';
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-        $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
             if (isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'stretch') {
