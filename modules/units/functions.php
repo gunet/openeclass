@@ -683,7 +683,6 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if (!$is_editor and ( !resource_access($exercise->active, $exercise->public))) {
             return '';
         }
-        //$link = "<a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         $exlink = $link . "$title</a>";
         $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";

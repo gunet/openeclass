@@ -99,7 +99,11 @@ if (isset($_REQUEST['exerciseId'])) {
         // or doesn't exist, redirect and show error
         if (!$objExercise->read($exerciseId) || (!$is_editor && $objExercise->selectStatus($exerciseId)==0)) {
             session::Messages($langExerciseNotFound);
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+            if (isset($_REQUEST['unit'])) {
+                redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+            } else {
+                redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+            }
         }
         // saves the object into the session
         $_SESSION['objExercise'][$exerciseId] = $objExercise;
@@ -129,7 +133,11 @@ if ($objExercise->assign_to_specific and !$is_editor) {
     }
     if (!$accessible) {
         Session::Messages($langNoAccessPrivilages);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+        } else {
+            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        }
     }
 }
 
@@ -144,7 +152,11 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
         $objDateTime = new DateTime($paused_attempt->record_start_date);
         $attempt_value = $objDateTime->getTimestamp();
     } else {
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+        } else {
+            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        }
     }
 } else {
     $objDateTime = new DateTime('NOW');
@@ -160,7 +172,11 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
                 $_SESSION['password'][$exerciseId][$attempt_value] = 1;
             } else {
                 Session::Messages($langCaptchaWrong);
-                redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                if (isset($_REQUEST['unit'])) {
+                    redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+                } else {
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                }
             }
         }
     }
@@ -171,7 +187,11 @@ if ($ips && !$is_editor){
     $user_ip = Log::get_client_ip();
     if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
         Session::Messages($langIPHasNoAccess);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+        } else {
+            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        }
     }
 }
 // If the user has clicked on the "Cancel" button,
@@ -220,7 +240,7 @@ if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
     }
 }
 
-// exercise has ended or hasn't been enabled yet due to declared dates or was submmitted automatically due to expiring time
+// exercise has ended or hasn't been enabled yet due to declared dates or was submitted automatically due to expiring time
 $autoSubmit = isset($_POST['autoSubmit']) && $_POST['autoSubmit'] == 'true';
 if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) or $autoSubmit) {
     // if that happens during an active attempt
@@ -242,11 +262,19 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_
                         total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpiredTime);
-        redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);
+        } else {
+            redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+        }
     } else {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpired);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+        } else {
+            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        }
     }
 }
 
@@ -299,7 +327,11 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
    if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseMaxAttemptsReached);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+       if (isset($_REQUEST['unit'])) {
+           redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+       } else {
+           redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+       }
    } else {
         if ($exerciseAllowedAttempts > 0 && !isset($_POST['acceptAttempt'])) {
             $left_attempts = $exerciseAllowedAttempts - $attempt;
@@ -446,7 +478,12 @@ if (isset($_POST['formSent'])) {
                 WHERE eurid = ?d AND question_id = ?d', $eurid, $qid);
         }
         unset_exercise_var($exerciseId);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+        } else {
+            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        }
+
     }
 }
 
