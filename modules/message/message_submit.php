@@ -185,6 +185,7 @@ if (isset($_POST['submit'])) {
                         array_push($list_of_recipients, $emailaddr);
                     }
                 }
+                array_push($list_of_recipients, $_SESSION['email']); // add sender email address
                 $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
                 $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
                 $datetime = date('l jS \of F Y h:i:s A');
@@ -232,7 +233,6 @@ if (isset($_POST['submit'])) {
 
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
-
             } else { // message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 $list_of_recipients = array();
@@ -242,6 +242,7 @@ if (isset($_POST['submit'])) {
                         array_push($list_of_recipients, $emailaddr);
                     }
                 }
+                array_push($list_of_recipients, $_SESSION['email']); // add sender email address
                 $datetime = date('l jS \of F Y h:i:s A');
                 $in_course = $require_current_course?
                     " $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>": '';
@@ -279,9 +280,7 @@ if (isset($_POST['submit'])) {
                 $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 $emailaddr = uid_to_email($userid);
-
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
-
             }
         }
         if (!$errormail) {
