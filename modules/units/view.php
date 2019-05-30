@@ -5,7 +5,6 @@
  * Date: 20/5/2019
  * Time: 2:38 μμ
  */
-//print_r($_REQUEST);
 
 switch ($_REQUEST['res_type']) {
     case 'assignment':
@@ -20,10 +19,16 @@ switch ($_REQUEST['res_type']) {
     case 'videolink':
         require_once "../video/playlink.php";
         exit;
-    case 'video';
-        //require_once "../../include/lib/modalboxhelper.class.php";
-        //ModalBoxHelper::loadModalBox(true);
+    case 'video':
+        require_once "../../include/lib/modalboxhelper.class.php";
+        ModalBoxHelper::loadModalBox(true);
         require_once "../video/play.php";
+        exit;
+    case 'chat':
+        require_once "../chat/chat.php";
+        exit;
+    case 'chat_actions':
+        require_once "../chat/messageList.php";
         exit;
     default:
         break;

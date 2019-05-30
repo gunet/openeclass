@@ -1165,15 +1165,9 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
  * @return string
  */
 function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
-    global $urlServer, $is_editor,
-           $langWasDeleted, $langInactiveModule, $course_id, $course_code;
+    global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id;
 
-    $module_visible = visible_module(MODULE_ID_CHAT); // checks module visibility
-
-    if (!$module_visible and !$is_editor) {
-        return '';
-    }
-
+    $comment_box = '';
     $title = q($title);
     $chat = Database::get()->querySingle("SELECT * FROM conference WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
     if (!$chat) { // check if it was deleted
@@ -1187,20 +1181,15 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
         if (!$is_editor and $chat->status == 'inactive') {
             return '';
         }
-        $link = "<a href='${urlServer}modules/chat/chat.php?conference_id=$chat_id'>";
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
         $chatlink = $link . "$title</a>";
-        if (!$module_visible) {
-            $chatlink .= " <i>($langInactiveModule)</i>";
-        }
         $imagelink = $link . "</a>" .icon('fa-exchange') . "";
     }
 
     if (!empty($comments)) {
         $comment_box = "<br />$comments";
-    } else {
-        $comment_box = '';
     }
-    $class_vis = ($chat->status == 'inactive' or !$module_visible) ?
+    $class_vis = ($chat->status == 'inactive') ?
         ' class="not_visible"' : ' ';
     return "
         <tr$class_vis data-id='$resource_id'>

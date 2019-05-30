@@ -71,7 +71,11 @@ if (isset($_GET['reset']) && $is_editor) {
     }
     fclose($fchat);
     @unlink($tmpArchiveFile);
-    redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
+    if (isset($_REQUEST['unit'])) {
+        redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=chat_actions&conference_id=$conference_id");
+    } else {
+        redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
+    }
 }
 
 // store
@@ -106,7 +110,11 @@ if (isset($_GET['store']) && $is_editor) {
     } else {
     }
     @unlink($exportFileChat);
-    redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
+    if (isset($_REQUEST['unit'])) {
+        redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=chat_actions&conference_id=$conference_id");
+    } else {
+        redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
+    }
 }
 
 // add new line
@@ -119,15 +127,25 @@ if (isset($_GET['store']) && $is_editor) {
         }
         fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . " !@#$ $uid       \n");
         fclose($fchat);
-        redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=chat_actions&conference_id=$conference_id");
+        } else {
+            redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
+        }
     }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <base target="_parent">
-    <meta http-equiv="refresh" content="30; url=<?php echo "{$urlServer}modules/chat/messageList.php?course=$course_code&conference_id=$conference_id" ?>" />
-    <title>Chat messages</title>
+    <meta http-equiv="refresh" content="30; url=<?php
+        if (isset($_REQUEST['unit'])) {
+            echo "{$urlServer}modules/units/view.php?course=$course_code&res_type=chat_actions&unit=$_REQUEST[unit]&conference_id=$conference_id";
+        } else {
+            echo "{$urlServer}modules/chat/messageList.php?course=$course_code&conference_id=$conference_id";
+        }
+    ?>" />
+    <title><?php echo $langMessages ?></title>
     <!-- jQuery -->
     <script src="<?php echo $urlServer;?>js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>
 
