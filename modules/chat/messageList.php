@@ -24,6 +24,7 @@
  */
 $require_current_course = TRUE;
 $require_login = TRUE;
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/document/doc_init.php';
@@ -139,12 +140,9 @@ if (isset($_GET['store']) && $is_editor) {
 <head>
     <base target="_parent">
     <meta http-equiv="refresh" content="30; url=<?php
-        if (isset($_REQUEST['unit'])) {
-            echo "{$urlServer}modules/units/view.php?course=$course_code&res_type=chat_actions&unit=$_REQUEST[unit]&conference_id=$conference_id";
-        } else {
-            echo "{$urlServer}modules/chat/messageList.php?course=$course_code&conference_id=$conference_id";
-        }
+        echo "{$urlServer}modules/units/view.php?course=$course_code&res_type=chat_actions&conference_id=$conference_id";
     ?>" />
+    <?php /*print_r($_REQUEST)*/?>
     <title><?php echo $langMessages ?></title>
     <!-- jQuery -->
     <script src="<?php echo $urlServer;?>js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>

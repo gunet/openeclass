@@ -36,7 +36,7 @@ $coursePath = $webDir . '/courses/';
 $conference_id = $_GET['conference_id'];
 $conference_activity = false;
 $conference_agent = false;
-/*$q = Database::get()->querySingle("SELECT status, chat_activity, agent_created FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
+$q = Database::get()->querySingle("SELECT status, chat_activity, agent_created FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
 if ($q) { // additional security
     $conference_status = $q->status;
     $conference_activity = $q->chat_activity;
@@ -53,7 +53,7 @@ if (!is_valid_activity_user($conference_activity, $conference_agent)) {
     Session::Messages($langForbidden, "alert-danger");
     redirect_to_home_page();
 }
-*/
+
   $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';
   $tmpArchiveFile = $coursePath . $course_code . '/'. $conference_id. '_tmpChatArchive.txt';
 
