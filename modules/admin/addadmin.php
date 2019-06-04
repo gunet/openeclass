@@ -1,7 +1,6 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -51,32 +50,30 @@ if (isset($_POST['submit']) && !empty($username)) {
                 $affected = Database::get()->query("INSERT INTO admin VALUES(?d,?d)", $user_id, $privilege)->affectedRows;
             }
             if ($affected > 0) {
-                $message_type = "alert-success";
-                $message = $langTheUser. " " . $username . " ". $langWith . " id=" . $user_id . " " . $langDone;                  
+                Session::Messages(trans('langTheUser') . ' <b>' . q($username) .
+                    '</b> ' . trans('langDone'), 'alert-success');
             }
         } else {
-            $message_type = "alert-danger";
-            $message = $langError;            
+            Session::Messages(trans('langError'), 'alert-danger');
         }
     } else {
-        $message_type = "alert-danger";
-        $message = $langTheUser . " " . $username . " " . $langNotFound;
+        Session::Messages(trans('langTheUser') . ' <b>' . q($username) .
+            '</b> ' . trans('langNotFound'), 'alert-danger');
     }
-    Session::Messages($message, $message_type);
     redirect_to_home_page('modules/admin/addadmin.php');
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval(getDirectReference($_GET['aid']));
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
         if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {
             $message_type = "alert-success";
-            $message = $langNotAdmin;                   
+            $message = $langNotAdmin;
         } else {
             $message_type = "alert-danger";
-            $message = $langDeleteAdmin. " " . $aid . " " . $langNotFeasible;                  
+            $message = $langDeleteAdmin. " " . $aid . " " . $langNotFeasible;
         }
     } else {
         $message_type = "alert-danger";
-        $message = $langCannotDeleteAdmin;          
+        $message = $langCannotDeleteAdmin;
     }
     Session::Messages($message, $message_type);
     redirect_to_home_page('modules/admin/addadmin.php');
