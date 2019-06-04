@@ -126,7 +126,7 @@ if ($is_editor) {
                   'url' => $base_url . 'forum',
                   'icon' => 'fa fa-paste',
                   'level' => 'secondary',
-                  'show' => !is_module_disable(MODULE_ID_FORUM)),
+                  'show' => visible_module(MODULE_ID_FORUM)),
             array('title' => $langAdd.' '.$langInsertEBook,
                   'url' => $base_url . 'ebook',
                   'icon' => 'fa fa-paste',
