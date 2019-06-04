@@ -90,6 +90,8 @@ function view($view_file, $view_data = array()) {
     $template_base = $urlAppend . 'template/' . $theme;
     if (isset($_SESSION['uname'])) {
         $uname = $_SESSION['uname'];
+    } else {
+        $uname = null;
     }
     if (isset($GLOBALS['leftNavExtras'])) {
         $eclass_leftnav_extras = $GLOBALS['leftNavExtras'];
