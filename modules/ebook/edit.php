@@ -25,19 +25,15 @@
  */
 
 $require_current_course = true;
+$require_editor = true;
 $require_help = true;
 $helpTopic = 'ebook';
-$guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/document/doc_init.php';
 
 $toolName = $langEBook;
-
-if (!$is_editor) {
-    redirect_to_home_page();
-}
 
 if (isset($_REQUEST['id'])) {
     $ebook_id = intval($_REQUEST['id']);
@@ -239,9 +235,8 @@ if (isset($_GET['delete'])) {
     if (!$info) {
         $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
     } else {
-        $pageName = $langEBookEdit;
+        $pageName = $langModify;
         $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
-        $k = 0;
         list($paths, $files, $file_ids, $id_map, $editable) = find_html_files();
 
         $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section

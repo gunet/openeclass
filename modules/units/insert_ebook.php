@@ -25,8 +25,6 @@
  * @global type $course_id
  * @global type $course_code
  * @global type $tool_content
- * @global type $urlServer
- * @global type $mysqlMainDb
  * @global type $langAddModulesButton
  * @global type $langChoice
  * @global type $langNoEbook
@@ -34,7 +32,7 @@
  * @global type $course_code
  */
 function list_ebooks() {
-    global $id, $course_id, $course_code, $tool_content, $urlServer,
+    global $id, $course_id, $tool_content,
     $langAddModulesButton, $langChoice, $langNoEBook,
     $langEBook, $course_code;
     
@@ -43,13 +41,12 @@ function list_ebooks() {
         $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
-				<input type='hidden' name='id' value='$id' />" .
+				<input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langEBook</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
-        $unit_parameter = 'unit=' . $id;
         foreach ($result as $catrow) {        
             $tool_content .= "<tr>";
             $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
@@ -59,49 +56,6 @@ function list_ebooks() {
                             <input type='hidden' name='ebook_title[$catrow->id]'
                                value='" . q($catrow->title) . "'></td>";
             $tool_content .= "</tr>";
-            $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
-                                    ebook_section.public_id AS psid,
-                                    ebook_section.title AS section_title,
-                                    ebook_subsection.id AS ssid,
-                                    ebook_subsection.public_id AS pssid,
-                                    ebook_subsection.title AS subsection_title,
-                                    document.path,
-                                    document.filename
-                                    FROM ebook, ebook_section, ebook_subsection, document
-                                    WHERE ebook.id = ?d AND
-                                        ebook.course_id = ?d AND
-                                        ebook_section.ebook_id = ebook.id AND
-                                        ebook_section.id = ebook_subsection.section_id AND
-                                        document.id = ebook_subsection.file_id AND
-                                        document.course_id = ?d AND
-                                        document.subsystem = " . EBOOK . "
-                                        ORDER BY CONVERT(psid, UNSIGNED), psid,
-                                                 CONVERT(pssid, UNSIGNED), pssid", $catrow->id, $course_id, $course_id);
-
-            $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$catrow->id/";
-            $old_sid = false;            
-            foreach ($q as $row) {                
-                $sid = $row->sid;
-                $ssid = $row->ssid;
-                $display_id = $sid . ',' . $ssid;
-                $surl = $ebook_url_base . $display_id . '/' . $unit_parameter;
-                if ($old_sid != $sid) {
-                    $tool_content .= "<tr>
-                                    <td class='section'>".icon('fa-link')."&nbsp;&nbsp;
-                                        " . q($row->section_title) . "</td>
-                                    <td align='center'><input type='checkbox' name='section[]' value='$sid' />
-                                        <input type='hidden' name='section_title[$sid]'
-                                               value='" . q($row->section_title) . "'></td></tr>";
-                }
-                $tool_content .= "<tr>
-                                <td class='subsection'>".icon('fa-link')."&nbsp;&nbsp;
-                                <a href='" . q($surl) . "' target='_blank'>" . q($row->subsection_title) . "</a></td>
-                                <td align='center'><input type='checkbox' name='subsection[]' value='$ssid' />
-                                   <input type='hidden' name='subsection_title[$ssid]'
-                                          value='" . q($row->subsection_title) . "'></td>
-                            </tr>";
-                $old_sid = $sid;
-            }
         }
         $tool_content .= 
                 "</table>
