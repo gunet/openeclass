@@ -506,13 +506,15 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         $row->title = $title;
         $status = $row->public;
         if ($table == 'video') {
-            $videolink = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id&amp;unit=$id'>";
-            //$vObj = MediaResourceFactory::initFromVideo($row);
-            //$videolink = MultimediaHelper::chooseMediaAhref($vObj);
+            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id&amp;unit=$id";
+            $vObj = MediaResourceFactory::initFromVideo($row);
+            $vObj->setPlayURL($videoplayurl);
+            $videolink = MultimediaHelper::chooseMediaAhref($vObj);
         } else {
-            $videolink = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id&amp;unit=$id'>";
-            //$vObj = MediaResourceFactory::initFromVideoLink($row);
-            //$videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
+            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id&amp;unit=$id";
+            $vObj = MediaResourceFactory::initFromVideoLink($row);
+            $vObj->setPlayURL($videoplayurl);
+            $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
         }
         $imagelink = "fa-film";
     } else { // resource was deleted
@@ -533,7 +535,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     $tool_content .= "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon($imagelink)."</td>
-          <td> $videolink $title $comment_box</td>" . actions('video', $resource_id, $visibility) . "
+          <td> $videolink $comment_box</td>" . actions('video', $resource_id, $visibility) . "
         </tr>";
 }
 

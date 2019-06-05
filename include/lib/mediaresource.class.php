@@ -19,12 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-if (isset($from_units)) {
-    require_once '../../include/lib/mediaresource.interface.php';
-} else {
-    require_once 'include/lib/mediaresource.interface.php';
-}
-
+require_once 'include/lib/mediaresource.interface.php';
 
 class MediaResource implements MediaResourceInterface {
 
