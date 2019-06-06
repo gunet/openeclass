@@ -102,7 +102,7 @@ if ($is_editor) {
                   'url' => $base_url . 'doc',
                   'icon' => 'fa fa-paste',
                   'level' => 'secondary',
-                  'show' => visible_module(MODULE_ID_DOCS)),
+                  'show' => !is_module_disable(MODULE_ID_DOCS)),
             array('title' => $langAdd.' '.$langInsertText,
                   'url' => $base_url . 'text',
                   'icon' => 'fa fa-paste',
