@@ -21,88 +21,94 @@
                     <div class='panel-body'>
                         <fieldset>
                             <div class='form-group'>
-                               <label for='formurlServer' class='col-sm-2 control-label'>{{ trans('langSiteUrl') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formurlServer' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langSiteUrl') }}:</label>
+                               <div class='col-sm-9'>
                                     <input class='form-control' type='text' name='formurlServer' id='formurlServer' value='{{ $urlServer }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formphpMyAdminURL' class='col-sm-2 control-label'>{{ trans('langphpMyAdminURL') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formphpMyAdminURL' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langphpMyAdminURL') }}:</label>
+                               <div class='col-sm-9'>
                                     <input class='form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='{{ get_config('phpMyAdminURL') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formphpSysInfoURL' class='col-sm-2 control-label'>{{ trans('langSystemInfoURL') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formphpSysInfoURL' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langSystemInfoURL') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='{{ get_config('phpSysInfoURL') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formemailAdministrator' class='col-sm-2 control-label'>{{ trans('langAdminEmail') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formemailAdministrator' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langAdminEmail') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formemailAdministrator' id='formemailAdministrator' value='{{ get_config('email_sender') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formemailAdministrator' class='col-sm-2 control-label'>{{ trans('langDefaultAdminName') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formemailAdministrator' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langDefaultAdminName') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formadministratorName' id='formadministratorName' value='{{ get_config('admin_name') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formsiteName' class='col-sm-2 control-label'>{{ trans('langCampusName') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formsiteName' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langCampusName') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formsiteName' id='formsiteName' value='{{ get_config('site_name') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formpostaddress' class='col-sm-2 control-label'>{{ trans('langPostMail') }}</label>
-                               <div class='col-sm-10'>
+                               <label for='formpostaddress' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langPostMail') }}</label>
+                               <div class='col-sm-9'>
                                    <textarea class='form-control' name='formpostaddress' id='formpostaddress'>{{ get_config('postaddress') }}</textarea>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formtelephone' class='col-sm-2 control-label'>{{ trans('langPhone') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formtelephone' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langPhone') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formtelephone' id='formtelephone' value='{{ get_config('phone') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formfax' class='col-sm-2 control-label'>{{ trans('langFax') }}</label>
-                               <div class='col-sm-10'>
+                               <label for='formfax' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langFax') }}</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formfax' id='formfax' value='{{ get_config('fax') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formemailhelpdesk' class='col-sm-2 control-label'>{{ trans('langHelpDeskEmail') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formemailhelpdesk' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langHelpDeskEmail') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='{{ get_config('email_helpdesk') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formInstitution' class='col-sm-2 control-label'>{{ trans('langInstituteShortName') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formInstitution' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langInstituteShortName') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formInstitution' id='formInstitution' value='{{ get_config('institution') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formInstitutionUrl' class='col-sm-2 control-label'>{{ trans('langInstituteName') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formInstitutionUrl' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langInstituteName') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='{{ get_config('institution_url') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formLandingName' class='col-sm-2 control-label'>{{ trans('langLandingPageName') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formLandingName' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langLandingPageName') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formLandingName' id='formLandingName' value='{{ get_config('landing_name') }}'>
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formLandingUrl' class='col-sm-2 control-label'>{{ trans('langLandingPageUrl') }}:</label>
-                               <div class='col-sm-10'>
+                               <label for='formLandingUrl' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langLandingPageUrl') }}:</label>
+                               <div class='col-sm-9'>
                                    <input class='form-control' type='text' name='formLandingUrl' id='formLandingUrl' value='{{ get_config('landing_url') }}'>
                                </div>
+                            </div>
+                            <hr>
+                            <div class='form-group'>
+                                <div class='col-sm-12'>
+                                    <input class='btn btn-default' type='submit' name='submit' value='{{ trans('langSave') }}'>
+                                </div>
                             </div>
                         </fieldset>
                     </div>
@@ -299,7 +305,7 @@
 
                 {!! mail_settings_form() !!}
 
-                <div class='panel panel-default' id='five'>
+                <div class='panel panel-default' id='six'>
                     <div class='panel-heading'>
                         <h2 class='panel-title'>{{ trans('langCourseSettings') }}</h2>
                     </div>
@@ -376,7 +382,7 @@
 
 
 
-                <div class='panel panel-default' id='seven'>
+                <div class='panel panel-default' id='eight'>
                     <div class='panel-heading'>
                         <h2 class='panel-title'>{{ trans('langOtherOptions') }}</h2>
                     </div>
@@ -517,7 +523,7 @@
                     </div>
                 </div>
 
-                <div class='panel panel-default' id='eight'>
+                <div class='panel panel-default' id='nine'>
                     <div class='panel-heading'>
                         <h2 class='panel-title'>{{ trans('langDocumentSettings') }}</h2>
                     </div>
@@ -575,7 +581,7 @@
                     </div>
                 </div>
 
-                <div class='panel panel-default' id='nine'>
+                <div class='panel panel-default' id='ten'>
                     <div class='panel-heading'>
                         <h2 class='panel-title'>{{ trans('langDefaultQuota') }}</h2>
                     </div>
@@ -608,7 +614,7 @@
                         </fieldset>
                     </div>
                 </div>
-                <div class='panel panel-default' id='ten'>
+                <div class='panel panel-default' id='eleven'>
                     <div class='panel-heading'>
                         <h2 class='panel-title'>{{ trans('langUploadWhitelist') }}</h2>
                     </div>
@@ -631,7 +637,7 @@
                 </div>
 
 
-                <div class='panel panel-default' id='eleven'>
+                <div class='panel panel-default' id='twelve'>
                     <div class='panel-heading'>
                         <h2 class='panel-title'>{{ trans('langLogActions') }}</h2>
                     </div>
@@ -675,7 +681,8 @@
                         </fieldset>
                     </div>
                 </div>
-                <div class='panel panel-default' id='twelve'>
+
+                <div class='panel panel-default' id='thirteen'>
                     <div class='panel-heading'>
                         <h2 class='panel-title'>{{ trans('langLoginFailCheck') }}</h2>
                     </div>
@@ -712,6 +719,52 @@
                         </fieldset>
                     </div>
                 </div>
+
+                <div class='panel panel-default' id='fourteen'>
+                    <div class='panel-heading'>
+                        <h2 class='panel-title'>{{ trans('langPrivacyPolicy') }}</h2>
+                    </div>
+                    <div class='panel-body'>
+                        <div class='margin-bottom-fat margin-top-fat'><strong>{{ trans('langPrivacyPolicyLegend') }}</strong></div>
+                        <fieldset>
+                            <div class='landing-default'>
+                                @foreach ($selectable_langs as $langCode => $langName)
+                                    <div class='form-group'>
+                                        <label for='privacy_policy_text_{{ $langCode }}' class='col-sm-2 control-label'>{{ trans('langText') }}:<br>({{ $langName }})</label>
+                                        <div class='col-sm-10'>
+                                            {!! rich_text_editor("privacy_policy_text_$langCode", 5, 20, $policyText[$langCode]) !!}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class='form-group'>
+                                <label for='theme' class='col-sm-2 control-label'>{{ trans('langViewShow') }}: </label>
+                                <div class='col-sm-10'>
+                                    <div class='checkbox'>
+                                        <label>
+                                            <input id='privacyPolicyLink' type='checkbox' name='activate_privacy_policy_text'
+                                                @if (get_config('activate_privacy_policy_text')) checked @endif value='1'>
+                                            {{ trans('langDisplayPrivacyPolicyLink') }}
+                                        </label>
+                                    </div>
+                                    <div class='checkbox'>
+                                        <label>
+                                            <input id='privacyPolicyConsent' type='checkbox' name='activate_privacy_policy_consent'
+                                                   @if (get_config('activate_privacy_policy_consent')) checked @endif value='1'>
+                                            {{ trans('langAskPrivacyPolicyConsent') }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <div class='col-sm-12'>
+                                    <input class='btn btn-default' type='submit' name='submit' value='{{ trans('langSave') }}'>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
                 {!! showSecondFactorChallenge() !!}
                 <div class='form-group'>
                     <div class='col-sm-12'>
@@ -720,8 +773,6 @@
                     </div>
                 </div>
                 {!! generate_csrf_token_form_field() !!}
-
-
             </form>
         </div>
 
@@ -730,19 +781,277 @@
                 <li class='active'><a href='#one'>{{ trans('langBasicCfgSetting') }}</a></li>
                 <li><a href='#two'>{{ trans('langUpgReg') }}</a></li>
                 <li><a href='#three'>{{ trans('langEclassThemes') }}</a></li>
-                <li><a href='#four'>{{ trans('langEmailSettings') }}</a></li>
-                <li><a href='#five'>{{ trans('langCourseSettings') }}</a></li>
-                <li><a href='#six'>{{ trans('langMetaCommentary') }}</a></li>
-                <li><a href='#seven'>{{ trans('langOtherOptions') }}</a></li>
-                <li><a href='#eight'>{{ trans('langDocumentSettings') }}</a></li>
-                <li><a href='#nine'>{{ trans('langDefaultQuota') }}</a></li>
-                <li><a href='#ten'>{{ trans('langUploadWhitelist') }}</a></li>
-                <li><a href='#eleven'>{{ trans('langLogActions') }}</a></li>
-                <li><a href='#twelve'>{{ trans('langLoginFailCheck') }}</a></li>
+                <li><a href='#four'>{{ trans('langHomePageSettings') }}</a></li>
+                <li><a href='#five'>{{ trans('langEmailSettings') }}</a></li>
+                <li><a href='#six'>{{ trans('langCourseSettings') }}</a></li>
+                <li><a href='#seven'>{{ trans('langMetaCommentary') }}</a></li>
+                <li><a href='#eight'>{{ trans('langOtherOptions') }}</a></li>
+                <li><a href='#nine'>{{ trans('langDocumentSettings') }}</a></li>
+                <li><a href='#ten'>{{ trans('langDefaultQuota') }}</a></li>
+                <li><a href='#eleven'>{{ trans('langUploadWhitelist') }}</a></li>
+                <li><a href='#twelve'>{{ trans('langLogActions') }}</a></li>
+                <li><a href='#thirteen'>{{ trans('langLoginFailCheck') }}</a></li>
+                <li><a href='#fourteen'>{{ trans('langPrivacyPolicy') }}</a></li>
             </ul>
         </div>
 
     </div>
     {!! modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', trans('langConfirmEnableIndexTitle'), trans('langConfirmEnableIndex'), 'confirmIndexCancel', 'confirmIndexOk') !!}
     {!! modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', trans('langConfirmEnableMobileAPITitle'), trans('langConfirmEnableMobileAPI'), 'confirmMobileAPICancel', 'confirmMobileAPIOk') !!}
+
+    @if (Session::get('scheduleIndexing'))
+        <script>
+            var idxwindow = null;
+
+            function idxpopup(url, w, h) {
+                var left = screen.width/2 - w/2,
+                    top = screen.height/2 - h/2;
+
+                if (idxwindow == null || idxwindow.closed) {
+                    idxwindow = window.open(url, 'idxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+                    if (window.focus && idxwindow !== null) {
+                        idxwindow.focus();
+                    }
+                } else {
+                    idxwindow.focus();
+                }
+
+                return false;
+            }
+
+            $(function() { $('#idxpbut').click(); });
+        </script>
+    @endif
+
+    <script>
+        function loginFailPanel(e) {
+            duration = null;
+            if (e) {
+                duration = 400;
+            }
+
+            if ($('#login_fail_check').is(":checked")) {
+                $('#login_fail_threshold').show(duration);
+                $('#login_fail_deny_interval').show(duration);
+                $('#login_fail_forgive_interval').show(duration);
+            }
+            else {
+                $('#login_fail_threshold').hide(duration);
+                $('#login_fail_deny_interval').hide(duration);
+                $('#login_fail_forgive_interval').hide(duration);
+            }
+        }
+
+        $(function() {
+            /* Check if we are in safari and fix Bootstrap Affix*/
+            if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+                var stickywidget = $('#floatMenu');
+                var explicitlySetAffixPosition = function() {
+                    stickywidget.css('left',stickywidget.offset().left+'px');
+                };
+                /* Before the element becomes affixed, add left CSS that is equal to the distance of the element from the left of the screen */
+                stickywidget.on('affix.bs.affix',function(){
+                    stickywidget.removeAttr('style');
+                    explicitlySetAffixPosition();
+                });
+                stickywidget.on('affixed-bottom.bs.affix',function(){
+                    stickywidget.css('left', 'auto');
+                });
+                /* On resize of window, un-affix affixed widget to measure where it should be located, set the left CSS accordingly, re-affix it */
+                $(window).resize(function(){
+                    if(stickywidget.hasClass('affix')) {
+                        stickywidget.removeClass('affix');
+                        explicitlySetAffixPosition();
+                        stickywidget.addClass('affix');
+                    }
+                });
+            }
+
+            // Course Settings checkboxes
+            $('#uown').click(function(event) {
+                if (!$('#uown').is(":checked")) {
+                    $('#town').prop('checked', false);
+                }
+                $('#town').prop('disabled', !$('#uown').is(":checked"));
+            });
+
+            // Login screen / link checkboxes
+            $('#hide_login_check').click(function(event) {
+                if (!$('#hide_login_check').is(":checked")) {
+                    $('#hide_login_link_check').prop('checked', false);
+                }
+                $('#hide_login_link_check').prop('disabled', !$('#hide_login_check').is(":checked"));
+            });
+
+            // Login Fail Panel
+            loginFailPanel();
+            $('#login_fail_check').click(function(event) {
+                loginFailPanel(true);
+            });
+
+            // Open Courses checkboxes
+            $('#opencourses_enable').click(function(event) {
+                if ($('#opencourses_enable').is(":checked")) {
+                    if ($('#course_metadata').is(":checked")) {
+                        $('#course_metadata').prop('disabled', true);
+                    } else {
+                        $('#course_metadata')
+                            .prop('checked', true)
+                            .prop('disabled', true)
+                            .change();
+                    }
+                } else {
+                    $('#course_metadata').prop('disabled', false);
+                }
+            });
+
+            if ($('#opencourses_enable').is(":checked")) {
+                $('#course_metadata').prop('disabled', true);
+            }
+
+            // MyDocs checkboxes and inputs
+            function mydocsCheckboxQuota(checkbox, input) {
+                $(checkbox).change(function (event) {
+                    $(input).prop('disabled', !$(this).is(':checked'));
+                }).change();
+            }
+            mydocsCheckboxQuota('#mydocs_teacher_enable_id', '#mydocs_teacher_quota_id');
+            mydocsCheckboxQuota('#mydocs_student_enable_id', '#mydocs_student_quota_id');
+
+            // Search Engine checkboxes
+            $('#confirmIndexDialog').modal({
+                show: false,
+                keyboard: false,
+                backdrop: 'static'
+            });
+
+            $("#confirmIndexCancel").click(function() {
+                $('#index_enable')
+                    .prop('checked', false)
+                    .prop('disabled', false);
+                $('#search_enable').prop('checked', false);
+                $("#confirmIndexDialog").modal("hide");
+            });
+
+            $("#privacyPolicyConsent").click(function() {
+                if ($(this).is(':checked')) {
+                    $('#privacyPolicyLink')
+                        .prop('checked', true)
+                        .prop('disabled', true);
+                } else {
+                    $('#privacyPolicyLink')
+                        .prop('disabled', false);
+                }
+            });
+            $('#privacyPolicyLink')
+                .prop('disabled', $("#privacyPolicyConsent").is(':checked'));
+
+            $("#confirmIndexOk").click(function() {
+                $("#confirmIndexDialog").modal("hide");
+            });
+
+            $('#search_enable').change(function(event) {
+                if ($('#search_enable').is(":checked")) {
+                    if ($('#index_enable').is(":checked")) {
+                        $('#index_enable').prop('disabled', true);
+                    } else {
+                        $('#index_enable')
+                            .prop('checked', true)
+                            .prop('disabled', true)
+                            .change();
+                    }
+                } else {
+                    $('#index_enable').prop('disabled', false);
+                }
+            });
+
+            if ($('#search_enable').is(":checked")) {
+                $('#index_enable').prop('disabled', true);
+            }
+
+            $('#index_enable').change(function(event) {
+                if ($('#index_enable').is(":checked")) {
+                    $("#confirmIndexDialog").modal("show");
+                }
+            });
+
+            $('#social_sharing_links').change(function(event) {
+                if ($('#social_sharing_links').is(":checked")) {
+                    if ($('#personal_blog_enable').is(":checked")) {
+                        $('#personal_blog_sharing_enable').prop('disabled', false);
+                    }
+                } else {
+                    $('#personal_blog_sharing_enable').prop('disabled', true);
+                }
+            });
+
+            if (!$('#social_sharing_links').is(":checked")) {
+                $('#personal_blog_sharing_enable').prop('disabled', true);
+            }
+
+            $('#personal_blog_enable').change(function(event) {
+                if ($('#personal_blog_enable').is(":checked")) {
+                    $('#personal_blog_public').prop('disabled', false);
+                    $('#personal_blog_commenting_enable').prop('disabled', false);
+                    $('#personal_blog_rating_enable').prop('disabled', false);
+                    if ($('#social_sharing_links').is(":checked")) {
+                        $('#personal_blog_sharing_enable').prop('disabled', false);
+                    }
+                } else {
+                    $('#personal_blog_public').prop('disabled', true);
+                    $('#personal_blog_commenting_enable').prop('disabled', true);
+                    $('#personal_blog_rating_enable').prop('disabled', true);
+                    $('#personal_blog_sharing_enable').prop('disabled', true);
+                }
+            });
+
+            if (!$('#personal_blog_enable').is(":checked")) {
+                $('#personal_blog_public').prop('disabled', true);
+                $('#personal_blog_commenting_enable').prop('disabled', true);
+                $('#personal_blog_rating_enable').prop('disabled', true);
+                $('#personal_blog_sharing_enable').prop('disabled', true);
+            }
+
+            $('input[name=submit]').click(function() {
+                $('#personal_blog_commenting_enable').prop('disabled', false);
+                $('#personal_blog_rating_enable').prop('disabled', false);
+                $('#personal_blog_sharing_enable').prop('disabled', false);
+            });
+
+            // Mobile API Confirmations
+            $('#confirmMobileAPIDialog').modal({
+                show: false,
+                keyboard: false,
+                backdrop: 'static'
+            });
+
+            $("#confirmMobileAPICancel").click(function() {
+                $('#mobileapi_enable').prop('checked', false);
+                $("#confirmMobileAPIDialog").modal("hide");
+            });
+
+            $("#confirmMobileAPIOk").click(function() {
+                $("#confirmMobileAPIDialog").modal("hide");
+            });
+
+            $('#mobileapi_enable').change(function(event) {
+                if ($('#mobileapi_enable').is(":checked")) {
+                    $("#confirmMobileAPIDialog").modal("show");
+                }
+            });
+
+            $('#registration_link').change(function() {
+                var type = $(this).val();
+                if (type == 'show_text') {
+                    $('#registration-info-block').show();
+                } else {
+                    $('#registration-info-block').hide();
+                }
+            }).change();
+
+            {!! $mail_form_js !!}
+        });
+
+    </script>
+
 @endsection

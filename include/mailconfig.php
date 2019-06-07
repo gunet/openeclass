@@ -135,7 +135,7 @@ function mail_settings_form() {
     $cbox_email_from = get_var('email_from') ? 'checked' : '';
     if (!$install) {
         $mail_form .= "
-            <div class='panel panel-default' id='four'>
+            <div class='panel panel-default' id='five'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langEmailSettings</h2>
                 </div>

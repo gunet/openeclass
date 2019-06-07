@@ -387,7 +387,13 @@
                     <span class='fa fa-caret-square-o-up fa-2x'></span>
                 </div>
                 <footer class="footer">
-                    <span><a href='{{ $urlAppend }}info/copyright.php'>Open eClass © 2003-{{ date('Y') }}</a> &mdash; <a href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a></span>
+                    <span>
+                        <a href='{{ $urlAppend }}info/copyright.php'>Open eClass © 2003-{{ date('Y') }}</a> &mdash;
+                        <a href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a>
+                        @if (get_config('activate_privacy_policy_text'))
+                            &mdash; <a href="{{ $urlAppend }}info/privacy_policy.php">{{ trans('langPrivacyPolicy') }}</a>
+                        @endif
+                    </span>
                 </footer>
             </div>
         </div>
@@ -399,4 +405,3 @@
     @endif
 </body>
 </html>
-
