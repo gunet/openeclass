@@ -70,7 +70,6 @@ $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
 $toolName = $langWorks;
 
-
 //-------------------------------------------
 // main program
 //-------------------------------------------
@@ -589,6 +588,7 @@ if ($is_editor) {
     } else {
         show_student_assignments();
     }
+
 }
 
 add_units_navigation(TRUE);
@@ -1117,7 +1117,7 @@ function submit_work($id, $on_behalf_of = null) {
             } elseif(!$is_editor) {
                 $error_msgs[] = $langUploadError;
                 Session::Messages($error_msgs, 'alert-danger');
-                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                //redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
             }
         }
 
@@ -1297,7 +1297,12 @@ function submit_work($id, $on_behalf_of = null) {
         // End Auto-judge
 
         Session::Messages($success_msgs, 'alert-success');
-        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+        } else {
+            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+        }
+
     } else { // not submit_ok
         Session::Messages($langExerciseNotPermit);
         redirect_to_home_page("modules/work/index.php?course=$course_code");
@@ -3254,11 +3259,16 @@ function show_student_assignment($id) {
             redirect_to_home_page("modules/work/index.php?course=$course_code");
         }
 
+        if (isset($_GET['unit'])) {
+            $back_url = "../units/index.php?course=$course_code&amp;id=$_GET[unit]";
+        } else {
+            $back_url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+        }
         $tool_content .= action_bar(array(
            array(
                'title' => $langBack,
                'icon' => 'fa-reply',
-               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+               'url' => "$back_url",
                'level' => "primary-label"
            )
         ));
@@ -3331,7 +3341,11 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     /*if ($assignment->late_submission) {
         $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
     }*/
-    $group_select_hidden_input = $group_select_form = '';
+    $group_select_hidden_input = $group_select_form = $course_unit_hidden_input = '';
+    if (isset($_GET['unit'])) {
+        $course_unit_hidden_input = "<input type='hidden' name='unit' value='$_GET[unit]'>
+                                     <input type='hidden' name='res_type' value='assignment'>";
+    }
     $is_group_assignment = is_group_assignment($id);
     if ($is_group_assignment) {
         if (!$on_behalf_of) {
@@ -3442,7 +3456,16 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             </div>
                         </div>";
         }
-        $back_link = $is_editor ? "index.php?course=$course_code&id=$id" : "index.php?course=$course_code";
+        if ($is_editor) {
+            $back_link = "index.php?course=$course_code&id=$id";
+        } else {
+            if (isset($_GET['unit'])) {
+                $back_link = "../units/index.php?course=$course_code&id=$_GET[unit]";
+                $form_link = "../units/view.php?course=$course_code";
+            } else {
+                $back_link = $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+            }
+        }
         $tool_content .= action_bar(array(
                 array(
                     'title' => $langBack,
@@ -3454,8 +3477,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
             ))."
                     $notice
                     <div class='form-wrapper'>
-                     <form class='form-horizontal' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-                        <input type='hidden' name='id' value='$id' />$group_select_hidden_input
+                     <form class='form-horizontal' enctype='multipart/form-data' action='$form_link' method='post'>
+                        <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>
                         $group_select_form
                         $submission_form

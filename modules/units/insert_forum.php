@@ -36,7 +36,9 @@ function list_forums() {
     global $id, $tool_content, $urlServer, $course_id,
     $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums, $course_code;
 
-    $result = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d", $course_id);
+    // select topics from forums (not from group forums)
+    $result = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d 
+                                                    AND cat_id IN (SELECT id FROM forum_category WHERE cat_order >= 0)", $course_id);
     $foruminfo = array();
     foreach ($result as $row) {
         $foruminfo[] = array(
@@ -58,12 +60,6 @@ function list_forums() {
                 "</tr>";
 
         foreach ($foruminfo as $entry) {
-            $tool_content .= "<tr>";
-            $tool_content .= "<td>
-            <a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$entry[id]'>" . q($entry['name']). "</a></td>";
-            $tool_content .= "<td>" . q($entry['comment']) . "</td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
-            $tool_content .= "</tr>";
             $r = Database::get()->queryArray("SELECT * FROM forum_topic WHERE forum_id = ?d", $entry['id']);
             if (count($r) > 0) { // if forum topics found
                 $topicinfo = array();
@@ -82,8 +78,7 @@ function list_forums() {
                 }
             }
         }
-        $tool_content .= 
-                "</table>";
+        $tool_content .= "</table>";
         $tool_content .= "<div class='text-right'>
                             <input class='btn btn-primary' type='submit' name='submit_forum' value='$langAddModulesButton' />
                         </div></form>";

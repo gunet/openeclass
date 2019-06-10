@@ -46,7 +46,7 @@ if ($q) { // additional security
     redirect_to_home_page();
 }
 if (!is_valid_chat_user($uid, $conference_id, $conference_status)) {
-  Session::Messages($langForbidden, "alert-danger");
+    Session::Messages($langForbidden, "alert-danger");
     redirect_to_home_page();
 }
 if (!is_valid_activity_user($conference_activity, $conference_agent)) {
@@ -102,9 +102,18 @@ $head_content .= '<script type="text/javascript">
 </script>';
 
 if (!$conference_activity) {
+    if (isset($_REQUEST['unit'])) {
+        $save_link = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]&amp;store=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
+        $back_link = "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit]";
+        $wash_link = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]&amp;reset=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
+    } else {
+        $save_link = "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
+        $back_link = "index.php";
+        $wash_link = "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
+    }
     $tool_content .= action_bar(array(
         array('title' => $langSave,
-            'url' => "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter(),
+            'url' => $save_link,
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
             'button-class' => 'btn-success',
@@ -112,12 +121,12 @@ if (!$conference_activity) {
             'show' => $is_editor
         ),
         array('title' => $langBack,
-            'url' => "index.php",
+            'url' => $back_link,
             'icon' => 'fa-reply',
             'level' => 'primary-label'
         ),
         array('title' => $langWash,
-            'url' => "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter(),
+            'url' => $wash_link,
             'icon' => 'fa-trash',
             'level' => 'primary',
             'link-attrs' => "target='messageList'",
@@ -125,27 +134,34 @@ if (!$conference_activity) {
         )
     ));
 
+    if (isset($_REQUEST['unit'])) {
+        $action_form = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]";
+        $iframe_file = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]&amp;conference_id=$conference_id";
+    } else {
+        $action_form = "messageList.php";
+        $iframe_file = "messageList.php?course=$course_code&amp;conference_id=$conference_id";
+    }
     $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
-   <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
-   <form name='chatForm' action='messageList.php' method='POST' target='messageList' onSubmit='return prepare_message();'>
-   <input type='hidden' name='course' value='$course_code'/>
-   <input type='hidden' name='conference_id' value='$conference_id'/>
-   <fieldset>
-    <div class='col-xs-12'>
-        <div class='input-group'>
-          <input type='text' name='msg' size='80' class='form-control'>
-          <input type='hidden' name='chatLine'>
-          <span class='input-group-btn'>
-            <input class='btn btn-primary' type='submit' value='&raquo;'>
-          </span>
-        </div>
-        <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
-          <iframe class='embed-responsive-item' id='iframe' src='messageList.php?course=$course_code&amp;conference_id=$conference_id' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
-        </div>       
-    </div>   
-   </fieldset>
-   " . generate_csrf_token_form_field() . "
-   </form></div></div></div>";
+       <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
+       <form name='chatForm' action='$action_form' method='POST' target='messageList' onSubmit='return prepare_message();'>
+       <input type='hidden' name='course' value='$course_code'>
+       <input type='hidden' name='conference_id' value='$conference_id'>
+       <fieldset>
+        <div class='col-xs-12'>
+            <div class='input-group'>
+              <input type='text' name='msg' size='80' class='form-control'>
+              <input type='hidden' name='chatLine'>
+              <span class='input-group-btn'>
+                <input class='btn btn-primary' type='submit' value='&raquo;'>
+              </span>
+            </div>
+            <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
+              <iframe class='embed-responsive-item' id='iframe' src='$iframe_file' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
+            </div>       
+        </div>   
+       </fieldset>
+       " . generate_csrf_token_form_field() . "
+       </form></div></div></div>";
 } else {
     if ($is_editor && isset($_GET['create_agent'])) {
         colmooc_create();
