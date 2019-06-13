@@ -49,7 +49,7 @@ function bbb_session_form($session_id = 0) {
     global $langUnitDescr, $langNewBBBSessionStart;
     global $langVisible, $langInvisible;
     global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
-    global $start_session, $BBBEndDate;
+    global $start_session, $BBBEndDate, $langAddAnn;
     global $langTitle, $langBBBNotifyExternalUsersHelpBlock, $langBBBRecordFalse;
     global $langBBBNotifyUsers, $langBBBNotifyExternalUsers, $langBBBSessionMaxUsers;
     global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue;
@@ -266,6 +266,15 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='addAnnouncement' value='1'>$langAddAnn
+                      </label>
+                    </div>
+            </div>
+        </div>
         $submit_id
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
@@ -307,12 +316,13 @@ function bbb_session_form($session_id = 0) {
  * @param type $BBBEndDate
  * @param type $status
  * @param type $notifyUsers
+ * @param type $addAnnouncement
  * @param type $minutes_before
  * @param type $external_users
  * @param type $update // true == add, false == update
  * @param type $session
  */
-function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $minutes_before, $external_users, $record, $sessionUsers, $update, $session_id = '')
+function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $addAnnouncement, $minutes_before, $external_users, $record, $sessionUsers, $update, $session_id = '')
 {
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
@@ -324,7 +334,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
         foreach ($_POST['groups'] as $group) {
             $r_group .= "$group" .',';
         }
-        $r_group = mb_substr($r_group, 0, -1); // remove last comma
+        $r_group = mb_substr($r_group, 0, -1); // remove last `comma` character
     } else {
         $r_group = '0';
     }
@@ -480,12 +490,16 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
             }
         }
     }
-    $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
+
+    if ($addAnnouncement == '1') { // add announcement
+        $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?d", $course_id)->maxorder;
-    $order = $orderMax + 1;
-    Database::get()->querySingle("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible)
+        $order = $orderMax + 1;
+        Database::get()->querySingle("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible)
                                     VALUES ('".$langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',
                                              '$langBBBScheduledSession', " . DBHelper::timeAfter() . ", ?d, ?d, '1')", $course_id, $order);
+    }
+
 }
 
 

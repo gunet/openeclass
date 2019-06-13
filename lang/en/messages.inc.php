@@ -4987,6 +4987,7 @@ $langConfirmPurgeBadge = "Caution: The progress record for this badge will be de
 $langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
 $langDownloadCourse = "Download $langsCourse";
 $langTopics = "Topics";
+$langTopic = "Topic";
 $langGoToHomePage = 'Go to home page';
 $langQuickLinks = "Quick Links";
 $langCourseOfflineSettings = "$langCourse download";
