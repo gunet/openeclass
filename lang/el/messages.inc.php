@@ -4234,6 +4234,7 @@ $langGradeNumber = "Αριθμός";
 $langGradeScales = "Βαθμολογικές Κλίμακες";
 $langGradeScale = "Βαθμολογική Κλίμακα";
 $langGradeScalesSelect = "Επιλογή Κλίμακας";
+$langGradeScalesDeleted = "Η βαθμολογική κλίμακα διαγράφηκε";
 $langGradeScaleNotEditable = "Η κλίμακα δεν είναι πλέον επεξεργάσιμη γιατί έχει χρησιμοποιηθεί για την βαθμολόγηση μίας ή περισσότερων εργασιών.";
 $langNoGradeScales = 'Δεν έχουν καταχωρηθεί βαθμολογικές κλίμακες.';
 $langWording = 'Λεκτικό';
