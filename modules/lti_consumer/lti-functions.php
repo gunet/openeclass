@@ -364,12 +364,17 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
     }
     $launch_presentation_document_target = ($launchcontainer == LTI_LAUNCHCONTAINER_EMBED) ? 'iframe' : 'window';
 
+    $clean_description = str_replace(array("\r", "\n", "&", "\""), " ",strip_tags( $resource_link_description));
+    if (strlen($clean_description) > 999) {
+        $clean_description = substr($clean_description, 0, 999);
+    }
+
     $launch_data = array(
         "user_id" => $uid,
         "roles" => lti_get_ims_role(),
         "resource_link_id" => $_SERVER['SERVER_NAME'] . ":" . $resource_link_type . ":" . $resource_link_id,
         "resource_link_title" => $resource_link_title,
-        "resource_link_description" => strip_tags($resource_link_description),
+        "resource_link_description" => $clean_description,
         "lis_person_name_full" => $lis_person_name_full,
         "lis_person_name_family" => $lis_person_name_family,
         "lis_person_name_given" => $lis_person_name_given,
