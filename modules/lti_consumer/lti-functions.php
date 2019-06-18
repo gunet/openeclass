@@ -23,6 +23,7 @@
 define('LTI_LAUNCHCONTAINER_EMBED', 1);
 define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
+define('LTI_DESCRIPTION_MAX_LENGTH', 999);
 
 
 function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
@@ -364,11 +365,11 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
     }
     $launch_presentation_document_target = ($launchcontainer == LTI_LAUNCHCONTAINER_EMBED) ? 'iframe' : 'window';
 
+    // clean title and description
     $clean_title = str_replace(array("\r", "\n", "\""), " ", $resource_link_title);
-
     $clean_description = str_replace(array("\r", "\n", "&", "\""), " ",strip_tags( $resource_link_description));
-    if (strlen($clean_description) > 999) {
-        $clean_description = substr($clean_description, 0, 999);
+    if (strlen($clean_description) > LTI_DESCRIPTION_MAX_LENGTH) {
+        $clean_description = substr($clean_description, 0, LTI_DESCRIPTION_MAX_LENGTH);
     }
 
     $launch_data = array(
