@@ -48,11 +48,11 @@ $head_content .= <<<EOF
 <script type='text/javascript'>
 //<![CDATA[
 $(document).ready(function() {
-    
+
     var lastHeight;
     var padding = 15;
     var frame = $("#contentframe");
-    
+
     var resize = function(e) {
         var viewportH = $(window).height();
         var docH = $(document).height();
@@ -62,7 +62,7 @@ $(document).ready(function() {
             lastHeight = minHeight;
         }
     };
-    
+
     resize();
 
     $(window).on('resize', function() {
@@ -90,13 +90,13 @@ $tool_content .= action_bar(array(
     )
 ));
 
-$tool_content .= '<iframe id="contentframe" 
-    src="' . "post_launch.php?course=" . $course_code . "&amp;id=" . $_GET['id'] . '" 
-    webkitallowfullscreen="" 
-    mozallowfullscreen="" 
-    allowfullscreen="" 
-    width="100%" 
-    height="800px" 
+$tool_content .= '<iframe id="contentframe"
+    src="' . $urlAppend . "modules/lti_consumer/post_launch.php?course=" . $course_code . "&amp;id=" . $_GET['id'] . '"
+    webkitallowfullscreen=""
+    mozallowfullscreen=""
+    allowfullscreen=""
+    width="100%"
+    height="800px"
     style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
 
 add_units_navigation(TRUE);
