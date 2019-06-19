@@ -726,12 +726,12 @@ function add_assignment() {
                     comments, submission_type, submission_date, secret_directory,
                     group_submissions, grading_type, max_grade, grading_scale_id,
                     assign_to_specific, auto_judge, auto_judge_scenarios, lang,
-                    notification, password_lock, ip_lock, assignment_type, lti_template, 
+                    notification, password_lock, ip_lock, assignment_type, lti_template,
                     launchcontainer, tii_feedbackreleasedate, tii_internetcheck, tii_institutioncheck,
                     tii_journalcheck, tii_report_gen_speed, tii_s_view_reports, tii_studentpapercheck,
                     tii_submit_papers_to, tii_use_biblio_exclusion, tii_use_quoted_exclusion,
                     tii_exclude_type, tii_exclude_value)
-                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t, 
+                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t,
                 ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d)",
                 $course_id, $title, $desc, $deadline, $late_submission, '',
                 $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $grade_type,
@@ -947,7 +947,7 @@ function edit_assignment($id) {
                 tii_feedbackreleasedate = ?t, tii_internetcheck = ?d, tii_institutioncheck = ?d,
                 tii_journalcheck = ?d, tii_report_gen_speed = ?d, tii_s_view_reports = ?d, tii_studentpapercheck = ?d,
                 tii_submit_papers_to = ?d, tii_use_biblio_exclusion = ?d, tii_use_quoted_exclusion = ?d,
-                tii_exclude_type = ?s, tii_exclude_value = ?d 
+                tii_exclude_type = ?s, tii_exclude_value = ?d
             WHERE course_id = ?d AND id = ?d",
             $title, $desc, $group_submissions, $comments, $submission_type,
             $deadline, $late_submission, $submission_date, $grade_type, $max_grade,
@@ -1066,7 +1066,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
     } //checks for submission validity end here
-    if ($submit_ok) {        
+    if ($submit_ok) {
         $success_msgs = array();
         $error_msgs = array();
         //Preparing variables
@@ -1490,17 +1490,17 @@ function new_assignment() {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-                    
+
                     // user groups
                     $('#group_button')
                         .prop('disabled', false);
-                    
+
                     // grading type
                     $('#scales_button')
                         .prop('disabled', false);
                     $('#rubrics_button')
                         .prop('disabled', false);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', false)
@@ -1508,7 +1508,7 @@ function new_assignment() {
                         .removeClass('hidden');
                     $('#online_button')
                         .prop('disabled', false);
-                    
+
                 } else if (choice == 1) {
                     // lti fields
                     $('#lti_templates')
@@ -1562,7 +1562,7 @@ function new_assignment() {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-                    
+
                     // user groups
                     $('#user_button')
                         .prop('checked', true)
@@ -1570,7 +1570,7 @@ function new_assignment() {
                         .trigger('change');
                     $('#group_button')
                         .prop('disabled', true);
-                    
+
                     // grading type
                     $('#numbers_button')
                         .prop('checked', true)
@@ -1580,7 +1580,7 @@ function new_assignment() {
                         .prop('disabled', true);
                     $('#rubrics_button')
                         .prop('disabled', true);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', true)
@@ -1588,7 +1588,7 @@ function new_assignment() {
                         .addClass('hidden');
                     $('#online_button')
                         .prop('disabled', true);
-                    
+
                     // dates
                     $('#enableWorkStart').trigger('click');
                     $('#enableWorkEnd').trigger('click');
@@ -2307,17 +2307,17 @@ function show_edit_assignment($id) {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-                    
+
                     // user groups
                     $('#group_button')
                         .prop('disabled', false);
-                    
+
                     // grading type
                     $('#scales_button')
                         .prop('disabled', false);
                     $('#rubrics_button')
                         .prop('disabled', false);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', false)
@@ -2325,7 +2325,7 @@ function show_edit_assignment($id) {
                         .removeClass('hidden');
                     $('#online_button')
                         .prop('disabled', false);
-                    
+
                 } else if (choice == 1) {
                     // lti fields
                     $('#lti_templates')
@@ -2379,7 +2379,7 @@ function show_edit_assignment($id) {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-                    
+
                     // user groups
                     $('#user_button')
                         .prop('checked', true)
@@ -2387,7 +2387,7 @@ function show_edit_assignment($id) {
                         .trigger('change');
                     $('#group_button')
                         .prop('disabled', true);
-                    
+
                     // grading type
                     $('#numbers_button')
                         .prop('checked', true)
@@ -2397,7 +2397,7 @@ function show_edit_assignment($id) {
                         .prop('disabled', true);
                     $('#rubrics_button')
                         .prop('disabled', true);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', true)
@@ -3327,7 +3327,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         return;
     }
 
-    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);    
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     /*if ($assignment->late_submission) {
         $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
     }*/
@@ -3489,7 +3489,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
 }
 
 function show_turnitin_integration($id) {
-    global $tool_content, $head_content, $course_code, $langTurnitinIntegration;
+    global $tool_content, $head_content, $course_code, $langTurnitinIntegration, $urlAppend;
 
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $assignment->lti_template);
@@ -3499,11 +3499,11 @@ function show_turnitin_integration($id) {
 <script type='text/javascript'>
 //<![CDATA[
 $(document).ready(function() {
-    
+
     var lastHeight;
     var padding = 15;
     var frame = $("#contentframe");
-    
+
     var resize = function(e) {
         var viewportH = $(window).height();
         var docH = $(document).height();
@@ -3513,7 +3513,7 @@ $(document).ready(function() {
             lastHeight = minHeight;
         }
     };
-    
+
     resize();
 
     $(window).on('resize', function() {
@@ -3525,13 +3525,13 @@ $(document).ready(function() {
 </script>
 EOF;*/
 
-        $tool_content .= '<iframe id="contentframe" 
-            src="' . "post_launch.php?course=" . $course_code . "&amp;id=" . $id . '" 
-            webkitallowfullscreen="" 
-            mozallowfullscreen="" 
-            allowfullscreen="" 
-            width="100%" 
-            height="800px" 
+        $tool_content .= '<iframe id="contentframe"
+            src="' . $urlAppend . "modules/work/post_launch.php?course=" . $course_code . "&amp;id=" . $id . '"
+            webkitallowfullscreen=""
+            mozallowfullscreen=""
+            allowfullscreen=""
+            width="100%"
+            height="800px"
             style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
     } else {
         $joinLink = create_join_button(
@@ -3801,7 +3801,7 @@ function assignment_details($id, $row) {
         }
     $tool_content .= "
         </div>
-    </div>";    
+    </div>";
     $cdate = date('Y-m-d H:i:s');
     if ($row->deadline < $cdate && $row->late_submission && !$is_editor) {
         $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
@@ -4321,16 +4321,16 @@ function show_student_assignments() {
     }
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                FROM assignment WHERE course_id = ?d 
+                FROM assignment WHERE course_id = ?d
                     AND active = '1' AND
                     (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
-                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d 
-                            UNION 
+                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                            UNION
                         SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                     )
-                ORDER BY                  
-                CASE 
-                    WHEN deadline IS NULL THEN 1 ELSE 0 
+                ORDER BY
+                CASE
+                    WHEN deadline IS NULL THEN 1 ELSE 0
                 END, title
                 ", $course_id, $uid);
 
@@ -4455,9 +4455,9 @@ function show_assignments() {
 
         // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                        FROM assignment WHERE course_id = ?d ORDER BY 
-                                            CASE 
-                                                WHEN deadline IS NULL THEN 1 ELSE 0 
+                                        FROM assignment WHERE course_id = ?d ORDER BY
+                                            CASE
+                                                WHEN deadline IS NULL THEN 1 ELSE 0
                                             END, title", $course_id);
     $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
@@ -4804,7 +4804,7 @@ function download_assignments($id) {
         $secret = work_secret($id);
         $filename = "{$course_code}_work_$id.zip";
         chdir($workPath);
-        create_zip_index("$secret/index.html", $id);                
+        create_zip_index("$secret/index.html", $id);
         if ($sub_type == 1) { // free text assignment
             $zip = new ZipArchive();
             $zip->open("$filename", ZipArchive::CREATE);
@@ -4824,7 +4824,7 @@ function download_assignments($id) {
                 $onlinetext->WriteHTML($data->submission_text);
                 $pdfname = greek_to_latin(uid_to_name($data->uid)) . ".pdf";
                 $onlinetext->Output($pdfname, 'F');
-                $zip->addFile($pdfname);                
+                $zip->addFile($pdfname);
             }
             $zip->addFile("$secret/index.html", "index.html");
         } else { // 'normal' assignment
@@ -4834,7 +4834,7 @@ function download_assignments($id) {
                 if (file_exists($file) and is_readable($file)) {
                     $zip->addFile($file, "work_$id/".substr($file, strlen($secret)+1));
                 }
-            }                
+            }
         }
         if ($zip->close()) {
             header("Content-Type: application/zip");
@@ -4845,7 +4845,7 @@ function download_assignments($id) {
             unlink($filename);
             exit;
         }
-        
+
     } else {
         return false;
     }
