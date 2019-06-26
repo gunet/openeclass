@@ -2,7 +2,7 @@
 
 /*
  * ========================================================================
- * Open eClass 3.7 - E-learning and Course Management System
+ * Open eClass 3.8 - E-learning and Course Management System
  * ========================================================================
   Copyright(c) 2003-2019  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.7.2');
+define('ECLASS_VERSION', '3.8-dev');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
