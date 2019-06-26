@@ -26,6 +26,7 @@ define('POSTS_PER_PAGE', 20);
 define('TOPICS_PER_PAGE', 10);
 define('HOT_THRESHOLD', 20);
 define('PAGINATION_CONTEXT', 3);
+define('POST_MAX_INDENTATION_LEVEL', 4);
 
 require_once 'modules/progress/ForumEvent.php';
 require_once 'modules/progress/ForumTopicEvent.php';
@@ -175,6 +176,31 @@ function add_topic_link($pagenr, $total_reply_pages) {
     $pagination .= "<a href='$topiclink&amp;start=$start'>$pagenr</a>" .
             (($pagenr < $total_reply_pages) ? "<span class='page-sep'>,&nbsp;</span>" : '');
 }
+
+
+/**
+ * @brief compute recursively all the child posts (if there are any)
+ * @brief stops after POST_MAX_INDENTATION_LEVEL levels of indentation
+ * @param $result
+ * @param $post_data
+ * @param $offset
+ */
+function find_child_posts($result, $post_data, $offset) {
+
+    global $tool_content, $user_stats, $topic_subject, $topic_locked, $count;
+
+    foreach ($result as $data) {
+        if ($post_data->id == $data->parent_post_id) {
+            $forum_data = Database::get()->querySingle("SELECT * FROM forum_post WHERE id = ?d", $data->id);
+            $tool_content .= post_content($forum_data, $user_stats, $topic_subject, $topic_locked, $offset, $count);
+            if ($offset > POST_MAX_INDENTATION_LEVEL) { // don't indent anymore
+                $offset = POST_MAX_INDENTATION_LEVEL;
+            }
+            find_child_posts($result, $data, $offset+1);
+        }
+    }
+}
+
 
 /**
  * @brief Send an e-mail notification for new messages to subscribed users
