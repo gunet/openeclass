@@ -1953,6 +1953,20 @@ $db->query("CREATE TABLE `user_consent` (
 ) $tbl_options");
 
 
+$db->query("CREATE TABLE `user_settings` ( 
+  `setting_id` int(11) NOT NULL, 
+  `user_id` int(11) NOT NULL, 
+  `course_id` int(11) DEFAULT NULL, 
+  `value` int(11) NOT NULL DEFAULT '0', 
+  PRIMARY KEY (`setting_id`,`user_id`), 
+  KEY `user_id` (`user_id`), 
+  KEY `course_id` (`course_id`), 
+  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE, 
+  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE ) $tbl_options");
+
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();

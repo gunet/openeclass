@@ -31,6 +31,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/course_settings.php';
+require_once 'include/user_settings.php';
 require_once 'include/log.class.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/rating/class.rating.php';
@@ -42,6 +43,12 @@ $toolName = $langForums;
 if ($is_editor) {
     load_js('tools.js');
 }
+
+$user_settings = new UserSettings($uid);
+if (isset($_GET['view'])) {
+    $user_settings->set(SETTING_FORUM_POST_VIEW, $_GET['view']);
+}
+$view = $user_settings->get(SETTING_FORUM_POST_VIEW);
 
 if (isset($_GET['all'])) {
     $paging = false;
@@ -205,107 +212,148 @@ if ($topic_locked == 1) {
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
                 ));
-}
-
-// pagination
-if ($paging and $total > POSTS_PER_PAGE) {
-    $times = 1;
-    if (isset($post_id)) {
-        $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post WHERE topic_id = ?d AND post_time <= ?t", $topic, $myrow->post_time);
-        $num = $result->c;
-        $_GET['start'] = (ceil($num / POSTS_PER_PAGE) - 1) * POSTS_PER_PAGE;
-    }
-
-    if (isset($_GET['start'])) {
-        $start = intval($_GET['start']);
-    } else {
-        $start = 0;
-    }
-
-    $last_page = $start - POSTS_PER_PAGE;
-    if (isset($start) && $start > 0) {
-        $pagination_btns = "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'><span aria-hidden='true'>&laquo;</span></a></li>";
-    } else {
-        $pagination_btns = "<li class='disabled'><a href='#'><span aria-hidden='true'>&laquo;</span></a></li>";
-    }
-    for ($x = 0; $x < $total; $x += POSTS_PER_PAGE) {
-        if ($start && ($start == $x)) {
-            $pagination_btns .= "<li class='active'><a href='#'>$times</a></li>";
-        } else if ($start == 0 && $x == 0) {
-            $pagination_btns .= "<li class='active'><a href='#'>1</a></li>";
-        } else {
-            $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a></li>";
-        }
-        $times++;
-    }
-    if (($start + POSTS_PER_PAGE) < $total) {
-        $next_page = $start + POSTS_PER_PAGE;
-        $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'><span aria-hidden='true'>&raquo;</span></a></li>";
-    } else {
-        $pagination_btns .= "<li class='disabled'><a href='#'><span aria-hidden='true'>&raquo;</span></a></li>";
+    // forum posts view selection
+    $selected_view_0 = $selected_view_1 = '';
+    if ($view == 0) {
+        $selected_view_0 = 'selected';
+    } else if ($view == 1) {
+        $selected_view_1 = 'selected';
     }
     $tool_content .= "
-        <nav>
-            <ul class='pagination'>
-            $pagination_btns
-            </ul>
-            <div class='pull-right'>
-                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
-            </div>
-          </nav>
-        ";
-} else {
-    if ($total > POSTS_PER_PAGE) {
-        $tool_content .= "
-        <div class='clearfix margin-bottom-fat'>
-          <nav>
-            <div class='pull-right'>
-                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
-            </div>
-          </nav>
-        </div>";
-    }
-}
-// end of pagination
+    <div class='row'>
+        <div class='col-md-12'>            
+            <form class='form-horizontal' name='viewselect' action='$_SERVER[SCRIPT_NAME]?course=$course_code&topic=$topic&forum=$forum' method='get'>
+                <div class='form-group'>
+                    <label class='col-sm-9 control-label'>$langQuestionView</label>
+                    <div class='col-sm-3'>
+                        <input type='hidden' name='course' value='$course_code'>
+                        <input type='hidden' name='forum' value='$forum'>
+                        <input type='hidden' name='topic' value='$topic'>
+                        <select name='view' id='view' class='form-control' onChange='document.viewselect.submit();'>
+                            <option value='0' $selected_view_0>$langForumPostFlatView</option>
+                            <option value='1' $selected_view_1>$langForumPostThreadedView</option>
+                        </select>
+                    </div>
+                </div>
+            </form>        
+        </div>
+    </div>";
 
-if (isset($_GET['all'])) {
-    $result = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id", $topic);
-} elseif (isset($_GET['start'])) {
-    $start = intval($_GET['start']);
-    $result = Database::get()->queryArray("SELECT * FROM forum_post
+
+}
+
+if ($view == POSTS_PAGINATION_VIEW) {
+    // pagination
+    if ($paging and $total > POSTS_PER_PAGE) {
+        $times = 1;
+        if (isset($post_id)) {
+            $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post WHERE topic_id = ?d AND post_time <= ?t", $topic, $myrow->post_time);
+            $num = $result->c;
+            $_GET['start'] = (ceil($num / POSTS_PER_PAGE) - 1) * POSTS_PER_PAGE;
+        }
+
+        if (isset($_GET['start'])) {
+            $start = intval($_GET['start']);
+        } else {
+            $start = 0;
+        }
+
+        $last_page = $start - POSTS_PER_PAGE;
+        if (isset($start) && $start > 0) {
+            $pagination_btns = "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'><span aria-hidden='true'>&laquo;</span></a></li>";
+        } else {
+            $pagination_btns = "<li class='disabled'><a href='#'><span aria-hidden='true'>&laquo;</span></a></li>";
+        }
+        for ($x = 0; $x < $total; $x += POSTS_PER_PAGE) {
+            if ($start && ($start == $x)) {
+                $pagination_btns .= "<li class='active'><a href='#'>$times</a></li>";
+            } else if ($start == 0 && $x == 0) {
+                $pagination_btns .= "<li class='active'><a href='#'>1</a></li>";
+            } else {
+                $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a></li>";
+            }
+            $times++;
+        }
+        if (($start + POSTS_PER_PAGE) < $total) {
+            $next_page = $start + POSTS_PER_PAGE;
+            $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'><span aria-hidden='true'>&raquo;</span></a></li>";
+        } else {
+            $pagination_btns .= "<li class='disabled'><a href='#'><span aria-hidden='true'>&raquo;</span></a></li>";
+        }
+        $tool_content .= "
+            <nav>
+                <ul class='pagination'>
+                $pagination_btns
+                </ul>
+                <div class='pull-right'>
+                    <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
+                </div>
+              </nav>
+            ";
+    } else {
+        if ($total > POSTS_PER_PAGE) {
+            $tool_content .= "
+            <div class='clearfix margin-bottom-fat'>
+              <nav>
+                <div class='pull-right'>
+                    <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
+                </div>
+              </nav>
+            </div>";
+        }
+    }
+    // end of pagination
+
+    if (isset($_GET['all'])) {
+        $result = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id", $topic);
+    } elseif (isset($_GET['start'])) {
+        $start = intval($_GET['start']);
+        $result = Database::get()->queryArray("SELECT * FROM forum_post
 		WHERE topic_id = ?d
 		ORDER BY id
                 LIMIT $start, " . POSTS_PER_PAGE . "", $topic);
-} else {
-    $result = Database::get()->queryArray("SELECT * FROM forum_post
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM forum_post
 		WHERE topic_id = ?d
 		ORDER BY id
                 LIMIT " . POSTS_PER_PAGE . "", $topic);
-}
+    }
 
+}
 $tool_content .= "<div class='row'><div class='col-xs-12'>";
 
-$count = 1; // num of posts
-$user_stats = array();
-foreach ($result as $myrow) {
-    if ($myrow->parent_post_id == 0) { // if it is parent post
+if ($view == POSTS_PAGINATION_VIEW) { // pagination view
+    $count = 1;
+    $user_stats = array();
+    foreach ($result as $myrow) {
         $forum_data = Database::get()->querySingle("SELECT * FROM forum_post WHERE id = ?d", $myrow->id);
         $tool_content .= post_content($forum_data, $user_stats, $topic_subject, $topic_locked,0, $count);
         $count++;
-        find_child_posts($result, $myrow, 1); // check if there are child posts under it
-    } else {
-        continue;
     }
-}
-
+} else { // threaded view
+     $result = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id", $topic);
+     $count = 1; // num of posts
+     $user_stats = array();
+     foreach ($result as $myrow) {
+         if ($myrow->parent_post_id == 0) { // if it is parent post
+             $forum_data = Database::get()->querySingle("SELECT * FROM forum_post WHERE id = ?d", $myrow->id);
+             $tool_content .= post_content($forum_data, $user_stats, $topic_subject, $topic_locked,0, $count);
+             $count++;
+             find_child_posts($result, $myrow, 1); // check if there are child posts under it
+         } else {
+             continue;
+         }
+     }
+ }
 
 $tool_content .= "</div></div>";
 
 Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
             WHERE id = ?d AND forum_id = ?d", $topic, $forum);
 
-if ($paging and $total > POSTS_PER_PAGE) {
-    $tool_content .= "
+if ($view == POSTS_PAGINATION_VIEW) {
+    if ($paging and $total > POSTS_PER_PAGE) {
+        $tool_content .= "
         <nav>
             <ul class='pagination'>
             $pagination_btns
@@ -315,9 +363,9 @@ if ($paging and $total > POSTS_PER_PAGE) {
             </div>
           </nav>
         ";
-} else {
-    if ($total > POSTS_PER_PAGE) {
-        $tool_content .= "
+    } else {
+        if ($total > POSTS_PER_PAGE) {
+            $tool_content .= "
         <div class='clearfix margin-bottom-fat'>
           <nav>
             <div class='pull-right'>
@@ -325,8 +373,10 @@ if ($paging and $total > POSTS_PER_PAGE) {
             </div>
           </nav>
         </div>";
+        }
     }
 }
+
 draw($tool_content, 2, null, $head_content);
 
 

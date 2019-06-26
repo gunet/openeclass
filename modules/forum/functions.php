@@ -26,7 +26,11 @@ define('POSTS_PER_PAGE', 20);
 define('TOPICS_PER_PAGE', 10);
 define('HOT_THRESHOLD', 20);
 define('PAGINATION_CONTEXT', 3);
+
 define('POST_MAX_INDENTATION_LEVEL', 4);
+define('POSTS_PAGINATION_VIEW', 0);
+define('POSTS_THREADED_VIEW', 1);
+
 
 require_once 'modules/progress/ForumEvent.php';
 require_once 'modules/progress/ForumTopicEvent.php';
