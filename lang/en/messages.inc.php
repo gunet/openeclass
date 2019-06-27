@@ -4071,6 +4071,7 @@ $langGradeType = "Grade Type";
 $langGradeNumbers = "Numbers";
 $langGradeScales = "Grading Scales";
 $langGradeScalesSelect = "Scales Select";
+$langGradeScalesDeleted = "Grading Scale deleted";
 $langNoGradeScales = 'No grading scales available';
 $langWording = 'Wording';
 $langScales = 'Scales';
