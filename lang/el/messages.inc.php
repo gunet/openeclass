@@ -2920,7 +2920,8 @@ $langUnlockTopic = "Ξεκλείδωμα θέματος";
 $langLockedTopic = "To θέμα κλειδώθηκε!";
 $langUnlockedTopic = "To θέμα ξεκλειδώθηκε!";
 $langNoForumTopic = "Δεν υπάρχουν περιοχές συζητήσεων";
-$langForumPostFlatView = "Με ημερομηνία";
+$langForumPostFlatViewAsc = "Με ημερομηνία (πρόσφατο τελευταίο)";
+$langForumPostFlatViewDesc = "Με ημερομηνία (πρόσφατο πρώτο)";
 $langForumPostThreadedView = "Ομαδοποιημένα";
 
 /* * ***************************************************************
