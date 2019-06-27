@@ -43,7 +43,7 @@ $toolName = $langForums;
 if ($is_editor) {
     load_js('tools.js');
 }
-
+// get forums post view user settings
 $user_settings = new UserSettings($uid);
 if (isset($_GET['view'])) {
     $user_settings->set(SETTING_FORUM_POST_VIEW, $_GET['view']);
@@ -77,7 +77,7 @@ if (($group_id) and !$is_editor) {
 if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
 }
-if (isset($_GET['post_id'])) {//needed to find post page for anchors
+if (isset($_GET['post_id'])) { //needed to find post page for anchors
     $post_id = intval($_GET['post_id']);
     $myrow = Database::get()->querySingle("SELECT f.id, f.name, p.post_time, p.poster_id, p.post_text, t.locked FROM forum f, forum_topic t, forum_post p
             WHERE f.id = ?d
@@ -213,25 +213,28 @@ if ($topic_locked == 1) {
                     'level' => 'primary-label')
                 ));
     // forum posts view selection
-    $selected_view_0 = $selected_view_1 = '';
-    if ($view == 0) {
+    $selected_view_0 = $selected_view_1 = $selected_view_2 = 0;
+    if ($view == POSTS_PAGINATION_VIEW_ASC) {
         $selected_view_0 = 'selected';
-    } else if ($view == 1) {
+    } else if ($view == POSTS_PAGINATION_VIEW_DESC) {
         $selected_view_1 = 'selected';
+    } else if ($view == POSTS_THREADED_VIEW) {
+        $selected_view_2 = 'selected';
     }
     $tool_content .= "
     <div class='row'>
         <div class='col-md-12'>            
             <form class='form-horizontal' name='viewselect' action='$_SERVER[SCRIPT_NAME]?course=$course_code&topic=$topic&forum=$forum' method='get'>
                 <div class='form-group'>
-                    <label class='col-sm-9 control-label'>$langQuestionView</label>
-                    <div class='col-sm-3'>
+                    <label class='col-sm-8 control-label'>$langQuestionView</label>
+                    <div class='col-sm-4'>
                         <input type='hidden' name='course' value='$course_code'>
                         <input type='hidden' name='forum' value='$forum'>
                         <input type='hidden' name='topic' value='$topic'>
                         <select name='view' id='view' class='form-control' onChange='document.viewselect.submit();'>
-                            <option value='0' $selected_view_0>$langForumPostFlatView</option>
-                            <option value='1' $selected_view_1>$langForumPostThreadedView</option>
+                            <option value='0' $selected_view_0>$langForumPostFlatViewAsc</option>
+                            <option value='1' $selected_view_1>$langForumPostFlatViewDesc</option>
+                            <option value='2' $selected_view_2>$langForumPostThreadedView</option>
                         </select>
                     </div>
                 </div>
@@ -242,7 +245,7 @@ if ($topic_locked == 1) {
 
 }
 
-if ($view == POSTS_PAGINATION_VIEW) {
+if ($view != POSTS_THREADED_VIEW) {
     // pagination
     if ($paging and $total > POSTS_PER_PAGE) {
         $times = 1;
@@ -305,25 +308,56 @@ if ($view == POSTS_PAGINATION_VIEW) {
     // end of pagination
 
     if (isset($_GET['all'])) {
-        $result = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id", $topic);
+        if ($view == POSTS_PAGINATION_VIEW_DESC) {
+            // initial post
+            $res1 = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id LIMIT 1", $topic);
+            // all the rest with descending order
+            $res2 = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id DESC", $topic);
+            $result = array_merge($res1, $res2);
+        } else {
+            $result = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id", $topic);
+        }
     } elseif (isset($_GET['start'])) {
-        $start = intval($_GET['start']);
-        $result = Database::get()->queryArray("SELECT * FROM forum_post
-		WHERE topic_id = ?d
-		ORDER BY id
-                LIMIT $start, " . POSTS_PER_PAGE . "", $topic);
+        if ($view == POSTS_PAGINATION_VIEW_DESC) {
+            $res1 = array();
+            if ($_GET['start'] == 0) {
+                // display the initial post in first page
+                $res1 = Database::get()->queryArray("SELECT * FROM forum_post
+                        WHERE topic_id = ?d ORDER BY id LIMIT 1", $topic);
+                // all the rest with descending order
+            }
+            $res2 = Database::get()->queryArray("SELECT * FROM forum_post
+                    WHERE topic_id = ?d ORDER BY id DESC 
+                            LIMIT ?d, " . POSTS_PER_PAGE . "", $topic, $_GET['start']);
+            $result = array_merge($res1, $res2);
+        } else {
+            $result = Database::get()->queryArray("SELECT * FROM forum_post
+                        WHERE topic_id = ?d ORDER BY id
+                                LIMIT ?d, " . POSTS_PER_PAGE . "", $topic, $_GET['start']);
+        }
     } else {
-        $result = Database::get()->queryArray("SELECT * FROM forum_post
-		WHERE topic_id = ?d
-		ORDER BY id
-                LIMIT " . POSTS_PER_PAGE . "", $topic);
+        if ($view == POSTS_PAGINATION_VIEW_DESC) {
+            // initial post
+            $res1 = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id LIMIT 1", $topic);
+            // all the rest with descending order
+            $res2 = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id DESC 
+                            LIMIT " . POSTS_PER_PAGE . "", $topic);
+            $result = array_merge($res1, $res2);
+        } else {
+            $result = Database::get()->queryArray("SELECT * FROM forum_post 
+                WHERE topic_id = ?d ORDER BY id 
+                  LIMIT " . POSTS_PER_PAGE . "", $topic);
+        }
     }
-
 }
+
 $tool_content .= "<div class='row'><div class='col-xs-12'>";
 
-if ($view == POSTS_PAGINATION_VIEW) { // pagination view
-    $count = 1;
+if ($view != POSTS_THREADED_VIEW) { // pagination view
+    $count = 1; // highlight the initial post
+    if (isset($_GET['start']) and $_GET['start'] > 0) {
+        $count = 2; // we don't want to highlight each top post in each page
+    }
     $user_stats = array();
     foreach ($result as $myrow) {
         $forum_data = Database::get()->querySingle("SELECT * FROM forum_post WHERE id = ?d", $myrow->id);
@@ -351,7 +385,7 @@ $tool_content .= "</div></div>";
 Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
             WHERE id = ?d AND forum_id = ?d", $topic, $forum);
 
-if ($view == POSTS_PAGINATION_VIEW) {
+if ($view == POSTS_PAGINATION_VIEW_ASC) {
     if ($paging and $total > POSTS_PER_PAGE) {
         $tool_content .= "
         <nav>
