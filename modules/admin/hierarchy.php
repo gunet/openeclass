@@ -263,9 +263,8 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         foreach ($session->active_ui_languages as $key => $langcode) {
             $tool_content .= "<div class='form-group'>
                     <label class='col-sm-3 control-label'>$langNodeDescription:</label>";
-            $tdpre = ($j >= 0) ? "<div class='col-sm-9'>" : '';
-            $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-            $tool_content .= $tdpre . rich_text_editor('description-' . $langcode, 8, 20, $placeholder) . "</div></div>";
+            $tdpre = ($j >= 0) ? "<div class='col-sm-9'>" : '';            
+            $tool_content .= $tdpre . rich_text_editor('description-' . $langcode, 8, 20, '') . "</div></div>";
             $j++;
         }
 
