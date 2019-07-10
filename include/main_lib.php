@@ -1640,6 +1640,21 @@ function course_id_to_public_code($cid) {
     }
 }
 
+
+/**
+ * @brief Find the course professor from its id
+ * @param type $cid
+ * @return boolean
+ */
+function course_id_to_prof($cid) {
+    $r = Database::get()->querySingle("SELECT prof_names FROM course WHERE id = ?d", $cid);
+    if ($r) {
+        return $r->prof_names;
+    } else {
+        return false;
+    }
+}
+
 /**
  * @global type $webDir
  * @param type $cid
