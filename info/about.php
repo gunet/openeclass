@@ -26,7 +26,7 @@
  */
 
 require_once '../include/baseTheme.php';
-$pageName = $langInfo;
+$toolName = $langInfo;
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,

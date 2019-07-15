@@ -20,7 +20,7 @@
 
 $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
-$pageName = $langManuals;
+$toolName = $langManuals;
 
 $addon = '';
 

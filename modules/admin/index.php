@@ -24,7 +24,7 @@ $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'modalconfirmation.php';
 
-$pageName = $langAdmin;
+$toolName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 
 $release_alert = '';
