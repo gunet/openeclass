@@ -480,13 +480,12 @@ if (!class_exists('Question')) {
             $question = $this->question;
             $description = $this->description;
             $weighting = $this->weighting;
-            $position = $this->position;
             $type = $this->type;
             $difficulty = $this->difficulty;
             $category = $this->category;
 
-            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
-                        VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type, $difficulty, $category)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, type, difficulty, category)
+                        VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $type, $difficulty, $category)->lastInsertID;
 
             // duplicates the picture
             $this->exportPicture($id);
