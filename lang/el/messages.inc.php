@@ -939,8 +939,9 @@ $langChatActive = "Ενεργή";
 $langChatInactive = "Ανενεργή";
 $langChatTitleError = "Παρακαλώ συμπληρώστε τον τίτλο της Κουβεντούλας";
 $langUntitledChat = "Ελεύθερη κουβεντούλα $langsOfCourse";
-$langChatActivity = "Συνομιλία Δραστηριότητας";
+$langChatActivity = "Συνομιλία Δραστηριότητας ColMOOC";
 $langCreateAgent = "Δημιουργία Agent";
+$langEditAgent = "Επεξεργασία Agent";
 
 /* * ***************************************************************
  * copyright.php
@@ -5610,4 +5611,13 @@ $langTiiExcludeType = "Τύπος εξαίρεσης";
 $langTiiExcludeTypeWords = "Λέξεις";
 $langTiiExcludeTypePercentage = "Ποσοστό";
 $langTiiExcludeValue = "Τιμή εξαίρεσης";
+
+// Messages for colmooc
 $langColmooc = "colMOOC";
+$langColmoocCreateAgentFailed = "Ανιχνεύθηκε σφάλμα κατά τη δημιουργία της συζήτησης. Παρακαλούμε ξαναπροσπαθήστε.";
+$langColmoocCreateAgentSuccess = "Η συζήτηση δημιουργήθηκε επιτυχώς. Παρακαλούμε ενημερώστε τους σπουδαστές σας οτι μπορούν να προχωρήσουν με την εγγραφή στη συζήτηση.";
+$langColmoocRegisterStudentFailed = "Ανιχνεύθηκε σφάλμα κατά την εγγραφή στη συζήτηση. Παρακαλούμε ξαναπροσπαθήστε.";
+$langColmoocRegisterStudentSuccess = "Η συζήτηση ολοκληρώθηκε επιτυχώς. Παρακαλούμε κλείστε αυτόν το διάλογο και επιστρέψτε στη λίστα συζητήσεων.";
+$langColmoocFollowLink = "Πατήστε τον παρακάτω σύνδεσμο για να μεταφερθείτε στο περιβάλλον του ColMOOC";
+$langColMoocAgentNeeded = "Παρακαλούμε επισκεφθείτε τη νέα συζήτηση για να μεταφερθείτε στο περιβάλλον του ColMOOC και να δημιουργήσετε τον Agent για να μπορούν να έχουν πρόσβαση οι σπουδαστές σας.";
+$langColMoocAgentCreateOrEdit = "Παρακαλούμε επιλέξτε Δημιουργία ή Επεξεργασία του Agent για να μεταφερθείτε στο περιβάλλον του ColMOOC.";

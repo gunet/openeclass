@@ -3954,9 +3954,37 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
           ) $tbl_options");
 
-        // conferency chat activity and agent
+        // conference chat activity and agent
         Database::get()->query('ALTER TABLE conference ADD chat_activity boolean not null default false');
         Database::get()->query('ALTER TABLE conference ADD agent_created boolean not null default false');
+    }
+
+    // upgrade queries for version 3.7.2
+    if (version_compare($oldversion, '3.7.2', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.7.2'));
+
+        // conference chat activity and agent
+        Database::get()->query('ALTER TABLE conference ADD chat_activity_id int(11)');
+        Database::get()->query('ALTER TABLE conference ADD agent_id int(11)');
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `colmooc_user` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `user_id` INT(11) NOT NULL,
+            `colmooc_id` INT(11) NOT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY (user_id),
+            FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `colmooc_user_session` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `user_id` INT(11) NOT NULL,
+            `activity_id` INT(11) NOT NULL,
+            `session_id` TEXT NOT NULL,
+            `session_token` TEXT NOT NULL,
+            `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+            PRIMARY KEY (id),
+            UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
+            FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
     }
 
     // update eclass version
