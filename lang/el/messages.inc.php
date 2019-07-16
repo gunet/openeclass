@@ -4898,16 +4898,16 @@ $langBBBNoteEnableJoin = "Ο σύνδεσμος είναι ενεργός μόν
 $langBBBNoteEnableJoinEditor = "Ο σύνδεσμος ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης.";
 $langBBBNoParticipation = "Δεν υπάρχει συμμετοχή σε καμμία τηλεσυνεργασία.";
 $langBBBNotifyUsers = "Ειδοποίηση συμμετεχόντων για τον προγραμματισμό της τηλεδιάσκεψης";
-$langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων";
+$langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων για τον προγραμματισμό της τηλεδιάσκεψης";
+$langBBBExternalUsers = "Εξωτερικοί συμμετέχοντες";
 $langBBBNotifyExternalUsersHelpBlock = "Συμπληρώστε τις email διευθύνσεις των εξωτερικών συμμετεχόντων";
 $langBBBSessionAvailable = "Ενεργοποίηση συμμετοχής";
 $langBBBMinutesBefore = "λεπτά νωρίτερα από την προγραμματισμένη έναρξη";
-
+$langBBBAnnDisplay = "Εμφάνιση στις ανακοινώσεις";
 $langBBBScheduledSession = "Προγραμματισμός τηλεσυνεργασίας";
 $langBBBScheduleSessionInfo = "Η τηλεσυνεργασία με τίτλο ";
 $langBBBScheduleSessionInfo2 = "προγραμματίστηκε για τις ";
 $langBBBScheduleSessionInfoJoin = "Συνδεθείτε για να την παρακολουθήσετε κάνοντας κλικ παρακάτω ";
-
 $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον $langsTeacher του $langsOfCourse.";
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langBBBServerOrder = "Σειρά προτίμησης κατά την επιλογή εξυπηρέτη";
