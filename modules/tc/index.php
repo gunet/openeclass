@@ -215,9 +215,12 @@ elseif(isset($_POST['update_bbb_session'])) {
 
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');
-    $notifyUsers = $addAnnouncement = 0;
+    $notifyUsers = $addAnnouncement = $notifyExternalUsers = 0;
     if (isset($_POST['notifyUsers']) and $_POST['notifyUsers']) {
         $notifyUsers = 1;
+    }
+    if (isset($_POST['notifyExternalUsers']) and $_POST['notifyExternalUsers']) {
+        $notifyExternalUsers = 1;
     }
     if (isset($_POST['addAnnouncement']) and $_POST['addAnnouncement']) {
         $addAnnouncement = 1;
@@ -231,7 +234,7 @@ elseif(isset($_POST['update_bbb_session'])) {
     } else {
         $ext_users = null;
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $_POST['sessionUsers'], true, getDirectReference($_POST['id']));
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $_POST['sessionUsers'], true, getDirectReference($_POST['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -303,9 +306,12 @@ elseif(isset($_GET['choice']))
     } else {
         $end = NULL;
     }
-    $notifyUsers = $addAnnouncement = 0;
+    $notifyUsers = $notifyExternalUsers = $addAnnouncement = 0;
     if (isset($_POST['notifyUsers']) and $_POST['notifyUsers']) {
         $notifyUsers = 1;
+    }
+    if (isset($_POST['notifyExternalUsers']) and $_POST['notifyExternalUsers']) {
+        $notifyExternalUsers = 1;
     }
     if (isset($_POST['addAnnouncement']) and $_POST['addAnnouncement']) {
         $addAnnouncement = 1;
@@ -314,7 +320,7 @@ elseif(isset($_GET['choice']))
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $addAnnouncement, $_POST['minutes_before'], implode(',', $_POST['external_users']), $record, $_POST['sessionUsers'], false);
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], implode(',', $_POST['external_users']), $record, $_POST['sessionUsers'], false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
