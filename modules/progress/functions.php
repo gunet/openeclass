@@ -2010,21 +2010,40 @@ function display_users_progress($element, $element_id) {
            $langSurname, $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
 
     if ($element == 'certificate') {
-        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate
-                                            WHERE certificate = ?d", $element_id);
-        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate WHERE
-                                                    completed = 1 AND certificate = ?d", $element_id)->t;
+        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
+                                            JOIN course_user ON user_certificate.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d
+                                                AND certificate = ?d", $course_id, $element_id);
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate
+                                            JOIN course_user ON user_certificate.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d 
+                                                AND completed = 1 
+                                                AND certificate = ?d", $course_id,$element_id)->t;
         $param_name = 'certificate_id';
     } else {
         $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_badge
-                                            WHERE badge = ?d", $element_id);
-        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge WHERE
-                                                    completed = 1 AND badge = ?d", $element_id)->t;
+                                            JOIN course_user ON user_badge.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d
+                                                AND badge = ?d", $course_id, $element_id);
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge 
+                                            JOIN course_user ON user_badge.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d 
+                                                AND completed = 1 
+                                                AND badge = ?d", $course_id, $element_id)->t;
         $param_name = 'badge_id';
     }
-    $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user
-                                        WHERE `user`.`id` = `course_user`.`user_id`
-                                        AND `course_user`.`course_id` = ?d", $course_id)->total;
+    $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user
+                                        WHERE status = " .USER_STUDENT . " 
+                                            AND editor = 0                                         
+                                            AND course_id = ?d", $course_id)->total;
 
     if (count($sql) > 0) {
         $tool_content .= "<div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div>";
