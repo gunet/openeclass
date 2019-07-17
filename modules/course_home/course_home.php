@@ -442,6 +442,10 @@ foreach ($departments as $dep) {
 $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = ?d", $course_id)->numUsers;
+$studentUsers = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
+                                        WHERE status = " .USER_STUDENT . " 
+                                            AND editor = 0                                         
+                                            AND course_id = ?d", $course_id)->studentUsers;
 
 //set the lang var for lessons visibility status
 switch ($visible) {
@@ -471,8 +475,13 @@ if ($uid) {
     $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
         if ($is_editor) {
-            $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge WHERE
-                                                    completed = 1 AND badge = ?d", $course_completion_id)->t;
+            $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
+                                                              JOIN course_user ON user_badge.user=course_user.user_id 
+                                                                    AND status = " .USER_STUDENT . " 
+                                                                    AND editor = 0 
+                                                                    AND course_id = ?d 
+                                                                    AND completed = 1 
+                                                                    AND badge = ?d", $course_id, $course_completion_id)->t;
         } else {
             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
             $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
@@ -888,7 +897,7 @@ if (isset($course_completion_id) and $course_completion_id > 0) {
                     <div class='text-center'>
                         <div class='col-sm-12'>";
                         if ($is_editor) {
-                            $tool_content .= "<h5><a href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&progressall=true'>$langUsersCertResults $certified_users/$numUsers $langUsersS.</a></h5>";
+                            $tool_content .= "<h5><a href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&progressall=true'>$langUsersCertResults $certified_users/$studentUsers $langUsersS.</a></h5>";
                         } else {
                             $tool_content .= "<div class='center-block' style='display:inline-block;'>
                                 <a style='text-decoration:none;' href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&u=$uid'>";
