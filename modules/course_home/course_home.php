@@ -471,7 +471,7 @@ switch ($visible) {
     }
 }
 
-if ($uid and !$is_editor) {
+if ($uid) {
     $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
         if ($is_editor) {
@@ -906,15 +906,17 @@ if (isset($course_completion_id) and $course_completion_id > 0) {
                             } else {
                                 $tool_content .= "<div class='course_completion_panel_percentage'>$percentage</div>";
                             }
-                            $tool_content .= "</a>
-                            </div>";
+                            $tool_content .= "</a></div>";
                         }
-                        $tool_content .= "</div>
+                            $tool_content .= "                        
+                        </div>
                     </div>
                 </div>
             </div>
         </div>";
 }
+
+
 
 // display open course level if exist
 if (isset($level) && !empty($level)) {
