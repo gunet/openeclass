@@ -897,7 +897,7 @@ if (isset($course_completion_id) and $course_completion_id > 0) {
                     <div class='text-center'>
                         <div class='col-sm-12'>";
                         if ($is_editor) {
-                            $tool_content .= "<h5><a href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&progressall=true'>$langUsersCertResults $certified_users/$studentUsers $langUsersS.</a></h5>";
+                            $tool_content .= "<i class='fa fa-trophy fa-2x'></i><h5><a href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&progressall=true'>$langHasBeenCompleted $certified_users/$studentUsers $langUsersS</a></h5>";
                         } else {
                             $tool_content .= "<div class='center-block' style='display:inline-block;'>
                                 <a style='text-decoration:none;' href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&u=$uid'>";

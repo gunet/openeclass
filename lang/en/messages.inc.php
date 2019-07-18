@@ -4904,7 +4904,7 @@ $langNoCertificateUsers = "There are no $langsStudents who participate in this c
 $langUsedCertRes = "Activity has alread been used by some $langsstudent_acc";
 $langNoUserActivity = "$langStudent hasn't completed any actitivity.";
 $langTotalPercentCompleteness = "Percentage of completion";
-$langUsersCertResults = "Completed by ";
+$langHasBeenCompleted = $langUsersCertResults = "Completed by ";
 $langNumOfBlogs = "Blogs created";
 $langNumOfForums = "Number of posts";
 $langResourceAlreadyAdded = "Activity has already inserted";

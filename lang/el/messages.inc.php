@@ -1399,6 +1399,7 @@ $langUsedCertRes = "Η δραστηριότητα έχει ήδη χρησιμο
 $langNoUserActivity = "Ο $langsStudent δεν έχει εκτελέσει καμμία δραστηριότητα.";
 $langTotalPercentCompleteness = "Συνολικό ποσοστό ολοκλήρωσης";
 $langUsersCertResults = "Έχει ολοκληρωθεί από ";
+$langHasBeenCompleted = "Ολοκληρώθηκε από";
 $langNumOfBlogs = "Αριθμός δημιουργημένων ιστολογίων";
 $langNumOfForums = "Αριθμός δημοσιεύσεων";
 $langResourceAlreadyAdded = "Η δραστηριότητα έχει ήδη προστεθεί";

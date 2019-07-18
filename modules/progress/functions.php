@@ -272,7 +272,7 @@ function display_course_completion() {
             $tool_content .= "
                         <div class='row res-table-row'>
                             <div class='col-sm-2'>
-                                <i class='fa fa-certificate fa-3x' aria-hidden='true'></i>
+                                <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
                             </div>
                             <div class='col-sm-9'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
@@ -353,8 +353,8 @@ function display_activities($element, $id) {
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langOfTopicForums, $langOfBlogComments, $langConfirmDelete,
            $langOfLearningPath, $langDelete, $langEditChange,
-           $langInsertWorkCap, $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
+           $langDocumentAsModuleLabel, $langCourseParticipation,
+           $langAdd, $langExport, $langBack, $langUsers,
            $langValue, $langOfForums, $langOfCourseCompletion, $course_id;
     /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
 
@@ -394,7 +394,7 @@ function display_activities($element, $id) {
     $addActivityBtn = action_button(array(
         array('title' => $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecompletion",
-            'icon' => 'fa fa-certificate',
+            'icon' => 'fa fa-trophy',
             'show' => $cc_enable),
         array('title' => $langOfAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
@@ -1884,12 +1884,34 @@ function certificate_settings($element, $element_id = 0) {
 function student_view_progress() {
 
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
-            $langBadges, $course_code, $langCertificates, $langPrintVers;
+            $langBadges, $course_code, $langCertificates, $langPrintVers, $langCourseCompletion;
 
     require_once 'Game.php';
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
     $found = false;
+
+    $course_completion_id = is_course_completion_active(); // is course completion active?
+    if (isset($course_completion_id) and $course_completion_id > 0) {
+        $found = true;
+        $tool_content .= "<div class='row'>";
+        $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+        $tool_content .= "<div class='badge-container'><h4>$langCourseCompletion</h4></div>
+                    <div class='form-wrapper col-sm-2'>
+                    <div class='clearfix text-center'>";
+                        
+        $tool_content .= "<div class='center-block' style='display:inline-block;'>
+                                <a style='text-decoration:none;' href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>";
+        if ($percentage == '100%') {
+            $tool_content .= "<span class='fa fa-check-circle fa-5x state_success'></span>";
+        } else {
+            $tool_content .= "<div class='course_completion_panel_percentage'>$percentage</div>";
+        }
+        $tool_content .= "</a></div>";
+        $tool_content .= "</div></div></div>";
+    }
+    
+    
     $iter = array('certificate', 'badge');
     foreach ($iter as $key) {
         ${'game_'.$key} = array();

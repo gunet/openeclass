@@ -40,7 +40,7 @@ require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
 require_once 'CourseParticipationEvent.php';
 
-$toolName = $langCertificates;
+$toolName = $langProgress;
 
 load_js('tools.js');
 load_js('jquery');
