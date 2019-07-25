@@ -40,9 +40,23 @@ require_once 'modules/abuse_report/abuse_report.php';
 ModalBoxHelper::loadModalBox();
 
 $toolName = $langForums;
+
 if ($is_editor) {
     load_js('tools.js');
+    $head_content .= "<script type='text/javascript'>
+            $(document).ready(function() {
+                $('#delete-btn_1').click(function(e) {
+                    e.preventDefault();
+                    bootbox.confirm('" . js_escape($langConfirmDelete) . "', function(result) {
+                        if (result) {
+                            $(location).attr('href');                            
+                        }
+                    });
+                });
+            });
+        </script>";
 }
+
 // get forums post view user settings
 $user_settings = new UserSettings($uid);
 if (isset($_GET['view'])) {
@@ -109,6 +123,7 @@ $topic_locked = $myrow->locked;
 $total = get_total_posts($topic);
 
 if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
+    die('deleted');
     $last_post_in_thread = get_last_post($topic);
 
     $this_post_time = $myrow->post_time;
@@ -477,12 +492,11 @@ draw($tool_content, 2, null, $head_content);
  */
 function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offset, $count) {
 
-    global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $unit,
+    global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $unit, $langFrom2,
            $langMessages, $course_code, $is_editor, $topic, $forum, $uid, $langMessage, $head_content,
            $langModify, $langDelete, $langConfirmDelete, $langSent, $dateTimeFormatShort;
 
-    $content = '';
-    $reply_button_link = '';
+    $content = $reply_button_link = '';
     if (!isset($user_stats[$myrow->poster_id])) {
         $user_num_posts = Database::get()->querySingle("SELECT num_posts FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $myrow->poster_id, $course_id);
         if ($user_num_posts) {
@@ -497,7 +511,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     }
     $parent_post_link = "";
     if ($myrow->parent_post_id == -1) {
-        $parent_post_link = "<br>$langForumPostParentDel";
+        $parent_post_link = "<span class='help-block'>$langForumPostParentDel</span>";
     }
 
     if ($count > 1) { // for all posts except first
@@ -508,11 +522,9 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         $content .= "<div class='panel-heading'>". q($topic_subject) . "</div>";
     }
 
+      //                  <small>".$user_stats[$myrow->poster_id]."</small>
     $content .= "<div class='panel-body'>";
-    $content .= "<span class='col-sm-2'>".profile_image($myrow->poster_id, '50px', 'img-responsive img-circle margin-bottom-thin'). "
-                        <small>" .display_user($myrow->poster_id, false, false)."</small><br>
-                        <small>".$user_stats[$myrow->poster_id]."</small>
-                      </span>";
+    $content .= "<span class='col-sm-1'>" . profile_image($myrow->poster_id, '40px', 'img-responsive img-circle margin-bottom-thin') . "</span>";
     $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
@@ -542,10 +554,11 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         $report_modal = $flag_arr[1]; //modal html code
     }
 
+    $content .= "<span class='col-sm-11'>";
     $content .= "<div class='forum-post-header'>";
-    $content .= "<span class='pull-right forum-anchor-link'></span>
-                        <small class='help-block'><b>$langSent:</b> " . claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) . "</small>";
-
+    $content .= "<small class='help-block'><strong>$langSent:</strong> " . claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) . "";
+    $content .= " $langFrom2 " .display_user($myrow->poster_id, false, false) . " (" . $user_stats[$myrow->poster_id] . ")</small>";
+    
     if (!empty($dyntools)) {
         $content .= "<span style='margin-left: 20px;' class='pull-right'>";
         if (isset($report_modal)) {
@@ -556,11 +569,12 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         }
         $content .= "</span>";
     }
-    $content .= "</div>";
+    $content .= "</div></span>";
 
-    $content .= "<div style='margin-right: 60px;'><span class='text-justify'>$message</span></div>";
-    $content .= "</div>";
+    /* message body */
+    $content .= "<div class='col-sm-offset-1' style='margin-top: 40px;'><span class='text-justify'>$message</span></div>";
 
+    $content .= "</div>";
     /* footer */
     $content .= "<div class='panel-footer'>";
     if ($topic_locked != 1 and $count > 1) { // `reply` button except first post (and if topic is not locked)
@@ -569,11 +583,18 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         } else {
             $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id";
         }
-        $reply_button_link = "<a class='btn btn-default btn-xs reply-post-btn' style='margin-right:15px;' href='$reply_url'>$langReply</a>";
+        $reply_button_link = "<a class='btn btn-success btn-xs reply-post-btn' style='margin-right:15px;' href='$reply_url'>$langReply</a>";
+    }
+    $edit_button_link = $delete_button_link = '';
+    if ($is_editor) {
+        $edit_button_link = "<a class='btn btn-default btn-xs reply-post-btn' style='margin-right: 15px;' 
+                href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id . "&amp;topic=$topic&amp;forum=$forum'>$langModify</a>";
+        $delete_button_link = "<a id='delete-btn_$count' class='btn btn-danger btn-xs reply-post-btn' style='margin-right: 15px;' 
+                href='../forum/viewtopic.php?course=$course_code&amp;post_id=$myrow->id&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>$langDelete</a>";
     }
     $content .= "<div class='row'>
                     <span class='pull-left'>$rate_str</span>
-                    <span class='pull-right'><small>$reply_button_link $parent_post_link</small>                      
+                    <span class='pull-right'><small>$reply_button_link $edit_button_link $delete_button_link $parent_post_link</small>                      
                   </div>";
     $content .= "</div>";
     /* end of footer */

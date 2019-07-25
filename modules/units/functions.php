@@ -740,7 +740,6 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
         } else {
             $forum_id = $r->forum_id;
             $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
-            //$link = "<a href='${urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
             $forumlink = $link . "$title</a>";
             $imagelink = icon('fa-comments'). "";
         }
