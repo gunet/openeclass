@@ -41,7 +41,10 @@ ModalBoxHelper::loadModalBox();
 
 $toolName = $langForums;
 
-if ($is_editor) {
+// need improvement
+
+
+/**if ($is_editor) {
     load_js('tools.js');
     $head_content .= "<script type='text/javascript'>
             $(document).ready(function() {
@@ -55,7 +58,7 @@ if ($is_editor) {
                 });
             });
         </script>";
-}
+}**/
 
 // get forums post view user settings
 $user_settings = new UserSettings($uid);
@@ -123,7 +126,6 @@ $topic_locked = $myrow->locked;
 $total = get_total_posts($topic);
 
 if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
-    die('deleted');
     $last_post_in_thread = get_last_post($topic);
 
     $this_post_time = $myrow->post_time;
@@ -558,7 +560,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     $content .= "<div class='forum-post-header'>";
     $content .= "<small class='help-block'><strong>$langSent:</strong> " . claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) . "";
     $content .= " $langFrom2 " .display_user($myrow->poster_id, false, false) . " (" . $user_stats[$myrow->poster_id] . ")</small>";
-    
+
     if (!empty($dyntools)) {
         $content .= "<span style='margin-left: 20px;' class='pull-right'>";
         if (isset($report_modal)) {
