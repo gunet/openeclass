@@ -34,6 +34,7 @@ require_once 'modules/forum/functions.php';
 require_once 'modules/search/indexer.class.php';
 
 $toolName = $langForums;
+$pageName = $langReply;
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
 } else {
@@ -42,6 +43,10 @@ if (isset($_GET['forum'])) {
 }
 if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
+}
+
+if (isset($_GET['unit'])) {
+    $unit = intval($_GET['unit']);
 }
 $parent_post_ok = true;
 if (isset($_GET['parent_post'])) {
@@ -69,7 +74,6 @@ $forum_id = $forum;
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
-$pageName = $langReply;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
 $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' => q($topic_title));
@@ -97,11 +101,7 @@ if (isset($_POST['submit'])) {
         draw($tool_content, 2, null, $head_content);
         exit();
     }
-
     $time = date("Y-m-d H:i:s");
-    $surname = addslashes($_SESSION['surname']);
-    $givenname = addslashes($_SESSION['givenname']);
-
     $this_post = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip, parent_post_id) VALUES (?d, ?s , ?d, ?t, ?s, ?d)"
                     , $topic, $message, $uid, $time, $poster_ip, $parent_post)->lastInsertID;
     triggerForumGame($course_id, $uid, ForumEvent::NEWPOST);
@@ -125,49 +125,56 @@ if (isset($_POST['submit'])) {
     $subject = Database::get()->querySingle('SELECT title FROM forum_topic WHERE id = ?d', $topic)->title;
     notify_users($forum_id, $forum_name, $topic, $subject, $message, $time);
 
-    $page = "modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
+    if (isset($unit)) {
+        $page = "modules/units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum_id&unit=$unit";
+    } else {
+        $page = "modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
+    }
     $total_posts = get_total_posts($topic);
     if ($total_posts > POSTS_PER_PAGE) {
-        $page .= '&start=' . (POSTS_PER_PAGE * intval(($total_posts - 1) / POSTS_PER_PAGE));
+        $page .= "&start=" . (POSTS_PER_PAGE * intval(($total_posts - 1) / POSTS_PER_PAGE));
     }
     Session::Messages($langStored, 'alert-success');
     redirect_to_home_page($page);
 } else {
+    if (isset($unit)) {
+        $cancel_url = $back_url = "../units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum_id&unit=$unit";
+        $form_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&forum=$forum_id&amp;unit=$unit";
+    } else {
+        $cancel_url = $back_url = "viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
+        $form_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id";
+    }
     // Topic review
     $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                    'url' => "viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id",
+                    'url' => "$back_url",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
                 ));
-    if (!isset($reply)) {
-        $reply = '';
-    }
 
     if (isset($_GET['parent_post'])) {
         $parent_post_text = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $parent_post)->post_text;
-        $tool_content .= "<blockquote><p><h5>$parent_post_text</h5></p></blockquote>";
+        $tool_content .= "<blockquote><h5>$parent_post_text</h5></blockquote>";
     }
 
-    $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
-            <input type='hidden' name='parent_post' value='$parent_post'>
-            <fieldset>
-
-            <div class='form-group'>
-              <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
-              <div class='col-sm-10'>
-                " . rich_text_editor('message', 15, 70, $reply) . "
-              </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                    <a class='btn btn-default' href='viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id'>$langCancel</a>
+    $reply = '';
+    $tool_content .=
+        "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' action='$form_url' method='post'>
+                <input type='hidden' name='parent_post' value='$parent_post'>            
+                <div class='form-group'>
+                  <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
+                  <div class='col-sm-10'>
+                    " . rich_text_editor('message', 15, 70, $reply) . "
+                  </div>
                 </div>
-            </div>
-        </fieldset>
-	</form>
-    </div>";
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                        <a class='btn btn-default' href='$cancel_url'>$langCancel</a>
+                    </div>
+                </div>        
+            </form>
+        </div>";
 }
 draw($tool_content, 2, null, $head_content);

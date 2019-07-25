@@ -110,10 +110,9 @@ if (isset($_POST['submit'])) {
     $tool_content .= "
         <div class='form-wrapper'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-            <input type='hidden' name='post_id' value='$post_id'>
-            <input type='hidden' name='topic' value='$topic_id'>
-            <input type='hidden' name='forum' value='$forum_id'>
-            <fieldset>
+                <input type='hidden' name='post_id' value='$post_id'>
+                <input type='hidden' name='topic' value='$topic_id'>
+                <input type='hidden' name='forum' value='$forum_id'>            
                 $subject_field
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langBodyMessage:</label>
@@ -126,8 +125,7 @@ if (isset($_POST['submit'])) {
                         <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                         <a class='btn btn-default' href='viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id'>$langCancel</a>
                     </div>
-                </div>                               
-            </fieldset>
+                </div>
             </form>
         </div>";
 }
