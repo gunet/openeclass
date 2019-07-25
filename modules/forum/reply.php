@@ -32,7 +32,6 @@ require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/forum/functions.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'include/lib/fileUploadLib.inc.php';
 
 $toolName = $langForums;
 $pageName = $langReply;
@@ -103,27 +102,8 @@ if (isset($_POST['submit'])) {
         exit();
     }
     $time = date("Y-m-d H:i:s");
-    // upload attached file
-    if (isset($_FILES['topic_file']) and is_uploaded_file($_FILES['topic_file']['tmp_name'])) { // upload comments file
-        $topic_filename = $_FILES['topic_file']['name'];
-        validateUploadedFile($topic_filename); // check file type
-        $topic_filename = add_ext_on_mime($topic_filename);
-        // File name used in file system and path field
-        $safe_topic_filename = safe_filename(get_file_extension($topic_filename));
-        if (!file_exists("$webDir/courses/$course_code/forum/")) {
-            mkdir("$webDir/courses/$course_code/forum/", 0755);
-        }
-        if (move_uploaded_file($_FILES['topic_file']['tmp_name'], "$webDir/courses/$course_code/forum/$safe_topic_filename")) {
-            @chmod("$webDir/courses/$course_code/forum/$safe_topic_filename", 0644);
-            $topic_real_filename = $_FILES['topic_file']['name'];
-            $topic_filepath = $safe_topic_filename;
-        }
-    } else {
-        $topic_filepath = $topic_real_filename = '';
-    }
-
-    $this_post = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip, parent_post_id, topic_filepath, topic_filename) VALUES (?d, ?s , ?d, ?t, ?s, ?d, ?s, ?s)"
-                    , $topic, $message, $uid, $time, $poster_ip, $parent_post, $topic_filepath, $topic_real_filename)->lastInsertID;
+    $this_post = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip, parent_post_id) VALUES (?d, ?s , ?d, ?t, ?s, ?d)"
+                    , $topic, $message, $uid, $time, $poster_ip, $parent_post)->lastInsertID;
     triggerForumGame($course_id, $uid, ForumEvent::NEWPOST);
     triggerTopicGame($course_id, $uid, ForumTopicEvent::NEWPOST, $topic);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $this_post);
@@ -178,29 +158,23 @@ if (isset($_POST['submit'])) {
     }
 
     $reply = '';
-    $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$form_url' method='post' enctype='multipart/form-data'>
-            <input type='hidden' name='parent_post' value='$parent_post'>
-            <div class='form-group'>
-              <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
-              <div class='col-sm-10'>
-                " . rich_text_editor('message', 15, 70, $reply) . "
-              </div>
-            </div>
-            <div class='form-group'>
-                <label for='topic_file' class='col-sm-2 control-label'>$langAttachedFile:</label>
-                <div class='col-sm-10'>
-                    <input type='file' name='topic_file' id='topic_file' size='35'>
-                    " . fileSizeHidenInput() . "
+    $tool_content .=
+        "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' action='$form_url' method='post'>
+                <input type='hidden' name='parent_post' value='$parent_post'>            
+                <div class='form-group'>
+                  <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
+                  <div class='col-sm-10'>
+                    " . rich_text_editor('message', 15, 70, $reply) . "
+                  </div>
                 </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                    <a class='btn btn-default' href='$cancel_url'>$langCancel</a>
-                </div>
-            </div>
-	</form>
-    </div>";
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                        <a class='btn btn-default' href='$cancel_url'>$langCancel</a>
+                    </div>
+                </div>        
+            </form>
+        </div>";
 }
 draw($tool_content, 2, null, $head_content);

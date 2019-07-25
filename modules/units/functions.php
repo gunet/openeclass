@@ -9,7 +9,7 @@ require_once 'include/lib/multimediahelper.class.php';
 
 /**
  * @brief  Process resource actions
- * @global type $content
+ * @global type $tool_content
  * @global type $id
  * @global type $langResourceCourseUnitDeleted
  * @global type $langResourceUnitModified
@@ -18,7 +18,7 @@ require_once 'include/lib/multimediahelper.class.php';
  * @return string
  */
 function process_actions() {
-    global $id, $langResourceCourseUnitDeleted,
+    global $tool_content, $id, $langResourceCourseUnitDeleted,
         $langResourceUnitModified, $course_id, $course_code, $webDir,
         $head_content, $langBack, $urlAppend, $navigation, $pageName,
         $langEditChange, $langViMod;
@@ -34,13 +34,13 @@ function process_actions() {
                 WHERE id = ?d AND course_id = ?d", $id, $course_id);
             $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$id", 'name' => $q->title);
             $pageName = $langEditChange;
-            $content .= action_bar(array(
+            $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "{$urlAppend}modules/units/index.php?course=$course_code&amp;id=$id",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
-            $content .= edit_res($res_id);
-            draw($content, 2, null, $head_content);
+            $tool_content .= edit_res($res_id);
+            draw($tool_content, 2, null, $head_content);
             exit;
         }
     } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
@@ -95,6 +95,7 @@ function process_actions() {
             move_order('unit_resources', 'id', $res_id, 'order', 'up', "unit_id=$id");
         }
     }
+    return '';
 }
 
 /**
@@ -122,18 +123,42 @@ function check_admin_unit_resource($resource_id) {
 
 
 /**
- * @brief Display resources for unit with id=$id 
+ * @brief Display resources for unit with id=$id
+ * @global type $tool_content
  * @global type $max_resource_id
  * @param type $unit_id
  */
 function show_resources($unit_id) {
-    global $max_resource_id, $langAvailableUnitResources, 
-           $is_editor, $head_content, $langDownload, $langPrint, $langCancel, $langFullScreen, $langNewTab;
+    global $tool_content, $max_resource_id,
+           $head_content, $langDownload, $langPrint, $langCancel,
+           $langFullScreen, $langNewTab;
 
     $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
-    if (count($req) > 0) {        
+    if (count($req) > 0) {
         load_js('screenfull/screenfull.min.js');
         $head_content .= "<script>
+        $(document).ready(function(){
+            Sortable.create(unitResources,{
+                handle: '.fa-arrows',
+                animation: 150,
+                onEnd: function (evt) {
+
+                var itemEl = $(evt.item);
+
+                var idReorder = itemEl.attr('data-id');
+                var prevIdReorder = itemEl.prev().attr('data-id');
+
+                $.ajax({
+                  type: 'post',
+                  dataType: 'text',
+                  data: {
+                          toReorder: idReorder,
+                          prevReorder: prevIdReorder,
+                        }
+                    });
+                }
+            });
+        });
         $(function(){
             $('.fileModal').click(function (e)
             {
@@ -141,27 +166,26 @@ function show_resources($unit_id) {
                 var fileURL = $(this).attr('href');
                 var downloadURL = $(this).prev('input').val();
                 var fileTitle = $(this).attr('title');
-                
-                // BUTTONS declare
-                var bts = {
-                    download: {
-                        label: '<i class=\"fa fa-download\"></i> $langDownload',
-                        className: 'btn-success',
-                        callback: function (d) {
-                            window.location = downloadURL;
-                        }
-                    },
-                    print: {
-                        label: '<i class=\"fa fa-print\"></i> $langPrint',
-                        className: 'btn-primary',
-                        callback: function (d) {
-                            var iframe = document.getElementById('fileFrame');
-                            iframe.contentWindow.print();
-                        }
-                    }
-                };
+                var buttons = {};
+                if (downloadURL) {
+                    buttons.download = {
+                            label: '<i class=\"fa fa-download\"></i> $langDownload',
+                            className: 'btn-success',
+                            callback: function (d) {
+                                window.location = downloadURL;
+                            }
+                    };
+                }
+                buttons.print = {
+                            label: '<i class=\"fa fa-print\"></i> $langPrint',
+                            className: 'btn-primary',
+                            callback: function (d) {
+                                var iframe = document.getElementById('fileFrame');
+                                iframe.contentWindow.print();
+                            }
+                        };
                 if (screenfull.enabled) {
-                    bts.fullscreen = {
+                    buttons.fullscreen = {
                         label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
                         className: 'btn-primary',
                         callback: function() {
@@ -170,7 +194,7 @@ function show_resources($unit_id) {
                         }
                     };
                 }
-                bts.newtab = {
+                buttons.newtab = {
                     label: '<i class=\"fa fa-plus\"></i> $langNewTab',
                     className: 'btn-primary',
                     callback: function() {
@@ -178,12 +202,10 @@ function show_resources($unit_id) {
                         return false;
                     }
                 };
-                bts.cancel = {
-                    label: '$langCancel',
-                    className: 'btn-default'
-                };
-                
-                
+                buttons.cancel = {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        };
                 bootbox.dialog({
                     size: 'large',
                     title: fileTitle,
@@ -192,93 +214,99 @@ function show_resources($unit_id) {
                                     '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
                                 '</div>'+
                             '</div>',
-                    buttons: bts
+                    buttons: buttons
                 });
             });
         });
+
         </script>";
         $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
-                                WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;                                
-        echo "<div class='table-responsive'>";
-        echo "<table class='table-default'>";        
-        foreach ($req as $info) {            
+                                WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+        $tool_content .= "<div class='table-responsive'>";
+        $tool_content .= "<table class='table table-striped table-hover'><tbody id='unitResources'>";
+        foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
-            echo show_resource($info);
+            show_resource($info);
         }
-        echo "</table>";
-        echo "</div>";
+        $tool_content .= "</tbody></table>";
+        $tool_content .= "</div>";
     }
 }
 
 /**
- * @brief display unit resources 
+ * @brief display unit resources
+ * @global type $tool_content
  * @global type $langUnknownResType
  * @global type $is_editor
  * @param type $info
  * @return type
  */
 function show_resource($info) {
-    global $langUnknownResType, $is_editor;
-      
-    if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' . 
+    global $tool_content, $langUnknownResType, $is_editor;
+
+    if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' .
         return;
     }
-    $content = '';
     switch ($info->type) {
         case 'doc':
-            $content .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
+            $tool_content .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
             break;
         case 'text':
-            $content .= show_text($info->comments, $info->id, $info->visible);
+            $tool_content .= show_text($info->comments, $info->id, $info->visible);
             break;
         case 'description':
-            $content .= show_description($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_description($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'lp':
-            $content .= show_lp($info->title, $info->comments, $info->id, $info->res_id);
+            $tool_content .= show_lp($info->title, $info->comments, $info->id, $info->res_id);
             break;
         case 'video':
         case 'videolink':
-            $content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'videolinkcategory':
-            $content .= show_videocat($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_videocat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'exercise':
-            $content .= show_exercise($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_exercise($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'work':
-            $content .= show_work($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_work($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'topic':
         case 'forum':
-            $content .= show_forum($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_forum($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'wiki':
-            $content .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'poll':
-            $content .= show_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'link':
-            $content .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'linkcategory':
-            $content .= show_linkcat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_linkcat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'ebook':
-            $content .= show_ebook($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_ebook($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'section':
-            $content .= show_ebook_section($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_ebook_section($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'subsection':
-            $content .= show_ebook_subsection($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_ebook_subsection($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            break;
+        case 'chat':
+            $tool_content .= show_chat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            break;
+        case 'tc':
+            $tool_content .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         default:
-            $content .= $langUnknownResType;
+            $tool_content .= $langUnknownResType;
     }
-    return $content;
 }
 
 /**
@@ -296,14 +324,14 @@ function show_resource($info) {
  * @return string
  */
 function show_doc($title, $comments, $resource_id, $file_id) {
-    global $is_editor, $course_id, $langWasDeleted, $urlServer,
+    global $can_upload, $course_id, $langWasDeleted, $urlServer,
            $id, $course_code;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
     if (!$file) {
         $download_hidden_link = '';
-        if (!$is_editor) {
+        if (!$can_upload) {
             return '';
         }
         $status = 'del';
@@ -311,7 +339,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
         $status = $file->visible;
-        if (!$is_editor and (!resource_access($file->visible, $file->public))) {
+        if (!$can_upload and (!resource_access($file->visible, $file->public))) {
             return '';
         }
         if ($file->format == '.dir') {
@@ -323,7 +351,8 @@ function show_doc($title, $comments, $resource_id, $file_id) {
             $file->title = $title;
             $image = choose_image('.' . $file->format);
             $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
-            $download_hidden_link = "<input type='hidden' value='$download_url'>";
+            $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
+                "<input type='hidden' value='$download_url'>" : '';
             $file_obj = MediaResourceFactory::initFromDocument($file);
             $file_obj->setAccessURL(file_url($file->path, $file->filename));
             $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
@@ -338,7 +367,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>" . icon($image, '') . "</td>
           <td class='text-left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
@@ -347,17 +376,18 @@ function show_doc($title, $comments, $resource_id, $file_id) {
 
 /**
  * @brief display resource text
- * @global string $content
+ * @global string $tool_content
  * @param type $comments
  * @param type $resource_id
  * @param type $visibility
  */
 function show_text($comments, $resource_id, $visibility) {
-        
+    global $tool_content;
+
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
-    $content = "
-        <tr$class_vis>
+    $tool_content .= "
+        <tr$class_vis data-id='$resource_id'>
           <td colspan='2'>$comments</td>" .
             actions('text', $resource_id, $visibility) .
             "
@@ -366,17 +396,18 @@ function show_text($comments, $resource_id, $visibility) {
 
 /**
  * @brief display course description resource
- * @global string $content
+ * @global string $tool_content
  * @param type $title
  * @param type $comments
  * @param type $id
  * @param type $res_id
  * @param type $visibility
  */
-function show_description($title, $comments, $id, $res_id, $visibility) {    
+function show_description($title, $comments, $id, $res_id, $visibility) {
+    global $tool_content;
 
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
-    $content = "
+    $tool_content .= "
         <tr>
           <td colspan='2'>
             <div class='title'>" . q($title) . "</div>
@@ -408,7 +439,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
+
     $class_vis = (!$module_visible) ?
             ' class="not_visible"' : ' ';
 
@@ -426,7 +457,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         $status = $lp->visible;
         if ($is_editor) {
             $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1", $lp_id)->module_id;
-            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";            
+            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
             if (!$module_visible) {
                 $link .= " <i>($langInactiveModule)</i> ";
             }
@@ -446,7 +477,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
           <td>$link$title</a>$comment_box</td>" .
             actions('lp', $resource_id, $status) . '
@@ -457,8 +488,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
  * @brief display resource video
  * @global type $is_editor
  * @global type $course_id
- * @global string $content
- * @global type $langInactiveModule
+ * @global string $tool_content
  * @param type $table
  * @param type $title
  * @param type $comments
@@ -468,35 +498,26 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
  * @return string
  */
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility) {
-    global $is_editor, $course_id, $langInactiveModule;
+    global $is_editor, $course_id, $tool_content, $urlServer, $course_code, $id;
 
-    $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
-    if (!$module_visible and !$is_editor) {
-        return '';
-    }
-    $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
-            ' class="not_visible"' : ' ';
 
     $row = Database::get()->querySingle("SELECT * FROM `$table` WHERE course_id = ?d AND id = ?d", $course_id, $video_id);
     if ($row) {
-        if (!$is_editor and (!resource_access(1, $row->public))) {
-            return '';
-        }
         $row->title = $title;
         $status = $row->public;
         if ($table == 'video') {
+            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id&amp;unit=$id";
             $vObj = MediaResourceFactory::initFromVideo($row);
+            $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMediaAhref($vObj);
         } else {
+            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id&amp;unit=$id";
             $vObj = MediaResourceFactory::initFromVideoLink($row);
+            $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
         }
-        if (!$module_visible) {
-            $videolink .= " <i>($langInactiveModule)</i>";
-        }
         $imagelink = "fa-film";
-    } else {
+    } else { // resource was deleted
         if (!$is_editor) {
             return;
         }
@@ -510,11 +531,11 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     } else {
         $comment_box = "";
     }
-    $class_vis = ($visibility == 0 or !$module_visible or $status == 'del') ? ' class="not_visible"' : ' ';
-    $content .= "
-        <tr$class_vis>
+    $class_vis = ($visibility == 0 or $status == 'del') ? ' class="not_visible"' : ' ';
+    $tool_content .= "
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon($imagelink)."</td>
-          <td>$videolink $comment_box</td>" . actions('video', $resource_id, $visibility) . "
+          <td> $videolink $comment_box</td>" . actions('video', $resource_id, $visibility) . "
         </tr>";
 }
 
@@ -523,7 +544,6 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
  * @global type $is_editor
  * @global type $course_id
  * @global type $langInactiveModule
- * @param array $table
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -531,7 +551,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
  * @param type $visibility
  * @return string
  */
-function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id, $visibility)
+function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visibility)
 {
     global $is_editor, $course_id, $langInactiveModule;
 
@@ -541,11 +561,11 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
         return '';
     }
     $linkcontent = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible)?
+    $class_vis = (!$module_visible)?
                  ' class="not_visible"': ' ';
     $vlcat = Database::get()->querySingle("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videolinkcat_id, $course_id);
     $content = "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon('fa-folder-o')."</td>
           <td>" . q($title);
 
@@ -557,10 +577,11 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
     foreach (array('video', 'videolink') as $table) {
         $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d AND course_id = ?d", $vlcat->id, $course_id);
         foreach ($sql2 as $row) {
-            if (!$is_editor and (!resource_access(1, $row->public))) {
-                return '';
+            if (!$is_editor) {
+                if (!resource_access(1, $row->public) or $row->visible == 0) {
+                    continue;
+                }
             }
-            $status = $row->public;
 
             if ($table == 'video') {
                 $vObj = MediaResourceFactory::initFromVideo($row);
@@ -573,12 +594,8 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
                 $videolink .= " <i>($langInactiveModule)</i>";
             }
 
-            $class_vis = ($visibility == 0 or !$module_visible or $status == 'del')? ' class="not_visible"': ' ';
-            $ltitle = q($row->title == ''? $row->url: $row->title);
-            $linkcontent .= '<br>' . icon('fa-film') . "&nbsp;&nbsp;$videolink";
-            if (!$module_visible) {
-                $linkcontent .= " <i>($langInactiveModule)</i>";
-            }
+            $class_vis = ($row->visible == 0 or !$module_visible)? ' class="not_visible"': ' ';
+            $linkcontent .= "<div $class_vis>" . icon('fa-film') . "&nbsp;&nbsp;$videolink</div>";
         }
     }
 
@@ -605,15 +622,7 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
  */
 function show_work($title, $comments, $resource_id, $work_id, $visibility) {
     global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_id, $course_code, $langInactiveModule;
-
-    $module_visible = visible_module(MODULE_ID_ASSIGN); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-    $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';
+    $langWasDeleted, $course_id, $course_code;
 
     $title = q($title);
     $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
@@ -621,26 +630,22 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$work_id&amp;unit=$id'>";
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id'>";
         $exlink = $link . "$title</a>";
-        if (!$module_visible) {
-            $exlink .= " <i>($langInactiveModule)</i>";
-        }
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
 
     if (!empty($comments)) {
-        $comment_box = "<br />$comments";
+        $comment_box = "<br>$comments";
     } else {
         $comment_box = '';
     }
     return "
-        <tr$class_vis>
+        <tr data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$exlink $comment_box</td>" .
             actions('lp', $resource_id, $visibility) . '
@@ -663,14 +668,8 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
  * @return string
  */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility) {
-    global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_id, $course_code, $langInactiveModule;
+    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code;
 
-    $module_visible = visible_module(MODULE_ID_EXERCISE); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-    $comment_box = $class_vis = $imagelink = $link = '';
     $title = q($title);
     $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
     if (!$exercise) { // check if it was deleted
@@ -699,7 +698,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('lp', $resource_id, $visibility) . "
         </tr>";
@@ -724,11 +723,6 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility) {
     global $id, $urlServer, $is_editor, $course_code, $langWasDeleted;
 
-    $module_visible = visible_module(MODULE_ID_FORUM); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-    $comment_box = '';
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $title = q($title);
     if ($type == 'forum') {
@@ -739,18 +733,18 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
         if (!$r) { // check if it was deleted
             if (!$is_editor) {
                 return '';
-            } else {                
+            } else {
                 $imagelink = icon('fa-times');
                 $forumlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
             }
         } else {
             $forum_id = $r->forum_id;
-            $link = "<a href='${urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+            //$link = "<a href='${urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
             $forumlink = $link . "$title</a>";
+            $imagelink = icon('fa-comments'). "";
         }
     }
-
-    $imagelink = icon('fa-comments'). "";
 
     if (!empty($comments)) {
         $comment_box = "<br />$comments";
@@ -759,7 +753,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$forumlink $comment_box</td>" .
             actions('forum', $resource_id, $visibility) . '
@@ -786,7 +780,6 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
         return '';
     }
 
-    $imagelink = $link = $class_vis = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     $title = q($title);
@@ -795,9 +788,8 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
-            $wikilink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+            $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
         $link = "<a href='${urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&amp;pid=$poll_id&amp;UseCase=1'>";
@@ -814,7 +806,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$polllink $comment_box</td>" .
             actions('poll', $resource_id, $visibility) . '
@@ -849,7 +841,6 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         return '';
     }
 
-    $comment_box = $imagelink = $link = $class_vis = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     $title = q($title);
@@ -858,7 +849,6 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $wikilink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
@@ -868,7 +858,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         if (!$module_visible) {
             $wikilink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "</a>" .icon('fa-wikipedia-w') . "";
+        $imagelink = $link . "</a>" .icon('fa-wikipedia') . "";
     }
 
     if (!empty($comments)) {
@@ -877,7 +867,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$wikilink $comment_box</td>" .
             actions('wiki', $resource_id, $visibility) . '
@@ -897,23 +887,15 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
  * @return string
  */
 function show_link($title, $comments, $resource_id, $link_id, $visibility) {
-    
-    global $is_editor, $langWasDeleted, $course_id, $langInactiveModule;
 
-    $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
+    global $is_editor, $langWasDeleted, $course_id;
 
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-    $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';    
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
     if (!$l) { // check if it was deleted
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
         }
@@ -935,7 +917,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('link', $resource_id, $visibility) . "
         </tr>";
@@ -954,32 +936,23 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
  * @return string
  */
 function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility) {
-    
-    global $is_editor, $langWasDeleted, $course_id, $langInactiveModule;
 
-    $content = $linkcontent = '';
-    $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
+    global $is_editor, $langWasDeleted, $course_id;
 
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-    $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';
-    $title = q($title);
+    $content = $linkcontent = $comment_box = $class_vis = $link = '';
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $linkcat_id);
     if (!$sql) { // check if it was deleted
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
-            $imagelink = icon('fa-times');
-            $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
+            $content = "<tr class='not_visible' data-id='$resource_id'>
+                        <td width='1'>" . icon('fa-folder-o') . "</td><td>" . q($title) . " ($langWasDeleted)";
         }
     } else {
         foreach ($sql as $lcat) {
             $content .= "
-                        <tr$class_vis>
+                        <tr$class_vis data-id='$resource_id'>
                           <td width='1'>".icon('fa-folder-o')."</td>
                           <td>" . q($lcat->name);
             if (!empty($lcat->description)) {
@@ -1023,7 +996,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
+
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     $title = q($title);
@@ -1032,7 +1005,6 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
         if (!$is_editor) {
             return '';
         } else {
-            $status = 'del';
             $imagelink = icon('fa-times');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
@@ -1052,7 +1024,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('ebook', $resource_id, $visibility) . "
         </tr>";
@@ -1140,14 +1112,14 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
  */
 function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted) {
     global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_code, $themeimg, $langInactiveModule;
+    $langWasDeleted, $course_code, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
 
     if (!$module_visible and ! $is_editor) {
         return '';
     }
-    $comment_box = $class_vis = $imagelink = $link = '';
+
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
     if ($deleted) {
@@ -1167,7 +1139,6 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
         $imagelink = $link . "</a>" .icon('fa-book'). "";
     }
 
-
     if (!empty($comments)) {
         $comment_box = "<br />$comments";
     } else {
@@ -1175,10 +1146,108 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('section', $resource_id, $visibility) . "
         </tr>";
+}
+
+/**
+ * @brief display chat resources
+ * @param $title
+ * @param $comments
+ * @param $resource_id
+ * @param $chat_id
+ * @param $visibility
+ * @return string
+ */
+function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
+    global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id;
+
+    $comment_box = '';
+    $title = q($title);
+    $chat = Database::get()->querySingle("SELECT * FROM conference WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
+    if (!$chat) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-times');
+            $chatlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+        }
+    } else {
+        if (!$is_editor and $chat->status == 'inactive') {
+            return '';
+        }
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $chatlink = $link . "$title</a>";
+        $imagelink = $link . "</a>" .icon('fa-exchange') . "";
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br />$comments";
+    }
+    $class_vis = ($chat->status == 'inactive') ?
+        ' class="not_visible"' : ' ';
+    return "
+        <tr$class_vis data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td>$chatlink $comment_box</td>" .
+        actions('chat', $resource_id, $visibility) . '
+        </tr>';
+}
+
+
+/**
+ * @brief display tc resources
+ * @param $title
+ * @param $comments
+ * @param $resource_id
+ * @param $tc_id
+ * @param $visibility
+ * @return string
+ */
+function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
+    global $urlServer, $is_editor,
+           $langWasDeleted, $langInactiveModule, $course_id, $course_code;
+
+    $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
+
+    if (!$module_visible and !$is_editor) {
+        return '';
+    }
+
+    $tc = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d AND id = ?d", $course_id, $tc_id);
+    if (!$tc) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-times');
+            $tclink = "<span class='not_visible'>" .q($title) ." ($langWasDeleted)</span>";
+        }
+    } else {
+        if (!$is_editor and !$tc->active) {
+            return '';
+        }
+        $tclink = q($title);
+        if (!$module_visible) {
+            $tclink .= " <i>($langInactiveModule)</i>";
+        }
+        $imagelink = icon('fa-exchange');
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br>$comments";
+    } else {
+        $comment_box = '';
+    }
+    $class_vis = (!$tc->active or !$module_visible) ?
+        ' class="not_visible"' : ' ';
+    return "
+        <tr$class_vis data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td>$tclink $comment_box</td>" .
+        actions('tc', $resource_id, $visibility) . '
+        </tr>';
 }
 
 /**
@@ -1200,9 +1269,9 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
  * @return string
  */
 function actions($res_type, $resource_id, $status, $res_id = false) {
-    global $is_editor, $langEditChange, $langDelete, $langVisibility,
-    $langAddToCourseHome, $langDown, $langUp,
-    $langConfirmDelete, $course_code, $langViewHide, $langViewShow;
+    global $is_editor, $langEditChange, $langDelete,
+    $langAddToCourseHome, $langConfirmDelete, $course_code,
+    $langViewHide, $langViewShow, $langReorder;
 
     static $first = true;
 
@@ -1219,7 +1288,10 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
-    $content = "<td class='option-btn-cell'>";
+    $content = "<td style='padding: 10px 0; width: 85px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
+                vertical-align: bottom;'>
+                                                <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                                            </div><div class='pull-left'>";
     $content .= action_button(array(
                 array('title' => $langEditChange,
                       'url' => $edit_link,
@@ -1233,22 +1305,14 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('description'))),
-                array('title' => $langDown,
-                      'level' => 'primary',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id",
-                      'icon' => 'fa-arrow-down',
-                      'disabled' => $resource_id == $GLOBALS['max_resource_id']),
-                array('title' => $langUp,
-                      'level' => 'primary',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
-                      'icon' => 'fa-arrow-up',
-                      'disabled' => $first),
                 array('title' => $langDelete,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
                       'icon' => 'fa-times',
                       'confirm' => $langConfirmDelete,
                       'class' => 'delete')
             ));
+
+    $content .= "</div>";
 
     $first = false;
     return $content;
