@@ -401,7 +401,8 @@ if ($view != POSTS_THREADED_VIEW) {
             // all the rest with descending order
             $res2 = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id DESC 
                             LIMIT " . POSTS_PER_PAGE . "", $topic);
-            $result = array_merge($res1, $res2);
+            $res3 = array_pop($res2);
+            $result = array_merge($res1, $res2); // remove last entry (we displayed it in $res1 already)
         } else {
             $result = Database::get()->queryArray("SELECT * FROM forum_post 
                 WHERE topic_id = ?d ORDER BY id 
