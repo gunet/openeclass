@@ -464,17 +464,17 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
     } else {
         if ($total > POSTS_PER_PAGE) {
             $tool_content .= "
-        <div class='clearfix margin-bottom-fat'>
-          <nav>
-            <div class='pull-right'>";
-            if (isset($unit)) {
-                $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
-            } else {
-                $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
-            }
-            $tool_content .= "</div>
-          </nav>
-        </div>";
+            <div class='clearfix margin-bottom-fat'>
+              <nav>
+                <div class='pull-right'>";
+                if (isset($unit)) {
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
+                } else {
+                    $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
+                }
+                $tool_content .= "</div>
+              </nav>
+            </div>";
         }
     }
 }
@@ -518,13 +518,22 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     if ($count > 1) { // for all posts except first
         $content .= "<div class='panel panel-default col-sm-offset-$offset'>";
-        $content .= "<div class='panel-heading'>$langMsgRe " . q($topic_subject) . "</div>";
+        $content .= "<div class='panel-heading'><h5 class='panel-title'>$langMsgRe " . q($topic_subject);
     } else {
         $content .= "<div class='panel panel-primary'>";
-        $content .= "<div class='panel-heading'>". q($topic_subject) . "</div>";
+        $content .= "<div class='panel-heading'><h5 class='panel-title'>". q($topic_subject);
     }
 
-      //                  <small>".$user_stats[$myrow->poster_id]."</small>
+    if ($is_editor) {
+        $content .= "<a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id . "&amp;topic=$topic&amp;forum=$forum'>
+                     <span class='fa fa-edit' title='$langModify' data-toggle='tooltip' data-original-title='$langModify'></span>
+                     </a>";
+        $content .= "<a id='delete-btn_$count' href='../forum/viewtopic.php?course=$course_code&amp;post_id=$myrow->id&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>
+                     <span class='fa fa-times' title='$langDelete' data-toggle='tooltip' data-original-title='$langDelete'></span>
+                     </a>";
+    }
+    $content .= "</h5></div>";
+
     $content .= "<div class='panel-body'>";
     $content .= "<span class='col-sm-1'>" . profile_image($myrow->poster_id, '40px', 'img-responsive img-circle margin-bottom-thin') . "</span>";
     $message = $myrow->post_text;
@@ -587,17 +596,10 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         }
         $reply_button_link = "<a class='btn btn-success btn-xs reply-post-btn' style='margin-right:15px;' href='$reply_url'>$langReply</a>";
     }
-    $edit_button_link = $delete_button_link = '';
-    if ($is_editor) {
-        $edit_button_link = "<a class='btn btn-default btn-xs reply-post-btn' style='margin-right: 15px;' 
-                href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id . "&amp;topic=$topic&amp;forum=$forum'>$langModify</a>";
-        $delete_button_link = "<a id='delete-btn_$count' class='btn btn-danger btn-xs reply-post-btn' style='margin-right: 15px;' 
-                href='../forum/viewtopic.php?course=$course_code&amp;post_id=$myrow->id&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>$langDelete</a>";
-    }
     $content .= "<div class='row'>
                     <span class='pull-left'>$rate_str</span>
-                    <span class='pull-right'><small>$reply_button_link $edit_button_link $delete_button_link $parent_post_link</small>                      
-                  </div>";
+                    <span class='pull-right'><small>$reply_button_link $parent_post_link</small>                      
+                 </div>";
     $content .= "</div>";
     /* end of footer */
     $content .= "</div>";
