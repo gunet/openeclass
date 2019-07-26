@@ -196,11 +196,11 @@ if (!$conference_activity) {
 
     if ($is_editor && isset($_GET['create_agent']) && $agent_id) {
         // Redirect teacher to colMOOC editor with agent_id & teacher_id parameters
-        $colmooc_url = COLMOOC_BASE_URL . "/colmoocapi/editor/?agent_id=" . $agent_id . '&teacher_id=' . $uid;
+        $colmooc_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/editor/?agent_id=" . $agent_id . '&teacher_id=' . $uid;
         redirect_to_home_page($colmooc_url, true);
     } else if ($is_editor && isset($_GET['edit_agent']) && $agent_id) {
         // Redirect teacher to colMOOC editor with agent_id & teacher_id parameters
-        $colmooc_url = COLMOOC_BASE_URL . "/colmoocapi/editor/?agent_id=" . $agent_id . '&teacher_id=' . $uid;
+        $colmooc_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/editor/?agent_id=" . $agent_id . '&teacher_id=' . $uid;
         redirect_to_home_page($colmooc_url, true);
     } else if ($is_editor && isset($_GET['create_agent']) && !$agent_id) {
         $tool_content .= "<div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div>";
@@ -212,7 +212,7 @@ if (!$conference_activity) {
         list($sessionId, $sessionToken) = colmooc_register_student($conference_id); // STEP 2
         if ($sessionId && $sessionToken) {
             // Redirect student to colMOOC chat
-            $colmooc_url = COLMOOC_CHAT_URL . "/?session_id=" . $sessionId . "&amp;session_token=" . $sessionToken;
+            $colmooc_url = $colmoocapp->getParam(ColmoocApp::CHAT_URL)->value() . "/?session_id=" . $sessionId . "&amp;session_token=" . $sessionToken;
             $tool_content .= "<div class='alert alert-info'>" . $langColmoocFollowLink
                 . ': <a id="studentChat" href="' . $colmooc_url . '" target="_blank" title="' . $langChat . '">' . $langChat . '</a>'
                 . "</div>";

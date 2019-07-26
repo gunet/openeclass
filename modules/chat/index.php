@@ -102,7 +102,7 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
-        if (get_config('enable_colmooc')) {
+        if ($colmoocapp->isEnabled()) {
             $tool_content .= "<div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
@@ -297,7 +297,7 @@ if ($is_editor) {
             </div>
         </div>";
 
-        if (get_config('enable_colmooc')) {
+        if ($colmoocapp->isEnabled()) {
             $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
             $tool_content .= "<div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>

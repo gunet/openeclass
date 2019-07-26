@@ -20,11 +20,13 @@
  * ======================================================================== 
  */
 
-define('COLMOOC_PLATFORM_ID', 201);
-define('COLMOOC_BASE_URL', "https://mklab.iti.gr");
+require_once 'modules/admin/extconfig/externals.php';
+require_once 'modules/admin/extconfig/colmoocapp.php';
+
 //define('COLMOOC_CHAT_URL', "https://mklab.iti.gr/colmooc-chat");
-define('COLMOOC_CHAT_URL', "http://mklab.iti.gr:4000");
 define('COLMOOC_JSON_HEAD', "Content-Type: application/json\r\n");
+
+$colmoocapp = ExtAppManager::getApp(strtolower(ColmoocApp::NAME));
 
 /** 
  * @brief checks if user has chat access permissions
@@ -74,16 +76,16 @@ function is_valid_activity_user($conference_activity, $conference_agent) {
 }
 
 function colmooc_create_activity($activityId, $activityTitle) {
-    global $uid, $course_id;
+    global $colmoocapp, $uid, $course_id;
 
     if (!ini_get('allow_url_fopen')) {
         return false;
     }
 
     // api add activity
-    $add_activity_url = COLMOOC_BASE_URL . "/colmoocapi/api/activity/add";
+    $add_activity_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/activity/add";
     $add_data = json_encode(array(array(
-        "platform_id" => COLMOOC_PLATFORM_ID,
+        "platform_id" => $colmoocapp->getParam(ColmoocApp::PLATFORM_ID)->value(),
         "activity_id" => $activityId,
         "activity_title" => $activityTitle,
         "teacher_id" => $uid,
@@ -100,16 +102,16 @@ function colmooc_create_activity($activityId, $activityTitle) {
 }
 
 function colmooc_update_activity($activityId, $activityTitle, $agentId) {
-    global $uid, $course_id;
+    global $colmoocapp, $uid, $course_id;
 
     if (!ini_get('allow_url_fopen')) {
         return false;
     }
 
     // api update activity
-    $update_activity_url = COLMOOC_BASE_URL . "/colmoocapi/api/activity/update";
+    $update_activity_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/activity/update";
     $update_data = json_encode(array(array(
-        "platform_id" => COLMOOC_PLATFORM_ID,
+        "platform_id" => $colmoocapp->getParam(ColmoocApp::PLATFORM_ID)->value(),
         "activity_id" => $activityId,
         "teacher_id" => $uid,
         "course_id" => $course_id,
@@ -126,16 +128,16 @@ function colmooc_update_activity($activityId, $activityTitle, $agentId) {
 }
 
 function colmooc_create_agent($conferenceId) {
-    global $uid, $urlServer;
+    global $colmoocapp, $uid, $urlServer;
 
     if (!ini_get('allow_url_fopen')) {
         return false;
     }
 
     // api add agent
-    $add_agent_url = COLMOOC_BASE_URL . "/colmoocapi/api/agent/add";
+    $add_agent_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/agent/add";
     $add_data = json_encode(array(array(
-        "platform_id" => COLMOOC_PLATFORM_ID,
+        "platform_id" => $colmoocapp->getParam(ColmoocApp::PLATFORM_ID)->value(),
         "teacher_id" => $uid,
         "callback_data" => $urlServer . "modules/chat/agentcb.php?id=" . $conferenceId
     )));
@@ -151,7 +153,7 @@ function colmooc_create_agent($conferenceId) {
 }
 
 function colmooc_register_student($conferenceId) {
-    global $uid, $urlServer, $language;
+    global $colmoocapp, $uid, $urlServer, $language;
 
     if (!ini_get('allow_url_fopen')) {
         return array(false, false);
@@ -169,9 +171,9 @@ function colmooc_register_student($conferenceId) {
         $colstudentId = $colmoocUser->colmooc_id;
 
         // api update student
-        $update_student_url = COLMOOC_BASE_URL . "/colmoocapi/api/student/update";
+        $update_student_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/student/update";
         $update_student_data = json_encode(array(array(
-            "platform_id" => COLMOOC_PLATFORM_ID,
+            "platform_id" => $colmoocapp->getParam(ColmoocApp::PLATFORM_ID)->value(),
             "colmooc_id" => $colstudentId,
             "student_id" => $uid,
             "first_name" => $u->givenname,
@@ -181,9 +183,9 @@ function colmooc_register_student($conferenceId) {
         custom_request($update_student_url, $update_student_data, "POST", COLMOOC_JSON_HEAD);
     } else {
         // api add student
-        $add_student_url = COLMOOC_BASE_URL . "/colmoocapi/api/student/add";
+        $add_student_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/student/add";
         $add_student_data = json_encode(array(array(
-            "platform_id" => COLMOOC_PLATFORM_ID,
+            "platform_id" => $colmoocapp->getParam(ColmoocApp::PLATFORM_ID)->value(),
             "student_id" => $uid,
             "first_name" => $u->givenname,
             "last_name" => $u->surname,
@@ -219,7 +221,7 @@ function colmooc_register_student($conferenceId) {
 //        $sessionToken = $colmoocUserSession->session_token;
 //    } else {
     // api create session
-    $add_session_url = COLMOOC_BASE_URL . "/colmoocapi/api/session/add";
+    $add_session_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/session/add";
     $add_session_data = json_encode(array(array(
         "colmooc_id" => $conf->chat_activity_id,
         "colstudent_id" => $colstudentId,

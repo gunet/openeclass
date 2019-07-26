@@ -5455,6 +5455,7 @@ $langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχο�
 $langTurnitinShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism).
 Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Turnitin.
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://turnitin.com\">https://turnitin.com</a>";
+$langColmoocDescription = "ColMOOC Description";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";

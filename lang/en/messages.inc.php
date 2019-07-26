@@ -5081,6 +5081,7 @@ $langTiiExcludeTypeWords = "Words";
 $langTiiExcludeTypePercentage = "Percentage";
 $langTiiExcludeValue = "Set source exclusion threshold";
 $langColmooc = "colMOOC";
+$langColmoocDescription = "ColMOOC Description";
 $langColmoocCreateAgentFailed = "Agent Create Error Detected. Please retry.";
 $langColmoocCreateAgentSuccess = "Agent created successfully. Please instruct your students to enroll the chat.";
 $langColmoocRegisterStudentFailed = "Student Chat Loading Error Detected. Pleases retry.";
