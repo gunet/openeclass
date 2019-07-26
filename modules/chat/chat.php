@@ -30,17 +30,18 @@ $helpTopic = 'chat';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
-require_once 'modules/colmooc/functions.php';
 
 $coursePath = $webDir . '/courses/';
 $conference_id = $_GET['conference_id'];
 $conference_activity = false;
 $conference_agent = false;
-$q = Database::get()->querySingle("SELECT status, chat_activity, agent_created FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
+$agent_id = false;
+$q = Database::get()->querySingle("SELECT status, chat_activity, agent_created, agent_id FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
 if ($q) { // additional security
     $conference_status = $q->status;
     $conference_activity = $q->chat_activity;
     $conference_agent = $q->agent_created;
+    $agent_id = $q->agent_id;
 } else {
     Session::Messages($langForbidden, "alert-danger");
     redirect_to_home_page();
@@ -164,9 +165,11 @@ if (!$conference_activity) {
        </form></div></div></div>";
 } else {
     if ($is_editor && isset($_GET['create_agent'])) {
-        colmooc_create();
-        Database::get()->querySingle("UPDATE conference SET agent_created = true WHERE conf_id = ?d", $conference_id);
-        $conference_agent = true;
+        $agent_id = colmooc_create_agent($conference_id);
+        if ($agent_id) {
+            Database::get()->querySingle("UPDATE conference SET agent_id = ?d WHERE conf_id = ?d", $agent_id, $conference_id);
+            $conference_agent = true;
+        }
     }
 
     $tool_content .= action_bar(array(
@@ -177,6 +180,13 @@ if (!$conference_activity) {
             'button-class' => 'btn-success',
             'show' => $is_editor && !$conference_agent
         ),
+        array('title' => $langEditAgent,
+            'url' => "chat.php?conference_id=" . $conference_id . "&edit_agent=1",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success',
+            'show' => $is_editor && $conference_agent && $agent_id
+        ),
         array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
@@ -184,10 +194,73 @@ if (!$conference_activity) {
         )
     ));
 
+    if ($is_editor && isset($_GET['create_agent']) && $agent_id) {
+        // Redirect teacher to colMOOC editor with agent_id & teacher_id parameters
+        $colmooc_url = COLMOOC_BASE_URL . "/colmoocapi/editor/?agent_id=" . $agent_id . '&teacher_id=' . $uid;
+        redirect_to_home_page($colmooc_url, true);
+    } else if ($is_editor && isset($_GET['edit_agent']) && $agent_id) {
+        // Redirect teacher to colMOOC editor with agent_id & teacher_id parameters
+        $colmooc_url = COLMOOC_BASE_URL . "/colmoocapi/editor/?agent_id=" . $agent_id . '&teacher_id=' . $uid;
+        redirect_to_home_page($colmooc_url, true);
+    } else if ($is_editor && isset($_GET['create_agent']) && !$agent_id) {
+        $tool_content .= "<div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div>";
+    } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent'])) {
+        $tool_content .= "<div class='alert alert-info'>" . $langColMoocAgentCreateOrEdit . "</div>";
+    }
+
     if (!$is_editor) {
-        colmooc_register_student();
+        list($sessionId, $sessionToken) = colmooc_register_student($conference_id); // STEP 2
+        if ($sessionId && $sessionToken) {
+            // Redirect student to colMOOC chat
+            $colmooc_url = COLMOOC_CHAT_URL . "/?session_id=" . $sessionId . "&amp;session_token=" . $sessionToken;
+            $tool_content .= "<div class='alert alert-info'>" . $langColmoocFollowLink
+                . ': <a id="studentChat" href="' . $colmooc_url . '" target="_blank" title="' . $langChat . '">' . $langChat . '</a>'
+                . "</div>";
+        } else {
+            $tool_content .= "<div class='alert alert-info'>" . $langColmoocRegisterStudentFailed . "</div>";
+        }
     }
 }
+
+load_js('screenfull/screenfull.min.js');
+$head_content .= "<script>
+    $(function(){
+        $('.fileModal').click(function (e)
+        {
+            e.preventDefault();
+            var fileURL = $(this).attr('href');
+            var fileTitle = $(this).attr('title');
+            
+            // BUTTONS declare
+            var bts = {};
+            if (screenfull.enabled) {
+                bts.fullscreen = {
+                    label: '<i class=\"fa fa - arrows - alt\"></i> $langFullScreen',
+                    className: 'btn-primary',
+                    callback: function() {
+                        screenfull.request(document.getElementById('fileFrame'));
+                        return false;
+                    }
+                };
+            }
+            bts.cancel = {
+                label: '$langCancel',
+                className: 'btn-default'
+            };
+            
+            bootbox.dialog({
+                size: 'large',
+                title: fileTitle,
+                message: '<div class=\"row\">'+
+                            '<div class=\"col-sm-12\">'+
+                                '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                            '</div>'+
+                        '</div>',
+                buttons: bts
+            });
+        });
+    });
+    </script>";
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);

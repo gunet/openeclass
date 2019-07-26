@@ -26,38 +26,29 @@
 
 $require_current_course = TRUE;
 $require_login = TRUE;
-$require_help = TRUE;
-$helpTopic = 'colmooc';
-
 require_once '../../include/baseTheme.php';
-require_once 'functions.php';
+require_once 'modules/chat/functions.php';
 
-$toolName = $langColmooc;
+$actionBar .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label'
+    )
+));
 
-if ($is_editor) {
-    if (isset($_GET['sync'])) {
-        $pageName = "Synchronization";
-        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langColmooc);
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+$tool_content = $actionBar . "<div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div>";
 
-        do_sync();
-    } else {
-        $tool_content .= action_bar(array(
-                array('title' => "Synchronize",
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sync=1",
-                    'icon' => 'fa-plus-circle',
-                    'button-class' => 'btn-success',
-                    'level' => 'primary-label',
-                    'show' => 1)));
+if (isset($_GET['id']) && $is_editor) {
+
+    $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $_GET['id']);
+    if ($conf && $conf->conf_id && $conf->agent_id) {
+        $success = colmooc_update_activity($conf->conf_id, $conf->conf_title, $conf->agent_id);
+        if ($success) {
+            Database::get()->query("UPDATE conference SET agent_created = true WHERE conf_id = ?d", $conf->conf_id);
+            $tool_content = $actionBar . "<div class='alert alert-info'>" . $langColmoocCreateAgentSuccess . "</div>";
+        }
     }
-}
-
-if (!isset($_GET['sync'])) {
-    $tool_content .= "hello world";
 }
 
 add_units_navigation(TRUE);
