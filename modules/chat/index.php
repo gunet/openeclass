@@ -102,7 +102,7 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
-        if (get_config('enable_colmooc')) {
+        if ($colmoocapp->isEnabled()) {
             $tool_content .= "<div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
@@ -176,16 +176,45 @@ if ($is_editor) {
         } else {
             $chat_activity = false;
         }
+        $skipFlash = false;
         if (isset($_POST['conference_id'])) {
             $conf_id = $_POST['conference_id'];
             Database::get()->querySingle("UPDATE conference SET conf_title= ?s,conf_description = ?s, status = ?s, chat_activity = ?b, user_id = ?s, group_id = ?s
                                             WHERE conf_id =?d", $title, $description, $status, $chat_activity, $chat_user_id, $chat_group_id, $conf_id);
+
+            // handle chat that was colmooc false and became true
+            if ($chat_activity) {
+                $colmooc_activity_id = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id)->chat_activity_id;
+                if ($colmooc_activity_id == null) {
+                    $colmooc_activity_id = colmooc_create_activity($conf_id, $title);
+                    if ($colmooc_activity_id) {
+                        Database::get()->querySingle("UPDATE conference SET chat_activity_id = ?d WHERE conf_id = ?d", $colmooc_activity_id, $conf_id);
+                        Session::Messages($langAttendanceEdit . ". " . $langColMoocAgentNeeded, "alert-success");
+                        $skipFlash = true;
+                    } else {
+                        Database::get()->querySingle("UPDATE conference SET chat_activity = false WHERE conf_id = ?d", $conf_id);
+                    }
+                }
+            }
         } else {
-            Database::get()->querySingle("INSERT INTO conference (course_id, conf_title, conf_description, status, chat_activity, user_id, group_id)
-                                                VALUES (?d, ?s, ?s, ?s, ?b, ?s, ?s)", $course_id, $title, $description, $status, $chat_activity, $chat_user_id, $chat_group_id);
+            $newChatId = Database::get()->query("INSERT INTO conference (course_id, conf_title, conf_description, status, chat_activity, user_id, group_id)
+                      VALUES (?d, ?s, ?s, ?s, ?b, ?s, ?s)", $course_id, $title, $description, $status, $chat_activity, $chat_user_id, $chat_group_id)->lastInsertID;
+
+            if ($chat_activity) {
+                $colmooc_activity_id = colmooc_create_activity($newChatId, $title);
+                if ($colmooc_activity_id) {
+                    Database::get()->querySingle("UPDATE conference SET chat_activity_id = ?d WHERE conf_id = ?d", $colmooc_activity_id, $newChatId);
+                    Session::Messages($langAttendanceEdit . ". " . $langColMoocAgentNeeded, "alert-success");
+                    $skipFlash = true;
+                } else {
+                    Database::get()->querySingle("UPDATE conference SET chat_activity = false WHERE conf_id = ?d", $newChatId);
+                }
+            }
         }
         // Display result message
-        Session::Messages($langAttendanceEdit,"alert-success");
+        if (!$skipFlash) {
+            Session::Messages($langAttendanceEdit, "alert-success");
+        }
         redirect_to_home_page("modules/chat/index.php");
 } elseif (isset($_GET['edit_conference'])) {
         $display = FALSE;
@@ -268,7 +297,7 @@ if ($is_editor) {
             </div>
         </div>";
 
-        if (get_config('enable_colmooc')) {
+        if ($colmoocapp->isEnabled()) {
             $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
             $tool_content .= "<div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
@@ -302,7 +331,9 @@ if ($display == TRUE) {
 
         $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d ORDER BY conf_id DESC",$course_id);
     } else {
-        $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d AND status = 'active' AND (chat_activity = false OR (chat_activity = true AND agent_created = TRUE)) ORDER BY conf_id DESC",$course_id);
+        $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d AND status = 'active' 
+            AND (chat_activity = false OR (chat_activity = true AND agent_created = TRUE AND chat_activity_id IS NOT NULL AND agent_id IS NOT NULL)) 
+            ORDER BY conf_id DESC", $course_id);
     }
     if (count($q)>0) {
         $tool_content .= "<div class='table-responsive'>";
@@ -318,6 +349,15 @@ if ($display == TRUE) {
         }
         $tool_content .="</tr></thead>";
         foreach ($q as $conf) {
+
+            // validate colmooc
+            if ($conf->chat_activity && $conf->agent_created && $conf->chat_activity_id && $conf->agent_id) {
+                $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $conf->chat_activity_id);
+                if ($colmoocUserSession && $colmoocUserSession->session_status == 1) {
+                    continue;
+                }
+            }
+
             $enabled_conference = ($conf->status == 'active')? "<span class='text-success'><span class='fa fa-eye'></span> $langVisible</span>" : "<span class='text-danger'><span class='fa fa-eye-slash'></span> $langInvisible</span>";
             ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
             $tool_content .= "<td>";

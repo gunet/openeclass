@@ -3979,6 +3979,37 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ON DELETE CASCADE ON UPDATE CASCADE 
             ) $tbl_options");
         }
+
+        if (!DBHelper::fieldExists('conference', 'chat_activity_id')) {
+            Database::get()->query('ALTER TABLE conference ADD chat_activity_id int(11)');
+        }
+
+        if (!DBHelper::fieldExists('conference', 'agent_id')) {
+            Database::get()->query('ALTER TABLE conference ADD agent_id int(11)');
+        }
+
+        if (!DBHelper::tableExists('colmooc_user')) {
+            Database::get()->query("CREATE TABLE IF NOT EXISTS `colmooc_user` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `user_id` INT(11) NOT NULL,
+                `colmooc_id` INT(11) NOT NULL,
+                PRIMARY KEY (id),
+                UNIQUE KEY (user_id),
+                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('colmooc_user_session')) {
+            Database::get()->query("CREATE TABLE IF NOT EXISTS `colmooc_user_session` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `user_id` INT(11) NOT NULL,
+                `activity_id` INT(11) NOT NULL,
+                `session_id` TEXT NOT NULL,
+                `session_token` TEXT NOT NULL,
+                `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+                PRIMARY KEY (id),
+                UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
+                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+        }
     }
 
     // update eclass version

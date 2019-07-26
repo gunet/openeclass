@@ -1775,7 +1775,30 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `group_id` varchar(255) default '0',
     `chat_activity` boolean not null default false,
     `agent_created` boolean not null default false, 
+    `chat_activity_id` int(11),
+    `agent_id` int(11),
     PRIMARY KEY (`conf_id`,`course_id`)) $tbl_options");
+
+// Colmooc user table
+$db->query("CREATE TABLE IF NOT EXISTS `colmooc_user` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `colmooc_id` INT(11) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY (user_id),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+// Colmooc user session table
+$db->query("CREATE TABLE IF NOT EXISTS `colmooc_user_session` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `activity_id` INT(11) NOT NULL,
+    `session_id` TEXT NOT NULL,
+    `session_token` TEXT NOT NULL,
+    `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+    PRIMARY KEY (id),
+    UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
 
 // Course Category tables
 $db->query("CREATE TABLE IF NOT EXISTS `category` (

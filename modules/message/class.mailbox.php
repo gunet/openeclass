@@ -119,8 +119,12 @@ Class Mailbox {
         $query_sql = $extra_sql = '';
 
         if (!empty($keyword)) {
-            $query_sql = "AND `dropbox_msg`.`subject` LIKE concat('%', ?s, '%')";
-            $args_1[] = $keyword;
+            $query_sql = "AND (`dropbox_msg`.`subject` LIKE ?s
+                               OR `user`.`surname` LIKE ?s
+                               OR `user`.`givenname` LIKE ?s)";
+            $args_1[] = '%' . $keyword . '%';
+            $args_1[] = $keyword . '%';
+            $args_1[] = $keyword . '%';
         }
         if ($limit > 0) {
             $extra_sql = "LIMIT ?d,?d";
@@ -135,6 +139,8 @@ Class Mailbox {
                                ON dropbox_msg.id = dropbox_index.msg_id
                         LEFT JOIN course_module
                                ON course_module.course_id = dropbox_msg.course_id
+                        JOIN user
+                               ON dropbox_msg.author_id = user.id
                     WHERE course_module.module_id = ?d
                       AND course_module.visible <> 0
                       AND dropbox_index.recipient_id = ?d
@@ -146,6 +152,8 @@ Class Mailbox {
                     FROM dropbox_msg
                         JOIN dropbox_index
                                ON dropbox_msg.id = dropbox_index.msg_id
+                        JOIN user
+                               ON dropbox_msg.author_id = user.id
                     WHERE course_id = 0
                       AND dropbox_index.recipient_id = ?d
                       AND dropbox_index.recipient_id <> dropbox_msg.author_id
@@ -154,12 +162,15 @@ Class Mailbox {
             $res = Database::get()->queryArray($sql, MODULE_ID_MESSAGE, $this->uid, $args_1, $this->uid, $args_1, $args_2);
         } else { //messages in course context
             $sql = "SELECT `dropbox_msg`.`id`
-                    FROM `dropbox_msg`,`dropbox_index`
-                    WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
-                    AND `dropbox_index`.`recipient_id` = ?d
-                    AND `dropbox_msg`.`course_id` = ?d
-                    AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
-                    AND `dropbox_index`.`deleted` = ?d $query_sql
+                    FROM `dropbox_msg`
+                        JOIN `dropbox_index`
+                               ON dropbox_msg.id = dropbox_index.msg_id
+                        JOIN user
+                               ON dropbox_msg.author_id = user.id
+                    WHERE `dropbox_index`.`recipient_id` = ?d
+                      AND `dropbox_msg`.`course_id` = ?d
+                      AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
+                      AND `dropbox_index`.`deleted` = ?d $query_sql
                     ORDER BY `timestamp` DESC $extra_sql";
             $res = Database::get()->queryArray($sql, $this->uid, $this->courseId, 0, $args_1, $args_2);
         }
