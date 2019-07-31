@@ -4,7 +4,8 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 
-$data = [];
+$data['content'] = Database::get()->queryArray("SELECT * FROM h5p_content
+	WHERE course_id = ?d ORDER BY id ASC", $course_id);
 
 $data['action_bar'] = action_bar([
             [ 'title' => $langImport,
@@ -13,5 +14,6 @@ $data['action_bar'] = action_bar([
               'level' => 'primary-label' ]
         ], false);
 		
+
 $toolName = $langH5P;
 view('modules.h5p.index', $data);

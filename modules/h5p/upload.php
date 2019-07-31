@@ -13,8 +13,9 @@ $data['action_bar'] = action_bar([
               'icon' => 'fa-reply',
               'level' => 'primary-label' ]
         ], false);
-		
+$data['can_upload'] = TRUE;
+$data['upload_target_url'] = 'courses/temp/h5p';
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5P];
 
-view('modules.h5p.index', $data);
+view('modules.h5p.upload', $data);

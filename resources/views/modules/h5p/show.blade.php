@@ -21,7 +21,15 @@
         $('.h5p-container').h5p({
           frameJs: '{{ $urlServer }}/js/h5p-standalone/js/h5p-standalone-frame.min.js',
           frameCss: '{{ $urlServer }}/js/h5p-standalone/styles/h5p.css',
-          h5pContent: '{{ $workspaceUrl }}'
+          h5pContent: '{{ $workspaceUrl }}',
+          displayOptions: {
+            frame: true,
+            copyright : true,
+            embed: false,
+            download: false,
+            icon: true,
+            export: false
+          }
         });
       });
     })(H5P.jQuery);
