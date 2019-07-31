@@ -701,7 +701,7 @@ class H5PClass implements H5PFrameworkInterface {
   public function saveContentDependencies($id){
     // global $link;
 
-    $path = 'modules/h5p/h5p/content/' . $id . "/h5p.json";
+    $path = 'courses/h5p/content/' . $id . "/h5p.json";
     $file = file_get_contents($path);
     $json = json_decode($file,true);
     foreach($json['preloadedDependencies'] as $json){
