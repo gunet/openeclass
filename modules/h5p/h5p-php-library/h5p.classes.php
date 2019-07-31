@@ -1,6 +1,6 @@
 <?php
 
-$tmpZipPath = ""; // custom variable for saving the zip file 
+$tmpZipPath = ""; // custom variable for saving the zip file
 /**
  * Interface defining functions the h5p library needs the framework to implement
  */
@@ -1563,7 +1563,7 @@ class H5PStorage {
       global $webDir;
       global $course_code;
       $copy = basename($tmpZipPath); // removing the tmp/ from the zip file name
-      $dest = 'modules/h5p/h5p/content/' . $content['id'];
+      $dest = 'courses/h5p/content/' . $content['id'];
       $destextract = $dest . "/extract";
       mkdir($destextract);
       $destextract = $destextract . "/" . $copy;

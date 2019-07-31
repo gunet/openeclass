@@ -19,21 +19,19 @@ function upload_content(){ // anebasma // na elen3w to database &  na balw to us
 	global $webDir;
 
 	$upload_dir = $webDir . '/courses/temp/h5p/' . $course_code;
-	if(file_exists($upload_dir)){
+	if (file_exists($upload_dir)){
 		deleteDirectory($upload_dir);
-		mkdir($upload_dir);
-	}else{
-		mkdir($upload_dir);
 	}
+    mkdir($upload_dir, 0777, true);
 
 	$target_file = $upload_dir . "/" . basename($_FILES["userFile"]["name"]);
 	move_uploaded_file($_FILES["userFile"]["tmp_name"], $target_file);
 
 	$classobj = new H5Pclass();
-	$path = $webDir . '/modules/h5p/h5p';
+    $h5pPath = $webDir . '/courses/h5p';
 	$url = $webDir . '/courses/temp/h5p/' . $course_code;
 	$language = 'en';
-	$classCore = new H5PCore($classobj, $path,$url,$language,FALSE);
+	$classCore = new H5PCore($classobj, $h5pPath, $url, $language, FALSE);
 	$classVal = new H5PValidator($classobj, $classCore);
 	$classStor = new H5PStorage($classobj, $classCore);
 
@@ -44,10 +42,10 @@ function upload_content(){ // anebasma // na elen3w to database &  na balw to us
 		$sql = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d ORDER BY id DESC",$course_id);
 		$content_id = $sql->id;
 
-		$filesource = $webDir . "/modules/h5p/h5p/content/" . $content_id . "/h5p.json";
+		$filesource = $h5pPath . "/content/" . $content_id . "/h5p.json";
 
-		$source = $webDir . "/modules/h5p/h5p/content/" . $content_id . "/extract";
-		$something = scandir($source,1);
+		$source = $h5pPath . "/content/" . $content_id . "/extract";
+		$something = scandir($source, 1);
 		$source = $source . "/" . $something[0];
 
 		$dirr = $webDir . "/courses/" . $course_code . "/h5p";
@@ -66,7 +64,7 @@ function upload_content(){ // anebasma // na elen3w to database &  na balw to us
 			mkdir($dest);
 		}
 		$filedest = $dest . "/h5p.json";
-		if(copy($filesource, $filedest)){ 
+		if(copy($filesource, $filedest)){
 			$dest = $dest . "/" . $something[0];
 			$file = $webDir . "/courses/" .  $course_code . "/h5p/content/" . $content_id . "/h5p.json";
 			$file = file_get_contents($file);
@@ -80,7 +78,7 @@ function upload_content(){ // anebasma // na elen3w to database &  na balw to us
 	}
 }
 
-function show_content($content_id){ 
+function show_content($content_id){
 	global $course_id;
 	global $course_code;
 	global $webDir;
@@ -115,7 +113,7 @@ function show_content($content_id){
 
 }
 
-function deleteDirectory($dir) { 
+function deleteDirectory($dir) {
     if (!file_exists($dir)) {
       return true;
     }
@@ -144,7 +142,7 @@ function delete_content($content_id){
 	$content_dir = $webDir . "/courses/" . $course_code . "/h5p/content/" . $content_id;
 	deleteDirectory($content_dir);
 	$sql = Database::get()->query("DELETE FROM h5p_content WHERE course_id = ?d AND id = ?d ",$course_id,$content_id);
-	$content_dir_mod = $webDir . "/modules/h5p/h5p/content/" . $content_id;
+	$content_dir_mod = $webDir . "/courses/h5p/content/" . $content_id;
 	var_dump($content_dir);
 	var_dump($content_dir_mod);
 	if(deleteDirectory($content_dir_mod)){
