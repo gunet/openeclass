@@ -24,18 +24,29 @@
   ============================================================================
  */
 
+$require_current_course = TRUE;
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/chat/functions.php';
+
+$actionBar .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label'
+    )
+));
+
+$tool_content = $actionBar . "<div class='alert alert-danger'>" . $langColmoocRegisterStudentFailed . "</div>";
 
 if (isset($_GET['activity_id']) && isset($_GET['session_status'])) {
 
     $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $_GET['activity_id']);
     if ($colmoocUserSession && $colmoocUserSession->session_id && $colmoocUserSession->session_token) {
-        Database::get()->query("UPDATE colmooc_user SET session_status = ?d WHERE user_id = ?d AND activity_id = ?d", $_GET['session_status'], $uid, $_GET[['activity_id']]);
-        echo $langColmoocRegisterStudentSuccess;
-        exit();
+        Database::get()->query("UPDATE colmooc_user_session SET session_status = ?d WHERE user_id = ?d AND activity_id = ?d", $_GET['session_status'], $uid, $_GET['activity_id']);
+        $tool_content = $actionBar . "<div class='alert alert-info'>" . $langColmoocRegisterStudentSuccess . "</div>";
     }
 }
 
-echo $langColmoocRegisterStudentFailed;
+add_units_navigation(TRUE);
+draw($tool_content, 2, null, $head_content);
