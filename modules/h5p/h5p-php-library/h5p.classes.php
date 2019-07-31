@@ -931,7 +931,7 @@ class H5PValidator {
     // We're done with the zip file, clean up the stuff
     $zip->close();
     $tmpZipPath = $tmpPath; // sets the global tmpZipPath to the .h5p file
-    //unlink($tmpPath); // we're not deleting the .h5p file yet : custom gunet code (more like lack of code)
+    //unlink($tmpPath); // we're not deleting the .h5p file yet
 
     if ($canInstall) {
       // Process and validate libraries using the unpacked library folders

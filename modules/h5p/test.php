@@ -83,31 +83,30 @@ function show_content($content_id){
 	global $course_code;
 	global $webDir;
 
-	$workspace_dir = $webDir . "/courses/" . $course_code . "/h5p/workspace";
 	$content_dir = $webDir . "/courses/" . $course_code . "/h5p/content/" . $content_id;
-	$h5p = scandir($content_dir,1);
-	$sentence_we_need = '.h5p';
-	foreach($h5p as $h){
-		if(strpos($h, $sentence_we_need)){
-			$h5p = $h;
+	$workspace_dir = $content_dir . "/workspace";
+	if(file_exists($workspace_dir)){
+		return true;
+	}else{
+		$h5p = scandir($content_dir,1);
+		$sentence_we_need = '.h5p';
+		foreach($h5p as $h){
+			if(strpos($h, $sentence_we_need)){
+				$h5p = $h;
+			}
 		}
-	}
-	deleteDirectory($workspace_dir);
-	mkdir($workspace_dir);
-	$content = $content_dir . "/" . $h5p;
-	var_dump($content);
-	var_dump($h5p);
-	var_dump($workspace_dir);
-	var_dump($content_dir);
+		mkdir($workspace_dir);
+		$content = $content_dir . "/" . $h5p;
 
-	$zip = new ZipArchive;
-	$res = $zip->open($content);
-	if($res){
-		$zip->extractTo($workspace_dir);
-		if($zip->close()){
-			return true;
-		}else{
-			return false;
+		$zip = new ZipArchive;
+		$res = $zip->open($content);
+		if($res){
+			$zip->extractTo($workspace_dir);
+			if($zip->close()){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 
@@ -142,6 +141,7 @@ function delete_content($content_id){
 	$content_dir = $webDir . "/courses/" . $course_code . "/h5p/content/" . $content_id;
 	deleteDirectory($content_dir);
 	$sql = Database::get()->query("DELETE FROM h5p_content WHERE course_id = ?d AND id = ?d ",$course_id,$content_id);
+	$sql = Database::get()->query("DELETE FROM h5p_content_dependency WHERE content_id = ?d ",$content_id);
 	$content_dir_mod = $webDir . "/courses/h5p/content/" . $content_id;
 	var_dump($content_dir);
 	var_dump($content_dir_mod);
