@@ -31,6 +31,9 @@ switch ($_REQUEST['res_type']) {
     case 'chat_actions':
         require_once "../chat/messageList.php";
         exit;
+    case 'forum';
+        require_once "../forum/viewforum.php";
+        exit;
     case 'forum_topic';
         require_once "../forum/viewtopic.php";
         exit;

@@ -33,6 +33,7 @@ require_once 'modules/forum/functions.php';
 if (!add_units_navigation(true)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 }
+$unit = isset($_GET['unit'])? intval($_GET['unit']): null;
 
 if ($is_editor) {
     load_js('tools.js');
@@ -272,11 +273,13 @@ if (count($result) > 0) { // topics found
     foreach ($result as $myrow) {
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
-        $last_post_datetime = $myrow->post_time;        
+        $last_post_datetime = $myrow->post_time;
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
         $pagination = '';
-        $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
+        $topiclink = $unit?
+            "view.php?course=$course_code&amp;&amp;res_type=forum_topic&amp;topic=$topic_id&amp;forum=$forum_id&amp;unit=$unit":
+            "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
         if ($topic_locked) {
             $image = icon('fa-lock');
         } else {

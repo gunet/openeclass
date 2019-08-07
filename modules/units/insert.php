@@ -391,7 +391,8 @@ function insert_exercise($id) {
  */
 function insert_forum($id) {
     global $course_code, $course_id;
-    if(isset($_POST['forum'])){
+
+    if (isset($_POST['forum'])){
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['forum'] as $for_id) {
             $order++;
@@ -402,7 +403,7 @@ function insert_forum($id) {
                                             WHERE id = ?d
                                             AND forum_id = ?d", $topic_id, $forum_id);
                 $q = Database::get()->query("INSERT INTO unit_resources
-                                                SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                                                SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d, comments = ''",
                                             $id, $topic->title, $order, $topic->id);
             } else {
                 $forum_id = $ids[0];
@@ -411,7 +412,7 @@ function insert_forum($id) {
                                             AND course_id = ?d", $forum_id, $course_id);
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'forum', title = ?s,
                                                 comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
-                                        $id, $forum->name, $forum->desc, $order, $forum->id);
+                                        $id, $forum->name, q($forum->desc), $order, $forum->id);
             }
             $uresId = $q->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);

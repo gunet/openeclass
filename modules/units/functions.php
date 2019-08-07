@@ -726,8 +726,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $title = q($title);
     if ($type == 'forum') {
-        $link = "<a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$ft_id&amp;unit=$id'>";
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id&amp;unit=$id'>";
         $forumlink = $link . "$title</a>";
+        $imagelink = icon('fa-comments');
     } else {
         $r = Database::get()->querySingle("SELECT forum_id FROM forum_topic WHERE id = ?d", $ft_id);
         if (!$r) { // check if it was deleted
