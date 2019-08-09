@@ -37,6 +37,9 @@ switch ($_REQUEST['res_type']) {
     case 'forum_topic';
         require_once "../forum/viewtopic.php";
         exit;
+    case 'forum_new_topic';
+        require_once "../forum/newtopic.php";
+        exit;
     case 'forum_topic_reply';
         require_once "../forum/reply.php";
         exit;

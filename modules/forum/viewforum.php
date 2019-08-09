@@ -72,7 +72,9 @@ if ($can_post) {
     $tool_content .=
             action_bar(array(
                 array('title' => $langNewTopic,
-                    'url' => "newtopic.php?course=$course_code&amp;forum=$forum_id",
+                    'url' => $unit?
+                        "view.php?course=$course_code&amp;res_type=forum_new_topic&amp;forum=$forum_id&amp;unit=$unit":
+                        "newtopic.php?course=$course_code&amp;forum=$forum_id",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
@@ -261,15 +263,15 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS p
 
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
-	<table class='table-default'>
-	<tr class='list-header'>
-	  <th class='forum_td'>$langTopics</th>
-	  <th class='text-center'>$langAnswers</th>
-	  <th class='text-center'>$langSender</th>
-	  <th class='text-center'>$langSeen</th>
-	  <th class='text-center'>$langLastMsg</th>
-	  <th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>
-	</tr>";
+        <table class='table-default'>
+        <tr class='list-header'>
+          <th class='forum_td'>$langTopics</th>
+          <th class='text-center'>$langAnswers</th>
+          <th class='text-center'>$langSender</th>
+          <th class='text-center'>$langSeen</th>
+          <th class='text-center'>$langLastMsg</th>
+          <th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>
+        </tr>";
     foreach ($result as $myrow) {
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;

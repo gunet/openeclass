@@ -95,66 +95,65 @@ if ($is_editor) {
                   'button-class' => 'btn-success'),
             array('title' => $langAdd.' '.$langInsertExercise,
                   'url' => $base_url . 'exercise',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-pencil-square-o',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_EXERCISE)),
             array('title' => $langAdd.' '.$langInsertDoc,
                   'url' => $base_url . 'doc',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-folder-open-o',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_DOCS)),
             array('title' => $langAdd.' '.$langInsertText,
                   'url' => $base_url . 'text',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-file-text-o',
                   'level' => 'secondary'),
             array('title' => $langAdd.' '.$langInsertLink,
                   'url' => $base_url . 'link',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-link',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_LINKS)),
             array('title' => $langAdd.' '.$langLearningPath1,
                   'url' => $base_url . 'lp',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-ellipsis-h',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_LP)),
             array('title' => $langAdd.' '.$langInsertVideo,
                   'url' => $base_url . 'video',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-film',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_VIDEO)),
             array('title' => $langAdd.' '.$langInsertForum,
                   'url' => $base_url . 'forum',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary',
-                  'show' => visible_module(MODULE_ID_FORUM)),
+                  'icon' => 'fa fa-comments',
+                  'level' => 'secondary'),
             array('title' => $langAdd.' '.$langInsertEBook,
                   'url' => $base_url . 'ebook',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-book',
                   'level' => 'secondary',
                   'show' =>  !is_module_disable(MODULE_ID_EBOOK)),
             array('title' => $langAdd.' '.$langInsertWork,
                   'url' => $base_url . 'work',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-flask',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_ASSIGN)),
             array('title' => $langAdd.' '.$langInsertPoll,
                   'url' => $base_url . 'poll',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-question-circle',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_QUESTIONNAIRE)),
             array('title' => $langAdd.' '.$langInsertWiki,
                   'url' => $base_url . 'wiki',
-                  'icon' => 'fa fa-paste',
+                  'icon' => 'fa fa-wikipedia',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_WIKI)),
             array('title' => $langAdd.' '.$langInsertChat,
                 'url' => $base_url . 'chat',
-                'icon' => 'fa fa-paste',
+                'icon' => 'fa fa-exchange',
                 'level' => 'secondary',
                 'show' => !is_module_disable(MODULE_ID_CHAT)),
             array('title' => $langAdd.' '.$langInsertTcMeeting,
                 'url' => $base_url . 'tc',
-                'icon' => 'fa fa-paste',
+                'icon' => 'fa fa-exchange',
                 'level' => 'secondary',
                 'show' => (!is_module_disable(MODULE_ID_TC) && is_configured_tc_server()))
             )) .
@@ -171,7 +170,7 @@ if ($is_editor) {
 }
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
-    if ($info) {        
+    if ($info) {
         $pageName = $info->title;
         $comments = standard_text_escape(trim($info->comments));
         $course_start_week = $course_finish_week = '';
@@ -181,7 +180,7 @@ if (isset($id) and $id !== false) {
         if (!(($info->finish_week == '0000-00-00') or (is_null($info->finish_week)))) {
             $course_finish_week = " $langTill " . nice_format($info->finish_week);
         }
-    } else {        
+    } else {
         Session::Messages($langUnknownResType);
         redirect_to_home_page("courses/$course_code/");
     }
@@ -207,7 +206,7 @@ foreach (array('previous', 'next') as $i) {
         $access_check = "";
     } else {
         $access_check = "AND public = 1";
-    }    
+    }
     $q = Database::get()->querySingle("SELECT id, title, start_week, finish_week, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
@@ -247,12 +246,12 @@ $tool_content .= "
                 <div class='panel-title h3'>
                     " . q($pageName) . "
                     <h6 class='text-muted'>
-                        $course_start_week                                               
+                        $course_start_week
                         $course_finish_week
                     </h6>
                 </div>
           </div>
-        <div class='panel-body'>          
+        <div class='panel-body'>
          <div>
             $comments
          </div>";
@@ -281,7 +280,7 @@ $q = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
                    $visibility_check $check_start_week
              ORDER BY `order`", $course_id);
 $course_units_options ='';
-foreach ($q as $info) {    
+foreach ($q as $info) {
     $selected = ($info->id == $id) ? ' selected ' : '';
     $course_units_options .= "<option value='$info->id'$selected>" .
             htmlspecialchars(ellipsize($info->title, 50)) .
