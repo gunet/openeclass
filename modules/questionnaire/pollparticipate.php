@@ -90,13 +90,17 @@ function printPollForm() {
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName;
+    $pageName, $lang_rate1, $lang_rate5;
 
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     $head_content .= "
+    <style>.slider-tick-label { font-size: 12px; white-space: normal; }</style>
     <script>
         $(function() {
-            $('.grade_bar').slider();
+            $('.grade_bar').slider({
+               ticks: [1, 2, 3, 4, 5],
+               ticks_labels: ['$lang_rate1', '', '', '', '$lang_rate5']
+            });
             setInterval(function() {
                 $.ajax({
                   type: 'POST',
@@ -304,7 +308,7 @@ function submitPoll() {
             $eventData->module = MODULE_ID_QUESTIONNAIRE;
             $eventData->resource = intval($pid);
             ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
-            
+
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
             require_once 'include/sendMail.inc.php';
