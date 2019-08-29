@@ -2925,6 +2925,7 @@ $langNoForumTopic = "Δεν υπάρχουν περιοχές συζητήσεω
 $langForumPostFlatViewAsc = "Με ημερομηνία (πρόσφατο τελευταίο)";
 $langForumPostFlatViewDesc = "Με ημερομηνία (πρόσφατο πρώτο)";
 $langForumPostThreadedView = "Ομαδοποιημένα";
+$langForumAttachmentDeleted = "Το αρχείο διαγράφηκε";
 
 /* * ***************************************************************
  * questionnaire.php
@@ -4348,7 +4349,8 @@ $langUnableDeletePost = "Αδύνατο να διαγραφεί το μήνυμ�
 $langPostRemoved = "Αδύνατο να ανανεωθεί το προηγούμενο μήνυμά σας - το τελευταίο μήνυμα έχει μεταφερθεί";
 $langUnableDeleteTopic = "Αδύνατο να διαγραφεί το θέμα από τη βάση δεδομένων ";
 $langTopicInformation = "Δεν ήταν δυνατή η ερώτηση στη βάση δεδομένων.";
-$langUserTopicInformation = "<p>Δεν ήταν δυνατή η ερώτηση στη βάση δεδομένων.";
+$langUserTopicInformation = "Δεν ήταν δυνατή η ερώτηση στη βάση δεδομένων.";
+$langDeleteAttachment = "Διαγραφή συνημμένου";
 
 /* * ***********************************************************
   newtopic.php

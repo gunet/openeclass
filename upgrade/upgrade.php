@@ -3964,6 +3964,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '3.8', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.8'));
 
+        // user settings table
         if (!DBHelper::tableExists('user_settings')) {
             Database::get()->query("CREATE TABLE `user_settings` (
                 `setting_id` int(11) NOT NULL, 
@@ -3980,6 +3981,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             ) $tbl_options");
         }
 
+        // forum attachments
+        if (!DBHelper::fieldExists('forum_post', 'topic_filepath')) {
+            Database::get()->query("ALTER TABLE forum_post ADD `topic_filepath` varchar(200) DEFAULT NULL");
+        }
+
+        if (!DBHelper::fieldExists('forum_post', 'topic_filename')) {
+            Database::get()->query("ALTER TABLE forum_post ADD `topic_filename` varchar(200) DEFAULT NULL");
+        }
+        // chat agent
         if (!DBHelper::fieldExists('conference', 'chat_activity_id')) {
             Database::get()->query('ALTER TABLE conference ADD chat_activity_id int(11)');
         }

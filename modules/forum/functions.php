@@ -338,3 +338,22 @@ function triggerForumGame($courseId, $uid, $eventName) {
 
     ForumEvent::trigger($eventName, $eventData);
 }
+
+
+/**
+ * @brief download forum post attached file
+ * @param $file_id
+ */
+function send_forum_post_file($file_id) {
+    global $webDir, $course_code, $unit, $is_editor;
+
+    $info = Database::get()->querySingle("SELECT topic_filepath, topic_filename FROM forum_post WHERE id = ?d", $file_id);
+    // security check
+    if (!$info or !(visible_module(MODULE_ID_FORUM) or $unit or $is_editor)) {
+        return false;
+    }
+    $actual_filename = $webDir . "/courses/" . $course_code . "/forum/" . $info->topic_filepath;
+    // download it
+    send_file_to_client($actual_filename, $info->topic_filename, null, true);
+    exit;
+}

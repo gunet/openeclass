@@ -526,7 +526,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_post` (
     `poster_id` INT(10) NOT NULL DEFAULT 0,
     `post_time` DATETIME,
     `poster_ip` VARCHAR(45) DEFAULT '' NOT NULL,
-    `parent_post_id` INT(10) NOT NULL DEFAULT 0) $tbl_options");
+    `parent_post_id` INT(10) NOT NULL DEFAULT 0,
+    `topic_filepath` varchar(200) DEFAULT NULL,
+    `topic_filename` varchar(200) DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
     `id` INT(10) NOT NULL auto_increment,
