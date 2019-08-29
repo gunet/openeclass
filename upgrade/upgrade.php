@@ -1,25 +1,3 @@
-
-    // upgrade queries for version 3.8
-    if (version_compare($oldversion, '3.8', '<')) {
-        updateInfo(-1, sprintf($langUpgForVersion, '3.8'));
-
-        if (!DBHelper::tableExists('user_settings')) {
-            Database::get()->query("CREATE TABLE `user_settings` (
-                `setting_id` int(11) NOT NULL, 
-                `user_id` int(11) NOT NULL, 
-                `course_id` int(11) DEFAULT NULL, 
-                `value` int(11) NOT NULL DEFAULT '0', 
-                PRIMARY KEY (`setting_id`,`user_id`), 
-                KEY `user_id` (`user_id`), 
-                KEY `course_id` (`course_id`), 
-                  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
-                    ON DELETE CASCADE ON UPDATE CASCADE, 
-                  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
-                    ON DELETE CASCADE ON UPDATE CASCADE 
-            ) $tbl_options");
-        }
-    }
-
 <?php
 /* ========================================================================
  * Open eClass 3.6
@@ -3981,10 +3959,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query('ALTER TABLE conference ADD agent_created boolean not null default false');
     }
 
+
     // upgrade queries for version 3.8
     if (version_compare($oldversion, '3.8', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.8'));
 
+        // user settings table
         if (!DBHelper::tableExists('user_settings')) {
             Database::get()->query("CREATE TABLE `user_settings` (
                 `setting_id` int(11) NOT NULL, 
@@ -4000,8 +3980,47 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ON DELETE CASCADE ON UPDATE CASCADE 
             ) $tbl_options");
         }
-    }
 
+        // forum attachments
+        if (!DBHelper::fieldExists('forum_post', 'topic_filepath')) {
+            Database::get()->query("ALTER TABLE forum_post ADD `topic_filepath` varchar(200) DEFAULT NULL");
+        }
+
+        if (!DBHelper::fieldExists('forum_post', 'topic_filename')) {
+            Database::get()->query("ALTER TABLE forum_post ADD `topic_filename` varchar(200) DEFAULT NULL");
+        }
+        // chat agent
+        if (!DBHelper::fieldExists('conference', 'chat_activity_id')) {
+            Database::get()->query('ALTER TABLE conference ADD chat_activity_id int(11)');
+        }
+
+        if (!DBHelper::fieldExists('conference', 'agent_id')) {
+            Database::get()->query('ALTER TABLE conference ADD agent_id int(11)');
+        }
+
+        if (!DBHelper::tableExists('colmooc_user')) {
+            Database::get()->query("CREATE TABLE IF NOT EXISTS `colmooc_user` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `user_id` INT(11) NOT NULL,
+                `colmooc_id` INT(11) NOT NULL,
+                PRIMARY KEY (id),
+                UNIQUE KEY (user_id),
+                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('colmooc_user_session')) {
+            Database::get()->query("CREATE TABLE IF NOT EXISTS `colmooc_user_session` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `user_id` INT(11) NOT NULL,
+                `activity_id` INT(11) NOT NULL,
+                `session_id` TEXT NOT NULL,
+                `session_token` TEXT NOT NULL,
+                `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+                PRIMARY KEY (id),
+                UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
+                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+        }
+    }
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);

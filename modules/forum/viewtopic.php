@@ -30,6 +30,7 @@ require_once 'modules/forum/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/course_settings.php';
 require_once 'include/user_settings.php';
 require_once 'include/log.class.php';
@@ -49,11 +50,11 @@ if ($is_editor) {
         <script type='text/javascript'>
             $(document).ready(function() {
                 $('.delete-btn').click(function(e) {
-                    var link = $(this).attr('href');                    
+                    var link = $(this).attr('href');
                     e.preventDefault();
                     bootbox.confirm('" . js_escape($langConfirmDelete) . "', function(result) {
                         if (result) {
-                            document.location.href = link;                            
+                            document.location.href = link;
                         }
                     });
                 });
@@ -74,8 +75,13 @@ if (isset($_GET['all'])) {
     $paging = true;
 }
 
-if (isset($_GET['unit'])) {
-    $unit = intval($_GET['unit']);
+$unit = isset($_GET['unit'])? $_GET['unit']: null;
+
+// get attached forum topic file (if any)
+if (isset($_GET['get'])) {
+    if (!send_forum_post_file($_GET['get'])) {
+        Session::Messages($langFileNotFound, 'alert-danger');
+    }
 }
 
 if (isset($_GET['forum'])) {
@@ -150,6 +156,12 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
         ));
     }
     Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');
+    // remove forum post attachment (if any)
+    $fp = Database::get()->querySingle("SELECT topic_filepath FROM forum_post WHERE id = ?d", $post_id);
+    if ($fp) {
+        unlink("$webDir/courses/$course_code/forum/$fp->topic_filepath");
+    }
+    // remove forum post entries
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
@@ -168,7 +180,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     if ($total == 1) { // if exists one post in topic
         Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic, $forum);
         Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic);
-        Database::get()->query("UPDATE forum SET 
+        Database::get()->query("UPDATE forum SET
                                     num_topics = num_topics-1,
                                     num_posts = num_posts-1
                                 WHERE id = ?d
@@ -221,7 +233,7 @@ if (isset($_SESSION['message'])) {
 if ($topic_locked == 1) {
     $tool_content .= "<div class='alert alert-warning'>$langErrorTopicLocked</div>";
 } else {
-    if (isset($unit)) {
+    if ($unit) {
         $back_url = "../units/index.php?course=$course_code&id=$unit";
         $reply_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&amp;forum=$forum&amp;unit=$unit";
     } else {
@@ -249,7 +261,7 @@ if ($topic_locked == 1) {
     } else if ($view == POSTS_THREADED_VIEW) {
         $selected_view_2 = 'selected';
     }
-    if (isset($unit)) {
+    if ($unit) {
         $selection_url = "../units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum&unit=$unit";
         $hidden_inputs = "<input type='hidden' name='res_type' value='forum_topic'>
                           <input type='hidden' name='unit' value='$unit'>";
@@ -260,7 +272,7 @@ if ($topic_locked == 1) {
 
     $tool_content .= "
     <div class='row'>
-        <div class='col-md-12'>            
+        <div class='col-md-12'>
             <form class='form-horizontal' name='viewselect' action='$selection_url' method='get'>
                 <div class='form-group'>
                     <label class='col-sm-8 control-label'>$langQuestionView</label>
@@ -276,7 +288,7 @@ if ($topic_locked == 1) {
                         </select>
                     </div>
                 </div>
-            </form>        
+            </form>
         </div>
     </div>";
 
@@ -301,7 +313,7 @@ if ($view != POSTS_THREADED_VIEW) {
 
         $last_page = $start - POSTS_PER_PAGE;
         if (isset($start) && $start > 0) {
-            if (isset($unit)) {
+            if ($unit) {
                 $pagination_btns = "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page&amp;unit=$unit'><span aria-hidden='true'>&laquo;</span></a></li>";
             } else {
                 $pagination_btns = "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'><span aria-hidden='true'>&laquo;</span></a></li>";
@@ -315,7 +327,7 @@ if ($view != POSTS_THREADED_VIEW) {
             } else if ($start == 0 && $x == 0) {
                 $pagination_btns .= "<li class='active'><a href='#'>1</a></li>";
             } else {
-                if (isset($unit)) {
+                if ($unit) {
                     $pagination_btns .= "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$x&amp;unit=$unit'>$times</a></li>";
                 } else {
                     $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a></li>";
@@ -326,7 +338,7 @@ if ($view != POSTS_THREADED_VIEW) {
         }
         if (($start + POSTS_PER_PAGE) < $total) {
             $next_page = $start + POSTS_PER_PAGE;
-            if (isset($unit)) {
+            if ($unit) {
                 $pagination_btns .= "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page&amp;unit=$unit'><span aria-hidden='true'>&raquo;</span></a></li>";
             } else {
                 $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'><span aria-hidden='true'>&raquo;</span></a></li>";
@@ -341,7 +353,7 @@ if ($view != POSTS_THREADED_VIEW) {
                 $pagination_btns
                 </ul>
                 <div class='pull-right'>";
-                if (isset($unit)) {
+                if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langAllOfThem</a>";
                 } else {
                     $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
@@ -355,7 +367,7 @@ if ($view != POSTS_THREADED_VIEW) {
             <div class='clearfix margin-bottom-fat'>
               <nav>
                 <div class='pull-right'>";
-                if (isset($unit)) {
+                if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
                 } else {
                     $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
@@ -454,7 +466,7 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
             $pagination_btns
             </ul>
             <div class='pull-right'>";
-            if (isset($unit)) {
+            if ($unit) {
                 $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langAllOfThem</a>";
             } else {
                 $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
@@ -469,7 +481,7 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
             <div class='clearfix margin-bottom-fat'>
               <nav>
                 <div class='pull-right'>";
-                if (isset($unit)) {
+                if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
                 } else {
                     $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
@@ -496,9 +508,9 @@ draw($tool_content, 2, null, $head_content);
  */
 function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offset, $count) {
 
-    global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $unit, $langFrom2,
+    global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $langAttachedFile, $unit, $langFrom2,
            $langMessages, $course_code, $is_editor, $topic, $forum, $uid, $langMessage, $head_content,
-           $langModify, $langDelete, $langSent, $dateTimeFormatShort;
+           $langModify, $langDelete, $langSent, $dateTimeFormatShort, $webDir;
 
     $content = $reply_button_link = '';
     if (!isset($user_stats[$myrow->poster_id])) {
@@ -527,12 +539,14 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     }
 
     if ($is_editor) {
-        $content .= "<a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id . "&amp;topic=$topic&amp;forum=$forum'>
-                     <span class='fa fa-edit' title='$langModify' data-toggle='tooltip' data-original-title='$langModify'></span>
-                     </a>";
-        $content .= "<a class='delete-btn' href='../forum/viewtopic.php?course=$course_code&amp;post_id=$myrow->id&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>
-                     <span class='fa fa-times' title='$langDelete' data-toggle='tooltip' data-original-title='$langDelete'></span>
-                     </a>";
+        $content .= "&nbsp;<a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id .
+                        "&amp;topic=$topic&amp;forum=$forum'>" .
+                            "<span class='fa fa-edit' title='$langModify' data-toggle='tooltip' " .
+                                "data-original-title='$langModify'></span></a>&nbsp;" .
+                    "<a class='delete-btn' href='../forum/viewtopic.php?course=$course_code&amp;post_id=" . $myrow->id .
+                        "&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>" .
+                            "<span class='fa fa-times' title='$langDelete' data-toggle='tooltip' " .
+                                "data-original-title='$langDelete'></span></a>";
     }
     $content .= "</h5></div>";
 
@@ -575,12 +589,21 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     /* message body */
     $content .= "<div class='col-sm-offset-1' style='margin-top: 40px;'><span class='text-justify'>$message</span></div>";
-
+    // attached file (if any)
+    if (!empty($myrow->topic_filename)) {
+        $actual_filename = $webDir . "/courses/" . $course_code . "/forum/" . $myrow->topic_filepath;
+        $content .= "<div class='row margin-top-thin'>
+                        <span class='help-block'>&nbsp;&nbsp;$langAttachedFile: " .
+                            "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$myrow->id" .
+                            ($unit? "&amp;unit=$unit&amp;res_type=forum_topic": '') .
+                            "'>" .q($myrow->topic_filename) ."</a> <i class='fa fa-save'></i> (" . format_file_size(filesize($actual_filename)) . ")</span>
+                    </div>";
+    }
     $content .= "</div>";
     /* footer */
     $content .= "<div class='panel-footer'>";
     if ($topic_locked != 1 and $count > 1) { // `reply` button except first post (and if topic is not locked)
-        if (isset($unit)) {
+        if ($unit) {
             $reply_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id&amp;unit=$unit";
         } else {
             $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id";

@@ -27,6 +27,24 @@ $require_editor = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/search/indexer.class.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+
+load_js('tools.js');
+
+$head_content .= "
+        <script type='text/javascript'>
+            $(document).ready(function() {
+                $('#filedelete').click(function(e) {
+                    var link = $(this).attr('href');                    
+                    e.preventDefault();
+                    bootbox.confirm('" . js_escape($langConfirmDelete) . "', function(result) {
+                        if (result) {
+                            document.location.href = link;                            
+                        }
+                    });
+                });
+            });
+        </script>";
 
 if (isset($_REQUEST['forum'])) {
     $forum_id = intval($_REQUEST['forum']);
@@ -37,6 +55,17 @@ if (isset($_REQUEST['forum'])) {
 if (isset($_REQUEST['topic'])) {
     $topic_id = intval($_REQUEST['topic']);
 }
+
+// delete post attachment
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $fp = Database::get()->querySingle("SELECT topic_filepath FROM forum_post WHERE id = ?d", $id);
+    unlink("$webDir/courses/$course_code/forum/$fp->topic_filepath");
+    Database::get()->query("UPDATE forum_post SET topic_filepath = '', topic_filename = '' WHERE id = ?d", $id);
+    Session::Messages($langForumAttachmentDeleted, 'alert-success');
+    header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id");
+}
+
 if (isset($_REQUEST['post_id'])) {
     $post_id = intval($_REQUEST['post_id']);
 }
@@ -90,23 +119,38 @@ if (isset($_POST['submit'])) {
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
 
-    $myrow = Database::get()->querySingle("SELECT p.post_text, p.post_time, t.title
+    $myrow = Database::get()->querySingle("SELECT p.id, p.post_text, p.post_time, p.topic_filepath, p.topic_filename, t.title
                         FROM forum_post p, forum_topic t
                         WHERE p.id = ?d
                         AND p.topic_id = t.id", $post_id);
     $message = str_replace('{', '&#123;', $myrow->post_text);
     list($day, $time) = explode(' ', $myrow->post_time);
     $first_post = is_first_post($topic_id, $post_id);
-    $subject_field = '';
+    $subject_field = $attached_file_content = '';
     if ($first_post) {
         $subject_field .= "
-                    <div class='form-group'>
-                        <label for='title' class='col-sm-2 control-label'>$langSubject:</label>
-                        <div class='col-sm-10'>
-                            <input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
-                        </div>
-                    </div>";            
-    }    
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$langSubject:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
+                </div>
+            </div>";
+    }
+
+    if (!empty($myrow->topic_filename)) {
+        $actual_filename = $webDir . "/courses/" . $course_code . "/forum/" . $myrow->topic_filepath;
+        $attached_file_content =
+            "<div class='form-group'>
+                <label class='col-sm-2 control-label'>$langAttachedFile:</label>
+                <div class='col-sm-10'>
+                    " .q($myrow->topic_filename) ." (" . format_file_size(filesize($actual_filename)) . ") <a id='filedelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;delete=$myrow->id'>
+                        <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteAttachment' title='' data-toggle='tooltip'></span>
+                    </a>
+                </div>                        
+            </div>";
+    }
+
+
     $tool_content .= "
         <div class='form-wrapper'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
@@ -115,6 +159,7 @@ if (isset($_POST['submit'])) {
             <input type='hidden' name='forum' value='$forum_id'>
             <fieldset>
                 $subject_field
+                $attached_file_content
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langBodyMessage:</label>
                     <div class='col-sm-10'>
