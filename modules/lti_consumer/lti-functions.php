@@ -371,6 +371,7 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
     if (strlen($clean_description) > LTI_DESCRIPTION_MAX_LENGTH) {
         $clean_description = substr($clean_description, 0, LTI_DESCRIPTION_MAX_LENGTH);
     }
+    $clean_course_title = str_replace(array("\r", "\n", "\""), " ", course_id_to_title($course_id));
 
     $launch_data = array(
         "user_id" => $uid,
@@ -383,7 +384,7 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
         "lis_person_name_given" => $lis_person_name_given,
         "lis_person_contact_email_primary" => $lis_person_contact_email_primary,
         "context_id" => $_SERVER['SERVER_NAME'] . ":" . $course_id,
-        "context_title" => course_id_to_title($course_id),
+        "context_title" => $clean_course_title,
         "context_label" => $course_code,
         "context_type" => "CourseSection",
         "lis_course_section_sourcedid" => $_SERVER['SERVER_NAME'] . ":" . $course_id,
