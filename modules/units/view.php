@@ -6,7 +6,6 @@
  * Time: 2:38 μμ
  */
 
-
 switch ($_REQUEST['res_type']) {
     case 'assignment':
         require_once '../work/index.php';
@@ -30,6 +29,12 @@ switch ($_REQUEST['res_type']) {
         exit;
     case 'chat_actions':
         require_once "../chat/messageList.php";
+        exit;
+    case 'questionnaire':
+        require_once "../questionnaire/pollparticipate.php";
+        exit;
+    case 'questionnaire_results':
+        require_once "../questionnaire/pollresults.php";
         exit;
     case 'forum';
         require_once "../forum/viewforum.php";

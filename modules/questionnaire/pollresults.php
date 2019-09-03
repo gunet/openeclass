@@ -134,10 +134,15 @@ if ($is_editor) {
             </ul>
         </div>";
 }
+if (isset($_REQUEST['unit_id'])) {
+    $back_link = "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]";
+} else {
+    $back_link = "index.php?course=$course_code";
+}
 $tool_content .= action_bar(array(
             array(
                 'title' => $langBack,
-                'url' => "index.php?course=$course_code",
+                'url' => $back_link,
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'
             )
