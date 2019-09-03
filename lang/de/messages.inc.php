@@ -1947,7 +1947,6 @@ $langVideoDeleted = "Alle Links auf das Video wurden gelöscht";
 $langURL = "Video Server URL (externer Link)";
 $langcreator = "Urheber";
 $langpublisher = "Herausgeber";
-$langdate = "Datum";
 $langNoVideo = "Für diesen Kurs gibt es keine verfügbaren Videos";
 $langEmptyVideoTitle = "Bitte geben Sie einen Titel für Ihr Video ein";
 $langAddImage = "Bild hinzufügen";

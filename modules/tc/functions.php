@@ -540,7 +540,7 @@ function bbb_session_details() {
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
         $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
-        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langdate, $langBBBNoServerForRecording;
+        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langDate, $langBBBNoServerForRecording;
 
 
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
@@ -568,7 +568,7 @@ function bbb_session_details() {
                            <table class='table-default'>
                              <tr class='list-header'>
                                <th style='width: 50%'>$langTitle</th>
-                               <th class='text-center'>$langdate</th>
+                               <th class='text-center'>$langDate</th>
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";

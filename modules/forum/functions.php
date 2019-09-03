@@ -237,7 +237,7 @@ function find_child_posts($result, $post_data, $offset) {
  */
 function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $topic_date) {
     global $logo, $langNewForumNotify, $course_code, $course_id, $langForumFrom,
-        $uid, $langBodyForumNotify, $langInForums, $urlServer, $langdate, $langSender,
+        $uid, $langBodyForumNotify, $langInForums, $urlServer, $langDate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
         $langLinkUnsubscribe, $langHere, $langMailBody, $langMailSubject;
 
@@ -256,7 +256,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
                 <li><span><b>$langCategory:</b></span> <span>" . q($cat_name) . "</span></li>
                 <li><span><b>$langForum:</b></span> <span><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($forum_name) . "</a></span></li>
                 <li><span><b>$langForumFrom :</b></span> <span>$name</span></li>
-                <li><span><b>$langdate:</b></span> <span> $topic_date </span></li>
+                <li><span><b>$langDate:</b></span> <span> $topic_date </span></li>
             </ul>
         </div>
     </div>";

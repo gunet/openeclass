@@ -197,7 +197,7 @@ if (isset($_POST['submit'])) {
                             <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
                                 <ul id='forum-category'>
                                     <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
-                                    <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
+                                    <li><span><b>$langDate:</b></span> <span>$datetime</span></li>
                                 </ul>
                         </div>
                     </div>";
@@ -253,7 +253,7 @@ if (isset($_POST['submit'])) {
                             <div id='header-title'>$langNewDropboxFile$in_course.</div>
                                 <ul id='forum-category'>
                                     <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
-                                    <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
+                                    <li><span><b>$langDate:</b></span> <span>$datetime</span></li>
                                 </ul>
                         </div>
                     </div>";
