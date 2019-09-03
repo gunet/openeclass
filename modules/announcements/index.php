@@ -521,7 +521,7 @@ if ($is_editor) {
                             <div id='header-title'>$langAnnHasPublished <a href='{$urlServer}courses/$course_code/'>" . q($title) . "</a>.</div>
                             <ul id='forum-category'>
                                 <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
-                                <li><span><b>$langdate:</b></span> <span class='left-space'>$datetime</span></li>
+                                <li><span><b>$langDate:</b></span> <span class='left-space'>$datetime</span></li>
                             </ul>
                         </div>
                     </div>";

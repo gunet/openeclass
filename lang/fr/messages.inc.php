@@ -2138,7 +2138,6 @@ $langVideoDeleted = "Tous les liens ont été supprimés";
 $langURL = "Lien externe vers le serveur vidéo ou audio";
 $langcreator = "Créateur";
 $langpublisher = "Éditeur";
-$langdate = "Date";
 $langNoVideo = "Il n'y a pas de fichiers multimédia disponibles";
 $langEmptyVideoTitle = "Please enter a title";
 $langAddImage = "Ajoutez une image";

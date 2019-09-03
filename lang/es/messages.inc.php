@@ -1988,7 +1988,6 @@ $langVideoDeleted = "Todos los enlaces al vídeo borrados";
 $langURL = "Video Server URL";
 $langcreator = "Autor";
 $langpublisher = "Editor";
-$langdate = "Date";
 $langNoVideo = "No disponibles archivos de video o enlaces";
 $langEmptyVideoTitle = "Por favor, introduzca un título para el vídeo";
 $langAddImage = "Incluye una imagen";

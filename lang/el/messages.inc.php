@@ -3981,7 +3981,6 @@ $langVideoDeleted = "Όλοι οι σύνδεσμοι διαγράφηκαν";
 $langURL = "Εξωτερικός σύνδεσμος προς τον εξυπηρετητή ήχου ή βίντεο";
 $langcreator = "Δημιουργός";
 $langpublisher = "Εκδότης";
-$langdate = "Ημερομηνία";
 $langNoVideo = "Δεν υπάρχουν διαθέσιμα πολυμεσικά αρχεία";
 $langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τίτλο για το αρχείο σας";
 $langColorboxCurrent = "πολυμέσο {current} από {total}";

@@ -227,7 +227,7 @@ function printPolls() {
         $langParticipate,  $langHasParticipated, $langSee,
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
-        $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langdate;
+        $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate;
 
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -298,7 +298,7 @@ function printPolls() {
               <table class='table-default'>
                 <tr class='list-header'>
                     <th style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
-                    <th class='text-center'>$langdate</th>";
+                    <th class='text-center'>$langDate</th>";
 
         if ($is_editor) {
             $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>";
