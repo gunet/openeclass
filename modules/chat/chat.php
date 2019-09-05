@@ -213,7 +213,11 @@ if (!$conference_activity) {
         if ($sessionId && $sessionToken) {
             // Redirect student to colMOOC chat
             $colmooc_url = $colmoocapp->getParam(ColmoocApp::CHAT_URL)->value() . "/?session_id=" . $sessionId . "&session_token=" . $sessionToken;
-            $chatindex_url = $urlAppend . "modules/chat/index.php";
+            if (isset($_REQUEST['unit'])) {
+                $chatindex_url = $urlAppend . "modules/units/?course=" . $course_code . "&id=" . intval($_REQUEST['unit']);
+            } else {
+                $chatindex_url = $urlAppend . "modules/chat/index.php";
+            }
             $tool_content .= "<div class='alert alert-info'>" . $langColmoocFollowLink
                 . ': <a id="studentChat" href="#" title="' . $langChat . '">' . $langChat . '</a>'
                 . "</div>";
