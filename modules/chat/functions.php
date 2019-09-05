@@ -193,7 +193,7 @@ function colmooc_register_student($conferenceId) {
             "lang" => $language,
             "language" => $language,
             "nationality" => "gr",
-            "timezone" => "EET"
+            "timezone" => "+2"
         )));
 
         $responseStr = custom_request($add_student_url, $add_student_data, "POST", COLMOOC_JSON_HEAD);

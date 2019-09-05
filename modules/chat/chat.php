@@ -213,8 +213,10 @@ if (!$conference_activity) {
         if ($sessionId && $sessionToken) {
             // Redirect student to colMOOC chat
             $colmooc_url = $colmoocapp->getParam(ColmoocApp::CHAT_URL)->value() . "/?session_id=" . $sessionId . "&amp;session_token=" . $sessionToken;
+            $chatindex_url = $urlAppend . "modules/chat/index.php";
             $tool_content .= "<div class='alert alert-info'>" . $langColmoocFollowLink
-                . ': <a id="studentChat" href="' . $colmooc_url . '" target="_blank" title="' . $langChat . '">' . $langChat . '</a>'
+                //. ': <a id="studentChat" href="' . $colmooc_url . '" target="_blank" title="' . $langChat . '">' . $langChat . '</a>'
+                . ': <a id="studentChat" href="#" title="' . $langChat . '">' . $langChat . '</a>'
                 . "</div>";
         } else {
             $tool_content .= "<div class='alert alert-info'>" . $langColmoocRegisterStudentFailed . "</div>";
@@ -258,6 +260,12 @@ $head_content .= "<script>
                         '</div>',
                 buttons: bts
             });
+        });
+        
+        $('#studentChat').click(function (e) {
+            console.log('hello1');
+            window.open('" . $colmooc_url . "', '_blank');
+            window.location.href = '" . $chatindex_url . "';
         });
     });
     </script>";

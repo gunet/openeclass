@@ -351,12 +351,12 @@ if ($display == TRUE) {
         foreach ($q as $conf) {
 
             // validate colmooc
-            if ($conf->chat_activity && $conf->agent_created && $conf->chat_activity_id && $conf->agent_id) {
-                $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $conf->chat_activity_id);
-                if ($colmoocUserSession && $colmoocUserSession->session_status == 1) {
-                    continue;
-                }
-            }
+            // if ($conf->chat_activity && $conf->agent_created && $conf->chat_activity_id && $conf->agent_id) {
+            //    $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $conf->chat_activity_id);
+            //    if ($colmoocUserSession && $colmoocUserSession->session_status == 1) {
+            //        continue;
+            //    }
+            //}
 
             $enabled_conference = ($conf->status == 'active')? "<span class='text-success'><span class='fa fa-eye'></span> $langVisible</span>" : "<span class='text-danger'><span class='fa fa-eye-slash'></span> $langInvisible</span>";
             ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
