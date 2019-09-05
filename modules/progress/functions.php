@@ -322,6 +322,7 @@ function display_course_completion() {
  * @global type $langDocumentAsModuleLabel
  * @global type $langMediaAsModuleLabel
  * @global type $langOfEBook
+ * @global type $langOfGradebook
  * @global type $langOfPoll
  * @global type $langWiki
  * @global type $langOfTopicForums
@@ -342,7 +343,6 @@ function display_course_completion() {
  * @global type $langUsers
  * @global type $langValue
  * @global type $langOfCourseCompletion
- * @global type $langGradebook
  * @param type $element
  * @param type $certificate_id
  */
@@ -355,8 +355,8 @@ function display_activities($element, $id) {
            $langOfTopicForums, $langOfBlogComments, $langConfirmDelete,
            $langOfLearningPath, $langDelete, $langEditChange,
            $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langExport, $langBack, $langUsers,
-           $langValue, $langOfForums, $langOfCourseCompletion, $langGradebook, $course_id;
+           $langAdd, $langExport, $langBack, $langUsers, $langOfGradebook,
+           $langValue, $langOfForums, $langOfCourseCompletion, $course_id;
     /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
 
     if ($element == 'certificate') {
@@ -461,7 +461,7 @@ function display_activities($element, $id) {
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
             'icon' => 'fa fa-area-chart fa-fw',
             'class' => ''),
-        array('title' => $langGradebook,
+        array('title' => $langOfGradebook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . GradebookEvent::ACTIVITY,
             'icon' => 'fa fa-sort-numeric-desc space-after-icon',
             'class' => '')),

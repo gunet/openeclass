@@ -22,8 +22,7 @@ $langAnd = "et";
 $langCoursesHeader = "Cours";
 $langClosed = "fermés";
 $langOpen = "ouverts";
-$langSemiopen = "sur inscription"
-;
+$langSemiopen = "sur inscription";
 $langUsers = "Utilisateurs";
 $langUsersS = "utilisateurs";
 $langUser = "Utilisateur";
@@ -5069,6 +5068,7 @@ $langOfBlog = "blog";
 $langOfMultimediaLinks = "Multimedia Links";
 $langOfEBook = "E-book";
 $langOfPoll = "Poll";
+$langOfGradebook = "Gradebook";
 $langOfTopicForums = "Forum topics";
 $langOfForums = "Forum";
 $langOfBlogComments = "Blog comments";

@@ -4858,6 +4858,7 @@ $langOfBlog = "blog";
 $langOfMultimediaLinks = "Multimedia Links";
 $langOfEBook = "E-book";
 $langOfPoll = "Poll";
+$langOfGradebook = "Gradebook";
 $langOfTopicForums = "Forum topics";
 $langOfForums = "Forum";
 $langOfBlogComments = "Blog comments";
