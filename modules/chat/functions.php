@@ -174,7 +174,7 @@ function colmooc_register_student($conferenceId) {
         $update_student_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/student/update";
         $update_student_data = json_encode(array(array(
             "platform_id" => $colmoocapp->getParam(ColmoocApp::PLATFORM_ID)->value(),
-            "colmooc_id" => $colstudentId,
+            "colstudent_id" => $colstudentId,
             "student_id" => $uid,
             "first_name" => $u->givenname,
             "last_name" => $u->surname
