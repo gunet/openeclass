@@ -1672,7 +1672,7 @@ function add_gradebook_other_activity($gradebook_id) {
 function insert_grades($gradebook_id, $actID) {
 
     global $tool_content, $langGradebookEdit, $gradebook, $langTheField,
-           $course_code, $langFormErrors, $langGradebookGrade;
+           $course_code, $langFormErrors, $langGradebookGrade, $course_id;
 
     $errors = [];
     $v = new Valitron\Validator($_POST['usersgrade']);
@@ -1689,18 +1689,20 @@ function insert_grades($gradebook_id, $actID) {
     }
     if($v->validate()) {
         foreach ($_POST['usersgrade'] as $userID => $userInp) {
+            $uid = getDirectReference($userID);
             if ($userInp == '') {
-                Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
+                Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $uid);
             } else {
                 // //check if there is record for the user for this activity
                 $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book
-                                            WHERE gradebook_activity_id = ?d AND uid = ?d LIMIT 1", $actID, getDirectReference($userID));
+                                            WHERE gradebook_activity_id = ?d AND uid = ?d LIMIT 1", $actID, $uid);
                 if ($checkForBook) { // update
                     Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d", $userInp/$gradebook->range, $checkForBook->id);
                 } else { // insert
-                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", getDirectReference($userID), $actID, $userInp/$gradebook->range, '');
+                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $uid, $actID, $userInp/$gradebook->range, '');
                 }
             }
+            triggerGame($course_id, $uid, $gradebook_id);
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -2008,4 +2010,14 @@ function get_gradebook_activity_title($gradebook_id, $activity_id) {
                                                 AND gradebook_id = ?d", $activity_id, $gradebook_id)->title;
 
     return $act_title;
+}
+
+function triggerGame($courseId, $uid, $gradebookId) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = GradebookEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_GRADEBOOK;
+    $eventData->resource = intval($gradebookId);
+    GradebookEvent::trigger(GradebookEvent::UPDGRADE, $eventData);
 }

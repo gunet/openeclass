@@ -342,6 +342,7 @@ function display_course_completion() {
  * @global type $langUsers
  * @global type $langValue
  * @global type $langOfCourseCompletion
+ * @global type $langGradebook
  * @param type $element
  * @param type $certificate_id
  */
@@ -355,7 +356,7 @@ function display_activities($element, $id) {
            $langOfLearningPath, $langDelete, $langEditChange,
            $langInsertWorkCap, $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
-           $langValue, $langOfForums, $langOfCourseCompletion, $course_id;
+           $langValue, $langOfForums, $langOfCourseCompletion,  $langGradebook, $course_id;
     /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
 
     if ($element == 'certificate') {
@@ -459,6 +460,10 @@ function display_activities($element, $id) {
         array('title' => "$langCourseParticipation",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
             'icon' => 'fa fa-area-chart fa-fw',
+            'class' => ''),
+        array('title' => $langGradebook,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . GradebookEvent::ACTIVITY,
+            'icon' => 'fa fa-sort-numeric-desc space-after-icon',
             'class' => '')),
         array(
             'secondary_title' => $langAdd,
@@ -595,6 +600,9 @@ function insert_activity($element, $element_id, $activity) {
             break;
         case 'participation':
             display_available_participation($element, $element_id);
+            break;
+        case GradebookEvent::ACTIVITY:
+            display_available_gradebooks($element, $element_id);
             break;
         default: break;
         }
@@ -1626,6 +1634,73 @@ function display_available_participation($element, $element_id) {
     }
 }
 
+/**
+ * @brief gradebooks display form
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $langNoGradeBooks
+ * @global type $course_code
+ * @global type $langAvailableGradebooks
+ * @global type $langStart
+ * @global type $langFinish
+ * @global type $langChoice
+ * @global type $langAddModulesButton
+ * @global type $langOperator
+ * @global type $langValue
+ * @param type $element
+ * @param type $element_id
+ */
+function display_available_gradebooks($element, $element_id) {
+
+    global $course_id, $tool_content, $langNoGradeBooks, $course_code,
+           $langAvailableGradebooks, $langStart, $langFinish, $langChoice,
+           $langAddModulesButton, $langOperator, $langValue;
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d 
+                                    AND active = 1
+                                    AND end_date > " . DBHelper::timeAfter() . "
+                                    AND id NOT IN
+                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                        AND resource != ''
+                                        AND activity_type = '" . GradebookEvent::ACTIVITY . "'
+                                        AND module = " . MODULE_ID_GRADEBOOK . ")
+                                    ORDER BY title", $course_id, $element_id);
+
+    if (count($result) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoGradeBooks</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+            "<input type='hidden' name = '$element_name' value='$element_id'>" .
+            "<table class='table-default'>" .
+            "<tr class='list-header'>" .
+            "<th class='text-left'>$langAvailableGradebooks</th>" .
+            "<th style='width:160px;'>$langStart</th>" .
+            "<th style='width:160px;'>$langFinish</th>" .
+            "<th style='width:5px;'>$langOperator</th>" .
+            "<th style='width:50px;'>$langValue</th>" .
+            "<th style='width:10px;' class='text-center'>$langChoice</th>" .
+            "</tr>";
+
+        foreach ($result as $row) {
+            $gradebook_id = $row->id;
+            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date)->format('d/m/Y H:i');
+            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date)->format('d/m/Y H:i');
+            $tool_content .= "<tr>" .
+                "<td>" . q($row->title) . "</td>" .
+                "<td class='text-center'>" . $start_date . "</td>" .
+                "<td class='text-center'>" . $end_date . "</td>" .
+                "<td>". selection(get_operators(), "operator[$gradebook_id]") . "</td>".
+                "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$gradebook_id]' value=''></td>" .
+                "<td class='text-center'><input name='gradebook[]' value='$gradebook_id' type='checkbox'></td>" .
+                "</tr>";
+        }
+
+        $tool_content .= "</table>" .
+            "<div align='right'><input class='btn btn-primary' type='submit' name='add_gradebook' value='$langAddModulesButton'></div></th></form>";
+    }
+}
+
 
 /**
  * @brief display badge / certificate settings
@@ -2251,5 +2326,6 @@ function criteria_with_operators() {
                  ForumEvent::ACTIVITY,
                  ForumTopicEvent::ACTIVITY,
                  BlogEvent::ACTIVITY,
-                 CommentEvent::BLOG_ACTIVITY);
+                 CommentEvent::BLOG_ACTIVITY,
+                 GradebookEvent::ACTIVITY);
 }
