@@ -171,11 +171,16 @@ function colmooc_register_student($conferenceId) {
         // api update student
         $update_student_url = COLMOOC_BASE_URL . "/colmoocapi/api/student/update";
         $update_student_data = json_encode(array(array(
-            "platform_id" => COLMOOC_PLATFORM_ID,
-            "colmooc_id" => $colstudentId,
+            "colstudent_id" => $colstudentId,
             "student_id" => $uid,
             "first_name" => $u->givenname,
-            "last_name" => $u->surname
+            "last_name" => $u->surname,
+            "last_name" => $u->surname,
+            "gender" => "male",
+            "lang" => $language,
+            "language" => $language,
+            "nationality" => "gr",
+            "timezone" => "+2"
         )));
 
         custom_request($update_student_url, $update_student_data, "POST", COLMOOC_JSON_HEAD);
