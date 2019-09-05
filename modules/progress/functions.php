@@ -272,7 +272,7 @@ function display_course_completion() {
             $tool_content .= "
                         <div class='row res-table-row'>
                             <div class='col-sm-2'>
-                                <i class='fa fa-certificate fa-3x' aria-hidden='true'></i>
+                                <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
                             </div>
                             <div class='col-sm-9'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
@@ -322,6 +322,7 @@ function display_course_completion() {
  * @global type $langDocumentAsModuleLabel
  * @global type $langMediaAsModuleLabel
  * @global type $langOfEBook
+ * @global type $langOfGradebook
  * @global type $langOfPoll
  * @global type $langWiki
  * @global type $langOfTopicForums
@@ -342,7 +343,6 @@ function display_course_completion() {
  * @global type $langUsers
  * @global type $langValue
  * @global type $langOfCourseCompletion
- * @global type $langGradebook
  * @param type $element
  * @param type $certificate_id
  */
@@ -354,10 +354,9 @@ function display_activities($element, $id) {
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langOfTopicForums, $langOfBlogComments, $langConfirmDelete,
            $langOfLearningPath, $langDelete, $langEditChange,
-           $langInsertWorkCap, $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
-           $langValue, $langOfForums, $langOfCourseCompletion,  $langGradebook, $langGradeOfCourseCompletion,
-           $course_id;
+           $langDocumentAsModuleLabel, $langCourseParticipation,
+           $langAdd, $langExport, $langBack, $langUsers, $langOfGradebook,
+           $langValue, $langOfForums, $langOfCourseCompletion, $course_id;
     /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
 
     if ($element == 'certificate') {
@@ -384,18 +383,9 @@ function display_activities($element, $id) {
             false
         );
 
-    // check if course completion is enabled
-    $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge WHERE course_id = ?d AND bundle = -1", $course_id)->active;
-
-    // check if current element is course completion badge
-    $cc_is_current = false;
-    if ($element == 'badge') {
-        $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
-        if ($bundle && $bundle == -1) {
-            $cc_is_current = true;
-        }
-    }
-
+    // check if course completion is enable
+    $cc_enable = Database::get()->querySingle("SELECT active FROM badge "
+                                    . "WHERE course_id = ?d AND bundle = -1", $course_id)->active;
     // certificate details
     $tool_content .= display_settings($element, $id);
 
@@ -403,82 +393,78 @@ function display_activities($element, $id) {
     $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
 
     $addActivityBtn = action_button(array(
-        array('title' => "$langOfCourseCompletion",
+        array('title' => $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecompletion",
-            'icon' => 'fa fa-certificate',
-            'show' => !$cc_enable),
-        array('title' => "$langOfAssignment",
+            'icon' => 'fa fa-trophy',
+            'show' => $cc_enable),
+        array('title' => $langOfAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
             'class' => ''),
-        array('title' => "$langExerciseAsModuleLabel",
+        array('title' => $langExerciseAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ExerciseEvent::ACTIVITY,
             'icon' => 'fa fa-pencil-square-o',
             'class' => ''),
-        array('title' => "$langOfBlog",
+        array('title' => $langOfBlog,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
             'icon' => 'fa fa-columns fa-fw',
             'class' => ''),
-        array('title' => "$langOfBlogComments",
+        array('title' => $langOfBlogComments,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
             'icon' => 'fa fa-comment fa-fw',
             'class' => ''),
-        /*array('title' => "$langOfCourseComments",
+        /*array('title' => $langOfCourseComments,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
               'icon' => 'fa fa-edit space-after-icon',
               'class' => ''),*/
-        array('title' => "$langOfForums",
+        array('title' => $langOfForums,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumEvent::ACTIVITY,
             'icon' => 'fa fa-comments fa-fw',
             'class' => ''),
-        array('title' => "$langOfTopicForums",
+        array('title' => $langOfTopicForums,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumTopicEvent::ACTIVITY,
             'icon' => 'fa fa-comments fa-fw',
             'class' => ''),
-        array('title' => "$langOfLearningPath",
+        array('title' => $langOfLearningPath,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lp",
             'icon' => 'fa fa-ellipsis-h fa-fw',
             'class' => ''),
-        /*array('title' => "$langOfLikesSocial",
+        /*array('title' => $langOfLikesSocial,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likesocial",
               'icon' => 'fa fa-edit space-after-icon',
               'class' => ''),
-        array('title' => "$langOfLikesForum",
+        array('title' => $langOfLikesForum,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likeforum",
               'icon' => 'fa fa-edit space-after-icon',
               'class' => ''),*/
-        array('title' => "$langDocumentAsModuleLabel",
+        array('title' => $langDocumentAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
             'icon' => 'fa fa-folder-open-o fa-fw',
             'class' => ''),
-        array('title' => "$langMediaAsModuleLabel",
+        array('title' => $langMediaAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=multimedia",
             'icon' => 'fa fa-edit space-after-icon',
             'class' => ''),
-        array('title' => "$langOfEBook",
+        array('title' => $langOfEBook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=ebook",
             'icon' => 'fa fa-book fa-fw',
             'class' => ''),
-        array('title' => "$langOfPoll",
+        array('title' => $langOfPoll,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
             'icon' => 'fa fa-question-circle fa-fw',
             'class' => ''),
-        array('title' => "$langWiki",
+        array('title' => $langWiki,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=wiki",
             'icon' => 'fa fa-wikipedia fa-fw',
             'class' => ''),
-        array('title' => "$langCourseParticipation",
+        array('title' => $langCourseParticipation,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
             'icon' => 'fa fa-area-chart fa-fw',
             'class' => ''),
-        array('title' => $langGradebook,
+        array('title' => $langOfGradebook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . GradebookEvent::ACTIVITY,
             'icon' => 'fa fa-sort-numeric-desc space-after-icon',
-            'class' => ''),
-        array('title' => $langGradeOfCourseCompletion,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
-            'icon' => 'fa fa-trophy',
-            'show' => $cc_enable && !$cc_is_current)),
+            'class' => '')),
         array(
             'secondary_title' => $langAdd,
             'secondary_icon' => '',
@@ -617,9 +603,6 @@ function insert_activity($element, $element_id, $activity) {
             break;
         case GradebookEvent::ACTIVITY:
             display_available_gradebooks($element, $element_id);
-            break;
-        case CourseCompletionEvent::ACTIVITY:
-            display_available_coursecompletiongrade($element, $element_id);
             break;
         default: break;
         }
@@ -1718,47 +1701,6 @@ function display_available_gradebooks($element, $element_id) {
     }
 }
 
-/**
- * @brief coursecompletion grade display form
- * @param $element
- * @param $element_id
- */
-function display_available_coursecompletiongrade($element, $element_id) {
-
-    global $tool_content, $langAddModulesButton, $langGradeCourseCompletion,
-           $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
-           $langChoice, $langOperator;
-
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    $res = Database::get()->queryArray("SELECT id FROM ${element}_criterion WHERE $element = ?d
-                                            AND resource IS NULL
-                                            AND activity_type = '" . CourseCompletionEvent::ACTIVITY . "'
-                                            AND module = " . MODULE_ID_PROGRESS, $element_id);
-    if (count($res) > 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
-    } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-            "<input type='hidden' name='$element_name' value='$element_id'>" .
-            "<table class='table-default'>" .
-            "<tr class='list-header'>" .
-            "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
-            "<th style='width:5px;'>&nbsp;$langOperator</th>" .
-            "<th style='width:30px;'>$langValue</th>" .
-            "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-            "</tr>";
-
-        $tool_content .= "<tr>" .
-            "<td>" . $langGradeCourseCompletion . "</td>" .
-            "<td>". selection(get_operators(), "operator") . "</td>".
-            "<td class='text-center'><input style='width:30px;' type='text' name='threshold' value=''></td>" .
-            "<td class='text-center'><input name='" . CourseCompletionEvent::ACTIVITY . "' value='1' type='checkbox'></td>" .
-            "</tr>";
-
-        $tool_content .= "</table>" .
-            "<div align='right'><input class='btn btn-primary' type='submit' name='add_coursecompletiongrade' value='$langAddModulesButton'></div></th></form>";
-    }
-}
-
 
 /**
  * @brief display badge / certificate settings
@@ -2003,7 +1945,7 @@ function certificate_settings($element, $element_id = 0) {
 
 
 /**
- * @brief student view certificates / badges
+ * @brief student view certificates / badges / course completion
  * @global type $uid
  * @global type $course_id
  * @global type $urlServer
@@ -2017,12 +1959,54 @@ function certificate_settings($element, $element_id = 0) {
 function student_view_progress() {
 
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
-            $langBadges, $course_code, $langCertificates, $langPrintVers;
+            $langBadges, $course_code, $langCertificates, $langPrintVers, $langCourseCompletion;
 
     require_once 'Game.php';
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
     $found = false;
+
+    $course_completion_id = is_course_completion_active(); // is course completion active?
+    if (isset($course_completion_id) and $course_completion_id > 0) {
+        $found = true;
+        $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                            <div class='inner-heading'>
+                                <div class='row'>
+                                    <div class='col-sm-7'>
+                                        <strong>$langCourseCompletion</strong>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class='res-table-wrapper'>
+                                <div class='row res-table-row'>
+                                    <div class='col-sm-2'>
+                                        <i class='fa fa-trophy fa-4x' aria-hidden='true'></i>
+                                    </div>
+                                    <div class='col-sm-9'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>
+                                        <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
+                                            <p class='progress-bar active from-control-static' role='progressbar' 
+                                                    aria-valuenow='\".str_replace('%','',$percentage).\"' 
+                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        ";
+    }
+    
+    
     $iter = array('certificate', 'badge');
     foreach ($iter as $key) {
         ${'game_'.$key} = array();
@@ -2040,52 +2024,79 @@ function student_view_progress() {
                 . "AND (b.expires IS NULL OR b.expires > NOW())";
         $sql = Database::get()->queryArray($gameQ, $uid, $course_id);
         foreach ($sql as $game) {
-            if ($key == 'badge') { // get badge icon
-                $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id =
-                                                         (SELECT icon FROM badge WHERE id = ?d)", $game->id)->filename;
-                }
                 ${'game_'.$key}[] = $game;
             }
         }
-
+        // display badges
         if (count($game_badge) > 0) {
             $found = true;
-            $tool_content .= "<div class='row'>";
-            $tool_content .= "<div class='badge-container'>";
-            $tool_content .= "<h4>$langBadges</h4>";
-            $tool_content .= "<div class='form-wrapper'>";
-            $tool_content .= "<div class='clearfix'>";
-            foreach ($game_badge as $key => $badge) {
-                $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned));
-                $dateAssigned = ($badge->completed == 1) ? $formatted_date : '';
-                $faded = ($badge->completed != 1) ? "faded" : '';
-                $tool_content .= "<div class='col-xs-6 col-sm-3'>";
-                $tool_content .= "<a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>
-                    <img class='$faded center-block' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
-                    <p class='text-center' style='padding-top: 10px; font-size: larger;'>
-                        " . ellipsize($badge->title, 40) . "
-                    </p>";
 
-                if ($badge->completed != 1) {
-                    $tool_content .= "<div class='not_completed'>
-                        <div class='certificate_panel_percentage_compact center-block'>" . round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%</div>
-                        </div>";
-                }
-                $tool_content .= "</a></div>";
+            $tool_content .= "
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='panel panel-default'>
+                            <div class='panel-body'>
+                                <div class='inner-heading'>
+                                    <div class='row'>
+                                        <div class='col-sm-7'>
+                                            <strong>$langBadges</strong>
+                                        </div>                                    
+                                    </div>
+                                </div>";
+
+            foreach ($game_badge as $key => $badge) {
+                // badge icon
+                $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id =
+                                                         (SELECT icon FROM badge WHERE id = ?d)", $badge->id)->filename;
+
+                $faded = ($badge->completed != 1) ? "faded" : '';
+                $badge_percentage = round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%";
+
+                $tool_content .= "<div class='res-table-wrapper'>
+                                    <div class='row res-table-row'>
+                                        <div class='col-sm-2'>                                            
+                                            <img class = '$faded center-block' style='max-height: 60px;' class='img-responsive block-center' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
+                                        </div>";
+                                    $tool_content .= "
+                                        <div class='col-sm-9'>
+                                        <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>                                    
+                                            <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
+                                                <p class='progress-bar active from-control-static' role='progressbar'
+                                                        aria-valuenow='" . str_replace('%','',$badge_percentage) . "'
+                                                        aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $badge_percentage;'>$badge_percentage
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
             }
             $tool_content .= "</div></div></div></div>";
         }
 
+        // display certificates
         if (count($game_certificate) > 0) {
             $found = true;
-            $tool_content .= "<div class='row'>";
-            $tool_content .= "<div class='badge-container'>
-                    <h4>$langCertificates</h4><hr>";
-            $tool_content .= "<div class='form-wrapper'>";
-            $tool_content .= "<div class='clearfix'>";
+
+            $tool_content .= "
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='panel panel-default'>
+                            <div class='panel-body'>
+                                <div class='inner-heading'>
+                                    <div class='row'>
+                                        <div class='col-sm-7'>
+                                            <strong>$langCertificates</strong>
+                                        </div>                                    
+                                    </div>
+                                </div>";
+
+
             foreach ($game_certificate as $key => $certificate) {
                 $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
                 $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';
+
+                $tool_content .= "<div class='res-table-wrapper'>";
+
                 $tool_content .= "<div class='col-xs-12 col-sm-6 col-xl-4'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
                 $tool_content .= "<div class='certificate_panel'>
@@ -2110,6 +2121,8 @@ function student_view_progress() {
                             "%</div>";
                 }
                 $tool_content .= "</div></a>";
+                $tool_content .= "</div>";
+
                 $tool_content .= "</div>";
             }
             $tool_content .= "</div></div></div></div>";
@@ -2143,21 +2156,40 @@ function display_users_progress($element, $element_id) {
            $langSurname, $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
 
     if ($element == 'certificate') {
-        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate
-                                            WHERE certificate = ?d", $element_id);
-        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate WHERE
-                                                    completed = 1 AND certificate = ?d", $element_id)->t;
+        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
+                                            JOIN course_user ON user_certificate.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d
+                                                AND certificate = ?d", $course_id, $element_id);
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate
+                                            JOIN course_user ON user_certificate.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d 
+                                                AND completed = 1 
+                                                AND certificate = ?d", $course_id,$element_id)->t;
         $param_name = 'certificate_id';
     } else {
         $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_badge
-                                            WHERE badge = ?d", $element_id);
-        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge WHERE
-                                                    completed = 1 AND badge = ?d", $element_id)->t;
+                                            JOIN course_user ON user_badge.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d
+                                                AND badge = ?d", $course_id, $element_id);
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge 
+                                            JOIN course_user ON user_badge.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d 
+                                                AND completed = 1 
+                                                AND badge = ?d", $course_id, $element_id)->t;
         $param_name = 'badge_id';
     }
-    $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user
-                                        WHERE `user`.`id` = `course_user`.`user_id`
-                                        AND `course_user`.`course_id` = ?d", $course_id)->total;
+    $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user
+                                        WHERE status = " .USER_STUDENT . " 
+                                            AND editor = 0                                         
+                                            AND course_id = ?d", $course_id)->total;
 
     if (count($sql) > 0) {
         $tool_content .= "<div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div>";
@@ -2385,6 +2417,5 @@ function criteria_with_operators() {
                  ForumTopicEvent::ACTIVITY,
                  BlogEvent::ACTIVITY,
                  CommentEvent::BLOG_ACTIVITY,
-                 GradebookEvent::ACTIVITY,
-                 CourseCompletionEvent::ACTIVITY);
+                 GradebookEvent::ACTIVITY);
 }
