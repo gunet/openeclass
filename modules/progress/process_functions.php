@@ -415,6 +415,31 @@ function add_course_completion_to_certificate($element_id) {
     
 }
 
+/**
+ * @brief add gradebook db entries in certificate criterion
+ * @param type $element
+ * @param type $element_id
+ * @return type
+ */
+function add_gradebook_to_certificate($element, $element_id) {
+    if (isset($_POST['gradebook'])) {
+        foreach ($_POST['gradebook'] as $datakey => $data) {
+            Database::get()->query("INSERT INTO ${element}_criterion
+                                    SET $element = ?d,
+                                        module= " . MODULE_ID_GRADEBOOK . ",
+                                        resource = ?d,
+                                        activity_type = '" . GradebookEvent::ACTIVITY . "',
+                                        operator = ?s,
+                                        threshold = ?f",
+                $element_id,
+                $_POST['gradebook'][$datakey],
+                $_POST['operator'][$data],
+                $_POST['threshold'][$data]);
+        }
+    }
+    return;
+}
+
 
 /**
  * @brief get certificate title
@@ -883,6 +908,8 @@ function resource_usage($element, $element_resource_id) {
  * @global type $langAllActivities
  * @global type $langCourseParticipation
  * @global type $langCourseHoursParticipation
+ * @global type $langGradebook
+ * @param type $element
  * @param type $resource_id
  * @return type
  */
@@ -892,7 +919,7 @@ function get_resource_details($element, $resource_id) {
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire,
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
-            $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation;
+            $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook;
 
     $data = array('type' => '', 'title' => '');
 
@@ -988,6 +1015,10 @@ function get_resource_details($element, $resource_id) {
         case CourseParticipationEvent::ACTIVITY:
                 $type = "$langCourseParticipation";
                 $title = "$langCourseHoursParticipation";
+            break;
+        case GradebookEvent::ACTIVITY:
+            $title = Database::get()->querySingle("SELECT title FROM gradebook WHERE gradebook.course_id = ?d AND gradebook.id = ?d", $course_id, $resource)->title;
+            $type = "$langGradebook";
             break;
         default:
                 $title = "$langAllActivities";
