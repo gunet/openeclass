@@ -133,6 +133,9 @@ define('SETTING_COURSE_FORUM_NOTIFICATIONS', 21);
 define('SETTING_DOCUMENTS_PUBLIC_WRITE', 22);
 define('SETTING_OFFLINE_COURSE', 23);
 
+// Available user settings
+define('SETTING_FORUM_POST_VIEW', 1);
+
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
 define('MULTIPLE_ANSWER', 2);
