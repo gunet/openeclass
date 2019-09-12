@@ -168,7 +168,7 @@ $langCronInfo = "Ενημερωτικά στοιχεία για τις προγ�
 $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
 $langExternalTools = 'Εξωτερικά εργαλεία';
-$langDisableModules = "Εργαλεία $langsOfCourse";
+$langDisableModules = "Απενεργοποιημένα υποσυστήματα";
 $langDisableModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω
     υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα $langsCourses της
     πλατφόρμας.";
@@ -2916,7 +2916,7 @@ $langTopicDataChanged = "Το θέμα τροποποιήθηκε!";
 $langForumPost = "Μήνυμα περιοχής συζητήσεων";
 $langForumPostReply = "Απάντηση σε αυτό το μήνυμα";
 $langForumPostParent = "Αυτό το μήνυμα είναι απάντηση στο μήνυμα ";
-$langForumPostParentDel = "Αυτό το μήνυμα είναι απάντηση σε ένα μήνυμα που έχει διαγραφεί.";
+$langForumPostParentDel = "Αυτό το μήνυμα είναι απάντηση σε ένα μήνυμα που έχει διαγραφεί";
 $langErrorTopicLocked = "Το θέμα συζήτησης είναι κλειδωμένο.";
 $langLockTopic = "Κλείδωμα θέματος";
 $langUnlockTopic = "Ξεκλείδωμα θέματος";
