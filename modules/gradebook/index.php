@@ -565,7 +565,7 @@ if ($is_editor) {
         $log_details = array('id' => getDirectReference($_GET['delete_gb']),
                              'title' => get_gradebook_title(getDirectReference($_GET['delete_gb'])));
         delete_gradebook(getDirectReference($_GET['delete_gb']));
-        triggerGame($course_id, 3, getDirectReference($_GET['delete_gb']));
+        triggerGameGradebook($course_id, 3, getDirectReference($_GET['delete_gb']));
         Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_DELETE, $log_details);
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
@@ -595,7 +595,7 @@ if ($is_editor) {
                         Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $activity->id, $attend/$gradebook_range, '');
                     }
                 }
-                triggerGame($course_id, $userID, $gradebook_id);
+                triggerGameGradebook($course_id, $userID, $gradebook_id);
                 $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
             }
         }
