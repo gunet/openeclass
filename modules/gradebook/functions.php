@@ -1702,7 +1702,7 @@ function insert_grades($gradebook_id, $actID) {
                     Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $uid, $actID, $userInp/$gradebook->range, '');
                 }
             }
-            triggerGame($course_id, $uid, $gradebook_id);
+            triggerGameGradebook($course_id, $uid, $gradebook_id);
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -2012,7 +2012,7 @@ function get_gradebook_activity_title($gradebook_id, $activity_id) {
     return $act_title;
 }
 
-function triggerGame($courseId, $uid, $gradebookId) {
+function triggerGameGradebook($courseId, $uid, $gradebookId) {
     $eventData = new stdClass();
     $eventData->courseId = $courseId;
     $eventData->uid = $uid;
