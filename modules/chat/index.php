@@ -263,6 +263,7 @@ if ($is_editor) {
         }
 }
 if ($display == TRUE) {
+    $q = array();
     if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langAdd,
