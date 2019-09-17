@@ -17,17 +17,16 @@ class action {
 
         // add duration to previous
         $result = Database::get()->querySingle("SELECT id, TIME_TO_SEC(TIMEDIFF(NOW(), last_update)) AS diff, module_id
-                                                FROM actions_daily
-                                                WHERE user_id = ?d
-                                                AND course_id = ?d
-                                                AND day = DATE(NOW())
-                                                ORDER BY last_update DESC LIMIT 1", $uid, $course_id);
+            FROM actions_daily
+            WHERE user_id = ?d
+            AND course_id = ?d
+            AND day = DATE(NOW())
+            ORDER BY last_update DESC, id DESC LIMIT 1", $uid, $course_id);
         if ($result) {
-            $last_id = $result->id;
             $diff = $result->diff;
             $last_module = $result->module_id;
             // Update previous action with corect duration
-            if ($last_id && $diff < DEFAULT_MAX_DURATION) {
+            if ($diff < DEFAULT_MAX_DURATION) {
                 $this->appendStats($uid, $last_module, $course_id, 0, $diff - DEFAULT_MAX_DURATION, $diff, false);
             }
         }
@@ -35,36 +34,20 @@ class action {
         if ($action_type_id != $exit) {
             $this->appendStats($uid, $module_id, $course_id, 1, DEFAULT_MAX_DURATION, DEFAULT_MAX_DURATION, true);
         }
-
+        $this->triggerAnalytics($uid, $course_id);
         $this->triggerGame($uid, $course_id);
-    }
-
-    private function triggerGame ($uid, $course_id) {
-        global $is_admin, $is_course_admin, $is_editor;
-
-        if ($is_admin || $is_course_admin || $is_editor) {
-            return;
-        }
-
-        require_once 'modules/progress/CourseParticipationEvent.php';
-        $eventData = new stdClass();
-        $eventData->uid = $uid;
-        $eventData->courseId = $course_id;
-        $eventData->activityType = CourseParticipationEvent::ACTIVITY;
-        $eventData->module = MODULE_ID_USAGE;
-        CourseParticipationEvent::trigger(CourseParticipationEvent::STATSAPPENDED, $eventData);
     }
 
     private function appendStats($uid, $module_id, $course_id, $hits, $diffduration, $induration, $update_lastdt = false) {
 
-        $today = date('Y-m-d');        
+        $today = date('Y-m-d');
         $stid = 0;
         $result = Database::get()->querySingle("SELECT id
                                     FROM actions_daily
                                     WHERE user_id = ?d
                                     AND module_id = ?d
                                     AND course_id = ?d
-                                    AND day = '" . $today . "'", $uid, $module_id, $course_id);        
+                                    AND day = '" . $today . "' FOR UPDATE", $uid, $module_id, $course_id);
         $lu = '';
         if ($update_lastdt) {
             $lu = ' , last_update = NOW() ';
@@ -73,20 +56,22 @@ class action {
         if ($result) {
             $stid = $result->id;
             Database::get()->query("UPDATE actions_daily SET
-                    	hits = hits + $hits,
-                    	duration = duration + $diffduration
-                    	$lu
-                    	WHERE id = $stid");
+                        hits = hits + $hits,
+                        duration = duration + $diffduration
+                        $lu
+                        WHERE id = $stid");
         } else {
             Database::get()->query("INSERT INTO actions_daily SET
-                    	user_id = ?d,
-                    	module_id = ?d,
-                    	course_id = ?d,
-                    	hits = 1,
-                    	duration = $induration,
-                    	day = '" . $today . "'
-                    	$lu", $uid, $module_id, $course_id);            
-        }        
+                        user_id = ?d,
+                        module_id = ?d,
+                        course_id = ?d,
+                        hits = 1,
+                        duration = $induration,
+                        day = '" . $today . "'
+                        $lu", $uid, $module_id, $course_id);
+        }
+
+        $this->triggerGame($uid, $course_id);
     }
 
     // ophelia 2006-08-02: per month and per course
@@ -161,14 +146,14 @@ class action {
                          AND day >= '$start_date'
                          AND day < '$end_date'", $module_id, $course_id);
             $visits = $row2->visits;
-            $total_dur = $row2->total_dur;            
-            
-	    $result_3 = Database::get()->query("INSERT INTO actions_summary SET 
-                                module_id  = ?d, 
-                                course_id  = ?d, 
-                                visits = ?d, 
-                                start_date = '$start_date', 
-                                end_date = '$end_date', 
+            $total_dur = $row2->total_dur;
+
+        $result_3 = Database::get()->query("INSERT INTO actions_summary SET
+                                module_id  = ?d,
+                                course_id  = ?d,
+                                visits = ?d,
+                                start_date = '$start_date',
+                                end_date = '$end_date',
                                 duration = ?d", $module_id, $course_id, $visits, $total_dur);
 
            $result_4 = Database::get()->query("DELETE FROM actions_daily
@@ -184,6 +169,41 @@ class action {
         $start_date = date('Y-m-01 00:00:00', $stmp);
 
         return array($start_date, $end_date, $end_stmp);
+    }
+
+    // gamification
+    private function triggerGame ($uid, $course_id) {
+        global $is_admin, $is_course_admin, $is_editor;
+
+        if ($is_admin || $is_course_admin || $is_editor) {
+            return;
+        }
+
+        require_once 'modules/progress/CourseParticipationEvent.php';
+        $eventData = new stdClass();
+        $eventData->uid = $uid;
+        $eventData->courseId = $course_id;
+        $eventData->activityType = CourseParticipationEvent::ACTIVITY;
+        $eventData->module = MODULE_ID_USAGE;
+        CourseParticipationEvent::trigger(CourseParticipationEvent::STATSAPPENDED, $eventData);
+    }
+
+    // learning analytics
+    private function triggerAnalytics ($uid, $course_id){
+        require_once 'modules/analytics/ParticipationAnalyticsEvent.php';
+        require_once 'modules/analytics/Event.php';
+        $data = new stdClass();
+        $data->uid = $uid;
+        $data->course_id = $course_id;
+
+        $data->element_type = 8;
+        ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::LOGINRECORDED, $data, true);
+
+        $data->element_type = 9;
+        ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::HITRECORDED, $data, true);
+
+        $data->element_type = 10;
+        ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::DURATIONRECORDED, $data, true);
     }
 
 }

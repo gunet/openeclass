@@ -104,7 +104,8 @@ define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_COURSEPREREQUISITE', 49);
 define('MODULE_ID_LTI_CONSUMER', 50);
-define('MODULE_ID_REQUEST', 51);
+define('MODULE_ID_ANALYTICS', 51);
+define('MODULE_ID_REQUEST', 100);
 
 // user modules
 
@@ -3691,7 +3692,7 @@ function action_button($options, $secondary_menu_options = array()) {
                 $btn_label = q($option['title']) . "<span class='hidden'>.</span>";
             }
             $element = ($url? "<a href='$url' class='btn $btn_class$disabled' $link_attrs>":
-                "<button class='btn $btn_class$disabled' $link_attrs>") . 
+                "<button class='btn $btn_class$disabled' $link_attrs>") .
                 "<span class='fa $icon$icon_class'>$btn_label</span>" .
                 ($url? '</a>': '</button>');
             $primary_form_begin = $form_begin;

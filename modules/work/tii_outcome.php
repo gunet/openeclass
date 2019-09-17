@@ -80,6 +80,8 @@ if (Database::get()->query("UPDATE assignment_submit SET grade = ?f, grade_submi
                                         $grade, Log::get_client_ip(), $sid)->affectedRows > 0) {
 
     triggerGame($assignment->course_id, $uid, $assignment_id);
+    triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+    triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
     Log::record($assignment->course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
         'title' => $assignment->title,
         'grade' => $grade,
