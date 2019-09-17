@@ -73,8 +73,8 @@ if ($can_post) {
             action_bar(array(
                 array('title' => $langNewTopic,
                     'url' => $unit?
-                        "view.php?course=$course_code&amp;res_type=forum_new_topic&amp;forum=$forum_id&amp;unit=$unit":
-                        "newtopic.php?course=$course_code&amp;forum=$forum_id",
+                    "view.php?course=$course_code&amp;res_type=forum_new_topic&amp;forum=$forum_id&amp;unit=$unit":
+                    "newtopic.php?course=$course_code&amp;forum=$forum_id",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
@@ -255,7 +255,7 @@ if ($is_editor and isset($_GET['topiclock'])) {
 
 }
 
-$result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS poster_id
+$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
         WHERE t.forum_id = ?d
@@ -306,7 +306,7 @@ if (count($result) > 0) { // topics found
         }
         $tool_content .= "<td>$image <a href='$topiclink'><b>" . q($topic_title) . "</b></a>$pagination</td>";
         $tool_content .= "<td class='text-center'>$replies</td>";
-        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "</td>";
+        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td class='text-center'>$myrow->num_views</td>";
         $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".claro_format_locale_date($dateTimeFormatShort, strtotime($last_post_datetime))."</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
