@@ -264,11 +264,35 @@ if($is_editor) {
                 display_user_info($user_id);
                 display_analytics_user($user_id, $analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next);
             } else {
+                $orderby = '';
+                if (isset($_REQUEST['orderby'])) {
+                    $orderby = $_REQUEST['orderby'];
+                }
+
+                $reverse = '';
+                if(isset($_REQUEST['reverse'])) {
+                    $reverse = $_REQUEST['reverse'];
+                }
+
+                $download = false;
+                if(isset($_REQUEST['download'])) {
+                    $download = true;
+                }
+
+                $reverse_op = 'true';
+                if ($reverse=='true') {
+                    $reverse_op = 'false';
+                }
+
                 $tool_content .= action_bar(
                     array(
                         array('title' => $langAnalyticsTotalAnalytics,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
                             'icon' => 'fa-bar-chart',
+                            'level' => 'primary-label'),
+                        array('title' => $langExport,
+                            'url' => '?course='.$course_code.'&amp;analytics_id='.$analytics_id.'&amp;mode=perUser&amp;period='.$period.'&amp;orderby='.$orderby.'&amp;reverse='.$reverse_op.'&amp;download=true',
+                            'icon' => 'fa-envelope',
                             'level' => 'primary-label'),
                         array('title' => $langBack,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -276,20 +300,6 @@ if($is_editor) {
                             'level' => 'primary-label')
                     )
                 );
-
-                $orderby = '';
-                if(isset($_REQUEST['orderby']))
-                    $orderby = $_REQUEST['orderby'];
-                
-                $reverse = '';
-                if(isset($_REQUEST['reverse']))
-                    $reverse = $_REQUEST['reverse'];
-
-                $download = false;
-                if(isset($_REQUEST['download']))
-                    $download = true;
-                   
-                    
                 display_analytics_peruser($analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next, $orderby, $reverse, $period, $download);
             }
         } else if ( $mode == 'courseStatistics') {
@@ -337,4 +347,3 @@ if($is_editor) {
 }
 
 draw($tool_content, 2, null, $head_content);
-?>

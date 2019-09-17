@@ -4,14 +4,13 @@ require_once 'PeriodType.php';
 require_once 'ElementTypes.php';
 
 function display_learning_analytics() {
-    global $course_id, $course_code, $tool_content, $langLearningAnalytic, $langAnalyticsNoAnalytics, $langActive, $langInactive,
+    global $course_id, $course_code, $tool_content, $langAnalyticsNoAnalytics, $langActive, $langInactive,
     $langAnalyticsTotalAnalytics, $langAnalyticsViewPerUserGeneral, $langModify, $langAnalyticsEditElements, $langDeactivate,
     $langActivate, $langDelete, $langAnalyticsConfirm, $langLearningAnalytics, $langAdd;
 
-
     $sql_data = Database::get()->queryArray("SELECT id, title, description, active, start_date, end_date, created, periodType FROM analytics WHERE courseID= ?d", $course_id);
     if(count($sql_data) == 0) {
-        $results = "<p class='text-center text-muted'>$langAnalyticsNoAnalytics</p>";
+        $results = "<div class='text-center text-muted'>$langAnalyticsNoAnalytics</div>";
     } else {
         $results = "";
         foreach ($sql_data as $data) {
@@ -83,6 +82,8 @@ function display_learning_analytics() {
         </div>";         
 }
 
+
+
 function display_general_lists($analytics_id) {
     global $course_id, $course_code, $tool_content, $langAnalyticsDetails, $langMessage, $langAnalyticsAdvancedLevel, $langAnalyticsCriticalLevel,
     $langAnalyticsNoAdvanced, $langAnalyticsNoCritical;
@@ -139,8 +140,6 @@ function display_general_lists($analytics_id) {
                 "</div></div>";
             }
         }
- 
-
 
         if (sizeof($advanced) == 0) {
             $good_results = '<div>' . $langAnalyticsNoAdvanced . '</div>';
@@ -198,13 +197,10 @@ function display_general_lists($analytics_id) {
                 </div>
             </div>
         </div>";
-
-
-
-
-
     }
 }
+
+
 
 function display_analytics_elements($analytics_id) {
     global $tool_content, $course_code, $langAdd, $langAnalyticsNoElements, $langAnalyticsType, $langAnalyticsGradeLimits, $langAnalyticsThresholds,
@@ -359,7 +355,6 @@ function display_analytics_information($analytics_id) {
                             <div class='pn-info-text-sct'>$langFrom $start_date $langTill $end_date</div>
                             <div class='pn-info-title-sct'>$langAnalyticsCalculation</div>
                             <div class='pn-info-text-sct'>$periodType</div>
-
                         </div>
                     </div>
                 </div>
@@ -369,27 +364,40 @@ function display_analytics_information($analytics_id) {
 ";
 }
 
+/**
+ * @brief display learning analytics per user
+ * @param $analytics_id
+ * @param $startdate
+ * @param $enddate
+ * @param $previous
+ * @param $next
+ * @param $orderby
+ * @param $reverse
+ * @param $period
+ * @param $download
+ */
 function display_analytics_peruser($analytics_id, $startdate, $enddate, $previous, $next, $orderby, $reverse, $period, $download) {
     global $tool_content, $course_id, $course_code, $langAnalyticsNoUsersToDisplay, $langSurnameName, $langPercentage, $langAnalyticsStatus,
-    $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langAnalyticsDetails, $langMessage, $langAnalyticsExport;
-    //To change here before commit
-    //$sql_data = Database::get()->queryArray("SELECT u.givenname as givenname, u.surname as surname, cu.user_id as userid FROM course_user as cu inner join user as u on cu.user_id=u.id WHERE course_id = ?d AND cu.status = 5", $course_id);
-    $sql_data = Database::get()->queryArray("SELECT u.givenname as givenname, u.surname as surname, cu.user_id as userid FROM course_user as cu inner join user as u on cu.user_id=u.id WHERE course_id = ?d", $course_id);
-    
+    $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langAnalyticsDetails, $langMessage;
+
+    $sql_data = Database::get()->queryArray("SELECT u.givenname AS givenname, 
+                                u.surname AS surname, cu.user_id AS userid 
+                                FROM course_user AS cu INNER JOIN user AS u on cu.user_id=u.id 
+                                WHERE course_id = ?d 
+                                AND cu.status = " . USER_STUDENT . "", $course_id);
+
     if(count($sql_data) == 0) {
         $results = "<div><p class='text-center text-muted'>$langAnalyticsNoUsersToDisplay</p>";
     } else {
         $backclass = '';
-        if (is_null($previous))
+        if (is_null($previous)) {
             $backclass = 'style="display:none"';
-
+        }
         $nextclass = '';
-        if (is_null($next))
+        if (is_null($next)) {
             $nextclass = 'style="display:none"';
-            //translation until here
-
-
-
+        }
+        //translation until here
         $arrowdirection = 'down';
         $arrowdirectionName = 'down';
         $arrowdirectionPercentage = 'down';
@@ -405,24 +413,25 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         } else if($orderby == 'percentage') {
             $arrowdirectionPercentage = $arrowdirection;
         }
-            
 
         $results = "
                 <div class='inner-heading'>
                     <div class='row res-table-header'>
                         <div class='col-sm-3'>
-                        $langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a>
+                            <h5>$langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a></h5>
                         </div>
                         <div class='col-sm-3'>
-                        $langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a>
+                            <h5>$langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a></h5>
                         </div>
                         <div class='col-sm-3'>
-                        $langAnalyticsStatus 
+                            <h5>$langAnalyticsStatus</h5> 
                         </div>
                         <div class='col-sm-3'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
-                        $startdate - $enddate
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                            <h5>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
+                                $startdate - $enddate
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -444,17 +453,16 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             }        
         }
 
-        if($reverse == 'false')
+        if($reverse == 'false') {
             ksort($peruserarray);
-        else 
+        } else {
             krsort($peruserarray);
-
-        
+        }
 
         foreach ($peruserarray as $peruser) {
             $results .="<div class='row res-table-row'>
             <div class='col-sm-2'>
-                <div >". $peruser['givenname'] . $peruser['surname']. "</div>
+                <div >". $peruser['givenname'] . "&nbsp;". $peruser['surname']. "</div>
             </div>
             <div class='col-sm-3'>
                 <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
@@ -465,9 +473,9 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             </div>
             <div class='col-sm-3'>
                 <div>
-                <span class='text-success'>$langAnalyticsAdvancedLevel:" . $peruser['values']['text-success'] . "</span><br/>
-                <span class='text-warning'>$langAnalyticsMiddleLevel:" . $peruser['values']['text-warning'] . "</span><br/>
-                <span class='text-danger'>$langAnalyticsCriticalLevel:" . $peruser['values']['text-danger'] . "</span>
+                <span class='text-success'>$langAnalyticsAdvancedLevel: " . $peruser['values']['text-success'] . "</span><br/>
+                <span class='text-warning'>$langAnalyticsMiddleLevel: " . $peruser['values']['text-warning'] . "</span><br/>
+                <span class='text-danger'>$langAnalyticsCriticalLevel: " . $peruser['values']['text-danger'] . "</span>
                 </div>
             </div>
             <div class='col-sm-4'>" . action_bar(
@@ -489,42 +497,39 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     }
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
 
-    if($download)
+    if ($download) {
         generate_analytics_csv($peruserarray, $analytics_title->title);
+    }
 
-     $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-9'>
-            <h3>$analytics_title->title</h3>
-        </div>
-        <div  class='col-xs-3'>".
-            action_bar(
-                array(                  
-                    array('title' => $langAnalyticsExport,                    
-                        'url' => '?course='.$course_code.'&amp;analytics_id='.$analytics_id.'&amp;mode=perUser&amp;period='.$period.'&amp;orderby='.$orderby.'&amp;reverse='.$reverse_op.'&amp;download=true',
-                        'icon' => 'fa-envelope',
-                        'level' => 'primary-label')
-                )
-            )."
-        </div>
-        <div class='panel panel-default'>
-            <div class='panel-body'>
-                 $results
+    $tool_content .= "
+         <div class='row'>                        
+            <div class='panel panel-default'>
+                <div class='panel-heading'>             
+                    $analytics_title->title
+                </div>
+                <div class='panel-body'>
+                     $results
+                </div>
             </div>
-        </div>
-</div>
-     </div>";  
+        </div>";
 
+    $tool_content .= "</div>";
 }
 
-function generate_analytics_csv($peruserarray,$title ) {
+
+/**
+ * @brief export learning analytics
+ * @param $peruserarray
+ * @param $title
+ */
+function generate_analytics_csv($peruserarray, $title) {
+
     require_once 'include/lib/csv.class.php';
+
     global $langSurnameName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel;
 
     $csv = new CSV();
-    if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-        $csv->setEncoding('UTF-8');
-    }
+    $csv->setEncoding('UTF-8');
 
     $csv->filename =   $title . '_learning_analytics.csv';
 
@@ -533,7 +538,9 @@ function generate_analytics_csv($peruserarray,$title ) {
     foreach($peruserarray as $array) {
         $csv->outputRecord($array['givenname'] . ' ' . $array['surname'], $array['percentage'], $array['values']['text-success'], $array['values']['text-warning'], $array['values']['text-danger']);
     }
+    exit;
 }
+
 
 function display_analytics_user($userid,$analytics_id, $start, $end, $previous, $next) {
     global $tool_content, $course_id, $course_code, $langSurnameName, $langPercentage;
@@ -1367,4 +1374,3 @@ function get_analytics_period($analytics_id) {
 
     return $analyticsPeriod;
 }
-?>
