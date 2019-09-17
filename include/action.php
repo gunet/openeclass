@@ -34,6 +34,8 @@ class action {
         if ($action_type_id != $exit) {
             $this->appendStats($uid, $module_id, $course_id, 1, DEFAULT_MAX_DURATION, DEFAULT_MAX_DURATION, true);
         }
+        $this->triggerAnalytics($uid, $course_id);
+        $this->triggerGame($uid, $course_id);
     }
 
     private function appendStats($uid, $module_id, $course_id, $hits, $diffduration, $induration, $update_lastdt = false) {
@@ -70,22 +72,6 @@ class action {
         }
 
         $this->triggerGame($uid, $course_id);
-    }
-
-    private function triggerGame ($uid, $course_id) {
-        global $is_admin, $is_course_admin, $is_editor;
-
-        if ($is_admin || $is_course_admin || $is_editor) {
-            return;
-        }
-
-        require_once 'modules/progress/CourseParticipationEvent.php';
-        $eventData = new stdClass();
-        $eventData->uid = $uid;
-        $eventData->courseId = $course_id;
-        $eventData->activityType = CourseParticipationEvent::ACTIVITY;
-        $eventData->module = MODULE_ID_USAGE;
-        CourseParticipationEvent::trigger(CourseParticipationEvent::STATSAPPENDED, $eventData);
     }
 
     // ophelia 2006-08-02: per month and per course
@@ -183,6 +169,41 @@ class action {
         $start_date = date('Y-m-01 00:00:00', $stmp);
 
         return array($start_date, $end_date, $end_stmp);
+    }
+
+    // gamification
+    private function triggerGame ($uid, $course_id) {
+        global $is_admin, $is_course_admin, $is_editor;
+
+        if ($is_admin || $is_course_admin || $is_editor) {
+            return;
+        }
+
+        require_once 'modules/progress/CourseParticipationEvent.php';
+        $eventData = new stdClass();
+        $eventData->uid = $uid;
+        $eventData->courseId = $course_id;
+        $eventData->activityType = CourseParticipationEvent::ACTIVITY;
+        $eventData->module = MODULE_ID_USAGE;
+        CourseParticipationEvent::trigger(CourseParticipationEvent::STATSAPPENDED, $eventData);
+    }
+
+    // learning analytics
+    private function triggerAnalytics ($uid, $course_id){
+        require_once 'modules/analytics/ParticipationAnalyticsEvent.php';
+        require_once 'modules/analytics/Event.php';
+        $data = new stdClass();
+        $data->uid = $uid;
+        $data->course_id = $course_id;
+
+        $data->element_type = 8;
+        ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::LOGINRECORDED, $data, true);
+
+        $data->element_type = 9;
+        ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::HITRECORDED, $data, true);
+
+        $data->element_type = 10;
+        ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::DURATIONRECORDED, $data, true);
     }
 
 }

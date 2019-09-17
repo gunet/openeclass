@@ -35,6 +35,7 @@ define('POSTS_THREADED_VIEW', 2);
 
 require_once 'modules/progress/ForumEvent.php';
 require_once 'modules/progress/ForumTopicEvent.php';
+require_once 'modules/analytics/ForumAnalyticsEvent.php';
 
 function get_total_topics($forum_id) {
     return Database::get()->querySingle("SELECT COUNT(*) AS total FROM forum_topic WHERE forum_id = ?d", $forum_id)->total;
@@ -339,6 +340,15 @@ function triggerForumGame($courseId, $uid, $eventName) {
     ForumEvent::trigger($eventName, $eventData);
 }
 
+function triggerForumAnalytics ($course_id, $uid, $eventName) {
+    $data = new stdClass();
+    $data->uid = $uid;
+    $data->course_id = $course_id;
+
+    $data->element_type = 50;
+
+    ForumAnalyticsEvent::trigger(ForumAnalyticsEvent::FORUMEVENT, $data, true);
+}
 
 /**
  * @brief download forum post attached file

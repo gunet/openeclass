@@ -41,6 +41,7 @@ require_once 'modules/wiki/lib/class.lockmanager.php';
 require_once 'modules/wiki/lib/lib.requestfilter.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
 require_once 'modules/progress/WikiEvent.php';
+require_once 'modules/analytics/WikiAnalyticsEvent.php';
 
 //check if groups are enabled for this course
 //if not user will be shown the course wiki page
@@ -385,6 +386,7 @@ switch ($action) {
                         $message = $langWikiPageSaved;
                         $style = 'alert-info';
                         triggerGame($course_id, $uid, WikiEvent::NEWPAGE);
+                        triggerAnalytics($course_id, $uid, WikiAnalyticsEvent::WIKIEVENT);
                     }
                     $action = 'show';
                 }
@@ -743,6 +745,7 @@ switch ($action) {
                      if ($wikiPage->delete()) {
                          Session::Messages($langWikiPageDeleted, 'alert-success');
                          triggerGame($course_id, $uid, WikiEvent::DELPAGE);
+                         triggerAnalytics($course_id, $uid, WikiAnalyticsEvent::WIKIEVENT);
                          redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                      } else {
                          Session::Messages($langWikiDeletePageError, 'alert-danger');
@@ -1011,4 +1014,14 @@ function triggerGame($courseId, $uid, $eventName) {
     $eventData->module = MODULE_ID_WIKI;
 
     WikiEvent::trigger($eventName, $eventData);
+}
+
+function triggerAnalytics($courseId, $uid, $eventName)
+{
+    $data = new stdClass();
+    $data->uid = $uid;
+    $data->course_id = $courseId;
+
+    $data->element_type = 60;
+    WikiAnalyticsEvent::trigger($eventName, $data, true);
 }

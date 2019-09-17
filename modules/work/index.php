@@ -47,6 +47,7 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'include/lib/csv.class.php';
 require_once 'modules/plagiarism/plagiarism.php';
 require_once 'modules/progress/AssignmentEvent.php';
+require_once 'modules/analytics/AssignmentAnalyticsEvent.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'modules/admin/extconfig/turnitinapp.php';
 
@@ -1178,6 +1179,8 @@ function submit_work($id, $on_behalf_of = null) {
                                      grade_submission_date, group_id)
                                      VALUES (?d, ?d, ". DBHelper::timeAfter() . ", ?s, ?s, ?s, ?s, ?s, ?f, ?s, ?s, ?s, " . DBHelper::timeAfter() . ", ?d)", $data)->lastInsertID;
             triggerGame($course_id, $user_id, $row->id);
+            triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+            triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
                 'title' => $row->title,
                 'assignment_id' => $row->id,
@@ -3119,6 +3122,8 @@ function delete_assignment($id) {
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($uids as $user_id) {
                 triggerGame($course_id, $user_id, $id);
+                triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+                triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             }
             if ($row->assign_to_specific) {
                 Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
@@ -3152,6 +3157,8 @@ function purge_assignment_subs($id) {
     if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
         foreach ($uids as $user_id) {
             triggerGame($course_id, $user_id, $id);
+            triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+            triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         }
         if ($row->assign_to_specific) {
             Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
@@ -3177,6 +3184,8 @@ function delete_user_assignment($id) {
     $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $id)->uid;
     if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
         triggerGame($course_id, $quserid, $id);
+        triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+        triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         if ($filename->file_path) {
             $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
             if (!my_delete($file)) {
@@ -4658,6 +4667,8 @@ function submit_grade_comments($args) {
                                             $comments_real_filename, Log::get_client_ip(), $sid)->affectedRows>0) {
             $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
             triggerGame($course_id, $quserid, $id);
+            triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+            triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                     'title' => $assignment->title,
                     'grade' => $grade,
@@ -4735,8 +4746,10 @@ function submit_grades($grades_id, $grades, $email = false) {
                                                 SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
                                                 WHERE id = ?d", $grade, Log::get_client_ip(), $sid);
                         $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                        triggerGame($course_id, $quserid, $assignment->id);
-                        Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
+                    triggerGame($course_id, $quserid, $assignment->id);
+                    triggerAssignmentAnalytics($course_id, $quserid, $assignment->id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+                    triggerAssignmentAnalytics($course_id, $quserid, $assignment->id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
+                    Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                                 'title' => $assignment->title,
                                 'grade' => $grade));
 

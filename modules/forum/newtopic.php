@@ -122,6 +122,7 @@ if (isset($_POST['submit'])) {
                     , $topic_id, $message, $uid, $time, $poster_ip, $topic_filepath, $topic_real_filename)->lastInsertID;
     triggerForumGame($course_id, $uid, ForumEvent::NEWPOST);
     triggerTopicGame($course_id, $uid, ForumTopicEvent::NEWPOST, $topic_id);
+    triggerForumAnalytics($course_id, $uid, ForumAnalyticsEvent::FORUMEVENT);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post

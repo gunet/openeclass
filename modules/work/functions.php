@@ -129,6 +129,8 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
         $ass_cid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = ?d", $id)->course_id;
         Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
         triggerGame($ass_cid, $row->uid, $id);
+        triggerAssignmentAnalytics($ass_cid, $row->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+        triggerAssignmentAnalytics($ass_cid, $row->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         if ($GLOBALS['uid'] == $row->uid) {
             $return .= $m['deleted_work_by_user'];
         } else {
@@ -448,6 +450,21 @@ function triggerGame($courseId, $uid, $assignId) {
     $eventData->module = MODULE_ID_ASSIGN;
     $eventData->resource = intval($assignId);
     AssignmentEvent::trigger(AssignmentEvent::UPDGRADE, $eventData);
+}
+
+
+function triggerAssignmentAnalytics($courseId, $uid, $assignmentId, $eventname) {
+    $data = new stdClass();
+    $data->course_id = $courseId;
+    $data->uid = $uid;
+    $data->resource = $assignmentId;
+
+    if ($eventname == AssignmentAnalyticsEvent::ASSIGNMENTGRADE) {
+        $data->element_type = 40;
+    } else if ($eventname == AssignmentAnalyticsEvent::ASSIGNMENTDL) {
+        $data->element_type = 41;
+    }
+    AssignmentAnalyticsEvent::trigger($eventname, $data, true);
 }
 
 /**

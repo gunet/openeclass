@@ -1991,6 +1991,40 @@ $db->query("CREATE TABLE `user_settings` (
   CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
     ON DELETE CASCADE ON UPDATE CASCADE ) $tbl_options");
 
+// learning analytics
+
+$db->query("CREATE TABLE `analytics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `courseID` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text,
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `periodType` int(11) NOT NULL,
+  PRIMARY KEY (id)) $tbl_options");
+
+$db->query("CREATE TABLE `analytics_element` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `analytics_id` int(11) NOT NULL,
+  `module_id` int(11) NOT NULL,
+  `resource` int(11) DEFAULT NULL,
+  `upper_threshold` float DEFAULT NULL,
+  `lower_threshold` float DEFAULT NULL,
+  `weight` int(11) NOT NULL DEFAULT '1',
+  `min_value` float NOT NULL,
+  `max_value` float NOT NULL,
+  PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `user_analytics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `analytics_element_id` int(11) NOT NULL,
+  `value` float NOT NULL DEFAULT '0',
+  `updated` datetime NOT NULL,
+  PRIMARY KEY (`id`)) $tbl_options");
+
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';

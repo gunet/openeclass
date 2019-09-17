@@ -194,6 +194,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         Database::get()->query("DELETE FROM forum_post WHERE id = $r->id");
         triggerForumGame($course_id, $uid, ForumEvent::DELPOST);
         triggerTopicGame($course_id, $uid, ForumTopicEvent::DELPOST, $topic_id);
+        triggerForumAnalytics($course_id, $uid, ForumAnalyticsEvent::FORUMEVENT);
     }
     $post_authors = array_unique($post_authors);
     foreach ($post_authors as $author) {

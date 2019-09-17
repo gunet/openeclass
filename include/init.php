@@ -439,6 +439,7 @@ $admin_modules = array(
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
     MODULE_ID_COURSEPREREQUISITE => array('title' => $langCoursePrerequisites, 'link' => 'course_prerequisites', 'image' => 'fa-university'),
+    MODULE_ID_ANALYTICS => array('title' => $langLearningAnalytics, 'link' => 'analytics', 'image' => 'fa-line-chart')
 );
 
 // -------------------------------------------
