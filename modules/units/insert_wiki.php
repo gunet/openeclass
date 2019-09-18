@@ -59,7 +59,7 @@ function list_wikis() {
                         <th>$langChoice</th>
                     </tr>";        
         foreach ($wikiinfo as $entry) {
-            $tool_content .= "<tr><td>&nbsp;".icon('fa-wikipedia')."&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>
+            $tool_content .= "<tr><td>&nbsp;".icon('fa-wikipedia-w')."&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>
                                 <td>$entry[description]</td>
                                 <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>
                             </tr>";            

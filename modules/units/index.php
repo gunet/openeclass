@@ -143,7 +143,7 @@ if ($is_editor) {
                   'show' => !is_module_disable(MODULE_ID_QUESTIONNAIRE)),
             array('title' => $langAdd.' '.$langInsertWiki,
                   'url' => $base_url . 'wiki',
-                  'icon' => 'fa fa-wikipedia',
+                  'icon' => 'fa fa-wikipedia-w',
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_WIKI)),
             array('title' => $langAdd.' '.$langInsertChat,

@@ -455,7 +455,7 @@ function display_activities($element, $id) {
             'class' => ''),
         array('title' => $langWiki,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=wiki",
-            'icon' => 'fa fa-wikipedia fa-fw',
+            'icon' => 'fa fa-wikipedia-w fa-fw',
             'class' => ''),
         array('title' => $langCourseParticipation,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",

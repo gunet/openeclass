@@ -137,7 +137,7 @@ function get_unit_resource_icon($type, $res_id) {
             $icon = 'fa-pencil-square-o';
             break;
         case 'wiki':
-            $icon = 'fa-wikipedia';
+            $icon = 'fa-wikipedia-w';
             break;
         case 'glossary':
             $icon = 'fa-list';

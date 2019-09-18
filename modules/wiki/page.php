@@ -524,7 +524,7 @@ $tool_content .= action_bar(array(
     array(
         'title' => $langWikiMainPage,
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=show&amp;title=__MainPage__",
-        'icon' => 'fa-wikipedia',
+        'icon' => 'fa-wikipedia-w',
         'level' => 'primary-label'
     ),
     array(
