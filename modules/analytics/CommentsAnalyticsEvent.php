@@ -17,20 +17,20 @@ class CommentsAnalyticsEvent extends Event {
                 $this->context['triggeredModule'] = $data->element_type;
                 $this->context['course_id'] = $data->course_id;
                 $this->context['user_id'] = $data->uid;
-                if ($this->context['triggeredModule'] == 20) 
+                if ($this->context['triggeredModule'] == ANALYTICS_BLOGCOMMENTS)
                     $record = Database::get()->querySingle("SELECT count(c.id) as value FROM comments as c 
                         INNER JOIN blog_post as bp on c.rid = bp.id WHERE 
                         c.rtype = 'blogpost'
                         AND c.user_id = ?d
                         AND bp.course_id = ?d
                         AND DATE(c.time) = CURDATE()", $this->context['user_id'], $this->context['course_id']);
-                else if ($this->context['triggeredModule'] == 21)
+                else if ($this->context['triggeredModule'] == ANALYTICS_COURSECOMMENTS)
                     $record = Database::get()->querySingle("SELECT count(id) as value FROM comments WHERE 
                         rtype = 'course'
                         AND user_id = ?d
                         AND rid = ?d
                         AND DATE(time) = CURDATE()", $this->context['user_id'], $this->context['course_id']);                    
-                else if ($this->context['triggeredModule'] == 22)
+                else if ($this->context['triggeredModule'] == ANALYTICS_WALLCOMMENTS)
                     $record = Database::get()->querySingle("SELECT count(c.id) as value FROM comments as c 
                         INNER JOIN wall_post as wp on c.rid = wp.id WHERE 
                         c.rtype = 'wallpost'
@@ -45,11 +45,9 @@ class CommentsAnalyticsEvent extends Event {
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-                
                     if ($record) {
                         $id = $record->id;
                         $value = $this->context['value'];
-
                         $this->updateValue($id, $value);
                     } else {
                         $user_id = $this->context['user_id'];
@@ -63,25 +61,24 @@ class CommentsAnalyticsEvent extends Event {
                 $course_id = $data->course_id;
                 $analytics_element_id = $data->analytics_element_id;
                 $element_type = $data->element_type;
-
-                if ($element_type == 20) 
-                    $comments_records = Database::get()->queryArray("SELECT c.user_id, c.time, count(c.id) as value 
+                if ($element_type == ANALYTICS_BLOGCOMMENTS)
+                    $comments_records = Database::get()->queryArray("SELECT c.user_id, DATE(c.time), count(c.id) as value 
                         FROM comments as c INNER JOIN blog_post as bp  ON c.rid = bp.id WHERE 
                             c.rtype = 'blogpost'
                             AND bp.course_id = ?d
                             AND DATE(c.time) >= ?t
                             AND DATE(c.time) <=?t
                             group by DATE(c.time), c.user_id", $course_id, $data->start_date, $data->end_date);
-                else if ($element_type == 21)
-                    $comments_records = Database::get()->queryArray("SELECT user_id, time, count(id) as value 
+                else if ($element_type == ANALYTICS_COURSECOMMENTS)
+                    $comments_records = Database::get()->queryArray("SELECT user_id, DATE(time), count(id) as value 
                         FROM comments WHERE 
                             rtype = 'course'
                             AND rid = ?d
                             AND DATE(time) >= ?t
                             AND DATE(time) <=?t
                             group by DATE(time), user_id", $course_id, $data->start_date, $data->end_date);
-                else if ($element_type == 22)
-                    $comments_records = Database::get()->queryArray("SELECT c.user_id, c.time, count(c.id) as value 
+                else if ($element_type == ANALYTICS_WALLCOMMENTS)
+                    $comments_records = Database::get()->queryArray("SELECT c.user_id, DATE(c.time), count(c.id) as value 
                         FROM comments as c INNER JOIN wall_post as wp  ON c.rid = wp.id WHERE 
                             c.rtype = 'wallpost'
                             AND wp.course_id = ?d

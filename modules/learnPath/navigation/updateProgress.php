@@ -107,7 +107,7 @@ if (isset($_POST['ump_id'])) {
             . " JOIN lp_learnPath lp ON (lp.learnPath_id = lump.learnPath_id) "
             . " WHERE lump.user_module_progress_id = ?d", $_POST['ump_id']);
     triggerLPGame($lp->course_id, $uid, $lp->learnPath_id, LearningPathEvent::UPDPROGRESS);
-    triggerLpAnalytics($lp->course_id, $uid, $lp->learnPath_id);
+    triggerLPAnalytics($lp->course_id, $uid, $lp->learnPath_id);
 }
 
 // display the form to accept new commit and

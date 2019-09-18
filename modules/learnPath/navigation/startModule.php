@@ -65,7 +65,7 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
                AND `learnPath_module_id` = ?d";
     Database::get()->query($sql, $userid, $lpmid);
     triggerLPGame($course_id, $userid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
-    triggerLpAnalytics($course_id, $userid, $_SESSION['path_id']);
+    triggerLPAnalytics($course_id, $userid, $_SESSION['path_id']);
 }
 
 if (isset($_GET['viewModule_id']) && !empty($_GET['viewModule_id'])) {
@@ -95,7 +95,7 @@ if ($uid) { // if not anonymous
 	            ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data` )
 	            VALUES (?d , ?d, ?d, '', '')", $uid, $_SESSION['path_id'], $learnPathModuleId);
         triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
-        triggerLpAnalytics($course_id, $uid, $_SESSION['path_id']);
+        triggerLPAnalytics($course_id, $uid, $_SESSION['path_id']);
     }
 }  // else anonymous : record nothing !
 // Get info about launched module

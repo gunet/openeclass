@@ -29,7 +29,7 @@ class ElementTypes {
         //ANALYTICS_FILEVIEW => array('title' => 'Προβολή περιεχομένου', 'link' => 'viewing-event', 'icon' => 'fa fa-columns fa-fw'),
         ANALYTICS_DAILYLOGINS => array('title' => 'Συνδέσεις στο μάθημα', 'link' => 'dailylogins', 'icon' =>'fa fa-area-chart fa-fw'),
         ANALYTICS_HITS => array('title' => 'Χτυπήματα', 'link' => 'hits', 'icon' =>'fa fa-mouse-pointer fa-fw'),
-        ANALYTICS_DURATION => array('title' => 'Διάρκεια στο μάθημα', 'link' => 'duration', 'icon' =>'fa fa-check-square-o fa-fw'),
+        ANALYTICS_DURATION => array('title' => 'Διάρκεια στο μάθημα', 'link' => 'duration', 'icon' =>'fa fa-clock-o fa-fw'),
         ANALYTICS_LPPERCENTAGE => array('title' => 'Γραμμή μάθησης', 'link' => 'lp-percentage', 'icon' => 'fa fa-ellipsis-h fa-fw')
     );
 }
