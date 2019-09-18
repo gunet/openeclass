@@ -873,7 +873,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         if (!$module_visible) {
             $wikilink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "</a>" .icon('fa-wikipedia') . "";
+        $imagelink = $link . "</a>" .icon('fa-wikipedia-w') . "";
     }
 
     if (!empty($comments)) {

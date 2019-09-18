@@ -154,7 +154,7 @@ if (isset($_GET['group_as'])) {
                       'show' => $documents),
                 array('title' => $langWiki,
                       'url' => "../wiki/?course=$course_code&amp;gid=$group_id",
-                      'icon' => 'fa-wikipedia',
+                      'icon' => 'fa-wikipedia-w',
                       'level' => 'primary',
                       'show' => $wiki),
                 array('title' => $langGroupAssignments,
