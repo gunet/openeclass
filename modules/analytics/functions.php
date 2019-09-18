@@ -201,11 +201,17 @@ function display_general_lists($analytics_id) {
 }
 
 
-
+/**
+ * @brief display learning analytics elements
+ * @param $analytics_id
+ */
 function display_analytics_elements($analytics_id) {
-    global $tool_content, $course_code, $langAdd, $langAnalyticsNoElements, $langAnalyticsType, $langAnalyticsGradeLimits, $langAnalyticsThresholds,
-    $langAnalyticsWeight, $langAnalyticsCriticalLevel, $langAnalyticsAdvancedLevel, $langModify, $langDelete, $langAnalyticsConfirmDeletion,
-    $langAnalyticsResource, $langAnalyticsParameters;
+
+    global $tool_content, $course_code, $langAdd, $langAnalyticsNoElements,
+           $langAnalyticsType, $langAnalyticsGradeLimits, $langAnalyticsThresholds,
+           $langAnalyticsWeight, $langAnalyticsCriticalLevel, $langAnalyticsAdvancedLevel,
+           $langModify, $langDelete, $langAnalyticsConfirmDeletion,
+           $langAnalyticsResource, $langAnalyticsParameters;
 
     $buttons = array();
     foreach (ElementTypes::elements as $elementType) {
@@ -226,7 +232,7 @@ function display_analytics_elements($analytics_id) {
     ));
 
     $sql_data = Database::get()->queryArray("SELECT id, upper_threshold, lower_threshold, min_value, max_value, weight, resource, module_id FROM analytics_element WHERE analytics_id=?d", $analytics_id);
-    if(count($sql_data) == 0) {
+    if (count($sql_data) == 0) {
         $results = "<p class='text-center text-muted'>$langAnalyticsNoElements</p>";
     } else {
         $results ="<div class='row res-table-header'>
@@ -257,29 +263,29 @@ function display_analytics_elements($analytics_id) {
             $module_id = $result->module_id;
 
             $results .= "
-            <div class='row res-table-row'>
-                <div class='col-sm-2'></div>
-                <div class='col-sm-3'><span class='text-danger'>$min_value</span> - <span class='text-success'>$max_value</span></div>
-                <div class='col-sm-4'>
-                    <span class='text-danger'>$langAnalyticsCriticalLevel: $min_value - $lower_threshold</span><br/>
-                    <span class='text-success'>$langAnalyticsAdvancedLevel: $upper_threshold - $max_value</span>
-                </div>
-                <div class='col-sm-2'>$weight</div>
-                <div class='col-sm-1 text-center'>".
-                    action_button(array(
-                        array('title' => $langModify,
-                            'icon' => 'fa-edit',
-                            'url' => "$_SERVER[SCRIPT_NAME]?analytics_element_id=$id&amp;edit_analytics_element=true&amp;analytics_id=$analytics_id" ,
-                            'class' => ''
-                        ),
-                        array('title' => $langDelete,
-                            'icon' => 'fa-times',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;analytics_element_id=$id&amp;delete_analytics_element=1",
-                            'confirm' => $langAnalyticsConfirmDeletion,
-                            'class' => 'delete'))).
-                "</div>
-                <div class='col-sm-12'>
-                    <span class='help-block'>$langAnalyticsResource: </span>";
+                <div class='row res-table-row'>
+                    <div class='col-sm-2'></div>
+                    <div class='col-sm-3'><span class='text-danger'>$min_value</span> - <span class='text-success'>$max_value</span></div>
+                        <div class='col-sm-4'>
+                            <span class='text-danger'>$langAnalyticsCriticalLevel: $min_value - $lower_threshold</span><br/>
+                            <span class='text-success'>$langAnalyticsAdvancedLevel: $upper_threshold - $max_value</span>
+                        </div>
+                    <div class='col-sm-2'>$weight</div>
+                    <div class='col-sm-1 text-center'>".
+                        action_button(array(
+                            array('title' => $langModify,
+                                'icon' => 'fa-edit',
+                                'url' => "$_SERVER[SCRIPT_NAME]?analytics_element_id=$id&amp;edit_analytics_element=true&amp;analytics_id=$analytics_id" ,
+                                'class' => ''
+                            ),
+                            array('title' => $langDelete,
+                                'icon' => 'fa-times',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;analytics_element_id=$id&amp;delete_analytics_element=1",
+                                'confirm' => $langAnalyticsConfirmDeletion,
+                                'class' => 'delete'))).
+                    "</div>
+                    <div class='col-sm-12'>
+                        <span class='help-block'>$langAnalyticsResource: </span>";
             $results .= get_resource_info($resource, $module_id);
             $results .= "</div></div>";
         }
@@ -296,7 +302,7 @@ function display_analytics_elements($analytics_id) {
                                 <strong>$langAnalyticsParameters</strong>
                             </div>
                             <div class='col-sm-5 text-right'>
-                            $addParametersBtn
+                                $addParametersBtn
                             </div>
                         </div>
                     </div>
@@ -306,10 +312,7 @@ function display_analytics_elements($analytics_id) {
                 </div>
             </div>
         </div>
-    </div>";  
-
-
-
+    </div>";
 }
 
 function display_analytics_information($analytics_id) {
@@ -542,16 +545,28 @@ function generate_analytics_csv($peruserarray, $title) {
 }
 
 
+/**
+ * @brief display user learning analytics
+ * @param $userid
+ * @param $analytics_id
+ * @param $start
+ * @param $end
+ * @param $previous
+ * @param $next
+ */
 function display_analytics_user($userid,$analytics_id, $start, $end, $previous, $next) {
-    global $tool_content, $course_id, $course_code, $langSurnameName, $langPercentage;
+
+    global $tool_content, $course_code, $langSurnameName, $langPercentage;
+
     $backclass = '';
-    if (is_null($previous))
+    if (is_null($previous)) {
         $backclass = 'style="display:none"';
+    }
 
     $nextclass = '';
-    if (is_null($next))
+    if (is_null($next)) {
         $nextclass = 'style="display:none"';
-        
+    }
 
     $results = "
         <div class='inner-heading'>
@@ -569,7 +584,7 @@ function display_analytics_user($userid,$analytics_id, $start, $end, $previous, 
                 </div>
             </div>
         </div>
-        <div class='res-table-wrapper'>";
+    <div class='res-table-wrapper'>";
 
     $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value 
                                             FROM analytics_element
@@ -613,7 +628,7 @@ function display_analytics_user($userid,$analytics_id, $start, $end, $previous, 
         if($upper_threshold <= $total_value) {
             $class = "text-success";
         } else if ($lower_threshold >= $total_value) {
-            $class =  "text-danger";
+            $class = "text-danger";
         } else {
             $class = "text-warning";
         }
@@ -634,18 +649,20 @@ function display_analytics_user($userid,$analytics_id, $start, $end, $previous, 
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
     
     $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
-            <h3>$analytics_title->title</h3>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                $results
-            </div>
+        <div class='row'>
+            <div class='col-xs-12'>
+                <h4>$analytics_title->title</h4>
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                        $results
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>";  
+        </div>";
 }
+
+
 
 function display_user_info($user_id) {
     global $tool_content, $langAnalyticsNotAvailable, $langEmail, $langAm, $langPhone;
@@ -870,9 +887,16 @@ function edit_analytics_settings ($analytics_id = 0)
 </div>";
 }
 
+/**
+ * @brief display form for adding analytics element
+ * @param $analytics_id
+ * @param null $type
+ * @param int $analytics_element_id
+ */
 function analytics_element_form($analytics_id, $type=null, $analytics_element_id=0) {
-    global $tool_content, $course_code, $langAnalyticsCriticalLevel, $langAnalyticsMinValue, $langAnalyticsWeight, $langAnalyticsMaxValue, $langAnalyticsAdvancedLevel, $langSave, $langAdd;
 
+    global $tool_content, $course_code, $langAnalyticsCriticalLevel, $langAnalyticsMinValue,
+           $langAnalyticsWeight, $langAnalyticsMaxValue, $langAnalyticsAdvancedLevel, $langSave, $langAdd;
 
     if ($analytics_element_id==0) {
         $resource = '';
@@ -882,12 +906,8 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         $max_value = 0;
         $weight = 0;
         $action = 'insert_analytics_element';
-        $resource = '';
-
-
     } else {
         $result = Database::get()->querySingle("SELECT * FROM analytics_element WHERE id= ?d AND analytics_id = ?d", $analytics_element_id, $analytics_id);
-
         $resource = $result->resource;
         $upper_threshold = $result->upper_threshold;
         $lower_threshold = $result->lower_threshold;
@@ -895,11 +915,10 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         $max_value = $result->max_value;
         $weight = $result->weight;
         $action = 'update_analytics_element';
-        $resource = $result->resource;
         $module_id = $result->module_id;
     }
     
-    if($type == null){    
+    if ($type == null) {
         $elementTypeTitle = ElementTypes::elements[$module_id]['title'];
     } else {
             foreach(ElementTypes::elements as $element) {
@@ -909,13 +928,12 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         }
     }
 
-    $tool_content .="<h3>" . $elementTypeTitle ."</h3>
+    $tool_content .="<h4>" . $elementTypeTitle ."</h4>
     <div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <input type='hidden' name='analytics_id' value='$analytics_id'>
         <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>
         <div class='form-group'>
             <label for='title' class='col-sm-4 control-label' style='text-align:left'>$langAnalyticsCriticalLevel:</label>
-
             <label for='title' class='col-sm-2 control-label'>$langAnalyticsMinValue</label>
             <div class='col-sm-2'>
                 <input class='form-control' type='number' name='min_value' value='$min_value'>
@@ -927,7 +945,6 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         </div>
         <div class='form-group'>
             <label for='title' class='col-sm-4 control-label' style='text-align:left'>$langAnalyticsAdvancedLevel:</label>
-
             <label for='title' class='col-sm-2 control-label'>$langAnalyticsMinValue</label>
             <div class='col-sm-2'>
                 <input class='form-control' type='number' name='upper_threshold' value='$upper_threshold'>
@@ -935,9 +952,9 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
             <label for='title' class='col-sm-2 control-label'>$langAnalyticsMaxValue</label>
             <div class='col-sm-2'>
                 <input class='form-control' type='number' name='max_value' value='$max_value'>
-            </div>        </div>
-            <div class='form-group'>
-    
+            </div>
+        </div>
+        <div class='form-group'>   
             <label for='title' class='col-sm-2 control-label'  style='text-align:left'>$langAnalyticsWeight:</label>
             <div class='col-sm-2'>
                 <input class='form-control' type='number' placeholder='' name='weight' value='$weight'>
@@ -958,19 +975,25 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                 ))."</div>
         </div>
     </form></div>";
-
 }
 
+
+/**
+ * @brief get available resources
+ * @param $type
+ * @param $analytics_element_id
+ * @return string
+ */
 function get_available_resources($type, $analytics_element_id) {
-    global $course_id, $analytics_id, $langAnalyticsResourceNotAvailable;
+
+    global $course_id, $analytics_id, $langAnalyticsResourceNotAvailable, $langAnalyticsResource;
     
     $resource_id = 0;
     $resource_type_id = 0;
-
     $resource = array();
     $resource_field = "";
 
-    if($analytics_element_id) {
+    if ($analytics_element_id) {
         
         $result = Database::get()->querySingle("SELECT resource, module_id FROM analytics_element WHERE id = ?d", $analytics_element_id);
     
@@ -978,7 +1001,7 @@ function get_available_resources($type, $analytics_element_id) {
         $resource_type_id = $result->module_id;
         
         switch ($resource_type_id) {
-            case 30:
+            case ANALYTICS_EXERCISEGRADE:
                 $result = Database::get()->queryArray("SELECT id, title FROM exercise WHERE course_id = ?d
                                             AND active = 1
                                             AND id NOT IN 
@@ -987,7 +1010,7 @@ function get_available_resources($type, $analytics_element_id) {
                                                 AND module_id = " . ANALYTICS_EXERCISEGRADE . ")
                                             ORDER BY title", $course_id, $analytics_id, $analytics_element_id);
                 break;
-            case 40:
+            case ANALYTICS_ASSIGNMENTGRADE:
                 $result = Database::get()->queryArray("SELECT id, title FROM assignment WHERE course_id = ?d
                                             AND active = 1
                                                AND id NOT IN 
@@ -996,7 +1019,7 @@ function get_available_resources($type, $analytics_element_id) {
                                                    AND module_id = " . ANALYTICS_ASSIGNMENTGRADE . ")
                                                ORDER BY title", $course_id, $analytics_id, $analytics_element_id);
                 break;
-            case 41:
+            case ANALYTICS_ASSIGNMENTDL:
                 $result = Database::get()->queryArray("SELECT id, title FROM assignment WHERE course_id = ?d
                                             AND active = 1
                                                AND id NOT IN 
@@ -1005,15 +1028,15 @@ function get_available_resources($type, $analytics_element_id) {
                                                    AND module_id = " . ANALYTICS_ASSIGNMENTDL . ")
                                                ORDER BY title", $course_id, $analytics_id, $analytics_element_id);
                 break;
-            case 90:
-                $result = Database::get()->queryArray("SELECT learnPath_id as id, name as title FROM lp_learnpath WHERE course_id = ?d
+            case ANALYTICS_LPPERCENTAGE:
+                $result = Database::get()->queryArray("SELECT learnPath_id as id, name as title FROM lp_learnPath WHERE course_id = ?d
                                             AND learnPath_id NOT IN 
                                                (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                    AND id != ?d
                                                    AND module_id = " . ANALYTICS_LPPERCENTAGE . ")
                                                ORDER BY name", $course_id, $analytics_id, $analytics_element_id);
                 break;
-            case 70:
+            case ANALYTICS_FILEVIEW:
                 $result = Database::get()->queryArray("SELECT id,  (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) as title FROM document WHERE course_id = ?d
                                             AND visible = 1
                                             AND id NOT IN 
@@ -1109,7 +1132,7 @@ function get_available_resources($type, $analytics_element_id) {
                 break;
             case 'lp-percentage':
                 $resource_type_id = ANALYTICS_LPPERCENTAGE;
-                $result = Database::get()->queryArray("SELECT learnPath_id as id, name as title FROM lp_learnpath WHERE course_id = ?d
+                $result = Database::get()->queryArray("SELECT learnPath_id as id, name as title FROM lp_learnPath WHERE course_id = ?d
                                         AND learnPath_id NOT IN 
                                             (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                 AND module_id = ?d)
@@ -1126,23 +1149,18 @@ function get_available_resources($type, $analytics_element_id) {
 
 
     foreach ($result as $row) {
-
         $resource[$row->id] = $row->title;
     }
 
-
-
     if (sizeof($resource)  == 0) {
-
         $resource_field = "<input type='hidden' name='resource' value='null'>
                 <div class='alert alert-warning'>$langAnalyticsResourceNotAvailable</div>
                 <input type='hidden' name='module_id' value='$resource_type_id'>";
-
         return $resource_field;
     }
 
     $resource_field =  "<div class='form-group'>
-                            <label for='title' class='col-sm-2 control-label'>Resource</label>
+                            <label for='title' class='col-sm-2 control-label'>$langAnalyticsResource</label>
                             <div class='col-sm-10'>"
                             . selection($resource, 'resource', $resource_id) . 
                             "</div>
@@ -1152,26 +1170,31 @@ function get_available_resources($type, $analytics_element_id) {
     return $resource_field;
 }
 
+/**
+ * @return array
+ */
 function get_activation_status () {
     global $langInactive, $langActive;
-    $status = array();
 
+    $status = array();
     $status[0] = $langInactive;
     $status[1] = $langActive;
 
     return $status;
 }
 
+/**
+ * @return array
+ */
 function get_period_types_array () {
     $periodTypes = array();
 
     foreach ( PeriodType::periodType as $key => $periodType) {
         $periodTypes[$key] = $periodType['title'];
     }
-        
-
     return $periodTypes;
 }
+
 
 function insert_analytics($title, $description, $active, $periodType, $start_date, $end_date, $created) {
     global $course_id;
@@ -1253,7 +1276,7 @@ function get_resource_info($resource, $module_id) {
             $resource_title = ' (' . $result->title. ') ';
             break;
         case ANALYTICS_LPPERCENTAGE:
-            $result = Database::get()->querySingle("SELECT name as title FROM lp_learnpath WHERE learnPath_id = ?d", $resource);
+            $result = Database::get()->querySingle("SELECT name as title FROM lp_learnPath WHERE learnPath_id = ?d", $resource);
             $resource_title = ' (' . $result->title. ') ';
             break;
         case ANALYTICS_FILEVIEW:
@@ -1301,6 +1324,13 @@ function update_analytics_element($analytics_id, $analytics_element_id, $resourc
     triggerAnalytics($course_id, $module_id, $analytics_element_id, $resource, $analytics_id);
 }
 
+/**
+ * @param $course_id
+ * @param $module_id
+ * @param $analytics_element_id
+ * @param $resource
+ * @param $analytics_id
+ */
 function triggerAnalytics ($course_id, $module_id, $analytics_element_id, $resource, $analytics_id){
     require_once 'modules/analytics/ParticipationAnalyticsEvent.php';
     require_once 'modules/analytics/BlogAnalyticsEvent.php';
@@ -1324,51 +1354,55 @@ function triggerAnalytics ($course_id, $module_id, $analytics_element_id, $resou
     $data->end_date = $record->end_date;
 
     switch ($module_id) {
-        case 10:
+        case ANALYTICS_BLOGPOSTS:
             BlogAnalyticsEvent::trigger(BlogAnalyticsEvent::BLOGEVENT, $data, false);
             break;
-        case 20:
+        case ANALYTICS_BLOGCOMMENTS:
             CommentsAnalyticsEvent::trigger(CommentsAnalyticsEvent::BLOGPOSTCOMMENT, $data, false);
             break;
-        case 21:
+        case ANALYTICS_COURSECOMMENTS:
             CommentsAnalyticsEvent::trigger(CommentsAnalyticsEvent::COURSECOMMENT, $data, false);
             break;
-        case 22:
+        case ANALYTICS_WALLCOMMENTS:
             CommentsAnalyticsEvent::trigger(CommentsAnalyticsEvent::WALLPOSTCOMMENT, $data, false);
             break;
-        case 30:
+        case ANALYTICS_EXERCISEGRADE:
             ExerciseAnalyticsEvent::trigger(ExerciseAnalyticsEvent::EXERCISEGRADE, $data, false);
             break;
-        case 40:
+        case ANALYTICS_ASSIGNMENTGRADE:
             AssignmentAnalyticsEvent::trigger(AssignmentAnalyticsEvent::ASSIGNMENTGRADE, $data, false);
             break;
-        case 41:
+        case ANALYTICS_ASSIGNMENTDL:
             AssignmentAnalyticsEvent::trigger(AssignmentAnalyticsEvent::ASSIGNMENTDL, $data, false);
             break;
-        case 50:
+        case ANALYTICS_FORUMACTIVITY:
             ForumAnalyticsEvent::trigger(ForumAnalyticsEvent::FORUMEVENT, $data, false);
             break;
-        case 60:
+        case ANALYTICS_WIKIACTIVITY:
             WikiAnalyticsEvent::trigger(WikiAnalyticsEvent::WIKIEVENT, $data, false);
             break;
-        case 70:
+        case ANALYTICS_FILEVIEW:
             //FileViewAnalyticsEvent::trigger(FileViewAnalyticsEvent::LOGINRECORDED, $data, false);
             break;
-        case 80:
+        case ANALYTICS_DAILYLOGINS:
             ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::LOGINRECORDED, $data, false);
             break;
-        case 81:
+        case ANALYTICS_HITS:
             ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::HITRECORDED, $data, false);
             break;
-        case 82:
+        case ANALYTICS_DURATION:
             ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::DURATIONRECORDED, $data, false);
             break;
-        case 90:
+        case ANALYTICS_LPPERCENTAGE:
             LpAnalyticsEvent::trigger(LpAnalyticsEvent::LPPERCENTAGE, $data, false);
             break;
     }
 }
 
+/**
+ * @param $analytics_id
+ * @return array
+ */
 function get_analytics_period($analytics_id) {
     $analyticsPeriod = Database::get()->querySingle("SELECT periodType, start_date, end_date FROM analytics WHERE id=?d", $analytics_id);
 

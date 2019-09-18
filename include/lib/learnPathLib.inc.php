@@ -36,6 +36,7 @@
  */
 
 require_once 'modules/progress/LearningPathEvent.php';
+require_once 'modules/analytics/LpAnalyticsEvent.php';
 
 /*
  * content type
@@ -1573,4 +1574,21 @@ function triggerLPGame($courseId, $uid, $lpId, $eventName) {
     $eventData->resource = intval($lpId);
     
     LearningPathEvent::trigger($eventName, $eventData);
+}
+
+/**
+ * @brief trigger learning analytics
+ * @param $courseId
+ * @param $uid
+ * @param $lpId
+ * @param $eventName
+ */
+function triggerLPAnalytics($courseId, $uid, $lpId) {
+    $data = new stdClass();
+    $data->course_id = $courseId;
+    $data->uid = $uid;
+    $data->resource = $lpId;
+    $data->element_type = 90;
+
+    LpAnalyticsEvent::trigger(LpAnalyticsEvent::LPPERCENTAGE, $data, true);
 }
