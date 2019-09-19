@@ -440,6 +440,26 @@ function add_gradebook_to_certificate($element, $element_id) {
     return;
 }
 
+/**
+ * @brief add coursecompletion grade entry in criterion
+ * @param type $element
+ * @param type $element_id
+ */
+function add_coursecompletiongrade_to_certificate($element, $element_id) {
+    if (isset($_POST[CourseCompletionEvent::ACTIVITY])) {
+        Database::get()->query("INSERT INTO ${element}_criterion
+                            SET $element = ?d,
+                            module = " . MODULE_ID_PROGRESS . ",
+                            resource = null,
+                            activity_type = '" . CourseCompletionEvent::ACTIVITY . "',
+                            operator = ?s,
+                            threshold = ?f",
+            $element_id,
+            $_POST['operator'],
+            $_POST['threshold']);
+    }
+}
+
 
 /**
  * @brief get certificate title
@@ -919,7 +939,8 @@ function get_resource_details($element, $resource_id) {
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire,
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
-            $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook;
+            $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
+            $langGradeCourseCompletion, $langCourseCompletion;
 
     $data = array('type' => '', 'title' => '');
 
@@ -1019,6 +1040,10 @@ function get_resource_details($element, $resource_id) {
         case GradebookEvent::ACTIVITY:
             $title = Database::get()->querySingle("SELECT title FROM gradebook WHERE gradebook.course_id = ?d AND gradebook.id = ?d", $course_id, $resource)->title;
             $type = "$langGradebook";
+            break;
+        case CourseCompletionEvent::ACTIVITY:
+            $title = "$langGradeCourseCompletion";
+            $type = "$langCourseCompletion";
             break;
         default:
                 $title = "$langAllActivities";
