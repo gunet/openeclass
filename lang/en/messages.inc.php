@@ -4748,3 +4748,5 @@ $langTiiExcludeType = "Small match exclusion type";
 $langTiiExcludeTypeWords = "Words";
 $langTiiExcludeTypePercentage = "Percentage";
 $langTiiExcludeValue = "Set source exclusion threshold";
+$langGradeOfCourseCompletion = "Grade of $langCourse completion";
+$langGradeCourseCompletion = "Grade of $langCourse completion";

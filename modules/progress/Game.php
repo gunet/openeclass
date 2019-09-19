@@ -48,14 +48,18 @@ class Game extends GameAbstract {
         
         $this->rule = 'satisfiesallcriteria(userCriterionIds)';
     }
-    
-    public function evaluate($context) {
-        $this->prepareForContext($context);
-        
+
+    private function evaluateProper($context, $terminal = false) {
+        if ($terminal) {
+            $this->prepareForContextTerminal($context);
+        } else {
+            $this->prepareForContext($context);
+        }
+
         if (!$this->autoassign) {
             return false;
         }
-            
+
         if ($this->ruler->assert($this->rule, $context)) {
             $this->assertedAction($context);
             return true;
@@ -65,7 +69,15 @@ class Game extends GameAbstract {
         }
     }
     
-    public static function checkCompleteness($uid, $course_id) {
+    public function evaluate($context) {
+        return $this->evaluateProper($context, false);
+    }
+
+    public function evaluateTerminal($context) {
+        return $this->evaluateProper($context, true);
+    }
+
+    private static function checkCompletenessProper($uid, $course_id, $terminal = false) {
         $context = new Hoa\Ruler\Context();
         $context['uid'] = $uid;
         $context['courseId'] = $course_id;
@@ -74,7 +86,7 @@ class Game extends GameAbstract {
         $iter = array('certificate', 'badge');
         foreach ($iter as $key) {
             $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t)";            
-            Database::get()->queryFunc($gameQ, function($game) use ($key, $uid, &$context) {
+            Database::get()->queryFunc($gameQ, function($game) use ($key, $uid, &$context, $terminal) {
                 // get game child-criterion ids
                 $criterionIds = array();
                 Database::get()->queryFunc("select c.id from {$key}_criterion c where $key = ?d ", function($crit) use (&$criterionIds) {
@@ -93,8 +105,20 @@ class Game extends GameAbstract {
                 $context['userCriterionIds'] = $userCriterionIds;
 
                 $gameObj = Game::initWithProperties($game);
-                $gameObj->evaluate($context);
+                if ($terminal) {
+                    $gameObj->evaluateTerminal($context);
+                } else {
+                    $gameObj->evaluate($context);
+                }
             }, $course_id, gmdate('Y-m-d H:i:s'));
         }
+    }
+    
+    public static function checkCompleteness($uid, $course_id) {
+        self::checkCompletenessProper($uid, $course_id, false);
+    }
+
+    public static function checkCompletenessTerminal($uid, $course_id) {
+        self::checkCompletenessProper($uid, $course_id, true);
     }
 }
