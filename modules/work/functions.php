@@ -129,6 +129,8 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
         $ass_cid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = ?d", $id)->course_id;
         Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
         triggerGame($ass_cid, $row->uid, $id);
+        triggerAssignmentAnalytics($ass_cid, $row->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+        triggerAssignmentAnalytics($ass_cid, $row->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         if ($GLOBALS['uid'] == $row->uid) {
             $return .= $m['deleted_work_by_user'];
         } else {
@@ -231,9 +233,9 @@ function was_graded($uid, $id, $ret_val = FALSE) {
 function show_submission_details($id) {
     
     global $uid, $m, $course_id, $langSubmittedAndGraded, $tool_content, $course_code,
-           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView,
+           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView, $urlServer,
            $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content, $langCriteria;
-    
+
     load_js('tools.js');
     $head_content .= "<script type='text/javascript'>";
     $head_content .= "$(function() {
@@ -351,15 +353,22 @@ function show_submission_details($id) {
                             </tr>
                     </table>
                     </div>";
-                } else
+                } else {
                     $tool_content .= $sub->grade;
+                }
+                if (isset($_GET['unit'])) {
+                    $unit = intval($_GET['unit']);
+                    $file_comments_link = "../units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
+                } else {
+                    $file_comments_link = "{$urlServer}modules/work/?course=$course_code&amp;getcomment=$sub->id";
+                }
                 $tool_content .= "</div>
                 </div>
                 <div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong>" . $m['gradecomments'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . $sub->grade_comments . "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$sub->id'>" . $sub->grade_comments_filename . "</a>
+                    <div class='col-sm-9'>" . $sub->grade_comments . "&nbsp;&nbsp;<a href='$file_comments_link'>" . $sub->grade_comments_filename . "</a>
                     </div>
                 </div>
                 <div class='row margin-bottom-fat'>
@@ -370,11 +379,16 @@ function show_submission_details($id) {
                     </div>
                 </div>";
             if ($assignment->submission_type == 0) {
+                if (isset($_GET['unit'])) {
+                    $get_link = "<a href='../units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id'>";
+                } else {
+                    $get_link = "<a href='{$urlServer}modules/work/?course=$course_code&amp;get=$sub->id'>";
+                }
                 $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong>" . $langFileName . ":</strong>
                     </div>
-                        <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
+                        <div class='col-sm-9'>$get_link" . q($sub->file_name) . "</a>
                     </div>
                 </div>";
             } else {
@@ -386,16 +400,16 @@ function show_submission_details($id) {
                     </div>
                 </div>";
             }
-            if(AutojudgeApp::getAutojudge()->isEnabled()) {
-            $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
-            $tool_content .= "
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>" . $langAutoJudgeEnable . ":</strong>
-                </div>
-                <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
-                </div>
-            </div>";
+            if (AutojudgeApp::getAutojudge()->isEnabled()) {
+                $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
+                $tool_content .= "
+                    <div class='row margin-bottom-fat'>
+                        <div class='col-sm-3'>
+                            <strong>" . $langAutoJudgeEnable . ":</strong>
+                        </div>
+                        <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
+                        </div>
+                    </div>";
             }
         table_row($m['comments'], $sub->comments, true);
         $tool_content .= "</div></div>";
@@ -443,6 +457,21 @@ function triggerGame($courseId, $uid, $assignId) {
     $eventData->module = MODULE_ID_ASSIGN;
     $eventData->resource = intval($assignId);
     AssignmentEvent::trigger(AssignmentEvent::UPDGRADE, $eventData);
+}
+
+
+function triggerAssignmentAnalytics($courseId, $uid, $assignmentId, $eventname) {
+    $data = new stdClass();
+    $data->course_id = $courseId;
+    $data->uid = $uid;
+    $data->resource = $assignmentId;
+
+    if ($eventname == AssignmentAnalyticsEvent::ASSIGNMENTGRADE) {
+        $data->element_type = 40;
+    } else if ($eventname == AssignmentAnalyticsEvent::ASSIGNMENTDL) {
+        $data->element_type = 41;
+    }
+    AssignmentAnalyticsEvent::trigger($eventname, $data, true);
 }
 
 /**
