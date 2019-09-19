@@ -3331,7 +3331,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit,
     $langNotice3, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade, $langWarnAboutDeadLine;
+    $langGradebookGrade, $langWarnAboutDeadLine, $urlServer;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
@@ -3458,12 +3458,13 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         }
         if ($is_editor) {
             $back_link = "index.php?course=$course_code&id=$id";
+            $form_link = "{$urlServer}modules/work/?course=$course_code";
         } else {
             if (isset($_GET['unit'])) {
                 $back_link = "../units/index.php?course=$course_code&id=$_GET[unit]";
                 $form_link = "../units/view.php?course=$course_code";
             } else {
-                $back_link = $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+                $back_link = $form_link = "{$urlServer}modules/work/?course=$course_code";
             }
         }
         $tool_content .= action_bar(array(
@@ -3578,30 +3579,6 @@ EOF;*/
 
 /**
  * @brief display assignment details
- * @global type $tool_content
- * @global type $is_editor
- * @global type $course_code
- * @global type $m
- * @global type $langDaysLeft
- * @global type $course_id
- * @global type $langEndDeadline
- * @global type $langDelAssign
- * @global type $langAddGrade
- * @global type $langZipDownload
- * @global type $langTags
- * @global type $langGraphResults
- * @global type $langWorksDelConfirm
- * @global type $langWorkFile
- * @global type $langGradeType
- * @global type $langGradeNumber
- * @global type $langGradeScale
- * @global type $langGradeRubric
- * @global type $langRubricCriteria
- * @global type $langEditChange
- * @global type $langExportGrades
- * @global type $langDescription
- * @global type $langTitle
- * @global type $langWarnAboutDeadLine
  * @param type $id
  * @param type $row
  */
@@ -3609,7 +3586,7 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $m, $langDaysLeft,$course_id,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
-           $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail,
+           $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail, $urlServer,
            $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine;
 
     $preview_rubric = '';
@@ -3652,7 +3629,7 @@ function assignment_details($id, $row) {
         $tool_content .= action_bar(array(
             array(
                 'title' => $langAddGrade,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add",
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=add",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
@@ -3660,28 +3637,28 @@ function assignment_details($id, $row) {
             array(
                 'title' => $langZipDownload,
                 'icon' => 'fa-file-archive-o',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id",
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;download=$id",
                 'level' => 'primary'
             ),
             array(
                 'title' => $langExportGrades,
                 'icon' => 'fa-file-excel-o',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=export"
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=export"
             ),
             array(
                 'title' => $langGraphResults,
                 'icon' => 'fa-bar-chart',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true"
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;disp_results=true"
             ),
             array(
                 'title' => $m['WorkUserGroupNoSubmission'],
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
                 'icon' => 'fa-minus-square'
             ),
             array(
                 'title' => $langDelAssign,
                 'icon' => 'fa-times',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete",
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=do_delete",
                 'button-class' => "btn-danger",
                 'confirm' => "$langWorksDelConfirm"
             )
@@ -3701,7 +3678,7 @@ function assignment_details($id, $row) {
             <h3 class='panel-title'>
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
-                "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
+                "<a href='{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=edit'>
                     <span class='fa fa-edit' title='' data-toggle='tooltip' data-original-title='$langEditChange'></span>
                 </a>" : "")."
             </h3>
@@ -3735,13 +3712,20 @@ function assignment_details($id, $row) {
                 </div>
             </div>";
         }
+        if (isset($_GET['unit'])) {
+            $unit = intval($_GET['unit']);
+            $filelink = "{$urlServer}modules/units/view.php/?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
+        } else {
+            $filelink = "{$urlServer}modules/work/?course=$course_code&amp;get=$row->id&amp;file_type=1";    
+        }
+        
         if (!empty($row->file_name)) {
             $tool_content .= "<div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langWorkFile:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a>
+                    <a href='$filelink'>$row->file_name</a>
                 </div>
             </div>";
         }
@@ -3835,31 +3819,6 @@ function assignment_details($id, $row) {
 /**
  * @brief show assignment - prof view only
  * @brief the optional message appears instead of assignment details
- * @global type $tool_content
- * @global type $m
- * @global type $langNoSubmissions
- * @global type $langSubmissions
- * @global type $langWorkOnlineText
- * @global type $langGradeOk
- * @global type $course_code
- * @global type $langGraphResults
- * @global type $m
- * @global type $course_code
- * @global type $langPlagiarismResult
- * @global type $langDownloadToPDF
- * @global array $works_url
- * @global type $course_id
- * @global type $langQuestionView
- * @global type $langSGradebookBook
- * @global type $langAutoJudgeShowWorkResultRpt
- * @global type $langSurnameName
- * @global type $langPlagiarismCheck
- * @global type $langProgress
- * @global type $langGradebookGrade
- * @global type $langHasAssignmentP
- * @global type $langAmShortublished
- * @global type $langGradedAt
- * @global type $langDeleteSubmission
  * @param type $id
  * @param type $display_graph_results
  */
@@ -3867,7 +3826,7 @@ function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $m, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
     $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult, $langHasAssignmentPublished,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
-    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission,
+    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -3920,7 +3879,7 @@ function show_assignment($id, $display_graph_results = false) {
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
                                                    ORDER BY $order $rev", $id);
 
-            $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
+            $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
                 <div class='margin-bottom-thin'>
@@ -3942,7 +3901,7 @@ function show_assignment($id, $display_graph_results = false) {
                 //is it a group assignment?
                 if (!empty($row->group_id)) {
                     $subContentGroup = "$m[groupsubmit] " .
-                            "<a href='../group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
+                            "<a href='{$urlServer}/modules/group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
                             "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
                 } else {
                     $subContentGroup = '';
@@ -3964,7 +3923,7 @@ function show_assignment($id, $display_graph_results = false) {
                         } else {
                             $filename = $row->file_name;
                         }
-                        $filelink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
+                        $filelink = "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;get=$row->id'>" .
                             q($filename) . "</a>";
                     }
                 }
@@ -3974,7 +3933,7 @@ function show_assignment($id, $display_graph_results = false) {
                 } else {
                     $grade = $row->grade;
                 }
-                $icon_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                $icon_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
                                 <span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span>
                             </a>";
                 if ($row->grading_scale_id && $row->grading_type == 1) {
@@ -4010,7 +3969,7 @@ function show_assignment($id, $display_graph_results = false) {
                         $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' disabled>";
                     } else {
                         $icon_field = '';
-                        $grade_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
                                 <span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span>
                             </a>";
                     }
@@ -4044,12 +4003,12 @@ function show_assignment($id, $display_graph_results = false) {
                     $comments = '<strong>'.$m['gradecomments'] . '</strong>:';
                     $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
                     $comments .= "&nbsp;&nbsp;<span class='small'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
+                                <a href='{$urlServer}modules/work/index.php?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
                             </span>";
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
                 if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                    $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                    $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                     $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
                 }
 
@@ -4063,7 +4022,7 @@ function show_assignment($id, $display_graph_results = false) {
                             $plagiarismlink = "<small>$langProgress: ". $results->progress*100 . "%</small>";
                         }
                     } else {
-                        $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
+                        $plagiarismlink = "<span class='small'><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
                     }
                 }
                 // ---------------------------------
@@ -4080,7 +4039,7 @@ function show_assignment($id, $display_graph_results = false) {
                             </td>
                             <td class='text-center'>
                             $icon_field
-                            <a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
+                            <a class='linkdelete' href='{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
                                 <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteSubmission' title='' data-toggle='tooltip'></span>
                             </a>
                         </td></tr>";
@@ -4779,11 +4738,18 @@ function submit_grades($grades_id, $grades, $email = false) {
 function send_file($id, $file_type) {
     global $uid, $is_editor;
 
+    if (is_module_disable(MODULE_ID_ASSIGN)) {
+        return false;
+    }
+
     if (isset($file_type)) {
         if ($file_type == 1) {
             $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-            // don't show file if: assignment nonexistent, not editor, not active assignment, module not visible
-            if (!$info or !($is_editor or ($info->active and visible_module(MODULE_ID_ASSIGN)))) {
+            // don't show file if: assignment nonexistent of assignment not active
+            if (!$info) {
+                return false;
+            }
+            if (!($info->active)) {
                 return false;
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);
