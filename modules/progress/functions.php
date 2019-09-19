@@ -356,7 +356,8 @@ function display_activities($element, $id) {
            $langOfLearningPath, $langDelete, $langEditChange,
            $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langExport, $langBack, $langUsers, $langOfGradebook,
-           $langValue, $langOfForums, $langOfCourseCompletion, $course_id;
+           $langValue, $langOfForums, $langOfCourseCompletion, $langGradeOfCourseCompletion,
+           $course_id;
     /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
 
     if ($element == 'certificate') {
@@ -383,9 +384,18 @@ function display_activities($element, $id) {
             false
         );
 
-    // check if course completion is enable
-    $cc_enable = Database::get()->querySingle("SELECT active FROM badge "
-                                    . "WHERE course_id = ?d AND bundle = -1", $course_id)->active;
+    // check if course completion is enabled
+    $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge WHERE course_id = ?d AND bundle = -1", $course_id)->active;
+
+    // check if current element is course completion badge
+    $cc_is_current = false;
+    if ($element == 'badge') {
+        $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
+        if ($bundle && $bundle == -1) {
+            $cc_is_current = true;
+        }
+    }
+
     // certificate details
     $tool_content .= display_settings($element, $id);
 
@@ -396,7 +406,7 @@ function display_activities($element, $id) {
         array('title' => $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecompletion",
             'icon' => 'fa fa-trophy',
-            'show' => $cc_enable),
+            'show' => !$cc_enable),
         array('title' => $langOfAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
@@ -464,7 +474,11 @@ function display_activities($element, $id) {
         array('title' => $langOfGradebook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . GradebookEvent::ACTIVITY,
             'icon' => 'fa fa-sort-numeric-desc space-after-icon',
-            'class' => '')),
+            'class' => ''),
+        array('title' => $langGradeOfCourseCompletion,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
+            'icon' => 'fa fa-trophy',
+            'show' => $cc_enable && !$cc_is_current)),
         array(
             'secondary_title' => $langAdd,
             'secondary_icon' => '',
@@ -603,6 +617,9 @@ function insert_activity($element, $element_id, $activity) {
             break;
         case GradebookEvent::ACTIVITY:
             display_available_gradebooks($element, $element_id);
+            break;
+        case CourseCompletionEvent::ACTIVITY:
+            display_available_coursecompletiongrade($element, $element_id);
             break;
         default: break;
         }
@@ -1701,6 +1718,47 @@ function display_available_gradebooks($element, $element_id) {
     }
 }
 
+/**
+ * @brief coursecompletion grade display form
+ * @param $element
+ * @param $element_id
+ */
+function display_available_coursecompletiongrade($element, $element_id) {
+
+    global $tool_content, $langAddModulesButton, $langGradeCourseCompletion,
+           $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
+           $langChoice, $langOperator;
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $res = Database::get()->queryArray("SELECT id FROM ${element}_criterion WHERE $element = ?d
+                                            AND resource IS NULL
+                                            AND activity_type = '" . CourseCompletionEvent::ACTIVITY . "'
+                                            AND module = " . MODULE_ID_PROGRESS, $element_id);
+    if (count($res) > 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+            "<input type='hidden' name='$element_name' value='$element_id'>" .
+            "<table class='table-default'>" .
+            "<tr class='list-header'>" .
+            "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+            "<th style='width:5px;'>&nbsp;$langOperator</th>" .
+            "<th style='width:30px;'>$langValue</th>" .
+            "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+            "</tr>";
+
+        $tool_content .= "<tr>" .
+            "<td>" . $langGradeCourseCompletion . "</td>" .
+            "<td>". selection(get_operators(), "operator") . "</td>".
+            "<td class='text-center'><input style='width:30px;' type='text' name='threshold' value=''></td>" .
+            "<td class='text-center'><input name='" . CourseCompletionEvent::ACTIVITY . "' value='1' type='checkbox'></td>" .
+            "</tr>";
+
+        $tool_content .= "</table>" .
+            "<div align='right'><input class='btn btn-primary' type='submit' name='add_coursecompletiongrade' value='$langAddModulesButton'></div></th></form>";
+    }
+}
+
 
 /**
  * @brief display badge / certificate settings
@@ -2417,5 +2475,6 @@ function criteria_with_operators() {
                  ForumTopicEvent::ACTIVITY,
                  BlogEvent::ACTIVITY,
                  CommentEvent::BLOG_ACTIVITY,
-                 GradebookEvent::ACTIVITY);
+                 GradebookEvent::ACTIVITY,
+                 CourseCompletionEvent::ACTIVITY);
 }

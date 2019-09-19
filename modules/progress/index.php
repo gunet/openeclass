@@ -40,6 +40,7 @@ require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
 require_once 'CourseParticipationEvent.php';
 require_once 'GradebookEvent.php';
+require_once 'CourseCompletionEvent.php';
 
 $toolName = $langProgress;
 
@@ -247,6 +248,10 @@ if ($is_editor) {
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_gradebook'])) {
         add_gradebook_to_certificate($element, $element_id);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_coursecompletiongrade'])) {
+        add_coursecompletiongrade_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     }
