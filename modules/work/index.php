@@ -67,7 +67,7 @@ load_js('d3/d3.min.js');
 load_js('c3-0.4.10/c3.min.js');
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
-$works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
+$works_url = array('url' => "{$urlServer}modules/work/?course=$course_code", 'name' => $langWorks);
 $toolName = $langWorks;
 
 //-------------------------------------------
@@ -576,13 +576,17 @@ if ($is_editor) {
         $id = intval($_REQUEST['id']);
         if (isset($_POST['work_submit'])) {
             $pageName = $m['SubmissionStatusWorkInfo'];
-            $navigation[] = $works_url;
+            if (!isset($_REQUEST['unit'])) {
+                $navigation[] = $works_url;
+            }
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
             submit_work($id);
         } else {
             $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
             $pageName = $work_title;
-            $navigation[] = $works_url;
+            if (!isset($_REQUEST['unit'])) {
+                $navigation[] = $works_url;
+            }
             show_student_assignment($id);
         }
     } else {
@@ -3219,6 +3223,7 @@ function delete_teacher_assignment_file($id) {
  * @param type $id
  */
 function show_student_assignment($id) {
+
     global $tool_content, $m, $uid, $langUserOnly, $langBack, $course_code,
         $course_id, $course_code, $langAssignmentWillBeActive,
         $langCaptchaWrong, $langIPHasNoAccess;
