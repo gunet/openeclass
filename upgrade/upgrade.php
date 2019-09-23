@@ -1871,9 +1871,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("DROP TABLE IF EXISTS `faculte`");
         }
 
-        // hierarchy stored procedures
-        refreshHierarchyProcedures();
-
         // Update ip-containing fields to support IPv6 addresses
         Database::get()->query("ALTER TABLE `log` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
         Database::get()->query("ALTER TABLE `login_failure` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
@@ -1973,10 +1970,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `value` text,
                 INDEX `field_index` (`field`) )");
         }
-    }
-
-    if (version_compare($oldversion, '3.1.6', '<')) {
-        refreshHierarchyProcedures();
     }
 
     // Rename table `cours` to `course` and `cours_user` to `course_user`
@@ -3350,38 +3343,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
         }
 
-        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
-        Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
-                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
-                    IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
-                LANGUAGE SQL
-                BEGIN
-                    DECLARE lft, rgt INT(11);
-
-                    SET lft = parentlft + 1;
-                    SET rgt = parentlft + 2;
-
-                    CALL shift_right(parentlft, 2, 0);
-
-                    INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
-                END");
-        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-        Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
-        Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
-                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-                    IN p_order_priority INT(11), IN p_visible TINYINT(4))
-                LANGUAGE SQL
-                BEGIN
-                    UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
-                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                        order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
-
-                    IF nodelft <> parentlft THEN
-                        CALL move_nodes(nodelft, p_lft, p_rgt);
-                    END IF;
-                END");
-
         // fix invalid agenda durations
         Database::get()->queryFunc("SELECT DISTINCT duration FROM agenda WHERE duration NOT LIKE '%:%'",
             function ($item) {
@@ -3986,6 +3947,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
             FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
     }
+
+
+    // hierarchy stored procedures
+    // Ensure that all stored procedures are up and running!
+    refreshHierarchyProcedures();
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
