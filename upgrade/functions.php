@@ -1919,55 +1919,45 @@ function updateAnnouncementSticky( $table ) {
     }
 }
 
+/**
+ * Create Stored Procedures
+ */
 function refreshHierarchyProcedures() {
     Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
 
     Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
-    Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
-                                IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-                                IN p_order_priority INT(11))
-                            LANGUAGE SQL
-                            BEGIN
-                                DECLARE lft, rgt INT(11);
+    Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
+                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
+                    IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                LANGUAGE SQL
+                BEGIN
+                    DECLARE lft, rgt INT(11);
 
-                                SET lft = parentlft + 1;
-                                SET rgt = parentlft + 2;
+                    SET lft = parentlft + 1;
+                    SET rgt = parentlft + 2;
 
-                                CALL shift_right(parentlft, 2, 0);
+                    CALL shift_right(parentlft, 2, 0);
 
-                                INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
-                            END");
+                    INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
+                END");
 
-    Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-    Database::get()->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
-                                IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
-                                IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                            LANGUAGE SQL
-                            BEGIN
-                                DECLARE lft, rgt INT(11);
-
-                                SET lft = parentlft + 1;
-                                SET rgt = parentlft + 2;
-
-                                CALL shift_right(parentlft, 2, 0);
-
-                                INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
-                            END");
 
     Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
-    Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT,
-                                IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                                IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                            LANGUAGE SQL
-                            BEGIN
-                                UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
-                                    code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                                    order_priority = p_order_priority WHERE id = p_id;
+    Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
+                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
+                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
+                    IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                LANGUAGE SQL
+                BEGIN
+                    UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
+                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                        order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
 
-                                IF nodelft <> parentlft THEN
-                                    CALL move_nodes(nodelft, p_lft, p_rgt);
-                                END IF;
-                            END");
+                    IF nodelft <> parentlft THEN
+                        CALL move_nodes(nodelft, p_lft, p_rgt);
+                    END IF;
+                END");
+
 
     Database::get()->query("DROP PROCEDURE IF EXISTS `delete_node`");
     Database::get()->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
