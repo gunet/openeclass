@@ -3944,7 +3944,7 @@ $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
 $langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
-$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 5.4.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
+$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 7.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
 $langPHPVersion = 'PHP version';
 $langGuestLoginLabel = "$langCourse guest accounts";
 $langGuestLogin = 'Login with guest account';
