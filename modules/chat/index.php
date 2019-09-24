@@ -357,8 +357,8 @@ if ($display == TRUE) {
             if ($conf->chat_activity && $conf->agent_created && $conf->chat_activity_id && $conf->agent_id) {
                 if ($is_editor) {
                     $compl_cnt = Database::get()->querySingle("select count(cus.id) as cnt from colmooc_user_session cus 
-                    join conference c on (c.chat_activity_id = cus.activity_id) 
-                    where c.course_id = ?d and c.conf_id = ?d and cus.session_status = 1", $course_id, $conference_id)->cnt;
+                        join conference c on (c.chat_activity_id = cus.activity_id) 
+                        where c.course_id = ?d and c.conf_id = ?d and cus.session_status = 1", $course_id, $conf->conf_id)->cnt;
                     $conf_details .= "<br/><small>($langColMoocCompletions: $compl_cnt)</small>";
                 } else {
                     $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $conf->chat_activity_id);
