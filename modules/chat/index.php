@@ -351,13 +351,22 @@ if ($display == TRUE) {
         $tool_content .="</tr></thead>";
         foreach ($q as $conf) {
 
-            // validate colmooc
-            // if ($conf->chat_activity && $conf->agent_created && $conf->chat_activity_id && $conf->agent_id) {
-            //    $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $conf->chat_activity_id);
-            //    if ($colmoocUserSession && $colmoocUserSession->session_status == 1) {
-            //        continue;
-            //    }
-            //}
+            $conf_details = '';
+
+            // colmooc details
+            if ($conf->chat_activity && $conf->agent_created && $conf->chat_activity_id && $conf->agent_id) {
+                if ($is_editor) {
+                    $compl_cnt = Database::get()->querySingle("select count(cus.id) as cnt from colmooc_user_session cus 
+                    join conference c on (c.chat_activity_id = cus.activity_id) 
+                    where c.course_id = ?d and c.conf_id = ?d and cus.session_status = 1", $course_id, $conference_id)->cnt;
+                    $conf_details .= "<br/><small>($langColMoocCompletions: $compl_cnt)</small>";
+                } else {
+                    $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $conf->chat_activity_id);
+                    if ($colmoocUserSession && $colmoocUserSession->session_status == 1) {
+                        $conf_details .= "<br/><small>($langColMoocSessionStatusFinished <img src='$themeimg/tick.png'/>)</small>";
+                    }
+                }
+            }
 
             $enabled_conference = ($conf->status == 'active')? "<span class='text-success'><span class='fa fa-eye'></span> $langVisible</span>" : "<span class='text-danger'><span class='fa fa-eye-slash'></span> $langInvisible</span>";
             ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
@@ -367,7 +376,7 @@ if ($display == TRUE) {
             } else {
                 $tool_content .= $conf->conf_title;
             }
-            $tool_content .= "<div style='font-size:smaller; padding-top: 10px;'>$conf->conf_description</div>";
+            $tool_content .= "<div style='font-size:smaller; padding-top: 10px;'>$conf->conf_description</div>" . $conf_details;
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>$enabled_conference</td>";
             $tool_content .= "<td class='text-center'>".claro_format_locale_date($dateTimeFormatShort, strtotime($conf->start))."</td>";

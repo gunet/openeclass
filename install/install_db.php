@@ -1659,6 +1659,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `colmooc_user_session` (
     `session_id` TEXT NOT NULL,
     `session_token` TEXT NOT NULL,
     `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+    `session_status_updated` datetime DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");

@@ -5086,9 +5086,14 @@ $langColmoocCreateAgentFailed = "Agent Create Error Detected. Please retry.";
 $langColmoocCreateAgentSuccess = "Agent created successfully. Please instruct your students to enroll the chat.";
 $langColmoocRegisterStudentFailed = "Student Chat Loading Error Detected. Pleases retry.";
 $langColmoocRegisterStudentSuccess = "Student Chat completed successfully. Please close this dialog and return the chat list.";
-$langColmoocFollowLink = "Please click the following link to visit the ColMOOC environment";
+$langColmoocFollowLink1 = "Please click the following link";
+$langColmoocFollowLink2 = "in order to visit the ColMOOC environment";
 $langColMoocAgentNeeded = "Please visit your new chat activity and get redirected to the ColMOOC environment for creating the chat agent in order for the students to be able to access it.";
 $langColMoocAgentCreateOrEdit = "Plese click Create or Edit Agent in order to get redirected to the ColMOOC enviroment.";
+$langColMoocSessionStatusNoPair = "No pair found";
+$langColMoocSessionStatusFinished = "Completed";
+$langColMoocSessionStatusNoFinalAnswer = "No final answer given";
+$langColMoocCompletions = "Times Completed";
 $langNewEclassVersion = 'New Open eClass platform release';
 $langNewEclassVersionInfo = 'A new version of the Open eClass platform, %s,
     is available.  Please visit the project webpage %s for upgrade information.';

@@ -5625,9 +5625,14 @@ $langColmoocCreateAgentFailed = "Ανιχνεύθηκε σφάλμα κατά τ
 $langColmoocCreateAgentSuccess = "Η συζήτηση δημιουργήθηκε επιτυχώς. Παρακαλούμε ενημερώστε τους σπουδαστές σας οτι μπορούν να προχωρήσουν με την εγγραφή στη συζήτηση.";
 $langColmoocRegisterStudentFailed = "Ανιχνεύθηκε σφάλμα κατά την εγγραφή στη συζήτηση. Παρακαλούμε ξαναπροσπαθήστε.";
 $langColmoocRegisterStudentSuccess = "Η συζήτηση ολοκληρώθηκε επιτυχώς. Παρακαλούμε κλείστε αυτόν το διάλογο και επιστρέψτε στη λίστα συζητήσεων.";
-$langColmoocFollowLink = "Πατήστε τον παρακάτω σύνδεσμο για να μεταφερθείτε στο περιβάλλον του ColMOOC";
+$langColmoocFollowLink1 = "Παρακαλούμε πατήστε το σύνδεσμο";
+$langColmoocFollowLink2 = "για να μεταφερθείτε στο περιβάλλον του ColMOOC";
 $langColMoocAgentNeeded = "Παρακαλούμε επισκεφθείτε τη νέα συζήτηση για να μεταφερθείτε στο περιβάλλον του ColMOOC και να δημιουργήσετε τον Agent για να μπορούν να έχουν πρόσβαση οι σπουδαστές σας.";
 $langColMoocAgentCreateOrEdit = "Παρακαλούμε επιλέξτε Δημιουργία ή Επεξεργασία του Agent για να μεταφερθείτε στο περιβάλλον του ColMOOC.";
+$langColMoocSessionStatusNoPair = "Δε βρέθηκε συνομιλητής";
+$langColMoocSessionStatusFinished = "Ολοκληρώθηκε";
+$langColMoocSessionStatusNoFinalAnswer = "Δε δόθηκε τελική απάντηση";
+$langColMoocCompletions = "Αριθμός ολοκληρώσεων";
 
 // Learning Analytics
 $langLearningAnalytics = 'Στατιστικά Μάθησης';
