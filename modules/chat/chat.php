@@ -237,7 +237,7 @@ if (!$conference_activity) {
             $tool_content .= "<td>". $cnt++ . "</td>";
             $tool_content .= "<td>" . display_user($cus->user_id) . "<br/><small>($langAmShort: ". uid_to_am($cus->user_id) . ")</small></td>";
             $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
-            $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->sesion_status_updated)) . "</td>";
+            $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->session_status_updated)) . "</td>";
             $tool_content .= "</tr>";
             $cnt++;
         }
@@ -274,7 +274,7 @@ if (!$conference_activity) {
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>" . display_user($cus->user_id) . "<br/><small>($langAmShort: " . uid_to_am($user_data->user) . ")</small></td>";
                 $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
-                $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->sesion_status_updated)) . "</td>";
+                $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->session_status_updated)) . "</td>";
                 $tool_content .= "</tr>";
                 $tool_content .= "</table></div>";
             }
