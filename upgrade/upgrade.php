@@ -3947,6 +3947,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
             FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
     }
+    
+    // upgrade queries for version 3.7.4
+    if (version_compare($oldversion, '3.7.4', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.7.4'));
+
+        // conference chat activity and agent
+        Database::get()->query('ALTER TABLE `colmooc_user_session` ADD `session_status_updated` datetime DEFAULT NULL');
+    }
 
 
     // hierarchy stored procedures

@@ -29,6 +29,7 @@ $require_help = true;
 $helpTopic = 'chat';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
 require_once 'functions.php';
 
 $coursePath = $webDir . '/courses/';
@@ -171,6 +172,11 @@ if (!$conference_activity) {
             $conference_agent = true;
         }
     }
+    $sessionId = false;
+    $sessionToken = false;
+    if (!$is_editor) {
+        list($sessionId, $sessionToken) = colmooc_register_student($conference_id); // STEP 2
+    }
 
     $tool_content .= action_bar(array(
         array('title' => $langCreateAgent,
@@ -187,6 +193,11 @@ if (!$conference_activity) {
             'button-class' => 'btn-success',
             'show' => $is_editor && $conference_agent && $agent_id
         ),
+        array('title' => $langChat,
+            'url' => '#',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success studentChat',
+            'show' => !$is_editor && $sessionId && $sessionToken),
         array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
@@ -206,10 +217,35 @@ if (!$conference_activity) {
         $tool_content .= "<div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div>";
     } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent'])) {
         $tool_content .= "<div class='alert alert-info'>" . $langColMoocAgentCreateOrEdit . "</div>";
+        $q = Database::get()->queryArray("select cus.user_id, cus.session_status, cus.session_status_updated 
+            from colmooc_user_session cus 
+            join conference c on (c.chat_activity_id = cus.activity_id) 
+            where c.course_id = ?d and c.conf_id = ?d", $course_id, $conference_id);
+        $tool_content .= "<div class='table-responsive'>";
+        $tool_content .= "<table class='table-default'>
+            <thead>
+                <tr class='list-header'>
+                    <th style='width:5%'>$langID</th>
+                    <th>$langName $langSurname</th>
+                    <th class = 'text-center' width='250'>$langNewBBBSessionStatus</th>
+                    <th class = 'text-center' width='200'>$langRegistrationDate</th>";
+        $tool_content .="</tr></thead>";
+
+        $cnt = 1;
+        foreach ($q as $cus) {
+            $tool_content .= "<tr>";
+            $tool_content .= "<td>". $cnt++ . "</td>";
+            $tool_content .= "<td>" . display_user($cus->user_id) . "<br/><small>($langAmShort: ". uid_to_am($cus->user_id) . ")</small></td>";
+            $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
+            $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->sesion_status_updated)) . "</td>";
+            $tool_content .= "</tr>";
+            $cnt++;
+        }
+
+        $tool_content .= "</table></div>";
     }
 
     if (!$is_editor) {
-        list($sessionId, $sessionToken) = colmooc_register_student($conference_id); // STEP 2
         if ($sessionId && $sessionToken) {
             // Redirect student to colMOOC chat
             $colmooc_url = COLMOOC_CHAT_URL . "/?session_id=" . $sessionId . "&session_token=" . $sessionToken;
@@ -218,11 +254,32 @@ if (!$conference_activity) {
             } else {
                 $chatindex_url = $urlAppend . "modules/chat/index.php";
             }
-            $tool_content .= "<div class='alert alert-info'>" . $langColmoocFollowLink
-                . ': <a id="studentChat" href="#" title="' . $langChat . '">' . $langChat . '</a>'
-                . "</div>";
+            $tool_content .= "<div class='alert alert-info'>" . $langColmoocFollowLink1
+                . ' <a class="studentChat" href="#" title="' . $langChat . '">' . $langChat . '</a> '
+                . $langColmoocFollowLink2 . "</div>";
+
+            $cus = Database::get()->querySingle("select cus.user_id, cus.session_status, cus.session_status_updated 
+                from colmooc_user_session cus 
+                join conference c on (c.chat_activity_id = cus.activity_id) 
+                where c.course_id = ?d and c.conf_id = ?d and cus.user_id = ?d", $course_id, $conference_id, $uid);
+            if ($cus) {
+                $tool_content .= "<div class='table-responsive'>";
+                $tool_content .= "<table class='table-default'>
+            <thead>
+                <tr class='list-header'>
+                    <th>$langName $langSurname</th>
+                    <th class = 'text-center' width='250'>$langNewBBBSessionStatus</th>
+                    <th class = 'text-center' width='200'>$langRegistrationDate</th>";
+                $tool_content .= "</tr></thead>";
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>" . display_user($cus->user_id) . "<br/><small>($langAmShort: " . uid_to_am($user_data->user) . ")</small></td>";
+                $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
+                $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->sesion_status_updated)) . "</td>";
+                $tool_content .= "</tr>";
+                $tool_content .= "</table></div>";
+            }
         } else {
-            $tool_content .= "<div class='alert alert-info'>" . $langColmoocRegisterStudentFailed . "</div>";
+            $tool_content .= "<div class='alert alert-warning'>" . $langColmoocRegisterStudentFailed . "</div>";
         }
     }
 }
@@ -265,7 +322,7 @@ $head_content .= "<script>
             });
         });
         
-        $('#studentChat').click(function (e) {
+        $('.studentChat').click(function (e) {
             window.open('" . $colmooc_url . "', '_blank');
             window.location.href = '" . $chatindex_url . "';
         });

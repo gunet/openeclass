@@ -219,10 +219,6 @@ function colmooc_register_student($conferenceId) {
     // user session
     $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $conf->chat_activity_id);
 
-//    if ($colmoocUserSession && $colmoocUserSession->session_id && $colmoocUserSession->session_token) {
-//        $sessionId = $colmoocUserSession->session_id;
-//        $sessionToken = $colmoocUserSession->session_token;
-//    } else {
     // api create session
     $add_session_url = COLMOOC_BASE_URL . "/colmoocapi/api/session/add";
     $add_session_data = json_encode(array(array(
@@ -248,7 +244,6 @@ function colmooc_register_student($conferenceId) {
     } else {
         return array(false, false);
     }
-//    }
 
     return array($sessionId, $sessionToken);
 }
@@ -268,91 +263,21 @@ function custom_request($url, $post_data, $method, $header) {
     return $response;
 }
 
+function display_session_status($status) {
+    global $langColMoocSessionStatusNoPair, $langColMoocSessionStatusFinished, $langColMoocSessionStatusNoFinalAnswer;
 
-// ATTIC
-
-//function colmooc_create() {
-//    global $tool_content, $course_id, $siteName;
-//
-//    if (!extension_loaded('curl')) {
-//        $tool_content .= "SYNC FAILED";
-//        return;
-//    }
-//
-//    // gather all data
-//    $crow = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $course_id);
-//    $ctitle = q($crow->title) . " (" . $crow->public_code . ")";
-//    $platform_id = 201;
-//    $base_url = "https://mklab.iti.gr";
-//    $accept_head = array("Accept: text/html; charset=UTF-8");
-//    $json_head = "Content-Type: application/json\r\n";
-//
-//    // api delete current course
-//    $delete_course_url = $base_url . "/colmoocapi/api/course/delete?course_id=" . $course_id . "&platform_id=" . $platform_id;
-//    list($response, $http_code, $response_headers) = curl_custom_request($delete_course_url, null, "DELETE", $accept_head);
-//    $tool_content .= "delete course API call, status: " . $http_code . ", response: " . $response . "<br/><br/>";
-//
-//    // api add current course
-//    $add_course_url = $base_url . "/colmoocapi/api/course/add";
-//    $add_data = json_encode(array(array(
-//        "platform_id" => $platform_id,
-//        "course_id" => $course_id,
-//        "title" => $ctitle,
-//        "platform" => $siteName
-//    )));
-//    $response = custom_request($add_course_url, $add_data, "POST", $json_head);
-//    $tool_content .= "add course API call response: " . $response . "<br/><br/>";
-//
-//    // api get current course
-//    $get_course_url = $base_url . "/colmoocapi/api/course?course_id=". $course_id ."&platform_id=" . $platform_id;
-//    list($response, $http_code, $response_headers) = curl_custom_request($get_course_url, null, "GET", $accept_head);
-//    $tool_content .= "get course API call, status: " . $http_code . ", response: " . $response . "<br/><br/>";
-//
-//    // finished
-//    $tool_content .= "SYNC SUCCESSFUL" . "<br/><br/>";
-//}
-
-//function curl_custom_request($url, $post_data = null, $req = null, $set_headers = null) {
-//    $response = null;
-//    $http_code = null;
-//    $headers = array();
-//
-//    $ch = curl_init();
-//
-//    curl_setopt($ch, CURLOPT_URL, $url);
-//    if ($req != null) {
-//        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
-//    }
-//    if ($post_data != null && is_array($post_data) && count($post_data) > 0) {
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-//    }
-//    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-//    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//    if ($set_headers != null && is_array($set_headers) && count($set_headers) > 0) {
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, $set_headers);
-//    }
-//    curl_setopt($ch, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
-//        $len = strlen($header);
-//        $header = explode(':', $header, 2);
-//        if (count($header) < 2) { // ignore invalid headers
-//            return $len;
-//        }
-//
-//        $name = strtolower(trim($header[0]));
-//        if (!array_key_exists($name, $headers)) {
-//            $headers[$name] = [trim($header[1])];
-//        } else {
-//            $headers[$name][] = trim($header[1]);
-//        }
-//
-//        return $len;
-//    });
-//
-//    $response = curl_exec($ch);
-//    if(!curl_errno($ch)) {
-//        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-//    }
-//    curl_close($ch);
-//
-//    return array($response, $http_code, $headers);
-//}
+    switch ($status) {
+        case 0:
+            return $langColMoocSessionStatusNoPair;
+            break;
+        case 1:
+            return $langColMoocSessionStatusFinished;
+            break;
+        case 2:
+            return $langColMoocSessionStatusNoFinalAnswer;
+            break;
+        default:
+            return $langColMoocSessionStatusNoPair;
+            break;
+    }
+}
