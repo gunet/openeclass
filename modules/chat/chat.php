@@ -217,29 +217,44 @@ if (!$conference_activity) {
         $tool_content .= "<div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div>";
     } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent'])) {
         $tool_content .= "<div class='alert alert-info'>" . $langColMoocAgentCreateOrEdit . "</div>";
-        $q = Database::get()->queryArray("select cus.user_id, cus.session_status, cus.session_status_updated 
+        $q1 = Database::get()->queryArray("select cus.user_id, cus.session_status, cus.session_status_updated 
             from colmooc_user_session cus 
             join conference c on (c.chat_activity_id = cus.activity_id) 
-            where c.course_id = ?d and c.conf_id = ?d", $course_id, $conference_id);
+            join user u on (u.id = cus.user_id)
+            where c.course_id = ?d and c.conf_id = ?d and cus.session_status = 1
+            order by u.surname, u.givenname", $course_id, $conference_id);
+        $q2 = Database::get()->queryArray("select cus.user_id, cus.session_status, cus.session_status_updated
+            from colmooc_user_session cus
+            join conference c on (c.chat_activity_id = cus.activity_id)
+            join user u on (u.id = cus.user_id)
+            where c.course_id = ?d and c.conf_id = ?d and cus.session_status <> 1
+            order by u.surname, u.givenname", $course_id, $conference_id);
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>
             <thead>
                 <tr class='list-header'>
                     <th style='width:5%'>$langID</th>
-                    <th>$langName $langSurname</th>
+                    <th>$langSurname $langName</th>
                     <th class = 'text-center' width='250'>$langNewBBBSessionStatus</th>
-                    <th class = 'text-center' width='200'>$langRegistrationDate</th>";
+                    <th class = 'text-center' width='200'>$langDate</th>";
         $tool_content .="</tr></thead>";
 
         $cnt = 1;
-        foreach ($q as $cus) {
+        foreach ($q1 as $cus) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>". $cnt++ . "</td>";
-            $tool_content .= "<td>" . display_user($cus->user_id) . "<br/><small>($langAmShort: ". uid_to_am($cus->user_id) . ")</small></td>";
+            $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
             $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
             $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->session_status_updated)) . "</td>";
             $tool_content .= "</tr>";
-            $cnt++;
+        }
+        foreach ($q2 as $cus) {
+            $tool_content .= "<tr>";
+            $tool_content .= "<td>". $cnt++ . "</td>";
+            $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
+            $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
+            $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->session_status_updated)) . "</td>";
+            $tool_content .= "</tr>";
         }
 
         $tool_content .= "</table></div>";
@@ -269,10 +284,10 @@ if (!$conference_activity) {
                 <tr class='list-header'>
                     <th>$langName $langSurname</th>
                     <th class = 'text-center' width='250'>$langNewBBBSessionStatus</th>
-                    <th class = 'text-center' width='200'>$langRegistrationDate</th>";
+                    <th class = 'text-center' width='200'>$langDate</th>";
                 $tool_content .= "</tr></thead>";
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>" . display_user($cus->user_id) . "<br/><small>($langAmShort: " . uid_to_am($user_data->user) . ")</small></td>";
+                $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
                 $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
                 $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->session_status_updated)) . "</td>";
                 $tool_content .= "</tr>";
