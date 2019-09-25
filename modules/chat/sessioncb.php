@@ -39,12 +39,16 @@ $actionBar .= action_bar(array(
 
 $tool_content = $actionBar . "<div class='alert alert-danger'>" . $langColmoocRegisterStudentFailed . "</div>";
 
-if (isset($_GET['activity_id']) && isset($_GET['session_status'])) {
+if (isset($_GET['activity_id']) && isset($_GET['session_status']) && isset($_GET['partner_colstudent_id'])) {
 
     $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $_GET['activity_id']);
     if ($colmoocUserSession && $colmoocUserSession->session_id && $colmoocUserSession->session_token) {
         Database::get()->query("UPDATE colmooc_user_session SET session_status = ?d, session_status_updated = ?t WHERE user_id = ?d AND activity_id = ?d", $_GET['session_status'], gmdate('Y-m-d H:i:s'), $uid, $_GET['activity_id']);
-        $tool_content = $actionBar . "<div class='alert alert-info'>" . $langColmoocRegisterStudentSuccess . "</div>";
+        $partnerUserSession = Database::get()->querySingle("SELECT cus.* FROM colmooc_user_session cus JOIN colmooc_user cu ON (cu.user_id = cus.user_id) WHERE cu.colmooc_id = ?d AND cus.activity_id = ?d", $_GET['partner_colstudent_id'], $_GET['activity_id']);
+        if ($partnerUserSession && $partnerUserSession->session_id && $partnerUserSession->session_token && $partnerUserSession->user_id) {
+            Database::get()->query("UPDATE colmooc_user_session SET session_status = ?d, session_status_updated = ?t WHERE user_id = ?d AND activity_id = ?d", $_GET['session_status'], gmdate('Y-m-d H:i:s'), $partnerUserSession->user_id, $_GET['activity_id']);
+            $tool_content = $actionBar . "<div class='alert alert-info'>" . $langColmoocRegisterStudentSuccess . "</div>";
+        }
     }
 }
 
