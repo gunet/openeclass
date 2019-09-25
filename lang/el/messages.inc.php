@@ -1390,6 +1390,7 @@ $langOfBlog = "Ιστολογίου";
 $langOfMultimediaLinks = "Πολυμεσικών συνδέσμων";
 $langOfEBook = "Ηλεκτρονικού βιβλίου";
 $langOfPoll = "Ερωτηματολογίου";
+$langOfGradebook = "Βαθμολογίου";
 $langOfTopicForums = "Δημοσιεύσεων σε συζήτηση";
 $langOfForums = "Περιοχής συζητήσεων";
 $langOfBlogComments = "Σχολίων ιστολογίου";
