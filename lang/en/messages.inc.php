@@ -2018,7 +2018,6 @@ $langVideoDeleted = "All video links deleted";
 $langURL = "Video Server URL";
 $langcreator = "Creator";
 $langpublisher = "Publisher";
-$langdate = "Date";
 $langNoVideo = "No multimedia files or links available";
 $langEmptyVideoTitle = "Please enter a title";
 $langAddImage = "Include picture";
