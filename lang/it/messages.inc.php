@@ -107,7 +107,6 @@ $langErrors = "Errori:";
 $langMultEmail = "Visualizzazione di molti indirizzi E-mail";
 $langMultLoginPass = "Molte paia di LOGIN - PASS ";
 $langOk = "Ok";
-$langCont = "Continuare";
 $langNumUsers = "Numero di partecipanti nella piattaforma";
 $langNumGuest = "Numero di Ospiti";
 $langRestoreCourse = "Recupero di Corso";

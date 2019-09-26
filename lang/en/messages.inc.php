@@ -107,7 +107,6 @@ $langErrors = "Errors:";
 $langMultEmail = "Multiple presentations of e-mail addresses";
 $langMultLoginPass = "Multiple LOGIN - PASS pairs";
 $langOk = "Ok";
-$langCont = "Continue";
 $langNumUsers = "Number of platform participants";
 $langNumGuest = "Number of Guests";
 $langRestoreCourse = "Course Retrieval";

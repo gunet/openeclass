@@ -352,7 +352,6 @@ $langCourseInfoEdit = "Αλλαγή στοιχείων $langsOfCourse";
 $langBackCourse = "Επιστροφή στην αρχική σελίδα του $langsOfCourse";
 $langCourseFormat = "Mορφή $langsOfCourse";
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
-$langCourseWallFormat = "Μορφή τοίχου";
 $langCourseActivityFormat = 'Μορφή δραστηριότητας';
 $langWithCourseUnits = "$langCourse με ενότητες (εβδομαδιαίες, θεματικές)";
 $langCourseSimpleFormat = 'Απλή μορφή';

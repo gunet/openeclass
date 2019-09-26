@@ -120,7 +120,6 @@ $langErrors = "Erreurs :";
 $langMultEmail = "Apparitions multiples d'adresses e-mail";
 $langMultLoginPass = "Paires multiples LOGIN-PASS";
 $langOk = "OK";
-$langCont = "Suite";
 $langNumUsers = "Nombre de participants sur la plateforme";
 $langNumGuest = "Nombre de visiteurs";
 $langRestoreCourse = "Recupération du cours";
