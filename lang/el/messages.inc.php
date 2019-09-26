@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -352,6 +352,7 @@ $langCourseInfoEdit = "Αλλαγή στοιχείων $langsOfCourse";
 $langBackCourse = "Επιστροφή στην αρχική σελίδα του $langsOfCourse";
 $langCourseFormat = "Mορφή $langsOfCourse";
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
+$langCourseWallFormat = "Μορφή τοίχου";
 $langCourseActivityFormat = 'Μορφή δραστηριότητας';
 $langWithCourseUnits = "$langCourse με ενότητες (εβδομαδιαίες, θεματικές)";
 $langCourseSimpleFormat = 'Απλή μορφή';
@@ -1098,6 +1099,7 @@ $langWithRegistrationDate = 'Με ημερομηνία εγγραφής';
 $langWho = 'Που';
 $langWithDepartment = 'ανήκουν στα';
 $langWithoutDepartment = 'δεν ανήκουν στα';
+$langWith = 'Με';
 $langWithStudentId = 'αριθμούς μητρώου';
 $langWithUsernames = 'ονόματα χρήστών';
 $langUnansweredQuestions = 'Μη απαντηθείσες ερωτήσεις';
@@ -1582,7 +1584,10 @@ $langFormat = "Τύπος-Κατηγορία";
 $langSubject = "Θέμα";
 $langAuthor = "Συγγραφέας";
 $langUserForum = "Μέλος";
+$langCopyrighted = "Πνευματικά Δικαιώματα";
 $langCopyrightedFree = "Ελεύθερο δικαιωμάτων";
+$langCopyrightedNotFree = "Προστατεύονται όλα τα δικαιώματα";
+$langCopyrightedUnknown = "Άγνωστο";
 $langChangeMetadata = "Αλλαγή πληροφοριών εγγράφου";
 $langEditMeta = "Επεξεργασία Πληροφοριών";
 $langCategoryExcercise = "Άσκηση";
@@ -5397,7 +5402,7 @@ $langAutoJudgeAssertions = array(
     "integer" => "είναι ακέραιος",
     "float" => "είναι δεκαδικός",
     "digit" => "είναι ψηφίο",
-    "boolean" => "είναιboolean",
+    "boolean" => "είναι boolean",
     "notEmpty" => "δεν είναι κενό",
     "notNull" => "δεν είναι Null",
     "string" => "είναι string",
@@ -5456,7 +5461,7 @@ $langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχο�
 $langTurnitinShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism).
 Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Turnitin.
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://turnitin.com\">https://turnitin.com</a>";
-$langColmoocDescription = "ColMOOC Description";
+$langColmoocDescription = "Περιγραφή του ColMOOC";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
