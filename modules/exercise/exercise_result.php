@@ -17,57 +17,72 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
- */
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-include('userRecord.class.php');
+ * ======================================================================== */
+
+include 'exercise.class.php';
+include 'question.class.php';
+include 'answer.class.php';
+include 'userRecord.class.php';
+
 $require_current_course = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
+require_once 'analytics.php';
 
 $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
+# is this an AJAX request to check grades?
+$checking = false;
+$ajax_regrade = false;
+
 // picture path
 $data['picturePath'] = $picturePath = "courses/$course_code/image";
-//Identifying ajax request
+// Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
-    $grade = $_POST['question_grade'];
-    $question_id = $_POST['question_id'];
-    $eurid = $_GET['eurId'];
-    Database::get()->query("UPDATE exercise_answer_record
-                SET weight = ?f WHERE eurid = ?d AND question_id = ?d",
-        $grade, $eurid, $question_id);
-    $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
-        FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
-        $eurid)->count;
-    if ($ungraded == 0) {
-        // if no more ungraded quastions, set attempt as complete and
-        // recalculate sum of grades
-        Database::get()->query("UPDATE exercise_user_record
-            SET attempt_status = ?d,
-                total_score = (SELECT SUM(weight) FROM exercise_answer_record
-                                    WHERE eurid = ?d)
-            WHERE eurid = ?d",
-            ATTEMPT_COMPLETED, $eurid, $eurid);
-        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting FROM exercise_user_record WHERE eurid = ?d", $eurid);
-        // update gradebook            
-        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+    if (isset($_GET['check'])) {
+        $checking = true;
+        header('Content-Type: application/json');
+    } elseif (isset($_POST['regrade'])) {
+        $ajax_regrade = true;
     } else {
-        // else increment total by just this grade
-        Database::get()->query("UPDATE exercise_user_record
-            SET total_score = total_score + ?f WHERE eurid = ?d",
-            $grade, $eurid);
-    }
-    $eur = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    triggerGame($course_id, $uid, $eur->eid);
-    exit();
+	    $grade = $_POST['question_grade'];
+	    $question_id = $_POST['question_id'];
+	    $eurid = $_GET['eurId'];
+	    Database::get()->query("UPDATE exercise_answer_record
+		        SET weight = ?f WHERE eurid = ?d AND question_id = ?d",
+		$grade, $eurid, $question_id);
+	    $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
+		FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
+		$eurid)->count;
+	    if ($ungraded == 0) {
+		// if no more ungraded quastions, set attempt as complete and
+		// recalculate sum of grades
+		Database::get()->query("UPDATE exercise_user_record
+		    SET attempt_status = ?d,
+		        total_score = (SELECT SUM(weight) FROM exercise_answer_record
+		                            WHERE eurid = ?d)
+		    WHERE eurid = ?d",
+		    ATTEMPT_COMPLETED, $eurid, $eurid);
+		$data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting FROM exercise_user_record WHERE eurid = ?d", $eurid);
+		// update gradebook            
+		update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+	    } else {
+		// else increment total by just this grade
+		Database::get()->query("UPDATE exercise_user_record
+		    SET total_score = total_score + ?f WHERE eurid = ?d",
+		    $grade, $eurid);
+	    }
+	    $eur = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
+	    triggerGame($course_id, $uid, $eur->eid);
+	    triggerExerciseAnalytics($course_id, $uid, $data->eid);
+	    exit();
+	}
 }
+
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();

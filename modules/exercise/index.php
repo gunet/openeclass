@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -53,9 +53,18 @@ if (isset($_COOKIE['inExercise'])) {
     setcookie("inExercise", "", time() - 3600);
 }
 
+if ($is_editor) {
+    // disable ordering for action button column
+    $columns = 'null, null, null, { orderable: false }';
+} elseif ($uid) {
+    $columns = 'null, null, null';
+} else {
+    $columns = 'null, null';
+}
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#ex').DataTable ({
+                'columns': [ $columns ],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -90,8 +99,8 @@ if ($is_editor) {
 
     if (isset($_GET['exerciseId'])) {
         $exerciseId = $_GET['exerciseId'];
-    }    
-    
+    }
+
     if (!empty($_GET['choice'])) {
         // construction of Exercise
         $objExerciseTmp = new Exercise();
@@ -142,12 +151,21 @@ if ($is_editor) {
                     $objExerciseTmp->duplicate();
                     Session::Messages($langCopySuccess, 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                case 'distribution': //distribute answers
+                    $objExerciseTmp->distribution($_GET['correction_output']);
+                    Session::Messages($langDistributionSuccess, 'alert-success');
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                case 'cancelDistribution': //canceling distributed answers
+                    $objExerciseTmp->cancelDistribution();
+                    Session::Messages($langCancelDistributionSuccess, 'alert-success');
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+
             }
         }
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, ip_lock, password_lock FROM exercise "
+    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, temp_save, time_constraint, attempts_allowed, ip_lock, password_lock FROM exercise "
                                 . "WHERE course_id = ?d "
                                 . "ORDER BY start_date DESC", $course_id);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
@@ -158,7 +176,7 @@ if ($is_editor) {
         } else {
             $gids_sql_ready = "''";
         }
-    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
+    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, temp_save, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
             "FROM exercise WHERE course_id = ?d AND active = 1 "
             . "AND (assign_to_specific = '0' OR assign_to_specific != '0' AND id IN
                        (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d UNION SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ($gids_sql_ready))
@@ -202,6 +220,8 @@ if ($is_editor) {
 
 if (!$nbrExercises) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEx</div>";
+    //For Correction Script
+    $cf_result_data = 0;
 } else {
     $tool_content .= "<div class='table-responsive'><table id='ex' class='table-default'><thead><tr class='list-header'>";
 
@@ -209,7 +229,8 @@ if (!$nbrExercises) {
     if ($is_editor) {
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th style='width: 190px;' class='text-center'>$langResults</th>
+                <th class='text-center' width='20%'>$langInfoExercise</th>
+                <th class='text-center' width='15%'>$langResults</th>
                 <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
@@ -217,15 +238,16 @@ if (!$nbrExercises) {
         $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th class='text-center'>$langStart / $langFinish</th>
-                <th class='text-center'>$langExerciseConstrain</th>
-                <th class='text-center'>$langExerciseAttemptsAllowed</th>
+                <th class='text-center' width='20%'>$langInfoExercise</th>
                 $resultsHeader
               </tr>";
     }
     $tool_content .= "</thead><tbody>";
-    // display exercise list    
+    // For correction Form script
+    $cf_result_data = [];
+    // display exercise list
     foreach ($result as $row) {
+        $cf_result_data[] = ['id' => $row->id];
         $tool_content .= "<tr ".($is_editor && !$row->active ? "class='not_visible'" : "").">";
         $row->description = standard_text_escape($row->description);
         $exclamation_icon = '';
@@ -254,13 +276,41 @@ if (!$nbrExercises) {
                 $descr = '';
             }
             $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
+            $tool_content .= "<td><small>
+                            <div style='color:green;'>$langStart: " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</div>";
+            if (isset($row->end_date)) {
+                $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
+            }
+
+            if ($row->time_constraint > 0) {
+                $tool_content .= "<div>$langDuration: {$row->time_constraint} $langExerciseConstrainUnit</div>";
+            }
+            // how many attempts we have.
+            if ($row->attempts_allowed > 0) {
+                $tool_content .= "<div>$langAttempts: $row->attempts_allowed</div>";
+            }
+            // is temp save enabled?
+            if ($row->temp_save == 1) {
+                $tool_content .= "<div>$langTemporarySave: <span style='color:green;'>$langYes</span></div>";
+            }
+            $tool_content .= "</small></td>";
+
+
             $eid = getIndirectReference($row->id);
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
+
+            $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status=2", $row->id);
+            $counter1 = count($TotalExercises);
+
             if ($NumOfResults) {
-                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a> |
-                <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
-                (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)</td>";
+                $tool_content .= "<td class='text-center'>"
+                        . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
+                           <div>
+                           <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
+                           (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)"
+                        . "</div>"
+                        . "</td>";
             } else {
                 $tool_content .= "<td class='text-center'>  &mdash; </td>";
             }
@@ -272,6 +322,18 @@ if (!$nbrExercises) {
                     array('title' => $langEditChange,
                           'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-edit'),
+                    array('title' => $langCorrectByQuestion,
+                          'icon-class' => 'by_question',
+                          'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
+                          'url' => "#",
+                          'icon' => 'fa-pencil',
+                          'show' => $counter1),
+                    array('title' => $langDistributeExercise,
+                          'icon-class' => 'distribution',
+                          'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
+                          'url' => "#",
+                          'icon' => 'fa-exchange',
+                          'show' => $counter1),
                     array('title' => $row->active ?  $langViewHide : $langViewShow,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable")."&amp;exerciseId=" . $row->id,
                           'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
@@ -299,7 +361,7 @@ if (!$nbrExercises) {
                     ))."</td></tr>";
 
         // student only
-    } else {
+        } else {
             if (!resource_access($row->active, $row->public)) {
                 continue;
             }
@@ -309,8 +371,7 @@ if (!$nbrExercises) {
             $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
 
             if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
-                
-            
+
                 $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
                                 . "FROM exercise_user_record "
                                 . "WHERE eid = ?d AND uid = ?d "
@@ -321,28 +382,33 @@ if (!$nbrExercises) {
                             . "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAttemptPaused'>$lock_icon";
                 } else {
                     $tool_content .= "<td><a class='$link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
-                }                                
-                
+                }
+
              } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
             }
-            $tool_content .= $row->description . "</td><td class='smaller' align='center'>
-                                " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
-                                " . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</td>";
+            $tool_content .= $row->description . "</td>";
+            $tool_content .= "<td><small>
+                            <div style='color:green;'>$langStart: " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</div>";
+            if (isset($row->end_date)) {
+                $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
+            }
+
             if ($row->time_constraint > 0) {
-                $tool_content .= "<td class='text-center'>{$row->time_constraint} $langExerciseConstrainUnit</td>";
-            } else {
-                $tool_content .= "<td class='text-center'> - </td>";
+                $tool_content .= "<div>$langDuration: {$row->time_constraint} $langExerciseConstrainUnit</div>";
             }
             // how many attempts we have.
             $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $row->id, $uid)->count;
             if ($row->attempts_allowed > 0) {
-                $tool_content .= "<td class='text-center'>$currentAttempt/$row->attempts_allowed</td>";
-            } else {
-                $tool_content .= "<td class='text-center'> - </td>";
+                $tool_content .= "<div>$langAttempts: $currentAttempt/$row->attempts_allowed</div>";
             }
+            // is temp save enabled?
+            if ($row->temp_save == 1) {
+                $tool_content .= "<div>$langTemporarySave: <span style='color:green;'>$langYes</span></div>";
+            }
+            $tool_content .= "</small></td>";
             if ($previousResultsAllowed) {
                 if ($row->score) {
                     // user last exercise score
@@ -355,12 +421,12 @@ if (!$nbrExercises) {
                     } else {
                         $tool_content .= "<td class='text-center''>&dash;</td>";
                     }
-                $tool_content .= "</tr>";
+                    $tool_content .= "</tr>";
                 } else {
                     $tool_content .= "<td class='text-center'>$langNotAvailable</td>";
                 }
             }
-        }        
+        }
     } // end while()
     $tool_content .= "</tbody></table></div>";
 }
@@ -368,7 +434,7 @@ add_units_navigation(TRUE);
 $head_content .= "<script type='text/javascript'>
     function password_bootbox(link) {
         bootbox.dialog({
-            title: '$langPasswordModalTitle',
+            title: '" .js_escape($langPasswordModalTitle) . "',
             message: '<form class=\"form-horizontal\" role=\"form\" action=\"'+link+'\" method=\"POST\" id=\"password_form\">'+
                         '<div class=\"form-group\">'+
                             '<div class=\"col-sm-12\">'+
@@ -378,11 +444,11 @@ $head_content .= "<script type='text/javascript'>
                       '</form>',
             buttons: {
                 cancel: {
-                    label: '$langCancel',
+                    label: '" . js_escape($langCancel) . "',
                     className: 'btn-default'
                 },
                 success: {
-                    label: '$langSubmit',
+                    label: '" . js_escape($langSubmit) . "',
                     className: 'btn-success',
                     callback: function (d) {
                         var password = $('#password').val();
@@ -390,7 +456,7 @@ $head_content .= "<script type='text/javascript'>
                             $('#password_form').submit();
                         } else {
                             $('#password').closest('.form-group').addClass('has-error');
-                            $('#password').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
+                            $('#password').after('<span class=\"help-block\">" . js_escape($langTheFieldIsRequired) . "</span>');
                             return false;
                         }
                     }
@@ -403,7 +469,7 @@ $head_content .= "<script type='text/javascript'>
             e.preventDefault();
             var exercise = $(this);
             var link = $(this).attr('href');
-            bootbox.confirm('$langTemporarySaveNotice2', function(result) {
+            bootbox.confirm('" . js_escape($langTemporarySaveNotice2) . "', function(result) {
                 if(result) {
                     if(exercise.hasClass('password_lock')) {
                         password_bootbox(link);
@@ -419,7 +485,162 @@ $head_content .= "<script type='text/javascript'>
             password_bootbox(link);
         });
     });";
+
 if ($is_editor) {
+    $my_courses1 = Database::get()->queryArray("SELECT givenname, id FROM user u "
+                                                . "JOIN course_user c ON u.id = c.user_id "
+                                                . "WHERE c.status = " . USER_TEACHER . " "
+                                                . "AND c.course_id = ?d", $course_id);
+    if ($cf_result_data != 0) {
+
+        $ids_array = array_column($cf_result_data, 'id');
+
+        /**
+         * @var array $TotalExercises2 Array of <stdClass> objects describing numbers of
+         *                             unassigned answers per exercise id
+         */
+
+        $TotalExercises2 = Database::get()->queryArray(
+            "SELECT count(eurid) as answers_number, eid
+             FROM exercise_user_record
+             WHERE  eid
+             IN (".implode(',', $ids_array).")
+             AND attempt_status=2
+             GROUP BY eid");
+
+
+        $courses_options1 = "<table id=\'my-grade-table\' class=\'table-default\'>"
+                            . "<thead class=\'list-header\'>"
+                            . "<tr><th>$langTeacher</th>"
+                            . "<th>$langExerciseNumber</th>"
+                            . "</tr></thead><tbody> " ;
+            foreach ($my_courses1 as $row){
+                $courses_options1 .= "<tr>"
+                    . "<td><div class=\'teacher-name\' data-id=\'$row->id\'>$row->givenname</div></td>"
+                    . "<td><input type\'text\' class=\'grade-number\' style=\'max-width:50px\'>"
+                    . "</input><strong> / '+results.current+'</strong></td>"
+                    . "</tr>";
+            }
+
+        $courses_options1 .= "</tbody></table>";
+        $countResJs = json_encode($TotalExercises2);
+
+        $question_types = Database::get()->queryArray("SELECT exq.question, ear.q_position, eur.eid, eur.eurid as eurid "
+                . "FROM exercise_question AS exq "
+                . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
+                . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
+                . "WHERE eur.eid IN (".implode(',', $ids_array).") AND ear.weight IS NULL "
+                . "AND exq.type = " . FREE_TEXT . " "
+                . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position");
+        $questionsEid = json_encode($question_types);
+
+        $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th>$langTitle</th><th>$langChoice</th></tr></thead><tbody> " ;
+        foreach ($question_types as $row){
+            $q_position = $row->q_position;
+            $questions_table .= "<tr>"
+                . "<td>$row->question</td>"
+                . "<td><input type='radio' name='q_position' value='$q_position'><strong> $q_position </strong></td>"
+                . "</tr>  ";
+        }
+
+        $questions_table .= "</tbody></table>";
+
+        // @brief distribute exercise grading
+        $head_content .= "
+        $(document).on('click', '.distribution', function() {
+            var exerciseid = $(this).data('exerciseid');
+
+            var results = {
+                'list': JSON.parse('$countResJs'),
+                'get': function(id) {
+                    return $.grep(results.list, function(element) { return element.eid == id; })
+                            [0].answers_number; // return from the first array element
+                }
+            };
+            results.current = results.get(exerciseid[1]);
+            bootbox.dialog({
+                title: '<strong>" . js_escape($langDistributeExercise) . "</strong>',
+                message: '<h2 class=\"page-subtitle\">" . js_escape($langResults) . " : <strong>'+results.current+'</strong></h2><form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"correction_form\"> $courses_options1 </form>',
+                    buttons: {
+                        first: {
+                            label : '" . js_escape($langDistribute) . "',
+                            className : 'btn btn-success',
+                            callback: function(d) {
+                                var row = $('#my-grade-table tbody').find('tr');
+                                var output = [];
+                                var temp = 0;
+                                $.each(row,function(){
+                                            //in this scenario, this will be the reference of the row. If we have 5 rows in the table, each $(this) will point at one.
+                                            var obj = {};
+                                            //this way you get the value of the attribute data-id
+                                            obj.teacher = $(this).find('.teacher-name').data('id');
+                                            //this way you get the actual value
+                                            obj.grade = $(this).find('.grade-number').val();
+                                            if (obj.grade != '' ) {
+                                                temp = temp + parseInt(obj.grade);
+                                            }
+                                            output.push(obj);
+                                        }
+                                    );
+                                    if (temp > results.current)
+                                    {
+                                        // Do not close modal
+                                         alert('" . js_escape($langDistributeError) . "');
+                                         return false;
+                                    }
+                                    else {
+                                        $('#correction_form').attr('action', 'index.php?course=$course_code&choice=distribution&exerciseId=' + exerciseid[1]  + '&correction_output='+JSON.stringify(output));
+                                        $('#correction_form').submit();
+                                    }
+                                }
+                            },
+                        second: {
+                                label : '" . js_escape($langCancelDistribute) . "',
+                                className : 'btn btn-danger',
+                                callback: function(d) {
+                                        $('#correction_form').attr('action', 'index.php?course=$course_code&choice=cancelDistribution&exerciseId=' + exerciseid[1]);
+                                        $('#correction_form').submit();
+                                    }
+                                },
+                        third: {
+                            label : '" . js_escape($langCancel) . "',
+                            className : 'btn-default'
+                        }
+                    }
+                }
+            );
+        });";
+        $head_content .= "
+            $(document).on('click', '.by_question', function() {
+                var exerciseid = $(this).data('exerciseid');
+                var results = {
+                'list': JSON.parse('$questionsEid '),
+                'get': function(id) {
+                    return $.grep(results.list, function(element) { return element.eid == id; })
+                            [0].eurid; // return from the first array element
+                    }
+                };
+            var res = results.get(exerciseid[1]);
+                bootbox.dialog({
+                    title: '" . js_escape($landQuestionsInExercise) ."',
+                    message: '" . js_escape($langCorrectionMessage) . "',
+                        buttons: {
+                            cancel: {
+                                label: '" . js_escape($langCancel) . "',
+                                className: 'btn-default'
+                            },
+                            success: {
+                                label: '" .js_escape($langGradeCorrect) . "',
+                                className: 'btn-success',
+                                callback: function (a) {
+                                    window.location.href = 'results_by_question.php?course=$course_code&exerciseId='+ exerciseid[0];
+                                }
+                            }
+                        }
+                    });
+            });";
+    }
+
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
     foreach ($my_courses as $row) {
@@ -429,20 +650,20 @@ if ($is_editor) {
         $(document).on('click', '.warnLink', function() {
             var exerciseid = $(this).data('exerciseid');
             bootbox.dialog({
-                title: '$langCreateDuplicateIn',
+                title: '" . js_escape($langCreateDuplicateIn) . "',
                 message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_form\">'+
                             '<select class=\"form-control\" id=\"course_id\" name=\"clone_to_course_id\">'+
-                                '<option value=\"$course_id\">--- $langCurrentCourse ---</option>'+
+                                '<option value=\"$course_id\">--- " . js_escape($langCurrentCourse) . " ---</option>'+
                                 $courses_options
                             '</select>'+
                           '</form>',
                     buttons: {
                         cancel: {
-                            label: '$langCancel',
+                            label: '" . js_escape($langCancel) . "',
                             className: 'btn-default'
                         },
                         success: {
-                            label: '$langCreateDuplicate',
+                            label: '" . js_escape($langCreateDuplicate) . "',
                             className: 'btn-success',
                             callback: function (d) {
                                 $('#clone_form').attr('action', 'index.php?course=$course_code&choice=clone&exerciseId=' + exerciseid);
@@ -453,6 +674,7 @@ if ($is_editor) {
             });
         });";
 }
-$head_content .= "
-</script>";
+
+$head_content .= "</script>";
+
 draw($tool_content, 2, null, $head_content);

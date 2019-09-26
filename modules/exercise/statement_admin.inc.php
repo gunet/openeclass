@@ -75,15 +75,15 @@ $(function() {
 </script>
  ";
 // the question form has been submitted
-if (isset($_POST['submitQuestion'])) { 
-            
+if (isset($_POST['submitQuestion'])) {
+
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('questionName'));
     $v->labels(array(
         'questionName' => "$langTheField $langQuestion"
     ));
     if ($v->validate()) {
-        $questionName = trim($_POST['questionName']);
+        $questionName = canonicalize_whitespace($_POST['questionName']);
         $questionDescription = purify($_POST['questionDescription']);
         $answerType = intval($_POST['answerType']);
         // no name given
@@ -176,7 +176,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     } else {
         $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
         $link_back = "admin.php?course=$course_code".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$_GET[modifyQuestion]";
-    }    
+    }
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => $link_back,

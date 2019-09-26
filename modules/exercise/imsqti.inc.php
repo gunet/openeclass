@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -42,8 +42,6 @@ $errorMsgs = array();
 
 $msgs = array();
 
-//3 MB
-$maxFileSize = 3145728; 
 $allowed_file_types =  array('xml');
 
 // handle upload
@@ -52,46 +50,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     /*
      * Check file
      */
-
     if (!isset($_FILES['uploadedPackage']) || !is_uploaded_file($_FILES['uploadedPackage']['tmp_name'])) {
       $errorFound = true;
       array_push($errorMsgs, $langFileScormError);
-    }
-    elseif ($_FILES['uploadedPackage']['size'] > $maxFileSize) {
-      $errorFound = true;
-      array_push($errorMsgs, $langMaxFileSize . ": &nbsp;" . $maxFileSize/1024/1024 . "MB" );
     } elseif (!in_array(pathinfo($_FILES['uploadedPackage']['name'], PATHINFO_EXTENSION), $allowed_file_types)) {
       $errorFound = true;
       array_push($errorMsgs, $langUploadWhitelist . ": &nbsp;" . implode(', ', $allowed_file_types));
-    } 
-
-   if (!$errorFound) {	
-    $msgs = qti_import_file_form_submit(file_get_contents($_FILES['uploadedPackage']['tmp_name']), $course_id);
-  } 
+    }
+    if (!$errorFound) {
+         $msgs = qti_import_file_form_submit(file_get_contents($_FILES['uploadedPackage']['tmp_name']), $course_id);
+    }
 
     /* --------------------------------------
       status messages
-      -------------------------------------- */
-
-      $tool_content .= "\n<p><!-- Messages -->\n";
+      -------------------------------------- */      
       foreach ($okMsgs as $msg) {
-        $tool_content .= "<i class='fa fa-check-square'></i>&nbsp;$langSuccessOk&nbsp;" . $msg . "<br />";
+        $tool_content .= "<div class='alert alert-success'>$langSuccessOk&nbsp;" . $msg . "</div>";
       }
-
       foreach ($errorMsgs as $msg) {
-        $tool_content .= "<i class='fa fa-close'></i>&nbsp;$langError&nbsp;" . $msg . "<br />";
+        $tool_content .= "<div class='alert alert-warning'>$langError&nbsp;" . $msg . "</div>";
       }
 
       foreach ($msgs as $msg) {
-        if($msg[0]) {
-          $tool_content .= "<i class='fa fa-check-square'></i>&nbsp;$langSuccessOk&nbsp;" . $msg[1] . "<br />";
-        } else {
-          $tool_content .= "<i class='fa fa-close'></i>&nbsp;$langError&nbsp;" . $msg[1] . "<br />";
-        }
+        if ($msg[0]) {
+            $tool_content .= "<div class='alert alert-success'>$langSuccessOk&nbsp;" . $msg[1] . "</div>";
+          } else {
+            $tool_content .= "<div class='alert alert-warning'>$langError&nbsp;" . $msg[1] . "</div>";
+          }
       }
-
-      $tool_content .= "\n<!-- End messages -->\n";
-      $tool_content .= "\n<br /><a href='question_pool.php?course=$course_code'>$langBack</a></p>";
+      
+      $tool_content .= "<div class='text-center' style='margin-top:15px;'><a href='question_pool.php?course=$course_code'>$langBack</a></div>";
 
 } else {
     // if method == 'post'
@@ -99,34 +87,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     /* --------------------------------------
       UPLOAD FORM
       -------------------------------------- */
-    $tool_content .= "
-      <form enctype=\"multipart/form-data\" action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&importIMSQTI=yes\" method=\"post\">
-      <fieldset>
-      <legend>$langImport</legend>
-      <table width=\"100%\" class=\"tbl\">
-      <tr>
-      <th width=\"120\">$langFileName:</th>
-      <td>
-      <input type=\"hidden\" name=\"qtiFormId\" value=\"" . uniqid('') . "\" >
-      <input type=\"file\" name=\"uploadedPackage\">
-      <br />
-      <span class='smaller'>$langIMSQTIUploadFile</span>
-      </td>
-      </tr>
-      <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td class='right'><input type=\"submit\" value=\"" . $langImport . "\"></td>
-      </tr>
-      <tr>
-      <th>&nbsp;</th>
-      <td class='right smaller'>$langMaxFileSize " . $maxFileSize/1024/1024 . "&nbsp;MB</td>
-      </tr>
-      </table>
-      </fieldset>
-      </form>
-      <p>";
-
+    $tool_content .= 
+        "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&importIMSQTI=yes' method='post'>
+                <input type='hidden' name='qtiFormId' value='" . uniqid('') . "' >
+                    <h4>$langImport</h4>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langIMSQTIUploadFile:</label>
+                        <div class='col-sm-9'>
+                            <input type='file' name='uploadedPackage'>                            
+                        </div>
+                    </div>
+                <div class='form-group'>
+                    <div class='col-sm-offset-3 col-sm-9'>
+                        <input type='submit' value='" . $langImport . "'>
+                        <span class='help-block'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small>
+                    </div>
+                </div>
+            </form>
+        </div>";
 }
-
 chdir($pwd);
-

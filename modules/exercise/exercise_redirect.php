@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass 3.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,8 +17,9 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
- */
+ * ======================================================================== */
+
+
 
 include('exercise.class.php');
 include('question.class.php');
@@ -29,6 +30,7 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 require_once 'game.php';
+require_once 'analytics.php';
 
 $pageName = $langExercicesView;
 require_once 'include/lib/textLib.inc.php';
@@ -78,6 +80,7 @@ $tmp = Database::get()->querySingle("SELECT COUNT(*) AS cnt, record_start_date F
 if ($tmp->cnt > 0) {	
     Database::get()->query("UPDATE `exercise_user_record` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = ?d AND uid = ?d AND record_end_date is NULL", $exerciseId, $uid);
     triggerGame($course_id, $uid, $exerciseId);
+    triggerExerciseAnalytics($course_id, $uid, $exerciseId);
 }
 
 $exerciseTitle = $objExercise->selectTitle();

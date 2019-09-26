@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -34,13 +33,13 @@ if (!class_exists('Answer')):
      */
     class Answer {
 
-        var $questionId;        
+        var $questionId;
         var $answer;
         var $correct;
         var $comment;
         var $weighting;
         var $position;
-        var $nbrAnswers;        
+        var $nbrAnswers;
 
         /**
          * constructor of the class
@@ -49,16 +48,16 @@ if (!class_exists('Answer')):
          * @param - integer $questionId - question ID that answers belong to
          */
         public function __construct($questionId) {
-            $this->questionId = $questionId;            
+            $this->questionId = $questionId;
             $this->nbrAnswers = 2;
             $this->answer = array();
             $this->correct = array();
             $this->comment = array();
             $this->weighting = array();
             $this->position = array();
-            
+
             $this->read();
-        }       
+        }
 
         /**
          * reads answer informations from the data base
@@ -70,7 +69,7 @@ if (!class_exists('Answer')):
             $result = Database::get()->queryArray("SELECT answer, correct, comment, weight, r_position
                             FROM exercise_answer WHERE question_id = ?d ORDER BY r_position", $questionId);
             if ($result) { // found result ?
-                $i = 1;                
+                $i = 1;
                 foreach ($result as $object) {
                     $this->answer[$i] = $object->answer;
                     $this->correct[$i] = $object->correct;
@@ -86,16 +85,16 @@ if (!class_exists('Answer')):
                     if ($this->getQuestionType() == MATCHING) {
                         $this->correct[$i] = 1;
                     } else {
-                        $this->correct[$i] = 0;    
-                    }                    
+                        $this->correct[$i] = 0;
+                    }
                     $this->comment[$i] = '';
                     $this->weighting[$i] = 0.00;
                     $this->position[$i] = 0;
-                }                
+                }
             }
         }
 
-                        
+
         /**
          * returns the number of answers in this question
          *
@@ -123,7 +122,7 @@ if (!class_exists('Answer')):
          * @param - integer $id - answer ID
          * @return - string - answer title
          */
-        public function selectAnswer($id) {            
+        public function selectAnswer($id) {
             if (isset($this->answer[$id])) {
                 return $this->answer[$id];
             } else {
@@ -139,6 +138,9 @@ if (!class_exists('Answer')):
          * @return - integer - 0 if bad answer, not 0 if good answer
          */
         public function isCorrect($id) {
+            if (!isset($this->correct[$id])) {
+                $this->correct[$id] = 0;
+            }
             return $this->correct[$id];
         }
 
@@ -150,6 +152,9 @@ if (!class_exists('Answer')):
          * @return - string - answer comment
          */
         public function selectComment($id) {
+            if (!isset($this->comment[$id])) {
+                $this->comment[$id] = '';
+            }
             return $this->comment[$id];
         }
 
@@ -161,6 +166,9 @@ if (!class_exists('Answer')):
          * @return - float - answer weighting
          */
         public function selectWeighting($id) {
+            if (!isset($this->weighting[$id])) {
+                $this->weighting[$id] = 0.00;
+            }
             return $this->weighting[$id];
         }
 
@@ -172,10 +180,13 @@ if (!class_exists('Answer')):
          * @return - integer - answer position
          */
         public function selectPosition($id) {
+            if (!isset($this->weighting[$id])) {
+                $this->weighting[$id] = 0;
+            }
             return $this->position[$id];
         }
 
-        
+
         public function getFirstMatchingPosition() {
             $pos = Database::get()->querySingle("SELECT r_position FROM exercise_answer "
                     . "WHERE question_id = ?d "
@@ -183,7 +194,7 @@ if (!class_exists('Answer')):
                     . "ORDER BY r_position ASC LIMIT 1", $this->questionId)->r_position;
             return $pos;
         }
-        
+
         /**
          * creates a new answer
          *
@@ -195,21 +206,21 @@ if (!class_exists('Answer')):
          * @param - integer $position - answer position
          */
         public function createAnswer($answer, $correct, $comment, $weighting, $position, $newEmptyAnswer = false) {
-            
+
             if ($newEmptyAnswer) {
                 $this->nbrAnswers = $this->nbrAnswers + 1;
                 $id = $this->nbrAnswers;
-                Database::get()->querySingle("INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) 
+                Database::get()->querySingle("INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position)
                     VALUES (?d, ?s, ?d, ?s, ?f, ?d)", $this->questionId, $answer, $correct, $comment, $weighting, $position);
             } else {
                 $this->nbrAnswers = $position;
-                $id = $position;                
-            }            
+                $id = $position;
+            }
             $this->answer[$id] = $answer;
             $this->correct[$id] = $correct;
             $this->comment[$id] = $comment;
             $this->weighting[$id] = $weighting;
-            $this->position[$id] = $position;                       
+            $this->position[$id] = $position;
         }
 
         /**
@@ -221,10 +232,10 @@ if (!class_exists('Answer')):
 
             $questionId = $this->questionId;
             // removes old answers before inserting of new ones
-           Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);            
+           Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);
             // inserts new answers into data base
-            $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";           
-            
+            $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";
+
             for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                   $data_array[] = $questionId;
                   $data_array[] = $this->answer[$i];
@@ -234,9 +245,9 @@ if (!class_exists('Answer')):
                   $data_array[] = $this->position[$i];
                 $sql .= "(?d, ?s, ?d, ?s, ?f, ?d),";
             }
-            $sql = substr($sql, 0, -1);            
+            $sql = substr($sql, 0, -1);
             Database::get()->query($sql, $data_array);
-                       
+
         }
 
         /**
@@ -258,8 +269,8 @@ if (!class_exists('Answer')):
                     $data_array[] = $this->correct[$i];
                     $data_array[] = $this->comment[$i];
                     $data_array[] = $this->weighting[$i];
-                    $data_array[] = $this->position[$i];  
-                    
+                    $data_array[] = $this->position[$i];
+
                     $sql .= "(?d, ?s, ?d, ?s, ?f, ?d),";
                 }
 
@@ -267,16 +278,16 @@ if (!class_exists('Answer')):
                 Database::get()->query($sql,$data_array);
             }
         }
-        
+
         /**
          * @brief get question type (e.g. multiple choice, matching etc)
          * @return type
          */
         private function getQuestionType() {
-            
-            $question_type = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $this->selectQuestionId())->type;            
-            return $question_type;            
-            
+
+            $question_type = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $this->selectQuestionId())->type;
+            return $question_type;
+
         }
 
     }

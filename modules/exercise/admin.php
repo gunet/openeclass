@@ -97,8 +97,6 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
                     // construction of the duplicated Question
                     $objQuestion = new Question();
                     $objQuestion->read($new_question_id);
-                    // adds the exercise ID into the exercise list of the Question object
-                    $objQuestion->addToList($exerciseId);
                     // copies answers from the old qustion to the new
                     $objAnswer = new Answer($question_id);
                     $objAnswer->duplicate($new_question_id);                
