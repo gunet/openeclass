@@ -53,12 +53,18 @@ if (isset($_COOKIE['inExercise'])) {
     setcookie("inExercise", "", time() - 3600);
 }
 
-// disable ordering for action button column
-$columnOrderable = $is_editor? ", { 'orderable': false }": '';
+if ($is_editor) {
+    // disable ordering for action button column
+    $columns = 'null, null, null, { orderable: false }';
+} elseif ($uid) {
+    $columns = 'null, null, null';
+} else {
+    $columns = 'null, null';
+}
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#ex').DataTable ({
-                'columns': [ null, null, null$columnOrderable ],
+                'columns': [ $columns ],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -234,7 +240,7 @@ if (!$nbrExercises) {
                 <th>$langExerciseName</th>
                 <th class='text-center' width='20%'>$langInfoExercise</th>
                 $resultsHeader
-              </tr>";        
+              </tr>";
     }
     $tool_content .= "</thead><tbody>";
     // For correction Form script
@@ -262,7 +268,7 @@ if (!$nbrExercises) {
         if (!$row->public) {
             $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
         }
-        // prof only        
+        // prof only
         if ($is_editor) {
             if (!empty($row->description)) {
                 $descr = "<br/>$row->description";
@@ -274,12 +280,12 @@ if (!$nbrExercises) {
                             <div style='color:green;'>$langStart: " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</div>";
             if (isset($row->end_date)) {
                 $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
-            }            
-                            
+            }
+
             if ($row->time_constraint > 0) {
                 $tool_content .= "<div>$langDuration: {$row->time_constraint} $langExerciseConstrainUnit</div>";
             }
-            // how many attempts we have.            
+            // how many attempts we have.
             if ($row->attempts_allowed > 0) {
                 $tool_content .= "<div>$langAttempts: $row->attempts_allowed</div>";
             }
@@ -288,8 +294,8 @@ if (!$nbrExercises) {
                 $tool_content .= "<div>$langTemporarySave: <span style='color:green;'>$langYes</span></div>";
             }
             $tool_content .= "</small></td>";
-                        
-            
+
+
             $eid = getIndirectReference($row->id);
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
@@ -388,8 +394,8 @@ if (!$nbrExercises) {
                             <div style='color:green;'>$langStart: " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</div>";
             if (isset($row->end_date)) {
                 $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
-            }            
-                            
+            }
+
             if ($row->time_constraint > 0) {
                 $tool_content .= "<div>$langDuration: {$row->time_constraint} $langExerciseConstrainUnit</div>";
             }
@@ -603,7 +609,7 @@ if ($is_editor) {
                     }
                 }
             );
-        });";        
+        });";
         $head_content .= "
             $(document).on('click', '.by_question', function() {
                 var exerciseid = $(this).data('exerciseid');
