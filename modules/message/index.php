@@ -343,7 +343,12 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                         unset($tutors[$r->user_id]);
                     }
                 }
-                $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . " (".q($r->username).")" . "</option>";
+                if (isset($_GET['user_id']) and $_GET['user_id'] == $r->user_id) {
+                    $selected_user = " selected";
+                } else {
+                    $selected_user = "";
+                }
+                $tool_content .= "<option value=" . $r->user_id . " $selected_user>" . q($r->name) . " (".q($r->username).")" . "</option>";
             }
             if (isset($tutors)) {
                 foreach ($tutors as $key => $value) {
