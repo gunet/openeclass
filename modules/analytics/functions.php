@@ -3,13 +3,16 @@
 require_once 'PeriodType.php';
 require_once 'ElementTypes.php';
 
+/**
+ * @brief learning analytics home page
+ */
 function display_learning_analytics() {
     global $course_id, $course_code, $tool_content, $langAnalyticsNoAnalytics, $langActive, $langInactive,
     $langAnalyticsTotalAnalytics, $langAnalyticsViewPerUserGeneral, $langModify, $langAnalyticsEditElements, $langDeactivate,
     $langActivate, $langDelete, $langAnalyticsConfirm, $langLearningAnalytics, $langAdd;
 
     $sql_data = Database::get()->queryArray("SELECT id, title, description, active, start_date, end_date, created, periodType FROM analytics WHERE courseID= ?d", $course_id);
-    if(count($sql_data) == 0) {
+    if (count($sql_data) == 0) {
         $results = "<div class='text-center text-muted'>$langAnalyticsNoAnalytics</div>";
     } else {
         $results = "";
@@ -23,11 +26,11 @@ function display_learning_analytics() {
             
             $results .= "
             <div class='row res-table-row'>
-                <div class='col-sm-6'>
+                <div class='col-sm-3'>
                     <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
-                    <p class='text-left text-muted'>$description</p>
+                    <small class='text-left text-muted'>$description</small>
                 </div>
-                <div class='col-sm-6 text-left'>".
+                <div class='col-sm-9 text-left'>".
                 action_bar(array(
                     array('title' => $langAnalyticsTotalAnalytics,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
@@ -83,7 +86,10 @@ function display_learning_analytics() {
 }
 
 
-
+/**
+ * @brief display analytics result per module
+ * @param $analytics_id
+ */
 function display_general_lists($analytics_id) {
     global $course_id, $course_code, $tool_content, $langAnalyticsDetails, $langMessage, $langAnalyticsAdvancedLevel, $langAnalyticsCriticalLevel,
     $langAnalyticsNoAdvanced, $langAnalyticsNoCritical;
@@ -98,24 +104,26 @@ function display_general_lists($analytics_id) {
         $analytics_element_id = $analytics_element->id;
         $upper_threshold = $analytics_element->upper_threshold;
         $lower_threshold = $analytics_element->lower_threshold;
-        
 
-        $users = Database::get()->queryArray("SELECT u.id, u.givenname as givenname, u.surname as surname, cu.user_id as userid FROM course_user as cu inner join user as u on cu.user_id=u.id WHERE course_id = ?d", $course_id);
+        $users = Database::get()->queryArray("SELECT u.id, u.givenname as givenname, u.surname as surname, cu.user_id as userid 
+                FROM course_user AS cu INNER JOIN user as u on cu.user_id=u.id 
+                WHERE course_id = ?d 
+                AND u.status = " . USER_STUDENT ."", $course_id);
         
         $critical = array();
         $advanced = array();
 
         foreach ($users as $user) {
-            $user_result = Database::get()->querySingle("SELECT sum(value) as value FROM user_analytics WHERE user_id=?d and analytics_element_id = ?d", $user->id, $analytics_element_id);
+            $user_result = Database::get()->querySingle("SELECT SUM(value) AS value FROM user_analytics WHERE user_id=?d and analytics_element_id = ?d", $user->id, $analytics_element_id);
 
-            if($user_result->value >= $upper_threshold)
+            if($user_result->value >= $upper_threshold) {
                 array_push($advanced, array('id' => $user->id, 'givenname' => $user->givenname, 'surname' => $user->surname));
-            else if($user_result->value <= $lower_threshold)
+            } else if($user_result->value <= $lower_threshold) {
                 array_push($critical, array('id' => $user->id, 'givenname' => $user->givenname, 'surname' => $user->surname));
-
+            }
         }
 
-        if (sizeof($critical) == 0){
+        if (sizeof($critical) == 0) {
             $bad_results = '<div>' . $langAnalyticsNoCritical . '</div>';
         } else {
             foreach ($critical as $crit) {
@@ -127,7 +135,7 @@ function display_general_lists($analytics_id) {
                 action_bar(
                     array(                  
                         array('title' => $langAnalyticsDetails,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
                                 'icon' => 'fa-user-o',
                                 'level' => 'primary-label'
                             ),
@@ -153,7 +161,7 @@ function display_general_lists($analytics_id) {
                 action_bar(
                     array(                  
                         array('title' => $langAnalyticsDetails,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
                                 'icon' => 'fa-user-o',
                                 'level' => 'primary-label'
                             ),
@@ -261,11 +269,12 @@ function display_analytics_elements($analytics_id) {
             $weight = $result->weight;
             $resource = $result->resource;
             $module_id = $result->module_id;
-
             $results .= "
                 <div class='row res-table-row'>
-                    <div class='col-sm-2'></div>
-                    <div class='col-sm-3'><span class='text-danger'>$min_value</span> - <span class='text-success'>$max_value</span></div>
+                    <div class='col-sm-12'><em>
+                        " . get_resource_info($resource, $module_id) . "</em>
+                        </div>
+                    <div class='col-sm-3 col-sm-offset-2'><span class='text-danger'>$min_value</span> - <span class='text-success'>$max_value</span></div>
                         <div class='col-sm-4'>
                             <span class='text-danger'>$langAnalyticsCriticalLevel: $min_value - $lower_threshold</span><br/>
                             <span class='text-success'>$langAnalyticsAdvancedLevel: $upper_threshold - $max_value</span>
@@ -284,10 +293,7 @@ function display_analytics_elements($analytics_id) {
                                 'confirm' => $langAnalyticsConfirmDeletion,
                                 'class' => 'delete'))).
                     "</div>
-                    <div class='col-sm-12'>
-                        <span class='help-block'>$langAnalyticsResource: </span>";
-            $results .= get_resource_info($resource, $module_id);
-            $results .= "</div></div>";
+                </div>";
         }
     }
 
@@ -446,56 +452,55 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             $givenname = $data->givenname;
             $surname = $data->surname;
             $userid = $data->userid;
-            $values = compute_general_analytics_foruser($userid,$analytics_id, $startdate, $enddate); 
+            $values = compute_general_analytics_foruser($userid, $analytics_id, $startdate, $enddate);
             $percentage = $values['percentage'];
-        
-            if ($orderby == 'percentage'){
+
+            /*if ($orderby == 'percentage'){
                 $peruserarray[(string)$percentage + (string)$userid] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
             }  else {
                 $peruserarray[$surname] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
-            }        
-        }
-
+            } */
+        //}
+        /*
         if($reverse == 'false') {
             ksort($peruserarray);
         } else {
             krsort($peruserarray);
         }
-
-        foreach ($peruserarray as $peruser) {
+        */
+        //foreach ($peruserarray as $peruser) {
             $results .="<div class='row res-table-row'>
             <div class='col-sm-2'>
-                <div >". $peruser['givenname'] . "&nbsp;". $peruser['surname']. "</div>
+                <div >". $givenname . "&nbsp;". $surname. "</div>
             </div>
             <div class='col-sm-3'>
                 <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
-                    <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: " .$peruser['percentage'] ."%; min-width: 2em;'>
-                    " .$peruser['percentage'] ."%
+                    <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: " .$percentage ."%; min-width: 2em;'>
+                    " .$percentage ."%
                     </div>
                 </div>
             </div>
             <div class='col-sm-3'>
                 <div>
-                <span class='text-success'>$langAnalyticsAdvancedLevel: " . $peruser['values']['text-success'] . "</span><br/>
-                <span class='text-warning'>$langAnalyticsMiddleLevel: " . $peruser['values']['text-warning'] . "</span><br/>
-                <span class='text-danger'>$langAnalyticsCriticalLevel: " . $peruser['values']['text-danger'] . "</span>
+                <span class='text-success'>$langAnalyticsAdvancedLevel: " . $values['text-success'] . "</span><br/>
+                <span class='text-warning'>$langAnalyticsMiddleLevel: " . $values['text-warning'] . "</span><br/>
+                <span class='text-danger'>$langAnalyticsCriticalLevel: " . $values['text-danger'] . "</span>
                 </div>
             </div>
             <div class='col-sm-4'>" . action_bar(
                 array(                  
                     array('title' => $langAnalyticsDetails,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=" .$peruser['userid'],
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
                             'icon' => 'fa-user-o',
                             'level' => 'primary-label'
                         ),
                     array('title' => $langMessage,
-                        'url' => "../message/index.php?course=$course_code&upload=1&type=cm&id=" .$peruser['userid'],
+                        'url' => "../message/index.php?course=$course_code&upload=1&type=cm&id=$userid",
                         'icon' => 'fa-envelope',
                         'level' => 'primary-label')
                 )
             ) . "</div>
-        </div>";
-
+            </div>";
         }
     }
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
@@ -515,7 +520,6 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                 </div>
             </div>
         </div>";
-
     $tool_content .= "</div>";
 }
 
@@ -554,7 +558,7 @@ function generate_analytics_csv($peruserarray, $title) {
  * @param $previous
  * @param $next
  */
-function display_analytics_user($userid,$analytics_id, $start, $end, $previous, $next) {
+function display_analytics_user($userid, $analytics_id, $start, $end, $previous, $next) {
 
     global $tool_content, $course_code, $langSurnameName, $langPercentage;
 
@@ -1259,6 +1263,13 @@ function switch_activation($analytics_id, $active) {
 
 }
 
+
+/**
+ * @brief get info about resource to be displayed
+ * @param $resource
+ * @param $module_id
+ * @return string
+ */
 function get_resource_info($resource, $module_id) {
     $module_title = ElementTypes::elements[$module_id]['title'];
     $resource_title = '';
