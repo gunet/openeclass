@@ -28,6 +28,7 @@ require_once 'include/mailconfig.php';
 require_once 'modules/db/recycle.php';
 require_once 'modules/db/foreignkeys.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'install/functions.php';
 require_once 'upgradeHelper.php';
 
 stop_output_buffering();
@@ -176,6 +177,8 @@ mkdir_or_error('courses/eportfolio/work_submissions');
 touch_or_error('courses/eportfolio/work_submissions/index.php');
 mkdir_or_error('courses/eportfolio/mydocs');
 touch_or_error('courses/eportfolio/mydocs/index.php');
+mkdir_try('storage');
+mkdir_try('storage/views');
 
 // ********************************************
 // upgrade config.php
@@ -3766,8 +3769,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             CHANGE external_users external_users TEXT DEFAULT NULL');
     }
 
-    // upgrade queries for version 3.7
-    if (version_compare($oldversion, '3.7', '<')) {
+    // upgrade queries for version 3.7 and 4.0
+    // (to allow internal upgrades in 4.0 of features ported from 3.7
+    if (version_compare($oldversion, '4.0', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.7'));
 
         if (!DBHelper::fieldExists('wiki_properties', 'visible')) {
@@ -3802,13 +3806,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             // Move weekly_course_units to course_units
             $result = Database::get()->query("INSERT INTO course_units
                         (title, comments, start_week, finish_week, visible, public, `order`, course_id)
-                            SELECT CASE WHEN (title = '' OR title IS NULL) 
-                                THEN 
+                            SELECT CASE WHEN (title = '' OR title IS NULL)
+                                THEN
                                   TRIM(CONCAT_WS(' ','$langWeek', DATE_FORMAT(start_week, '%d-%m-%Y')))
-                                ELSE 
-                                  title  
-                                END 
-                              AS title, 
+                                ELSE
+                                  title
+                                END
+                              AS title,
                               comments, start_week, finish_week, visible, public, `order`, ?d
                                 FROM course_weekly_view
                                 WHERE course_id = ?d ORDER BY id", $courseid, $courseid);
@@ -3827,7 +3831,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query("INSERT INTO unit_resources
                                 (unit_id, title, comments, res_id, `type`, visible, `order`, `date`)
                             SELECT ?d, title, comments, res_id, `type`, visible, `order`, `date`
-                                FROM course_weekly_view_activities 
+                                FROM course_weekly_view_activities
                                 WHERE course_weekly_view_id = ?d", $unit_id, $weekly_id);
             }
             // update course with new view type (=units)
@@ -3943,6 +3947,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ADD `assigned_to` INT(11) DEFAULT NULL");
         }
 
+        // conferency chat activity and agent
+        Database::get()->query('ALTER TABLE conference ADD chat_activity boolean not null default false');
+        Database::get()->query('ALTER TABLE conference ADD agent_created boolean not null default false');
+
         // user consent
         Database::get()->query("CREATE TABLE IF NOT EXISTS `user_consent` (
             id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -3954,9 +3962,98 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
           ) $tbl_options");
 
-        // conferency chat activity and agent
-        Database::get()->query('ALTER TABLE conference ADD chat_activity boolean not null default false');
-        Database::get()->query('ALTER TABLE conference ADD agent_created boolean not null default false');
+        // upgrade queries for version 4.0
+        updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
+
+
+        Database::get()->query('ALTER TABLE tc_session
+                  CHANGE external_users external_users TEXT DEFAULT NULL');
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `class` varchar(400) NOT NULL) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `widget_id` int(11) unsigned NOT NULL,
+                `widget_area_id` int(11) NOT NULL,
+                `options` text NOT NULL,
+                `position` int(3) NOT NULL,
+                `user_id` int(11) NULL,
+                `course_id` int(11) NULL,
+                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
+
+        // `request` tables (aka `ticketing`)
+        Database::get()->query("CREATE TABLE IF NOT EXISTS request_type (
+                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `name` MEDIUMTEXT NOT NULL,
+                `description` MEDIUMTEXT NULL DEFAULT NULL) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS request (
+                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `course_id` INT(11) NOT NULL,
+                `title` VARCHAR(255) NOT NULL,
+                `description` TEXT,
+                `creator_id` INT(11) NOT NULL,
+                `state` TINYINT(4) NOT NULL,
+                `type` INT(11) UNSIGNED NOT NULL,
+                `open_date` DATETIME NOT NULL,
+                `change_date` DATETIME NOT NULL,
+                `close_date` DATETIME,
+                PRIMARY KEY(id),
+                FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                FOREIGN KEY (`type`) REFERENCES request_type(id) ON DELETE CASCADE,
+                FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field` (
+                `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                `type_id` INT(11) UNSIGNED NOT NULL,
+                `name` MEDIUMTEXT NOT NULL,
+                `description` MEDIUMTEXT NULL DEFAULT NULL,
+                `datatype` INT(11) NOT NULL,
+                `sortorder` INT(11) NOT NULL DEFAULT 0,
+                `values` MEDIUMTEXT DEFAULT NULL,
+                FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field_data` (
+                `id` INT(11) UNSIGNED NULL AUTO_INCREMENT PRIMARY KEY,
+                `request_id` INT(11) UNSIGNED NOT NULL,
+                `field_id` INT(11) UNSIGNED NOT NULL,
+                `data` TEXT NOT NULL,
+                FOREIGN KEY (field_id) REFERENCES request_field(id) ON DELETE CASCADE,
+                UNIQUE KEY (`request_id`, `field_id`)) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS request_watcher (
+                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `request_id` INT(11) UNSIGNED NOT NULL,
+                `user_id` INT(11) NOT NULL,
+                `type` TINYINT(4) NOT NULL,
+                `notification` TINYINT(4) NOT NULL,
+                PRIMARY KEY (id),
+                UNIQUE KEY (request_id, user_id),
+                FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS request_action (
+                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `request_id` INT(11) UNSIGNED NOT NULL,
+                `user_id` INT(11) NOT NULL,
+                `ts` DATETIME NOT NULL,
+                `old_state` TINYINT(4) NOT NULL,
+                `new_state` TINYINT(4) NOT NULL,
+                `filename` VARCHAR(256),
+                `real_filename` VARCHAR(255),
+                `comment` TEXT,
+                PRIMARY KEY(id),
+                FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+        if (!DBHelper::fieldExists('user', 'public_blog')) {
+            Database::get()->query("ALTER TABLE user
+                ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
+        }
     }
 
 
