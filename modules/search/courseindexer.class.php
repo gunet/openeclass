@@ -68,7 +68,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
             return null;
         }
 
-        $course->units = '';
+        $course->units = $course->description;
         if ($course->view_type == 'activity') {
             $res = Database::get()->queryArray("SELECT content
                                                 FROM activity_content
