@@ -92,14 +92,13 @@ function display_learning_analytics() {
  */
 function display_general_lists($analytics_id) {
     global $course_id, $course_code, $tool_content, $langAnalyticsDetails,
-           $langMessage, $langAnalyticsAdvancedLevel, $langAnalyticsCriticalLevel,
-           $langAnalyticsNoAdvanced, $langAnalyticsNoCritical;
+           $langMessage, $langAnalyticsAdvancedLevel, $langAnalyticsCriticalLevel;
 
     $analytics_elements = Database::get()->queryArray("SELECT * FROM analytics_element WHERE analytics_id= ?d", $analytics_id);
 
     foreach ($analytics_elements as $analytics_element) {
-        $good_results = '';
-        $bad_results = '';
+        $message_advanced = $message_critical = '';
+        $good_results = $bad_results = '';
         $module_id = $analytics_element->module_id;
         $resource = $analytics_element->resource;
         $analytics_element_id = $analytics_element->id;
@@ -110,12 +109,11 @@ function display_general_lists($analytics_id) {
                 FROM course_user AS cu INNER JOIN user as u on cu.user_id=u.id 
                 WHERE course_id = ?d 
                 AND u.status = " . USER_STUDENT ."", $course_id);
-        
+
         $critical = array();
         $advanced = array();
         foreach ($users as $user) {
             $user_result = Database::get()->querySingle("SELECT SUM(value) AS value FROM user_analytics WHERE user_id=?d and analytics_element_id = ?d", $user->id, $analytics_element_id);
-
             if($user_result->value >= $upper_threshold) {
                 array_push($advanced, array('id' => $user->id, 'givenname' => $user->givenname, 'surname' => $user->surname));
             } else if($user_result->value <= $lower_threshold) {
@@ -123,17 +121,15 @@ function display_general_lists($analytics_id) {
             }
         }
 
-        if (sizeof($critical) == 0) {
-            $bad_results = '<div>' . $langAnalyticsNoCritical . '</div>';
-        } else {
+        if (count($critical) > 0) {
+            $message_critical = $langAnalyticsCriticalLevel;
             foreach ($critical as $crit) {
                 $userid = $crit['id'];
                 $bad_results .="<div class='row res-table-row'>
-                    <div class='col-sm-5'>".
-                    $crit['givenname'] . " " . $crit['surname']
-                ."</div><div class='col-sm-7'>".
+                    <div class='col-sm-5'>". display_user($userid) ."</div>
+                    <div class='col-sm-7'>".
                 action_bar(
-                    array(                  
+                    array(
                         array('title' => $langAnalyticsDetails,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
                                 'icon' => 'fa-user-o',
@@ -149,15 +145,13 @@ function display_general_lists($analytics_id) {
             }
         }
 
-        if (sizeof($advanced) == 0) {
-            $good_results = '<div>' . $langAnalyticsNoAdvanced . '</div>';
-        } else {
+        if (count($advanced) > 0) {
+            $message_advanced = $langAnalyticsAdvancedLevel;
             foreach ($advanced as $adv) {
                 $userid = $adv['id'];
                 $good_results .= "<div class='row res-table-row'>
-                    <div class='col-sm-5'>".
-                    $adv['givenname'] . " " . $adv['surname']
-                ."</div><div class='col-sm-7'>".
+                    <div class='col-sm-5'>". display_user($userid) ."</div>
+                    <div class='col-sm-7'>".
                     action_bar(
                         array(
                             array('title' => $langAnalyticsDetails,
@@ -189,17 +183,14 @@ function display_general_lists($analytics_id) {
                             </div>
                         </div>
                         <div class='col-sm-12'>
-                        <div class='col-sm-6'><h4 class='text-success'>$langAnalyticsAdvancedLevel</h4>
+                            <h4 class='text-success'>$message_advanced</h4>
                             <div class='res-table-wrapper'>
                                 $good_results
-                            </div>
-                        </div>
-                        
-                        <div class='col-sm-6'><h4 class='text-danger'>$langAnalyticsCriticalLevel</h4>
+                            </div>                                                        
+                            <h4 class='text-danger'>$message_critical</h4>
                             <div class='res-table-wrapper'>
                                 $bad_results
-                            </div>
-                        </div>
+                            </div>                            
                         </div>
                     </div>
                 </div>
@@ -328,7 +319,7 @@ function display_analytics_elements($analytics_id) {
  */
 function display_analytics_information($analytics_id) {
     global $course_id, $course_code, $tool_content, $langActive, $langInactive, $langModify, $langDescription,
-    $langAnaliticsTimeFrame, $langFrom, $langTill, $langAnalyticsCalculation;
+    $langAnalyticsTimeFrame, $langFrom, $langTill, $langAnalyticsCalculation;
 
     $sql_data = Database::get()->querySingle("SELECT a.id as id, a.title as title, a.description as description, a.active as active, a.start_date as start_date, a.end_date as end_date, a.created as created, a.periodtype as periodType FROM analytics as a WHERE a.courseID= ?d AND a.id = ?d", $course_id, $analytics_id);
     
@@ -363,7 +354,7 @@ function display_analytics_information($analytics_id) {
                             <div class='pn-info-text-sct'>$description</div>
                         </div>
                         <div class='col-sm-5'>
-                            <div class='pn-info-title-sct'>$langAnaliticsTimeFrame</div>
+                            <div class='pn-info-title-sct'>$langAnalyticsTimeFrame</div>
                             <div class='pn-info-text-sct'>$langFrom $start_date $langTill $end_date</div>
                             <div class='pn-info-title-sct'>$langAnalyticsCalculation</div>
                             <div class='pn-info-text-sct'>$periodType</div>
@@ -491,7 +482,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             <div class='col-sm-4'>" . action_bar(
                 array(                  
                     array('title' => $langAnalyticsDetails,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
                             'icon' => 'fa-user-o',
                             'level' => 'primary-label'
                         ),
@@ -583,9 +574,9 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                         $langPercentage
                     </div>
                     <div class='col-sm-4'>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
-                            $start - $end
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>"
+                            . nice_format($start) . " &mdash; " . nice_format($end) .
+                            "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
                     </div>
                 </div>
             </h5>
@@ -630,7 +621,6 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
             $total_value = $min_value;
         }
 
-        $class = '';
         if($upper_threshold <= $total_value) {
             $class = "text-success";
         } else if ($lower_threshold >= $total_value) {
