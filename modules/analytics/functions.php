@@ -151,51 +151,54 @@ function display_general_lists($analytics_id) {
                 $userid = $adv['id'];
                 $good_results .= "<div class='row res-table-row'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
-                    <div class='col-sm-7'>".
-                    action_bar(
-                        array(
-                            array('title' => $langAnalyticsDetails,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
-                                    'icon' => 'fa-user-o',
-                                    'level' => 'primary-label'
-                                ),
-                            array('title' => $langMessage,
-                                'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
-                                'icon' => 'fa-envelope',
-                                'level' => 'primary-label')
-                        )
-                    ).
-                "</div>
+                        <div class='col-sm-7'>".
+                        action_bar(
+                            array(
+                                array('title' => $langAnalyticsDetails,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
+                                        'icon' => 'fa-user-o',
+                                        'level' => 'primary-label'
+                                    ),
+                                array('title' => $langMessage,
+                                    'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
+                                    'icon' => 'fa-envelope',
+                                    'level' => 'primary-label')
+                            )
+                        ).
+                    "</div>
                 </div>";
             }
         }
 
         $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        <div class='inner-heading'>
-                            <div class='row'>
-                                <div class='col-sm-12'>
-                                    <strong>".get_resource_info($resource, $module_id)."</strong>
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                            <div class='inner-heading'>
+                                <div class='row'>
+                                    <div class='col-sm-12'>
+                                        <strong>
+                                            <a data-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
+                                            <i class='fa fa-arrow-down'>" . get_resource_info($resource, $module_id) . "</a></i>
+                                        </strong>
+                                    </div>
                                 </div>
+                            </div>                        
+                            <div class='col-sm-12 collapse' id='LearnAnalyticsResource$module_id'>
+                                <h4 class='text-success'>$message_advanced</h4>
+                                <div class='res-table-wrapper'>
+                                    $good_results
+                                </div>                                                        
+                                <h4 class='text-danger'>$message_critical</h4>
+                                <div class='res-table-wrapper'>
+                                    $bad_results
+                                </div>                            
                             </div>
-                        </div>
-                        <div class='col-sm-12'>
-                            <h4 class='text-success'>$message_advanced</h4>
-                            <div class='res-table-wrapper'>
-                                $good_results
-                            </div>                                                        
-                            <h4 class='text-danger'>$message_critical</h4>
-                            <div class='res-table-wrapper'>
-                                $bad_results
-                            </div>                            
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>";
+            </div>";
     }
 }
 
@@ -1300,6 +1303,18 @@ function get_resource_info($resource, $module_id) {
     return '' . $module_title .  $resource_title ;
 }
 
+/**
+ * @brief insert new analytics element
+ * @param $analytics_id
+ * @param $resource
+ * @param $module_id
+ * @param $min_value
+ * @param $max_value
+ * @param $lower_threshold
+ * @param $upper_threshold
+ * @param $weight
+ * @return mixed
+ */
 function insert_analytics_element($analytics_id, $resource, $module_id, $min_value, $max_value, $lower_threshold, $upper_threshold, $weight) {
     global $course_id;
     
@@ -1317,6 +1332,18 @@ function insert_analytics_element($analytics_id, $resource, $module_id, $min_val
         return $new_id;
 }
 
+/**
+ * @brief update existing analytics element
+ * @param $analytics_id
+ * @param $analytics_element_id
+ * @param $resource
+ * @param $module_id
+ * @param $min_value
+ * @param $max_value
+ * @param $lower_threshold
+ * @param $upper_threshold
+ * @param $weight
+ */
 function update_analytics_element($analytics_id, $analytics_element_id, $resource, $module_id, $min_value, $max_value, $lower_threshold, $upper_threshold, $weight) {
     global $course_id;
     
