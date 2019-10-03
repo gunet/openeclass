@@ -104,6 +104,7 @@ $head_content .= '<script type="text/javascript">
 </script>';
 
 if (!$conference_activity) {
+    $colmooc_url = $chatindex_url = '';
     if (isset($_REQUEST['unit'])) {
         $save_link = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]&amp;store=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
         $back_link = "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit]";
