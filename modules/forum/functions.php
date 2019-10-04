@@ -156,7 +156,7 @@ function init_forum_group_info($forum_id) {
     global $course_id, $group_id, $can_post, $is_member, $is_editor;
 
     $q = Database::get()->querySingle("SELECT id FROM `group`
-			WHERE course_id = ?d AND forum_id = ?d", $course_id, $forum_id);
+            WHERE course_id = ?d AND forum_id = ?d", $course_id, $forum_id);
     if ($q) {
         $group_id = $q->id;
         initialize_group_info($group_id);
@@ -301,14 +301,14 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
                                                 AND u.email IS NOT NULL", $course_id);
        } else { // if it's not set lookup user setting
             $users = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
-			WHERE (forum_id = ?d OR cat_id = ?d)
-			AND notify_sent = 1 AND course_id = ?d AND user_id != ?d", $forum_id, $category_id, $course_id, $uid);
+            WHERE (forum_id = ?d OR cat_id = ?d)
+            AND notify_sent = 1 AND course_id = ?d AND user_id != ?d", $forum_id, $category_id, $course_id, $uid);
        }
     $email = array();
     foreach ($users as $user) {
         if (get_user_email_notification($user->user_id, $course_id)) {
             $useremail = uid_to_email($user->user_id);
-            if (Swift_Validate::email($useremail)) { // if email is valid
+            if (valid_email($useremail)) { // if email is valid
                 $email[] = $useremail;
             }
         }
