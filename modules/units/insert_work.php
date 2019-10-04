@@ -38,9 +38,9 @@
 function list_assignments() {
     global $id, $tool_content, $langTitle, $langChoice, $langGroupWorkDeadline_of_Submission,
     $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
-    $langVisibility, $course_id, $course_code;
+    $course_id, $course_code;
 
-    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY active, title", $course_id);
+    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     } else {

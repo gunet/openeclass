@@ -589,14 +589,13 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
 
 
 /**
- * @brief display resource work (assignment)
+ * @brief display resource assignment (aka work)
  * @global type $id
  * @global type $urlServer
  * @global type $is_editor
  * @global type $langWasDeleted
  * @global type $course_id
  * @global type $course_code
- * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -656,7 +655,6 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
  * @global type $langWasDeleted
  * @global type $course_id
  * @global type $course_code
- * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -688,11 +686,8 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if (!$is_editor and ( !resource_access($exercise->active, $exercise->public))) {
             return '';
         }
-        $link = "<a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         $exlink = $link . "$title</a>";
-        if (!$module_visible) {
-            $exlink .= " <i>($langInactiveModule)</i>";
-        }
         $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
@@ -894,7 +889,6 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
  * @global type $is_editor
  * @global type $langWasDeleted
  * @global type $course_id
- * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -931,9 +925,6 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
         }
         $link = "<a href='" . q($l->url) . "' target='_blank'>";
         $exlink = $link . "$title</a>";
-        if (!$module_visible) {
-            $exlink .= " <i>($langInactiveModule)</i>";
-        }
         $imagelink = icon('fa-link');
     }
 
@@ -955,7 +946,6 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
  * @global type $is_editor
  * @global type $langWasDeleted
  * @global type $course_id
- * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -993,19 +983,14 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
                           <td width='1'>".icon('fa-folder-o')."</td>
                           <td>" . q($lcat->name);
             if (!empty($lcat->description)) {
-                $comment_box = "<br />$lcat->description";
-            } else {
-                $comment_box = '';
+                $comment_box = "<br><small>$lcat->description</small>";
             }
 
             $sql2 = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d AND category = $lcat->id", $course_id);
             foreach ($sql2 as $l) {
                 $imagelink = icon('fa-link');
                 $ltitle = q(($l->title == '') ? $l->url : $l->title);
-                $linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank'>$ltitle</a>";
-                if (!$module_visible) {
-                    $linkcontent .= " <i>($langInactiveModule)</i>";
-                }
+                $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank'>$ltitle</a>";
             }
         }
     }
