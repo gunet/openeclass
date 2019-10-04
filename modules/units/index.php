@@ -34,11 +34,12 @@ $helpSubTopic = 'units_actions';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
-require_once 'modules/units/functions.php';
+require_once 'functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/tc/functions.php';
 
 doc_init();
 

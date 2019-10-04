@@ -48,6 +48,7 @@ if (!isset($_REQUEST['UseCase'])) {
 if (!isset($_REQUEST['pid'])) {
     die();
 }
+
 $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $_REQUEST['pid']);
 if(!$p){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -116,7 +117,11 @@ function printPollForm() {
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
     if ($uid && $has_participated > 0 && !$is_editor){
         Session::Messages($langPollAlreadyParticipated);
-        redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+        if (isset($_REQUEST['unit_id'])) {
+            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit_id']);
+        } else {
+            redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+        }
     }
     // *****************************************************************************
     //      Get poll data
@@ -134,10 +139,16 @@ function printPollForm() {
     if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 
         $pageName = $thePoll->name;
+        if (isset($_REQUEST['unit_id'])) {
+            $back_link = "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]";
+        } else {
+            $back_link = "index.php?course=$course_code";
+        }
+
         $tool_content .= action_bar(array(
             array(
                 'title' => $langBack,
-                'url' => "index.php?course=$course_code",
+                'url' => "$back_link",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'
             )
@@ -150,10 +161,18 @@ function printPollForm() {
                 </div>
             </div>";
         }
+        if (isset($_REQUEST['unit_id'])) {
+            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$_REQUEST[unit_id]";
+        } else {
+            $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+        }
         $tool_content .= "
-            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='poll' method='post'>
+            <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
             <input type='hidden' value='2' name='UseCase'>
             <input type='hidden' value='$pid' name='pid'>";
+        if (isset($_REQUEST['unit_id'])) {
+            $tool_content .= "<input type='hidden' value='$_REQUEST[unit_id]' name='unit_id'>";
+        }
 
         //*****************************************************************************
         //      Get answers + questions
@@ -254,10 +273,17 @@ function printPollForm() {
             }
         }
         $tool_content .= "<div class='text-center'>";
-        if (!$is_editor) {
-            $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'> ";
+        if ($is_editor) {
+            $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langBack). "</a>";
+        } else {
+            $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'>";
+            if (isset($_REQUEST['unit_id'])) {
+                $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
+            } else {
+                $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+            }
         }
-        $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>".(($is_editor) ? q($langBack) : q($langCancel) )."</a></div></form>";
+        $tool_content .= "</div></form>";
     } else {
         Session::Messages($langPollInactive);
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -371,9 +397,18 @@ function submitPoll() {
         if (!empty($end_message)) {
             $tool_content .=  $end_message;
         }
-        $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a> ";
+        $tool_content .= "<br><div class='text-center'>";
+        if (isset($_REQUEST['unit_id'])) {
+            $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>$langBack</a>";
+        } else {
+            $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>";
+        }
         if ($poll->show_results) {
-            $tool_content .= "<a class='btn btn-primary' href=\"pollresults.php?course=$course_code&amp;pid=$pid\">".$langUsage."</a>";
+            if (isset($_REQUEST['unit_id'])) {
+                $tool_content .= "<a class='btn btn-primary' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
+            } else {
+                $tool_content .= "<a class='btn btn-primary' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
+            }
         }
         $tool_content .= "</div>";
     } else {

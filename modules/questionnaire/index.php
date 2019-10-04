@@ -220,12 +220,12 @@ draw($tool_content, 2, null, $head_content);
  */
 function printPolls() {
     global $tool_content, $course_id, $course_code,
-        $langTitle, $langCancel, $langOpenParticipation, $langHasExpired,
+        $langTitle, $langCancel, $langOpenParticipation,
         $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
         $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
         $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
         $langParticipate,  $langHasParticipated, $langSee,
-        $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
+        $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
         $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate;
 

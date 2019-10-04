@@ -726,8 +726,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $title = q($title);
     if ($type == 'forum') {
-        $link = "<a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$ft_id&amp;unit=$id'>";
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id&amp;unit=$id'>";
         $forumlink = $link . "$title</a>";
+        $imagelink = icon('fa-comments');
     } else {
         $r = Database::get()->querySingle("SELECT forum_id FROM forum_topic WHERE id = ?d", $ft_id);
         if (!$r) { // check if it was deleted
@@ -740,7 +741,6 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
         } else {
             $forum_id = $r->forum_id;
             $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
-            //$link = "<a href='${urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
             $forumlink = $link . "$title</a>";
             $imagelink = icon('fa-comments'). "";
         }
@@ -772,16 +772,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
  */
 function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
 
-    global $course_id, $course_code, $is_editor, $urlServer, $langInactiveModule;
+    global $course_id, $course_code, $is_editor, $urlServer, $id;
 
-    $module_visible = visible_module(MODULE_ID_QUESTIONNAIRE); // checks module visibility
-
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-
-    $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';
+    $class_vis = ($visibility == 0 ) ? ' class="not_visible"' : ' ';
     $title = q($title);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
     if (!$poll) { // check if it was deleted
@@ -792,11 +785,9 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&amp;pid=$poll_id&amp;UseCase=1'>";
+        //$link = "<a href='${urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&amp;pid=$poll_id&amp;UseCase=1'>";
+        $link = "<a href='${urlServer}modules/units/view.php?course_code=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
         $polllink = $link . $title . '</a>';
-        if (!$module_visible) {
-            $polllink .= " <i>($langInactiveModule)</i>";
-        }
         $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
     }
 
@@ -858,7 +849,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         if (!$module_visible) {
             $wikilink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "</a>" .icon('fa-wikipedia') . "";
+        $imagelink = $link . "</a>" .icon('fa-wikipedia-w') . "";
     }
 
     if (!empty($comments)) {
