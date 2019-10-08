@@ -10,7 +10,7 @@ echo '
     <link rel="stylesheet" href="/template/default/CSS/bootstrap-custom.css">
 
     <!-- Font Awesome - A font of icons -->
-    <link href="/template/default/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link href="/template/default/CSS/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
     <style>
 #error404 {
 padding-top: 100px;

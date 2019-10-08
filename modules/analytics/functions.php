@@ -383,7 +383,7 @@ function display_analytics_information($analytics_id) {
  * @param $download
  */
 function display_analytics_peruser($analytics_id, $startdate, $enddate, $previous, $next, $orderby, $reverse, $period, $download) {
-    global $tool_content, $course_id, $course_code, $langAnalyticsNoUsersToDisplay, $langSurnameName, $langPercentage, $langAnalyticsStatus,
+    global $tool_content, $course_id, $course_code, $langAnalyticsNoUsersToDisplay, $langSurnameName, $langPercentage,
     $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langAnalyticsDetails, $langMessage;
 
     $sql_data = Database::get()->queryArray("SELECT u.givenname AS givenname, 
@@ -392,47 +392,27 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                                 WHERE course_id = ?d 
                                 AND cu.status = " . USER_STUDENT . "", $course_id);
 
-    if(count($sql_data) == 0) {
+    if (count($sql_data) == 0) {
         $results = "<div><p class='text-center text-muted'>$langAnalyticsNoUsersToDisplay</p>";
     } else {
-        $backclass = '';
+        $backclass = $nextclass = '';
         if (is_null($previous)) {
             $backclass = 'style="display:none"';
         }
-        $nextclass = '';
         if (is_null($next)) {
             $nextclass = 'style="display:none"';
-        }
-        //translation until here
-        $arrowdirection = 'down';
-        $arrowdirectionName = 'down';
-        $arrowdirectionPercentage = 'down';
-        $reverse_op = 'true';
-
-        if($reverse=='true') {
-            $arrowdirection = 'up';
-            $reverse_op = 'false'; 
-        }
-
-        if($orderby == 'surname') {
-            $arrowdirectionName = $arrowdirection;
-        } else if($orderby == 'percentage') {
-            $arrowdirectionPercentage = $arrowdirection;
         }
 
         $results = "
                 <div class='inner-heading'>
                     <div class='row res-table-header'>
-                        <div class='col-sm-3'>
-                            <h5>$langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a></h5>
+                        <div class='col-sm-4'>
+                            <h5>$langSurnameName</h5>
                         </div>
-                        <div class='col-sm-3'>
-                            <h5>$langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a></h5>
-                        </div>
-                        <div class='col-sm-2'>
-                            <h5>$langAnalyticsStatus</h5> 
-                        </div>
-                        <div class='col-sm-4' >
+                        <div class='col-sm-5'>
+                            <h5>$langPercentage</h5>
+                        </div>                        
+                        <div class='col-sm-3' >
                             <h5>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
                                 " . nice_format($startdate) . " &mdash; " . nice_format($enddate) . "
@@ -450,23 +430,9 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             $values = compute_general_analytics_foruser($userid, $analytics_id, $startdate, $enddate);
             $percentage = $values['percentage'];
 
-            /*if ($orderby == 'percentage'){
-                $peruserarray[(string)$percentage + (string)$userid] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
-            }  else {
-                $peruserarray[$surname] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
-            } */
-        //}
-        /*
-        if($reverse == 'false') {
-            ksort($peruserarray);
-        } else {
-            krsort($peruserarray);
-        }
-        */
-        //foreach ($peruserarray as $peruser) {
             $results .="<div class='row res-table-row'>
-            <div class='col-sm-3'>
-                <div >". display_user($userid). "</div>
+            <div class='col-sm-4'>
+                ". display_user($userid). "
             </div>
             <div class='col-sm-3'>
                 <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
@@ -475,24 +441,22 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                     </div>
                 </div>
             </div>
-            <div class='col-sm-2'>
-                <div>
-                <span class='text-success'>$langAnalyticsAdvancedLevel: " . $values['text-success'] . "</span><br/>
-                <span class='text-warning'>$langAnalyticsMiddleLevel: " . $values['text-warning'] . "</span><br/>
-                <span class='text-danger'>$langAnalyticsCriticalLevel: " . $values['text-danger'] . "</span>
-                </div>
+            <div class='col-sm-2'>"
+                 . $values['text-success'] . "&nbsp;<i class='fa fa-arrow-up' data-toggle='tooltip' data-placement='top' title='$langAnalyticsAdvancedLevel'></i>&nbsp;&nbsp;"
+                 . $values['text-warning'] . "&nbsp;<i class='fa fa-minus' data-toggle='tooltip' data-placement='top' title='$langAnalyticsMiddleLevel'></i>&nbsp;&nbsp;"
+                 . $values['text-danger'] . "&nbsp;<i class='fa fa-arrow-down' data-toggle='tooltip' data-placement='top' title='$langAnalyticsCriticalLevel'></i>                
             </div>
-            <div class='col-sm-4'>" . action_bar(
+            <div class='col-sm-3'>" . action_bar(
                 array(                  
                     array('title' => $langAnalyticsDetails,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
-                            'icon' => 'fa-user-o',
-                            'level' => 'primary-label'
+                            'icon' => 'fa-area-chart',
+                            'level' => 'primary'
                         ),
                     array('title' => $langMessage,
                         'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
                         'icon' => 'fa-envelope',
-                        'level' => 'primary-label')
+                        'level' => 'primary')
                 )
             ) . "</div>
             </div>";
