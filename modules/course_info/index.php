@@ -167,6 +167,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['ar_radio'])) {
                 setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
             }
+            if (isset($_POST['enable_offline_course'])) {
+                setting_set(SETTING_OFFLINE_COURSE, $_POST['enable_offline_course'], $course_id);
+            }
             if (isset($_POST['disable_log_course_user_requests'])) {
                 setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
             }
@@ -370,8 +373,26 @@ if (isset($_POST['submit'])) {
     $data['checkAbuseReportDis'] = $checkAbuseReportDis;
     $data['checkAbuseReportEn'] = $checkAbuseReportEn;
 
+    // offline course
+    if (!get_config('offline_course')) {
+        $log_offline_course_inactive = ' disabled';
+    } else {
+        $log_offline_course_inactive = '';
+    }
+
+    if (setting_get(SETTING_OFFLINE_COURSE, $course_id)) {
+        $log_offline_course_enable = 'checked';
+        $log_offline_course_disable = '';
+    } else {
+        $log_offline_course_enable = '';
+        $log_offline_course_disable = 'checked';
+    }
+    $data['log_offline_course_inactive'] = $log_offline_course_inactive;
+    $data['log_offline_course_enable'] = $log_offline_course_enable;
+    $data['log_offline_course_disable'] = $log_offline_course_disable;
+
     // Log course user requests
-    if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id) == 1) {
+    if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
         $log_course_user_requests_disable = 'checked';
         $log_course_user_requests_enable = '';
     } else {

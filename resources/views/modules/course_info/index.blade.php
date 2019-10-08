@@ -225,6 +225,22 @@
             </div>
         </div>
         <div class='form-group'>
+            <label for='courseoffline' class='col-sm-2 control-label'>{{ trans('langCourseOfflineSettings') }}:</label>
+            <div class="col-sm-10">
+                <div class="radio">
+                    <label>
+                        <input type='radio' value='1' name='enable_offline_course' {{ $log_offline_course_enable }} {{ $log_offline_course_inactive }}> {{ trans('langActivate') }}
+                        <span class='help-block'><small>{{ trans('langCourseOfflineLegend') }}</small></span>
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type='radio' value='0' name='enable_offline_course' {{ $log_offline_course_disable }} {{ $log_offline_course_inactive }}> {{ trans('langDeactivate') }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class='form-group'>
             <label class='col-sm-2 control-label'>{{ trans('langCourseUserRequests') }}:</label>
             <div class='col-sm-10'>
                 <div class='radio'>

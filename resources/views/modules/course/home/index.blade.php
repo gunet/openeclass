@@ -60,6 +60,13 @@
                                     <span class='hidden'>.</span>
                                 </a>
                             </li>
+                            @if ($offline_course)
+                                <li class='access pull-right'>
+                                    <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}">
+                                        <span class="fa fa-download fa-fw" data-toggle="tooltip" data-placement="top" title="{{ trans('langDownloadCourse') }}"></span>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                     @if ($course_info->home_layout == 1)

@@ -240,7 +240,7 @@ $course_descriptions = Database::get()->queryArray("SELECT cd.id, cd.title, cd.c
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 $course_descriptions_modals = "";
 
-if(count($course_descriptions)>0){
+if(count($course_descriptions) > 0) {
     $course_info_extra = "";
     foreach ($course_descriptions as $key => $course_description) {
         $hidden_id = "hidden_" . $key;
@@ -249,7 +249,7 @@ if(count($course_descriptions)>0){
         if ($key + 1 < count($course_descriptions)) $next_id = "hidden_" . ($key + 1);
         if ($key > 0) $previous_id = "hidden_" . ($key - 1);
 
-        $course_descriptions_modals .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+        $course_descriptions_modals .= "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
@@ -276,7 +276,7 @@ if(count($course_descriptions)>0){
 } else {
     $course_info_extra = "<div class='text-muted'>$langNoInfoAvailable</div>";
 }
-$data['course_info_popover'] = "<div  class='list-group'>$course_info_extra</div>";
+$data['course_info_popover'] = "<div class='list-group'>$course_info_extra</div>";
 $data['course_descriptions_modals'] = $course_descriptions_modals;
 
 if ($course_info->description) {
@@ -291,6 +291,8 @@ if ($course_info->description) {
     $data['truncated_text'] = ellipsize_html($description, 1000, $postfix_truncate_more);
 }
 
+// offline course setting
+$data['offline_course'] = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
 
 if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
     commenting_add_js();
@@ -498,7 +500,7 @@ function course_announcements() {
                             FROM announcement
                             WHERE course_id = ?d AND
                                   visible = 1
-                                AND (start_display <= NOW() OR start_display IS NULL) 
+                                AND (start_display <= NOW() OR start_display IS NULL)
                                 AND (stop_display >= NOW() OR stop_display IS NULL)
                             ORDER BY `date` DESC LIMIT 5", $course_id);
         if ($q) { // if announcements exist

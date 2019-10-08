@@ -358,6 +358,7 @@ else {
     $data['cbox_disable_log_actions'] = get_config('disable_log_actions') ? 'checked' : '';
     $data['cbox_disable_log_course_actions'] = get_config('disable_log_course_actions') ? 'checked' : '';
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';
+    $data['cbox_offline_course'] = get_config('offline_course') ? 'checked' : '';
 
     foreach ($session->active_ui_languages as $langCode) {
         $policy = get_config('privacy_policy_text_' . $langCode);

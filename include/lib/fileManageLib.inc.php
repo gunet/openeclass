@@ -128,7 +128,7 @@ function my_rename($filePath, $newFileName) {
         /** * check if the new name has an extension ***/
         if ((!preg_match('/[^.]+\.[[:alnum:]]+$/', $newFileName)) and preg_match('/\.([[:alnum:]]+)$/', $oldFileName, $extension)) {
             $newFileName .= '.' . $extension[1];
-        }        
+        }
         $newFileName = replace_dangerous_char($newFileName);
         chdir($path);
         rename($oldFileName, $newFileName);
@@ -223,6 +223,7 @@ function move_dir($src, $dest) {
  */
 
 function copyDirTo($origDirPath, $destination) {
+
     // extract directory name - create it at destination - update destination trail
     $dirName = my_basename($origDirPath);
     make_dir($destination . '/' . $dirName);
@@ -237,7 +238,6 @@ function copyDirTo($origDirPath, $destination) {
             continue; // skip the current and parent directories
         } elseif (is_file($element)) {
             copy($element, $destinationTrail . "/" . $element);
-            unlink($element);
         } elseif (is_dir($element)) {
             $dirToCopy[] = $origDirPath . "/" . $element;
         }
@@ -251,7 +251,6 @@ function copyDirTo($origDirPath, $destination) {
         }
     }
 
-    rmdir($origDirPath);
     chdir($cwd);
 }
 
@@ -310,7 +309,7 @@ function directory_selection($source_value, $command, $entryToExclude, $director
 function zip_documents_directory($zip_filename, $downloadDir, $include_invisible = false) {
     global $basedir, $group_sql, $map_filenames, $path_visibility;
 
-    create_map_to_real_filename($downloadDir, $include_invisible);    
+    create_map_to_real_filename($downloadDir, $include_invisible);
     $topdir = ($downloadDir == '/') ? $basedir : ($basedir . $downloadDir);
     $zipFile = new ZipArchive();
     $zipFile->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -326,11 +325,11 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
             // Get real and filename to be added for current file
             $filePath = $file->getRealPath();
             $relativePath = substr($filePath, strlen($basedir));
-            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {            
+            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
                 continue; // skip invisible files for student
             } else {
                 // Add current file to archive
-                $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));                
+                $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));
             }
         } else { // empty directory
             $filePath = $file->getRealPath();

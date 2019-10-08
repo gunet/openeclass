@@ -343,6 +343,12 @@
                                             {{ trans('lang_allow_teacher_clone_course') }}
                                         </label>
                                     </div>
+                                   <div class='checkbox'>
+                                        <label>
+                                            <input type='checkbox' name='offline_course' value='1' {{ $cbox_offline_course }}>
+                                            {{ trans('langCourseOfflineSettings') }}
+                                        </label>
+                                    </div>
                                </div>
                             </div>
                         </fieldset>
