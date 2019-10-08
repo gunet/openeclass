@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // This script is a replicate from
@@ -47,7 +47,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
  . "<link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>\n"
  . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/CSS/font-awesome/css/font-awesome.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>\n"
  . '<title>' . $langExercicesResult . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
@@ -166,7 +166,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
-        $answerComment = $objAnswerTmp->selectComment($answerId);       
+        $answerComment = $objAnswerTmp->selectComment($answerId);
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
         // support for math symbols
@@ -190,7 +190,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 break;
             // for fill in the blanks
             case FILL_IN_BLANKS :
-            case FILL_IN_BLANKS_TOLERANT :    
+            case FILL_IN_BLANKS_TOLERANT :
                 // splits text and weightings that are joined with the char '::'
                 list($answer, $answerWeighting) = explode('::', $answer);
                 // splits weightings that are joined with a comma
@@ -266,21 +266,21 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         } // end switch()
         if ($displayResults == 1) {
             if ($answerType != MATCHING || $answerCorrect) {
-                if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {                    
-                    echo "<tr><td><div align='center'>";                    
+                if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+                    echo "<tr><td><div align='center'>";
                     if ($studentChoice) {
                         $icon_choice= "fa-check-square-o";
                     } else {
                         $icon_choice = "fa-square-o";
                     }
                     echo icon($icon_choice);
-                    echo "</div></div></td><td><div align='center'>";                    
+                    echo "</div></div></td><td><div align='center'>";
                     if ($answerCorrect) {
                         $icon_choice= "fa-check-square-o";
                     } else {
                         $icon_choice = "fa-square-o";
                     }
-                    echo icon($icon_choice) . "</div>";                    
+                    echo icon($icon_choice) . "</div>";
                     echo ("</td>
                             <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
                             <td>");

@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="{{ $template_base }}/CSS/bootstrap-custom.css">
 
     <!-- Font Awesome - A font of icons -->
-    <link href="{{ $template_base }}/CSS/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ $template_base }}/CSS/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
 
     @if (isset($styles_str) && $styles_str)
     <style>
@@ -48,7 +48,7 @@
                     <div class="col-md-12 add-gutter">
                         @if ($messages)
                             <div class='row'>
-                                <div class='col-xs-12'>{!! $messages !!}</div>                                   
+                                <div class='col-xs-12'>{!! $messages !!}</div>
                             </div>
                         @endif
                         {!! $tool_content !!}
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div id="leftnav" class="col-xs-2 col-xs-pull-10 sidebar embeded" style="top: 0px; height: 100%; overflow: visible;">
-                <div class="panel-group" id="sidebar-accordion">                   
+                <div class="panel-group" id="sidebar-accordion">
                     <div class="panel">
                         @foreach ($toolArr as $key => $tool_group)
                         <div id="collapse{{ $key }}" class="panel-collapse list-group collapse{{ $tool_group[0]['class'] }}">
