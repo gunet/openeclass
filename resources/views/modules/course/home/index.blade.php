@@ -263,11 +263,11 @@
                             </div>
                         @endforeach
                     @else
-                    <div class='col-sm-12'>
-                        <div class='panel'>
-                            <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
+                        <div class='col-sm-12'>
+                            <div class='panel'>
+                                <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
+                            </div>
                         </div>
-                    </div>
                     @endif
                 </div>
                 {!! $course_home_main_area_widgets !!}
