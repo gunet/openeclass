@@ -293,8 +293,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     
     $fieldid = intval($_GET['edit_field']);
     $result = Database::get()->querySingle("SELECT * FROM custom_profile_fields WHERE id = ?d", $fieldid);
-    if (count($result) != 0) {
-        
+    if ($result) {
         $name = q($result->name);
         $shortname = q($result->shortname);
         $description = standard_text_escape($result->description);
@@ -376,8 +375,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= 'chkValidator.addValidation("options","req","' . $langCPFMenuOptionsAlert . '");';
         }
         $tool_content .= '//]]></script>';
-    } else {
-        
     }
 } elseif (isset($_POST['submit_cat'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
