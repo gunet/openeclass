@@ -26,10 +26,9 @@ function process_actions() {
     // update index and refresh course metadata
     require_once 'modules/search/indexer.class.php';
     require_once 'modules/course_metadata/CourseXML.php';
-
     if (isset($_REQUEST['edit'])) {
         $res_id = intval($_GET['edit']);
-        if ($id = check_admin_unit_resource($res_id)) {
+        if (check_admin_unit_resource($res_id)) {
             $q = Database::get()->querySingle("SELECT title FROM course_units
                 WHERE id = ?d AND course_id = ?d", $id, $course_id);
             $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$id", 'name' => $q->title);
@@ -45,14 +44,14 @@ function process_actions() {
         }
     } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
         $res_id = intval($_REQUEST['resource_id']);
-        if ($id = check_admin_unit_resource($res_id)) {
+        if (check_admin_unit_resource($res_id)) {
             if (!isset($_REQUEST['restitle'])) {
                 $restitle = '';
             } else {
                 $restitle = $_REQUEST['restitle'];
             }
             $rescomments = purify($_REQUEST['rescomments']);
-            $result = Database::get()->query("UPDATE unit_resources SET
+            Database::get()->query("UPDATE unit_resources SET
                                         title = ?s,
                                         comments = ?s
                                         WHERE unit_id = ?d AND id = ?d", $restitle, $rescomments, $id, $res_id);
@@ -64,7 +63,7 @@ function process_actions() {
         redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
-        if ($id = check_admin_unit_resource($res_id)) {
+        if (check_admin_unit_resource($res_id)) {
             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", $res_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
@@ -74,7 +73,7 @@ function process_actions() {
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);
-        if ($id = check_admin_unit_resource($res_id)) {
+        if (check_admin_unit_resource($res_id)) {
             $vis = Database::get()->querySingle("SELECT `visible` FROM unit_resources WHERE id = ?d", $res_id)->visible;
             $newvis = ($vis == 1) ? 0 : 1;
             Database::get()->query("UPDATE unit_resources SET visible = '$newvis' WHERE id = ?d", $res_id);
@@ -86,12 +85,12 @@ function process_actions() {
         }
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
-        if ($id = check_admin_unit_resource($res_id)) {
+        if (check_admin_unit_resource($res_id)) {
             move_order('unit_resources', 'id', $res_id, 'order', 'down', "unit_id=$id");
         }
     } elseif (isset($_REQUEST['up'])) { // change order up
         $res_id = intval($_REQUEST['up']);
-        if ($id = check_admin_unit_resource($res_id)) {
+        if (check_admin_unit_resource($res_id)) {
             move_order('unit_resources', 'id', $res_id, 'order', 'up', "unit_id=$id");
         }
     }
@@ -109,16 +108,19 @@ function process_actions() {
  */
 function check_admin_unit_resource($resource_id) {
     global $course_id, $is_editor;
+
     if ($is_editor) {
         $q = Database::get()->querySingle("SELECT course_units.id AS cuid FROM course_units,unit_resources WHERE
             course_units.course_id = ?d AND course_units.id = unit_resources.unit_id
             AND unit_resources.id = ?d", $course_id, $resource_id);
         if ($q) {
-            $unit_id = $q->cuid;
-            return $unit_id;
+            return true;
+        } else {
+            return false;
         }
+    } else {
+        return false;
     }
-    return false;
 }
 
 
@@ -772,7 +774,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
  */
 function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
 
-    global $course_id, $course_code, $is_editor, $urlServer, $id;
+    global $course_id, $course_code, $is_editor, $urlServer, $id, $langWasDeleted;
 
     $class_vis = ($visibility == 0 ) ? ' class="not_visible"' : ' ';
     $title = q($title);
@@ -785,7 +787,6 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        //$link = "<a href='${urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&amp;pid=$poll_id&amp;UseCase=1'>";
         $link = "<a href='${urlServer}modules/units/view.php?course_code=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
         $polllink = $link . $title . '</a>';
         $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
@@ -1272,32 +1273,33 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
 
     if ($res_type == 'description') {
         $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
-        $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
+        $edit_link = "edit.php?course=$course_code&amp;id=$_GET[id]&amp;numBloc=$res_id";
     } else {
         $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
         $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
-        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
+        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;edit=$resource_id";
     }
 
-    $content = "<td style='padding: 10px 0; width: 85px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
-                vertical-align: bottom;'>
-                                                <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
-                                            </div><div class='pull-left'>";
+    $content = "<td style='padding: 10px 0; width: 85px;'>
+                    <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                        <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                    </div>
+                <div class='pull-left'>";
     $content .= action_button(array(
                 array('title' => $langEditChange,
                       'url' => $edit_link,
                       'icon' => 'fa-edit',
                       'show' => $status != 'del'),
                 array('title' => $showorhide,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
                 array('title' => $langAddToCourseHome,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('description'))),
                 array('title' => $langDelete,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;del=$resource_id",
                       'icon' => 'fa-times',
                       'confirm' => $langConfirmDelete,
                       'class' => 'delete')
@@ -1331,7 +1333,6 @@ function edit_res($resource_id) {
     $resource_type = $ru->type;
     $content = "<div class='form-wrapper'>";
     $content .= "<form class='form-horizontal' role='form' method='post' action='${urlServer}modules/units/?course=$course_code'>" .
-            "<fieldset>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {
@@ -1344,15 +1345,14 @@ function edit_res($resource_id) {
         $message = $langContents;
     }
     $content .= "
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$message:</label>
-                <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
-            </div>
-            <div class='col-sm-offset-2 col-sm-10'>
-                <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
-            </div>
-        </fieldset>
-    </form>
-</div>";
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$message:</label>
+                    <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
+                </div>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
+                </div>                
+            </form>
+        </div>";
     return $content;
 }
