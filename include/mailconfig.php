@@ -105,9 +105,8 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $langPreviousStep, $langNextStep, $tool_content, $langEmailBounces;
+        $langPreviousStep, $langNextStep, $tool_content, $langEmailBounces, $langSave;
 
-    $mail_form = '';
     // True if running initial install
     $install = isset($GLOBALS['input_fields']);
 
@@ -134,15 +133,15 @@ function mail_settings_form() {
     $cbox_dont_mail_unverified_mails = get_var('dont_mail_unverified_mails') ? 'checked' : '';
     $cbox_email_from = get_var('email_from') ? 'checked' : '';
     if (!$install) {
-        $mail_form .= "
-            <div class='panel panel-default' id='five'>
+        $tool_content .= "
+            <div class='panel panel-primary' id='five'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langEmailSettings</h2>
                 </div>
                 <div class='panel-body'>
                     <fieldset>";
     }
-        $mail_form .= "
+    $tool_content .= "
                         <div class='form-group'>
                            <div class='col-sm-12'>
                                 <div class='checkbox'>
@@ -217,13 +216,17 @@ function mail_settings_form() {
                            <div class='col-sm-10'>
                                 <input type='text' class='form-control' name='sendmail_command' id='formSendmailCommand' value='".q(get_var('sendmail_command', ini_get('sendmail_path')))."'>
                            </div>
+                        </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
                         </div>";
     if (!$install) {
-        $mail_form .= "
+        $tool_content .= "
                     </fieldset>
                 </div>
             </div>";
     }
-    $tool_content .= $mail_form;
-    return $tool_content;
 }

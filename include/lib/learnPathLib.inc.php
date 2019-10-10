@@ -1104,16 +1104,16 @@ function addScormTime($time1, $time2) {
         $mask = "/^([0-9]{2,4}):([0-9]{2}):([0-9]{2}).?([0-9]?[0-9]?)$/";
 
         preg_match($mask, $time1, $matches);
-        $hours1 = $matches[1];
-        $minutes1 = $matches[2];
-        $secondes1 = $matches[3];
-        $primes1 = $matches[4];
+        $hours1 = intval($matches[1]);
+        $minutes1 = intval($matches[2]);
+        $secondes1 = intval($matches[3]);
+        $primes1 = intval($matches[4]);
 
         preg_match($mask, $time2, $matches);
-        $hours2 = $matches[1];
-        $minutes2 = $matches[2];
-        $secondes2 = $matches[3];
-        $primes2 = $matches[4];
+        $hours2 = intval($matches[1]);
+        $minutes2 = intval($matches[2]);
+        $secondes2 = intval($matches[3]);
+        $primes2 = intval($matches[4]);
 
         // calculate the resulting added hours, secondes, ... for result
 
@@ -1302,15 +1302,6 @@ function disp_message_box($message, $style = FALSE) {
         $cell = "<td class=\"$style\">";
     } else {
         $cell = "<td class=\"left\">";
-    }
-    return "$cell $message";
-}
-
-function disp_message_box1($message, $style = FALSE) {
-    if ($style) {
-        $cell = "";
-    } else {
-        $cell = "";
     }
     return "$cell $message";
 }

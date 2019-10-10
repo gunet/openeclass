@@ -157,7 +157,7 @@ function getExternalLinks() {
  */
 function loggedInMenu($rich=true) {
     global $uid, $is_admin, $is_power_user, $is_usermanage_user,
-    $is_departmentmanage_user, $urlServer, $session;
+    $is_departmentmanage_user, $urlServer, $course_code, $session;
 
     $sideMenuGroup = array();
 
@@ -282,7 +282,7 @@ function loggedInMenu($rich=true) {
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_GRADEBOOK)) {
         array_push($sideMenuText, $GLOBALS['langGradeTotal']);
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
-        array_push($sideMenuImg, "fa-sort-numeric-desc");
+        array_push($sideMenuImg, "gradebook");
     }
 
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_PROGRESS)) {
@@ -294,7 +294,7 @@ function loggedInMenu($rich=true) {
     if (get_config('personal_blog')) {
         array_push($sideMenuText, $GLOBALS['langMyBlog']);
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
-        array_push($sideMenuImg, "fa-columns");
+        array_push($sideMenuImg, "blog");
     }
 
     if (get_config('eportfolio_enable')) {
@@ -308,7 +308,7 @@ function loggedInMenu($rich=true) {
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
         array_push($sideMenuText, q($GLOBALS['langMyDocs']));
         array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php'));
-        array_push($sideMenuImg, 'fa-folder-open');
+        array_push($sideMenuImg, 'docs.png');
     }
 
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
@@ -547,7 +547,7 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
         array_push($sideMenuLink, '../admin/coursecategory.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        array_push($sideMenuImg, 'arrow.png');
 
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
@@ -742,6 +742,7 @@ function lessonToolsMenu($rich=true) {
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
                             '/?course=' . $course_code));
             array_push($sideMenuImg, $modules[$mid]['image']);
+
             array_push($sideMenuID, $mid);
         }
 
