@@ -284,9 +284,8 @@ if ($all_set) {
         }
 
         // User Message
-        $tool_content .= "<div class='alert alert-success'>" .
-                ($prof ? $langDearProf : $langDearUser) .
-                "!<br />$success</div><p>$infoprof<br /><br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+        $tool_content .= "<div class='alert alert-success'>$success</div>";
+        $tool_content .= "<div class='alert alert-info'>$infoprof<br /><br />$langClick <a href='$urlServer'>$langHere</a> $langBackPage</div>";
     }
     else {
         // email needs verification -> mail user
@@ -325,10 +324,8 @@ if ($all_set) {
         }
 
         // User Message
-        $tool_content .= "<div class='alert alert-success'>" .
-                ($prof ? $langDearProf : $langDearUser) .
-                "<br />$langMailVerificationSuccess
-            $langMailVerificationSuccess2</div><br /><p>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+        $tool_content .= "<div class='alert alert-success'>$langMailVerificationSuccess $langMailVerificationSuccess2</div>
+                          <div class='alert alert-info'>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
     }
     draw($tool_content, 0);
     exit();
