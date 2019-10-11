@@ -4018,6 +4018,7 @@ $langForumPost = "Forum post";
 $langNoAccessPrivilages = "No access privileges";
 $langPollShowResults = "Display results to participants";
 $langRegistrationDenied = 'You are not allowed to register to the platform.';
+$langInvalidEmailRecipient = "Sender email address is not valid! Email wasn't sent! Please contact platform administrator";
 $langHits = "Number of hits";
 $langGradeType = "Grade Type";
 $langGradeNumbers = "Numbers";

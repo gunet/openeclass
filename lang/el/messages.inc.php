@@ -3289,6 +3289,7 @@ $langNotifyRegUser1 = "Πραγματοποιήθηκε η εγγραφή σας
 $langNotifyRegUser2 = " από τον διαχειριστή του $langsOfCourse.";
 $langToUser = "στον χρήστη";
 $langRegistrationDenied = 'Η εγγραφή σας στην πλατφόρμα δεν επιτρέπεται.';
+$langInvalidEmailRecipient = "Η διεύθυνση του αποστολέα δεν είναι συμπληρωμένη ή περιέχει άκυρους χαρακτήρες οπότε το email δεν στάλθηκε! Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 
 // search_user.php
 $langUserNoneMasc = "-";
@@ -3517,7 +3518,7 @@ $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαρι
 $langMailVerificationSuccess = "Θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε.";
 $langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. Μόλις η επιβεβαίωση ολοκληρωθεί, θα σας σταλεί δεύτερο e-mail
                                 από την ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName,
-                        με τα στοιχεία σας";
+                        με τα στοιχεία σας.";
 $langMailVerificationNote = "(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)";
 $langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.<br><br>$langMailVerificationSuccess<br>$langMailVerificationClick<br>%s";
 $langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.<br><br>$langMailVerificationClick<br>%s";

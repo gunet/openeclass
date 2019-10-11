@@ -128,7 +128,7 @@ function sendMessage($message) {
 
 // Determine the correct From: header
 function fromHeader($from, $from_address) {
-    global $langVia, $siteName;
+    global $langVia, $siteName, $langInvalidEmailRecipient;
 
     if (empty($from_address) or !get_config('email_from')) {
         $from_address = get_config('email_sender');
@@ -136,13 +136,19 @@ function fromHeader($from, $from_address) {
     } else {
         $from = "$from ($langVia: $siteName)";
     }
-    return array($from_address => $from);
+
+    if (!valid_email($from_address)) { // check if sender address is valid
+        Session::Messages("$langInvalidEmailRecipient", 'alert-danger');
+        return;
+    } else {
+        return array($from_address => $from);
+    }
 }
 
 
 // Add the correct Reply-To: header if needed
 function addReplyTo($message, $from, $from_address) {
-    global $emailAdministrator;
+    global $emailAdministrator, $langInvalidEmailRecipient;
 
     // Don't include reply-to if it has been provided by caller
     if ($message->getReplyTo()) {
@@ -150,7 +156,12 @@ function addReplyTo($message, $from, $from_address) {
     }
 
     if (!get_config('email_from') and $emailAdministrator <> $from_address) {
-        $message->setReplyTo(array($from_address => $from));
+        if (!valid_email($from_address)) { // check if sender address is valid
+            Session::Messages("$langInvalidEmailRecipient", 'alert-danger');
+            return;
+        } else {
+            $message->setReplyTo(array($from_address => $from));
+        }
     }
 }
 
