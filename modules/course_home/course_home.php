@@ -50,6 +50,15 @@ $data['course_info'] = $course_info = Database::get()->querySingle("SELECT keywo
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 
+// Handle unit reordering
+if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toReorder'])) {
+        reorder_table('course_units', 'course_id', $course_id, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+        exit;
+    }
+}
+
 // other actions in course unit
 if ($is_editor) {
     // update index and refresh course metadata
@@ -129,9 +138,32 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 ModalBoxHelper::loadModalBox();
 $head_content .= "
 <script type='text/javascript'>
-    $(document).ready(function() {  "
+    $(document).ready(function() {";
+
+if ($is_editor and $course_info->view_type == 'units') {
+    $head_content .= '
+        Sortable.create(boxlistSort, {
+            animation: 350,
+            handle: \'.fa-arrows\',
+            animation: 150,
+            onUpdate: function (evt) {
+                var itemEl = $(evt.item);
+                var idReorder = itemEl.attr(\'data-id\');
+                var prevIdReorder = itemEl.prev().attr(\'data-id\');
+
+                $.ajax({
+                  type: \'post\',
+                  dataType: \'text\',
+                  data: {
+                      toReorder: idReorder,
+                      prevReorder: prevIdReorder,
+                  }
+                });
+            }
+        });';
+}
 //Calendar stuff
-.'var calendar = $("#bootstrapcalendar").calendar({
+$head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
                     events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
                     language: "'.$langLanguageCode.'",
@@ -163,45 +195,8 @@ $head_content .= "
     ."})
     </script>";
 
-$head_content .= "
-        <script>
-        $(function() {
-            $('#help-btn').click(function(e) {
-                e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
-            });
-        });
-        </script>
-        ";
+$registerUrl = js_escape($urlAppend . 'modules/course_home/register.php?course=' . $course_code);
 
-$head_content .= "
-        <script>
-            $(function() {
-                $('body').keydown(function(e) {
-                    if(e.keyCode == 37 || e.keyCode == 39) {
-                        if ($('.modal.in').length) {
-                            var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
-                            if (e.keyCode == 37) {
-                                var new_modal_id = parseInt(visible_modal_id) - 1;
-                            } else {
-                                var new_modal_id = parseInt(visible_modal_id) + 1;
-                            }
-                            var new_modal = $('#hidden_'+new_modal_id);
-                            if (new_modal.length) {
-                                hideVisibleModal();
-                                new_modal.modal('show');
-                            }
-                        }
-                    }
-                });
-            });
-            function hideVisibleModal(){
-                var visible_modal = $('.modal.in');
-                if (visible_modal) { // modal is active
-                    visible_modal.modal('hide'); // close modal
-                }
-            };
-        </script>";
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
     SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
@@ -239,6 +234,35 @@ $course_descriptions = Database::get()->queryArray("SELECT cd.id, cd.title, cd.c
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 $course_descriptions_modals = "";
+
+$head_content .= "
+        <script>
+            $(function() {
+                $('body').keydown(function(e) {
+                    if(e.keyCode == 37 || e.keyCode == 39) {
+                        if ($('.modal.in').length) {
+                            var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
+                            if (e.keyCode == 37) {
+                                var new_modal_id = parseInt(visible_modal_id) - 1;
+                            } else {
+                                var new_modal_id = parseInt(visible_modal_id) + 1;
+                            }
+                            var new_modal = $('#hidden_'+new_modal_id);
+                            if (new_modal.length) {
+                                hideVisibleModal();
+                                new_modal.modal('show');
+                            }
+                        }
+                    }
+                });
+            });
+            function hideVisibleModal(){
+                var visible_modal = $('.modal.in');
+                if (visible_modal) { // modal is active
+                    visible_modal.modal('hide'); // close modal
+                }
+            };
+        </script>";
 
 if(count($course_descriptions) > 0) {
     $course_info_extra = "";
