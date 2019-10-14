@@ -51,7 +51,7 @@ function process_actions() {
                 $restitle = $_REQUEST['restitle'];
             }
             $rescomments = purify($_REQUEST['rescomments']);
-            $result = Database::get()->query("UPDATE unit_resources SET
+            Database::get()->query("UPDATE unit_resources SET
                                         title = ?s,
                                         comments = ?s
                                         WHERE unit_id = ?d AND id = ?d", $restitle, $rescomments, $id, $res_id);
@@ -1341,7 +1341,6 @@ function edit_res($resource_id) {
     $resource_type = $ru->type;
     $content = "<div class='form-wrapper'>";
     $content .= "<form class='form-horizontal' role='form' method='post' action='${urlServer}modules/units/?course=$course_code'>" .
-            "<fieldset>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {
@@ -1361,8 +1360,7 @@ function edit_res($resource_id) {
             <div class='col-sm-offset-2 col-sm-10'>
                 <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
             </div>
-        </fieldset>
-    </form>
-</div>";
+            </form>
+        </div>";
     return $content;
 }

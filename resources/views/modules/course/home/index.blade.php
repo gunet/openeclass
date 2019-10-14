@@ -165,7 +165,7 @@
                         @endif
                     </div>
                 </div>
-                <div class='row boxlist no-list'>
+                <div class='row boxlist no-list' id='boxlistSort'>
                     @if ($course_units)
                         <?php $count_index = 0;?>
                         @foreach ($course_units as $key => $course_unit)
@@ -212,25 +212,14 @@
                             @endif
                                                 @if ($is_editor)
                                                     <div class='item-side'>
+                                                        <div class='reorder-btn'>
+                                                            <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title ='{{ trans('langReorder') }}'></span>
+                                                        </div>
                                                         {!! action_button([
                                                             [
                                                                 'title' => trans('langEditChange'),
                                                                 'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$course_unit->id",
                                                                 'icon' => 'fa-edit'
-                                                            ],
-                                                            [
-                                                                'title' => trans('langDown'),
-                                                                'level' => 'primary',
-                                                                'url' => "$_SERVER[REQUEST_URI]?down=". getIndirectReference($course_unit->id),
-                                                                'icon' => 'fa-arrow-down',
-                                                                'disabled' => $key + 1 == count($course_units)
-                                                            ],
-                                                            [
-                                                                'title' => trans('langUp'),
-                                                                'level' => 'primary',
-                                                                'url' => "$_SERVER[REQUEST_URI]?up=". getIndirectReference($course_unit->id),
-                                                                'icon' => 'fa-arrow-up',
-                                                                'disabled' => $key == 0
                                                             ],
                                                             [
                                                                 'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
@@ -436,5 +425,4 @@
             });
         </script>";
     @endif
-}
 @endsection
