@@ -134,6 +134,7 @@ add_units_navigation(TRUE);
 
 load_js('bootstrap-calendar');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
+load_js('sortable');
 
 ModalBoxHelper::loadModalBox();
 $head_content .= "

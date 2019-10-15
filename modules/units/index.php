@@ -55,6 +55,7 @@ $pageName = ''; // delete $pageName set in doc_init.php
 
 $lang_editor = $language;
 load_js('tools.js');
+load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox(true);
 
 if (isset($_POST['edit_submit'])) {
@@ -137,7 +138,7 @@ foreach (array('previous', 'next') as $i) {
 }
 
 $moduleTag = new ModuleElement($id);
-$data['tags'] = $moduleTag->showTags();
+$data['tags_list'] = $moduleTag->showTags();
 $data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
              WHERE course_id = ?d AND `order` > 0
                    $visibility_check $check_start_week

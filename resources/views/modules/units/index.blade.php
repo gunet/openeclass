@@ -111,21 +111,18 @@
                     </div>
                 </div>
                 <div class='panel-body'>
-                    {!! standard_text_escape($comments) !!}
-                    @if ($tags)
+                    <div>
+                        {!! standard_text_escape($comments) !!}
+                    </div>
+                    @if ($tags_list)
                         <div>
-                            {{ trans('langTags') }}: {!! $tags !!}
+                            <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
                         </div>
                     @endif
+                    <div class='unit-resources'>
+                        {!! show_resources($unitId) !!}
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class='row'>
-        <div class='col-md-12'>
-            <div class='panel padding'>
-                {!! show_resources($unitId) !!}
             </div>
         </div>
     </div>

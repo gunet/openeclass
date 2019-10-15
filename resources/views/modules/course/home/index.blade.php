@@ -181,7 +181,7 @@
                             @if (!$is_editor and $not_shown)
                                 @continue;
                             @else
-                                <div class='col-xs-12'>
+                                <div id='unit_{{ getIndirectReference($course_unit->id) }}' class='col-xs-12' data-id='{{ $course_unit->id }}'>
                                     <div class='panel clearfix'>
                                         <div class='col-xs-12'>
                                             <div class='item-content'>
