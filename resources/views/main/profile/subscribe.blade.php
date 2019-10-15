@@ -29,7 +29,9 @@
                 <input type='hidden' name='cid' value='{{ getIndirectReference($cid) }}'>
             @else
                 @foreach($_SESSION['courses'] as $code => $status)
-                    <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ $selected }}>&nbsp;{{ $title }}<br />
+                    @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
+                        <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>&nbsp;{{ course_code_to_title($code) }}<br>
+                    @endif
                 @endforeach
             @endif
             </div>
