@@ -82,7 +82,6 @@ $data['action_bar'] = action_bar(
     if (!get_user_email_notification_from_courses($uid)) {
         $data['mail_notification'] = true;
     }
-
     $tool_content .= "<div class='alert alert-info'>$langInfoUnsubscribe</div>
                           <div id='unsubscontrols'>";
     if (isset($_REQUEST['cid'])) { // one course only

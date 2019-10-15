@@ -24,14 +24,24 @@ $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
 foreach ($q as $l) {
     $authTitle = empty($l->auth_title)? "$langLogInWith {$l->auth_name}": getSerializedMessage($l->auth_title);
     if (in_array($l->auth_name, $extAuthMethods)) {
-        $authUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');        
+        $authUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
+        if (isset($_GET['next'])) {
+            $authUrl .= '?next=' . urlencode($_GET['next']);
+        }
         $authLink[] = array(false, "
             <div class='col-sm-8 col-sm-offset-2' style='padding-top:40px;'>
                 <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>
             </div>", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
-        $hybridProviderHtml = "<a class='' href='{$urlServer}index.php?provider=" .
-            $l->auth_name . "'><img src='$themeimg/$l->auth_name.png' alt='Sign-in with $l->auth_name' title='Sign-in with $l->auth_name' style='margin-right: 0.5em;'>" . ucfirst($l->auth_name) . "</a>";
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/default/CSS/bootstrap-social.css'>";
+        $providerClass = $l->auth_name;
+        $providerFont = $l->auth_name;
+        if ($l->auth_name === 'live') {
+            $providerClass = 'microsoft';
+            $providerFont = 'windows';
+        }
+        $hybridProviderHtml = "<a class='btn btn-block btn-social btn-$providerClass' href='{$urlServer}index.php?provider=" .
+            $l->auth_name . "'><span class='fa fa-$providerFont'></span>" . ucfirst($l->auth_name) . "</a>";
         if (is_null($hybridLinkId)) {
             $authLink[] = array(false, $hybridProviderHtml, $langViaSocialNetwork);
             $hybridLinkId = count($authLink) - 1;
@@ -76,7 +86,7 @@ $tool_content .= action_bar(array(
           'button-class' => 'btn-default')), false);
 $tool_content .= "<div class='login-page'>
                     <div class='row'>";
-foreach ($authLink as $authInfo) {    
+foreach ($authLink as $authInfo) {
     $tool_content .= "
       <div class='col-sm-$columns'>
         <div class='panel panel-default '>
@@ -90,8 +100,8 @@ foreach ($authLink as $authInfo) {
                                 </div>
                             </div>
                         </div>";
-    
+
 }
 $tool_content .= "</div></div>";
 
-draw($tool_content, 0);
+draw($tool_content, 0, null, $head_content);

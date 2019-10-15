@@ -37,9 +37,6 @@ $require_login = true;
 $require_help = TRUE;
 $helpTopic = 'portfolio';
 
-if(isset($_POST['setsessioncourse']) && $_POST['setsessioncourse'] == 1)
-    $require_current_course = TRUE;
-
 include '../../include/baseTheme.php';
 $require_valid_uid = true;
 require_once 'include/lib/textLib.inc.php';
@@ -74,6 +71,7 @@ $head_content .= "<script>
 </script>";
 
 $noteNumber = Notes::count_user_notes();
+
 $displayForm = true;
 /* up and down commands */
 if (isset($_GET['down'])) {
@@ -97,8 +95,7 @@ if (isset($_POST['submitNote'])) {
     if($v->validate()) {
         $newTitle = $_POST['newTitle'];
         $newContent = $_POST['newContent'];
-        $refCourseId = (isset($_POST['setsessioncourse']) &&  $_POST['setsessioncourse'] == 1) ? "course:".$course_id:$_POST['refcourse'];
-        $refobjid = ($_POST['refobjid'] == "0") ? $refCourseId : $_POST['refobjid'];
+        $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
         if (!empty($_POST['id'])) { //existing note
             $id = intval(getDirectReference($_POST['id']));
             Notes::update_note($id, $newTitle, $newContent, $refobjid);
@@ -218,7 +215,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                             'icon' => 'fa-times')
                     ))
                ."</div>
-                <div class='panel-title h3'>".q($note->title)."</div>
+                <h3 class='panel-title'>".q($note->title)."</h3>
             </div>
             <div class='panel-body'>
                 <div class='label label-success'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>

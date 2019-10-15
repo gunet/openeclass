@@ -28,7 +28,6 @@ require_once 'include/mailconfig.php';
 require_once 'modules/db/recycle.php';
 require_once 'modules/db/foreignkeys.php';
 require_once 'modules/auth/auth.inc.php';
-require_once 'install/functions.php';
 require_once 'upgradeHelper.php';
 
 stop_output_buffering();
@@ -131,8 +130,8 @@ mkdir_or_error('courses/eportfolio/work_submissions');
 touch_or_error('courses/eportfolio/work_submissions/index.php');
 mkdir_or_error('courses/eportfolio/mydocs');
 touch_or_error('courses/eportfolio/mydocs/index.php');
-mkdir_try('storage');
-mkdir_try('storage/views');
+mkdir_or_error('storage');
+mkdir_or_error('storage/views');
 
 // ********************************************
 // upgrade config.php
@@ -1400,38 +1399,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
         }
 
-        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
-        Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
-                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
-                    IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
-                LANGUAGE SQL
-                BEGIN
-                    DECLARE lft, rgt INT(11);
-
-                    SET lft = parentlft + 1;
-                    SET rgt = parentlft + 2;
-
-                    CALL shift_right(parentlft, 2, 0);
-
-                    INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
-                END");
-        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-        Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
-        Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
-                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-                    IN p_order_priority INT(11), IN p_visible TINYINT(4))
-                LANGUAGE SQL
-                BEGIN
-                    UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
-                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                        order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
-
-                    IF nodelft <> parentlft THEN
-                        CALL move_nodes(nodelft, p_lft, p_rgt);
-                    END IF;
-                END");
-
         // fix invalid agenda durations
         Database::get()->queryFunc("SELECT DISTINCT duration FROM agenda WHERE duration NOT LIKE '%:%'",
             function ($item) {
@@ -1852,13 +1819,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             // Move weekly_course_units to course_units
             $result = Database::get()->query("INSERT INTO course_units
                         (title, comments, start_week, finish_week, visible, public, `order`, course_id)
-                            SELECT CASE WHEN (title = '' OR title IS NULL)
-                                THEN
+                            SELECT CASE WHEN (title = '' OR title IS NULL) 
+                                THEN 
                                   TRIM(CONCAT_WS(' ','$langWeek', DATE_FORMAT(start_week, '%d-%m-%Y')))
-                                ELSE
-                                  title
-                                END
-                              AS title,
+                                ELSE 
+                                  title  
+                                END 
+                              AS title, 
                               comments, start_week, finish_week, visible, public, `order`, ?d
                                 FROM course_weekly_view
                                 WHERE course_id = ?d ORDER BY id", $courseid, $courseid);
@@ -1877,7 +1844,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query("INSERT INTO unit_resources
                                 (unit_id, title, comments, res_id, `type`, visible, `order`, `date`)
                             SELECT ?d, title, comments, res_id, `type`, visible, `order`, `date`
-                                FROM course_weekly_view_activities
+                                FROM course_weekly_view_activities 
                                 WHERE course_weekly_view_id = ?d", $unit_id, $weekly_id);
             }
             // update course with new view type (=units)
@@ -1992,7 +1959,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `exercise_user_record`
                     ADD `assigned_to` INT(11) DEFAULT NULL");
         }
-        
+
         // user consent
         Database::get()->query("CREATE TABLE IF NOT EXISTS `user_consent` (
             id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -2070,9 +2037,49 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `session_id` TEXT NOT NULL,
                 `session_token` TEXT NOT NULL,
                 `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+                `session_status_updated` datetime DEFAULT NULL,
                 PRIMARY KEY (id),
                 UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+        }
+
+        //learning analytics
+        if (!DBHelper::tableExists('analytics')) {
+            Database::get()->query("CREATE TABLE `analytics` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `courseID` int(11) NOT NULL,
+              `title` varchar(255) NOT NULL,
+              `description` text,
+              `active` tinyint(1) NOT NULL DEFAULT '0',
+              `start_date` date DEFAULT NULL,
+              `end_date` date DEFAULT NULL,
+              `created` datetime DEFAULT NULL,
+              `periodType` int(11) NOT NULL,
+              PRIMARY KEY (id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('analytics_element')) {
+            Database::get()->query("CREATE TABLE `analytics_element` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `analytics_id` int(11) NOT NULL,
+              `module_id` int(11) NOT NULL,
+              `resource` int(11) DEFAULT NULL,
+              `upper_threshold` float DEFAULT NULL,
+              `lower_threshold` float DEFAULT NULL,
+              `weight` int(11) NOT NULL DEFAULT '1',
+              `min_value` float NOT NULL,
+              `max_value` float NOT NULL,
+              PRIMARY KEY (`id`)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('user_analytics')) {
+            Database::get()->query("CREATE TABLE `user_analytics` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `user_id` int(11) NOT NULL,
+              `analytics_element_id` int(11) NOT NULL,
+              `value` float NOT NULL DEFAULT '0',
+              `updated` datetime NOT NULL,
+              PRIMARY KEY (`id`)) $tbl_options");
         }
     }
 
@@ -2080,9 +2087,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '4.0', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
         
-        Database::get()->query('ALTER TABLE tc_session
-                CHANGE external_users external_users TEXT DEFAULT NULL');
-
         // widgets
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
                 `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2171,7 +2175,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
         }
     }
-    
+
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
 
