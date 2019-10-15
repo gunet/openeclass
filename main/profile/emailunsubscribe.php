@@ -93,7 +93,9 @@ $tool_content .= action_bar(array(
             $title = course_code_to_title($code);
             $cid = course_code_to_id($code);
             $selected = get_user_email_notification($uid, $cid) ? 'checked' : '';
-            $tool_content .= "<input type='checkbox' name='c_unsub[$code]' value='1' $selected>&nbsp;" . q($title) . "<br />";
+            if (course_status($cid) != COURSE_INACTIVE) {
+                $tool_content .= "<input type='checkbox' name='c_unsub[$code]' value='1' $selected>&nbsp;" . q($title) . "<br />";
+            }
         }
     }
     $tool_content .= "</div>
