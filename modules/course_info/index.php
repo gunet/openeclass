@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
         redirect_to_home_page("modules/course_info/index.php?course=$course_code");
     } else {
         // update course settings
-        if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
+        if (isset($_POST['formvisible']) and ( $_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
             $password = $_POST['password'];
         } else {
             $password = '';
@@ -112,7 +112,7 @@ if (isset($_POST['submit'])) {
         }
 
         // validate departments
-        $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
+        $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
         foreach ($departments as $dep) {
             if ($depadmin_mode && !in_array($dep, $allowables)) {
@@ -121,11 +121,13 @@ if (isset($_POST['submit'])) {
             }
         }
 
+
         $old_deps = $course->getDepartmentIds($course_id);
         $deps_changed = count(array_diff($old_deps, $departments)) +
                         count(array_diff($departments, $old_deps));
 
-        // Check if the teacher is allowed to create in the chosen departments
+        //=======================================================
+        // Check if the teacher is allowed to create in the departments he chose
         if ($deps_changed and !$deps_valid) {
             Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
             redirect_to_home_page("modules/course_info/?course=$course_code");
@@ -139,19 +141,21 @@ if (isset($_POST['submit'])) {
                                 prof_names = ?s,
                                 lang = ?s,
                                 password = ?s,
-                                view_type = ?s,
-                                start_date = ?t,
-                                finish_date = ?t
-                            WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);
+                                view_type = ?s                                
+                            WHERE id = ?d",
+                                $_POST['title'], $_POST['fcode'], $_POST['course_keywords'],
+                                $_POST['formvisible'], $course_license, $_POST['teacher_name'],
+                                $session->language, $password, $view_type, $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
                 array('title' => $_POST['title'],
                       'public_code' => $_POST['fcode'],
                       'visible' => $_POST['formvisible'],
-                      'prof_names' => $_POST['titulary'],
+                      'prof_names' => $_POST['teacher_name'],
                       'lang' => $session->language));
 
+            // update course settings
             if (isset($_POST['s_radio'])) {
                 setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
             }
@@ -176,6 +180,10 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['f_radio'])) {
                 setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, $_POST['f_radio'], $course_id);
             }
+            if (isset($_POST['enable_docs_public_write'])) {
+                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['enable_docs_public_write'], $course_id);
+            }
+            //-------------------------
             Session::Messages($langModifDone,'alert-success');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }

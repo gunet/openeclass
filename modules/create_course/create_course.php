@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -63,7 +63,7 @@ if ($allow_only_defaults) {
         }
     }
 }
-$departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
+$departments = isset($_POST['department']) ? $_POST['department'] : array();
 $deps_valid = true;
 
 foreach ($departments as $dep) {
@@ -117,7 +117,7 @@ if (!isset($_POST['create_course'])) {
         $validationFailed = true;
     }
 
-    if (empty($title) || empty($prof_names)) {
+    if (empty($title)) {
         Session::Messages($langFieldsMissing);
         $validationFailed = true;
     }
@@ -125,7 +125,7 @@ if (!isset($_POST['create_course'])) {
     if ($validationFailed) {
         redirect_to_home_page('modules/create_course/create_course.php');
     }
-    
+
     // create new course code: uppercase, no spaces allowed
     $code = strtoupper(new_code($departments[0]));
     $code = str_replace(' ', '', $code);
@@ -174,8 +174,9 @@ if (!isset($_POST['create_course'])) {
     }
 
     if (ctype_alnum($_POST['view_type'])) {
-        $view_type = $_POST['view_type'];        
-    }    
+        $view_type = $_POST['view_type'];
+    }
+
     if (empty($_POST['public_code'])) {
         $public_code = $code;
     } else {
@@ -204,16 +205,15 @@ if (!isset($_POST['create_course'])) {
                         glossary_index = 1,
                         description = ?s",
             $code, $language, $title, $_POST['formvisible'],
-            intval($course_license), $prof_names, $public_code, $doc_quota * 1024 * 1024,
+            $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, $view_type,
-            $description);
+            $dropbox_quota * 1024 * 1024, $password, $view_type, $description);
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
         Session::Messages($langGeneralError);
         redirect_to_home_page('modules/create_course/create_course.php');
     }
-    
+
     // create course modules
     create_modules($new_course_id);
 
@@ -224,8 +224,8 @@ if (!isset($_POST['create_course'])) {
                                         tutor = 1,
                                         reg_date = " . DBHelper::timeAfter() . ",
                                         document_timestamp = " . DBHelper::timeAfter() . "",
-                                    $new_course_id, $uid);
-    
+                           $new_course_id, $uid);
+
     $course->refresh($new_course_id, $departments);
 
     // create courses/<CODE>/index.php
@@ -244,7 +244,7 @@ if (!isset($_POST['create_course'])) {
               'icon' => 'fa-arrow-right',
               'level' => 'primary-label',
               'button-class' => 'btn-success')));
-    
+
     // logging
     Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,
                                                'code' => $code,

@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -507,7 +506,7 @@ if ($is_editor) {
                 </tr>";
 
         foreach ($groupSelect as $group) {
-            initialize_group_info($group->id);            
+            initialize_group_info($group->id);
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p style='padding-top:10px;'>$group_description</p>";
@@ -580,17 +579,17 @@ if ($is_editor) {
             $group_id = $row->id;
 
             initialize_group_info($group_id);
-            
+
             $tool_content .= "<tr>";
             $tool_content .= "<td class='text-left'>";
             // Allow student to enter group only if he's a member
             if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
-                        "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
+                        "</a> <span class='pull-right label label-success'>$langMyGroup</span>";
             } else {
                 $full_group_message = '';
                 if ($max_members > 0 and $max_members == $member_count) {
-                   $full_group_message = "<span style='color:#900; weight:bold; padding-left: 10px;'>($langGroupFull)</span>";
+                   $full_group_message = " <span class='pull-right label label-warning'>$langGroupFull</span>";
                 }
                 $tool_content .= q($group_name) . "$full_group_message";
             }
@@ -614,19 +613,18 @@ if ($is_editor) {
                     ($max_members ? $max_members : '&mdash;') . "</td>";
             // If self-registration and multi registration allowed by admin and group is not full
             $tool_content .= "<td class='text-center'>";
-            if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
-                $group_id_indirect = getIndirectReference($group_id);
-                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
-            } elseif (!$self_reg) {
-                $tool_content .= '&mdash;';
-            } else {
-                if (!$allow_unreg) {
-                    $tool_content .= '&mdash;';
-                } else {
-                   $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
+            $group_id_indirect = getIndirectReference($group_id);
+            $control = '';
+            if ($uid) {
+                if (!$is_member) {
+                    if ($self_reg and (!$user_groups or $multi_reg) and (!$max_members or $member_count < $max_members)) {
+                        $control = icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
+                    }
+                } elseif ($allow_unreg) {
+                    $control = icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id_indirect", " style='color:#d9534f;'");
                 }
             }
-            $tool_content .= "</td></tr>";
+            $tool_content .= ($control? $control: '&mdash;') . "</td></tr>";
             $totalRegistered += $member_count;
         }
         $tool_content .= "</table></div>";

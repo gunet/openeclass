@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 /**
- * @file refresh_course.php 
+ * @file refresh_course.php
  * @brief course clean up
  */
 
@@ -31,6 +31,8 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/work/functions.php';
 require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/log.class.php';
 
 $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
@@ -40,14 +42,19 @@ $data['action_bar'] = action_bar(array(
                   'level' => 'primary-label'
                  )));
 
-if (isset($_GET['from_user'])) {
+$from_user = false;
+if (isset($_REQUEST['from_user'])) { // checks if we are coming from /modules/user/index.php
+    $from_user = true;
+}
+
+if (!$from_user) {
     $toolName = $langCourseInfo;
     $pageName = $langRefreshCourse;
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 } else {
     $toolName = $langUsers;
     $pageName = $langDelUsers;
-    $navigation[] = array('url' => "../user/index.php?course=$course_code", 'name' => $langUsers);        
+    $navigation[] = array('url' => "../user/index.php?course=$course_code", 'name' => $langUsers);
 }
 
 if (isset($_POST['reg_flag'])) {
@@ -57,55 +64,37 @@ if (isset($_POST['reg_flag'])) {
 }
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
-    if (!isset($_GET['from_user'])) {
-        $url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
-    } else {
-        $url = "../user/index.php?course=$course_code";
-    }
-    
-    $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => $url,
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label'
-                 )));
-       
+
     $output = array();
-    if (isset($_POST['delusers'])) {
-        if (isset($_POST['reg_date']) and isset($_POST['reg_flag'])) {
-            $date_obj = DateTime::createFromFormat('d-m-Y', $_POST['reg_date']);
-            $date = $date_obj->format('Y-m-d');            
-            $output[] = delete_users(q($date), $_POST['reg_flag']);
-        } else {
+    if (isset($_POST['delusersdate']) or isset($_POST['delusersdept']) or
+        isset($_POST['delusersid']) or isset($_POST['delusersinactive'])) {
             $output[] = delete_users();
-        }
     }
     if (isset($_POST['delannounces'])) {
         $output[] = delete_announcements();
-    }    
+    }
     if (isset($_POST['delagenda'])) {
         $output[] = delete_agenda();
     }
     if (isset($_POST['hideworks'])) {
         $output[] = hide_work();
     }
-    if (isset($_POST['delworkssubs'])) {        
-	$output[] = del_work_subs();
-    }            
+    if (isset($_POST['delworkssubs'])) {
+        $output[] = del_work_subs();
+    }
     if (isset($_POST['purgeexercises'])) {
         $output[] = purge_exercises();
     }
     if (isset($_POST['clearstats'])) {
         $output[] = clear_stats();
     }
-    if (isset($_POST['delblogposts'])) {
-        $output[] = del_blog_posts();
-    }
     if (isset($_POST['delwallposts'])) {
         $output[] = del_wall_posts();
     }
-    // output results
+    if (isset($_POST['delblogposts'])) {
+        $output[] = del_blog_posts();
+    }
+
     if (($count_events = count($output)) > 0) {
         $data['count_events'] = $count_events;
         $data['output'] = $output;
@@ -124,38 +113,109 @@ if (isset($_POST['submit'])) {
 }
 
 /**
- * 
+ *
  * @global type $course_id
  * @global type $langUsersDeleted
  * @param type $date
  * @param type $duration
  * @return type
  */
-function delete_users($date = '', $duration = '') {
+function delete_users() {
     global $course_id, $langUsersDeleted;
 
-    if (isset($date)) {
-         if ($duration == 'before') {
-             $operator = '<';
-         } else {
-             $operator = '>';
-         }
-                  
-        Database::get()->query("DELETE FROM course_user WHERE course_id = ?d AND
-                                status != ". USER_TEACHER ." AND
-                                reg_date $operator ?t", $course_id, $date);
+    $details = array('multiple' => true, 'params' => array());
+
+    if (isset($_POST['delusersdept']) and isset($_POST['dept_flag']) and isset($_POST['department'])) {
+        $filter_department = true;
+        $sql_department = 'LEFT JOIN user_department ON user.id = user_department.user';
     } else {
-        Database::get()->query("DELETE FROM course_user WHERE course_id = ?d AND status != " . USER_TEACHER . "", $course_id);
+        $filter_department = false;
+        $sql_department = '';
     }
-    Database::get()->query("DELETE FROM group_members
-                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d) AND
-                               user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = ?d)", $course_id, $course_id);
-    
-    return "$langUsersDeleted";
+
+    $sql = 'SELECT user.id AS user_id
+        FROM course_user, user ' . $sql_department . '
+        WHERE course_user.user_id = user.id
+          AND course_user.status <> ' . USER_TEACHER . '
+          AND course_user.editor = 0
+          AND course_user.reviewer = 0
+          AND course_id = ?d';
+    $args = array($course_id);
+
+    if (isset($_POST['delusersinactive'])) {
+        $sql .= ' AND user.expires_at < ' . DBHelper::timeAfter();
+        $details['params'][] = "inactive\n";
+    }
+
+    if (isset($_POST['delusersdate']) and isset($_POST['reg_date']) and isset($_POST['reg_flag'])) {
+        $date_obj = DateTime::createFromFormat('d-m-Y', $_POST['reg_date']);
+        $operator = ($_POST['reg_flag'] == 'before')? '<': '>=';
+        $sql .= " AND reg_date $operator ?t";
+        $args[] = $del_date = $date_obj->format('Y-m-d');
+        $details['params'][] = "reg_date $operator $del_date\n";
+    }
+
+    if ($filter_department) {
+        if ($_POST['dept_flag'] == 'no') {
+            $sql .= ' AND (user_department.department IS NULL OR user_department.department NOT IN (';
+            $close = '))';
+            $operator = 'not in';
+        } else {
+            $sql .= ' AND user_department.department IN (';
+            $close = ')';
+            $operator = 'in';
+        }
+        $sql .= implode(', ', array_fill(0, count($_POST['department']), '?d')) . $close;
+        $args[] = $_POST['department'];
+
+        $details['params'][] = "department $_POST[dept_flag] $operator (" .
+            implode(', ', $_POST['department']) . ")\n";
+    }
+
+    if (isset($_POST['delusersid']) and isset($_POST['id_flag']) and isset($_POST['idlist'])) {
+        if ($_POST['id_flag'] == 'am') {
+            $what = 'user.am';
+        } else {
+            $what = 'user.username';
+        }
+        $ids = array();
+        foreach (preg_split('/$\R?^/m', $_POST['idlist']) as $id) {
+            $id = canonicalize_whitespace($id);
+            if ($id !== '') {
+                $ids[] = $id;
+            }
+        }
+        $sql .= " AND $what IN (" .
+            implode(', ', array_fill(0, count($ids), '?s')) . ')';
+        $args[] = $ids;
+
+        $details['params'][] = "$what IN (" . implode(', ', $ids) . ")";
+    }
+
+    $del_uids = array();
+    Database::get()->queryFunc($sql, function ($item) use (&$del_uids) {
+        $del_uids[] = $item->user_id;
+    }, $args);
+
+    if (count($del_uids)) {
+        $placeholders = '(' . implode(', ', array_fill(0, count($del_uids), '?d')) . ')';
+        Database::get()->query('DELETE FROM course_user
+            WHERE course_id = ?d AND user_id IN ' . $placeholders,
+            $course_id, $del_uids);
+
+        $details['uid'] = $del_uids;
+        Log::record($course_id, MODULE_ID_USERS, LOG_DELETE, $details);
+
+        Database::get()->query("DELETE FROM group_members
+                             WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d) AND
+                                   user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = ?d)", $course_id, $course_id);
+    }
+
+    return $langUsersDeleted;
 }
 
 /**
- * 
+ *
  * @global type $course_id
  * @global type $langAnnDeleted
  * @return type
@@ -164,11 +224,11 @@ function delete_announcements() {
     global $course_id, $langAnnDeleted;
 
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $course_id);
-    return "$langAnnDeleted";
+    return "<p>$langAnnDeleted</p>";
 }
 
 /**
- * 
+ *
  * @global type $langAgendaDeleted
  * @global type $course_id
  * @return type
@@ -177,11 +237,11 @@ function delete_agenda() {
     global $langAgendaDeleted, $course_id;
 
     Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $course_id);
-    return "$langAgendaDeleted";
+    return "<p>$langAgendaDeleted</p>";
 }
 
 /**
- * 
+ *
  * @global type $langDocsDeleted
  * @global type $course_id
  * @return type
@@ -190,11 +250,11 @@ function hide_doc() {
     global $langDocsDeleted, $course_id;
 
     Database::get()->query("UPDATE document SET visible=0, public=0 WHERE course_id = ?d", $course_id);
-    return "$langDocsDeleted";
+    return "<p>$langDocsDeleted</p>";
 }
 
 /**
- * 
+ *
  * @global type $langWorksDeleted
  * @global type $course_id
  * @return type
@@ -203,10 +263,10 @@ function hide_work() {
     global $langWorksDeleted, $course_id;
 
     Database::get()->query("UPDATE assignment SET active=0 WHERE course_id = ?d", $course_id);
-    return "$langWorksDeleted";
+    return "<p>$langWorksDeleted</p>";
 }
 /**
- * 
+ *
  * @global type $langAllAssignmentSubsDeleted
  * @global type $webDir
  * @global type $course_id
@@ -221,7 +281,7 @@ function del_work_subs()  {
     $result = Database::get()->queryArray("SELECT id FROM assignment WHERE course_id = ?d", $course_id);
 
     foreach ($result as $row) {
-        $secret =  Database::get()->querySingle("SELECT secret_directory FROM assignment 
+        $secret =  Database::get()->querySingle("SELECT secret_directory FROM assignment
                             WHERE course_id = ?d AND id = ?d", $course_id, $row->id);
         if ($secret) {
             if (is_dir("$workPath/$secret->secret_directory")) { // if exists secret directory
@@ -233,28 +293,28 @@ function del_work_subs()  {
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $row->id);
         }
     }
-    return "$langAllAssignmentSubsDeleted";
+    return "<p>$langAllAssignmentSubsDeleted</p>";
 }
 
 /**
- * 
+ *
  * @global type $langPurgeExercisesResults
  * @return type
  */
 function purge_exercises() {
     global $langPurgeExercisesResults, $course_id;
-    
+
     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid IN (
-                                SELECT eurid FROM exercise_user_record WHERE eid IN 
+                                SELECT eurid FROM exercise_user_record WHERE eid IN
                                     (SELECT id FROM exercise WHERE course_id = ?d))", $course_id);
     Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN
                                 (SELECT id FROM exercise WHERE course_id = ?d)",$course_id);
 
-    return "$langPurgeExercisesResults";
+    return "<p>$langPurgeExercisesResults</p>";
 }
 
 /**
- * 
+ *
  * @global type $langStatsCleared
  * @return type
  */
@@ -265,7 +325,29 @@ function clear_stats() {
     $action = new action();
     $action->summarizeAll();
 
-    return "$langStatsCleared";
+    return "<p>$langStatsCleared</p>";
+}
+
+/**
+ *
+ * @global type $langWallPostsDeleted
+ * @return type
+ */
+function del_wall_posts() {
+    global $langWallPostsDeleted, $course_id;
+
+    Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `wall_post` ON `rating`.`rid` = `wall_post`.`id`
+                            WHERE `rating`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
+    Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `wall_post` ON `rating_cache`.`rid` = `wall_post`.`id`
+                            WHERE `rating_cache`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
+    Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `wall_post` ON `comments`.`rid` = `wall_post`.`id`
+                            WHERE `comments`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
+    Database::get()->query("DELETE `wall_post_resources` FROM `wall_post_resources` INNER JOIN `wall_post` ON `wall_post_resources`.`post_id` = `wall_post`.`id`
+                            WHERE `wall_post`.`course_id` = ?d", $course_id);
+    Database::get()->query("DELETE FROM abuse_report WHERE rtype = ?s AND course_id = ?d", 'wallpost', $course_id);
+    Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $course_id);
+
+    return "<p>$langWallPostsDeleted</p>";
 }
 
 /**
@@ -283,29 +365,7 @@ function del_blog_posts() {
     Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `blog_post` ON `rating_cache`.`rid` = `blog_post`.`id`
                             WHERE `rating_cache`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $course_id);
     Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $course_id);
-    
-    return "$langBlogPostsDeleted";
-}
 
-/**
- *
- * @global type $langWallPostsDeleted
- * @return type 
- */
-function del_wall_posts() {
-    global $langWallPostsDeleted, $course_id;
-
-    Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `wall_post` ON `rating`.`rid` = `wall_post`.`id`
-                            WHERE `rating`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
-    Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `wall_post` ON `rating_cache`.`rid` = `wall_post`.`id`
-                            WHERE `rating_cache`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
-    Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `wall_post` ON `comments`.`rid` = `wall_post`.`id`
-                            WHERE `comments`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
-    Database::get()->query("DELETE `wall_post_resources` FROM `wall_post_resources` INNER JOIN `wall_post` ON `wall_post_resources`.`post_id` = `wall_post`.`id`
-                            WHERE `wall_post`.`course_id` = ?d", $course_id);
-    Database::get()->query("DELETE FROM abuse_report WHERE rtype = ?s AND course_id = ?d", 'wallpost', $course_id);
-    Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $course_id);
-
-    return "$langWallPostsDeleted";
+    return "<p>$langBlogPostsDeleted</p>";
 }
 

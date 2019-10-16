@@ -22,7 +22,7 @@
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
-$helpTopic = 'courseTools';
+$helpTopic = 'course_tools';
 $require_login = true;
 
 include '../../include/baseTheme.php';
@@ -49,7 +49,7 @@ if (isset($_REQUEST['toolStatus'])) {
         $placeholders = join(', ', array_fill(0, count($mids), '?d'));
         Database::get()->query("UPDATE course_module SET visible = 1
                                     WHERE course_id = ?d AND module_id IN ($placeholders)",
-            $course_id, $mids);
+                               $course_id, $mids);
     }
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, array());
     Session::Messages($langRegDone, 'alert-success');
@@ -61,12 +61,15 @@ if (isset($_GET['delete'])) {
     $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);
     Database::get()->query("DELETE FROM link WHERE id = ?d", $delete);
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
-        'link' => $r->url,
-        'name_link' => $r->title));
+                                                                   'link' => $r->url,
+                                                                   'name_link' => $r->title));
     Session::Messages($langLinkDeleted, 'alert-success');
     redirect_to_home_page($page_url);
 }
 
+/**
+ * Add external link
+ */
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $link = isset($_POST['link']) ? $_POST['link'] : '';
@@ -80,26 +83,23 @@ if (isset($_POST['submit'])) {
                             VALUES (?d, ?s, ?s, -1, ' ')", $course_id, $link, $name_link);
     $id = $sql->lastInsertID;
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
-        'link' => $link,
-        'name_link' => $name_link));
+                                                                   'link' => $link,
+                                                                   'name_link' => $name_link));
     Session::Messages($langLinkAdded, 'alert-success');
     redirect_to_home_page($page_url);
-}
-
-if (isset($_GET['action'])) { // add external link
+} elseif (isset($_GET['action'])) { // add external link
     $pageName = $langAddExtLink;
     $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
-        )));
+            array('title' => $langBack,
+                  'url' => "index.php?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label'
+                 )));
 
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
-    $helpTopic = 'Module';
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'>
-            <fieldset>
+            <fieldset>            
             <div class='form-group'>
                 <label for='link' class='col-sm-2 control-label'>$langLink:</label>
                 <div class='col-sm-10'>
@@ -110,15 +110,15 @@ if (isset($_GET['action'])) { // add external link
                 <label for-'name_link' class='col-sm-2 control-label'>$langLinkName:</label>
                 <div class='col-sm-10'>
                     <input class='form-control' type='text' name='name_link' size='50'>
-                </div>
+                </div>              
             </div>
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
               <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
-            </div>
+            </div>  
             </div>
             </fieldset>
-            ". generate_csrf_token_form_field() ."
+            ". generate_csrf_token_form_field() ." 
             </form>
           </div>";
     draw($tool_content, 2, null, $head_content);
@@ -127,10 +127,15 @@ if (isset($_GET['action'])) { // add external link
 
 $data['toolSelection'][0] = $data['toolSelection'][1] = array();
 $module_list = Database::get()->queryArray('SELECT module_id, visible
-    FROM course_module WHERE course_id = ?d', $course_id);
+                                FROM course_module WHERE course_id = ?d
+                                AND module_id NOT IN (SELECT module_id FROM module_disable)', $course_id);
+
 foreach ($module_list as $item) {
+    if ($item->module_id == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+        continue;
+    }
     $mid = getIndirectReference($item->module_id);
-    $mtitle = $modules[$item->module_id]['title'];
+    $mtitle = q($modules[$item->module_id]['title']);
     $data['toolSelection'][$item->visible][] = (object) array('id' => $mid, 'title' => $mtitle);
 }
 

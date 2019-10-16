@@ -160,9 +160,10 @@ if (file_exists($disk_path)) {
             $useragent=$_SERVER['HTTP_USER_AGENT'];
             if (preg_match('/(android).+mobile/i', $useragent)) {
                 $is_android = true;
-            }    
-        }        
+            }
+        }
         
+
         if ($is_in_lpmode && $is_android) {
             require_once 'include/lib/fileDisplayLib.inc.php';
             //$dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;

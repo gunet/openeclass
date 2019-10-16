@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -641,14 +641,23 @@ function display_all_users_grades($gradebook_id) {
 /**
  * @brief display user grades (student view)
  * @global type $tool_content
+ * @global type $course_code
+ * @global type $is_editor
  * @global type $langGradebookTotalGradeNoInput
  * @global type $langGradebookTotalGrade
+ * @global type $langGradebookSum
  * @global type $langTitle
  * @global type $langGradebookActivityDate2
- * @global type $langGradebookActivityDescription
+ * @global type $langGradebookNoTitle
+ * @global type $langType
  * @global type $langGradebookActivityWeight
  * @global type $langGradebookGrade
  * @global type $langGradebookAlertToChange
+ * @global type $langBack
+ * @global type $langAssignment
+ * @global type $langExercise
+ * @global type $langGradebookActivityAct
+ * @global type $langAttendanceActivity
  * @param type $gradebook_id
  * @param type $uid
  */
@@ -703,7 +712,6 @@ function student_view_gradebook($gradebook_id, $uid) {
     }
     if ($result) {
         foreach ($result as $details) {
-            //$content = standard_text_escape($details->description);
             $tool_content .= "
                 <tr>
                     <td>
@@ -1661,10 +1669,6 @@ function add_gradebook_other_activity($gradebook_id) {
  * @brief insert grades for activity
  * @global string $tool_content
  * @global type $langGradebookEdit
- * @global type $gradebook
- * @global type $langTheField
- * @global type $course_code
- * @global type $langFormErrors
  * @global type $langGradebookGrade
  * @param type $gradebook_id
  * @param type $actID

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,9 +31,13 @@ if (!isset($require_login)) {
 
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
+/* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
-require_once 'modules/document/doc_init.php';
-require_once 'modules/document/doc_metadata.php';
+$action = new action();
+$action->record(MODULE_ID_DOCS);
+
+require_once 'doc_init.php';
+require_once 'doc_metadata.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
@@ -45,9 +49,6 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
 require_once 'modules/drives/clouddrive.php';
 require_once 'include/course_settings.php';
-
-$action = new action();
-$action->record(MODULE_ID_DOCS);
 
 $require_help = true;
 $helpTopic = 'documents';
@@ -63,7 +64,7 @@ $uploading_as_user = !$can_upload && $user_upload;
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
-    $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
+    $diskQuotaDocument = $diskUsed + parseSize(ini_get('upload_max_filesize'));
 } elseif (defined('MY_DOCUMENTS')) {
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
         redirect_to_home_page();
@@ -162,6 +163,7 @@ if (isset($_GET['mindmap'])) {
     redirect_to_home_page("modules/mindmap/index.php");
 }
 
+
 // ---------------------------
 // mindmap screenshot save
 // ---------------------------
@@ -210,11 +212,12 @@ if (isset($_POST['imgBase64'])) {
     exit;
 }
 
+
 // ---------------------------
 // download directory or file
 // ---------------------------
 if (isset($_GET['download'])) {
-    $downloadDir = getDirectReference($_GET['download']);
+    $downloadDir = $_GET['download'];
 
     if ($downloadDir == '/') {
         $format = '.dir';
@@ -450,11 +453,12 @@ if ($can_upload or $user_upload) {
                                         author = ?s,
                                         format = ?s,
                                         language = ?s,
-                                        copyrighted = ?d"
+                                        copyrighted = ?d,
+                                        lock_user_id = ?d"
                             , $course_id, $subsystem, $subsystem_id, $file_path, $extra_path, $fileName, $vis
                             , $_POST['file_comment'], $_POST['file_category'], $_POST['file_title'], $_POST['file_creator']
                             , $file_date, $file_date, $_POST['file_subject'], $_POST['file_description'], $_POST['file_author']
-                            , $file_format, $_POST['file_language'], $_POST['file_copyrighted'])->lastInsertID;
+                            , $file_format, $_POST['file_language'], $_POST['file_copyrighted'], $uid)->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
             // Logging
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
@@ -471,7 +475,7 @@ if ($can_upload or $user_upload) {
             $v->labels(array(
                 'file_title' => "$langTheField $langTitle"
             ));
-            if($v->validate()) {
+            if ($v->validate()) {
                 $q = false;
                 if (isset($_POST['editPath'])) {
                     $fileInfo = Database::get()->querySingle("SELECT * FROM document
@@ -511,11 +515,12 @@ if ($can_upload or $user_upload) {
                                 format = ?s,
                                 language = ?s,
                                 copyrighted = 0,
-                                editable = 1",
+                                editable = 1,
+                                lock_user_id = ?d",
                                 $course_id, $subsystem, $subsystem_id, $file_path,
                                 $fileName, $_POST['file_title'], $file_creator,
                                 $file_date, $file_date, $file_creator, $file_format,
-                                $language);
+                                $language, $uid);
                 }
                 if ($q) {
                     if (!isset($id)) {
@@ -648,6 +653,7 @@ if ($can_upload or $user_upload) {
                         }
                     },
                     $filePath . '%');
+
                 if (empty($r->extra_path)) {
                     if ($delete_ok = my_delete($basedir . $filePath) && $delete_ok) {
                         if (hasMetaData($filePath, $basedir, $group_sql)) {
@@ -778,17 +784,14 @@ if ($can_upload or $user_upload) {
                                                 language = ?s,
                                                 copyrighted = ?d
                                         WHERE $group_sql AND
-                                              path = ?s",
-                    $_POST['file_comment'], $_POST['file_category'],
-                    $_POST['file_title'], $_POST['file_subject'],
-                    $_POST['file_description'], $_POST['file_author'],
-                    $file_language, $_POST['file_copyrighted'], $commentPath);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $res->id);
-                Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
-                    'filename' => $res->filename,
-                    'comment' => $_POST['file_comment'],
-                    'title' => $_POST['file_title']));
-            }
+                                              path = ?s"
+                    , $_POST['file_comment'], $_POST['file_category'], $_POST['file_title'], $_POST['file_subject']
+                    , $_POST['file_description'], $_POST['file_author'], $file_language, $_POST['file_copyrighted'], $commentPath);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $res->id);
+            Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
+                'filename' => $res->filename,
+                'comment' => $_POST['file_comment'],
+                'title' => $_POST['file_title']));
             $curDirPath = my_dirname($commentPath);
             Session::Messages($langComMod, 'alert-success');
             redirect_to_current_dir();
@@ -815,8 +818,8 @@ if ($can_upload or $user_upload) {
                                 date_modified = NOW(),
                                 format = ?s,
                                 language = ?s
-                                WHERE $group_sql AND path = ?s"
-                    , ($_SESSION['givenname'] . " " . $_SESSION['surname']), $file_format, $_POST['meta_language'], $metadataPath);
+                                WHERE $group_sql AND path = ?s",
+                "$_SESSION[givenname] $_SESSION[surname]", $file_format, $_POST['meta_language'], $metadataPath);
         } else {
             Database::get()->query("INSERT INTO document SET
                                 course_id = ?d ,
@@ -829,9 +832,11 @@ if ($can_upload or $user_upload) {
                                 date = ?t ,
                                 date_modified = ?t ,
                                 format = ?s,
-                                language = ?s"
-                    , $course_id, $subsystem, $subsystem_id, $metadataPath, $oldFilename
-                    , ($_SESSION['givenname'] . " " . $_SESSION['surname']), $xml_date, $xml_date, $file_format, $_POST['meta_language']);
+                                language = ?s,
+                                lock_user_id = ?d",
+                $course_id, $subsystem, $subsystem_id, $metadataPath, $oldFilename,
+                "$_SESSION[givenname] $_SESSION[surname]", $xml_date, $xml_date,
+                $file_format, $_POST['meta_language'], $uid);
         }
 
         Session::Messages($langMetadataMod, 'alert-success');
@@ -841,20 +846,18 @@ if ($can_upload or $user_upload) {
     if (isset($_POST['replacePath']) and
             isset($_FILES['newFile']) and
             is_uploaded_file($_FILES['newFile']['tmp_name'])) {
-
         validateUploadedFile($_FILES['newFile']['name'], $menuTypeID);
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        $replacePath = getDirectReference($_POST['replacePath']);
+        $replacePath = $_POST['replacePath'];
         // Check if file actually exists
-        $result = Database::get()->querySingle("SELECT id, path, format FROM document WHERE
+        $result = Database::get()->querySingle("SELECT id, path, format, lock_user_id FROM document WHERE
                                         $group_sql AND
                                         format <> '.dir' AND
-                                        path = ?s", $replacePath);
-        if ($result) {
+                                        path=?s", $replacePath);
+        if ($result and (!$uploading_as_user or $result->lock_user_id == $uid)) {
             $docId = $result->id;
             $oldpath = $result->path;
             $oldformat = $result->format;
-            $curDirPath = my_dirname($replacePath);
+            $curDirPath = my_dirname($_POST['replacePath']);
             // check for disk quota
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
                 Session::Messages($langNoSpace, 'alert-danger');
@@ -865,25 +868,24 @@ if ($can_upload or $user_upload) {
                         (empty($newformat) ? '' : '.' . $newformat);
                 my_delete($basedir . $oldpath);
                 $affectedRows = Database::get()->query("UPDATE document SET path = ?s, format = ?s, filename = ?s, date_modified = NOW()
-                        WHERE $group_sql AND path = ?s",
-                    $newpath, $newformat, ($_FILES['newFile']['name']), $oldpath)->affectedRows;
+                          WHERE $group_sql AND path = ?s"
+                                , $newpath, $newformat, ($_FILES['newFile']['name']), $oldpath)->affectedRows;
                 if (!copy($_FILES['newFile']['tmp_name'], $basedir . $newpath) or $affectedRows == 0) {
                     Session::Messages($langGeneralError, 'alert-danger');
                     redirect_to_current_dir();
                 } else {
                     require_once 'modules/admin/extconfig/externals.php';
                     $connector = AntivirusApp::getAntivirus();
-                    if ($connector->isEnabled() == true ){
-                        $output = $connector->check($basedir . $newpath);
-                        if ($output->status==$output::STATUS_INFECTED){
+                    if($connector->isEnabled() == true ){
+                        $output=$connector->check($basedir . $newpath);
+                        if($output->status==$output::STATUS_INFECTED){
                             AntivirusApp::block($output->output);
                         }
                     }
                     if (hasMetaData($oldpath, $basedir, $group_sql)) {
                         rename($basedir . $oldpath . ".xml", $basedir . $newpath . ".xml");
-                        Database::get()->query("UPDATE document SET path = ?s, filename=?s
-                                WHERE $group_sql AND path = ?s",
-                            $newpath . '.xml', $_FILES['newFile']['name'] . '.xml', $oldpath . '.xml');
+                        Database::get()->query("UPDATE document SET path = ?s, filename=?s WHERE $group_sql AND path = ?s"
+                                , ($newpath . ".xml"), ($_FILES['newFile']['name'] . ".xml"), ($oldpath . ".xml"));
                     }
                     $session->setDocumentTimestamp($course_id);
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $docId);
@@ -946,7 +948,7 @@ if ($can_upload or $user_upload) {
     if (isset($_GET['metadata'])) {
 
         $metadata = $_GET['metadata'];
-        $row = Database::get()->querySingle("SELECT filename, lock_user_id FROM document WHERE $group_sql AND path = ?s", $metadata);
+        $row = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $metadata);
         if ($row && (!$uploading_as_user or $row->lock_user_id == $uid)) {
             $curDirPath = my_dirname($metadata);
             $backUrl = documentBackLink($curDirPath);
@@ -959,15 +961,16 @@ if ($can_upload or $user_upload) {
         }
     }
 
-    // Visibility commands
+    // Don't allow these commands for users in courses with user upload
     if (!$uploading_as_user) {
+        // Visibility commands
         if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
             if (isset($_GET['mkVisibl'])) {
                 $newVisibilityStatus = 1;
-                $visibilityPath = getDirectReference($_GET['mkVisibl']);
+                $visibilityPath = $_GET['mkVisibl'];
             } else {
                 $newVisibilityStatus = 0;
-                $visibilityPath = getDirectReference($_GET['mkInvisibl']);
+                $visibilityPath = $_GET['mkInvisibl'];
             }
             $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
             if (($newVisibilityStatus == 0) and resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
@@ -982,22 +985,22 @@ if ($can_upload or $user_upload) {
                 redirect_to_current_dir();
             }
         }
-    }
 
-    // Public accessibility commands
-    if (isset($_GET['public']) || isset($_GET['limited'])) {
-        $new_public_status = intval(isset($_GET['public']));
-        $path = isset($_GET['public']) ? getDirectReference($_GET['public']) : getDirectReference($_GET['limited']);
-        Database::get()->query("UPDATE document SET public = ?d
-                                          WHERE $group_sql AND
-                                                path = ?s", $new_public_status, $path);
-        $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        Session::Messages($langViMod, 'alert-success');
-        $curDirPath = my_dirname($path);
-        redirect_to_current_dir();
+        // Public accessibility commands
+        if (isset($_GET['public']) || isset($_GET['limited'])) {
+            $new_public_status = intval(isset($_GET['public']));
+            $path = isset($_GET['public']) ? $_GET['public'] : $_GET['limited'];
+            Database::get()->query("UPDATE document SET public = ?d
+                                              WHERE $group_sql AND
+                                                    path = ?s", $new_public_status, $path);
+            $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+            Session::Messages($langViMod, 'alert-success');
+            $curDirPath = my_dirname($path);
+            redirect_to_current_dir();
+        }
     }
-} // teacher only
+}
 
 // Common for teachers and students
 
@@ -1064,24 +1067,18 @@ if ($curDirPath) {
     }
 }
 
-// Retrieve file info for current directory from database and disk
-$result = Database::get()->queryArray("SELECT id, path, filename, format,
-                                        title, extra_path, course_id,
-                                        date_modified, public, visible,
-                                        editable, copyrighted, comment, lock_user_id,
-                                        IF((title = '' OR title IS NULL), filename, title) AS sort_key
-                                FROM document
-                                WHERE $group_sql AND
-                                      path LIKE '$curDirPath/%' AND
-                                      path NOT LIKE '$curDirPath/%/%' $filter $order");
-$files = $dirs = array();
-$cmdCurDirPath = rawurlencode($curDirPath);
-$cmdParentDir = rawurlencode($parentDir);
+/* * * Retrieve file info for current directory from database and disk ** */
+$result = Database::get()->queryArray("SELECT id, path, filename,
+        format, title, extra_path, course_id, date_modified,
+        public, visible, editable, copyrighted, comment, lock_user_id,
+        IF((title = '' OR title IS NULL), filename, title) AS sort_key
+    FROM document
+    WHERE $group_sql AND
+          path LIKE ?s AND
+          path NOT LIKE ?s $filter $order",
+    "$curDirPath/%", "$curDirPath/%/%");
+$fileinfo = array();
 foreach ($result as $row) {
-    $updated = 0;
-    if (!$can_upload and !resource_access($row->visible, $row->public)) {
-        continue;
-    }
     $is_dir = $row->format == '.dir';
     if ($real_path = common_doc_path($row->extra_path, true)) {
         // common docs
@@ -1121,8 +1118,8 @@ foreach ($result as $row) {
 
     $info = array(
         'is_dir' => $is_dir,
-        'size' => format_file_size($size),
-        'title' => $row->sort_key,
+        'size' => $size,
+        'title' => $row->title,
         'filename' => $row->filename,
         'format' => $row->format,
         'path' => $row->path,
@@ -1130,8 +1127,9 @@ foreach ($result as $row) {
         'visible' => ($row->visible == 1),
         'public' => $row->public,
         'comment' => $row->comment,
-        'date' => nice_format($row->date_modified, true, true),
-        'date_time' => nice_format($row->date_modified, true),
+        'copyrighted' => $row->copyrighted,
+        'date' => $row->date_modified,
+        'object' => MediaResourceFactory::initFromDocument($row),
         'editable' => $row->editable,
         'updated_message' => $updated_message,
         'controls' => $can_upload || ($user_upload && $row->lock_user_id == $uid),
@@ -1237,7 +1235,7 @@ foreach ($result as $row) {
         $files[] = (object) $info;
     }
 }
-
+// end of common to teachers and students
 // ----------------------------------------------
 // Display
 // ----------------------------------------------
@@ -1366,12 +1364,15 @@ function select_proper_filters($requestDocsFilter) {
  * @global type $reverse
  * @global type $curDirPath
  * @global type $base_url
+ * @global type $themeimg
+ * @global type $langUp
+ * @global type $langDown
  * @param type $label
  * @param type $this_sort
  * @return type
  */
 function headlink($label, $this_sort) {
-    global $sort, $reverse, $curDirPath, $base_url;
+    global $sort, $reverse, $curDirPath, $base_url, $themeimg, $langUp, $langDown;
 
     if (empty($curDirPath)) {
         $path = '/';
@@ -1380,13 +1381,14 @@ function headlink($label, $this_sort) {
     }
     if ($sort == $this_sort) {
         $this_reverse = !$reverse;
-        $indicator = ' <span class="fa fa-sort-' .
-                ($reverse ? 'asc' : 'desc') . '"><span>';
+        $indicator = " <img src='$themeimg/arrow_" .
+                ($reverse ? 'up' : 'down') . ".png' alt='" .
+                ($reverse ? $langUp : $langDown) . "'>";
     } else {
         $this_reverse = $reverse;
         $indicator = '';
     }
-    return '<a class="text-nowrap" href="' . $base_url . 'openDir=' . $path .
+    return '<a href="' . $base_url . 'openDir=' . $path .
             '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
             '">' . $label . $indicator . '</a>';
 }

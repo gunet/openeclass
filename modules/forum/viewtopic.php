@@ -589,7 +589,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         $content .= "<div class='panel panel-primary'>";
         $content .= "<div class='panel-heading'><h5 class='panel-title'>". q($topic_subject);
     }
-
+    
     if ($is_editor) {
         $content .= "
                 <span class='pull-right'>

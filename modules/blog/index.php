@@ -18,16 +18,15 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-if (isset($_GET['course'])) { // course blog
+if (isset($_GET['course'])) { //course blog
     $require_current_course = TRUE;
     $blog_type = 'course_blog';
 } else { //personal blog
-    $require_login = false;
-    $guest_allowed = true;
+    $require_login = true;
+    $require_valid_uid = TRUE;
     $require_current_course = FALSE;
     $blog_type = 'perso_blog';
 }
-
 $require_help = TRUE;
 $helpTopic = 'blog';
 require_once '../../include/baseTheme.php';
@@ -70,9 +69,9 @@ if ($blog_type == 'course_blog') {
 
     $is_blog_editor = false;
 
-    if (isset($_GET['user_id']) && intval($_GET['user_id']) > 0) {
+    if (isset($_GET['user_id'])) {
         $user_id = intval($_GET['user_id']);
-        if ($user_id == $uid) {
+        if ($user_id == $_SESSION['uid']) {
             $is_blog_editor = true;
         } elseif (isset($is_admin) && $is_admin) {
             $is_blog_editor = true;
@@ -98,7 +97,7 @@ if ($blog_type == 'course_blog') {
         exit;
     }
 
-    if ($user_id == $uid) {
+    if ($user_id == $_SESSION['uid']) {
         $toolName = $langMyBlog;
 
         if (get_config('personal_blog_public')) {
@@ -178,7 +177,7 @@ if ($blog_type == 'course_blog') {
 load_js('tools.js');
 
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-        $langEmptyBlogPostTitle . '";</script>';
+		$langEmptyBlogPostTitle . '";</script>';
 
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
@@ -200,6 +199,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langGeneralSettings;
     } elseif ($action == "createPost") {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langBlogAddPost;
     } elseif ($action == "editPost") {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
@@ -218,16 +218,16 @@ if ($blog_type == 'course_blog' && $is_editor) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
             setting_set(SETTING_BLOG_COMMENT_ENABLE, $_POST['2_radio'], $course_id);
             setting_set(SETTING_BLOG_RATING_ENABLE, $_POST['3_radio'], $course_id);
-            if (isset($_POST['4_radio'])) {
+		    if (isset($_POST['4_radio'])) {
                 setting_set(SETTING_BLOG_SHARING_ENABLE, $_POST['4_radio'], $course_id);
-            }
+		    }
             Session::Messages($langRegDone, 'alert-success');
             redirect_to_home_page('modules/blog/index.php?course='.$course_code);
         }
 
         if (isset($message) && $message) {
-            $tool_content .= $message . "<br/>";
-            unset($message);
+        	$tool_content .= $message . "<br/>";
+        	unset($message);
         }
 
 
@@ -240,18 +240,18 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $checkStud = "";
         }
         if (setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id) == 1) {
-            $checkCommentDis = "";
-            $checkCommentEn = "checked ";
+        	$checkCommentDis = "";
+        	$checkCommentEn = "checked ";
         } else {
-            $checkCommentDis = "checked ";
-            $checkCommentEn = "";
+        	$checkCommentDis = "checked ";
+        	$checkCommentEn = "";
         }
         if (setting_get(SETTING_BLOG_RATING_ENABLE, $course_id) == 1) {
-            $checkRatingDis = "";
-            $checkRatingEn = "checked ";
+        	$checkRatingDis = "";
+        	$checkRatingEn = "checked ";
         } else {
-            $checkRatingDis = "checked ";
-            $checkRatingEn = "";
+        	$checkRatingDis = "checked ";
+        	$checkRatingEn = "";
         }
         if (!$sharing_allowed) {
             $sharing_radio_dis = " disabled";
@@ -282,10 +282,10 @@ if ($blog_type == 'course_blog' && $is_editor) {
                 <div class='col-sm-12'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' action='' role='form' method='post'>
-                            <fieldset>
+                            <fieldset>                               
                                 <div class='form-group'>
                                     <label class='col-sm-3'>$langBlogPerm</label>
-                                    <div class='col-sm-9'>
+                                    <div class='col-sm-9'> 
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='0' name='1_radio' $checkTeach>$langBlogPermTeacher
