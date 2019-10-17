@@ -216,7 +216,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                         </div>
                     </li>";
             } else {
-                $ann_url = $urlAppend . 'main/system_announcements.php/?an_id=' . $ann->id;
+                $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
                 $ann_content .= "
                 <li class='list-item'>
