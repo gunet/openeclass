@@ -580,7 +580,7 @@ function display_all_users_grades($gradebook_id) {
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
            $langID, $langAm, $langRegistrationDateShort, $langGradebookGrade,
            $langGradebookBook, $langGradebookDelete, $langConfirmDelete,
-           $langNoRegStudent, $langHere, $langGradebookGradeAlert;
+           $langNoRegStudent, $langHere, $langGradebookGradeAlert, $dateFormatMiddle;
 
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID,
                                                             gradebook_users.uid as userID,
@@ -613,8 +613,8 @@ function display_all_users_grades($gradebook_id) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td>" . nice_format($resultUser->reg_date) . "</td>
-                <td>";
+                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
+                <td class='text-center'>";
                 if(weightleft($gradebook_id, 0) == 0) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>";
                 } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
@@ -1232,7 +1232,7 @@ function register_user_grades($gradebook_id, $actID) {
             $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort,
             $langGradebookGrade, $langGradebookNoTitle,
             $langGradebookBooking, $langGradebookTotalGrade,
-            $langGradebookActivityWeight, $langCancel;
+            $langGradebookActivityWeight, $langCancel, $dateFormatMiddle;
 
     //display form and list
     $gradebook_range = get_gradebook_range($gradebook_id);
@@ -1258,8 +1258,8 @@ function register_user_grades($gradebook_id, $actID) {
                 <tr class='list-header'>
                     <th width='2'>$langID</th>
                     <th>$langName $langSurname</th>
-                    <th>$langAm</th>
-                    <th class='text-center' width='80'>$langRegistrationDateShort</th>
+                    <th class='text-center'>$langAm</th>
+                    <th class='text-center' width='120'>$langRegistrationDateShort</th>
                     <th width='50' class='text-center'>$langGradebookGrade</th>
                     <th width='50'>$langGradebookTotalGrade</th>
                 </tr>
@@ -1280,7 +1280,7 @@ function register_user_grades($gradebook_id, $actID) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td>" . nice_format($resultUser->reg_date) . "</td>
+                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
                 <td class='text-center form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
                     <input class='form-control' type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]' value = '".$grade."'>
                     <input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'>
