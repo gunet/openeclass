@@ -1,9 +1,10 @@
 <?php
+
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,9 +20,9 @@
  * ======================================================================== */
 
 $require_login = true;
-$require_current_course = true;
-$require_course_admin = true;
-$require_help = true;
+$require_current_course = TRUE;
+$require_course_admin = TRUE;
+$require_help = TRUE;
 $helpTopic = 'course_users';
 
 require_once '../../include/baseTheme.php';
@@ -29,7 +30,7 @@ require_once 'include/log.class.php';
 require_once 'include/course_settings.php';
 require_once 'include/lib/textLib.inc.php';
 
-// DataTables AJAX request
+//Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     if (isset($_POST['action']) && $_POST['action'] == 'delete') {
         $unregister_gid = intval(getDirectReference($_POST['value']));
@@ -52,11 +53,18 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             Database::get()->query("DELETE FROM course_user
                                             WHERE user_id = ?d AND
                                                 course_id = ?d", $unregister_gid, $course_id);
-                        
-            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $unregister_gid);
-            Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $unregister_gid);
-            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $unregister_gid);
-            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $unregister_gid);
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND 
+                                    badge_criterion IN
+                                           (SELECT id FROM badge_criterion WHERE badge IN
+                                           (SELECT id FROM badge WHERE course_id = ?d))", $unregister_gid, $course_id);
+            Database::get()->query("DELETE FROM user_badge WHERE user = ?d AND                 
+                                      badge IN (SELECT id FROM badge WHERE course_id = ?d)", $unregister_gid, $course_id);
+            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d AND 
+                                    certificate_criterion IN
+                                    (SELECT id FROM certificate_criterion WHERE certificate IN
+                                        (SELECT id FROM certificate WHERE course_id = ?d))", $unregister_gid, $course_id);
+            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND 
+                                 certificate IN (SELECT id FROM certificate WHERE course_id = ?d)", $unregister_gid, $course_id);
             
             if (check_guest($unregister_gid)) {
                 Database::get()->query("DELETE FROM user WHERE id = ?d", $unregister_gid);
@@ -84,16 +92,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // user status
     if (!empty($_GET['sSearch_1'])) {
         $filter = $_GET['sSearch_1'];
-        $status = array('teacher','student');
-        $others = array('editor', 'reviewer', 'tutor');
-        if (in_array($filter, $status)) {
-            $value = $filter == 'teacher' ? 1 : 5;
-            $search_values[] = $value;
-            $search_sql .= " AND (course_user.status = ?d)";
-        } elseif (in_array($filter, $others)) {
-            $search_sql .= " AND (course_user.$filter = 1)";
+        if ($filter == 'editor') {
+            $search_sql .= ' AND course_user.editor = 1 AND course_user.status = '.USER_STUDENT;
+        } elseif ($filter == 'teacher') {
+            $search_sql .= ' AND course_user.status = '.USER_TEACHER;
+        } elseif ($filter == 'student') {
+            $search_sql .= ' AND course_user.editor <> 1 AND course_user.status = '.USER_STUDENT;
+        } elseif ($filter == 'tutor') {
+            $search_sql .= ' AND course_user.tutor = 1';
+        } elseif ($filter == 'reviewer') {
+            $search_sql .= ' AND course_user.reviewer = 1';
         }
-
     }
     $sortDir = ($_GET['sSortDir_0'] == 'desc')? 'DESC': '';
     $order_sql = 'ORDER BY ' .
@@ -152,40 +161,53 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
             }
         }
-        $idIndirect = getIndirectReference($myrow->id);
-        $urlBase = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;";
         $user_role_controls = action_button(array(
-            [ 'title' => $langUnregCourse,
+            array(
+              'title' => $langUnregCourse,
               'level' => 'primary',
+              'url' => '#',
               'icon' => 'fa-times',
-              'link-attrs' => "data-id='$idIndirect'",
-              'btn-class' => 'delete delete_btn btn-default' ],
-            [ 'title' => $langGiveRightTutor,
-              'url' => $urlBase . ($myrow->tutor ? 'remove' : 'give') . 'Tutor=' . $idIndirect,
-              'icon' => $myrow->tutor ? 'fa-check-square-o' : 'fa-square-o' ],
-            [ 'title' => $langGiveRightEditor,
-              'url' => $urlBase . ($myrow->editor ? 'remove' : 'give') . 'Editor=' . $idIndirect,
-              'icon' => $myrow->editor ? 'fa-check-square-o' : 'fa-square-o' ],
-            [ 'title' => $langGiveRightAdmin,
-              'url' => $urlBase . ($myrow->status == '1' ? 'remove' : 'give') . 'Admin=' . $idIndirect,
-              'icon' => $myrow->status != '1' ? 'fa-square-o' : 'fa-check-square-o',
-              'disabled' => $myrow->id == $uid ||
-                            ($myrow->id != $uid && get_config('opencourses_enable') && $myrow->reviewer) ],
-            [ 'title' => $langGiveRightReviewer,
-              'url' => $urlBase . ($myrow->reviewer == '1' ? 'remove' : 'give') . 'Reviewer=' . $idIndirect,
-              'icon' => $myrow->reviewer != '1' ? 'fa-square-o' : 'fa-check-square-o',
-              'disabled' => $myrow->id == $uid,
-              'show' => get_config('opencourses_enable') && (
-                    ($myrow->id == $uid && $myrow->reviewer == '1') ||
-                    ($myrow->id != $uid && $is_opencourses_reviewer && $is_admin)) ]
+              'btn_class' => 'delete_btn btn-default'
+            ),
+            array(
+                'title' => $langGiveRightTutor,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=". getIndirectReference($myrow->id),
+                'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
+            ),
+            array(
+                'title' => $langGiveRightEditor,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
+                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
+            ),
+            array(
+                'title' => $langGiveRightAdmin,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
+                'icon' => $myrow->status != '1' ? "fa-square-o" : "fa-check-square-o",
+                'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
+            ),
+            array(
+                'title' => $langGiveRightReviewer,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=". getIndirectReference($myrow->id),
+                'icon' => $myrow->reviewer != '1' ? "fa-square-o" : "fa-check-square-o",
+                'disabled' => $myrow->id == $_SESSION["uid"],
+                'show' => get_config('opencourses_enable') &&
+                            (
+                                ($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1') ||
+                                ($myrow->id != $_SESSION["uid"] && $is_opencourses_reviewer && $is_admin)
+                            )
+            )
         ));
-        $user_roles = array();
-        ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langStudent);
+        if ($myrow->editor == '1' and $myrow->status != USER_TEACHER) {
+            $user_roles = array($langEditor);
+        } elseif ($myrow->status == USER_TEACHER) {
+            $user_roles = array($langTeacher);
+        } else {
+            $user_roles = array($langStudent);
+        }
         if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
-        if ($myrow->editor == '1') array_push($user_roles, $langEditor);
         if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
 
-        $user_role_string = implode(', ', $user_roles);
+        $user_role_string = implode(',<br>', $user_roles);
 
         $nameColumn = "
                         <div class='pull-left' style='width: 32px ; margin-right: 10px;'>
@@ -197,7 +219,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a></small></div>
                             <div class='text-muted'><small>$am_message</small></div>
                         </div>";
-        $roleColumn = "<div class='text-muted'>".str_replace(', ', ',<br>', $user_role_string)."</div>";
+        $roleColumn = "<div class='text-muted'>$user_role_string</div>";
         // search for inactive users
         $inactive_user = is_inactive_user($myrow->id);
         //setting datables column data
@@ -294,15 +316,14 @@ if (get_config('opencourses_enable')) {
     }
 }
 
-if (course_status($course_id) == COURSE_CLOSED and
-    !setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
-        $num_requests = Database::get()->querySingle('SELECT COUNT(*) AS cnt
-            FROM course_user_request
-            WHERE course_id = ?d AND status = 1', $course_id)->cnt;
-        $course_user_requests = true;
-} else {
-    $num_requests = '';
-    $course_user_requests = false;
+// show help link and link to Add new user, search new user and management page of groups
+$num_requests = '';
+$course_user_requests = FALSE;
+if (course_status($course_id) == COURSE_CLOSED) {
+    if (!setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
+        $num_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id)->cnt;
+        $course_user_requests = TRUE;
+    }
 }
 
 $data['ajaxUrl'] = "$_SERVER[SCRIPT_NAME]?course=$course_code";

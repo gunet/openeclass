@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -53,7 +53,7 @@ if (isset($_GET['add'])) {
         Session::Messages($langTheU . ' ' . $langAdded, "alert alert-success");
         // notify user via email
         $email = uid_to_email($uid_to_add);
-        if (!empty($email) and Swift_Validate::email($email)) {
+        if (!empty($email) and valid_email($email)) {
             $emailsubject = "$langYourReg " . course_id_to_title($course_id);
             $emailbody = "$langNotifyRegUser1 <a href='{$urlServer}courses/$course_code/'>" . q(course_id_to_title($course_id)) . "</a> $langNotifyRegUser2 $langFormula \n$gunet";
 

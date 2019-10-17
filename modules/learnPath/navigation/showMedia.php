@@ -32,9 +32,7 @@ if (isset($_GET['id'])) {
     $lp_resource_sql = Database::get()->querySingle("SELECT name, comment FROM lp_module WHERE module_id = ?d", $_GET['viewModule_id']);
     $lp_spec_comment = Database::get()->querySingle("SELECT specificComment FROM lp_rel_learnPath_module WHERE module_id = ?d", $_GET['viewModule_id'])->specificComment;
     if ($row) {
-        echo "<div align='center'>$lp_resource_sql->name</div>";
-        echo "<div align='center'>$lp_resource_sql->comment</div>";
-        echo "<div align='center'>$lp_spec_comment</div>";
+        echo "<br><div align='center'>$lp_resource_sql->name</div><br><br>";
         $vObj = MediaResourceFactory::initFromVideo($row);
         echo MultimediaHelper::mediaHtmlObject($vObj);
     }

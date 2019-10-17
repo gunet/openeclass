@@ -46,16 +46,20 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>
-
+        
     <!-- Latest compiled and minified CSS -->
     <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
 
     <!-- Font Awesome - A font of icons -->
-    <link href='{$urlAppend}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>
-
-    <link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet' type='text/css' />
+    <link href='{$urlAppend}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>  
+        
+    <link href='{$urlAppend}template/$theme/CSS/lp.css?v=".ECLASS_VERSION."' rel='stylesheet' type='text/css' />
+    
+    <script>
+    
+</script>
 </head>
-<body style='padding-right: 5px;'>
+<body>
 <div class='menu_left'>";
 
 if ($uid) {
@@ -92,7 +96,7 @@ foreach ($result as $list) {
     if (empty($list->name) and $list->contentType == 'LINK') {
         $modar['name'] = $list->path;
     } else {
-        $modar['name'] = $list->name;
+        $modar['name'] = $list->name;    
     }
     $modar['comment'] = $list->comment;
     $modar['accessibility'] = $list->accessibility;
@@ -114,7 +118,7 @@ foreach ($result as $list) {
 }
 
 // get LP name and comments
-$q = Database::get()->querySingle("SELECT name, comment FROM lp_learnPath
+$q = Database::get()->querySingle("SELECT name, comment FROM lp_learnPath 
                                 WHERE learnpath_id = ?d AND course_id = ?d", $modar['learnPath_id'], $modar['course_id']);
 $lp_name = $q->name;
 $lp_comment = $q->comment;
@@ -139,9 +143,7 @@ $unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
 
 // -------------------------- learning path list header ----------------------------
 
-echo "<ul><li class='category'>$lp_name</li>
-          <li class='help-block'>$lp_comment</li>
-          <li class='category'>$langContents</li>";
+echo "<ul><li class='category'>$lp_name</li>";
 
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module) {

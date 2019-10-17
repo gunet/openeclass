@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,8 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ========================================================================
  */
-
-require_once 'modules/tags/moduleElement.class.php';
 
 class eClassTag {
 
@@ -42,24 +40,23 @@ class eClassTag {
     public static function tagInput($id = null) {
         global $langTags, $head_content, $course_code;
 
-        // Tags saved in session due to form error
-        if (Session::has('tags')) {
-            $tags_init = Session::get('tags');
-        } elseif ($id) {
-            // initialize the tags from existing module element
+        // initialize the tags
+        if ($id) {
+            require_once 'modules/tags/moduleElement.class.php';
             $moduleTag = new ModuleElement($id);
-            $tags_init = array_values($moduleTag->getTags());
+
+            $tags_init = $moduleTag->getTags();
+            $answer = implode(',', array_map(function ($tag) {
+                return '{id:"' . js_escape($tag) . '", text:"' . js_escape($tag) . '", selected: true}';
+            }, $tags_init));
         } else {
-            $tags_init = [];
+            $answer = '';
         }
-        $answer = json_encode(array_map(function ($tag) {
-            return ['id' => $tag, 'text' => $tag, 'selected' => true];
-        }, $tags_init));
         $head_content .= "
             <script>
                 $(function () {
                     $('#tags').select2({
-                            data: $answer,
+                            data: [".$answer."],
                             minimumInputLength: 2,
                             tags: true,
                             tokenSeparators: [','],
@@ -78,6 +75,12 @@ class eClassTag {
                             ajax: {
                                 url: '../tags/feed.php',
                                 dataType: 'json',
+                                data: function(term, page) {
+                                    return {
+                                        course: '" . js_escape($course_code) . "',
+                                        q: term
+                                    };
+                                },
                                 processResults: function(data, page) {
                                     return {results: data};
                                 }

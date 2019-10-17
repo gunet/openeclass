@@ -56,7 +56,7 @@ if (isset($_GET['user_date_end'])) {
 
 if (isset($_GET['stats_submit'])) {
     if (isset($_GET['formsearchfaculte'])) {
-        $searchfaculte = getDirectReference($_GET['formsearchfaculte']);
+        $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
         if ($searchfaculte) {
             $subs = $tree->buildSubtrees(array($searchfaculte));
             $ids = 0;
@@ -81,7 +81,7 @@ if (isset($_GET['stats_submit'])) {
 
         $tool_content .= "<div class='panel panel-default'>
                              <div class='panel-body'>
-                                <div class='inner-heading'><strong>" . $tree->unserializeLangField($name) . "</strong></div>
+                                <div class='inner-heading'>" . $tree->unserializeLangField($name) . "</div>
                                 <div class='row'>
                                    <div class='col-sm-6'>
                                    <dl>

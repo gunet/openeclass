@@ -61,7 +61,7 @@ if (isset($_POST['submit'])) {
                     Log::record($course_id, MODULE_ID_WALL, LOG_INSERT,
                         array('id' => $id,
                               'content' => $content,
-                              'youtube' => $_POST['extvideo']));
+                              'extvideo' => $_POST['extvideo']));
                     Session::Messages($langWallPostSaved, 'alert-success');
                 }
             }

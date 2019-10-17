@@ -374,10 +374,10 @@ function add_course_completion_to_certificate($element_id) {
 
     global $langQuotaSuccess, $course_code;
 
-    $badge_id = has_course_completion(); // get course completion id
+    $badge_id = is_course_completion_active(); // get course completion id
 
-    Database::get()->querySingle("INSERT INTO certificate_criterion (certificate, activity_type, module, resource, threshold, operator)
-                                   SELECT ?d, activity_type, module, resource, threshold, operator
+    Database::get()->querySingle("INSERT INTO certificate_criterion (certificate, activity_type, module, resource, threshold, operator) 
+                                   SELECT ?d, activity_type, module, resource, threshold, operator 
                                    FROM badge_criterion WHERE badge = ?d", $element_id, $badge_id);
     // mapping badge_criterion_ids --->  cert_criterion_ids
     $d1 = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d ORDER BY id", $element_id);
@@ -391,21 +391,21 @@ function add_course_completion_to_certificate($element_id) {
     $ids = array_combine($b_ids, $cc_ids);
 
     // get user progress (if exists)
-    Database::get()->querySingle("INSERT INTO user_certificate (user, certificate, completed, completed_criteria, total_criteria, updated, assigned)
-                                    SELECT user, ?d, completed, completed_criteria, total_criteria, updated, assigned
+    Database::get()->querySingle("INSERT INTO user_certificate (user, certificate, completed, completed_criteria, total_criteria, updated, assigned) 
+                                    SELECT user, ?d, completed, completed_criteria, total_criteria, updated, assigned 
                                     FROM user_badge WHERE badge = ?d", $element_id, $badge_id);
     $data = Database::get()->queryArray("SELECT user FROM user_certificate WHERE certificate = ?d", $element_id);
     foreach ($data as $u) {
-        $d = Database::get()->queryArray("SELECT badge_criterion, created
-                                    FROM user_badge_criterion JOIN badge_criterion
-                                    ON badge_criterion.id=user_badge_criterion.badge_criterion
-                                    AND badge_criterion.badge = ?d
+        $d = Database::get()->queryArray("SELECT badge_criterion, created 
+                                    FROM user_badge_criterion JOIN badge_criterion 
+                                    ON badge_criterion.id=user_badge_criterion.badge_criterion 
+                                    AND badge_criterion.badge = ?d 
                                     AND user = ?d", $badge_id, $u->user);
         foreach ($d as $to_add) {
             $index = $to_add->badge_criterion;
-            Database::get()->query("INSERT INTO user_certificate_criterion SET
+            Database::get()->query("INSERT INTO user_certificate_criterion SET 
                                         user = $u->user,
-                                        certificate_criterion = $ids[$index],
+                                        certificate_criterion = $ids[$index], 
                                         created = '$to_add->created'");
         }
     }
@@ -762,12 +762,28 @@ function update_visibility($element, $element_id, $visibility) {
 }
 
 /**
+ * @brief check if course completion badge is active
+ * @global type $course_id
+ * @return boolean
+ */
+function is_course_completion_active() {
+
+    global $course_id;
+
+    $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1", $course_id);
+    if ($sql) {
+        return $sql->id;
+    } else {
+        return 0;
+    }
+}
+
+/**
  * @brief check if we have created course completion badge
  * @global type $course_id
  * @return boolean
  */
-function has_course_completion() {
-
+function is_course_completion_enabled() {
     global $course_id;
 
     $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1", $course_id);
@@ -1084,10 +1100,12 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $orientation = $q->orientation;
         $student_name = uid_to_name($user);
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
-        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
-        /*if (is_null($cert_date)) {
-            $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(NOW()) AS cert_date")->cert_date;
-        }*/
+        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id);
+        if ($cert_date) {
+            $cert_date = $cert_date->cert_date;
+        } else {
+            $cert_date = time();
+        }
         $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
     } else { // logged out
         $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
@@ -1099,7 +1117,18 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $student_name = $user;
     }
     // init pdf
-    $mpdf = new mPDF('utf-8', 'A4-' . $orientation, 0, '', 0, 0, 0, 0, 0, 0);
+    $mpdf = new \Mpdf\Mpdf([
+        'mode' => 'utf-8',
+        'format' => $orientation == 'P'? 'A4': 'A4-L',
+        'tempDir' => _MPDF_TEMP_PATH,
+        'margin_left' => 0,
+        'margin_right' => 0,
+        'margin_top' => 0,
+        'margin_bottom' => 0,
+        'margin_header' => 0,
+        'margin_footer' => 0,
+    ]);
+    $mpdf->AddFontDirectory(_MPDF_TTFONTDATAPATH);
     chdir("$webDir" . CERT_TEMPLATE_PATH);
     $html_certificate = file_get_contents($cert_file);
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);

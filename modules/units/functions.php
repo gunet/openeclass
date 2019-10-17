@@ -125,16 +125,10 @@ function check_admin_unit_resource($resource_id) {
 
 
 /**
- * @brief display resources for unit with id=$id
+ * @brief Display resources for unit with id=$id
+ * @global type $tool_content
  * @global type $max_resource_id
- * @global type $head_content
- * @global type $langDownload
- * @global type $langPrint
- * @global type $langCancel
- * @global type $langFullScreen
- * @global type $langNewTab
  * @param type $unit_id
- * @return string
  */
 function show_resources($unit_id) {
     global $max_resource_id,
@@ -773,8 +767,8 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 
 /**
  * @brief display resource poll
+ * @param type $type
  * @param type $title
- * @param type $comments
  * @param type $resource_id
  * @param type $poll_id
  * @param type $visibility
@@ -1353,13 +1347,13 @@ function edit_res($resource_id) {
         $message = $langContents;
     }
     $content .= "
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$message:</label>
-                <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
-            </div>
-            <div class='col-sm-offset-2 col-sm-10'>
-                <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
-            </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$message:</label>
+                    <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
+                </div>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
+                </div>                
             </form>
         </div>";
     return $content;

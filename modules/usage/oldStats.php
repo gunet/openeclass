@@ -294,7 +294,7 @@ $tool_content .= '<div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
       </div>
-    </div>
+  </div>
 </form></div>';
 
 draw($tool_content, 2, null, $head_content);

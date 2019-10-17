@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -201,7 +201,7 @@ if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {
 }
 
 echo "<frame src='../viewer_toc.php?course=$course_code$unitParam' name='tocFrame' scrolling='no' />";
-echo "<frameset border='0' cols='200,*' frameborder='0' id='colFrameset'>";
+echo "<frameset border='0' cols='250,*' frameborder='0' id='colFrameset'>";
 echo "<frame src='../toc.php?course=$course_code$unitParam' name='tocleftFrame'>";
 echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
 echo "</frameset>";

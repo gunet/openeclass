@@ -42,7 +42,7 @@ require_once 'CourseParticipationEvent.php';
 require_once 'GradebookEvent.php';
 require_once 'CourseCompletionEvent.php';
 
-$toolName = $langCertificates;
+$toolName = $langProgress;
 
 load_js('tools.js');
 load_js('jquery');
@@ -136,7 +136,7 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcc=1",
                   'icon' => 'fa-navicon',
                   'level' => 'primary-label',
-                  'show' => !has_course_completion()),
+                  'show' => !is_course_completion_enabled()),
             array('title' => $langBack,
                   'url' => "{$urlServer}courses/$course_code/index.php",
                   'icon' => 'fa-reply',
@@ -364,7 +364,6 @@ if (isset($display) and $display == TRUE) {
         } else {
             // display certificate (student view)
             student_view_progress();
-            exit;
         }
     }
 }

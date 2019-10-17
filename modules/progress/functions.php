@@ -2078,8 +2078,8 @@ function student_view_progress() {
  */
 function display_users_progress($element, $element_id) {
 
-    global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langName, $langUsersS,
-           $langSurname, $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
+    global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langNameSurname, $langUsersS,
+           $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
 
     if ($element == 'certificate') {
         $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
@@ -2123,8 +2123,8 @@ function display_users_progress($element, $element_id) {
             $tool_content .= "<thead>
                         <tr>
                           <th style='width:5%'>$langID</th>
-                          <th>$langName $langSurname</th>
-                          <th style='width:10%;'>$langProgress</th>
+                          <th>$langNameSurname</th>
+                          <th style='width: 20%;'>$langProgress</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -2135,10 +2135,14 @@ function display_users_progress($element, $element_id) {
             } else {
                 $icon = icon('fa-hourglass-2');
             }
+            $user_am = uid_to_am($user_data->user);
             $tool_content .= "<tr>
                     <td>". $cnt++ . "</td>
-                    <td>" . display_user($user_data->user). "<br>" .
-                    "($langAmShort: ". uid_to_am($user_data->user) . ")</td>
+                    <td>" . display_user($user_data->user). "<br>";
+                    if ($user_am) {
+                        $tool_content .= "($langAmShort: $user_am)";
+                    }
+            $tool_content .= "</td>
                     <td>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;&nbsp;$icon"
                           . "<small><a href='index.php?course=$course_code&amp;$param_name=$element_id&amp;u=$user_data->user'>$langDetails</a></small>
                     </td>

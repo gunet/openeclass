@@ -33,11 +33,6 @@
   ==============================================================================
   @Description: This script updates the student's progress for a learning
   path module after browsing it.
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
  */
 
 $require_current_course = true;

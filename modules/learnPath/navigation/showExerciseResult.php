@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,8 +17,8 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ========================================================================
- */
+ * ======================================================================== */
+
 
 // This script is a replicate from
 // exercise/exercise_result.php, but it is modified for the
@@ -88,7 +88,7 @@ echo "<div class='panel panel-primary'>
         </div>";
 if ($exerciseDescription) {
    echo "<div class='panel-body'>
-        " . standard_text_escape($exerciseDescription, '../../../courses/mathimg/') . "
+        " . standard_text_escape($exerciseDescription) . "
         </div>";
   }
 echo "</div>";
@@ -132,9 +132,9 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         </tr>
         <tr>
         <td colspan='${colspan}'>
-        <b>" . q($questionName) . "</b>
+        <b>" . q_math($questionName) . "</b>
         <br />" .
-        standard_text_escape($questionDescription, '../../../courses/mathimg/')
+        standard_text_escape($questionDescription)
         . "<br/><br/>
         </td>
         </tr>";
@@ -169,10 +169,9 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         $answerComment = $objAnswerTmp->selectComment($answerId);
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
-        // support for math symbols
-        $answer = mathfilter($answer, 12, "$webDir/courses/mathimg/");
-        //$answerComment = mathfilter($answerComment, 12, "$webDir/courses/mathimg/");
-
+        if (in_array($answerType, [UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, TRUE_FALSE])) {
+            $answer = standard_text_escape($answer);
+        }
         switch ($answerType) {
             // for unique answer
             case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
@@ -196,7 +195,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 // splits weightings that are joined with a comma
                 $answerWeighting = explode(',', $answerWeighting);
                 // we save the answer because it will be modified
-                $temp = $answer;
+                $temp = q_math($answer);
                 $answer = '';
                 $j = 0;
                 // the loop will stop at the end of the text
@@ -282,10 +281,10 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     }
                     echo icon($icon_choice) . "</div>";
                     echo ("</td>
-                            <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
+                            <td>" . standard_text_escape($answer) . "</td>
                             <td>");
                     if ($studentChoice) {
-                        echo standard_text_escape($answerComment, '../../../courses/mathimg/');
+                        echo standard_text_escape($answerComment);
                     } else {
                         echo ('&nbsp;');
                     }
@@ -293,12 +292,12 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                     echo ("
                         <tr>
-                          <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
+                          <td>" . standard_text_escape($answer) . "</td>
                         </tr>");
                 } else {
                     echo ("
                         <tr>
-                          <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
+                          <td>" . standard_text_escape($answer) . "</td>
                           <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
                         </tr>");
                 }
