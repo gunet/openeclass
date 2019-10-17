@@ -565,6 +565,20 @@ function get_badge_icon($badge_id) {
 
 }
 
+
+/**
+ * @brief get badge filename
+ * @param type $badge_id
+ * @return type
+ */
+function get_badge_filename($badge_id) {
+
+    $r = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id =
+                (SELECT icon FROM badge WHERE id = ?d)", $badge_id);
+
+    return $r->filename;
+}
+
 /**
  * @brief get available badge icons
  * @return string

@@ -472,7 +472,7 @@ $tool_content .= "
               <th>$langSurnameName</th>
               <th class='text-center'>$langRole</th>
               <th class='text-center'>$langGroup</th>
-              <th class='text-center' width='80'>$langRegistrationDateShort</th>
+              <th class='text-center' width='80'>$langRegistrationDate</th>
               <th class='text-center'>".icon('fa-gears')."</th>
             </tr>
         </thead>

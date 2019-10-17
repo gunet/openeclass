@@ -120,7 +120,7 @@ function display_attendances() {
  */
 function register_user_presences($attendance_id, $actID) {
 
-    global $tool_content, $course_id, $course_code,
+    global $tool_content, $course_id, $course_code, $dateFormatMiddle,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
 
@@ -168,7 +168,7 @@ function register_user_presences($attendance_id, $actID) {
                 <tr>
                   <th class='text-center' width='5%'>$langID</th>
                   <th class='text-left'>$langName $langSurname</th>
-                  <th>$langAm</th>
+                  <th class='text-center'>$langAm</th>
                   <th class='text-center'>$langRegistrationDateShort</th>
                   <th class='text-center'>$langAttendanceAbsences</th>
                 </tr>
@@ -182,7 +182,7 @@ function register_user_presences($attendance_id, $actID) {
                 <td class='text-center'>$cnt</td>
                 <td> " . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>" . nice_format($resultUser->reg_date, true, true) . "</td>
+                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
                 <td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
                 //check if the user has attendace for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
@@ -991,7 +991,7 @@ function display_all_users_presences($attendance_id) {
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
            $langID, $langAm, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAttendanceBook, $langAttendanceDelete, $langConfirmDelete,
-           $langNoRegStudent, $langHere;
+           $langNoRegStudent, $langHere, $dateFormatMiddle;
 
     $attendance_limit = get_attendance_limit($attendance_id);
 
@@ -1011,9 +1011,9 @@ function display_all_users_presences($attendance_id) {
                 <tr>
                   <th width='1'>$langID</th>
                   <th>$langName $langSurname</th>
-                  <th>$langAm</th>
-                  <th class='center'>$langRegistrationDateShort</th>
-                  <th class='center'>$langAttendanceAbsences</th>
+                  <th class='text-center'>$langAm</th>
+                  <th class='text-center'>$langRegistrationDateShort</th>
+                  <th class='text-center'>$langAttendanceAbsences</th>
                   <th class='text-center'><i class='fa fa-cogs'></i></th>
                 </tr>
             </thead>
@@ -1025,8 +1025,8 @@ function display_all_users_presences($attendance_id) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID) . "</td>
                 <td>$resultUser->am</td>
-                <td>" . nice_format($resultUser->reg_date) . "</td>
-                <td>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
+                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
+                <td class='text-center'>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
                 <td class='option-btn-cell'>"
                    . action_button(array(
                         array('title' => $langAttendanceBook,
