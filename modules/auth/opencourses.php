@@ -54,8 +54,10 @@ if (isset($_GET['fc'])) {
 // This is needed in case the user decides to switch language.
 if (isset($data['fc'])) {
     $_SESSION['fc_memo'] = $data['fc'];
-} else {
+} elseif (isset($_SESSION['fc_memo'])) {
     $data['fc'] = $_SESSION['fc_memo'];
+} else {
+    redirect_to_home_page();
 }
 
 

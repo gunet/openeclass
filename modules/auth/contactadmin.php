@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -35,13 +35,13 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-$pageName = $langContactAdmin;
+$pageName = $langContactAdminAuth;
 
 $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
 
-if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'])) {    
+if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'])) {
     $info = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $userid);
-    if ($info) {      
+    if ($info) {
         $firstname = $info->givenname;
         $lastname = $info->surname;
         $email = $info->email;

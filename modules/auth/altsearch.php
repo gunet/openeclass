@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.3
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -188,7 +188,7 @@ if ($is_valid) {
     if (!$ok and $submit) {
         $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</div>";
     }
-    $depid = intval(getDirectReference($department));
+    $depid = intval($department);
     if (isset($_SESSION['auth_user_info'])) {
         $givenname_form = $_SESSION['auth_user_info']['givenname'];
         $surname_form = $_SESSION['auth_user_info']['surname'];
@@ -199,7 +199,7 @@ if ($is_valid) {
             $email = $_SESSION['auth_user_info']['email'];
         }
     }
-    if (!empty($email) and !Swift_Validate::email($email)) {
+    if (!empty($email) and !valid_email($email)) {
         $ok = NULL;
         $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
     } else {
@@ -209,7 +209,7 @@ if ($is_valid) {
     $tool_content .= $init_auth ? ("<div class='alert alert-success'>$langTheUser $ldapfound.</div>") : '';
     if (@(!empty($_SESSION['was_validated']['uname_exists']) and $_POST['p'] != 1)) {
         $tool_content .= "<div class='alert alert-danger'>$langUserFree<br />
-                                <br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
+                                <br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
         draw($tool_content, 0, null, $head_content);
         exit();
     }
@@ -348,7 +348,7 @@ if ($is_valid) {
             $tool_content .= "<div class='alert alert-success'>" .
                     ($prof ? $langDearProf : $langDearUser) .
                     "!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
-                                                <p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+                                                <p>$langMailVerificationSuccess4.<br /><br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
         }
     } elseif (empty($_SESSION['uname_app_exists'])) {
         $email_verification_required = get_config('email_verification_required');
@@ -359,7 +359,7 @@ if ($is_valid) {
         }
 
         // check if mail address is valid
-        if (!empty($email) and !Swift_Validate::email($email)) {
+        if (!empty($email) and !valid_email($email)) {
             $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
             user_info_form();
             draw($tool_content, 0, null, $head_content);
@@ -458,11 +458,11 @@ if ($is_valid) {
             $tool_content .= "<div class='alert alert-success'>" .
                     ($prof ? $langDearProf : $langDearUser) .
                     "!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
-                                        <p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer'
+                                        <p>$langMailVerificationSuccess4.<br /><br />$langClick <a href='$urlServer'
                                         class='mainpage'>$langHere</a> $langBackPage</p>";
         }
     } elseif (!empty($_SESSION['uname_app_exists'])) {
-        $tool_content .= "<div class='alert alert-danger'>$langUserFree3<br><br>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langUserFree3<br><br>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
     }
 }
 draw($tool_content, 0);
@@ -524,7 +524,7 @@ function user_info_form() {
         $mail_message = $langEmailNotice;
     } else {
         $mail_message = '';
-    }   
+    }
     if (isset($_SESSION['auth_user_info']) and !empty($_SESSION['auth_user_info']['givenname'])) {
         $givennameClass = ' form-control-static';
         $givennameInput = q($_SESSION['auth_user_info']['givenname']);
@@ -594,7 +594,7 @@ function user_info_form() {
     $tool_content .= "<div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";
-    list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'where' => 'AND node.allow_user = true', 'multiple' => false));
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'where' => 'AND node.allow_user = true', 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html . "</div>
         </div>

@@ -46,7 +46,8 @@ $data['alt_auth_stud_reg'] = get_config('alt_auth_stud_reg'); //user registratio
 if (isset($_REQUEST['auth'])) {
     $auth = intval($_REQUEST['auth']);
     $_SESSION['u_tmp'] = $auth;
-} else  {
+}
+if (!isset($_REQUEST['auth'])) {
     $auth = 0;
     $auth = $_SESSION['u_tmp'];
 }
