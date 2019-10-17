@@ -3728,11 +3728,11 @@ function assignment_details($id, $row) {
         }
         if (isset($_GET['unit'])) {
             $unit = intval($_GET['unit']);
-            $filelink = "{$urlServer}modules/units/view.php/?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
+            $filelink = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
         } else {
-            $filelink = "{$urlServer}modules/work/?course=$course_code&amp;get=$row->id&amp;file_type=1";    
+            $filelink = "{$urlServer}modules/work/?course=$course_code&amp;get=$row->id&amp;file_type=1";
         }
-        
+
         if (!empty($row->file_name)) {
             $tool_content .= "<div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
