@@ -102,7 +102,7 @@ $tool_content .= "<div class='alert alert-info'>$langAskManyUsers</div>
         </fieldset>
         ". generate_csrf_token_form_field() ."  
         </form>
-        </div";
+        </div>";
 
 draw($tool_content, 2);
 
