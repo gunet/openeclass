@@ -2,6 +2,22 @@
 
 @section('content')
     {!! isset($action_bar) ?  $action_bar : '' !!}
+    @if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0)
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='panel panel-success'>
+                    <div class='panel-heading'>
+                        {{ trans('langNewEclassVersion') }}
+                    </div>
+                    <div class='panel-body'>
+                        {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>",
+                                    "<a href='https://www.openeclass.org/' target='_blank'>www.openeclass.org</a>") !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel'>
