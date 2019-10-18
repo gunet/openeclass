@@ -75,6 +75,23 @@
                                 'url' => "auth_test.php?auth=$authMethod->auth_id",
                                 'icon' => 'fa-plug',
                                 'show' => $authMethod->auth_id != 1 && $authMethod->auth_settings
+                            ],
+                                'title' => "Ενεργοποίηση μετάβασης",
+                                'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
+                                'icon' => 'fa-bell',
+                                'show' => $auth_name == 'cas' && !get_config('sso_transition')
+                            ],
+                            [
+                                'title' => "Απενεργοποίηση μετάβασης",
+                                'url' => "$_SERVER[SCRIPT_NAME]?transition=false",
+                                'icon' => 'fa-bell-slash',
+                                'show' => $auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition')
+                            ],
+                            [
+                                'title' => "Αιτήματα εξαιρέσεων μετάβασης",
+                                'url' => "../auth/transition/admin_auth_transition.php",
+                                'icon' => 'fa-exclamation',
+                                'show' => $auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))
                             ]
                         ]
                         ) !!}

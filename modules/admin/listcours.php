@@ -31,7 +31,6 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     $tree = new Hierarchy();
     $course = new Course();
@@ -43,7 +42,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $searchtitle = isset($_GET['formsearchtitle']) ? $_GET['formsearchtitle'] : '';
     $searchcode = isset($_GET['formsearchcode']) ? $_GET['formsearchcode'] : '';
     $searchtype = isset($_GET['formsearchtype']) ? intval($_GET['formsearchtype']) : '-1';
-    $searchfaculte = isset($_GET['formsearchfaculte']) ? intval(getDirectReference($_GET['formsearchfaculte'])) : '';
+    $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
     // pagination
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
@@ -63,7 +62,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $query .= ' AND course.visible = ?d';
         $terms[] = $searchtype;
     }
-
     if ($searchfaculte) {
         $subs = $tree->buildSubtrees(array($searchfaculte));
         $ids = 0;
@@ -166,27 +164,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $dep .= $tree->getFullPath($department) . $br;
             $i++;
         }
-        // display tc_server action if needed
-        $tc_type = is_configured_tc_server();
-        if ($tc_type == FALSE) {
-            $show_tc = false;
-            $icon_tc = $link_tc = '';
-        } else {
-            if (is_tc_server_enabled_for_all($tc_type)) {
-                $show_tc = false;
-                $icon_tc = $link_tc = '';
-            } else {                                
-                $show_tc = true;
-                if (is_active_tc_server($tc_type, $logs->id)) {
-                    $icon_tc = 'fa-check-square-o';
-                    $link_tc = "tc=0&amp;tc_type=$tc_type";
-                } else {
-                    $icon_tc = 'fa-square-o';
-                    $link_tc = "tc=1&amp;tc_type=$tc_type";
-                }
-            }
-        }
-        
         // Add links to course users, delete course and course edit
         $icon_content = action_button(array(
             array(
@@ -206,15 +183,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'show' => !isDepartmentAdmin()
             ),
             array(
-                'title' => $langActivateConference,
-                'icon' => $icon_tc,
-                'url' => "$_SERVER[SCRIPT_NAME]?c=$logs->id&amp;$link_tc",
-                'show' => $show_tc
-            ),  
-            array(
                 'title' => $langDelete,
                 'icon' => 'fa-times',
-                'url' => "delcours.php?c=" . getIndirectReference($logs->id)
+                'url' => "delcours.php?c=$logs->id"
             )            
         ));
         $data['aaData'][] = array(
@@ -274,22 +245,6 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
-
-// enable - disable tc server per course
-if (isset($_GET['tc'])) {
-    if ($_GET['tc'] == 1) {
-        $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE enabled='true' AND `type` = ?s ORDER BY weight ASC", $_GET['tc_type'])->id;        
-        if ($tc_id) {
-            Database::get()->query("INSERT INTO course_external_server SET course_id=?d, external_server=?d", $_GET['c'], $tc_id);
-            Session::Messages($langTcCourseEnabled, 'alert alert-info');
-        }
-    } elseif($_GET['tc'] == 0)  {
-        Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $_GET['c']);
-        Session::Messages($langTcCourseDisabled, 'alert alert-info');        
-    } else {
-        redirect_to_home_page('modules/admin/index.php');
-    }
-}
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);

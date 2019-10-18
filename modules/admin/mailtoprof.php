@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -48,7 +48,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         }
     } elseif ($_POST['sendTo'] == "1") { // Only professors
         if (isDepartmentAdmin()) {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user 
+            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user
                                                                 AND user.status = " . USER_TEACHER . " AND " . $depwh);
         } else {
             $sql = Database::get()->queryArray("SELECT email, id FROM user where status = " . USER_TEACHER . "");
@@ -70,8 +70,8 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
     foreach ($sql as $m) {
         $emailTo = $m->email;
         $user_id = $m->id;
-        // checks if user is notified by email
-        if (Swift_Validate::email($emailTo) and get_user_email_notification($user_id)) {
+        // checks if user is notified by email and his email address is valid
+        if (valid_email($emailTo) and get_user_email_notification($user_id)) {
             array_push($recipients, $emailTo);
         }
 

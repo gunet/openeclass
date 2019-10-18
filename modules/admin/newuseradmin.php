@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -91,6 +91,7 @@ if (isset($_POST['submit'])) {
         } else {
             $password_encrypted = $auth_ids[$_POST['auth_form']];
         }
+
         if (isset($_POST['user_date_expires_at'])) {
             $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
             $user_expires_at = $expires_at->format("Y-m-d H:i");
@@ -98,7 +99,7 @@ if (isset($_POST['submit'])) {
         } else {                                    
             $expires_at = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now + 1 year")));
             $user_expires_at = $expires_at->format("Y-m-d H:i");
-        } 
+        }
         $uid = Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
                 VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '')",
@@ -106,7 +107,6 @@ if (isset($_POST['submit'])) {
                     $password_encrypted, $email_form, 
                     $pstatus, $phone_form, $am_form, 
                     $user_expires_at, $language_form, $verified_mail)->lastInsertID;
-        
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $uid);
