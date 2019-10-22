@@ -9,8 +9,8 @@
             <?php $auth_count = count_auth_users($auth_id); ?>
             @if ($auth_count > 0 or in_array($auth_id, $auth_active_ids))
                 <li>
-                    {{ get_auth_info($auth_id) }} 
-                    ({{ trans('langNbUsers') }}: 
+                    {{ get_auth_info($auth_id) }}
+                    ({{ trans('langNbUsers') }}:
                     @if ($auth_count == 0)
                         0
                     @else
@@ -76,7 +76,7 @@
                                 'icon' => 'fa-plug',
                                 'show' => $authMethod->auth_id != 1 && $authMethod->auth_settings
                             ],
-                                'title' => "Ενεργοποίηση μετάβασης",
+                            [   'title' => "Ενεργοποίηση μετάβασης",
                                 'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
                                 'icon' => 'fa-bell',
                                 'show' => $auth_name == 'cas' && !get_config('sso_transition')
@@ -91,13 +91,13 @@
                                 'title' => "Αιτήματα εξαιρέσεων μετάβασης",
                                 'url' => "../auth/transition/admin_auth_transition.php",
                                 'icon' => 'fa-exclamation',
-                                'show' => $auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))
+                                'show' => $auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition')
                             ]
-                        ]
-                        ) !!}
+                        ])
+                    !!}
                     </td>
-                <tr>
-            @endforeach            
+                </tr>
+            @endforeach
         </table>
     </div>
 @endsection
