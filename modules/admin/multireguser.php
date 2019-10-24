@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
     $data['unparsed_lines'] = '';
     $data['new_users_info'] = array();
     $newstatus = ($_POST['type'] == 'prof') ? 1 : 5;
-    $departments = isset($_POST['facid']) ? arrayValuesDirect($_POST['facid']) : array();
+    $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
     $am = $_POST['am'];
     $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
     $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
@@ -166,13 +166,11 @@ $data['menuTypeID'] = 3;
 view($view, $data);
 
 function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public) {
-    global $charset, $langAsProf,
-    $langYourReg, $siteName, $langDestination, $langYouAreReg,
-    $langSettings, $langPass, $langAddress, $langIs, $urlServer,
-    $langProblem, $langPassSameAuth,
-    $langManager, $langTel, $langEmail,
-    $profsuccess, $usersuccess, $langWithSuccess,
-    $user, $langUserCodename, $uname_form, $auth_ids, $auth_methods_form;
+    global $charset, $langAsProf, $langYourReg, $siteName, $langDestination,
+        $langYouAreReg, $langSettings, $langPass, $langAddress, $langIs,
+        $urlServer, $langProblem, $langPassSameAuth, $langManager, $langTel,
+        $langEmail, $profsuccess, $usersuccess, $langWithSuccess, $user,
+        $langUserCodename, $uname_form, $auth_ids, $auth_methods_form;
 
     if ($status == 1) {
         $message = $profsuccess;
@@ -195,6 +193,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
 
     if ($auth_methods_form != 1) { // other authentication methods
         $password_encrypted = $auth_ids[$auth_methods_form];
+        $password = get_auth_info($auth_methods_form);
         $mail_message = $langPassSameAuth;
     } else {
         $hasher = new PasswordHash(8, false);
