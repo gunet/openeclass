@@ -104,10 +104,10 @@ $(document).ready(function() {
     
     $('.fileModal').click(function (e) {
         e.preventDefault();
-
+        
         var fileURL = $(this).attr('href');
         var fileTitle = $(this).attr('title');
-
+        
         bootbox.dialog({
             size: 'large',
             title: fileTitle,
@@ -133,6 +133,15 @@ $(document).ready(function() {
 hContent;
     }
     return $head;
+}
+
+function getDelosButton() {
+    global $course_code, $langAddOpenDelosVideoLink;
+    return array('title' => $langAddOpenDelosVideoLink,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=opendelos",
+        'icon' => 'fa-plus-circle',
+        'level' => 'primary-label',
+        'button-class' => 'btn-success');
 }
 
 function getDelosSignedToken() {
@@ -277,6 +286,8 @@ function httpGetRequest($url, $headers = array()) {
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     $response = curl_exec($ch);
     if(!curl_errno($ch)) {
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -318,18 +329,16 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
                         AND category = ?d 
                         AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
                     } else {
-                        $id = Database::get()->query('INSERT INTO videolink 
-                        (course_id, url, title, description, category, creator, publisher, date)
-                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)',
-                            $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date)->lastInsertID;
+                        $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
+                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
+                        $id = $q->lastInsertID;
                     }
-
-                    // index and log
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                    $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                         'url' => canonicalize_url($url),
                         'title' => $title,
-                        'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
+                        'description' => $txt_description));
                 }
             }
         }
@@ -349,27 +358,29 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
                     if ($stored) {
                         $id = $stored->id;
                         Database::get()->query("UPDATE videolink SET 
-                        url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
-                        WHERE course_id = ?d 
-                        AND category = ?d 
-                        AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
+                            url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
+                            WHERE course_id = ?d 
+                            AND category = ?d 
+                            AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
                     } else {
                         $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
-                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
+                            VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
                         $id = $q->lastInsertID;
                     }
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                    $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                         'url' => canonicalize_url($url),
                         'title' => $title,
-                        'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
+                        'description' => $txt_description));
                 }
             }
         }
     }
 }
 
-function getCurrentVideoLinks($course_id) {
+function getCurrentVideoLinks() {
+    global $course_id;
     $current = array();
     Database::get()->queryFunc("SELECT url, date FROM videolink WHERE course_id = ?d", function($vl) use (&$current) {
         $current[$vl->url] = $vl->date;
