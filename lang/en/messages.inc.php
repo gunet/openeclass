@@ -5091,6 +5091,10 @@ $langColMoocSessionStatusNoPair = "No pair found";
 $langColMoocSessionStatusFinished = "Completed";
 $langColMoocSessionStatusNoFinalAnswer = "No final answer given";
 $langColMoocCompletions = "Times Completed";
+$langColmoocPairLog = "Pairs Log";
+$langColmoocCompletionsLog = "Completions Log";
+$langColmoocModerator = "Moderator";
+$langColmoocPartner = "Partner";
 $langNewEclassVersion = 'New Open eClass platform release';
 $langNewEclassVersionInfo = 'A new version of the Open eClass platform, %s,
     is available.  Please visit the project webpage %s for upgrade information.';
