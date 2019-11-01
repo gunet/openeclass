@@ -282,3 +282,10 @@ function display_session_status($status) {
             break;
     }
 }
+
+function display_finished_count($user_id) {
+    $mod_cnt = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM colmooc_pair_log WHERE moderator_id = ?d AND session_status = 1", $user_id)->cnt;
+    $par_cnt = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM colmooc_pair_log WHERE partner_id = ?d AND session_status = 1", $user_id)->cnt;
+    $cnt = $mod_cnt + $par_cnt;
+    return $cnt;
+}

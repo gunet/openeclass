@@ -5637,6 +5637,10 @@ $langColMoocSessionStatusNoPair = "Δε βρέθηκε συνομιλητής";
 $langColMoocSessionStatusFinished = "Ολοκληρώθηκε";
 $langColMoocSessionStatusNoFinalAnswer = "Δε δόθηκε τελική απάντηση";
 $langColMoocCompletions = "Αριθμός ολοκληρώσεων";
+$langColmoocPairLog = "Καταγραφή Ζευγών";
+$langColmoocCompletionsLog = "Καταγραφή Ολοκληρώσεων";
+$langColmoocModerator = "Συντονιστής";
+$langColmoocPartner = "Συνομιλητής";
 
 // Learning Analytics
 $langLearningAnalytics = 'Στατιστικά Μάθησης';
