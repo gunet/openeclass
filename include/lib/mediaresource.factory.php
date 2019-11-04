@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 require_once 'include/lib/mediaresource.class.php';
-require_once 'modules/video/inc/delos_functions.php';
+require_once 'modules/video/delos_functions.php';
 
 class MediaResourceFactory {
 

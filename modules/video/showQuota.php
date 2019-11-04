@@ -30,7 +30,7 @@ $helpTopic = 'Video';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/action.php';
-require_once 'inc/video_functions.php';
+require_once 'video_functions.php';
 
 $action = new action();
 $action->record('MODULE_ID_VIDEO');

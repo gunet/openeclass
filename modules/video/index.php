@@ -43,8 +43,8 @@ require_once 'include/log.class.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
+require_once 'video_functions.php';
 require_once 'delos_functions.php';
-require_once 'custom_sort.php';
 
 $toolName = $langVideo;
 $data = array();

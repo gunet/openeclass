@@ -24,7 +24,7 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
-require_once 'inc/delos_functions.php';
+require_once 'delos_functions.php';
 
 
 //$authUrl = getDelosRLoginURL();
