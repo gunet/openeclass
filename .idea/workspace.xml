@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="077e6b68-2734-40e5-9e60-a465731a6080" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/include/lib/mediaresource.factory.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/lib/mediaresource.factory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/video/custom_sort.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/video/edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/video/edit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/video/editCategory.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/video/editCategory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/video/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/video/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/video/showQuota.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/modules/video/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/modules/video/index.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -110,7 +109,7 @@
   <component name="ProjectId" id="1SyJxCeYUe8RkHet3Znk5O395mY" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -135,7 +134,7 @@
       <option name="presentableId" value="Default" />
       <updated>1572530146451</updated>
       <workItem from="1572530153101" duration="1470000" />
-      <workItem from="1572866156547" duration="1883000" />
+      <workItem from="1572866156547" duration="3607000" />
     </task>
     <servers />
   </component>

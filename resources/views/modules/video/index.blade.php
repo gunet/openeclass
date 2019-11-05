@@ -20,7 +20,7 @@
                   'url' => $urlAppend . "modules/video/editCategory.php?course=" . $course_code,
                   'icon' => 'fa-plus-circle'),
             array('title' => $GLOBALS['langQuotaBar'],
-                  'url' => $urlAppend . "modules/video/showQuota.php?course=" . $course_code,
+                  'url' => $urlAppend . "modules/video/index.php?course=" . $course_code . "&amp;showQuota=true",
                   'icon' => 'fa-pie-chart')
         );
         if (isDelosEnabled()) {

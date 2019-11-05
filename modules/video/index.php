@@ -75,6 +75,15 @@ $data['order'] = $order;
 
 if ($is_editor && !$is_in_tinymce) { // admin actions
 
+    if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
+        $pageName = $langQuotaBar;
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
+        $data = array();
+        list($diskQuotaVideo, $updir, $diskUsed) = getQuotaInfo($course_code, $webDir);
+        $data['showQuota'] = showquota($diskQuotaVideo, $diskUsed, "$_SERVER[SCRIPT_NAME]?course=$course_code");
+        view('modules.video.showQuota', $data);
+    }
+    
     // visibility commands
     if (isset($_GET['vis'])) {
         $table = select_table($_GET['table']);
