@@ -998,7 +998,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `course_id` int(11) NOT NULL,
                         `comments` text,
                         `status` int(11) NOT NULL,
-                        `ts` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                        `ts` datetime NOT NULL DEFAULT '1970-01-01 00:00:01',
                         PRIMARY KEY (`id`)) $tbl_options");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
