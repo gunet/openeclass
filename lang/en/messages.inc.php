@@ -5141,3 +5141,4 @@ $langUserHasNoConsent = "Has not consented";
 $langUserConsentUnknown = "Has not yet consented or was not yet notified";
 $langTiiApp = "TurnItIn Application";
 $langGradeCorrect = 'Grade';
+$langLearningAnalytics = 'Learning Analytics';

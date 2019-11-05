@@ -5633,3 +5633,6 @@ $langColmoocPairLog = "Καταγραφή Ζευγών";
 $langColmoocCompletionsLog = "Καταγραφή Ολοκληρώσεων";
 $langColmoocModerator = "Συντονιστής";
 $langColmoocPartner = "Συνομιλητής";
+
+// Learning Analytics
+$langLearningAnalytics = 'Στατιστικά Μάθησης';

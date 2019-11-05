@@ -22,8 +22,9 @@
 
 define('COLMOOC_PLATFORM_ID', 201);
 define('COLMOOC_BASE_URL', "https://mklab.iti.gr");
-//define('COLMOOC_CHAT_URL', "https://mklab.iti.gr/colmooc-chat");
-define('COLMOOC_CHAT_URL', "http://mklab.iti.gr:4000");
+define('COLMOOC_CHAT_URL', "https://mklab.iti.gr/colmooc-chat");
+//define('COLMOOC_CHAT_URL', "http://mklab.iti.gr:4000");
+define('COLMOOC_ANALYTICS_URL', "https://mklab.iti.gr/colmoocapi/analytics");
 define('COLMOOC_JSON_HEAD', "Content-Type: application/json\r\n");
 
 /** 
@@ -246,6 +247,37 @@ function colmooc_register_student($conferenceId) {
     }
 
     return array($sessionId, $sessionToken);
+}
+
+function colmooc_add_teacher_lasession() {
+    global $uid, $course_id;
+
+    if (!ini_get('allow_url_fopen')) {
+        return array(false, false);
+    }
+
+    // api add la session
+    $add_lasession_url = COLMOOC_BASE_URL . "/colmoocapi/api/lasession/add";
+    $add_lasession_data = json_encode(array(array(
+        "platform_id" => COLMOOC_PLATFORM_ID,
+        "course_id" => $course_id,
+        "teacher_id" => $uid,
+        "colstudent_id" => 0
+    )));
+
+    $responseStr = custom_request($add_lasession_url, $add_lasession_data, "POST", COLMOOC_JSON_HEAD);
+    // error_log("add lasession API call response: " . $responseStr);
+    $responseData = json_decode($responseStr, true);
+    if (is_array($responseData) && count($responseData) > 0 && isset($responseData['success']) && isset($responseData['success']['lasession_id']) && isset($responseData['success']['lasession_token'])) {
+        // error_log("lasession id: " . $responseData['success']['lasession_id']);
+        // error_log("session token: " . $responseData['success']['lasession_token']);
+        $laSessionId = $responseData['success']['lasession_id'];
+        $laSessionToken = $responseData['success']['lasession_token'];
+    } else {
+        return array(false, false);
+    }
+
+    return array($laSessionId, $laSessionToken);
 }
 
 function custom_request($url, $post_data, $method, $header) {
