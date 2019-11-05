@@ -77,6 +77,15 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('sortable/Sortable.min.js');
 
 ModalBoxHelper::loadModalBox();
+$head_content .= "<style>        
+    #collapseDescription {
+        background-color: #f5f5f5;
+    }
+    #collapseDescription > div {
+        padding: 20px;
+    }
+</style>";
+
 $head_content .= "
 <script type='text/javascript'>
     $(document).ready(function() {";
@@ -647,8 +656,10 @@ if (count($categoryItems)) {
     $categoryDisplay = '';
 }
 
+// offline course setting
 $offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
 
+// content
 $tool_content .= "
 $action_bar
 <div class='row margin-top-thin margin-bottom-fat'>
@@ -682,13 +693,31 @@ $action_bar
                 $categoryDisplay
                 <div class='col-xs-12 course-below-wrapper'>
                     <div class='row text-muted course-below-info'>
-                    <div class='col-xs-6'>
-                         $bar_content
+                        <div class='col-xs-6'>
+                             $bar_content
+                        </div>
+                        <div class='col-xs-6'>$license_holder</div>                         
                     </div>
-                    <div class='col-xs-6'>$license_holder</div>
-                </div>
+                </div>";
+                // course description
+                $tool_content .= "
+                    <div class='col-xs-12 course-below-wrapper'>
+                        <div class='row text-muted course-below-info'>                            
+                              <a role='button' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
+                              <h4 class='panel-heading panel-title'>
+                                    <span class='fa fa-chevron-down fa-fw'></span> $langCourseDescription
+                              </h4>
+                              </a>";
+                            $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px;'>";
+                            foreach ($res as $row) {
+                                $tool_content .= "<h3 class='panel-title' style='margin: 1em 0 .5em;'>" . q($row->title) . "</h3>" . standard_text_escape($row->comments);
+                            }
+                            $tool_content .= "</div>";
+                        $tool_content .= "</div>
+                    </div>";
+
+                $tool_content .= "
             </div>
-        </div>
         $panel_footer
     </div>
     </div>
