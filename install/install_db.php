@@ -1664,6 +1664,18 @@ $db->query("CREATE TABLE IF NOT EXISTS `colmooc_user_session` (
     UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
 
+// Colmooc pair log table
+$db->query("CREATE TABLE IF NOT EXISTS `colmooc_pair_log` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `activity_id` INT(11) NOT NULL,
+    `moderator_id` INT(11) NOT NULL,
+    `partner_id` INT(11) NOT NULL,
+    `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (moderator_id) REFERENCES user(id) ON DELETE CASCADE,
+    FOREIGN KEY (partner_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
 // Course Category tables
 $db->query("CREATE TABLE IF NOT EXISTS `category` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

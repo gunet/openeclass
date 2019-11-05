@@ -178,6 +178,16 @@ if (!$conference_activity) {
     if (!$is_editor) {
         list($sessionId, $sessionToken) = colmooc_register_student($conference_id); // STEP 2
     }
+    $laSessionId = false;
+    $laSessionToken = false;
+    $colmooc_teacher_la_url = null;
+    if ($is_editor && $conference_agent && $agent_id && !isset($_GET['create_agent']) && !isset($_GET['edit_agent'])) {
+        list($laSessionId, $laSessionToken) = colmooc_add_teacher_lasession();
+        if ($laSessionId && $laSessionToken) {
+            // Redirect teacher to colMOOC learning analytics
+            $colmooc_teacher_la_url = $colmoocapp->getParam(ColmoocApp::ANALYTICS_URL)->value() . "/?lasession_id=" . $laSessionId . "&lasession_token=" . $laSessionToken;
+        }
+    }
 
     $tool_content .= action_bar(array(
         array('title' => $langCreateAgent,
@@ -194,6 +204,19 @@ if (!$conference_activity) {
             'button-class' => 'btn-success',
             'show' => $is_editor && $conference_agent && $agent_id
         ),
+        array('title'=> $langColmoocPairLog,
+            'url' => "chat.php?conference_id=" . $conference_id . "&pair_log=1",
+            'level' => 'primary-label',
+            'show' => $is_editor && $conference_agent && $agent_id && !isset($_GET['pair_log'])),
+        array('title'=> $langColmoocCompletionsLog,
+            'url' => "chat.php?conference_id=" . $conference_id,
+            'level' => 'primary-label',
+            'show' => $is_editor && $conference_agent && $agent_id && isset($_GET['pair_log'])),
+        array('title' => $langLearningAnalytics,
+            'url' => '#',
+            'level' => 'primary-label',
+            'button-class' => 'btn-default teacherLearningAnalytics',
+            'show' => $is_editor && $laSessionId && $laSessionToken),
         array('title' => $langChat,
             'url' => '#',
             'level' => 'primary-label',
@@ -216,7 +239,37 @@ if (!$conference_activity) {
         redirect_to_home_page($colmooc_url, true);
     } else if ($is_editor && isset($_GET['create_agent']) && !$agent_id) {
         $tool_content .= "<div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div>";
-    } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent'])) {
+    } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent']) && isset($_GET['pair_log'])) {
+        $tool_content .= "<div class='alert alert-info'>" . $langColMoocAgentCreateOrEdit . "</div>";
+        $q = Database::get()->queryArray("select cpl.moderator_id, cpl.partner_id, cpl.session_status, cpl.created
+            from colmooc_pair_log cpl
+            join conference c on (c.chat_activity_id = cpl.activity_id)
+            where c.course_id = ?d and c.conf_id = ?d
+            order by cpl.created desc", $course_id, $conference_id);
+        $tool_content .= "<div class='table-responsive'>";
+        $tool_content .= "<table class='table-default'>
+            <thead>
+                <tr class='list-header'>
+                    <th style='width:5%'>$langID</th>
+                    <th>$langColmoocModerator</th>
+                    <th>$langColmoocPartner</th>
+                    <th class='text-center' width='250'>$langNewBBBSessionStatus</th>
+                    <th class='text-center' width='200'>$langDate</th>";
+        $tool_content .="</tr></thead>";
+
+        $cnt = 1;
+        foreach ($q as $cpl) {
+            $tool_content .= "<tr>";
+            $tool_content .= "<td>". $cnt++ . "</td>";
+            $tool_content .= "<td>" . display_user($cpl->moderator_id) . "</td>";
+            $tool_content .= "<td>" . display_user($cpl->partner_id) . "</td>";
+            $tool_content .= "<td class='text-center'>" . display_session_status($cpl->session_status) . "</td>";
+            $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cpl->created)) . "</td>";
+            $tool_content .= "</tr>";
+        }
+
+        $tool_content .= "</table></div>";
+    } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent']) && !isset($_GET['pair_log'])) {
         $tool_content .= "<div class='alert alert-info'>" . $langColMoocAgentCreateOrEdit . "</div>";
         $q1 = Database::get()->queryArray("select cus.user_id, cus.session_status, cus.session_status_updated 
             from colmooc_user_session cus 
@@ -236,8 +289,9 @@ if (!$conference_activity) {
                 <tr class='list-header'>
                     <th style='width:5%'>$langID</th>
                     <th>$langSurname $langName</th>
-                    <th class = 'text-center' width='250'>$langNewBBBSessionStatus</th>
-                    <th class = 'text-center' width='200'>$langDate</th>";
+                    <th class='text-center' width='250'>$langNewBBBSessionStatus</th>
+                    <th class='text-center' width='200'>$langDate</th>
+                    <th class='text-center'>$langColMoocCompletions</th>";
         $tool_content .="</tr></thead>";
 
         $cnt = 1;
@@ -247,6 +301,7 @@ if (!$conference_activity) {
             $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
             $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
             $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->session_status_updated)) . "</td>";
+            $tool_content .= "<td class='text-center'>" . display_finished_count($cus->user_id) . "</td>";
             $tool_content .= "</tr>";
         }
         foreach ($q2 as $cus) {
@@ -255,12 +310,15 @@ if (!$conference_activity) {
             $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
             $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
             $tool_content .= "<td class='text-center'>" . claro_format_locale_date($dateTimeFormatShort, strtotime($cus->session_status_updated)) . "</td>";
+            $tool_content .= "<td class='text-center'>" . display_finished_count($cus->user_id) . "</td>";
             $tool_content .= "</tr>";
         }
 
         $tool_content .= "</table></div>";
     }
 
+    $colmooc_url = null;
+    $chatindex_url = null;
     if (!$is_editor) {
         if ($sessionId && $sessionToken) {
             // Redirect student to colMOOC chat
@@ -341,6 +399,10 @@ $head_content .= "<script>
         $('.studentChat').click(function (e) {
             window.open('" . $colmooc_url . "', '_blank');
             window.location.href = '" . $chatindex_url . "';
+        });
+        
+        $('.teacherLearningAnalytics').click(function (e) {
+            window.open('" . $colmooc_teacher_la_url . "', '_blank');
         });
     });
     </script>";

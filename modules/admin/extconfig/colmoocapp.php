@@ -29,12 +29,14 @@ class ColmoocApp extends ExtApp {
     const PLATFORM_ID = "platform_id";
     const BASE_URL = "base_url";
     const CHAT_URL = "chat_url";
+    const ANALYTICS_URL = "analytics_url";
 
     public function __construct() {
         parent::__construct();
         $this->registerParam(new GenericRequiredParam($this->getName(), "Platform Id", ColmoocApp::PLATFORM_ID, "201"));
         $this->registerParam(new GenericRequiredParam($this->getName(), "Base URL", ColmoocApp::BASE_URL, "https://mklab.iti.gr"));
-        $this->registerParam(new GenericRequiredParam($this->getName(), "Chat URL", ColmoocApp::CHAT_URL, "http://mklab.iti.gr:4000"));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "Chat URL", ColmoocApp::CHAT_URL, "https://mklab.iti.gr/colmooc-chat"));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "Analytics URL", ColmoocApp::ANALYTICS_URL, "https://mklab.iti.gr/colmoocapi/analytics"));
     }
 
     public function getDisplayName() {

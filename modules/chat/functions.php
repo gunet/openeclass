@@ -23,7 +23,6 @@
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/colmoocapp.php';
 
-//define('COLMOOC_CHAT_URL', "https://mklab.iti.gr/colmooc-chat");
 define('COLMOOC_JSON_HEAD', "Content-Type: application/json\r\n");
 
 $colmoocapp = ExtAppManager::getApp(strtolower(ColmoocApp::NAME));
@@ -249,6 +248,37 @@ function colmooc_register_student($conferenceId) {
     return array($sessionId, $sessionToken);
 }
 
+function colmooc_add_teacher_lasession() {
+    global $colmoocapp, $uid, $course_id;
+
+    if (!ini_get('allow_url_fopen')) {
+        return array(false, false);
+    }
+
+    // api add la session
+    $add_lasession_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/lasession/add";
+    $add_lasession_data = json_encode(array(array(
+        "platform_id" => $colmoocapp->getParam(ColmoocApp::PLATFORM_ID)->value(),
+        "course_id" => $course_id,
+        "teacher_id" => $uid,
+        "colstudent_id" => 0
+    )));
+
+    $responseStr = custom_request($add_lasession_url, $add_lasession_data, "POST", COLMOOC_JSON_HEAD);
+    // error_log("add lasession API call response: " . $responseStr);
+    $responseData = json_decode($responseStr, true);
+    if (is_array($responseData) && count($responseData) > 0 && isset($responseData['success']) && isset($responseData['success']['lasession_id']) && isset($responseData['success']['lasession_token'])) {
+        // error_log("lasession id: " . $responseData['success']['lasession_id']);
+        // error_log("session token: " . $responseData['success']['lasession_token']);
+        $laSessionId = $responseData['success']['lasession_id'];
+        $laSessionToken = $responseData['success']['lasession_token'];
+    } else {
+        return array(false, false);
+    }
+
+    return array($laSessionId, $laSessionToken);
+}
+
 function custom_request($url, $post_data, $method, $header) {
 
     $context = stream_context_create(array(
@@ -281,4 +311,11 @@ function display_session_status($status) {
             return $langColMoocSessionStatusNoPair;
             break;
     }
+}
+
+function display_finished_count($user_id) {
+    $mod_cnt = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM colmooc_pair_log WHERE moderator_id = ?d AND session_status = 1", $user_id)->cnt;
+    $par_cnt = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM colmooc_pair_log WHERE partner_id = ?d AND session_status = 1", $user_id)->cnt;
+    $cnt = $mod_cnt + $par_cnt;
+    return $cnt;
 }
