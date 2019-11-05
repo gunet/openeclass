@@ -2201,6 +2201,19 @@ $langGradeOk = "Submit changes";
 $langGroupSubmit = "Group work submission";
 $langGradeWork = "Grading comments";
 $langUserOnly = "To submit an assignment you must first log in.";
+$langImportGradesError = 'No grades have been imported, due to the following errors.
+    Please fix them and try again.';
+$langImportInvalidUsers = 'The following usernames were not found on the platform:';
+$langImportExtraUsers = 'The following users were found, but had not made a submission to this assignment:';
+$langImportErrorLines = 'The following records were formatted incorrectly:<br>
+ (e.g. more than two fields, second field was not numeric, grade exceeded the maximum)';
+$langGradesImported = 'Grades imported successfully!';
+$langImportGrades = 'Import Grades From File';
+$langImportGradesHelp = 'Please provide a spreadsheet file (e.g. xls, xlsx, csv) with two or three columns.
+    The first column should include the usernames of students who have submitted an
+    assignment.
+    The second column should contain a numerical grade. The third column is optional and can contain
+    a comment for the grade';
 $langNoSubmissions = "No submissions";
 $langNoAssign = "No assignments";
 $langWorkWrongInput = 'The grade must be a number. Please go back and enter the grade again.';
@@ -4690,6 +4703,7 @@ $langGiveRight = "granted the right";
 $langRemovedRight = "removed the right";
 $langOMNotSupported = "Connection is not possible due to non-support of required API calls";
 $langEnableStrongPasswords = "Create stronger (more complex) passwords for user accounts";
+$langControlPanel = "Control Panel";
 $langNodeDescription = "$langFaculty Description";
 $langNodePublic = "Public visibility";
 $langNodePublic2 = "The $langsFaculty will show up for all users";
@@ -5158,6 +5172,7 @@ $langTiiExcludeType = "Small match exclusion type";
 $langTiiExcludeTypeWords = "Words";
 $langTiiExcludeTypePercentage = "Percentage";
 $langTiiExcludeValue = "Set source exclusion threshold";
+$langLTIOptions = "Turnitin Options";
 $langColmooc = "colMOOC";
 $langColmoocDescription = "ColMOOC Description";
 $langColmoocCreateAgentFailed = "Agent Create Error Detected. Please retry.";
@@ -5166,12 +5181,16 @@ $langColmoocRegisterStudentFailed = "Student Chat Loading Error Detected. Please
 $langColmoocRegisterStudentSuccess = "Student Chat completed successfully. Please close this dialog and return the chat list.";
 $langColmoocFollowLink1 = "Please click the following link";
 $langColmoocFollowLink2 = "in order to visit the ColMOOC environment";
-$langColMoocAgentNeeded = "Please visit your new chat activity and get redirected to the ColMOOC environment for creating the chat agent in order for the students to be able to access it.";
-$langColMoocAgentCreateOrEdit = "Plese click Create or Edit Agent in order to get redirected to the ColMOOC enviroment.";
+$langColMoocAgentNeeded = "Please visit your new chat activity and get redirected to the colMOOC environment for creating the chat agent in order for the students to be able to access it.";
+$langColMoocAgentCreateOrEdit = "Plese click Create or Edit Agent in order to get redirected to the colMOOC enviroment.";
 $langColMoocSessionStatusNoPair = "No pair found";
 $langColMoocSessionStatusFinished = "Completed";
 $langColMoocSessionStatusNoFinalAnswer = "No final answer given";
 $langColMoocCompletions = "Times Completed";
+$langColmoocPairLog = "Pairs Log";
+$langColmoocCompletionsLog = "Completions Log";
+$langColmoocModerator = "Moderator";
+$langColmoocPartner = "Partner";
 $langNewEclassVersion = 'New Open eClass platform release';
 $langNewEclassVersionInfo = 'A new version of the Open eClass platform, %s,
     is available.  Please visit the project webpage %s for upgrade information.';
@@ -5184,7 +5203,7 @@ $langPrivacyPolicyConsentRedisplay = 'Request new consent';
 $langYouHaveConsentedToPrivacyPolicy = 'You have consented to the {Privacy Policy} on %date.';
 $langYouHaveRejectedPrivacyPolicy = 'You have rejected the {Privacy Policy} on %date.';
 $langYouHaveNotConsentedToPrivacyPolicy = 'You have not consented to the {Privacy Policy}.';
-$langChatActivity = 'Chat ColMOOC Activity';
+$langChatActivity = 'Chat colMOOC Activity';
 $langCreateAgent = "Create Agent";
 $langEditAgent = "Edit Agent";
 $langNoDeadline = "No deadline";

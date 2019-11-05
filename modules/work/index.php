@@ -1099,6 +1099,7 @@ function submit_work($id, $on_behalf_of = null) {
                 }
                 $local_name = greek_to_latin($local_name);
             }
+            $local_name .= ' (' . uid_to_name($user_id, 'username') . ')';
             $local_name = replace_dangerous_char($local_name);
             if (isset($on_behalf_of) and !isset($_FILES)) {
                 $_FILES['userfile']['name'] = '';
@@ -1122,7 +1123,7 @@ function submit_work($id, $on_behalf_of = null) {
             } elseif(!$is_editor) {
                 $error_msgs[] = $langUploadError;
                 Session::Messages($error_msgs, 'alert-danger');
-                //redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
             }
         }
 
@@ -1219,7 +1220,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
 
-        // Auto-judge: Send file to hackearth
+        // Send file to AutoJudge service
         if(AutojudgeApp::getAutojudge()->isEnabled()) {
             if ($auto_judge && $ext === $langExt[$lang]) {
                     $content = file_get_contents("$workPath/$filename");
@@ -1273,9 +1274,9 @@ function submit_work($id, $on_behalf_of = null) {
                         $weight_sum += $curScenario['weight'];
                         $i++;
                     }
-
                     // 3 decimal digits precision
                     $grade = round($partial / $weight_sum * $max_grade, 3);
+
                     // allow an error of 0.001
                     if($max_grade - $grade <= 0.001)
                         $grade = $max_grade;
@@ -1374,7 +1375,8 @@ function new_assignment() {
            $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
            $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
            $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
-           $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage, $langTiiExcludeValue;
+           $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
+           $langTiiExcludeValue, $langLTIOptions;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -1451,6 +1453,10 @@ function new_assignment() {
                 var choice = $(this).val();
                 if (choice == 0) {
                     // lti fields
+                    $('#lti_label')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
                     $('#lti_templates')
                         .prop('disabled', true)
                         .closest('div.form-group')
@@ -1523,6 +1529,10 @@ function new_assignment() {
 
                 } else if (choice == 1) {
                     // lti fields
+                    $('#lti_label')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
                     $('#lti_templates')
                         .prop('disabled', false)
                         .closest('div.form-group')
@@ -1728,7 +1738,7 @@ function new_assignment() {
                   <input type='file' id='userfile' name='userfile'>
                 </div>
             </div>";
-    if ($turnitinapp->isEnabled()) {
+    if ($turnitinapp->isEnabled()) { // lti options
         $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langAssignmentType:</label>
@@ -1748,21 +1758,123 @@ function new_assignment() {
                     <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
                 </div>
             </div>
-            <div class='form-group hidden'>
-                <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
-                <div class='col-sm-10'>
-                  <select name='lti_template' class='form-control' id='lti_templates' disabled>
-                        $lti_template_options
-                  </select>
+            
+            <div class='container-fluid form-group hidden' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
+                <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
+                <div class='form-group hidden' style='margin-top: 30px;'>                    
+                    <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
+                    <div class='col-sm-10'>
+                      <select name='lti_template' class='form-control' id='lti_templates' disabled>
+                            $lti_template_options
+                      </select>
+                    </div>
                 </div>
-            </div>
             <div class='form-group hidden'>
                 <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
                 <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', LTI_LAUNCHCONTAINER_EMBED, 'id="lti_launchcontainer" disabled') . "</div>
             </div>";
-    } else {
         $tool_content .= "
-            <input type='hidden' name='assignment_type' value='0' />";
+            <!-- <div class='form-group hidden'>
+                <label for='tii_submit_papers_to' class='col-sm-2 control-label'>$langTiiSubmissionSettings:</label>
+                <div class='col-sm-10'>
+                  <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' disabled>
+                        <option value='0'>$langTiiSubmissionNoStore</option>
+                        <option value='1' selected>$langTiiSubmissionStandard</option>
+                        <option value='2'>$langTiiSubmissionInstitutional</option>
+                  </select>
+                </div>
+            </div> -->
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiCompareAgainst:</label>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' checked disabled>
+                        $langTiiStudentPaperCheck
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' checked disabled>
+                        $langTiiInternetCheck
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' checked disabled>
+                        $langTiiJournalCheck
+                      </label>
+                    </div>
+                    <!--<div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' checked disabled>
+                        $langTiiInstitutionCheck
+                      </label>
+                    </div>-->
+                </div>
+            </div>            
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
+                <div class='col-sm-10'>
+                  <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' disabled>
+                        <option value='0' selected>$langTiiReportGenImmediatelyNoResubmit</option>
+                        <option value='1'>$langTiiReportGenImmediatelyWithResubmit</option>
+                        <option value='2'>$langTiiReportGenOnDue</option>
+                  </select>
+                </div>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' disabled>
+                        $langTiiSViewReports
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' disabled>
+                        $langTiiExcludeBiblio
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' disabled>
+                       $langTiiExcludeQuoted
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' disabled>
+                       $langTiiExcludeSmall
+                      </label>
+                    </div>
+                </div>
+            </div>            
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' checked disabled>
+                        $langTiiExcludeTypeWords
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' disabled>
+                        $langTiiExcludeTypePercentage
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group hidden' style='margin-bottom: 20px;'>
+                <label for='tii_exclude_value' class='col-sm-2 control-label'>$langTiiExcludeValue:</label>
+                <div class='col-sm-10'>
+                    <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='0' disabled>
+                </div>
+            </div>                
+            </div>";
+    } else {
+        $tool_content .= "<input type='hidden' name='assignment_type' value='0'>";
     }
     $tool_content .= "
             <div class='form-group'>
@@ -1948,64 +2060,66 @@ function new_assignment() {
                     </div>
                 </div>
             </div>";
+        // Auto Judge Options
             if(AutojudgeApp::getAutojudge()->isEnabled()) {
                 $connector = AutojudgeApp::getAutojudge();
                 $tool_content .= "
                 <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
-                <div class='col-sm-10'>
-                    <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' /></div>
-                    <table style='display: none;'>
-                        <thead>
-                            <tr>
-                              <th>$langAutoJudgeInput</th>
-                              <th>$langOperator</th>
-                              <th>$langAutoJudgeExpectedOutput</th>
-                              <th>$langAutoJudgeWeight</th>
-                              <th>$langDelete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                              <td><input type='text' name='auto_judge_scenarios[0][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
-                              <td>
-                                <select name='auto_judge_scenarios[0][assertion]' class='auto_judge_assertion'>
-                                    <option value='eq' selected='selected'>".$langAutoJudgeAssertions['eq']."</option>
-                                    <option value='same'>".$langAutoJudgeAssertions['same']."</option>
-                                    <option value='notEq'>".$langAutoJudgeAssertions['notEq']."</option>
-                                    <option value='notSame'>".$langAutoJudgeAssertions['notSame']."</option>
-                                    <option value='integer'>".$langAutoJudgeAssertions['integer']."</option>
-                                    <option value='float'>".$langAutoJudgeAssertions['float']."</option>
-                                    <option value='digit'>".$langAutoJudgeAssertions['digit']."</option>
-                                    <option value='boolean'>".$langAutoJudgeAssertions['boolean']."</option>
-                                    <option value='notEmpty'>".$langAutoJudgeAssertions['notEmpty']."</option>
-                                    <option value='notNull'>".$langAutoJudgeAssertions['notNull']."</option>
-                                    <option value='string'>".$langAutoJudgeAssertions['string']."</option>
-                                    <option value='startsWith'>".$langAutoJudgeAssertions['startsWith']."</option>
-                                    <option value='endsWith'>".$langAutoJudgeAssertions['endsWith']."</option>
-                                    <option value='contains'>".$langAutoJudgeAssertions['contains']."</option>
-                                    <option value='numeric'>".$langAutoJudgeAssertions['numeric']."</option>
-                                    <option value='isArray'>".$langAutoJudgeAssertions['isArray']."</option>
-                                    <option value='true'>".$langAutoJudgeAssertions['true']."</option>
-                                    <option value='false'>".$langAutoJudgeAssertions['false']."</option>
-                                    <option value='isJsonString'>".$langAutoJudgeAssertions['isJsonString']."</option>
-                                    <option value='isObject'>".$langAutoJudgeAssertions['isObject']."</option>
-                                </select>
-                              </td>
-                              <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output' /></td>
-                      <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'/></td>
-                              <td><a href='#' class='autojudge_remove_scenario' style='display: none;'>X</a></td>
-                            </tr>
-                            <tr>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td style='text-align:center;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>
-                                <td> <input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
+                    <div class='col-sm-10'>
+                        <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1'></div>
+                        <div class='table-responsive'>                    
+                            <table style='display: none;'>
+                                <thead>
+                                    <tr>
+                                      <th>$langAutoJudgeInput</th>
+                                      <th>$langOperator</th>
+                                      <th>$langAutoJudgeExpectedOutput</th>
+                                      <th>$langAutoJudgeWeight</th>
+                                      <th>$langDelete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                      <td><input type='text' name='auto_judge_scenarios[0][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
+                                      <td>
+                                        <select name='auto_judge_scenarios[0][assertion]' class='auto_judge_assertion'>
+                                            <option value='eq' selected='selected'>".$langAutoJudgeAssertions['eq']."</option>
+                                            <option value='same'>".$langAutoJudgeAssertions['same']."</option>
+                                            <option value='notEq'>".$langAutoJudgeAssertions['notEq']."</option>
+                                            <option value='notSame'>".$langAutoJudgeAssertions['notSame']."</option>
+                                            <option value='integer'>".$langAutoJudgeAssertions['integer']."</option>
+                                            <option value='float'>".$langAutoJudgeAssertions['float']."</option>
+                                            <option value='digit'>".$langAutoJudgeAssertions['digit']."</option>
+                                            <option value='boolean'>".$langAutoJudgeAssertions['boolean']."</option>
+                                            <option value='notEmpty'>".$langAutoJudgeAssertions['notEmpty']."</option>
+                                            <option value='notNull'>".$langAutoJudgeAssertions['notNull']."</option>
+                                            <option value='string'>".$langAutoJudgeAssertions['string']."</option>
+                                            <option value='startsWith'>".$langAutoJudgeAssertions['startsWith']."</option>
+                                            <option value='endsWith'>".$langAutoJudgeAssertions['endsWith']."</option>
+                                            <option value='contains'>".$langAutoJudgeAssertions['contains']."</option>
+                                            <option value='numeric'>".$langAutoJudgeAssertions['numeric']."</option>
+                                            <option value='isArray'>".$langAutoJudgeAssertions['isArray']."</option>
+                                            <option value='true'>".$langAutoJudgeAssertions['true']."</option>
+                                            <option value='false'>".$langAutoJudgeAssertions['false']."</option>
+                                            <option value='isJsonString'>".$langAutoJudgeAssertions['isJsonString']."</option>
+                                            <option value='isObject'>".$langAutoJudgeAssertions['isObject']."</option>
+                                        </select>
+                                      </td>
+                                      <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output'></td>
+                                      <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'></td>
+                                      <td class='text-center'><icon class='fa fa-times'><a href='#' class='autojudge_remove_scenario' style='display: none;'></a></icon></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan='5' style='text-align:center;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>                                
+                                    </tr>
+                                    <tr>
+                                        <td><input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class='form-group'>
                   <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
@@ -2034,107 +2148,6 @@ function new_assignment() {
                 </div>
             </div>" .
             eClassTag::tagInput();
-    if ($turnitinapp->isEnabled()) {
-        $tool_content .= "
-            <!--<div class='form-group hidden'>
-                <label for='tii_submit_papers_to' class='col-sm-2 control-label'>$langTiiSubmissionSettings:</label>
-                <div class='col-sm-10'>
-                  <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' disabled>
-                        <option value='0'>$langTiiSubmissionNoStore</option>
-                        <option value='1' selected>$langTiiSubmissionStandard</option>
-                        <option value='2'>$langTiiSubmissionInstitutional</option>
-                  </select>
-                </div>
-            </div>-->
-            <div class='form-group hidden'>
-                <label class='col-sm-2 control-label'>$langTiiCompareAgainst:</label>
-                <div class='col-sm-10'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' checked disabled>
-                        $langTiiStudentPaperCheck
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' checked disabled>
-                        $langTiiInternetCheck
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' checked disabled>
-                        $langTiiJournalCheck
-                      </label>
-                    </div>
-                    <!--<div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' checked disabled>
-                        $langTiiInstitutionCheck
-                      </label>
-                    </div>-->
-                </div>
-            </div>
-            <div class='form-group hidden'>
-                <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
-                <div class='col-sm-10'>
-                  <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' disabled>
-                        <option value='0' selected>$langTiiReportGenImmediatelyNoResubmit</option>
-                        <option value='1'>$langTiiReportGenImmediatelyWithResubmit</option>
-                        <option value='2'>$langTiiReportGenOnDue</option>
-                  </select>
-                </div>
-                <div class='col-sm-10'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' disabled>
-                        $langTiiSViewReports
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' disabled>
-                        $langTiiExcludeBiblio
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' disabled>
-                       $langTiiExcludeQuoted
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' disabled>
-                       $langTiiExcludeSmall
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group hidden'>
-                <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
-                <div class='col-sm-10'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' checked disabled>
-                        $langTiiExcludeTypeWords
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' disabled>
-                        $langTiiExcludeTypePercentage
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group hidden'>
-                <label for='tii_exclude_value' class='col-sm-2 control-label'>$langTiiExcludeValue:</label>
-                <div class='col-sm-10'>
-                    <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='0' disabled>
-                </div>
-            </div>";
-    }
     $tool_content .= "
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>".
@@ -3471,8 +3484,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </div>";
         }
         if ($is_editor) {
-            $back_link = "index.php?course=$course_code&id=$id";
-            $form_link = "{$urlServer}modules/work/?course=$course_code";
+            $back_link = $form_link = "index.php?course=$course_code&id=$id";
         } else {
             if (isset($_GET['unit'])) {
                 $back_link = "../units/index.php?course=$course_code&id=$_GET[unit]";
@@ -3653,6 +3665,11 @@ function assignment_details($id, $row) {
                 'icon' => 'fa-file-archive-o',
                 'url' => "{$urlServer}modules/work/?course=$course_code&amp;download=$id",
                 'level' => 'primary'
+            ),
+            array(
+                'title' => $GLOBALS['langImportGrades'],
+                'icon' => 'fa-upload',
+                'url' => "import.php?course=$course_code&amp;id=$id"
             ),
             array(
                 'title' => $langExportGrades,
@@ -4012,12 +4029,17 @@ function show_assignment($id, $display_graph_results = false) {
                 if ($row->grade != '') { // grade submission date
                     $label = "<h6>($langGradedAt " .nice_format($row->grade_submission_date) . ")</h6>";
                 }
-                //professor comments
+                // professor comments
                 if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
-                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:';
-                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
-                    $comments .= "&nbsp;&nbsp;<span class='small'>
-                                <a href='{$urlServer}modules/work/index.php?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
+                    $grade_comments = q_math($row->grade_comments);
+                    if (preg_match('/(\r\n|\n|\r)\s/', $grade_comments)) {
+                        $grade_comments = "<pre>$grade_comments</pre>";
+                    } else {
+                        $grade_comments = "&nbsp;<span>$grade_comments</span>&nbsp;&nbsp;";
+                    }
+                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "
+                            <span class='small'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
                             </span>";
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
@@ -4566,7 +4588,7 @@ function show_assignments() {
 function submit_grade_comments($args) {
     global $langGrades, $course_id, $langTheField, $course_code,
             $langFormErrors, $workPath, $langGradebookGrade;
-
+    print_a($args);
     $id = $args['assignment'];
     $grading_type = 0;
     $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
@@ -4587,6 +4609,7 @@ function submit_grade_comments($args) {
     $v->labels(array(
         'grade' => "$langTheField $langGradebookGrade"
     ));
+
     if($v->validate()) {
         if ($grading_type == 2) {
             $grade_rubric = serialize($args['grade_rubric']);
@@ -5105,73 +5128,4 @@ function max_grade_from_rubric($rubric_id) {
     }
     //Session::Messages("<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
     return $max_grade/100;
-}
-
-
-function doScenarioAssertion($scenarionAssertion, $scenarioInputResult, $scenarioOutputExpectation) {
-    switch($scenarionAssertion) {
-        case 'eq':
-            $assertionResult = ($scenarioInputResult == $scenarioOutputExpectation);
-            break;
-        case 'same':
-            $assertionResult = ($scenarioInputResult === $scenarioOutputExpectation);
-            break;
-        case 'notEq':
-            $assertionResult = ($scenarioInputResult != $scenarioOutputExpectation);
-            break;
-        case 'notSame':
-            $assertionResult = ($scenarioInputResult !== $scenarioOutputExpectation);
-            break;
-        case 'integer':
-            $assertionResult = (is_int($scenarioInputResult));
-            break;
-        case 'float':
-            $assertionResult = (is_float($scenarioInputResult));
-            break;
-        case 'digit':
-            $assertionResult = (ctype_digit($scenarioInputResult));
-            break;
-        case 'boolean':
-            $assertionResult = (is_bool($scenarioInputResult));
-            break;
-        case 'notEmpty':
-            $assertionResult = (empty($scenarioInputResult) === false);
-            break;
-        case 'notNull':
-            $assertionResult = ($scenarioInputResult !== null);
-            break;
-        case 'string':
-            $assertionResult = (is_string($scenarioInputResult));
-            break;
-        case 'startsWith':
-            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === 0);
-            break;
-        case 'endsWith':
-            $stringPosition  = mb_strlen($scenarioInputResult, 'utf8') - mb_strlen($scenarioOutputExpectation, 'utf8');
-            $assertionResult = (mb_strripos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === $stringPosition);
-            break;
-        case 'contains':
-            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8'));
-            break;
-        case 'numeric':
-            $assertionResult = (is_numeric($scenarioInputResult));
-            break;
-        case 'isArray':
-            $assertionResult = (is_array($scenarioInputResult));
-            break;
-        case 'true':
-            $assertionResult = ($scenarioInputResult === true);
-            break;
-        case 'false':
-            $assertionResult = ($scenarioInputResult === false);
-            break;
-        case 'isJsonString':
-            $assertionResult = (json_decode($value) !== null && JSON_ERROR_NONE === json_last_error());
-            break;
-        case 'isObject':
-            $assertionResult = (is_object($scenarioInputResult));
-            break;
-    }
-
-    return $assertionResult;
 }
