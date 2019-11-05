@@ -17,7 +17,8 @@
         "philo/laravel-blade": "3.*",
         "hoa/ruler": "~2.0",
         "egulias/email-validator": "^2.1",
-        "bacon/bacon-qr-code": "^1.0"
+        "bacon/bacon-qr-code": "^1.0",
+        "phpoffice/phpspreadsheet": "^1.9"
     },
     "autoload": {
         "psr-0": {
