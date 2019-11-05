@@ -178,6 +178,16 @@ if (!$conference_activity) {
     if (!$is_editor) {
         list($sessionId, $sessionToken) = colmooc_register_student($conference_id); // STEP 2
     }
+    $laSessionId = false;
+    $laSessionToken = false;
+    $colmooc_teacher_la_url = null;
+    if ($is_editor && $conference_agent && $agent_id && !isset($_GET['create_agent']) && !isset($_GET['edit_agent'])) {
+        list($laSessionId, $laSessionToken) = colmooc_add_teacher_lasession();
+        if ($laSessionId && $laSessionToken) {
+            // Redirect teacher to colMOOC learning analytics
+            $colmooc_teacher_la_url = $colmoocapp->getParam(ColmoocApp::ANALYTICS_URL)->value() . "/?lasession_id=" . $laSessionId . "&lasession_token=" . $laSessionToken;
+        }
+    }
 
     $tool_content .= action_bar(array(
         array('title' => $langCreateAgent,
@@ -202,6 +212,11 @@ if (!$conference_activity) {
             'url' => "chat.php?conference_id=" . $conference_id,
             'level' => 'primary-label',
             'show' => $is_editor && $conference_agent && $agent_id && isset($_GET['pair_log'])),
+        array('title' => $langLearningAnalytics,
+            'url' => '#',
+            'level' => 'primary-label',
+            'button-class' => 'btn-default teacherLearningAnalytics',
+            'show' => $is_editor && $laSessionId && $laSessionToken),
         array('title' => $langChat,
             'url' => '#',
             'level' => 'primary-label',
@@ -302,6 +317,8 @@ if (!$conference_activity) {
         $tool_content .= "</table></div>";
     }
 
+    $colmooc_url = null;
+    $chatindex_url = null;
     if (!$is_editor) {
         if ($sessionId && $sessionToken) {
             // Redirect student to colMOOC chat
@@ -382,6 +399,10 @@ $head_content .= "<script>
         $('.studentChat').click(function (e) {
             window.open('" . $colmooc_url . "', '_blank');
             window.location.href = '" . $chatindex_url . "';
+        });
+        
+        $('.teacherLearningAnalytics').click(function (e) {
+            window.open('" . $colmooc_teacher_la_url . "', '_blank');
         });
     });
     </script>";
