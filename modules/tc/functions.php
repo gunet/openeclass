@@ -820,6 +820,7 @@ function delete_bbb_session($id)
  * @global type $langBBBCreationRoomError
  * @global type $langBBBConnectionError
  * @global type $langBBBConnectionErrorOverload
+ * @global type $langBBBWelcomeMsg
  * @param type $title
  * @param type $meeting_id
  * @param type $mod_pw
@@ -828,7 +829,7 @@ function delete_bbb_session($id)
  */
 function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
 {
-    global $langBBBCreationRoomError, $langBBBConnectionError, $course_code, $langBBBConnectionErrorOverload;
+    global $langBBBCreationRoomError, $langBBBConnectionError, $course_code, $langBBBWelcomeMsg, $langBBBConnectionErrorOverload;
 
     $run_to = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s", $meeting_id)->running_at;
     if (isset($run_to)) {
@@ -868,12 +869,12 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             'meetingName' => $title, // REQUIRED
             'attendeePw' => $att_pw, // Match this value in getJoinMeetingURL() to join as attendee.
             'moderatorPw' => $mod_pw, // Match this value in getJoinMeetingURL() to join as moderator.
-            'welcomeMsg' => '', // ''= use default. Change to customize.
+            'welcomeMsg' => $langBBBWelcomeMsg, // ''= use default. Change to customize.
             'dialNumber' => '', // The main number to call into. Optional.
             'voiceBridge' => '', // PIN to join voice. Optional.
             'webVoice' => '', // Alphanumeric to join voice. Optional.
             'logoutUrl' => '', // Default in bigbluebutton.properties. Optional.
-            'maxParticipants' => '-1', // Optional. -1 = unlimitted. Not supported in BBB. [number]
+            'maxParticipants' => '-1', // Optional. -1 = unlimited. Not supported in BBB. [number]
             'record' => $record, // New. 'true' will tell BBB to record the meeting.
             'duration' => '0', // Default = 0 which means no set duration in minutes. [number]
             //'meta_category' => '', // Use to pass additional info to BBB server. See API docs.
@@ -917,7 +918,7 @@ function bbb_join_moderator($meeting_id, $mod_pw, $att_pw, $surname, $name) {
         $salt = $res->server_key;
         $bbb_url = $res->api_url;
 
-        // Instatiate the BBB class:
+        // Instantiate the BBB class:
         $bbb = new BigBlueButton($salt, $bbb_url);
 
         $joinParams = array(
@@ -1014,7 +1015,7 @@ function bbb_session_running($meeting_id)
         return false;
     }
 
-    // Instatiate the BBB class:
+    // instantiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
     // Get the URL to join meeting:
     try {
@@ -1049,30 +1050,27 @@ function date_diff_in_minutes($start_date, $current_date) {
  * @param type $ip
  * @return int
  */
-function get_connected_users($salt, $bbb_url, $ip)
+function get_connected_users($salt, $bbb_url)
 {
-    $socket = @fsockopen($ip, '80', $errorNo, $errorStr, 3);
-    if (!$socket) {
-        return 0;
-    } else {
-        // Instatiate the BBB class:
-        $bbb = new BigBlueButton($salt,$bbb_url);
 
-        $meetings = $bbb->getMeetingsWithXmlResponseArray();
-        if (!$meetings) {
-            $meetings = array();
-        }
-        $sum = 0;
-        foreach ($meetings as $meeting) {
-            $mid = $meeting['meetingId'];
-            $pass = $meeting['moderatorPw'];
-            if ($mid != null) {
-                $info = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,array('meetingId' => $mid, 'password' => $pass));
-                $sum += $info['participantCount'];
-            }
-        }
-        return $sum;
+    $sum = 0;
+    // instantiate the BBB class
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    $meetings = $bbb->getMeetingsWithXmlResponseArray();
+    if (!$meetings) {
+        $meetings = array();
     }
+    foreach ($meetings as $meeting) {
+        $mid = $meeting['meetingId'];
+        $pass = $meeting['moderatorPw'];
+        if ($mid != null) {
+            $info = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,array('meetingId' => $mid, 'password' => $pass));
+            $sum += $info['participantCount'];
+        }
+    }
+    return $sum;
+
 }
 
 /**
@@ -1084,7 +1082,7 @@ function get_connected_users($salt, $bbb_url, $ip)
 function get_active_rooms($salt,$bbb_url)
 {
     $sum = 0;
-    // Instatiate the BBB class:
+    // instantiate the BBB class
     $bbb = new BigBlueButton($salt,$bbb_url);
 
     $meetings = $bbb->getMeetingsWithXmlResponseArray();
@@ -1145,7 +1143,7 @@ function publish_video_recordings($course_id, $id)
                 curl_close($ch);
 
                 $xml = simplexml_load_string($recs);
-                // If not set it means that there is no video recording.
+                // If not set, it means that there is no video recording.
                 // Skip and search for next one
                 if (isset($xml->recordings->recording/*->playback->format->url*/)) {
                    foreach($xml->recordings->recording as $recording) {
@@ -1203,7 +1201,7 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
 {
     global $langBBBGetUsersError, $langBBBConnectionError, $course_code;
 
-    // Instatiate the BBB class:
+    // Instantiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
 
     $infoParams = array(
@@ -1318,13 +1316,13 @@ function is_bbb_server_available($server_id, $participants)
         $users_to_join = $participants;
     }
 
-    $row = Database::get()->querySingle("SELECT id, ip, server_key, api_url, max_rooms, max_users
+    $row = Database::get()->querySingle("SELECT id, server_key, api_url, max_rooms, max_users
                                     FROM tc_servers WHERE id = ?d AND enabled = 'true'", $server_id);
     if ($row) {
         $max_rooms = $row->max_rooms;
         $max_users = $row->max_users;
         // get connected users
-        $connected_users = get_connected_users($row->server_key, $row->api_url, $row->ip);
+        $connected_users = get_connected_users($row->server_key, $row->api_url);
         // get active rooms
         $active_rooms = get_active_rooms($row->server_key ,$row->api_url);
         //cases
