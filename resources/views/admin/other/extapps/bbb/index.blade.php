@@ -7,8 +7,7 @@
             <table class='table-default'>
                 <thead>
                 <tr>
-                    <th class = 'text-center'>{{ trans('langHost') }}</th>
-                    <th class = 'text-center'>IP</th>
+                    <th class = 'text-center'>API URL</th>
                     <th class = 'text-center'>{{ trans('langBBBEnabled') }}</th>
                     <th class = 'text-center'>{{ trans('langOnlineUsers') }}</th>
                     <th class = 'text-center'>{{ trans('langMaxRooms') }}</th>
@@ -18,8 +17,7 @@
                 </thead>
         @foreach ($bbb_servers as $bbb_server)
             <tr>
-                <td>{{ $bbb_server->hostname }}</td>
-                <td>{{ $bbb_server->ip }}</td>
+                <td>{{ $bbb_server->api_url }}</td>
                 <td class='text-center'>{{ $bbb_server->enabled == 'true' ? trans('langYes') : trans('langNo') }}</td>
                 <td class='text-center'>{{ get_connected_users($bbb_server->server_key, $bbb_server->api_url, $bbb_server->ip) }}</td>
                 <td class='text-center'>{{ $bbb_server->max_rooms }}</td>

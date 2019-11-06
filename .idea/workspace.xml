@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="077e6b68-2734-40e5-9e60-a465731a6080" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/openeclass.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/openeclass.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lang/el/messages.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/el/messages.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lang/en/messages.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/en/messages.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/admin/bbbmoduleconf.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin/bbbmoduleconf.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/tc/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tc/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/other/extapps/bbb/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/other/extapps/bbb/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/other/extapps/bbb/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/other/extapps/bbb/index.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +88,6 @@
       <path value="$PROJECT_DIR$/vendor/psr/simple-cache" />
       <path value="$PROJECT_DIR$/vendor/dropbox/dropbox-sdk" />
       <path value="$PROJECT_DIR$/vendor/doctrine/inflector" />
-      <path value="$PROJECT_DIR$/vendor/pclzip/pclzip" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-util" />
       <path value="$PROJECT_DIR$/vendor/philo/laravel-blade" />
       <path value="$PROJECT_DIR$/vendor/hoa/exception" />
@@ -101,6 +108,10 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/lexer" />
       <path value="$PROJECT_DIR$/vendor/hoa/ustring" />
       <path value="$PROJECT_DIR$/vendor/hautelook/phpass" />
+      <path value="$PROJECT_DIR$/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/vendor/markbaker/matrix" />
     </include_path>
   </component>
   <component name="ProjectId" id="1SyJxCeYUe8RkHet3Znk5O395mY" />
@@ -132,6 +143,7 @@
       <updated>1572530146451</updated>
       <workItem from="1572530153101" duration="1470000" />
       <workItem from="1572866156547" duration="3925000" />
+      <workItem from="1573211088571" duration="2611000" />
     </task>
     <servers />
   </component>

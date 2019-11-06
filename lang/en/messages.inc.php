@@ -4650,6 +4650,7 @@ $langAddServer = "Add server";
 $langNewBBBSessionEnd = "End";
 $langBBBConnectionErrorOverload = "Connection to teleconference server is not possible. Either it is not enabled or no more users can connect.";
 $langBBBEndHelpBlock = "Click to set Teleconference End Date";
+$langBBBWelcomeMsg = "Welcome to Teleconference!";
 $langUseOfTc = "Use server";
 $langToAllCourses = "For all $langsCourses";
 $langToAllCoursesInfo = "Select whether server will be available to all $langsCourses or only a subset.";
