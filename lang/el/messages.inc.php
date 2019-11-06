@@ -4944,6 +4944,7 @@ $langBBBServerAlertMaxUsers = "Παρακαλώ πληκτρολογείστε �
 $langBBBServerAlertOrder = "Παρακαλώ πληκτρολογείστε σωστά τη σειρά επιλογής του εξυπηρετητή";
 $langBBBMaxUsersJoinError = "Έχει συμπληρωθεί ο μέγιστος αριθμός συμμετεχόντων στην τηλεσυνεργασία. Παρακαλώ δοκιμάστε να συνδεθείτε αργότερα ή επικοινωνήστε με τον $langsOfTeacher του $langsOfCourse.";
 $langBBBEndHelpBlock = "Κάντε κλικ για να ορίσετε Ημερομηνία Λήξης Τηλεσυνεργασίας";
+$langBBBWelcomeMsg = "Καλώς ήρθατε στην Υπηρεσία Τηλεσυνεργασίας!";
 $langUseOfTc = "Χρήση του εξυπηρέτη";
 $langToAllCourses = "Σε όλα τα $langsCourses";
 $langToAllCoursesInfo = "Επιλέξτε αν ο εξυπηρέτης θα μπορεί να χρησιμοποιείται από όλα τα $langsCourses ή από ορισμένα";
