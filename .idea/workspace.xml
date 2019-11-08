@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="077e6b68-2734-40e5-9e60-a465731a6080" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/video/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/video/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/video/showQuota.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/modules/video/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/modules/video/index.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -134,7 +131,7 @@
       <option name="presentableId" value="Default" />
       <updated>1572530146451</updated>
       <workItem from="1572530153101" duration="1470000" />
-      <workItem from="1572866156547" duration="3607000" />
+      <workItem from="1572866156547" duration="3925000" />
     </task>
     <servers />
   </component>
