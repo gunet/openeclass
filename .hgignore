@@ -18,6 +18,7 @@ syntax: regexp
 ^laravel/storage/logs/
 
 ^nbproject/private/
+^\.idea/
 ^template/default/.sass-cache/
 
 ^\.buildpath$
