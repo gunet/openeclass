@@ -23,7 +23,7 @@
 require_once 'genericrequiredparam.php';
 
 class AutojudgeApp extends ExtApp {
-    public static $ServiceNames = array("AutojudgeDnnaApp", "AutojudgeHackerearthApp", "AutojudgeCodepadApp");
+    public static $ServiceNames = array("AutojudgeDnnaApp", "AutojudgeHackerearthApp");
 
     public function __construct() {
         parent::__construct();
