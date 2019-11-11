@@ -858,9 +858,17 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
         redirect_to_home_page("modules/tc/index.php?course=$course_code");
     } else { // create the meeting
         $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d AND `type`='bbb'", $run_to);
-
         $salt = $res->server_key;
         $bbb_url = $res->api_url;
+        $duration = 0;
+        $r = Database::get()->querySingle("SELECT start_date, end_date FROM tc_session WHERE meeting_id = ?s", $meeting_id);
+        if (($r->start_date != null) and ($r->end_date != null)) {
+            $date_start = new DateTime($r->start_date);
+            $date_end = new DateTime($r->end_date);
+            $hour_duration = $date_end->diff($date_start)->h; // hour
+            $min_duration = $date_end->diff($date_start)->i; // minutes
+            $duration = $hour_duration*60 + $min_duration;
+        }
 
         $bbb = new BigBlueButton($salt, $bbb_url);
 
@@ -876,9 +884,10 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             'logoutUrl' => '', // Default in bigbluebutton.properties. Optional.
             'maxParticipants' => '-1', // Optional. -1 = unlimited. Not supported in BBB. [number]
             'record' => $record, // New. 'true' will tell BBB to record the meeting.
-            'duration' => '0', // Default = 0 which means no set duration in minutes. [number]
+            'duration' => $duration // Default = 0 which means no set duration in minutes. [number]
             //'meta_category' => '', // Use to pass additional info to BBB server. See API docs.
         );
+
 
         // Create the meeting and get back a response:
         $result = $bbb->createMeetingWithXmlResponseArray($creationParams);
