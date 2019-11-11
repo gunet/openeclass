@@ -410,7 +410,6 @@ if (!isset($_POST['submit'])) {
             <p>$langSettings</p>
                 <ul id='forum-category'>
                     <li><span><b>$langUsername:</b></span> <span>$uname</span></li>
-                    <li><span><b>$langPass:</b></span> <span>$password</span></li>
                     <li><span><b>$langAddress $siteName:</b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
                 </ul>
                 <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick <a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id</a>" : "") .
