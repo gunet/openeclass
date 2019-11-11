@@ -261,7 +261,7 @@ elseif(isset($_GET['choice']))
             $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
             if ($tc_type == 'bbb') { // if tc server is `bbb`
                 $mod_pw = $sess->mod_pw;
-                $record = $sess->record;
+                $record = ($serv->enable_recordings == 'true')? $sess->record: 'false';
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
                     create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
                 }
