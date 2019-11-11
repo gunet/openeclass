@@ -639,7 +639,7 @@ function bbb_session_details() {
                 $joinLink = q($title);
             }
 
-            if ($record == 'true' and has_enable_recordings($server_id) == 'false') {
+            if ($record == 'false' or has_enable_recordings($server_id) == 'false') {
                 $warning_message_record = "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBNoServerForRecording'></span>";
             } else {
                 $warning_message_record = '';
