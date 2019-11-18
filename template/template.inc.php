@@ -170,7 +170,7 @@ class Template {
      * @access    public
      * @return    void
      */
-    
+
     public function __construct($root = ".", $unknowns = "remove") {
         if ($this->debug & 4) {
             echo "<p><b>Template:</b> root = $root, unknowns = $unknowns</p>\n";
@@ -496,8 +496,7 @@ class Template {
         }
 
         // quote the replacement strings to prevent bogus stripping of special chars
-        reset($this->varvals);
-        while (list($k, $v) = each($this->varvals)) {
+        foreach($this->varvals as $k => $v) {
             $varvals_quoted[$k] = preg_replace(array('/\\\\/', '/\$/'), array('\\\\\\\\', '\\\\$'), $v);
         }
 
