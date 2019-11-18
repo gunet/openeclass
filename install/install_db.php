@@ -1986,7 +1986,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `request_field` (
     FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `request_field_data` (
-    `id` INT(11) UNSIGNED NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `request_id` INT(11) UNSIGNED NOT NULL,
     `field_id` INT(11) UNSIGNED NOT NULL,
     `data` TEXT NOT NULL,
@@ -2017,20 +2017,6 @@ $db->query("CREATE TABLE IF NOT EXISTS request_action (
     PRIMARY KEY(id),
     FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
-
-$db->query("CREATE TABLE `user_settings` ( 
-    `setting_id` int(11) NOT NULL, 
-    `user_id` int(11) NOT NULL, 
-    `course_id` int(11) DEFAULT NULL, 
-    `value` int(11) NOT NULL DEFAULT '0', 
-    PRIMARY KEY (`setting_id`,`user_id`), 
-    KEY `user_id` (`user_id`), 
-    KEY `course_id` (`course_id`), 
-    CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
-      ON DELETE CASCADE ON UPDATE CASCADE, 
-    CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
-      ON DELETE CASCADE ON UPDATE CASCADE ) $tbl_options");
-  
 
 $db->query("CREATE TABLE `user_settings` ( 
   `setting_id` int(11) NOT NULL, 

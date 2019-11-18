@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 4.0
  * E-learning and Course Management System
@@ -325,66 +326,58 @@ function importThemes($themes = null) {
  */
 function installTheme($themesDir, $file_name) {
     global $webDir;
-    if (copy("$themesDir/$file_name", "$webDir/courses/theme_data/$file_name")) {
-        $archive = new PclZip("$webDir/courses/theme_data/$file_name");
-        if (!$archive->extract(PCLZIP_OPT_PATH, "$webDir/courses/theme_data/temp")) {
-            die("Error : ".$archive->errorInfo(true));
-        } else {
-            unlink("$webDir/courses/theme_data/$file_name");
-            $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
-            unlink("$webDir/courses/theme_data/temp/theme_options.txt");
-            $theme_options = unserialize(base64_decode($base64_str));
-            $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
-            @rename("$webDir/courses/theme_data/temp/$theme_options->id", "$webDir/courses/theme_data/$new_theme_id");
-            recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
-            removeDir("$webDir/courses/theme_data/temp");
-        }
+
+    $tempdir = "$webDir/courses/theme_data/temp";
+    $archive = new ZipArchive;
+    if (!$archive->open("$themesDir/$file_name") or !$archive->extractTo($tempdir)) {
+        die('Error: ' . $archive->getStatusString());
     }
+    $base64_str = file_get_contents("$tempdir/theme_options.txt");
+    unlink("$tempdir/theme_options.txt");
+    $theme_options = unserialize(base64_decode($base64_str));
+    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)",
+        $theme_options->name, $theme_options->styles)->lastInsertID;
+    rename($tempdir . '/' . $theme_options->id, "$webDir/courses/theme_data/$new_theme_id");
+    rmdir($tempdir);
 }
 
 
 /**
- * @brief install ready to use certificate templates 
+ * @brief install ready to use certificate templates
  */
 function installCertTemplates($root_dir) {
-        
-    
     $cert_default_dir = $root_dir . "/template/default/img/game";
-    chdir($cert_default_dir);
-    foreach (glob("*.zip") as $zipfile) {
-        if (copy("$zipfile", "$root_dir" . CERT_TEMPLATE_PATH . "$zipfile")) {
-            $archive = new PclZip("$root_dir" . CERT_TEMPLATE_PATH . "$zipfile");
-            if ($archive->extract(PCLZIP_OPT_PATH , "$root_dir" . CERT_TEMPLATE_PATH)) {
-                unlink("$root_dir" . CERT_TEMPLATE_PATH . "$zipfile");                
-            } else {
-                die("Error : ".$archive->errorInfo(true));
-            }
+    foreach (glob("$cert_default_dir/*.zip") as $zipfile) {
+        $archive = new ZipArchive;
+        if (!$archive->open($zipfile) or !$archive->extractTo($root_dir . CERT_TEMPLATE_PATH)) {
+          die('Error: ' . $archive->getStatusString());
         }
     }
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename, orientation) VALUES ('Πρότυπο 1', '', 'certificate1.html', 'L')");
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename, orientation) VALUES ('Πρότυπο 2', '', 'certificate2.html', 'L')");
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename, orientation) VALUES ('Πρότυπο 3', '', 'certificate3.html', 'P')");
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename, orientation) VALUES ('Πρότυπο 4', '', 'certificate4.html', 'L')");    
-    Database::get()->query("INSERT INTO certificate_template(name, description, filename, orientation) VALUES ('Πρότυπο 5', '', 'certificate5.html', 'L')");    
+    Database::get()->query("INSERT INTO certificate_template
+        (name, description, filename, orientation) VALUES
+        ('Πρότυπο 1', '', 'certificate1.html', 'L'),
+        ('Πρότυπο 2', '', 'certificate2.html', 'L'),
+        ('Πρότυπο 3', '', 'certificate3.html', 'P'),
+        ('Πρότυπο 4', '', 'certificate4.html', 'L'),
+        ('Πρότυπο 5', '', 'certificate5.html', 'L')");
 }
 
 /**
- * install ready to use badge icons 
+ * install ready to use badge icons
  */
 function installBadgeIcons($root_dir) {
-        
-    
     $cert_default_dir = $root_dir . "/template/default/img/game";
-    chdir($cert_default_dir);
-    foreach (glob("*.png") as $icon) {
-        if (!copy("$icon", "$root_dir" . BADGE_TEMPLATE_PATH . "$icon")) {
+    foreach (glob("$cert_default_dir/*.png") as $icon) {
+        $iconname = preg_replace('|.*/(.*)\.png|', '$1', $icon);
+        $filename = $iconname . '.png';
+        if (!copy($icon, $root_dir . BADGE_TEMPLATE_PATH . $filename)) {
             die("Error copying badge icon!");
         }
-        $iconname = substr($icon, 0, -4);
-        Database::get()->query("INSERT INTO badge_icon(name, description, filename) VALUES (?s, '', ?s)", $iconname, $icon);
+        Database::get()->query("INSERT INTO badge_icon
+            (name, description, filename) VALUES (?s, '', ?s)",
+            $iconname, $filename);
     }
 }
-
 
 
 function setGlobalContactInfo() {
@@ -474,55 +467,45 @@ function updateAnnouncementSticky( $table ) {
     }
 }
 
+/**
+ * Create Stored Procedures
+ */
 function refreshHierarchyProcedures() {
     Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
 
     Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
-    Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
-                                IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-                                IN p_order_priority INT(11))
-                            LANGUAGE SQL
-                            BEGIN
-                                DECLARE lft, rgt INT(11);
+    Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
+                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
+                    IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                LANGUAGE SQL
+                BEGIN
+                    DECLARE lft, rgt INT(11);
 
-                                SET lft = parentlft + 1;
-                                SET rgt = parentlft + 2;
+                    SET lft = parentlft + 1;
+                    SET rgt = parentlft + 2;
 
-                                CALL shift_right(parentlft, 2, 0);
+                    CALL shift_right(parentlft, 2, 0);
 
-                                INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
-                            END");
+                    INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
+                END");
 
-    Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-    Database::get()->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
-                                IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
-                                IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                            LANGUAGE SQL
-                            BEGIN
-                                DECLARE lft, rgt INT(11);
-
-                                SET lft = parentlft + 1;
-                                SET rgt = parentlft + 2;
-
-                                CALL shift_right(parentlft, 2, 0);
-
-                                INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
-                            END");
 
     Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
-    Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT,
-                                IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                                IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                            LANGUAGE SQL
-                            BEGIN
-                                UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
-                                    code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                                    order_priority = p_order_priority WHERE id = p_id;
+    Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
+                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
+                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
+                    IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                LANGUAGE SQL
+                BEGIN
+                    UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
+                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                        order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
 
-                                IF nodelft <> parentlft THEN
-                                    CALL move_nodes(nodelft, p_lft, p_rgt);
-                                END IF;
-                            END");
+                    IF nodelft <> parentlft THEN
+                        CALL move_nodes(nodelft, p_lft, p_rgt);
+                    END IF;
+                END");
+
 
     Database::get()->query("DROP PROCEDURE IF EXISTS `delete_node`");
     Database::get()->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
