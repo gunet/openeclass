@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.7
+ * Open eClass 3.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2019  Greek Universities Network - GUnet
@@ -154,7 +154,7 @@ if (file_exists($disk_path)) {
             not_found(preg_replace('/^.*file\.php/', '', $uri));
             exit();
         }
-        
+
         $is_android = false;
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $useragent=$_SERVER['HTTP_USER_AGENT'];
@@ -162,7 +162,6 @@ if (file_exists($disk_path)) {
                 $is_android = true;
             }
         }
-        
 
         if ($is_in_lpmode && $is_android) {
             require_once 'include/lib/fileDisplayLib.inc.php';
@@ -195,32 +194,31 @@ if (file_exists($disk_path)) {
 }
 
 function check_cours_access() {
-    global $course_code, $uid, $uri;
+    global $course_code, $uid, $uri, $urlAppend;
 
     if (!$uid && !isset($course_code)) {
         $course_code = $_SESSION['dbname'];
     }
 
-    $cours = Database::get()->querySingle("SELECT id, code, visible FROM `course` WHERE code=?s", $course_code);
+    $course = Database::get()->querySingle("SELECT id, code, visible FROM `course` WHERE code = ?s", $course_code);
 
     // invalid lesson code
-    if (!$cours) {
-        redirect_to_home_page();
+    if (!$course) {
+        not_found(preg_replace('/^.*\.php/', '', $uri));
         exit;
     }
 
-    if ($cours->visible != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
-        require_once 'include/lib/forcedownload.php';
-        not_found(preg_replace('/^.*\.php/', '', $uri));
-        exit(0);
+    if ($course->visible != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
+        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+        redirect_to_home_page("main/login_form.php?next=" . urlencode($next));
     }
 
     if (!$uid) {
-        $_SESSION['course_id'] = $cours->id;
+        $_SESSION['course_id'] = $course->id;
         return; // do not do own course check if anonymous with access token
     }
 
-    switch ($cours->visible) {
+    switch ($course->visible) {
         case '2': return;  // cours is open
         case '1':
         case '0':
@@ -238,13 +236,13 @@ function check_cours_access() {
 
 function triggerGame($documentId) {
     global $course_id, $uid;
-    
+
     $eventData = new stdClass();
     $eventData->courseId = $course_id;
     $eventData->uid = $uid;
     $eventData->activityType = ViewingEvent::DOCUMENT_ACTIVITY;
     $eventData->module = MODULE_ID_DOCS;
     $eventData->resource = intval($documentId);
-    
+
     ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 }
