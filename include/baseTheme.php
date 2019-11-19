@@ -55,16 +55,8 @@ function view($view_file, $view_data = array()) {
     $require_editor, $langHomePage;
 
     // negative course_id might be set in common documents
-    if ($course_id < 1) {
-        $course_code = $course_id = null;
-    }
-
-    if (!isset($course_id)) {
-        $course_code = $course_id = null;
-    }
-
-    if (!isset($module_id)) {
-        $module_id = $module_visibility = null;
+    if (!isset($course_id) or !$course_id or $course_id < 1) {
+        $course_id = $course_code = null;
     }
 
     $pageTitle = $siteName;
@@ -90,8 +82,6 @@ function view($view_file, $view_data = array()) {
     $template_base = $urlAppend . 'template/' . $theme;
     if (isset($_SESSION['uname'])) {
         $uname = $_SESSION['uname'];
-    } else {
-        $uname = null;
     }
     if (isset($GLOBALS['leftNavExtras'])) {
         $eclass_leftnav_extras = $GLOBALS['leftNavExtras'];
@@ -240,8 +230,8 @@ function view($view_file, $view_data = array()) {
     }
 
     // Add Theme Options styles
-    $logo_img = $themeimg . '/eclass-new-logo.png';
-    $logo_img_small = $themeimg . '/logo_eclass_small.png';
+    $logo_img = $themeimg.'/eclass-new-logo.png';
+    $logo_img_small = $themeimg.'/logo_eclass_small.png';
     $container = 'container';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     $styles_str = '';
@@ -304,6 +294,11 @@ function view($view_file, $view_data = array()) {
                                 ($is_editor || isset($saved_is_editor) && $saved_is_editor) &&
                                 !(isset($require_course_admin) && $require_course_admin) &&
                                 !(isset($require_editor) && $require_editor);
+
+    if (!isset($module_id)) {
+        $module_id = null;
+        $module_visibility = false;
+    }
 
     $views = $webDir.'/resources/views';
     $cache = $webDir . '/storage/views';
@@ -536,7 +531,6 @@ function module_path($path) {
         return '/admin/search_user.php';
     }
 
-    $original_path = $path;
     $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
                         array('/', '/', ''), $path);
@@ -565,10 +559,6 @@ function module_path($path) {
     } elseif (isset($GLOBALS['course_code']) and
               strpos($path, '/courses/' . $GLOBALS['course_code']) !== false) {
         return 'course_home';
-    } elseif (strpos($path, '/lti_consumer/launch.php') !== false or
-              strpos($path, '/lti_consumer/load.php') !== false) {
-        $lti_path = str_replace(array($urlServer, $urlAppend, '&amp;'), array('/', '/', '&'), $original_path);
-        return $lti_path;
     }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
