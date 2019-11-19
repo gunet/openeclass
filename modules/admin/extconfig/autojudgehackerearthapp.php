@@ -26,7 +26,7 @@ require_once 'include/simplehtmldom/simple_html_dom.php';
 class AutojudgeHackerearthApp extends AutojudgeApp implements AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input) {
         //set POST variables
-        $url           = 'http://api.hackerearth.com/code/run/';
+        $url           = 'https://api.hackerearth.com/code/run/';
         $fields_string = null;
         $fields        = array(
             'client_secret' => q(get_config('autojudge_hackerEarthKey')),
