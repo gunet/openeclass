@@ -1842,6 +1842,8 @@ $langCheckFinished = 'Ο έλεγχος ολοκληρώθηκε.';
 $langRegradeAttemptsList = 'Εντοπίστηκαν ασυνέπειες στις βαθμολογίες και μπορεί να γίνει αναβαθμολόγηση στις παρακάτω προσπάθειες:';
 $langRegradeNotNeeded = 'Δεν απαιτείται αναβαθμολόγηση.';
 $langRegradeAll = 'Αναβαθμολόγηση όλων';
+$langHasAnswered = "έχει απαντηθεί";
+$langPendingAnswered = "εκκρεμεί απάντηση";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";

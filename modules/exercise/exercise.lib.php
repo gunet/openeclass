@@ -29,17 +29,17 @@
  * @global type $langColumnB
  * @global type $langMakeCorrespond
  * @global type $langInfoGrades
- * @global type $i
  * @global type $exerciseType
  * @global type $nbrQuestions
  * @global type $langInfoGrade
  * @param type $objQuestionTmp
  * @param type $exerciseResult
+ * @param type $question_number
  * @return type
  */
-function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
+function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_number) {
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
-    $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades, $i,
+    $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
     $exerciseType, $nbrQuestions, $langInfoGrade;
 
     $questionId = $objQuestionTmp->id;
@@ -62,10 +62,10 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
             <div class='panel panel-success qPanel' id='qPanel$questionId'>
               <div class='panel-heading'>
                 <h3 class='panel-title'>$langQuestion : ";
-                if ($exerciseType == 2) {
-                    $tool_content .= "$i / $nbrQuestions ($questionWeight $message)";
+                if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+                    $tool_content .= "$question_number / $nbrQuestions ($questionWeight $message)";
                 } else {
-                    $tool_content .= "$i ($questionWeight $message)";
+                    $tool_content .= "$question_number ($questionWeight $message)";
                 }                
               $tool_content .= "</h3></div>
               <div class='panel-body'>
