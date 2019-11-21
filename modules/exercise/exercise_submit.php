@@ -574,12 +574,15 @@ foreach ($questionList as $questionId) {
             $q_id = $questionList[$k];
             $t_question = new Question();
             $t_question->read($q_id);
-
             $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>";
-
+            if ($current_question_number == $k) { // we are in the current question
+                $round_border = "border-radius: 70%;";
+            } else {
+                $round_border = '';
+            }
             if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE)
                 and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) { // if question has answered button color is `blue``
-                $tool_content .= "<input class='btn btn-success' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
+                $tool_content .= "<input class='btn btn-success' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
             } elseif (($t_question->selectType() == FILL_IN_BLANKS or $t_question->selectType() == FILL_IN_BLANKS_TOLERANT)
                 and array_key_exists($q_id, $exerciseResult)) {
                 if (is_array($exerciseResult[$q_id])) {
@@ -592,7 +595,7 @@ foreach ($questionList as $questionId) {
                             break;
                         }
                     }
-                    $tool_content .= "<input class='$class' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
+                    $tool_content .= "<input class='$class' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
                 }
             } elseif ($t_question->selectType() == FREE_TEXT
                 and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
@@ -608,10 +611,10 @@ foreach ($questionList as $questionId) {
                             break;
                         }
                     }
-                    $tool_content .= "<input class='$class' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
+                    $tool_content .= "<input class='$class' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
                 }
             } else {
-                $tool_content .= "<input class='btn btn-default' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langPendingAnswered'>"; // button color is `gray`
+                $tool_content .= "<input class='btn btn-default' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langPendingAnswered'>"; // button color is `gray`
             }
             $tool_content .= "</span>";
             $k++;
