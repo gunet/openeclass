@@ -390,7 +390,6 @@ if (isset($_POST['formSent'])) {
 
     // inserts user's answers in the database and adds them in the $exerciseResult array which is returned
     $action = isset($paused_attempt) ? 'update' : 'insert';
-
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
     $questionNum = count($exerciseResult) + 1;
 
@@ -419,9 +418,9 @@ if (isset($_POST['formSent'])) {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }
 
-        // If time expired in sequential exercise we must add to the DB the non-given answers
-        // to the questions the student didn't had the time to answer
-        if ($time_expired && $exerciseType == MULTIPLE_PAGE_TYPE) {
+        // In sequential exercise we must add to the DB the non-given answers
+        // to questions the student didn't answered
+        if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             $objExercise->save_unanswered();
         }
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
