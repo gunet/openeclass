@@ -59,7 +59,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
     $questionTypeWord = $objQuestionTmp->selectTypeWord($answerType);
     $tool_content .= "
-            <div class='panel panel-success qPanel' id='qPanel$questionId'>
+            <div class='panel panel-default qPanel' id='qPanel$questionId'>
               <div class='panel-heading'>
                 <h3 class='panel-title'>$langQuestion : ";
                 if ($exerciseType == MULTIPLE_PAGE_TYPE) {
