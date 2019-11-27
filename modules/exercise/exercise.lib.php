@@ -57,27 +57,26 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     $questionName = $objQuestionTmp->selectTitle();
     $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
     $questionTypeWord = $objQuestionTmp->selectTypeWord($answerType);
+    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+        $qNumber = "$question_number / $nbrQuestions";
+    } else {
+        $qNumber = $question_number;
+    }
     $tool_content .= "
             <div class='panel panel-default qPanel' id='qPanel$questionId'>
               <div class='panel-heading'>
-                <h4 class='panel-title'>$langQuestion ";
-                if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-                    $tool_content .= "$question_number / $nbrQuestions";
-                } else {
-                    $tool_content .= "$question_number";
-                }                
-              $tool_content .= " <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
-                                    <span title='$langHasAnswered' id='qCheck$question_number'></span>
-                                </h4>
-                                </div>
-                <div class='panel-body'>
-                    <h4>
-                        " . q_math($questionName) . "
-                    </h4>
-                    $questionDescription
-                    <div class='text-center'>
-                        ".(file_exists($picturePath . '/quiz-' . $questionId) ? "<img src='../../$picturePath/quiz-$questionId'>" : "")."
-                    </div>";
+                <h4 class='panel-title'>$langQuestion $qNumber
+                    <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
+                    <span title='$langHasAnswered' id='qCheck$question_number'></span>
+                </h4>
+            </div>
+            <div class='panel-body'>
+                <h4>" . q_math($questionName) . "</h4>
+                $questionDescription
+                <div class='text-center'>" .
+                    (file_exists($picturePath . '/quiz-' . $questionId) ?
+                        "<img src='../../$picturePath/quiz-$questionId'>" : "") . "
+                </div>";
 
     // construction of the Answer object
     $objAnswerTmp = new Answer($questionId);
@@ -111,7 +110,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
         $answer = $objAnswerTmp->selectAnswer($answerId);
         if (is_null($answer) or $answer == '') {  // don't display blank or empty answers
             continue;
-        }        
+        }
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
@@ -222,12 +221,14 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     $tool_content .= "
     <script>
         function tinyMceCallback(editor) {
-            editor.on('Change', function () {
-               if (this.getContent({format: 'text'}).trim() == '') {
-                   console.log($(this).closest('.qPanel').id);
-                   //$(\"#\"+button_id).removeClass('btn-default').addClass('btn-success');
-                    //$(\"#\"+check_id).addClass('fa fa-check');
-               }
+            editor.on('Change', function (e) {
+                if (this.getContent({format: 'text'}).trim() != '') {
+                    var qPanel = $('#qPanel' + e.target.id.split(/[\[\]]/)[1]);
+                    var qCheck = qPanel.find('span').first();
+                    var qButton = $('#' + qCheck.attr('id').replace('qCheck', 'q_num'));
+                    qCheck.addClass('fa fa-check');
+                    qButton.removeClass('btn-default').addClass('btn-success');
+                }
             });
         }
     </script>";
