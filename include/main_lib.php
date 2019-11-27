@@ -2060,7 +2060,10 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 init_instance_callback: function(editor) {
                     var parent = $(editor.contentAreaContainer.parentElement);
                     (editorToggleSecondToolbar(editor))();
-                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:1px solid #ddd');";
+                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:1px solid #ddd');
+                    if (typeof tinyMceCallback !== 'undefined') {
+                        tinyMceCallback(editor);
+                    }";
         if ($onFocus) {
             $focus_init .= "parent.find('.mce-toolbar-grp').hide();";
         }

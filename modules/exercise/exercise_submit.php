@@ -42,6 +42,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
+
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
@@ -540,6 +541,20 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             WHERE eurid = ?d AND is_answered = 2', $eurid);
     }
 }
+
+
+if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering buttons
+    $k = 1;
+    $tool_content .= "<div style='margin-bottom: 20px;'>";
+    while ($k <= count($questionList)) {
+        $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>";
+        $tool_content .= "<button type='button' class='btn btn-default' id='q_num$k'>$k</button>";
+        $tool_content .= "</span>";
+        $k++;
+    }
+    $tool_content .= "</div>";
+}
+
 
 $i = 0;
 foreach ($questionList as $questionId) {

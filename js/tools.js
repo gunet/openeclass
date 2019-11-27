@@ -493,6 +493,71 @@ function exercise_init_countdown(params) {
     }
 }
 
+
+/**
+ * @brief update question number button color (type = 'matching', 'fill-in-blanks')
+ * @param question_number
+ * @param question_id
+ */
+function questionUpdateListener(question_number, question_id) {
+
+    var button_id = "q_num" + question_number;
+    var qpanel_id = "qPanel" + question_id;
+    var check_id = "qCheck" + question_number; // `check` icon
+
+    $(function() {
+        $.ajax({
+            url: 'exercise_submit.php',
+            success: function() {
+                var el = $("#"+qpanel_id+" :input");
+                answered = true;
+                if (el.attr('type') == 'text') {
+                    // Text inputs are fill-in-blanks questions:
+                    // if any remain empty, question remains unanswered
+                    el.siblings('input').each(function () {
+                        if (this.value == '') {
+                            answered = false;
+                        }
+                    });
+                } else if (el.is('select')) {
+                    // Selects are matching questions:
+                    // if any remain unset, question remains unanswered
+                    el.closest('.qPanel').find('select').each(function () {
+                        if (this.value == '0') {
+                            answered = false;
+                        }
+                    });
+                }
+                if (answered === true) {
+                    $("#"+button_id).removeClass('btn-default').addClass('btn-success');
+                    $("#"+check_id).addClass('fa fa-check');
+                }
+            }
+        });
+   });
+}
+
+
+/**
+ * @brief update question number button color (type = 'multiple choice', 'true/false')
+ * @param question_number
+ */
+function updateQuestionNavButton(question_number) {
+
+    var button_id = "q_num" + question_number; // button
+    var check_id = "qCheck" + question_number; // `check` icon
+    $(function() {
+        $.ajax({
+            url: 'exercise_submit.php',
+            success: function() {
+                $("#"+button_id).removeClass('btn-default').addClass('btn-success');
+                $("#"+check_id).addClass('fa fa-check');
+            }
+        });
+    });
+}
+
+
 function countdown(timer, callback) {
     int = setInterval(function() {
       timer.text(secondsToHms(timer.time--));
