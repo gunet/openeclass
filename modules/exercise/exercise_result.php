@@ -64,17 +64,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     total_score = (SELECT SUM(weight) FROM exercise_answer_record
                                         WHERE eurid = ?d)
                 WHERE eurid = ?d",
-                ATTEMPT_COMPLETED, $eurid, $eurid);            
+                ATTEMPT_COMPLETED, $eurid, $eurid);
         } else {
             // else increment total by just this grade
             Database::get()->query("UPDATE exercise_user_record
                 SET total_score = total_score + ?f WHERE eurid = ?d",
                 $grade, $eurid);
-        }        
-        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting 
+        }
+        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting
                              FROM exercise_user_record WHERE eurid = ?d", $eurid);
             // update gradebook
-        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);        
+        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
         triggerGame($course_id, $uid, $data->eid);
         exit();
     }
@@ -283,7 +283,7 @@ if (count($exercise_question_ids) > 0) {
         $objQuestionTmp = new Question();
         $is_question = $objQuestionTmp->read($row->question_id);
         // gets the student choice for this question
-        $choice = $objQuestionTmp->get_answers_record($eurid);        
+        $choice = $objQuestionTmp->get_answers_record($eurid);
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
         $questionWeighting = $objQuestionTmp->selectWeighting();
@@ -371,7 +371,7 @@ if (count($exercise_question_ids) > 0) {
                 } else {
                     $answer = standard_text_escape($answer);
                 }
-                
+
                 $grade = 0;
                 switch ($answerType) {
                     // for unique answer
@@ -559,7 +559,7 @@ if (count($exercise_question_ids) > 0) {
             if (!is_null($choice)) {
                 if ($answerType == FREE_TEXT && $is_editor) {
                     if (isset($question_graded) && !$question_graded) {
-                        $value = '';                    
+                        $value = '';
                     } else {
                         $value = round($questionScore, 2);
                     }
@@ -568,9 +568,9 @@ if (count($exercise_question_ids) > 0) {
                                    <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
                                    <strong>/$questionWeighting</strong>
                                     </span>";
+                } else {
+                    $tool_content .= "<span style='float:right;'>$langQuestionScore: <b>$question_weight</b></span>";
                 }
-            } else {
-                $tool_content .= "<span style='float:right;'>$langQuestionScore: <b>$question_weight</b></span>";
             }
         }
         $tool_content .= "</th></tr>";
@@ -657,7 +657,7 @@ if ($showScore) {
         </tr>
     </table>";
 }
-$tool_content .= "  
+$tool_content .= "
   <div class='text-center'>";
     if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
         $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>";
