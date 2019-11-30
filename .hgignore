@@ -4,7 +4,6 @@ syntax: regexp
 
 ^courses/
 ^video/
-^secure/
 ^config/.*\.php
 ^html/
 
