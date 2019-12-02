@@ -5288,3 +5288,5 @@ $langAnalyticsEndDescription = 'Start date to compute learnng analytics';
 $langAnalyticsMinValue = 'Lower value';
 $langAnalyticsMaxValue = 'Upper value';
 $langAnalyticsResourceNotAvailable = 'There are no resources';
+
+$langTagNotFound = 'This tag is not assigned to any resource.';
