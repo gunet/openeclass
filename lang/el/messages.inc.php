@@ -5442,6 +5442,7 @@ $langAutoJudgeConnectionError = "Σφάλμα σύνδεσης με την υπ�
 // Tags
 $langTag = 'Ετικέτα';
 $langTags = 'Ετικέτες';
+$langTagNotFound = 'Η ετικέτα δεν αντιστοιχεί σε κανέναν πόρο.';
 
 // Messages for external tools
 $langAnalyticsDescription = '<p>Μπορείτε να συνδέσετε την πλατφόρμα με κάποια

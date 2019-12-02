@@ -374,7 +374,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
     $t->set_var('LANG_PORTFOLIO', $langPortfolio);
 
-    $t->set_var('TOOL_NAME', $toolName);
+    $t->set_var('TOOL_NAME', q($toolName));
 
     if ($is_editor) {
         $t->set_var('ACTIVATE_MODULE', $mod_activation);
