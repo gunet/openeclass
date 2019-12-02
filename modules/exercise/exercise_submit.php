@@ -542,15 +542,12 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE) {
     }
 }
 
-
 if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering buttons
-    $k = 1;
     $tool_content .= "<div style='margin-bottom: 20px;'>";
-    while ($k <= count($questionList)) {
-        $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>";
-        $tool_content .= "<button type='button' class='btn btn-default' id='q_num$k'>$k</button>";
-        $tool_content .= "</span>";
-        $k++;
+    foreach ($questionList as $q_num => $q_id) {
+        $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>" .
+                             "<a href='#qPanel$q_id' class='btn btn-default qNavButton' id='q_num$q_num'>$q_num</a>" .
+                         "</span>";
     }
     $tool_content .= "</div>";
 }
@@ -727,6 +724,13 @@ if ($questionList) {
                 answeredIds: ". json_encode($answeredIds) .",
                 attemptsAllowed: $exerciseAllowedAttempts,
                 eurid: $eurid
+            });
+            $('.qNavButton').click(function (e) {
+                e.preventDefault();
+                var panel = $($(this).attr('href'));
+                $('.qPanel').removeClass('panel-info').addClass('panel-default');
+                panel.removeClass('panel-default').addClass('panel-info');
+                $('html').animate({ scrollTop: ($(panel).offset().top - 20) + 'px' });
             });
         });
 </script>";
