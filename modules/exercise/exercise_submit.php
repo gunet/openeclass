@@ -42,6 +42,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
+
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
@@ -390,7 +391,6 @@ if (isset($_POST['formSent'])) {
 
     // inserts user's answers in the database and adds them in the $exerciseResult array which is returned
     $action = isset($paused_attempt) ? 'update' : 'insert';
-
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
     $questionNum = count($exerciseResult) + 1;
 
@@ -419,9 +419,9 @@ if (isset($_POST['formSent'])) {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }
 
-        // If time expired in sequential exercise we must add to the DB the non-given answers
-        // to the questions the student didn't had the time to answer
-        if ($time_expired && $exerciseType == MULTIPLE_PAGE_TYPE) {
+        // In sequential exercise we must add to the DB the non-given answers
+        // to questions the student didn't answered
+        if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             $objExercise->save_unanswered();
         }
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
@@ -541,6 +541,17 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             WHERE eurid = ?d AND is_answered = 2', $eurid);
     }
 }
+
+if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering buttons
+    $tool_content .= "<div style='margin-bottom: 20px;'>";
+    foreach ($questionList as $q_num => $q_id) {
+        $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>" .
+                             "<a href='#qPanel$q_id' class='btn btn-default qNavButton' id='q_num$q_num'>$q_num</a>" .
+                         "</span>";
+    }
+    $tool_content .= "</div>";
+}
+
 
 $i = 0;
 foreach ($questionList as $questionId) {
@@ -713,6 +724,13 @@ if ($questionList) {
                 answeredIds: ". json_encode($answeredIds) .",
                 attemptsAllowed: $exerciseAllowedAttempts,
                 eurid: $eurid
+            });
+            $('.qNavButton').click(function (e) {
+                e.preventDefault();
+                var panel = $($(this).attr('href'));
+                $('.qPanel').removeClass('panel-info').addClass('panel-default');
+                panel.removeClass('panel-default').addClass('panel-info');
+                $('html').animate({ scrollTop: ($(panel).offset().top - 20) + 'px' });
             });
         });
 </script>";
