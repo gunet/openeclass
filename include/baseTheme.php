@@ -68,7 +68,7 @@ require_once 'tools.php';
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
     global $session, $course_code, $course_id, $helpTopic, $helpSubTopic,
         $is_editor, $langActivate, $langNote,$langPleaseWait,
-        $langAdmin, $langAdvancedSearch,
+        $langAdmin, $langAdministratorTools, $langAdvancedSearch,
         $langChooseLang, $langDeactivate, $langProfileMenu,
         $langEclass, $langHelp, $langUsageTerms, $langPrivacyPolicy,
         $langHomePage, $langLogin, $langLogout, $langMyAgenda,
@@ -267,6 +267,16 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_ANNOUNCEMENTS', q($GLOBALS['langMyAnnouncements']));
         $t->set_var('ANNOUNCEMENTS_LINK', $urlAppend . 'modules/announcements/myannouncements.php');
         if (!$is_embedonce) {
+            if ($GLOBALS['is_admin'] or
+                $GLOBALS['is_power_user'] or
+                $GLOBALS['is_usermanage_user'] or
+                $GLOBALS['is_departmentmanage_user']) {
+                    $t->set_var('LANG_ADMIN', q($langAdministratorTools));
+                    $t->set_var('ADMIN_LINK', $urlAppend . 'modules/admin/');
+                    $t->set_var('topMenuDivider', 'style="border-top: 1px solid #ddd"');
+            } else {
+                    $t->set_block('mainBlock', 'AdminToolsBlock', 'delete');
+            }
             if (get_config('personal_blog')) {
                 $t->set_var('LANG_MYBLOG', q($GLOBALS['langMyBlog']));
                 $t->set_var('MYBLOG_LINK', $urlAppend . 'modules/blog/index.php');

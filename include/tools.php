@@ -160,37 +160,6 @@ function loggedInMenu($rich=true) {
 
     $sideMenuGroup = array();
 
-    if ((isset($is_admin) and $is_admin) or
-            (isset($is_power_user) and $is_power_user) or
-            (isset($is_usermanage_user) and ($is_usermanage_user)) or
-            (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-        $sideMenuSubGroup = array();
-        $sideMenuText = array();
-        $sideMenuLink = array();
-        $sideMenuImg = array();
-
-        $arrMenuType = array();
-        $arrMenuType['type'] = 'text';
-        $arrMenuType['text'] = $GLOBALS['langAdminOptions'];
-        $arrMenuType['class'] = 'admin';
-        array_push($sideMenuSubGroup, $arrMenuType);
-
-        if ((isset($is_admin) and $is_admin) or
-                (isset($is_power_user) and $is_power_user) or
-                (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-            array_push($sideMenuText, "$GLOBALS[langAdminTool]");
-            array_push($sideMenuLink, $urlServer . 'modules/admin/');
-        }
-
-        array_push($sideMenuImg, "fa-caret-right");
-
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
-    }
-
     $sideMenuSubGroup = array();
     $sideMenuText = array();
     $sideMenuLink = array();
