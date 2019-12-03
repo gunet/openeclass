@@ -140,7 +140,6 @@ function view($view_file, $view_data = array()) {
             unset($item);
         }
 
-
         // Breadcrumb first entry (home / portfolio)
         if ($session->status != USER_GUEST) {
             if (isset($_SESSION['uid'])) {
@@ -300,6 +299,13 @@ function view($view_file, $view_data = array()) {
         $module_visibility = false;
     }
 
+    if (!isset($uname)) {
+        $uname = null;
+    }
+
+    $display_admin_tools = $GLOBALS['is_admin'] || $GLOBALS['is_power_user'] ||
+        $GLOBALS['is_usermanage_user'] || $GLOBALS['is_departmentmanage_user'];
+
     $views = $webDir.'/resources/views';
     $cache = $webDir . '/storage/views';
     $blade = new Blade($views, $cache);
@@ -312,7 +318,8 @@ function view($view_file, $view_data = array()) {
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
-            'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group');
+            'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
+            'display_admin_tools');
     $data = array_merge($global_data, $view_data);
     echo $blade->view()->make($view_file, $data)->render();
 }

@@ -97,9 +97,11 @@
                                     </a>
 
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
-                                        <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_courses.php"><span class="fa fa-graduation-cap fa-fw"></span>{{ trans('langMyCourses') }}</a>
+                                        @if ($display_admin_tools)
+                                        <li role="presentation" style="border-bottom: 1px solid #ddd">
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/admin/"><span class="fa fa-cog fa-fw"></span>{{ trans('langAdministratorTools') }}</a>
                                         </li>
+                                        @endif
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/message/index.php"><span class="fa fa-envelope-o fa-fw"></span>{{ trans('langMyDropBox') }}</a>
                                         </li>
