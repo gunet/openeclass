@@ -3697,7 +3697,7 @@ function action_button($options, $secondary_menu_options = array()) {
             }
             $element = ($url? "<a href='$url' class='btn $btn_class$disabled' $link_attrs>":
                 "<button class='btn $btn_class$disabled' $link_attrs>") .
-                "<span class='fa $icon$icon_class'>$btn_label</span>" .
+                "<span class='fa $icon$icon_class'></span>$btn_label" .
                 ($url? '</a>': '</button>');
             $primary_form_begin = $form_begin;
             $primary_form_end = $form_end;
