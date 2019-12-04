@@ -2113,6 +2113,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             $placeholders, $values);
     });
 
+    // delete deprecated course modules
+    Database::get()->query("DELETE FROM course_module WHERE module_id = " . MODULE_ID_DESCRIPTION);
+    Database::get()->query("DELETE FROM course_module WHERE module_id = " . MODULE_ID_LTI_CONSUMER);
+
     set_config('upgrade_begin', '');
     updateInfo(1, $langUpgradeSuccess);
 

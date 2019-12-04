@@ -658,7 +658,6 @@ if (count($categoryItems)) {
 
 // offline course setting
 $offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
-
 // content
 $tool_content .= "
 $action_bar
@@ -699,23 +698,34 @@ $action_bar
                         <div class='col-xs-6'>$license_holder</div>                         
                     </div>
                 </div>";
+                $edit_course_desc_link = '';
+                if ($is_editor) {
+                    if ($courseDescriptionVisible > 0) {
+                        $edit_course_desc_link = "&nbsp;&nbsp;" . icon('fa-pencil', $langCourseDescription,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
+                    } else {
+                        $edit_course_desc_link = "&nbsp;&nbsp;" . icon('fa-plus', $langAdd,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
+                    }
+                }
                 // course description
-                $tool_content .= "
+                if ((!$is_editor) and (!$courseDescriptionVisible)) { // if there is no course info don't display link to users;
+                    $tool_content .= "";
+                } else {
+                    $tool_content .= "
                     <div class='col-xs-12 course-below-wrapper'>
                         <div class='row text-muted course-below-info'>                            
                               <a role='button' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                               <h4 class='panel-heading panel-title'>
-                                    <span class='fa fa-chevron-down fa-fw'></span> $langCourseDescription 
+                                    <span class='fa fa-chevron-down fa-fw'></span> $langCourseDescription $edit_course_desc_link 
                               </h4>
                               </a>";
                             $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px;'>";
-                            foreach ($res as $row) {
-                                $tool_content .= "<h3 class='panel-title' style='margin: 1em 0 .5em;'>" . q($row->title) . "</h3>" . standard_text_escape($row->comments);
-                            }
+                                foreach ($res as $row) {
+                                    $tool_content .= "<h3 class='panel-title' style='margin: 1em 0 .5em;'>" . q($row->title) . "</h3>" . standard_text_escape($row->comments);
+                                }
                             $tool_content .= "</div>";
-                        $tool_content .= "</div>
-                    </div>";
-
+                        $tool_content .= "</div>";
+                    $tool_content .= "</div>";
+                }
                 $tool_content .= "
             </div>
         $panel_footer

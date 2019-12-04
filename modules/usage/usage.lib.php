@@ -701,7 +701,7 @@ function count_course_users($cid, $user_type = null){
  * @return string the title of the course module
 */
 function which_module($mid){
-    global $modules, $static_modules, $admin_modules;
+    global $modules, $static_modules, $admin_modules, $deprecated_modules;
 
     if (isset($modules[$mid])) {
         $m_title = $modules[$mid]['title'];
@@ -709,6 +709,8 @@ function which_module($mid){
         $m_title = $admin_modules[$mid]['title'];
     }  elseif (isset($static_modules[$mid])) {
         $m_title = $static_modules[$mid]['title'];
+    } elseif (isset($deprecated_modules[$mid]['title'])) {
+        $m_title = $deprecated_modules[$mid]['title'];
     } else {
         $m_title = 'module '.$mid;
     }
