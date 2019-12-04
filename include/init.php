@@ -437,7 +437,6 @@ $modules = array(
     MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
     MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'),
     MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-exchange'),
-    MODULE_ID_DESCRIPTION => array('title' => $langCourseDescription, 'link' => 'course_description', 'image' => 'fa-info-circle'),
     MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-question-circle'),
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-ellipsis-h'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia-w'),
@@ -502,6 +501,13 @@ $offline_course_modules = array(
     /*MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-columns')*/
 );
 
+// --------------------------------------------------
+// deprecated modules (used ONLY for old statistics)
+// --------------------------------------------------
+$deprecated_modules = array(
+    MODULE_ID_DESCRIPTION => array('title' => $langCourseDescription, 'link' => 'course_description', 'image' => 'fa-info-circle'),
+    MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => '', 'image' => '')
+);
 
 // the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {

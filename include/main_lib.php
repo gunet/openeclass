@@ -81,7 +81,7 @@ define('MODULE_ID_MESSAGE', 16);
 define('MODULE_ID_GLOSSARY', 17);
 define('MODULE_ID_EBOOK', 18);
 define('MODULE_ID_CHAT', 19);
-define('MODULE_ID_DESCRIPTION', 20);
+define('MODULE_ID_DESCRIPTION', 20); /* deprecated. used only for compatibility in statistics*/
 define('MODULE_ID_QUESTIONNAIRE', 21);
 define('MODULE_ID_LP', 23);
 define('MODULE_ID_USAGE', 24);
@@ -103,7 +103,7 @@ define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_COURSEPREREQUISITE', 49);
-define('MODULE_ID_LTI_CONSUMER', 50);
+define('MODULE_ID_LTI_CONSUMER', 50);  /* deprecated. used only for compatibility in statistics*/
 define('MODULE_ID_ANALYTICS', 51);
 define('MODULE_ID_REQUEST', 100);
 

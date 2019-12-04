@@ -334,6 +334,16 @@ if (is_sharing_allowed($course_id)) {
     }
 }
 
+$data['course_descriptions'] = $course_descriptions;
+$data['courseDescriptionVisible'] = $courseDescriptionVisible = count($course_descriptions);
+$data['edit_course_desc_link'] = '';
+if ($is_editor) {
+    if ($courseDescriptionVisible > 0) {
+        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-pencil', $langCourseDescription,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
+    } else {
+        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-plus', $langAdd,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
+    }
+}
 
 $data['departments'] = $course->getDepartmentIds($course_id);
 
@@ -366,7 +376,7 @@ switch ($visible) {
 }
 
 if ($uid and !$is_editor) {
-    $data['course_completion_id'] = $course_completion_id = has_course_completion(); // is course completion enabled?
+    $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion enabled?
     if ($course_completion_id) {
         $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
         $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";

@@ -118,6 +118,24 @@
                             </div>
                         </div>
                     </div>
+
+                    @if ($courseDescriptionVisible or $is_editor)
+                        <div class='col-xs-12 course-below-wrapper'>
+                            <div class='row text-muted course-below-info'>
+                                <a role='button' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
+                                    <h4 class='panel-heading panel-title'>
+                                        <span class='fa fa-chevron-down fa-fw'></span> {{ trans('langCourseDescription') }} {!! $edit_course_desc_link !!}
+                                    </h4>
+                                </a>
+                                <div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px;'>
+                                    @foreach ($course_descriptions as $row)
+                                        <h3 class='panel-title' style='margin: 1em 0 .5em;'>{{ q($row->title) }}</h3> {!! standard_text_escape($row->comments) !!}
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
                 @if(isset($rating_content) || isset($social_content) || isset($comment_content))
                     <div class='panel-footer'>
