@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,7 +28,7 @@ $guest_allowed = false;
 $require_help = true;
 $helpTopic = 'message';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
@@ -82,15 +81,15 @@ if ($course_id != 0) {
 }
 
 $courseParam = ($course_id === 0) ? '' : '?course=' . $course_code;
-    if (isset($_GET['mid'])) {
-        if ($courseParam != '') {
-            $msg_id_param = '&amp;mid='.intval($_GET['mid']);
-        } else {
-            $msg_id_param = '?mid='.intval($_GET['mid']);
-        }
+if (isset($_GET['mid'])) {
+    if ($courseParam != '') {
+        $msg_id_param = '&amp;mid='.intval($_GET['mid']);
     } else {
-        $msg_id_param = '';
+        $msg_id_param = '?mid='.intval($_GET['mid']);
     }
+} else {
+    $msg_id_param = '';
+}
 // action bar
 if (!isset($_GET['showQuota'])) {
     if (isset($_GET['upload'])) {
@@ -144,14 +143,14 @@ if (!isset($_GET['showQuota'])) {
     }
 }
 
-if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
+if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota']) {
     $pageName = $langQuotaBar;
-    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langDropBox);
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langDropBox);
     $space_released = 0;
 
     if ($is_editor && ($diskUsed/$diskQuotaDropbox >= 0.8)) { // 80% of quota
         $space_to_free = format_file_size($diskQuotaDropbox*0.8);
-        if (isset($_GET['free']) && $_GET['free'] == TRUE) { //free some space
+        if (isset($_GET['free']) && $_GET['free']) { // free some space
             $sql = "SELECT da.filename, da.id, da.filesize FROM dropbox_attachment as da, dropbox_msg as dm
                     WHERE da.msg_id = dm.id
                     AND dm.course_id = ?d
@@ -182,7 +181,7 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
     exit;
 }
 
-if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
+if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     if ($course_id == 0) {
         if (isset($_GET['type']) && $_GET['type'] == 'cm') {
             $type = 'cm';
@@ -288,8 +287,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 // find course groups (if any)
                 $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d ORDER BY name";
                 $result_g = Database::get()->queryArray($sql_g, $course_id);
-                foreach ($result_g as $res_g)
-                {
+                foreach ($result_g as $res_g) {
                     if (isset($_GET['group_id']) and $_GET['group_id'] == $res_g->id) {
                         $selected_group = " selected";
                     } else {
@@ -314,8 +312,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d AND `gm`.is_tutor = ?d";
 
                 $result_g = Database::get()->queryArray($sql_g, $course_id, $uid, 1);
-                foreach ($result_g as $res_g)
-                {
+                foreach ($result_g as $res_g) {
                     $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
                 }
 
@@ -346,7 +343,12 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                         unset($tutors[$r->user_id]);
                     }
                 }
-                $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . " (".q($r->username).")" . "</option>";
+                if (isset($_GET['user_id']) and $_GET['user_id'] == $r->user_id) {
+                    $selected_user = " selected";
+                } else {
+                    $selected_user = "";
+                }
+                $tool_content .= "<option value=" . $r->user_id . " $selected_user>" . q($r->name) . " (".q($r->username).")" . "</option>";
             }
             if (isset($tutors)) {
                 foreach ($tutors as $key => $value) {
@@ -459,7 +461,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         </fieldset>
         ". generate_csrf_token_form_field() ."
         </form></div>";
-    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
+    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         $head_content .= "<script type='text/javascript'>
             $(document).ready(function () {
 
@@ -482,7 +484,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             </script>
         ";
     }
-} else {//mailbox
+} else { //mailbox
     load_js('datatables');
     load_js('trunk8');
     $head_content .= "<script type='text/javascript'>
@@ -505,14 +507,27 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 
                             // trap links to open inside tabs
                             $('.tab-content').on('click', 'a', function(e) {
-                                if (e.currentTarget.className != 'outtabs' && e.currentTarget.className.indexOf('paginate_button') == -1) {
+                                var in_content = $(e.currentTarget).parents('.panel-body').length;
+                                if (!in_content && e.currentTarget.className != 'outtabs' &&
+                                    e.currentTarget.className.indexOf('paginate_button') == -1) {
                                     e.preventDefault();
                                     $(this).closest('.tab-pane').load(this.href);
+                                } else if (in_content) {
+                                    // open links in message bodies in new window
+                                    e.currentTarget.target = '_blank';
                                 }
                             });
 
                             // show 1st tab
                             $('#dropboxTabs a:first').tab('show');
+
+                            $('body').on('click', '.attachment-delete-button', function (e) {
+                                e.preventDefault();
+                                $('.attachment-section').fadeOut(300, function() {
+                                    $(this).remove();
+                                });
+                                return false;
+                            });
                         });
 
                     </script>";

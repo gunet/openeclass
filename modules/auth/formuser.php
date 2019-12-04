@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -78,15 +78,13 @@ $var_arr = array('usercomment' => true,
 //add custom profile fields required variables
 augment_registered_posted_variables_arr($var_arr);
 
-$department = getDirectReference($department);
-
 $all_set = register_posted_variables($var_arr);
 
 if (!$all_set) {
     $errors[] = $langFieldsMissing;
 }
 
-if (!Swift_Validate::email($usermail)) {
+if (!valid_email($usermail)) {
     $errors[] = $langEmailWrong;
     $all_set = false;
 } else {
@@ -108,7 +106,7 @@ if (user_app_exists($username)) {
 
 if ($display_captcha) {
     // captcha check
-    include 'include/securimage/securimage.php';    
+    include 'include/securimage/securimage.php';
     $securimage = new Securimage();
     if ($securimage->check($captcha_code) == false) {
         $errors[] = $langCaptchaWrong;
@@ -147,19 +145,20 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
-    
+
     $hybridauth = new Hybrid_Auth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
-    
+
     // additional layer of checks to verify that the provider is valid via hybridauth middleware
-    if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) { 
+    if($provider_name == 'linkedin') $provider_name = 'LinkedIn'; //small fix required for LinkedIn
+    if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) {
         try {
             $hybridauth = new Hybrid_Auth($config);
-    
+
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate(strtolower($provider_name));
-    
+
             // grab the user profile and check if the provider_uid
             $user_data = $adapter->getUserProfile();
             if ($user_data->identifier) {
@@ -169,7 +168,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
                     //the provider user id already exists the the db. show an error.
                     $registration_errors[] = $langProviderError9;
                 } else {
-                    $provider_id = $user_data->identifier; 
+                    $provider_id = $user_data->identifier;
                     if (empty($givenname)) $givenname = $user_data->firstName;
                     if (empty($surname)) $surname = $user_data->lastName;
                     if (empty($username)) $username = q(str_replace(' ', '', $user_data->displayName));
@@ -241,10 +240,10 @@ if ($all_set) {
             SET auth_id = ?d, user_request_id = ?d, uid = ?s',
             $auth_id, $request_id, $user_data->identifier);
     }
-    
+
     //save custom profile fields values in pending table
     process_profile_fields_data(array('user_request_id' => $request_id, 'pending' => true));
-    
+
     // email does not need verification -> mail helpdesk
     if (!$email_verification_required) {
         //----------------------------- Email Request Message --------------------------
@@ -285,19 +284,17 @@ if ($all_set) {
         }
 
         // User Message
-        $tool_content .= "<div class='alert alert-success'>" .
-                ($prof ? $langDearProf : $langDearUser) .
-                "!<br />$success</div><p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+        $tool_content .= "<div class='alert alert-success'>$success</div>";
+        $tool_content .= "<div class='alert alert-info'>$infoprof<br /><br />$langClick <a href='$urlServer'>$langHere</a> $langBackPage</div>";
     }
-    // email needs verification -> mail user
     else {
+        // email needs verification -> mail user
         $hmac = token_generate($username . $usermail . $request_id);
-        //----------------------------- Email Verification -----------------------
         $subject = $langMailVerificationSubject;
         $emailhelpdesk = get_config('email_helpdesk');
         $emailAdministrator = get_config('email_sender');
 
-        $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid.$request_id."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid.$request_id."</a>";;
+        $activateLink = "<a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;rid=$request_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$request_id</a>";;
 
         $header_html_topic_notify = "<!-- Header Section -->
         <div id='mail-header'>
@@ -327,10 +324,8 @@ if ($all_set) {
         }
 
         // User Message
-        $tool_content .= "<div class='alert alert-success'>" .
-                ($prof ? $langDearProf : $langDearUser) .
-                "<br />$langMailVerificationSuccess
-			$langMailVerificationSuccess2</div><br /><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+        $tool_content .= "<div class='alert alert-success'>$langMailVerificationSuccess $langMailVerificationSuccess2</div>
+                          <div class='alert alert-info'>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
     }
     draw($tool_content, 0);
     exit();
@@ -408,7 +403,7 @@ if ($all_set) {
             <div class='form-group'>
                 <label for='ProfComments' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
-    list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</div></div>";

@@ -37,7 +37,7 @@ $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#user_date_start, #user_date_end').datepicker({
                 format: 'dd-mm-yyyy',
-                pickerPosition: 'bottom-left',
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true    
             });            

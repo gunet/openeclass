@@ -20,7 +20,7 @@
 
 $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
-$pageName = $langManuals;
+$toolName = $langManuals;
 
 $addon = '';
 $url = 'https://docs.openeclass.org/' . preg_replace('/^(\d\.\d+).*$/', '\1', ECLASS_VERSION);

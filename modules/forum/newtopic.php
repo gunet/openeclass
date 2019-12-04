@@ -29,7 +29,9 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
+require_once 'include/log.class.php';
 require_once 'functions.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 $toolName = $langForums;
 if (isset($_GET['forum'])) {
@@ -44,17 +46,22 @@ if (isset($_GET['topic'])) {
     $topic = '';
 }
 
+$unit = isset($_GET['unit'])? intval($_GET['unit']): null;
+
 $myrow = Database::get()->querySingle("SELECT id, name FROM forum WHERE id = ?d AND course_id = ?d", $forum, $course_id);
 
 $forum_name = $myrow->name;
 $forum_id = $myrow->id;
+$forumUrl = $unit?
+    "view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum_id&amp;unit=$unit":
+    "viewforum.php?course=$course_code&amp;forum=$forum_id";
 
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
 $pageName = $langNewTopic;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-$navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
+$navigation[] = array('url' => $forumUrl, 'name' => q($forum_name));
 
 if (!does_exists($forum_id, "forum")) {
     $tool_content .= "<div class='alert alert-danger'>$langErrorPost</div>";
@@ -65,7 +72,9 @@ if (!does_exists($forum_id, "forum")) {
 if (!isset($_POST['submit'])) {
     $dynbar = array(
         array('title' => $langBack,
-            'url' => "viewforum.php?course=$course_code&forum=$forum_id",
+            'url' => $unit?
+                "view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum_id&amp;unit=$unit":
+                "viewforum.php?course=$course_code&forum=$forum_id",
             'icon' => 'fa-reply',
             'level' => 'primary-label'
              )
@@ -82,20 +91,41 @@ if (isset($_POST['submit'])) {
         exit;
     }
     $message = purify($message);
-    $poster_ip = $_SERVER['REMOTE_ADDR'];
+    $poster_ip = Log::get_client_ip();
     $time = date("Y-m-d H:i:s");
+
+    // upload attached file
+    if (isset($_FILES['topic_file']) and is_uploaded_file($_FILES['topic_file']['tmp_name'])) { // upload comments file
+        $topic_filename = $_FILES['topic_file']['name'];
+        validateUploadedFile($topic_filename); // check file type
+        $topic_filename = add_ext_on_mime($topic_filename);
+        // File name used in file system and path field
+        $safe_topic_filename = safe_filename(get_file_extension($topic_filename));
+        if (!file_exists("$webDir/courses/$course_code/forum/")) {
+            mkdir("$webDir/courses/$course_code/forum/", 0755);
+        }
+        if (move_uploaded_file($_FILES['topic_file']['tmp_name'], "$webDir/courses/$course_code/forum/$safe_topic_filename")) {
+            @chmod("$webDir/courses/$course_code/forum/$safe_topic_filename", 0644);
+            $topic_real_filename = $_FILES['topic_file']['name'];
+            $topic_filepath = $safe_topic_filename;
+        }
+    } else {
+        $topic_filepath = $topic_real_filename = '';
+    }
+
 
     $topic_id = Database::get()->query("INSERT INTO forum_topic (title, poster_id, forum_id, topic_time) VALUES (?s, ?d, ?d, ?t)"
                     , $subject, $uid, $forum_id, $time)->lastInsertID;
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
 
-    $post_id = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s, ?d, ?t, ?s)"
-                    , $topic_id, $message, $uid, $time, $poster_ip)->lastInsertID;
+    $post_id = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip, topic_filepath, topic_filename) VALUES (?d, ?s, ?d, ?t, ?s, ?s, ?s)"
+                    , $topic_id, $message, $uid, $time, $poster_ip, $topic_filepath, $topic_real_filename)->lastInsertID;
     triggerForumGame($course_id, $uid, ForumEvent::NEWPOST);
     triggerTopicGame($course_id, $uid, ForumTopicEvent::NEWPOST, $topic_id);
+    triggerForumAnalytics($course_id, $uid, ForumAnalyticsEvent::FORUMEVENT);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
-    $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 
+    $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
                         INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
                         INNER JOIN forum ON forum.id = forum_topic.forum_id
                         WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $uid, $course_id);
@@ -121,18 +151,23 @@ if (isset($_POST['submit'])) {
     notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $time);
 
     Session::Messages($langTopicStored, 'alert-success');
-    redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
+    $redirectUrl = $unit?
+        "modules/units/view.php?course=$course_code&res_type=forum&forum=$forum_id&unit=$unit":
+        "modules/forum/viewforum.php?course=$course_code&forum=$forum_id";
+    redirect_to_home_page($redirectUrl);
 } else {
+    $action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id" .
+        ($unit? "&amp;unit=$unit&amp;res_type=forum_new_topic": '');
     $tool_content .= "
     <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
+        <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>
         <fieldset>
             <div class='form-group'>
               <label for='subject' class='col-sm-2 control-label'>$langSubject:</label>
               <div class='col-sm-10'>
                 <input type='text' name='subject' id='subject' class='form-control' maxlength='100'>
               </div>
-            </div>   
+            </div>
             <div class='form-group'>
               <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
               <div class='col-sm-10'>
@@ -140,11 +175,18 @@ if (isset($_POST['submit'])) {
               </div>
             </div>
             <div class='form-group'>
+                <label for='topic_file' class='col-sm-2 control-label'>$langAttachedFile:</label>
+                <div class='col-sm-10'>
+                    <input type='file' name='topic_file' id='topic_file' size='35'>
+                    " . fileSizeHidenInput() . "
+                </div>
+            </div>
+            <div class='form-group'>
               <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                 <a class='btn btn-default' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>
               </div>
-            </div>            
+            </div>
 	</fieldset>
 	</form>
     </div>";

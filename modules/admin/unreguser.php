@@ -70,6 +70,10 @@ if ($doit) {
             Database::get()->query("DELETE FROM group_members
                             WHERE user_id = ?d AND
                             group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $u, $c);
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
             $message = "$langWithUsername $u_accoun $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>";
             Session::Messages($message, 'alert-info');
         }

@@ -81,7 +81,8 @@ if (isset($_POST['submit'])) {
                 'ldapbind_dn' => $ldapbind_dn,
                 'ldapbind_pw' => $ldapbind_pw,
                 'ldap_login_attr' => $ldap_login_attr,
-                'ldap_login_attr2' => $ldap_login_attr2,
+                'ldap_firstname_attr' => $ldap_firstname_attr,
+                'ldap_surname_attr' => $ldap_surname_attr,
                 'ldap_mail_attr' => $ldap_mail_attr,
                 'ldap_studentid' => $ldap_studentid);
             break;
@@ -126,6 +127,7 @@ if (isset($_POST['submit'])) {
                 'casuserfirstattr' => $casuserfirstattr,
                 'casuserlastattr' => $casuserlastattr,
                 'cas_altauth' => $cas_altauth,
+                'cas_altauth_use' => $cas_altauth_use,
                 'cas_logout' => $cas_logout,
                 'cas_ssout' => $cas_ssout,
                 'casuserstudentid' => $casuserstudentid);
@@ -160,7 +162,7 @@ if (isset($_POST['submit'])) {
             auth_default = GREATEST(auth_default, 1),
             auth_title = ?s
         WHERE auth_id = ?d",
-        function ($error) use ($langErrActiv) {
+        function ($error) use (&$tool_content, $langErrActiv) {
             Session::Messages($langErrActiv, 'alert-warning');
         }, $auth_settings, $auth_instructions, $auth_title, $auth);
     if ($result) {

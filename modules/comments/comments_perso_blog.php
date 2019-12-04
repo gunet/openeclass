@@ -29,14 +29,14 @@ if (get_config('personal_blog_commenting')) {
     $response = array();
     
     if ($_POST['action'] == 'new') {
-        if (isset($_SESSION['uid']) && $session->status) {
+        if (isset($_SESSION['uid'])  && $session->status) {
             $comment = new Comment();
             if ($comment->create($_POST['commentText'], $uid, $_POST['rtype'], intval($_POST['rid']))) {
                 $post_actions = '<div class="pull-right">';
-                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
-                $post_actions .= icon('fa-edit', $langModify).'</a> ';
                 $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                $post_actions .= icon('fa-times', $langDelete).'</a>';
+                $post_actions .= '<span class="fa fa-times text-danger pull-right" data-original-title="'.$langDelete.'" title="" data-toggle="tooltip"></span></a>';
+                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
+                $post_actions .= '<span class="fa fa-edit pull-right" data-original-title="'.$langModify.'" title="" data-toggle="tooltip"></span></a>';
                 $post_actions .='</div>';   
                 
                 $response[0] = 'OK';
@@ -72,7 +72,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid']) && $session->status) {
+            if (isset($_SESSION['uid'])  && $session->status) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }
@@ -105,7 +105,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid']) && $session->status) {
+            if (isset($_SESSION['uid'])  && $session->status) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }
@@ -135,7 +135,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid']) && $session->status) {
+            if (isset($_SESSION['uid'])  && $session->status) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }

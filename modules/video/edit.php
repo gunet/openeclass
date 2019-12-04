@@ -35,8 +35,8 @@ require_once 'include/log.class.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
-require_once 'inc/delos_functions.php';
-require_once 'inc/video_functions.php';
+require_once 'delos_functions.php';
+require_once 'video_functions.php';
 
 $action = new action();
 $action->record('MODULE_ID_VIDEO');

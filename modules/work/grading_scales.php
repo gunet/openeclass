@@ -21,12 +21,21 @@
  */
 $require_current_course = TRUE;
 $require_editor = true;
+$require_help = true;
+$helpTopic = 'assignments';
+$helpSubTopic = 'scale';
 
 include '../../include/baseTheme.php';
 
 $toolName = $langGradeScales;
 $pageName = $langGradeScales;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
+
+if (isset($_GET['delete'])) { // delete scale
+    Database::get()->query("DELETE FROM `grading_scale` WHERE id = ?d", $_GET['delete']);
+    Session::Messages($langGradeScalesDeleted, 'alert-success');
+    redirect_to_home_page("modules/work/grading_scales.php");
+}
 
 if (isset($_POST['submitScale'])) {
     $v = new Valitron\Validator($_POST);
@@ -111,14 +120,11 @@ if (isset($_GET['scale_id'])) {
                             <input type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required".($scale_used ? " disabled" : "").">
                         </td>";
             if (!$scale_used) {
-                $scale_rows .= "            
-                            <td class='text-center'>
-                                <a href='#' class='removeScale'><span class='fa fa-times' style='color:red'></span></a>
-                            </td>";
+                    $scale_rows .= "<td class='text-center'>
+                                    <a href='#' class='removeScale'><span class='fa fa-times' style='color:red'></span></a>
+                                </td>";
             }
-            $scale_rows .= "
-                    </tr>
-                ";
+            $scale_rows .= "</tr>";
         }
     }
     $toolName = $langGradeScales;
@@ -168,12 +174,11 @@ if (isset($_GET['scale_id'])) {
                                 </div>
                             </div>";
     if (!$scale_used) {
-        $tool_content .= "
-                            <div class='col-xs-offset-2 col-sm-10'>
-                                 <a class='btn btn-xs btn-success margin-top-thin' id='addScale'>$langAdd</a>
-                            </div>";
+        $tool_content .= "<div class='col-xs-offset-2 col-sm-10'>
+                             <a class='btn btn-xs btn-success margin-top-thin' id='addScale'>$langAdd</a>
+                         </div>";
     }
-    $tool_content .= "  </div>";
+    $tool_content .= "</div>";
     if (!$scale_used) {
         $tool_content .= " 
                         <div class='form-group'>
@@ -233,12 +238,19 @@ if (isset($_GET['scale_id'])) {
                             </td>
                             <td class='option-btn-cell'>
                             ". action_button(array(
-                                array(
-                                    'title' => $langEdit,
-                                    'url' => "grading_scales.php?course=$course_code&amp;scale_id=$grading_scale->id",
-                                    'icon' => 'fa-edit'
-                                )
-                            ))."
+                                    array(
+                                        'title' => $langEdit,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;scale_id=$grading_scale->id",
+                                        'icon' => 'fa-edit'
+                                    ),
+                                    array(
+                                        'title' => $langDelete,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$grading_scale->id",
+                                        'icon' => 'fa-times',
+                                        'show' => !is_scale_used_in_assignment($grading_scale->id, $course_id),
+                                        'class' => 'delete',
+                                        'confirm' => $langConfirmDelete)
+                                    ))."
                             </td>
                         </tr>
                         ";
@@ -265,12 +277,21 @@ if (isset($_GET['scale_id'])) {
 }
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @param $scale_id
+ */
 function update_assignments_max_grade($scale_id) {
     $max_grade = max_grade_from_scale($scale_id);
     Database::get()->query("UPDATE assignment SET max_grade = ?f WHERE grading_scale_id = ?d", $max_grade, $scale_id);
 }
+
+/**
+ * @param $scale_id
+ * @return int
+ */
 function max_grade_from_scale($scale_id) {
     global $course_id;
+
     $scale_data = Database::get()->querySingle("SELECT * FROM grading_scale WHERE id = ?d AND course_id = ?d", $scale_id, $course_id);
     $unserialized_scale_items = unserialize($scale_data->scales);
     $max_scale_item_value = 0;
@@ -280,4 +301,23 @@ function max_grade_from_scale($scale_id) {
         }
     }
     return $max_scale_item_value;
+}
+
+/**
+ * @brief check if rubric is used in some assignment
+ * @param $scale_id
+ * @param $course_id
+ * @return bool
+ */
+function is_scale_used_in_assignment($scale_id, $course_id) {
+
+    $sql = Database::get()->querySingle("SELECT * FROM assignment WHERE grading_scale_id = ?d
+                                                  AND grading_type = 1 
+                                                  AND course_id = ?d", $scale_id, $course_id);
+    if ($sql) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+
 }

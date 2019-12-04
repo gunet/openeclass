@@ -429,7 +429,7 @@ class Hierarchy {
         if ($offset > 0) {
             $offset -= 1;
         }
-
+        $langEmptyNodeSelect = js_escape($langEmptyNodeSelect);
         $js = <<<jContent
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -659,8 +659,8 @@ jContent;
                 $i = 0;
                 foreach ($defaults as $def) {
                     $html .= '<p id="nd_' . $i . '">';
-                    $html .= '<input type="hidden" ' . $params . ' value="' . getIndirectReference($def) . '" />';
-                    $html .= $this->getFullPath($def);
+                    $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
+                    $html .= $this->getFullPath(getDirectReference($def));
                     $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }
@@ -1113,10 +1113,10 @@ jContent;
                         continue;
                     }
 
-                    $ret .= "<li class='list-group-item' ><a href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
+                    $ret .= "<li class='list-group-item'><div class='table_td_header'><a href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
                     $ret .= (strlen(q($code)) > 0) ? "&nbsp;(" . q($code) . ")" : '';
-                    $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small>";
-                    $ret .= (strlen(q($description)) > 0) ? "<br/><br/> " . $description : '';
+                    $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></div>";
+                    $ret .= (strlen(q($description)) > 0) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>" . $description  . "</div>" : '';
                     $ret .= "</li>";
                 }
             }

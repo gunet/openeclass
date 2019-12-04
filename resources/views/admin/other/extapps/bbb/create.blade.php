@@ -4,29 +4,17 @@
     {!! isset($action_bar) ?  $action_bar : '' !!}
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' name='serverForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-        <fieldset>        
+        <fieldset>
             <div class='form-group'>
-                <label for='host' class='col-sm-3 control-label'>{{ trans('langHost') }}:</label>
+                <label for='api_url_form' class='col-sm-3 control-label'>API URL:</label>
                 <div class='col-sm-9'>
-                    <input class='form-control' id='host' type='text' name='hostname_form' value='{{ isset($server) ? $server->hostname : "" }}'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='ip_form' class='col-sm-3 control-label'>IP:</label>
-                <div class='col-sm-9'>
-                    <input class='form-control' type='text' id='ip_form' name='ip_form' value='{{ isset($server) ? $server->ip : "" }}'>
+                    <input class='form-control' type='text' id='api_url_form' name='api_url_form' value='{{ isset($server) ? $server->api_url : "" }}'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='key_form' class='col-sm-3 control-label'>{{ trans('langPresharedKey') }}:</label>
                 <div class='col-sm-9'>
                     <input class='form-control' type='text' name='key_form' value='{{ isset($server) ? $server->server_key : "" }}'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='api_url_form' class='col-sm-3 control-label'>API URL:</label>
-                <div class='col-sm-9'>
-                    <input class='form-control' type='text' id='api_url_form' name='api_url_form' value='{{ isset($server) ? $server->api_url : "" }}'>
                 </div>
             </div>
             <div class='form-group'>
@@ -103,9 +91,6 @@
     </div>
     <script language="javaScript" type="text/javascript">
         var chkValidator  = new Validator("serverForm");
-        chkValidator.addValidation("hostname_form","req","{{ trans('langBBBServerAlertHostname') }}");
-        chkValidator.addValidation("ip_form","req","{{ trans('langBBBServerAlertIP') }}");
-        chkValidator.addValidation("ip_form","regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$","{{ trans('langBBBServerAlertIP') }}");
         chkValidator.addValidation("key_form","req","{{ trans('langBBBServerAlertKey') }}");
         chkValidator.addValidation("api_url_form","req","{{ trans('langBBBServerAlertAPIUrl') }}");
         chkValidator.addValidation("max_rooms_form","req","{{ trans('langBBBServerAlertMaxRooms') }}");

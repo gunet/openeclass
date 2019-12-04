@@ -219,17 +219,19 @@ if (!isset($_POST['submit'])) {
                     'email' => $email_arr_value,
                     'phone' => false,
                     'am' => $am_arr_value);
-    
+
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
-    
+
     $missing = register_posted_variables($var_arr);
 
     if (!isset($_POST['department'])) {
         $departments = array();
-        $missing = false;
+        if (!isset($_POST['toolbox'])) {
+            $missing = false;
+        }
     } else {
-        $departments = arrayValuesDirect($_POST['department']);
+        $departments = $_POST['department'];
     }
 
     $registration_errors = array();
@@ -239,8 +241,20 @@ if (!isset($_POST['submit'])) {
     } else {
         $uname = canonicalize_whitespace($uname);
         // check if the username is already in use
-        $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $uname);
+        $username_check = Database::get()->querySingle("SELECT username, email FROM user WHERE username = ?s", $uname);
         if ($username_check) {
+            if (isset($_POST['toolbox'])) {
+                $login_details = array();
+                foreach ($var_arr as $var => $req) {
+                    $login_details[$var] = $GLOBALS[$var];
+                }
+                Session::flash('login-details', $login_details);
+                Session::flash('username-exists', true);
+                if ($username_check->email === $email) {
+                    Session::flash('email-correct', true);
+                }
+                redirect_to_home_page('main/toolbox.php');
+            }
             $registration_errors[] = $langUserFree;
         }
         if ($display_captcha) {
@@ -252,7 +266,7 @@ if (!isset($_POST['submit'])) {
             }
         }
     }
-    if (!empty($email) and !Swift_Validate::email($email)) {
+    if (!empty($email) and !valid_email($email)) {
         $registration_errors[] = $langEmailWrong;
     } else {
         $email = mb_strtolower(trim($email));
@@ -329,7 +343,7 @@ if (!isset($_POST['submit'])) {
     if (count($registration_errors) == 0) {
         if (get_config('email_verification_required') && !empty($email)) {
             $verified_mail = 0;
-            $vmail = TRUE;            
+            $vmail = TRUE;
         } else {
             $verified_mail = 2;
             $vmail = FALSE;
@@ -367,10 +381,10 @@ if (!isset($_POST['submit'])) {
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
         $userObj->refresh($last_id, $departments);
         user_hook($last_id);
-        
+
         //fill custom profile fields
         process_profile_fields_data(array('uid' => $last_id, 'origin' => 'student_register'));
-        
+
         if ($vmail) {
             $hmac = token_generate($uname . $email . $last_id);
         }
@@ -396,7 +410,6 @@ if (!isset($_POST['submit'])) {
             <p>$langSettings</p>
                 <ul id='forum-category'>
                     <li><span><b>$langUsername:</b></span> <span>$uname</span></li>
-                    <li><span><b>$langPass:</b></span> <span>$password</span></li>
                     <li><span><b>$langAddress $siteName:</b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
                 </ul>
                 <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick <a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id</a>" : "") .

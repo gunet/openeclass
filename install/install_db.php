@@ -527,7 +527,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_post` (
     `poster_id` INT(10) NOT NULL DEFAULT 0,
     `post_time` DATETIME,
     `poster_ip` VARCHAR(45) DEFAULT '' NOT NULL,
-    `parent_post_id` INT(10) NOT NULL DEFAULT 0) $tbl_options");
+    `parent_post_id` INT(10) NOT NULL DEFAULT 0,
+    `topic_filepath` varchar(200) DEFAULT NULL,
+    `topic_filename` varchar(200) DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
     `id` INT(10) NOT NULL auto_increment,
@@ -1381,7 +1383,7 @@ $eclass_stud_reg = intval($eclass_stud_reg);
 $eclass_prof_reg = intval($eclass_prof_reg);
 
 $student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, docm, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlsm, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
-$teacher_upload_whitelist = 'htm, html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
+$teacher_upload_whitelist = 'htm, html, js, css, xml, xsl, xsd, dtd, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
 
 $db->query("CREATE TABLE `config` (
     `key` VARCHAR(32) NOT NULL,
@@ -1958,19 +1960,19 @@ $db->query("CREATE TABLE IF NOT EXISTS request_type (
     `description` MEDIUMTEXT NULL DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS request (
-    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     `course_id` INT(11) NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `description` TEXT,
     `creator_id` INT(11) NOT NULL,
     `state` TINYINT(4) NOT NULL,
-    `type` TINYINT(4) DEFAULT NULL,
+    `type` INT(11) UNSIGNED NOT NULL,
     `open_date` DATETIME NOT NULL,
     `change_date` DATETIME NOT NULL,
     `close_date` DATETIME,
     PRIMARY KEY(id),
     FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-    FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE,
+    FOREIGN KEY (`type`) REFERENCES request_type(id) ON DELETE CASCADE,
     FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `request_field` (
@@ -1984,11 +1986,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `request_field` (
     FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `request_field_data` (
-    `id` INT(11) UNSIGNED NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `request_id` INT(11) UNSIGNED NOT NULL,
     `field_id` INT(11) UNSIGNED NOT NULL,
     `data` TEXT NOT NULL,
-    FOREIGN KEY (field_id) REFERENCES request_custom_field(id) ON DELETE CASCADE,
+    FOREIGN KEY (field_id) REFERENCES request_field(id) ON DELETE CASCADE,
     UNIQUE KEY (`request_id`, `field_id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS request_watcher (
@@ -2015,6 +2017,53 @@ $db->query("CREATE TABLE IF NOT EXISTS request_action (
     PRIMARY KEY(id),
     FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+$db->query("CREATE TABLE `user_settings` ( 
+  `setting_id` int(11) NOT NULL, 
+  `user_id` int(11) NOT NULL, 
+  `course_id` int(11) DEFAULT NULL, 
+  `value` int(11) NOT NULL DEFAULT '0', 
+  PRIMARY KEY (`setting_id`,`user_id`), 
+  KEY `user_id` (`user_id`), 
+  KEY `course_id` (`course_id`), 
+  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE, 
+  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE ) $tbl_options");
+
+// learning analytics
+
+$db->query("CREATE TABLE `analytics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `courseID` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text,
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `periodType` int(11) NOT NULL,
+  PRIMARY KEY (id)) $tbl_options");
+
+$db->query("CREATE TABLE `analytics_element` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `analytics_id` int(11) NOT NULL,
+  `module_id` int(11) NOT NULL,
+  `resource` int(11) DEFAULT NULL,
+  `upper_threshold` float DEFAULT NULL,
+  `lower_threshold` float DEFAULT NULL,
+  `weight` int(11) NOT NULL DEFAULT '1',
+  `min_value` float NOT NULL,
+  `max_value` float NOT NULL,
+  PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `user_analytics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `analytics_element_id` int(11) NOT NULL,
+  `value` float NOT NULL DEFAULT '0',
+  `updated` datetime NOT NULL,
+  PRIMARY KEY (`id`)) $tbl_options");
 
 
 $_SESSION['theme'] = 'default';

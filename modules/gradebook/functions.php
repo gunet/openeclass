@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -580,16 +580,18 @@ function display_all_users_grades($gradebook_id) {
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
            $langID, $langAm, $langRegistrationDateShort, $langGradebookGrade,
            $langGradebookBook, $langGradebookDelete, $langConfirmDelete,
-           $langNoRegStudent, $langHere, $langGradebookGradeAlert;
+           $langNoRegStudent, $langHere, $langGradebookGradeAlert, $dateFormatMiddle;
 
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID,
                                                             gradebook_users.uid as userID,
-                                                            user.am as am, DATE(course_user.reg_date) as reg_date
+                                                            user.am as am, user.surname, user.givenname,
+                                                            DATE(course_user.reg_date) as reg_date
                                                  FROM gradebook_users, user, course_user
                                                     WHERE gradebook_id = ?d
                                                     AND gradebook_users.uid = user.id
                                                     AND `user`.id = `course_user`.`user_id`
-                                                    AND `course_user`.`course_id` = ?d", $gradebook_id, $course_id);
+                                                    AND `course_user`.`course_id` = ?d 
+                                                    ORDER by surname,givenname", $gradebook_id, $course_id);
     if (count($resultUsers)> 0) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
@@ -611,8 +613,8 @@ function display_all_users_grades($gradebook_id) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td>" . nice_format($resultUser->reg_date) . "</td>
-                <td>";
+                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
+                <td class='text-center'>";
                 if(weightleft($gradebook_id, 0) == 0) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>";
                 } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
@@ -639,14 +641,23 @@ function display_all_users_grades($gradebook_id) {
 /**
  * @brief display user grades (student view)
  * @global type $tool_content
+ * @global type $course_code
+ * @global type $is_editor
  * @global type $langGradebookTotalGradeNoInput
  * @global type $langGradebookTotalGrade
+ * @global type $langGradebookSum
  * @global type $langTitle
  * @global type $langGradebookActivityDate2
- * @global type $langGradebookActivityDescription
+ * @global type $langGradebookNoTitle
+ * @global type $langType
  * @global type $langGradebookActivityWeight
  * @global type $langGradebookGrade
  * @global type $langGradebookAlertToChange
+ * @global type $langBack
+ * @global type $langAssignment
+ * @global type $langExercise
+ * @global type $langGradebookActivityAct
+ * @global type $langAttendanceActivity
  * @param type $gradebook_id
  * @param type $uid
  */
@@ -701,7 +712,6 @@ function student_view_gradebook($gradebook_id, $uid) {
     }
     if ($result) {
         foreach ($result as $details) {
-            //$content = standard_text_escape($details->description);
             $tool_content .= "
                 <tr>
                     <td>
@@ -1222,7 +1232,7 @@ function register_user_grades($gradebook_id, $actID) {
             $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort,
             $langGradebookGrade, $langGradebookNoTitle,
             $langGradebookBooking, $langGradebookTotalGrade,
-            $langGradebookActivityWeight, $langCancel;
+            $langGradebookActivityWeight, $langCancel, $dateFormatMiddle;
 
     //display form and list
     $gradebook_range = get_gradebook_range($gradebook_id);
@@ -1236,7 +1246,7 @@ function register_user_grades($gradebook_id, $actID) {
                                                 FROM gradebook_users, user, course_user
                                                 WHERE gradebook_id = ?d AND gradebook_users.uid = user.id
                                                     AND `user`.id = `course_user`.`user_id`
-                                                    AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
+                                                    AND `course_user`.`course_id` = ?d ORDER BY surname,name", $gradebook_id, $course_id);
 
     if ($resultUsers) {
         $tool_content .= "<div class='form-wrapper'>
@@ -1248,8 +1258,8 @@ function register_user_grades($gradebook_id, $actID) {
                 <tr class='list-header'>
                     <th width='2'>$langID</th>
                     <th>$langName $langSurname</th>
-                    <th>$langAm</th>
-                    <th class='text-center' width='80'>$langRegistrationDateShort</th>
+                    <th class='text-center'>$langAm</th>
+                    <th class='text-center' width='120'>$langRegistrationDateShort</th>
                     <th width='50' class='text-center'>$langGradebookGrade</th>
                     <th width='50'>$langGradebookTotalGrade</th>
                 </tr>
@@ -1270,7 +1280,7 @@ function register_user_grades($gradebook_id, $actID) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td>" . nice_format($resultUser->reg_date) . "</td>
+                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
                 <td class='text-center form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
                     <input class='form-control' type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]' value = '".$grade."'>
                     <input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'>
@@ -1659,10 +1669,6 @@ function add_gradebook_other_activity($gradebook_id) {
  * @brief insert grades for activity
  * @global string $tool_content
  * @global type $langGradebookEdit
- * @global type $gradebook
- * @global type $langTheField
- * @global type $course_code
- * @global type $langFormErrors
  * @global type $langGradebookGrade
  * @param type $gradebook_id
  * @param type $actID
@@ -1670,7 +1676,7 @@ function add_gradebook_other_activity($gradebook_id) {
 function insert_grades($gradebook_id, $actID) {
 
     global $tool_content, $langGradebookEdit, $gradebook, $langTheField,
-           $course_code, $langFormErrors, $langGradebookGrade;
+           $course_code, $langFormErrors, $langGradebookGrade, $course_id;
 
     $errors = [];
     $v = new Valitron\Validator($_POST['usersgrade']);
@@ -1687,18 +1693,20 @@ function insert_grades($gradebook_id, $actID) {
     }
     if($v->validate()) {
         foreach ($_POST['usersgrade'] as $userID => $userInp) {
+            $uid = getDirectReference($userID);
             if ($userInp == '') {
-                Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
+                Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $uid);
             } else {
                 // //check if there is record for the user for this activity
                 $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book
-                                            WHERE gradebook_activity_id = ?d AND uid = ?d LIMIT 1", $actID, getDirectReference($userID));
+                                            WHERE gradebook_activity_id = ?d AND uid = ?d LIMIT 1", $actID, $uid);
                 if ($checkForBook) { // update
                     Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d", $userInp/$gradebook->range, $checkForBook->id);
                 } else { // insert
-                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", getDirectReference($userID), $actID, $userInp/$gradebook->range, '');
+                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $uid, $actID, $userInp/$gradebook->range, '');
                 }
             }
+            triggerGameGradebook($course_id, $uid, $gradebook_id);
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -2006,4 +2014,14 @@ function get_gradebook_activity_title($gradebook_id, $activity_id) {
                                                 AND gradebook_id = ?d", $activity_id, $gradebook_id)->title;
 
     return $act_title;
+}
+
+function triggerGameGradebook($courseId, $uid, $gradebookId) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = GradebookEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_GRADEBOOK;
+    $eventData->resource = intval($gradebookId);
+    GradebookEvent::trigger(GradebookEvent::UPDGRADE, $eventData);
 }

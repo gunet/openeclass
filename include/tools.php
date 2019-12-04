@@ -157,40 +157,9 @@ function getExternalLinks() {
  */
 function loggedInMenu($rich=true) {
     global $uid, $is_admin, $is_power_user, $is_usermanage_user,
-    $is_departmentmanage_user, $urlServer, $session;
+    $is_departmentmanage_user, $urlServer, $course_code, $session;
 
     $sideMenuGroup = array();
-
-    if ((isset($is_admin) and $is_admin) or
-            (isset($is_power_user) and $is_power_user) or
-            (isset($is_usermanage_user) and ($is_usermanage_user)) or
-            (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-        $sideMenuSubGroup = array();
-        $sideMenuText = array();
-        $sideMenuLink = array();
-        $sideMenuImg = array();
-
-        $arrMenuType = array();
-        $arrMenuType['type'] = 'text';
-        $arrMenuType['text'] = $GLOBALS['langAdminOptions'];
-        $arrMenuType['class'] = 'admin';
-        array_push($sideMenuSubGroup, $arrMenuType);
-
-        if ((isset($is_admin) and $is_admin) or
-                (isset($is_power_user) and $is_power_user) or
-                (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-            array_push($sideMenuText, "$GLOBALS[langAdminTool]");
-            array_push($sideMenuLink, $urlServer . 'modules/admin/');
-        }
-
-        array_push($sideMenuImg, "fa-caret-right");
-
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
-    }
 
     $sideMenuSubGroup = array();
     $sideMenuText = array();
@@ -308,7 +277,7 @@ function loggedInMenu($rich=true) {
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
         array_push($sideMenuText, q($GLOBALS['langMyDocs']));
         array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php'));
-        array_push($sideMenuImg, 'fa-folder-open');
+        array_push($sideMenuImg, 'docs.png');
     }
 
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
@@ -547,7 +516,7 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
         array_push($sideMenuLink, '../admin/coursecategory.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        array_push($sideMenuImg, 'arrow.png');
 
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
@@ -742,6 +711,7 @@ function lessonToolsMenu($rich=true) {
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
                             '/?course=' . $course_code));
             array_push($sideMenuImg, $modules[$mid]['image']);
+
             array_push($sideMenuID, $mid);
         }
 
@@ -752,6 +722,19 @@ function lessonToolsMenu($rich=true) {
                     array_push($sideMenuText, q($ex_link->title));
                     array_push($sideMenuLink, q($ex_link->url));
                     array_push($sideMenuImg, 'fa-external-link');
+                    array_push($sideMenuID, -1);
+                }
+            }
+        }
+
+        if ($section['type'] == 'Public') {
+            require_once 'modules/lti_consumer/lti-functions.php';
+            $result3 = getLTILinksForTools();
+            if ($result3) { // display lti apps as links (if any)
+                foreach ($result3 as $lti_link) {
+                    array_push($sideMenuText, q($lti_link->title));
+                    array_push($sideMenuLink, q($lti_link->url));
+                    array_push($sideMenuImg, q($lti_link->menulink));
                     array_push($sideMenuID, -1);
                 }
             }

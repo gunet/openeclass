@@ -158,7 +158,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // Department search
     $depqryadd = '';
-    $dep = (isset($_GET['department'])) ? intval(getDirectReference($_GET['department'])) : 0;
+    $dep = (isset($_GET['department'])) ? intval($_GET['department']) : 0;
     if ($dep || isDepartmentAdmin()) {
         $depqryadd = ', user_department';
 
@@ -289,14 +289,18 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                                                 OR username LIKE ?s
                                                                 OR email LIKE ?s)", $keywords)->total;
     }
+
+
+
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;
     $data['aaData'] = array();
 
-    foreach ($sql as $logs) {
-        $email_icon = $logs->email;
+    foreach ($sql as $myrow) {
+        $inactive_user = is_inactive_user($myrow->id);
+        $email_icon = $myrow->email;
         if ($mail_ver_required) {
-            switch ($logs->verified_mail) {
+            switch ($myrow->verified_mail) {
                 case EMAIL_VERIFICATION_REQUIRED:
                     $icon = 'fa-clock-o';
                     $tip = $langMailVerificationPendingU;
@@ -314,7 +318,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         }
 
 
-        switch ($logs->status) {
+        switch ($myrow->status) {
             case USER_TEACHER:
                 $icon = 'fa-university';
                 $tip = $langTeacher;
@@ -333,19 +337,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 break;
         }
 
-        if ($logs->id == 1) { // don't display actions for admin user
+        if ($myrow->id == 1) { // don't display actions for admin user
             $icon_content = "&mdash;&nbsp;";
         } else {
-            $iuid = getIndirectReference($logs->id);
-            $changetip = q("$langChangeUserAs $logs->username");
+            $iuid = getIndirectReference($myrow->id);
+            $changetip = q("$langChangeUserAs $myrow->username");
             $profileUrl = $urlAppend .
-                "main/profile/display_profile.php?id=$logs->id&amp;token=" .
-                token_generate($logs->id, true);
+                "main/profile/display_profile.php?id=$myrow->id&amp;token=" .
+                token_generate($myrow->id, true);
             $icon_content = action_button(array(
                 array(
                     'title' => $langEditChange,
                     'icon' => 'fa-edit',
-                    'url' => "edituser.php?u=$logs->id"
+                    'url' => "edituser.php?u=$myrow->id"
                 ),
                 array(
                     'title' => $langDisplayProfile,
@@ -355,34 +359,35 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 array(
                     'title' => $langActions,
                     'icon' => 'fa-list-alt',
-                    'url' => "userlogs.php?u=$logs->id"
+                    'url' => "userlogs.php?u=$myrow->id"
                 ),
                 array(
                     'title' => $changetip,
                     'icon' => 'fa-key',
-                    'url' => 'change_user.php?username=' . urlencode($logs->username),
+                    'url' => 'change_user.php?username=' . urlencode($myrow->username),
                     'class' => 'change-user-link',
                     'hide' => isDepartmentAdmin()
                 ),
                 array(
                     'title' => $langUsage,
                     'icon' => 'fa-pie-chart',
-                    'url' => "../usage/?t=u&u=$logs->id"
+                    'url' => "../usage/?t=u&u=$myrow->id"
                 ),
                 array(
                     'title' => $langDelete,
                     'icon' => 'fa-times',
-                    'url' => "deluser.php?u=$logs->id"
+                    'url' => "deluser.php?u=$myrow->id"
                 )
             ));
         }
         $data['aaData'][] = array(
-            '0' => sanitize_utf8($logs->surname),
-            '1' => sanitize_utf8($logs->givenname),
-            '2' => sanitize_utf8($logs->username),
+            '0' => sanitize_utf8($myrow->surname),
+            '1' => sanitize_utf8($myrow->givenname),
+            '2' => sanitize_utf8($myrow->username),
             '3' => $email_icon,
             '4' => icon($icon, $tip),
-            '5' => $icon_content
+            '5' => $icon_content,
+            '6' => $inactive_user
         );
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -419,6 +424,11 @@ $head_content .= "<script>
             },
             'fnDrawCallback': function( oSettings ) {
                 popover_init();
+            },
+            'createdRow': function(row, data, dataIndex) {
+                if (data[6] == 1) {
+                    $(row). addClass('not_visible');
+                }
             },
             'bProcessing': true,
             'bServerSide': true,

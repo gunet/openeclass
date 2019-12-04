@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2017  Greek Universities Network - GUnet
@@ -30,16 +30,21 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/drives/clouddrive.php';
+
 require_once 'include/action.php';
+$action = new action();
+$action->record(MODULE_ID_VIDEO);
+
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
-require_once 'inc/delos_functions.php'; // required by view
-require_once 'inc/video_functions.php';
-
-$action = new action();
-$action->record(MODULE_ID_VIDEO);
+require_once 'include/log.class.php';
+require_once 'modules/search/indexer.class.php';
+require_once 'modules/admin/extconfig/externals.php';
+require_once 'modules/admin/extconfig/opendelosapp.php';
+require_once 'video_functions.php';
+require_once 'delos_functions.php';
 
 $toolName = $langVideo;
 $data = array();
@@ -56,11 +61,11 @@ $data['compatiblePlugin'] = $compatiblePlugin;
 
 // custom sort
 $order = 'ORDER BY title';
-$sort = "title";
+$sort = 'title';
 $reverse = false;
 if (isset($_GET['sort']) && $_GET['sort'] === 'date') {
     $order = 'ORDER BY date';
-    $sort = "date";
+    $sort = 'date';
 }
 if (isset($_GET['rev'])) {
     $order .= ' DESC';
@@ -70,12 +75,21 @@ $data['order'] = $order;
 
 if ($is_editor && !$is_in_tinymce) { // admin actions
 
+    if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
+        $pageName = $langQuotaBar;
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
+        $data = array();
+        list($diskQuotaVideo, $updir, $diskUsed) = getQuotaInfo($course_code, $webDir);
+        $data['showQuota'] = showquota($diskQuotaVideo, $diskUsed, "$_SERVER[SCRIPT_NAME]?course=$course_code");
+        view('modules.video.showQuota', $data);
+    }
+    
     // visibility commands
     if (isset($_GET['vis'])) {
         $table = select_table($_GET['table']);
         if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['vid'])) {
             Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d", $_GET['vis'], $_GET['vid']);
-            Session::Messages($langViMod, "alert-success");
+            $action_message = "<div class='alert alert-success'>$langViMod</div>";
         } else {
             Session::Messages($langResourceBelongsToCert, "alert-warning");
         }
@@ -86,7 +100,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         $new_public_status = isset($_GET['public']) ? 1 : 0;
         $table = select_table($_GET['table']);
         Database::get()->query("UPDATE $table SET public = ?d WHERE id = ?d", $new_public_status, $_GET['vid']);
-        Session::Messages($langViMod, "alert-success");
+        $action_message = "<div class='alert alert-success'>$langViMod</div>";
     }
     
     if (isset($_GET['delete'])) {
@@ -102,22 +116,15 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
                     $error = TRUE;
                 }
             }
-            // delete category videolinks
-            $q2 = Database::get()->queryArray("SELECT id FROM videolink WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
-            foreach ($q2 as $a) {
-                delete_video($a->id, 'videolink', $course_id, $course_code, $webDir);
+            $q = Database::get()->queryArray("SELECT id FROM videolink WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
+            foreach ($q as $a) {
+                delete_video($a->id, 'videolink');
             }
-            
-            // delete category
-            if (!$error) {                
-                delete_video_category($_GET['id']);
-            }
-            
-        } else { // delete video / videolink
+            delete_video_category($_GET['id']);
+        } else {  // delete video / videolink
             $table = select_table($_GET['table']);
             if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['id'])) {
-                delete_video($_GET['id'], $table, $course_id, $course_code, $webDir);
-                Session::Messages($langGlossaryDeleted, "alert-success");
+                delete_video($_GET['id'], $table);
             } else {
                 Session::Messages($langResourceBelongsToCert, "alert-warning");
             }

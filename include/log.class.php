@@ -74,7 +74,7 @@ class Log {
     }
 
     /**
-     * display users logging
+     * @brief display users logging
      * Note: $module_id = $course_id = 0 means other logging (e.g. modify user profile, course creation etc.)
      * @param int $course_id (-1 means all courses)
      * @param type $user_id (-1 means all users)
@@ -90,7 +90,7 @@ class Log {
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
             $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
-            $langModifyInfo, $langAbuseReport, $langWall;
+            $langModifyInfo, $langAbuseReport;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -158,7 +158,7 @@ class Log {
             // display logs
             foreach ($sql as $r) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>" . nice_format($r->ts, true) . "</td>";
+                $tool_content .= "<td><span style='display:none;'>$r->ts</span>" . nice_format($r->ts, true) . "<s/</td>";
                 if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
                     $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                 } else {
@@ -187,7 +187,7 @@ class Log {
                 if ($course_id == 0 or $module_id == 0) { // system logging
                     $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
                 } else { // course logging
-                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
+                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details, $r->action_type) . "</td>";
                 }
                 $tool_content .= "</tr>";
             }
@@ -238,7 +238,7 @@ class Log {
      * @return type
      * drive to appropriate subsystem for displaying details
      */
-    public function course_action_details($module_id, $details) {
+    public function course_action_details($module_id, $details, $type=null) {
 
         global $langUnknownModule;
 
@@ -269,7 +269,7 @@ class Log {
                 break;
             case MODULE_ID_WIKI: $content = $this->wiki_action_details($details);
                 break;
-            case MODULE_ID_USERS: $content = $this->course_user_action_details($details);
+            case MODULE_ID_USERS: $content = $this->course_user_action_details($details, $type);
                 break;
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
@@ -286,6 +286,8 @@ class Log {
             case MODULE_ID_ATTENDANCE: $content = $this->attendance_action_details($details);
                 break;
             case MODULE_ID_TC: $content = $this->tc_action_details($details);
+                break;
+            case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
                 break;
             default: $content = $langUnknownModule;
                 break;
@@ -370,7 +372,6 @@ class Log {
      * @global type $langDeactivate
      * @global type $langBlogComment
      * @global type $langBlogRatingLog
-     * @global type $langsCourseSharing
      * @global type $langBlogSharingLog
      * @global type $langsCourseSharing
      * @global type $langCourseComment
@@ -386,8 +387,8 @@ class Log {
 
         global $langCourseStatusChange, $langIn, $langClosedCourse,
                $langRegCourse, $langOpenCourse, $langInactiveCourse,
-               $langActivate, $langDeactivate, $langBlogComment, $langBlogRatingLog,
-               $langsCourseSharing, $langBlogSharingLog, $langCourseSharing,
+               $langActivate, $langDeactivate, $langBlogComment,
+               $langBlogSharingLog, $langBlogRatingLog,
                $langCourseComment, $langsCourseAnonymousRating, $langsCourseRating,
                $langForumRating, $langCourseSocialBookmarks, $langCourseAbuseReport;
 
@@ -395,13 +396,13 @@ class Log {
 
         if (isset($details['visible'])) {
             switch ($details['visible']) {
-                case COURSE_CLOSED: $mes = "".q($langIn). "&nbsp;&laquo;". q($langClosedCourse) . "&raquo;";
+                case COURSE_CLOSED: $mes = q($langIn). "&nbsp;&laquo;". q($langClosedCourse) . "&raquo;";
                     break;
-                case COURSE_REGISTRATION: $mes = "".q($langIn). "&nbsp;&laquo;". q($langRegCourse) . "&raquo;";
+                case COURSE_REGISTRATION: $mes = q($langIn). "&nbsp;&laquo;". q($langRegCourse) . "&raquo;";
                     break;
-                case COURSE_OPEN: $mes = "".q($langIn). "&nbsp;&laquo;". q($langOpenCourse) . "&raquo;";
+                case COURSE_OPEN: $mes = q($langIn). "&nbsp;&laquo;". q($langOpenCourse) . "&raquo;";
                     break;
-                case COURSE_INACTIVE: $mes = "".q($langIn). "&nbsp;&laquo;". q($langInactiveCourse) . "&raquo;";
+                case COURSE_INACTIVE: $mes = q($langIn). "&nbsp;&laquo;". q($langInactiveCourse) . "&raquo;";
                     break;
                 default: $mes = '';
                     break;
@@ -534,8 +535,8 @@ class Log {
      * display action details in assignments
      * @global type $langTitle
      * @global type $langDescription
-     * @global type $langGradebookGrade
      * @global type $m
+     * @global type $langGradebookGrade
      * @param type $details
      * @return string
      */
@@ -785,6 +786,9 @@ class Log {
         global $langTitle, $langDescription;
 
         $details = unserialize($details);
+        if (is_object($details['title'])) {
+            $details['title'] = $details['title']->title;
+        }
         $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . ellipsize($details['description'], 100) . "&raquo";
@@ -830,14 +834,24 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function course_user_action_details($details) {
+    private function course_user_action_details($details, $type) {
 
         global $langUnCourse, $langOfUser, $langToUser,
         $langsOfTeacher, $langsOfEditor, $langNewUser, $langAddGUser,
         $langRemoveRightAdmin, $langRemoveRightAdmin, $langUnCourse,
-        $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor;
+        $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor,
+        $langDelUsers, $langParams;
 
         $details = unserialize($details);
+
+        if (isset($details['multiple'])) {
+            if ($type == LOG_DELETE) {
+                $content = "$langDelUsers &mdash; $langParams: " .
+                    implode(', ', $details['params']) . '<br>' .
+                    display_user($details['uid']);
+            }
+            return $content;
+        }
 
         switch ($details['right']) {
             case '+5': $content = $langNewUser;
@@ -895,7 +909,7 @@ class Log {
         if (!empty($details['link'])) {
             $content .= "URL: " . q($details['link']);
         }
-        if (!empty($details['name_link'])) {
+        if(!empty($details['name_link'])) {
             $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
         }
 

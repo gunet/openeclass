@@ -22,7 +22,7 @@
 
 $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
-$pageName = $contactpoint;
+$toolName = $contactpoint;
 
 $data['postaddress'] = nl2br(get_config('postaddress'));
 $data['Institution'] = get_config('institution');

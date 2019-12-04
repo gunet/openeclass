@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,277 +19,27 @@
  * ======================================================================== */
 
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/modalconfirmation.php';
 require_once 'include/mailconfig.php';
 
+if (isset($_POST['updatePrivacyPolicy'])) {
+    set_config('privacy_policy_timestamp', date('Y-m-d H:i:s'));
+    redirect_to_home_page('modules/admin/eclassconf.php');
+}
+
 $toolName = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$head_content .= <<<EOF
-<script type='text/javascript'>
-/* <![CDATA[ */
-
-function loginFailPanel(e) {
-    duration = null;
-    if (e) {
-        duration = 400;
-    }
-
-    if ($('#login_fail_check').is(":checked")) {
-        $('#login_fail_threshold').show(duration);
-        $('#login_fail_deny_interval').show(duration);
-        $('#login_fail_forgive_interval').show(duration);
-    }
-    else {
-        $('#login_fail_threshold').hide(duration);
-        $('#login_fail_deny_interval').hide(duration);
-        $('#login_fail_forgive_interval').hide(duration);
-    }
-}
-
-$(document).ready(function() {
-/* Check if we are in safari and fix Bootstrap Affix*/
-if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-    var stickywidget = $('#floatMenu');
-    var explicitlySetAffixPosition = function() {
-        stickywidget.css('left',stickywidget.offset().left+'px');
-    };
-    /* Before the element becomes affixed, add left CSS that is equal to the distance of the element from the left of the screen */
-    stickywidget.on('affix.bs.affix',function(){
-        stickywidget.removeAttr('style');
-        explicitlySetAffixPosition();
-    });
-    stickywidget.on('affixed-bottom.bs.affix',function(){
-        stickywidget.css('left', 'auto');
-    });
-    /* On resize of window, un-affix affixed widget to measure where it should be located, set the left CSS accordingly, re-affix it */
-    $(window).resize(function(){
-        if(stickywidget.hasClass('affix')) {
-            stickywidget.removeClass('affix');
-            explicitlySetAffixPosition();
-            stickywidget.addClass('affix');
-        }
-    });
-}
-    // Course Settings checkboxes
-    $('#uown').click(function(event) {
-        if (!$('#uown').is(":checked")) {
-            $('#town').prop('checked', false);
-        }
-        $('#town').prop('disabled', !$('#uown').is(":checked"));
-    });
-
-    // Login screen / link checkboxes
-    $('#hide_login_check').click(function(event) {
-        if (!$('#hide_login_check').is(":checked")) {
-            $('#hide_login_link_check').prop('checked', false);
-        }
-        $('#hide_login_link_check').prop('disabled', !$('#hide_login_check').is(":checked"));
-    });
-
-    // Login Fail Panel
-    loginFailPanel();
-    $('#login_fail_check').click(function(event) {
-        loginFailPanel(true);
-    });
-
-    // Open Courses checkboxes
-    $('#opencourses_enable').click(function(event) {
-        if ($('#opencourses_enable').is(":checked")) {
-            if ($('#course_metadata').is(":checked")) {
-                $('#course_metadata').prop('disabled', true);
-            } else {
-                $('#course_metadata')
-                    .prop('checked', true)
-                    .prop('disabled', true)
-                    .change();
-            }
-        } else {
-            $('#course_metadata').prop('disabled', false);
-        }
-    });
-
-    if ($('#opencourses_enable').is(":checked")) {
-        $('#course_metadata').prop('disabled', true);
-    }
-
-    // MyDocs checkboxes and inputs
-    function mydocsCheckboxQuota(checkbox, input) {
-        $(checkbox).change(function (event) {
-            $(input).prop('disabled', !$(this).is(':checked'));
-        }).change();
-    }
-    mydocsCheckboxQuota('#mydocs_teacher_enable_id', '#mydocs_teacher_quota_id');
-    mydocsCheckboxQuota('#mydocs_student_enable_id', '#mydocs_student_quota_id');
-
-    // Search Engine checkboxes
-    $('#confirmIndexDialog').modal({
-        show: false,
-        keyboard: false,
-        backdrop: 'static'
-    });
-
-    $("#confirmIndexCancel").click(function() {
-        $('#index_enable')
-            .prop('checked', false)
-            .prop('disabled', false);
-        $('#search_enable').prop('checked', false);
-        $("#confirmIndexDialog").modal("hide");
-    });
-
-    $("#confirmIndexOk").click(function() {
-        $("#confirmIndexDialog").modal("hide");
-    });
-
-    $('#search_enable').change(function(event) {
-        if ($('#search_enable').is(":checked")) {
-            if ($('#index_enable').is(":checked")) {
-                $('#index_enable').prop('disabled', true);
-            } else {
-                $('#index_enable')
-                    .prop('checked', true)
-                    .prop('disabled', true)
-                    .change();
-            }
-        } else {
-            $('#index_enable').prop('disabled', false);
-        }
-    });
-
-    if ($('#search_enable').is(":checked")) {
-        $('#index_enable').prop('disabled', true);
-    }
-
-    $('#index_enable').change(function(event) {
-        if ($('#index_enable').is(":checked")) {
-            $("#confirmIndexDialog").modal("show");
-        }
-    });
-
-    $('#social_sharing_links').change(function(event) {
-        if ($('#social_sharing_links').is(":checked")) {
-            if ($('#personal_blog_enable').is(":checked")) {
-                $('#personal_blog_sharing_enable').prop('disabled', false);
-            }
-        } else {
-            $('#personal_blog_sharing_enable').prop('disabled', true);
-        }
-    });
-
-    if (!$('#social_sharing_links').is(":checked")) {
-        $('#personal_blog_sharing_enable').prop('disabled', true);
-    }
-
-    $('#personal_blog_enable').change(function(event) {
-        if ($('#personal_blog_enable').is(":checked")) {
-            $('#personal_blog_public').prop('disabled', false);
-            $('#personal_blog_commenting_enable').prop('disabled', false);
-            $('#personal_blog_rating_enable').prop('disabled', false);
-            if ($('#social_sharing_links').is(":checked")) {
-                $('#personal_blog_sharing_enable').prop('disabled', false);
-            }
-        } else {
-            $('#personal_blog_public').prop('disabled', true);
-            $('#personal_blog_commenting_enable').prop('disabled', true);
-            $('#personal_blog_rating_enable').prop('disabled', true);
-            $('#personal_blog_sharing_enable').prop('disabled', true);
-        }
-    });
-
-    if (!$('#personal_blog_enable').is(":checked")) {
-        $('#personal_blog_public').prop('disabled', true);
-        $('#personal_blog_commenting_enable').prop('disabled', true);
-        $('#personal_blog_rating_enable').prop('disabled', true);
-        $('#personal_blog_sharing_enable').prop('disabled', true);
-    }
-
-    $('input[name=submit]').click(function() {
-        $('#personal_blog_commenting_enable').prop('disabled', false);
-        $('#personal_blog_rating_enable').prop('disabled', false);
-        $('#personal_blog_sharing_enable').prop('disabled', false);
-    });
-
-    // Mobile API Confirmations
-    $('#confirmMobileAPIDialog').modal({
-        show: false,
-        keyboard: false,
-        backdrop: 'static'
-    });
-
-    $("#confirmMobileAPICancel").click(function() {
-        $('#mobileapi_enable').prop('checked', false);
-        $("#confirmMobileAPIDialog").modal("hide");
-    });
-
-    $("#confirmMobileAPIOk").click(function() {
-        $("#confirmMobileAPIDialog").modal("hide");
-    });
-
-    $('#mobileapi_enable').change(function(event) {
-        if ($('#mobileapi_enable').is(":checked")) {
-            $("#confirmMobileAPIDialog").modal("show");
-        }
-    });
-
-    $('#registration_link').change(function() {
-        var type = $(this).val();
-        if (type == 'show_text') {
-            $('#registration-info-block').show();
-        } else {
-            $('#registration-info-block').hide();
-        }
-    }).change();
-
-    $mail_form_js
-});
-
-/* ]]> */
-</script>
-EOF;
-
 define('MONTHS', 30 * 24 * 60 * 60);
 
-// schedule indexing if necessary
-if (Session::get('scheduleIndexing')) {
-    $head_content .= <<<EOF
-<script type='text/javascript'>
-/* <![CDATA[ */
-
-var idxwindow = null;
-
-function idxpopup(url, w, h) {
-    var left = (screen.width/2)-(w/2);
-    var top = (screen.height/2)-(h/2);
-
-    if (idxwindow == null || idxwindow.closed) {
-        idxwindow = window.open(url, 'idxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
-        if (window.focus && idxwindow !== null) {
-            idxwindow.focus();
-        }
-    } else {
-        idxwindow.focus();
-    }
-
-    return false;
-}
-
-$(document).ready(function() {
-
-    $('#idxpbut').click();
-
-});
-
-/* ]]> */
-</script>
-EOF;
-}
-
-$data['registration_link_options'] = $registration_link_options = array('show' => $langViewShow, 'hide' => $langViewHide, 'show_text' => $langRegistrationShowText);
+$data['mail_form_js'] = $mail_form_js;
+$data['registration_link_options'] = $registration_link_options = [
+    'show' => $langViewShow,
+    'hide' => $langViewHide,
+    'show_text' => $langRegistrationShowText];
 
 // Save new `config` table
 if (isset($_POST['submit'])) {
@@ -312,6 +61,23 @@ if (isset($_POST['submit'])) {
         set_config('default_language', $_POST['default_language']);
     }
 
+    $homepageSet = $_POST['homepageSet'];
+    if ($homepageSet == 'external') {
+        set_config('homepage', 'external');
+        set_config('landing_name', $_POST['landing_name']);
+        set_config('landing_url', $_POST['landing_url']);
+    } elseif ($homepageSet == 'toolbox') {
+        set_config('homepage', 'toolbox');
+        set_config('toolbox_name', $_POST['toolbox_name']);
+        set_config('toolbox_title', $_POST['toolbox_title']);
+        set_config('toolbox_intro', $_POST['toolbox_intro']);
+    } else {
+        set_config('homepage', 'default');
+        set_config('homepage_title', $_POST['homepage_title']);
+        set_config('homepage_name', $_POST['homepage_name']);
+        set_config('homepage_intro', purify($_POST['homepage_intro']));
+    }
+
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
     set_config('base_url', $_POST['formurlServer']);
     set_config('phpMyAdminURL', $_POST['formphpMyAdminURL']);
@@ -323,8 +89,6 @@ if (isset($_POST['submit'])) {
     set_config('email_helpdesk', $_POST['formemailhelpdesk']);
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
-    set_config('landing_url', $_POST['formLandingUrl']);
-    set_config('landing_name', $_POST['formLandingName']);
     set_config('postaddress', $_POST['formpostaddress']);
     set_config('fax', $_POST['formfax']);
     set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
@@ -332,7 +96,21 @@ if (isset($_POST['submit'])) {
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
 
-    $config_vars = array('email_required' => true,
+    $privacyPolicyChanged = false;
+    foreach ($session->active_ui_languages as $langCode) {
+        $langVar = 'privacy_policy_text_' . $langCode;
+        if (isset($_POST[$langVar])) {
+            $oldText = get_config($langVar);
+            $newText = purify(trim($_POST[$langVar]));
+            if ($oldText != $newText) {
+                set_config($langVar, purify(trim($_POST[$langVar])));
+                $privacyPolicyChanged = true;
+            }
+        }
+    }
+
+    $config_vars = [
+        'email_required' => true,
         'email_verification_required' => true,
         'am_required' => true,
         'dont_display_login_form' => true,
@@ -387,7 +165,11 @@ if (isset($_POST['submit'])) {
         'course_metadata' => true,
         'opencourses_enable' => true,
         'mydocs_student_enable' => true,
-        'mydocs_teacher_enable' => true);
+        'mydocs_teacher_enable' => true,
+        'offline_course' => true,
+        'activate_privacy_policy_text' => true,
+        'activate_privacy_policy_consent' => true,
+    ];
 
     register_posted_variables($config_vars, 'all', 'intval');
 
@@ -430,6 +212,10 @@ if (isset($_POST['submit'])) {
         $GLOBALS['restrict_teacher_owndep'] = 0;
     }
 
+    if ($GLOBALS['activate_privacy_policy_consent']) {
+        $GLOBALS['activate_privacy_policy_text'] = 1;
+    }
+
     $scheduleIndexing = false;
     // indexing was previously off, but now set to on, need to schedule re-indexing
     if (!get_config('enable_indexing') && $enable_indexing) {
@@ -449,6 +235,15 @@ if (isset($_POST['submit'])) {
     // update table `config`
     foreach ($config_vars as $varname => $what) {
         set_config($varname, $GLOBALS[$varname]);
+    }
+
+    if ($privacyPolicyChanged and $activate_privacy_policy_consent) {
+        Session::Messages(trans('langPrivacyPolicyConsentAskAgain') .
+            "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
+                <button type='submit' class='btn btn-default' name='updatePrivacyPolicy' value='true'>" .
+                    trans('langPrivacyPolicyConsentRedisplay') . "
+                </button>
+            </form>", 'alert-info');
     }
 
     // Display result message
@@ -480,8 +275,7 @@ else {
         });
         </script>";
     // Display link to index.php
-    $data['action_bar'] =
-        action_bar([
+    $data['action_bar'] = action_bar([
                         [
                             'title' => $langBack,
                             'url' => "index.php",
@@ -563,7 +357,24 @@ else {
     $data['cbox_disable_log_actions'] = get_config('disable_log_actions') ? 'checked' : '';
     $data['cbox_disable_log_course_actions'] = get_config('disable_log_course_actions') ? 'checked' : '';
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';
+    $data['cbox_offline_course'] = get_config('offline_course') ? 'checked' : '';
 
+    foreach ($session->active_ui_languages as $langCode) {
+        $policy = get_config('privacy_policy_text_' . $langCode);
+        if (!$policy) {
+            $policyFile = "lang/$langCode/privacy.html";
+            if (file_exists($policyFile)) {
+                $policy = file_get_contents($policyFile);
+            } else {
+                $policy = get_config('privacy_policy_text_en');
+                if (!$policy) {
+                    $policy = file_get_contents('lang/en/privacy.html');
+                }
+            }
+        }
+        $data['policyText'][$langCode] = $policy;
+    }
 }
+
 $data['menuTypeID'] = 3;
 view('admin.other.eclassconf', $data);

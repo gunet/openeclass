@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,8 +33,7 @@ $pageName = $langDefaultModules;
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['module'])) {
-        $default = array_map(getDirectReference, array_keys($_POST['module']));
-        set_config('default_modules', serialize($default));
+        set_config('default_modules', serialize(array_keys($_POST['module'])));
     }
     Session::Messages($langWikiEditionSucceed, 'alert-success');
     redirect_to_home_page('modules/admin/modules_default.php');

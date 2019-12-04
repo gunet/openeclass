@@ -28,8 +28,43 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 
+// sso transition
+if (isset($_GET['transition'])) {
+    if ($_GET['transition'] == 'true') {
+        Session::Messages("ΠΡΟΣΟΧΗ! Θα ενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON). 
+                                Επιβεβαιώστε την ενέργειά σας. 
+                                <ul>
+                                <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=true'><strong>Ναι</strong></a></li>
+                                <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
+                                </ul>", 'alert-warning');
+    } else {
+        Session::Messages("ΠΡΟΣΟΧΗ! Θα απενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON). 
+                                Επιβεβαιώστε την ενέργειά σας. 
+                                <ul>
+                                <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=false'><strong>Ναι</strong></a></li>
+                                <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
+                                </ul>", 'alert-warning');
+    }
+    redirect_to_home_page('modules/admin/auth.php');
+}
+
+if (isset($_GET['do_transition'])) {
+    if ($_GET['do_transition'] == 'true') {
+        require_once 'modules/auth/transition/Transition.class.php';
+        set_config('sso_transition', true);
+        Transition::create_table();
+        Session::Messages("Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS ενεργοποιήθηκε.", 'alert-success');
+    } else if ($_GET['do_transition'] == 'false') {
+        set_config('sso_transition', false);
+        Session::Messages("Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS απενεργοποιήθηκε.", 'alert-success');
+    } else {
+        redirect_to_home_page('modules/admin/auth.php');
+    }
+}
+// end of sso transition
+
 if (isset($_GET['auth'])) {
-    $auth = getDirectReference($_GET['auth']);
+    $auth = $_GET['auth'];
     if (isset($_GET['q'])) { // activate / deactivate authentication method
         $q = $_GET['q'];
         $s = get_auth_settings($auth);

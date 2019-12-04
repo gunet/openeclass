@@ -60,6 +60,13 @@
                                     <span class='hidden'>.</span>
                                 </a>
                             </li>
+                            @if ($offline_course)
+                                <li class='access pull-right'>
+                                    <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}">
+                                        <span class="fa fa-download fa-fw" data-toggle="tooltip" data-placement="top" title="{{ trans('langDownloadCourse') }}"></span>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                     @if ($course_info->home_layout == 1)
@@ -158,13 +165,13 @@
                         @endif
                     </div>
                 </div>
-                <div class='row boxlist no-list'>
+                <div class='row boxlist no-list' id='boxlistSort'>
                     @if ($course_units)
                         <?php $count_index = 0;?>
                         @foreach ($course_units as $key => $course_unit)
                             <?php
                                 $not_shown = false;
-                                if (!(($course_units->start_week == '0000-00-00') or (is_null($course_unit->start_week))) and (date('Y-m-d') < $course_unit->start_week)) {
+                                if (!(($course_unit->start_week == '0000-00-00') or (is_null($course_unit->start_week))) and (date('Y-m-d') < $course_unit->start_week)) {
                                     $not_shown = true;
                                 }
                             ?>
@@ -174,7 +181,7 @@
                             @if (!$is_editor and $not_shown)
                                 @continue;
                             @else
-                                <div class='col-xs-12'>
+                                <div id='unit_{{ getIndirectReference($course_unit->id) }}' class='col-xs-12' data-id='{{ $course_unit->id }}'>
                                     <div class='panel clearfix'>
                                         <div class='col-xs-12'>
                                             <div class='item-content'>
@@ -205,25 +212,14 @@
                             @endif
                                                 @if ($is_editor)
                                                     <div class='item-side'>
+                                                        <div class='reorder-btn'>
+                                                            <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title ='{{ trans('langReorder') }}'></span>
+                                                        </div>
                                                         {!! action_button([
                                                             [
                                                                 'title' => trans('langEditChange'),
                                                                 'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$course_unit->id",
                                                                 'icon' => 'fa-edit'
-                                                            ],
-                                                            [
-                                                                'title' => trans('langDown'),
-                                                                'level' => 'primary',
-                                                                'url' => "$_SERVER[REQUEST_URI]?down=". getIndirectReference($course_unit->id),
-                                                                'icon' => 'fa-arrow-down',
-                                                                'disabled' => $key + 1 == count($course_units)
-                                                            ],
-                                                            [
-                                                                'title' => trans('langUp'),
-                                                                'level' => 'primary',
-                                                                'url' => "$_SERVER[REQUEST_URI]?up=". getIndirectReference($course_unit->id),
-                                                                'icon' => 'fa-arrow-up',
-                                                                'disabled' => $key == 0
                                                             ],
                                                             [
                                                                 'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
@@ -256,11 +252,11 @@
                             </div>
                         @endforeach
                     @else
-                    <div class='col-sm-12'>
-                        <div class='panel'>
-                            <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
+                        <div class='col-sm-12'>
+                            <div class='panel'>
+                                <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
+                            </div>
                         </div>
-                    </div>
                     @endif
                 </div>
                 {!! $course_home_main_area_widgets !!}
@@ -429,5 +425,4 @@
             });
         </script>";
     @endif
-}
 @endsection

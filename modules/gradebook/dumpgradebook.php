@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,6 +27,8 @@ require_once 'functions.php';
 
 if (isset($_GET['t'])) {
     $t = intval($_GET['t']);
+} else {
+    $t = 1;
 }
 
 $csv = new CSV();
@@ -41,7 +42,7 @@ $gid = getDirectReference($_GET['gradebook_id']);
 $gradebook_title = get_gradebook_title($gid);
 $csv->outputRecord($gradebook_title);
 $csv->outputRecord();
-        
+
 if ($t == 1) { // display gradebook activities results
     $range = Database::get()->querySingle('SELECT `range` FROM gradebook
         WHERE course_id = ?d AND id = ?d', $course_id, $gid)->range;
@@ -62,36 +63,42 @@ if ($t == 1) { // display gradebook activities results
         }
         $csv->outputRecord();
     }
-} else { // display gradebook users results            
-    
+} else { // display gradebook users results
+
     // data header
     $data_header = array();
+    // mapping of activity id's to output columns
+    $actId = array();
+    $actCounter = 0;
     array_push($data_header, $langSurname, $langName, $langAm, $langUsername, $langEmail);
     array_push($data_header, $langGradebookTotalGrade);
-    $activities = Database::get()->queryArray("SELECT title FROM gradebook_activities WHERE visible = 1 AND gradebook_id = ?d", $gid);
-    foreach ($activities as $act_title) {
-        array_push($data_header, $act_title->title);
-    }    
+    $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE visible = 1 AND gradebook_id = ?d", $gid);
+    foreach ($activities as $act) {
+        $actId[$act->id] = $actCounter++;
+        array_push($data_header, $act->title);
+    }
     $csv->outputRecord($data_header);
-    
+
     // user grades
     $range = get_gradebook_range($gid);
-    $sql_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gid);    
+    $sql_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gid);
     foreach ($sql_users as $data) {
-        $data_user_grades = array();
-        array_push($data_user_grades, uid_to_name($data->uid, 'surname'), 
-                                      uid_to_name($data->uid, 'givenname'), 
+        $data_user_intro = array();
+        array_push($data_user_intro, uid_to_name($data->uid, 'surname'),
+                                      uid_to_name($data->uid, 'givenname'),
                                       uid_to_name($data->uid, 'username'),
-                                      uid_to_am($data->uid), 
+                                      uid_to_am($data->uid),
                                       uid_to_email($data->uid));
-        array_push($data_user_grades, userGradeTotal($gid, $data->uid, true)); // total grade
-        $sql_grades = Database::get()->queryArray("SELECT grade FROM gradebook_book
-                                            WHERE gradebook_activity_id IN 
+        array_push($data_user_intro, userGradeTotal($gid, $data->uid, true)); // total grade
+        $sql_grades = Database::get()->queryArray("SELECT gradebook_activity_id, grade FROM gradebook_book
+                                            WHERE gradebook_activity_id IN
                                         (SELECT id FROM gradebook_activities WHERE gradebook_activities.visible = 1 AND gradebook_id = ?d)
                                             AND uid = ?d", $gid, $data->uid);
+        $data_user_grades = array_fill(0, $actCounter, '-');
         foreach ($sql_grades as $g) {
-            array_push($data_user_grades, round($g->grade * $range, 2)); // activities grade
-        }        
-        $csv->outputRecord($data_user_grades);
+            $position = $actId[$g->gradebook_activity_id];
+            $data_user_grades[$position] = round($g->grade * $range, 2); // activities grade
+        }
+        $csv->outputRecord($data_user_intro, $data_user_grades);
     }
 }

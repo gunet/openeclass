@@ -22,6 +22,9 @@
 
 $require_current_course = TRUE;
 $require_editor = true;
+$require_help = true;
+$helpTopic = 'assignments';
+$helpSubTopic = 'rubric';
 include '../../include/baseTheme.php'; 
 
 $toolName = $langGradeRubrics;
@@ -29,18 +32,9 @@ $pageName = $langGradeRubrics;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
 
 if (isset($_GET['delete'])) { // delete rubric
-    $rubric_used = Database::get()->querySingle("SELECT COUNT(*) as count FROM `assignment`, `assignment_submit` "
-            . "WHERE `assignment`.`grading_scale_id` = ?d "
-            . "AND `assignment`.`course_id` = ?d "
-            . "AND `assignment`.`id` = `assignment_submit`.`assignment_id` "
-            . "AND `assignment_submit`.`grade` IS NOT NULL", $_GET['delete'], $course_id)->count;
-    if ($rubric_used) {
-        $tool_content .= "<div class='alert alert-info'>$langRubricNotDelete</div>";
-    } else {
-        Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
-        Session::Messages($langRubricDeleted, 'alert-success');
-        redirect_to_home_page("modules/work/rubrics.php");
-    }
+    Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
+    Session::Messages($langRubricDeleted, 'alert-success');
+    redirect_to_home_page("modules/work/rubrics.php");
 }
 
 // submit rubric
@@ -284,7 +278,6 @@ if (isset($_GET['rubric_id'])) {
             'url' => "rubrics.php?course=$course_code"
         ),
     ));
-    //<form class='form-horizontal' role='form' data-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;rubric_id=$rubric->id' id='rubric_form'>
     $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
@@ -446,11 +439,6 @@ if (isset($_GET['rubric_id'])) {
                 $table_content .= "<tr>
                             <td><a href='rubrics.php?course=$course_code&amp;preview=$rubric_id'>$rubric->name</a></td>
 							<td>$rubric->description</td>";
-                            /*<td>
-                                <ul class='list-unstyled'>
-                                    $criteria_list
-                                </ul>
-                            </td>*/
                 $table_content .= "<td class='option-btn-cell'>
                             ".action_button(array(
                                 array(
@@ -462,6 +450,7 @@ if (isset($_GET['rubric_id'])) {
                                         'title' => $langDelete,
                                         'url' => "rubrics.php?course=$course_code&amp;delete=$rubric->id",
                                         'icon' => 'fa-times',
+                                        'show' => !is_rubric_used_in_assignment($rubric->id, $course_id),
                                         'class' => 'delete',
                                         'confirm' => $langConfirmDelete)
                                 ))."
@@ -545,18 +534,38 @@ function show_rubric ($rubric_id) {
                     ". action_button(array(
                         array(
                             'title' => $langEdit,
-                            'url' => "rubrics.php?course=$course_code&amp;rubric_id=$rubric->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;rubric_id=$rubric->id",
                             'icon' => 'fa-edit'
                         ),
                         array(
-                                'title' => $langDelete,
-                                'url' => "rubrics.php?course=$course_code&amp;delete=$rubric->id",
-                                'icon' => 'fa-times',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmDelete)
+                            'title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$rubric->id",
+                            'icon' => 'fa-times',
+                            'show' => !is_rubric_used_in_assignment($rubric->id, $course_id),
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete)
                         ))."
                 </td>
                 </tr>
         </table>
     </div>";
+}
+
+/**
+ * @brief check if rubric is used in some assignment
+ * @param $rubric_id
+ * @param $course_id
+ * @return bool
+ */
+function is_rubric_used_in_assignment($rubric_id, $course_id) {
+
+    $sql = Database::get()->querySingle("SELECT * FROM assignment WHERE grading_scale_id = ?d
+                                                  AND grading_type = 2 
+                                                  AND course_id = ?d", $rubric_id, $course_id);
+    if ($sql) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+
 }

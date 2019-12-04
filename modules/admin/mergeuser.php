@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,9 +20,9 @@
  * ======================================================================== */
 
 
-/** 
+/**
   @file mergeuser.php
-  @Description: Merge two users  
+  @Description: Merge two users
  */
 
 $require_usermanage_user = true;
@@ -45,15 +45,15 @@ if (isset($_REQUEST['u'])) {
         $info = (array) $info;
         if (in_array($info['password'], $auth_ids)) {            
             $temp = array_keys($auth_ids, $info['password']);// to avoid strict standards warning
-            $data['auth_id'] = array_pop($temp);
+            $auth_id = array_pop($temp);
         } else {
-            $data['auth_id'] = 1; // eclass default method
+            $auth_id = 1; // eclass default method
         }
-       
+
         $legend = q(sprintf($langUserMergeLegend, $info['username']));
         $data['status_names'] = $status_names = array(USER_GUEST => $langGuest, USER_TEACHER => $langTeacher, USER_STUDENT => $langStudent);
         $target = false;
-        
+
         $pageName = $legend;
         $data['action_bar'] = action_bar(array(            
             array('title' => $langBack,
@@ -119,7 +119,7 @@ view('admin.users.mergeuser', $data);
  * @param type $target
  */
 function do_user_merge($source, $target) {
-    global $langUserMergeSuccess;
+    global $langUserMergeSuccess, $langBack;
 
     $source_id = $source['id'];
     $target_id = $target['id'];
@@ -144,7 +144,7 @@ function do_user_merge($source, $target) {
         Database::get()->query("DELETE FROM user WHERE id = ?d", $source_id);
         Database::get()->query("DELETE FROM course_user WHERE user_id IN ($source_id, $target_id)");
         Database::get()->query("INSERT INTO course_user SELECT * FROM `$tmp_table`");
-        Database::get()->query("DROP TEMPORARY TABLE `$tmp_table`");        
+        Database::get()->query("DROP TEMPORARY TABLE `$tmp_table`");
         fix_table('loginout', 'id_user', $source_id, $target_id);
         fix_table('log', 'user_id', $source_id, $target_id);
         fix_table('assignment_submit', 'uid', $source_id, $target_id);
@@ -173,7 +173,8 @@ function do_user_merge($source, $target) {
         fix_table('user_department', 'user', $source_id, $target_id);
         fix_table('custom_profile_fields_data', 'user_id', $source_id, $target_id);
 
-        Session::Messages(sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>'), 'alert-success');
+        Session::Messages(sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>
+            <p><a href=\'search_user.php\'>$langBack</p>'), 'alert-success');
         redirect_to_home_page('modules/admin/search_user.php');
     }
 }

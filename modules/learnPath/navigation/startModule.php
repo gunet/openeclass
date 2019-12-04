@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -64,7 +64,8 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
              WHERE `user_id` = ?d
                AND `learnPath_module_id` = ?d";
     Database::get()->query($sql, $userid, $lpmid);
-    triggerLPGame($course_id, $userid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);    
+    triggerLPGame($course_id, $userid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
+    triggerLPAnalytics($course_id, $userid, $_SESSION['path_id']);
 }
 
 if (isset($_GET['viewModule_id']) && !empty($_GET['viewModule_id'])) {
@@ -94,6 +95,7 @@ if ($uid) { // if not anonymous
 	            ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data` )
 	            VALUES (?d , ?d, ?d, '', '')", $uid, $_SESSION['path_id'], $learnPathModuleId);
         triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
+        triggerLPAnalytics($course_id, $uid, $_SESSION['path_id']);
     }
 }  // else anonymous : record nothing !
 // Get info about launched module
@@ -201,7 +203,7 @@ if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {
 }
 
 echo "<frame src='../viewer_toc.php?course=$course_code$unitParam' name='tocFrame' scrolling='no' />";
-echo "<frameset border='0' cols='200,*' frameborder='0' id='colFrameset'>";
+echo "<frameset border='0' cols='250,*' frameborder='0' id='colFrameset'>";
 echo "<frame src='../toc.php?course=$course_code$unitParam' name='tocleftFrame'>";
 echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
 echo "</frameset>";

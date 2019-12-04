@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -216,7 +216,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                         </div>
                     </li>";
             } else {
-                $ann_url = $urlAppend . 'main/system_announcements.php/?an_id=' . $ann->id;
+                $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
                 $ann_content .= "
                 <li class='list-item'>
@@ -273,3 +273,29 @@ function getUserMessages() {
     return $message_content;
 }
 
+
+/**
+ * @brief check if user has accepted or rejected the current privacy policy
+ * @global type $uid
+ * @return boolean
+ */
+function user_has_accepted_policy($uid) {
+    $q = Database::get()->querySingle('SELECT ts FROM user_consent
+        WHERE user_id = ?d', $uid);
+    if ($q and $q->ts >= get_config('privacy_policy_timestamp')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+/*
+ * @brief update user consent
+ */
+function user_accept_policy($uid, $accept = true) {
+    $accept = $accept? 1: 0;
+    Database::get()->query('INSERT INTO user_consent
+        (has_accepted, user_id, ts) VALUES (?d, ?d, NOW())
+        ON DUPLICATE KEY UPDATE has_accepted = ?d, ts = NOW()', $accept, $uid, $accept);
+}

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2018  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -124,12 +124,12 @@ if ($u) {
         $ind_u = getIndirectReference($u);
         $data['action_bar'] = action_bar(array(
             array('title' => $langUserMerge,
-                'url' => "mergeuser.php?u=" . getIndirectReference($u),
+                'url' => "mergeuser.php?u=$u",
                 'icon' => 'fa-share-alt',
                 'level' => 'primary-label',
                 'show' => ($u != 1 and get_admin_rights($u) < 0)),
             array('title' => $langChangePass,
-                'url' => "password.php?userid=" . getIndirectReference($u),
+                'url' => "password.php?userid=$u",
                 'icon' => 'fa-key',
                 'level' => 'primary-label',
                 'show' => !(in_array($info->password, $auth_ids))),
@@ -177,9 +177,9 @@ if ($u) {
 
 
         if (isDepartmentAdmin()) {
-            list($js, $html) = $tree->buildUserNodePickerIndirect(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
+            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
         } else {
-            list($js, $html) = $tree->buildUserNodePickerIndirect(array('defaults' => $user->getDepartmentIds($u)));
+            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
         }
         $head_content .= $js;
         $data['html'] = $html;
@@ -207,11 +207,11 @@ if ($u) {
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
         $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
         $am = isset($_POST['am']) ? $_POST['am'] : '';
-        $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : 'NULL';
+        $departments = isset($_POST['department']) ? $_POST['department'] : 'NULL';
         $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
         $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
         if (isset($_POST['user_date_expires_at'])) {
-            if (empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at'])) {
+            if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) ) {
                 Session::Messages($langUserExpiresFieldEmpty, 'alert-warning');
                 redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
             }
@@ -228,10 +228,10 @@ if ($u) {
                                                  username = ?s", $u, $username)) {
             $user_exist = TRUE;
         }
-        
+
         //check for validation errors in custom profile fields
         $cpf_check = cpf_validate_format();
-        
+
         // check if there are empty fields
         if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
             Session::Messages($langFieldsMissing, 'alert-danger');

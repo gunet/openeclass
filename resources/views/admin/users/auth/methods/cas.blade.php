@@ -27,8 +27,8 @@
                     <div class='col-sm-10'>
                         {!! selection(
                             [
-                                0 => trans("m['no']"), 
-                                1 => trans("m['yes']")
+                                0 => trans('langNo'),
+                                1 => trans('langYes')
                             ], 
                             'cas_ssout', isset($auth_data['cas_ssout']) ? $auth_data['cas_ssout'] : 0, 'class="form-control"') !!}
                     </div>

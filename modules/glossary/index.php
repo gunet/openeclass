@@ -96,6 +96,7 @@ if ($glossary_data) {
  * ****************************************** */
 
 if ($is_editor) {
+
     if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
         if (isset($_GET['add'])) {
             $pageName = $langAddGlossaryTerm;
@@ -302,7 +303,7 @@ if ($is_editor) {
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
                              <div class='col-sm-10'>
-                                 " . selection($indirectcategories, 'category_id', $category_id, 'class="form-control"') . "
+                                 " . selection($indirectcategories, 'category_id', ($category_id), 'class="form-control"') . "
                              </div>
                         </div>";
             unset($categories['none']);

@@ -535,6 +535,10 @@ function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = nul
             phpCAS::setNoCasServerValidation();
             $ret['error'] = "$langNotSSL";
         }
+        // Force renewal of CAS login during transition
+        if (isset($GLOBALS['transition_script'])) {
+             phpCAS::renewAuthentication();
+        }
         // Single Sign Out
         //phpCAS::handleLogoutRequests(true, $cas_real_hosts);
         // Force CAS authentication on any page that includes this file
@@ -590,12 +594,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
 /**
  * @brief  Process login form submission
  * @global type $warning
- * @global type $surname
- * @global type $givenname
- * @global type $email
  * @global type $status
- * @global type $is_admin
- * @global type $language
  * @global type $session
  * @global type $langInvalidId
  * @global type $langAccountInactive1
@@ -604,14 +603,14 @@ function get_cas_attrs($phpCASattrs, $settings) {
  * @global type $langEnterPlatform
  * @global type $urlServer
  * @global type $langHere
+ * @global type $langInvalidAuth
  * @global array $auth_ids
  * @global type $inactive_uid
  * @global type $langTooManyFails
  * @global type $urlAppend
  */
 function process_login() {
-    global $warning, $surname, $givenname, $email, $status, $is_admin,
-        $language, $session, $langInvalidId, $langAccountInactive1,
+    global $warning, $session, $langInvalidId, $langAccountInactive1, $langInvalidAuth,
         $langAccountInactive2, $langNoCookies, $langEnterPlatform, $urlServer,
         $langHere, $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
 
@@ -670,7 +669,7 @@ function process_login() {
                             $auth_allow = login($myrow, $posted_uname, $pass);
                         }
                     } else {
-                        $tool_content .= "<br>$langInvalidAuth<br>";
+                        $warning .= "<div class='alert alert-warning'>$langInvalidAuth</div>";
                     }
                 }
             }
@@ -1103,7 +1102,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
     } else {
         $auth_allow = 4; // means wrong password
         Log::record(0, 0, LOG_LOGIN_FAILURE,
-            array('uname' => $posted_uname, 'pass' => $pass));
+            array('uname' => $posted_uname));
     }
 
     return $auth_allow;
@@ -1114,7 +1113,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
  * ************************************************************** */
 
 function alt_login($user_info_object, $uname, $pass, $mobile = false) {
-    global $warning, $auth_ids;
+    global $warning, $auth_ids, $langInvalidAuth;
 
     $_SESSION['canChangePassword'] = false;
     $auth = array_search($user_info_object->password, $auth_ids);
@@ -1169,8 +1168,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
         } else {
             $auth_allow = 2;
             // log invalid logins
-            Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $uname,
-                                                       'pass' => $pass));
+            Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $uname));
         }
         if ($auth_allow == 1) {
             $userObj = new User();

@@ -34,11 +34,12 @@ $helpSubTopic = 'units_actions';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
-require_once 'modules/units/functions.php';
+require_once 'functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/tc/functions.php';
 
 doc_init();
 
@@ -54,6 +55,7 @@ $pageName = ''; // delete $pageName set in doc_init.php
 
 $lang_editor = $language;
 load_js('tools.js');
+load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox(true);
 
 if (isset($_POST['edit_submit'])) {
@@ -136,7 +138,7 @@ foreach (array('previous', 'next') as $i) {
 }
 
 $moduleTag = new ModuleElement($id);
-$data['tags'] = $moduleTag->showTags();
+$data['tags_list'] = $moduleTag->showTags();
 $data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
              WHERE course_id = ?d AND `order` > 0
                    $visibility_check $check_start_week

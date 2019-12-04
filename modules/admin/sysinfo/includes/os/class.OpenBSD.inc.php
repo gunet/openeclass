@@ -8,7 +8,7 @@
  * @package   PSI OpenBSD OS class
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License version 2, or (at your option) any later version
  * @version   SVN: $Id: class.OpenBSD.inc.php 621 2012-07-29 18:49:04Z namiltd $
  * @link      http://phpsysinfo.sourceforge.net
  */
@@ -20,7 +20,7 @@
  * @package   PSI OpenBSD OS class
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License version 2, or (at your option) any later version
  * @version   Release: 3.0
  * @link      http://phpsysinfo.sourceforge.net
  */
@@ -29,13 +29,13 @@ class OpenBSD extends BSDCommon
     /**
      * define the regexp for log parser
      */
-    public function __construct()
+    public function __construct($blockname = false)
     {
-        parent::__construct();
+        parent::__construct($blockname);
 //        $this->setCPURegExp1("/^cpu(.*) (.*) MHz/");
         $this->setCPURegExp2("/(.*),(.*),(.*),(.*),(.*)/");
         $this->setSCSIRegExp1("/^(.*) at scsibus.*: <(.*)> .*/");
-        $this->setSCSIRegExp2("/^(da[0-9]+): (.*)MB /");
+        $this->setSCSIRegExp2("/^(sd[0-9]+): (.*)MB,/");
         $this->setPCIRegExp1("/(.*) at pci[0-9]+ .* \"(.*)\"/");
         $this->setPCIRegExp2("/\"(.*)\" (.*).* at [.0-9]+ irq/");
     }
@@ -77,15 +77,15 @@ class OpenBSD extends BSDCommon
                     $speedinfo = "";
                     $bufe2 = preg_split("/\n/", $bufr2, -1, PREG_SPLIT_NO_EMPTY);
                     foreach ($bufe2 as $buf2) {
-                        if (preg_match('/^\s+lladdr\s+(\S+)/i', $buf2, $ar_buf2))
-                            $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').preg_replace('/:/', '-', strtoupper($ar_buf2[1])));
-                        elseif (preg_match('/^\s+inet\s+(\S+)\s+netmask/i', $buf2, $ar_buf2))
+                        if (preg_match('/^\s+lladdr\s+(\S+)/i', $buf2, $ar_buf2)) {
+                            if (!defined('PSI_HIDE_NETWORK_MACADDR') || !PSI_HIDE_NETWORK_MACADDR) $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').preg_replace('/:/', '-', strtoupper($ar_buf2[1])));
+                        } elseif (preg_match('/^\s+inet\s+(\S+)\s+netmask/i', $buf2, $ar_buf2)) {
                             $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').$ar_buf2[1]);
-                        elseif ((preg_match('/^\s+inet6\s+([^\s%]+)\s+prefixlen/i', $buf2, $ar_buf2)
+                        } elseif ((preg_match('/^\s+inet6\s+([^\s%]+)\s+prefixlen/i', $buf2, $ar_buf2)
                               || preg_match('/^\s+inet6\s+([^\s%]+)%\S+\s+prefixlen/i', $buf2, $ar_buf2))
-                              && ($ar_buf2[1]!="::") && !preg_match('/^fe80::/i', $ar_buf2[1]))
+                              && ($ar_buf2[1]!="::") && !preg_match('/^fe80::/i', $ar_buf2[1])) {
                             $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').strtolower($ar_buf2[1]));
-                        elseif (preg_match('/^\s+media:\s+/i', $buf2) && preg_match('/[\(\s](\d+)(G*)base/i', $buf2, $ar_buf2)) {
+                        } elseif (preg_match('/^\s+media:\s+/i', $buf2) && preg_match('/[\(\s](\d+)(G*)base/i', $buf2, $ar_buf2)) {
                             if (isset($ar_buf2[2]) && strtoupper($ar_buf2[2])=="G") {
                                 $unit = "G";
                             } else {
@@ -114,11 +114,14 @@ class OpenBSD extends BSDCommon
         foreach ($this->readdmesg() as $line) {
             if (preg_match('/^(.*) at pciide[0-9]+ (.*): <(.*)>/', $line, $ar_buf)) {
                 $dev = new HWDevice();
-                $dev->setName($ar_buf[0]);
-                // now loop again and find the capacity
-                foreach ($this->readdmesg() as $line2) {
-                    if (preg_match("/^(".$ar_buf[0]."): (.*), (.*), (.*)MB, .*$/", $line2, $ar_buf_n)) {
-                        $dev->setCapacity($ar_buf_n[4] * 2048 * 1.049);
+                $dev->setName($ar_buf[3]);
+                if (defined('PSI_SHOW_DEVICES_INFOS') && PSI_SHOW_DEVICES_INFOS) {
+                    // now loop again and find the capacity
+                    foreach ($this->readdmesg() as $line2) {
+                        if (preg_match("/^(".$ar_buf[1]."): (.*), (.*), (.*)MB, .*$/", $line2, $ar_buf_n)) {
+                            $dev->setCapacity($ar_buf_n[4] * 1024 * 1024);
+                            break;
+                        }
                     }
                 }
                 $this->sys->setIdeDevices($dev);
@@ -214,9 +217,13 @@ class OpenBSD extends BSDCommon
     public function build()
     {
         parent::build();
-        $this->_distroicon();
-        $this->_network();
-        $this->_uptime();
-        $this->_processes();
+        if (!$this->blockname || $this->blockname==='vitals') {
+            $this->_distroicon();
+            $this->_uptime();
+            $this->_processes();
+        }
+        if (!$this->blockname || $this->blockname==='network') {
+            $this->_network();
+        }
     }
 }

@@ -26,7 +26,7 @@
  */
 
 require_once '../include/baseTheme.php';
-$pageName = $langInfo;
+$toolName = $langInfo;
 
 $data['course_inactive'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count;
 $data['course_open'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_OPEN)->count;

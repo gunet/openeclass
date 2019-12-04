@@ -1,7 +1,6 @@
 <?php
-
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2016  Greek Universities Network - GUnet
@@ -28,25 +27,12 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
-    if (isset($_POST['toReorder'])){
-        $toReorder = $_POST['toReorder'];
-
-        if (isset($_POST['prevReorder'])) {
-            $prevRank = Database::get()->querySingle("SELECT `order` FROM ebook WHERE id = ?d", $_POST['prevReorder'])->order;
-        } else {
-            $prevRank = 0;
-        }
-
-        Database::get()->query("UPDATE `ebook` SET `order` = `order` + 1 WHERE `course_id` = ?d AND `order` > ?d", $course_id, $prevRank);
-        Database::get()->query("UPDATE `ebook` SET `order` = ?d WHERE `course_id` = ?d AND id = ?d", $prevRank + 1, $course_id, $toReorder);
-        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM ebook WHERE course_id =?d", $course_id)->minOrder;
-        Database::get()->query("UPDATE `ebook` SET `order` = `order` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
-
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toReorder'])) {
+        reorder_table('ebook', 'course_id', $course_id, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
     }
-
-    exit();
+    exit;
 }
 
 /* * ** The following is added for statistics purposes ** */
@@ -93,7 +79,7 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')
-            ));        
+            ));
     } else {
         $tool_content .= action_bar(array(
             array('title' => $langCreate,
@@ -114,16 +100,16 @@ if ($is_editor) {
                                              (SELECT id FROM ebook_section WHERE ebook_id = ?d)", $id);
                 Database::get()->query("DELETE FROM ebook_section WHERE ebook_id = ?d", $id);
                 Database::get()->query("DELETE FROM ebook WHERE id = ?d", $id);
-                $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
+                $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $id;
                 my_delete($basedir);
                 Database::get()->query("DELETE FROM document WHERE
                                      subsystem = " . EBOOK . " AND
                                      subsystem_id = ?d AND
                                      course_id = ?d", $id, $course_id);
                 $tool_content .= "<div class='alert alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
+            } else {
+                Session::Messages($langResourceBelongsToCert, "alert-warning");
             }
-        } else {
-            Session::Messages($langResourceBelongsToCert, "alert-warning");
         }
     } elseif (isset($_GET['create'])) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langEBook);
@@ -135,18 +121,17 @@ if ($is_editor) {
                 <div class='form-group'>
                     <label for='ebook_title' class='col-sm-2 control-label'>$langTitle: </label>
                     <div class='col-sm-10'>
-                        <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>                    
+                        <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>
                     </div>
                 </div>
                 <div class='form-group'>
                     <label for='fileUpload' class='col-sm-2 control-label'>$langZipFile:</label>
-                    <div class='col-sm-10'>                    
-                      <input type='file' name='file' id='fileUpload'>
- $langOptional
+                    <div class='col-sm-10'>
+                      <input type='file' name='file' id='fileUpload'><small class='help-block'>$langOptional</small>
                     </div>
                 </div>
                 <div class='row'>
-                      <div class='infotext-sm col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+                      <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2 '>".
@@ -160,15 +145,11 @@ if ($is_editor) {
                     'href' => "index.php?course=$course_code",
                 )
             ))
-            ."    
+            ."
                     </div>
-                </div>                         
+                </div>
             </form>
         </div>";
-    } elseif (isset($_GET['down'])) {
-        move_order('ebook', 'id', intval($_GET['down']), 'order', 'down', "course_id = $course_id");
-    } elseif (isset($_GET['up'])) {
-        move_order('ebook', 'id', intval($_GET['up']), 'order', 'up', "course_id = $course_id");
     } elseif (isset($_GET['vis'])) {
         if (!resource_belongs_to_progress_data(MODULE_ID_EBOOK, $_GET['vis'])) {
             Database::get()->query("UPDATE ebook SET visible = NOT visible
@@ -199,14 +180,11 @@ if (!$q && !isset($_GET['create'])) {
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'><thead>
      <tr class='list-header'>
-       <th class = 'text-left'>$langEBook</th>" .
+       <th class = 'text-left'>$langEBooks</th>" .
             ($is_editor ?
                     "<th class='text-center option-btn-cell'>".icon('fa-gears')."</th>" :
                     '') . "
      </tr></thead><tbody id='tosort'>";
-
-    $k = 0;
-    $num = count($q);
     foreach ($q as $r) {
         $vis_class = $r->visible ? '' : 'not_visible';
         if (is_null($r->sid)) {
@@ -214,12 +192,14 @@ if (!$q && !isset($_GET['create'])) {
         } else {
             $title_link = "<a href='show.php/$course_code/$r->id/'>" . q($r->title) . "</a>";
         }
-        $warning = is_null($r->sid) ? " <i>($langInactive)</i>" : '';
+        if ($is_editor) {
+            $title_link .= '&nbsp;' . icon('fa-edit', $langEditChange, "edit.php?course=$course_code&amp;id=" . $r->id);
+        }
         $tool_content .= "<tr class = '$vis_class' data-id='$r->id'>
                 <td>$title_link</td>".
-                   tools($r->id, $k, $num, $r->visible) . 
+                   tools($r->id, $r->visible) .
                 "</tr>";
-        $k++;
+
     }
     $tool_content .= "</tbody></table>";
     $tool_content .= "</div>";
@@ -232,25 +212,22 @@ draw($tool_content, 2, null, $head_content);
  * @brief display action button
  * @global type $is_editor
  * @global type $langEditChange
- * @global type $langDelete 
+ * @global type $langDelete
  * @global type $langEBookDelConfirm
  * @global type $langViewShow
  * @global type $course_code
  * @global type $langViewHide
- * @param type $id 
- * @param type $k
- * @param type $num
+ * @param type $id
  * @param type $vis
  * @return string
  */
-function tools($id, $k, $num, $vis) {
+function tools($id, $vis) {
     global $is_editor, $langEditChange, $langDelete, $langViewShow,
            $langEBookDelConfirm, $course_code, $langViewHide;
 
     if (!$is_editor) {
         return '';
-    } else {        
-        $num--;
+    } else {
         $content = "<td class='option-btn-cell' style='width: 90px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
                 vertical-align: bottom;'><span class='fa fa-arrows' style='cursor: pointer;'></span></div><div class='pull-left'>";
         $content .= action_button(array(
@@ -260,13 +237,13 @@ function tools($id, $k, $num, $vis) {
                     array('title' => $vis ? $langViewHide : $langViewShow,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id",
                           'icon' => $vis ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,                          
+                    array('title' => $langDelete,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$id",
                           'icon' => 'fa-times',
                           'class' => 'delete',
                           'confirm' => $langEBookDelConfirm)
         ));
         $content .= "</div></td>";
-        return "$content";        
+        return "$content";
     }
 }

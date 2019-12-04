@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -272,7 +272,7 @@ function display_course_completion() {
             $tool_content .= "
                         <div class='row res-table-row'>
                             <div class='col-sm-2'>
-                                <i class='fa fa-certificate fa-3x' aria-hidden='true'></i>
+                                <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
                             </div>
                             <div class='col-sm-9'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
@@ -322,6 +322,7 @@ function display_course_completion() {
  * @global type $langDocumentAsModuleLabel
  * @global type $langMediaAsModuleLabel
  * @global type $langOfEBook
+ * @global type $langOfGradebook
  * @global type $langOfPoll
  * @global type $langWiki
  * @global type $langOfTopicForums
@@ -341,6 +342,7 @@ function display_course_completion() {
  * @global type $langInsertWorkCap
  * @global type $langUsers
  * @global type $langValue
+ * @global type $langOfCourseCompletion
  * @param type $element
  * @param type $certificate_id
  */
@@ -350,11 +352,12 @@ function display_activities($element, $id) {
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
-           $langOfTopicForums, $langOfBlogComments, $langConfirmDelete,
+           $langNumInForum, $langOfBlogComments, $langConfirmDelete,
            $langOfLearningPath, $langDelete, $langEditChange,
-           $langInsertWorkCap, $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
-           $langValue, $langOfForums;
+           $langDocumentAsModuleLabel, $langCourseParticipation,
+           $langAdd, $langExport, $langBack, $langUsers, $langOfGradebook,
+           $langValue, $langNumInForumTopic, $langOfCourseCompletion,
+           $course_id;
     /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
 
     if ($element == 'certificate') {
@@ -381,6 +384,18 @@ function display_activities($element, $id) {
             false
         );
 
+    // check if course completion is enabled
+    $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge WHERE course_id = ?d AND bundle = -1", $course_id)->active;
+
+    // check if current element is course completion badge
+    $cc_is_current = false;
+    if ($element == 'badge') {
+        $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
+        if ($bundle && $bundle == -1) {
+            $cc_is_current = true;
+        }
+    }
+
     // certificate details
     $tool_content .= display_settings($element, $id);
 
@@ -388,70 +403,82 @@ function display_activities($element, $id) {
     $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
 
     $addActivityBtn = action_button(array(
-        array('title' => "$langOfAssignment",
+        array('title' => $langOfCourseCompletion,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecompletion",
+            'icon' => 'fa fa-trophy',
+            'show' => !$cc_enable),
+        array('title' => $langOfAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
             'class' => ''),
-        array('title' => "$langExerciseAsModuleLabel",
+        array('title' => $langExerciseAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ExerciseEvent::ACTIVITY,
             'icon' => 'fa fa-pencil-square-o',
             'class' => ''),
-        array('title' => "$langOfBlog",
+        array('title' => $langOfBlog,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
             'icon' => 'fa fa-columns fa-fw',
             'class' => ''),
-        array('title' => "$langOfBlogComments",
+        array('title' => $langOfBlogComments,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
             'icon' => 'fa fa-comment fa-fw',
             'class' => ''),
-        /*array('title' => "$langOfCourseComments",
+        /*array('title' => $langOfCourseComments,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
               'icon' => 'fa fa-edit space-after-icon',
               'class' => ''),*/
-        array('title' => "$langOfForums",
+        array('title' => $langNumInForum,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumEvent::ACTIVITY,
             'icon' => 'fa fa-comments fa-fw',
             'class' => ''),
-        array('title' => "$langOfTopicForums",
+        array('title' => $langNumInForumTopic,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumTopicEvent::ACTIVITY,
             'icon' => 'fa fa-comments fa-fw',
             'class' => ''),
-        array('title' => "$langOfLearningPath",
+        array('title' => $langOfLearningPath,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lp",
             'icon' => 'fa fa-ellipsis-h fa-fw',
             'class' => ''),
-        /*array('title' => "$langOfLikesSocial",
+        /*array('title' => $langOfLikesSocial,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likesocial",
               'icon' => 'fa fa-edit space-after-icon',
               'class' => ''),
-        array('title' => "$langOfLikesForum",
+        array('title' => $langOfLikesForum,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likeforum",
               'icon' => 'fa fa-edit space-after-icon',
               'class' => ''),*/
-        array('title' => "$langDocumentAsModuleLabel",
+        array('title' => $langDocumentAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
             'icon' => 'fa fa-folder-open-o fa-fw',
             'class' => ''),
-        array('title' => "$langMediaAsModuleLabel",
+        array('title' => $langMediaAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=multimedia",
             'icon' => 'fa fa-edit space-after-icon',
             'class' => ''),
-        array('title' => "$langOfEBook",
+        array('title' => $langOfEBook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=ebook",
             'icon' => 'fa fa-book fa-fw',
             'class' => ''),
-        array('title' => "$langOfPoll",
+        array('title' => $langOfPoll,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
             'icon' => 'fa fa-question-circle fa-fw',
             'class' => ''),
-        array('title' => "$langWiki",
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=wiki",
-            'icon' => 'fa fa-wikipedia fa-fw',
+        array('title' => $langWiki,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . WikiEvent::ACTIVITY,
+            'icon' => 'fa fa-wikipedia-w fa-fw',
             'class' => ''),
-        array('title' => "$langCourseParticipation",
+        array('title' => $langCourseParticipation,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
             'icon' => 'fa fa-area-chart fa-fw',
-            'class' => '')),
+            'class' => ''),
+        array('title' => $langOfGradebook,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . GradebookEvent::ACTIVITY,
+            'icon' => 'fa fa-sort-numeric-desc space-after-icon',
+            'class' => ''),
+        array('title' => $langOfCourseCompletion,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
+            'icon' => 'fa fa-trophy',
+            'show' => $cc_enable && !$cc_is_current)),
         array(
             'secondary_title' => $langAdd,
             'secondary_icon' => '',
@@ -539,6 +566,9 @@ function display_activities($element, $id) {
 function insert_activity($element, $element_id, $activity) {
 
     switch ($activity) {
+        case 'coursecompletion':
+            add_course_completion_to_certificate($element_id);
+            break;
         case AssignmentEvent::ACTIVITY:
             display_available_assignments($element, $element_id);
             break;
@@ -584,6 +614,12 @@ function insert_activity($element, $element_id, $activity) {
             break;
         case 'participation':
             display_available_participation($element, $element_id);
+            break;
+        case GradebookEvent::ACTIVITY:
+            display_available_gradebooks($element, $element_id);
+            break;
+        case CourseCompletionEvent::ACTIVITY:
+            display_available_coursecompletiongrade($element, $element_id);
             break;
         default: break;
         }
@@ -631,27 +667,15 @@ function display_modification_activity($element, $element_id, $activity_id) {
 
 /**
  * @brief assignments display form
- * @global type $course_id
- * @global type $tool_content
- * @global type $langNoAssign
- * @global type $course_code
- * @global type $langTitle
- * @global type $langGroupWorkDeadline_of_Submission
- * @global type $langChoice
- * @global type $langActive
- * @global type $langInactive
- * @global type $langAddModulesButton
- * @global type $langOperator
- * @global type $langValue
  * @param type $element
  * @param type $element_id
  */
 function display_available_assignments($element, $element_id) {
 
     global $course_id, $tool_content, $langNoAssign, $course_code,
-           $langTitle, $langGroupWorkDeadline_of_Submission, $langChoice,
-           $langActive, $langInactive, $langAddModulesButton,
-           $langOperator, $langValue;
+           $langTitle, $langGroupWorkDeadline_of_Submission,
+           $langAddModulesButton, $langChoice,
+           $langOperator, $langGradebookGrade, $urlServer;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d
@@ -673,20 +697,14 @@ function display_available_assignments($element, $element_id) {
                 "<th class='text-left'>&nbsp;$langTitle</th>" .
                 "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langValue</th>" .
+                "<th style='width:50px;'>$langGradebookGrade</th>" .
                 "<th style='width:10px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         foreach ($result as $row) {
-            if ($row->active) {
-                $visible = icon('fa-eye', $langActive);
-            } else {
-                $visible = icon('fa-eye-slash', $langInactive);
-            }
             $assignment_id = $row->id;
-            $description = empty($row->description) ? '' :
-                    "<div>$row->description</div>";
+            $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
-                    "<td> " . q($row->title) . "<br><br><div class='text-muted'>$description</div></td>" .
+                    "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>
                     <td>". selection(get_operators(), "operator[$assignment_id]") . "</td>".
                     "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
@@ -701,25 +719,14 @@ function display_available_assignments($element, $element_id) {
 
 /**
  * @brief exercises display form
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $urlServer
- * @global type $langExercices
- * @global type $langNoExercises
- * @global type $langDescription
- * @global type $langChoice
- * @global type $langOperator
- * @global type $langValue
- * @global type $langAddModulesButton
  * @param type $element
  * @param type $element_id
  */
 function display_available_exercises($element, $element_id) {
 
     global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
-            $langNoExercises, $langDescription, $langChoice, $langAddModulesButton,
-            $langOperator, $langValue;
+            $langNoExercises, $langChoice, $langAddModulesButton,
+            $langOperator, $langGradebookGrade;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
@@ -745,22 +752,16 @@ function display_available_exercises($element, $element_id) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th width='50%' class='text-left'>$langExercices</th>" .
-                "<th class='text-left'>$langDescription</th>" .
+                "<th class='text-left'>$langExercices</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langValue</th>" .
+                "<th style='width:50px;'>$langGradebookGrade</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         foreach ($quizinfo as $entry) {
-            if ($entry['visibility'] == '0') {
-                $vis = 'not_visible';
-            } else {
-                $vis = '';
-            }
             $exercise_id = $entry['id'];
-            $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a></td>";
-            $tool_content .= "<td class='text-left'>" . $entry['comment'] . "</td>";
+            $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
+            $tool_content .= "<tr>";
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
             $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$exercise_id]' value=''></td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$exercise_id'></td>";
@@ -774,19 +775,6 @@ function display_available_exercises($element, $element_id) {
 
 /**
  * @brief document display form
- * @global type $webDir
- * @global type $course_code
- * @global type $tool_content
- * @global type $langDirectory
- * @global type $langUp
- * @global type $langName
- * @global type $langSize
- * @global type $langDate
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoDocuments
- * @global type $course_code
- * @global type $group_sql
  * @param type $element
  * @param type $element_id
  */
@@ -907,7 +895,7 @@ function display_available_documents($element, $element_id) {
 
                 /* * * comments ** */
                 if (!empty($entry['comment'])) {
-                    $tool_content .= "<br /><div class='comment'>" .
+                    $tool_content .= "<div style='margin-top: 10px;' class='comment'>" .
                             standard_text_escape($entry['comment']) .
                             "</div>";
                 }
@@ -1051,21 +1039,12 @@ function display_available_coursecomments($element, $element_id) {
 
 /**
  * @brief number of forums display form
- * @global type $tool_content
- * @global type $langAddModulesButton
- * @global type $langNumOfForums
- * @global type $course_code
- * @global type $langTitle
- * @global type $langValue
- * @global type $langResourceAlreadyAdded
- * @global type $langChoice
- * @global type $langOperator
  * @param type $element
  * @param type $element_id
  */
 function display_available_forums($element, $element_id) {
 
-    global $tool_content, $langAddModulesButton, $langNumOfForums,
+    global $tool_content, $langAddModulesButton, $langNumInForum,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
            $langChoice, $langOperator;
 
@@ -1088,7 +1067,7 @@ function display_available_forums($element, $element_id) {
                 "</tr>";
 
             $tool_content .= "<tr>" .
-                    "<td>$langNumOfForums</td>" .
+                    "<td>$langNumInForum</td>" .
                     "<td>". selection(get_operators(), "operator") . "</td>".
                     "<td class='text-center'><input style='width:30px;' type='text' name='threshold' value=''></td>" .
                     "<td class='text-center'><input name='forum' value='1' type='checkbox'></td>" .
@@ -1101,22 +1080,14 @@ function display_available_forums($element, $element_id) {
 }
 /**
  * @brief forum topic display form
- * @global type $tool_content
- * @global type $urlServer
- * @global type $course_id
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langForums
- * @global type $course_code
- * @global type $langOperator
- * @global type $langValue
  * @param type $element
  * @param type $element_id
  */
 function display_available_forumtopics($element, $element_id) {
+
     global $tool_content, $urlServer, $course_id,
            $langAddModulesButton, $langChoice, $langNoForumTopic,
-           $langForums, $course_code, $langOperator, $langValue;
+           $langTopics, $course_code, $langOperator, $langValue;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT ft.* FROM forum_topic ft JOIN forum f ON (f.id = ft.forum_id) WHERE f.course_id = ?d
@@ -1141,7 +1112,7 @@ function display_available_forumtopics($element, $element_id) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th>$langForums</th>" .
+                "<th>$langTopics</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1166,24 +1137,14 @@ function display_available_forumtopics($element, $element_id) {
 
 /**
  * @brief learning paths display form
- * @global type $course_id
- * @global type $course_code
- * @global type $urlServer
- * @global type $langNoLearningPath
- * @global type $langLearningPaths
- * @global type $langComments
- * @global type $langChoice
- * @global type $langAddModulesButton
- * @global type $langValue
- * @global type $langOperator
  * @param type $element
  * @param type $element_id
  */
 function display_available_lps($element, $element_id) {
 
     global $course_id, $course_code, $urlServer, $tool_content,
-           $langNoLearningPath, $langLearningPaths, $langComments, $langChoice,
-           $langAddModulesButton, $langOperator, $langValue;
+           $langNoLearningPath, $langLearningPaths, $langPercentage,
+           $langChoice, $langAddModulesButton, $langOperator;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
@@ -1199,7 +1160,6 @@ function display_available_lps($element, $element_id) {
             'id' => $row->learnPath_id,
             'name' => $row->name,
             'comment' => $row->comment,
-            'visible' => $row->visible,
             'rank' => $row->rank);
     }
     if (count($lpinfo) == 0) {
@@ -1209,31 +1169,23 @@ function display_available_lps($element, $element_id) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th width='50%'>$langLearningPaths</th>" .
-                "<th class='text-left'>$langComments</th>" .
+                "<th>$langLearningPaths</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langValue</th>" .
+                "<th style='width:50px;'>$langPercentage</th>" .
                 "<th style='width:10px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         foreach ($lpinfo as $entry) {
-            if ($entry['visible'] == 0) {
-                $vis = 'not_visible';
-                $disabled = 'disabled';
-            } else {
-                $vis = '';
-                $disabled = '';
-            }
             $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d
                                                     AND rank = (SELECT MIN(rank) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)",
                                                 $entry['id'], $entry['id']);
             if (($m_id) and $m_id->module_id > 0) {
                 $lp_id = $entry['id'];
-                $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a></td>";
-                $tool_content .= "<td>" . $entry['comment'] . "</td>";
+                $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
                 $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
                 $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$lp_id]' value=''></td>";
-                $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$lp_id' $disabled></td>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$lp_id'></td>";
                 $tool_content .= "</tr>";
             }
         }
@@ -1245,24 +1197,14 @@ function display_available_lps($element, $element_id) {
 }
 
 function display_available_ratings($element, $element_id) {
+    global $tool_content;
     $tool_content .= '..Still working on this...';
-
     return $tool_content;
 }
 
 
 /**
  * @brief multimedia display form
- * @global type $tool_content
- * @global type $themeimg
- * @global type $course_id
- * @global type $langTitle
- * @global type $langDescription
- * @global type $langDate
- * @global type $langChoice
- * @global type $langAddModulesButton
- * @global type $langNoVideo
- * @global type $course_code
  * @param type $element
  * @param type $element_id
  */
@@ -1272,11 +1214,10 @@ function display_available_multimedia($element, $element_id) {
     require_once 'include/lib/multimediahelper.class.php';
 
     global $tool_content, $themeimg, $course_id,
-            $langTitle, $langDescription, $langDate, $langChoice,
+            $langTitle, $langDate, $langChoice,
             $langAddModulesButton, $langNoVideo, $course_code;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    $count = 0;
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
     $cnt2 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE course_id = ?d", $course_id)->cnt;
@@ -1287,8 +1228,7 @@ function display_available_multimedia($element, $element_id) {
                          "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>" .
-                         "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
-                         "<th class='text-left'>$langDescription</th>" .
+                         "<th class='text-left'>&nbsp;$langTitle</th>" .
                          "<th width='100'>$langDate</th>" .
                          "<th width='80'>$langChoice</th>" .
                          "</tr>";
@@ -1302,6 +1242,7 @@ function display_available_multimedia($element, $element_id) {
                                                     AND activity_type IN ('" . ViewingEvent::VIDEO_ACTIVITY . "', '" . ViewingEvent::VIDEOLINK_ACTIVITY . "') AND module = ". MODULE_ID_VIDEO . ")", $course_id, $element_id);
             foreach ($result as $row) {
                 $row->course_id = $course_id;
+                $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". q($row->description). "</div>";
                 if ($table == 'video') {
                     $vObj = MediaResourceFactory::initFromVideo($row);
                     $videolink = MultimediaHelper::chooseMediaAhref($vObj);
@@ -1310,20 +1251,18 @@ function display_available_multimedia($element, $element_id) {
                     $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                 }
                 $tool_content .= "<tr>".
-                                 "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
-                                 "<td>" . q($row->description) . "</td>".
-                                 "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
-                                 "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
+                                     "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
+                                     "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
+                                     "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
                                  "</tr>";
             }
         }
         $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY name", $course_id);
         if ($sql) {
             foreach ($sql as $videocat) {
+                $description = empty($videocat->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". standard_text_escape($videocat->description). "</div>";
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" .
-                                 q($videocat->name) . "</td>";
-                $tool_content .= "<td colspan='2'>" . standard_text_escape($videocat->description) . "</td>";
+                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" . q($videocat->name) . $description . "</td>";
                 $tool_content .= "<td align='center'><input type='checkbox' name='videocatlink[]' value='$videocat->id'></td>";
                 $tool_content .= "</tr>";
                 foreach (array('video', 'videolink') as $table) {
@@ -1334,10 +1273,10 @@ function display_available_multimedia($element, $element_id) {
                                                         AND resource!=''
                                                         AND activity_type IN ('" . ViewingEvent::VIDEO_ACTIVITY . "', '" . ViewingEvent::VIDEOLINK_ACTIVITY . "') AND module = " . MODULE_ID_VIDEO . ")", $videocat->id, $element_id);
                     foreach ($sql2 as $linkvideocat) {
+                        $linkvideocat_description = empty($linkvideocat->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". standard_text_escape($linkvideocat->description). "</div>";
                         $tool_content .= "<tr>";
                         $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
-                                q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
-                        $tool_content .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
+                                q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>" . $linkvideocat_description . "</td>";
                         $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
                         $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'></td>";
                         $tool_content .= "</tr>";
@@ -1359,15 +1298,6 @@ function display_available_multimedia($element, $element_id) {
 
 /**
  * @brief ebook display form
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $urlServer
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoEBook
- * @global type $langEBook
- * @global type $course_code
  * @param type $element
  * @param type $element_id
  */
@@ -1393,7 +1323,6 @@ function display_available_ebooks($element, $element_id) {
                 "<th class='text-left'>&nbsp;$langEBook</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
-        $unit_parameter = 'unit=' . $id;
         foreach ($result as $catrow) {
             $tool_content .= "<tr>";
             $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
@@ -1426,6 +1355,7 @@ function display_available_ebooks($element, $element_id) {
             $old_sid = false;
             foreach ($q as $row) {
                 $sid = $row->sid;
+                $unit_parameter = 'unit=' . $sid;
                 $ssid = $row->ssid;
                 $display_id = $sid . ',' . $ssid;
                 $surl = $ebook_url_base . $display_id . '/' . $unit_parameter;
@@ -1457,14 +1387,6 @@ function display_available_ebooks($element, $element_id) {
 
 /**
  * @brief poll display form
- * @global type $course_id
- * @global type $course_code
- * @global type $urlServer
- * @global type $tool_content
- * @global type $langPollNone
- * @global type $langQuestionnaire
- * @global type $langChoice
- * @global type $langAddModulesButton
  * @param type $element
  * @param type $element_id
  */
@@ -1487,7 +1409,7 @@ function display_available_polls($element, $element_id) {
         $pollinfo[] = array(
             'id' => $row->pid,
             'title' => $row->name,
-            'active' => $row->active);
+            'description' => $row->description);
     }
     if (count($pollinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langPollNone</div>";
@@ -1500,8 +1422,9 @@ function display_available_polls($element, $element_id) {
                 "<th style='width:80px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         foreach ($pollinfo as $entry) {
+            $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";
+            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";
         }
@@ -1566,22 +1489,14 @@ function display_available_wiki($element, $element_id) {
 
 /**
  * @brief display course participation form
- * @global type $tool_content
- * @global type $course_code
- * @global type $langTitle
- * @global type $langChoice
- * @global type $langAddModulesButton
- * @global type $langOperator
- * @global type $langValue
- * @global type $langCourseParticipation
  * @param type $element
  * @param type $element_id
  */
 function display_available_participation($element, $element_id) {
 
-    global $tool_content, $course_code, $langInHour,
+    global $tool_content, $course_code, $langHours,
            $langTitle, $langChoice, $langAddModulesButton,
-           $langOperator, $langValue, $langCourseParticipation, $langResourceAlreadyAdded;
+           $langOperator, $langCourseParticipation, $langResourceAlreadyAdded;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
@@ -1596,12 +1511,12 @@ function display_available_participation($element, $element_id) {
                 "<tr class='list-header'>" .
                 "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
                 "<th style='width:5px;'>&nbsp;$langOperator</th>" .
-                "<th style='width:30px;'>$langValue</th>" .
+                "<th style='width:30px;'>$langHours</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
 
         $tool_content .= "<tr>
-                            <td>$langCourseParticipation $langInHour</td>
+                            <td>$langCourseParticipation</td>
                             <td>". selection(get_operators(), "operator") . "</td>
                             <td class='text-center'><input style='width:50px;' type='text' name='threshold' value=''></td>
                             <td align='center'><input type='checkbox' name='participation' value='1'></td>
@@ -1612,6 +1527,103 @@ function display_available_participation($element, $element_id) {
                 <div class='text-right'>
                     <input class='btn btn-primary' type='submit' name='add_participation' value='$langAddModulesButton'>
                 </div></form>";
+    }
+}
+
+/**
+ * @brief gradebooks display form
+ * @param type $element
+ * @param type $element_id
+ */
+function display_available_gradebooks($element, $element_id) {
+
+    global $course_id, $tool_content, $langNoGradeBooks, $course_code, $urlServer,
+           $langAvailableGradebooks, $langStart, $langFinish, $langChoice,
+           $langAddModulesButton, $langOperator, $langGradebookGrade;
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d 
+                                    AND active = 1
+                                    AND end_date > " . DBHelper::timeAfter() . "
+                                    AND id NOT IN
+                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                        AND resource != ''
+                                        AND activity_type = '" . GradebookEvent::ACTIVITY . "'
+                                        AND module = " . MODULE_ID_GRADEBOOK . ")
+                                    ORDER BY title", $course_id, $element_id);
+
+    if (count($result) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoGradeBooks</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+            "<input type='hidden' name = '$element_name' value='$element_id'>" .
+            "<table class='table-default'>" .
+            "<tr class='list-header'>" .
+            "<th class='text-left'>$langAvailableGradebooks</th>" .
+            "<th style='width:160px;'>$langStart</th>" .
+            "<th style='width:160px;'>$langFinish</th>" .
+            "<th style='width:5px;'>$langOperator</th>" .
+            "<th style='width:50px;'>$langGradebookGrade</th>" .
+            "<th style='width:10px;' class='text-center'>$langChoice</th>" .
+            "</tr>";
+
+        foreach ($result as $row) {
+            $gradebook_id = $row->id;
+            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date)->format('d/m/Y H:i');
+            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date)->format('d/m/Y H:i');
+            $tool_content .= "<tr>" .
+                "<td><a href ='{$urlServer}modules/gradebook/index.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "'>" . q($row->title) . "</a></td>" .
+                "<td class='text-center'>" . $start_date . "</td>" .
+                "<td class='text-center'>" . $end_date . "</td>" .
+                "<td>". selection(get_operators(), "operator[$gradebook_id]") . "</td>".
+                "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$gradebook_id]' value=''></td>" .
+                "<td class='text-center'><input name='gradebook[]' value='$gradebook_id' type='checkbox'></td>" .
+                "</tr>";
+        }
+
+        $tool_content .= "</table>" .
+            "<div align='right'><input class='btn btn-primary' type='submit' name='add_gradebook' value='$langAddModulesButton'></div></th></form>";
+    }
+}
+
+/**
+ * @brief Course Completion grade display form
+ * @param $element
+ * @param $element_id
+ */
+function display_available_coursecompletiongrade($element, $element_id) {
+
+    global $tool_content, $langAddModulesButton, $langCourseCompletion,
+           $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
+           $langChoice, $langPercentage;
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $res = Database::get()->queryArray("SELECT id FROM ${element}_criterion WHERE $element = ?d
+                                            AND resource IS NULL
+                                            AND activity_type = '" . CourseCompletionEvent::ACTIVITY . "'
+                                            AND module = " . MODULE_ID_PROGRESS, $element_id);
+    if (count($res) > 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+            "<input type='hidden' name='$element_name' value='$element_id'>" .
+            "<table class='table-default'>" .
+            "<tr class='list-header'>" .
+            "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+            "<th style='width:5px;'>&nbsp;$langValue</th>" .
+            "<th style='width:30px;'>$langPercentage</th>" .
+            "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+            "</tr>";
+
+        $tool_content .= "<tr>" .
+            "<td>" . $langCourseCompletion . "</td>" .
+            "<td>". selection(get_operators(), "operator") . "</td>".
+            "<td class='text-center'><input style='width:30px;' type='text' name='threshold' value=''></td>" .
+            "<td class='text-center'><input name='" . CourseCompletionEvent::ACTIVITY . "' value='1' type='checkbox'></td>" .
+            "</tr>";
+
+        $tool_content .= "</table>" .
+            "<div align='right'><input class='btn btn-primary' type='submit' name='add_coursecompletiongrade' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -1859,7 +1871,7 @@ function certificate_settings($element, $element_id = 0) {
 
 
 /**
- * @brief student view certificates / badges
+ * @brief student view certificates / badges / course completion
  * @global type $uid
  * @global type $course_id
  * @global type $urlServer
@@ -1873,12 +1885,54 @@ function certificate_settings($element, $element_id = 0) {
 function student_view_progress() {
 
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
-            $langBadges, $course_code, $langCertificates, $langPrintVers;
+            $langBadges, $course_code, $langCertificates, $langPrintVers, $langCourseCompletion;
 
     require_once 'Game.php';
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
     $found = false;
+
+    $course_completion_id = is_course_completion_active(); // is course completion active?
+    if (isset($course_completion_id) and $course_completion_id > 0) {
+        $found = true;
+        $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                            <div class='inner-heading'>
+                                <div class='row'>
+                                    <div class='col-sm-7'>
+                                        <strong>$langCourseCompletion</strong>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class='res-table-wrapper'>
+                                <div class='row res-table-row'>
+                                    <div class='col-sm-2'>
+                                        <i class='fa fa-trophy fa-4x' aria-hidden='true'></i>
+                                    </div>
+                                    <div class='col-sm-9'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>
+                                        <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
+                                            <p class='progress-bar active from-control-static' role='progressbar' 
+                                                    aria-valuenow='\".str_replace('%','',$percentage).\"' 
+                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        ";
+    }
+    
+    
     $iter = array('certificate', 'badge');
     foreach ($iter as $key) {
         ${'game_'.$key} = array();
@@ -1896,52 +1950,79 @@ function student_view_progress() {
                 . "AND (b.expires IS NULL OR b.expires > NOW())";
         $sql = Database::get()->queryArray($gameQ, $uid, $course_id);
         foreach ($sql as $game) {
-            if ($key == 'badge') { // get badge icon
-                $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id =
-                                                         (SELECT icon FROM badge WHERE id = ?d)", $game->id)->filename;
-                }
                 ${'game_'.$key}[] = $game;
             }
         }
-
+        // display badges
         if (count($game_badge) > 0) {
             $found = true;
-            $tool_content .= "<div class='row'>";
-            $tool_content .= "<div class='badge-container'>";
-            $tool_content .= "<h4>$langBadges</h4>";
-            $tool_content .= "<div class='form-wrapper'>";
-            $tool_content .= "<div class='clearfix'>";
-            foreach ($game_badge as $key => $badge) {
-                $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned));
-                $dateAssigned = ($badge->completed == 1) ? $formatted_date : '';
-                $faded = ($badge->completed != 1) ? "faded" : '';
-                $tool_content .= "<div class='col-xs-6 col-sm-3'>";
-                $tool_content .= "<a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>
-                    <img class='$faded center-block' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
-                    <p class='text-center' style='padding-top: 10px; font-size: larger;'>
-                        " . ellipsize($badge->title, 40) . "
-                    </p>";
 
-                if ($badge->completed != 1) {
-                    $tool_content .= "<div class='not_completed'>
-                        <div class='certificate_panel_percentage_compact center-block'>" . round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%</div>
-                        </div>";
-                }
-                $tool_content .= "</a></div>";
+            $tool_content .= "
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='panel panel-default'>
+                            <div class='panel-body'>
+                                <div class='inner-heading'>
+                                    <div class='row'>
+                                        <div class='col-sm-7'>
+                                            <strong>$langBadges</strong>
+                                        </div>                                    
+                                    </div>
+                                </div>";
+
+            foreach ($game_badge as $key => $badge) {
+                // badge icon
+                $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id =
+                                                         (SELECT icon FROM badge WHERE id = ?d)", $badge->id)->filename;
+
+                $faded = ($badge->completed != 1) ? "faded" : '';
+                $badge_percentage = round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%";
+
+                $tool_content .= "<div class='res-table-wrapper'>
+                                    <div class='row res-table-row'>
+                                        <div class='col-sm-2'>                                            
+                                            <img class = '$faded center-block' style='max-height: 60px;' class='img-responsive block-center' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
+                                        </div>";
+                                    $tool_content .= "
+                                        <div class='col-sm-9'>
+                                        <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>                                    
+                                            <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
+                                                <p class='progress-bar active from-control-static' role='progressbar'
+                                                        aria-valuenow='" . str_replace('%','',$badge_percentage) . "'
+                                                        aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $badge_percentage;'>$badge_percentage
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
             }
             $tool_content .= "</div></div></div></div>";
         }
 
+        // display certificates
         if (count($game_certificate) > 0) {
             $found = true;
-            $tool_content .= "<div class='row'>";
-            $tool_content .= "<div class='badge-container'>
-                    <h4>$langCertificates</h4><hr>";
-            $tool_content .= "<div class='form-wrapper'>";
-            $tool_content .= "<div class='clearfix'>";
+
+            $tool_content .= "
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='panel panel-default'>
+                            <div class='panel-body'>
+                                <div class='inner-heading'>
+                                    <div class='row'>
+                                        <div class='col-sm-7'>
+                                            <strong>$langCertificates</strong>
+                                        </div>                                    
+                                    </div>
+                                </div>";
+
+
             foreach ($game_certificate as $key => $certificate) {
                 $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
                 $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';
+
+                $tool_content .= "<div class='res-table-wrapper'>";
+
                 $tool_content .= "<div class='col-xs-12 col-sm-6 col-xl-4'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
                 $tool_content .= "<div class='certificate_panel'>
@@ -1966,6 +2047,8 @@ function student_view_progress() {
                             "%</div>";
                 }
                 $tool_content .= "</div></a>";
+                $tool_content .= "</div>";
+
                 $tool_content .= "</div>";
             }
             $tool_content .= "</div></div></div></div>";
@@ -1995,25 +2078,44 @@ function student_view_progress() {
  */
 function display_users_progress($element, $element_id) {
 
-    global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langName, $langUsersS,
-           $langSurname, $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
+    global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langNameSurname, $langUsersS,
+           $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
 
     if ($element == 'certificate') {
-        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate
-                                            WHERE certificate = ?d", $element_id);
-        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate WHERE
-                                                    completed = 1 AND certificate = ?d", $element_id)->t;
+        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
+                                            JOIN course_user ON user_certificate.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d
+                                                AND certificate = ?d", $course_id, $element_id);
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate
+                                            JOIN course_user ON user_certificate.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d 
+                                                AND completed = 1 
+                                                AND certificate = ?d", $course_id,$element_id)->t;
         $param_name = 'certificate_id';
     } else {
         $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_badge
-                                            WHERE badge = ?d", $element_id);
-        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge WHERE
-                                                    completed = 1 AND badge = ?d", $element_id)->t;
+                                            JOIN course_user ON user_badge.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d
+                                                AND badge = ?d", $course_id, $element_id);
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge 
+                                            JOIN course_user ON user_badge.user=course_user.user_id 
+                                                AND status = " .USER_STUDENT . " 
+                                                AND editor = 0 
+                                                AND course_id = ?d 
+                                                AND completed = 1 
+                                                AND badge = ?d", $course_id, $element_id)->t;
         $param_name = 'badge_id';
     }
-    $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user
-                                        WHERE `user`.`id` = `course_user`.`user_id`
-                                        AND `course_user`.`course_id` = ?d", $course_id)->total;
+    $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user
+                                        WHERE status = " .USER_STUDENT . " 
+                                            AND editor = 0                                         
+                                            AND course_id = ?d", $course_id)->total;
 
     if (count($sql) > 0) {
         $tool_content .= "<div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div>";
@@ -2021,8 +2123,8 @@ function display_users_progress($element, $element_id) {
             $tool_content .= "<thead>
                         <tr>
                           <th style='width:5%'>$langID</th>
-                          <th>$langName $langSurname</th>
-                          <th style='width:10%;'>$langProgress</th>
+                          <th>$langNameSurname</th>
+                          <th style='width: 20%;'>$langProgress</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -2033,10 +2135,14 @@ function display_users_progress($element, $element_id) {
             } else {
                 $icon = icon('fa-hourglass-2');
             }
+            $user_am = uid_to_am($user_data->user);
             $tool_content .= "<tr>
                     <td>". $cnt++ . "</td>
-                    <td>" . display_user($user_data->user). "<br>" .
-                    "($langAmShort: ". uid_to_am($user_data->user) . ")</td>
+                    <td>" . display_user($user_data->user). "<br>";
+                    if ($user_am) {
+                        $tool_content .= "($langAmShort: $user_am)";
+                    }
+            $tool_content .= "</td>
                     <td>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;&nbsp;$icon"
                           . "<small><a href='index.php?course=$course_code&amp;$param_name=$element_id&amp;u=$user_data->user'>$langDetails</a></small>
                     </td>
@@ -2127,9 +2233,13 @@ function display_user_progress_details($element, $element_id, $user_id) {
                         </div>
                         <div class='row'>
                             <div class='col-sm-12'>
-                            	<div class='pn-info-title-sct'>$langTotalPercentCompleteness</div>
-                            	<div class='pn-info-text-sct'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>
-                                <div class='pn-info-title-sct'>$langDescription</div>
+                            	<div class='pn-info-title-sct'>$langTotalPercentCompleteness</div>";
+                                if ($user_data) {
+                                    $tool_content .= "<div class='pn-info-text-sct'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
+                                } else {
+                                    $tool_content .= "<div class='pn-info-text-sct'>0%</div>";
+                                }
+                                $tool_content .= "<div class='pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
                                 <div class='pn-info-title-sct'>$langpublisher</div>
                                 <div class='pn-info-text-sct'>" . get_cert_issuer($element, $element_id) . "</div>
@@ -2191,12 +2301,15 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 </div>";
 	}
 	$tool_content .= "
-                <div class='row res-table-header'>
-                    <div class='col-sm-9'>$langTotalPercentCompleteness</div>
-                    <div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>
-                </div>";
-
-	$tool_content .= "
+            <div class='row res-table-header'>
+                <div class='col-sm-9'>$langTotalPercentCompleteness</div>";
+                if ($user_data) {
+                    $tool_content .= "<div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";
+                } else {
+                    $tool_content .= "<div class='col-sm-3 text-center'><em>0%</em></div>";
+                }
+            $tool_content .= "</div>";
+            $tool_content .= "
                     </div></div>
                 </div>
             </div>
@@ -2233,5 +2346,7 @@ function criteria_with_operators() {
                  ForumEvent::ACTIVITY,
                  ForumTopicEvent::ACTIVITY,
                  BlogEvent::ACTIVITY,
-                 CommentEvent::BLOG_ACTIVITY);
+                 CommentEvent::BLOG_ACTIVITY,
+                 GradebookEvent::ACTIVITY,
+                 CourseCompletionEvent::ACTIVITY);
 }

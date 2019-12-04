@@ -1,26 +1,14 @@
 <?php
 /**
- * speedfan sensor class
+ * speedfan sensor class, getting hardware information through SpeedFanGet
  *
  * PHP version 5
  *
  * @category  PHP
  * @package   PSI_Sensor
- * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
- * @copyright 2009 phpSysInfo
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.qtssnmp.inc.php 661 2012-08-27 11:26:39Z namiltd $
- * @link      http://phpsysinfo.sourceforge.net
- */
- /**
- * getting hardware temperature information through snmpwalk
- *
- * @category  PHP
- * @package   PSI_Sensor
- * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
- * @author    William Johansson <radar@radhuset.org>
- * @copyright 2009 phpSysInfo
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @author    Mieczyslaw Nalewaj <namiltd@users.sourceforge.net>
+ * @copyright 2016 phpSysInfo
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License version 2, or (at your option) any later version
  * @version   Release: 3.0
  * @link      http://phpsysinfo.sourceforge.net
  */
@@ -50,7 +38,7 @@ class SpeedFan extends Sensors
             }
             break;
         case 'data':
-            if (CommonFunctions::rfts(APP_ROOT.'/data/speedfan.txt', $buffer) && (strlen($buffer) > 0)) {
+            if (CommonFunctions::rfts(PSI_APP_ROOT.'/data/speedfan.txt', $buffer) && (strlen($buffer) > 0)) {
                 if (preg_match("/^Temperatures:\s+(.+)$/m", $buffer, $out)) {
                     $this->_filecontent["temp"] = $out[1];
                 }
@@ -63,7 +51,7 @@ class SpeedFan extends Sensors
             }
             break;
         default:
-            $this->error->addConfigError('__construct()', 'PSI_SENSOR_SPEEDFAN_ACCESS');
+            $this->error->addConfigError('__construct()', '[sensor_speedfan] ACCESS');
             break;
         }
     }

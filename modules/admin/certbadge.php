@@ -78,18 +78,22 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
         if ($_FILES['filename']['size'] > 0) { // replace file if needed
             $filename = $_FILES['filename']['name'];
             if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
-                $archive = new PclZip("$webDir" . CERT_TEMPLATE_PATH . "$filename");
-                if ($archive->extract(PCLZIP_OPT_PATH , "$webDir" . CERT_TEMPLATE_PATH)) {
-                    $old_file = Database::get()->querySingle("SELECT filename FROM certificate_template WHERE id = ?d", $_POST['cert_id'])->filename;
-                    unlink($webDir . CERT_TEMPLATE_PATH . $old_file); // delete old template
-                    Database::get()->querySingle("UPDATE certificate_template SET
-                                                    name = ?s,
-                                                    description = ?s,
-                                                    filename = ?s
-                                                   WHERE id = ?d", 
-                                                $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
-                } else {
-                    die("Error : ".$archive->errorInfo(true));
+                $archive = new ZipArchive;
+                if ($archive->open("$webDir" . CERT_TEMPLATE_PATH . "$filename") == TRUE) {
+                    if ($archive->extractTo("$webDir" . CERT_TEMPLATE_PATH)) {
+                        $archive->close();
+                        $old_file = Database::get()->querySingle("SELECT filename FROM certificate_template WHERE id = ?d", $_POST['cert_id'])->filename;
+                        unlink($webDir . CERT_TEMPLATE_PATH . $old_file); // delete old template
+                        Database::get()->querySingle("UPDATE certificate_template SET
+                                                        name = ?s,
+                                                        description = ?s,
+                                                        filename = ?s
+                                                       WHERE id = ?d", 
+                                                    $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
+                        Session::Messages($langDownloadEnd, 'alert-success');
+                    } else {
+                        die("Error : Zip file couldn't be extracted!");
+                    }
                 }
             }
         } else {
@@ -100,19 +104,22 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                                         WHERE id = ?d", 
                                     $_POST['name'], $_POST['description'], $_POST['orientation'], $_POST['cert_id']);
         }
-    } else {        
+    } else {
         $filename = $_FILES['filename']['name'];
         if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
-            $archive = new PclZip("$webDir" . CERT_TEMPLATE_PATH . "$filename");
-            if ($archive->extract(PCLZIP_OPT_PATH , "$webDir" . CERT_TEMPLATE_PATH)) {
-                Database::get()->querySingle("INSERT INTO certificate_template SET 
-                                            name = ?s,                                             
-                                            description = ?s,
-                                            filename = ?s,
-                                            orientation = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['orientation']);
-                Session::Messages($langDownloadEnd, 'alert-success');
-            } else {
-                die("Error : ".$archive->errorInfo(true));
+            $archive = new ZipArchive;
+            if ($archive->open("$webDir" . CERT_TEMPLATE_PATH . "$filename") == TRUE) {
+                if ($archive->extractTo("$webDir" . CERT_TEMPLATE_PATH)) {
+                    $archive->close();
+                    Database::get()->querySingle("INSERT INTO certificate_template SET 
+                                        name = ?s,
+                                        description = ?s,
+                                        filename = ?s,
+                                        orientation = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['orientation']);
+                    Session::Messages($langDownloadEnd, 'alert-success');
+                } else {
+                    die("Error : Zip file couldn't be extracted!");
+                }
             }
         }
     }

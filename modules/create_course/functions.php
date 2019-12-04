@@ -57,7 +57,7 @@ function create_course($public_code, $lang, $title, $description, $departments, 
         $course_id = $q->lastInsertID;
     } else {
         return false;
-    }       
+    }
 
     require_once 'include/lib/course.class.php';
     $course = new Course();
@@ -88,7 +88,7 @@ function course_index($code) {
 }
 
 /**
- * @brief create course directories 
+ * @brief create course directories
  * @param type $code
  * @return boolean
  */
@@ -96,7 +96,6 @@ function create_course_dirs($code) {
     global $langDirectoryCreateError;
 
     $base = "courses/$code";
-    $old_umask = umask();
     umask(0);
     foreach (array($base, "$base/image", "$base/document", "$base/dropbox",
                    "$base/page", "$base/work", "$base/group", "$base/temp",
@@ -104,9 +103,8 @@ function create_course_dirs($code) {
        if (!make_dir($dir)) {
             Session::Messages(sprintf($langDirectoryCreateError, $dir));
             return false;
-       } 
+       }
     }
-    umask($old_umask);
     return true;
 }
 

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -36,10 +36,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $query_vars[] = $category;
         $extraSql .= " AND category = ?d";
     }
-    $query_vars[] = $exerciseId;    
+    $query_vars[] = $exerciseId;
     if ($action == 'add_questions') {
         $qnum = $_POST['qnum'];
-        $query_vars[] = $qnum; 
+        $query_vars[] = $qnum;
         if ($qnum>0) {
             $q_ids = Database::get()->queryArray("SELECT id FROM exercise_question WHERE course_id = ?d$extraSql AND id NOT IN (SELECT question_id FROM exercise_with_questions WHERE exercise_id = ?d) ORDER BY RAND() LIMIT ?d", $query_vars);
             $q_ids_count = count($q_ids);
@@ -53,8 +53,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             }
             Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id) VALUES $values", $insert_query_vars);
         }
-        $data = array('success' => true);     
-    } else {    
+        $data = array('success' => true);
+    } else {
 
         $results = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_question WHERE course_id = ?d$extraSql AND id NOT IN (SELECT question_id FROM exercise_with_questions WHERE exercise_id = ?d)", $query_vars)->count;
 
@@ -83,11 +83,11 @@ foreach ($q_cats as $qcat) {
 
 $head_content .= "
 <script>
-  $(function() { 
+  $(function() {
     function initAjaxSelect() {
         $('select#diff, select#cat').bind('change', function () {
             var name = $(this).attr('name');
-            if (name == 'difficulty') {              
+            if (name == 'difficulty') {
                 var diffValue = $(this).val();
                 var catValue = $('select#cat').val();
             } else {
@@ -100,7 +100,7 @@ $head_content .= "
                       datatype: 'json',
                       data: {
                          action: 'count_questions',
-                         category: catValue, 
+                         category: catValue,
                          difficulty: diffValue
                       },
                       success: function(data){
@@ -111,7 +111,7 @@ $head_content .= "
                                 options += '<option value=\"'+i+'\">'+i+' ερωτήσεις</option>';
                             }
                         }
-                        
+
                         $('select#q_num').find('option:not(:first)').remove().end().find('option:first').after(options);
                       },
                       error: function(xhr, textStatus, error){
@@ -119,9 +119,9 @@ $head_content .= "
                           console.log(textStatus);
                           console.log(error);
                       }
-                    });              
-        });  
-    }     
+                    });
+        });
+    }
     $('.randomSelection').click( function(e){
         e.preventDefault();
         bootbox.dialog({
@@ -138,8 +138,8 @@ $head_content .= "
                             '<select name=\"difficulty\" class=\"form-control\" id=\"diff\">$diff_options</select>' +
                             '</div>' +
                             '<div class=\"form-group\"> ' +
-                            '<select name=\"q_num\" class=\"form-control\" id=\"q_num\">$q_number_options</select>' +                                
-                            '</div></div>' +                            
+                            '<select name=\"q_num\" class=\"form-control\" id=\"q_num\">$q_number_options</select>' +
+                            '</div></div>' +
                             '</div>' +
                             '</form> </div>  </div>',
                         buttons: {
@@ -156,7 +156,7 @@ $head_content .= "
                                       datatype: 'json',
                                       data: {
                                          action: 'add_questions',
-                                         category: catValue, 
+                                         category: catValue,
                                          difficulty: diffValue,
                                          qnum: qnumValue
                                       },
@@ -173,16 +173,16 @@ $head_content .= "
                             }
                         }
                     }
-                ).find('div.modal-dialog').addClass('modal-lg');           
+                ).find('div.modal-dialog').addClass('modal-lg');
                 initAjaxSelect();
-           
+
     });
     $('.menu-popover').on('shown.bs.popover', function () {
         $('.warnLink').on('click', function(e){
               var modifyAllLink = $(this).attr('href');
               var modifyOneLink = modifyAllLink.concat('&clone=true');
               $('a#modifyAll').attr('href', modifyAllLink);
-              $('a#modifyOne').attr('href', modifyOneLink); 
+              $('a#modifyOne').attr('href', modifyOneLink);
         });
     });
   });
@@ -219,52 +219,48 @@ if (isset($_GET['deleteQuestion'])) {
     redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }
 
-    $tool_content .= action_bar(array(
-        array('title' => $langNewQu,
-            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;newQuestion=yes",
-            'icon' => 'fa-plus-circle',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success'
-        ),
-        array('title' => $langSelection.' '.$langWithCriteria,
-            'class' => 'randomSelection',
-            'url' => "#",
-            'icon' => 'fa-random',
-            'level' => 'primary-label'
-        ),          
-        array('title' => $langSelection.' '.$langFrom2.' '.$langQuestionPool,
-            'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
-            'icon' => 'fa-bank',
-            'level' => 'primary-label'
-        )       
-    ), false);  
-    
+$tool_content .= action_bar(array(
+    array('title' => $langNewQu,
+          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;newQuestion=yes",
+          'icon' => 'fa-plus-circle',
+          'level' => 'primary-label',
+          'button-class' => 'btn-success'),
+    array('title' => $langSelection.' '.$langWithCriteria,
+          'class' => 'randomSelection',
+          'url' => "#",
+          'icon' => 'fa-random',
+          'level' => 'primary-label'),
+    array('title' => $langSelection.' '.$langFrom2.' '.$langQuestionPool,
+          'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
+          'icon' => 'fa-bank',
+          'level' => 'primary-label')), false);
+
 if ($nbrQuestions) {
     $questionList = $objExercise->selectQuestionList();
     $i = 1;
     $tool_content .= "
         <div class='table-responsive'>
-	    <table class='table-default'>
-	    <tr>
-	      <th colspan='2' class='text-left'>$langQuestionList</th>
-	      <th class='text-center'>".icon('fa-gears', $langActions)."</th>
-	    </tr>";
+        <table class='table-default'>
+        <tr>
+          <th colspan='2' class='text-left'>$langQuestionList</th>
+          <th class='text-center'>".icon('fa-gears', $langActions)."</th>
+        </tr>";
 
     foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
         $objQuestionTmp->read($id);
-                         
+
         $addon = '';
         if ($objQuestionTmp->selectType() == MATCHING) {
             $sql = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $id);
             if (!$sql) $addon = "&amp;htopic=4";
         }
-    
+
         $tool_content .= "<tr>
-			<td align='right' width='1'>" . $i . ".</td>
-			<td> " . q_math($objQuestionTmp->selectTitle()) . "<br />
-			" . $aType[$objQuestionTmp->selectType() - 1] . "</td>
-			<td class='option-btn-cell'>".            
+            <td align='right' width='1'>" . $i . ".</td>
+            <td> " . q_math($objQuestionTmp->selectTitle()) . "<br />
+            " . $aType[$objQuestionTmp->selectType() - 1] . "</td>
+            <td class='option-btn-cell'>".
                     action_button(array(
                         array('title' => $langEditChange,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon",
@@ -288,7 +284,7 @@ if ($nbrQuestions) {
                                 'icon' => 'fa-times',
                                 'class' => 'delete',
                                 'confirm' => $langConfirmYourChoice,
-                                'show' => !isset($fromExercise))           
+                                'show' => !isset($fromExercise))
                     ))."</td></tr>";
         $i++;
         unset($objQuestionTmp);
@@ -312,7 +308,7 @@ $tool_content .= "
       </div>
     </div>
   </div>
-</div>    
+</div>
 ";
 if ($nbrQuestions == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";

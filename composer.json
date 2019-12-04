@@ -3,7 +3,6 @@
         "vlucas/valitron": "^1.4.2",
         "hautelook/phpass": "0.3.*",
         "jasig/phpcas": "^1.3.5",
-        "pclzip/pclzip": "2.8.*",
         "ezyang/htmlpurifier": "dev-master",
         "phpids/phpids": "dev-master",
         "pragmarx/google2fa":"dev-master",
@@ -18,6 +17,7 @@
         "hoa/ruler": "~2.0",
         "egulias/email-validator": "^2.1",
         "bacon/bacon-qr-code": "^1.0",
+        "phpoffice/phpspreadsheet": "^1.9",
         "sabre/event": "~2.0.0"
     },
     "require-dev": {

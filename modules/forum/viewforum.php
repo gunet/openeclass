@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,13 +33,13 @@ require_once 'modules/forum/functions.php';
 if (!add_units_navigation(true)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 }
+$unit = isset($_GET['unit'])? intval($_GET['unit']): null;
 
 if ($is_editor) {
     load_js('tools.js');
 }
 $toolName = $langForums;
 
-$paging = true;
 $next = 0;
 if (isset($_GET['forum'])) {
     $forum_id = intval($_GET['forum']);
@@ -72,7 +72,9 @@ if ($can_post) {
     $tool_content .=
             action_bar(array(
                 array('title' => $langNewTopic,
-                    'url' => "newtopic.php?course=$course_code&amp;forum=$forum_id",
+                    'url' => $unit?
+                    "view.php?course=$course_code&amp;res_type=forum_new_topic&amp;forum=$forum_id&amp;unit=$unit":
+                    "newtopic.php?course=$course_code&amp;forum=$forum_id",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
@@ -192,6 +194,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         Database::get()->query("DELETE FROM forum_post WHERE id = $r->id");
         triggerForumGame($course_id, $uid, ForumEvent::DELPOST);
         triggerTopicGame($course_id, $uid, ForumTopicEvent::DELPOST, $topic_id);
+        triggerForumAnalytics($course_id, $uid, ForumAnalyticsEvent::FORUMEVENT);
     }
     $post_authors = array_unique($post_authors);
     foreach ($post_authors as $author) {
@@ -252,7 +255,7 @@ if ($is_editor and isset($_GET['topiclock'])) {
 
 }
 
-$result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS poster_id
+$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
         WHERE t.forum_id = ?d
@@ -261,30 +264,25 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS p
 
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
-	<table class='table-default'>
-	<tr class='list-header'>
-	  <th class='forum_td'>&nbsp;$langTopics</th>
-	  <th class='text-center forum_td'>$langAnswers</th>
-	  <th class='text-center forum_td'>$langSender</th>
-	  <th class='text-center forum_td'>$langSeen</th>
-	  <th class='text-center forum_td'>$langLastMsg</th>
-	  <th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
-	</tr>";
+        <table class='table-default'>
+        <tr class='list-header'>
+          <th class='forum_td'>$langTopics</th>
+          <th class='text-center'>$langAnswers</th>
+          <th class='text-center'>$langSender</th>
+          <th class='text-center'>$langSeen</th>
+          <th class='text-center'>$langLastMsg</th>
+          <th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>
+        </tr>";
     foreach ($result as $myrow) {
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
         $last_post_datetime = $myrow->post_time;
-        list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
-        list($year, $month, $day) = explode("-", $last_post_date);
-        list($hour, $min, $sec) = explode(":", $last_post_time);
-        $last_post_time = mktime($hour, $min, $sec, $month, $day, $year);
-        if (!isset($last_visit)) {
-            $last_visit = 0;
-        }
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
         $pagination = '';
-        $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
+        $topiclink = $unit?
+            "view.php?course=$course_code&amp;&amp;res_type=forum_topic&amp;topic=$topic_id&amp;forum=$forum_id&amp;unit=$unit":
+            "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
         if ($topic_locked) {
             $image = icon('fa-lock');
         } else {
@@ -308,9 +306,9 @@ if (count($result) > 0) { // topics found
         }
         $tool_content .= "<td>$image <a href='$topiclink'><b>" . q($topic_title) . "</b></a>$pagination</td>";
         $tool_content .= "<td class='text-center'>$replies</td>";
-        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "</td>";
+        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td class='text-center'>$myrow->num_views</td>";
-        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time))."</td>";
+        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".claro_format_locale_date($dateTimeFormatShort, strtotime($last_post_datetime))."</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
 			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
         if ($sql) {

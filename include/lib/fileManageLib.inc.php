@@ -88,19 +88,6 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
 }
 
 /*
- * Cheks a file or a directory actually exist at this location
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - filePath (string) - path of the presume existing file or dir
- * @return - boolean TRUE if the file or the directory exists
- *           boolean FALSE otherwise.
- */
-
-function check_name_exist($filePath) {
-    return file_exists($filePath);
-}
-
-/*
  * Delete a file or a directory
  *
  * @author - Hugues Peeters
@@ -135,13 +122,13 @@ function my_rename($filePath, $newFileName) {
     $path = @$baseWorkDir . dirname($filePath);
     $oldFileName = my_basename($filePath);
 
-    if (check_name_exist($path . "/" . $newFileName) && $newFileName != $oldFileName) {
+    if (file_exists($path . "/" . $newFileName) && $newFileName != $oldFileName) {
         return false;
     } else {
         /** * check if the new name has an extension ***/
         if ((!preg_match('/[^.]+\.[[:alnum:]]+$/', $newFileName)) and preg_match('/\.([[:alnum:]]+)$/', $oldFileName, $extension)) {
             $newFileName .= '.' . $extension[1];
-        }        
+        }
         $newFileName = replace_dangerous_char($newFileName);
         chdir($path);
         rename($oldFileName, $newFileName);
@@ -161,9 +148,9 @@ function my_rename($filePath, $newFileName) {
  */
 
 function move($source, $target) {
-    if (check_name_exist($source)) {
+    if (file_exists($source)) {
         $fileName = my_basename($source);
-        if (check_name_exist($target . "/" . $fileName)) {
+        if (file_exists($target . "/" . $fileName)) {
             return false;
         } else { /*         * * File case ** */
             if (is_file($source)) {
@@ -236,6 +223,7 @@ function move_dir($src, $dest) {
  */
 
 function copyDirTo($origDirPath, $destination) {
+
     // extract directory name - create it at destination - update destination trail
     $dirName = my_basename($origDirPath);
     make_dir($destination . '/' . $dirName);
@@ -250,7 +238,6 @@ function copyDirTo($origDirPath, $destination) {
             continue; // skip the current and parent directories
         } elseif (is_file($element)) {
             copy($element, $destinationTrail . "/" . $element);
-            unlink($element);
         } elseif (is_dir($element)) {
             $dirToCopy[] = $origDirPath . "/" . $element;
         }
@@ -264,7 +251,6 @@ function copyDirTo($origDirPath, $destination) {
         }
     }
 
-    rmdir($origDirPath);
     chdir($cwd);
 }
 
@@ -321,29 +307,51 @@ function directory_selection($source_value, $command, $entryToExclude, $director
  * @param type $include_invisible
  */
 function zip_documents_directory($zip_filename, $downloadDir, $include_invisible = false) {
-    global $basedir, $group_sql;
+    global $basedir, $group_sql, $map_filenames, $path_visibility;
 
     create_map_to_real_filename($downloadDir, $include_invisible);
-    $GLOBALS['basedir_length'] = strlen($basedir);
     $topdir = ($downloadDir == '/') ? $basedir : ($basedir . $downloadDir);
+    $zipFile = new ZipArchive();
+    $zipFile->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+    // Create recursive directory iterator
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($topdir),
+        RecursiveIteratorIterator::LEAVES_ONLY
+    );
 
-    $zipfile = new PclZip($zip_filename);
-    $v = $zipfile->create($topdir, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename');
-    if ($v === 0) {
-        die("error: " . $zipfile->errorInfo(true));
-    }
-
-    $real_paths = array();
-    if (isset($GLOBALS['common_docs'])) {
-        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
-            $filename = $GLOBALS['map_filenames'][$path];
-            $GLOBALS['common_filenames'][$real_path] = $filename;
-            $real_paths[] = $real_path;
+    foreach ($files as $name => $file) {
+        // Skip directories (they will be added automatically)
+        if (!$file->isDir()) {
+            // Get real and filename to be added for current file
+            $filePath = $file->getRealPath();
+            $relativePath = substr($filePath, strlen($basedir));
+            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
+                continue; // skip invisible files for student
+            } else {
+                // Add current file to archive
+                $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));
+            }
+        } else { // empty directory
+            $filePath = $file->getRealPath();
+            $relativePath = substr($filePath, strlen($basedir));
+            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
+                continue; // skip invisible files for student
+            } else {
+                $zipFile->addEmptyDir(substr($map_filenames[$relativePath], 1));
+            }
         }
     }
-    $v = $zipfile->add($real_paths, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
-    if ($v === 0) {
-        die("error: " . $zipfile->errorInfo(true));
+
+    // support for common documents
+    if (isset($GLOBALS['common_docs'])) {
+        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
+            $common_filename = $GLOBALS['map_filenames'][$path];
+            $zipFile->addFile($real_path, substr($common_filename, 1));
+
+        }
+    }
+    if (!$zipFile->close()) {
+        die("Error while creating ZIP file!");
     }
 }
 
@@ -437,29 +445,6 @@ function common_doc_path($extra_path, $full = false) {
         return false;
     }
 }
-
-// PclZip callback function to store filenames with real filenames
-function convert_to_real_filename($p_event, &$p_header) {
-    global $map_filenames, $path_visibility, $basedir_length;
-
-    $filename = substr($p_header['filename'], $basedir_length);
-    if (!isset($path_visibility[$filename]) or ! $path_visibility[$filename] or ! isset($map_filenames[$filename])) {
-        return 0;
-    }
-
-    $p_header['stored_filename'] = substr(greek_to_latin($map_filenames[$filename]), 1);
-
-    return 1;
-}
-
-// PclZip callback function to store common documents with real filenames
-function convert_to_real_filename_common($p_event, &$p_header) {
-    global $common_filenames;
-
-    $p_header['stored_filename'] = substr(greek_to_latin($common_filenames[$p_header['filename']]), 1);
-    return 1;
-}
-
 //------------------------------------------------------------------------------
 /* --------------- backported functions from Claroline 1.7.x --------------- */
 

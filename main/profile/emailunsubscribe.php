@@ -61,15 +61,16 @@ if (isset($_POST['submit'])) {
     }
     redirect_to_home_page("main/profile/display_profile.php");
 } else {
-$data['action_bar'] = action_bar(
-    [
+    $data['uid'] = $uid;
+    $data['action_bar'] = action_bar(
         [
-            'title' => $langBack,
-            'url' => 'display_profile.php',
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
-        ]
-    ]);
+            [
+                'title' => $langBack,
+                'url' => 'display_profile.php',
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            ]
+        ]);
 
     if (get_config('email_verification_required') or get_config('dont_mail_unverified_mails')) {
         $user_email_status = get_mail_ver_status($uid);
@@ -82,25 +83,6 @@ $data['action_bar'] = action_bar(
     if (!get_user_email_notification_from_courses($uid)) {
         $data['mail_notification'] = true;
     }
-
-    $tool_content .= "<div class='alert alert-info'>$langInfoUnsubscribe</div>
-                          <div id='unsubscontrols'>";
-    if (isset($_REQUEST['cid'])) { // one course only
-        $cid = intval($_REQUEST['cid']);
-        $data['course_title'] = course_id_to_title($cid);
-        $data['selected'] = get_user_email_notification($uid, $cid) ? 'checked' : '';
-    } else { // displays all courses
-        foreach ($_SESSION['courses'] as $code => $status) {
-            $data['title'] = course_code_to_title($code);
-            $cid = course_code_to_id($code);
-            $data['selected'] = get_user_email_notification($uid, $cid) ? 'checked' : '';
-        }
-    }
-    $tool_content .= "
-                    <br>
-                        <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                        <a class='btn btn-default' href='display_profile.php'>$langCancel<a>";
-    $tool_content .= generate_csrf_token_form_field() ."</form>";
 }
 
 $data['menuTypeID'] = 1;

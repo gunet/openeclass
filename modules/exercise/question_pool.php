@@ -71,7 +71,7 @@ $(function() {
                 var modifyAllLink = $(this).attr('href');
                 var modifyOneLink = modifyAllLink.concat('&clone=true');
                 $('a#modifyAll').attr('href', modifyAllLink);
-                $('a#modifyOne').attr('href', modifyOneLink); 
+                $('a#modifyOne').attr('href', modifyOneLink);
           });
     });
 });
@@ -118,17 +118,13 @@ elseif (isset($_GET['recup']) && isset($fromExercise)) {
     $recup = intval($_GET['recup']);
     // construction of the Question object
     $objQuestionTmp = new Question();
-    // if the question exists
-    if ($objQuestionTmp->read($recup)) {
-        // adds the exercise ID into the list of exercises for the current question
-        $objQuestionTmp->addToList($fromExercise);
+    // if the question exists, add it into the list of questions for the
+    // current exercise
+    if ($objQuestionTmp->read($recup) and $objExercise->addToList($recup)) {
+        Session::Messages($langQuestionReused, 'alert-success');
+        $objExercise->save();
     }
-    // destruction of the Question object
-    unset($objQuestionTmp);
-    // adds the question ID into the list of questions for the current exercise
-    $objExercise->addToList($recup);
-    Session::Messages($langQuestionReused, 'alert-success');
-    redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");        
+    redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");
 }
 
 if (isset($fromExercise)) {
@@ -136,7 +132,7 @@ if (isset($fromExercise)) {
             'url' => "admin.php?course=$course_code&amp;exerciseId=$fromExercise",
             'icon' => 'fa-reply',
             'level' => 'primary-label'
-     );        
+     );
 } else {
     $action_bar_options = array(
         array('title' => $langNewQu,
@@ -154,9 +150,9 @@ if (isset($fromExercise)) {
             'icon' => 'fa-upload',
             'level' => 'primary-label',
             'button-class' => 'btn-success')
-     );          
+     );
 }
-	
+
 $tool_content .= action_bar($action_bar_options);
 
 if (isset($fromExercise)) {
@@ -181,7 +177,7 @@ foreach ($q_cats as $q_cat) {
 $tool_content .= "<div class='form-wrapper'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
                     ".(isset($fromExercise)? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
                     <div class='form-group'>
-                        <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>                               
+                        <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>
                             $exercise_options
                         </select>
                 </div>
@@ -200,9 +196,9 @@ $tool_content .= "<div class='form-wrapper'><form class='form-inline' role='form
                     <select onChange = 'document.qfilter.submit();' name='categoryId' class='form-control'>
                         $q_cat_options
                     </select>
-                </div>                    
+                </div>
             </form>
-        </div>";      
+        </div>";
 //End of filtering Component
 
 if (isset($fromExercise)) {
@@ -223,17 +219,17 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
     if(isset($categoryId) && $categoryId!=-1) {
         $result_query_vars[] = $categoryId;
         $extraSql .= " AND category = ?d";
-    }          
-    $result_query_vars = isset($fromExercise) ? array_merge($result_query_vars, array($fromExercise, $fromExercise)) : $result_query_vars;         
+    }
+    $result_query_vars = isset($fromExercise) ? array_merge($result_query_vars, array($fromExercise, $fromExercise)) : $result_query_vars;
     if (isset($fromExercise)) {
         $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                         ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                         question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                        GROUP BY id ORDER BY question";        
+                        GROUP BY id ORDER BY question";
     } else {
         $result_query = "SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
                         WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$extraSql
-                        ORDER BY q_position";        
+                        ORDER BY q_position";
     }
 } else { // if user selected either Orphan Question or All Questions
     $result_query_vars[] = $course_id;
@@ -259,16 +255,16 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
             $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            GROUP BY id ORDER BY question";
+                            GROUP BY id, question, type ORDER BY question";
         } else {
             $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d$extraSql
-                            GROUP BY id ORDER BY question";
+                            GROUP BY id, question, type ORDER BY question";
         }
         // forces the value to 0
         $exerciseId = 0;
     }
-} 
+}
 
 if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
     $result = Database::get()->queryArray($result_query, $result_query_vars);
@@ -277,8 +273,8 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
     exportIMSQTI($result);
     exit();
 
-} else {    
-    $result = Database::get()->queryArray($result_query, $result_query_vars);   
+} else {
+    $result = Database::get()->queryArray($result_query, $result_query_vars);
     $tool_content .= "<thead>
     <tr>
       <th>$langQuesList</th>
@@ -334,7 +330,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
                  )) .
                  "</td></tr>";
         }
-    }    
+    }
     $tool_content .= "</tbody></table>";
 }
 
@@ -355,7 +351,7 @@ $tool_content .= "
       </div>
     </div>
   </div>
-</div>    
+</div>
 ";
 
 draw($tool_content, 2, null, $head_content);

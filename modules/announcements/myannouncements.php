@@ -32,7 +32,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $offset = intval($_GET['iDisplayStart']);
 
     $announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
-
     $data['iTotalDisplayRecords'] =  count($announcements);
     if (!isset($_GET['sSearch']) or $_GET['sSearch'] === '') {
         $data['iTotalRecords'] = count(getUserAnnouncements($lesson_ids, 'more', 'to_ajax'));
@@ -63,7 +62,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
-                            <a href='" . $urlAppend . "main/system_announcements.php/?an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
+                            <a href='" . $urlAppend . "main/system_announcements.php?an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
                         </div>
                         <small class='text-grey'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></small>
                         <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>

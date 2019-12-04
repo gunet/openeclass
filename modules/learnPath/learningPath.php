@@ -105,11 +105,18 @@ if ($uid) {
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
 
-$sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
-	LPM.`lock`, M.`module_id`,
-	M.`contentType`, M.`name`,
-	UMP.`lesson_status`, UMP.`raw`,
-	UMP.`scoreMax`, UMP.`credit`, A.`path`
+$sql = "SELECT 
+    MIN(LPM.`learnPath_module_id`) as learnPath_module_id,
+    MIN(LPM.`parent`) as parent,
+	MIN(LPM.`lock`) as `lock`, 
+	MIN(M.`module_id`) as module_id,
+	MIN(M.`contentType`) as contentType,
+	MIN(M.`name`) as name,
+	MIN(UMP.`lesson_status`) as lesson_status,
+	MIN(UMP.`raw`) as raw,
+	MIN(UMP.`scoreMax`) as scoreMax,
+	MIN(UMP.`credit`) as credit,
+	MIN(A.`path`) as path
         FROM (`lp_module` AS M,
 	`lp_rel_learnPath_module` AS LPM)
      LEFT JOIN `lp_user_module_progress` AS UMP
@@ -123,7 +130,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
             AND LPM.`module_id` = M.`module_id`
             AND M.`course_id` = ?d
        GROUP BY LPM.`module_id`
-       ORDER BY LPM.`rank`";
+       ORDER BY MIN(LPM.`rank`)";
 
 $fetchedList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
@@ -133,7 +140,7 @@ $tool_content .= action_bar(array(
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'
             )
-        ));
+        ),false);
 
 if (count($fetchedList) == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
@@ -185,20 +192,25 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
   ================================================================ */
 
 // comment
+$tool_content .= "<div class='panel panel-default'>
+                    <div class='panel-heading list-header'>
+                        <h3 class='panel-title'>$langLearningPathData</h3>
+                    </div>";
+$tool_content .= "<table class='table-default'>";
+$tool_content .= "<tr><th width='70'>$langTitle:</th>";
+$tool_content .= "<td>". nameBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
-    $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>"
-                . commentBox(LEARNINGPATH_, DISPLAY_) .
-            "</div>
-        </div>
-    ";
+    $tool_content .= "<tr>
+      <th width='90'>$langDescription:</th>
+      ";
+    $tool_content .= "<td>". commentBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 }
+$tool_content .= "</table></div>";
 
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
 $tool_content .= "<table class='table-default'>";
-$tool_content .= "<tr class='list-header'><th colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningObjects . "</b></div></th>\n";
+$tool_content .= "<tr class='list-header'><th colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningPathStructure . "</b></div></th>\n";
 
 
 // show only progress column for authenticated users

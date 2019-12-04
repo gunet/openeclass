@@ -1,33 +1,32 @@
 <?php
 /* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
- *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ * Open eClass 3.6
+* E-learning and Course Management System
+* ========================================================================
+* Copyright 2003-2017  Greek Universities Network - GUnet
+* A full copyright notice can be read in "/info/copyright.txt".
+* For a full list of contributors, see "credits.txt".
+*
+* Open eClass is an open platform distributed in the hope that it will
+* be useful (without any warranty), under the terms of the GNU (General
+		* Public License) as published by the Free Software Foundation.
+* The full license can be read in "/info/license/license_gpl.txt".
+*
+* Contact address: GUnet Asynchronous eLearning Group,
+*                  Network Operations Center, University of Athens,
+*                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+*                  e-mail: info@openeclass.org
+* ======================================================================== */
 
-if (isset($_GET['course'])) { // course blog
+if (isset($_GET['course'])) { //course blog
     $require_current_course = TRUE;
     $blog_type = 'course_blog';
 } else { //personal blog
-    $require_login = false;
-    $guest_allowed = true;
+    $require_login = true;
+    $require_valid_uid = TRUE;
     $require_current_course = FALSE;
     $blog_type = 'perso_blog';
 }
-
 $require_help = TRUE;
 $helpTopic = 'blog';
 require_once '../../include/baseTheme.php';
@@ -39,128 +38,59 @@ require_once 'modules/blog/class.blogpost.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
 require_once 'modules/progress/BlogEvent.php';
+require_once 'modules/analytics/BlogAnalyticsEvent.php';
 
 if ($blog_type == 'course_blog') {
     $user_id = 0;
-
-    define_rss_link();
+    
+    define_rss_link();    
     $toolName = $langBlog;
-
+    
     //check if commenting is enabled for course blogs
     $comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
     //check if rating is enabled for course blogs
     $ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
-
+    
     $sharing_allowed = is_sharing_allowed($course_id);
     $sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
-
+    
     $url_params = "course=$course_code";
 } elseif ($blog_type == 'perso_blog') {
     if (!get_config('personal_blog')) {
         $tool_content = "<div class='alert alert-danger'>$langPersoBlogDisabled</div>";
-        if ($session->status == 0) {
-            draw($tool_content, 0);
-        } else {
-            draw($tool_content, 1);
-        }
+        draw($tool_content, 1);
         exit;
     }
-
+    
     $course_id = 0;
-
+    
     $is_blog_editor = false;
-
-    if (isset($_GET['user_id']) && intval($_GET['user_id']) > 0) {
+    
+    if (isset($_GET['user_id'])) {
         $user_id = intval($_GET['user_id']);
-        if ($user_id == $uid) {
+        if ($user_id == $_SESSION['uid']) {
             $is_blog_editor = true;
         } elseif (isset($is_admin) && $is_admin) {
             $is_blog_editor = true;
         }
     } else {
-        if ($session->status == 0) {
-            redirect_to_home_page();
-            exit;
-        } else {
-            $user_id = $uid; //current user's blog
-            $is_blog_editor = true;
-        }
+        $user_id = $_SESSION['uid']; //current user's blog
+        $is_blog_editor = true;
     }
-
-    if (!$is_blog_editor and !token_validate('personal_blog' . $user_id, $_GET['token'])) {
-        redirect_to_home_page();
-    }
-
-    $db_user = Database::get()->querySingle("SELECT surname, givenname, public_blog FROM user WHERE id = ?d", $user_id);
+    
+    $db_user = Database::get()->querySingle("SELECT surname, givenname FROM user WHERE id = ?d", $user_id);
     if (!$db_user) {
         $tool_content = "<div class='alert alert-danger'>$langBlogUserNotExist</div>";
         draw($tool_content, 1);
         exit;
     }
-
-    if ($user_id == $uid) {
+    
+    if ($user_id == $_SESSION['uid']) {
         $toolName = $langMyBlog;
-
-        if (get_config('personal_blog_public')) {
-            if (isset($_POST['toggle_val'])) {
-                if ($_POST['toggle_val'] == 'on') {
-                    Database::get()->query("UPDATE user SET public_blog = ?d WHERE id = ?d", 1, $uid);
-                    $db_user->public_blog = 1;
-                } elseif ($_POST['toggle_val'] == 'off') {
-                    Database::get()->query("UPDATE user SET public_blog = ?d WHERE id = ?d", 0, $uid);
-                    $db_user->public_blog = 0;
-                }
-            }
-
-            $head_content .= "<script type='text/javascript'>//<![CDATA[
-                                  $(function(){
-                                      $('#toggle_event_editing button').click(function(){
-                                          if($(this).hasClass('locked_active') || $(this).hasClass('unlocked_inactive')){
-                                              /* code to do when unlocking */
-                                              $('#enable-public-blog-form input').val('on');
-                                              $('#enable-public-blog-form').submit();
-                                          }else{
-                                              /* code to do when locking */
-                                              $('#enable-public-blog-form input').val('off');
-                                              $('#enable-public-blog-form').submit();
-                                          }
-
-                                          /* reverse locking status */
-                                          $('#toggle_event_editing button').eq(0).toggleClass('locked_inactive locked_active btn-default btn-info');
-                                          $('#toggle_event_editing button').eq(1).toggleClass('unlocked_inactive unlocked_active btn-info btn-default');
-                                      });
-                                  });//]]>
-                              </script>";
-
-            if ($db_user->public_blog == 0) {
-                $off_class = "btn btn-info locked_active";
-                $on_class = "btn btn-default unlocked_inactive";
-                $tool_content .= "<div class='alert alert-warning'>$langPublicBlogDisableWarning</div>";
-            } elseif ($db_user->public_blog == 1) {
-                $off_class = "btn btn-default locked_inactive";
-                $on_class = "btn btn-info unlocked_active";
-            }
-
-            $tool_content .= '<div class="btn-group" id="toggle_event_editing">
-                                  <form method="post" action="" id="enable-public-blog-form">
-                                      <input type="hidden" name="toggle_val">
-                                  </form>
-                                  <b>'.$langPublicBlogButtonsLabel.'</b><br/>
-                                  <button type="button" class="'.$off_class.'">OFF</button>
-                                  <button type="button" class="'.$on_class.'">ON</button>
-                              </div>';
-        }
     } else {
-        if ($session->status == 0) {
-            if (!get_config('personal_blog_public') || $db_user->public_blog == 0) {
-                $tool_content = "<div class='alert alert-danger'>$langUserBlogNotPublic</div>";
-                draw($tool_content, 0);
-                exit;
-            }
-        }
         $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
-    }
-
+    }    
+    
     //check if commenting is enabled for personal blogs
     $comments_enabled = get_config('personal_blog_commenting');
     //check if rating is enabled for personal blogs
@@ -168,17 +98,15 @@ if ($blog_type == 'course_blog') {
     //check if sharing is platform widely allowed and enabled for personal blogs
     $sharing_allowed = get_config('enable_social_sharing_links');
     $sharing_enabled = get_config('personal_blog_sharing');
-
-    $token = token_generate('personal_blog' . $user_id);
-
-    $url_params = "user_id=$user_id&amp;token=$token";
+    
+    $url_params = "user_id=$user_id";
 }
 
 
 load_js('tools.js');
 
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-        $langEmptyBlogPostTitle . '";</script>';
+		$langEmptyBlogPostTitle . '";</script>';
 
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
@@ -200,6 +128,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langGeneralSettings;
     } elseif ($action == "createPost") {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langBlogAddPost;
     } elseif ($action == "editPost") {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
@@ -218,16 +147,16 @@ if ($blog_type == 'course_blog' && $is_editor) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
             setting_set(SETTING_BLOG_COMMENT_ENABLE, $_POST['2_radio'], $course_id);
             setting_set(SETTING_BLOG_RATING_ENABLE, $_POST['3_radio'], $course_id);
-            if (isset($_POST['4_radio'])) {
+		    if (isset($_POST['4_radio'])) {
                 setting_set(SETTING_BLOG_SHARING_ENABLE, $_POST['4_radio'], $course_id);
-            }
+		    }
             Session::Messages($langRegDone, 'alert-success');
             redirect_to_home_page('modules/blog/index.php?course='.$course_code);
         }
-
+        
         if (isset($message) && $message) {
-            $tool_content .= $message . "<br/>";
-            unset($message);
+        	$tool_content .= $message . "<br/>";
+        	unset($message);
         }
 
 
@@ -240,18 +169,18 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $checkStud = "";
         }
         if (setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id) == 1) {
-            $checkCommentDis = "";
-            $checkCommentEn = "checked ";
+        	$checkCommentDis = "";
+        	$checkCommentEn = "checked ";
         } else {
-            $checkCommentDis = "checked ";
-            $checkCommentEn = "";
+        	$checkCommentDis = "checked ";
+        	$checkCommentEn = "";
         }
         if (setting_get(SETTING_BLOG_RATING_ENABLE, $course_id) == 1) {
-            $checkRatingDis = "";
-            $checkRatingEn = "checked ";
+        	$checkRatingDis = "";
+        	$checkRatingEn = "checked ";
         } else {
-            $checkRatingDis = "checked ";
-            $checkRatingEn = "";
+        	$checkRatingDis = "checked ";
+        	$checkRatingEn = "";
         }
         if (!$sharing_allowed) {
             $sharing_radio_dis = " disabled";
@@ -267,7 +196,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $sharing_radio_dis = "";
             $sharing_dis_label = "";
         }
-
+		
         if ($sharing_enabled == 1) {
             $checkSharingDis = "";
             $checkSharingEn = "checked";
@@ -275,17 +204,17 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $checkSharingDis = "checked";
             $checkSharingEn = "";
         }
-
-
+        
+        
         $tool_content .= "
             <div class='row'>
                 <div class='col-sm-12'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' action='' role='form' method='post'>
-                            <fieldset>
+                            <fieldset>                               
                                 <div class='form-group'>
                                     <label class='col-sm-3'>$langBlogPerm</label>
-                                    <div class='col-sm-9'>
+                                    <div class='col-sm-9'> 
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='0' name='1_radio' $checkTeach>$langBlogPermTeacher
@@ -371,7 +300,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
 } elseif ($blog_type == 'perso_blog' && $is_blog_editor) {
     $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?user_id=$user_id&amp;token=".token_generate('personal_blog' . $user_id)."&amp;action=showBlog",
+                  'url' => "$_SERVER[SCRIPT_NAME]?user=$user_id&amp;action=showBlog",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label',
                   'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
@@ -395,6 +324,7 @@ if ($action == "delPost") {
             if($post->delete()) {
                 Session::Messages($langBlogPostDelSucc, 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::DELPOST);
+                triggerAnalytics($course_id, $uid, BlogAnalyticsEvent::BLOGEVENT);
             } else {
                 Session::Messages($langBlogPostDelFail);
             }
@@ -469,7 +399,7 @@ if ($action == "createPost") {
         </div>";
     } else {
         Session::Messages($langBlogPostNotAllowedCreate);
-        redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
+        redirect_to_home_page("modules/blog/index.php?$url_params");
     }
 
 }
@@ -482,7 +412,7 @@ if ($action == "editPost") {
         if ($blog_type == 'course_blog') {
             $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
         } elseif ($blog_type == 'perso_blog') {
-            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?$url_params", 'name' => $langBlog);
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langBlog);
             $pageName = $langEditChange;
             $allow_to_edit = $is_blog_editor;
         }
@@ -576,6 +506,7 @@ if ($action == "savePost") {
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id, $commenting)) {
                 Session::Messages($langBlogPostSaveSucc, 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::NEWPOST);
+                triggerAnalytics($course_id, $uid, BlogAnalyticsEvent::BLOGEVENT);
             } else {
                 Session::Messages($langBlogPostSaveFail);
             }
@@ -832,11 +763,7 @@ if ($action == "showBlog") {
 if ($blog_type == 'course_blog') {
     draw($tool_content, 2, null, $head_content);
 } elseif ($blog_type == 'perso_blog') {
-    if ($session->status) {
-        draw($tool_content, 1, null, $head_content);
-    } else {
-        draw($tool_content, 0, null, $head_content);
-    }
+    draw($tool_content, 1, null, $head_content);
 }
 
 function triggerGame($courseId, $uid, $eventName) {
@@ -847,4 +774,13 @@ function triggerGame($courseId, $uid, $eventName) {
     $eventData->module = MODULE_ID_BLOG;
 
     BlogEvent::trigger($eventName, $eventData);
+}
+
+function triggerAnalytics($courseId, $uid, $eventName) {
+    $data = new stdClass();
+    $data->uid = $uid;
+    $data->course_id = $courseId;
+
+    $data->element_type = 1;
+    BlogAnalyticsEvent::trigger(BlogAnalyticsEvent::BLOGEVENT, $data, true);
 }

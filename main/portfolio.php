@@ -21,7 +21,7 @@
 
 /**
  * @file portfolio.php
- * @brief This component creates the content of the start page when the user is logged in 
+ * @brief This component creates the content of the start page when the user is logged in
  */
 
 $require_login = true;
@@ -33,6 +33,7 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
+require_once 'perso.php';
 
 $data['tree'] = new Hierarchy();
 $user = new User();
@@ -77,17 +78,17 @@ jQuery(document).ready(function() {
                'sNext':     '&rsaquo;',
                'sLast':     '&raquo;'
            }
-       }    
+       }
   });
-  $('div.all_courses').html('<a class=\"btn btn-xs btn-default\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses</a>');  
+  $('div.all_courses').html('<a class=\"btn btn-xs btn-default\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses</a>');
   jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();
     mypanel.slideToggle(100);
     if($(this).hasClass('active')) {
-    $(this).removeClass('active');
+        $(this).removeClass('active');
     } else {
-    $(this).addClass('active');
+        $(this).addClass('active');
     }
   });"
   .'var calendar = $("#bootstrapcalendar").calendar({
@@ -101,7 +102,7 @@ jQuery(document).ready(function() {
                                 $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                                 }
         });
-        
+
         $(".btn-group button[data-calendar-nav]").each(function() {
             var $this = $(this);
             $this.click(function() {
@@ -118,11 +119,11 @@ jQuery(document).ready(function() {
 ."});
 ".
 'function show_month(day,month,year){
-    $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});    
+    $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});
 }
+
 </script>';
 
-require_once 'perso.php';
 $data['action_bar'] = action_bar(array(
         array('title' => $langRegCourses, 
               'url' => $urlAppend . 'modules/auth/courses.php',

@@ -28,6 +28,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
+require_once 'modules/progress/process_functions.php';
 
 $data['tree'] = new Hierarchy();
 $data['user'] = new User();

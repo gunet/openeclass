@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-209  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,14 +22,8 @@
 
 /* * ===========================================================================
   scormExport12.inc.php
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7 licensed under GPL
-  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-  original file: scormExport.inc.php Revision: 1.11.2.4
-
-  Claroline authors: Amand Tihon <amand.tihon@alrj.org>
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr> 
+                 Amand Tihon <amand.tihon@alrj.org>
   ==============================================================================
   @Description: This script is for export to SCORM 1.2 package. It is kept
   for historical and backwards compatibility reasons.
@@ -61,7 +55,7 @@
   ==============================================================================
  */
 
-if (!class_exists('ScormExport')):
+if (!class_exists('ScormExport')) {
 
     require_once 'include/lib/textLib.inc.php';
     require_once 'modules/exercise/exercise.class.php';
@@ -100,7 +94,7 @@ if (!class_exists('ScormExport')):
          * @param $learnPathId The ID of the learning path to export
          * @author Amand Tihon <amand@alrj.org>
          */
-        function ScormExport($learnPathId) {
+        public function __construct($learnPathId) {
             /* Default values */
             $this->id = (int) $learnPathId;
             $this->fromScorm = false;
@@ -142,7 +136,6 @@ if (!class_exists('ScormExport')):
 
             /* Build various directories' names */
 
-            // Replace ',' too, because pclzip doesn't support it.
             $this->destDir = $webDir . "/courses/" . $course_code . '/temp/'
                     . str_replace(',', '_', replace_dangerous_char($this->name));
             $this->srcDirDocument = $webDir . "/courses/" . $course_code . "/document";
@@ -1018,26 +1011,38 @@ if (!class_exists('ScormExport')):
         }
 
         /**
-         * Create the final zip file.
-         *
-         * @return False on error, True otherwise.
-         * @author Amand Tihon <amand@alrj.org>
+         * @brief Create the final zip file.         
+         * @return false on error, true otherwise.
          */
         function zip() {
-            global $langErrorCreatingScormArchive;
+            global $langErrorCreatingScormArchive;            
 
-            $list = 1;
-            $zipFile = new PclZip($this->destDir . '.zip');
-            $list = $zipFile->create($this->destDir, PCLZIP_OPT_REMOVE_PATH, $this->destDir);
+            $zipFile = new ZipArchive();
+            $zipFile->open($this->destDir . '.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            
+            // Create recursive directory iterator            
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($this->destDir),
+                RecursiveIteratorIterator::LEAVES_ONLY
+            );
 
-            if (!$list) {
+            foreach ($files as $name => $file) {
+                // Skip directories (they will be added automatically)
+                if (!$file->isDir()) {
+                    // Get real and relative path for current file
+                    $filePath = $file->getRealPath();
+                    $relativePath = substr($filePath, strlen($this->destDir) + 1);
+                    // Add current file to archive
+                    $zipFile->addFile($filePath, $relativePath);
+                }
+            }
+            
+            if (!$zipFile->close()) {
                 $this->error[] = $langErrorCreatingScormArchive;
                 return false;
             }
-
-            // Temporary directory can be deleted, now that the zip is made.
+            
             claro_delete_file($this->destDir);
-
             return true;
         }
 
@@ -1081,5 +1086,4 @@ if (!class_exists('ScormExport')):
         }
 
     }
-
-endif; // !class_exists(ScormExport)
+}

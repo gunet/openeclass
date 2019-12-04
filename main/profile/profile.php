@@ -102,7 +102,7 @@ if (isset($_POST['submit'])) {
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
     Database::get()->query("UPDATE user SET lang = ?s WHERE id = ?d", $langcode, $uid);
-    
+
     $var_arr = array('am_form' => get_config('am_required') and $myrow->status != 1,
                     'desc_form' => false,
                     'phone_form' => false,
@@ -113,17 +113,17 @@ if (isset($_POST['submit'])) {
                     'email_public' => false,
                     'phone_public' => false,
                     'am_public' => false);
-    
+
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
-    
-    $all_ok = register_posted_variables($var_arr, 'all');    
+
+    $all_ok = register_posted_variables($var_arr, 'all');
     $departments = null;
     if (!get_config('restrict_owndep')) {
         if (!isset($_POST['department']) and !$is_admin) {
             $all_ok = false;
         } else {
-            $departments = arrayValuesDirect($_POST['department']);
+            $departments = $_POST['department'];
         }
     }
     $email_public = valid_access($email_public);
@@ -152,9 +152,9 @@ if (isset($_POST['submit'])) {
                                              'imagetype' => $type));
     }
 
-    
+
     // check if email is valid
-    if ((get_config('email_required') or get_config('email_verification_required')) and !Swift_Validate::email($email_form)) { 
+    if ((get_config('email_required') or get_config('email_verification_required')) and !valid_email($email_form)) {
         Session::Messages($langEmailWrong);
         redirect_to_home_page("main/profile/profile.php");
     }
@@ -178,7 +178,7 @@ if (isset($_POST['submit'])) {
             redirect_to_home_page("main/profile/profile.php");
         }
     }
-    
+
     //check for validation errors in custom profile fields
     $cpf_check = cpf_validate_format();
     if ($cpf_check[0] === false) {
@@ -216,7 +216,7 @@ if (isset($_POST['submit'])) {
                              $verified_mail_sql
                          WHERE id = ?d",
                             $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
-        
+
     //fill custom profile fields
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
 
@@ -299,7 +299,7 @@ if (isset($_GET['provider'])) {
                             }
                     } else {
                         Session::Messages($langProviderError, 'alert-danger');
-                    } 
+                    }
                     redirect_to_home_page('main/profile/profile.php');
                 } catch (Exception $e) {
                     // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
@@ -328,11 +328,11 @@ if (isset($_GET['provider'])) {
                             break;
                         case 6:
                             Session::Messages($langProviderError7, 'alert-danger');
-                            $adapter->logout(); 
+                            $adapter->logout();
                             break;
                         case 7:
                             Session::Messages($langProviderError8, 'alert-danger');
-                            $adapter->logout(); 
+                            $adapter->logout();
                             break;
                     }
                     $_GET['msg'] = 11; // display generic error for now
@@ -494,7 +494,7 @@ view('main.profile.edit', $data);
  */
 function valid_access($val) {
     $val = intval($val);
-    if (in_array($val, array(ACCESS_PROFS, ACCESS_USERS))) {
+    if (in_array($val, array(ACCESS_PRIVATE, ACCESS_PROFS, ACCESS_USERS))) {
         return $val;
     } else {
         return 0;

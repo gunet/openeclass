@@ -961,7 +961,7 @@ function get_course_old_stats($start = null, $end = null, $cid, $mid)
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_login_old_stats($start = null, $end = null)
-{   
+{
     $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
     if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
         $g = build_group_selector_cond('month', 'start_date');

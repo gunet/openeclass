@@ -55,9 +55,8 @@ function view($view_file, $view_data = array()) {
     $require_editor, $langHomePage;
 
     // negative course_id might be set in common documents
-    if ($course_id < 1) {
-        unset($course_id);
-        unset($course_code);
+    if (!isset($course_id) or !$course_id or $course_id < 1) {
+        $course_id = $course_code = null;
     }
 
     $pageTitle = $siteName;
@@ -140,7 +139,6 @@ function view($view_file, $view_data = array()) {
             array_push($breadcrumbs, $item);
             unset($item);
         }
-
 
         // Breadcrumb first entry (home / portfolio)
         if ($session->status != USER_GUEST) {
@@ -235,12 +233,12 @@ function view($view_file, $view_data = array()) {
     $logo_img_small = $themeimg.'/logo_eclass_small.png';
     $container = 'container';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+    $styles_str = '';
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-        $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
             if (isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'stretch') {
@@ -296,6 +294,18 @@ function view($view_file, $view_data = array()) {
                                 !(isset($require_course_admin) && $require_course_admin) &&
                                 !(isset($require_editor) && $require_editor);
 
+    if (!isset($module_id)) {
+        $module_id = null;
+        $module_visibility = false;
+    }
+
+    if (!isset($uname)) {
+        $uname = null;
+    }
+
+    $display_admin_tools = $GLOBALS['is_admin'] || $GLOBALS['is_power_user'] ||
+        $GLOBALS['is_usermanage_user'] || $GLOBALS['is_departmentmanage_user'];
+
     $views = $webDir.'/resources/views';
     $cache = $webDir . '/storage/views';
     $blade = new Blade($views, $cache);
@@ -308,7 +318,8 @@ function view($view_file, $view_data = array()) {
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
-            'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group');
+            'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
+            'display_admin_tools');
     $data = array_merge($global_data, $view_data);
     echo $blade->view()->make($view_file, $data)->render();
 }

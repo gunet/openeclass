@@ -1,26 +1,15 @@
 <?php
 /**
- * hddtemp sensor class
+ * hddtemp sensor class, getting information from hddtemp
  *
  * PHP version 5
  *
  * @category  PHP
  * @package   PSI_Sensor
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
- * @copyright 2009 phpSysInfo
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.hddtemp.inc.php 661 2012-08-27 11:26:39Z namiltd $
- * @link      http://phpsysinfo.sourceforge.net
- */
- /**
- * getting information from hddtemp
- *
- * @category  PHP
- * @package   PSI_Sensor
- * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @author    T.A. van Roermund <timo@van-roermund.nl>
  * @copyright 2009 phpSysInfo
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License version 2, or (at your option) any later version
  * @version   Release: 3.0
  * @link      http://phpsysinfo.sourceforge.net
  */
@@ -30,7 +19,7 @@ class HDDTemp extends Sensors
      * get the temperature information from hddtemp
      * access is available through tcp or command
      *
-     * @return array temperatures in array
+     * @return void
      */
     private function _temperature()
     {
@@ -100,7 +89,7 @@ class HDDTemp extends Sensors
             }
             break;
         default:
-            $this->error->addConfigError("temperature()", "PSI_HDD_TEMP");
+            $this->error->addConfigError("temperature()", "[sensor_hddtemp] ACCESS");
             break;
         }
         // Timo van Roermund: parse the info from the hddtemp daemon.

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.8
 * E-learning and Course Management System
 * ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
+* Copyright 2003-2019  Greek Universities Network - GUnet
 * A full copyright notice can be read in "/info/copyright.txt".
 * For a full list of contributors, see "credits.txt".
 *
@@ -24,18 +24,24 @@ require_once 'include/course_settings.php';
 require_once 'class.comment.php';
 require_once 'class.commenting.php';
 require_once 'modules/progress/CommentEvent.php';
+require_once 'modules/analytics/CommentsAnalyticsEvent.php';
+
 
 $wall_commenting = false;
 
 $commentEventActivity = null;
+$commentTypeAnalytics = null;
 if ($_POST['rtype'] == 'blogpost') {
     $setting_id = SETTING_BLOG_COMMENT_ENABLE;
     $commentEventActivity = CommentEvent::BLOG_ACTIVITY;
+    $commentTypeAnalytics = CommentsAnalyticsEvent::BLOGPOSTCOMMENT;
 } elseif ($_POST['rtype'] == 'course') {
     $setting_id = SETTING_COURSE_COMMENT_ENABLE;
     $commentEventActivity = CommentEvent::COURSE_ACTIVITY;
+    $commentTypeAnalytics = CommentsAnalyticsEvent::COURSECOMMENT;
 } elseif ($_POST['rtype'] == 'wallpost') {
     $wall_commenting = true;
+    $commentTypeAnalytics = CommentsAnalyticsEvent::WALLPOSTCOMMENT;
 }
 
 if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
@@ -48,10 +54,10 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
             $comment = new Comment();
             if ($comment->create($_POST['commentText'], $uid, $_POST['rtype'], intval($_POST['rid']))) {
                 $post_actions = '<div class="pull-right">';
-                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
-                $post_actions .= icon('fa-edit', $langModify).'</a> ';
                 $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                $post_actions .= icon('fa-times', $langDelete).'</a>';
+                $post_actions .= '<span class="fa fa-times text-danger pull-right" data-original-title="'.$langDelete.'" title="" data-toggle="tooltip"></span></a>';
+                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
+                $post_actions .= '<span class="fa fa-edit pull-right" data-original-title="'.$langModify.'" title="" data-toggle="tooltip"></span></a>';
                 $post_actions .='</div>';   
                 
                 $response[0] = 'OK';
@@ -75,6 +81,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 </div>                    
                 ";
                 triggerGame($course_id, $uid, CommentEvent::NEWCOMMENT, $commentEventActivity, $comment->getRid());
+                triggerAnalytics($course_id, $uid, $commentTypeAnalytics);
             } else {
                 $response[0] = 'ERROR';
                 $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
@@ -92,6 +99,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                     $response[0] = 'OK';
                     $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>";
                     triggerGame($course_id, $uid, CommentEvent::DELCOMMENT, $commentEventActivity, $comment->getRid());
+                    triggerAnalytics($course_id, $uid, $commentTypeAnalytics);
                 } else {
                     $response[0] = 'ERROR';
                     $response[1] = "<div class='alert alert-warning'>".$langCommentsDelFail."</div>";
@@ -155,5 +163,22 @@ function triggerGame($courseId, $uid, $eventName, $commentEventActivity, $resour
         $eventData->module = MODULE_ID_COMMENTS;
         $eventData->resource = $resourceId;
         CommentEvent::trigger($eventName, $eventData);
+    }
+}
+
+function triggerAnalytics($courseId, $uid, $commentTypeAnalytics) {
+    if ($commentTypeAnalytics !== null) {
+        $data = new stdClass();
+        $data->uid = $uid;
+        $data->course_id = $courseId;
+
+        if ($commentTypeAnalytics == CommentsAnalyticsEvent::BLOGPOSTCOMMENT)
+            $data->element_type = 20;
+        else if ($commentTypeAnalytics == CommentsAnalyticsEvent::COURSECOMMENT)
+            $data->element_type = 21;
+        else if ($commentTypeAnalytics == CommentsAnalyticsEvent::WALLPOSTCOMMENT)
+            $data->element_type = 22;
+
+        CommentsAnalyticsEvent::trigger($commentTypeAnalytics, $data, true);
     }
 }

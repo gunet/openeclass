@@ -35,7 +35,7 @@
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
 function validateNode($id, $checkOwn) {
-    global $head_content, $tree, $user, $uid,
+    global $tool_content, $head_content, $tree, $user, $uid,
     $langBack, $langNotAllowed;
 
     $notallowed = "$langNotAllowed";

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ $template_base }}/CSS/bootstrap-custom.css?v={{ $eclass_version }}">
 
     <!-- Font Awesome - A font of icons -->
-    <link href="{{ $template_base }}/CSS/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ $template_base }}/CSS/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
 
     @if (isset($styles_str) && $styles_str)
         <style>
@@ -97,9 +97,11 @@
                                     </a>
 
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
-                                        <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_courses.php"><span class="fa fa-graduation-cap fa-fw"></span>{{ trans('langMyCourses') }}</a>
+                                        @if ($display_admin_tools)
+                                        <li role="presentation" style="border-bottom: 1px solid #ddd">
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/admin/"><span class="fa fa-cog fa-fw"></span>{{ trans('langAdministratorTools') }}</a>
                                         </li>
+                                        @endif
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/message/index.php"><span class="fa fa-envelope-o fa-fw"></span>{{ trans('langMyDropBox') }}</a>
                                         </li>
@@ -387,7 +389,13 @@
                     <span class='fa fa-caret-square-o-up fa-2x'></span>
                 </div>
                 <footer class="footer">
-                    <span><a href='{{ $urlAppend }}info/copyright.php'>Open eClass © 2003-{{ date('Y') }}</a> &mdash; <a href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a></span>
+                    <span>
+                        <a href='{{ $urlAppend }}info/copyright.php'>Open eClass © 2003-{{ date('Y') }}</a> &mdash;
+                        <a href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a>
+                        @if (get_config('activate_privacy_policy_text'))
+                            &mdash; <a href="{{ $urlAppend }}info/privacy_policy.php">{{ trans('langPrivacyPolicy') }}</a>
+                        @endif
+                    </span>
                 </footer>
             </div>
         </div>
@@ -399,4 +407,3 @@
     @endif
 </body>
 </html>
-

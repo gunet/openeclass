@@ -8,7 +8,7 @@
  * @package   PSI_UPS
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License version 2, or (at your option) any later version
  * @version   SVN: $Id: class.apcupsd.inc.php 661 2012-08-27 11:26:39Z namiltd $
  * @link      http://phpsysinfo.sourceforge.net
  */
@@ -20,7 +20,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @author    Artem Volk <artvolk@mail.ru>
  * @copyright 2009 phpSysInfo
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License version 2, or (at your option) any later version
  * @version   Release: 3.0
  * @link      http://phpsysinfo.sourceforge.net
  */
@@ -29,7 +29,7 @@ class SNMPups extends UPS
     /**
      * internal storage for all gathered data
      *
-     * @var Array
+     * @var array
      */
     private $_output = array();
 
@@ -48,21 +48,21 @@ class SNMPups extends UPS
                         $upss = array(PSI_UPS_SNMPUPS_LIST);
                     }
                     foreach ($upss as $ups) {
-                        CommonFunctions::executeProgram("snmpwalk", "-Ona -c public -v 1 -r 1 ".$ups." .1.3.6.1.4.1.318.1.1.1.1", $buffer, PSI_DEBUG);
+                        CommonFunctions::executeProgram("snmpwalk", "-Ona -c public -v 1 -t ".PSI_SNMP_TIMEOUT_INT." -r ".PSI_SNMP_RETRY_INT." ".$ups." .1.3.6.1.4.1.318.1.1.1.1", $buffer, PSI_DEBUG);
                         if (strlen($buffer) > 0) {
                             $this->_output[$ups] = $buffer;
                             $buffer = "";
-                            CommonFunctions::executeProgram("snmpwalk", "-Ona -c public -v 1 -r 1 ".$ups." .1.3.6.1.4.1.318.1.1.1.2", $buffer, PSI_DEBUG);
+                            CommonFunctions::executeProgram("snmpwalk", "-Ona -c public -v 1 -t ".PSI_SNMP_TIMEOUT_INT." -r ".PSI_SNMP_RETRY_INT." ".$ups." .1.3.6.1.4.1.318.1.1.1.2", $buffer, PSI_DEBUG);
                             if (strlen($buffer) > 0) {
                                 $this->_output[$ups] .=  "\n".$buffer;
                             }
                             $buffer = "";
-                            CommonFunctions::executeProgram("snmpwalk", "-Ona -c public -v 1 -r 1 ".$ups." .1.3.6.1.4.1.318.1.1.1.3", $buffer, PSI_DEBUG);
+                            CommonFunctions::executeProgram("snmpwalk", "-Ona -c public -v 1 -t ".PSI_SNMP_TIMEOUT_INT." -r ".PSI_SNMP_RETRY_INT." ".$ups." .1.3.6.1.4.1.318.1.1.1.3", $buffer, PSI_DEBUG);
                             if (strlen($buffer) > 0) {
                                 $this->_output[$ups] .=  "\n".$buffer;
                             }
                             $buffer = "";
-                            CommonFunctions::executeProgram("snmpwalk", "-Ona -c public -v 1 -r 1 ".$ups." .1.3.6.1.4.1.318.1.1.1.4", $buffer, PSI_DEBUG);
+                            CommonFunctions::executeProgram("snmpwalk", "-Ona -c public -v 1 -t ".PSI_SNMP_TIMEOUT_INT." -r ".PSI_SNMP_RETRY_INT." ".$ups." .1.3.6.1.4.1.318.1.1.1.4", $buffer, PSI_DEBUG);
                             if (strlen($buffer) > 0) {
                                 $this->_output[$ups] .=  "\n".$buffer;
                             }
@@ -89,7 +89,7 @@ class SNMPups extends UPS
                             $old_err_rep = error_reporting();
                             error_reporting(E_ERROR); /* fatal errors only */
                         }
-                        $bufferarr=snmprealwalk($ups, "public", ".1.3.6.1.4.1.318.1.1.1.1", 1000000, 1);
+                        $bufferarr=snmprealwalk($ups, "public", ".1.3.6.1.4.1.318.1.1.1.1", 1000000 * PSI_SNMP_TIMEOUT_INT, PSI_SNMP_RETRY_INT);
                         if (! PSI_DEBUG) {
                             error_reporting($old_err_rep); /* restore error level */
                             set_error_handler('errorHandlerPsi'); /* restore error handler */
@@ -105,9 +105,9 @@ class SNMPups extends UPS
                                 $old_err_rep = error_reporting();
                                 error_reporting(E_ERROR); /* fatal errors only */
                             }
-                            $bufferarr2=snmprealwalk($ups, "public", ".1.3.6.1.4.1.318.1.1.1.2", 1000000, 1);
-                            $bufferarr3=snmprealwalk($ups, "public", ".1.3.6.1.4.1.318.1.1.1.3", 1000000, 1);
-                            $bufferarr4=snmprealwalk($ups, "public", ".1.3.6.1.4.1.318.1.1.1.4", 1000000, 1);
+                            $bufferarr2=snmprealwalk($ups, "public", ".1.3.6.1.4.1.318.1.1.1.2", 1000000 * PSI_SNMP_TIMEOUT_INT, PSI_SNMP_RETRY_INT);
+                            $bufferarr3=snmprealwalk($ups, "public", ".1.3.6.1.4.1.318.1.1.1.3", 1000000 * PSI_SNMP_TIMEOUT_INT, PSI_SNMP_RETRY_INT);
+                            $bufferarr4=snmprealwalk($ups, "public", ".1.3.6.1.4.1.318.1.1.1.4", 1000000 * PSI_SNMP_TIMEOUT_INT, PSI_SNMP_RETRY_INT);
                             if (! PSI_DEBUG) {
                                 error_reporting($old_err_rep); /* restore error level */
                                 set_error_handler('errorHandlerPsi'); /* restore error handler */

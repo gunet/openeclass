@@ -4,7 +4,7 @@
 @endpush
 
 @section('content')
-    
+
     <style>
         .profile-name
         {
@@ -12,7 +12,7 @@
             font-weight: bold;
             line-height: 3;
         }
-        
+
         .profile-content-panel
         {
             font-size: 14px;
@@ -20,7 +20,7 @@
             padding: 25px;
             background-color: #f5f5f5;
         }
-        
+
         .profile-content-panel-title
         {
             font-size: larger;
@@ -28,7 +28,7 @@
             margin-bottom: 40px;
         }
     </style>
-    
+
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default">
@@ -38,16 +38,16 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <div id='profile-avatar'>{!! $profile_img !!}</div>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div id='profile-avatar'>{!! $profile_img !!}</div>
+                                </div>
+                                <div class="col-xs-8">
+                                    <div class="profile-name">{{ $userdata->givenname }} {{ $userdata->surname }}</div>
+                                    <div class='not_visible'><strong>{{ $userdata->username }}</strong></div>
+                                </div>
+
                             </div>
-                            <div class="col-xs-8">
-                                <div class="profile-name">{{ $userdata->givenname }} {{ $userdata->surname }}</div>
-                                <div class='not_visible'><strong>{{ $userdata->username }}</strong></div>
-                            </div>
-                            
-                        </div>
                         </div>
                         <div class="col-sm-6">
                             {!! $action_bar_blog_portfolio !!}
@@ -88,7 +88,7 @@
                                     <div style="line-height:26px;">
                                         <span style="font-weight: bold; color: #888;">
                                             {{ trans('langAm') }}:
-                                        </span> 
+                                        </span>
                                         @if (!empty($userdata->am) and allow_access($userdata->am_public))
                                             {{ $userdata->am }}
                                         @else
@@ -106,7 +106,7 @@
                                     <div style="line-height:26px;">
                                         <span style="font-weight: bold; color: #888;">
                                             {{ trans('langFaculty') }}:
-                                        </span> 
+                                        </span>
                                         @foreach ($user->getDepartmentIds($id) as $i=>$dep)
                                             {!! $tree->getFullPath($dep) !!}
                                             @if($i+1 < count($user->getDepartmentIds($id)))
@@ -144,66 +144,64 @@
     </div>
 
 @if (count($cert_completed) > 0)
-	    <div class="panel panel-default">
-        <div class="panel-body">
-        <div class='col-sm-10' style='padding-top:20px;'><h4>{{ trans('langMyCertificates') }}</h4></div>
-            <div class='row'>
-                <div class='badge-container'>
-                <div class='clearfix'>
-                    @foreach ($cert_completed as $key => $certificate)           
-                        <div class='col-xs-12 col-sm-4 col-xl-2'>
-                        <a style='display:inline-block; width: 100%;' href='../out.php?i={{ $certificate->identifier }}'>
-                            <div class='certificate_panel' style='width:210px; height:120px;'>
-                                <h4 class='certificate_panel_title' style='font-size:15px; margin-top:2px;'>
-                                    {{ $certificate->cert_title }}
-                                </h4>
-                                <div style='font-size:10px;'>
-                                    {{ claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) }}
-                                </div>
-                                <div class='certificate_panel_issuer' style='font-size:11px;'>
-                                    {{ $certificate->cert_issuer }}
-                                </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class='col-sm-10' style='padding-top:20px;'><h4>{{ trans('langMyCertificates') }}</h4></div>
+                <div class='row'>
+                    <div class='badge-container'>
+                        <div class='clearfix'>
+                            @foreach ($cert_completed as $key => $certificate)
+                                <div class='col-xs-12 col-sm-4 col-xl-2'>
+                                    <a style='display:inline-block; width: 100%;' href='../out.php?i={{ $certificate->identifier }}'>
+                                        <div class='certificate_panel' style='width:210px; height:120px;'>
+                                            <h4 class='certificate_panel_title' style='font-size:15px; margin-top:2px;'>
+                                                {{ $certificate->cert_title }}
+                                            </h4>
+                                            <div style='font-size:10px;'>
+                                                {{ claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) }}
+                                            </div>
+                                            <div class='certificate_panel_issuer' style='font-size:11px;'>
+                                                {{ $certificate->cert_issuer }}
+                                            </div>
 
-                                <div class='certificate_panel_state'>
-                                    <i class='fa fa-check-circle fa-inverse state_success'></i>
+                                            <div class='certificate_panel_state'>
+                                                <i class='fa fa-check-circle fa-inverse state_success'></i>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
-                            </div>
-                        </a>
+                            @endforeach
                         </div>
-                    @endforeach                    
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
-        </div>
-    @endif            
-    @if (count($badge_completed) > 0) 
-	    <div class="panel panel-default">
-        <div class="panel-body">
-        <div class='col-sm-10' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
-            <div class='row'>
-                <div class='badge-container'>
-                <div class='clearfix'>
-                    @foreach ($badge_completed as $key => $badge)
-                        <!-- $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 
-                                                             (SELECT icon FROM badge WHERE id = ?d)", $badge->id)->filename; -->
-                        <div class='col-xs-6 col-sm-4'>
-                        <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}' style='display: block; width: 100%'>
-                            <img class='center-block' src='{{ $urlServer . BADGE_TEMPLATE_PATH . $badge_filename }}' width='100' height='100'>
-                            <h5 class='text-center' style='padding-top: 10px;'>
-                                {{ ellipsize($badge->title, 40) }}
-                            </h5>
-                        </a></div>
-                    @endforeach
+    @endif
+    @if (count($badge_completed) > 0)
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class='col-sm-10' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
+                    <div class='row'>
+                        <div class='badge-container'>
+                        <div class='clearfix'>
+                            @foreach ($badge_completed as $key => $badge)
+                                <div class='col-xs-6 col-sm-4'>
+                                <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}' style='display: block; width: 100%'>
+                                    <img class='center-block' src='{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}' width='100' height='100'>
+                                    <h5 class='text-center' style='padding-top: 10px;'>
+                                        {{ ellipsize($badge->title, 40) }}
+                                    </h5>
+                                </a></div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        </div>
         </div>
     @endif
 
 
-@if ($uid == $id)    
+@if ($uid == $id)
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default">
@@ -218,10 +216,9 @@
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            {!! $action_bar_unreg !!}                                                        
+                            {!! $action_bar_unreg !!}
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </div>

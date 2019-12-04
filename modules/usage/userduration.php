@@ -64,7 +64,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
             'icon' => 'fa-reply',
             'level' => 'primary-label')
     ),false);
-    
+
     $tool_content .= "
         <table class='table-default'>
         <tr>

@@ -27,7 +27,7 @@ require_once 'include/lib/fileManageLib.inc.php';
 doc_init();
 
 /**
- * @brief list documents while inserting them in course unit
+ * list documents while inserting them in course unit
  * @global type $id
  * @global type $webDir
  * @global type $course_code
@@ -37,7 +37,8 @@ doc_init();
  * @global type $langUp
  * @global type $langName
  * @global type $langSize
- * @global type $langDate 
+ * @global type $langDate
+ * @global type $langType
  * @global type $langAddModulesButton
  * @global type $langChoice
  * @global type $langNoDocuments
@@ -46,7 +47,7 @@ doc_init();
 function list_docs() {
     global $id, $webDir, $course_code, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
-    $langDate, $langAddModulesButton, $langChoice,
+    $langDate, $langType, $langAddModulesButton, $langChoice,
     $langNoDocuments, $course_code, $langCommonDocs, $pageName;
 
     $basedir = $webDir . '/courses/' . $course_code . '/document';

@@ -1,9 +1,10 @@
 <?php
+
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.4
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,8 +23,10 @@
  * Password reset component
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ *
  * @abstract This component resets the user's password after verifying
- *     their information through a challenge/response system.
+ * his/hers  information through a challenge/response system.
  *
  */
 use Hautelook\Phpass\PasswordHash;
@@ -128,7 +131,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                 </div>
             </div>";
 
-            $text = $header_html_topic_notify . $body_html_topic_notify;
+            $text = $header_html_topic_notify.$body_html_topic_notify;
 
             $plainText = html2text($text);
             // store the timestamp of this action (password reminding and token generation)

@@ -42,7 +42,7 @@ if (!isset($course_id) || !$course_id) {
     $diskQuotaDropbox = $d->dropbox_quota;
 }
 
-if (isset($_POST['course'])) {//for the case of course messages from central ui
+if (isset($_POST['course'])) { // for the case of course messages from central ui
     $cid = course_code_to_id($_POST['course']);
     if ($cid === false) {
         $cid = $course_id;
@@ -89,7 +89,7 @@ if (isset($_POST['submit'])) {
      * submit message
      */
     if (!$error) {
-        if (!is_array($_POST['recipients'])) { //in personal msg form select2 returns a comma delimited string instead of array
+        if (!is_array($_POST['recipients'])) { // in personal msg form select2 returns a comma delimited string instead of array
             $_POST['recipients'] = explode(',', $_POST['recipients']);
         }
         foreach ($_POST['recipients'] as $r) { // group ids have been prefixed with '_'
@@ -111,7 +111,22 @@ if (isset($_POST['submit'])) {
         } else {
             $subject = $langMessage;
         }
-        if (!$file_attached) { // no file attached
+        if (isset($_POST['keepAttachment'])) { // forwarding message with attachment
+            $sourceMsg = Database::get()->querySingle('SELECT filename, real_filename, filesize
+                FROM dropbox_msg, dropbox_index, dropbox_attachment
+                WHERE dropbox_msg.id = dropbox_attachment.msg_id AND
+                      dropbox_msg.id = dropbox_index.msg_id AND
+                      dropbox_msg.id = ?d AND recipient_id = ?d',
+                $_POST['keepAttachment'], $uid);
+            if ($sourceMsg) {
+                $real_filename = $sourceMsg->real_filename;
+                $filesize = $sourceMsg->filesize;
+                $format = get_file_extension($real_filename);
+                $filename = safe_filename($format);
+                copy("$message_dir/{$sourceMsg->filename}", "$message_dir/$filename");
+                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+            }
+        } elseif (!$file_attached) { // no file attached
             $filename = '';
             $real_filename = '';
             $filesize = 0;
@@ -144,7 +159,7 @@ if (isset($_POST['submit'])) {
                 @chmod($filename_final, 0644);
                 require_once 'modules/admin/extconfig/externals.php';
                 $connector = AntivirusApp::getAntivirus();
-                if($connector->isEnabled() == true ){
+                if ($connector->isEnabled() == true ){
                     $output=$connector->check($filename_final);
                     if($output->status==$output::STATUS_INFECTED){
                         AntivirusApp::block($output->output);
@@ -160,7 +175,7 @@ if (isset($_POST['submit'])) {
         $msgURL = $urlServer . 'modules/message/index.php?mid=' . $msg->id;
         $errormail = FALSE;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients
-            if ($course_id != 0 || isset($_POST['course'])) {//message in course context
+            if ($course_id != 0 || isset($_POST['course'])) {// message in course context
                 $list_of_recipients = array();
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
@@ -170,6 +185,7 @@ if (isset($_POST['submit'])) {
                         array_push($list_of_recipients, $emailaddr);
                     }
                 }
+                array_push($list_of_recipients, $_SESSION['email']); // add sender email address
                 $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
                 $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
                 $datetime = date('l jS \of F Y h:i:s A');
@@ -182,7 +198,7 @@ if (isset($_POST['submit'])) {
                             <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
                                 <ul id='forum-category'>
                                     <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
-                                    <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
+                                    <li><span><b>$langDate:</b></span> <span>$datetime</span></li>
                                 </ul>
                         </div>
                     </div>";
@@ -217,8 +233,7 @@ if (isset($_POST['submit'])) {
 
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
-
-            } else {//message in personal context
+            } else { // message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 $list_of_recipients = array();
                 foreach ($recipients as $userid) {
@@ -227,6 +242,7 @@ if (isset($_POST['submit'])) {
                         array_push($list_of_recipients, $emailaddr);
                     }
                 }
+                array_push($list_of_recipients, $_SESSION['email']); // add sender email address
                 $datetime = date('l jS \of F Y h:i:s A');
                 $in_course = $require_current_course?
                     " $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>": '';
@@ -238,7 +254,7 @@ if (isset($_POST['submit'])) {
                             <div id='header-title'>$langNewDropboxFile$in_course.</div>
                                 <ul id='forum-category'>
                                     <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
-                                    <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
+                                    <li><span><b>$langDate:</b></span> <span>$datetime</span></li>
                                 </ul>
                         </div>
                     </div>";
@@ -264,9 +280,7 @@ if (isset($_POST['submit'])) {
                 $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 $emailaddr = uid_to_email($userid);
-
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
-
             }
         }
         if (!$errormail) {

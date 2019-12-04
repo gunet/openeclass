@@ -30,6 +30,7 @@ $require_login = true;
 require_once "../../include/baseTheme.php";
 require_once "modules/document/doc_init.php";
 require_once 'include/course_settings.php';
+
 doc_init();
 
 if ($subsystem == MAIN and get_config('enable_docs_public_write') and
@@ -60,9 +61,9 @@ $pageName = $langCreateDoc;
 
 $uploadPath = $editPath = null;
 if (isset($_GET['uploadPath'])) {
-    $uploadPath = $_GET['uploadPath'];
+    $uploadPath = q($_GET['uploadPath']);
 } elseif (isset($_GET['editPath'])) {
-    $editPath = $_GET['editPath'];
+    $editPath = q($_GET['editPath']);
     $uploadPath = my_dirname($editPath);
 }
 

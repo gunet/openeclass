@@ -36,7 +36,7 @@
                         @elseif (isset($desc_is_ser) && !$desc_is_ser && $key == 0)
                             {!! rich_text_editor('description-' . $langcode, 8, 20, $mynode->description) !!}
                         @else
-                            {!! rich_text_editor('description-' . $langcode, 8, 20, $GLOBALS['langFaculte2'] . " (" . $GLOBALS['langNameOfLang'][langcode_to_name($langcode)] . ")") !!}
+                            {!! rich_text_editor('description-' . $langcode, 8, 20, '') !!}
                         @endif
                     </div>
                 </div>

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -40,14 +40,14 @@ $modules[MODULE_ID_UNITS] = array('title' => $langCourseUnits, 'link' => 'units'
 if (isset($_GET['tag']) && strlen($_GET['tag'])) {
     $tag = $_GET['tag'];
     $tag_elements = Database::get()->queryArray("SELECT * FROM `tag_element_module`, `tag` WHERE `tag`.`name` = ?s AND `tag`.`id` =  `tag_element_module`.`tag_id` AND `tag_element_module`.`course_id` = ?d ORDER BY module_id", $tag, $course_id);
-    $toolName = "$langTag: $tag";
+    $toolName = "$langTag: " . $tag;
     //check the element type
     $latest_module_id = 0;
-    foreach($tag_elements as $tag){
-        if($tag->module_id !== $latest_module_id && $latest_module_id){
+    foreach ($tag_elements as $tag) {
+        if ($tag->module_id !== $latest_module_id && $latest_module_id){
             $tool_content .= "</div></div>";
         }
-        if($tag->module_id !== $latest_module_id){
+        if ($tag->module_id !== $latest_module_id){
             $tool_content .= "
                     <div class='panel panel-default'>
                         <div class='panel-heading'>
@@ -55,19 +55,19 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
                         </div>
                         <div class='panel-body'>";
         }
-        if($tag->module_id == MODULE_ID_ANNOUNCE){
+        if ($tag->module_id == MODULE_ID_ANNOUNCE){
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);
             $link = "<a href='../../modules/announcements/?course=".$course_code."&amp;an_id=".$tag->element_id."'>$announce->title</a><br>";
         }
-        if($tag->module_id == MODULE_ID_ASSIGN){
+        if ($tag->module_id == MODULE_ID_ASSIGN){
             $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
             $link = "<a href='../../modules/work/?course=".$course_code."&amp;id=".$tag->element_id."'>$work->title</a><br>";
         }
-        if($tag->module_id == MODULE_ID_EXERCISE){
+        if ($tag->module_id == MODULE_ID_EXERCISE){
             $exe = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);
             $link = "<a href='../../modules/exercise/admin.php?course=".$course_code."&amp;exerciseId=".$tag->element_id."'>$exe->title</a><br>";
         }
-        if($tag->module_id == MODULE_ID_UNITS){
+        if ($tag->module_id == MODULE_ID_UNITS){
             $unit = Database::get()->querySingle("SELECT title FROM course_units WHERE id = ?d ", $tag->element_id);
             $link = "<a href='../../modules/units/index.php?course=".$course_code."&amp;id=".$tag->element_id."'>$unit->title</a><br>";
         }
@@ -78,8 +78,11 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
                 ";
         $latest_module_id = $tag->module_id;
     }
+    if ($tag_elements) {
         $tool_content .= "</div></div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langTagNotFound</div>";
+    }
 }
-
 
 draw($tool_content, 2, null, $head_content);

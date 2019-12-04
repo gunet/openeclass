@@ -18,6 +18,7 @@ syntax: regexp
 ^laravel/storage/logs/
 
 ^nbproject/private/
+^\.idea$
 ^template/default/.sass-cache/
 
 ^\.buildpath$
@@ -30,9 +31,12 @@ syntax: regexp
 \.rej$
 \.conflict\~$
 \.map$
+\..*\.swp$
 
 \.git$
 \.gitignore$
 \.travis.yml$
+
+\.sass-cache
 
 ^modules/drives/plugins/googledrive_key.p12

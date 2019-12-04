@@ -105,11 +105,13 @@ if (isset($_POST['welcomeScreen'])) {
     $dbHostForm = 'localhost';
     $dbUsernameForm = 'root';
     $dbNameForm = 'eclass';
-    $dbMyAdmin = '';
+    $dbMyAdmin = $emailForm = '';     
     $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']) ? 'https://' : 'http://') .
             $_SERVER['SERVER_NAME'] .
             str_replace('/install/index.php', '/', $_SERVER['SCRIPT_NAME']);
-    $emailForm = $_SERVER['SERVER_ADMIN'];
+    if (isset($_SERVER['SERVER_ADMIN'])) { // only for apache
+        $emailForm = $_SERVER['SERVER_ADMIN'];
+    }    
     $nameForm = $langDefaultAdminName;
     $loginForm = 'admin';
     $passForm = genPass();
@@ -533,6 +535,8 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/eportfolio/work_submissions/index.php');
     mkdir_try('courses/eportfolio/mydocs');
     touch_try('courses/eportfolio/mydocs/index.php');
+    mkdir_try('storage');
+    mkdir_try('storage/views');
 
     if ($configErrorExists) {
         $tool_content .= "<div class='alert alert-danger'>" . implode('', $errorContent) . "</div>" .
@@ -568,6 +572,7 @@ elseif (isset($_POST['install1'])) {
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
     warnIfExtNotLoaded('curl');
+    warnIfExtNotLoaded('zip');
     $tool_content .= "</ul><h3>$langOptionalPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('soap');

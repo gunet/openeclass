@@ -130,7 +130,7 @@
               <th>{{ trans('langSurnameName') }}</th>
               <th class='text-center'>{{ trans('langRole') }}</th>
               <th class='text-center'>{{ trans('langGroup') }}</th>
-              <th class='text-center' width='80'>{{ trans('langRegistrationDateShort') }}</th>
+              <th class='text-center' width='80'>{{ trans('langRegistrationDate') }}</th>
               <th class='text-center'>{!! icon('fa-gears') !!}</th>
             </tr>
         </thead>

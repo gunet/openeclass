@@ -62,7 +62,8 @@ if (isset($_GET['v'])) {
 }
  
 // list view if we want a specific event 
-        
+
+
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('bootstrap-timepicker');
@@ -137,12 +138,12 @@ function checkenableenddate(){
 }
 $(function() {
     $('#startdate').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right', 
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right',
         language: '".$language."',
         autoclose: true
     });
     $('#enddate').datepicker({
-        format: 'dd-mm-yyyy', pickerPosition: 'bottom-left', 
+        format: 'dd-mm-yyyy', pickerPosition: 'bottom-right',
         language: '".$language."',
         autoclose: true
     });
@@ -271,7 +272,7 @@ if ($is_editor) {
                 <div class='col-sm-10'>
                     <div class='input-group'>
                         <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
-                        <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>
+                        <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                     </div>
                 </div>
             </div>
@@ -280,7 +281,7 @@ if ($is_editor) {
                 <div class='col-sm-10'>
                     <div class='input-group add-on'>
                         <input class='form-control' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
-                        <div class='input-group-addon add-on'><i class='fa fa-clock-o fa-fw'></i></div>
+                        <div class='input-group-addon add-on'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
             </div>";
@@ -317,7 +318,7 @@ if ($is_editor) {
                     <div class='col-sm-4'>
                         <div class='input-group'>
                             <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                            <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>
+                            <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                         </div>
                     </div>
                 </div>
@@ -406,7 +407,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                             </div>
                             </div>
                         </div>'
-                . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'                
+                . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'
                 . '</div></div>';
 
         $tool_content .= "<script type='text/javascript'>" .

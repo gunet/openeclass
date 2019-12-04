@@ -50,6 +50,15 @@ $data['course_info'] = $course_info = Database::get()->querySingle("SELECT keywo
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 
+// Handle unit reordering
+if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toReorder'])) {
+        reorder_table('course_units', 'course_id', $course_id, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+        exit;
+    }
+}
+
 // other actions in course unit
 if ($is_editor) {
     // update index and refresh course metadata
@@ -125,13 +134,37 @@ add_units_navigation(TRUE);
 
 load_js('bootstrap-calendar');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
+load_js('sortable');
 
 ModalBoxHelper::loadModalBox();
 $head_content .= "
 <script type='text/javascript'>
-    $(document).ready(function() {  "
+    $(document).ready(function() {";
+
+if ($is_editor and $course_info->view_type == 'units') {
+    $head_content .= '
+        Sortable.create(boxlistSort, {
+            animation: 350,
+            handle: \'.fa-arrows\',
+            animation: 150,
+            onUpdate: function (evt) {
+                var itemEl = $(evt.item);
+                var idReorder = itemEl.attr(\'data-id\');
+                var prevIdReorder = itemEl.prev().attr(\'data-id\');
+
+                $.ajax({
+                  type: \'post\',
+                  dataType: \'text\',
+                  data: {
+                      toReorder: idReorder,
+                      prevReorder: prevIdReorder,
+                  }
+                });
+            }
+        });';
+}
 //Calendar stuff
-.'var calendar = $("#bootstrapcalendar").calendar({
+$head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
                     events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
                     language: "'.$langLanguageCode.'",
@@ -163,45 +196,8 @@ $head_content .= "
     ."})
     </script>";
 
-$head_content .= "
-        <script>
-        $(function() {
-            $('#help-btn').click(function(e) {
-                e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
-            });
-        });
-        </script>
-        ";
+$registerUrl = js_escape($urlAppend . 'modules/course_home/register.php?course=' . $course_code);
 
-$head_content .= "
-        <script>
-            $(function() {
-                $('body').keydown(function(e) {
-                    if(e.keyCode == 37 || e.keyCode == 39) {
-                        if ($('.modal.in').length) {
-                            var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
-                            if (e.keyCode == 37) {
-                                var new_modal_id = parseInt(visible_modal_id) - 1;
-                            } else {
-                                var new_modal_id = parseInt(visible_modal_id) + 1;
-                            }
-                            var new_modal = $('#hidden_'+new_modal_id);
-                            if (new_modal.length) {
-                                hideVisibleModal();
-                                new_modal.modal('show');
-                            }
-                        }
-                    }
-                });
-            });
-            function hideVisibleModal(){
-                var visible_modal = $('.modal.in');
-                if (visible_modal) { // modal is active
-                    visible_modal.modal('hide'); // close modal
-                }
-            };
-        </script>";
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
     SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
@@ -240,7 +236,36 @@ $course_descriptions = Database::get()->queryArray("SELECT cd.id, cd.title, cd.c
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 $course_descriptions_modals = "";
 
-if(count($course_descriptions)>0){
+$head_content .= "
+        <script>
+            $(function() {
+                $('body').keydown(function(e) {
+                    if(e.keyCode == 37 || e.keyCode == 39) {
+                        if ($('.modal.in').length) {
+                            var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
+                            if (e.keyCode == 37) {
+                                var new_modal_id = parseInt(visible_modal_id) - 1;
+                            } else {
+                                var new_modal_id = parseInt(visible_modal_id) + 1;
+                            }
+                            var new_modal = $('#hidden_'+new_modal_id);
+                            if (new_modal.length) {
+                                hideVisibleModal();
+                                new_modal.modal('show');
+                            }
+                        }
+                    }
+                });
+            });
+            function hideVisibleModal(){
+                var visible_modal = $('.modal.in');
+                if (visible_modal) { // modal is active
+                    visible_modal.modal('hide'); // close modal
+                }
+            };
+        </script>";
+
+if(count($course_descriptions) > 0) {
     $course_info_extra = "";
     foreach ($course_descriptions as $key => $course_description) {
         $hidden_id = "hidden_" . $key;
@@ -249,7 +274,7 @@ if(count($course_descriptions)>0){
         if ($key + 1 < count($course_descriptions)) $next_id = "hidden_" . ($key + 1);
         if ($key > 0) $previous_id = "hidden_" . ($key - 1);
 
-        $course_descriptions_modals .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+        $course_descriptions_modals .= "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
@@ -276,7 +301,7 @@ if(count($course_descriptions)>0){
 } else {
     $course_info_extra = "<div class='text-muted'>$langNoInfoAvailable</div>";
 }
-$data['course_info_popover'] = "<div  class='list-group'>$course_info_extra</div>";
+$data['course_info_popover'] = "<div class='list-group'>$course_info_extra</div>";
 $data['course_descriptions_modals'] = $course_descriptions_modals;
 
 if ($course_info->description) {
@@ -291,6 +316,8 @@ if ($course_info->description) {
     $data['truncated_text'] = ellipsize_html($description, 1000, $postfix_truncate_more);
 }
 
+// offline course setting
+$data['offline_course'] = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
 
 if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
     commenting_add_js();
@@ -498,6 +525,8 @@ function course_announcements() {
                             FROM announcement
                             WHERE course_id = ?d AND
                                   visible = 1
+                                AND (start_display <= NOW() OR start_display IS NULL)
+                                AND (stop_display >= NOW() OR stop_display IS NULL)
                             ORDER BY `date` DESC LIMIT 5", $course_id);
         if ($q) { // if announcements exist
             $ann_content = '';

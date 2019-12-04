@@ -34,15 +34,15 @@ if ($urlAppend[strlen($urlAppend) - 1] != '/') {
 $pageName = $langUpgrade;
 
 if ($language == 'el') {
-    $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=el:upgrade_doc';
-    $link_changes_file = 'http://wiki.openeclass.org/el:changes';
+    $upgrade_info_file = 'https://docs.openeclass.org/el/upgrade';
+    $link_changes_file = 'https://docs.openeclass.org/el/current';
 } else {
-    $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=en:upgrade_doc';
-    $link_changes_file = 'http://wiki.openeclass.org/en:changes';
+    $upgrade_info_file = 'https://docs.openeclass.org/en/upgrade';
+    $link_changes_file = 'https://docs.openeclass.org/el/current';
 }
 
 // check PHP version
-if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+if (version_compare(PHP_VERSION, '7.0') < 0) {
     $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
 }
 

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,12 +17,12 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 /**
  * Archive serialized course tables
- * 
+ *
  * @param int $course_id
  * @param string $course_code
  * @param string $archivedir  Target directory
@@ -59,9 +59,6 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'course_units' => $sql_course,
         'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                     WHERE course_id = $course_id)",
-        'course_weekly_view' => $sql_course,
-        'course_weekly_view_activities' => "course_weekly_view_id IN (SELECT id FROM course_weekly_view 
-                                                                                WHERE course_id = $course_id)",
         'forum' => $sql_course,
         'forum_category' => $sql_course,
         'forum_topic' => "forum_id IN (SELECT id FROM forum
@@ -133,14 +130,14 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'tc_session' => "course_id IN (SELECT id FROM tc_session WHERE course_id = $course_id)",
         'blog_post' => $sql_course,
         'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR
-                       (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",
-        'rating' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR 
-                     (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
-                     WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id)) OR (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",
-        'rating_cache' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR 
-                     (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
-                     WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id)) OR (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",
-        'abuse_report' => $sql_course,                     
+            (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",
+        'rating' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR
+            (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
+            WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id)) OR (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",
+        'rating_cache' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR
+            (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
+            WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id)) OR (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",
+        'abuse_report' => $sql_course,
         'wall_post' => $sql_course,
         'wall_post_resources' => "post_id IN (SELECT id FROM wall_post WHERE course_id = $course_id)",
         'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)",
@@ -171,11 +168,10 @@ function archiveTables($course_id, $course_code, $archivedir) {
 
 
 /**
- * @brief Do the main task of archiving a course.
- * @global type $webDir
- * @global type $langError
- * @param type $course_id
- * @param type $course_code
+ * Do the main task of archiving a course.
+ *
+ * @param int $course_id
+ * @param string $course_code
  */
 function doArchive($course_id, $course_code) {
     global $webDir, $tool_content;
@@ -197,18 +193,37 @@ function doArchive($course_id, $course_code) {
     $zipfile = $basedir . "/$course_code-$backup_date_short.zip";
 
     // create zip file
-    $zipCourse = new PclZip($zipfile);
-    $result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive") &&
-        $zipCourse->add("$webDir/courses/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html") &&
-        $zipCourse->add("$webDir/video/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
-    
+    $zip = new ZipArchive;
+    if ($zip->open($zipfile, ZipArchive::CREATE) !== true) {
+        Session::Messages($langGeneralError, 'alert-danger');
+        redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
+    }
+    $result = $zip->addGlob($archivedir . '/*', GLOB_NOSORT, [
+            'remove_path' => "$webDir/courses/archive" ]) &&
+        addDir($zip, "$webDir/courses/$course_code", "$course_code/$backup_date/html") &&
+        addDir($zip, "$webDir/video/$course_code", "$course_code/$backup_date/video_files");
+    $zip->close();
     removeDir($archivedir);
 
-    if (!$result) {   
-        $message_zip_error = "$langError: " . $zipCourse->errorInfo(true);
-        Session::Messages($message_zip_error, 'alert-danger');
-        redirect_to_home_page("modules/course_info/index.php?course=$course_code");
+    if (!$result) {
+        Session::Messages($langGeneralError, 'alert-danger');
+        redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
     }
+}
+
+function addDir($zip, $path, $newPath) {
+    $result = true;
+    $dir = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
+    $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
+    foreach ($iterator as $name => $item) {
+        $basename = str_replace($path, $newPath, $name);
+        if ($item->isFile()) {
+            $result = $result && $zip->addFile($name, $basename);
+        } else {
+            $result = $result && $zip->addEmptyDir($basename);
+        }
+    }
+    return $result;
 }
 
 /**
@@ -228,7 +243,7 @@ function backup_table($basedir, $table, $condition) {
 
 /**
  * Delete everything in $basedir older than $age seconds.
- * 
+ *
  * @param string $basedir
  * @param string $age
  */

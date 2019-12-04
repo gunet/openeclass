@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,9 +31,13 @@ if (defined('FILE_PHP__PLAY_MODE')) {
 
 session_start();
 
-// save current course
+// save current course and student_view status
 if (isset($_SESSION['course_code'])) {
     define('old_course_code', $_SESSION['course_code']);
+}
+
+if (isset($_SESSION['student_view'])) {
+    define('old_student_view', $_SESSION['student_view']);
 }
 
 // lpmode is used for learning path
@@ -81,6 +85,10 @@ require_once 'include/lib/forcedownload.php';
 require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/document/doc_init.php';
 
+if (defined('old_student_view')) {
+    $_SESSION['student_view'] = old_student_view;
+}
+
 if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {
     // check user's access to cours
     check_cours_access();
@@ -94,9 +102,10 @@ if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {
 }
 
 if (defined('MY_DOCUMENTS')) {
-    // temporary change, uid is used to get the full path in doc_init()
+    // temporary change, uid is used to get the full path in doc_init
     $uid = $mydocs_uid;
 }
+
 doc_init();
 $uid = $session->user_id;
 
@@ -147,19 +156,21 @@ if (file_exists($disk_path)) {
         }
 
         $is_android = false;
-        $useragent=$_SERVER['HTTP_USER_AGENT'];
-        if (preg_match('/(android).+mobile/i', $useragent)) {
-            $is_android = true;
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $useragent=$_SERVER['HTTP_USER_AGENT'];
+            if (preg_match('/(android).+mobile/i', $useragent)) {
+                $is_android = true;
+            }
         }
 
         if ($is_in_lpmode && $is_android) {
             require_once 'include/lib/fileDisplayLib.inc.php';
-            //$dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . getIndirectReference($file_info->path);
+            //$dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
             $dl_url = file_url($file_info->path);
             echo $langMailVerificationClick . " " . "<a href='" . $dl_url . "'>". $langDownload . "</a>";
             unset($_SESSION['FILE_PHP__LP_MODE']);
             exit();
-        }                
+        }
         triggerGame($file_info->id);
         send_file_to_client($disk_path, $file_info->filename);
     } else {
@@ -168,11 +179,12 @@ if (file_exists($disk_path)) {
 
         $mediaPath = file_url($file_info->path, $file_info->filename);
         $mediaURL = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
-        if (defined('GROUP_DOCUMENTS'))
+        if (defined('GROUP_DOCUMENTS')) {
             $mediaURL = $urlServer . 'modules/group/index.php?course=' . $course_code . '&amp;group_id=' . $group_id . '&amp;download=' . $file_info->path;
+        }
         $token = token_generate($file_info->path, true);
         $mediaAccess = $mediaPath . '?token=' . $token;
-        
+
         triggerGame($file_info->id);
         echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, $mediaPath);
         exit();
@@ -182,31 +194,31 @@ if (file_exists($disk_path)) {
 }
 
 function check_cours_access() {
-    global $course_code, $uid, $uri;
+    global $course_code, $uid, $uri, $urlAppend;
 
     if (!$uid && !isset($course_code)) {
         $course_code = $_SESSION['dbname'];
     }
 
-    $cours = Database::get()->querySingle("SELECT id, code, visible FROM `course` WHERE code=?s", $course_code);
+    $course = Database::get()->querySingle("SELECT id, code, visible FROM `course` WHERE code = ?s", $course_code);
 
     // invalid lesson code
-    if (!$cours) {
-        redirect_to_home_page();
+    if (!$course) {
+        not_found(preg_replace('/^.*\.php/', '', $uri));
         exit;
     }
 
-    if ($cours->visible != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
-        not_found(preg_replace('/^.*\.php/', '', $uri));
-        exit(0);
+    if ($course->visible != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
+        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+        redirect_to_home_page("main/login_form.php?next=" . urlencode($next));
     }
 
     if (!$uid) {
-        $_SESSION['course_id'] = $cours->id;
+        $_SESSION['course_id'] = $course->id;
         return; // do not do own course check if anonymous with access token
     }
 
-    switch ($cours->visible) {
+    switch ($course->visible) {
         case '2': return;  // cours is open
         case '1':
         case '0':
@@ -224,13 +236,13 @@ function check_cours_access() {
 
 function triggerGame($documentId) {
     global $course_id, $uid;
-    
+
     $eventData = new stdClass();
     $eventData->courseId = $course_id;
     $eventData->uid = $uid;
     $eventData->activityType = ViewingEvent::DOCUMENT_ACTIVITY;
     $eventData->module = MODULE_ID_DOCS;
     $eventData->resource = intval($documentId);
-    
+
     ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 }

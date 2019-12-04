@@ -20,7 +20,7 @@
 
 
 /*
- *  	Authors:	Giannis Kapetanakis <bilias@edu.physics.uoc.gr>
+ * Authors: Giannis Kapetanakis <bilias@edu.physics.uoc.gr>
  */
 
 require_once '../../include/baseTheme.php';
@@ -37,19 +37,22 @@ if (phpCAS::checkAuthentication()) {
     if (!empty($_SESSION['cas_uname'])) {
         $_SESSION['uname'] = $_SESSION['cas_uname'];
     }
-    if (!empty($attrs['casuserlastattr'])) {
-        $_SESSION['cas_surname'] = $attrs['casuserlastattr'];
+    if (!empty($attrs['surname'])) {
+        $_SESSION['cas_surname'] = $attrs['surname'];
     }
-    if (!empty($attrs['casuserfirstattr'])) {
-        $_SESSION['cas_givenname'] = $attrs['casuserfirstattr'];
+    if (!empty($attrs['givenname'])) {
+        $_SESSION['cas_givenname'] = $attrs['givenname'];
     }
-    if (!empty($attrs['casusermailattr'])) {
-        $_SESSION['cas_email'] = $attrs['casusermailattr'];
+    if (!empty($attrs['email'])) {
+        $_SESSION['cas_email'] = $attrs['email'];
     }
-    if (!empty($attrs['casuserstudentid'])) {
-    	$_SESSION['cas_userstudentid'] = $attrs['casuserstudentid'];
+    if (!empty($attrs['studentid'])) {
+        $_SESSION['cas_userstudentid'] = $attrs['studentid'];
     }
 }
-//print_a($_SESSION);
-//die;
-header("Location: $urlServer");
+
+if (isset($_GET['next'])) {
+    header("Location: $urlServer?next=" . urlencode($_GET['next']));
+} else {
+    header("Location: $urlServer");
+}

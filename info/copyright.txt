@@ -2,7 +2,7 @@ Copyright Notice
 
 Open eClass © 2003 - 2008 Greek Universities Network GUnet.
 
-The Open eClass plaform is a complete Course Management System .It is the 
+The Open eClass plaform is a complete Course Management System .It is the
 solution offered by the Greek Academic Network GUnet to support Asynchronous 
 eLearning Services via a simple web browser. Its goal is the incorporation 
 and constructive use of the Internet and web technologies in the teaching and 

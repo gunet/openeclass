@@ -4,7 +4,7 @@
  * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,6 +20,8 @@
  * ======================================================================== 
  */
 
+// Check if user is administrator and if yes continue
+// Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/tc/functions.php';
@@ -27,6 +29,8 @@ require_once 'modules/tc/functions.php';
 $toolName = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
+
+$available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 load_js('tools.js');
 load_js('validation.js');
@@ -57,11 +61,9 @@ if (isset($_GET['delete_server'])) {
     Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
-    redirect_to_home_page('modules/admin/bbbmoduleconf.php');   
+    redirect_to_home_page('modules/admin/bbbmoduleconf.php');
 } else if (isset($_POST['submit'])) {
     // Save new config
-    $hostname = $_POST['hostname_form'];
-    $ip = $_POST['ip_form'];
     $key = $_POST['key_form'];
     $api_url = $_POST['api_url_form'];
     if (!preg_match('/\/$/', $api_url)) { // append '/' if doesn't exist
@@ -77,12 +79,10 @@ if (isset($_GET['delete_server'])) {
         $allcourses = 1; // tc server is assigned to all courses
     } else {
         $allcourses = 0; // tc server is assigned to specific courses
-    }    
+    }
     if (isset($_POST['id_form'])) {
         $id = getDirectReference($_POST['id_form']);
-                Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
-                ip = ?s,
-                server_key = ?s,
+        Database::get()->querySingle("UPDATE tc_servers SET server_key = ?s,
                 api_url = ?s,
                 max_rooms =?s,
                 max_users =?s,
@@ -90,7 +90,7 @@ if (isset($_GET['delete_server'])) {
                 enabled = ?s,
                 weight = ?d,
                 all_courses = ?d
-                WHERE id =?d", $hostname, $ip, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses, $id);
+                WHERE id =?d", $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses, $id);
         Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $id);
         if ($allcourses == 0) {        
             foreach ($tc_courses as $tc_data) {
@@ -99,8 +99,8 @@ if (isset($_GET['delete_server'])) {
             }
         }
     } else {
-        $q = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, ip, server_key, api_url, max_rooms, max_users, enable_recordings, enabled, weight, all_courses) VALUES
-        ('bbb', ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d)", $hostname, $ip, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses);                
+        $q = Database::get()->query("INSERT INTO tc_servers (`type`, server_key, api_url, max_rooms, max_users, enable_recordings, enabled, weight, all_courses) VALUES
+        ('bbb', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d)", $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses);
         $tc_id = $q->lastInsertID;
         if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
@@ -112,7 +112,6 @@ if (isset($_GET['delete_server'])) {
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
     redirect_to_home_page("modules/admin/bbbmoduleconf.php");
-
 } // end of if($submit)
 
 if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {

@@ -47,6 +47,7 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'include/lib/csv.class.php';
 require_once 'modules/plagiarism/plagiarism.php';
 require_once 'modules/progress/AssignmentEvent.php';
+require_once 'modules/analytics/AssignmentAnalyticsEvent.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'modules/admin/extconfig/turnitinapp.php';
 
@@ -67,9 +68,8 @@ load_js('d3/d3.min.js');
 load_js('c3-0.4.10/c3.min.js');
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
-$works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
+$works_url = array('url' => "{$urlServer}modules/work/?course=$course_code", 'name' => $langWorks);
 $toolName = $langWorks;
-
 
 //-------------------------------------------
 // main program
@@ -577,18 +577,23 @@ if ($is_editor) {
         $id = intval($_REQUEST['id']);
         if (isset($_POST['work_submit'])) {
             $pageName = $m['SubmissionStatusWorkInfo'];
-            $navigation[] = $works_url;
+            if (!isset($_REQUEST['unit'])) {
+                $navigation[] = $works_url;
+            }
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
             submit_work($id);
         } else {
             $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
             $pageName = $work_title;
-            $navigation[] = $works_url;
+            if (!isset($_REQUEST['unit'])) {
+                $navigation[] = $works_url;
+            }
             show_student_assignment($id);
         }
     } else {
         show_student_assignments();
     }
+
 }
 
 add_units_navigation(TRUE);
@@ -726,12 +731,12 @@ function add_assignment() {
                     comments, submission_type, submission_date, secret_directory,
                     group_submissions, grading_type, max_grade, grading_scale_id,
                     assign_to_specific, auto_judge, auto_judge_scenarios, lang,
-                    notification, password_lock, ip_lock, assignment_type, lti_template, 
+                    notification, password_lock, ip_lock, assignment_type, lti_template,
                     launchcontainer, tii_feedbackreleasedate, tii_internetcheck, tii_institutioncheck,
                     tii_journalcheck, tii_report_gen_speed, tii_s_view_reports, tii_studentpapercheck,
                     tii_submit_papers_to, tii_use_biblio_exclusion, tii_use_quoted_exclusion,
                     tii_exclude_type, tii_exclude_value)
-                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t, 
+                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t,
                 ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d)",
                 $course_id, $title, $desc, $deadline, $late_submission, '',
                 $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $grade_type,
@@ -804,7 +809,7 @@ function add_assignment() {
                 redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
             }
         } else {
-            Session::Mesages($langErrorCreatingDirectory);
+            Session::Messages($langErrorCreatingDirectory);
             redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
         }
     } else {
@@ -947,7 +952,7 @@ function edit_assignment($id) {
                 tii_feedbackreleasedate = ?t, tii_internetcheck = ?d, tii_institutioncheck = ?d,
                 tii_journalcheck = ?d, tii_report_gen_speed = ?d, tii_s_view_reports = ?d, tii_studentpapercheck = ?d,
                 tii_submit_papers_to = ?d, tii_use_biblio_exclusion = ?d, tii_use_quoted_exclusion = ?d,
-                tii_exclude_type = ?s, tii_exclude_value = ?d 
+                tii_exclude_type = ?s, tii_exclude_value = ?d
             WHERE course_id = ?d AND id = ?d",
             $title, $desc, $group_submissions, $comments, $submission_type,
             $deadline, $late_submission, $submission_date, $grade_type, $max_grade,
@@ -1066,7 +1071,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
     } //checks for submission validity end here
-    if ($submit_ok) {        
+    if ($submit_ok) {
         $success_msgs = array();
         $error_msgs = array();
         //Preparing variables
@@ -1094,6 +1099,7 @@ function submit_work($id, $on_behalf_of = null) {
                 }
                 $local_name = greek_to_latin($local_name);
             }
+            $local_name .= ' (' . uid_to_name($user_id, 'username') . ')';
             $local_name = replace_dangerous_char($local_name);
             if (isset($on_behalf_of) and !isset($_FILES)) {
                 $_FILES['userfile']['name'] = '';
@@ -1178,6 +1184,8 @@ function submit_work($id, $on_behalf_of = null) {
                                      grade_submission_date, group_id)
                                      VALUES (?d, ?d, ". DBHelper::timeAfter() . ", ?s, ?s, ?s, ?s, ?s, ?f, ?s, ?s, ?s, " . DBHelper::timeAfter() . ", ?d)", $data)->lastInsertID;
             triggerGame($course_id, $user_id, $row->id);
+            triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+            triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
                 'title' => $row->title,
                 'assignment_id' => $row->id,
@@ -1212,7 +1220,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
 
-        // Auto-judge: Send file to hackearth
+        // Send file to AutoJudge service
         if(AutojudgeApp::getAutojudge()->isEnabled()) {
             if ($auto_judge && $ext === $langExt[$lang]) {
                     $content = file_get_contents("$workPath/$filename");
@@ -1266,9 +1274,9 @@ function submit_work($id, $on_behalf_of = null) {
                         $weight_sum += $curScenario['weight'];
                         $i++;
                     }
-
                     // 3 decimal digits precision
                     $grade = round($partial / $weight_sum * $max_grade, 3);
+
                     // allow an error of 0.001
                     if($max_grade - $grade <= 0.001)
                         $grade = $max_grade;
@@ -1297,7 +1305,12 @@ function submit_work($id, $on_behalf_of = null) {
         // End Auto-judge
 
         Session::Messages($success_msgs, 'alert-success');
-        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+        } else {
+            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+        }
+
     } else { // not submit_ok
         Session::Messages($langExerciseNotPermit);
         redirect_to_home_page("modules/work/index.php?course=$course_code");
@@ -1356,13 +1369,14 @@ function new_assignment() {
            $langOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
            $langAutoJudgeAssertions, $langDescription, $langTitle, $langNotifyAssignmentSubmission,
            $langPasswordUnlock, $langIPUnlock, $langDelete, $langAssignmentType, $langAssignmentTypeEclass,
-           $langAssignmentTypeTurnitin, $langLTITemplate, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
+           $langAssignmentTypeTurnitin, $langTiiApp, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
            $langTiiFeedbackReleaseDate, $langAssignmentFeedbackReleaseHelpBlock, $langTiiSubmissionSettings,
            $langTiiSubmissionNoStore, $langTiiSubmissionStandard, $langTiiSubmissionInstitutional, $langTiiCompareAgainst,
            $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
            $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
            $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
-           $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage, $langTiiExcludeValue;
+           $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
+           $langTiiExcludeValue, $langLTIOptions;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -1383,6 +1397,9 @@ function new_assignment() {
         $lti_template_options .= "<option value='$lti->id'>$lti->title</option>";
     }
     $turnitinapp = ExtAppManager::getApp(strtolower(TurnitinApp::NAME));
+
+    $interval = new DateInterval('P1M');
+    $tii_fwddate = (new DateTime('NOW'))->add($interval)->format('d-m-Y H:i');
 
     $head_content .= "<script type='text/javascript'>
         $(function() {
@@ -1436,6 +1453,10 @@ function new_assignment() {
                 var choice = $(this).val();
                 if (choice == 0) {
                     // lti fields
+                    $('#lti_label')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
                     $('#lti_templates')
                         .prop('disabled', true)
                         .closest('div.form-group')
@@ -1487,17 +1508,17 @@ function new_assignment() {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-                    
+
                     // user groups
                     $('#group_button')
                         .prop('disabled', false);
-                    
+
                     // grading type
                     $('#scales_button')
                         .prop('disabled', false);
                     $('#rubrics_button')
                         .prop('disabled', false);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', false)
@@ -1505,9 +1526,13 @@ function new_assignment() {
                         .removeClass('hidden');
                     $('#online_button')
                         .prop('disabled', false);
-                    
+
                 } else if (choice == 1) {
                     // lti fields
+                    $('#lti_label')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
                     $('#lti_templates')
                         .prop('disabled', false)
                         .closest('div.form-group')
@@ -1559,7 +1584,7 @@ function new_assignment() {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-                    
+
                     // user groups
                     $('#user_button')
                         .prop('checked', true)
@@ -1567,7 +1592,7 @@ function new_assignment() {
                         .trigger('change');
                     $('#group_button')
                         .prop('disabled', true);
-                    
+
                     // grading type
                     $('#numbers_button')
                         .prop('checked', true)
@@ -1577,7 +1602,7 @@ function new_assignment() {
                         .prop('disabled', true);
                     $('#rubrics_button')
                         .prop('disabled', true);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', true)
@@ -1585,6 +1610,13 @@ function new_assignment() {
                         .addClass('hidden');
                     $('#online_button')
                         .prop('disabled', true);
+
+                    // dates
+                    $('#enableWorkStart').trigger('click');
+                    $('#enableWorkEnd').trigger('click');
+                    $('#enableWorkFeedbackRelease').trigger('click');
+                    $('#WorkEnd').val('$tii_fwddate');
+                    $('#tii_feedbackreleasedate').val('$tii_fwddate');
                 }
             });
             $('#WorkEnd, #WorkStart, #tii_feedbackreleasedate').datetimepicker({
@@ -1706,7 +1738,7 @@ function new_assignment() {
                   <input type='file' id='userfile' name='userfile'>
                 </div>
             </div>";
-    if ($turnitinapp->isEnabled()) {
+    if ($turnitinapp->isEnabled()) { // lti options
         $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langAssignmentType:</label>
@@ -1726,21 +1758,123 @@ function new_assignment() {
                     <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
                 </div>
             </div>
-            <div class='form-group hidden'>
-                <label for='title' class='col-sm-2 control-label'>$langLTITemplate:</label>
-                <div class='col-sm-10'>
-                  <select name='lti_template' class='form-control' id='lti_templates' disabled>
-                        $lti_template_options
-                  </select>
+            
+            <div class='container-fluid form-group hidden' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
+                <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
+                <div class='form-group hidden' style='margin-top: 30px;'>                    
+                    <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
+                    <div class='col-sm-10'>
+                      <select name='lti_template' class='form-control' id='lti_templates' disabled>
+                            $lti_template_options
+                      </select>
+                    </div>
                 </div>
-            </div>
             <div class='form-group hidden'>
                 <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
                 <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', LTI_LAUNCHCONTAINER_EMBED, 'id="lti_launchcontainer" disabled') . "</div>
             </div>";
-    } else {
         $tool_content .= "
-            <input type='hidden' name='assignment_type' value='0' />";
+            <!-- <div class='form-group hidden'>
+                <label for='tii_submit_papers_to' class='col-sm-2 control-label'>$langTiiSubmissionSettings:</label>
+                <div class='col-sm-10'>
+                  <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' disabled>
+                        <option value='0'>$langTiiSubmissionNoStore</option>
+                        <option value='1' selected>$langTiiSubmissionStandard</option>
+                        <option value='2'>$langTiiSubmissionInstitutional</option>
+                  </select>
+                </div>
+            </div> -->
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiCompareAgainst:</label>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' checked disabled>
+                        $langTiiStudentPaperCheck
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' checked disabled>
+                        $langTiiInternetCheck
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' checked disabled>
+                        $langTiiJournalCheck
+                      </label>
+                    </div>
+                    <!--<div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' checked disabled>
+                        $langTiiInstitutionCheck
+                      </label>
+                    </div>-->
+                </div>
+            </div>            
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
+                <div class='col-sm-10'>
+                  <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' disabled>
+                        <option value='0' selected>$langTiiReportGenImmediatelyNoResubmit</option>
+                        <option value='1'>$langTiiReportGenImmediatelyWithResubmit</option>
+                        <option value='2'>$langTiiReportGenOnDue</option>
+                  </select>
+                </div>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' disabled>
+                        $langTiiSViewReports
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' disabled>
+                        $langTiiExcludeBiblio
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' disabled>
+                       $langTiiExcludeQuoted
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' disabled>
+                       $langTiiExcludeSmall
+                      </label>
+                    </div>
+                </div>
+            </div>            
+            <div class='form-group hidden'>
+                <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' checked disabled>
+                        $langTiiExcludeTypeWords
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' disabled>
+                        $langTiiExcludeTypePercentage
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group hidden' style='margin-bottom: 20px;'>
+                <label for='tii_exclude_value' class='col-sm-2 control-label'>$langTiiExcludeValue:</label>
+                <div class='col-sm-10'>
+                    <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='0' disabled>
+                </div>
+            </div>                
+            </div>";
+    } else {
+        $tool_content .= "<input type='hidden' name='assignment_type' value='0'>";
     }
     $tool_content .= "
             <div class='form-group'>
@@ -1926,64 +2060,66 @@ function new_assignment() {
                     </div>
                 </div>
             </div>";
+        // Auto Judge Options
             if(AutojudgeApp::getAutojudge()->isEnabled()) {
                 $connector = AutojudgeApp::getAutojudge();
                 $tool_content .= "
                 <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
-                <div class='col-sm-10'>
-                    <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' /></div>
-                    <table style='display: none;'>
-                        <thead>
-                            <tr>
-                              <th>$langAutoJudgeInput</th>
-                              <th>$langOperator</th>
-                              <th>$langAutoJudgeExpectedOutput</th>
-                              <th>$langAutoJudgeWeight</th>
-                              <th>$langDelete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                              <td><input type='text' name='auto_judge_scenarios[0][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
-                              <td>
-                                <select name='auto_judge_scenarios[0][assertion]' class='auto_judge_assertion'>
-                                    <option value='eq' selected='selected'>".$langAutoJudgeAssertions['eq']."</option>
-                                    <option value='same'>".$langAutoJudgeAssertions['same']."</option>
-                                    <option value='notEq'>".$langAutoJudgeAssertions['notEq']."</option>
-                                    <option value='notSame'>".$langAutoJudgeAssertions['notSame']."</option>
-                                    <option value='integer'>".$langAutoJudgeAssertions['integer']."</option>
-                                    <option value='float'>".$langAutoJudgeAssertions['float']."</option>
-                                    <option value='digit'>".$langAutoJudgeAssertions['digit']."</option>
-                                    <option value='boolean'>".$langAutoJudgeAssertions['boolean']."</option>
-                                    <option value='notEmpty'>".$langAutoJudgeAssertions['notEmpty']."</option>
-                                    <option value='notNull'>".$langAutoJudgeAssertions['notNull']."</option>
-                                    <option value='string'>".$langAutoJudgeAssertions['string']."</option>
-                                    <option value='startsWith'>".$langAutoJudgeAssertions['startsWith']."</option>
-                                    <option value='endsWith'>".$langAutoJudgeAssertions['endsWith']."</option>
-                                    <option value='contains'>".$langAutoJudgeAssertions['contains']."</option>
-                                    <option value='numeric'>".$langAutoJudgeAssertions['numeric']."</option>
-                                    <option value='isArray'>".$langAutoJudgeAssertions['isArray']."</option>
-                                    <option value='true'>".$langAutoJudgeAssertions['true']."</option>
-                                    <option value='false'>".$langAutoJudgeAssertions['false']."</option>
-                                    <option value='isJsonString'>".$langAutoJudgeAssertions['isJsonString']."</option>
-                                    <option value='isObject'>".$langAutoJudgeAssertions['isObject']."</option>
-                                </select>
-                              </td>
-                              <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output' /></td>
-                      <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'/></td>
-                              <td><a href='#' class='autojudge_remove_scenario' style='display: none;'>X</a></td>
-                            </tr>
-                            <tr>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td style='text-align:center;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>
-                                <td> <input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
+                    <div class='col-sm-10'>
+                        <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1'></div>
+                        <div class='table-responsive'>                    
+                            <table style='display: none;'>
+                                <thead>
+                                    <tr>
+                                      <th>$langAutoJudgeInput</th>
+                                      <th>$langOperator</th>
+                                      <th>$langAutoJudgeExpectedOutput</th>
+                                      <th>$langAutoJudgeWeight</th>
+                                      <th>$langDelete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                      <td><input type='text' name='auto_judge_scenarios[0][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
+                                      <td>
+                                        <select name='auto_judge_scenarios[0][assertion]' class='auto_judge_assertion'>
+                                            <option value='eq' selected='selected'>".$langAutoJudgeAssertions['eq']."</option>
+                                            <option value='same'>".$langAutoJudgeAssertions['same']."</option>
+                                            <option value='notEq'>".$langAutoJudgeAssertions['notEq']."</option>
+                                            <option value='notSame'>".$langAutoJudgeAssertions['notSame']."</option>
+                                            <option value='integer'>".$langAutoJudgeAssertions['integer']."</option>
+                                            <option value='float'>".$langAutoJudgeAssertions['float']."</option>
+                                            <option value='digit'>".$langAutoJudgeAssertions['digit']."</option>
+                                            <option value='boolean'>".$langAutoJudgeAssertions['boolean']."</option>
+                                            <option value='notEmpty'>".$langAutoJudgeAssertions['notEmpty']."</option>
+                                            <option value='notNull'>".$langAutoJudgeAssertions['notNull']."</option>
+                                            <option value='string'>".$langAutoJudgeAssertions['string']."</option>
+                                            <option value='startsWith'>".$langAutoJudgeAssertions['startsWith']."</option>
+                                            <option value='endsWith'>".$langAutoJudgeAssertions['endsWith']."</option>
+                                            <option value='contains'>".$langAutoJudgeAssertions['contains']."</option>
+                                            <option value='numeric'>".$langAutoJudgeAssertions['numeric']."</option>
+                                            <option value='isArray'>".$langAutoJudgeAssertions['isArray']."</option>
+                                            <option value='true'>".$langAutoJudgeAssertions['true']."</option>
+                                            <option value='false'>".$langAutoJudgeAssertions['false']."</option>
+                                            <option value='isJsonString'>".$langAutoJudgeAssertions['isJsonString']."</option>
+                                            <option value='isObject'>".$langAutoJudgeAssertions['isObject']."</option>
+                                        </select>
+                                      </td>
+                                      <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output'></td>
+                                      <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'></td>
+                                      <td class='text-center'><icon class='fa fa-times'><a href='#' class='autojudge_remove_scenario' style='display: none;'></a></icon></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan='5' style='text-align:center;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>                                
+                                    </tr>
+                                    <tr>
+                                        <td><input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class='form-group'>
                   <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
@@ -2012,107 +2148,6 @@ function new_assignment() {
                 </div>
             </div>" .
             eClassTag::tagInput();
-    if ($turnitinapp->isEnabled()) {
-        $tool_content .= "
-            <!--<div class='form-group hidden'>
-                <label for='tii_submit_papers_to' class='col-sm-2 control-label'>$langTiiSubmissionSettings:</label>
-                <div class='col-sm-10'>
-                  <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' disabled>
-                        <option value='0'>$langTiiSubmissionNoStore</option>
-                        <option value='1' selected>$langTiiSubmissionStandard</option>
-                        <option value='2'>$langTiiSubmissionInstitutional</option>
-                  </select>
-                </div>
-            </div>-->
-            <div class='form-group hidden'>
-                <label class='col-sm-2 control-label'>$langTiiCompareAgainst:</label>
-                <div class='col-sm-10'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' checked disabled>
-                        $langTiiStudentPaperCheck
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' checked disabled>
-                        $langTiiInternetCheck
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' checked disabled>
-                        $langTiiJournalCheck
-                      </label>
-                    </div>
-                    <!--<div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' checked disabled>
-                        $langTiiInstitutionCheck
-                      </label>
-                    </div>-->
-                </div>
-            </div>
-            <div class='form-group hidden'>
-                <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
-                <div class='col-sm-10'>
-                  <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' disabled>
-                        <option value='0' selected>$langTiiReportGenImmediatelyNoResubmit</option>
-                        <option value='1'>$langTiiReportGenImmediatelyWithResubmit</option>
-                        <option value='2'>$langTiiReportGenOnDue</option>
-                  </select>
-                </div>
-                <div class='col-sm-10'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' disabled>
-                        $langTiiSViewReports
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' disabled>
-                        $langTiiExcludeBiblio
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' disabled>
-                       $langTiiExcludeQuoted
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' disabled>
-                       $langTiiExcludeSmall
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group hidden'>
-                <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
-                <div class='col-sm-10'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' checked disabled>
-                        $langTiiExcludeTypeWords
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' disabled>
-                        $langTiiExcludeTypePercentage
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group hidden'>
-                <label for='tii_exclude_value' class='col-sm-2 control-label'>$langTiiExcludeValue:</label>
-                <div class='col-sm-10'>
-                    <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='0' disabled>
-                </div>
-            </div>";
-    }
     $tool_content .= "
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>".
@@ -2185,7 +2220,7 @@ function show_edit_assignment($id) {
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
         $langPasswordUnlock, $langIPUnlock, $langDelete, $langAssignmentType, $langAssignmentTypeEclass,
-        $langAssignmentTypeTurnitin, $langLTITemplate, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
+        $langAssignmentTypeTurnitin, $langTiiApp, $langLTILaunchContainer, $langTurnitinNewAssignNotice,
         $langTiiFeedbackReleaseDate, $langAssignmentFeedbackReleaseHelpBlock, $langTiiSubmissionSettings,
         $langTiiSubmissionNoStore, $langTiiSubmissionStandard, $langTiiSubmissionInstitutional, $langTiiCompareAgainst,
         $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
@@ -2297,17 +2332,17 @@ function show_edit_assignment($id) {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-                    
+
                     // user groups
                     $('#group_button')
                         .prop('disabled', false);
-                    
+
                     // grading type
                     $('#scales_button')
                         .prop('disabled', false);
                     $('#rubrics_button')
                         .prop('disabled', false);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', false)
@@ -2315,7 +2350,7 @@ function show_edit_assignment($id) {
                         .removeClass('hidden');
                     $('#online_button')
                         .prop('disabled', false);
-                    
+
                 } else if (choice == 1) {
                     // lti fields
                     $('#lti_templates')
@@ -2369,7 +2404,7 @@ function show_edit_assignment($id) {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-                    
+
                     // user groups
                     $('#user_button')
                         .prop('checked', true)
@@ -2377,7 +2412,7 @@ function show_edit_assignment($id) {
                         .trigger('change');
                     $('#group_button')
                         .prop('disabled', true);
-                    
+
                     // grading type
                     $('#numbers_button')
                         .prop('checked', true)
@@ -2387,7 +2422,7 @@ function show_edit_assignment($id) {
                         .prop('disabled', true);
                     $('#rubrics_button')
                         .prop('disabled', true);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', true)
@@ -2617,7 +2652,7 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='form-group $lti_hidden'>
-                    <label for='title' class='col-sm-2 control-label'>$langLTITemplate:</label>
+                    <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
                     <div class='col-sm-10'>
                       <select name='lti_template' class='form-control' id='lti_templates' $lti_disabled>
                             $lti_template_options
@@ -3104,6 +3139,8 @@ function delete_assignment($id) {
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($uids as $user_id) {
                 triggerGame($course_id, $user_id, $id);
+                triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+                triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             }
             if ($row->assign_to_specific) {
                 Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
@@ -3137,6 +3174,8 @@ function purge_assignment_subs($id) {
     if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
         foreach ($uids as $user_id) {
             triggerGame($course_id, $user_id, $id);
+            triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+            triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         }
         if ($row->assign_to_specific) {
             Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
@@ -3162,6 +3201,8 @@ function delete_user_assignment($id) {
     $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $id)->uid;
     if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
         triggerGame($course_id, $quserid, $id);
+        triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+        triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         if ($filename->file_path) {
             $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
             if (!my_delete($file)) {
@@ -3204,6 +3245,7 @@ function delete_teacher_assignment_file($id) {
  * @param type $id
  */
 function show_student_assignment($id) {
+
     global $tool_content, $m, $uid, $langUserOnly, $langBack, $course_code,
         $course_id, $course_code, $langAssignmentWillBeActive,
         $langCaptchaWrong, $langIPHasNoAccess;
@@ -3244,11 +3286,16 @@ function show_student_assignment($id) {
             redirect_to_home_page("modules/work/index.php?course=$course_code");
         }
 
+        if (isset($_GET['unit'])) {
+            $back_url = "../units/index.php?course=$course_code&amp;id=$_GET[unit]";
+        } else {
+            $back_url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+        }
         $tool_content .= action_bar(array(
            array(
                'title' => $langBack,
                'icon' => 'fa-reply',
-               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+               'url' => "$back_url",
                'level' => "primary-label"
            )
         ));
@@ -3266,7 +3313,7 @@ function show_student_assignment($id) {
         } else {
             foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
                 $submissions_exist = true;
-                if ($sub->grade != '') {
+                if ($sub->grade != '' && $row->assignment_type != ASSIGNMENT_TYPE_TURNITIN) {
                     $submit_ok = false;
                 }
                 show_submission_details($sub->id);
@@ -3311,17 +3358,21 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit,
     $langNotice3, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade, $langWarnAboutDeadLine;
+    $langGradebookGrade, $langWarnAboutDeadLine, $urlServer;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
     }
 
-    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);    
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     /*if ($assignment->late_submission) {
         $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
     }*/
-    $group_select_hidden_input = $group_select_form = '';
+    $group_select_hidden_input = $group_select_form = $course_unit_hidden_input = '';
+    if (isset($_GET['unit'])) {
+        $course_unit_hidden_input = "<input type='hidden' name='unit' value='$_GET[unit]'>
+                                     <input type='hidden' name='res_type' value='assignment'>";
+    }
     $is_group_assignment = is_group_assignment($id);
     if ($is_group_assignment) {
         if (!$on_behalf_of) {
@@ -3432,7 +3483,16 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             </div>
                         </div>";
         }
-        $back_link = $is_editor ? "index.php?course=$course_code&id=$id" : "index.php?course=$course_code";
+        if ($is_editor) {
+            $back_link = $form_link = "index.php?course=$course_code&id=$id";
+        } else {
+            if (isset($_GET['unit'])) {
+                $back_link = "../units/index.php?course=$course_code&id=$_GET[unit]";
+                $form_link = "../units/view.php?course=$course_code";
+            } else {
+                $back_link = $form_link = "{$urlServer}modules/work/?course=$course_code";
+            }
+        }
         $tool_content .= action_bar(array(
                 array(
                     'title' => $langBack,
@@ -3444,8 +3504,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
             ))."
                     $notice
                     <div class='form-wrapper'>
-                     <form class='form-horizontal' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-                        <input type='hidden' name='id' value='$id' />$group_select_hidden_input
+                     <form class='form-horizontal' enctype='multipart/form-data' action='$form_link' method='post'>
+                        <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>
                         $group_select_form
                         $submission_form
@@ -3479,7 +3539,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
 }
 
 function show_turnitin_integration($id) {
-    global $tool_content, $head_content, $course_code, $langTurnitinIntegration;
+    global $tool_content, $head_content, $course_code, $langTurnitinIntegration, $urlAppend;
 
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $assignment->lti_template);
@@ -3489,11 +3549,11 @@ function show_turnitin_integration($id) {
 <script type='text/javascript'>
 //<![CDATA[
 $(document).ready(function() {
-    
+
     var lastHeight;
     var padding = 15;
     var frame = $("#contentframe");
-    
+
     var resize = function(e) {
         var viewportH = $(window).height();
         var docH = $(document).height();
@@ -3503,7 +3563,7 @@ $(document).ready(function() {
             lastHeight = minHeight;
         }
     };
-    
+
     resize();
 
     $(window).on('resize', function() {
@@ -3515,13 +3575,13 @@ $(document).ready(function() {
 </script>
 EOF;*/
 
-        $tool_content .= '<iframe id="contentframe" 
-            src="' . "post_launch.php?course=" . $course_code . "&amp;id=" . $id . '" 
-            webkitallowfullscreen="" 
-            mozallowfullscreen="" 
-            allowfullscreen="" 
-            width="100%" 
-            height="800px" 
+        $tool_content .= '<iframe id="contentframe"
+            src="' . $urlAppend . "modules/work/post_launch.php?course=" . $course_code . "&amp;id=" . $id . '"
+            webkitallowfullscreen=""
+            mozallowfullscreen=""
+            allowfullscreen=""
+            width="100%"
+            height="800px"
             style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
     } else {
         $joinLink = create_join_button(
@@ -3545,30 +3605,6 @@ EOF;*/
 
 /**
  * @brief display assignment details
- * @global type $tool_content
- * @global type $is_editor
- * @global type $course_code
- * @global type $m
- * @global type $langDaysLeft
- * @global type $course_id
- * @global type $langEndDeadline
- * @global type $langDelAssign
- * @global type $langAddGrade
- * @global type $langZipDownload
- * @global type $langTags
- * @global type $langGraphResults
- * @global type $langWorksDelConfirm
- * @global type $langWorkFile
- * @global type $langGradeType
- * @global type $langGradeNumber
- * @global type $langGradeScale
- * @global type $langGradeRubric
- * @global type $langRubricCriteria
- * @global type $langEditChange
- * @global type $langExportGrades
- * @global type $langDescription
- * @global type $langTitle
- * @global type $langWarnAboutDeadLine
  * @param type $id
  * @param type $row
  */
@@ -3576,8 +3612,8 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $m, $langDaysLeft,$course_id,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
-           $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail,
-           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine, $langBack;
+           $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail, $urlServer,
+           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine;
 
     $preview_rubric = '';
     $grade_type = $row->grading_type;
@@ -3619,7 +3655,7 @@ function assignment_details($id, $row) {
         $tool_content .= action_bar(array(
             array(
                 'title' => $langAddGrade,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add",
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=add",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
@@ -3627,28 +3663,33 @@ function assignment_details($id, $row) {
             array(
                 'title' => $langZipDownload,
                 'icon' => 'fa-file-archive-o',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id",
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;download=$id",
                 'level' => 'primary'
+            ),
+            array(
+                'title' => $GLOBALS['langImportGrades'],
+                'icon' => 'fa-upload',
+                'url' => "import.php?course=$course_code&amp;id=$id"
             ),
             array(
                 'title' => $langExportGrades,
                 'icon' => 'fa-file-excel-o',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=export"
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=export"
             ),
             array(
                 'title' => $langGraphResults,
                 'icon' => 'fa-bar-chart',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true"
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;disp_results=true"
             ),
             array(
                 'title' => $m['WorkUserGroupNoSubmission'],
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
                 'icon' => 'fa-minus-square'
             ),
             array(
                 'title' => $langDelAssign,
                 'icon' => 'fa-times',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete",
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=do_delete",
                 'button-class' => "btn-danger",
                 'confirm' => "$langWorksDelConfirm"
             )
@@ -3668,7 +3709,7 @@ function assignment_details($id, $row) {
             <h3 class='panel-title'>
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
-                "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
+                "<a href='{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=edit'>
                     <span class='fa fa-edit' title='' data-toggle='tooltip' data-original-title='$langEditChange'></span>
                 </a>" : "")."
             </h3>
@@ -3702,13 +3743,20 @@ function assignment_details($id, $row) {
                 </div>
             </div>";
         }
+        if (isset($_GET['unit'])) {
+            $unit = intval($_GET['unit']);
+            $filelink = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
+        } else {
+            $filelink = "{$urlServer}modules/work/?course=$course_code&amp;get=$row->id&amp;file_type=1";
+        }
+
         if (!empty($row->file_name)) {
             $tool_content .= "<div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langWorkFile:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a>
+                    <a href='$filelink'>$row->file_name</a>
                 </div>
             </div>";
         }
@@ -3791,7 +3839,7 @@ function assignment_details($id, $row) {
         }
     $tool_content .= "
         </div>
-    </div>";    
+    </div>";
     $cdate = date('Y-m-d H:i:s');
     if ($row->deadline < $cdate && $row->late_submission && !$is_editor) {
         $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
@@ -3802,31 +3850,6 @@ function assignment_details($id, $row) {
 /**
  * @brief show assignment - prof view only
  * @brief the optional message appears instead of assignment details
- * @global type $tool_content
- * @global type $m
- * @global type $langNoSubmissions
- * @global type $langSubmissions
- * @global type $langWorkOnlineText
- * @global type $langGradeOk
- * @global type $course_code
- * @global type $langGraphResults
- * @global type $m
- * @global type $course_code
- * @global type $langPlagiarismResult
- * @global type $langDownloadToPDF
- * @global array $works_url
- * @global type $course_id
- * @global type $langQuestionView
- * @global type $langSGradebookBook
- * @global type $langAutoJudgeShowWorkResultRpt
- * @global type $langSurnameName
- * @global type $langPlagiarismCheck
- * @global type $langProgress
- * @global type $langGradebookGrade
- * @global type $langHasAssignmentP
- * @global type $langAmShortublished
- * @global type $langGradedAt
- * @global type $langDeleteSubmission
  * @param type $id
  * @param type $display_graph_results
  */
@@ -3834,7 +3857,7 @@ function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $m, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
     $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult, $langHasAssignmentPublished,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
-    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission,
+    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -3887,7 +3910,7 @@ function show_assignment($id, $display_graph_results = false) {
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
                                                    ORDER BY $order $rev", $id);
 
-            $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
+            $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
                 <div class='margin-bottom-thin'>
@@ -3909,7 +3932,7 @@ function show_assignment($id, $display_graph_results = false) {
                 //is it a group assignment?
                 if (!empty($row->group_id)) {
                     $subContentGroup = "$m[groupsubmit] " .
-                            "<a href='../group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
+                            "<a href='{$urlServer}/modules/group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
                             "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
                 } else {
                     $subContentGroup = '';
@@ -3931,7 +3954,7 @@ function show_assignment($id, $display_graph_results = false) {
                         } else {
                             $filename = $row->file_name;
                         }
-                        $filelink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
+                        $filelink = "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;get=$row->id'>" .
                             q($filename) . "</a>";
                     }
                 }
@@ -3941,7 +3964,7 @@ function show_assignment($id, $display_graph_results = false) {
                 } else {
                     $grade = $row->grade;
                 }
-                $icon_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                $icon_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
                                 <span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span>
                             </a>";
                 if ($row->grading_scale_id && $row->grading_type == 1) {
@@ -3977,12 +4000,14 @@ function show_assignment($id, $display_graph_results = false) {
                         $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' disabled>";
                     } else {
                         $icon_field = '';
-                        $grade_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
                                 <span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span>
                             </a>";
                     }
                 } else {
-                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3'>";
+                    // disabled grade field if turnitin
+                    $grade_disabled = ($assign->assignment_type == 1) ? ' disabled': '';
+                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' $grade_disabled>";
                 }
 
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
@@ -4004,17 +4029,22 @@ function show_assignment($id, $display_graph_results = false) {
                 if ($row->grade != '') { // grade submission date
                     $label = "<h6>($langGradedAt " .nice_format($row->grade_submission_date) . ")</h6>";
                 }
-                //professor comments
+                // professor comments
                 if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
-                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:';
-                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
-                    $comments .= "&nbsp;&nbsp;<span class='small'>
+                    $grade_comments = q_math($row->grade_comments);
+                    if (preg_match('/(\r\n|\n|\r)\s/', $grade_comments)) {
+                        $grade_comments = "<pre>$grade_comments</pre>";
+                    } else {
+                        $grade_comments = "&nbsp;<span>$grade_comments</span>&nbsp;&nbsp;";
+                    }
+                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "
+                            <span class='small'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
                             </span>";
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
                 if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                    $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                    $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                     $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
                 }
 
@@ -4028,7 +4058,7 @@ function show_assignment($id, $display_graph_results = false) {
                             $plagiarismlink = "<small>$langProgress: ". $results->progress*100 . "%</small>";
                         }
                     } else {
-                        $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
+                        $plagiarismlink = "<span class='small'><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
                     }
                 }
                 // ---------------------------------
@@ -4045,12 +4075,15 @@ function show_assignment($id, $display_graph_results = false) {
                             </td>
                             <td class='text-center'>
                             $icon_field
-                            <a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
+                            <a class='linkdelete' href='{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
                                 <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteSubmission' title='' data-toggle='tooltip'></span>
                             </a>
                         </td></tr>";
                 $i++;
             } //END of Foreach
+
+            // disabled grades submit if turnitin
+            $disabled_submit = ($assign->assignment_type == 1) ? ' disabled': '';
 
             $tool_content .= "
                     </tbody>
@@ -4066,7 +4099,7 @@ function show_assignment($id, $display_graph_results = false) {
                 </div>
             </div>
             <div class='pull-right'>
-                <button class='btn btn-primary' type='submit' name='submit_grades'>$langGradeOk</button>
+                <button class='btn btn-primary' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
             </div>
             </form>";
         } else {
@@ -4278,12 +4311,17 @@ function assignment_password_bootbox() {
  * @global type $uid
  * @global type $course_id
  * @global type $course_code
+ * @global type $urlServer
  * @global type $langDaysLeft
  * @global type $langNoAssign
  * @global type $course_code
  * @global type $langTitle
  * @global type $langHasExpiredS
  * @global type $langGradebookGrade
+ * @global type $langAddResePortfolio
+ * @global type $langAddGroupWorkSubePortfolio
+ * @global type $langPasswordUnlock
+ * @global type $langIPUnlock
  */
 function show_student_assignments() {
     global $tool_content, $m, $uid, $course_id, $course_code, $urlServer,
@@ -4299,12 +4337,20 @@ function show_student_assignments() {
     } else {
         $gids_sql_ready = "''";
     }
+
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                 FROM assignment WHERE course_id = ?d AND active = '1' AND
-                                 (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
-                                    (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
-                                 )
-                                 ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
+                FROM assignment WHERE course_id = ?d
+                    AND active = '1' AND
+                    (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
+                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                            UNION
+                        SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                    )
+                ORDER BY
+                CASE
+                    WHEN deadline IS NULL THEN 1 ELSE 0
+                END, title
+                ", $course_id, $uid);
 
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
@@ -4421,12 +4467,16 @@ function show_student_assignments() {
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign,
         $langNewAssign, $course_code, $course_id, $langWorksDelConfirm,
-        $langDaysLeft, $m, $langHasExpiredS, $langWarnForSubmissions,
+        $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions,
         $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics,
         $langPasswordUnlock, $langIPUnlock;
 
+        // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-              FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
+                                        FROM assignment WHERE course_id = ?d ORDER BY
+                                            CASE
+                                                WHEN deadline IS NULL THEN 1 ELSE 0
+                                            END, title", $course_id);
     $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
@@ -4492,7 +4542,7 @@ function show_assignments() {
                             <td class='text-center'>$deadline";
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
-            } else if((int)$row->deadline){
+            } else if (intval($row->deadline)) {
                 $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
            $tool_content .= "</td>
@@ -4538,7 +4588,7 @@ function show_assignments() {
 function submit_grade_comments($args) {
     global $langGrades, $course_id, $langTheField, $course_code,
             $langFormErrors, $workPath, $langGradebookGrade;
-
+    print_a($args);
     $id = $args['assignment'];
     $grading_type = 0;
     $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
@@ -4559,6 +4609,7 @@ function submit_grade_comments($args) {
     $v->labels(array(
         'grade' => "$langTheField $langGradebookGrade"
     ));
+
     if($v->validate()) {
         if ($grading_type == 2) {
             $grade_rubric = serialize($args['grade_rubric']);
@@ -4603,6 +4654,8 @@ function submit_grade_comments($args) {
                                             $comments_real_filename, Log::get_client_ip(), $sid)->affectedRows>0) {
             $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
             triggerGame($course_id, $quserid, $id);
+            triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+            triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                     'title' => $assignment->title,
                     'grade' => $grade,
@@ -4676,12 +4729,14 @@ function submit_grades($grades_id, $grades, $email = false) {
                 $grade = is_numeric($grade['grade']) ? $grade['grade'] : null;
 
                 if ($val !== $grade) {
-                    if (Database::get()->query("UPDATE assignment_submit
+                    Database::get()->query("UPDATE assignment_submit
                                                 SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
-                                                WHERE id = ?d", $grade, Log::get_client_ip(), $sid)->affectedRows > 0) {
+                                                WHERE id = ?d", $grade, Log::get_client_ip(), $sid);
                         $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                        triggerGame($course_id, $quserid, $assignment->id);
-                        Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
+                    triggerGame($course_id, $quserid, $assignment->id);
+                    triggerAssignmentAnalytics($course_id, $quserid, $assignment->id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+                    triggerAssignmentAnalytics($course_id, $quserid, $assignment->id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
+                    Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                                 'title' => $assignment->title,
                                 'grade' => $grade));
 
@@ -4700,7 +4755,6 @@ function submit_grades($grades_id, $grades, $email = false) {
                             grade_email_notify($grades_id, $sid, $grade, '');
                         }
                         Session::Messages($langGrades, 'alert-success');
-                    }
                 }
             }
         }
@@ -4725,17 +4779,24 @@ function submit_grades($grades_id, $grades, $email = false) {
 function send_file($id, $file_type) {
     global $uid, $is_editor;
 
+    if (is_module_disable(MODULE_ID_ASSIGN)) {
+        return false;
+    }
+
     if (isset($file_type)) {
         if ($file_type == 1) {
             $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-            // don't show file if: assignment nonexistent, not editor, not active assignment, module not visible
-            if (!$info or !($is_editor or ($info->active and visible_module(MODULE_ID_ASSIGN)))) {
+            // don't show file if: assignment nonexistent of assignment not active
+            if (!$info) {
+                return false;
+            }
+            if (!($info->active)) {
                 return false;
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);
         } elseif ($file_type == 2) { // download comments file
             $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
-            if (count($info)==0) {
+            if (!$info) {
                 return false;
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->grade_comments_filepath", $info->grade_comments_filename, null, true);
@@ -4773,8 +4834,9 @@ function download_assignments($id) {
         $filename = "{$course_code}_work_$id.zip";
         chdir($workPath);
         create_zip_index("$secret/index.html", $id);
-        $zip = new PclZip($filename);
         if ($sub_type == 1) { // free text assignment
+            $zip = new ZipArchive();
+            $zip->open("$filename", ZipArchive::CREATE);
             $sql = Database::get()->queryArray("SELECT uid, submission_text FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($sql as $data) {
                 $onlinetext = new \Mpdf\Mpdf([
@@ -4791,19 +4853,28 @@ function download_assignments($id) {
                 $onlinetext->WriteHTML($data->submission_text);
                 $pdfname = greek_to_latin(uid_to_name($data->uid)) . ".pdf";
                 $onlinetext->Output($pdfname, 'F');
-                $zip->add($pdfname);
-                unlink($pdfname);
+                $zip->addFile($pdfname);
             }
-            $zip->add("$secret/index.html", PCLZIP_OPT_REMOVE_PATH, "$secret");
-        } else {
-            $flag = $zip->create($secret, "work_$id", $secret);
+            $zip->addFile("$secret/index.html", "index.html");
+        } else { // 'normal' assignment
+            $zip = new ZipArchive();
+            $zip->open("$filename", ZipArchive::CREATE);
+            foreach (glob("$secret/*") as $file) {
+                if (file_exists($file) and is_readable($file)) {
+                    $zip->addFile($file, "work_$id/".substr($file, strlen($secret)+1));
+                }
+            }
         }
-        header("Content-Type: application/x-zip");
-        header("Content-Disposition: attachment; filename=$filename");
-        stop_output_buffering();
-        @readfile($filename);
-        @unlink($filename);
-        exit;
+        if ($zip->close()) {
+            header("Content-Type: application/zip");
+            header("Content-Disposition: attachment; filename=$filename");
+            header("Content-Length: " . filesize($filename));
+            stop_output_buffering();
+            readfile($filename);
+            unlink($filename);
+            exit;
+        }
+
     } else {
         return false;
     }
@@ -5057,73 +5128,4 @@ function max_grade_from_rubric($rubric_id) {
     }
     //Session::Messages("<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
     return $max_grade/100;
-}
-
-
-function doScenarioAssertion($scenarionAssertion, $scenarioInputResult, $scenarioOutputExpectation) {
-    switch($scenarionAssertion) {
-        case 'eq':
-            $assertionResult = ($scenarioInputResult == $scenarioOutputExpectation);
-            break;
-        case 'same':
-            $assertionResult = ($scenarioInputResult === $scenarioOutputExpectation);
-            break;
-        case 'notEq':
-            $assertionResult = ($scenarioInputResult != $scenarioOutputExpectation);
-            break;
-        case 'notSame':
-            $assertionResult = ($scenarioInputResult !== $scenarioOutputExpectation);
-            break;
-        case 'integer':
-            $assertionResult = (is_int($scenarioInputResult));
-            break;
-        case 'float':
-            $assertionResult = (is_float($scenarioInputResult));
-            break;
-        case 'digit':
-            $assertionResult = (ctype_digit($scenarioInputResult));
-            break;
-        case 'boolean':
-            $assertionResult = (is_bool($scenarioInputResult));
-            break;
-        case 'notEmpty':
-            $assertionResult = (empty($scenarioInputResult) === false);
-            break;
-        case 'notNull':
-            $assertionResult = ($scenarioInputResult !== null);
-            break;
-        case 'string':
-            $assertionResult = (is_string($scenarioInputResult));
-            break;
-        case 'startsWith':
-            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === 0);
-            break;
-        case 'endsWith':
-            $stringPosition  = mb_strlen($scenarioInputResult, 'utf8') - mb_strlen($scenarioOutputExpectation, 'utf8');
-            $assertionResult = (mb_strripos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === $stringPosition);
-            break;
-        case 'contains':
-            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8'));
-            break;
-        case 'numeric':
-            $assertionResult = (is_numeric($scenarioInputResult));
-            break;
-        case 'isArray':
-            $assertionResult = (is_array($scenarioInputResult));
-            break;
-        case 'true':
-            $assertionResult = ($scenarioInputResult === true);
-            break;
-        case 'false':
-            $assertionResult = ($scenarioInputResult === false);
-            break;
-        case 'isJsonString':
-            $assertionResult = (json_decode($value) !== null && JSON_ERROR_NONE === json_last_error());
-            break;
-        case 'isObject':
-            $assertionResult = (is_object($scenarioInputResult));
-            break;
-    }
-
-    return $assertionResult;
 }

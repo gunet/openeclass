@@ -33,7 +33,7 @@ $courseObj = new Course();
 
 load_js('jstree3');
 
-list($js, $html) = $treeObj->buildCourseNodePickerIndirect();
+list($js, $html) = $treeObj->buildCourseNodePicker();
 $head_content .= $js;
 
 $pageName = $langRestoreCourse;
@@ -72,7 +72,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $tool_content .= "<tr><td>" . unpack_zip_show_files($pathToArchive) . "</td></tr>";
         $tool_content .= "</table></fieldset>";
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langFileNotFound</div>";
+        Session::Messages($langFileNotFound, 'alert-danger');
+        redirect_to_home_page('modules/course_info/restore_course.php');
     }
 } elseif (isset($_POST['create_restored_course'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -151,11 +152,6 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
                 </div>
             </div>
-            <div class='form-group'>
-                <div class='col-sm-10'>
-                ".showSecondFactorChallenge()."
-                </div>
-            </div>
             ". generate_csrf_token_form_field() ."  
             </form>
         </div> 
@@ -170,11 +166,6 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "'>
             </div>
           ". generate_csrf_token_form_field() ."  
-            <div class='form-group'>
-                <div class='col-sm-10'>
-                ".showSecondFactorChallenge()."
-                </div>
-            </div>
           </form>
         </div>";
 }

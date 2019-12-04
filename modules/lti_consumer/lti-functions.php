@@ -23,6 +23,7 @@
 define('LTI_LAUNCHCONTAINER_EMBED', 1);
 define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
+define('LTI_DESCRIPTION_MAX_LENGTH', 999);
 
 
 function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
@@ -205,6 +206,9 @@ function edit_lti_app($session_id) {
                     //]]></script>';
 }
 
+/**
+ * @brief display available lti apps (if any)
+ */
 function lti_app_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
         $langConfirmDelete, $langNewLTIAppSessionDesc, $langNote,
@@ -227,9 +231,9 @@ function lti_app_details() {
                                <th class='text-center'>$langNewLTIAppSessionDesc</th>
                                <th class='text-center'>$langLTIAppActions</th>";
         if ($is_editor) {
-            $headings .= "         <th class='text-center'>" . icon('fa-gears') . "</th>";
+            $headings .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
-        $headings .= "       </tr>";
+        $headings .= "</tr>";
 
         foreach ($result as $row) {
             $id = $row->id;
@@ -237,7 +241,7 @@ function lti_app_details() {
 
             $desc = isset($row->description)? $row->description: '';
 
-            $canJoin = $row->enabled == 1;
+            $canJoin = ($row->enabled == 1 || $is_editor);
             if ($canJoin) {
                 if ($row->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
                     $joinLink = create_launch_button($row->id);
@@ -268,14 +272,14 @@ function lti_app_details() {
                     <td class='option-btn-cell'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
+                                    'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
                                     'icon' => 'fa-edit'),
                             array(  'title' => $row->enabled? $langDeactivate : $langActivate,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_".
+                                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
                                              ($row->enabled? 'disable' : 'enable'),
                                     'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash'),
                             array(  'title' => $langDelete,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
+                                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
                                     'icon' => 'fa-times',
                                     'class' => 'delete',
                                     'confirm' => $langConfirmDelete)
@@ -311,7 +315,7 @@ function disable_lti_app($id)
 
     Database::get()->querySingle("UPDATE lti_apps set enabled = 0 WHERE id = ?d",$id);
     Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
-    redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
+    redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
 }
 
 function enable_lti_app($id)
@@ -320,7 +324,7 @@ function enable_lti_app($id)
 
     Database::get()->querySingle("UPDATE lti_apps SET enabled = 1 WHERE id = ?d",$id);
     Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
-    redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
+    redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
 }
 
 
@@ -361,18 +365,26 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
     }
     $launch_presentation_document_target = ($launchcontainer == LTI_LAUNCHCONTAINER_EMBED) ? 'iframe' : 'window';
 
+    // clean title and description
+    $clean_title = str_replace(array("\r", "\n", "\""), " ", $resource_link_title);
+    $clean_description = str_replace(array("\r", "\n", "&", "\""), " ",strip_tags( $resource_link_description));
+    if (strlen($clean_description) > LTI_DESCRIPTION_MAX_LENGTH) {
+        $clean_description = substr($clean_description, 0, LTI_DESCRIPTION_MAX_LENGTH);
+    }
+    $clean_course_title = str_replace(array("\r", "\n", "\""), " ", course_id_to_title($course_id));
+
     $launch_data = array(
         "user_id" => $uid,
         "roles" => lti_get_ims_role(),
         "resource_link_id" => $_SERVER['SERVER_NAME'] . ":" . $resource_link_type . ":" . $resource_link_id,
-        "resource_link_title" => $resource_link_title,
-        "resource_link_description" => strip_tags($resource_link_description),
+        "resource_link_title" => $clean_title,
+        "resource_link_description" => $clean_description,
         "lis_person_name_full" => $lis_person_name_full,
         "lis_person_name_family" => $lis_person_name_family,
         "lis_person_name_given" => $lis_person_name_given,
         "lis_person_contact_email_primary" => $lis_person_contact_email_primary,
         "context_id" => $_SERVER['SERVER_NAME'] . ":" . $course_id,
-        "context_title" => course_id_to_title($course_id),
+        "context_title" => $clean_course_title,
         "context_label" => $course_code,
         "context_type" => "CourseSection",
         "lis_course_section_sourcedid" => $_SERVER['SERVER_NAME'] . ":" . $course_id,
@@ -421,6 +433,7 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
             $token = token_generate($assignment_secret, true);
             $launch_data['lis_result_sourcedid'] = $token . "-" . $resource_link_id . "-" . $uid;
             $launch_data['ext_outcomes_tool_placement_url'] = $urlServer . "modules/work/tii_placement.php";
+            $launch_data['lis_outcome_service_url'] = $urlServer . "modules/work/tii_outcome.php";
         }
     }
 
@@ -560,4 +573,79 @@ function lti_get_containers_selection() {
     return array(LTI_LAUNCHCONTAINER_EMBED => $langLTILaunchContainerEmbed,
         LTI_LAUNCHCONTAINER_NEWWINDOW => $langLTILaunchContainerNewWindow,
         LTI_LAUNCHCONTAINER_EXISTINGWINDOW => $langLTILaunchContainerExistingWindow);
+}
+
+function lti_verify_extract_sourcedid($sourcedid, $ts_valid_time) {
+    // extract sourcedid info
+    $sourcediddata = explode("-", $sourcedid);
+    if (count($sourcediddata) != 4) {
+        error_log("invalid lis_result_sourcedid, exiting ...");
+        die();
+    }
+    $token = $sourcediddata[0] . "-" . $sourcediddata[1];
+    $assignment_id = intval($sourcediddata[2]);
+    $uid = intval($sourcediddata[3]);
+
+    // locate/validate assignment, lti, user and token
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $assignment_id);
+    if (!$assignment) {
+        error_log("no assignment found, exiting...");
+        die();
+    }
+    if (!token_validate($assignment->secret_directory, $token, $ts_valid_time )) {
+        error_log("invalid token, exiting...");
+        die();
+    }
+    $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $assignment->lti_template);
+    if (!$lti) {
+        error_log("no lti found, exiting...");
+        die();
+    }
+    $user = Database::get()->querySingle("SELECT * FROM user WHERE id  = ?d", $uid);
+    if (!$user) {
+        error_log("no user found, exiting...");
+        die();
+    }
+
+    return array($assignment_id, $uid, $assignment, $lti, $user);
+}
+
+function getLTILinksForTools() {
+    global $course_id, $course_code, $urlServer, $is_editor;
+
+    $activeClause = ($is_editor) ? '' : "AND enabled = 1";
+    $rows = Database::get()->queryArray("SELECT * FROM lti_apps
+        WHERE course_id = ?d $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
+
+    if ($rows) {
+        $result = array();
+        foreach ($rows as $row) {
+            $ret = new stdClass();
+            $ret->title = $row->title;
+
+            switch ($row->launchcontainer) {
+                case LTI_LAUNCHCONTAINER_EMBED:
+                    $ret->url = $urlServer . "modules/lti_consumer/launch.php?course=" . $course_code . "&id=" . getIndirectReference($row->id);
+                    $ret->menulink = 'fa-link';
+                    break;
+                case LTI_LAUNCHCONTAINER_NEWWINDOW:
+                    $ret->url = $urlServer . "modules/lti_consumer/load.php?course=" . $course_code . "&id=" . getIndirectReference($row->id);
+                    $ret->menulink = 'fa-external-link';
+                    break;
+                case LTI_LAUNCHCONTAINER_EXISTINGWINDOW:
+                    $ret->url = $urlServer . "modules/lti_consumer/load.php?course=" . $course_code . "&id=" . getIndirectReference($row->id);
+                    $ret->menulink = 'fa-link';
+                    break;
+                default:
+                    $ret->url = $urlServer . "modules/lti_consumer/launch.php?course=" . $course_code . "&id=" . getIndirectReference($row->id);
+                    $ret->menulink = 'fa-link';
+                    break;
+            }
+
+            $result[] = $ret;
+        }
+        return $result;
+    } else {
+        return false;
+    }
 }

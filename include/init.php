@@ -4,7 +4,7 @@
  * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2019  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -171,9 +171,6 @@ if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
 }
 // PHP Math Publisher
 require_once 'include/phpmathpublisher/mathpublisher.php';
-// temp directory for pclzip
-define('PCLZIP_TEMPORARY_DIR', $webDir . '/courses/temp/');
-
 // include_messages
 require "$webDir/lang/$language/common.inc.php";
 $extra_messages = "config/{$language_codes[$language]}.inc.php";
@@ -201,6 +198,12 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
         }
     }
 }
+
+// ----------------- sso transition ------------------
+if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
+    header("Location: {$urlServer}modules/auth/transition/auth_transition.php");
+}
+// ----------------------------------------------------
 
 // check if we are admin or power user or manageuser_user
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
@@ -232,6 +235,9 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
 $theme = $_SESSION['theme'] = 'default';
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
+if (file_exists("template/$theme/settings.php")) {
+    require_once "template/$theme/settings.php";
+}
 
 if (isset($require_login) and $require_login and ! $uid) {
     $toolContent_ErrorExists = $langSessionIsLost;
@@ -440,7 +446,6 @@ $modules = array(
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
     MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-exchange'),
-    MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),
     MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-trophy'),
     MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
     MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-ticket'),
@@ -457,6 +462,9 @@ $admin_modules = array(
     MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-wrench'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
+    MODULE_ID_COURSEPREREQUISITE => array('title' => $langCoursePrerequisites, 'link' => 'course_prerequisites', 'image' => 'fa-university'),
+    MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),
+    MODULE_ID_ANALYTICS => array('title' => $langLearningAnalytics, 'link' => 'analytics', 'image' => 'fa-line-chart')
 );
 
 // -------------------------------------------
@@ -482,17 +490,17 @@ $static_modules = array(
 // modules for offline course
 // -------------------------------------------
 $offline_course_modules = array(
-    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'calendar'),
-    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'links'),
-    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'docs'),
-    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'videos'),
-    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'announcements'),
-    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'exercise'),
-    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'glossary'),
-    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'ebook'),
-    MODULE_ID_DESCRIPTION => array('title' => $langCourseDescription, 'link' => 'course_description', 'image' => 'description'),
-    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
-    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog')
+    /*MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-calendar'), */
+    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-link'),
+    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-folder-open-o'),
+    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-film'),
+    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-bullhorn'),
+    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-pencil-square-o'),
+    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
+    /*MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'), */
+    MODULE_ID_DESCRIPTION => array('title' => $langCourseDescription, 'link' => 'course_description', 'image' => 'fa-info-circle')
+    /*MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia'),*/
+    /*MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-columns')*/
 );
 
 

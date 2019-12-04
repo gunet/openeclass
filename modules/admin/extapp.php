@@ -74,7 +74,7 @@ if (isset($_POST['state'])) {
     }
     
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    
-    echo $newState;    
+    echo $newState;
     exit;
 }
 

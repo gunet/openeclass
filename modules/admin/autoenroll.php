@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.2
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,7 +25,6 @@ require_once 'include/lib/hierarchy.class.php';
 
 $toolName = $langAutoEnroll;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
 
 if (isset($_REQUEST['add'])) {
     $data['type'] = $type = intval($_REQUEST['add']);
@@ -63,10 +62,9 @@ if (isset($_GET['delete'])) {
             multiInsert('autoenroll_rule_department',
                 'rule, department', $rule, $_POST['department']);
         }
-        if (isset($_POST['courses']) and !empty($_POST['courses'])) {
-            $courses = explode(',', $_POST['courses']);
+        if (isset($_POST['courses']) and is_array($_POST['courses'])) {
             multiInsert('autoenroll_course',
-                'rule, course_id', $rule, $courses);
+                'rule, course_id', $rule, $_POST['courses']);
         }
         if (isset($_POST['rule_deps'])) {
             multiInsert('autoenroll_department',
@@ -127,21 +125,14 @@ if (isset($_GET['delete'])) {
     $head_content .= $jsTree . "
       <script>
         $(function () {
-          $('#courses').select2({
+          $('#courses-select').select2({
             minimumInputLength: 2,
             tags: true,
-            tokenSeparators: [', '],
             ajax: {
               url: 'coursefeed.php',
-              dataType: 'json',
-              data: function(term, page) {
-                return { q: term };
-              },
-              results: function(data, page) {
-                return { results: data };
-              }
+              dataType: 'json'
             }
-          }).select2('data', [$courses]);
+          });
 
           $('#ndAdd2').click(function() {
             $('#treeCourseModal').modal('show');
@@ -291,7 +282,7 @@ function multiInsert($table, $signature, $key, $values) {
     foreach ($values as $value) {
         $count++;
         $terms[] = $key;
-        $terms[] = getDirectReference($value);
+        $terms[] = $value;
     }
     Database::get()->query("INSERT INTO `$table` ($signature) VALUES " .
             implode(', ', array_fill(0, $count, '(?d, ?d)')),

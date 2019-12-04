@@ -24,7 +24,7 @@ $require_help = true;
 $helpTopic = 'announcements';
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
@@ -64,7 +64,7 @@ if ($is_editor) {
                 'title' => $announce->title,
                 'content' => $txt_content));
             exit();
-        } elseif ($_POST['action'] == 'visible') {
+        } elseif ($_POST['action']=='visible') {
             /* modify visibility */
             $row_id = intval($_POST['value']);
             $visible = intval($_POST['visible']) ? 1 : 0;
@@ -105,10 +105,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
             $to_top = "";
 
-            // checking visible status
+            //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
-                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langAnnouncementIsNotVis</li>";
+                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langInvisible</li>";
                 $vis_class = 'not_visible';
             } else {
                 $visible = 0;
@@ -120,16 +120,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         $vis_class = 'not_visible';
                         $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
                     } else {
-                        $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAnnouncementIsVis</li>";
+                        $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
                         $vis_class = 'visible';
                     }
-                } else {
-                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAnnouncementIsVis</li>";
+                }else{
+                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
                     $vis_class = 'visible';
                 }
             }
 
-            // setting datables column data
+            //setting datables column data
             if ($myrow->order != 0) {
                 $pinned_class = "text-danger";
                 $pinned = 0;
@@ -168,10 +168,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         'icon-class' => 'vis_btn',
                         'icon-extra' => "data-vis='$visible' data-id='$myrow->id'"),
                     array('title' => $langDelete,
-                        'class' => 'delete delete_btn',
+                        'class' => 'delete',
                         'icon' => 'fa-times',
-                        'link-attrs' => "data-id='$myrow->id'")
-                )));
+                        'icon-class' => 'delete_btn',
+                        'icon-extra' => "data-id='$myrow->id'")
+                    )));
             $iterator++;
         }
     } else {

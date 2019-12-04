@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -51,15 +51,15 @@ if (isset($_POST['submit'])) {
     $data['unparsed_lines'] = '';
     $data['new_users_info'] = array();
     $newstatus = ($_POST['type'] == 'prof') ? 1 : 5;
-    $departments = isset($_POST['facid']) ? arrayValuesDirect($_POST['facid']) : array();
+    $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
     $am = $_POST['am'];
     $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
     $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
-    
+
     if ($auth_methods_form != 1) {
         $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
     }
-    
+
     foreach ($fields as $field) {
         if (!in_array($field, $acceptable_fields)) {           
             Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                     $info[$field] = array_shift($userl);
                 }
 
-                if (!isset($info['email']) or !Swift_Validate::email($info['email'])) {
+                if (!isset($info['email']) or !valid_email($info['email'])) {
                     $info['email'] = '';
                 }
 
@@ -166,13 +166,11 @@ $data['menuTypeID'] = 3;
 view($view, $data);
 
 function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public) {
-    global $charset, $langAsProf,
-    $langYourReg, $siteName, $langDestination, $langYouAreReg,
-    $langSettings, $langPass, $langAddress, $langIs, $urlServer,
-    $langProblem, $langPassSameAuth,
-    $langManager, $langTel, $langEmail,
-    $profsuccess, $usersuccess, $langWithSuccess,
-    $user, $langUserCodename, $uname_form, $auth_ids, $auth_methods_form;
+    global $charset, $langAsProf, $langYourReg, $siteName, $langDestination,
+        $langYouAreReg, $langSettings, $langPass, $langAddress, $langIs,
+        $urlServer, $langProblem, $langPassSameAuth, $langManager, $langTel,
+        $langEmail, $profsuccess, $usersuccess, $langWithSuccess, $user,
+        $langUserCodename, $uname_form, $auth_ids, $auth_methods_form;
 
     if ($status == 1) {
         $message = $profsuccess;
@@ -186,22 +184,23 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $GLOBALS['error'] = "$GLOBALS[langMultiRegUsernameError] ($uname)";
         return false;
     }
-    if (empty($am)) {        
+    if (empty($am)) {
         $am = ' ';
     }
     if (empty($phone)) {
         $phone = ' ';
     }
-    
+
     if ($auth_methods_form != 1) { // other authentication methods
         $password_encrypted = $auth_ids[$auth_methods_form];
+        $password = get_auth_info($auth_methods_form);
         $mail_message = $langPassSameAuth;
     } else {
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
         $mail_message = $password;
     }
-    
+
     $id = Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email,
                  status, registered_at, expires_at, lang, am, phone,
@@ -216,7 +215,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $telephone = get_config('phone');
     $administratorName = get_config('admin_name');
     $emailhelpdesk = get_config('email_helpdesk');
-    $emailsubject = "$langYourReg $siteName $type_message"; 
+    $emailsubject = "$langYourReg $siteName $type_message";
 
     $emailHeader = "
     <!-- Header Section -->
@@ -270,11 +269,11 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
  * @return string
  */
 function create_username($status, $departments, $nom, $givenname, $prefix) {
-    
+
     $wildcard = str_pad('', SUFFIX_LEN, '_');
     $req = Database::get()->querySingle("SELECT username FROM user WHERE username LIKE ?s ORDER BY username DESC LIMIT 1", $prefix . $wildcard);
     if ($req) {
-        $last_uname = $req->username;        
+        $last_uname = $req->username;
         $lastid = 1 + str_replace($prefix, '', $last_uname);
     } else {
         $lastid = 1;
@@ -293,12 +292,12 @@ function create_username($status, $departments, $nom, $givenname, $prefix) {
  * @return boolean
  */
 function register($uid, $course_code) {
-    
+
     $result = Database::get()->querySingle("SELECT code, id FROM course WHERE code = ?s OR public_code = ?s", $course_code, $course_code);
     if ($result) {
         Database::get()->query("INSERT INTO course_user
                                  SET course_id = ?d, user_id = ?d, status = "  . USER_STUDENT . ",
-                                     reg_date = " . DBHelper::timeAfter() . ", 
+                                     reg_date = " . DBHelper::timeAfter() . ",
                                      document_timestamp = " . DBHelper::timeAfter() . "", $result->id, $uid);
         return true;
     }

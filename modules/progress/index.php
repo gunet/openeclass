@@ -39,108 +39,13 @@ require_once 'LearningPathEvent.php';
 require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
 require_once 'CourseParticipationEvent.php';
+require_once 'GradebookEvent.php';
+require_once 'CourseCompletionEvent.php';
 
-$toolName = $langCertificates;
+$toolName = $langProgress;
 
 load_js('tools.js');
 load_js('jquery');
-
-//load_js('datatables');
-//load_js('datatables_filtering_delay');
-
-/*@$head_content .= "
-<script type='text/javascript'>
-$(function() {
-    var oTable = $('#users_table{$course_id}').DataTable ({
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],
-               'fnDrawCallback': function( oSettings ) {
-                            $('#users_table{$course_id}_wrapper label input').attr({
-                              class : 'form-control input-sm',
-                              placeholder : '$langSearch...'
-                            });
-                        },
-               'sPaginationType': 'full_numbers',
-                'bSort': true,
-                'oLanguage': {
-                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '".$langNoResult."',
-                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                       'sInfoFiltered': '',
-                       'sInfoPostFix':  '',
-                       'sSearch':       '',
-                       'sUrl':          '',
-                       'oPaginate': {
-                           'sFirst':    '&laquo;',
-                           'sPrevious': '&lsaquo;',
-                           'sNext':     '&rsaquo;',
-                           'sLast':     '&raquo;'
-                       }
-                   }
-    });
-    $('#user_attendances_form').on('submit', function (e) {
-        oTable.rows().nodes().page.len(-1).draw();
-    });
-$('input[id=button_groups]').click(changeAssignLabel);
-    $('input[id=button_some_users]').click(changeAssignLabel);
-    $('input[id=button_some_users]').click(ajaxParticipants);
-    $('input[id=button_all_users]').click(hideParticipants);
-    function hideParticipants()
-    {
-        $('#participants_tbl').addClass('hide');
-        $('#users_box').find('option').remove();
-        $('#all_users').show();
-    }
-    function changeAssignLabel()
-    {
-        var assign_to_specific = $('input:radio[name=specific_attendance_users]:checked').val();
-        if(assign_to_specific>0){
-           ajaxParticipants();
-        }
-        if (this.id=='button_groups') {
-           $('#users').text('$langGroups');
-        }
-        if (this.id=='button_some_users') {
-           $('#users').text('$langUsers');
-        }
-    }
-    function ajaxParticipants()
-    {
-        $('#all_users').hide();
-        $('#participants_tbl').removeClass('hide');
-        var type = $('input:radio[name=specific_attendance_users]:checked').val();
-        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=".q($_REQUEST['attendance_id'])."&editUsers=1',
-        {
-          assign_type: type
-        },
-        function(data,status){
-            var index;
-            var parsed_data = JSON.parse(data);
-            var select_content = '';
-            var select_content_2 = '';
-            if (type==2) {
-                for (index = 0; index < parsed_data.length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
-                }
-            }
-            if (type==1) {
-                for (index = 0; index < parsed_data[0].length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname'] + '<\/option>';
-                }
-                for (index = 0; index < parsed_data[1].length; ++index) {
-                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname'] + '<\/option>';
-                }
-            }
-            $('#users_box').find('option').remove().end().append(select_content);
-            $('#participants_box').find('option').remove().end().append(select_content_2);
-
-        });
-    }
-});
-</script>"; */
 
 $display = TRUE;
 if (isset($_REQUEST['certificate_id'])) {
@@ -231,7 +136,7 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcc=1",
                   'icon' => 'fa-navicon',
                   'level' => 'primary-label',
-                  'show' => !has_course_completion()),
+                  'show' => !is_course_completion_enabled()),
             array('title' => $langBack,
                   'url' => "{$urlServer}courses/$course_code/index.php",
                   'icon' => 'fa-reply',
@@ -339,6 +244,14 @@ if ($is_editor) {
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_participation'])) {
         add_courseparticipation_to_certificate($element, $element_id);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_gradebook'])) {
+        add_gradebook_to_certificate($element, $element_id);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_coursecompletiongrade'])) {
+        add_coursecompletiongrade_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     }
@@ -451,7 +364,6 @@ if (isset($display) and $display == TRUE) {
         } else {
             // display certificate (student view)
             student_view_progress();
-            exit;
         }
     }
 }
