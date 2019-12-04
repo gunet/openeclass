@@ -281,28 +281,28 @@ if (!isset($_POST['create_course'])) {
                     <div class='radio'>
                       <label>
                         <input id='courseopen' type='radio' name='formvisible' value='2'>".
-                        $course_access_icons[COURSE_OPEN]." $langOpenCourse
+                        course_access_icon(COURSE_OPEN)." $langOpenCourse
                         <span class='help-block'><small>$langPublic</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='coursewithregistration' type='radio' name='formvisible' value='1' checked>".
-                        $course_access_icons[COURSE_REGISTRATION]." $langRegCourse
+                        course_access_icon(COURSE_REGISTRATION)." $langRegCourse
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='courseclose' type='radio' name='formvisible' value='0'>".
-                        $course_access_icons[COURSE_CLOSED]." $langClosedCourse
+                        course_access_icon(COURSE_CLOSED)." $langClosedCourse
                         <span class='help-block'><small>$langClosedCourseShort</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='courseinactive' type='radio' name='formvisible' value='3'>".
-                        $course_access_icons[COURSE_INACTIVE]." $langInactiveCourse
+                        course_access_icon(COURSE_INACTIVE)." $langInactiveCourse
                         <span class='help-block'><small>$langCourseInactive</small></span>
                       </label>
                     </div>

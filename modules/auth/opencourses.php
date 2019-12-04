@@ -208,12 +208,7 @@ if (count($courses) > 0) {
             $tool_content .= CourseXMLElement::getLevel($mycours->level) . "&nbsp;";
             $tool_content .= "<a href='javascript:showMetadata(\"" . $mycours->k . "\");'><img src='${themeimg}/lom.png'/></a>";
         } else {
-            // show the necessary access icon
-            foreach ($course_access_icons as $visible => $image) {
-                if ($visible == $mycours->visible) {
-                    $tool_content .= $image;
-                }
-            }
+            $tool_content .= course_access_icon($mycours->visible);
         }
         $tool_content .= "</td>";
         $tool_content .= "</tr>";        

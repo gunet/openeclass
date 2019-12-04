@@ -457,7 +457,7 @@ $studentUsers = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FR
                                             AND course_id = ?d", $course_id)->studentUsers;
 
 //set the lang var for lessons visibility status
-switch ($visible) {
+/*switch ($visible) {
     case COURSE_CLOSED: {
         $lessonStatus = "<span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
         break;
@@ -479,7 +479,7 @@ switch ($visible) {
         break;
     }
 }
-
+*/
 if ($uid) {
     $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
@@ -672,7 +672,7 @@ $action_bar
                     <ul class='course-title-actions clearfix pull-right list-inline'>" .
 
                         ($courseDescriptionVisible? "<li class='access pull-right'><a href='javascript:void(0);' style='color: #23527C;''><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span><span class='hidden'>.</span></a></li>": '') . "
-                        <li class='access pull-right'><a href='javascript:void(0);'>$lessonStatus</a></li>
+                        <li class='access pull-right'><a href='javascript:void(0);'>". course_access_icon($visible) . "</a></li>
                         <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span><span class='hidden'>.</span></a></li>" .
 
                         ($uid? ("<li class='access pull-right'><a href='{$urlAppend}modules/user/" .
@@ -705,7 +705,7 @@ $action_bar
                         <div class='row text-muted course-below-info'>                            
                               <a role='button' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                               <h4 class='panel-heading panel-title'>
-                                    <span class='fa fa-chevron-down fa-fw'></span> $langCourseDescription
+                                    <span class='fa fa-chevron-down fa-fw'></span> $langCourseDescription 
                               </h4>
                               </a>";
                             $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px;'>";

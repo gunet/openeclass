@@ -181,11 +181,7 @@ foreach ($courses as $course) {
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td>
                       <td>";
-    foreach ($course_access_icons as $visible => $image) {
-        if ($visible == $course->visible) {
-            $tool_content .= $image;
-        }
-    }
+    $tool_content .= course_access_icon($course->visible);
     $tool_content .= "</td></tr>";
 }
 $tool_content .= "</table>";

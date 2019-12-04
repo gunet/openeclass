@@ -136,7 +136,7 @@ hContent;
 
 $toolName = $langCourseInfo;
 
-// if the course is opencourses certified, disable visibility choice in form
+// if the course is `open courses` certified, disable visibility choice in form
 $isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?d", $course_id)) ? $creview->is_certified : false;
 $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
@@ -154,7 +154,7 @@ if (isset($_POST['submit'])) {
         } else {
             $password = '';
         }
-        // if it is opencourses certified keeep the current course_license
+        // if it is `open courses` certified keeep the current course_license
         if (isset($_POST['course_license'])) {
             $course_license = getDirectReference($_POST['course_license']);
         }
@@ -262,6 +262,10 @@ if (isset($_POST['submit'])) {
     warnCourseInvalidDepartment();
 
     $action_bar_array0 = array(
+        array('title' => $langCourseDescription,
+            'url' => "../course_description/index.php?course=$course_code&".generate_csrf_token_link_parameter(),
+            'icon' => 'fa-info-circle',
+            'level' => 'primary-label'),
         array('title' => $langBackupCourse,
             'url' => "archive_course.php?course=$course_code&".generate_csrf_token_link_parameter(),
             'icon' => 'fa-archive',

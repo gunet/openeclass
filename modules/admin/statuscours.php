@@ -90,29 +90,29 @@ else {
                     <div class='radio'>
                       <label>
                         <input id='courseopen' type='radio' name='formvisible' value='2'" . @$visibleChecked[2] . ">".
-                            $course_access_icons[COURSE_OPEN]."
+                            course_access_icon(COURSE_OPEN)."
                         <span class='help-block'><small>$langPublic</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='coursewithregistration' type='radio' name='formvisible' value='1'" . @$visibleChecked[1] . ">".
-                            $course_access_icons[COURSE_REGISTRATION]."
+                            course_access_icon(COURSE_REGISTRATION)."
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='courseclose' type='radio' name='formvisible' value='0'" . @$visibleChecked[0] . ">".
-                            $course_access_icons[COURSE_CLOSED]."
+                            course_access_icon(COURSE_CLOSED)."
                         <span class='help-block'><small>$langClosedCourseShort</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='courseinactive' type='radio' name='formvisible' value='3'" . @$visibleChecked[3] . ">".
-                            $course_access_icons[COURSE_INACTIVE]."
-                        <span class='help-block'><small>$langCourseInactiveShort</small></span>
+                            course_access_icon(COURSE_INACTIVE)."
+                        <span class='help-block'><small>$langInactiveCourse</small></span>
                       </label>
                     </div>                   
                 </div>
@@ -121,8 +121,7 @@ else {
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
                 </div>
-            </div>
-            </fieldset>
+            </div>            
             </form>
         </div>";
 }
