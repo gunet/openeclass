@@ -178,33 +178,29 @@
                 <div class='radio'>
                   <label>
                     <input id='courseopen' type='radio' name='formvisible' value='2' {{ $course_open }}>
-                    <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;{{ trans('langOpenCourse') }}
+                    {!! course_access_icon(COURSE_OPEN) !!}{{ trans('langOpenCourse') }}
                     <span class='help-block'><small>{{ trans('langPublic') }}</small></span>
                   </label>
                 </div>
                 <div class='radio'>
                   <label>
                     <input id='coursewithregistration' type='radio' name='formvisible' value='1' {{ $course_registration }}>
-                    <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
-                            <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
-                        </span>&nbsp;{{ trans('langTypeRegistration') }}
+                    {!! course_access_icon(COURSE_REGISTRATION) !!} {{ trans('langTypeRegistration') }}
                     <span class='help-block'><small>{{ trans('langPrivOpen') }}</small></span>
                   </label>
                 </div>
                 <div class='radio'>
                   <label>
                     <input id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
-                    <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;{{ trans('langClosedCourse') }}
+                    {!! course_access_icon(COURSE_CLOSED) !!} {{ trans('langClosedCourse') }}
                     <span class='help-block'><small>{{ trans('langClosedCourseShort') }}</small></span>
                   </label>
                 </div>
                 <div class='radio'>
                   <label>
                     <input id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
-                        <span class='fa fa-lock fa-fw' style='font-size:23px;'>
-                            <span class='fa fa-times text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
-                        </span>&nbsp;{{ trans('langInactiveCourse') }}
-                    <span class='help-block'><small>{{ trans('langCourseInactiveShort') }}</small></span>
+                      {!! course_access_icon(COURSE_INACTIVE) !!}{!! trans('langInactiveCourse') !!}
+                    <span class='help-block'><small>{{ trans('langCourseInactive') }}</small></span>
                   </label>
                 </div>
             </div>

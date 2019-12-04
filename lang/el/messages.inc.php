@@ -4349,6 +4349,7 @@ $langGradedAt = 'βαθμολογήθηκε στις';
 $langAssignmentType = "Τύπος Εργασίας";
 $langAssignmentTypeEclass = "Eclass";
 $langAssignmentTypeTurnitin = "TurnItIn";
+$langGradeReviews = "Αξιολόγηση από ομότιμους";
 
 
 /* * ***********************************************************
@@ -4427,7 +4428,7 @@ $langInsertChat = "κουβεντούλας";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 $langAddToCourseHome = "Εμφάνιση στην κεντρική σελίδα του $langsOfCourse";
-$langSeenToCourseHome = "Εμφάνιζεται στην κεντρική σελίδα του $langsOfCourse";
+$langSeenToCourseHome = "Εμφανίζεται στην κεντρική σελίδα του $langsOfCourse";
 $langRemoveFromCourseHome = "Απόκρυψη από την κεντρική σελίδα του $langsOfCourse";
 $langVia = 'μέσω';
 $langStudentViewEnable = "Περιβάλλον $langsOfStudent";

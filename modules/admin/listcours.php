@@ -136,25 +136,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     foreach ($sql as $logs) {        
         $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
                         </a> (" . q($logs->code) . ")<br /><i>" . q($logs->prof_names) . "";
-        // Define course type
-        switch ($logs->visible) {
-            case COURSE_CLOSED:
-                $icon = 'lock_closed';
-                $title = $langClosedCourse;
-                break;
-            case COURSE_REGISTRATION:
-                $icon = 'lock_registration';
-                $title = $langRegCourse;
-                break;
-            case COURSE_OPEN:
-                $icon = 'lock_open';
-                $title = $langOpenCourse;
-                break;
-            case COURSE_INACTIVE:
-                $icon = 'lock_inactive';
-                $title = $langInactiveCourse;
-                break;
-        }
 
         $departments = $course->getDepartmentIds($logs->id);
         $i = 1;
@@ -190,7 +171,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         ));
         $data['aaData'][] = array(
             '0' => $course_title,
-            '1' => icon_old_style($icon, $title),
+            '1' => course_access_icon($logs->visible),
             '2' => $dep,
             '3' => $icon_content
         );
@@ -217,7 +198,7 @@ $head_content .= "<script type='text/javascript'>
                 'searchDelay': 1000,
                 'aoColumns': [
                     {'bSortable' : true, 'sWidth': '50%' },
-                    {'bSortable' : false, 'sClass': 'center' },
+                    {'bSortable' : false, 'sClass': 'text-center' },
                     {'bSortable' : false, 'sWidth': '25%' },
                     {'bSortable' : false },
                 ],

@@ -1395,19 +1395,37 @@ $language_codes = array(
     'xx' => 'variables',
 );
 
-// Html for course access icons
-global $langPublic, $langPrivOpen, $langClosedCourseShort, $langCourseInactiveShort;
+/**
+ * @brief return course access icon
+ * @param $visibility
+ * @return string
+ */
+function course_access_icon($visibility) {
 
-$course_access_icons = array(
-    COURSE_OPEN => "<div class='course_status_container'><span class='fa fa-unlock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langPublic'></span><span class='sr-only'>.</span></div>",
-    COURSE_REGISTRATION => "<div class='course_status_container'><span class='fa fa-lock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
-                                <span class='fa fa-pencil text-danger fa-custom-lock'></span>
-                            </span><span class='sr-only'>$langPrivOpen</span></div>",
-    COURSE_CLOSED => "<div class='course_status_container'><span class='fa fa-lock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='sr-only'>$langClosedCourseShort</span></div>",
-    COURSE_INACTIVE => "<div class='course_status_container'><span class='fa fa-lock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
-                                <span class='fa fa-times text-danger fa-custom-lock'></span>
-                             </span><span class='sr-only'>$langCourseInactiveShort</span></div>"
-);
+    global $langTypeRegistration, $langTypeOpen, $langTypeClosed, $langTypeInactive;
+
+    switch ($visibility) {
+        case COURSE_OPEN: {
+            $access_icon = "<span class='fa fa-unlock fa-lg fa-fw' data-toggle='tooltip' data-placement='top' title='$langTypeOpen'></span>";
+            break;
+        }
+        case COURSE_REGISTRATION: {
+            $access_icon = "<span class='fa fa-lock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langTypeRegistration'>
+                                    <span class='fa fa-pencil text-danger fa-custom-lock'></span>
+                            </span>";
+            break;
+        }
+        case COURSE_CLOSED: {
+            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-toggle='tooltip' data-placement='top' title='$langTypeClosed'></span>";
+            break;
+        }
+        case COURSE_INACTIVE: {
+            $access_icon = "<span class='fa fa-ban fa-lg text-danger fa-custom-lock' data-toggle='tooltip' data-placement='top' title='$langTypeInactive'></span>";
+            break;
+        }
+    }
+    return "<div class='course_status_container'>$access_icon</div>";
+}
 
 // Convert language code to language name in English lowercase (for message files etc.)
 // Returns 'english' if code is not in array
@@ -2637,7 +2655,6 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 
 // Produce HTML source for an icon
 function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false) {
-    global $themeimg;
 
     if (isset($title)) {
         $title = q($title);
@@ -2650,28 +2667,6 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
     } else {
         $img = "<span class='fa $name' $extra></span>";
     }
-    if (isset($link)) {
-        return "<a href='$link'$link_attrs>$img</a>";
-    } else {
-        return $img;
-    }
-}
-
-function icon_old_style($name, $title = null, $link = null, $attrs = null, $format = 'png', $link_attrs = '') {
-    global $themeimg;
-
-    if (isset($title)) {
-        $title = q($title);
-        $extra = "alt='$title' title='$title'";
-    } else {
-        $extra = "alt=''";
-    }
-
-    if (isset($attrs)) {
-        $extra .= ' ' . $attrs;
-    }
-
-    $img = "<img src='$themeimg/$name.$format' $extra>";
     if (isset($link)) {
         return "<a href='$link'$link_attrs>$img</a>";
     } else {

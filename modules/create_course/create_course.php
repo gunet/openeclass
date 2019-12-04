@@ -96,10 +96,10 @@ if (!isset($_POST['create_course'])) {
                                       'button-class' => 'btn-default')
                             ),false);
         
-        $data['icon_course_open'] = $course_access_icons[COURSE_OPEN];
-        $data['icon_course_registration'] = $course_access_icons[COURSE_REGISTRATION];
-        $data['icon_course_closed'] = $course_access_icons[COURSE_CLOSED];
-        $data['icon_course_inactive'] = $course_access_icons[COURSE_INACTIVE];
+        $data['icon_course_open'] = course_access_icon(COURSE_OPEN);
+        $data['icon_course_registration'] = course_access_icon(COURSE_REGISTRATION);
+        $data['icon_course_closed'] = course_access_icon(COURSE_CLOSED);
+        $data['icon_course_inactive'] = course_access_icon(COURSE_INACTIVE);
         $data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
         $data['rich_text_editor'] = rich_text_editor('description', 4, 20, @$description);
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-control"');

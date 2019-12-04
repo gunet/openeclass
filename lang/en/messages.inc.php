@@ -5111,6 +5111,7 @@ $langForward = "Forward";
 $langAssignmentType = "Assignment Type";
 $langAssignmentTypeEclass = "Eclass";
 $langAssignmentTypeTurnitin = "TurnItIn";
+$langGradeReviews = "Peer Review Grading";
 $langNewCoursePrerequisite = "New Prerequisite";
 $langNoCoursePrerequisites = "No prerequisites exist";
 $langRemovePrerequisite = "Remove Prerequisite";

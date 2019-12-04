@@ -10,7 +10,7 @@
                     <div class='radio'>
                       <label>
                         <input id='courseopen' type='radio' name='formvisible' value='2'{!! $course->visible == 2 ? ' checked': '' !!}>
-                        <img src='{{ $themeimg }}/lock_open.png' alt='{{ trans('langOpenCourse') }}' title='{{ trans('langOpenCourse') }}' width='16'>&nbsp;{{ trans('langOpenCourse') }}
+                        {!! course_access_icon(COURSE_OPEN) !!}
                         <span class='help-block'>
                             <small>{{ trans('langPublic') }}</small>
                         </span>
@@ -19,7 +19,7 @@
                     <div class='radio'>
                       <label>
                         <input id='coursewithregistration' type='radio' name='formvisible' value='1'{!! $course->visible == 1 ? ' checked': '' !!}>
-                        <img src='{{ $themeimg }}/lock_registration.png' alt='{{ trans("m['legrestricted']") }}' title='{{ trans("m['legrestricted']") }}' width='16'>&nbsp;{{ trans("m['legrestricted']") }}
+                        {!! course_access_icon(COURSE_REGISTRATION) !!}
                         <span class='help-block'>
                             <small>{{ trans('langPrivOpen') }}</small>
                         </span>
@@ -28,7 +28,7 @@
                     <div class='radio'>
                       <label>
                         <input id='courseclose' type='radio' name='formvisible' value='0'{!! $course->visible == 0 ? ' checked': '' !!}>
-                        <img src='{{ $themeimg }}/lock_closed.png' alt='{{ trans('langClosedCourse') }}' title='{{ trans('langClosedCourse') }}' width='16'>&nbsp;{{ trans('langClosedCourse') }}
+                        {!! course_access_icon(COURSE_CLOSED) !!}
                         <span class='help-block'>
                             <small>{{ trans('langClosedCourseShort') }}</small>
                         </span>
@@ -37,9 +37,9 @@
                     <div class='radio'>
                       <label>
                         <input id='courseinactive' type='radio' name='formvisible' value='3'{!! $course->visible == 3 ? ' checked': '' !!}>
-                        <img src='{{ $themeimg }}/lock_inactive.png' alt='{{ trans('langInactiveCourse') }}' title='{{ trans('langInactiveCourse') }}' width='16'>&nbsp;{{ trans('langInactiveCourse') }}
+                        {!!  course_access_icon(COURSE_INACTIVE) !!}
                         <span class='help-block'>
-                            <small>{{ trans('langCourseInactiveShort') }}</small>
+                            <small>{{ trans('langInactiveCourse') }}</small>
                         </span>
                       </label>
                     </div>                   

@@ -187,9 +187,7 @@ function getdepnumcourses($fac) {
 /**
  * @brief display courses list
  * @global type $m
- * @global array $course_access_icons
  * @global type $langTutor
- * @global type $langRegistration
  * @global type $langRegistration
  * @global type $langCourseCode
  * @global type $langTeacher
@@ -202,9 +200,8 @@ function getdepnumcourses($fac) {
  * @return string
  */
 function expanded_faculte($facid, $uid) {
-    global $m, $course_access_icons, $langTutor, $langRegistration,
-    $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
-    $themeimg, $tree, $is_power_user, $is_departmentmanage_user;
+    global $m, $langTutor, $langRegistration, $langCourseCode,
+    $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user;
 
     $retString = '';
 
@@ -248,7 +245,7 @@ function expanded_faculte($facid, $uid) {
                       WHERE course.id = course_department.course
                         AND course_department.department = ?d
                         AND course.visible != ?d
-                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $course_access_icons, $unlock_all_courses) {
+                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $unlock_all_courses) {
         global $urlAppend, $courses_list;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
@@ -316,7 +313,7 @@ function expanded_faculte($facid, $uid) {
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$requirepassword $coursePrerequisites</td>
                    <td>" . q($mycours->t) . "</td>
-                   <td class='text-center'>" . $course_access_icons[$mycours->visible] . "</td></tr>";        
+                   <td class='text-center'>" . course_access_icon($mycours->visible) . "</td></tr>";
     }, intval($facid), COURSE_INACTIVE);
     $retString .= "</table></div>";
 
