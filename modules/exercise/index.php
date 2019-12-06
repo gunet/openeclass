@@ -256,7 +256,7 @@ if (!$nbrExercises) {
         if (isset($row->password_lock) || isset($row->ip_lock)) {
             $lock_description = "<ul>";
             if ($row->password_lock) {
-                $lock_description .= "<li>$langPasswordUnlock</li>";
+                $lock_description .= "<li>$langPassCode</li>";
                 $link_class = "password_protected";
             }
             if ($row->ip_lock) {

@@ -484,23 +484,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
-                 <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
-                   <label for='exercisePasswordLock' class='col-sm-2 control-label'>$langPasswordUnlock:</label>
-                   <div class='col-sm-10'>
-                     <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
-                     <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
-                   </div>
-                 </div>
-                 <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
-                   <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
-                   <div class='col-sm-10'>
-                     <select name='exerciseIPLock[]' class='form-control' id='exerciseIPLock' multiple>
-                        $exerciseIPLockOptions
-                     </select>
-                     <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
-                   </div>
-                 </div>
-                <div class='form-group'>
+                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
@@ -550,9 +534,35 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                             </table>
                         </div>
                     </div>
-                </div>
-                 " . eClassTag::tagInput($exerciseId) . "
+                </div>";
 
+                $tool_content .= "<div class='text-muted'>
+                            <a role='button' data-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
+                                 <h4 class='panel-heading' style='margin-bottom: 20px;'>
+                                       <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess   
+                                 </h4>
+                            </a>
+                          </div>";
+
+                $tool_content .= "<div id='CheckAccess' class='collapse'>";
+                 $tool_content .= "<div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
+                       <label for='exercisePasswordLock' class='col-sm-2 control-label'>$langPassCode:</label>
+                       <div class='col-sm-10'>
+                         <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
+                         <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
+                       </div>
+                     </div>
+                     <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
+                       <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
+                       <div class='col-sm-10'>
+                         <select name='exerciseIPLock[]' class='form-control' id='exerciseIPLock' multiple>
+                            $exerciseIPLockOptions
+                         </select>
+                         <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
+                       </div>
+                     </div>                
+                     " . eClassTag::tagInput($exerciseId) . "
+                 </div>
                  <div class='form-group'>
                    <div class='col-sm-offset-2 col-sm-10'>
                     " . form_buttons(array(

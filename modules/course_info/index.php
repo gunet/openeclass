@@ -580,7 +580,7 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
             <div class='form-group'>
-                <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
+                <label for='coursepassword' class='col-sm-2 control-label'>$langPassCode:</label>
                 <div class='col-sm-10'>
                       <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
                 </div>
@@ -591,24 +591,33 @@ if (isset($_POST['submit'])) {
         <div class='form-group'>
                 <label for='Options' class='col-sm-2 control-label'>$langLanguage:</label>
                 <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"', $language) . "</div>
-        </div>
+        </div>";
 
-        <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langCourseOfflineSettings:</label>
-            <div class='col-sm-10'>
-                <div class='radio'>
-                  <label>
-                        <input type='radio' value='1' name='enable_offline_course' $log_offline_course_enable $log_offline_course_inactive> $langActivate
-                        <span class='help-block'><small>$langCourseOfflineLegend</small></span>
-                  </label>
-                </div>
-                <div class='radio'>
-                  <label>
-                        <input type='radio' value='0' name='enable_offline_course' $log_offline_course_disable $log_offline_course_inactive> $langDeactivate
-                  </label>
+        $tool_content .= "<div class='text-muted'>
+                            <a role='button' data-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
+                                 <h4 class='panel-heading' style='margin-bottom: 20px;'>
+                                       <span class='fa fa-chevron-down fa-fw'></span> $langReadMore   
+                                 </h4>
+                            </a>
+                          </div>";
+    
+        $tool_content .= "<div class='collapse' id='MoreInfo'>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langCourseOfflineSettings:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='1' name='enable_offline_course' $log_offline_course_enable $log_offline_course_inactive> $langActivate
+                            <span class='help-block'><small>$langCourseOfflineLegend</small></span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='0' name='enable_offline_course' $log_offline_course_disable $log_offline_course_inactive> $langDeactivate
+                      </label>
+                    </div>
                 </div>
             </div>
-        </div>
 
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseUserRequests:</label>
@@ -734,6 +743,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </div>": '') . "
+            </div>
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>

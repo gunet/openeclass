@@ -373,6 +373,7 @@ $langActivateForumNotifications = "Ενεργοποίηση ενημέρωσης
 $langDisableForumNotifications = "Aπενεργοποίηση ενημέρωσης $langsOfStudents (μέσω email)";
 $langPublicDocumentManagement = 'Δημόσια διαχείριση εγγράφων';
 $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστολή και διαχείριση αρχείων στα «Έγγραφα» από όλους τους εγγεγραμμένους χρήστες.';
+$langPassCode = "Συνθηματικό πρόσβασης";
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;
@@ -1890,6 +1891,7 @@ $langQuestionEasy = "Eύκολη";
 $langQuestionModerate = "Μέτρια";
 $langQuestionDifficult = "Δύσκολη";
 $langQuestionVeryDifficult = "Πολύ δύσκολη";
+$langCheckAccess = "Έλεγχος πρόσβασης";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
@@ -1947,11 +1949,10 @@ $langQuestionStoredScore = 'Αποθηκευμένη βαθμολογία ερώ
 $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
 $langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
-$langIPUnlock = "Ξεκλείδωμα σε συγκεκριμένες IP(s) ή IP CIDR(s)";
-$langPasswordUnlock = "Ξεκλείδωμα με συνθηματικό";
+$langIPUnlock = "Πρόσβαση από διευθ. δικτύου (IP(s) ή CIDR(s))";
 $langPasswordModalTitle = "Πληκτρολογήστε τον κωδικό της άσκησης";
 $langIPHasNoAccess = "Η IP διεύθυνση σας δεν έχει πρόσβαση στην συγκεκριμένη άσκηση.";
-$langIPInvalid = "περιέχει μη έγκυρη IP ή IP CIDR";
+$langIPInvalid = "περιέχει άκυρη διεύθυνση IP ή IP CIDR";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
 $langRemainingTime = "Υπολειπόμενος χρόνος";
 
@@ -1999,7 +2000,7 @@ $langNotAllowed = "Μη επιτρεπτή ενέργεια";
 $langExternalLinks = "Εξωτερικοί Σύνδεσμοι";
 
 /* * *********************************************
- * faculte.php
+ * faculty.php
  * ********************************************* */
 $langCodeFaculte1 = "Κωδικός $langOfFaculty";
 $langCodeFaculte2 = "(με λατινικούς χαρακτήρες μόνο, π.χ. MATH)";

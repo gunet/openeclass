@@ -3495,6 +3495,7 @@ $langQuestionEasy = "Easy";
 $langQuestionModerate = "Moderate";
 $langQuestionDifficult = "Difficult";
 $langQuestionVeryDifficult = "Very difficult";
+$langCheckAccess = "Access Control";
 $langWithCriteria = 'with Criteria';
 $langSelectionRule = 'Selection Rule';
 $langOptional = "(optional)";
