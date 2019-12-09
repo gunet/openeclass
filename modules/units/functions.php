@@ -670,7 +670,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
  * @return string
  */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility) {
-    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code;
+    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $uid;
 
     $title = q($title);
     $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
@@ -687,7 +687,16 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if (!$is_editor and ( !resource_access($exercise->active, $exercise->public))) {
             return '';
         }
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+        // check if exercise is in `paused` state
+        $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
+            . "FROM exercise_user_record "
+            . "WHERE eid = ?d AND uid = ?d "
+            . "AND attempt_status = ?d", $exercise_id, $uid, ATTEMPT_PAUSED);
+        if ($paused_exercises) {
+            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$paused_exercises->eurid&amp;unit=$id'>";
+        } else {
+            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+        }
         $exlink = $link . "$title</a>";
         $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
     }
