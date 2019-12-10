@@ -31,8 +31,11 @@
                 <div class="col-sm-10">{!! selection($module_names, 'u_module_id', '', "class='form-control'") !!}</div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">    
+                <div class="col-sm-10 col-sm-offset-9">
                     <input class="btn btn-primary" type="submit" name="submit" value="{{ trans('langSubmit') }}">
+                    <a class="btn btn-default" href="listusers.php" data-placement="bottom" data-toggle="tooltip" title="" data-original-title="{{ trans('langBack') }}" >
+                        <span class="fa fa-reply space-after-icon"></span><span class="hidden-xs">{{ trans('langBack') }}</span>
+                    </a>
                 </div>
             </div>
         </form>
