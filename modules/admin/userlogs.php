@@ -190,11 +190,14 @@ $tool_content .= '<div class="form-group">
      <div class="col-sm-10">' . selection($module_names, 'u_module_id', $m, "class='form-control'") . '</div>
   </div>
   <input type="hidden" name="u" value="'. $u .'">
-  <div class="col-sm-offset-2 col-sm-10">    
-    <input class="btn btn-primary" type="submit" name="submit" value="' . $langSubmit . '">
-    </div>      
+  <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-9">
+            <input class="btn btn-primary" type="submit" name="submit" value="' . $langSubmit . '">
+            <a class="btn btn-default" href="listusers.php" data-placement="bottom" data-toggle="tooltip" title="" data-original-title='.$langBack.' ><span class="fa fa-reply space-after-icon"></span><span class="hidden-xs">'.$langBack.'</span></a>
+        </div>
+    </div>
+    
 </form></div>';        
 
-$tool_content .= "<p align='right'><a href='listusers.php'>$langBack</a></p>";
 
 draw($tool_content, 3, null, $head_content);
