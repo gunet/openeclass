@@ -62,7 +62,7 @@
                         <tr>
                             <td class='right' colspan='2'>
                                 <b>
-                                    <span style='color: #FF0000'>{{ trans('langExist') }}</span>
+                                    <span style='color: #FF0000'>{{ trans('langExist') count($loginDouble) }}</span>
                                 </b>
                             </td>
                         </tr>
@@ -89,7 +89,7 @@
                         <tr>
                             <td class=right colspan='2'>
                                 <b>
-                                    <span style='color: #FF0000'>{{ trans('langExist') }}</span>
+                                    <span style='color: #FF0000'>{{ trans('langExist') count($loginDouble) }}</span>
                                 </b>
                             </td>
                         </tr>
@@ -118,7 +118,7 @@
                         <tr>
                             <td class='right' colspan='2'>
                                 <b>
-                                    <span style='color: #FF0000'>{{ trans('langExist') }}</span>
+                                    <span style='color: #FF0000'>{{ trans('langExist') count($loginDouble) }}</span>
                                 </b>
                             </td>
                         </tr>

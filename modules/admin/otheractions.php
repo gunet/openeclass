@@ -92,17 +92,17 @@ if (isset($_GET['stats'])) {
             $data['extra_info'] = $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
             break;        
         case 'musers':
-            $data['loginDouble'] = list_ManyResult("SELECT DISTINCT username, COUNT(*) AS nb
-                    FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC", 'username');
-            break;        
+            $data['loginDouble'] = list_ManyResult("SELECT DISTINCT BINARY(username) AS username, COUNT(*) AS nb
+				FROM user GROUP BY username HAVING nb > 1 ORDER BY nb DESC", 'username');
+            break;
         case 'memail':
             $sqlLoginDouble = "SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email
 				HAVING nb > 1 ORDER BY nb DESC";
             $data['loginDouble'] = list_ManyResult($sqlLoginDouble, 'email');
             break;
         case 'mlogins':
-            $sqlLoginDouble = "SELECT DISTINCT CONCAT(username, \" -- \", password) AS pair,
-				COUNT(*) AS nb FROM user GROUP BY BINARY pair HAVING nb > 1 ORDER BY nb DESC";
+            $sqlLoginDouble = "SELECT DISTINCT BINARY(CONCAT(username, \"-- \", password)) AS pair,
+                COUNT(*) AS nb FROM user GROUP BY pair HAVING nb > 1 ORDER BY nb DESC";
             $data['loginDouble'] = list_ManyResult($sqlLoginDouble, 'pair');
             break;
         case 'vmusers':
