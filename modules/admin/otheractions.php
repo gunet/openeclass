@@ -107,14 +107,14 @@ if (isset($_GET['stats'])) {
         case 'musers':
             $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>";
-            $loginDouble = list_ManyResult("SELECT DISTINCT username, COUNT(*) AS nb
-				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC", 'username');
+            $loginDouble = list_ManyResult("SELECT DISTINCT BINARY(username) AS username, COUNT(*) AS nb
+				FROM user GROUP BY username HAVING nb > 1 ORDER BY nb DESC", 'username');
             $tool_content .= "<tr class='list-header'><th><b>$langMultipleUsers</b></th>
 			<th class='right'><strong>$langResult</strong></th>
 			</tr>";
             if (count($loginDouble) > 0) {
                 $tool_content .= tablize($loginDouble, 'username');
-                $tool_content .= "<tr><td class='right' colspan='2'>" . error_message() . "</td></tr>";
+                $tool_content .= "<tr><td class='right' colspan='2'>" . error_message(count($loginDouble)) . "</td></tr>";
             } else {
                 $tool_content .= "<tr><td class='right' colspan='2'>" . ok_message() . "</td></tr>";
             }
@@ -133,7 +133,7 @@ if (isset($_GET['stats'])) {
             if (count($loginDouble) > 0) {
                 $tool_content .= tablize($loginDouble, 'email');
                 $tool_content .= "<tr><td class=right colspan='2'>";
-                $tool_content .= error_message();
+                $tool_content .= error_message(count($loginDouble));
                 $tool_content .= "</td></tr>";
             } else {
                 $tool_content .= "<tr><td class=right colspan='2'>";
@@ -143,8 +143,8 @@ if (isset($_GET['stats'])) {
             $tool_content .= "</table></div>";
             break;
         case 'mlogins':
-            $sqlLoginDouble = "SELECT DISTINCT CONCAT(username, \" -- \", password) AS pair,
-				COUNT(*) AS nb FROM user GROUP BY BINARY pair HAVING nb > 1 ORDER BY nb DESC";
+            $sqlLoginDouble = "SELECT DISTINCT BINARY(CONCAT(username, \" -- \", password)) AS pair,
+				COUNT(*) AS nb FROM user GROUP BY pair HAVING nb > 1 ORDER BY nb DESC";
             $loginDouble = list_ManyResult($sqlLoginDouble, 'pair');
             $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>
@@ -155,7 +155,7 @@ if (isset($_GET['stats'])) {
             if (count($loginDouble) > 0) {
                 $tool_content .= tablize($loginDouble, 'pair');
                 $tool_content .= "<tr><td class='right' colspan='2'>";
-                $tool_content .= error_message();
+                $tool_content .= error_message(count($loginDouble));
                 $tool_content .= "</td></tr>";
             } else {
                 $tool_content .= "<tr><td class='right' colspan='2'>";
@@ -242,10 +242,10 @@ function ok_message() {
  * @global type $langExist
  * @return type
  */
-function error_message() {
-    global $langExist;
+function error_message($count) {
+    global $langExist, $langRegisterActions;
 
-    return "<b><span style='color: #FF0000'>$langExist</span></b>";
+    return "<strong><span style='color: #FF0000'>$langExist</span><small> ($count $langRegisterActions)</small></strong>";
 }
 
 /**
