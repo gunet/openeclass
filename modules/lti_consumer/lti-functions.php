@@ -25,11 +25,17 @@ define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
 define('LTI_DESCRIPTION_MAX_LENGTH', 999);
 
-
+/**
+ * @brief new lti app (display form)
+ * @param bool $is_template
+ * @param $course_code
+ * @param string $lti_url_default
+ */
 function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
     global $tool_content, $langAdd, $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
-           $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer;
+           $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id;
 
     $urlext = ($is_template == false) ? '?course=' . $course_code : '';
     $urldefault = (strlen($lti_url_default) > 0) ? " value='$lti_url_default' " : '';
@@ -75,8 +81,8 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
                 <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  LTI_LAUNCHCONTAINER_EMBED) . "</div>
             </div>
             <div class='form-group'>
-            <label for='active_button' class='col-sm-2 control-label'>$langNewLTIAppStatus:</label>
-            <div class='col-sm-10'>
+                <label for='active_button' class='col-sm-2 control-label'>$langNewLTIAppStatus:</label>
+                <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='active_button' name='status' value='1' checked>
@@ -89,9 +95,31 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
                        $langNewLTIAppInActive
                       </label>
                     </div>
-            </div>
-        </div>
-        <div class='form-group'>
+                </div>
+            </div>";
+            if (!isset($course_code)) {
+                $tool_content .= "<div class='form-group' id='courses-list'>
+                    <label class='col-sm-3 control-label'>$langUseOfApp:&nbsp;&nbsp;
+                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>                    
+                    <div class='col-sm-9'>                                
+                        <select class='form-control' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
+                    $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
+                                                            WHERE id NOT IN (SELECT course_id FROM course_lti_app)
+                                                            AND visible != " . COURSE_INACTIVE . "
+                                                            ORDER BY title");
+                    $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+                    foreach($courses_list as $c) {
+                        $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
+                    }
+                    $tool_content .= "</select>
+                        <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                    </div>
+                </div>";
+            } else {
+                $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
+            }
+
+        $tool_content .= "<div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='new_lti_app' value='$langAdd'>
             </div>
@@ -99,6 +127,7 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
         </fieldset>
          ". generate_csrf_token_form_field() ."
         </form></div>";
+
         $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
             var chkValidator  = new Validator("sessionForm");
@@ -107,27 +136,64 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
         //]]></script>';
 }
 
-function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $course_id = null, $is_template = false, $update = false, $session_id = '')  {
+/**
+ * @param $title
+ * @param $desc
+ * @param $url
+ * @param $key
+ * @param $secret
+ * @param $launchcontainer
+ * @param $status
+ * @param $lti_courses
+ * @param null $course_id
+ * @param bool $is_template
+ * @param bool $update
+ * @param string $session_id
+ * @brief add / update lti app settings
+ */
+function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null, $is_template = false, $update = false, $session_id = '')  {
+    if (in_array(0, $lti_courses)) {
+        $all_courses = 1; // lti app is assigned to all courses
+    } else {
+        $all_courses = 0; // lti app is assigned to specific courses
+    }
     if ($update == true) {
         Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s,
-                                        lti_provider_key = ?s, lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s WHERE id = ?d",
-                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $session_id);
+                                        lti_provider_key = ?s, lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s, all_courses = ?d WHERE id = ?d",
+                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $session_id);
+        Database::get()->query("DELETE FROM course_lti_app WHERE lti_app = ?d", $session_id);
+        if ($all_courses == 0) {
+            foreach ($lti_courses as $data) {
+                Database::get()->query("INSERT INTO course_lti_app SET course_id = ?d, lti_app = ?d", $data, $session_id);
+            }
+        }
     } else {
         $firstparam = ($is_template == true) ? 'is_template' : 'course_id';
         $firstarg = ($is_template == true) ? 1 : intval($course_id);
 
-        Database::get()->query("INSERT INTO lti_apps (" . $firstparam . ", title, description,
+        $q = Database::get()->query("INSERT INTO lti_apps (" . $firstparam . ", title, description,
                                                             lti_provider_url, lti_provider_key, lti_provider_secret,
-                                                            launchcontainer, enabled)
-                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s)",
-                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status);
+                                                            launchcontainer, enabled, all_courses)
+                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s,?d)",
+                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses);
+        $lti_app_id = $q->lastInsertID;
+        if ($all_courses == 0) {
+            foreach ($lti_courses as $data) {
+                Database::get()->query("INSERT INTO course_lti_app SET course_id = ?d, lti_app = ?d", $data, $lti_app_id);
+            }
+        }
     }
 }
 
+/**
+ * @brief edit lti app (display form)
+ * @param $session_id
+ */
 function edit_lti_app($session_id) {
     global $tool_content, $langModify, $langNewLTIAppSessionDesc, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
-           $langLTILaunchContainer;
+           $langLTILaunchContainer, $langUseOfApp, $course_id,
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;;
 
     $row = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $session_id);
 
@@ -189,8 +255,42 @@ function edit_lti_app($session_id) {
                                   </label>
                                 </div>
                         </div>
-                    </div>
-                    <div class='form-group'>
+                    </div>";
+
+                    if (!isset($course_id)) {
+                        $tool_content .= "<div class='form-group' id='courses-list'>
+                            <label class='col-sm-3 control-label'>$langUseOfApp:&nbsp;&nbsp;
+                            <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>                    
+                            <div class='col-sm-9'>                                
+                                <select class='form-control' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
+                                $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
+                                                                    WHERE id NOT IN (SELECT course_id FROM course_lti_app)
+                                                                    AND visible != " . COURSE_INACTIVE . "
+                                                                    ORDER BY title");
+                                if ($row->all_courses == 1) {
+                                    $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+                                } else {
+                                    $lti_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
+                                                                                IN (SELECT course_id FROM course_lti_app WHERE lti_app = ?d) ORDER BY title", $session_id);
+                                    if (count($lti_courses_list) > 0) {
+                                        foreach($lti_courses_list as $c) {
+                                            $tool_content .= "<option value='$c->id' selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
+                                        }
+                                        $tool_content .= "<option value='0'><h2>$langToAllCourses</h2></option>";
+                                    }
+                                }
+                                foreach($courses_list as $c) {
+                                    $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
+                                }
+                            $tool_content .= "</select>
+                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                            </div>
+                        </div>";
+                    } else {
+                        $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
+                    }
+
+                    $tool_content .= "<div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='update_lti_app' value='$langModify'>
                         </div>
@@ -328,9 +428,15 @@ function enable_lti_app($id)
 }
 
 
+/**
+ * @param $id
+ * @brief delete lti app
+ */
 function delete_lti_app($id)
 {
+    Database::get()->query("DELETE FROM course_lti_app WHERE lti_app=?d", $id);
     Database::get()->querySingle("DELETE FROM lti_apps WHERE id=?d",$id);
+
 }
 
 function lti_build_signature($launch_url, $secret, $launch_data) {
@@ -648,4 +754,29 @@ function getLTILinksForTools() {
     } else {
         return false;
     }
+}
+
+
+function is_active_lti_app($turnitinapp, $course_id) {
+
+    if ($turnitinapp->isEnabled()) {
+        $q = Database::get()->querySingle("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = 'turnitin'");
+        if (!is_null($q->course_id)) {
+            return true;
+        } else {
+            if ($q->all_courses == 1) { // turnitin is enabled for all courses
+                return true;
+            } else { // otherwise check if turnitin is enabled for specific course
+                $s = Database::get()->querySingle("SELECT * FROM course_lti_app
+                            WHERE course_id = ?d AND lti_app = $q->id", $course_id);
+                if ($s) {
+                    return true;
+                }
+            }
+        }
+
+    } else {
+        return false;
+    }
+
 }

@@ -35,6 +35,26 @@ load_js('bootstrap-datetimepicker');
 load_js('validation.js');
 load_js('select2');
 
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {                
+        $('#select-courses').select2();
+        $('#selectAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-courses').find('option').each(function(){
+                stringVal.push($(this).val());
+            });
+            $('#select-courses').val(stringVal).trigger('change');
+        });
+        $('#removeAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-courses').val(stringVal).trigger('change');
+        });
+    });
+</script>";
+
+
 if (isset($_GET['add_template'])) {
 
     $pageName = $langNewTIITool;
@@ -56,14 +76,14 @@ if (isset($_GET['add_template'])) {
 } else if (isset($_POST['new_lti_app'])) { // Create
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], null, true);
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true);
     Session::Messages($langTIIAppAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
 
 } else if (isset($_POST['update_lti_app'])) { // Update
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], null, true, true, getDirectReference($_GET['id']));
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true, true, getDirectReference($_GET['id']));
     // Display result message
     Session::Messages($langTIIAppAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
