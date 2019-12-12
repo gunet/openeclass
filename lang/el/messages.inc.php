@@ -5665,6 +5665,8 @@ $langTiiExcludeTypeWords = "Λέξεις";
 $langTiiExcludeTypePercentage = "Ποσοστό";
 $langTiiExcludeValue = "Τιμή εξαίρεσης";
 $langLTIOptions = "Επιλογές Turnitin";
+$langUseOfApp = "Χρήση της εφαρμογής";
+$langUseOfAppInfo = "Επιλέξτε σε ποια $langsCourses θα χρησιμοποιείται η εφαρμογή";
 
 // Messages for colmooc
 $langColmooc = "colMOOC";
