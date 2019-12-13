@@ -639,7 +639,7 @@ if (!class_exists('Exercise')) {
             // if the user has answered at least one question
             if (is_array($choice)) {
                 // if all questions on the same page
-                if ($this->selectType() == 1) {
+                if ($this->selectType() == SINGLE_PAGE_TYPE) {
                     // $exerciseResult receives the content of the form.
                     // Each choice of the student is stored into the array $choice
                     $exerciseResult = $choice;

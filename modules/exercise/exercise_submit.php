@@ -408,7 +408,7 @@ if (isset($_POST['formSent'])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
-        if (empty($totalScore)) {
+        if (empty($totalScore) or ($totalScore < 0)) {
             $totalScore = 0.00;
         }
 
