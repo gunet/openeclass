@@ -49,44 +49,60 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='alert alert-success'>$langsecondfaUpdated</div>";
 } // end of if($submit)
 else {
+    $tool_content .= action_bar([
+        [ 'title' => $langBack,
+          'url' => "extapp.php",
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ]]);
+
     $connectorOptions = array_map(function($connectorClass) {
         $connector = new $connectorClass();
         $selected = q(get_config('asecondfa_connector')) == $connectorClass ? " selected='selected'" : '';
         return "<option value='$connectorClass'$selected>".$connector->getName()."</option>";
     }, $connectorClasses);
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-                <fieldset><legend>$langBasicCfgSetting</legend>
-	 <table class='table table-bordered' width='100%'>
-         <tr>
-            <th width='200' class='left'><b>$langSFAConf</b></th>
-            <td><select name='formconnector'>".implode('', $connectorOptions)."</select></td>
-         </tr>";
+
+    $tool_content .= "
+      <form action='$_SERVER[SCRIPT_NAME]' method='post'>
+        <fieldset>
+          <legend>$langBasicCfgSetting</legend>
+          <div class='form-group'>
+            <label class='col-sm-2'>$langSFAConf</label>
+            <div class='col-sm-10'>
+              <select name='formconnector'>" . implode('', $connectorOptions) . "</select>
+            </div>
+          </div>";
     foreach($connectorClasses as $curConnectorClass) {
         $connector = new $curConnectorClass();
         foreach($connector->getConfigFields() as $curField => $curLabel) {
             $tool_content .= "
-              <tr class='connector-config connector-$curConnectorClass' style='display: none;'>
-                <th width='200' class='left'><b>$curLabel</b></th>
-                <td><input class='FormData_InputText' type='text' name='form$curField' size='40' value='" . q(get_config($curField)) . "'></td>
-              </tr>";
+          <div class='form-group connector-config connector-$curConnectorClass' style='display: none;'>
+            <label class='col-sm-2'>$curLabel</label>
+            <div class='col-sm-10'>
+              <input class='FormData_InputText' type='text' name='form$curField' size='40' value='" . q(get_config($curField)) . "'>
+            </div>
+          </div>";
         }
     }
 
-    $tool_content .= "</table></fieldset>";
-    $tool_content .= "<p>$langSFAusage</p>";
-    $tool_content .= "  <ul>
-                        <li><a href='https://www.authy.com/'>Authy for iOS, Android, Chrome, OS X</a></li>
-                        <li><a href='https://fedorahosted.org/freeotp/'>FreeOTP for iOS, Android and Peeble</a></li>
-                        <li><a href='https://www.toopher.com/'>FreeOTP for iOS, Android and Peeble</a></li>
-                        <li><a href='http://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8%22'>Google Authenticator for iOS</a></li>
-                        <li><a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2%22'>Google Authenticator for Android</a></li>
-                        <li><a href='https://m.google.com/authenticator%22'>Google Authenticator for Blackberry</a></li>
-                        <li><a href='http://apps.microsoft.com/windows/en-us/app/google-authenticator/7ea6de74-dddb-47df-92cb-40afac4d38bb%22'>Google Authenticator (port) on Windows app store</a></li>
-                        </ul>
-                        <BR>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'>". generate_csrf_token_form_field() ."</form>";
-    $head_content .= "
-        <script type='text/javascript'>
+    $tool_content .= "
+        </fieldset>
+        <hr>
+        <p>$langSFAusage</p>
+        <ul>
+          <li><a href='https://www.authy.com/'>Authy for iOS, Android, Chrome, OS X</a></li>
+          <li><a href='https://fedorahosted.org/freeotp/'>FreeOTP for iOS, Android and Peeble</a></li>
+          <li><a href='https://www.toopher.com/'>FreeOTP for iOS, Android and Peeble</a></li>
+          <li><a href='http://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8%22'>Google Authenticator for iOS</a></li>
+          <li><a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2%22'>Google Authenticator for Android</a></li>
+          <li><a href='https://m.google.com/authenticator%22'>Google Authenticator for Blackberry</a></li>
+          <li><a href='http://apps.microsoft.com/windows/en-us/app/google-authenticator/7ea6de74-dddb-47df-92cb-40afac4d38bb%22'>Google Authenticator (port) on Windows app store</a></li>
+        </ul>
+        <br>
+        <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+        <a href='extapp.php' class='btn btn-default'>$langCancel</a>" .
+        generate_csrf_token_form_field() . "
+      </form>
+      <script>
         function update_connector_config_visibility() {
             $('tr.connector-config').hide();
             $('tr.connector-config input').removeAttr('required');
@@ -99,14 +115,7 @@ else {
             });
             update_connector_config_visibility();
         });
-        </script>";
+      </script>";
 }
 
-// Display link to index.php
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "extapp.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);
-

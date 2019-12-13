@@ -89,25 +89,25 @@ $pageName = "$langUserLog: " . uid_to_name($u);
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);
 
-if (isset($_POST['user_date_start'])) {    
+if (isset($_POST['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
-    $u_date_start = $uds->format('Y-m-d H:i');    
+    $u_date_start = $uds->format('Y-m-d H:i');
     $user_date_start = $uds->format('d-m-Y H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P15D'));    
+    $date_start->sub(new DateInterval('P15D'));
     $u_date_start = $date_start->format('Y-m-d H:i');
-    $user_date_start = $date_start->format('d-m-Y H:i');       
+    $user_date_start = $date_start->format('d-m-Y H:i');
 }
 if (isset($_POST['user_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);
     $u_date_end = $ude->format('Y-m-d H:i');
-    $user_date_end = $ude->format('d-m-Y H:i');        
+    $user_date_end = $ude->format('d-m-Y H:i');
 } else {
     $date_end = new DateTime();
     $u_date_end = $date_end->format('Y-m-d H:i');
     $date_end->add(new DateInterval('P1D'));
-    $user_date_end = $date_end->format('d-m-Y H:i');        
+    $user_date_end = $date_end->format('d-m-Y H:i');
 }
 
 $logtype = isset($_GET['logtype']) ? intval($_GET['logtype']) : '0';
@@ -121,7 +121,7 @@ if (isDepartmentAdmin()) {
 $log = new Log();
 // display logs
 if (isset($_GET['submit'])) {  // display course modules logging
-    $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);        
+    $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
 } else {
     $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
 }
@@ -154,10 +154,10 @@ $log_types = array(0 => $langAllActions,
     LOG_DELETE_COURSE => $i . $i . $langCourseDel,
     LOG_MODIFY_COURSE => $i . $i . $langCourseInfoEdit);
 $tool_content .= "<div class='form-wrapper'>";
-$tool_content .= "<form class='form-horizontal' role='form' method='get' action='$_SERVER[SCRIPT_NAME]'>    
+$tool_content .= "<form class='form-horizontal' role='form' method='get' action='$_SERVER[SCRIPT_NAME]'>
         <div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
         <label class='col-sm-2 control-label'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>               
+        <div class='col-xs-10 col-sm-9'>
             <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
         <div class='col-xs-2 col-sm-1'>
@@ -176,11 +176,11 @@ $tool_content .= "<div class='input-append date form-group' data-date= '" . q($u
         </div>
         </div>";
 
-$tool_content .= "<div class='form-group'>  
+$tool_content .= "<div class='form-group'>
     <label class='col-sm-2 control-label'>$langLogTypes:</label>
      <div class='col-sm-10'>" . selection($log_types, 'logtype', $logtype, "class='form-control'") . "</div>
   </div>";
-        
+
 $tool_content .= '<div class="form-group">
     <label class="col-sm-2 control-label">' . $langCourse . ':</label>
      <div class="col-sm-10">' . selection($cours_opts, 'u_course_id', $u_course_id, "class='form-control'") . '</div>
@@ -196,8 +196,8 @@ $tool_content .= '<div class="form-group">
             <a class="btn btn-default" href="listusers.php" data-placement="bottom" data-toggle="tooltip" title="" data-original-title='.$langBack.' ><span class="fa fa-reply space-after-icon"></span><span class="hidden-xs">'.$langBack.'</span></a>
         </div>
     </div>
-    
-</form></div>';        
+
+</form></div>';
 
 
 draw($tool_content, 3, null, $head_content);

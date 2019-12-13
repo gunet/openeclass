@@ -68,6 +68,7 @@ if (isset($_GET['c'])) {
 
 // Update course basic information
 if (isset($_POST['submit'])) {
+
     $departments = isset($_POST['department']) ? $_POST['department'] : array();
 
     // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
@@ -92,10 +93,12 @@ if (isset($_POST['submit'])) {
                     prof_names = ?s
                     WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
     $course->refresh($cId, $departments);
-    $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
-}
-// Display edit form for course basic information
-else {
+    Session::Messages($langModifDone, 'alert-success');
+    redirect_to_home_page("modules/admin/editcours.php?c=$_GET[c]");
+
+} else {
+
+    // Display edit form for course basic information
     $row = Database::get()->querySingle("SELECT course.code AS code, course.title AS title, course.prof_names AS prof_name, course.id AS id
                                             FROM course
                                            WHERE course.code = ?s" ,$_GET['c']);
@@ -104,7 +107,7 @@ else {
 	<fieldset>
         <div class='form-group'>
 	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
-            <div class='col-sm-10'>";    
+            <div class='col-sm-10'>";
 
         if (isDepartmentAdmin()) {
             list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id), 'allowables' => $user->getDepartmentIds($uid)));
@@ -133,8 +136,9 @@ else {
 	    </div>
         </div>
         <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-4'>
-                <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                <a href='editcours.php?c=$_GET[c]' class='btn btn-default'>$langCancel</a>
             </div>
         </div>
         </fieldset>

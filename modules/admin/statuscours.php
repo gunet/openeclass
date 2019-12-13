@@ -61,21 +61,19 @@ if (isset($_GET['c'])) {
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));           
+              'level' => 'primary-label')));
 }
-    
+
 // Update course status
 if (isset($_POST['submit'])) {
     // Update query
     $sql = Database::get()->query("UPDATE course SET visible=?d WHERE code=?s", $_POST['formvisible'], $_GET['c']);
-    // Some changes occured
     if ($sql->affectedRows > 0) {
-        $tool_content .= "<div class='alert alert-info'> $langCourseStatusChangedSuccess</div>";
+        Session::Messages($langCourseStatusChangedSuccess, 'alert-success');
+    } else {
+        Session::Messages($langNoChangeHappened, 'alert-info');
     }
-    // Nothing updated
-    else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoChangeHappened</div>";
-    }
+    redirect_to_home_page("modules/admin/editcours.php?c=$_GET[c]");
 }
 // Display edit form for course status
 else {
@@ -83,7 +81,7 @@ else {
     $visibleChecked[Database::get()->querySingle("SELECT * FROM course WHERE code=?s", $_GET['c'])->visible] = "checked";
 
     $tool_content .= "<div class='form-wrapper'>
-            <form role='form' class='form-horizontal' action=" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($_GET['c']) . " method='post'>                
+            <form role='form' class='form-horizontal' action=" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($_GET['c']) . " method='post'>
             <div class='form-group'>
                 <label for='localize' class='col-sm-2 control-label'>$langAvailableTypes:</label>
                 <div class='col-sm-10'>
@@ -114,17 +112,17 @@ else {
                             course_access_icon(COURSE_INACTIVE)."
                         <span class='help-block'><small>$langInactiveCourse</small></span>
                       </label>
-                    </div>                   
+                    </div>
                 </div>
             </div>
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+                    <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                    <a href='editcours.php?c=$_GET[c]' class='btn btn-default'>$langCancel</a>
                 </div>
-            </div>            
+            </div>
             </form>
         </div>";
 }
 
 draw($tool_content, 3);
-

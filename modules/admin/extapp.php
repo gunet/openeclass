@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // Check if user is administrator and if yes continue
@@ -38,8 +38,8 @@ $appName = isset($_GET['edit'])? $_GET['edit']: null;
 if (isset($_POST['state'])) {
     $appName= $_POST['appName'];
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
-    $appNameAjax = $appName;   
-    
+    $appNameAjax = $appName;
+
     if (($appNameAjax == 'openmeetings') and $newState == 1) {
         $app_tc = ExtAppManager::getApp('bigbluebutton');
         $app_tc->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
@@ -47,7 +47,7 @@ if (isset($_POST['state'])) {
         $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
         $app_tc->update_tc_sessions('om'); // update tc sessions
     }
-    
+
     if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
         $app_tc = ExtAppManager::getApp('openmeetings');
         $app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
@@ -55,7 +55,7 @@ if (isset($_POST['state'])) {
         $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
         $app_tc->update_tc_sessions('bbb'); // update tc sessions
     }
-    
+
     if (($appNameAjax == 'webconf') and $newState == 1) {
         $app_tc = ExtAppManager::getApp('bigbluebutton');
         $app_tc->setEnabled(!$newState);  // disable bigbluebutton if bigbluebutton has been enabled
@@ -63,8 +63,8 @@ if (isset($_POST['state'])) {
         $app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
         $app_tc->update_tc_sessions('webconf'); // update tc sessions
     }
-    
-    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    
+
+    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
     echo $newState;
     exit;
 }
@@ -141,15 +141,15 @@ if ($appName) {
 
     $tool_content .= "<div class='row extapp'><div class='col-xs-12'>";
     $tool_content .="<table class='table-default dataTable no-footer extapp-table'>";
-    $tool_content .="<thead class='list-header'><td>$langExtAppName</td><td>$langDescription</td></thead>";    
+    $tool_content .="<thead class='list-header'><td>$langExtAppName</td><td>$langDescription</td></thead>";
     foreach (ExtAppManager::getApps() as $app) {
         $tool_content .="<tr>";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
         $tool_content .= "<td style='width:90px; padding:0px;'>";
         $tool_content .= "<div class='text-center' style='padding:10px;'><a href='$urlAppend" . $app->getConfigUrl() . "''>";
         if ($app->getAppIcon() !== null) {
-            $tool_content .= "<img height='50' width='89' src='" . $app->getAppIcon() . "'/>";            
-        }                
+            $tool_content .= "<img height='50' width='89' src='" . $app->getAppIcon() . "'/>";
+        }
         if ($app->isConfigured()) {
             if ($app->getName() == 'bigbluebutton') {
                 $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
@@ -159,8 +159,8 @@ if ($appName) {
                 $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success webconf-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger webconf-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
             } else {
             $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
-            }            
-        } else { 
+            }
+        } else {
             $app_active = "<button type='button' class='btn btn-default' data-app='" . $app->getName() . "'  data-toggle='modal' data-target='#noSettings'> <i class='fa fa-warning'></i> </button>";
         }
         $tool_content .= $app->getDisplayName() . "</a>";
@@ -174,7 +174,7 @@ if ($appName) {
 
     $tool_content .="</table>";
     $tool_content .= "</div></div>";
-    
+
     // Modal message when trying to enable tool without applying settings
     $tool_content .= "<div class='modal fade' id='noSettings' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
                           <div class='modal-dialog' role='document'>

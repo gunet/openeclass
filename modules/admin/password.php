@@ -70,14 +70,14 @@ $tool_content .= action_bar(array(
                 'level' => 'primary-label')
                 ));
 
-if (!isset($_POST['changePass'])) {       
+if (!isset($_POST['changePass'])) {
     if (!isset($_GET['userid'])) {
         header("Location: {$urlServer}modules/admin/");
         exit;
     }
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$passurl'>
-    <fieldset>      
+    <fieldset>
       <input type='hidden' name='userid' value='" . q($_GET['userid']) . "' />
       <div class='form-group'>
       <label class='col-sm-3 control-label'>$langNewPass1</label>
@@ -92,32 +92,32 @@ if (!isset($_POST['changePass'])) {
         </div>
       </div>
       <div class='col-sm-offset-3 col-sm-9'>
-        <input class='btn btn-primary' type='submit' name='changePass' value='$langModify'>
+        <input class='btn btn-primary' type='submit' name='changePass' value='$langSubmit'>
         <a class='btn btn-default' href='{$urlServer}modules/admin/edituser.php?u=" . urlencode($_REQUEST['userid']) . "'>$langCancel</a>
-      </div>      
+      </div>
     </fieldset>
-    ". generate_csrf_token_form_field() ."    
+    ". generate_csrf_token_form_field() ."
     </form>
     </div>";
 } else {
     $userid = intval($_POST['userid']);
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    
+
     if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
         Session::Messages($langFieldsMissing);
         redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));
     }
     if ($_POST['password_form1'] !== $_POST['password_form']) {
         Session::Messages($langPassTwo);
-        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));        
+        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));
     }
     // All checks ok. Change password!
     $hasher = new PasswordHash(8, false);
     $new_pass = $hasher->HashPassword($_POST['password_form']);
     Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
     Session::Messages($langPassChanged);
-    redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));    
+    redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));
 }
 
 draw($tool_content, 3, null, $head_content);

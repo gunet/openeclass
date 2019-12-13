@@ -21,7 +21,7 @@
 
 /**
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @file password.php 
+ * @file password.php
  * @abstract Password change component
  *
  */
@@ -54,7 +54,7 @@ $head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
 $head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
 $head_content .= <<<hContent
     };
-                        
+
     $(document).ready(function() {
         $('#password_form').keyup(function() {
             $('#result').html(checkStrength($('#password_form').val()))
@@ -80,8 +80,8 @@ if (isset($_POST['submit'])) {
         'password_form' => "$langTheField $langNewPass1",
         'password_form1' => "$langTheField $langNewPass2"
     ));
-    if($v->validate()) { 
-        // all checks ok. Change password!    
+    if($v->validate()) {
+        // all checks ok. Change password!
        $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);
 
        $hasher = new PasswordHash(8, false);
@@ -98,11 +98,11 @@ if (isset($_POST['submit'])) {
        } else {
            Session::Messages($langPassOldWrong);
            redirect_to_home_page('main/profile/password.php');
-       }       
+       }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page('main/profile/password.php');
-    } 
+    }
 
 }
 
@@ -125,15 +125,15 @@ if (!isset($_POST['changePass'])) {
     <div class='form-group".($old_pass_error ? " has-error" : "")."'>
       <label for='old_pass' class='col-sm-2 control-label'>$langOldPass: </label>
       <div class='col-sm-8'>
-	    <input type='password' class='form-control' id='old_pass' name='old_pass' value='$old_pass' autocomplete='off'>
-            <span class='help-block'>$old_pass_error</span>
+        <input type='password' class='form-control' id='old_pass' name='old_pass' value='$old_pass' autocomplete='off'>
+        <span class='help-block'>$old_pass_error</span>
       </div>
     </div>
     <div class='form-group".($password_form_error ? " has-error" : "")."'>
       <label for='password_form' class='col-sm-2 control-label'>$langNewPass1: </label>
       <div class='col-sm-8'>
-	    <input type='password' class='form-control' id='password_form' name='password_form' value='$password_form' autocomplete='off'>
-            <span class='help-block'>$password_form_error</span>
+        <input type='password' class='form-control' id='password_form' name='password_form' value='$password_form' autocomplete='off'>
+        <span class='help-block'>$password_form_error</span>
       </div>
       <div class='col-sm-2 text-center padding-thin'>
         <span id='result'></span>
@@ -149,12 +149,12 @@ if (!isset($_POST['changePass'])) {
     ".showSecondFactorChallenge()."
     <div class='form-group'>
       <div class='col-sm-offset-2 col-sm-8'>
-         <input type='submit' class='btn btn-primary' name='submit' value='$langModify'>
+         <input type='submit' class='btn btn-primary' name='submit' value='$langSubmit'>
          <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
       </div>
     </div>
   </fieldset>
-  ". generate_csrf_token_form_field() ."  
+  ". generate_csrf_token_form_field() ."
 </form></div>";
 }
 

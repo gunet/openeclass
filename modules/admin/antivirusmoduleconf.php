@@ -50,21 +50,28 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='alert alert-success'>$langAntivirusUpdated</div>";
 } // end of if($submit)
 else {
+    $tool_content .= action_bar([
+        [ 'title' => $langBack,
+          'url' => "extapp.php",
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ]]);
+
     $connectorOptions = array_map(function($connectorClass) {
         $connector = new $connectorClass();
         $selected = q(get_config('aantivirus_connector')) == $connectorClass ? " selected='selected'" : '';
         return "<option value='$connectorClass'$selected>".$connector->getName()."</option>";
     }, $connectorClasses);
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-                <fieldset><legend>$langBasicCfgSetting</legend>
-	 <table class='table table-bordered' width='100%'>
-         <tr>
-            <th width='200' class='left'><b>$langAntivirusConnector</b></th>
-            <td><select name='formconnector'>".implode('', $connectorOptions)."</select></td>
-         </tr>";
+
+    $tool_content .= "
+        <form action='$_SERVER[SCRIPT_NAME]' method='post'>
+          <fieldset><legend>$langBasicCfgSetting</legend>
+            <table class='table table-bordered' width='100%'>
+              <tr>
+                 <th width='200' class='left'><b>$langAntivirusConnector</b></th>
+                 <td><select name='formconnector'>".implode('', $connectorOptions)."</select></td>
+              </tr>";
     foreach($connectorClasses as $curConnectorClass) {
         $connector = new $curConnectorClass();
-
         foreach($connector->getConfigFields() as $curField => $curLabel) {
             $tool_content .= "
               <tr class='connector-config connector-$curConnectorClass' style='display: none;'>
@@ -73,11 +80,14 @@ else {
               </tr>";
         }
     }
-    $tool_content .= "</table></fieldset>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'>". generate_csrf_token_form_field() ."</form>";
-
-    $head_content .= "
-        <script type='text/javascript'>
+    $tool_content .= "
+            </table>
+          </fieldset>
+          <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+          <a href='extapp.php' class='btn btn-default'>$langCancel</a>" .
+          generate_csrf_token_form_field() . "
+        </form>
+        <script>
         function update_connector_config_visibility() {
             $('tr.connector-config').hide();
             $('tr.connector-config input').removeAttr('required');
@@ -93,11 +103,4 @@ else {
         </script>";
 }
 
-// Display link to index.php
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "extapp.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);
-

@@ -74,10 +74,11 @@ $tool_content .= action_bar(array(
 
 $boolean_field = "";
 
-$tool_content .= "<div class='row extapp'><div class='col-xs-12'>";
-$tool_content .= "<div class='form-wrapper'>";
-$tool_content .= "<form class='form-horizontal' role='form' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>";
-$tool_content .= "<fieldset>";
+$tool_content .= "
+    <div class='row extapp'><div class='col-xs-12'>
+      <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+          <fieldset>";
 
 foreach ($app->getParams() as $param) {
 
@@ -101,12 +102,19 @@ foreach ($app->getParams() as $param) {
 }
 
 $tool_content .= $boolean_field;
-$tool_content .= "<div class='form-group'>";
-$tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
-$tool_content .= "<button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
-$tool_content .= "</div>";
-$tool_content .= "</div>";
-$tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";
-$tool_content .= "</form></div></div></div>";
+$tool_content .= "
+            <div class='form-group'>
+              <div class='col-sm-offset-2 col-sm-10'>
+                <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>
+                <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>
+                <a href='extapp.php' class='btn btn-default'>$langCancel</a>
+              </div>
+            </div>
+          </fieldset>" .
+          generate_csrf_token_form_field() . "
+        </form>
+      </div>
+    </div>
+  </div>";
 
 draw($tool_content, 3, null);

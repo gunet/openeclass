@@ -22,7 +22,7 @@
  * @file quotacours.php
  * @brief Edit course quota
  */
-  
+
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
@@ -59,7 +59,7 @@ if (isset($_GET['c'])) {
             array('title' => $langBackAdmin,
                   'url' => "index.php",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));           
+                  'level' => 'primary-label')));
     }
 
 // Initialize some variables
@@ -86,7 +86,7 @@ if (isset($_POST['submit'])) {
     }
 }
 // Display edit form for course quota
-else {        
+else {
     $q = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", $_GET['c']);
     $quota_info .= $langTheCourse . " <b>" . q($q->title) . "</b> " . $langMaxQuota;
     $dq = round($q->doc_quota / MB);
@@ -96,7 +96,7 @@ else {
 
     $tool_content .= "<div class='form-wrapper'>
             <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?c=" . q($_GET['c']) . "' method='post'>
-            <fieldset>                    
+            <fieldset>
                 <div class='alert alert-info'>$quota_info</div>
                 <div class='form-group'>
                     <label class='col-sm-4 control-label'>$langLegend $langDoc:</label>
@@ -116,7 +116,8 @@ else {
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-4'>
-                        <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                        <a href='editcours.php?c=$_GET[c]' class='btn btn-default'>$langCancel</a>
                     </div>
                 </div>
             </fieldset>

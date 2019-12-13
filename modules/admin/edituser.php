@@ -113,21 +113,23 @@ if ($u) {
                 }
             }
         }
-        $tool_content .= "<div class='form-wrapper'>
-                            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-                            <fieldset>
-                            <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langEditAuthMethod:</label>
-                              <div class='col-sm-10'>" . selection($auth_names, 'auth', intval($current_auth), "class='form-control'") . "</div>
-                            </div>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <input class='btn btn-primary' type='submit' name='submit_editauth' value='$langModify'>
-                              </div>
-                            <input type='hidden' name='u' value='$u'>
-                            </fieldset>
-                            ". generate_csrf_token_form_field() ."
-                            </form>
-                            </div>";
+        $tool_content .= "
+            <div class='form-wrapper'>
+              <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
+                <fieldset>
+                  <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langEditAuthMethod:</label>
+                    <div class='col-sm-10'>" . selection($auth_names, 'auth', intval($current_auth), "class='form-control'") . "</div>
+                  </div>
+                  <div class='col-sm-offset-2 col-sm-10'>
+                    <input class='btn btn-primary' type='submit' name='submit_editauth' value='$langSubmit'>
+                    <a href='$_SERVER[SCRIPT_NAME]?u=$u' class='btn btn-default'>$langCancel</a>
+                  </div>
+                  <input type='hidden' name='u' value='$u'>
+                </fieldset>" .
+                generate_csrf_token_form_field() . "
+              </form>
+            </div>";
         draw($tool_content, 3, null, $head_content);
         exit;
     }
@@ -284,19 +286,19 @@ if ($u) {
             if ($q) {
                 if ($q->has_accepted) {
                     $icon_consent = "<i class='fa fa-check' title='$langUserHasConsent'></i>";
-                } else {                
+                } else {
                     $icon_consent = "<i class='fa fa-times' title='$langUserHasNoConsent'></i>";
                 }
             } else {
                 $icon_consent = "<i class='fa fa-minus' title='$langUserConsentUnknown'></i>";
-            }             
-            $tool_content .= 
+            }
+            $tool_content .=
             "<div class='form-group'>
                 <label class='col-sm-2 control-label'>$langUserHasConsent:</label>
                 <div class='col-sm-10'><p class='form-control-static'>$icon_consent</p></div>
             </div>";
         }
-        
+
         $tool_content .= "<div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserID: </label>
           <div class='col-sm-10'><p class='form-control-static'>$u</p></div>
@@ -332,7 +334,8 @@ if ($u) {
         <input type='hidden' name='u_submitted' value='1' />
         <input type='hidden' name='registered_at' value='" . $info->registered_at . "' />
         <div class='col-sm-offset-2 col-sm-10'>
-	    <input class='btn btn-primary' type='submit' name='submit_edituser' value='$langModify' />
+	    <input class='btn btn-primary' type='submit' name='submit_edituser' value='$langSubmit' />
+	    <a href='$_SERVER[SCRIPT_NAME]?u=$u' class='btn btn-default'>$langSubmit</a>
         </div>
         </fieldset>
         ". generate_csrf_token_form_field() ."

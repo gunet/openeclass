@@ -91,9 +91,9 @@ else {
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-3'>";
     $tool_content .= form_buttons(array(
         array(
-            'text' => $langModify,
+            'text' => $langSubmit,
             'name' => 'submit',
-            'value'=> $langModify
+            'value'=> $langSubmit
         ),
         array(
             'href' => "extapp.php"
@@ -121,4 +121,3 @@ else {
 }
 
 draw($tool_content, 3, null, $head_content);
-

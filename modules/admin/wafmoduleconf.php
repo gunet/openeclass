@@ -51,11 +51,18 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='alert alert-success'>$langWafUpdated</div>";
 } // end of if($submit)
 else {
+    $tool_content .= action_bar([
+        [ 'title' => $langBack,
+          'url' => 'extapp.php',
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ]]);
+
     $connectorOptions = array_map(function($connectorClass) {
         $connector = new $connectorClass();
         $selected = q(get_config('awaf_connector')) == $connectorClass ? " selected='selected'" : '';
         return "<option value='$connectorClass'$selected>".$connector->getName()."</option>";
     }, $connectorClasses);
+
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
                 <fieldset><legend>$langBasicCfgSetting</legend>
 	 <table class='table table-bordered' width='100%'>
@@ -70,31 +77,35 @@ else {
         foreach($connector->getConfigFields() as $curField => $curLabel) {
             $enabled = get_config($curField);
             if(!$enabled || $enabled == 0){
-                $checked = "";
-                $notchecked = " checked='true' ";
+                $checked = '';
+                $notchecked = 'checked';
             }else{
-                $checked = " checked='true' ";
-                $notchecked = "";
+                $checked = 'checked';
+                $notchecked = '';
             }
             $tool_content .= "
               <tr class='connector-config connector-$curConnectorClass' style='display: none;'>
                 <th width='200' class='left'><b>Rule ".q($curLabel)."</b><br><br><var>Impact: ".q($rules[$curField]['impact'])."</var></th>
                 <td><input class='FormData_InputText' type='text' name='form$curField' disabled='disabled' size='80'  value='" . q($rules[$curField]['rule']). "'>
                 <input class='FormData_InputText' type='text' name='form$curField' disabled='disabled' size='80' value='" . q($rules[$curField]['description']). "'></td>
-                <td>  
-                <label class='col-sm-3 control-label'>$langActivate:</label>
-                    <br>
-                    <div class='col-sm-9 radio'><label><input  type='radio' id='$curField' name='$curField' " . $notchecked ." value='0'>$langNo</label></div>
-                    <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='$curField' name='$curField' " . $checked ." value='1'>$langYes</label></div>
+                <td>
+                <label class='control-label'>$langActivate:</label>
+                  <div class='radio'>
+                    <label><input type='radio' id='$curField' name='$curField' $notchecked value='0'>$langNo</label>
+                    <label><input type='radio' id='$curField' name='$curField' $checked value='1'>$langYes</label>
+                  </div>
                 </td>
               </tr>";
         }
     }
-    $tool_content .= "</table></fieldset>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'>". generate_csrf_token_form_field() ."</form>";
-
-    $head_content .= "
-        <script type='text/javascript'>
+    $tool_content .= "
+            </table>
+          </fieldset>
+          <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+          <a href='extapp.php' class='btn btn-default'>$langCancel</a>" .
+          generate_csrf_token_form_field() . "
+        </form>
+        <script>
         function update_connector_config_visibility() {
             $('tr.connector-config').hide();
             $('tr.connector-config input').removeAttr('required');
@@ -110,11 +121,4 @@ else {
         </script>";
 }
 
-// Display link to index.php
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "extapp.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);
-

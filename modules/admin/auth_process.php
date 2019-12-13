@@ -233,7 +233,7 @@ if (isset($_POST['submit'])) {
     $tool_content .= "
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
-                        <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                         <a class='btn btn-default' href='auth.php'>$langCancel</a>
                     </div>
                 </div>
@@ -286,4 +286,3 @@ function pack_settings($settings) {
     }
     return implode('|', $items);
 }
-
