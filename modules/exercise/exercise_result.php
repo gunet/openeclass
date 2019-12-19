@@ -90,7 +90,9 @@ load_js('tools.js');
 
 if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
-    $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
+    $exercise_user_record = Database::get()->querySingle("SELECT *, DATE_FORMAT(record_start_date, '%Y-%m-%d %H:%i') AS record_start_date,
+                                                                      TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration 
+                                                                    FROM exercise_user_record WHERE eurid = ?d", $eurid);
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id
                                                         FROM exercise_answer_record WHERE eurid = ?d", $eurid);
     $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
@@ -204,6 +206,11 @@ if (isset($user)) { // user details
     if ($showScore) {
         $tool_content .= "<h5>$langYourTotalScore: <span id='total_score'><strong>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong></h5>";
     }
+    $tool_content .= "<h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>";
+    $tool_content .= "<h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>";
+    /*if ($exerciseAttemptsAllowed > 0) {
+        $tool_content .= "<h5>$langAttempt: <em>$exerciseAttemptsAllowed</em></h5>";
+    }*/
     $tool_content .= "</div>";
 }
 
@@ -261,6 +268,8 @@ if (count($exercise_question_ids) > 0) {
         $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
         $question_graded = is_null($question_weight) ? FALSE : TRUE;
 
+        $tool_content .= "<div class='panel'>";
+        $tool_content .= "<div class='panel-body'>";
         $tool_content .= "
             <table class='table ".(($question_graded)? 'graded' : 'ungraded')."'>
             <tr class='active'>
@@ -506,6 +515,7 @@ if (count($exercise_question_ids) > 0) {
         }
 
         $tool_content .= "</table>";
+        $tool_content .= "</div></div>";
 
         $totalScore += $questionScore;
         $totalWeighting += $questionWeighting;
