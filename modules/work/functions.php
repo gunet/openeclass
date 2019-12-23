@@ -141,6 +141,48 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
     return $return;
 }
 
+//function delete gia pinaka assignment_grade_review, to delete ginetai apo ton kathhghth
+function delete_submissions($id) {
+
+	$return = '';
+	$res = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
+	if ($res){
+		$return = "Οι εργασίες ανατέθηκαν σε χρήστες. Διαγράφτηκαν οι παλιές αναθέσεις.";
+	}
+	else{
+		$return = "Οι εργασίες ανατέθηκαν.";
+	}
+	foreach ($res as $row) {
+		Database::get()->query("DELETE FROM  assignment_grading_review WHERE assignment_id = ?d ", $id);
+	}
+	return $return;
+}
+
+
+//$del_submission_msg = delete_submissions_by_quserid($quserid, -1, $sid, $grade);
+/*function delete_submissions_by_quserid($uid, $sid, $gid) {
+
+	global $m;
+	$res = Database::get()->queryArray("SELECT id, grade,id_assignment_submit, assignment_id, user_id,gid FROM assignment_grading_review WHERE id_assignment_submit = ?d AND user_id = ?d ", $sid, $uid);
+	foreach ($res as $row) {
+		Database::get()->query("DELETE FROM  assignment_grading_review WHERE id = ?d", $row->id);
+        /*if ($row->grade != $grade) {
+            @unlink("$GLOBALS[workPath]/$row->file_path");
+        }*/
+        //$ass_cid = Database::get()->querySingle("SELECT id FROM assignment_submit WHERE id = ?d", $sid)->id;
+      //  Database::get()->query("DELETE FROM  assignment_grading_review WHERE id = ?d", $row->id)
+		//triggerGame($row->assignment_id, $row->uid, $id);
+		//if ($GLOBALS['uid'] == $row->user_id) {
+		/*if (gid != 1 ){
+			$return .= $m['deleted_work_by_user'];//den emfanizoun mnm na ta ksana dw
+		} else {
+			$return .= $m['deleted_work_by_group'];
+		}
+		//$return .= ' "<i>' . q($row->grade) . '</i>". ';
+	}
+    return $return;
+}*/
+
 // Find submissions by a user (or the user's groups)
 function find_submissions($is_group_assignment, $uid, $id, $gids) {
 
@@ -280,6 +322,7 @@ function show_submission_details($id) {
         $notice = $GLOBALS['langSubmitted'];
     }
 
+    //Κατάσταση υποβολής εργασίας από ομάδες
     if ($sub->uid != $uid) {
         $notice .= "<br>$m[submitted_by_other_member] " .
                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
