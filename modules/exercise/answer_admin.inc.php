@@ -205,7 +205,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 }
             } else {
                 // a bad answer can't have a positive weighting
-                $weighting[$i] = abs(fix_float($_POST['weighting'][$i]));
+                $weighting[$i] = -abs(fix_float($_POST['weighting'][$i]));
             }
             // checks if field is empty
             if (!isset($_POST['reponse'][$i]) || ($_POST['reponse'][$i] === '')) {
