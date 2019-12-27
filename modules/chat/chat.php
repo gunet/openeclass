@@ -181,11 +181,18 @@ if (!$conference_activity) {
     $laSessionId = false;
     $laSessionToken = false;
     $colmooc_teacher_la_url = null;
+    $colmooc_student_la_url = null;
     if ($is_editor && $conference_agent && $agent_id && !isset($_GET['create_agent']) && !isset($_GET['edit_agent'])) {
         list($laSessionId, $laSessionToken) = colmooc_add_teacher_lasession();
         if ($laSessionId && $laSessionToken) {
             // Redirect teacher to colMOOC learning analytics
             $colmooc_teacher_la_url = $colmoocapp->getParam(ColmoocApp::ANALYTICS_URL)->value() . "/?lasession_id=" . $laSessionId . "&lasession_token=" . $laSessionToken;
+        }
+    } else if (!$is_editor && $conference_agent && $agent_id) {
+        list($laSessionId, $laSessionToken) = colmooc_add_student_lasession();
+        if ($laSessionId && $laSessionToken) {
+            // Redirect student to colMOOC learning analytics
+            $colmooc_student_la_url = $colmoocapp->getParam(ColmoocApp::ANALYTICS_URL)->value() . "/?lasession_id=" . $laSessionId . "&lasession_token=" . $laSessionToken;
         }
     }
 
@@ -222,6 +229,11 @@ if (!$conference_activity) {
             'level' => 'primary-label',
             'button-class' => 'btn-success studentChat',
             'show' => !$is_editor && $sessionId && $sessionToken),
+        array('title' => $langLearningAnalytics,
+            'url' => '#',
+            'level' => 'primary-label',
+            'button-class' => 'btn-default studentLearningAnalytics',
+            'show' => !$is_editor && $laSessionId && $laSessionToken),
         array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
@@ -403,6 +415,10 @@ $head_content .= "<script>
         
         $('.teacherLearningAnalytics').click(function (e) {
             window.open('" . $colmooc_teacher_la_url . "', '_blank');
+        });
+        
+        $('.studentLearningAnalytics').click(function (e) {
+            window.open('" . $colmooc_student_la_url . "', '_blank');
         });
     });
     </script>";
