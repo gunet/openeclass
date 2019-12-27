@@ -288,7 +288,7 @@ function colmooc_add_student_lasession() {
     }
 
     // api add la session
-    $add_lasession_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/api/lasession/add";
+    $add_lasession_url = COLMOOC_BASE_URL . "/colmoocapi/api/lasession/add";
     $add_lasession_data = json_encode(array(array(
         "platform_id" => COLMOOC_PLATFORM_ID,
         "course_id" => $course_id,
