@@ -154,9 +154,9 @@ function count_auth_users($auth) {
  * ************************************************************** */
 function get_auth_info($auth)
 {
-    global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, 
-            $langViaShibboleth, $langViaCAS, $langViaFacebook, $langViaTwitter, 
-            $langViaGoogle, $langViaLive, $langViaYahoo, $langViaLinkedIn;            
+    global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB,
+            $langViaShibboleth, $langViaCAS, $langViaFacebook, $langViaTwitter,
+            $langViaGoogle, $langViaLive, $langViaYahoo, $langViaLinkedIn;
 
     if(!empty($auth)) {
         $title = Database::get()->querySingle('SELECT auth_title FROM auth WHERE auth_id = ?d', $auth);
@@ -396,7 +396,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
         case '5':
             try {
                 $link = new Database($settings['dbhost'], $settings['dbname'], $settings['dbuser'], $settings['dbpass']);
-            } catch(Exception $ex) {                
+            } catch(Exception $ex) {
                 break;
             }
             if ($link) {
@@ -433,22 +433,22 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
   return $testauth (boolean: true-is authenticated, false-is not)
  * ************************************************************** */
 function is_active_account($userid, $eclass_auth = true) {
-    
+
     if ($eclass_auth) {
-        if (get_config('block_duration_account')) { // user accounts never expire.        
+        if (get_config('block_duration_account')) { // user accounts never expire.
             Database::get()->query("UPDATE user SET expires_at = DATE_ADD(NOW(), INTERVAL 1 YEAR) WHERE id = ?d", $userid);
-            return 1;    
-        } 
+            return 1;
+        }
     } elseif (get_config('block_duration_alt_account')) { // user accounts never expire.
         Database::get()->query("UPDATE user SET expires_at = DATE_ADD(NOW(), INTERVAL 1 YEAR) WHERE id = ?d", $userid);
         return 1;
-    } 
+    }
     $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?d", $userid);
     if (!empty($result) && strtotime($result->expires_at) > time()) {
         return 1;
     } else {
         return 0;
-    }    
+    }
 }
 
 /* * **************************************************************
@@ -1235,7 +1235,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 }
 
 /**
- * @brief Authenticate user via Shibboleth or CAS          
+ * @brief Authenticate user via Shibboleth or CAS
  * @global type $surname
  * @global type $givenname
  * @global type $email
@@ -1249,12 +1249,12 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
  * @global type $langUserAltAuth
  * @global type $langAccountInactive1
  * @global type $langAccountInactive2
- * @param type is 'shibboleth' or 'cas' 
+ * @param type is 'shibboleth' or 'cas'
  */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
         $is_admin, $is_power_user, $is_usermanage_user,
-        $is_departmentmanage_user, $langUserAltAuth, 
+        $is_departmentmanage_user, $langUserAltAuth,
         $langAccountInactive1, $langAccountInactive2;
 
     $_SESSION['canChangePassword'] = false;
@@ -1309,27 +1309,19 @@ function shib_cas_login($type) {
                             status, email, lang, verified_mail, am
                         FROM user WHERE username $sqlLogin", $uname);
 
-    if ($info) {                
+    if ($info) {
         if (!is_active_account($info->id, false)) { // check if user is active
-            unset($_SESSION['cas_uname']);
-            unset($_SESSION['cas_email']);
-            unset($_SESSION['cas_surname']);
-            unset($_SESSION['cas_givenname']);
-            unset($_SESSION['cas_userstudentid']);
+            unset_shib_cas_session();
             $message = "$langAccountInactive1 <a href='modules/auth/contactadmin.php?userid=$info->id&amp;h=" .
                             token_generate("userid=$info->id") . "'>$langAccountInactive2</a>";
-            Session::Messages($message, 'alert-warning');            
+            Session::Messages($message, 'alert-warning');
             redirect_to_home_page();
-        }        
-        
+        }
+
         // if user found
         if ($info->password != $type) {
             // has different auth method - redirect to home page
-            unset($_SESSION['cas_uname']);
-            unset($_SESSION['cas_email']);
-            unset($_SESSION['cas_surname']);
-            unset($_SESSION['cas_givenname']);
-            unset($_SESSION['cas_userstudentid']);
+            unset_shib_cas_session();
             Session::Messages($langUserAltAuth, 'alert-danger');
             redirect_to_home_page();
         } else {
@@ -1519,12 +1511,12 @@ function resetLoginFailure() {
 function external_DB_Check_Pass($test_password, $hash, $encryption) {
     switch ($encryption) {
         case 'none':
-            return ($test_password == $hash);            
+            return ($test_password == $hash);
         case 'md5':
-            return (md5($test_password) == $hash);            
+            return (md5($test_password) == $hash);
         case 'ehasher':
             $hasher = new PasswordHash(8, false);
-            return $hasher->CheckPassword($test_password, $hash);            
+            return $hasher->CheckPassword($test_password, $hash);
         default:
             /* Maybe append an error message to tool_content, telling not supported encryption */
     }
@@ -1659,6 +1651,12 @@ function deny_access() {
     }
 }
 
+function unset_shib_cas_session () {
+    foreach (['cas_uname', 'cas_email', 'cas_surname', 'cas_givenname', 'cas_userstudentid',
+        'shib_uname', 'shib_email', 'shib_surname', 'shib_givenname', 'shib_cn', 'shib_studentid'] as $var) {
+            unset($_SESSION[$var]);
+    }
+}
 
 //function triggerGame($uid, $is_admin) {
 //    if (!$is_admin) {
