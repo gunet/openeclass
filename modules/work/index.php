@@ -705,24 +705,8 @@ function add_assignment() {
 			$v->rule('error', array('WorkStart_review'));*/
 			$v->rule('min',array('WorkStart_review'), 'μεγαλύτερη από την υποβολή');
 			$v->labels(array('WorkStart_review' => "Η ημερομηνία Έναρξης αξιολόγησης "));
-			//$v->rule('min',array('WorkEnd'), 'WorkStart_review');
-			//$v->labels(array('WorkEnd' => "Το πεδίο Λήξη αξιολόγησης"));
 		}
-	/*	if (isset($_POST['WorkStart_review'])){
-			$v->rule('required', array('WorkStart_review'));
-			$v->labels(array('WorkStart_review' => "Το πεδίο Έναρξη αξιολόγησης"));
-		}
-		if (isset($_POST['WorkEnd_review'])){
-			$v->rule('required', array('WorkEnd_review'));
-			$v->labels(array('WorkEnd_review' => "Το πεδίο Λήξη αξιολόγησης"));
-		}*/
 	}
-
-	/*if (isset($_POST['rubric_review'])){
-		$v->rule('required', array('reviews'));
-        $v->rule('numeric', array('reviews'));
-        $v->labels(array('reviews' => "Το πεδίο ρουμπρίκα"));
-	}*/
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
         $title = $_POST['title'];
@@ -956,13 +940,17 @@ function edit_assignment($id) {
 		$v->rule('required', array('WorkEnd'));
 		$v->labels(array('WorkEnd' => "Το πεδίο Προθεσμία υποβολής"));
 
-		if ( isset($_POST['WorkStart_review'] ) > isset($_POST['WorkEnd']) )  {
+		/*if ( isset($_POST['WorkStart_review'] ) > isset($_POST['WorkEnd']) )  {
 			/*$v->addRule('error', 'error', $langrevnvalid);
 			$v->rule('error', array('WorkStart_review'));*/
-			$v->rule('min',array('WorkStart_review'), 'μεγαλύτερη από την υποβολή');
-			$v->labels(array('WorkStart_review' => "Η ημερομηνία Έναρξης αξιολόγησης "));
+			//$v->rule('min',array('WorkStart_review'), 'μεγαλύτερη από την υποβολή');
+			//$v->labels(array('WorkStart_review' => "Η ημερομηνία Έναρξης αξιολόγησης "));
 			//$v->rule('min',array('WorkEnd'), 'WorkStart_review');
 			//$v->labels(array('WorkEnd' => "Το πεδίο Λήξη αξιολόγησης"));
+		//}
+		if ( $_POST['WorkStart_review']  < $_POST['WorkEnd'] ) {
+			$v->rule('min',array('WorkStart_review'), 'μεγαλύτερη από την υποβολή');
+			$v->labels(array('WorkStart_review' => "Η ημερομηνία Έναρξης αξιολόγησης "));
 		}
 	}
 
@@ -985,11 +973,11 @@ function edit_assignment($id) {
         if (isset($_POST['scale'])) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
-        }
-		/*elseif (isset($_POST['reviews_per_user']) && isset($_POST['rubric_review']) )  {
+        }elseif (isset($_POST['rubric_review']) && $reviews_per_user ){
             $max_grade = max_grade_from_rubric($_POST['rubric_review']);
             $grading_scale_id = $_POST['rubric_review'];
-        }*/elseif (isset($_POST['rubric'])) {
+        }
+		elseif (isset($_POST['rubric']) ){
             $max_grade = max_grade_from_rubric($_POST['rubric']);
             $grading_scale_id = $_POST['rubric'];
         } elseif (isset($_POST['max_grade'])) {
@@ -2765,14 +2753,16 @@ function show_edit_assignment($id) {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
                     $('input#'+dateType).prop('disabled', false);
-                    if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', false);
+                    //if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', false); 
                     $('#late_sub_row').removeClass('hide');
                 } else {
                     $('input#'+dateType).prop('disabled', true);
-                    if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', true);
+                    //if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', true);
                     $('#late_sub_row').addClass('hide');
+					
                 }
             });
+			
             $('#enableWorkFeedbackRelease').change(function() {
                 if($(this).prop('checked')) {
                     $('input#tii_feedbackreleasedate').prop('disabled', false);
@@ -2785,10 +2775,8 @@ function show_edit_assignment($id) {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
                     $('input#'+dateType).prop('disabled', false);
-                   // $('#late_sub_row').removeClass('hide');
                 } else {
                     $('input#'+dateType).prop('disabled', true);
-                   // $('#late_sub_row').addClass('hide');
                 }
             });	
 			
@@ -3758,27 +3746,37 @@ function show_student_assignment($id) {
             } else {
                 //emfanizei mono thn forma ypovolhs
                 show_submission_form($id, $user_group_info, false, $submissions_exist);
+
             }
         }
         //h sunarthhsh theloume na kaleitai an einai peer review kai an exei upovalei ergasia o foithths
         //dhladh an einai true h $submissions_exist
 		$ass = Database::get()->querySingle("SELECT * FROM assignment_submit
                                  WHERE assignment_id = ?d AND uid = ?d ", $id, $uid);
+		$rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
+                                 WHERE assignment_id = ?d ", $id);
         if ($row->grading_type == 3 && $submissions_exist && $ass){
-			if ($row->reviews_per_assignment < $count_of_assign ){
-				if ( $row->start_date_review < $cdate ) { //!empty( $row->start_date_review)
-
+			if ( $row->start_date_review < $cdate ) {
+				if ($row->reviews_per_assignment < $count_of_assign && $rows ){
 					show_assignment_review($id);
-				}
-				//if ( $row->start_date_review  $cdate )
-				else
-				{
-						//auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
-					$start_date_review = nice_format($row->start_date_review, TRUE); //hmeromhnia enarkshs aksiologhshs
+				}elseif ($row->reviews_per_assignment < $count_of_assign && empty($rows)){
 					$tool_content .= "
-						<p class='sub_title1'></p>
-						<div class='alert alert-warning'>Αναμένονται εργασίες για αξιολόγηση.</div>";
+					<p class='sub_title1'></p>
+					<div class='alert alert-warning'>Δεν θα γίνει αξιολόγηση.</div>";
 				}
+				elseif ($row->reviews_per_assignment > $count_of_assign ){
+					$tool_content .= "
+					<p class='sub_title1'></p>
+					<div class='alert alert-warning'>Δεν θα γίνει αξιολόγηση.</div>";
+				}
+			}
+			else
+			{
+				//auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
+				$start_date_review = nice_format($row->start_date_review, TRUE); //hmeromhnia enarkshs aksiologhshs
+				$tool_content .= "
+					<p class='sub_title1'></p>
+					<div class='alert alert-warning'>Αναμένονται εργασίες για αξιολόγηση.</div>";
 			}
         }
     } else {
@@ -4478,11 +4476,9 @@ function assignment_details($id, $row, $x =false) {
                 </div>
             </div> ";
         }
-
-		//$user = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE assignment_id = ?d AND uid = ?d", $id, $uid);
 		$review_per_assignment = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d", $id)->reviews_per_assignment;
-		$counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $id)->count;
-		if ($grade_type == 3 && !$x && $counter > $review_per_assignment ){
+		//$counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $id)->count;
+		if ($grade_type == 3 && !$x){
 			$tool_content .= "
 				<div class='row margin-bottom-fat'>
 					<div class='col-sm-3'>
@@ -4633,56 +4629,62 @@ function show_assignment($id, $display_graph_results = false) {
                     $subContentGroup = '';
                 }
 
-				//status aksiologhshs kathe foithth
 			    // $cdate = date('Y-m-d H:i:s')
 				$mess = '';
-				if ($assign->grading_type == 3){
-					if ( $cdate > $assign->start_date_review){
-						$assigns = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid);
-						$r_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid)->count;
-						$counter = 0;
-						foreach ($assigns as $ass){
-							if ( empty($ass->grade) ){
-								$counter++;
-							}
-						}
-						if ($counter == 0){
-							$mess = '<span style="color:#32CD32;"> <small>Η αξιολόγηση ολοκληρώθηκε</small></span>';
-						}elseif ($counter < $r_count){
-							$mess = '<span style="color:#FFD700;"> <small>Η αξιολόγηση δεν έχει ολοκληρωθεί</small></span>';
-						}else{
-							$mess = '<span style="color:#FF0000;"> <small>Εκκρεμεί αξιολόγηση</small></span>';
-						}
-					}
+				if ($assign->grading_type == 3 ){
 					$grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
 					$condition ='';
-					if ($cdate > $assign->due_date_review){
-						//select tous vathmous ths kathe upovolhs kai vres ton mo kai topothethse ton sto pedio
-						$grades= Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id = ?d", $row->id);
-						$count_grade = 0;
-						$sum = 0;
-						$grade_review = '';
-						foreach ($grades as $as){
-							if ($as->grade){
-								$count_grade++;
+					$rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
+                                 WHERE assignment_id = ?d ", $id);
+					if( $count_of_assignments > $assign->reviews_per_assignment && $rows){
+						//status aksiologhshs kathe foithth
+						if ( $cdate > $assign->start_date_review){
+							$assigns = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid);
+							$r_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid)->count;
+							$counter = 0;
+							foreach ($assigns as $ass){
+								if ( empty($ass->grade) ){
+									$counter++;
+								}
 							}
-							if ($count_grade == $assign->reviews_per_assignment){
-								$condition = "<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
+							if ($counter == 0){
+								$mess = '<span style="color:#32CD32;"> <small>Η αξιολόγηση ολοκληρώθηκε</small></span>';
+							}elseif ($counter < $r_count){
+								$mess = '<span style="color:#FFD700;"> <small>Η αξιολόγηση δεν έχει ολοκληρωθεί</small></span>';
 							}else{
-								$condition = "<span class='fa fa-fw fa-times text-danger' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
+								$mess = '<span style="color:#FF0000;"> <small>Εκκρεμεί αξιολόγηση</small></span>';
 							}
-							$sum = $sum + $as->grade;
 						}
-						if ($sum != 0){
-							$grade = $sum / $count_grade;
+						//grade_field pedio
+						if ($cdate > $assign->due_date_review){
+							//select tous vathmous ths kathe upovolhs kai vres ton mo kai topothethse ton sto pedio
+							$grades= Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id = ?d", $row->id);
+							$count_grade = 0;
+							$sum = 0;
+							$grade_review = '';
+							foreach ($grades as $as){
+								if ($as->grade){
+									$count_grade++;
+								}
+								if ($count_grade == $assign->reviews_per_assignment){
+									//$condition = "<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='Αξιολόγηση'></span>";
+									$condition = "<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
+								}else{
+									$condition = "<span class='fa fa-fw fa-times text-danger' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
+								}
+								$sum = $sum + $as->grade;
+							}
+							if ($sum != 0){
+								$grade = $sum / $count_grade;
 
-							if (is_float($grade)){
-								$grade_review = number_format($grade,1);
-							}else{
-								$grade_review = $grade;
+								if (is_float($grade)){
+									$grade_review = number_format($grade,1);
+								}else{
+									$grade_review = $grade;
+								}
 							}
+							$grade_review_field = "<input class='form-control' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
 						}
-						$grade_review_field = "<input class='form-control' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
 					}
 				}
                 $name = empty($row->group_id) ? display_user($row->uid) : display_group($row->group_id);
