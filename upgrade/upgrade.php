@@ -2113,6 +2113,35 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // fix wrong entries in exercises answers regarding negative weight (if any)
     Database::get()->query("UPDATE exercise_answer SET weight=-ABS(weight) WHERE correct=0 AND weight>0");
 
+    // peer review
+    if (!DBHelper::fieldExists('assignment', 'reviews_per_assignment')) {
+        Database::get()->query("ALTER TABLE assignment ADD `reviews_per_assignment` INT(4) DEFAULT NULL");
+    }
+    if (!DBHelper::fieldExists('assignment', 'start_date_review')) {
+        Database::get()->query("ALTER TABLE assignment ADD `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
+    }
+    if (!DBHelper::fieldExists('assignment', 'due_date_review')) {
+        Database::get()->query("ALTER TABLE assignment ADD `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
+    }
+
+    if (!DBHelper::tableExists('assignment_grading_review')) {
+        Database::get()->query("CREATE TABLE `assignment_grading_review` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `assignment_id` INT(11) NOT NULL,
+            `user_submit_id` INT(11) NOT NULL,
+            `user_id` INT(11) NOT NULL,
+            `file_path` VARCHAR(200) NOT NULL,
+            `file_name` VARCHAR(200) NOT NULL,
+            `submission_text` MEDIUMTEXT,
+            `submission_date` DATETIME NOT NULL,
+            `gid` INT(11) NOT NULL,
+            `users_id` INT(11) NOT NULL,
+            `grade` FLOAT DEFAULT NULL,
+            `comments` TEXT,
+            `date_submit` DATETIME DEFAULT NULL,
+            `rubric_scales` TEXT) $tbl_options");
+    }
+
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
 

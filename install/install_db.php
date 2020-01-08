@@ -969,7 +969,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `tii_use_biblio_exclusion` TINYINT NOT NULL DEFAULT '0',
     `tii_use_quoted_exclusion` TINYINT NOT NULL DEFAULT '0',
     `tii_exclude_type` VARCHAR(20) NOT NULL DEFAULT 'none',
-    `tii_exclude_value` INT(11) NOT NULL DEFAULT '0') $tbl_options");
+    `tii_exclude_value` INT(11) NOT NULL DEFAULT '0',
+    `reviews_per_assignment` int(4) DEFAULT NULL,
+    `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -990,6 +993,23 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
     `group_id` INT( 11 ) DEFAULT NULL,
     `auto_judge_scenarios_output` TEXT) $tbl_options");
+
+// assignment peer review
+$db->query("CREATE TABLE `assignment_grading_review` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `assignment_id` INT(11) NOT NULL,
+    `user_submit_id` INT(11) NOT NULL,
+    `user_id` INT(11) NOT NULL,
+    `file_path` VARCHAR(200) NOT NULL,
+    `file_name` VARCHAR(200) NOT NULL,
+    `submission_text` MEDIUMTEXT,
+    `submission_date` DATETIME NOT NULL,
+    `gid` INT(11) NOT NULL,
+    `users_id` INT(11) NOT NULL,
+    `grade` FLOAT DEFAULT NULL,
+    `comments` TEXT,
+    `date_submit` DATETIME DEFAULT NULL,
+    `rubric_scales` TEXT) $tbl_options");
 
 // grading scales table
 $db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
