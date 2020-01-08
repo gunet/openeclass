@@ -2110,6 +2110,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
+    // fix wrong entries in exercises answers regarding negative weight (if any)
+    Database::get()->query("UPDATE exercise_answer SET weight=-ABS(weight) WHERE correct=0 AND weight>0");
+
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
 
