@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2020  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,13 +31,9 @@ if (!isset($require_login)) {
 
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
-/* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
-$action = new action();
-$action->record(MODULE_ID_DOCS);
-
-require_once 'doc_init.php';
-require_once 'doc_metadata.php';
+require_once 'modules/document/doc_init.php';
+require_once 'modules/document/doc_metadata.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
@@ -49,6 +45,9 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
 require_once 'modules/drives/clouddrive.php';
 require_once 'include/course_settings.php';
+
+$action = new action();
+$action->record(MODULE_ID_DOCS);
 
 $require_help = true;
 $helpTopic = 'documents';
@@ -163,7 +162,6 @@ if (isset($_GET['mindmap'])) {
     redirect_to_home_page("modules/mindmap/index.php");
 }
 
-
 // ---------------------------
 // mindmap screenshot save
 // ---------------------------
@@ -212,12 +210,11 @@ if (isset($_POST['imgBase64'])) {
     exit;
 }
 
-
 // ---------------------------
 // download directory or file
 // ---------------------------
 if (isset($_GET['download'])) {
-    $downloadDir = $_GET['download'];
+    $downloadDir = getDirectReference($_GET['download']);
 
     if ($downloadDir == '/') {
         $format = '.dir';
@@ -792,6 +789,7 @@ if ($can_upload or $user_upload) {
                 'filename' => $res->filename,
                 'comment' => $_POST['file_comment'],
                 'title' => $_POST['file_title']));
+            }
             $curDirPath = my_dirname($commentPath);
             Session::Messages($langComMod, 'alert-success');
             redirect_to_current_dir();
@@ -1067,7 +1065,7 @@ if ($curDirPath) {
     }
 }
 
-/* * * Retrieve file info for current directory from database and disk ** */
+// Retrieve file info for current directory from database and disk
 $result = Database::get()->queryArray("SELECT id, path, filename,
         format, title, extra_path, course_id, date_modified,
         public, visible, editable, copyrighted, comment, lock_user_id,
