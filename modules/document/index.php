@@ -1075,7 +1075,7 @@ $result = Database::get()->queryArray("SELECT id, path, filename,
           path LIKE ?s AND
           path NOT LIKE ?s $filter $order",
     "$curDirPath/%", "$curDirPath/%/%");
-$fileinfo = array();
+$dirs = $files = [];
 foreach ($result as $row) {
     $is_dir = $row->format == '.dir';
     if ($real_path = common_doc_path($row->extra_path, true)) {
@@ -1458,4 +1458,3 @@ function newPageFileName($uploadPath, $prefix, $suffix) {
         preg_quote($prefix) . '[0-9]+' . preg_quote($suffix))->newPageId;
     return $prefix . $newId . $suffix;
 }
-
