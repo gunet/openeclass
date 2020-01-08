@@ -145,6 +145,10 @@ function show_edit_form($id, $sid, $assign) {
            $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName, $langDeleteSubmission;
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
+	$count_of_ass = Database::get()->querySingle("SELECT COUNT(*) FROM assignment_submit WHERE id = ?d", $id);
+
+	///$reviews_per_ass = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d",$id)->reviews_per_assignment;
+	$reviews_per_ass = Database::get()->querySingle('SELECT reviews_per_assignment FROM assignment WHERE id = ?d ', $id)->reviews_per_assignment;
     if ($sub) {
 		if ($grading_type == 3 ) {
 			$cdate = date('Y-m-d H:i:s');
@@ -166,151 +170,157 @@ function show_edit_form($id, $sid, $assign) {
 				//tha emfanistoun oi ergasies
 				//$tool_content .= "<input type='' name='assign' value='$id'>";
 				//$tool_content .= "<input type='' name='assign' value='$sid'>";
-				$tool_content .= action_bar(array(
-					array(
-						'title' => $langBack,
-						'url' => "index.php?course=$course_code&id=$sub->assignment_id",
-						'icon' => "fa-reply",
-						'level' => 'primary-label'
-					)
-				))."";
-				$ass = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id =?d ", $sid);
-				//$tool_content .= "<input type='' name='gra' value='$sub->id' />";
-				foreach($ass AS $row){
-					$uid_2_name = display_user($row->users_id);
-					$grade = Session::has('grade') ? Session::get('grade') : $row->grade;
-					$comments = Session::has('comments') ? Session::get('comments') : q($row->comments);
-					$pageName = $m['addgradecomments'];
-					//roubrika
-					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
-					$criteria = unserialize($rubric->scales);
-					//$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
-					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d ", $row->id);
-					$sel_criteria = unserialize($submitted_grade->rubric_scales);
-					$criteria_list = "";
-					//Session::Messages("<pre>".print_r($criteria,true)."</pre><pre>-".print_r($sel_criteria,true)."</pre>", 'alert-danger');
-					foreach ($criteria as $ci => $criterio ) {
-						$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
-						if(is_array($criterio['crit_scales'])){
-							$criteria_list .= "<li><ul class='list-unstyled'>";
-							foreach ($criterio['crit_scales'] as $si=>$scale) {
-								$selectedrb = ($sel_criteria[$ci]==$si?"checked=\"checked\"":"");
-								$criteria_list .= "<li class='list-group-item'>
-								<input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
-								$scale[scale_item_name] ( $scale[scale_item_value] )
-								</li>";
+				$rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
+                                 WHERE assignment_id = ?d ", $id);
+				if ($reviews_per_ass < $count_of_ass && $rows){
+					$tool_content .= action_bar(array(
+						array(
+							'title' => $langBack,
+							'url' => "index.php?course=$course_code&id=$sub->assignment_id",
+							'icon' => "fa-reply",
+							'level' => 'primary-label'
+						)
+					))."";
+					$ass = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id =?d ", $sid);
+					//$tool_content .= "<input type='' name='gra' value='$sub->id' />";
+					foreach($ass AS $row){
+						$uid_2_name = display_user($row->users_id);
+						$grade = Session::has('grade') ? Session::get('grade') : $row->grade;
+						$comments = Session::has('comments') ? Session::get('comments') : q($row->comments);
+						$pageName = $m['addgradecomments'];
+						//roubrika
+						$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
+						$criteria = unserialize($rubric->scales);
+						//$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
+						$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d ", $row->id);
+						$sel_criteria = unserialize($submitted_grade->rubric_scales);
+						$criteria_list = "";
+						//Session::Messages("<pre>".print_r($criteria,true)."</pre><pre>-".print_r($sel_criteria,true)."</pre>", 'alert-danger');
+						foreach ($criteria as $ci => $criterio ) {
+							$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
+							if(is_array($criterio['crit_scales'])){
+								$criteria_list .= "<li><ul class='list-unstyled'>";
+								foreach ($criterio['crit_scales'] as $si=>$scale) {
+									$selectedrb = ($sel_criteria[$ci]==$si?"checked=\"checked\"":"");
+									$criteria_list .= "<li class='list-group-item'>
+									<input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
+									$scale[scale_item_name] ( $scale[scale_item_value] )
+									</li>";
+								}
+								$criteria_list .= "</ul></li>";
+
 							}
-							$criteria_list .= "</ul></li>";
-
 						}
-					}
-					$grade_field = "<div class='col-sm-9' id='myModalLabel'><h5>$rubric->name</h5>
-                            <table class='table-default'>
-                            <tr>
-                                <td>
-                                    <ul class='list-unstyled'>
-                                        $criteria_list
-                                    </ul>
-                                </td>
-                            </tr>
-                            </table>
-                            </div>";
+						$grade_field = "<div class='col-sm-9' id='myModalLabel'><h5>$rubric->name</h5>
+								<table class='table-default'>
+								<tr>
+									<td>
+										<ul class='list-unstyled'>
+											$criteria_list
+										</ul>
+									</td>
+								</tr>
+								</table>
+								</div>";
 
-					/*if ($row->date_submit)
-					{
+						/*if ($row->date_submit)
+						{
 
-					}*/
-					/*$tool_content .= action_bar(array(
-							array(
-								'title' => $langBack,
-								'url' => "index.php?course=$course_code&id=$sub->assignment_id",
-								'icon' => "fa-reply",
-								'level' => 'primary-label'
-							)
-						))."*/
-					//sxolia me pedio text
-					/*<div class='form-group'>
-								<label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
-								<div class='col-sm-9'>
-									< class='form-control' rows='3' name='comments'  id='comments'>$row->comments</textarea>
-								</div>
-							</div>*/
-					if($cdate > $assign->due_date_review && empty($row->grade) ){
-						$message = '<span style="color:#ff0000;text-align:center;">(Δεν βαθμολόγησε)</span>';
-					}
-					else{
-						$message = '';
-					}
+						}*/
+						/*$tool_content .= action_bar(array(
+								array(
+									'title' => $langBack,
+									'url' => "index.php?course=$course_code&id=$sub->assignment_id",
+									'icon' => "fa-reply",
+									'level' => 'primary-label'
+								)
+							))."*/
+						//sxolia me pedio text
+						/*<div class='form-group'>
+									<label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
+									<div class='col-sm-9'>
+										< class='form-control' rows='3' name='comments'  id='comments'>$row->comments</textarea>
+									</div>
+								</div>*/
+						if($cdate > $assign->due_date_review && empty($row->grade) ){
+							$message = '<span style="color:#ff0000;text-align:center;">(Δεν βαθμολόγησε)</span>';
+						}
+						else{
+							$message = '';
+						}
 
-					$tool_content .= "
-					<div class='form-wrapper'>
-						<form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
-						<input type='hidden' name='assignment' value='$id' />
-						<input type='hidden' name='submission' value='$row->id' />
-							
-						<a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id'>
-							<span class='fa fa-fw fa-times text-danger' data-original-title='Διαγραφή αξιολόγησης' title='' data-toggle='tooltip'></span>
-						</a>
-						<fieldset>
-							<div class='form-group'>
-								<label class='col-sm-3 control-label'>$m[username]:</label>
-								<div class='col-sm-9'>
-								$uid_2_name &nbsp $message     
-								</div>
-							</div>
-							
-							<div class='form-group'>
-								<label class='col-sm-3 control-label'>$m[sub_date]:</label>
-								<div class='col-sm-9'>
-									<span>".q($row->date_submit)."</span>
-								</div>
-							</div>
-							<div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-								<label for='grade' class='col-sm-3 control-label'>Ρουμπρίκα:</label>                        
-								$grade_field
-								<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
-							</div>
-							<div class='form-group'>
-								<label class='col-sm-3 control-label'>Βαθμός:</label>
-								<div class='col-sm-9'>
-									<span>".q($row->grade)."</span>
-								</div>
-							</div>
-							<div class='form-group'>
-								<label class='col-sm-3 control-label'>$m[gradecomments]:</label>
-								<div class='col-sm-9'>
-									<span>".q($row->comments)."</span>
-								</div>
-							</div>						
-						</fieldset>
-						</form>		
-					</div>";
-
-				}
-				$tool_content.= "
-							<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
-								<input type='hidden' name='assignment' value='$id' />
-								<input type='hidden' name='submission' value='$sid' />
+						$tool_content .= "
+						<div class='form-wrapper'>
+							<form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
+							<input type='hidden' name='assignment' value='$id' />
+							<input type='hidden' name='submission' value='$row->id' />
+								
+							<a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id'>
+								<span class='fa fa-fw fa-times text-danger' data-original-title='Διαγραφή αξιολόγησης' title='' data-toggle='tooltip'></span>
+							</a>
+							<fieldset>
 								<div class='form-group'>
-								<div class='col-sm-9 col-sm-offset-3'>
-									<div class='checkbox'>
-										<label>
-											<input type='checkbox' value='1' id='email_button' name='email' checked>
-											$m[email_users]
-										</label>
+									<label class='col-sm-3 control-label'>$m[username]:</label>
+									<div class='col-sm-9'>
+									$uid_2_name &nbsp $message     
 									</div>
 								</div>
+								
+								<div class='form-group'>
+									<label class='col-sm-3 control-label'>$m[sub_date]:</label>
+									<div class='col-sm-9'>
+										<span>".q($row->date_submit)."</span>
+									</div>
+								</div>
+								<div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
+									<label for='grade' class='col-sm-3 control-label'>Ρουμπρίκα:</label>                        
+									$grade_field
+									<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
 								</div>
 								<div class='form-group'>
+									<label class='col-sm-3 control-label'>Βαθμός:</label>
+									<div class='col-sm-9'>
+										<span>".q($row->grade)."</span>
+									</div>
+								</div>
+								<div class='form-group'>
+									<label class='col-sm-3 control-label'>$m[gradecomments]:</label>
+									<div class='col-sm-9'>
+										<span>".q($row->comments)."</span>
+									</div>
+								</div>						
+							</fieldset>
+							</form>		
+						</div>";
+
+					}
+					$tool_content.= "
+								<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
+									<input type='hidden' name='assignment' value='$id' />
+									<input type='hidden' name='submission' value='$sid' />
+									<div class='form-group'>
 									<div class='col-sm-9 col-sm-offset-3'>
-										<input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
-										<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+										<div class='checkbox'>
+											<label>
+												<input type='checkbox' value='1' id='email_button' name='email' checked>
+												$m[email_users]
+											</label>
+										</div>
 									</div>
-								</div>
-						</form>
-						";
+									</div>
+									<div class='form-group'>
+										<div class='col-sm-9 col-sm-offset-3'>
+											<input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
+											<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+										</div>
+									</div>
+							</form>";
+				}else{
+					 $tool_content .= "
+                    <p class='sub_title1'></p>
+                    <div class='alert alert-warning'>Δεν υπάρχουν αναθέσεις</div>";
+				}
 			}
-
 		}
 
 		//an den exoyme peer_review
