@@ -722,6 +722,7 @@ function add_assignment() {
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
         $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;
+
         if (isset($_POST['scale'])) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
@@ -924,7 +925,7 @@ function edit_assignment($id) {
         $v->labels(array('max_grade' => "$langTheField $m[max_grade]"));
     }
 	//upoxrewtika pedia sthn epilogh aksiologhsh apo omotimous
-	elseif (isset($_POST['reviews_per_user'])){
+	if (isset($_POST['reviews_per_user']) and !empty($_POST['reviews_per_user'])) {
 		$v->rule('required', array('reviews_per_user'));
         $v->rule('numeric', array('reviews_per_user'));
 		$v->rule('min', array('reviews_per_user'), 3);
@@ -936,23 +937,15 @@ function edit_assignment($id) {
 		$v->rule('required', array('WorkEnd_review'));
 		$v->labels(array('WorkEnd_review' => "Το πεδίο Λήξη αξιολόγησης"));
 
-
 		$v->rule('required', array('WorkEnd'));
 		$v->labels(array('WorkEnd' => "Το πεδίο Προθεσμία υποβολής"));
 
-		/*if ( isset($_POST['WorkStart_review'] ) > isset($_POST['WorkEnd']) )  {
-			/*$v->addRule('error', 'error', $langrevnvalid);
-			$v->rule('error', array('WorkStart_review'));*/
-			//$v->rule('min',array('WorkStart_review'), 'μεγαλύτερη από την υποβολή');
-			//$v->labels(array('WorkStart_review' => "Η ημερομηνία Έναρξης αξιολόγησης "));
-			//$v->rule('min',array('WorkEnd'), 'WorkStart_review');
-			//$v->labels(array('WorkEnd' => "Το πεδίο Λήξη αξιολόγησης"));
-		//}
-		if ( $_POST['WorkStart_review']  < $_POST['WorkEnd'] ) {
+		if ($_POST['WorkStart_review'] < $_POST['WorkEnd']) {
 			$v->rule('min',array('WorkStart_review'), 'μεγαλύτερη από την υποβολή');
 			$v->labels(array('WorkStart_review' => "Η ημερομηνία Έναρξης αξιολόγησης "));
 		}
 	}
+
 
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
@@ -970,24 +963,20 @@ function edit_assignment($id) {
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
         $grade_type = $_POST['grading_type'];
-        if (isset($_POST['scale'])) {
-            $max_grade = max_grade_from_scale($_POST['scale']);
-            $grading_scale_id = $_POST['scale'];
-        }elseif (isset($_POST['rubric_review']) && $reviews_per_user ){
+        if (isset($_POST['rubric_review']) && $reviews_per_user ) {
             $max_grade = max_grade_from_rubric($_POST['rubric_review']);
             $grading_scale_id = $_POST['rubric_review'];
-        }
-		elseif (isset($_POST['rubric']) ){
+        } elseif (isset($_POST['scale'])) {
+            $max_grade = max_grade_from_scale($_POST['scale']);
+            $grading_scale_id = $_POST['scale'];
+        } elseif (isset($_POST['rubric']) ){
             $max_grade = max_grade_from_rubric($_POST['rubric']);
             $grading_scale_id = $_POST['rubric'];
         } elseif (isset($_POST['max_grade'])) {
             $max_grade = $_POST['max_grade'];
             $grading_scale_id = 0;
         }
-        /* elseif (isset($_POST['rubric_review']))  {
-            $max_grade = max_grade_from_rubric($_POST['rubric_review']);
-            $grading_scale_id = $_POST['rubric_review'];
-        }*/
+
         $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
         $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $auto_judge           = isset($_POST['auto_judge']) ? filter_input(INPUT_POST, 'auto_judge', FILTER_VALIDATE_INT) : 0;
@@ -1213,7 +1202,7 @@ function submit_work($id, $on_behalf_of = null) {
                 $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $user_id)->am;
                 if (!empty($am)) {
-                    $local_name .= $am;
+                    $local_name .= " " . $am;
                 }
                 $local_name = greek_to_latin($local_name);
             }
@@ -1392,9 +1381,9 @@ function submit_work($id, $on_behalf_of = null) {
                         $weight_sum += $curScenario['weight'];
                         $i++;
                     }
+
                     // 3 decimal digits precision
                     $grade = round($partial / $weight_sum * $max_grade, 3);
-
                     // allow an error of 0.001
                     if($max_grade - $grade <= 0.001)
                         $grade = $max_grade;
@@ -1612,7 +1601,7 @@ function new_assignment() {
 					$('#reviews_per_user')
                         .prop('disabled', false)
                         .closest('div.form-group') 
-                        .removeClass('hidden');					
+                        .removeClass('hidden');	
                 }    
             });
             $('input[name=assignment_type]').on('change', function(e) {
@@ -2582,7 +2571,7 @@ function show_edit_assignment($id) {
 					$('#reviews_per_user')
                         .prop('disabled', false)
                         .closest('div.form-group') 
-                        .removeClass('hidden');
+                        .removeClass('hidden');  
                 }});
             $('input[name=assignment_type]').on('change', function(e) {
                 var choice = $(this).val();
@@ -2840,7 +2829,6 @@ function show_edit_assignment($id) {
             $item = trim($item);
             return $item? ('<option selected>' . q($item) . '</option>'): '';
         }, $assignmentIPLock));
-
     $assignment_type = ($row->assignment_type ? $row->assignment_type : 0);
     $lti_hidden = ($assignment_type == 1) ? '' : ' hidden';
     $subtype_hidden = ($assignment_type == 1) ?  ' hidden' : '';
@@ -2857,7 +2845,6 @@ function show_edit_assignment($id) {
     foreach ($rubrics as $rubric) {
         $rubric_options .= "<option value='$rubric->id'".(($row->grading_scale_id == $rubric->id && $grading_type==2) ? " selected" : "").">$rubric->name</option>";
     }
-	//$rubic = Database::get()->queryArray('SELECT * FROM rubric WHERE course_id = ?d', $course_id);
     $rubric_option_review = '';
 	foreach ($rubrics as $rub) {
         $rubric_option_review .= "<option value='$rub->id'".(($row->grading_scale_id == $rub->id && $grading_type==3) ? " selected" : "").">$rub->name</option>";
@@ -3183,7 +3170,7 @@ function show_edit_assignment($id) {
                     <div class='col-xs-10 col-xs-offset-2'>
                         <div class='checkbox'>
                           <label>
-                            <input type='checkbox' id='late_submission' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">
+                            <input type='checkbox' id='late_submission' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '')."".($grading_type == 3 ? " disabled" : "").">
                             $m[late_submission_enable]
                           </label>
                         </div>
@@ -3238,7 +3225,7 @@ function show_edit_assignment($id) {
                         <div class='table-responsive'>
                             <table id='assignees_tbl' class='table-default ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
                             <tr class='title1'>
-                              <td id='assignees'>$langStudents</td>
+                              <td id='assignees'>$langStudents</td> 
                               <td class='text-center'>$langMove</td>
                               <td>$m[WorkAssignTo]</td>
                             </tr>
@@ -3892,11 +3879,9 @@ function show_assignment_review($id, $display_graph_results = false) {
                         <span class='help-block'>".Session::getError("grade.$row->id")."</span>
                     </div>
                 </td>
-                <td class='text-center'>
-                $icon_field
-                            
+				<td class='text-center'>
+					$icon_field          
                 </td></tr>";
-
 			$i++;
 		}
 		//end foreach
@@ -4027,7 +4012,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
             $scale_options .= "<option value='$scale[scale_item_value]'>$scale[scale_item_name]</option>";
         }
         $grade_field = "<select name='grade' class='form-control' id='scales'>$scale_options</select>";
-    } elseif($assignment->grading_type == 2) {
+    } elseif ($assignment->grading_type == 2) {
         $valuegrade = (isset($grade)) ? $grade : '';
         $grade_field = "<input class='form-control' type='text' value='$valuegrade' name='grade' maxlength='4' size='3' readonly>";
     } elseif ($assignment->grading_type == 3) {
@@ -4523,9 +4508,9 @@ function show_assignment($id, $display_graph_results = false) {
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress;
 
-    $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
-                                CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
-                                CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
+    $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time, 
+								CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
+								CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
                                 FROM assignment
                                 WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $nav[] = $works_url;
@@ -4610,7 +4595,7 @@ function show_assignment($id, $display_graph_results = false) {
             sort_link($langSurnameName, 'username');
             $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
             sort_link($m['sub_date'], 'date');
-			if ($assign->grading_type == 3 && $count_of_assignments > $assign->reviews_per_assignment){
+			if ($assign->grading_type == 3){
 				//neo pedio vathmos aksiologhshs mono gia peer review
 				sort_link('Βαθμός αξιολόγησης', '');
 			}
@@ -4823,11 +4808,11 @@ function show_assignment($id, $display_graph_results = false) {
                                     $filelink <br> $plagiarismlink
                             </td>
                             <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>";
-				if ($assign->grading_type == 3 && $count_of_assignments > $assign->reviews_per_assignment){
+				if ($assign->grading_type == 3 ){
 					$tool_content .="<td width='5' class='text-center'>
-										<div class='form-group'>											
-											$grade_review_field
-											$condition											
+										<div class='form-group'>
+                                            $grade_review_field
+											$condition
 										</div>
 									</td>";
 				}
@@ -5108,21 +5093,20 @@ function show_student_assignments() {
     } else {
         $gids_sql_ready = "''";
     }
-
+    //to time exei mia tetoia morgh 261788726178872617887-5356113
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                FROM assignment WHERE course_id = ?d
+                FROM assignment WHERE course_id = ?d 
                     AND active = '1' AND
                     (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
-                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
-                            UNION
+                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d 
+                            UNION 
                         SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                     )
-                ORDER BY
-                CASE
-                    WHEN deadline IS NULL THEN 1 ELSE 0
+                ORDER BY                  
+                CASE 
+                    WHEN deadline IS NULL THEN 1 ELSE 0 
                 END, title
                 ", $course_id, $uid);
-
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
             $add_eportfolio_res_th = "<th class='text-center'>".icon('fa-gears')."</th>";
@@ -5244,9 +5228,9 @@ function show_assignments() {
 
         // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                        FROM assignment WHERE course_id = ?d ORDER BY
-                                            CASE
-                                                WHEN deadline IS NULL THEN 1 ELSE 0
+                                        FROM assignment WHERE course_id = ?d ORDER BY 
+                                            CASE 
+                                                WHEN deadline IS NULL THEN 1 ELSE 0 
                                             END, title", $course_id);
     $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
@@ -5262,7 +5246,6 @@ function show_assignments() {
                   'url' => "rubrics.php?course=$course_code",
                   'level' => 'primary-label'),
             ),false);
-
     if (count($result)>0) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
@@ -5360,7 +5343,7 @@ function submit_grade_comments($args) {
     global $langGrades, $course_id, $langTheField, $course_code,
             $langFormErrors, $workPath, $langGradebookGrade;
 
-    $id = $args['assignment'];
+    $id = $args['assignment'];//assignment=id_ergasias hidden pedio sto grade_edit arxeio
     $grading_type = 0;
     $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
     if ($rubric) {
@@ -5386,7 +5369,6 @@ function submit_grade_comments($args) {
     $v->labels(array(
         'grade' => "$langTheField $langGradebookGrade"
     ));
-
     if($v->validate()) {
         if ($grading_type == 2) {
             $grade_rubric = serialize($args['grade_rubric']);
@@ -5540,7 +5522,6 @@ function submit_grade_reviews($args) {
         redirect_to_home_page("modules/work/grade_edit.php?course=$course_code&assignment=$id&submission=$sid");
     }
 }
-
 
 /**
  * @brief submit reviews per assignment
