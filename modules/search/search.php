@@ -159,7 +159,7 @@ foreach ($courses as $course) {
     if ($course->visible == COURSE_INACTIVE && $uid != 1) {
         continue;
     }
-
+    // courses with password
     $requirepassword = '';
     $tool_content .= "<tr>";
     if ($uid > 0) {
@@ -176,7 +176,27 @@ foreach ($courses as $course) {
                     . "<input type='hidden' name='changeCourse[]' value='" . $course->id . "' /></td>";
         }
     }
-    $tool_content .= "<td>" . $courseUrl . $requirepassword . "</td>
+    // courses with prerequisites
+    $coursePrerequisites = "";
+    $prereqsCnt = 0;
+    $result = Database::get()->queryArray("SELECT c.*
+                                 FROM course_prerequisite cp 
+                                 JOIN course c on (c.id = cp.prerequisite_course) 
+                                 WHERE cp.course_id = ?d 
+                                 ORDER BY c.title", $course->id);
+    foreach ($result as $row) {
+        $prereqTitle = q($row->title . " (" . $row->public_code . ")");
+        if ($prereqsCnt > 0) {
+            $coursePrerequisites .= ", ";
+        }
+        $coursePrerequisites .= $prereqTitle;
+        $prereqsCnt++;
+    }
+    if ($prereqsCnt > 0) {
+        $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langCoursePrerequisites'] . ": " . $coursePrerequisites . "</small>";
+    }
+
+    $tool_content .= "<td>" . $courseUrl . $requirepassword . $coursePrerequisites . "</td>
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td>
                       <td>";
@@ -199,6 +219,7 @@ var lang = {
         unregCourse: '" . js_escape($langUnregCourse) . "',
         reregisterImpossible: '" . js_escape("$langConfirmUnregCours $m[unsub]") . "',
         invalidCode: '" . js_escape($langInvalidCode) . "',
+        prereqsNotComplete: '" . js_escape($langPrerequisitesNotComplete) . "',
 };
 var courses = ".(json_encode($courses_list)).";
 </script>";
