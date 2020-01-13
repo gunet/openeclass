@@ -287,13 +287,24 @@ function colmooc_add_student_lasession() {
         return array(false, false);
     }
 
+    // colstudent id
+    $colstudentId = null;
+    $colmoocUser = Database::get()->querySingle("SELECT * FROM colmooc_user WHERE user_id = ?d", $uid);
+    if ($colmoocUser && $colmoocUser->colmooc_id) {
+        $colstudentId = $colmoocUser->colmooc_id;
+    }
+
+    if ($colstudentId == null) {
+        return array(false, false);
+    }
+
     // api add la session
     $add_lasession_url = COLMOOC_BASE_URL . "/colmoocapi/api/lasession/add";
     $add_lasession_data = json_encode(array(array(
         "platform_id" => COLMOOC_PLATFORM_ID,
         "course_id" => $course_id,
         "teacher_id" => 0,
-        "colstudent_id" => $uid
+        "colstudent_id" => $colstudentId
     )));
 
     $responseStr = custom_request($add_lasession_url, $add_lasession_data, "POST", COLMOOC_JSON_HEAD);
