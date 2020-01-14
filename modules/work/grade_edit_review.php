@@ -55,7 +55,9 @@ function get_assignment_details($id) {
  */
 function show_form($id, $sid, $assign) {
     global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
-    $langBack, $assign, $langWorkOnlineText, $course_id, $pageName;
+           $langBack, $assign, $langWorkOnlineText, $course_id, $pageName, $langEndPeerReview,
+           $langReviewStart, $langReviewEnd;
+
 	$cdate = date('Y-m-d H:i:s');
 	$sub = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d", $sid);
 	if ($sub) {
@@ -93,7 +95,6 @@ function show_form($id, $sid, $assign) {
 		$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d ", $sub->id);
 		$sel_criteria = unserialize($submitted_grade->rubric_scales);
 		$criteria_list = "";
-		//Session::Messages("<pre>".print_r($criteria,true)."</pre><pre>-".print_r($sel_criteria,true)."</pre>", 'alert-danger');
 		foreach ($criteria as $ci => $criterio ) {
 			$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
 			if(is_array($criterio['crit_scales'])){
@@ -120,9 +121,7 @@ function show_form($id, $sid, $assign) {
 		</tr>
 		</table>
 		</div>";
-		//$langGradebookGrade=βαθμός
 		$tool_content .= action_bar(array(
-			//to array einai to button epistrofh me ta xarakthristika
 			array(
 					'title' => $langBack,
 					'url' => "index.php?course=$course_code&id=$sub->assignment_id",
@@ -142,13 +141,13 @@ function show_form($id, $sid, $assign) {
 					</div>
 				</div>
 				<div class='form-group'>
-					<label class='col-sm-3 control-label'>Έναρξη αξιολόγησης:</label>
+					<label class='col-sm-3 control-label'>$langReviewStart:</label>
 					<div class='col-sm-9'>
 						<span>".q($assign->start_date_review)."</span>
 					</div>
 				</div>
 				<div class='form-group'>
-					<label class='col-sm-3 control-label'>Προθεσμία αξιολόγησης:</label>
+					<label class='col-sm-3 control-label'>$langReviewEnd:</label>
 					<div class='col-sm-9'>
 						<span>".q($assign->due_date_review)."</span>
 					</div>
@@ -165,7 +164,7 @@ function show_form($id, $sid, $assign) {
 						<textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
 					</div>
 				</div>";
-				if ( $assign->due_date_review > $cdate){
+				if ($assign->due_date_review > $cdate) {
 					$tool_content .="
 					<div class='form-group'>
 						<div class='col-sm-9 col-sm-offset-3'>
@@ -183,13 +182,8 @@ function show_form($id, $sid, $assign) {
 							<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
 						</div>
 					</div>";
-				}
-				else
-				{
-					 //$tool_content .= "
-
-                     // <div class='alert alert-danger'>sffsfsfsfds</div>";
-					Session::Messages("Η περίδος βαθμολόγησης έληξε, δεν μπορείτε να βαθμολογήσετε.", 'alert-danger');
+				} else {
+					Session::Messages("$langEndPeerReview", 'alert-danger');
 				}
 			$tool_content .="
 			</fieldset>
