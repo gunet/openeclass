@@ -4350,7 +4350,27 @@ $langAssignmentType = "Τύπος Εργασίας";
 $langAssignmentTypeEclass = "Eclass";
 $langAssignmentTypeTurnitin = "TurnItIn";
 $langGradeReviews = "Αξιολόγηση από ομότιμους";
-
+$langReviewsPerUser = "Αξιολογήσεις ανά χρήστη";
+$langAllowableReviewValues = "Επιτρεπτές τιμές: 3-5";
+$langReviewStart = "Έναρξη αξιολόγησης";
+$langReviewEnd = "Λήξη αξιολόγησης";
+$langReviewDateHelpBlock = "Κάντε κλικ για να ορίσετε μια διαφορετική (μελλοντική) Ημερομηνία Έναρξης Αξιολόγησης";
+$langPeerReviewImpossible = "Το πλήθος των εργασιών δεν επαρκεί για να γίνει αξιολόγηση από ομότιμους";
+$langPeerReviewGrade = "Βαθμός αξιολόγησης";
+$langPeerReviewCompletedByStudent = "Ολοκλήρωσε τις αξιολογήσεις του";
+$langPeerReviewPendingByStudent = "Οι αξιολογήσεις του δεν έχουν ολοκληρωθεί";
+$langPeerReviewMissingByStudent = "Δεν έχει εκτελέσει τις αξιολογήσεις του";
+$langPeerReviewPerUserCompulsory = "Το πεδίο Aξιολογήσεις ανά χρήστη";
+$langPeerReviewStartDateCompulsory = "Το πεδίο Έναρξη αξιολόγησης";
+$langPeerReviewEndDateCompulsory = "Το πεδίο Λήξη αξιολόγησης";
+$langPeerReviewDeadlineCompulsory = "Το πεδίο Προθεσμία υποβολής";
+$langPeerReviewStartDateError = "Η ημερομηνία Έναρξης αξιολόγησης ";
+$langPeerReviewStartDateError2 = "μεγαλύτερη από την υποβολή";
+$langPeerReviewNoAssignments = "Δεν έχουν ανατεθεί ακόμα εργασίες";
+$langNotGraded = "(Δεν βαθμολόγησε)";
+$langDeletePeerReview = "Διαγραφή αξιολόγησης";
+$langNoAssignmentsForReview = "Δεν υπάρχουν αναθέσεις";
+$langEndPeerReview = "Η περίδος βαθμολόγησης έληξε, δεν μπορείτε να βαθμολογήσετε.";
 
 /* * ***********************************************************
  * listerqusers.php

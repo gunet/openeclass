@@ -669,8 +669,11 @@ function ipORcidr($field, $value, array $params) {
  */
 function add_assignment() {
     global $workPath, $course_id, $uid, $langTheField, $m, $langTitle,
-        $langErrorCreatingDirectory, $langGeneralError,
-        $course_code, $langFormErrors, $langNewAssignSuccess, $langIPInvalid;
+        $langErrorCreatingDirectory, $langGeneralError, $langPeerReviewPerUserCompulsory,
+        $course_code, $langFormErrors, $langNewAssignSuccess, $langIPInvalid,
+        $langPeerReviewStartDateCompulsory, $langPeerReviewEndDateCompulsory,
+        $langPeerReviewDeadlineCompulsory, $langPeerReviewStartDateError,
+        $langPeerReviewStartDateError2;
 
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
@@ -688,23 +691,23 @@ function add_assignment() {
         $v->rule('numeric', array('reviews_per_user'));
 		$v->rule('min', array('reviews_per_user'), 3);
 		$v->rule('max', array('reviews_per_user'), 5);
-        $v->labels(array('reviews_per_user' => "Το πεδίο Aξιολογήσεις ανά χρήστη"));
+        $v->labels(array('reviews_per_user' => "$langPeerReviewPerUserCompulsory"));
 
 
 		$v->rule('required', array('WorkStart_review'));
-		$v->labels(array('WorkStart_review' => "Το πεδίο Έναρξη αξιολόγησης"));
+		$v->labels(array('WorkStart_review' => "$langPeerReviewStartDateCompulsory"));
 
 		$v->rule('required', array('WorkEnd_review'));
-		$v->labels(array('WorkEnd_review' => "Το πεδίο Λήξη αξιολόγησης"));
+		$v->labels(array('WorkEnd_review' => "$langPeerReviewEndDateCompulsory"));
 
 		$v->rule('required', array('WorkEnd'));
-		$v->labels(array('WorkEnd' => "Το πεδίο Προθεσμία υποβολής"));
+		$v->labels(array('WorkEnd' => "$langPeerReviewDeadlineCompulsory"));
 
 		if ( isset($_POST['WorkStart_review'] ) < isset($_POST['WorkEnd']) )  {
 			/*$v->addRule('error', 'error', $langrevnvalid);
 			$v->rule('error', array('WorkStart_review'));*/
-			$v->rule('min',array('WorkStart_review'), 'μεγαλύτερη από την υποβολή');
-			$v->labels(array('WorkStart_review' => "Η ημερομηνία Έναρξης αξιολόγησης "));
+			$v->rule('min',array('WorkStart_review'), "$langPeerReviewStartDateError2");
+			$v->labels(array('WorkStart_review' => "$langPeerReviewStartDateError"));
 		}
 	}
     $v->labels(array('title' => "$langTheField $langTitle"));
@@ -911,7 +914,10 @@ function add_assignment() {
 function edit_assignment($id) {
     global $langEditSuccess, $m, $langTheField, $course_code,
         $course_id, $uid, $workPath, $langFormErrors, $langTitle,
-        $langIPInvalid;
+        $langIPInvalid, $langPeerReviewPerUserCompulsory,
+        $langPeerReviewStartDateCompulsory, $langPeerReviewEndDateCompulsory,
+        $langPeerReviewDeadlineCompulsory, $langPeerReviewStartDateError2,
+        $langPeerReviewStartDateError;
 
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
@@ -930,19 +936,19 @@ function edit_assignment($id) {
         $v->rule('numeric', array('reviews_per_user'));
 		$v->rule('min', array('reviews_per_user'), 3);
 		$v->rule('max', array('reviews_per_user'), 5);
-        $v->labels(array('reviews_per_user' => "Το πεδίο Aξιολογήσεις ανά χρήστη"));
+        $v->labels(array('reviews_per_user' => "$langPeerReviewPerUserCompulsory"));
 
 		$v->rule('required', array('WorkStart_review'));
-		$v->labels(array('WorkStart_review' => "Το πεδίο Έναρξη αξιολόγησης"));
+		$v->labels(array('WorkStart_review' => "$langPeerReviewStartDateCompulsory"));
 		$v->rule('required', array('WorkEnd_review'));
-		$v->labels(array('WorkEnd_review' => "Το πεδίο Λήξη αξιολόγησης"));
+		$v->labels(array('WorkEnd_review' => "$langPeerReviewEndDateCompulsory"));
 
 		$v->rule('required', array('WorkEnd'));
-		$v->labels(array('WorkEnd' => "Το πεδίο Προθεσμία υποβολής"));
+		$v->labels(array('WorkEnd' => "$langPeerReviewDeadlineCompulsory"));
 
 		if ($_POST['WorkStart_review'] < $_POST['WorkEnd']) {
-			$v->rule('min',array('WorkStart_review'), 'μεγαλύτερη από την υποβολή');
-			$v->labels(array('WorkStart_review' => "Η ημερομηνία Έναρξης αξιολόγησης "));
+			$v->rule('min',array('WorkStart_review'), "$langPeerReviewStartDateError2");
+			$v->labels(array('WorkStart_review' => "$langPeerReviewStartDateError"));
 		}
 	}
 
@@ -1426,45 +1432,7 @@ function submit_work($id, $on_behalf_of = null) {
 
 
 /**
- * @brief assignment - prof view only
- * @global type $tool_content
- * @global type $m
- * @global type $course_code
- * @global type $course_id
- * @global type $desc
- * @global type $language
- * @global string $head_content
- * @global type $langBack
- * @global type $langSave
- * @global type $langStudents
- * @global type $langMove
- * @global type $langWorkFile
- * @global type $langAssignmentStartHelpBlock
- * @global type $langAssignmentEndHelpBlock
- * @global type $langWorkSubType
- * @global type $langWorkOnlineText
- * @global type $langStartDate
- * @global type $langGradeNumbers
- * @global type $langGradeType
- * @global type $langGradeScales
- * @global type $langGradeRubrics
- * @global type $langAutoJudgeInputNotSupported
- * @global type $langAutoJudgeSum
- * @global type $langAutoJudgeNewScenario
- * @global type $langAutoJudgeEnable
- * @global type $langAutoJudgeInput
- * @global type $langAutoJudgeExpectedOutput
- * @global type $langOperator
- * @global type $langAutoJudgeWeight
- * @global type $langAutoJudgeProgrammingLanguage
- * @global type $langAutoJudgeAssertions
- * @global type $langDescription
- * @global type $langTitle
- * @global type $langNotifyAssignmentSubmission
- * @global type $langPasswordUnlock
- * @global type $langIPUnlock
- * @global type $langDelete
- * @global type $langGradeReviews
+ * @brief assignment - new assignment - prof view only
  */
 function new_assignment() {
     global $tool_content, $m, $course_code, $course_id, $langAssignmentStartHelpBlock,
@@ -1484,7 +1452,8 @@ function new_assignment() {
            $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
            $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
-           $langTiiExcludeValue, $langLTIOptions, $langGradeReviews;
+           $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser,
+           $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2128,10 +2097,10 @@ function new_assignment() {
             </div> 
             					  					
 			<div class='form-group" .($review_error_user ? " has-error" : " ").($grading_type==3 ? "" : " hidden")."'>
-				<label for='title' class='col-sm-2 control-label'>Αξιολογήσεις ανά χρήστη:</label>
+				<label for='title' class='col-sm-2 control-label'>$langReviewsPerUser:</label>
                 <div class='col-sm-10'>
                     <input name='reviews_per_user' type='text' class='form-control' id = 'reviews_per_user'  disabled>
-                    <span class='help-block'>Επιτρεπτές τιμές 3-5. $review_error_user</span>
+                    <span class='help-block'>$langAllowableReviewValues $review_error_user</span>
                 </div>
 			</div>
 			<div class='form-group" .($review_error_rubric ? " has-error" : "").($grading_type==3 ? "" : " hidden")."'>
@@ -2144,7 +2113,7 @@ function new_assignment() {
                 </div>
 			
                 <div class='input-append date".(Session::getError('WorkStart_review') ? " has-error" : "")."' id='startdatepicker' data-date='$WorkStart_review' data-date-format='dd-mm-yyyy'>
-                    <label for='WorkStart_review' class='col-sm-2 control-label'>Έναρξη αξιολόγησης:</label> 
+                    <label for='WorkStart_review' class='col-sm-2 control-label'>$langReviewStart:</label> 
                     <div class='col-sm-10'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
@@ -2152,13 +2121,13 @@ function new_assignment() {
                            </span>
                            <input class='form-control' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
                        </div>
-                       <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "<i class='fa fa-share fa-rotate-270'></i> Κάντε κλικ για να ορίσετε μια διαφορετική (μελλοντική) Ημερομηνία Εναρξης Αξιολόγησης")." </span>
+                       <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "<i class='fa fa-share fa-rotate-270'></i> $langReviewDateHelpBlock")." </span>
 						&nbsp
 					</div>
                 </div> 
 			
                 <div class='input-append date".(Session::getError('WorkEnd_review') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd_review' data-date-format='dd-mm-yyyy'>
-                    <label for='exerciseEndDate' class='col-sm-2 control-label'>Λήξη αξιολόγησης:</label>
+                    <label for='exerciseEndDate' class='col-sm-2 control-label'>$langReviewEnd:</label>
                     <div class='col-sm-10'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
@@ -2415,45 +2384,9 @@ function new_assignment() {
 }
 
 /**
- * @brief form for editing
- * @global type $tool_content
- * @global type $m
- * @global type $langBack
- * @global type $course_code
- * @global type $langSave
- * @global type $course_id
- * @global string $head_content
- * @global type $language
- * @global type $langAssignmentStartHelpBlock
- * @global type $langAssignmentEndHelpBlock
- * @global type $langStudents
- * @global type $langMove
- * @global type $langWorkFile
- * @global type $themeimg
- * @global type $langStartDate
- * @global type $langLessOptions
- * @global type $langMoreOptions
- * @global type $langWorkOnlineText
- * @global type $langWorkSubType
- * @global type $langGradeType
- * @global type $langGradeNumbers
- * @global type $langGradeScales
- * @global type $langAutoJudgeInputNotSupported
- * @global type $langAutoJudgeSum
- * @global type $langAutoJudgeNewScenario
- * @global type $langAutoJudgeEnable
- * @global type $langDescription
- * @global type $langAutoJudgeInput
- * @global type $langAutoJudgeExpectedOutput
- * @global type $langOperator
- * @global type $langAutoJudgeWeight
- * @global type $langAutoJudgeProgrammingLanguage
- * @global type $langAutoJudgeAssertions
- * @global type $langTitle
- * @global type $langNotifyAssignmentSubmission
- * @global type $langDelete
+ * @brief display form for editing assignment
  * @param type $id
- * @global type $langGradeReviews
+ *
  */
 function show_edit_assignment($id) {
 
@@ -2474,7 +2407,8 @@ function show_edit_assignment($id) {
         $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
         $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
         $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
-        $langTiiExcludeValue, $langGradeReviews;
+        $langTiiExcludeValue, $langGradeReviews, $langReviewsPerUser, $langAllowableReviewValues,
+        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -3064,10 +2998,10 @@ function show_edit_assignment($id) {
 
 
 				<div class='form-group" .($review_error_user ? " has-error" : " ").($grading_type==3 ? "" : " hidden")."'>
-					<label for='title' class='col-sm-2 control-label'>Αξιολογήσεις ανά χρήστη:</label>
+					<label for='title' class='col-sm-2 control-label'>$langReviewsPerUser:</label>
 					<div class='col-sm-10'>
 						<input name='reviews_per_user' id = 'reviews_per_user' type='text' class='form-control' value='".q($row->reviews_per_assignment)."'>
-						<span class='help-block'>Επιτρεπτές τιμές 3-5. $review_error_user</span>
+						<span class='help-block'>$langAllowableReviewValues $review_error_user</span>
 					</div>
 				</div>
 				
@@ -3080,7 +3014,7 @@ function show_edit_assignment($id) {
                       <span class='help-block'>&nbsp;$review_error_rubric</span>
                     </div>
                     <div class='input-append date".(Session::getError('WorkStart_review') ? " has-error" : "")."' id='startdatepicker' data-date='$WorkStart_review' data-date-format='dd-mm-yyyy'>
-                        <label for='WorkStart_review' class='col-sm-2 control-label'>Έναρξη αξιολόγησης:</label>
+                        <label for='WorkStart_review' class='col-sm-2 control-label'>$langReviewStart:</label>
                         <div class='col-sm-10'>
                            <div class='input-group'>
                                <span class='input-group-addon'>
@@ -3088,12 +3022,12 @@ function show_edit_assignment($id) {
                                </span>
                                <input class='form-control' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
                             </div>
-                            <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> Κάντε κλικ για να ορίσετε μια διαφορετική (μελλοντική) Ημερομηνία Εναρξης Αξιολόγησης")."</span>
+                            <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langReviewDateHelpBlock")."</span>
 							&nbsp
 						</div>
                     </div> 
                     <div class='input-append date".(Session::getError('WorkEnd_review') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd_review' data-date-format='dd-mm-yyyy'>
-                        <label for='exerciseEndDate' class='col-sm-2 control-label'>Λήξη αξιολόγησης:</label>
+                        <label for='exerciseEndDate' class='col-sm-2 control-label'>$langReviewEnd:</label>
                         <div class='col-sm-10'>
                            <div class='input-group'>
                                <span class='input-group-addon'>
@@ -3652,12 +3586,18 @@ function show_student_assignment($id) {
     }
 
     $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time, 
-										 CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
-										 CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
-                                         FROM assignment WHERE course_id = ?d AND id = ?d AND active = '1' AND
-                                            (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
-                                               (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
-                                            )", $course_id, $id, $uid);
+                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
+                                                         CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
+                                                     FROM assignment 
+                                                     WHERE course_id = ?d 
+                                                        AND id = ?d 
+                                                        AND active = '1' 
+                                                        AND (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
+                                                               (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d 
+                                                                UNION 
+                                                                SELECT assignment_id FROM assignment_to_specific 
+                                                                   WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                                                    )", $course_id, $id, $uid);
 
 	$count_of_assign = Database::get()->querySingle("SELECT COUNT(*) AS count_of_assign FROM assignment_submit
                                  WHERE assignment_id = ?d ", $id)->count_of_assign;
@@ -4192,15 +4132,16 @@ function assignment_details($id, $row, $x =false) {
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail, $urlServer,
-           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine;
+           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine,
+           $langReviewStart, $langReviewEnd, $langGradeReviews;;
 
     $preview_rubric = '';
     $grade_type = $row->grading_type;
     if ($grade_type == 0){
-        $g_type=$langGradeNumber;
+        $g_type = $langGradeNumber;
     }
     elseif ($grade_type ==1) {
-        $g_type=$langGradeScale;
+        $g_type = $langGradeScale;
     } elseif ($grade_type ==2) {
         $g_type = $langGradeRubric;
         $rubric_id = $row ->grading_scale_id;
@@ -4231,8 +4172,8 @@ function assignment_details($id, $row, $x =false) {
         }
     }
     //edw ena else me aksiologhsh apo omotimous
-    elseif ($grade_type == 3){
-        $g_type='Αξιολόγηση από ομότιμους';
+    elseif ($grade_type == 3) {
+        $g_type = $langGradeReviews;
         $rubric_id = $row ->grading_scale_id;
         $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
         if ($rubric) {
@@ -4467,7 +4408,7 @@ function assignment_details($id, $row, $x =false) {
 			$tool_content .= "
 				<div class='row margin-bottom-fat'>
 					<div class='col-sm-3'>
-						<strong>Έναρξη αξιολόγησης:</strong>
+						<strong>$langReviewStart:</strong>
 					</div>
 					<div class='col-sm-9'> 
 						$start_date_review ".(isset($start_date_review_notice) ? $start_date_review_notice: "")."
@@ -4475,7 +4416,7 @@ function assignment_details($id, $row, $x =false) {
 				</div>
 				<div class='row margin-bottom-fat'>
 					<div class='col-sm-3'>
-						<strong>Λήξη αξιολόγησης:</strong>
+						<strong>$langReviewEnd:</strong>
 					</div>
 					<div class='col-sm-9'> 
 						$due_date_review ".(isset($due_date_review_notice) ? $due_date_review_notice: "")."
@@ -4486,12 +4427,10 @@ function assignment_details($id, $row, $x =false) {
     $tool_content .= "
         </div>
     </div>";
-    //emfanizei mnm oti exei perasei h hmeromhnia upovolhs kai oti tha thewrhthei ekprothesmh
     $cdate = date('Y-m-d H:i:s');
     if ($row->deadline < $cdate && $row->late_submission && !$is_editor) {
         $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
     }
-   // $tool_content .= "<div class='alert alert-warning'>Munhma</div>";
 }
 
 
@@ -4502,27 +4441,28 @@ function assignment_details($id, $row, $x =false) {
  * @param type $display_graph_results
  */
 function show_assignment($id, $display_graph_results = false) {
-    global $tool_content, $m, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
-    $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult, $langHasAssignmentPublished,
+    global $tool_content, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
+    $langWorkOnlineText, $langGradeOk, $langPlagiarismResult, $langHasAssignmentPublished,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
-    $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress;
+    $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress,
+    $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent,
+    $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time, 
-								CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
-								CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
-                                FROM assignment
-                                WHERE course_id = ?d AND id = ?d", $course_id, $id);
+                                                        CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
+                                                        CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
+                                                    FROM assignment
+                                                      WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $nav[] = $works_url;
     assignment_details($id, $assign);
 
 	$cdate = date('Y-m-d H:i:s');
-	//to button anathesh tha emfanizetai sto xroniko diasthma apo deadline- start_date_review
+	//to button anathesh tha emfanizetai sto xroniko diasthma apo deadline - start_date_review
 	if ( ($assign->grading_type == 3 && $cdate > $assign->deadline && $cdate < $assign->start_date_review)){
-		//if ($assign->grading_type == 3){
 	    $count_of_ass = Database::get()->querySingle("SELECT COUNT(*) AS count_of_ass FROM assignment_submit
                                  WHERE assignment_id = ?d ", $id)->count_of_ass;
-		if ($assign->reviews_per_assignment < $count_of_ass){
+		if ($assign->reviews_per_assignment < $count_of_ass) {
 			$tool_content .= " <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>	
 						   <input type='hidden' name='assign' value='$id'>
 						   <div class='form-group'>
@@ -4531,9 +4471,8 @@ function show_assignment($id, $display_graph_results = false) {
 								</div>
 						   </div>
 						   </form>";
-		}
-		else{
-			Session::Messages('Το πλήθος των εργασιών δεν επαρκεί για να γίνει αξιολόγηση από ομότιμους', 'alert-warning');
+		} else {
+			Session::Messages($langPeerReviewImpossible, 'alert-warning');
 		}
 	}
 
@@ -4597,7 +4536,7 @@ function show_assignment($id, $display_graph_results = false) {
             sort_link($m['sub_date'], 'date');
 			if ($assign->grading_type == 3){
 				//neo pedio vathmos aksiologhshs mono gia peer review
-				sort_link('Βαθμός αξιολόγησης', '');
+				sort_link($langPeerReviewGrade, '');
 			}
             sort_link($langGradebookGrade, 'grade');
             $tool_content .= "<th width='8%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
@@ -4614,7 +4553,6 @@ function show_assignment($id, $display_graph_results = false) {
                     $subContentGroup = '';
                 }
 
-			    // $cdate = date('Y-m-d H:i:s')
 				$mess = '';
 				if ($assign->grading_type == 3 ){
 					$grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
@@ -4632,12 +4570,12 @@ function show_assignment($id, $display_graph_results = false) {
 									$counter++;
 								}
 							}
-							if ($counter == 0){
-								$mess = '<span style="color:#32CD32;"> <small>Η αξιολόγηση ολοκληρώθηκε</small></span>';
-							}elseif ($counter < $r_count){
-								$mess = '<span style="color:#FFD700;"> <small>Η αξιολόγηση δεν έχει ολοκληρωθεί</small></span>';
-							}else{
-								$mess = '<span style="color:#FF0000;"> <small>Εκκρεμεί αξιολόγηση</small></span>';
+							if ($counter == 0) {
+								$mess = "<span style='color: green;'><h6>$langPeerReviewCompletedByStudent</h6></span>";
+							} elseif ($counter < $r_count){
+								$mess = "<span style='color: darkorange;'><h6>$langPeerReviewPendingByStudent</h6></span>";
+							} else {
+								$mess = "<span style='color: red;'><h6>$langPeerReviewMissingByStudent</h6></span>";
 							}
 						}
 						//grade_field pedio
@@ -4652,7 +4590,6 @@ function show_assignment($id, $display_graph_results = false) {
 									$count_grade++;
 								}
 								if ($count_grade == $assign->reviews_per_assignment){
-									//$condition = "<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='Αξιολόγηση'></span>";
 									$condition = "<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
 								}else{
 									$condition = "<span class='fa fa-fw fa-times text-danger' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
@@ -5525,12 +5462,10 @@ function submit_grade_reviews($args) {
 
 /**
  * @brief submit reviews per assignment
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
  */
 function submit_review_per_ass($id) {
-	global $course_id, $tool_content, $course_code;
+	global $course_code;
+
 	$assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d ",$id);
 	$assign = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ?d ",$id);
 
@@ -5574,11 +5509,6 @@ function submit_review_per_ass($id) {
 	}
 	Session::Messages($success_msgs, 'alert-success');
 	redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-	/*} else {
-        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/work/grade_edit.php?course=$course_code&assignment=$id&submission=$sid");
-    }*/
-
 }
 
 

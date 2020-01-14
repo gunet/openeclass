@@ -122,7 +122,7 @@ function delete_review($id) {
 
 /**
  * @brief Show to professor details of a student's submission and allow editing of fields            
- * @global type $m
+ * @global type $langNoAssignmentsForReview
  * @global type $langGradeOk
  * @global string $tool_content
  * @global type $course_code
@@ -141,8 +141,11 @@ function delete_review($id) {
  */
 function show_edit_form($id, $sid, $assign) {
     
-    global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
-           $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName, $langDeleteSubmission;
+    global $m, $langGradeOk, $tool_content, $course_code, $langCancel,
+           $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName,
+           $langDeleteSubmission, $langPeerReviewNoAssignments, $langNotGraded, $langDeletePeerReview,
+           $langGradebookGrade, $langGradeRubric, $langNoAssignmentsForReview;
+
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
 	$count_of_ass = Database::get()->querySingle("SELECT COUNT(*) FROM assignment_submit WHERE id = ?d", $id);
@@ -153,10 +156,9 @@ function show_edit_form($id, $sid, $assign) {
 		if ($grading_type == 3 ) {
 			$cdate = date('Y-m-d H:i:s');
 			if($cdate < $assign->start_date_review){
-				//mnmn den exoun anatethei akoma ergasies
 				 $tool_content .= "
                     <p class='sub_title1'></p>
-                    <div class='alert alert-warning'>Δεν έχουν ανατεθεί ακόμα εργασίες.</div>";
+                    <div class='alert alert-warning'>$langPeerReviewNoAssignments</div>";
 			}
 			/*if ($cdate > $ass->deadline && $cdate > $ass->start_date_review){
 				$tool_content .= "<div class='form-group'>
@@ -172,7 +174,7 @@ function show_edit_form($id, $sid, $assign) {
 				//$tool_content .= "<input type='' name='assign' value='$sid'>";
 				$rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
                                  WHERE assignment_id = ?d ", $id);
-				if ($reviews_per_ass < $count_of_ass && $rows){
+				if ($reviews_per_ass < $count_of_ass && $rows) {
 					$tool_content .= action_bar(array(
 						array(
 							'title' => $langBack,
@@ -195,7 +197,6 @@ function show_edit_form($id, $sid, $assign) {
 						$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d ", $row->id);
 						$sel_criteria = unserialize($submitted_grade->rubric_scales);
 						$criteria_list = "";
-						//Session::Messages("<pre>".print_r($criteria,true)."</pre><pre>-".print_r($sel_criteria,true)."</pre>", 'alert-danger');
 						foreach ($criteria as $ci => $criterio ) {
 							$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
 							if(is_array($criterio['crit_scales'])){
@@ -242,10 +243,9 @@ function show_edit_form($id, $sid, $assign) {
 										< class='form-control' rows='3' name='comments'  id='comments'>$row->comments</textarea>
 									</div>
 								</div>*/
-						if($cdate > $assign->due_date_review && empty($row->grade) ){
-							$message = '<span style="color:#ff0000;text-align:center;">(Δεν βαθμολόγησε)</span>';
-						}
-						else{
+						if ($cdate > $assign->due_date_review && empty($row->grade)) {
+							$message = "<span style='color:#ff0000;text-align:center;'>$langNotGraded</span>";
+						} else {
 							$message = '';
 						}
 
@@ -256,7 +256,7 @@ function show_edit_form($id, $sid, $assign) {
 							<input type='hidden' name='submission' value='$row->id' />
 								
 							<a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id'>
-								<span class='fa fa-fw fa-times text-danger' data-original-title='Διαγραφή αξιολόγησης' title='' data-toggle='tooltip'></span>
+								<span class='fa fa-fw fa-times text-danger' data-original-title='$langDeletePeerReview' title='' data-toggle='tooltip'></span>
 							</a>
 							<fieldset>
 								<div class='form-group'>
@@ -273,12 +273,12 @@ function show_edit_form($id, $sid, $assign) {
 									</div>
 								</div>
 								<div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-									<label for='grade' class='col-sm-3 control-label'>Ρουμπρίκα:</label>                        
+									<label for='grade' class='col-sm-3 control-label'>$langGradeRubric:</label>                        
 									$grade_field
 									<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
 								</div>
 								<div class='form-group'>
-									<label class='col-sm-3 control-label'>Βαθμός:</label>
+									<label class='col-sm-3 control-label'>$langGradebookGrade:</label>
 									<div class='col-sm-9'>
 										<span>".q($row->grade)."</span>
 									</div>
@@ -292,9 +292,8 @@ function show_edit_form($id, $sid, $assign) {
 							</fieldset>
 							</form>		
 						</div>";
-
-					}
-					$tool_content.= "
+					    }
+					    $tool_content.= "
 								<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
 									<input type='hidden' name='assignment' value='$id' />
 									<input type='hidden' name='submission' value='$sid' />
@@ -315,16 +314,16 @@ function show_edit_form($id, $sid, $assign) {
 										</div>
 									</div>
 							</form>";
-				}else{
+				} else {
 					 $tool_content .= "
                     <p class='sub_title1'></p>
-                    <div class='alert alert-warning'>Δεν υπάρχουν αναθέσεις</div>";
+                    <div class='alert alert-warning'>$langNoAssignmentsForReview</div>";
 				}
 			}
 		}
 
 		//an den exoyme peer_review
-		else{
+		else {
 			$uid_2_name = display_user($sub->uid);
 			if (!empty($sub->group_id)) {
 				$group_submission = "($m[groupsubmit] $m[ofgroup] " .
@@ -370,7 +369,6 @@ function show_edit_form($id, $sid, $assign) {
 					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
 					$sel_criteria = unserialize($submitted_grade->grade_rubric);
 					$criteria_list = "";
-					//Session::Messages("<pre>".print_r($criteria,true)."</pre><pre>-".print_r($sel_criteria,true)."</pre>", 'alert-danger');
 					foreach ($criteria as $ci => $criterio ) {
 						$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
 						if(is_array($criterio['crit_scales'])){
