@@ -58,6 +58,10 @@ if (isset($_GET['activity_id']) && isset($_GET['session_status']) && isset($_GET
     if ($colmoocUserSession && $colmoocUserSession->session_id && $colmoocUserSession->session_token) {
         Database::get()->query("UPDATE colmooc_user_session SET session_status = ?d, session_status_updated = ?t WHERE user_id = ?d AND activity_id = ?d", $_GET['session_status'], gmdate('Y-m-d H:i:s'), $uid, $_GET['activity_id']);
         $tool_content = $actionBar . "<div class='alert alert-info'>" . $langColmoocRegisterStudentSuccess . "</div>";
+        if (intval($_GET['session_status']) == 0) {
+            // αποτυχημένη εύρεση συνεργάτη, προσπάθησε ξανά
+            $tool_content = $actionBar . "<div class='alert alert-danger'>" . $langColmoocRegisterStudentNoPartner . "</div>";
+        }
     }
 }
 
