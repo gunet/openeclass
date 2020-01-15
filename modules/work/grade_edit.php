@@ -29,34 +29,35 @@ require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
 $toolName = $langScore;
-if (isset($_GET['ass_id']) ) {
-	load_js('tools.js');
-    $head_content .= "<script type='text/javascript'>";
-    // assignment delete confirmation
-    $head_content .= '
-        $(document).on("click", ".linkdelete", function(e) {
-            var link = $(this).attr("href");
-            e.preventDefault();
-            bootbox.confirm("'.$langDelWarnUserAssignment.'", function(result) {
-				if (result) {
-					document.location.href = link;
-				}
+
+load_js('tools.js');
+// delete confirmation student review
+$head_content .= "<script type='text/javascript'>";
+$head_content .= '
+        $(function () {  
+            $(document).on("click", ".linkdelete", function(e) {
+                var link = $(this).attr("href");
+                e.preventDefault();
+                bootbox.confirm("'.$langConfirmDeleteStudentReview.'", function(result) {
+                    if (result) {
+                        document.location.href = link;
+                    }
+                });
             });
         });
     ';
+$head_content .= "</script>";
+
+if (isset($_GET['ass_id']) ) { // delete student review
     $ass_id = intval($_GET['ass_id']);
     $id = intval($_GET['id']);
 	$a_id = intval($_GET['a_id']);
-	//$choice = $_REQUEST['choice'];
-	//if ($choice == 'do_delete') {
-	if(delete_review($ass_id)){
-		Session::Messages($langDeleted, 'alert-success');
-	} else {
-		Session::Messages($langDelError, 'alert-danger');
-	}
+    if (delete_review($ass_id)) {
+        Session::Messages($langStudentReviewDeleted, 'alert-success');
+    } else {
+        Session::Messages($langDelError, 'alert-danger');
+    }
 	redirect_to_home_page('modules/work/grade_edit.php?course='.$course_code.'&assignment='.$id.'&submission='.$a_id);
-	//redirect_to_home_page('modules/work/grade_edit.php?course='.$course_code.'&id='.$id);
-	//}
 }
 if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
     $as_id = intval($_GET['assignment']);
@@ -66,7 +67,7 @@ if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
     $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$as_id", "name" => q($assign->title));
     show_edit_form($as_id, $sub_id, $assign);
-    draw($tool_content, 2);
+    draw($tool_content, 2, null, $head_content);
 } else {
     redirect_to_home_page('modules/work/index.php?course='.$course_code);
 }
@@ -83,39 +84,14 @@ function get_assignment_details($id) {
 
 
 /**
- * @brief delete user assignment
- * @global type $course_id
- * @global type $course_code
- * @global type $webDir
- * @global type $uid
+ * @brief delete user assignment review
  * @param type $id
  */
 function delete_review($id) {
-   //global $course_code, $webDir, $course_id;
     if (Database::get()->query("DELETE FROM assignment_grading_review WHERE id = ?d", $id)->affectedRows > 0) {
-
         return true;
     }
     return false;
-
-   /*global $workPath, $webDir, $course_code, $course_id;
-
-    $secret = work_secret($id);
-    $row = Database::get()->querySingle("SELECT title, assign_to_specific FROM assignment WHERE course_id = ?d
-                                    AND id = ?d", $course_id, $id);
-    $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
-    if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
-        foreach ($uids as $user_id) {
-            triggerGame($course_id, $user_id, $id);
-        }
-        if ($row->assign_to_specific) {
-            Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
-        }
-        move_dir("$workPath/$secret",
-        "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
-        return true;
-    }
-    return false;*/
 }
 
 
@@ -143,7 +119,7 @@ function show_edit_form($id, $sid, $assign) {
     
     global $m, $langGradeOk, $tool_content, $course_code, $langCancel,
            $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName,
-           $langDeleteSubmission, $langPeerReviewNoAssignments, $langNotGraded, $langDeletePeerReview,
+           $langPeerReviewNoAssignments, $langNotGraded, $langDeletePeerReview,
            $langGradebookGrade, $langGradeRubric, $langNoAssignmentsForReview;
 
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
@@ -224,25 +200,6 @@ function show_edit_form($id, $sid, $assign) {
 								</table>
 								</div>";
 
-						/*if ($row->date_submit)
-						{
-
-						}*/
-						/*$tool_content .= action_bar(array(
-								array(
-									'title' => $langBack,
-									'url' => "index.php?course=$course_code&id=$sub->assignment_id",
-									'icon' => "fa-reply",
-									'level' => 'primary-label'
-								)
-							))."*/
-						//sxolia me pedio text
-						/*<div class='form-group'>
-									<label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
-									<div class='col-sm-9'>
-										< class='form-control' rows='3' name='comments'  id='comments'>$row->comments</textarea>
-									</div>
-								</div>*/
 						if ($cdate > $assign->due_date_review && empty($row->grade)) {
 							$message = "<span style='color:#ff0000;text-align:center;'>$langNotGraded</span>";
 						} else {
@@ -250,48 +207,45 @@ function show_edit_form($id, $sid, $assign) {
 						}
 
 						$tool_content .= "
-						<div class='form-wrapper'>
-							<form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
-							<input type='hidden' name='assignment' value='$id' />
-							<input type='hidden' name='submission' value='$row->id' />
-								
-							<a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id'>
-								<span class='fa fa-fw fa-times text-danger' data-original-title='$langDeletePeerReview' title='' data-toggle='tooltip'></span>
-							</a>
-							<fieldset>
-								<div class='form-group'>
-									<label class='col-sm-3 control-label'>$m[username]:</label>
-									<div class='col-sm-9'>
-									$uid_2_name &nbsp $message     
-									</div>
-								</div>
-								
-								<div class='form-group'>
-									<label class='col-sm-3 control-label'>$m[sub_date]:</label>
-									<div class='col-sm-9'>
-										<span>".q($row->date_submit)."</span>
-									</div>
-								</div>
-								<div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-									<label for='grade' class='col-sm-3 control-label'>$langGradeRubric:</label>                        
-									$grade_field
-									<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
-								</div>
-								<div class='form-group'>
-									<label class='col-sm-3 control-label'>$langGradebookGrade:</label>
-									<div class='col-sm-9'>
-										<span>".q($row->grade)."</span>
-									</div>
-								</div>
-								<div class='form-group'>
-									<label class='col-sm-3 control-label'>$m[gradecomments]:</label>
-									<div class='col-sm-9'>
-										<span>".q($row->comments)."</span>
-									</div>
-								</div>						
-							</fieldset>
-							</form>		
-						</div>";
+						    <div class='form-wrapper'>
+                                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
+                                    <input type='hidden' name='assignment' value='$id' />
+                                    <input type='hidden' name='submission' value='$row->id' />															
+                                    <div class='btn-group pull-right'>
+                                        <a class='linkdelete btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-placement='bottom' data-toggle='tooltip' title='$langDeletePeerReview' data-original-title=''>
+                                            <span class='fa fa-times'></span>
+                                        </a>							
+                                    </div>							
+                                    <div class='form-group'>
+                                        <label class='col-sm-3 control-label'>$m[username]:</label>									
+                                        $uid_2_name &nbsp $message    									
+                                    </div>
+                                    
+                                    <div class='form-group'>
+                                        <label class='col-sm-3 control-label'>$m[sub_date]:</label>
+                                        <div class='col-sm-9'>
+                                            <span>".q($row->date_submit)."</span>
+                                        </div>
+                                    </div>
+                                    <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
+                                        <label for='grade' class='col-sm-3 control-label'>$langGradeRubric:</label>                        
+                                        $grade_field
+                                        <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
+                                    </div>
+                                    <div class='form-group'>
+                                        <label class='col-sm-3 control-label'>$langGradebookGrade:</label>
+                                        <div class='col-sm-9'>
+                                            <span>".q($row->grade)."</span>
+                                        </div>
+                                    </div>
+                                    <div class='form-group'>
+                                        <label class='col-sm-3 control-label'>$m[gradecomments]:</label>
+                                        <div class='col-sm-9'>
+                                            <span>".q($row->comments)."</span>
+                                        </div>
+                                    </div>													
+                                </form>		
+                            </div>";
 					    }
 					    $tool_content.= "
 								<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>

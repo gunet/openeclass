@@ -5132,6 +5132,8 @@ $langPeerReviewNoAssignments = "Assignments haven't been distributed yet";
 $langNotGraded = "(Didn't grade)";
 $langDeletePeerReview = "Delete review";
 $langNoAssignmentsForReview = "There are no assignments for reviewing";
+$langConfirmDeleteStudentReview = "Confirmation of assignment review";
+$langStudentReviewDeleted = "Assignment review deleted";
 $langEndPeerReview = "Peer Review has ended. You can't grade assignments.";
 
 $langNewCoursePrerequisite = "New Prerequisite";

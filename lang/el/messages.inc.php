@@ -4370,6 +4370,8 @@ $langPeerReviewNoAssignments = "Δεν έχουν ανατεθεί ακόμα ε
 $langNotGraded = "(Δεν βαθμολόγησε)";
 $langDeletePeerReview = "Διαγραφή αξιολόγησης";
 $langNoAssignmentsForReview = "Δεν υπάρχουν αναθέσεις";
+$langConfirmDeleteStudentReview = "Επιβεβαίωση διαγραφής αξιολόγησης";
+$langStudentReviewDeleted = "Η αξιολόγηση διαγράφηκε";
 $langEndPeerReview = "Η περίδος βαθμολόγησης έληξε, δεν μπορείτε να βαθμολογήσετε.";
 
 /* * ***********************************************************
