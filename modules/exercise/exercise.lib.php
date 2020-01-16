@@ -119,7 +119,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             $replace_callback = function () use ($questionId, $exerciseResult, $question_number) {
                     static $id = 0;
                     $id++;
-                    $value = (isset($exerciseResult[$questionId][$id])) ? 'value = '.$exerciseResult[$questionId][$id] : '';
+                    $value = (isset($exerciseResult[$questionId][$id])) ? ('value = "'.q($exerciseResult[$questionId][$id]) .'"') : '';
                     return "<input type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
             };
             $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
