@@ -21,8 +21,9 @@
 
 $require_current_course = true;
 $require_course_admin = true;
-$require_help = false;
-$helpTopic = 'course_prerequisites';
+$require_help = true;
+$helpTopic = 'prequesities';
+
 require_once '../../include/baseTheme.php';
 
 $head_content .= <<<hContent
