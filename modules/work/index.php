@@ -2291,7 +2291,7 @@ function new_assignment() {
                                       <th>$langOperator</th>
                                       <th>$langAutoJudgeExpectedOutput</th>
                                       <th>$langAutoJudgeWeight</th>
-                                      <th>$langDelete</th>
+                                      <th>&nbsp;</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -2323,13 +2323,18 @@ function new_assignment() {
                                       </td>
                                       <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output'></td>
                                       <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'></td>
-                                      <td class='text-center'><icon class='fa fa-times'><a href='#' class='autojudge_remove_scenario' style='display: none;'></a></icon></td>
+                                      <td class='text-center'>
+                                          <a href='#' class='autojudge_remove_scenario' style='display: none;'>
+                                            <span class='fa fa-fw fa-times text-danger' data-original-title='$langDelete' data-toggle='tooltip'></span>
+                                          </a>
+                                      </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td colspan='5' style='text-align: right;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>                                
                                     </tr>
                                     <tr>
-                                        <td colspan='5' style='text-align:center;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>                                
-                                    </tr>
-                                    <tr>
-                                        <td><input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
+                                        <td colspan='5' style='text-align: left;'><input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -3182,6 +3187,7 @@ function show_edit_assignment($id) {
                         </div>
                     </div>
                 </div>";
+                    // `auto judge` assignment
                 if (AutojudgeApp::getAutojudge()->isEnabled()) {
                     $auto_judge = $row->auto_judge;
                     $lang = $row->lang;
@@ -3197,7 +3203,7 @@ function show_edit_assignment($id) {
                                     <th>$langOperator</th>
                                     <th>$langAutoJudgeExpectedOutput</th>
                                     <th>$langAutoJudgeWeight</th>
-                                    <th>$langDelete</th>
+                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>";
@@ -3244,7 +3250,10 @@ function show_edit_assignment($id) {
 
                             $tool_content .= "
                                     <td><input type='text' value='$aajudge[weight]' name='auto_judge_scenarios[$rows][weight]' class='auto_judge_weight'/></td>
-                                    <td><a href='#' class='autojudge_remove_scenario' style='display: ".($rows <= 0 ? 'none': 'visible').";'>X</a></td>
+                                    <td><a href='#' class='autojudge_remove_scenario' style='display: ".($rows <= 0 ? 'none': 'visible').";'>
+                                    <span class='fa fa-fw fa-times text-danger' data-original-title='$langDelete' data-toggle='tooltip'></span>
+                                    </a>
+                                    </td>
                                 </tr>";
 
                             $rows++;
@@ -3279,32 +3288,36 @@ function show_edit_assignment($id) {
                                     </td>
                                     <td><input type='text' name='auto_judge_scenarios[$rows][output]' class='auto_judge_output' /></td>
                                     <td><input type='text' name='auto_judge_scenarios[$rows][weight]' class='auto_judge_weight'/></td>
-                                    <td><a href='#' class='autojudge_remove_scenario' style='display: none;'>X</a></td>
+                                    <td><a href='#' class='autojudge_remove_scenario' style='display: none;'>
+                                        <span class='fa fa-fw fa-times text-danger' data-original-title='$langDelete' data-toggle='tooltip'></span>
+                                    </a></td>
                                 </tr>";
                     }
-                    $tool_content .= "
-                                <tr>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td style='text-align:center;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>
-                                    <td> <input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    $tool_content .= "<tr>
+                                        <td colspan='4' style='text-align: right;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>                                        
+                                      </tr>
+                                    <tr>
+                                        <td colspan='4' style='text-align: left;'>
+                                            <input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario'>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div class='form-group'>
-                  <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
-                  <div class='col-sm-10'>
-                    <select id='lang' name='lang'>";
-                    foreach($connector->getSupportedLanguages() as $llang => $ext) {
-                        $tool_content .= "<option value='$llang' ".($llang === $lang ? "selected='selected'" : "").">$llang</option>\n";
-                    }
-                    $tool_content .= "</select>
-                  </div>
-                </div>";
+                    <div class='form-group'>
+                      <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
+                      <div class='col-sm-10'>
+                        <select id='lang' name='lang'>";
+                        foreach($connector->getSupportedLanguages() as $llang => $ext) {
+                            $tool_content .= "<option value='$llang' ".($llang === $lang ? "selected='selected'" : "").">$llang</option>\n";
+                        }
+                        $tool_content .= "</select>
+                      </div>
+                    </div>";
                 }
+                // end of `auto judge` assignment
+
                 $tool_content .= "
                 <div class='form-group'>
                     <label for='assignmentPasswordLock' class='col-sm-2 control-label'>$langPassCode:</label>
