@@ -67,14 +67,15 @@ require_once 'tools.php';
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
     global $session, $course_code, $course_id, $helpTopic, $helpSubTopic,
-        $is_editor, $langActivate, $langNote,$langPleaseWait,
-        $langAdmin, $langAdministratorTools, $langAdvancedSearch,
+        $is_editor, $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user,
+        $langActivate, $langNote,$langPleaseWait,
+        $langAdmin, $langAdminTool, $langAdvancedSearch,
         $langChooseLang, $langDeactivate, $langProfileMenu,
         $langEclass, $langHelp, $langUsageTerms, $langPrivacyPolicy,
         $langHomePage, $langLogin, $langLogout, $langMyAgenda,
         $langMyPersoAnnouncements, $langMyCourses, $langGoToHomePage,
         $langPortfolio, $langSearch,
-        $langUserPortfolio, $langUserHeader, $language,
+        $langUserPortfolio, $langUserHeader,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName,
         $theme, $themeimg,
@@ -267,13 +268,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_ANNOUNCEMENTS', q($GLOBALS['langMyAnnouncements']));
         $t->set_var('ANNOUNCEMENTS_LINK', $urlAppend . 'modules/announcements/myannouncements.php');
         if (!$is_embedonce) {
-            if ($GLOBALS['is_admin'] or
-                $GLOBALS['is_power_user'] or
-                $GLOBALS['is_usermanage_user'] or
-                $GLOBALS['is_departmentmanage_user']) {
-                    $t->set_var('LANG_ADMIN', q($langAdministratorTools));
+            if ((isset($is_admin) and $is_admin) or
+                (isset($is_power_user) and $is_power_user) or
+                (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+                    $t->set_var('LANG_ADMIN', q($langAdminTool));
                     $t->set_var('ADMIN_LINK', $urlAppend . 'modules/admin/');
                     $t->set_var('topMenuDivider', 'style="border-top: 1px solid #ddd"');
+                    $t->set_var('ADMIN_ICON',"<li><a href='". $urlAppend . "modules/admin/index.php'><span class='fa fa-wrench'></span></a></li>");
             } else {
                     $t->set_block('mainBlock', 'AdminToolsBlock', 'delete');
             }

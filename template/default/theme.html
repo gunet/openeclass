@@ -99,6 +99,7 @@
                         <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
                             <!-- BEGIN LoggedInBlock -->
+                            {%ADMIN_ICON%}
                             <li><a href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home"></span><span class="sr-only">{%LANG_PORTFOLIO%}</span></a></li>
                             <li id="profile_menu_dropdown" class="dropdown">
                                <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" data-toggle="dropdown">
@@ -108,7 +109,7 @@
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <!-- BEGIN AdminToolsBlock -->
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%ADMIN_LINK%}"><span class="fa fa-cog fa-fw"></span>{%LANG_ADMIN%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%ADMIN_LINK%}"><span class="fa fa-wrench fa-fw"></span>{%LANG_ADMIN%}</a>
                                     </li>
                                     <!-- END AdminToolsBlock -->
                                     <li role="presentation" {%topMenuDivider%}>
