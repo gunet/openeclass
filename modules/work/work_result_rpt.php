@@ -272,5 +272,5 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
     </table>';
 
     $pdf->WriteHTML("$report_details $report_table");
-    $pdf->Output('auto_judge_report_'.greek_to_latin(uid_to_name($sub->uid)).'.pdf', 'F');
+    $pdf->Output();
 }
