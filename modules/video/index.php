@@ -170,7 +170,7 @@ hContent;
     if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
         $pageName = $langQuotaBar;
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-        $tool_content .= showquota($diskQuotaVideo, $diskUsed);
+        $tool_content .= showquota($diskQuotaVideo, $diskUsed, "$_SERVER[SCRIPT_NAME]?course=$course_code");
         draw($tool_content, $menuTypeID);
         exit;
     }
