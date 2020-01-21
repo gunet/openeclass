@@ -67,7 +67,7 @@ $head_content .= "
 <script>
 $(function() {
     $('.menu-popover').on('shown.bs.popover', function () {
-          $('.warnLink').click( function(e){
+          $(document).on('click', '.warnLink', function(e){
                 var modifyAllLink = $(this).attr('href');
                 var modifyOneLink = modifyAllLink.concat('&clone=true');
                 $('a#modifyAll').attr('href', modifyAllLink);
@@ -299,19 +299,19 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
                 $answerType = "$langFillBlanks ($langFillBlanksTolerant)";
             }
             $tool_content .= "<tr>";
-            if (!isset($fromExercise)) {                                
-                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
+            if (!isset($fromExercise)) {
+                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")." href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
             } else {
                 $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br>" . $answerType . "</td>";
             }
-            
+
             $tool_content .= "<td class='option-btn-cell'>".
                 action_button(array(
                     array('title' => $langEditChange,
                           'url' => "admin.php?course=$course_code&amp;modifyAnswers=" . $row->id,
-                          'icon-class' => 'warnLink', 
+                          'icon-class' => 'warnLink',
                           'icon-extra' => ((count($exercise_ids)>0)?
-                                " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),                          
+                                " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),
                           'icon' => 'fa-edit',
                           'show' => !isset($fromExercise)),
                     array('title' => $langReuse,
