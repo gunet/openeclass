@@ -94,18 +94,28 @@
                         <!-- END normalViewOpenDiv -->
                         <!-- BEGIN logoBlock -->
                         <a href='{%URL_PATH%}' class="navbar-brand small-logo">
-                            <img class="img-responsive hidden-md hidden-lg" src="{%logo_img_small%}" style="height: 36px;margin-top:8px;" alt='{%PAGE_TITLE%} logo'>
+                            <img class="img-responsive hidden-md hidden-lg" src="{%logo_img_small%}" style="height: 36px;margin-top:8px;" alt='{%GO_TO_HOME%}'>
                             </a>
                         <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
                             <!-- BEGIN LoggedInBlock -->
+
                             <li><a href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home"></span><span class="sr-only">{%LANG_PORTFOLIO%}</span></a></li>
+                            {%ADMIN_ICON%}
                             <li id="profile_menu_dropdown" class="dropdown">
                                <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" data-toggle="dropdown">
                                    <img alt="{%LANG_USER_ICON%}" class="img-circle user-icon" src="{%USER_ICON%}" style="display: block; float: left; max-height: 20px;"><div style="display: block; float: left;">{%USERNAME%}</div>
                                 </a>
 
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                                    <!-- BEGIN AdminToolsBlock -->
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%ADMIN_LINK%}"><span class="fa fa-wrench fa-fw"></span>{%LANG_ADMIN%}</a>
+                                    </li>
+                                    <!-- END AdminToolsBlock -->
+                                    <li role="presentation" {%topMenuDivider%}>
+                                        <a role="menuitem" tabindex="-1" href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home fa-fw"></span>{%LANG_MYPORTFOLIO%}</a>
+                                    </li>
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%COURSES_LINK%}"><span class="fa fa-graduation-cap fa-fw"></span>{%LANG_COURSES%}</a>
                                     </li>
@@ -254,7 +264,7 @@
                 <!-- BEGIN logoBlock -->
                     <div class="logo">
                         <a href='{%URL_PATH%}'>
-                        <img class="img-responsive hidden-xs hidden-sm" src="{%logo_img%}" alt='{%PAGE_TITLE%} logo'>
+                        <img class="img-responsive hidden-xs hidden-sm" src="{%logo_img%}" alt='{%GO_TO_HOME%}'>
                         </a>
                     </div>
                     <!-- END logoBlock -->
@@ -406,7 +416,7 @@
                     <span class='fa fa-caret-square-o-up fa-2x'></span>
                 </div>
                 <footer class="footer">
-                    <span>{%COPYRIGHT%} &mdash; <a href="{%TERMS_URL%}">{%LANG_TERMS%}</a></span>
+                    <span>{%COPYRIGHT%} &mdash; <a href="{%TERMS_URL%}">{%LANG_TERMS%}</a><!-- BEGIN privacyPolicyBlock -->&mdash; <a href="{%PRIVACY_POLICY_URL%}">{%LANG_PRIVACY_POLICY%}</a><!-- END privacyPolicyBlock --></span>
                 </footer>
             </div>
         </div>

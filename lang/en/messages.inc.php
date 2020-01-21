@@ -1917,6 +1917,7 @@ $langCheckPublicTools = "<b>You tried to access an inactive module.</b>
 $langWarnShibUser = "<b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.";
 $langUserPortfolio = "User portfolio";
 $langPortfolio = "Portfolio";
+$langMyPortfolio = "My portfolio";
 $langAdvancedSearch = "Advanced search";
 $langTitle = "Title";
 $langType = "Type";

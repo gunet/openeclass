@@ -84,6 +84,17 @@
                         </a>
                         <ul class="nav navbar-nav navbar-right">
                             @if ($uid && !defined('UPGRADE'))
+                                @if ((isset($is_admin) and $is_admin) or
+                                    (isset($is_power_user) and $is_power_user) or
+                                    (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                                    (isset($is_departmentmanage_user) and $is_departmentmanage_user))
+                                    <li>
+                                        <a href="{{ $urlAppend }}modules/admin/">
+                                            <span class="fa fa-wrench"></span>
+                                            <span class="sr-only">{{ trans('langAdminTool') }}</span>
+                                        </a>
+                                    </li>
+                                @endif
                                 <li>
                                     <a href="{{ $urlAppend }}main/portfolio.php">
                                         <span class="fa fa-home"></span>
@@ -97,10 +108,13 @@
                                     </a>
 
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
-                                        @if ($display_admin_tools)
-                                        <li role="presentation" style="border-bottom: 1px solid #ddd">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/admin/"><span class="fa fa-cog fa-fw"></span>{{ trans('langAdministratorTools') }}</a>
-                                        </li>
+                                        @if ((isset($is_admin) and $is_admin) or
+                                            (isset($is_power_user) and $is_power_user) or
+                                            (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                                            (isset($is_departmentmanage_user) and $is_departmentmanage_user))
+                                                <li role="presentation" style="border-bottom: 1px solid #ddd">
+                                                    <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/admin/"><span class="fa fa-wrench fa-fw"></span>{{ trans('langAdminTool') }}</a>
+                                                </li>
                                         @endif
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/message/index.php"><span class="fa fa-envelope-o fa-fw"></span>{{ trans('langMyDropBox') }}</a>

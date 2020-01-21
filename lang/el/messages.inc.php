@@ -3831,6 +3831,7 @@ $langWarnShibUser = "
 
 $langUserPortfolio = "Χαρτοφυλάκιο χρήστη";
 $langPortfolio = "Χαρτοφυλάκιο";
+$langMyPortfolio = "Το χαρτοφυλάκιο μου";
 $langAdvancedSearch = "Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
 $langType = "Τύπος";
