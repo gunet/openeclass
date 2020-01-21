@@ -78,7 +78,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langUserPortfolio, $langUserHeader,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName,
-        $theme, $themeimg,
+        $theme, $themeimg, $langMyPortfolio,
         $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor,
         $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
@@ -385,6 +385,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SEARCH_TITLE', $langSearch);
     $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
     $t->set_var('LANG_PORTFOLIO', $langPortfolio);
+    $t->set_var('LANG_MYPORTFOLIO', $langMyPortfolio);
 
     $t->set_var('TOOL_NAME', q($toolName));
 
