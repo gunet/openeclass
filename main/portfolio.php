@@ -185,15 +185,7 @@ $tool_content .= action_bar(array(
               'show' => $_SESSION['status'] == USER_TEACHER,
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
-              'button-class' => 'btn-success'),
-    array('title' => $langAdminTool,
-                'url' => $urlAppend . 'modules/admin/index.php',
-                'show' => (isset($is_admin) and $is_admin) or
-                           (isset($is_power_user) and $is_power_user) or
-                           (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                           (isset($is_departmentmanage_user) and $is_departmentmanage_user),
-                'icon' => 'fa-cogs',
-                'level' => 'primary')));
+              'button-class' => 'btn-success')));
 
 $tool_content .= "
     <div class='row'>
