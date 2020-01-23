@@ -63,41 +63,45 @@ $tool_content .= "
                 </div>
             </div>
         </div>
-    </div>
-    <div class='row'>
-        <div class='col-md-12'>
-            <div class='panel panel-default'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$langQuickLinks</h3>
+    </div>";
+
+if (isset($is_admin) and $is_admin) { // only for `admin `user
+    $tool_content .= "
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <h3 class='panel-title'>$langQuickLinks</h3>
+                    </div>
+                    <div class='panel-body'>" .
+            action_button(array(
+                array('title' => $langSearchUser,
+                    'url' => "search_user.php",
+                    'icon' => 'fa-search',
+                    'level' => 'primary-label'),
+                array('title' => $langSearchCourse,
+                    'url' => "searchcours.php",
+                    'icon' => 'fa-search',
+                    'level' => 'primary-label'),
+                array('title' => $langConfig,
+                    'url' => "eclassconf.php",
+                    'icon' => 'fa-cogs',
+                    'level' => 'primary-label'),
+                array('title' => $langThemeSettings,
+                    'url' => "theme_options.php",
+                    'icon' => 'fa-tasks',
+                    'level' => 'primary-label'),
+                array('title' => $langExternalTools,
+                    'url' => "extapp.php",
+                    'icon' => 'fa-wrench',
+                    'level' => 'primary-label')
+            )) .
+            "</div>
                 </div>
-                <div class='panel-body'>" .
-                    action_button(array(
-                        array('title' => $langSearchUser,
-                            'url' => "search_user.php",
-                            'icon' => 'fa-search',
-                            'level' => 'primary-label'),
-                        array('title' => $langSearchCourse,
-                            'url' => "searchcours.php",
-                            'icon' => 'fa-search',
-                            'level' => 'primary-label'),
-                        array('title' => $langConfig,
-                            'url' => "eclassconf.php",
-                            'icon' => 'fa-cogs',
-                            'level' => 'primary-label'),
-                        array('title' => $langThemeSettings,
-                            'url' => "theme_options.php",
-                            'icon' => 'fa-tasks',
-                            'level' => 'primary-label'),
-                        array('title' => $langExternalTools,
-                            'url' => "extapp.php",
-                            'icon' => 'fa-wrench',
-                            'level' => 'primary-label')
-                        )) .
-                "</div>
             </div>
-        </div>
-    </div>
-    <div class='row'>
+        </div>";
+}
+    $tool_content .= "<div class='row'>
         <div class='col-md-12'>
             <div class='panel panel-default'>
                 <div class='panel-heading'>
@@ -114,7 +118,7 @@ $tool_content .= "
                 </div>
                 <div class='row margin-bottom-thin'>
                 <div class='col-sm-3'>";
-                if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+                if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
                     $info_icon = icon('fa-check');
                     $info_text = '';
                 } else {

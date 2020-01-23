@@ -497,32 +497,33 @@ function adminMenu() {
         array_push($sideMenuLink, '../admin/multicourse.php');
         array_push($sideMenuImg, 'fa-caret-right');
 
-        array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
-        array_push($sideMenuLink, '../admin/autoenroll.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        if (isset($is_admin) and $is_admin) {
+            array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
+            array_push($sideMenuLink, '../admin/autoenroll.php');
+            array_push($sideMenuImg, 'fa-caret-right');
 
-        array_push($sideMenuText, $GLOBALS['langDisableModules']);
-        array_push($sideMenuLink, "../admin/modules.php");
-        array_push($sideMenuImg, "fa-caret-right");
+            array_push($sideMenuText, $GLOBALS['langDisableModules']);
+            array_push($sideMenuLink, "../admin/modules.php");
+            array_push($sideMenuImg, "fa-caret-right");
 
-        array_push($sideMenuText, $GLOBALS['langCertBadge']);
-        array_push($sideMenuLink, '../admin/certbadge.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+            array_push($sideMenuText, $GLOBALS['langCertBadge']);
+            array_push($sideMenuLink, '../admin/certbadge.php');
+            array_push($sideMenuImg, 'fa-caret-right');
 
-        array_push($sideMenuText, $GLOBALS['langActivityCourse']);
-        array_push($sideMenuLink, '../admin/activity.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+            array_push($sideMenuText, $GLOBALS['langActivityCourse']);
+            array_push($sideMenuLink, '../admin/activity.php');
+            array_push($sideMenuImg, 'fa-caret-right');
 
-        array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
-        array_push($sideMenuLink, '../admin/coursecategory.php');
-        array_push($sideMenuImg, 'arrow.png');
-
+            array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
+            array_push($sideMenuLink, '../admin/coursecategory.php');
+            array_push($sideMenuImg, 'arrow.png');
+        }
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
         array_push($sideMenuGroup, $sideMenuSubGroup);
     }
-
+    
     // server administration
     // reset sub-arrays so that we do not have duplicate entries
     $sideMenuSubGroup = array();
