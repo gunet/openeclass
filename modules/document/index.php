@@ -1280,7 +1280,7 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'icon' => 'fa-file',
               'level' => 'primary'),
         array('title' => $langCreateDir,
-              'url' => "{$base_url}createDir=$cmdCurDirPath",
+              'url' => "{$base_url}createDir=$curDirPath",
               'icon' => 'fa-folder',
               'level' => 'primary'),
         array('title' => $langExternalFile,

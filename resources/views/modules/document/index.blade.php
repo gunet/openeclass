@@ -49,7 +49,7 @@
                         </tr>
 
                         @forelse ($fileInfo as $file)
-                        
+
                             <tr class='{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}'>
                                 <td class='text-center'><span class='fa {{ $file->icon }}'></span></td>
                                 <td>
@@ -60,7 +60,7 @@
                                     @endif
                                     <input type='hidden' value='{{ $file->url }}'>
                                     @if ($file->is_dir)
-                                        <a href='{{ $file->url }}'>{{ $file->title }}</a>
+                                        <a href='{{ $file->url }}'>{{ $file->filename }}</a>
                                     @else
                                         {!! $file->link !!}
                                     @endif
@@ -192,4 +192,3 @@
     </script>
 
 @endsection
-
