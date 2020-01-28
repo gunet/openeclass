@@ -1753,8 +1753,8 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
     $params = [$activity, $id];
     $sql = "SELECT gradebook_activities.id, gradebook_activities.gradebook_id
                             FROM gradebook_activities, gradebook
-                            WHERE gradebook.start_date < NOW()
-                            AND gradebook.end_date > NOW()
+                            WHERE gradebook.start_date < gradebook_activities.date
+                            AND gradebook.end_date > gradebook_activities.date
                             AND gradebook_activities.module_auto_type = ?d
                             AND gradebook_activities.module_auto_id = ?d
                             AND gradebook_activities.auto = 1
@@ -1771,10 +1771,9 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
         array_push($params, $uid);
     }
     // This query gets the gradebook activities that:
-    // 1) belong to gradebooks (or specific gradebook if $gradebook_id != 0)
-    // withing the date constraints
-    // 2) of a specifc module and have grade auto-submission enabled
-    // 3) include a specifc user
+    // 1) belong to gradebooks (or specific gradebook if $gradebook_id != 0) within the date constraints of a specific module
+    // 2) have grade auto-submission enabled
+    // 3) include a specific user
     $gradebookActivities = Database::get()->queryArray($sql, $params);
     if ($gradebookActivities) {
         foreach($gradebookActivities as $gradebookActivity){
