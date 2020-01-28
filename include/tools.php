@@ -523,7 +523,7 @@ function adminMenu() {
         array_push($sideMenuSubGroup, $sideMenuImg);
         array_push($sideMenuGroup, $sideMenuSubGroup);
     }
-    
+
     // server administration
     // reset sub-arrays so that we do not have duplicate entries
     $sideMenuSubGroup = array();
