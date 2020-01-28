@@ -24,12 +24,17 @@ $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
 
 $user = new User();
+$tree = new Hierarchy();
+$allowables = array();
 
 $toolName = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
+load_js('jstree3');
 
 // Display link back to index.php
 $tool_content .= action_bar(array(
@@ -37,9 +42,7 @@ $tool_content .= action_bar(array(
         'url' => "index.php",
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
-/* * ***************************************************************************
-  MAIN BODY
- * **************************************************************************** */
+
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] == $langSend)) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -47,26 +50,54 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         $depwh = ' user_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ';
     }
 
-    // where we want to send the email ?
-    if ($_POST['sendTo'] == '0') { // All users
-        if (isDepartmentAdmin()) {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user AND " . $depwh);
-        } else {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user");
+
+    // Department search
+    $depqryadd = $qry_criteria = '';
+    $dep = (isset($_POST['department'])) ? intval($_POST['department']) : 0;
+    if ($dep || isDepartmentAdmin()) {
+        $depqryadd = ', user_department';
+
+        $subs = array();
+        if ($dep) {
+            $subs = $tree->buildSubtrees(array($dep));
+            //add_param('department', $dep);
+        } else if (isDepartmentAdmin()) {
+            $subs = $user->getDepartmentIds($uid);
         }
-    } elseif ($_POST['sendTo'] == "1") { // Only professors
+
+        $ids = '';
+        foreach ($subs as $key => $id) {
+            $ids .= $id . ',';
+            validateNode($id, isDepartmentAdmin());
+        }
+        // remove last ',' from $ids
+        $deps = substr($ids, 0, -1);
+
+        $criteria[] = 'AND user.id = user_department.user';
+        $criteria[] = 'department IN (' . $deps . ')';
+        $qry_criteria = implode(' AND ', $criteria);
+    }
+
+    // where we want to send the email ?
+    if (isset($_POST['send_to_prof']) and isset($_POST['send_to_users']) and ($_POST['send_to_prof'] == "1") and ($_POST['send_to_users'] == "1")) { // all users
         if (isDepartmentAdmin()) {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user
+            $sql = Database::get()->queryArray("SELECT email, user.id FROM user, user_department WHERE user.id = user_department.user AND " . $depwh);
+        } else {
+            $sql = Database::get()->queryArray("SELECT email, user.id FROM user $depqryadd $qry_criteria");
+        }
+    } elseif (isset($_POST['send_to_prof']) and $_POST['send_to_prof'] == "1") { // Only professors
+        if (isDepartmentAdmin()) {
+            $sql = Database::get()->queryArray("SELECT email, user.id FROM user, user_department WHERE user.id = user_department.user
                                                                 AND user.status = " . USER_TEACHER . " AND " . $depwh);
         } else {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user where status = " . USER_TEACHER . "");
+            $sql = Database::get()->queryArray("SELECT email, user.id FROM user $depqryadd WHERE status = " . USER_TEACHER . " $qry_criteria");
         }
-    } elseif ($_POST['sendTo'] == "2") { // Only students
+    } elseif (isset($_POST['send_to_users']) and $_POST['send_to_users'] == "1") { // Only students
         if (isDepartmentAdmin()) {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user
+            $sql = Database::get()->queryArray("SELECT email, user.id FROM user, user_department WHERE user.id = user_department.user
                                             AND user.status = " . USER_STUDENT . " AND " . $depwh);
         } else {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user where status = " . USER_STUDENT . "");
+            $sql = Database::get()->queryArray("SELECT email, user.id FROM user $depqryadd WHERE status = " . USER_STUDENT . " $qry_criteria");
         }
     }
 
@@ -129,37 +160,59 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
     $tool_content .= "<div class='alert alert-success'>$emailsuccess</div>";
 } else {
     $body_mail = $email_title = '';
+
+    $userdeps = $user->getDepartmentIds($uid);
+    $subs = $tree->buildSubtreesFull($userdeps);
+    foreach ($subs as $node) {
+        if (intval($node->allow_course) === 1) {
+            $allowables[] = $node->id;
+        }
+    }
     // Display form to administrator
     $tool_content .= "<div class='form-wrapper'>
-    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-    <fieldset>
+    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>   
         <div class='form-group'>
             <label for='email_title' class='col-sm-2 control-label'>$langTitle</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' name='email_title' value='$email_title' size='50' />
             </div>
         </div>
-    <div class='form-group'>
-      <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
-              <div class='col-sm-10'>
-          ".rich_text_editor('body_mail', 10, 20, $body_mail)."
-              </div/>
-    </div>
-    <div class='form-group'>
-      <label for='sendTo' class='col-sm-2 control-label'>$langSendMessageTo</label>
+        <div class='form-group'>
+          <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
+                  <div class='col-sm-10'>
+              ".rich_text_editor('body_mail', 10, 20, $body_mail)."
+                  </div/>
+        </div>";
+
+        list($js, $html) = $tree->buildCourseNodePicker(array('params' => 'name="department"',
+                                                              'tree' => array('0' => $langAllFacultes),
+                                                              'defaults' => $allowables,
+                                                              'skip_preloaded_defaults' => true,
+                                                              'multiple' => false));
+        $head_content .= $js;
+        $tool_content .= "<div class='form-group'>
+            <label class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>
-                <select class='form-control' name='sendTo' id='sendTo'>
-                    <option value='1'>$langProfOnly</option>
-                    <option value='2'>$langStudentsOnly</option>
-                    <option value='0'>$langToAllUsers</option>
-                </select>
+              $html
             </div>
         </div>
-    <div class='col-sm-offset-2 col-sm-10'>
-      <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
-        </div>
-    </fieldset>
-    ". generate_csrf_token_form_field() ."
+        <div class='form-group'>
+          <label for='sendTo' class='col-sm-2 control-label'>$langSendMessageTo</label>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='send_to_prof' value='1'>$langProfOnly
+                        </label>
+                        <label>
+                            <input type='checkbox' name='send_to_users' value='1'>$langStudentsOnly
+                        </label>
+                    </div>                    
+                </div>
+            </div>
+        <div class='col-sm-offset-2 col-sm-10'>
+          <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
+            </div>    
+        ". generate_csrf_token_form_field() ."
     </form>
     </div>";
 }

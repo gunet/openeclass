@@ -393,8 +393,8 @@ $langElaboration = "Επεξεργασία";
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
 $langToAllUsers = "σε όλους τους χρήστες";
-$langProfOnly = "μόνο στους " . $langsTeachers . " ";
-$langStudentsOnly = "μόνο στους " . $langsOfStudentss . " ";
+$langProfOnly = "στους " . $langsTeachers . " ";
+$langStudentsOnly = "στους " . $langsOfStudentss . " ";
 
 // searchcours.php
 $langSearchCourse = "Αναζήτηση $langOfCourses";
