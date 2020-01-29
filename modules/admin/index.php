@@ -27,6 +27,11 @@ require_once 'modalconfirmation.php';
 $toolName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 $data['release_info'] = get_eclass_release();
+
+if (isset($is_admin) and $is_admin) {
+    $data['is_admin'] = $is_admin;
+}
+
 // Construct a table with platform identification info
 $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
@@ -61,7 +66,7 @@ $data['action_button'] = action_button(array(
                         'level' => 'primary-label')
                     ));
 
-$data['validPHP'] = version_compare(PHP_VERSION, '5.4.0') >= 0;
+$data['validPHP'] = version_compare(PHP_VERSION, '5.6.0') >= 0;
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;
 

@@ -27,18 +27,22 @@
             </div>
         </div>
     </div>
-    <div class='row'>
-        <div class='col-md-12'>
-            <div class='panel panel-default'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>{{ trans('langQuickLinks') }}</h3>
-                </div>
-                <div class='panel-body'>
-                    {!! $action_button !!}
+
+    @if ($is_admin)
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <h3 class='panel-title'>{{ trans('langQuickLinks') }}</h3>
+                    </div>
+                    <div class='panel-body'>
+                        {!! $action_button !!}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
+
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel panel-default'>
