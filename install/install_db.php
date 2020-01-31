@@ -2066,6 +2066,51 @@ $db->query("CREATE TABLE `user_analytics` (
   PRIMARY KEY (`id`)) $tbl_options");
 
 
+// h5p
+
+$db->query("CREATE TABLE h5p_library (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    machine_name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    major_version INT(4) NOT NULL,
+    minor_version INT(4) NOT NULL,
+    patch_version INT(4) NOT NULL,
+    runnable INT(1) NOT NULL DEFAULT '0',
+    fullscreen INT(1) NOT NULL DEFAULT '0',
+    embed_types VARCHAR(255),
+    preloaded_js TEXT,
+    preloaded_css TEXT,
+  PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE h5p_library_dependency (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    library_id INT(10) NOT NULL,
+    required_library_id INT(10) NOT NULL,
+    dependency_type VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE h5p_library_translation (
+    id INT(10) NOT NULL,
+    library_id INT(10) NOT NULL,
+    language_code VARCHAR(255) NOT NULL,
+    language_json TEXT NOT NULL,
+  PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE h5p_content (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    main_library_id INT(10) NOT NULL,
+    params TEXT,
+    course_id INT(11) NOT NULL,
+    PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE h5p_content_dependency (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    content_id INT(10) NOT NULL,
+    library_id INT(10) NOT NULL,
+    dependency_type VARCHAR(10) NOT NULL,
+  PRIMARY KEY(id)) $tbl_options");
+
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();

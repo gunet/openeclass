@@ -130,8 +130,6 @@ mkdir_or_error('courses/eportfolio/work_submissions');
 touch_or_error('courses/eportfolio/work_submissions/index.php');
 mkdir_or_error('courses/eportfolio/mydocs');
 touch_or_error('courses/eportfolio/mydocs/index.php');
-mkdir_or_error('storage');
-mkdir_or_error('storage/views');
 
 // ********************************************
 // upgrade config.php
@@ -1978,7 +1976,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.8'));
 
         // conference chat activity and agent
-        if (!DBHelper::fieldExists('conference','chat_activity')) {
+        if (!DBHelper::fieldExists('conference', 'chat_activity')) {
             Database::get()->query('ALTER TABLE conference ADD chat_activity boolean not null default false');
         }
         if (!DBHelper::fieldExists('conference', 'agent_created')) {
@@ -2043,6 +2041,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
         }
 
+        if (!DBHelper::tableExists('colmooc_pair_log')) {
+            Database::get()->query("CREATE TABLE IF NOT EXISTS `colmooc_pair_log` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `activity_id` INT(11) NOT NULL,
+                `moderator_id` INT(11) NOT NULL,
+                `partner_id` INT(11) NOT NULL,
+                `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+                `created` datetime DEFAULT NULL,
+                PRIMARY KEY (id),
+                FOREIGN KEY (moderator_id) REFERENCES user(id) ON DELETE CASCADE,
+                FOREIGN KEY (partner_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+        }
+
         //learning analytics
         if (!DBHelper::tableExists('analytics')) {
             Database::get()->query("CREATE TABLE `analytics` (
@@ -2081,101 +2092,110 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
               `updated` datetime NOT NULL,
               PRIMARY KEY (`id`)) $tbl_options");
         }
-    }
 
-    // upgrade queries for version 4.0
-    if (version_compare($oldversion, '4.0', '<')) {
-        updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
-        
-        // widgets
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `class` varchar(400) NOT NULL) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `widget_id` int(11) unsigned NOT NULL,
-                `widget_area_id` int(11) NOT NULL,
-                `options` text NOT NULL,
-                `position` int(3) NOT NULL,
-                `user_id` int(11) NULL,
-                `course_id` int(11) NULL,
-                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-                FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
-
-        // `request` tables (aka `ticketing`)
-        Database::get()->query("CREATE TABLE IF NOT EXISTS request_type (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `name` MEDIUMTEXT NOT NULL,
-                `description` MEDIUMTEXT NULL DEFAULT NULL) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS request (
-                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `course_id` INT(11) NOT NULL,
-                `title` VARCHAR(255) NOT NULL,
-                `description` TEXT,
-                `creator_id` INT(11) NOT NULL,
-                `state` TINYINT(4) NOT NULL,
-                `type` INT(11) UNSIGNED NOT NULL,
-                `open_date` DATETIME NOT NULL,
-                `change_date` DATETIME NOT NULL,
-                `close_date` DATETIME,
-                PRIMARY KEY(id),
-                FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                FOREIGN KEY (`type`) REFERENCES request_type(id) ON DELETE CASCADE,
-                FOREIGN KEY (creator_id) REFERENCES user(id)) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field` (
-                `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                `type_id` INT(11) UNSIGNED NOT NULL,
-                `name` MEDIUMTEXT NOT NULL,
-                `description` MEDIUMTEXT NULL DEFAULT NULL,
-                `datatype` INT(11) NOT NULL,
-                `sortorder` INT(11) NOT NULL DEFAULT 0,
-                `values` MEDIUMTEXT DEFAULT NULL,
-                FOREIGN KEY (type_id) REFERENCES request_type(id) ON DELETE CASCADE) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field_data` (
-                `id` INT(11) UNSIGNED NULL AUTO_INCREMENT PRIMARY KEY,
-                `request_id` INT(11) UNSIGNED NOT NULL,
-                `field_id` INT(11) UNSIGNED NOT NULL,
-                `data` TEXT NOT NULL,
-                FOREIGN KEY (field_id) REFERENCES request_field(id) ON DELETE CASCADE,
-                UNIQUE KEY (`request_id`, `field_id`)) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS request_watcher (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `request_id` INT(11) UNSIGNED NOT NULL,
-                `user_id` INT(11) NOT NULL,
-                `type` TINYINT(4) NOT NULL,
-                `notification` TINYINT(4) NOT NULL,
-                PRIMARY KEY (id),
-                UNIQUE KEY (request_id, user_id),
-                FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS request_action (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `request_id` INT(11) UNSIGNED NOT NULL,
-                `user_id` INT(11) NOT NULL,
-                `ts` DATETIME NOT NULL,
-                `old_state` TINYINT(4) NOT NULL,
-                `new_state` TINYINT(4) NOT NULL,
-                `filename` VARCHAR(256),
-                `real_filename` VARCHAR(255),
-                `comment` TEXT,
-                PRIMARY KEY(id),
-                FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
-
-        // user portfolio
-        if (!DBHelper::fieldExists('user', 'public_blog')) {
-            Database::get()->query("ALTER TABLE user
-                ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
+        // lti apps
+        if (!DBHelper::fieldExists('lti_apps', 'all_courses')) {
+            Database::get()->query("ALTER TABLE lti_apps ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
         }
-    }
+        if (!DBHelper::fieldExists('lti_apps', 'type')) {
+            Database::get()->query("ALTER TABLE lti_apps ADD `type` VARCHAR(255) NOT NULL DEFAULT 'turnitin'");
+        }
 
+        if (!DBHelper::tableExists('course_lti_app')) {
+            Database::get()->query("CREATE TABLE `course_lti_app` (
+              `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+              `course_id` int(11) NOT NULL,
+              `lti_app` int(11) NOT NULL,
+              FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
+              FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) $tbl_options");
+        }
+
+        // h5p
+        if (!DBHelper::tableExists('h5p_library')) {
+            Database::get()->query("CREATE TABLE h5p_library (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                machine_name VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                major_version INT(4) NOT NULL,
+                minor_version INT(4) NOT NULL,
+                patch_version INT(4) NOT NULL,
+                runnable INT(1) NOT NULL DEFAULT '0',
+                fullscreen INT(1) NOT NULL DEFAULT '0',
+                embed_types VARCHAR(255),
+                preloaded_js TEXT,
+                preloaded_css TEXT,
+              PRIMARY KEY(id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('h5p_library_dependency')) {
+            Database::get()->query("CREATE TABLE h5p_library_dependency (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                library_id INT(10) NOT NULL,
+                required_library_id INT(10) NOT NULL,
+                dependency_type VARCHAR(255) NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('h5p_library_translation')) {
+            Database::get()->query("CREATE TABLE h5p_library_translation (
+                id INT(10) NOT NULL,
+                library_id INT(10) NOT NULL,
+                language_code VARCHAR(255) NOT NULL,
+                language_json TEXT NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('h5p_content')) {
+            Database::get()->query("CREATE TABLE h5p_content (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                main_library_id INT(10) NOT NULL,
+                params TEXT,
+                course_id INT(11) NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('h5p_content_dependency')) {
+            Database::get()->query("CREATE TABLE h5p_content_dependency (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                content_id INT(10) NOT NULL,
+                library_id INT(10) NOT NULL,
+                dependency_type VARCHAR(10) NOT NULL,
+          PRIMARY KEY(id)) $tbl_options");
+        }
+
+        // fix wrong entries in exercises answers regarding negative weight (if any)
+        Database::get()->query("UPDATE exercise_answer SET weight=-ABS(weight) WHERE correct=0 AND weight>0");
+
+        // peer review
+        if (!DBHelper::fieldExists('assignment', 'reviews_per_assignment')) {
+            Database::get()->query("ALTER TABLE assignment ADD `reviews_per_assignment` INT(4) DEFAULT NULL");
+        }
+        if (!DBHelper::fieldExists('assignment', 'start_date_review')) {
+            Database::get()->query("ALTER TABLE assignment ADD `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
+        }
+        if (!DBHelper::fieldExists('assignment', 'due_date_review')) {
+            Database::get()->query("ALTER TABLE assignment ADD `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
+        }
+
+        if (!DBHelper::tableExists('assignment_grading_review')) {
+            Database::get()->query("CREATE TABLE `assignment_grading_review` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `assignment_id` INT(11) NOT NULL,
+            `user_submit_id` INT(11) NOT NULL,
+            `user_id` INT(11) NOT NULL,
+            `file_path` VARCHAR(200) NOT NULL,
+            `file_name` VARCHAR(200) NOT NULL,
+            `submission_text` MEDIUMTEXT,
+            `submission_date` DATETIME NOT NULL,
+            `gid` INT(11) NOT NULL,
+            `users_id` INT(11) NOT NULL,
+            `grade` FLOAT DEFAULT NULL,
+            `comments` TEXT,
+            `date_submit` DATETIME DEFAULT NULL,
+            `rubric_scales` TEXT) $tbl_options");
+        }
+
+    }
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
 
@@ -2194,6 +2214,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("INSERT IGNORE INTO course_module (module_id, visible, course_id) VALUES " .
             $placeholders, $values);
     });
+
+    // delete deprecated course modules
+    Database::get()->query("DELETE FROM course_module WHERE module_id = " . MODULE_ID_DESCRIPTION);
+    Database::get()->query("DELETE FROM course_module WHERE module_id = " . MODULE_ID_LTI_CONSUMER);
 
     set_config('upgrade_begin', '');
     updateInfo(1, $langUpgradeSuccess);
