@@ -1976,7 +1976,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.8'));
 
         // conference chat activity and agent
-        if (!DBHelper::fieldExists('conference','chat_activity')) {
+        if (!DBHelper::fieldExists('conference', 'chat_activity')) {
             Database::get()->query('ALTER TABLE conference ADD chat_activity boolean not null default false');
         }
         if (!DBHelper::fieldExists('conference', 'agent_created')) {
@@ -2093,6 +2093,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
               PRIMARY KEY (`id`)) $tbl_options");
         }
 
+        // lti apps
         if (!DBHelper::fieldExists('lti_apps', 'all_courses')) {
             Database::get()->query("ALTER TABLE lti_apps ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
         }
@@ -2108,24 +2109,76 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
               FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
               FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) $tbl_options");
         }
-    }
 
-    // fix wrong entries in exercises answers regarding negative weight (if any)
-    Database::get()->query("UPDATE exercise_answer SET weight=-ABS(weight) WHERE correct=0 AND weight>0");
+        // h5p
+        if (!DBHelper::tableExists('h5p_library')) {
+            Database::get()->query("CREATE TABLE h5p_library (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                machine_name VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                major_version INT(4) NOT NULL,
+                minor_version INT(4) NOT NULL,
+                patch_version INT(4) NOT NULL,
+                runnable INT(1) NOT NULL DEFAULT '0',
+                fullscreen INT(1) NOT NULL DEFAULT '0',
+                embed_types VARCHAR(255),
+                preloaded_js TEXT,
+                preloaded_css TEXT,
+              PRIMARY KEY(id)) $tbl_options");
+        }
 
-    // peer review
-    if (!DBHelper::fieldExists('assignment', 'reviews_per_assignment')) {
-        Database::get()->query("ALTER TABLE assignment ADD `reviews_per_assignment` INT(4) DEFAULT NULL");
-    }
-    if (!DBHelper::fieldExists('assignment', 'start_date_review')) {
-        Database::get()->query("ALTER TABLE assignment ADD `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
-    }
-    if (!DBHelper::fieldExists('assignment', 'due_date_review')) {
-        Database::get()->query("ALTER TABLE assignment ADD `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
-    }
+        if (!DBHelper::tableExists('h5p_library_dependency')) {
+            Database::get()->query("CREATE TABLE h5p_library_dependency (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                library_id INT(10) NOT NULL,
+                required_library_id INT(10) NOT NULL,
+                dependency_type VARCHAR(255) NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        }
 
-    if (!DBHelper::tableExists('assignment_grading_review')) {
-        Database::get()->query("CREATE TABLE `assignment_grading_review` (
+        if (!DBHelper::tableExists('h5p_library_translation')) {
+            Database::get()->query("CREATE TABLE h5p_library_translation (
+                id INT(10) NOT NULL,
+                library_id INT(10) NOT NULL,
+                language_code VARCHAR(255) NOT NULL,
+                language_json TEXT NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('h5p_content')) {
+            Database::get()->query("CREATE TABLE h5p_content (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                main_library_id INT(10) NOT NULL,
+                params TEXT,
+                course_id INT(11) NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('h5p_content_dependency')) {
+            Database::get()->query("CREATE TABLE h5p_content_dependency (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                content_id INT(10) NOT NULL,
+                library_id INT(10) NOT NULL,
+                dependency_type VARCHAR(10) NOT NULL,
+          PRIMARY KEY(id)) $tbl_options");
+        }
+
+        // fix wrong entries in exercises answers regarding negative weight (if any)
+        Database::get()->query("UPDATE exercise_answer SET weight=-ABS(weight) WHERE correct=0 AND weight>0");
+
+        // peer review
+        if (!DBHelper::fieldExists('assignment', 'reviews_per_assignment')) {
+            Database::get()->query("ALTER TABLE assignment ADD `reviews_per_assignment` INT(4) DEFAULT NULL");
+        }
+        if (!DBHelper::fieldExists('assignment', 'start_date_review')) {
+            Database::get()->query("ALTER TABLE assignment ADD `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
+        }
+        if (!DBHelper::fieldExists('assignment', 'due_date_review')) {
+            Database::get()->query("ALTER TABLE assignment ADD `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
+        }
+
+        if (!DBHelper::tableExists('assignment_grading_review')) {
+            Database::get()->query("CREATE TABLE `assignment_grading_review` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `assignment_id` INT(11) NOT NULL,
             `user_submit_id` INT(11) NOT NULL,
@@ -2140,8 +2193,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `comments` TEXT,
             `date_submit` DATETIME DEFAULT NULL,
             `rubric_scales` TEXT) $tbl_options");
-    }
+        }
 
+    }
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
 
