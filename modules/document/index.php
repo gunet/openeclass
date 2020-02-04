@@ -333,7 +333,7 @@ if ($can_upload or $user_upload) {
                     }
                     $extracted_file_name = process_extracted_file($stat);
                     if (!is_null($extracted_file_name)) {
-                        $zipFile->renameName($stat["name"], $extracted_file_name);
+                        $zipFile->renameIndex($i, $extracted_file_name);
                         $zipFile->extractTo("$webDir/courses/$course_code/document/", $extracted_file_name);
                     }
                 }
