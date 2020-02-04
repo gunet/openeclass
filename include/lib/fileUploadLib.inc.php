@@ -540,10 +540,10 @@ function validateUploadedZipFile($listContent, $menuTypeID = 2) {
         $filename = basename($entry['filename']);
 
         if (!isWhitelistAllowed($filename)) {
-            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed <b>". q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";            
+            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed <b>". q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
             draw($tool_content, $menuTypeID, null, $head_content);
             exit;
-        }        
+        }
     }
 }
 
@@ -557,7 +557,7 @@ function isWhitelistAllowed($filename) {
     global $is_editor, $uid;
 
     $wh = get_config('student_upload_whitelist');
-    $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';    
+    $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';
     $wh3 = fetchUserWhitelist($uid);
 
     $wh .= (strlen($wh2) > 0) ? ', ' . $wh2 : '';

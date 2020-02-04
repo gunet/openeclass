@@ -1158,7 +1158,7 @@ function current_module_id() {
 
 // Returns true if a string is invalid UTF-8
 function invalid_utf8($s) {
-    return !mb_detect_encoding($s, 'UTF-8', true);
+    return !mb_check_encoding($s, 'UTF-8');
 }
 
 // Remove invalid bytes from UTF-8 string

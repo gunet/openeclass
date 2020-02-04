@@ -90,7 +90,7 @@ if ($is_in_tinymce) {
     $menuTypeID = 5;
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
-    $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;    
+    $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
@@ -317,7 +317,7 @@ if ($can_upload or $user_upload) {
             if ($zipFile->open($userFile) == TRUE) {
                 // check for file type in zip contents
                 for ($i = 0; $i < $zipFile->numFiles; $i++) {
-                    $stat = $zipFile->statIndex($i);
+                    $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                     $files_in_zip[$i] = $stat['name'];
                     if (!empty(my_basename($files_in_zip[$i]))) {
                         validateUploadedFile(my_basename($files_in_zip[$i]), $menuTypeID);
@@ -325,7 +325,7 @@ if ($can_upload or $user_upload) {
                 }
                 // extract files
                 for ($i = 0; $i < $zipFile->numFiles; $i++) {
-                    $stat = $zipFile->statIndex($i);
+                    $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                     $realFileSize += $stat["size"]; // check for free space
                     if ($diskUsed + $realFileSize > $diskQuotaDocument) {
                         Session::Messages($langNoSpace, 'alert-danger');
@@ -402,7 +402,7 @@ if ($can_upload or $user_upload) {
         // No errors, so proceed with upload
         // File date is current date
         $file_date = date("Y\-m\-d G\:i\:s");
-        // Try to add an extension to files without extension,        
+        // Try to add an extension to files without extension,
         $fileName = add_ext_on_mime($fileName);
         // File name used in file system and path field
         $safe_fileName = safe_filename(get_file_extension($fileName));
@@ -652,7 +652,7 @@ if ($can_upload or $user_upload) {
                                                 AND format <> '.meta' AND path LIKE ?s",
                     function ($r2) {
                         Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
-                        if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {                            
+                        if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
                             Session::Messages($langResourceBelongsToCert, "alert-warning");
                             redirect_to_current_dir();
                         }
@@ -916,11 +916,11 @@ if ($can_upload or $user_upload) {
             // check for disk quota
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
                 Session::Messages($langNoSpace, 'alert-danger');
-                redirect_to_current_dir();            
+                redirect_to_current_dir();
             } else {
                 $newformat = get_file_extension($_FILES['newFile']['name']);
                 $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .
-                        (empty($newformat) ? '' : '.' . $newformat);                
+                        (empty($newformat) ? '' : '.' . $newformat);
                 my_delete($basedir . $oldpath);
                 $affectedRows = Database::get()->query("UPDATE document SET path = ?s, format = ?s, filename = ?s, date_modified = NOW()
                           WHERE $group_sql AND path = ?s"
@@ -1630,7 +1630,7 @@ if ($doc_count == 0) {
             var fileURL = $(this).attr('href');
             var downloadURL = $(this).prev('input').val();
             var fileTitle = $(this).attr('title');
-            
+
             // BUTTONS declare
             var bts = {
                 download: {
@@ -1671,7 +1671,7 @@ if ($doc_count == 0) {
                 label: '$langCancel',
                 className: 'btn-default'
             };
-            
+
             bootbox.dialog({
                 size: 'large',
                 title: fileTitle,
@@ -1840,4 +1840,3 @@ function newPageFileName($uploadPath, $prefix, $suffix) {
         preg_quote($prefix) . '[0-9]+' . preg_quote($suffix))->newPageId;
     return $prefix . $newId . $suffix;
 }
-
