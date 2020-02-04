@@ -394,7 +394,7 @@ final class Database {
         if ($isTransactional) {
             $this->dbh->commit();
         }
-        Database::dbg("Succesfully performed query", $statement, $init_time, null, Debug::INFO);
+        Database::dbg("Succesfully performed query", $statement, $init_time, $backtrace_info, Debug::INFO);
         return $result;
     }
 
