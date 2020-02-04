@@ -2183,8 +2183,7 @@ tinymce.init({
     link_class_list: [
         {title: 'None', value: ''},
         {title: '".js_escape($langPopUp)."', value: 'colorbox'},
-        {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'},
-        {title: '".js_escape($langPopUpBootboxFrame)."', value: 'bootboxframe'}
+        {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'}        
     ],
     $filebrowser
     // Menubar options
