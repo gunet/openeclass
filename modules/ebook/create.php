@@ -71,7 +71,7 @@ if (isset($_FILES['file']['name']) and !$_FILES['file']['error']) {
         $diskQuotaDocument = Database::get()->querySingle("SELECT doc_quota AS quotatype FROM course WHERE id = ?d", $course_id)->quotatype;
         // check for file type in zip contents
         for ($i = 0; $i < $zipFile->numFiles; $i++) {
-            $stat = $zipFile->statIndex($i);
+            $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
             $files_in_zip[$i] = $stat['name'];
             if (!empty(my_basename($files_in_zip[$i]))) {
                 validateUploadedFile(my_basename($files_in_zip[$i]), 2);

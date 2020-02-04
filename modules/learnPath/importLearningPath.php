@@ -20,15 +20,15 @@
  * ======================================================================== */
 
 /* ===========================================================================
-  @file importLearningPath.php  
+  @file importLearningPath.php
   @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
                  Sakis Agorastos <th_agorastos@hotmail.com>
                  Piraux Sebastien <pir@cerdecam.be>
                  Lederer Guillaume <led@cerdecam.be>
-  
+
   @brief: This script handles importing of SCORM packages.
   It mainly parses imsmanifest.xml and extracts the SCOs
-  from the zip file.  
+  from the zip file.
   ==============================================================================
  */
 
@@ -571,7 +571,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         if (move_uploaded_file($_FILES['uploadedPackage']['tmp_name'], "$webDir/$baseWorkDir/$zipname")) {
             if ($zipFile->open("$webDir/$baseWorkDir/$zipname") == TRUE) {
                 for ($i = 0; $i < $zipFile->numFiles; $i++) {
-                    $stat = $zipFile->statIndex($i);
+                    $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                     $files_in_zip[$i] = $stat['name'];
                     validateUploadedFile($files_in_zip[$i]);
                 }
@@ -666,13 +666,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                     // Since manifest.xml cannot be parsed, test versus IMS CP 1.4.4 XSD (compatible with all SCORM packages as well)
                     require_once 'include/validateXML.php';
                     libxml_use_internal_errors(true);
-                    
+
                     $xml = new DOMDocument();
                     $xml->load($manifestPath."imsmanifest.xml");
-                    
+
                     if (!$xml->schemaValidate($urlServer . 'modules/learnPath/export/imscp_v1p2.xsd')) {
                         $messages = libxml_display_errors();
-                        
+
                         array_push($errorMsgs, $langErrorValidatingManifest . $messages);
                     }
                     break;
@@ -871,7 +871,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                 $insertedModule_id[$i] = Database::get()->query("INSERT INTO `lp_module`
                         (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
                         VALUES (?d, ?s, ?s, ?s, ?s)", $course_id, $moduleName, $description, $contentType, $item['datafromlms'])->lastInsertID;
-                
+
                 if (!$insertedModule_id[$i]) {
                     $errorFound = true;
                     array_push($errorMsgs, $langErrorSql);
@@ -931,7 +931,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                 $insertedAsset_id[$i] = Database::get()->query("INSERT INTO `lp_asset`
                         (`path` , `module_id` , `comment`)
                         VALUES (?s, ?d, '')", $assetPath, $insertedModule_id[$i])->lastInsertID;
-                
+
                 if (!$insertedAsset_id[$i]) {
                     $errorFound = true;
                     array_push($errorMsgs, $langErrorSql);
@@ -1045,11 +1045,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
     // installation completed or not message
     if (!$errorFound) {
-        $tool_content .= "<div class='alert alert-info'>" . $langInstalled . "</div>";        
+        $tool_content .= "<div class='alert alert-info'>" . $langInstalled . "</div>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>" . $langNotInstalled . "</div>";
-    }    
-    
+    }
+
     $tool_content .=  action_bar(array(
             array('title' => $langBack,
                 'url' => "index.php?course=$course_code",
@@ -1060,7 +1060,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     /* --------------------------------------
       UPLOAD FORM
       -------------------------------------- */
-    
+
     // Action_bar section
     $tool_content .= "
         <div class='row'>
