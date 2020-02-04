@@ -18,13 +18,22 @@
                   </div>
             </div>
             <div class='form-group'>
+                <label class='col-sm-2 control-label'>{{ trans('langFaculty') }}:</label>
+                <div class='col-sm-10'>
+                    {!! $buildusernode !!}
+                </div>
+            </div>
+            <div class='form-group'>
               <label for='sendTo' class='col-sm-2 control-label'>{{ trans('langSendMessageTo') }}</label>
                 <div class='col-sm-10'>
-                    <select class='form-control' name='sendTo' id='sendTo'>
-                        <option value='1'>{{ trans('langProfOnly') }}</option>
-                        <option value='2'>{{ trans('langStudentsOnly') }}</option>
-                        <option value='0'>{{ trans('langToAllUsers') }}</option>
-                    </select>	    
+                    <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='send_to_prof' value='1'>{{ trans('langProfOnly') }}
+                        </label>
+                        <label>
+                            <input type='checkbox' name='send_to_users' value='1'>{{ trans('langStudentsOnly') }}
+                        </label>
+                    </div>
                 </div>
             </div>
             {!! showSecondFactorChallenge() !!}
