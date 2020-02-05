@@ -785,14 +785,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data_pending` (
 $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `name` MEDIUMTEXT NOT NULL,
-                `sortorder` INT(11) NOT NULL DEFAULT 0) $tbl_options");
+                `sortorder`  INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `faq` (
-                `id` int(11) NOT NULL AUTO_INCREMENT,
-                 `title` text NOT NULL,
-                 `body` text NOT NULL,
-                 `order` int(11) NOT NULL,
-                  PRIMARY KEY (`id`)) $tbl_options");
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `title` text NOT NULL,
+                            `body` text NOT NULL,
+                            `order` int(11) NOT NULL,
+                            PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -970,7 +970,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `tii_use_biblio_exclusion` TINYINT NOT NULL DEFAULT '0',
     `tii_use_quoted_exclusion` TINYINT NOT NULL DEFAULT '0',
     `tii_exclude_type` VARCHAR(20) NOT NULL DEFAULT 'none',
-    `tii_exclude_value` INT(11) NOT NULL DEFAULT '0') $tbl_options");
+    `tii_exclude_value` INT(11) NOT NULL DEFAULT '0',
+    `reviews_per_assignment` int(4) DEFAULT NULL,
+    `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -983,7 +986,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `submission_text` MEDIUMTEXT NULL DEFAULT NULL,
     `comments` TEXT NOT NULL,
     `grade` FLOAT DEFAULT NULL,
-    `grade_rubric` TEXT,
+	`grade_rubric` TEXT,
     `grade_comments` TEXT NOT NULL,
     `grade_comments_filepath` VARCHAR(200) NOT NULL DEFAULT '',
     `grade_comments_filename` VARCHAR(200) NOT NULL DEFAULT '',
@@ -991,6 +994,23 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
     `group_id` INT( 11 ) DEFAULT NULL,
     `auto_judge_scenarios_output` TEXT) $tbl_options");
+
+// assignment peer review
+$db->query("CREATE TABLE `assignment_grading_review` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `assignment_id` INT(11) NOT NULL,
+    `user_submit_id` INT(11) NOT NULL,
+    `user_id` INT(11) NOT NULL,
+    `file_path` VARCHAR(200) NOT NULL,
+    `file_name` VARCHAR(200) NOT NULL,
+    `submission_text` MEDIUMTEXT,
+    `submission_date` DATETIME NOT NULL,
+    `gid` INT(11) NOT NULL,
+    `users_id` INT(11) NOT NULL,
+    `grade` FLOAT DEFAULT NULL,
+    `comments` TEXT,
+    `date_submit` DATETIME DEFAULT NULL,
+    `rubric_scales` TEXT) $tbl_options");
 
 // grading scales table
 $db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
@@ -1055,7 +1075,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
     `total_weighting` FLOAT(11,2) DEFAULT 0,
     `attempt` INT(11) NOT NULL DEFAULT 0,
     `attempt_status` tinyint(4) NOT NULL DEFAULT 1,
-    `secs_remaining` INT(11) NOT NULL DEFAULT '0') $tbl_options");
+    `secs_remaining` INT(11) NOT NULL DEFAULT '0',
+    `assigned_to` INT(11) DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
     `answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1064,7 +1085,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
     `answer` text,
     `answer_id` int(11) NOT NULL,
     `weight` float(11,2) DEFAULT NULL,
-    `is_answered` TINYINT NOT NULL DEFAULT '1') $tbl_options");
+    `is_answered` TINYINT NOT NULL DEFAULT 1,
+    `q_position` INT(11) NOT NULL DEFAULT 1) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1072,7 +1094,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `question` TEXT,
     `description` TEXT,
     `weight` FLOAT(11,2) DEFAULT NULL,
-    `q_position` INT(11) DEFAULT 1,
     `type` INT(11) DEFAULT 1,
     `difficulty` INT(1) DEFAULT 0,
     `category` INT(11) DEFAULT 0) $tbl_options");
@@ -1089,11 +1110,12 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
     `correct` INT(11) DEFAULT NULL,
     `comment` TEXT,
     `weight` FLOAT(5,2),
-`r_position` INT(11) DEFAULT NULL ) $tbl_options");
+    `r_position` INT(11) DEFAULT NULL ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
     `question_id` INT(11) NOT NULL DEFAULT 0,
     `exercise_id` INT(11) NOT NULL DEFAULT 0,
+    `q_position` INT(11) NOT NULL DEFAULT 1,
     PRIMARY KEY (question_id, exercise_id) ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
@@ -1107,7 +1129,18 @@ $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `launchcontainer` TINYINT(4) NOT NULL DEFAULT 1,
     `is_template` TINYINT(4) NOT NULL DEFAULT 0,
     `enabled` TINYINT(4) NOT NULL DEFAULT 1,
+    `all_courses` TINYINT(1) NOT NULL DEFAULT 1,
+     `type` VARCHAR(255) NOT NULL DEFAULT 'turnitin',
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `course_lti_app` (
+      `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      `course_id` int(11) NOT NULL,
+      `lti_app` int(11) NOT NULL,
+      FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
+      FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) 
+   $tbl_options");
+
 
 // hierarchy tables
 $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
@@ -1156,148 +1189,9 @@ $db->query("CREATE TABLE `user_department` (
     FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $tbl_options");
 
-// hierarchy stored procedures
-$db->query("DROP PROCEDURE IF EXISTS `add_node`");
-$db->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
-            IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
-            IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
-        LANGUAGE SQL
-        BEGIN
-            DECLARE lft, rgt INT(11);
 
-            SET lft = parentlft + 1;
-            SET rgt = parentlft + 2;
-
-            CALL shift_right(parentlft, 2, 0);
-
-            INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-
-$db->query("DROP PROCEDURE IF EXISTS `update_node`");
-$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
-            IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-            IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-            IN p_order_priority INT(11), IN p_visible TINYINT(4))
-        LANGUAGE SQL
-        BEGIN
-            UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
-                code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
-
-            IF nodelft <> parentlft THEN
-                CALL move_nodes(nodelft, p_lft, p_rgt);
-            END IF;
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `delete_node`");
-$db->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
-        LANGUAGE SQL
-        BEGIN
-            DECLARE p_lft, p_rgt INT(11);
-
-            SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
-            DELETE FROM `hierarchy` WHERE id = p_id;
-
-            CALL delete_nodes(p_lft, p_rgt);
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `shift_right`");
-$db->query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
-        LANGUAGE SQL
-        BEGIN
-            IF maxrgt > 0 THEN
-                UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node AND rgt <= maxrgt;
-            ELSE
-                UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node;
-            END IF;
-
-            IF maxrgt > 0 THEN
-                UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node AND lft <= maxrgt;
-            ELSE
-                UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node;
-            END IF;
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `shift_left`");
-$db->query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
-        LANGUAGE SQL
-        BEGIN
-            IF maxrgt > 0 THEN
-                UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node AND rgt <= maxrgt;
-            ELSE
-                UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node;
-            END IF;
-
-            IF maxrgt > 0 THEN
-                UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node AND lft <= maxrgt;
-            ELSE
-                UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node;
-            END IF;
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `shift_end`");
-$db->query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
-        LANGUAGE SQL
-        BEGIN
-            UPDATE `hierarchy`
-            SET lft = (lft - (p_lft - 1)) + maxrgt,
-                rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
-$db->query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
-        LANGUAGE SQL
-        BEGIN
-            SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `get_parent`");
-$db->query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
-        LANGUAGE SQL
-        BEGIN
-            SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `delete_nodes`");
-$db->query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
-        LANGUAGE SQL
-        BEGIN
-            DECLARE node_width INT(11);
-            SET node_width = p_rgt - p_lft + 1;
-
-            DELETE FROM `hierarchy` WHERE lft BETWEEN p_lft AND p_rgt;
-            UPDATE `hierarchy` SET rgt = rgt - node_width WHERE rgt > p_rgt;
-            UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
-        END");
-
-$db->query("DROP PROCEDURE IF EXISTS `move_nodes`");
-$db->query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
-        LANGUAGE SQL
-        BEGIN
-            DECLARE node_width, maxrgt INT(11);
-
-            SET node_width = p_rgt - p_lft + 1;
-            CALL get_maxrgt(maxrgt);
-
-            CALL shift_end(p_lft, p_rgt, maxrgt);
-
-            IF nodelft = 0 THEN
-                CALL shift_left(p_rgt, node_width, 0);
-            ELSE
-                CALL shift_left(p_rgt, node_width, maxrgt);
-
-                IF p_lft < nodelft THEN
-                    SET nodelft = nodelft - node_width;
-                END IF;
-
-                CALL shift_right(nodelft, node_width, maxrgt);
-
-                UPDATE `hierarchy` SET rgt = (rgt - maxrgt) + nodelft WHERE rgt > maxrgt;
-                UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
-            END IF;
-        END");
+// create stored procedures
+refreshHierarchyProcedures();
 
 // encrypt the admin password into DB
 $hasher = new PasswordHash(8, false);
@@ -1792,7 +1686,45 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `user_id` varchar(255) default '0',
     `group_id` varchar(255) default '0',
+    `chat_activity` boolean not null default false,
+    `agent_created` boolean not null default false, 
+    `chat_activity_id` int(11),
+    `agent_id` int(11),
     PRIMARY KEY (`conf_id`,`course_id`)) $tbl_options");
+
+// Colmooc user table
+$db->query("CREATE TABLE IF NOT EXISTS `colmooc_user` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `colmooc_id` INT(11) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY (user_id),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+// Colmooc user session table
+$db->query("CREATE TABLE IF NOT EXISTS `colmooc_user_session` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `activity_id` INT(11) NOT NULL,
+    `session_id` TEXT NOT NULL,
+    `session_token` TEXT NOT NULL,
+    `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+    `session_status_updated` datetime DEFAULT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY `user_activity` (`user_id`, `activity_id`),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+// Colmooc pair log table
+$db->query("CREATE TABLE IF NOT EXISTS `colmooc_pair_log` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `activity_id` INT(11) NOT NULL,
+    `moderator_id` INT(11) NOT NULL,
+    `partner_id` INT(11) NOT NULL,
+    `session_status` TINYINT(4) NOT NULL DEFAULT 0,
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (moderator_id) REFERENCES user(id) ON DELETE CASCADE,
+    FOREIGN KEY (partner_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
 
 // Course Category tables
 $db->query("CREATE TABLE IF NOT EXISTS `category` (
@@ -1953,6 +1885,23 @@ $db->query("CREATE TABLE `certified_users` (
   `template_id` INT(11),
   PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `course_prerequisite` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) not null,
+  `prerequisite_course` int(11) not null,
+  PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `user_consent` (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id INT(11) NOT NULL,
+  has_accepted BOOL NOT NULL DEFAULT 0,
+  ts DATETIME,
+  PRIMARY KEY (id),
+  UNIQUE KEY (user_id),
+  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+) $tbl_options");
+
+
 // `request` tables (aka `ticketing`)
 $db->query("CREATE TABLE IF NOT EXISTS request_type (
     `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2064,6 +2013,51 @@ $db->query("CREATE TABLE `user_analytics` (
   `value` float NOT NULL DEFAULT '0',
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`)) $tbl_options");
+
+
+// h5p
+
+$db->query("CREATE TABLE h5p_library (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    machine_name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    major_version INT(4) NOT NULL,
+    minor_version INT(4) NOT NULL,
+    patch_version INT(4) NOT NULL,
+    runnable INT(1) NOT NULL DEFAULT '0',
+    fullscreen INT(1) NOT NULL DEFAULT '0',
+    embed_types VARCHAR(255),
+    preloaded_js TEXT,
+    preloaded_css TEXT,
+  PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE h5p_library_dependency (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    library_id INT(10) NOT NULL,
+    required_library_id INT(10) NOT NULL,
+    dependency_type VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE h5p_library_translation (
+    id INT(10) NOT NULL,
+    library_id INT(10) NOT NULL,
+    language_code VARCHAR(255) NOT NULL,
+    language_json TEXT NOT NULL,
+  PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE h5p_content (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    main_library_id INT(10) NOT NULL,
+    params TEXT,
+    course_id INT(11) NOT NULL,
+    PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE h5p_content_dependency (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    content_id INT(10) NOT NULL,
+    library_id INT(10) NOT NULL,
+    dependency_type VARCHAR(10) NOT NULL,
+  PRIMARY KEY(id)) $tbl_options");
 
 
 $_SESSION['theme'] = 'default';
