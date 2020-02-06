@@ -114,14 +114,14 @@ if ($is_editor) {
         submit_link();
         $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
         Session::Messages($message, 'alert-success');
-        redirect_to_home_page("modules/link/index.php");
+        redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
     if (isset($_POST['submitCategory'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
         Session::Messages($messsage, 'alert-success');
-        redirect_to_home_page("modules/link/index.php");
+        redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
     if (isset($_POST['submitSettings'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -135,13 +135,11 @@ if ($is_editor) {
         case 'deletelink':
             delete_link($id);
             Session::Messages($langLinkDeleted, 'alert-success');
-            redirect_to_home_page("modules/link/index.php");
-            break;
+            redirect_to_home_page("modules/link/index.php?course=$course_code");
         case 'deletecategory':
             delete_category($id);
             Session::Messages($langCategoryDeleted, 'alert-success');
-            redirect_to_home_page("modules/link/index.php");
-            break;
+            redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
 
 
@@ -290,10 +288,10 @@ if ($is_editor) {
         }
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
-        $tool_content .= "<fieldset>                               
+        $tool_content .= "<fieldset>
                               <div class='form-group'>
                                   <label class='col-sm-3'>$langSocialBookmarksFunct</label>
-                                  <div class='col-sm-9'> 
+                                  <div class='col-sm-9'>
                                       <div class='radio'>
                                           <label>
                                               <input type='radio' value='1' name='settings_radio' $checkEn>$langActivate
@@ -331,7 +329,7 @@ if ($is_editor) {
                     $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
                     Session::Messages($message, 'alert-success');
                 }
-                redirect_to_home_page("modules/link/index.php");
+                redirect_to_home_page("modules/link/index.php?course=$course_code");
             }
             switch ($action) {
                 case 'deletelink':
@@ -341,17 +339,16 @@ if ($is_editor) {
                     } else {
                         Session::Messages($langLinkNotOwner, 'alert-danger');
                     }
-                    redirect_to_home_page("modules/link/index.php");
-                    break;
+                    redirect_to_home_page("modules/link/index.php?course=$course_code");
             }
-            
+
             if (isset($_GET['action'])) {
                 $tool_content .= action_bar(array(
                         array('title' => $langBack,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                               'icon' => 'fa-reply',
                               'level' => 'primary-label')));
-            
+
             } else {
                 $ext = (isset($urlview)? "&amp;urlview=$urlview": '');
                 $tool_content .= action_bar(array(
@@ -361,7 +358,7 @@ if ($is_editor) {
                               'button-class' => 'btn-success',
                               'level' => 'primary-label')));
             }
-            
+
             if (in_array($action, array('addlink', 'editlink'))) {
                 if ((isset($id) && is_link_creator($id)) || !isset($id)) {
                     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
