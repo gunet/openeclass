@@ -155,7 +155,7 @@ if ($is_editor) {
             });
         ';
 
-    if (AutojudgeApp::getAutojudge()->isEnabled()) {
+    if (AutojudgeApp::getAutojudge()->isEnabled() and !isset($_GET['disp_results'])) {
         $head_content .= "
     function check_weights() {
         /* function to check weight validity */
@@ -4146,7 +4146,7 @@ function assignment_details($id, $row, $x =false) {
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail, $urlServer,
            $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine,
-           $langReviewStart, $langReviewEnd, $langGradeReviews;;
+           $langReviewStart, $langReviewEnd, $langGradeReviews, $langImportGrades;
 
     $preview_rubric = '';
     $grade_type = $row->grading_type;
@@ -4245,9 +4245,10 @@ function assignment_details($id, $row, $x =false) {
                 'level' => 'primary'
             ),
             array(
-                'title' => $GLOBALS['langImportGrades'],
+                'title' => $langImportGrades,
                 'icon' => 'fa-upload',
-                'url' => "import.php?course=$course_code&amp;id=$id"
+                'url' => "import.php?course=$course_code&amp;id=$id",
+                'show' => ($grade_type == 0)
             ),
             array(
                 'title' => $langExportGrades,
@@ -4824,21 +4825,21 @@ function show_assignment($id, $display_graph_results = false) {
                     }
                 }
             }
-
             // display pie chart with grades results
             if ($gradesExists) {
                 // Used to display grades distribution chart
                 $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign
                                                              WHERE assign.assignment_id = ?d AND
                                                              assign.grade <> ''", $id)->count;
-                if ($assign->grading_scale_id) {
+
+                if ($assign->grading_scale_id and $assign->grading_type == 1) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
                     $scale_values = array_value_recursive('scale_item_value', $scales);
                 }
                 foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
                     $percentage = round((100.0 * $gradeOccurance / $graded_submissions_count),2);
-                    if ($assign->grading_scale_id) {
+                    if ($assign->grading_scale_id and $assign->grading_type == 1) {
                         $key = closest($gradeValue, $scale_values, true)['key'];
                         $gradeValue = $scales[$key]['scale_item_name'];
                     }
