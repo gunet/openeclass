@@ -548,33 +548,29 @@ if (isset($_POST['submit'])) {
                     <div class='radio'>
                       <label>
                         <input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2]>
-                        <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;$langOpenCourse
+                        " . course_access_icon(COURSE_OPEN). "$langOpenCourse
                         <span class='help-block'><small>$langPublic</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1]>
-                        <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
-                                <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
-                            </span>&nbsp;$langTypeRegistration
+                        " . course_access_icon(COURSE_REGISTRATION) . "$langTypeRegistration
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility>
-                        <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;$langClosedCourse
+                        " . course_access_icon(COURSE_CLOSED) . "$langClosedCourse
                         <span class='help-block'><small>$langClosedCourseShort</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] $disabledVisibility>
-                            <span class='fa fa-lock fa-fw' style='font-size:23px;'>
-                                <span class='fa fa-times text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
-                            </span>&nbsp;$langInactiveCourse
-                        <span class='help-block'><small>$langCourseInactiveShort</small></span>
+                            " . course_access_icon(COURSE_INACTIVE) . "$langInactiveCourse
+                        <span class='help-block'><small>$langCourseInactive</small></span>
                       </label>
                     </div>
                 </div>
