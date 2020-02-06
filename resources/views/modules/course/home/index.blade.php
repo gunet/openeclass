@@ -2,6 +2,13 @@
 
 @section('content')
 <style>
+    #collapseDescription {
+        background-color: #f5f5f5;
+    }
+    #collapseDescription > div {
+        padding: 20px;
+    }
+
     .course_completion_panel_percentage
         {
             bottom:15px;
