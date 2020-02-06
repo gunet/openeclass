@@ -115,7 +115,7 @@ if ($is_editor) {
         submit_link();
         $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
         Session::Messages($message, 'alert-success');
-        redirect_to_home_page("modules/link/index.php");
+        redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
     //Category Submission
     if (isset($_POST['submitCategory'])) {
@@ -123,7 +123,7 @@ if ($is_editor) {
         submit_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
         Session::Messages($messsage, 'alert-success');
-        redirect_to_home_page("modules/link/index.php");
+        redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
     // Settings Submission
     if (isset($_POST['submitSettings'])) {
@@ -149,13 +149,11 @@ if ($is_editor) {
         case 'deletelink':
             delete_link($id);
             Session::Messages($langLinkDeleted, 'alert-success');
-            redirect_to_home_page("modules/link/index.php");
-            break;
+            redirect_to_home_page("modules/link/index.php?course=$course_code");
         case 'deletecategory':
             delete_category($id);
             Session::Messages($langCategoryDeleted, 'alert-success');
-            redirect_to_home_page("modules/link/index.php");
-            break;
+            redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
 
 
@@ -241,7 +239,7 @@ if ($is_editor) {
                     $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
                     Session::Messages($message, 'alert-success');
                 }
-                redirect_to_home_page("modules/link/index.php");
+                redirect_to_home_page("modules/link/index.php?course=$course_code");
             }
             switch ($action) {
                 case 'deletelink':
@@ -251,8 +249,7 @@ if ($is_editor) {
                     } else {
                         Session::Messages($langLinkNotOwner, 'alert-danger');
                     }
-                    redirect_to_home_page("modules/link/index.php");
-                    break;
+                    redirect_to_home_page("modules/link/index.php?course=$course_code");
             }
 
             if (isset($_GET['action'])) {
