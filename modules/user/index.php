@@ -130,7 +130,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['aaData'] = array();
     foreach ($result as $myrow) {
         $full_name = sanitize_utf8($myrow->givenname . " " . $myrow->surname);
-        $am_message = sanitize_utf8(empty($myrow->am) ? '' : ("<div class='right'>$langAmShort: " . q($myrow->am) . "</div>"));
+        $am_message = sanitize_utf8(empty($myrow->am) ? '' : ("<div class='right'>" . q($myrow->am) . "</div>"));
         $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/index.php?course=$course_code&amp;id=$myrow->id");
         /* $link_parent_email = "";
           if (get_config('enable_secondary_email')) {
