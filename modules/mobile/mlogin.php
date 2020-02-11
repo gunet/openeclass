@@ -30,7 +30,7 @@ if (isset($_POST['token'])) {
     if (isset($_REQUEST['logout'])) {
         require_once ('modules/auth/auth.inc.php');
 
-        if (isset($_SESSION['uid'])) {        
+        if (isset($_SESSION['uid'])) {
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                                   VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGOUT')", intval($_SESSION['uid']), Log::get_client_ip());
         }
@@ -72,7 +72,8 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     require_once ('modules/auth/auth.inc.php');
 
     $uname = canonicalize_whitespace($_POST['uname']);
-    $pass = $_POST['pass'];
+    $raw_post = file_get_contents("php://input");
+    $pass = preg_replace('/^[^&]*&pass=/', '', $raw_post);
 
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
