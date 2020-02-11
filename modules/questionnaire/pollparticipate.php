@@ -292,22 +292,10 @@ function printPollForm() {
 
 /**
  * @brief submit poll
- * @global type $tool_content
- * @global type $course_code
- * @global type $uid
- * @global type $langPollSubmitted
- * @global type $langBack
- * @global type $langUsage
- * @global type $langTheField
- * @global type $langFormErrors
- * @global type $urlServer
- * @global type $langPollEmailUsed
- * @global type $langPollParticipateConfirmation
- * @global type $course_id
  */
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
-           $langUsage, $langTheField, $langFormErrors, $urlServer,
+           $langUsage, $langTheField, $langFormErrors, $urlServer, $langPollParticipateConfirm,
            $langPollEmailUsed, $langPollParticipateConfirmation, $course_id;
 
     $pid = intval($_POST['pid']);
@@ -353,7 +341,7 @@ function submitPoll() {
             <!-- Body Section -->
             <div id='mail-body'>
                 <br>
-                <div id='mail-body-inner'>
+                <div id='mail-body-inner'>$langPollParticipateConfirm:<br><br>
                     <a href='{$urlServer}modules/questionnaire/index.php?course=$course_code&amp;verification_code=$verification_code'>test</a>
                 </div>
             </div>";

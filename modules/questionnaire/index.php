@@ -41,7 +41,7 @@ load_js('tools.js');
 if (isset($_GET['verification_code'])) {
     $afftected_rows = Database::get()->query("UPDATE poll_user_record SET email_verification = 1, verification_code = NULL WHERE verification_code = ?s", $_GET['verification_code'])->affectedRows;
     if ($afftected_rows > 0) {
-        Session::Messages('Η απαντήσεις σας καταμετρήθηκαν με επιτυχία', 'alert-success');
+        Session::Messages("$langPollParticipationValid", 'alert-success');
     }
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
