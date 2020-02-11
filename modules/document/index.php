@@ -1130,8 +1130,7 @@ foreach ($result as $row) {
         'object' => MediaResourceFactory::initFromDocument($row),
         'editable' => $row->editable,
         'updated_message' => $updated_message,
-        'controls' => $can_upload || ($user_upload && $row->lock_user_id == $uid),
-        'updated' => $updated);
+        'controls' => $can_upload || ($user_upload && $row->lock_user_id == $uid));
 
     if ($row->extra_path) {
         $info['common_doc_path'] = common_doc_path($row->extra_path); // sets global $common_doc_visible

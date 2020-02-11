@@ -79,7 +79,16 @@ if ($can_upload) {
     $navigation[] = array('url' => $data['backUrl'], 'name' => $pageName);
 
     $data['languages'] = $fileLanguageNames;
-    $data['copyrightTitles'] = $copyright_titles;
+    $data['copyrightTitles'] = array(
+                            '0' => $langCopyrightedUnknown,
+                            '2' => $langCopyrightedFree,
+                            '1' => $langCopyrightedNotFree,
+                            '3' => $langCreativeCommonsCCBY,
+                            '4' => $langCreativeCommonsCCBYSA,
+                            '5' => $langCreativeCommonsCCBYND,
+                            '6' => $langCreativeCommonsCCBYNC,
+                            '7' => $langCreativeCommonsCCBYNCSA,
+                            '8' => $langCreativeCommonsCCBYNCND);
 
     $data['pendingCloudUpload'] = CloudDriveManager::getFileUploadPending();
 
