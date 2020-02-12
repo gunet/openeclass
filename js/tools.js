@@ -529,7 +529,7 @@ function questionUpdateListener(question_number, question_id) {
                     });
                 }
                 if (answered === true) {
-                    $("#"+button_id).removeClass('btn-default').addClass('btn-success');
+                    $("#"+button_id).removeClass('btn-default').addClass('btn-info');
                     $("#"+check_id).addClass('fa fa-check');
                 }
             }
@@ -550,7 +550,7 @@ function updateQuestionNavButton(question_number) {
         $.ajax({
             url: 'exercise_submit.php',
             success: function() {
-                $("#"+button_id).removeClass('btn-default').addClass('btn-success');
+                $("#"+button_id).removeClass('btn-default').addClass('btn-info');
                 $("#"+check_id).addClass('fa fa-check');
             }
         });

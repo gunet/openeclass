@@ -379,7 +379,7 @@ if (!$nbrExercises) {
                 if ($paused_exercises) {
                     $password_protected = isset($row->password_lock) && !$is_editor ? " password_lock": "";
                     $tool_content .= "<td><a class='paused_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
-                            . "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAttemptPaused'></span>$lock_icon";
+                            . "&nbsp;&nbsp;(<font color='red'>$langAttemptPausedS</font>)";
                 } else {
                     $tool_content .= "<td><a class='$link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
                 }

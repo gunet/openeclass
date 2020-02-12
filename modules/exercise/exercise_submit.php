@@ -545,8 +545,47 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE) {
 if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering buttons
     $tool_content .= "<div style='margin-bottom: 20px;'>";
     foreach ($questionList as $q_num => $q_id) {
-        $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>" .
-                             "<a href='#qPanel$q_id' class='btn btn-default qNavButton' id='q_num$q_num'>$q_num</a>" .
+        $q_temp = new Question();
+        $q_temp->read($q_id);
+        if (($q_temp->selectType() == UNIQUE_ANSWER or $q_temp->selectType() == MULTIPLE_ANSWER or $q_temp->selectType() == TRUE_FALSE)
+            and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) { // if question has answered button color is `blue``
+            $class = 'btn btn-info';
+            $label = $langHasAnswered;
+        } elseif (($q_temp->selectType() == FILL_IN_BLANKS or $q_temp->selectType() == FILL_IN_BLANKS_TOLERANT)
+            and array_key_exists($q_id, $exerciseResult)) {
+            if (is_array($exerciseResult[$q_id])) {
+                $class = 'btn btn-info';
+                $label = $langHasAnswered;
+                foreach ($exerciseResult[$q_id] as $key => $value) {
+                    if (trim($value) == '') {  // check if we have filled all blanks
+                        $class = 'btn btn-default';
+                        $label = $langPendingAnswered;
+                        break;
+                    }
+                }
+            }
+        } elseif ($q_temp->selectType() == FREE_TEXT
+            and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
+            $class = 'btn btn-info';
+            $label = $langHasAnswered;
+        } elseif ($q_temp->selectType() == MATCHING and array_key_exists($q_id, $exerciseResult)) {
+            if (is_array($exerciseResult[$q_id])) {
+                $class = 'btn btn-info';
+                $label = $langHasAnswered;
+                foreach ($exerciseResult[$q_id] as $key => $value) {
+                    if ($value == 0) {  // check if we have done all matches
+                        $class = 'btn btn-default';
+                        $label = $langPendingAnswered;
+                        break;
+                    }
+                }
+            }
+        } else {
+            $class = 'btn btn-default';
+            $label = $langPendingAnswered;
+        }
+        $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;' data-toggle='tooltip' data-placement='top' title='$label'>" .
+                             "<a href='#qPanel$q_id' class='$class qNavButton' id='q_num$q_num'>$q_num</a>" .
                          "</span>";
     }
     $tool_content .= "</div>";
@@ -593,11 +632,11 @@ foreach ($questionList as $questionId) {
             }
             if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE)
                 and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) { // if question has answered button color is `blue``
-                $tool_content .= "<input class='btn btn-success' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
+                $tool_content .= "<input class='btn btn-info' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
             } elseif (($t_question->selectType() == FILL_IN_BLANKS or $t_question->selectType() == FILL_IN_BLANKS_TOLERANT)
                 and array_key_exists($q_id, $exerciseResult)) {
                 if (is_array($exerciseResult[$q_id])) {
-                    $class = 'btn btn-success';
+                    $class = 'btn btn-info';
                     $label = $langHasAnswered;
                     foreach ($exerciseResult[$q_id] as $key => $value) {
                         if (trim($value) == '') {  // check if we have filled all blanks
@@ -610,10 +649,10 @@ foreach ($questionList as $questionId) {
                 }
             } elseif ($t_question->selectType() == FREE_TEXT
                 and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
-                $tool_content .= "<input class='btn btn-success' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
+                $tool_content .= "<input class='btn btn-info' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
             } elseif ($t_question->selectType() == MATCHING and array_key_exists($q_id, $exerciseResult)) {
                 if (is_array($exerciseResult[$q_id])) {
-                    $class = 'btn btn-success';
+                    $class = 'btn btn-info';
                     $label = $langHasAnswered;
                     foreach ($exerciseResult[$q_id] as $key => $value) {
                         if ($value == 0) {  // check if we have done all matches
