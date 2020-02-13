@@ -1525,7 +1525,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
     `activity_type` INT(11) DEFAULT NULL,
     `date` DATETIME DEFAULT NULL,
     `description` TEXT NOT NULL,
-    `weight` MEDIUMINT(11) NOT NULL DEFAULT 0,
+    `weight` DECIMAL(5,2) NOT NULL DEFAULT 0,
     `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
     `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
     `auto` TINYINT(4) NOT NULL DEFAULT 0,
