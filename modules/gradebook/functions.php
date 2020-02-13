@@ -894,7 +894,7 @@ function display_gradebook($gradebook) {
                                         </tr>";
         foreach ($result as $details) {
             $content = ellipsize_html($details->description, 50);
-            $tool_content .= "<tr><td><b>";
+            $tool_content .= "<tr><td><strong>";
             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;ins=" . getIndirectReference($details->id) . "'>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
             $tool_content .= "<small class='help-block'>";
             switch ($details->activity_type) {
@@ -906,7 +906,7 @@ function display_gradebook($gradebook) {
                  default : $tool_content .= "";
              }
             $tool_content .= "</small";
-            $tool_content .= "</b>";
+            $tool_content .= "</strong>";
             $tool_content .= "</td><td><div class='smaller'>" . nice_format($details->date, true, true) . "</div></td>";
 
             if ($details->module_auto_id) {
@@ -930,7 +930,12 @@ function display_gradebook($gradebook) {
                 $tool_content .= "<td class='smaller'>$langAttendanceActivity</td>";
             }
 
-            $tool_content .= "<td class='text-center'>" . $details->weight . "%</td>";
+            if (fmod($details->weight,1) !== 0.00) { // if number doesn't contain `.00`
+                $tool_content .= "<td class='text-center'>" . $details->weight . "%</td>";
+            } else {
+                $tool_content .= "<td class='text-center'>" . round($details->weight) . "%</td>";
+            }
+
             $tool_content .= "<td width='' class='text-center'>";
             if ($details->visible) {
                 $tool_content .= $langYes;
@@ -1512,7 +1517,6 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
  * @global type $langComments
  * @global type $langGradebookInsAut
  * @global type $langAdd
- * @global type $langAdd
  * @global type $langType
  * @global type $langGradebookExams
  * @global type $langGradebookLabs
@@ -1525,7 +1529,7 @@ function add_gradebook_other_activity($gradebook_id) {
 
     global $tool_content, $course_code, $visible,
            $langTitle, $langGradebookActivityDate2, $langGradebookActivityWeight,
-           $langGradeVisible, $langComments, $langGradebookInsAut, $langAdd,
+           $langGradeVisible, $langComments, $langGradebookInsAut,
            $langAdd, $langType, $langGradebookExams, $langGradebookLabs,
            $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langGradebookRemainingGrade, $langSave, $head_content, $language;
@@ -1549,8 +1553,7 @@ function add_gradebook_other_activity($gradebook_id) {
     <div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "'>
-                    <fieldset>";
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "'>";
                         if (isset($_GET['modify'])) { // modify an existing gradebook activity
                             $id  = filter_var(getDirectReference($_GET['modify']), FILTER_VALIDATE_INT);
                             //All activity data (check if it's in this gradebook)
@@ -1656,7 +1659,7 @@ function add_gradebook_other_activity($gradebook_id) {
                         } else {
                             $tool_content .= " <input type='hidden' name='id' value='' >";
                         }
-                    $tool_content .= "</fieldset>
+                    $tool_content .= "
                 ". generate_csrf_token_form_field() ."
                 </form>
             </div>

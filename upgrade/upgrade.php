@@ -2166,6 +2166,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // fix wrong entries in exercises answers regarding negative weight (if any)
         Database::get()->query("UPDATE exercise_answer SET weight=-ABS(weight) WHERE correct=0 AND weight>0");
 
+        // in gradebook change `weight` type from integer to decimal
+        Database::get()->query("ALTER TABLE `gradebook_activities` CHANGE `weight` `weight` DECIMAL(5,2) NOT NULL DEFAULT '0'");
+
         // peer review
         if (!DBHelper::fieldExists('assignment', 'reviews_per_assignment')) {
             Database::get()->query("ALTER TABLE assignment ADD `reviews_per_assignment` INT(4) DEFAULT NULL");

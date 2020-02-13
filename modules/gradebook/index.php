@@ -521,12 +521,11 @@ if ($is_editor) {
             $actDate = empty($_POST['date']) ? NULL :
                 DateTime::createFromFormat('d-m-Y H:i', $_POST['date'])->format('Y-m-d H:i');
             $visible = isset($_POST['visible']) ? 1 : 0;
-
             if ($_POST['id']) {
                 //update
                 $id = getDirectReference($_POST['id']);
                 Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s,
-                                            `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d
+                                            `auto` = ?d, `weight` = ?f, `activity_type` = ?d, `visible` = ?d
                                             WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);
                 $log_details = array('id'=>$gradebook_id,'title'=>  get_gradebook_title($gradebook_id), 'action' => 'modify activity', 'activity_type' => $type, 'activity_id' => $id, 'activity_title' => $actTitle, 'activity_date' => $actDate, 'auto' => $auto, 'weight' => $weight, 'visible' => $visible);
                 Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
@@ -535,7 +534,7 @@ if ($is_editor) {
             } else {
                 //insert
                 $insertAct = Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s,
-                                                            `date` = ?t, description = ?s, weight = ?d, `activity_type` = ?d, visible = ?d",
+                                                            `date` = ?t, description = ?s, weight = ?f, `activity_type` = ?d, visible = ?d",
                                                     $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type, $visible)->lastInsertID;
                 $log_details = array('action' => 'add activity','id' => $gradebook_id,  'title' => get_gradebook_title($gradebook_id), 'activity_type' => $type, 'activity_id' => $insertAct, 'activity_title' => $actTitle, 'activity_date' => $actDate, 'weight' => $weight, 'visible' => $visible);
                 Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
