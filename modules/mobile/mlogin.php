@@ -72,9 +72,8 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     require_once ('modules/auth/auth.inc.php');
 
     $uname = canonicalize_whitespace($_POST['uname']);
-    $raw_post = file_get_contents("php://input");
-    $pass = preg_replace('/^[^&]*&pass=/', '', $raw_post);
-
+    $pass = $_POST['pass'];
+    
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
