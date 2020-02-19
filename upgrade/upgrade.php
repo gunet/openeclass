@@ -1849,8 +1849,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("UPDATE course SET view_type = 'units' WHERE id = ?d", $courseid);
         }
         // drop tables
-        Database::get()->query("DROP TABLE course_weekly_view");
-        Database::get()->query("DROP TABLE course_weekly_view_activities");
+        if (DBHelper::tableExists('course_weekly_view')) {
+            Database::get()->query("DROP TABLE course_weekly_view");
+        }
+        if (DBHelper::tableExists('course_weekly_view_activities')) {
+            Database::get()->query("DROP TABLE course_weekly_view_activities");
+        }
         // end of upgrading course units
 
         // course prerequisites

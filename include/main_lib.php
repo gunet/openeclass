@@ -1420,7 +1420,7 @@ function course_access_icon($visibility) {
             break;
         }
         case COURSE_INACTIVE: {
-            $access_icon = "<span class='fa fa-ban fa-lg text-danger fa-custom-lock' data-toggle='tooltip' data-placement='top' title='$langTypeInactive'></span>";
+            $access_icon = "<span class='fa fa-ban fa-lg text-danger' data-toggle='tooltip' data-placement='top' title='$langTypeInactive'></span>";
             break;
         }
     }
