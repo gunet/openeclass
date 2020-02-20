@@ -40,7 +40,7 @@
 function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_number) {
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
     $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
-    $exerciseType, $nbrQuestions, $langInfoGrade;
+    $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
 
     $questionId = $objQuestionTmp->id;
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -54,28 +54,29 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
         $message = $langInfoGrade;
     }
 
-
     $questionName = $objQuestionTmp->selectTitle();
     $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
     $questionTypeWord = $objQuestionTmp->selectTypeWord($answerType);
+    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+        $qNumber = "$question_number / $nbrQuestions";
+    } else {
+        $qNumber = $question_number;
+    }
     $tool_content .= "
             <div class='panel panel-default qPanel' id='qPanel$questionId'>
               <div class='panel-heading'>
-                <h3 class='panel-title'>$langQuestion : ";
-                if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-                    $tool_content .= "$question_number / $nbrQuestions ($questionWeight $message)";
-                } else {
-                    $tool_content .= "$question_number ($questionWeight $message)";
-                }                
-              $tool_content .= "</h3></div>
-              <div class='panel-body'>
-                    <h4>
-                        <small>$questionTypeWord</small><br>" . q_math($questionName) . "
-                    </h4>
-                    $questionDescription
-                    <div class='text-center'>
-                        ".(file_exists($picturePath . '/quiz-' . $questionId) ? "<img src='../../$picturePath/quiz-$questionId'>" : "")."
-                    </div>";
+                <h4 class='panel-title'>$langQuestion $qNumber
+                    <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
+                    <span title='$langHasAnswered' id='qCheck$question_number'></span>
+                </h4>
+            </div>
+            <div class='panel-body'>
+                <h4>" . q_math($questionName) . "</h4>
+                $questionDescription
+                <div class='text-center'>" .
+                    (file_exists($picturePath . '/quiz-' . $questionId) ?
+                        "<img src='../../$picturePath/quiz-$questionId'>" : "") . "
+                </div>";
 
     // construction of the Answer object
     $objAnswerTmp = new Answer($questionId);
@@ -109,17 +110,17 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
         $answer = $objAnswerTmp->selectAnswer($answerId);
         if (is_null($answer) or $answer == '') {  // don't display blank or empty answers
             continue;
-        }        
+        }
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = Question::blanksSplitAnswer($answer);
             // replaces [blank] by an input field
-            $replace_callback = function () use ($questionId, $exerciseResult) {
+            $replace_callback = function () use ($questionId, $exerciseResult, $question_number) {
                     static $id = 0;
                     $id++;
-                    $value = (isset($exerciseResult[$questionId][$id])) ? 'value = '.$exerciseResult[$questionId][$id] : '';
-                    return "<input type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value>";
+                    $value = (isset($exerciseResult[$questionId][$id])) ? ('value = "'.q($exerciseResult[$questionId][$id]) .'"') : '';
+                    return "<input type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
             };
             $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
         }
@@ -129,7 +130,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             $tool_content .= "
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked>
+                            <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
                             " . standard_text_escape($answer) . "
                           </label>
                         </div>";
@@ -140,7 +141,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             $tool_content .= "
                         <div class='checkbox'>
                           <label>
-                            <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' $checked>
+                            <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
                             " . standard_text_escape($answer) . "
                           </label>
                         </div>";
@@ -158,9 +159,9 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                 $Select[$answerId]['Reponse'] = standard_text_escape($answer);
             } else {
                 $tool_content .= "<tr>
-                                  <td><b>${cpt2}.</b> " . standard_text_escape($answer) . "</td>
+                                  <td><strong>${cpt2}.</strong> " . standard_text_escape($answer) . "</td>
                                   <td><div align='left'>
-                                   <select name='choice[${questionId}][${answerId}]'>
+                                   <select name='choice[${questionId}][${answerId}]' onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>
                                      <option value='0'>--</option>";
 
                 // fills the list-box
@@ -170,7 +171,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                 }
                 $tool_content .= "</select></div></td><td width='200'>";
                 if (isset($Select[$cpt2])) {
-                    $tool_content .= '<b>' . q($Select[$cpt2]['Lettre']) . '.</b> ' . $Select[$cpt2]['Reponse'];
+                    $tool_content .= '<strong>' . q($Select[$cpt2]['Lettre']) . '.</strong> ' . $Select[$cpt2]['Reponse'];
                 } else {
                     $tool_content .= '&nbsp;';
                 }
@@ -194,7 +195,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             $tool_content .= "
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked>
+                            <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
                             " . standard_text_escape($answer) . "
                           </label>
                         </div>";
@@ -216,6 +217,21 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     unset($objAnswerTmp);
     // destruction of the Question object
     unset($objQuestionTmp);
+
+    $tool_content .= "
+    <script>
+        function tinyMceCallback(editor) {
+            editor.on('Change', function (e) {
+                if (this.getContent({format: 'text'}).trim() != '') {
+                    var qPanel = $('#qPanel' + e.target.id.split(/[\[\]]/)[1]);
+                    var qCheck = qPanel.find('span').first();
+                    var qButton = $('#' + qCheck.attr('id').replace('qCheck', 'q_num'));
+                    qCheck.addClass('fa fa-check');
+                    qButton.removeClass('btn-default').addClass('btn-info');
+                }
+            });
+        }
+    </script>";
 
     return $nbrAnswers;
 }
