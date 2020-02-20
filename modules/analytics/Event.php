@@ -20,9 +20,9 @@ class Event implements Sabre\Event\EventEmitterInterface {
     public static function trigger($eventname, $data, $exists) {
         $course_id = $data->course_id;
         $element_type = $data->element_type;
-        
+
         $resource = 0;
-        if(array_key_exists('resource', $data))
+        if (isset($data->resource))
             $resource = $data->resource;
 
         //Check if there are analytics to compute this action
@@ -42,7 +42,7 @@ class Event implements Sabre\Event\EventEmitterInterface {
            //print_r($data);
 
             //print("Resource: $resource!! ");
-            
+
             // print("SELECT ae.id as id, ae.upper_threshold as upper_threshold, ae.lower_threshold as lower_threshold, ae.weight as weight, ae.min_value as min_value, ae.max_value as max_value, a.periodType as periodType
             // FROM analytics_element as ae
             // INNER JOIN analytics as a
@@ -53,7 +53,7 @@ class Event implements Sabre\Event\EventEmitterInterface {
             // AND a.end_date >= $now
             // AND a.active = 1
             // AND ae.resource = $resource");
-           
+
             if(count($elements) > 0) { //If the query return something trigger calculation otherwise there is nothing to compute
                 $class = get_called_class();
                 $event = new $class;
