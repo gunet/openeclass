@@ -4710,10 +4710,10 @@ function show_assignment($id, $display_graph_results = false) {
                 // professor comments
                 if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
                     $grade_comments = q_math($row->grade_comments);
-                    if (preg_match('/[\n\r] +[^ ]/', $grade_comments)) {
+                    if (preg_match('/[\n\r] +\S/', $grade_comments)) {
                         $grade_comments = "<pre style='overflow: auto'>$grade_comments</pre>";
                     } else {
-                        $grade_comments = "&nbsp;<span>$grade_comments</span>&nbsp;&nbsp;";
+                        $grade_comments = "&nbsp;<span>" . nl2br($grade_comments) . "</span>&nbsp;&nbsp;";
                     }
                     $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "
                             <span class='small'>
