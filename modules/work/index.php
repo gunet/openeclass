@@ -4666,7 +4666,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $criteria = unserialize($rubric->scales);
                     $criteria_list = '';
                     foreach ($criteria as $ci => $criterio) {
-                        $criteria_list .= "<li  class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
+                        $criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
                         if(is_array($criterio['crit_scales'])) {
                             foreach ($criterio['crit_scales'] as $si=>$scale) {
                                 $criteria_list .= "<ul class='list-unstyled'><li  class='list-group-item'>
@@ -4703,15 +4703,15 @@ function show_assignment($id, $display_graph_results = false) {
                 }
                 $label = '';
                 $comments = '';
-				//emfanizei pote vathmologhthhke
+                //emfanizei pote vathmologhthhke
                 if ($row->grade != '') { // grade submission date
                     $label = "<h6>($langGradedAt " .nice_format($row->grade_submission_date) . ")</h6>";
                 }
                 // professor comments
                 if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
                     $grade_comments = q_math($row->grade_comments);
-                    if (preg_match('/[\n\r] /', $grade_comments)) {
-                        $grade_comments = "<pre>$grade_comments</pre>";
+                    if (preg_match('/[\n\r] +[^ ]/', $grade_comments)) {
+                        $grade_comments = "<pre style='overflow: auto'>$grade_comments</pre>";
                     } else {
                         $grade_comments = "&nbsp;<span>$grade_comments</span>&nbsp;&nbsp;";
                     }
