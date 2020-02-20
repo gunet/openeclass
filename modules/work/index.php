@@ -810,12 +810,12 @@ function add_assignment() {
                     comments, submission_type, submission_date, secret_directory,
                     group_submissions, grading_type, max_grade, grading_scale_id,
                     assign_to_specific, auto_judge, auto_judge_scenarios, lang,
-                    notification, password_lock, ip_lock, assignment_type, lti_template, 
+                    notification, password_lock, ip_lock, assignment_type, lti_template,
                     launchcontainer, tii_feedbackreleasedate, tii_internetcheck, tii_institutioncheck,
                     tii_journalcheck, tii_report_gen_speed, tii_s_view_reports, tii_studentpapercheck,
                     tii_submit_papers_to, tii_use_biblio_exclusion, tii_use_quoted_exclusion,
                     tii_exclude_type, tii_exclude_value, reviews_per_assignment, start_date_review, due_date_review)
-                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t, 
+                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t,
                 ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?t, ?t)",
                 $course_id, $title, $desc, $deadline, $late_submission, '',
                 $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $grade_type,
@@ -1065,7 +1065,7 @@ function edit_assignment($id) {
                 tii_feedbackreleasedate = ?t, tii_internetcheck = ?d, tii_institutioncheck = ?d,
                 tii_journalcheck = ?d, tii_report_gen_speed = ?d, tii_s_view_reports = ?d, tii_studentpapercheck = ?d,
                 tii_submit_papers_to = ?d, tii_use_biblio_exclusion = ?d, tii_use_quoted_exclusion = ?d,
-                tii_exclude_type = ?s, tii_exclude_value = ?d, reviews_per_assignment = ?d, start_date_review = ?t, due_date_review = ?t 
+                tii_exclude_type = ?s, tii_exclude_value = ?d, reviews_per_assignment = ?d, start_date_review = ?t, due_date_review = ?t
             WHERE course_id = ?d AND id = ?d",
             $title, $desc, $group_submissions, $comments, $submission_type,
             $deadline, $late_submission, $submission_date, $grade_type, $max_grade,
@@ -1482,7 +1482,7 @@ function new_assignment() {
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#scales').select2({ width: '100%' });
-            $('#rubrics').select2({ width: '100%' }); //plaisio anazhthshs 
+            $('#rubrics').select2({ width: '100%' }); //plaisio anazhthshs
 			$('#reviews').select2({ width: '100%' });
             $('input[name=grading_type]').on('change', function(e){
                 var choice = $(this).val();
@@ -1501,11 +1501,11 @@ function new_assignment() {
                         .addClass('hidden');
                     $('#reviews')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
-                        .addClass('hidden'); 
+                        .closest('div.form-group')
+                        .addClass('hidden');
 					$('#reviews_per_user')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
+                        .closest('div.form-group')
                         .addClass('hidden');
                 } else if (choice == 1) {
                     $('#max_grade')
@@ -1522,13 +1522,13 @@ function new_assignment() {
                         .addClass('hidden');
                     $('#reviews')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
-                        .addClass('hidden'); 
+                        .closest('div.form-group')
+                        .addClass('hidden');
 					$('#reviews_per_user')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
+                        .closest('div.form-group')
                         .addClass('hidden');
-                } else if (choice == 2) {  
+                } else if (choice == 2) {
                     $('#max_grade')
                         .prop('disabled', true)
                         .closest('div.form-group')
@@ -1540,14 +1540,14 @@ function new_assignment() {
                     $('#rubrics')
                         .prop('disabled', false)
                         .closest('div.form-group')
-                        .removeClass('hidden'); 
+                        .removeClass('hidden');
                     $('#reviews')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
+                        .closest('div.form-group')
                         .addClass('hidden');
 					$('#reviews_per_user')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
+                        .closest('div.form-group')
                         .addClass('hidden');
                 }
                 else  {
@@ -1562,16 +1562,16 @@ function new_assignment() {
                     $('#rubrics')
                         .prop('disabled', true)
                         .closest('div.form-group')
-                        .addClass('hidden'); 
+                        .addClass('hidden');
                     $('#reviews')
                         .prop('disabled', false)
-                        .closest('div.form-group') 
+                        .closest('div.form-group')
                         .removeClass('hidden');
 					$('#reviews_per_user')
                         .prop('disabled', false)
-                        .closest('div.form-group') 
-                        .removeClass('hidden');	
-                }    
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                }
             });
             $('input[name=assignment_type]').on('change', function(e) {
                 var choice = $(this).val();
@@ -1632,11 +1632,11 @@ function new_assignment() {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-                    
+
                     // user groups
                     $('#group_button')
                         .prop('disabled', false);
-                    
+
                     // grading type
                     $('#scales_button')
                         .prop('disabled', false);
@@ -1644,7 +1644,7 @@ function new_assignment() {
                         .prop('disabled', false);
                     $('#reviews_button')
                         .prop('disabled', false);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', false)
@@ -1652,7 +1652,7 @@ function new_assignment() {
                         .removeClass('hidden');
                     $('#online_button')
                         .prop('disabled', false);
-                    
+
                 } else if (choice == 1) {
                     // lti fields
                     $('#lti_label')
@@ -1710,7 +1710,7 @@ function new_assignment() {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-                    
+
                     // user groups
                     $('#user_button')
                         .prop('checked', true)
@@ -1718,7 +1718,7 @@ function new_assignment() {
                         .trigger('change');
                     $('#group_button')
                         .prop('disabled', true);
-                    
+
                     // grading type
                     $('#numbers_button')
                         .prop('checked', true)
@@ -1730,7 +1730,7 @@ function new_assignment() {
                         .prop('disabled', true);
                     $('#reviews_button')
                         .prop('disabled',true);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', true)
@@ -1738,7 +1738,7 @@ function new_assignment() {
                         .addClass('hidden');
                     $('#online_button')
                         .prop('disabled', true);
-                    
+
                     // dates
                     $('#enableWorkStart').trigger('click');
                     $('#enableWorkEnd').trigger('click');
@@ -1760,7 +1760,7 @@ function new_assignment() {
                 if($(this).prop('checked')) {
                     $('input#'+dateType).prop('disabled', false);
                     $('#late_sub_row').removeClass('hide');
-			
+
                 } else {
                     $('input#'+dateType).prop('disabled', true);
                     $('#late_sub_row').addClass('hide');
@@ -1780,10 +1780,10 @@ function new_assignment() {
                     $('input#'+dateType).prop('disabled', false);
                 } else {
                     $('input#'+dateType).prop('disabled', true);
-                } 
+                }
             });
-			
-			
+
+
 			$('input[name=grading_type]').on('change', function(e){
                 var choice = $(this).val();
 				if (choice == 3 ){
@@ -1793,9 +1793,9 @@ function new_assignment() {
 					$('#late_submission').prop('disabled', false)
 				}
 			});
-			
-			
-			
+
+
+
             $('#tii_use_small_exclusion').change(function() {
                 if($(this).prop('checked')) {
                     $('#tii_exclude_type_words')
@@ -1921,10 +1921,10 @@ function new_assignment() {
                     <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
                 </div>
             </div>
-            
+
             <div class='container-fluid form-group hidden' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
                 <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
-                <div class='form-group hidden' style='margin-top: 30px;'>                    
+                <div class='form-group hidden' style='margin-top: 30px;'>
                     <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
                     <div class='col-sm-10'>
                       <select name='lti_template' class='form-control' id='lti_templates' disabled>
@@ -1975,7 +1975,7 @@ function new_assignment() {
                       </label>
                     </div>-->
                 </div>
-            </div>            
+            </div>
             <div class='form-group hidden'>
                 <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
                 <div class='col-sm-10'>
@@ -2011,7 +2011,7 @@ function new_assignment() {
                       </label>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class='form-group hidden'>
                 <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
                 <div class='col-sm-10'>
@@ -2034,7 +2034,7 @@ function new_assignment() {
                 <div class='col-sm-10'>
                     <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='0' disabled>
                 </div>
-            </div>                
+            </div>
             </div>";
     } else {
         $tool_content .= "
@@ -2061,14 +2061,14 @@ function new_assignment() {
                         <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") .">
                         $langGradeRubrics
                       </label>
-                    </div> 
+                    </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='reviews_button' name='grading_type' value='3'". ($grading_type==3 ? " checked" : "") .">
                         $langGradeReviews
                       </label>
                     </div>
-                </div>   
+                </div>
             </div>
             <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type==0 ? "" : " hidden")."'>
                 <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
@@ -2094,8 +2094,8 @@ function new_assignment() {
                   </select>
                   <span class='help-block'>$rubric_error</span>
                 </div>
-            </div> 
-            					  					
+            </div>
+
 			<div class='form-group" .($review_error_user ? " has-error" : " ").($grading_type==3 ? "" : " hidden")."'>
 				<label for='title' class='col-sm-2 control-label'>$langReviewsPerUser:</label>
                 <div class='col-sm-10'>
@@ -2108,12 +2108,12 @@ function new_assignment() {
                 <div class='col-sm-10'>
                   <select name='rubric_review' class='form-control' id='reviews' disabled>
                         $rubric_options
-                  </select> 
+                  </select>
                   <span class='help-block'>&nbsp;$review_error_rubric</span>
                 </div>
-			
+
                 <div class='input-append date".(Session::getError('WorkStart_review') ? " has-error" : "")."' id='startdatepicker' data-date='$WorkStart_review' data-date-format='dd-mm-yyyy'>
-                    <label for='WorkStart_review' class='col-sm-2 control-label'>$langReviewStart:</label> 
+                    <label for='WorkStart_review' class='col-sm-2 control-label'>$langReviewStart:</label>
                     <div class='col-sm-10'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
@@ -2124,8 +2124,8 @@ function new_assignment() {
                        <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "<i class='fa fa-share fa-rotate-270'></i> $langReviewDateHelpBlock")." </span>
 						&nbsp
 					</div>
-                </div> 
-			
+                </div>
+
                 <div class='input-append date".(Session::getError('WorkEnd_review') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd_review' data-date-format='dd-mm-yyyy'>
                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langReviewEnd:</label>
                     <div class='col-sm-10'>
@@ -2137,9 +2137,9 @@ function new_assignment() {
                        </div>
                        <span class='help-block'>".(Session::hasError('WorkEnd_review') ? Session::getError('WorkEnd_review') : "<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                     </div>
-                </div>	
-            </div>	
-		
+                </div>
+            </div>
+
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langWorkSubType:</label>
                 <div class='col-sm-10'>
@@ -2202,7 +2202,7 @@ function new_assignment() {
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' id='late_submission' name='late_submission' value='1'>
-                        $m[late_submission_enable] 
+                        $m[late_submission_enable]
                       </label>
                     </div>
                 </div>
@@ -2283,7 +2283,7 @@ function new_assignment() {
                     <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
                     <div class='col-sm-10'>
                         <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1'></div>
-                        <div class='table-responsive'>                    
+                        <div class='table-responsive'>
                             <table style='display: none;'>
                                 <thead>
                                     <tr>
@@ -2329,9 +2329,9 @@ function new_assignment() {
                                           </a>
                                       </td>
                                     </tr>
-                                    
+
                                     <tr>
-                                        <td colspan='5' style='text-align: right;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>                                
+                                        <td colspan='5' style='text-align: right;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>
                                     </tr>
                                     <tr>
                                         <td colspan='5' style='text-align: left;'><input type='submit' value='$langAutoJudgeNewScenario' id='autojudge_new_scenario' /></td>
@@ -2440,11 +2440,11 @@ function show_edit_assignment($id) {
                         .addClass('hidden');
                     $('#reviews')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
-                        .addClass('hidden'); 
+                        .closest('div.form-group')
+                        .addClass('hidden');
 					$('#reviews_per_user')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
+                        .closest('div.form-group')
                         .addClass('hidden');
                 } else if (choice == 1) {
                     $('#max_grade')
@@ -2461,11 +2461,11 @@ function show_edit_assignment($id) {
                         .addClass('hidden');
                     $('#reviews')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
-                        .addClass('hidden'); 
+                        .closest('div.form-group')
+                        .addClass('hidden');
 					$('#reviews_per_user')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
+                        .closest('div.form-group')
                         .addClass('hidden');
                 } else if (choice == 2) {
                     $('#max_grade')
@@ -2482,11 +2482,11 @@ function show_edit_assignment($id) {
                         .removeClass('hidden');
                     $('#reviews')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
-                        .addClass('hidden'); 
+                        .closest('div.form-group')
+                        .addClass('hidden');
 					$('#reviews_per_user')
                         .prop('disabled', true)
-                        .closest('div.form-group') 
+                        .closest('div.form-group')
                         .addClass('hidden');
                 }
                 else
@@ -2509,8 +2509,8 @@ function show_edit_assignment($id) {
                         .removeClass('hidden');
 					$('#reviews_per_user')
                         .prop('disabled', false)
-                        .closest('div.form-group') 
-                        .removeClass('hidden');  
+                        .closest('div.form-group')
+                        .removeClass('hidden');
                 }});
             $('input[name=assignment_type]').on('change', function(e) {
                 var choice = $(this).val();
@@ -2567,11 +2567,11 @@ function show_edit_assignment($id) {
                         .prop('disabled', true)
                         .closest('div.form-group')
                         .addClass('hidden');
-                    
+
                     // user groups
                     $('#group_button')
                         .prop('disabled', false);
-                    
+
                     // grading type
                     $('#scales_button')
                         .prop('disabled', false);
@@ -2579,7 +2579,7 @@ function show_edit_assignment($id) {
                         .prop('disabled', false);
                     $('#reviews_button')
                         .prop('disabled', false);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', false)
@@ -2587,7 +2587,7 @@ function show_edit_assignment($id) {
                         .removeClass('hidden');
                     $('#online_button')
                         .prop('disabled', false);
-                    
+
                 } else if (choice == 1) {
                     // lti fields
                     $('#lti_templates')
@@ -2641,7 +2641,7 @@ function show_edit_assignment($id) {
                         .prop('disabled', false)
                         .closest('div.form-group')
                         .removeClass('hidden');
-                    
+
                     // user groups
                     $('#user_button')
                         .prop('checked', true)
@@ -2649,7 +2649,7 @@ function show_edit_assignment($id) {
                         .trigger('change');
                     $('#group_button')
                         .prop('disabled', true);
-                    
+
                     // grading type
                     $('#numbers_button')
                         .prop('checked', true)
@@ -2661,7 +2661,7 @@ function show_edit_assignment($id) {
                         .prop('disabled', true);
                     $('#reviews_button')
                         .prop('disabled', true);
-                    
+
                     // submission type
                     $('#file_button')
                         .prop('disabled', true)
@@ -2681,16 +2681,16 @@ function show_edit_assignment($id) {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
                     $('input#'+dateType).prop('disabled', false);
-                    //if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', false); 
+                    //if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', false);
                     $('#late_sub_row').removeClass('hide');
                 } else {
                     $('input#'+dateType).prop('disabled', true);
                     //if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', true);
                     $('#late_sub_row').addClass('hide');
-					
+
                 }
             });
-			
+
             $('#enableWorkFeedbackRelease').change(function() {
                 if($(this).prop('checked')) {
                     $('input#tii_feedbackreleasedate').prop('disabled', false);
@@ -2706,8 +2706,8 @@ function show_edit_assignment($id) {
                 } else {
                     $('input#'+dateType).prop('disabled', true);
                 }
-            });	
-			
+            });
+
 			$('input[name=grading_type]').on('change', function(e){
                 var choice = $(this).val();
 				if (choice == 3 ){
@@ -2717,8 +2717,8 @@ function show_edit_assignment($id) {
 					$('#late_submission').prop('disabled', false)
 				}
 			});
-			
-			
+
+
             $('#tii_use_small_exclusion').change(function() {
                 if($(this).prop('checked')) {
                     $('#tii_exclude_type_words')
@@ -3009,8 +3009,8 @@ function show_edit_assignment($id) {
 						<span class='help-block'>$langAllowableReviewValues $review_error_user</span>
 					</div>
 				</div>
-				
-                <div class='form-group".($review_error_rubric ? " has-error" : "").($grading_type==3 ? "" : " hidden")."' >  
+
+                <div class='form-group".($review_error_rubric ? " has-error" : "").($grading_type==3 ? "" : " hidden")."' >
 				   <label for='title' class='col-sm-2 control-label'>$langGradeRubrics:</label>
                     <div class='col-sm-10'>
                      <select name='rubric_review' class='form-control' id='reviews'".(!$grading_type ? " disabled" : "").">
@@ -3030,7 +3030,7 @@ function show_edit_assignment($id) {
                             <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langReviewDateHelpBlock")."</span>
 							&nbsp
 						</div>
-                    </div> 
+                    </div>
                     <div class='input-append date".(Session::getError('WorkEnd_review') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd_review' data-date-format='dd-mm-yyyy'>
                         <label for='exerciseEndDate' class='col-sm-2 control-label'>$langReviewEnd:</label>
                         <div class='col-sm-10'>
@@ -3044,8 +3044,8 @@ function show_edit_assignment($id) {
                         </div>
                     </div>
                 </div>
-                 
-				 
+
+
 
                 <div class='form-group $subtype_hidden'>
                     <label class='col-sm-2 control-label'>$langWorkSubType:</label>
@@ -3164,7 +3164,7 @@ function show_edit_assignment($id) {
                         <div class='table-responsive'>
                             <table id='assignees_tbl' class='table-default ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
                             <tr class='title1'>
-                              <td id='assignees'>$langStudents</td> 
+                              <td id='assignees'>$langStudents</td>
                               <td class='text-center'>$langMove</td>
                               <td>$m[WorkAssignTo]</td>
                             </tr>
@@ -3294,7 +3294,7 @@ function show_edit_assignment($id) {
                                 </tr>";
                     }
                     $tool_content .= "<tr>
-                                        <td colspan='4' style='text-align: right;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>                                        
+                                        <td colspan='4' style='text-align: right;'> $langAutoJudgeSum: <span id='weights-sum'>0</span></td>
                                       </tr>
                                     <tr>
                                         <td colspan='4' style='text-align: left;'>
@@ -3588,7 +3588,8 @@ function show_student_assignment($id) {
 
     global $tool_content, $m, $uid, $langUserOnly, $langBack, $course_code,
         $course_id, $course_code, $langAssignmentWillBeActive,
-        $langCaptchaWrong, $langIPHasNoAccess;
+        $langCaptchaWrong, $langIPHasNoAccess, $langNoPeerReview,
+        $langPendingPeerSubmissions;
 
     $cdate = date('Y-m-d H:i:s');
     $user_group_info = user_group_info($uid, $course_id);
@@ -3598,17 +3599,17 @@ function show_student_assignment($id) {
         $gids_sql_ready = "''";
     }
 
-    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time, 
+    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                          CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
                                                          CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
-                                                     FROM assignment 
-                                                     WHERE course_id = ?d 
-                                                        AND id = ?d 
-                                                        AND active = '1' 
+                                                     FROM assignment
+                                                     WHERE course_id = ?d
+                                                        AND id = ?d
+                                                        AND active = '1'
                                                         AND (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
-                                                               (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d 
-                                                                UNION 
-                                                                SELECT assignment_id FROM assignment_to_specific 
+                                                               (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                                                                UNION
+                                                                SELECT assignment_id FROM assignment_to_specific
                                                                    WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                                                     )", $course_id, $id, $uid);
 
@@ -3661,7 +3662,6 @@ function show_student_assignment($id) {
 			assignment_details($id, $row, true); //den emfanizontai oi hmeromhnies start, due otan o foithths den exei upovalei parolo pou uparxei peer review
 		}
 
-
         $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission);
         $submissions_exist = false;
 
@@ -3691,32 +3691,31 @@ function show_student_assignment($id) {
         }
         //h sunarthhsh theloume na kaleitai an einai peer review kai an exei upovalei ergasia o foithths
         //dhladh an einai true h $submissions_exist
-		$ass = Database::get()->querySingle("SELECT * FROM assignment_submit
+        $ass = Database::get()->querySingle("SELECT * FROM assignment_submit
                                  WHERE assignment_id = ?d AND uid = ?d ", $id, $uid);
-		$rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
+        $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
                                  WHERE assignment_id = ?d ", $id);
-        if ($row->grading_type == 3 && $submissions_exist && $ass){
-			if ( $row->start_date_review < $cdate ) {
-				if ($row->reviews_per_assignment < $count_of_assign && $rows ){
-					show_assignment_review($id);
-				}elseif ($row->reviews_per_assignment < $count_of_assign && empty($rows)){
-					$tool_content .= "
-					<p class='sub_title1'></p>
-					<div class='alert alert-warning'>Δεν θα γίνει αξιολόγηση.</div>";
-				}
-				elseif ($row->reviews_per_assignment > $count_of_assign ){
-					$tool_content .= "
-					<p class='sub_title1'></p>
-					<div class='alert alert-warning'>Δεν θα γίνει αξιολόγηση.</div>";
-				}
-			}
-			else
-			{
-				//auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
-				$start_date_review = nice_format($row->start_date_review, TRUE); //hmeromhnia enarkshs aksiologhshs
-				$tool_content .= "
-					<p class='sub_title1'></p>
-					<div class='alert alert-warning'>Αναμένονται εργασίες για αξιολόγηση.</div>";
+        if ($row->grading_type == 3 && $submissions_exist && $ass) {
+            if ($row->start_date_review < $cdate) {
+                if ($row->reviews_per_assignment < $count_of_assign && $rows) {
+                    show_assignment_review($id);
+                } elseif ($row->reviews_per_assignment < $count_of_assign && empty($rows)) {
+                    $tool_content .= "
+                      <p class='sub_title1'></p>
+                      <div class='alert alert-warning'>$langNoPeerReview</div>";
+                } elseif ($row->reviews_per_assignment > $count_of_assign) {
+                    $tool_content .= "
+                      <p class='sub_title1'></p>
+                      <div class='alert alert-warning'>$langNoPeerReview</div>";
+                }
+            }
+            else
+            {
+                //auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
+                $start_date_review = nice_format($row->start_date_review, TRUE); //hmeromhnia enarkshs aksiologhshs
+                $tool_content .= "
+                       <p class='sub_title1'></p>
+                       <div class='alert alert-warning'>$langPendingPeerSubmissions</div>";
 			}
         }
     } else {
@@ -3739,40 +3738,39 @@ function show_student_assignment($id) {
  * @param type $display_graph_results
  */
 function show_assignment_review($id, $display_graph_results = false) {
-   global $tool_content, $course_id, $works_url, $course_code, $langWorkOnlineText, $m, $langGradebookGrade, $langSurnameName, $uid, $langQuestionView,
-   $langSGradebookBook, $langEdit;
-   $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment 
-											WHERE course_id = ?d AND id = ?d", $course_id, $id);
-	$nav[] = $works_url;
-	//den kserw ti kanei
-   /* if ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-        show_turnitin_integration($id);
-    }*/
-	$review_per_assignment = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d", $id)->reviews_per_assignment;
-	if (!$display_graph_results) {
+    global $tool_content, $course_id, $works_url, $course_code, $uid,
+        $langWorkOnlineText, $m, $langGradebookGrade, $langSurnameName,
+        $langQuestionView, $langSGradebookBook, $langEdit;
 
-		$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
-            <input type='hidden' name='grades_id' value='$id' />
+    $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+        FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $nav[] = $works_url;
+    $review_per_assignment = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d", $id)->reviews_per_assignment;
+    if (!$display_graph_results) {
+
+        $tool_content .= "
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
+            <input type='hidden' name='grades_id' value='$id'>
             <br>
             <div class='margin-bottom-thin'>
-                 <b>Εργασίες που έχουν ανατεθεί :</b>&nbsp; $review_per_assignment
+              <b>$langPeerSubmissions:</b>&nbsp; $review_per_assignment
             </div>
             <div class='table-responsive'>
-            <table class='table-default'>
-            <tbody>
-             <tr class='list-header'>
-            <th width='3'>&nbsp;</th>";
+              <table class='table-default'>
+                <tbody>
+                  <tr class='list-header'>
+                    <th width='3'>&nbsp;</th>";
         //auta einai ta onomata panw sto pedio tou pinaka bathmos hmeromhnia...
         $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
         sort_link($langGradebookGrade, 'grade');
         $tool_content .= "<th width='10%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
-		$result = Database :: get()->queryArray("SELECT * from assignment_grading_review WHERE assignment_id = ?d && users_id = ?d",$id, $uid);
-		$i = 1;
-		$plagiarismlink='';
-		//foreach
-		foreach ($result as $row) {
-			$tool_content .="<input type='hidden' name='assignment' value='$row->id'>";
-			if ($assign->submission_type) {
+        $result = Database :: get()->queryArray("SELECT * from assignment_grading_review WHERE assignment_id = ?d && users_id = ?d",$id, $uid);
+        $i = 1;
+        $plagiarismlink = '';
+
+        foreach ($result as $row) {
+            $tool_content .="<input type='hidden' name='assignment' value='$row->id'>";
+            if ($assign->submission_type) {
                 $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
             } else {
                 if (empty($row->file_name)) {
@@ -3791,24 +3789,19 @@ function show_assignment_review($id, $display_graph_results = false) {
                       q($filename) . "</a>";
                 }
             }
-			$icon_field = "<a class='link' href='grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
-                            <span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span>
-						   </a>";
+            $icon_field = "<a class='link' href='grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
 
-			//langSGradebookBook=Καταχώριση βαμθού
-		    $grade = Database::get()->querySingle("SELECT grade FROM assignment_grading_review WHERE id = ?d ", $row->id )->grade;
+            $grade = Database::get()->querySingle("SELECT grade FROM assignment_grading_review WHERE id = ?d ", $row->id )->grade;
             if (!empty($grade)) {
                 $grade_field = "<input class='form-control' type='text' value='$grade' name='grade' maxlength='4' size='3' disabled>";
             } else {
-				$icon_field = '';
-				$grade_field = "<a class='link' href='grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
-									<span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span>
-								</a>";
+                $icon_field = '';
+                $grade_field = "<a class='link' href='grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'><span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span></a>";
             }
-			$tool_content .= "<tr>
+            $tool_content .= "<tr>
                                 <td class='text-right' width='4'>$i.</td>
-                            <td>$filelink";
-			// check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
+                                <td>$filelink";
+            // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
             if (get_config('ext_unicheck_enabled') and valid_plagiarism_file_type($row->id)) {
                 $results = Plagiarism::get()->getResults($row->id);
                 if ($results) {
@@ -3821,40 +3814,38 @@ function show_assignment_review($id, $display_graph_results = false) {
                     $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
                 }
             }
-                // ---------------------------------
+            // ---------------------------------
             $tool_content .= "</td>
                 <td class='text-center' width='180'>
-                    $filelink <br> $plagiarismlink
+                  $filelink <br> $plagiarismlink
                 </td>
                 <td width='5' class='text-center'>
-                    <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
-                        $grade_field
-                        <span class='help-block'>".Session::getError("grade.$row->id")."</span>
-                    </div>
+                  <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
+                    $grade_field
+                    <span class='help-block'>".Session::getError("grade.$row->id")."</span>
+                  </div>
                 </td>
-				<td class='text-center'>
-					$icon_field          
+                <td class='text-center'>
+                  $icon_field
                 </td></tr>";
-			$i++;
-		}
-		//end foreach
-		$tool_content .= "
+            $i++;
+        }
+        //end foreach
+        $tool_content .= "
                     </tbody>
                 </table>
             </div>
             <div class='form-group'>
-                <div class='col-xs-12'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' value='1' name='email' checked> $m[email_users]
-                      </label>
-                    </div>
-                </div>
+              <div class='col-xs-12'>
+                 <div class='checkbox'>
+                   <label>
+                     <input type='checkbox' value='1' name='email' checked> $m[email_users]
+                   </label>
+                 </div>
+              </div>
             </div>
-            
-            </form>";
-	}
-
+          </form>";
+    }
 }
 
 
@@ -4424,7 +4415,7 @@ function assignment_details($id, $row, $x =false) {
 					<div class='col-sm-3'>
 						<strong>$langReviewStart:</strong>
 					</div>
-					<div class='col-sm-9'> 
+					<div class='col-sm-9'>
 						$start_date_review ".(isset($start_date_review_notice) ? $start_date_review_notice: "")."
 					</div>
 				</div>
@@ -4432,7 +4423,7 @@ function assignment_details($id, $row, $x =false) {
 					<div class='col-sm-3'>
 						<strong>$langReviewEnd:</strong>
 					</div>
-					<div class='col-sm-9'> 
+					<div class='col-sm-9'>
 						$due_date_review ".(isset($due_date_review_notice) ? $due_date_review_notice: "")."
 					</div>
 				</div>
@@ -4461,9 +4452,9 @@ function show_assignment($id, $display_graph_results = false) {
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent,
-    $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent;
+    $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
 
-    $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time, 
+    $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
                                                         CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
                                                     FROM assignment
@@ -4473,15 +4464,15 @@ function show_assignment($id, $display_graph_results = false) {
 
 	$cdate = date('Y-m-d H:i:s');
 	//to button anathesh tha emfanizetai sto xroniko diasthma apo deadline - start_date_review
-	if ( ($assign->grading_type == 3 && $cdate > $assign->deadline && $cdate < $assign->start_date_review)){
+	if ( ($assign->grading_type == 3 && $cdate > $assign->deadline && $cdate < $assign->start_date_review)) {
 	    $count_of_ass = Database::get()->querySingle("SELECT COUNT(*) AS count_of_ass FROM assignment_submit
                                  WHERE assignment_id = ?d ", $id)->count_of_ass;
 		if ($assign->reviews_per_assignment < $count_of_ass) {
-			$tool_content .= " <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>	
+			$tool_content .= " <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
 						   <input type='hidden' name='assign' value='$id'>
 						   <div class='form-group'>
 								<div class='pull-right'>
-									<input class='btn btn-primary' type='submit' name='ass_review' value='Ανάθεση Εργασιών'>
+									<input class='btn btn-primary' type='submit' name='ass_review' value='$langAssignmentDistribution'>
 								</div>
 						   </div>
 						   </form>";
@@ -4655,9 +4646,7 @@ function show_assignment($id, $display_graph_results = false) {
 					$grade = $grade_review;
 					$count_ass++;
 				}*/
-                $icon_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
-                                <span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span>
-                            </a>";
+                $icon_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
                 if ($row->grading_scale_id && $row->grading_type == 1) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
@@ -4675,7 +4664,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $row->grading_scale_id);
 
                     $criteria = unserialize($rubric->scales);
-                    $criteria_list = "";
+                    $criteria_list = '';
                     foreach ($criteria as $ci => $criterio) {
                         $criteria_list .= "<li  class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
                         if(is_array($criterio['crit_scales'])) {
@@ -4691,9 +4680,7 @@ function show_assignment($id, $display_graph_results = false) {
                         $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' disabled>";
                     } else {
                         $icon_field = '';
-                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
-                                <span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span>
-                            </a>";
+                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'><span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span></a>";
                     }
                 } else {
                     // disabled grade field if turnitin
@@ -4723,7 +4710,7 @@ function show_assignment($id, $display_graph_results = false) {
                 // professor comments
                 if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
                     $grade_comments = q_math($row->grade_comments);
-                    if (preg_match('/(\r\n|\n|\r)\s/', $grade_comments)) {
+                    if (preg_match('/[\n\r] /', $grade_comments)) {
                         $grade_comments = "<pre>$grade_comments</pre>";
                     } else {
                         $grade_comments = "&nbsp;<span>$grade_comments</span>&nbsp;&nbsp;";
@@ -4860,6 +4847,7 @@ function show_assignment($id, $display_graph_results = false) {
                       <div class='alert alert-warning'>$langNoSubmissions</div>";
     }
 }
+
 /**
  * @global type $tool_content
  * @global array $works_url
@@ -4874,7 +4862,7 @@ function show_non_submitted($id) {
     global $tool_content, $works_url, $course_id, $m,
             $langGroup, $course_code, $langHasAssignmentPublished;
 
-    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time, 
+    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
 								CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
 								CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
                                 FROM assignment
@@ -5046,16 +5034,16 @@ function show_student_assignments() {
     }
     //to time exei mia tetoia morgh 261788726178872617887-5356113
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                FROM assignment WHERE course_id = ?d 
+                FROM assignment WHERE course_id = ?d
                     AND active = '1' AND
                     (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
-                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d 
-                            UNION 
+                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                            UNION
                         SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                     )
-                ORDER BY                  
-                CASE 
-                    WHEN deadline IS NULL THEN 1 ELSE 0 
+                ORDER BY
+                CASE
+                    WHEN deadline IS NULL THEN 1 ELSE 0
                 END, title
                 ", $course_id, $uid);
     if (count($result) > 0) {
@@ -5179,9 +5167,9 @@ function show_assignments() {
 
         // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                        FROM assignment WHERE course_id = ?d ORDER BY 
-                                            CASE 
-                                                WHEN deadline IS NULL THEN 1 ELSE 0 
+                                        FROM assignment WHERE course_id = ?d ORDER BY
+                                            CASE
+                                                WHEN deadline IS NULL THEN 1 ELSE 0
                                             END, title", $course_id);
     $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
@@ -5496,11 +5484,11 @@ function submit_review_per_ass($id) {
 		$count = $assignment->reviews_per_assignment - $rowcount;//oi ergasies pou leipoun
 		foreach($ass as $row2){
 			if ($assignment->submission_type) {
-				Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, submission_text, submission_date, gid, users_id) 
+				Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, submission_text, submission_date, gid, users_id)
 				VALUES (?d, ?d, ?d, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->submission_text, $row1->submission_date, $row1->group_id, $row2->uid)->lastInsertID;
 			}
 			else{
-				Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, file_path, file_name, submission_date, gid, users_id) 
+				Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, file_path, file_name, submission_date, gid, users_id)
 				VALUES (?d, ?d, ?d, ?s, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->file_path, $row1->file_name, $row1->submission_date, $row1->group_id, $row2->uid)->lastInsertID;
 			}
 		}
@@ -5510,11 +5498,11 @@ function submit_review_per_ass($id) {
 			foreach ($assign1 as $row3)
 			{
 				if ($assignment->submission_type) {
-					Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, submission_text, submission_date, gid, users_id) 
+					Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, submission_text, submission_date, gid, users_id)
 					VALUES (?d, ?d, ?d, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->submission_text, $row1->submission_date, $row1->group_id, $row3->uid)->lastInsertID;
 				}
 				else{
-					Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, file_path, file_name, submission_date, gid, users_id) 
+					Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, file_path, file_name, submission_date, gid, users_id)
 					VALUES (?d, ?d, ?d, ?s, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->file_path, $row1->file_name, $row1->submission_date, $row1->group_id, $row3->uid)->lastInsertID;
 				}
 			}
