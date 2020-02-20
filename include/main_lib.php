@@ -3057,37 +3057,39 @@ class HtmlCutString {
  */
 function getOnlineUsers() {
 
+    $count = 0;
     if (ini_get('session.save_handler') == 'redis') {
         $redis = new Redis();
         $path = ini_get('session.save_path');
         $url = parse_url($path);
-        if (isset($url['host'])) {
-            if (isset($url['port'])) {
-                $redis->pconnect($url['host'], $url['port']);
-            } else {
-                $redis->pconnect($url['host']);
-            }
-        } elseif (isset($url['path'])) {
-            $redis->pconnect($url['path']);
-        } elseif (preg_match('|^unix://(/[^?]+)|', $path, $matches)) {
-            $redis->pconnect($matches[1]);
-        } else {
-            return 0;
-        }
-        return floor($redis->dbSize() / 12);
-    }
-
-    $count = 0;
-    if ($directory_handle = @opendir(session_save_path())) {
-        while (false !== ($file = readdir($directory_handle))) {
-            if ($file != '.' and $file != '..') {
-                if (time() - fileatime(session_save_path() . '/' . $file) < MAX_IDLE_TIME * 60) {
-                    $count++;
+	try { // is Redis alive ?
+		if (isset($url['host'])) {
+        	    if (isset($url['port'])) {
+	                $redis->pconnect($url['host'], $url['port']);
+        	    } else {
+        	        $redis->pconnect($url['host']);
+	            }
+	        } elseif (isset($url['path'])) {
+        	    $redis->pconnect($url['path']);
+	        } elseif (preg_match('|^unix://(/[^?]+)|', $path, $matches)) {
+        	    $redis->pconnect($matches[1]);
+                }
+                $count = floor($redis->dbSize() / 12);
+	} catch (RedisException $e) {
+		unset($e);
+	}
+    } else {
+        if ($directory_handle = @opendir(session_save_path())) {
+            while (false !== ($file = readdir($directory_handle))) {
+                if ($file != '.' and $file != '..') {
+                    if (time() - fileatime(session_save_path() . '/' . $file) < MAX_IDLE_TIME * 60) {
+                        $count++;
+                    }
                 }
             }
+           @closedir($directory_handle);
         }
     }
-    @closedir($directory_handle);
     return $count;
 }
 
