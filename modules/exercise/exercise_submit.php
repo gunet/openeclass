@@ -69,11 +69,11 @@ if (isset($_COOKIE['inExercise'])) {
 
 // Identifying ajax request that cancels an active attempt
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-        if ($_POST['action'] == 'refreshSession') {
+        if (isset($_POST['action']) and $_POST['action'] == 'refreshSession') {
             // Does nothing just refreshes the session
             exit();
         }
-        if ($_POST['action'] == 'endExerciseNoSubmit') {
+        if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
 
             $exerciseId = $_POST['eid'];
             $record_end_date = date('Y-m-d H:i:s', time());
