@@ -227,7 +227,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                     var qCheck = qPanel.find('span').first();
                     var qButton = $('#' + qCheck.attr('id').replace('qCheck', 'q_num'));
                     qCheck.addClass('fa fa-check');
-                    qButton.removeClass('btn-default').addClass('btn-complete');
+                    qButton.removeClass('btn-default').addClass('btn-info');
                 }
             });
         }

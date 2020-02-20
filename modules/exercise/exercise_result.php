@@ -394,11 +394,12 @@ if (count($exercise_question_ids) > 0) {
                             // else if the word entered is not the same as the one defined by the professor
                             elseif ($choice[$j] !== '' and $showResults) {
                                 // adds the word in red at the end of the string, and strikes it
-                                $answer.='<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
+                                $answer .= '<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             } else {
                                 // adds a tabulation if no word has been typed by the student
-                                $answer.='&nbsp;&nbsp;&nbsp;';
+                                $answer .= '&nbsp;&nbsp;&nbsp;';
+                                $icon = "<span class='fa fa-times text-danger'></span>";
                             }
                             if ($showResults) { // adds the correct word, followed by ] to close the blank
                                 $answer .= ' / <span class="text-success"><strong>' .
@@ -460,7 +461,7 @@ if (count($exercise_question_ids) > 0) {
                 if ($answerType != MATCHING || $answerCorrect) {
                     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                         $tool_content .= "<tr><td width='100' class='text-center'>";
-
+                        $answer_icon  = '';
                         if ($studentChoice) {
                             $student_choice_icon = "fa fa-fw fa-check-square-o help-block";
                             $style = '';
@@ -486,7 +487,7 @@ if (count($exercise_question_ids) > 0) {
                             } else {
                                 $tool_content .= "&nbsp;<span class='text-danger'><small>($langIncorrectS)</small></span>";
                             }
-                            if ($studentChoice) {
+                            if ($studentChoice or $answerCorrect) {
                                 $tool_content .= "<small><span class='help-block'>" . standard_text_escape(nl2br(make_clickable($answerComment))) ."</span></small>";
                             }
                         }
