@@ -37,6 +37,8 @@ $conference_id = $_GET['conference_id'];
 $conference_activity = false;
 $conference_agent = false;
 $agent_id = false;
+$colmooc_teacher_la_url = null;
+$colmooc_student_la_url = null;
 $q = Database::get()->querySingle("SELECT status, chat_activity, agent_created, agent_id FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
 if ($q) { // additional security
     $conference_status = $q->status;
@@ -180,8 +182,6 @@ if (!$conference_activity) {
     }
     $laSessionId = false;
     $laSessionToken = false;
-    $colmooc_teacher_la_url = null;
-    $colmooc_student_la_url = null;
     if ($is_editor && $conference_agent && $agent_id && !isset($_GET['create_agent']) && !isset($_GET['edit_agent'])) {
         list($laSessionId, $laSessionToken) = colmooc_add_teacher_lasession();
         if ($laSessionId && $laSessionToken) {

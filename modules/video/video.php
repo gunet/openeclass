@@ -41,6 +41,8 @@ if (isset($_GET['course']) and isset($_GET['id'])) {
         }
         redirect_to_home_page($url);
     }
+} else {
+    redirect_to_home_page("modules/video/index.php?course=$course_code");
 }
 
-not_found();
+
