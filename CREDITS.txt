@@ -2,7 +2,7 @@
 *   Open eClass
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2016  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2020  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".				
 *
 *  Open eClass is an open platform distributed in the hope that it will
@@ -16,117 +16,14 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-************************************************************************/
- Project Management and Core Developers
-************************************************************************/
- Costas Tsibanis <k.tsibanis@noc.uoa.gr>
- Yannis Exidaridis <jexi@noc.uoa.gr>
- Alexandros Diamantidis <adia@noc.uoa.gr>
+
+************************************************************************
+https://docs.openeclass.org/el/dream_team
+************************************************************************
 
 ************************************************************************/
-Developers and Contributors
+Platform uses various 3rd party components such as:
 ************************************************************************/
- Thanos Kyritsis <atkyritsis@upnet.gr>
- Panayotis Katsaloulis <panayotis@panayotis.com>
- Nikos Vavoulas <nikos.va@gmail.com>
- Anastasios Karakostas <akarakos@csd.auth.gr> (Aristotele University of Thessaloniki)
- Ananias Tsalouchidis <atsaloux@it.auth.gr> (Aristotele University of Thessaloniki)
- Sakis Agorastos <th_agorastos@hotmail.com>
- Angela Dimitriou <a.dimitriou@noc.ntua.gr> (National Technical University of Athens)
- Athanasios Plessas <plessas@ceid.upatras.gr> (University of Patras)
- Evangelia Boufardea <mpoufard@westgate.gr>
-
-************************************************************************/
- UI Team
-************************************************************************/
- Ioannis Feneris <ifeneris@it.auth.gr> (Aristotele University of Thessaloniki)
- Theodore Schizas <tioschizas@gmail.com>
- Manina Dourali <info@groovygraphics.gr>
- George Piskopanis <gpiskopanis@gmail.com>
-
-************************************************************************/
- Security Team
-************************************************************************/
- Ioannis Stais <istais@di.uoa.gr>
- George Argyros <argyros.george@gmail.com>
-
-************************************************************************/
-Documentation and Testing Team
-************************************************************************/
- Tilemachos Raptis <traptis@noc.uoa.gr>
- Evaggelos Matiatos <ematiat@noc.uoa.gr> (University of Athens)
-
-************************************************************************/
-Previous Developers and Contributors
-************************************************************************/
- Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
- Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
- Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete) 
- Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
- Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
- Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
- Vangelis Chaniotakis <haniotak@ucnet.uoc.gr> (University of Crete)
- Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
- Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
- Ophelia Neofytou <ophelia@ucnet.uoc.gr> (Universify of Crete)
- Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
- Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)
- Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
- Ilias Mpertsimas <mhlias@noc.teilam.gr> (Technological Educational Institute of Lamia)
- Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
- Michalis Psaltakis <mpsaltakis@aegean.gr> (University of the Aegean)
- Konstantinidis K. (Aristotele University of Thessaloniki)
- Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
- George Doukas <geodoukas@upatras.gr> (University of Patras)
- Kostantinos Tsakaloglou <tsakf@yahoo.com> 
- Apostolos Kechagias <apkech@gmail.com>
- Eirini Lagiou <eilagiou@upatras.gr> (University of Patras)
- Yury Kherimyan <yurissudavar@gmail.com> (University of Athens)
-
-Also we would like to thank:
- Aristotelis Glentis <arisg@noc.uoa.gr> (University of Athens)
- Aggelos Kiayias <aggelos@di.uoa.gr> (Associate Professor, Department of Informatics, University of Athens) and his students 
-   Kyriakos Lesgidis
-   Demetris Procopiou
-   Spyridon Smparounis
-   Georgios Lestaris
-   Georgios Papakyriakopoulos
-   Konstantinos Ferles
-   George Tsolkas
-   Lykourgos Papaevgeniou
-   Ioannis Constantinou
-   Nikolaos Karvelas
-   Christos Kasketis <kasketis@gmail.com>
-for their contribution in security issues. 
-
-/***********************************************************************
-Porting to IOS by:
-	Thanos Kyritsis <atkyritsis@upnet.gr>
- 	Panayotis Katsaloulis <panayotis@panayotis.com>
-
-/***********************************************************************
-Porting to Android OS by:
-	Thanos Kyritsis <atkyritsis@upnet.gr>
- 	Panayotis Katsaloulis <panayotis@panayotis.com>
-    Contributions by: Zamani Aikaterini <kat.zamani@gmail.com> (University of Athens)
-                      Raikakou Eugenia  <t.raikakou@gmail.com> (University of Athens)
-***********************************************************************/
-
-************************************************************************/
-Messages translated to:
-        Spanish by Ana Serrado Bayes <ana.serrado@uca.es>
-        German by George Nikolaidis <nikolage@noc.uoa.gr>
-        Italian by Harris Kalligeros <hariskal@noc.uoa.gr>        
-        French by Mavina Pantazara <mavinap@frl.uoa.gr>
-************************************************************************/
-
-
-************************************************************************/
-Various components which are being used (or have used in previous releases)
-************************************************************************/
-
-Initially inspired and partially based on Claroline 1.3.0, (www.claroline.net)
-  Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
 
@@ -165,10 +62,6 @@ D3
     Copyright (c) 2010-2015, Michael Bostock
     http://d3js.org
 
-PclZip 2.8.2 : Vincent Blavet <vincent@phpconcept.net>
-    Distributed under the GNU Lesser General Public License.
-    http://www.phpconcept.net
-
 phpBB Copyright (c) 2001 The phpBB Group
 
 PEAR: Copyright (c) 1997-2004 The PHP Group
@@ -177,7 +70,7 @@ phpSysInfo:
   Copyright (c), 1999-2001, Uriah Welcome (precision@devrandom.net)
   Copyright (c), 1999-2001, Matthew Snelham (infinite@valinux.com)
 
-JSCalendar: Copyright Mihai Bazon, 2002-2005
+JSCalendar: Copyright Mihai Bazon,
   Distributed under the GNU Lesser General Public License.
   http://www.dynarch.com/projects/calendar/old/
 
@@ -197,8 +90,6 @@ Learnpath module: Piraux Sebastien <pir@cerdecam.be>
 
 PHP MathPublisher : Copyright (c) 2005 by Pascal Brachet <pbrachet@xm1math.net> 
   http://www.xm1math.net/phpmathpublisher/
-  
-Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
 
 Javascript SortTable (sorttable.js): Stuart Langridge (licenced as X11)
  http://www.kryogenix.org/code/browser/sorttable/
@@ -231,13 +122,11 @@ HTML Purify: (include/htmlpurifier-4.3.0-standalone)
 Tiny MCE Editor
   Copyright © 2003-2011 Moxiecode Systems AB. All rights Reserved.
   Licensed under LGPL
-  http:/tinymce.moxiecode.com
-  version 3.5.6
+  https://www.tiny.cloud
 
 PHP CAS Library - Copyright 2003 - 2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
   Licensed under the New BSD License, an OSI-certified ("open") and Gnu/FSF-recognized ("free") license
   https://wiki.jasig.org/display/CASC/phpCAS
-  version 1.2.2
 
 SecureImage - Copyright 2009 Drew Phillips
   Licenced under GPL
