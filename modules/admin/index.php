@@ -73,34 +73,14 @@ if (isset($is_admin) and $is_admin) { // only for `admin `user
                     <div class='panel-heading'>
                         <h3 class='panel-title'>$langQuickLinks</h3>
                     </div>
-                    <div class='panel-body'>" .
-            action_button(array(
-                array('title' => $langSearchUser,
-                    'url' => "search_user.php",
-                    'icon' => 'fa-search',
-                    'level' => 'primary-label'),
-                array('title' => $langSearchCourse,
-                    'url' => "searchcours.php",
-                    'icon' => 'fa-search',
-                    'level' => 'primary-label'),
-                array('title' => $langHierarchy,
-                    'url' => "hierarchy.php",
-                    'icon' => 'fa-sitemap',
-                    'level' => 'primary-label'),
-                array('title' => $langConfig,
-                    'url' => "eclassconf.php",
-                    'icon' => 'fa-cogs',
-                    'level' => 'primary-label'),
-                array('title' => $langThemeSettings,
-                    'url' => "theme_options.php",
-                    'icon' => 'fa-tasks',
-                    'level' => 'primary-label'),
-                array('title' => $langExternalTools,
-                    'url' => "extapp.php",
-                    'icon' => 'fa-wrench',
-                    'level' => 'primary-label')
-            )) .
-            "</div>
+                    <div class='panel-body'>
+                        <a href='search_user.php' class='btn btn-default btn-xs'>$langSearchUser</a>
+                        <a href='searchcours.php' class='btn btn-default btn-xs'>$langSearchCourse</a>
+                        <a href='hierarchy.php' class='btn btn-default btn-xs'>$langHierarchy</a>
+                        <a href='eclassconf.php' class='btn btn-default btn-xs'>$langConfig</a>
+                        <a href='theme_options.php' class='btn btn-default btn-xs'>$langThemeSettings</a>
+                        <a href='extapp.php' class='btn btn-default btn-xs'>$langExternalTools</a>
+                    </div>
                 </div>
             </div>
         </div>";
