@@ -306,7 +306,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                         });
                         $.ajax({
                             type: 'POST',
-                            url: '{$urlAppend}/modules/search/idxasync.php'
+                            url: '{$urlServer}modules/search/idxasync.php'
                         });
                     }
                 });
@@ -335,7 +335,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                 });
                 $.ajax({
                     type: 'POST',
-                    url: '{$urlAppend}/modules/search/idxasync.php'
+                    url: '{$urlServer}/modules/search/idxasync.php'
                 });
             });
             $('.success').delay(3000).fadeOut(1500);
