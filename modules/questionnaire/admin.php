@@ -136,20 +136,29 @@ if (isset($_POST['submitQuestion'])) {
     if($v->validate()) {
         $question_text = $_POST['questionName'];
         $qtype = $_POST['answerType'];
-        if(isset($_GET['modifyQuestion'])) {
+        if (isset($_GET['modifyQuestion'])) {
             $pqid = intval($_GET['modifyQuestion']);
             $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
-            if(!$poll){
+            if (!$poll) {
                 redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
             }
-            Database::get()->query("UPDATE poll_question SET question_text = ?s, qtype = ?d
-                    WHERE pqid = ?d AND pid = ?d", $question_text, $qtype, $pqid, $pid);
+            $query_vars = [$question_text, $qtype];
+            if (isset($_POST['questionScale'])) {
+                $query_columns = ", q_scale = ?d";
+                $query_vars[] = $_POST['questionScale'];
+            } else {
+                $query_columns = '';
+            }
+            array_push($query_vars, $pqid, $pid);
+            Database::get()->query("UPDATE poll_question
+                    SET question_text = ?s, qtype = ?d $query_columns
+                    WHERE pqid = ?d AND pid = ?d", $query_vars);
         } else {
             $max_position = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM poll_question WHERE pid = ?d", $pid)->position;
             $query_columns = "pid, question_text, qtype, q_position";
             $query_values = "?d, ?s, ?d, ?d";
             $query_vars = array($pid, $question_text, $qtype, $max_position + 1);
-            if(isset($_POST['questionScale'])){
+            if (isset($_POST['questionScale'])){
                 $query_columns .= ", q_scale";
                 $query_values .=", ?d";
                 $query_vars[] = $_POST['questionScale'];
