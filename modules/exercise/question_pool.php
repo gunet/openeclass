@@ -61,21 +61,19 @@ $head_content .= "<script type='text/javascript'>
                           placeholder : '$langSearch...'
                         });
         });
-        </script>";
+    </script>";
 
 $head_content .= "
-<script>
-$(function() {
-    $('.menu-popover').on('shown.bs.popover', function () {
-          $(document).on('click', '.warnLink', function(e){
+    <script>
+        $(function() {
+            $(document).on('click', '.warnLink', function(e){
                 var modifyAllLink = $(this).attr('href');
                 var modifyOneLink = modifyAllLink.concat('&clone=true');
                 $('a#modifyAll').attr('href', modifyAllLink);
                 $('a#modifyOne').attr('href', modifyOneLink);
-          });
-    });
-});
-</script>";
+            });
+        });
+    </script>";
 $tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
 
 $toolName = $langQuestionPool;
