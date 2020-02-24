@@ -242,7 +242,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     // if user is logged in display the logout option
-    if (isset($_SESSION['uid'])) {
+    if ($uid) {
         $t->set_var('LANG_USER', q($langUserHeader));
         $t->set_var('USER_NAME', q($_SESSION['givenname']));
         $t->set_var('USER_SURNAME', q($_SESSION['surname']));
