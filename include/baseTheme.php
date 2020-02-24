@@ -66,7 +66,7 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $session, $course_code, $course_id, $helpTopic, $helpSubTopic,
+    global $session, $course_code, $course_id, $helpTopic, $helpSubTopic, $uid,
         $is_editor, $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user,
         $langActivate, $langNote,$langPleaseWait,
         $langAdmin, $langAdminTool, $langAdvancedSearch,
