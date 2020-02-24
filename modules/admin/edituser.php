@@ -335,7 +335,7 @@ if ($u) {
         <input type='hidden' name='registered_at' value='" . $info->registered_at . "' />
         <div class='col-sm-offset-2 col-sm-10'>
 	    <input class='btn btn-primary' type='submit' name='submit_edituser' value='$langSubmit' />
-	    <a href='$_SERVER[SCRIPT_NAME]?u=$u' class='btn btn-default'>$langSubmit</a>
+	    <a href='listusers.php' class='btn btn-default'>$langCancel</a>
         </div>
         </fieldset>
         ". generate_csrf_token_form_field() ."
