@@ -335,8 +335,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               'icon' => 'fa-reply')));
     $tool_content .= "
     <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>
-            <fieldset>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>            
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
               <label for='PollName' class='col-sm-2 control-label'>$langTitle:</label>
               <div class='col-sm-10'>
@@ -482,57 +481,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             ))
             ."
               </div>
-            </div>
-        </fieldset>
+            </div>        
         </form>
     </div>";
-} elseif (isset($_GET['editQuestion'])) {
-    if (isset($_GET['editQuestion'])) {
-        $question_id = $_GET['editQuestion'];
-        $question = Database::get()->querySingle('SELECT * FROM poll_question WHERE pid = ?d AND pqid = ?d', $pid, $question_id);
-        if(!$question) {
-            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
-        }
-    }
-    $pageName = $langPollManagement;
-    $navigation[] = array(
-        'url' => "admin.php?course=$course_code&amp;pid=$pid",
-        'name' => $poll->name
-    );
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary-label',
-            'icon' => 'fa-reply',
-            'url' => "admin.php?course=$course_code&amp;pid=$pid"
-        )
-    ));
-
-    $tool_content .= "
-    <div class='panel panel-primary'>
-      <div class='panel-heading'>
-        <h3 class='panel-title'>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('fa-edit', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</h3>
-      </div>
-      <div class='panel-body'>
-        <h4>$question->question_text<br><small>".$aType[$question->qtype - 1]."</small></h4>
-      </div>
-    </div>";
-    if ($question->qtype != QTYPE_LABEL && $question->qtype != QTYPE_FILL && $question->qtype != QTYPE_SCALE) {
-        $tool_content .= "
-        <div class='panel panel-info'>
-                  <div class='panel-heading'>
-                    <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;" . icon('fa-edit', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyAnswers=$question->pqid") . "</a></h3>
-                  </div>
-        <!--      <div class='panel-body'>
-                    Answers should be placed here
-                  </div>
-        -->
-        </div>";
-    }
-    $tool_content .= "
-        <div class='pull-right'><a href='admin.php?course=$course_code&amp;pid=$pid'>$langBackPollManagement</a></div>
-    ";
-// Modify/Create question form
 } elseif (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid",
@@ -544,11 +495,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         if(!$question) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
         }
-        $pageName = $question->question_text;
-        $navigation[] = array(
-            'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid",
-            'name' => $langPollManagement
-        );
+        $pageName = $langModify;
+        if (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE)) {
+            $navigation[] = array(
+                'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid",
+                'name' => $langPollManagement
+            );
+        }
+
     } else {
         $pageName = $langNewQu;
     }
@@ -559,7 +513,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         array(
             'title' => $langBack,
             'level' => 'primary-label',
-            'url' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&editQuestion=".$_GET['modifyQuestion'] : ""),
+            'url' => "admin.php?course=$course_code&amp;pid=$pid",
             'icon' => 'fa-reply'
         )
     ));
@@ -574,8 +528,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $questionScaleErrorClass = ($questionScaleError) ? " has-error" : "";
     $questionScaleShowHide = $answerType == QTYPE_SCALE ? "" : " hidden";
 
-    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$action_url' method='post'>
-    <fieldset>
+    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$action_url' method='post'>    
             <div class='form-group $questionNameErrorClass'>
                 <label for='questionName' class='col-sm-2 control-label'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion).":</label>
                 <div class='col-sm-10'>
@@ -638,19 +591,20 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>";
     }
     $tool_content .= "
-            <div class='col-md-10 col-md-offset-2'>".
-            form_buttons(array(
-                array(
-                    'text'  => $langSave,
-                    'name'  => 'submitQuestion',
-                    'value' => (isset($_GET['newQuestion']) ? $langCreate : $langModify)
-                ),
-                array(
-                    'href' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&editQuestion=".$_GET['modifyQuestion'] : "")
-                )
-            ))
-            ."</div>
-        </fieldset>
+            <div class='form-group'>
+                <div class='col-md-10 col-md-offset-2'>".
+                    form_buttons(array(
+                        array(
+                            'text'  => $langSave,
+                            'name'  => 'submitQuestion',
+                            'value' => (isset($_GET['newQuestion']) ? $langCreate : $langModify)
+                        ),
+                        array(
+                            'href' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&modifyAnswers=".$_GET['modifyQuestion'] : "")
+                        )
+                    ))
+                ."</div>
+            </div>
     </form></div>";
 
 //Modify Answers
@@ -670,13 +624,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     }
     $navigation[] = array(
-        'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid",
+        'url' => "admin.php?course=$course_code&amp;pid=$pid",
         'name' => $langPollManagement
     );
     $tool_content .= "
         <div class='panel panel-primary'>
             <div class='panel-heading'>
-              <h3 class='panel-title'>$langQuestion</h3>
+                <h3 class='panel-title'>$langQuestion&nbsp;"
+                    . icon('fa-edit', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
+                "</h3>
             </div>
             <div class='panel-body'>
                   <h4>$question->question_text<br><small><em>".$aType[$question->qtype - 1]."</em></small></h4>
@@ -689,8 +645,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <h3 class='panel-title'>$langQuestionAnswers</h3>
             </div>
             <div class='panel-body'>
-                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>
-                    <fieldset>
+                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>                    
                     <div class='form-group'>
                         <label class='col-xs-3 control-label'>$langPollAddAnswer:</label>
                         <div class='col-xs-9'>
@@ -732,10 +687,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='submitAnswers' value='$langCreate'>
-                            <a class='btn btn-default' href='admin.php?course=$course_code&amp;pid=$pid&amp;editQuestion=$question_id'>$langCancel</a>
+                            <a class='btn btn-default' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
                         </div>
-                    </div>
-                    </fieldset>
+                    </div>                    
                     </form>
             </div>
         </div>";
@@ -885,7 +839,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                     array(
                                         'title' => $langEditChange,
                                         'icon' => 'fa-edit',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid"
+                                        'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE))?
+                                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
+                                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
                                     ),
                                     array(
                                         'title' => $langDelete,
