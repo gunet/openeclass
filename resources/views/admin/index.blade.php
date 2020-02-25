@@ -36,7 +36,12 @@
                         <h3 class='panel-title'>{{ trans('langQuickLinks') }}</h3>
                     </div>
                     <div class='panel-body'>
-                        {!! $action_button !!}
+                        <a href='search_user.php' class='btn btn-default btn-xs'>{{ trans('langSearchUser') }}</a>
+                        <a href='searchcours.php' class='btn btn-default btn-xs'>{{ trans('langSearchCourse') }}</a>
+                        <a href='hierarchy.php' class='btn btn-default btn-xs'>{{ trans('langHierarchy') }}</a>
+                        <a href='eclassconf.php' class='btn btn-default btn-xs'>{{ trans('langConfig') }}</a>
+                        <a href='theme_options.php' class='btn btn-default btn-xs'>{{ trans('langThemeSettings') }}</a>
+                        <a href='extapp.php' class='btn btn-default btn-xs'>{{ trans('langExternalTools') }}</a>
                     </div>
                 </div>
             </div>

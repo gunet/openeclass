@@ -39,34 +39,7 @@ $data['action_bar'] = action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary-label')),false);
 
-$data['action_button'] = action_button(array(
-                    array('title' => $langSearchUser,
-                        'url' => "search_user.php",
-                        'icon' => 'fa-search',
-                        'level' => 'primary-label'),
-                    array('title' => $langSearchCourse,
-                        'url' => "searchcours.php",
-                        'icon' => 'fa-search',
-                        'level' => 'primary-label'),
-                    array('title' => $langHierarchy,
-                        'url' => "hierarchy.php",
-                        'icon' => 'fa-sitemap',
-                        'level' => 'primary-label'),
-                    array('title' => $langConfig,
-                        'url' => "eclassconf.php",
-                        'icon' => 'fa-cogs',
-                        'level' => 'primary-label'),
-                    array('title' => $langThemeSettings,
-                        'url' => "theme_options.php",
-                        'icon' => 'fa-tasks',
-                        'level' => 'primary-label'),
-                    array('title' => $langExternalTools,
-                        'url' => "extapp.php",
-                        'icon' => 'fa-wrench',
-                        'level' => 'primary-label')
-                    ));
-
-$data['validPHP'] = version_compare(PHP_VERSION, '5.6.0') >= 0;
+$data['validPHP'] = version_compare(PHP_VERSION, '7.1') >= 0;
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;
 
