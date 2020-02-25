@@ -85,7 +85,7 @@ $head_content .= <<<hContent
     }
 
     $(document).ready(function() {
-    
+
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
         });
@@ -246,7 +246,7 @@ if (!isset($_POST['create_course'])) {
                       </label>
                     </div>": '') . "
                 </div>
-            </div>            
+            </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langOpenCoursesLicense:</label>
                 <div class='col-sm-10'>
@@ -419,7 +419,6 @@ if (!isset($_POST['create_course'])) {
                         password = ?s,
                         view_type = ?s,
                         start_date = " . DBHelper::timeAfter() . ",
-                        finish_date = " . DBHelper::timeAfter(31536000) . ",
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
