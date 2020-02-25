@@ -172,10 +172,9 @@ if ($theme_id) {
         $styles_str .= "#openeclass-banner {display: none;}";
     }
     if (!empty($theme_options_styles['leftNavBgColor'])) {
-        $rgba_no_alpha = explode(',', $theme_options_styles['leftNavBgColor']);
-        $rgba_no_alpha[3] = "1)";
-        $rgba_no_alpha = implode(',', $rgba_no_alpha);
-
+        $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
+        $rgba_no_alpha[3] = '1';
+        $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
         $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
     }
     if (!empty($theme_options_styles['linkColor'])) {
