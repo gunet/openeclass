@@ -254,7 +254,7 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
         if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str }";
         if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
-            $styles_str .= ".jumbotron.jumbotron-login {  background-size: cover, cover; background-position: 0% 0%;}";
+            $styles_str .= ".jumbotron.jumbotron-login {background-size: cover, cover; background-position: 0% 0%;}";
         }
         //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
         if (isset($theme_options_styles['fluidContainerWidth'])){
@@ -265,10 +265,9 @@ function view($view_file, $view_data = array()) {
              $styles_str .= "#openeclass-banner {display: none;}";
         }
         if (!empty($theme_options_styles['leftNavBgColor'])) {
-            $rgba_no_alpha = explode(',', $theme_options_styles['leftNavBgColor']);
-            $rgba_no_alpha[3] = "1)";
-            $rgba_no_alpha = implode(',', $rgba_no_alpha);
-
+            $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
+            $rgba_no_alpha[3] = '1';
+            $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
             $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
         if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a {color: $theme_options_styles[linkColor];}";
