@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 abstract class DBHelper {
@@ -42,19 +42,19 @@ abstract class DBHelper {
      */
     public static function intToDate($unixDate = null) {
         if (is_null($unixDate))
-            $unixDate = time();
-        return DBHelper::impl()->intToDateImpl(intval($unixDate));
+            $unixDate = 0;
+        return DBHelper::impl()->intToDateImpl($unixDate);
     }
 
     /**
-     * 
+     *
      * @param int $secondsOffset Offset by current time in seconds
      * @return timestamp The timestamp in SQL wrapper
      */
     public static function timeAfter($secondsOffset = null) {
         if (is_null($secondsOffset))
             $secondsOffset = 0;
-        return DBHelper::impl()->intToDateImpl(time() + intval($secondsOffset));
+        return DBHelper::impl()->intToDateImpl(intval($secondsOffset));
     }
 
     /**
@@ -183,7 +183,11 @@ abstract class DBHelper {
 class _DBHelper_MYSQL extends DBHelper {
 
     protected function intToDateImpl($unixdate) {
-        return "FROM_UNIXTIME(" . $unixdate . ")";
+        if ($unixdate == 0) {
+            return 'NOW()';
+        } else {
+            return 'DATE_ADD(FROM_UNIXTIME(0), INTERVAL ' . intval($unixdate) . ' SECOND)';
+        }
     }
 
     protected function tableExistsImpl($table, $db) {
@@ -263,11 +267,11 @@ class _DBHelper_MYSQL extends DBHelper {
     }
 
     protected function foreignKeyExistsImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName) {
-        $constrInfo = Database::get()->querySingle("select CONSTRAINT_NAME as name from INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
-                where TABLE_NAME = ?s 
-                and COLUMN_NAME = ?s 
-                and REFERENCED_TABLE_NAME = ?s 
-                and REFERENCED_COLUMN_NAME = ?s 
+        $constrInfo = Database::get()->querySingle("select CONSTRAINT_NAME as name from INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+                where TABLE_NAME = ?s
+                and COLUMN_NAME = ?s
+                and REFERENCED_TABLE_NAME = ?s
+                and REFERENCED_COLUMN_NAME = ?s
         ", $detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
         if ($constrInfo) {
             $name = $constrInfo->name;
