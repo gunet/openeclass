@@ -46,13 +46,13 @@ if (!isset($_POST['doit'])) {
           <div class='form-group'>
             <label class='col-sm-2'>$langYes:</label>
             <div class='col-sm-10'>
-              <button class='btn btn-danger' name='doit'><i class='fa fa-sign-out'></i> $langUnregCourse</button>
+              <button class='btn btn-danger' name='doit'> $langUnCourse</button>
             </div>
           </div>
           <div class='form-group'>
             <label class='col-sm-2'>$langNo:</label>
             <div class='col-sm-10'>
-              <a href='{$urlAppend}main/portfolio.php' class='btn btn-default'><i class='fa fa-reply'></i> $langCancel</a>
+              <a href='{$urlAppend}main/portfolio.php' class='btn btn-default'> $langCancel</a>
             </div>
           </div>
         </form>

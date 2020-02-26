@@ -63,6 +63,17 @@ if ($session->status == USER_TEACHER) {
 }
     
 $data['action_bar'] = action_bar(array(
+    array('title' => $langRegCourses,
+        'url' => $urlAppend . 'modules/auth/courses.php',
+        'icon' => 'fa-check',
+        'level' => 'primary-label',
+        'button-class' => 'btn-success'),
+    array('title' => $langCourseCreate,
+        'url' => $urlAppend . 'modules/create_course/create_course.php',
+        'show' => $_SESSION['status'] == USER_TEACHER,
+        'icon' => 'fa-plus-circle',
+        'level' => 'primary-label',
+        'button-class' => 'btn-success'),
     array(
         'title' => $langBack,
         'icon' => 'fa-reply',
@@ -75,15 +86,12 @@ $data['myCourses'] = $myCourses;
 if ($myCourses) {        
     foreach ($myCourses as $course) {
         if ($course->status == USER_STUDENT) { 
-            $action_button = icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
+            $action_button = icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
         } elseif ($course->status == USER_TEACHER) {
             $action_button = icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
         }      
         $data['action_button'] = $action_button;
-        $data['actions'] = icon('fa-gears');        
-        //$data['course->title'] =  q($course->title);
-        //$data['course->public_code'] =  q($course->public_code);
-        //$data['course->professor'] = q($course->professor);        
+        $data['actions'] = icon('fa-gears');
     }
 }    
 $data['menuTypeID'] = 1;

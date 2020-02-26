@@ -11,9 +11,6 @@
                     <th>
                         {{ trans('langTitle') }}
                     </th>
-                    <th>
-                        {{ trans('langTeacher') }}
-                    </th>
                     <th class='text-center'>
                         {!! $actions !!}
                     </th>
@@ -29,9 +26,7 @@
                             <strong>
                                 <a href='{{ $urlServer }}courses/{{ q($course->code) }}'>{{ q($course->title) }}</a>
                             </strong> ({{ q($course->public_code) }})
-                        </td>
-                        <td>
-                            {{ q($course->professor) }}
+                            <div><small>{{ q($course->professor) }} </small></div>
                         </td>
                         <td class='text-center'>
                             {!! $action_button !!}
