@@ -94,11 +94,11 @@ function getUserLessonInfo($uid) {
             }
             $lesson_content .= "<tr class='$visclass'>
 			  <td class='text-left'>
-			  <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
-			  <div class='smaller'>" . q($data->professor) . "</div></td>";
-            $lesson_content .= "<td class='text-center right-cell'>";
+			  <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>&nbsp;(" . q($data->public_code) . ")
+			  <div><small>" . q($data->professor) . "</small></div></td>";
+            $lesson_content .= "<td class='text-center'>";
             if ($data->status == USER_STUDENT) {
-                $lesson_content .= icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;
             } elseif ($data->status == USER_TEACHER) {
                 $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code, '', true, true);
