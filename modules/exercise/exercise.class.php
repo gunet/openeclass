@@ -961,7 +961,7 @@ if (!class_exists('Exercise')) {
          * Clone an Exercise
          */
         function duplicate() {
-            global $langCopy2, $course_id;
+            global $langCopy2, $course_id, $course_code;
 
             $clone_course_id = $_POST['clone_to_course_id'];
             if (!check_editor(null, $clone_course_id)) {
@@ -977,7 +977,7 @@ if (!class_exists('Exercise')) {
             $timeConstraint = $this->timeConstraint;
             $attemptsAllowed = $this->attemptsAllowed;
             $random = $this->random;
-            $active = $this->active;            
+            $active = $this->active;
             $results = $this->results;
             $score = $this->score;
             $ip_lock = $this->ip_lock;
@@ -995,9 +995,11 @@ if (!class_exists('Exercise')) {
             }
             if ($clone_course_id != $course_id) {
                 // copy questions and answers to new course question pool
+                $old_path = "courses/$course_code/image/quiz-";
+                $new_path = 'courses/' . course_id_to_code($clone_course_id) . '/image/quiz-';
                 Database::get()->queryFunc("SELECT question_id AS id, q_position FROM exercise_with_questions
                         WHERE exercise_id = ?d",
-                    function ($question) use ($clone_id, $clone_course_id) {
+                    function ($question) use ($clone_id, $clone_course_id, $old_path, $new_path) {
                         $question_clone_id = Database::get()->query("INSERT INTO exercise_question
                             (course_id, question, description, weight, type, difficulty, category)
                             SELECT ?d, question, description, weight, type, difficulty, 0
@@ -1009,6 +1011,10 @@ if (!class_exists('Exercise')) {
                             SELECT ?d, answer, correct, comment, weight, r_position FROM exercise_answer
                                 WHERE question_id = ?d",
                             $question_clone_id, $question->id);
+                        $old_image_path = $old_path . $question->id;
+                        if (file_exists($old_image_path)) {
+                            copy($old_image_path, $new_path . $question_clone_id);
+                        }
                     },
                     $id);
             } else {
@@ -1019,13 +1025,13 @@ if (!class_exists('Exercise')) {
                             WHERE exercise_id = ?d", $clone_id, $id);
             }
         }
-        
+
         /**
          * @brief run UPDATE queries for each item of the output
          * @param type $correction_output
          */
-        function distribution($correction_output) {                  
-            
+        function distribution($correction_output) {
+
             $id = $this->id;
             $stopped = 0;
             $courses = json_decode($correction_output);
@@ -1043,12 +1049,12 @@ if (!class_exists('Exercise')) {
                 }
             }
         }
-        
+
         /**
          * @brief run UPDATE queries for each eurid
          */
         function cancelDistribution() {
-            
+
             $TotalExercises = Database::get()->queryArray("SELECT eurid
                         FROM exercise_user_record WHERE  eid = ?d AND attempt_status = " . ATTEMPT_PENDING . "", $this->id);
             foreach ($TotalExercises as $row) {
