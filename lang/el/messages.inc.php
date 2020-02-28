@@ -4483,7 +4483,6 @@ $langMailVerifyNoApplication = "Δεν βρέθηκε η αίτησή σας. Π
 $langMailVerifyNoAccount = "Δεν βρέθηκε ο λογαριασμός σας. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία ή επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langMailVerifySuccess = "Το email σας επιβεβαιώθηκε με επιτυχία.";
 $langMailVerifySuccess2 = "Το email σας έχει επιβεβαιωθεί με επιτυχία.";
-$langMailVerifySuccessReq = "Η αίτηση δημιουργίας λογαριασμού ανανεώθηκε.";
 $langMailVerifySuccessU = "Ο λογαριασμός σας ενεργοποιήθηκε.";
 $langVerifiedMail = "Επιβεβαιωμένη διεύθυνση email";
 $langMailNotVerified = "Το email σας δεν είναι επιβεβαιωμένο. Δεν θα μπορείτε να λαμβάνετε emails από τα $langsCourses έως ότου το επιβεβαιώσετε.
