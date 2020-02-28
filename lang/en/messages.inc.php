@@ -285,7 +285,7 @@ $langInactiveUsers = "Inactive Users";
 $langAddSixMonths = "Reactivate accounts";
 $langRestoredValues = "Restore old values";
 $langEclassConf = "Configuration File";
-$langFileUpdatedSuccess = "Config file edited with success!";
+$langFileUpdatedSuccess = "The platform configuration has been updated.";
 $langReplaceBackupFile = "Replace config_backup.php.";
 $langencryptedPasswd = "Mandatory passwords encryption";
 $langAdminAn = "Administrator Announcements";
@@ -4261,8 +4261,8 @@ $langGroupNowNotMember = "You unregistered from this group successfully.";
 $langAdminLoginPage = "Admin login";
 $langLoginVia = "Login via";
 $langPassResetIntro2 = "If this was not you, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
-$langPollParticipantInfo = 'Enter a valid email address. 
-            After poll completion, an email will be sent with a confirmation link. 
+$langPollParticipantInfo = 'Enter a valid email address.
+            After poll completion, an email will be sent with a confirmation link.
             You must click in it, otherwise your answers will not be taken into account.';
 $langPollEmailUsed = 'contains an account already used to answer the questionnaire';
 $langUnRegister = "Unregister";
