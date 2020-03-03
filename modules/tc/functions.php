@@ -164,7 +164,7 @@ function bbb_session_form($session_id = 0) {
                       <label>
                         <input type='radio' id='active_button' name='status' value='1' " . (($status==1) ? "checked" : "") . ">
                         $langVisible
-                      </label>                    
+                      </label>
                       <label style='margin-left: 10px;'>
                         <input type='radio' id='inactive_button' name='status' value='0' " . (($status==0) ? "checked" : "") .">
                        $langInvisible
@@ -270,7 +270,7 @@ function bbb_session_form($session_id = 0) {
                       </label>
                     </div>
             </div>
-        </div>        
+        </div>
         $submit_id
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
@@ -352,7 +352,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
         $t = Database::get()->querySingle("SELECT external_server FROM course_external_server WHERE course_id = ?d", $course_id);
         if ($t) {
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE id = $t->external_server AND `type` = '$tc_type' AND enabled = 'true' ORDER BY weight ASC")->id;
-        } else { // else course will use default tc_server            
+        } else { // else course will use default tc_server
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type' and enabled = 'true' ORDER BY weight ASC")->id;
         }
         $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
@@ -630,8 +630,8 @@ function bbb_session_details() {
 
             if ($canJoin) {
                 if($is_editor) {
-                    $i++;                    
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";                    
+                    $i++;
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";
                 } else {
                     $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
                 }
@@ -653,21 +653,21 @@ function bbb_session_details() {
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
                     <td>
                         <div class='table_td'>
-                            <div class='table_td_header clearfix'>$joinLink $warning_message_record</div> 
+                            <div class='table_td_header clearfix'>$joinLink $warning_message_record</div>
                             <div class='table_td_body'>
                                 $desc
                             </div>
                         </div>
                     </td>
                     <td class='text-center'>
-                        <div style='padding-top: 7px;'>  
+                        <div style='padding-top: 7px;'>
                             <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
                         </div>
                         <div style='padding-top: 7px;'>
                             <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
                         </div>
                     </td>
-                    
+
                     <td style='width: 20%'>$participants</td>
                     <td class='option-btn-cell'>".
                         action_button(array(
@@ -729,7 +729,7 @@ function bbb_session_details() {
                         </div>
                     </td>
                     <td class='text-center'>
-                        <div style='padding-top: 7px;'>  
+                        <div style='padding-top: 7px;'>
                             <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
                         </div>
                         <div style='padding-top: 7px;'>
@@ -1155,19 +1155,35 @@ function publish_video_recordings($course_id, $id)
                 // If not set, it means that there is no video recording.
                 // Skip and search for next one
                 if (isset($xml->recordings->recording/*->playback->format->url*/)) {
-                   foreach($xml->recordings->recording as $recording) {
-                        $url = (string) $recording->playback->format->url;
-                        // Check if recording already in videolinks and if not insert
-                        $c = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE url = ?s",$url);
-                        if ($c->cnt == 0) {
-                            Database::get()->querySingle("INSERT INTO videolink (course_id,url,title,description,creator,publisher,date,visible,public)"
-                            . " VALUES (?s,?s,?s,IFNULL(?s,'-'),?s,?s,?t,?d,?d)",$session->course_id,$url,$session->title,strip_tags($session->description),$session->prof_names,$session->prof_names,$session->start_date,1,1);
-                            $msgID[$sessionsCounter] = 2;  /*AN EGINE TO INSERT SWSTA PAIRNEI 2*/
-                        } else {
-                            if(isset($msgID[$sessionsCounter])) {
-                                if($msgID[$sessionsCounter] <= 1)  $msgID[$sessionsCounter] = 1;  /*AN DEN EXEI GINEI KANENA INSERT MEXRI EKEINH TH STIGMH PAIRNEI 1*/
+                    foreach ($xml->recordings->recording as $recording) {
+                        $format = $recording->playback->format;
+                        if (!is_array($format)) {
+                            $format = [$format];
+                        }
+                        foreach ($format as $entry) {
+                            if ($entry->type != 'presentation') {
+                                continue;
                             }
-                            else  $msgID[$sessionsCounter] = 1;
+                            $url = (string) $entry->url;
+                            // Check if recording already in videolinks and if not insert
+                            $c = Database::get()->querySingle("SELECT id FROM videolink
+                                WHERE url = ?s AND course_id = ?d LIMIT 1", $url, $course_id);
+                            if (!$c) {
+                                Database::get()->querySingle("INSERT INTO videolink
+                                    (course_id, url, title, description, creator, publisher, date, visible, public)
+                                    VALUES (?s, ?s, ?s, IFNULL(?s, '-'), ?s, ?s, ?t, ?d, ?d)",
+                                    $session->course_id, $url, $session->title, strip_tags($session->description),
+                                    $session->prof_names, $session->prof_names, $session->start_date, 1, 1);
+                                $msgID[$sessionsCounter] = 2;  /*AN EGINE TO INSERT SWSTA PAIRNEI 2*/
+                            } else {
+                                if (isset($msgID[$sessionsCounter])) {
+                                    if ($msgID[$sessionsCounter] <= 1) {
+                                        $msgID[$sessionsCounter] = 1;  /*AN DEN EXEI GINEI KANENA INSERT MEXRI EKEINH TH STIGMH PAIRNEI 1*/
+                                    }
+                                } else {
+                                    $msgID[$sessionsCounter] = 1;
+                                }
+                            }
                         }
                     }
                 } else {
@@ -1264,16 +1280,16 @@ function is_tc_server_enabled_for_all($tc_type) {
  * @param type $tc_type
  * @return boolean
  */
-function is_active_tc_server($tc_type, $course_id) {    
-    
+function is_active_tc_server($tc_type, $course_id) {
+
     $q = Database::get()->queryArray("SELECT id, all_courses FROM tc_servers WHERE enabled='true'
                                 AND `type` = '$tc_type' ORDER BY weight");
-    
+
     if (count($q) > 0) {
         foreach ($q as $data) {
             if ($data->all_courses == 1) { // tc_server is enabled for all courses
                 return true;
-            } else { // check if tc_server is enabled for specific course                
+            } else { // check if tc_server is enabled for specific course
                 $q = Database::get()->querySingle("SELECT * FROM course_external_server
                                     WHERE course_id = ?d AND external_server = $data->id", $course_id);
                 if ($q) {
@@ -1372,14 +1388,14 @@ function has_enable_recordings($server_id) {
  * @return type
  */
 function get_tc_title($meeting_id) {
-    
+
     global $course_id;
-    
-    $result = Database::get()->querySingle("SELECT title FROM tc_session 
+
+    $result = Database::get()->querySingle("SELECT title FROM tc_session
                     WHERE meeting_id = ?s AND course_id = ?d", $meeting_id, $course_id)->title;
-    
+
     return $result;
-    
+
 }
 
 /**
@@ -1388,10 +1404,10 @@ function get_tc_title($meeting_id) {
  * @return type
  */
 function get_tc_meeting_id($id) {
-    
-    $result = Database::get()->querySingle("SELECT meeting_id FROM tc_session 
+
+    $result = Database::get()->querySingle("SELECT meeting_id FROM tc_session
                     WHERE id = ?d", $id)->meeting_id;
-    
+
     return $result;
 }
 
@@ -1401,11 +1417,11 @@ function get_tc_meeting_id($id) {
  * @return type
  */
 function get_tc_id($meeting_id) {
-    $result = Database::get()->querySingle("SELECT id FROM tc_session 
+    $result = Database::get()->querySingle("SELECT id FROM tc_session
                     WHERE meeting_id = ?s", $meeting_id)->id;
-    
+
     return $result;
-    
+
 }
 
 
@@ -1415,7 +1431,7 @@ function get_tc_id($meeting_id) {
  * @return int
  */
 function get_tc_participants($meeting_id) {
-    $r = Database::get()->querySingle("SELECT participants FROM tc_session 
+    $r = Database::get()->querySingle("SELECT participants FROM tc_session
                     WHERE meeting_id = ?s", $meeting_id)->participants;
 
     if ($r == '0') {
