@@ -67,10 +67,13 @@ if (get_config('enable_indexing')) {
     require_once 'modules/search/indexer.class.php';
     $idx = new Indexer();
 
-    $data['numDocs'] = $idx->getIndex()->numDocs();
-    $data['isOpt'] = (!$idx->getIndex()->hasDeletions()) ? $langYes : $langNo;
-    $data['idxHasDeletions'] = $idx->getIndex()->hasDeletions();
-
+    $data['numDocs'] = 0;
+    $data['isOpt'] = $langNo;
+    if ($idx->getIndex()) {
+        $data['numDocs'] = $idx->getIndex()->numDocs();
+        $data['isOpt'] = (!$idx->getIndex()->hasDeletions()) ? $langYes : $langNo;
+        $data['idxHasDeletions'] = $idx->getIndex()->hasDeletions();
+    }
 
     $data['idxModal'] = modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
 }

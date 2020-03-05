@@ -168,7 +168,12 @@ if (empty($search_terms)) {
     // prepare data in POST for feeding Indexer
     $_POST['course_id'] = $course_id;
     $_POST['search_terms'] = $search_terms;
+
     $idx = new Indexer();
+    if (!$idx->getIndex()) {
+        draw($tool_content, 2);
+        exit;
+    }
     $tool_content .= action_bar(array(
                     array('title' => $langAdvancedSearch,
                           'url' => $_SERVER['SCRIPT_NAME'],
