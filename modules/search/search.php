@@ -61,6 +61,11 @@ if (!register_posted_variables(array('search_terms' => false,
 
 // search in the index
 $idx = new Indexer();
+if (!$idx->getIndex()) {
+    draw($tool_content, $menuTypeId, null, $head_content);
+    exit();
+}
+
 $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_POST));
 
 // exit if not results

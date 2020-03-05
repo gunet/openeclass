@@ -681,7 +681,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 // Simplified draw for pop-ups
 function draw_popup() {
-    global $theme, $language, $urlAppend, $theme, $pageName, $head_content, $tool_content;
+    global $language, $urlAppend, $theme, $pageName, $head_content, $tool_content;
 
     $t = new Template('template/' . $theme);
     $t->set_file('fh', 'popup.html');

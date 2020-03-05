@@ -162,7 +162,7 @@ class Indexer {
      * @global type $webDir
      */
     public function __construct() {
-        global $webDir, $errorMessage;
+        global $webDir, $errorMessage, $langIdxErrorPermissions, $is_admin, $langSearchDisabled;
         
         if (!get_config('enable_indexing')) {
             return;
@@ -182,7 +182,13 @@ class Indexer {
             }
         } catch (Zend_Search_Lucene_Exception $e) {
             $errorMessage = $e->getMessage();
-            require_once 'fatal_error.php';
+            if ($is_admin) {
+                Session::Messages("$langIdxErrorPermissions $errorMessage");
+            } else {
+                Session::Messages($langSearchDisabled);
+            }
+
+            return;
         }
 
         $this->__index->setFormatVersion(Zend_Search_Lucene::FORMAT_2_3); // Set Index Format Version

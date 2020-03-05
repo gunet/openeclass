@@ -239,9 +239,12 @@ if (get_config('enable_indexing')) {
     require_once 'modules/search/indexer.class.php';
     $idx = new Indexer();
 
-    $numDocs = $idx->getIndex()->numDocs();
-    $isOpt = (!$idx->getIndex()->hasDeletions()) ? $langYes : $langNo;
-
+    $numDocs = 0;
+    $isOpt = $langNo;
+    if ($idx->getIndex()) {
+        $numDocs = $idx->getIndex()->numDocs();
+        $isOpt = (!$idx->getIndex()->hasDeletions()) ? $langYes : $langNo;
+    }
 
     $tool_content .= "
     <div class='panel panel-default'>
@@ -265,23 +268,23 @@ if (get_config('enable_indexing')) {
                     $isOpt
                 </div>
             </div>";
-if ($idx->getIndex()->hasDeletions()) {
-    $tool_content .= "
-            <div class='row margin-bottom-thin'>
-                <div class='col-sm-9 col-sm-offset-3'>
-                    <a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a>
-                </div>
-            </div>";
-}
-$tool_content .= "
-            <div class='row margin-bottom-thin'>
-                <div class='col-sm-9 col-sm-offset-3'>
-                    <a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a>
+            if ($idx->getIndex() and $idx->getIndex()->hasDeletions()) {
+                $tool_content .= "
+                        <div class='row margin-bottom-thin'>
+                            <div class='col-sm-9 col-sm-offset-3'>
+                                <a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a>
+                            </div>
+                        </div>";
+            }
+        $tool_content .= "
+                <div class='row margin-bottom-thin'>
+                    <div class='col-sm-9 col-sm-offset-3'>
+                        <a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>";
-    $tool_content .= modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
+        </div>";
+        $tool_content .= modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
 }
 
 // CRON RELATED
