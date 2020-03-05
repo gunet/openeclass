@@ -23,6 +23,8 @@
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'modules/search/indexer.class.php';
+require_once 'include/log.class.php';
 
 if (isset($_GET['pin'])) {
     if ($_GET['pin'] == 1) {
@@ -280,7 +282,6 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                     if(result) {
                         $.ajax({
                           type: 'POST',
-                          url: '',
                           datatype: 'json',
                           data: {
                              action: 'delete',
@@ -306,7 +307,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                         });
                         $.ajax({
                             type: 'POST',
-                            url: '{$urlServer}modules/search/idxasync.php'
+                            url: '{$urlAppend}modules/search/idxasync.php'
                         });
                     }
                 });
@@ -317,7 +318,6 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                 var row_id = $(this).data('id');
                 $.ajax({
                   type: 'POST',
-                  url: '',
                   datatype: 'json',
                   data: {
                         action: 'visible',
@@ -335,7 +335,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                 });
                 $.ajax({
                     type: 'POST',
-                    url: '{$urlServer}/modules/search/idxasync.php'
+                    url: '{$urlAppend}modules/search/idxasync.php'
                 });
             });
             $('.success').delay(3000).fadeOut(1500);
