@@ -53,7 +53,7 @@ $tree = new Hierarchy();
 $course = new Course();
 $pageName = ''; // delete $pageName set in doc_init.php
 
-$main_content = $cunits_content = $bar_content = $course_info_extra = "";
+$main_content = $cunits_content = $course_info_extra = "";
 
 add_units_navigation(TRUE);
 
@@ -86,9 +86,18 @@ $head_content .= "<style>
     }
 </style>";
 
+
+/*
+ *
+ *
+ */
+
 $head_content .= "
 <script type='text/javascript'>
-    $(document).ready(function() {";
+    $(document).ready(function() {
+        $('#btn-syllabus').click(function () {
+            $(this).find('.fa-chevron-right').toggleClass('fa-rotate-90');
+        });";
 
 // Units sorting
 if ($is_editor and $course_info->view_type == 'units') {
@@ -282,7 +291,7 @@ if (count($res) > 0) {
         if ($key + 1 < count($res)) $next_id = "hidden_" . ($key + 1);
         if ($key > 0) $previous_id = "hidden_" . ($key - 1);
 
-        $tool_content .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel_$key' aria-hidden='true'>
+        $tool_content .= "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel_$key' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
@@ -299,7 +308,7 @@ if (count($res) > 0) {
                                         if ($next_id) {
                                             $tool_content .= "<a class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
                                         }
-        $tool_content .=    "
+        $tool_content .= "
                                     </div>
                                   </div>
                                 </div>
@@ -437,17 +446,6 @@ if ($is_editor) {
 
 }
 
-$bar_content .= "<strong>" . $langCode . ":</strong> " . q($public_code) . "" .
-                "<br><strong>" . $langFaculty . ":</strong> ";
-
-$departments = $course->getDepartmentIds($course_id);
-$i = 1;
-foreach ($departments as $dep) {
-    $br = ($i < count($departments)) ? '<br>' : '';
-    $bar_content .= $tree->getFullPath($dep) . $br;
-    $i++;
-}
-
 $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = ?d", $course_id)->numUsers;
@@ -456,30 +454,6 @@ $studentUsers = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FR
                                             AND editor = 0                                         
                                             AND course_id = ?d", $course_id)->studentUsers;
 
-//set the lang var for lessons visibility status
-/*switch ($visible) {
-    case COURSE_CLOSED: {
-        $lessonStatus = "<span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
-        break;
-    }
-    case COURSE_REGISTRATION: {
-        $lessonStatus = "<span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
-                                <span class='fa fa-pencil text-danger fa-custom-lock'></span>
-                            </span><span class='hidden'>.</span>";
-        break;
-    }
-    case COURSE_OPEN: {
-        $lessonStatus = "<span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span><span class='hidden'>.</span>";
-        break;
-    }
-    case COURSE_INACTIVE: {
-        $lessonStatus = "<span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
-                                <span class='fa fa-times text-danger fa-custom-lock'></span>
-                             </span><span class='hidden'>.</span>";
-        break;
-    }
-}
-*/
 if ($uid) {
     $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
@@ -498,9 +472,11 @@ if ($uid) {
     }
 }
 
+// display course citation
 $citation_text = q($professor) . ". <em>" . q($currentCourseName) .
     ".</em> $langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) .
     " $langFrom2 {$urlServer}courses/$course_code/";
+
 $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='citationModalLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
                         <div class='modal-content'>
@@ -514,14 +490,6 @@ $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dial
                         </div>
                     </div>
                 </div>";
-//$bar_content_2 .= "<br><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>$langCitation</a>";
-
-// display course license
-if ($course_license) {
-    $license_info_box = "<span>" . copyright_info($course_id) . "</span>";
-} else {
-    $license_info_box = '';
-}
 
 // display opencourses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
@@ -571,13 +539,6 @@ if (isset($level) && !empty($level)) {
             <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
         </div>
     </div>";
-}
-
-
-if (!empty($license_info_box)) {
-    $license_holder = "<div class ='text-center'>$license_info_box</div>";
-} else {
-    $license_holder = '';
 }
 
 if ($course_info->home_layout == 3) {
@@ -658,6 +619,7 @@ if (count($categoryItems)) {
 
 // offline course setting
 $offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
+
 // content
 $tool_content .= "
 $action_bar
@@ -689,15 +651,8 @@ $action_bar
                 <div class='col-xs-12 $main_content_cols'>
                     $main_content
                 </div>
-                $categoryDisplay
-                <div class='col-xs-12 course-below-wrapper'>
-                    <div class='row text-muted course-below-info'>
-                        <div class='col-xs-6'>
-                             $bar_content
-                        </div>
-                        <div class='col-xs-6'>$license_holder</div>                         
-                    </div>
-                </div>";
+                $categoryDisplay";
+
                 $edit_course_desc_link = '';
                 if ($is_editor) {
                     if ($courseDescriptionVisible > 0) {
@@ -711,20 +666,23 @@ $action_bar
                     $tool_content .= "";
                 } else {
                     $tool_content .= "
-                    <div class='col-xs-12 course-below-wrapper'>
-                        <div class='row text-muted course-below-info'>                            
-                              <a role='button' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
-                              <h4 class='panel-heading panel-title'>
-                                    <span class='fa fa-chevron-down fa-fw'></span> $langCourseDescription $edit_course_desc_link 
-                              </h4>
-                              </a>";
-                            $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px;'>";
-                                foreach ($res as $row) {
-                                    $tool_content .= "<h3 class='panel-title' style='margin: 1em 0 .5em;'>" . q($row->title) . "</h3>" . standard_text_escape($row->comments);
-                                }
-                            $tool_content .= "</div>";
-                        $tool_content .= "</div>";
-                    $tool_content .= "</div>";
+                        <div class='col-xs-12 course-below-wrapper'>
+                            <div class='row text-muted well well-sm' style='margin-left:20px; margin-right: 20px;'>
+                                <h4 class='panel-heading panel-title'>
+                                  <a role='button' id='btn-syllabus' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>                                      
+                                            <span class='fa fa-chevron-right fa-fw'></span><span style='padding-left: 5px;'>$langCourseDescription</span></a> 
+                                            $edit_course_desc_link";
+                                        // course license
+                                    if ($course_license) {
+                                        $tool_content .= "<span class='pull-right'>" . copyright_info($course_id) . "</span>";
+                                    }
+                                  $tool_content .= "</h4>";
+                                    // course description
+                                  $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px; margin-top: 20px;'>";
+                                  foreach ($res as $row) {
+                                      $tool_content .= "<div style='margin-top: 1px;'><strong>" . q($row->title) . "</strong></div>" . standard_text_escape($row->comments) . "";
+                                  }
+                    $tool_content .= "</div></div></div>";
                 }
                 $tool_content .= "
             </div>

@@ -79,7 +79,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName,
         $theme, $themeimg, $langMyPortfolio,
-        $urlAppend, $urlServer,
+        $urlAppend, $urlServer, $public_code,
         $theme_settings, $language, $saved_is_editor,
         $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
 
@@ -333,6 +333,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->set_var('SECTION_TITLE', q($currentCourseName));
         } else {
             $t->set_var('SECTION_TITLE', "<a href='${urlServer}courses/$course_code/'>" . q($currentCourseName) . '</a>');
+        }
+        if (!empty($public_code) and ($public_code !== $course_code)) {
+            $t->set_var('COURSE_PUBLIC_CODE', "($public_code)");
         }
     } elseif ($menuTypeID == 3) {
         $t->set_var('SECTION_TITLE', $langAdmin);

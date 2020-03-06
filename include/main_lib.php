@@ -3130,12 +3130,12 @@ function copyright_info($cid, $noImg=1) {
         }
     }
     if ($noImg == 1) {
-        $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'><img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a><br>";
+        $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'><img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . q($license[$lic]['title']) . "' alt='" . q($license[$lic]['title']) . "' data-toggle='tooltip' data-placement='top' /></a><br>";
     } else if ($noImg == 0) {
         $link = "";
     }
 
-    return $link . q($license[$lic]['title']);
+    return $link;
 }
 
 /**
