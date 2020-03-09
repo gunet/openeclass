@@ -18,7 +18,7 @@ have contributed a great amount of work and ideas and we would like to express
 our gratitude to all of them for their support. A complete list of
 contributors can be found in the CREDITS.txt file.
 
-Installation of Open eClass requires a web server with support for PHP >= 5.6
+Installation of Open eClass requires a web server with support for PHP >= 7.1
 and a database server (MySQL or MariaDB). You can find detailed installation
 instructions as well as other manuals at the following address:
 
@@ -65,7 +65,7 @@ http://www.openeclass.org/
 και βελτίωση της πλατφόρμας. (Περισσότερες πληροφορίες στο αρχείο CREDITS.txt)
 
 Για την εγκατάσταση της πλατφόρμας απαιτείται ένας εξυπηρετητής web με υποστήριξη
-PHP >= 5.6 και μια βάση δεδομένων (MySQL ή MariaDB). Αναλυτικές οδηγίες εγκατάστασης
+PHP >= 7.1 και μια βάση δεδομένων (MySQL ή MariaDB). Αναλυτικές οδηγίες εγκατάστασης
 και άλλα εγχειρίδια της πλατφόρμας μπορούν να βρεθούν στη διεύθυνση:
 
 http://docs.openeclass.org/el:manuals
