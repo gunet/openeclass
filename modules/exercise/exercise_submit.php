@@ -309,7 +309,7 @@ $nbrQuestions = count($questionList);
 
 
 // determine begin time:
-// either from a previews attempt meaning that user hasn't submitted his answers permanantly
+// either from a previews attempt meaning that user hasn't submitted his answers permanently
 // and exerciseTimeConstrain hasn't yet passed,
 // either start a new attempt and count now() as begin time.
 
@@ -544,7 +544,9 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE) {
 
 if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering buttons
     $tool_content .= "<div style='margin-bottom: 20px;'>";
-    foreach ($questionList as $q_num => $q_id) {
+    $q_num = 0;
+    foreach ($questionList as $q_id) {
+        $q_num++;
         $q_temp = new Question();
         $q_temp->read($q_id);
         if (($q_temp->selectType() == UNIQUE_ANSWER or $q_temp->selectType() == MULTIPLE_ANSWER or $q_temp->selectType() == TRUE_FALSE)
@@ -592,9 +594,14 @@ if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering button
 }
 
 
-$i = 0;
-foreach ($questionList as $questionId) {
+$qList = array_values($questionList); // reindex questions (necessary in random questions)
+array_unshift($qList,'0');  // add dummy array element
+unset($qList[0]); // remove it so the keys start from 1.
+$questionList = $qList;
 
+$i = 0;
+
+foreach ($questionList as $questionId) {
     $i++;
 
     if (isset($_REQUEST['q_id'])) { // we come from pagination buttons
@@ -622,6 +629,7 @@ foreach ($questionList as $questionId) {
         $tool_content .= "<div style='margin-bottom: 20px;'>";
         while ($k <= count($questionList)) {
             $q_id = $questionList[$k];
+            //$q_id = current($questionList);
             $t_question = new Question();
             $t_question->read($q_id);
             $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>";
