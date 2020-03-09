@@ -528,7 +528,7 @@ if (isset($timeleft) && $timeleft > 0) {
   $tool_content .= "<input type='hidden' name='secsRemaining' id='secsRemaining' value='$timeleft' />";
 }
 
-$answeredIds = array();
+$unansweredIds = $answeredIds = array();
 $savedQuestion = null;
 
 if ($exerciseType == MULTIPLE_PAGE_TYPE) {
@@ -628,6 +628,7 @@ foreach ($questionList as $questionId) {
         $k = 1;
         $tool_content .= "<div style='margin-bottom: 20px;'>";
         while ($k <= count($questionList)) {
+            $answered = false;
             $q_id = $questionList[$k];
             //$q_id = current($questionList);
             $t_question = new Question();
@@ -640,42 +641,51 @@ foreach ($questionList as $questionId) {
             }
             if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE)
                 and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) { // if question has answered button color is `blue``
-                $tool_content .= "<input class='btn btn-info' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
+                $tool_content .= "<input class='btn btn-info' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
+                $answered = true;
             } elseif (($t_question->selectType() == FILL_IN_BLANKS or $t_question->selectType() == FILL_IN_BLANKS_TOLERANT)
                 and array_key_exists($q_id, $exerciseResult)) {
                 if (is_array($exerciseResult[$q_id])) {
                     $class = 'btn btn-info';
                     $label = $langHasAnswered;
+                    $answered = true;
                     foreach ($exerciseResult[$q_id] as $key => $value) {
                         if (trim($value) == '') {  // check if we have filled all blanks
                             $class = 'btn btn-default';
                             $label = $langPendingAnswered;
+                            $answered = false;
                             break;
                         }
                     }
-                    $tool_content .= "<input class='$class' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
+                    $tool_content .= "<input class='$class' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
                 }
             } elseif ($t_question->selectType() == FREE_TEXT
                 and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
                 $tool_content .= "<input class='btn btn-info' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
+                $answered = true;
             } elseif ($t_question->selectType() == MATCHING and array_key_exists($q_id, $exerciseResult)) {
                 if (is_array($exerciseResult[$q_id])) {
                     $class = 'btn btn-info';
                     $label = $langHasAnswered;
+                    $answered = true;
                     foreach ($exerciseResult[$q_id] as $key => $value) {
                         if ($value == 0) {  // check if we have done all matches
                             $class = 'btn btn-default';
                             $label = $langPendingAnswered;
+                            $answered = false;
                             break;
                         }
                     }
-                    $tool_content .= "<input class='$class' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
+                    $tool_content .= "<input class='$class' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
                 }
             } else {
-                $tool_content .= "<input class='btn btn-default' style = '$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langPendingAnswered'>"; // button color is `gray`
+                $tool_content .= "<input class='btn btn-default' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langPendingAnswered'>"; // button color is `gray`
             }
             $tool_content .= "</span>";
             $k++;
+            if (!$answered) {
+                $unansweredIds[] = $q_id;
+            }
         }
         $tool_content .= "</div>";
     }
@@ -721,6 +731,7 @@ foreach ($questionList as $questionId) {
     }
 } // end foreach()
 
+$disableCheck = 0;
 if (!$questionList) {
     $tool_content .= "
             <div class='alert alert-warning'>$langNoQuestion</div>
@@ -732,6 +743,7 @@ if (!$questionList) {
         $submitLabel = $langSubmit;
     } else {
         $submitLabel = $langNext . ' &gt;';
+        $disableCheck = 1;
     }
     $tool_content .= "<div class='pull-right' style='margin-top: 15px;'>
         <input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;";
@@ -769,8 +781,10 @@ if ($questionList) {
                 refreshTime: $refresh_time,
                 exerciseId: $exerciseId,
                 answeredIds: ". json_encode($answeredIds) .",
+                unansweredIds: ". json_encode($unansweredIds) .",
                 attemptsAllowed: $exerciseAllowedAttempts,
-                eurid: $eurid
+                eurid: $eurid,
+                disableCheck: $disableCheck
             });
             $('.qNavButton').click(function (e) {
                 e.preventDefault();
