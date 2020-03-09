@@ -666,7 +666,7 @@ $action_bar
                     $tool_content .= "";
                 } else {
                     $tool_content .= "
-                        <div class='col-xs-12 course-below-wrapper'>
+                        <div class='col-xs-12 course-below-wrapper' style='margin-top: 25px;'>
                             <div class='row text-muted well well-sm' style='margin-left:20px; margin-right: 20px;'>
                                 <h4 class='panel-heading panel-title'>
                                   <a role='button' id='btn-syllabus' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>                                      
