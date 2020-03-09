@@ -430,11 +430,10 @@ function exercise_init_countdown(params) {
             }
         });
         $('input[name=q_id], input[name=prev]').click(function () {
-            cancelCheck = true;
+            continueSubmit();
         });
         $('.exercise').submit(function (e) {
             var unansweredCount = 0, firstUnanswered;
-
             if ('tinymce' in window) {
                 // Check for empty tinyMCE instances
                 tinymce.get().forEach(function (e) {
@@ -483,7 +482,10 @@ function exercise_init_countdown(params) {
                         submit: {
                             label: params.submit,
                             className: 'btn-warning',
-                            callback: continueSubmit
+                            callback: function () {
+                                $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
+                                continueSubmit();
+                            }
                         },
                     }
                 });

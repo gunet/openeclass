@@ -399,7 +399,7 @@ if (isset($_POST['formSent'])) {
     // if it is a non-sequential exercise OR
     // if it is a sequential exercise in the last question OR the time has expired
     if ($exerciseType == SINGLE_PAGE_TYPE && !isset($_POST['buttonSave']) ||
-        $exerciseType == MULTIPLE_PAGE_TYPE && ((isset($_POST['submit']) && $_POST['submit'] == "$langSubmit") || $time_expired)) {
+        $exerciseType == MULTIPLE_PAGE_TYPE && (isset($_POST['buttonFinish']) || $time_expired)) {
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -741,9 +741,11 @@ if (!$questionList) {
 } else {
     if ($exerciseType == SINGLE_PAGE_TYPE || $nbrQuestions == $current_question_number) {
         $submitLabel = $langSubmit;
+        $buttonName = "name='buttonFinish'";
     } else {
         $submitLabel = $langNext . ' &gt;';
         $disableCheck = 1;
+        $buttonName = '';
     }
     $tool_content .= "<div class='pull-right' style='margin-top: 15px;'>
         <input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;";
@@ -751,8 +753,8 @@ if (!$questionList) {
             $prevLabel = '&lt; ' . $langPrevious;
             $tool_content .= "<input class='btn btn-primary blockUI' type='submit' name='prev' value='$prevLabel' >&nbsp;";
         }
-        // display `submit` button
-        $tool_content .= "<input class='btn btn-primary blockUI' type='submit' name='submit' value='$submitLabel'>";
+        // display submit button
+        $tool_content .= "<input class='btn btn-primary blockUI' type='submit' $buttonName value='$submitLabel'>";
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
