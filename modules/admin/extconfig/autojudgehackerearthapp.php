@@ -21,7 +21,6 @@
  */
 
 require_once 'autojudgeapp.php';
-require_once 'include/simplehtmldom/simple_html_dom.php';
 
 class AutojudgeHackerearthApp extends AutojudgeApp implements AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input) {
