@@ -124,15 +124,15 @@ if (isset($_POST['submitPoll'])) {
 if (isset($_POST['submitQuestion'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('questionName'));
-    if (isset($_POST['questionScale'])) {
+    if (!empty($_POST['questionScale'])) {
         $v->rule('required', array('questionScale'));
+        $v->rule('numeric', array('questionScale'));
+        $v->rule('min', array('questionScale'), 1);
+        $v->labels(array(
+            'questionName' => "$langTheField $langPollStart",
+            'questionScale' => "$langTheField $langPollEnd"
+        ));
     }
-    $v->rule('numeric', array('questionScale'));
-    $v->rule('min', array('questionScale'), 1);
-    $v->labels(array(
-        'questionName' => "$langTheField $langPollStart",
-        'questionScale' => "$langTheField $langPollEnd"
-    ));
     if($v->validate()) {
         $question_text = $_POST['questionName'];
         $qtype = $_POST['answerType'];
