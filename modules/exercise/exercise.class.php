@@ -299,35 +299,14 @@ if (!class_exists('Exercise')) {
                 return $this->questionList;
             }
 
-            // takes all questions
-            if ($this->random > $this->selectNbrQuestions()) {
-                $draws = $this->selectNbrQuestions();
-            } else {
-                $draws = $this->random;
-            }
-
             $randQuestionList = array();
-            $alreadyChosed = array();
-
-            // loop for the number of draws
-            for ($i = 0; $i < $draws; $i++) {
-                // selects a question randomly
-                do {
-                    $rand = crypto_rand_secure(0, $this->selectNbrQuestions() - 1);
-                }
-                // if the question has already been selected, continues in the loop
-                while (in_array($rand, $alreadyChosed));
-
-                $alreadyChosed[] = $rand;
-                $j = 0;
-
-                foreach ($this->questionList as $key => $val) {
-                    // if we have found the question chosed above
-                    if ($j == $rand) {
-                        $randQuestionList[$key] = $val;
-                        break;
-                    }
-                    $j++;
+            if ($this->random == 1) { // if we pick up one random question
+                $rand_keys = array_rand($this->questionList);
+                $randQuestionList[1] = $this->questionList[$rand_keys];
+            } else { // if we pick up more than one random questions
+                $rand_keys = array_rand($this->questionList, $this->random);
+                for ($key = 1; $key <= $this->random; $key++) {
+                    $randQuestionList[$key] = $this->questionList[$rand_keys[$key-1]];
                 }
             }
             return $randQuestionList;

@@ -594,11 +594,6 @@ if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering button
 }
 
 
-$qList = array_values($questionList); // reindex questions (necessary in random questions)
-array_unshift($qList,'0');  // add dummy array element
-unset($qList[0]); // remove it so the keys start from 1.
-$questionList = $qList;
-
 $i = 0;
 
 foreach ($questionList as $questionId) {
@@ -630,7 +625,6 @@ foreach ($questionList as $questionId) {
         while ($k <= count($questionList)) {
             $answered = false;
             $q_id = $questionList[$k];
-            //$q_id = current($questionList);
             $t_question = new Question();
             $t_question->read($q_id);
             $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>";
