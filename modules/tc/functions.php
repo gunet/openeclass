@@ -829,7 +829,8 @@ function delete_bbb_session($id)
  */
 function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
 {
-    global $langBBBCreationRoomError, $langBBBConnectionError, $course_code, $langBBBWelcomeMsg, $langBBBConnectionErrorOverload;
+    global $langBBBCreationRoomError, $langBBBConnectionError, $course_code,
+        $langBBBWelcomeMsg, $langBBBConnectionErrorOverload, $course_code, $urlServer;
 
     $run_to = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s", $meeting_id)->running_at;
     if (isset($run_to)) {
@@ -872,16 +873,22 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
 
         $bbb = new BigBlueButton($salt, $bbb_url);
 
+        if (isset($course_code) and $course_code) {
+            $logoutUrl = $urlServer . 'modules/tc/?course=' . $course_code;
+        } else {
+            $logoutUrl = '';
+        }
+
         $creationParams = array(
             'meetingId' => $meeting_id, // REQUIRED
             'meetingName' => $title, // REQUIRED
             'attendeePw' => $att_pw, // Match this value in getJoinMeetingURL() to join as attendee.
             'moderatorPw' => $mod_pw, // Match this value in getJoinMeetingURL() to join as moderator.
-            'welcomeMsg' => $langBBBWelcomeMsg, // ''= use default. Change to customize.
+            'welcomeMsg' => $langBBBWelcomeMsg,
             'dialNumber' => '', // The main number to call into. Optional.
             'voiceBridge' => '', // PIN to join voice. Optional.
             'webVoice' => '', // Alphanumeric to join voice. Optional.
-            'logoutUrl' => '', // Default in bigbluebutton.properties. Optional.
+            'logoutUrl' => $logoutUrl,
             'maxParticipants' => '-1', // Optional. -1 = unlimited. Not supported in BBB. [number]
             'record' => $record, // New. 'true' will tell BBB to record the meeting.
             'duration' => $duration // Default = 0 which means no set duration in minutes. [number]
