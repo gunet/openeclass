@@ -255,6 +255,7 @@ if ($PollType == POLL_NORMAL) {
                     }
                     $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage;
                     if ($thePoll->anonymized != 1) {
+                        $names_str = $ellipsized_names_str = '';
                         $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname,
                                                             submit_date AS s
                                                     FROM poll_user_record, poll_answer_record, user
@@ -272,11 +273,13 @@ if ($PollType == POLL_NORMAL) {
                                                         AND poll_answer_record.poll_user_record_id = poll_user_record.id)
                                                     ORDER BY s DESC
                                                 ", $theQuestion->pqid, $aid, $theQuestion->pqid, $aid);
-                        foreach($names as $name) {
-                          $names_array[] = $name->fullname;
+                        if (count($names) > 0) {
+                            foreach($names as $name) {
+                                $names_array[] = $name->fullname;
+                            }
+                            $names_str = implode(', ', $names_array);
+                            $ellipsized_names_str = q(ellipsize($names_str, 60));
                         }
-                        $names_str = implode(', ', $names_array);
-                        $ellipsized_names_str = q(ellipsize($names_str, 60));
                     }
                     $answers_table .= "
                         <tr>
@@ -321,6 +324,7 @@ if ($PollType == POLL_NORMAL) {
                     $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;
 
                     if ($thePoll->anonymized != 1) {
+                        $names_str = $ellipsized_names_str = '';
                         // Gets names for registered users and emails for unregistered
                         $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname,
                                                             submit_date AS s
@@ -339,11 +343,13 @@ if ($PollType == POLL_NORMAL) {
                                                         AND poll_answer_record.poll_user_record_id = poll_user_record.id)
                                                     ORDER BY s DESC
                                                 ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
-                        foreach($names as $name) {
-                          $names_array[] = $name->fullname;
+                        if (count($names) > 0) {
+                            foreach ($names as $name) {
+                                $names_array[] = $name->fullname;
+                            }
+                            $names_str = implode(', ', $names_array);
+                            $ellipsized_names_str = q(ellipsize($names_str, 60));
                         }
-                        $names_str = implode(', ', $names_array);
-                        $ellipsized_names_str = q(ellipsize($names_str, 60));
                     }
                     $answers_table .= "
                         <tr>
