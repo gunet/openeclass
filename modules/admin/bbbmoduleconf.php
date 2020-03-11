@@ -194,7 +194,7 @@ else if (isset($_POST['submit'])) {
         }
     } else {
         $q = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, ip, server_key, api_url, max_rooms, max_users, enable_recordings, enabled, weight, all_courses) VALUES
-        ('bbb', NULL, NULL, ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d)", $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses);
+        ('bbb', '', '', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d)", $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses);
         $tc_id = $q->lastInsertID;
         if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
