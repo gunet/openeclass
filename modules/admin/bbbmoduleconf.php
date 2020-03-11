@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // Check if user is administrator and if yes continue
@@ -37,7 +37,7 @@ load_js('validation.js');
 load_js('select2');
 
 $head_content .= "<script type='text/javascript'>
-    $(document).ready(function () {                
+    $(document).ready(function () {
         $('#select-courses').select2();
         $('#selectAll').click(function(e) {
             e.preventDefault();
@@ -66,7 +66,7 @@ if (isset($_GET['add_server'])) {
             'url' => "bbbmoduleconf.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-    
+
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<div class='form-group'>";
@@ -91,10 +91,10 @@ if (isset($_GET['add_server'])) {
             <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' checked='true' value='false'>$langNo</label></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
-    
+
     $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>
             <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
-            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' value='false'>$langNo</label></div>    
+            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' value='false'>$langNo</label></div>
         </div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
@@ -102,18 +102,18 @@ if (isset($_GET['add_server'])) {
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group' id='courses-list'>
                 <label class='col-sm-3 control-label'>$langUseOfTc:&nbsp;&nbsp;
-                <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span></label>                    
-                <div class='col-sm-9'>                                
-                    <select class='form-control' name='tc_courses[]' multiple class='form-control' id='select-courses'>";        
-                    $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course 
-                                                        WHERE id NOT IN (SELECT course_id FROM course_external_server) 
+                <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span></label>
+                <div class='col-sm-9'>
+                    <select class='form-control' name='tc_courses[]' multiple class='form-control' id='select-courses'>";
+                    $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
+                                                        WHERE id NOT IN (SELECT course_id FROM course_external_server)
                                                         AND visible != " . COURSE_INACTIVE . "
                                                         ORDER BY title");
                     $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
                     foreach($courses_list as $c) {
                         $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
                     }
-        $tool_content .= "</select>            
+        $tool_content .= "</select>
                     <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                 </div>
             </div>";
@@ -131,7 +131,7 @@ if (isset($_GET['add_server'])) {
 
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
-            var chkValidator  = new Validator("serverForm");            
+            var chkValidator  = new Validator("serverForm");
             chkValidator.addValidation("key_form","req","' . $langBBBServerAlertKey . '");
             chkValidator.addValidation("api_url_form","req","' . $langBBBServerAlertAPIUrl . '");
             chkValidator.addValidation("max_rooms_form","req","' . $langBBBServerAlertMaxRooms . '");
@@ -141,7 +141,7 @@ if (isset($_GET['add_server'])) {
             chkValidator.addValidation("weight","req","' . $langBBBServerAlertOrder . '");
             chkValidator.addValidation("weight","numeric","' . $langBBBServerAlertOrder . '");
         //]]></script>';
-    
+
 } else if (isset($_GET['delete_server'])) {
     $id = $_GET['delete_server'];
     Database::get()->query("DELETE FROM tc_servers WHERE id=?d", $id);
@@ -163,7 +163,11 @@ else if (isset($_POST['submit'])) {
     $enable_recordings = $_POST['enable_recordings'];
     $enabled = $_POST['enabled'];
     $weight = $_POST['weight'];
-    $tc_courses = $_POST['tc_courses'];    
+    if (isset($_POST['tc_courses'])) {
+        $tc_courses = $_POST['tc_courses'];
+    } else {
+        $tc_courses = [];
+    }
     if (in_array(0, $tc_courses)) {
         $allcourses = 1; // tc server is assigned to all courses
     } else {
@@ -171,7 +175,7 @@ else if (isset($_POST['submit'])) {
     }
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
-        Database::get()->querySingle("UPDATE tc_servers SET 
+        Database::get()->querySingle("UPDATE tc_servers SET
                 server_key = ?s,
                 api_url = ?s,
                 max_rooms =?s,
@@ -182,7 +186,7 @@ else if (isset($_POST['submit'])) {
                 all_courses = ?d
                 WHERE id =?d", $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses, $id);
         Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $id);
-        if ($allcourses == 0) {        
+        if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
                 Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $id);
                 update_tc_session($tc_data, $id); // update existing tc_sessions
@@ -204,7 +208,7 @@ else if (isset($_POST['submit'])) {
     redirect_to_home_page("modules/admin/bbbmoduleconf.php");
 } // end of if($submit)
 // Display config edit form
-else {    
+else {
     if (isset($_GET['edit_server'])) {
         $pageName = $langEdit;
         $tool_content .= action_bar(array(
@@ -212,9 +216,9 @@ else {
             'url' => "bbbmoduleconf.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-        
+
         $server = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $bbb_server);
-        
+
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<div class='form-group'>";
@@ -268,20 +272,20 @@ else {
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' name='weight' value='$server->weight'></div>";
-        $tool_content .= "</div>";           
+        $tool_content .= "</div>";
         $tool_content .= "<div class='form-group' id='courses-list'>
                 <label class='col-sm-3 control-label'>$langUseOfTc:&nbsp;&nbsp;
-                <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span></label>                    
-                <div class='col-sm-9'>                                
+                <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span></label>
+                <div class='col-sm-9'>
                     <select class='form-control' name='tc_courses[]' multiple class='form-control' id='select-courses'>";
-                    $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
-                                                                    NOT IN (SELECT course_id FROM course_external_server) 
+                    $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id
+                                                                    NOT IN (SELECT course_id FROM course_external_server)
                                                                     AND visible != " . COURSE_INACTIVE . "
                                                                 ORDER BY title");
                     if ($server->all_courses == '1') {
                         $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
                     } else {
-                        $tc_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
+                        $tc_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id
                                                     IN (SELECT course_id FROM course_external_server WHERE external_server = ?d) ORDER BY title", $_GET['edit_server']);
                         if (count($tc_courses_list) > 0) {
                             foreach($tc_courses_list as $c) {
@@ -306,7 +310,7 @@ else {
         $tool_content .= "</form></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
-                    var chkValidator  = new Validator("serverForm");                    
+                    var chkValidator  = new Validator("serverForm");
                     chkValidator.addValidation("key_form","req","' . $langBBBServerAlertKey . '");
                     chkValidator.addValidation("api_url_form","req","' . $langBBBServerAlertAPIUrl . '");
                     chkValidator.addValidation("max_rooms_form","req","' . $langBBBServerAlertMaxRooms . '");
@@ -316,7 +320,7 @@ else {
                     chkValidator.addValidation("weight","req","' . $langBBBServerAlertOrder . '");
                     chkValidator.addValidation("weight","numeric","' . $langBBBServerAlertOrder . '");
                 //]]></script>';
-                    
+
     } else {
         //display available BBB servers
         $tool_content .= action_bar(array(
@@ -335,7 +339,7 @@ else {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr><th class = 'text-center'>API URL</th>                    
+                <tr><th class = 'text-center'>API URL</th>
                     <th class = 'text-center'>$langBBBEnabled</th>
                     <th class = 'text-center'>$langOnlineUsers</th>
                     <th class = 'text-center'>$langMaxRooms</th>
@@ -380,9 +384,9 @@ draw($tool_content, 3, null, $head_content);
  * @param type $tc_server_id
  */
 function update_tc_session($course_id, $tc_server_id) {
-    
+
     $q = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d", $course_id);
     if ($q) {
-        Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE course_id = ?d", $tc_server_id, $course_id);        
-    }    
+        Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE course_id = ?d", $tc_server_id, $course_id);
+    }
 }
