@@ -294,8 +294,12 @@ if (!class_exists('Exercise')) {
          *           without randomizing, otherwise, returns the list with questions selected randomly
          */
         function selectRandomList() {
-            // if the exercise is not a random exercise, or if there are not at least 2 questions
-            if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0) {
+
+            // if the exercise is not a random exercise,
+            // or if there are not at least 2 questions
+            // or number of random question > number of questions
+            // cancel randomization and return normal question list
+            if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0 || $this->random > $this->selectNbrQuestions()) {
                 return $this->questionList;
             }
 
