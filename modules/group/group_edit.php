@@ -64,7 +64,7 @@ if (isset($_POST['modify'])) {
     $v->rule('required', array('name'));
     $v->rule('required', array('maxStudent'));
     $v->rule('numeric', array('maxStudent'));
-    $v->rule('min', array('maxStudent'), 1);
+    $v->rule('min', array('maxStudent'), 0);
     $v->labels(array(
         'name' => "$langTheField $langNewGroups",
         'maxStudent' => "$langTheField $langMax $langGroupPlacesThis"
@@ -206,7 +206,6 @@ if ($is_editor) {
     $tool_content_tutor = display_user($tutors);
 }
 
-$tool_content_max_student = $max_members ? $max_members : 1;
 $tool_content_group_description = q($group_description);
 
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
@@ -289,7 +288,7 @@ $tool_content .= "<div class='form-wrapper'>
         <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")."'>
             <label class='col-sm-2 control-label'>$langMax $langGroupPlacesThis:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type=text name='maxStudent' size=2 value='$tool_content_max_student'>
+                <input class='form-control' type=text name='maxStudent' size=2 value='$max_members'>
                 <span class='help-block'>".Session::getError('maxStudent')."</span>
             </div>
 
@@ -360,29 +359,29 @@ $tool_content .= "<div class='form-wrapper'>
     $tool_content .= "
             <div class='form-group'>
             <label class='col-sm-2 control-label'>$langGroupStudentRegistrationType:</label>
-                <div class='col-sm-10'>             
+                <div class='col-sm-10'>
                     <div class='checkbox'>
                     <label>
                      <input type='checkbox' name='self_reg' $checked[self_reg]>
                         $langGroupAllowStudentRegistration
                         </label>
-                        </div>                    
+                        </div>
                 </div>
             </div>
             <div class='form-group'>
             <label class='col-sm-2 control-label'>$langGroupAllowUnregister:</label>
-                <div class='col-sm-10'>             
+                <div class='col-sm-10'>
                     <div class='checkbox'>
                     <label>
                      <input type='checkbox' name='allow_unreg' $checked[allow_unreg]>
                         $langGroupAllowStudentUnregister
                         </label>
-                        </div>                    
+                        </div>
                 </div>
             </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langPrivate_1:</label>
-                <div class='col-sm-10'>            
+                <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
                         <input type='radio' name='private_forum' value='1' checked=''  $checked[private_forum_yes]>
@@ -399,35 +398,35 @@ $tool_content .= "<div class='form-wrapper'>
             </div>
             <div class='form-group'>
             <label class='col-sm-2 control-label'>$langGroupForum:</label>
-                <div class='col-sm-10'>             
+                <div class='col-sm-10'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='forum' $checked[has_forum]>
                       </label>
-                    </div>                    
+                    </div>
                 </div>
-            </div>   
+            </div>
             <div class='form-group'>
             <label class='col-sm-2 control-label'>$langDoc:</label>
-                <div class='col-sm-10'>             
+                <div class='col-sm-10'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='documents' $checked[documents]>
                       </label>
-                    </div>                    
+                    </div>
                 </div>
-            </div>  
+            </div>
             <div class='form-group'>
             <label class='col-sm-2 control-label'>$langWiki:</label>
-                <div class='col-sm-10'>             
+                <div class='col-sm-10'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='wiki' $checked[wiki]>
                       </label>
-                    </div>                    
+                    </div>
                 </div>
-            </div>			
-            <input type='hidden' name='group_id' value=$group_id></input>          
+            </div>
+            <input type='hidden' name='group_id' value=$group_id></input>
         <div class='form-group'>
         <div class='col-sm-10 col-sm-offset-2'>".
             form_buttons(array(
