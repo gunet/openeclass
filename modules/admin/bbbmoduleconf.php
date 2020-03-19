@@ -349,9 +349,15 @@ else {
             foreach ($q as $srv) {
                 $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
                 $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip);
+                $q = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_external_server WHERE external_server = ?d", $srv->id);
+                $num_of_tc_courses = $q->cnt;
+                $mess = '';
+                if ($srv->enabled == "true") {
+                    $mess = " <small>($langIn $num_of_tc_courses $langsCourses) </small>";
+                }
                 $tool_content .= "<tr>" .
                     "<td>$srv->api_url</td>" .
-                    "<td class = 'text-center'>$enabled_bbb_server</td>" .
+                    "<td class = 'text-center'>$enabled_bbb_server $mess</td>" .
                     "<td class = 'text-center'>$connected_users</td>" .
                     "<td class = 'text-center'>$srv->max_rooms</td>" .
                     "<td class = 'text-center'>$srv->weight</td>" .
