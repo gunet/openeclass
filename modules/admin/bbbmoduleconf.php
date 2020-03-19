@@ -25,19 +25,50 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/tc/functions.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
 
 $toolName = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
+$tree = new Hierarchy();
+$course = new Course();
 
 load_js('tools.js');
 load_js('validation.js');
 load_js('select2');
+load_js('datatables');
 
 $head_content .= "<script type='text/javascript'>
-    $(document).ready(function () {
+        $(document).ready(function() {
+            $('#bbb_courses').DataTable ({
+                'sPaginationType': 'full_numbers',
+                'bAutoWidth': true,
+                'searchDelay': 1000,
+                'order' : [[1, 'desc']],
+                'oLanguage': {
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '\" . $langNoResult . \"',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
+                   }
+               }
+            });
+            $('.dataTables_filter input').attr({
+                  class : 'form-control input-sm',
+                  placeholder : '$langSearch...'
+                });
         $('#select-courses').select2();
         $('#selectAll').click(function(e) {
             e.preventDefault();
@@ -55,9 +86,81 @@ $head_content .= "<script type='text/javascript'>
     });
 </script>";
 
+
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
-if (isset($_GET['add_server'])) {
+if (isset($_POST['code_to_assign'])) {
+    $course_id_to_assign = course_code_to_id($_POST['code_to_assign']);
+    Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d",
+                                    $course_id_to_assign, $_POST['tc_server']);
+    Session::Messages("Το μάθημα προστέθηκε",'alert-success');
+}
+if (isset($_GET['add_course_to_tc'])) {
+    $tc_server = $_GET['tc_server'];
+    $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='form-horizontal' role='form'>                        
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$langCourseCode :</label>
+                            <div class='col-xs-3'>
+                                <input type='text' class='form-control' name='code_to_assign'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-offset-2 col-xs-10'>
+                                <button class='btn btn-primary' type='submit'>$langAdd</button>&nbsp;&nbsp;
+                                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]'>$langBack</a>&nbsp;&nbsp;
+                            </div>
+                        </div>
+                        <input type='hidden' name='tc_server' value='$tc_server'>
+                    </form>";
+    $tool_content .= "</div>";
+}
+
+// list of courses with bbb enabled
+else if (isset($_GET['list'])) {
+    $tool_content .= action_bar(array(
+        array('title' => $langAdd,
+            'url' => "$_SERVER[SCRIPT_NAME]?tc_server=$_GET[list]&amp;add_course_to_tc",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'),
+        array('title' => $langBack,
+            'url' => "$_SERVER[SCRIPT_NAME]",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')
+        ));
+
+    $bbb = $_GET['list'];
+    $q = Database::get()->queryArray("SELECT id, course_id FROM course_external_server WHERE external_server = ?d", $bbb);
+    $tool_content .= "<table class='table-default' id='bbb_courses'>";
+    $tool_content .= "<thead>";
+    $tool_content .= "<th>$langCourse</th>";
+    $tool_content .= "<th>$langFaculty</th>";
+    $tool_content .= "</thead>";
+    $tool_content .= "<tbody>";
+
+    foreach ($q as $data) {
+        // ger course full path
+        $departments = $course->getDepartmentIds($data->course_id);
+        $i = 1;
+        $dep = '';
+        foreach ($departments as $department) {
+            $br = ($i < count($departments)) ? '<br/>' : '';
+            $dep .= $tree->getFullPath($department) . $br;
+            $i++;
+        }
+        $code = course_id_to_code($data->course_id);
+        $tool_content .= "<tr>";
+        $tool_content .= "<td><a href='${urlServer}courses/$code/' target='_blank'>" . course_id_to_title($data->course_id) . "</a>
+                                    &nbsp;<small>(" . course_id_to_code($data->course_id). ")</small>
+                                    <div style='margin-top: 5px;'><small>". course_id_to_prof($data->course_id) . "</small></div>
+                          </td>";
+        $tool_content .= "<td>". $dep ."</td>";
+        $tool_content .= "</tr>";
+    }
+    $tool_content .= "</tbody>";
+    $tool_content .= "</table>";
+}  else if (isset($_GET['add_server'])) {
     $pageName = $langAddServer;
     $toolName = $langBBBConf;
     $navigation[] = array('url' => 'bbbmoduleconf.php', 'name' => $langBBBConf);
@@ -353,7 +456,7 @@ else {
                 $num_of_tc_courses = $q->cnt;
                 $mess = '';
                 if ($srv->enabled == "true") {
-                    $mess = " <small>($langIn $num_of_tc_courses $langsCourses) </small>";
+                    $mess = " <small>(<a href='$_SERVER[SCRIPT_NAME]?list=$srv->id'>$langIn $num_of_tc_courses $langsCourses)</a></small>";
                 }
                 $tool_content .= "<tr>" .
                     "<td>$srv->api_url</td>" .
