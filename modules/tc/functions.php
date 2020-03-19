@@ -539,13 +539,14 @@ function bbb_session_details() {
         $langNewBBBSessionStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
-        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
+        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd, $langBBBNotServerAvailableTeacherCovid,
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langDate, $langBBBNoServerForRecording;
 
 
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
         if ($is_editor) {
             $tool_content .= "<div class='alert alert-danger'>$langBBBNotServerAvailableTeacher</div>";
+            $tool_content .= "<div class='alert alert-info'>$langBBBNotServerAvailableTeacherCovid</div>";
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langBBBNotServerAvailableStudent</div>";
         }
