@@ -632,7 +632,7 @@ $action_bar
                     <div class='pull-left h4'>$langDescription</div> $edit_link
                     <ul class='course-title-actions clearfix pull-right list-inline'>" .
 
-                        ($courseDescriptionVisible? "<li class='access pull-right'><a href='javascript:void(0);' style='color: #23527C;''><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span><span class='hidden'>.</span></a></li>": '') . "
+                        ($is_course_admin? "<li class='access pull-right'><a href='{$urlAppend}modules/course_info/?course=$course_code' style='color: #23527C;'><span class='fa fa-wrench fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInfo'></span></a></li>": '') . "
                         <li class='access pull-right'><a href='javascript:void(0);'>". course_access_icon($visible) . "</a></li>
                         <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span><span class='hidden'>.</span></a></li>" .
 
