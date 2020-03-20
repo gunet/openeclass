@@ -86,9 +86,14 @@ $head_content .= "<script type='text/javascript'>
     });
 </script>";
 
-
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
+if (isset($_GET['delete_tc_course']) and $_GET['list']) {
+    Database::get()->querySingle("DELETE FROM course_external_server 
+                                          WHERE course_id = ?d 
+                                          AND external_server = ?d", $_GET['delete_tc_course'], $_GET['list']);
+    Session::Messages("Η τηλεσυνεργασία απενεργοποιήθηκε για το μάθημα",'alert-success');
+}
 if (isset($_POST['code_to_assign'])) {
     $course_id_to_assign = course_code_to_id($_POST['code_to_assign']);
     Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d",
@@ -136,6 +141,7 @@ else if (isset($_GET['list'])) {
     $tool_content .= "<thead>";
     $tool_content .= "<th>$langCourse</th>";
     $tool_content .= "<th>$langFaculty</th>";
+    $tool_content .= "<th><span class='fa fa-cogs'></span></th>";
     $tool_content .= "</thead>";
     $tool_content .= "<tbody>";
 
@@ -156,6 +162,14 @@ else if (isset($_GET['list'])) {
                                     <div style='margin-top: 5px;'><small>". course_id_to_prof($data->course_id) . "</small></div>
                           </td>";
         $tool_content .= "<td>". $dep ."</td>";
+        $tool_content .= "<td class='option-btn-cell'>".
+                            action_button(array(
+                                array('title' => $langDelete,
+                                  'url' => "$_SERVER[SCRIPT_NAME]?list=$bbb&delete_tc_course=$data->course_id",
+                                  'icon' => 'fa-times',
+                                  'class' => 'delete',
+                                  'confirm' => $langConfirmDelete))) .
+                        "</td>";
         $tool_content .= "</tr>";
     }
     $tool_content .= "</tbody>";
