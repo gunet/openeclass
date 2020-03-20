@@ -589,11 +589,11 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"', $language) . "</div>
         </div>";
 
-        $tool_content .= "<div class='text-muted'>
+        $tool_content .= "<div class='course-info-title clearfix'>
                             <a role='button' data-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
-                                 <h4 class='panel-heading' style='margin-bottom: 20px;'>
+                                 <h5 class='panel-heading' style='margin-bottom: 0px;'>
                                        <span class='fa fa-chevron-down fa-fw'></span> $langReadMore   
-                                 </h4>
+                                 </h5>
                             </a>
                           </div>";
     

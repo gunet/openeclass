@@ -148,9 +148,6 @@ $head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
             $this.click(function() {
                 calendar.view($this.data("calendar-view"));
             });
-        });
-        $(".modal").on("show.bs.modal", function(e){
-            $("#lalou").popover("hide");
         });'
 
     ."})
@@ -664,11 +661,14 @@ $action_bar
                 // course description
                 if ((!$is_editor) and (!$courseDescriptionVisible)) { // if there is no course info don't display link to users;
                     $tool_content .= "";
+                    if ($course_license) {
+                        $tool_content .= "<span class='pull-right' style='margin-top: 15px;'>" . copyright_info($course_id) . "</span>";
+                    }
                 } else {
                     $tool_content .= "
                         <div class='col-xs-12 course-below-wrapper' style='margin-top: 25px;'>
-                            <div class='row text-muted well well-sm' style='margin-left:20px; margin-right: 20px;'>
-                                <h4 class='panel-heading panel-title'>
+                            <div class='course-info-title clearfix'>
+                                    <h5>
                                   <a role='button' id='btn-syllabus' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>                                      
                                             <span class='fa fa-chevron-right fa-fw'></span><span style='padding-left: 5px;'>$langCourseDescription</span></a> 
                                             $edit_course_desc_link";
@@ -678,9 +678,10 @@ $action_bar
                                     }
                                   $tool_content .= "</h4>";
                                     // course description
-                                  $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px; margin-top: 20px;'>";
+                                  $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-top: 20px;'>";
                                   foreach ($res as $row) {
-                                      $tool_content .= "<div style='margin-top: 1px;'><strong>" . q($row->title) . "</strong></div>" . standard_text_escape($row->comments) . "";
+                                      $tool_content .= "<div style='margin-top: 1px;'><strong>" . q($row->title) . "</strong></div>
+                                                        <div style='margin-left: 10px; margin-right: 10px;'>" . standard_text_escape($row->comments) . "</div>";
                                   }
                     $tool_content .= "</div></div></div>";
                 }

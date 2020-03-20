@@ -536,11 +536,11 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>
                 </div>";
 
-                $tool_content .= "<div class='text-muted'>
+                $tool_content .= "<div class='course-info-title clearfix'>
                             <a role='button' data-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
-                                 <h4 class='panel-heading' style='margin-bottom: 20px;'>
+                                 <h5 class='panel-heading'>
                                        <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess   
-                                 </h4>
+                                 </h5>
                             </a>
                           </div>";
 
