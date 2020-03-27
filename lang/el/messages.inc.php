@@ -57,6 +57,7 @@ $langOfUser = "χρήστη";
 $langSupportUser = "Υποστήριξη";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
+$langActiveRooms = "Ενεργά δωμάτια";
 $langVisible = "Ορατή";
 $langInvisible = "Μη ορατή";
 $langNoAccountPleaseRegister = 'Δεν έχετε λογαριασμό; Παρακαλούμε %sεγγραφείτε%s.';
@@ -5009,6 +5010,7 @@ $langToAllCourses = "Σε όλα τα $langsCourses";
 $langToAllCoursesInfo = "Επιλέξτε αν ο εξυπηρέτης θα μπορεί να χρησιμοποιείται από όλα τα $langsCourses ή από ορισμένα";
 $langToSomeCourses = "Σε συγκεκριμένα $langsCourses";
 $langToSomeCoursesInfo = "Ο εξυπηρέτης θα μπορεί να χρησιμοποιείται από συγκεκριμένα $langsCourses. Για να ορίσετε ποια $langsCourses θα τον χρησιμοποιούν μεταβείτε στην \"Αναζήτηση $langsOfCourses\" και επιλέξτε \"Ενέργειες\".";
+$langToNoCourses = "Σε κάνενα από τα $langsCourses";
 
 /* * ***********************************************************
  * blog.php

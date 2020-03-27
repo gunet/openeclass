@@ -384,6 +384,7 @@ $infoParams = array(
                 'meetingName' => $xml->meetingName,
                 'meetingId' => $xml->meetingID,
                 'createTime' => $xml->createTime,
+                'createDate' => $xml->createDate,
                 'voiceBridge' => $xml->voiceBridge,
                 'attendeePw' => $xml->attendeePW,
                 'moderatorPw' => $xml->moderatorPW,
@@ -395,10 +396,11 @@ $infoParams = array(
                 'participantCount' => $xml->participantCount,
                 'maxUsers' => $xml->maxUsers,
                 'moderatorCount' => $xml->moderatorCount,
+                'attendees' => array(),
             );
             // Then interate through attendee results and return them as part of the array:
             foreach ($xml->attendees->attendee as $a) {
-                $result[] = array(
+                $result['attendees'][] = array(
                     'userId' => $a->userID,
                     'fullName' => $a->fullName,
                     'role' => $a->role

@@ -1096,7 +1096,7 @@ function get_connected_users($salt, $bbb_url)
  * @param type $bbb_url
  * @return int
  */
-function get_active_rooms($salt,$bbb_url)
+function get_active_rooms($salt, $bbb_url)
 {
     $sum = 0;
     // instantiate the BBB class
@@ -1115,6 +1115,32 @@ function get_active_rooms($salt,$bbb_url)
     }
 
     return $sum;
+}
+
+/**
+ * @brief get room details
+ * @param type $salt
+ * @param type $bbb_url
+ * @return array
+ */
+function get_active_rooms_details($salt, $bbb_url)
+{
+    // instantiate the BBB class
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    $meetings = $bbb->getMeetingsWithXmlResponseArray();
+    if (!$meetings) {
+        $meetings = array();
+    }
+    $info = array();
+    foreach ($meetings as $meeting) {
+        $mid = $meeting['meetingId'];
+        $pass = $meeting['moderatorPw'];
+        if ($mid != null) {
+            $info[] = $bbb->getMeetingInfoWithXmlResponseArray($bbb, $bbb_url, $salt, array('meetingId' => $mid, 'password' => $pass));
+        }
+    }
+    return $info;
 }
 
 /**
