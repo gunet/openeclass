@@ -518,55 +518,7 @@ else {
         } else {
              $tool_content .= "<div class='alert alert-warning'>$langNoAvailableBBBServers</div>";
         }
-       $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE enabled = 'true' AND `type` = 'bbb' ORDER BY weight");
-        if (count($q)>0) {
-            $tool_content .= "<div class='inner-heading'>$langActiveRooms</div>";
-            $tool_content .= "<div class='table-responsive'>";
-            $tool_content .= "<table class='table-default'>
-                <thead>
-                <tr><th class = 'text-center'>API URL</th>
-                    <th class = 'text-center'>$langCourse</th>
-                    <th class = 'text-center'>$langTitle</th>
-                    <th class = 'text-center'>$langOnlineUsers</th>
-                    <th class = 'text-center'>$langNewBBBSessionStatus</th>
-                </thead>";
-           foreach ($q as $srv) {
-                $meetings = get_active_rooms_details($srv->server_key, $srv->api_url);
-                foreach ($meetings as $meeting) {
-                    $meeting_id = $meeting['meetingId'];
-                    if ($meeting_id != null) {
-                        $course = Database::get()->querySingle("SELECT code,course.title,tc_session.title as mtitle FROM course LEFT JOIN tc_session on course.id=tc_session.course_id WHERE tc_session.meeting_id='${meeting_id}'");
-                        // don't list meetings from other APIs
-                        if (!$course) {
-                            continue;
-                        }
-                        $createstamp = $meeting['createTime'];
-                        $createDate = date('d/m/Y H:i:s', $createstamp/1000);
-                        $recording = $meeting['recording'];
-                        $mod_pw = $meeting['moderatorPw'];
-                        $att_pw = $meeting['attendeePw'];
-                        $mparticipants = $meeting['participantCount'];
-                        $course_code = $course->code;
-                        $course_title = $course->title;
-                        // meeting name without course code
-                        $mtitle = $course->mtitle;
-                        // meeting name with course code
-                        $title = $meeting['meetingName'];
-                        $courseLink = "<a href='/modules/tc/?course=$course_code'>" . q($course_title) . "</a>";
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($mtitle) . "</a>";
-
-                        $tool_content .= "<tr>" .
-                            "<td>$srv->api_url</td>" .
-                            "<td>$courseLink ($course_code)</td>" .
-                            "<td>$joinLink</td>" .
-                            "<td class = 'text-center'>$mparticipants</td>" .
-                            "<td class = 'text-center'>$createDate</td>" .
-                            "</tr>";
-                    }
-                }
-            }
-            $tool_content .= "</table></div>";
-        }
+        
        $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE enabled = 'true' AND `type` = 'bbb' ORDER BY weight");
         if (count($q)>0) {
             $tool_content .= "<div class='inner-heading'>$langActiveRooms</div>";
