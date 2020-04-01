@@ -1691,32 +1691,20 @@ function delete_course($cid) {
         return;
     }
 
-    Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion IN
-                            (SELECT id FROM badge_criterion WHERE badge IN
-                            (SELECT id FROM badge WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM badge_criterion WHERE badge IN
-                            (SELECT id FROM badge WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM user_badge WHERE badge IN
-                            (SELECT id FROM badge WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM user_badge_criterion d,badge_criterion s,badge s2 WHERE d.badge_criterion=s.id AND s.badge=s2.id AND s2.course_id = ?d))", $cid);
+    Database::get()->query("DELETE d FROM badge_criterion d,badge s WHERE d.badge=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM user_badge d,badge s WHERE d.badge=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM badge WHERE course_id = ?d", $cid);
 
-    Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN
-                            (SELECT id FROM certificate_criterion WHERE certificate IN
-                            (SELECT id FROM certificate WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM certificate_criterion WHERE certificate IN
-                            (SELECT id FROM certificate WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM user_certificate WHERE certificate IN
-                             (SELECT id FROM certificate WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM user_certificate_criterion d,certificate_criterion s,certificate s2 WHERE d.certificate_criterion=s.id AND s.certificate=s2.id AND s2.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM certificate_criterion d,certificate s WHERE d.certificates.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM user_certificate d,certificate s WHERE d.certificate=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM certificate WHERE course_id = ?d", $cid);
 
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM document WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
-                         (SELECT ebook_section.id FROM ebook_section, ebook
-                                 WHERE ebook_section.ebook_id = ebook.id AND
-                                       ebook.course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM ebook_section WHERE id IN
-                         (SELECT id FROM ebook WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM ebook_subsection d,ebook_section s,ebook s2 WHERE d.section_id=s.id AND s.ebook_id = s2.id AND s2.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM ebook_section d,ebook s WHERE d.ebook_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM ebook WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `forum_post` ON `rating`.`rid` = `forum_post`.`id` INNER JOIN `forum_topic`
                             ON `forum_post`.`topic_id` = `forum_topic`.`id` INNER JOIN `forum` ON `forum`.`id` = `forum_topic`.`forum_id`
@@ -1734,10 +1722,8 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM forum WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM forum_user_stats WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM group_members WHERE group_id IN
-                         (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM group_properties WHERE group_id IN
-                         (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM group_members d,`group` s WHERE d.group_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM group_properties d,`group` s WHERE d.group_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM `group` WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM `group_category` WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `link` ON `rating`.`rid` = `link`.`id`
@@ -1748,8 +1734,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM link_category WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_review WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM unit_resources WHERE unit_id IN
-                         (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM unit_resources d,course_units s WHERE d.unit_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM abuse_report WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id`
@@ -1780,47 +1765,45 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM course WHERE id = ?d", $cid);
     Database::get()->query("DELETE FROM video WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM videolink WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM dropbox_attachment WHERE msg_id IN (SELECT id FROM dropbox_msg WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM dropbox_index WHERE msg_id IN (SELECT id FROM dropbox_msg WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM dropbox_attachment d,dropbox_msg s WHERE d.msg_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM dropbox_index d,dropbox_msg s WHERE d.msg_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM dropbox_msg WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM lp_asset d,lp_module s WHERE d.module_id=s.module_id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM lp_rel_learnPath_module d,lp_learnPath s WHERE d.learnPath_id=s.learnPath_id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM lp_user_module_progress d,lp_learnPath s WHERE d.learnPath_id=s.learnPath_id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM lp_module WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM lp_learnPath WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM wiki_pages_content WHERE pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM wiki_pages_content d,wiki_pages s,wiki_properties s2 WHERE d.pid=s.id AND s.wiki_id=s2.id AND s2.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM wiki_pages d,wiki_properties s WHERE d.wiki_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM wiki_acls d,wiki_properties s WHERE d.wiki_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM wiki_properties WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM poll_user_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM poll_question_answer d,poll_question s,poll s2 WHERE d.pqid=s.pqid AND s.pid=s2.pid AND s2.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM poll_answer_record d,poll_user_record s,poll s2 WHERE d.poll_user_record_id=s.id AND s.pid=s2.pid AND s2.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM poll_user_record d,poll s WHERE d.pid=s.pid AND course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM poll_question d,poll s WHERE d.pid=s.pid AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM poll WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM assignment_submit d,assignment s WHERE d.assignment_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM assignment_to_specific d,assignment s WHERE d.assignment_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM assignment WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM exercise_with_questions WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM exercise_with_questions WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM exercise_answer WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM exercise_answer_record WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM exercise_with_questions d,exercise_question s WHERE d.question_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM exercise_with_questions d,exercise s WHERE d.exercise_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM exercise_answer d,exercise_question s WHERE d.question_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM exercise_answer_record d,exercise_question s WHERE d.question_id =s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM exercise_question WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM exercise_question_cats WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM exercise_user_record d,exercise s WHERE d.eid=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);
+    Database::get()->query("DELETE d FROM tag d,tag_element_module s WHERE d.id=s.tag_id AND NOT EXISTS (SELECT 1 FROM tag_element_module v WHERE v.tag_id=s.tag_id AND v.course_id != s.course_id ) AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM tag_element_module WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id IN
-                                    (SELECT id FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM gradebook_users WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM gradebook_book d,gradebook_activities s,gradebook s2 WHERE d.gradebook_activity_id=s.id AND s.gradebook_id=s2.id AND s2.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM gradebook_activities d,gradebook s WHERE d.gradebook_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM gradebook_users d,gradebook s WHERE d.gradebook_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM gradebook WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id IN
-                                    (SELECT id FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM attendance_users WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM attendance_book d,attendance_activities s,attendance s2 WHERE d.attendance_activity_id=s.id AND s.attendance_id=s2.id AND s2.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM attendance_activities d,attendance s WHERE d.attendance_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM attendance_users d,attendance s WHERE d.attendance_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM tc_session WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $cid);
