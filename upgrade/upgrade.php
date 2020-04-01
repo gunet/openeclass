@@ -1979,6 +1979,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '3.8', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.8'));
 
+        if (DBHelper::fieldExists('announcement', 'preview')) {
+            Database::get()->query("ALTER TABLE announcement DROP COLUMN preview");
+        }
         // conference chat activity and agent
         if (!DBHelper::fieldExists('conference', 'chat_activity')) {
             Database::get()->query('ALTER TABLE conference ADD chat_activity boolean not null default false');
