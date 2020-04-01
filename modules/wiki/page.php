@@ -194,20 +194,12 @@ if ($action == "diff") {
 // get content
 if ($action == "edit") {
     if (isset($_REQUEST['wiki_content'])) {
-        if (!get_magic_quotes_gpc()) {
-            $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
-        } else {
-            $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
-        }
+        $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
     } else {
         $content = '';
     }
 } else {
-    if (!get_magic_quotes_gpc()) {
-        $content = ( isset($_REQUEST['wiki_content']) ) ? $_REQUEST['wiki_content'] : '';
-    } else {
-        $content = ( isset($_REQUEST['wiki_content']) ) ? $_REQUEST['wiki_content'] : '';
-    }
+    $content = ( isset($_REQUEST['wiki_content']) ) ? $_REQUEST['wiki_content'] : '';
 }
 
 // use __MainPage__ if empty title
