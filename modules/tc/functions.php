@@ -863,13 +863,12 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
         $salt = $res->server_key;
         $bbb_url = $res->api_url;
         $duration = 0;
-        $r = Database::get()->querySingle("SELECT start_date, end_date FROM tc_session WHERE meeting_id = ?s", $meeting_id);
-        if (($r->start_date != null) and ($r->end_date != null)) {
-            $date_start = new DateTime($r->start_date);
-            $date_end = new DateTime($r->end_date);
-            $hour_duration = $date_end->diff($date_start)->h; // hour
-            $min_duration = $date_end->diff($date_start)->i; // minutes
-            $duration = $hour_duration*60 + $min_duration;
+        $r = Database::get()->querySingle("SELECT end_date FROM tc_session WHERE meeting_id = ?s", $meeting_id);
+        if ($r->end_date != null) {
+            $now = new DateTime('now');
+            $end = new DateTime($r->end_date);
+            $interval = $now->diff($end);
+            $duration = $interval->d * 24 * 60 + $interval->h * 60 + $interval->i + ($interval->s >= 30? 1: 0);
         }
 
         $bbb = new BigBlueButton($salt, $bbb_url);
