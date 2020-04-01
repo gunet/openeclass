@@ -40,37 +40,46 @@ $head_content .= "
 $pageName = $langBBBRecordUserParticipation;
 
 // *** TO DO **** //
-$q = Database::get()->querySingle("SELECT server_key, api_url FROM tc_servers WHERE type='bbb' AND enabled = 'true'");
-if ($q) {
-    $salt = $q->server_key;
-    $bbb_url = $q->api_url;            
-} else {
-    exit();
-}
+$q = Database::get()->queryArray("SELECT server_key, api_url FROM tc_servers WHERE type='bbb' AND enabled = 'true'");
+if (empty($q)) {
+    exit;
+} 
+
 $tool_content .= $langWangBBBAttendance;
 
-// scan active bbb rooms
-$xml_url = $bbb_url."api/getMeetings?checksum=".sha1("getMeetings".$salt);
-// read the XML format of bbb answer and ...
-$bbb = new BigBlueButton($salt, $bbb_url);
-$xml = $bbb->getMeetingInfo($xml_url);
-// ... for each meeting room scan connected users
-foreach ($xml->meetings->meeting as $row) {
-    $meet_id = $row->meetingID;
-    $moder_pw = $row->moderatorPW;        
-    /****************************************************/
-    /*		write attendes in SQL database		*/
-    /****************************************************/    
-    $joinParams = array(
-        'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
-        'password' => $moder_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
-    );
-    // Get the URL to meeting info:
-    $room_xml = $bbb-> getMeetingInfoUrl($bbb_url, $salt, $joinParams);
-    /****************************************************/    
-    /*		XML read from URL and write to SQL	*/    
-    /****************************************************/
-    xml2sql($room_xml, $bbb);    
+foreach($q as $server) {
+    $salt = $server->server_key;
+    $bbb_url = $server->api_url;            
+
+    // scan active bbb rooms
+    $xml_url = $bbb_url."api/getMeetings?checksum=".sha1("getMeetings".$salt);
+    // read the XML format of bbb answer and ...
+    $bbb = new BigBlueButton($salt, $bbb_url);
+    $xml = $bbb->getMeetingInfo($xml_url);
+    // ... for each meeting room scan connected users
+    foreach ($xml->meetings->meeting as $row) {
+        $meet_id = $row->meetingID;
+        $moder_pw = $row->moderatorPW;        
+
+    	 $course = Database::get()->querySingle("SELECT code,course.title,tc_session.title as mtitle FROM course LEFT JOIN tc_session on course.id=tc_session.course_id WHERE tc_session.meeting_id='${meet_id}'");
+    	 // don't list meetings from other APIs
+    	 if (!$course) {
+    		continue;
+    	 }
+        /****************************************************/
+        /*		write attendes in SQL database		*/
+        /****************************************************/    
+        $joinParams = array(
+            'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
+            'password' => $moder_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
+        );
+        // Get the URL to meeting info:
+        $room_xml = $bbb-> getMeetingInfoUrl($bbb_url, $salt, $joinParams);
+        /****************************************************/    
+        /*		XML read from URL and write to SQL	*/    
+        /****************************************************/
+        xml2sql($room_xml, $bbb);    
+    }
 }
 // draws pop window
 draw_popup();
