@@ -90,13 +90,13 @@ if ($appName) {
             }
             Session::Messages($langFileUpdatedSuccess, 'alert-info');
         } else {
-        $result = $app->storeParams();
-        if ($result) {
-            Session::Messages($result, 'alert-danger');
-        } else {
-            Session::Messages($langFileUpdatedSuccess, 'alert-success');
+            $result = $app->storeParams();
+            if ($result) {
+                Session::Messages($result, 'alert-danger');
+            } else {
+                Session::Messages($langFileUpdatedSuccess, 'alert-success');
+            }
         }
-    }
         redirect_to_home_page($app->getConfigUrl());
     }
 
