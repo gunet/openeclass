@@ -183,7 +183,7 @@ public function getJoinMeetingURL($joinParams) {
     USAGE:
     $joinParams = array(
     'meetingId' => '1234', -- REQUIRED - A unique id for the meeting
-    'username' => 'Jane Doe', -- REQUIRED - The name that will display for the user in the meeting
+    'fullName' => 'Jane Doe', -- REQUIRED - The name that will display for the user in the meeting
     'password' => 'ap', -- REQUIRED - The attendee or moderator password, depending on what's passed here
     'createTime' => '', -- OPTIONAL - string. Leave blank ('') unless you set this correctly.
     'userID' => '', -- OPTIONAL - string
@@ -191,14 +191,14 @@ public function getJoinMeetingURL($joinParams) {
     );
     */
     $this->_meetingId = $this->_requiredParam($joinParams['meetingId']);
-    $this->_username = $this->_requiredParam($joinParams['username']);
+    $this->_fullName = $this->_requiredParam($joinParams['fullName']);
     $this->_password = $this->_requiredParam($joinParams['password']);
     // Establish the basic join URL:
     $joinUrl = $this->_bbbServerBaseUrl."api/join?";
     // Add parameters to the URL:
     $params =
         'meetingID='.urlencode($this->_meetingId).
-        '&fullName='.urlencode($this->_username).
+        '&fullName='.urlencode($this->_fullName).
         '&password='.urlencode($this->_password).
         '&userID='.urlencode($joinParams['userId']).
         '&webVoiceConf='.urlencode($joinParams['webVoiceConf']);

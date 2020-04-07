@@ -939,10 +939,10 @@ function bbb_join_moderator($meeting_id, $mod_pw, $att_pw, $surname, $name) {
 
         $joinParams = array(
             'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting to join.
-            'username' => $surname . " " . $name,   // REQUIRED - The user display name that will show in the BBB meeting.
+            'fullName' => $surname . " " . $name,   // REQUIRED - The user display name that will show in the BBB meeting.
             'password' => $mod_pw,  // REQUIRED - Must match either attendee or moderator pass for meeting.
             'createTime' => '', // OPTIONAL - string
-            'userId' => '', // OPTIONAL - string
+            'userId' => $_SESSION['uname'], // OPTIONAL - string
             'webVoiceConf' => ''    // OPTIONAL - string
         );
         // Get the URL to join meeting:
@@ -981,12 +981,18 @@ function bbb_join_user($meeting_id, $att_pw, $surname, $name) {
     // Instantiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
 
+    if (isset($_SESSION['uname'])) {
+      $userId = $_SESSION['uname'];
+    } else { // ext.php users
+      $userId = '';
+    }
+
     $joinParams = array(
         'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting to join.
-        'username' => $surname . " " . $name,   // REQUIRED - The user display name that will show in the BBB meeting.
+        'fullName' => $surname . " " . $name,   // REQUIRED - The user display name that will show in the BBB meeting.
         'password' => $att_pw,  // REQUIRED - Must match either attendee or moderator pass for meeting.
         'createTime' => '', // OPTIONAL - string
-        'userId' => '', // OPTIONAL - string
+        'userId' => $userId, // OPTIONAL - string
         'webVoiceConf' => ''    // OPTIONAL - string
     );
     // Get the URL to join meeting:
