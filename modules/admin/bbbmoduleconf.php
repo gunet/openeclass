@@ -186,7 +186,7 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 
-    $data['bbb_servers'] = Database::get()->queryArray("SELECT * FROM tc_servers");
+    $data['bbb_servers'] = Database::get()->queryArray("SELECT * FROM tc_servers WHERE type='bbb'");
     $view = 'admin.other.extapps.bbb.index';
 }
 
