@@ -22,12 +22,13 @@
 
 require_once 'genericrequiredparam.php';
 
-class OpenMeetings extends ExtApp {
+class OpenMeetings extends ExtTCApp {
 
     const NAME = "OpenMeetings";
 
     public function __construct() {
         parent::__construct();
+        $this->sessionType = 'om';
     }
 
     public function getDisplayName() {
@@ -44,14 +45,6 @@ class OpenMeetings extends ExtApp {
 
     public function getConfigUrl() {
         return 'modules/admin/openmeetingsconf.php';
-    }
-
-    /**
-     * @brief return true if any OpenMeetings servers are enabled, else false     
-     * @return boolean
-     */
-    public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND `type`='om'")->count > 0;
     }
 
 }

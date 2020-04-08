@@ -32,30 +32,79 @@ class ExtAppManager {
         'BBBApp', 'OpenMeetings', 'WebConfApp', 'AutojudgeApp', 'AntivirusApp',
         'WafApp', 'secondfaApp', 'AnalyticsApp', 'UnPlagApp', 'TurnitinApp');
     private static $APPS = null;
+    private static $ExclusiveAppNames = array(
+        'tc'=>['BBBApp','OpenMeetings','WebConfApp']
+    );
+    private static $EXCLUSIVEAPPS = null;
 
     /**
      * @return ExtApp[]
      */
     public static function getApps() {
-        if (ExtAppManager::$APPS == null) {
+        if (self::$APPS == null) {
             $apps = array();
-            foreach (ExtAppManager::$AppNames as $appName) {
+            foreach (self::$AppNames as $appName) {
                 $app = new $appName();
                 $apps[$app->getName()] = $app;
             }
-            ExtAppManager::$APPS = $apps;
+            self::$APPS = $apps;
         }
-        return ExtAppManager::$APPS;
+        return self::$APPS;
     }
 
+    /**
+     * @return int[]ExtApp[]
+     */
+    public static function getExclusiveApps() {
+        if (self::$EXCLUSIVEAPPS == null) {
+            self::getApps();
+            $apps = array();
+            foreach (self::$ExclusiveAppNames as $k=>$appClassNames) {
+                foreach($appClassNames as $appClassName) {
+
+                     //Find already created instance, avoid creating another one, plugins could be front heavy
+                    foreach(self::$APPS as $app) {
+                        if ( $app->getClassName() === $appClassName ) {
+                            $apps[$k][$app->getName()] = $app;
+                            continue;
+                        }
+                    }
+                    
+                }
+            }
+            self::$EXCLUSIVEAPPS = $apps;
+        }
+        return self::$EXCLUSIVEAPPS;
+    }
+    
     /**
      * 
      * @param string $appname
      * @return ExtApp
      */
     public static function getApp($appname) {
-        $apps = ExtAppManager::getApps();
+        $apps = self::getApps();
         return array_key_exists($appname, $apps) ? $apps[$appname] : null;
+    }
+    
+    public static function enableDisableApp($appname,$newstate=1,callable $disableFunc=null) {
+        $app = self::getApp($appname);
+        if ( !$app ) return false;
+        if ( $newstate === 1) { //If enabling an app, check for exclusions
+            self::getExclusiveApps();
+            foreach(self::$EXCLUSIVEAPPS as $k=>$excapps) {
+                if (array_key_exists($appname,$excapps)) {
+                    foreach($excapps as $apptoswitch) {
+                        if ( $apptoswitch == $app ) continue; //don't disable myself
+                        $apptoswitch->setEnabled(0); //disable excluded app
+                        if ( $disableFunc )
+                            $disableFunc($apptoswitch);//tell caller we're disabling this app
+                    }
+                }
+            }
+        }
+        $app->SetEnabled($newstate);
+        return true;
     }
 
 }
@@ -116,7 +165,16 @@ abstract class ExtApp {
     public function getName() {
         return strtolower(str_replace(' ', '', $this->getDisplayName()));
     }
-
+    
+    
+    /**
+     *
+     * @return string
+     */
+    public function getClassName() {
+        return static::class; //requires php 5.5+
+    }
+    
     /**
      * 
      * @return string
@@ -181,10 +239,15 @@ abstract class ExtApp {
         return $this->getBaseURL() . "template/icons/" . $this->getName() . ".png";
     }
 
-    public function update_tc_sessions($type) {
+}
 
-        $r = Database::get()->querySingle("SELECT id FROM tc_servers 
-                                            WHERE `type` = '$type' AND enabled = 'true'
+abstract class ExtTCApp extends ExtApp {
+    protected $sessionType = null; //must be overriden in descendants
+    
+    public function update_tc_sessions() {
+        if ( $this->sessionType === null ) die('[externals.php] Session type uninitialized');
+        $r = Database::get()->querySingle("SELECT id FROM tc_servers
+                                            WHERE `type` = '".$this->sessionType."' AND enabled = 'true'
                                             ORDER BY weight ASC");
         if ($r) {
             $tc_id = $r->id;
@@ -193,6 +256,29 @@ abstract class ExtApp {
         }
     }
 
+    /**
+     *
+     * @param boolean $status
+     */
+    function setEnabled($status) {
+        if ( $status==1 && !$this->isEnabled() ) {
+            parent::setEnabled($status);
+            $this->update_tc_sessions();
+        }
+        else
+            parent::setEnabled($status);
+    }
+    
+    /**
+     * Return true if any TC servers of type $sessionType are enabled, else false
+     *
+     * @return boolean
+     */
+    public function isConfigured() {
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND `type` = ?s",$this->sessionType)->count > 0;
+    }
+    
+    
 }
 
 abstract class ExtParam {

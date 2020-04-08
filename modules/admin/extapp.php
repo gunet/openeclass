@@ -32,13 +32,12 @@ load_js('tools.js');
 load_js('validation.js');
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
-$data['appName'] = $appName = isset($_GET['edit'])? $_GET['edit']: null;
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
     $appName = $_POST['appName'];
     if(showSecondFactorChallenge()!=""){
         $parts = explode(",",$appName);
-        if(count($parts)>1){ 
+        if(count($parts)>1){
             $appName = $parts[0];
             $_POST['sfaanswer'] = $parts[count($parts)-1];
         }else{
@@ -46,38 +45,19 @@ if (isset($_POST['state'])) {
         }
         checkSecondFactorChallenge();
     }
-    $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;    
-    $appNameAjax = getDirectReference($appName);    
+    $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
+    $appNameAjax = getDirectReference($appName);
     
-    if (($appNameAjax == 'openmeetings') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('bigbluebutton');
-        $app_tc->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
-        $app_tc = ExtAppManager::getApp('webconf');
-        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
-        $app_tc->update_tc_sessions('om'); // update tc sessions
-    }
+    $app_tc = ExtAppManager::getApp($appNameAjax);
+    if ( !$app_tc ) die('[externals.php] App not found!');
     
-    if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('openmeetings');
-        $app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
-        $app_tc = ExtAppManager::getApp('webconf');
-        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
-        $app_tc->update_tc_sessions('bbb'); // update tc sessions
-    }
-    
-    if (($appNameAjax == 'webconf') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('bigbluebutton');
-        $app_tc->setEnabled(!$newState);  // disable bigbluebutton if bigbluebutton has been enabled
-        $app_tc = ExtAppManager::getApp('openmeetings');
-        $app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
-        $app_tc->update_tc_sessions('webconf'); // update tc sessions
-    }
-    
-    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    
-    echo $newState;
+    $res = ExtAppManager::enableDisableApp($appNameAjax,$newState); //use the manager - it handles exclusions
+    if (!$res) die("FAILED");
+    echo $app_tc->isEnabled()?'1':'0';
     exit;
-}
+} //POST['state']
 
+$data['appName'] = $appName = isset($_GET['edit'])? $_GET['edit']: null;
 if ($appName) {
     $data['app'] = $app = ExtAppManager::getApp($appName);
 

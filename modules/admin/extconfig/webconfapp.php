@@ -22,12 +22,13 @@
 
 require_once 'genericrequiredparam.php';
 
-class WebConfApp extends ExtApp {
+class WebConfApp extends ExtTCApp {
 
     const NAME = "WebConf";
 
     public function __construct() {
         parent::__construct();
+        $this->sessionType = 'webconf';
     }
 
     public function getDisplayName() {
@@ -44,15 +45,6 @@ class WebConfApp extends ExtApp {
 
     public function getConfigUrl() {
         return 'modules/admin/webconf.php';
-    }
-
-    /**
-     * Return true if any WebConf servers are enabled, else false
-     * 
-     * @return boolean
-     */
-    public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND `type` = 'webconf'")->count > 0;
     }
 
 }

@@ -22,12 +22,13 @@
 
 require_once 'genericrequiredparam.php';
 
-class BBBApp extends ExtApp {
+class BBBApp extends ExtTCApp {
 
     const NAME = "BigBlueButton";
 
     public function __construct() {
         parent::__construct();
+        $this->sessionType = 'bbb';
     }
 
     public function getDisplayName() {
@@ -44,15 +45,6 @@ class BBBApp extends ExtApp {
 
     public function getConfigUrl() {
         return 'modules/admin/bbbmoduleconf.php';
-    }
-
-    /**
-     * Return true if any BBB servers are enabled, else false
-     * 
-     * @return boolean
-     */
-    public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND `type` = 'bbb'")->count > 0;
     }
 
 }
