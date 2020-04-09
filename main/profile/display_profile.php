@@ -181,7 +181,7 @@ if ($userdata) {
                                                 $langPhone:
                                             </span>";
                                             if (!empty($userdata->phone) and allow_access($userdata->phone_public)) {
-                                                $tool_content .= $userdata->phone;
+                                                $tool_content .= q($userdata->phone);
                                             } else {
                                                 $tool_content .= "<span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
                                             }
@@ -202,7 +202,7 @@ if ($userdata) {
                                                 $langAm:
                                             </span>";
                                             if (!empty($userdata->am) and allow_access($userdata->am_public)) {
-                                                $tool_content .= $userdata->am;
+                                                $tool_content .= q($userdata->am);
                                             } else {
                                                 $tool_content .= "<span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
                                             }

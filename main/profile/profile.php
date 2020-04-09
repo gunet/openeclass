@@ -222,7 +222,7 @@ if (isset($_POST['submit'])) {
                              am_public = ?d
                              $verified_mail_sql
                          WHERE id = ?d",
-                            $surname_form, $givenname_form, $username_form, $email_form, q($am_form), q($phone_form), $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
+                            $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
 
     //fill custom profile fields
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
