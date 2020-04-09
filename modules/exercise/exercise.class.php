@@ -944,9 +944,8 @@ if (!class_exists('Exercise')) {
         function purge() {
             $id = $this->id;
 
-            Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid IN ("
-                    . "SELECT eurid FROM exercise_user_record WHERE eid = ?d"
-                    . ")", $id);
+            Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s 
+                              WHERE d.eurid = s.eurid AND s.eid = ?d", $id);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d",$id);
         }
         /**
