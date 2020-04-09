@@ -21,8 +21,10 @@
 $require_login = true;
 if (isset($_GET['course'])) { //course messages
     $require_current_course = true;
+    $require_user_registration = true;
 } else { //personal messages
     $require_current_course = false;
+    $require_user_registration = false;
 }
 $guest_allowed = false;
 $require_help = true;

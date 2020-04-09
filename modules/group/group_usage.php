@@ -24,6 +24,7 @@
  * @brief Groups usage / statistics
  */
 $require_current_course = TRUE;
+$require_user_registration = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';

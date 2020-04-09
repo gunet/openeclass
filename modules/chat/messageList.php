@@ -36,6 +36,10 @@ if (isset($_REQUEST['conference_id'])) {
     redirect_to_home_page("modules/chat/messageList.php?course=$course_code");
 }
 
+if (!user_is_registered_to_course($uid, $course_id)) {
+    redirect_to_home_page("courses/$course_code/");
+}
+
 $fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';
 $tmpArchiveFile = $coursePath . $course_code . '/' . $conference_id. '_tmpChatArchive.txt';
 

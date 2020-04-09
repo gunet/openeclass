@@ -25,6 +25,7 @@
  */
 $require_current_course = TRUE;
 $require_login = TRUE;
+$require_user_registration = TRUE;
 $require_help = true;
 $helpTopic = 'chat';
 

@@ -3828,6 +3828,7 @@ $langCheckPublicTools = "
 $langWarnShibUser = "
         <strong>Προειδοποίηση:</strong> Επειδή η πιστοποίησή σας έγινε μέσω Shibboleth δεν έχετε αποσυνδεθεί από την πλατφόρμα!
         <br>Για να αποσυνδεθείτε θα πρέπει να κλείσετε τον browser σας.</p>";
+$langCheckUserRegistration = "<strong>Η ενέργεια που προσπαθείτε να εκτελέσετε απαιτεί εγγραφή στο $langsCourse:</strong>.";
 
 $langUserPortfolio = "Χαρτοφυλάκιο χρήστη";
 $langPortfolio = "Χαρτοφυλάκιο";

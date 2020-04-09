@@ -1912,6 +1912,7 @@ $langCheckGuest = "<b>The action you attempted to execute is not possible with g
 $langCheckPublicTools = "<b>You tried to access an inactive module.</b>
 <br> For security reasons the system has automatically redirected you to the start page to login again.";
 $langWarnShibUser = "<b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.";
+$langCheckUserRegistration = "<strong>$langCourse registration is required:</strong>.";
 $langUserPortfolio = "User portfolio";
 $langPortfolio = "Portfolio";
 $langAdvancedSearch = "Advanced search";

@@ -26,6 +26,7 @@
 
 $require_current_course = true;
 $require_login = true;
+$require_user_registration = true;
 $require_help = true;
 $helpTopic = 'assignments';
 
@@ -70,6 +71,7 @@ load_js('c3-0.4.10/c3.min.js');
 $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "{$urlServer}modules/work/?course=$course_code", 'name' => $langWorks);
 $toolName = $langWorks;
+
 
 //-------------------------------------------
 // main program

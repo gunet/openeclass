@@ -21,6 +21,7 @@
 
 $require_login = true;
 $require_current_course = true;
+$require_user_registration = true;
 $require_help = true;
 $helpTopic = 'Progress';
 

@@ -22,6 +22,7 @@
 
 $require_login = true;
 $require_current_course = TRUE;
+$require_user_registration = true;
 
 require_once '../../include/baseTheme.php';
 
