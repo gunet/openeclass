@@ -77,9 +77,9 @@ class ModuleElement {
             $tag_id = $tag->findOrCreate();
             if ($tag_id) {
                 Database::get()->query("DELETE FROM `tag_element_module` WHERE `course_id` = ?d AND `module_id` = ?d AND `element_id` = ?d AND `tag_id` = ?d", $this->course_id, $this->module_id, $this->element_id, $tag_id);
+                Database::get()->query("DELETE FROM tag WHERE id NOT IN (SELECT DISTINCT tag_id FROM tag_element_module) AND id = ?d", $tag_id);
             }
         }
-        Database::get()->query('DELETE FROM tag WHERE id NOT IN (SELECT DISTINCT tag_id FROM tag_element_module)');
     }
     public function syncTags($tagsArray) {
         $attached_tags = $this->getTags();
