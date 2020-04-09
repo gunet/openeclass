@@ -75,7 +75,7 @@
                                             {{ trans('langPhone') }}:
                                         </span>
                                         @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
-                                            {{ $userdata->phone }}
+                                            {{ q($userdata->phone) }}
                                         @else
                                             <span class='tag-value not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
                                         @endif
@@ -90,7 +90,7 @@
                                             {{ trans('langAm') }}:
                                         </span>
                                         @if (!empty($userdata->am) and allow_access($userdata->am_public))
-                                            {{ $userdata->am }}
+                                            {{ q($userdata->am) }}
                                         @else
                                             <span class='tag-value not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
                                         @endif
