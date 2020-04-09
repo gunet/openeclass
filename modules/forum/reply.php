@@ -24,6 +24,7 @@
  */
 $require_current_course = true;
 $require_login = true;
+$require_user_registration = true;
 $require_help = true;
 $helpTopic = 'forum';
 require_once '../../include/baseTheme.php';
@@ -36,6 +37,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 
 $toolName = $langForums;
 $pageName = $langReply;
+
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
 } else {

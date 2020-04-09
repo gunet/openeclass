@@ -732,7 +732,6 @@ function selection3($entries, $name, $default = '') {
  * @return boolean
  */
 function check_guest($id = FALSE) {
-    //global $uid;
 
     if ($id) {
         $uid = $id;
@@ -835,6 +834,25 @@ function check_uid() {
     }
 }
 
+
+/**
+ * @brief check if user is registered to specific course
+ * @param $uid
+ * @param $course_id
+ * @return bool
+ */
+
+function user_is_registered_to_course($uid, $course_id) {
+
+    $q = Database::get()->querySingle('SELECT status FROM course_user 
+                                      WHERE user_id = ?d AND course_id = ?d', $uid, $course_id);
+    if (!$q or !$q->status) {
+           return FALSE;
+    } else {
+        return TRUE;
+    }
+
+}
 
 /**
  * @brief Check if a user with username $login already exists
@@ -1719,13 +1737,13 @@ function delete_course($cid) {
         return;
     }
 
-    Database::get()->query("DELETE d FROM user_badge_criterion d,badge_criterion s,badge s2 WHERE d.badge_criterion=s.id AND s.badge=s2.id AND s2.course_id = ?d))", $cid);
+    Database::get()->query("DELETE d FROM user_badge_criterion d,badge_criterion s,badge s2 WHERE d.badge_criterion=s.id AND s.badge=s2.id AND s2.course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM badge_criterion d,badge s WHERE d.badge=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM user_badge d,badge s WHERE d.badge=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM badge WHERE course_id = ?d", $cid);
 
     Database::get()->query("DELETE d FROM user_certificate_criterion d,certificate_criterion s,certificate s2 WHERE d.certificate_criterion=s.id AND s.certificate=s2.id AND s2.course_id = ?d", $cid);
-    Database::get()->query("DELETE d FROM certificate_criterion d,certificate s WHERE d.certificates.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM certificate_criterion d,certificate s WHERE d.certificate=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM user_certificate d,certificate s WHERE d.certificate=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM certificate WHERE course_id = ?d", $cid);
 

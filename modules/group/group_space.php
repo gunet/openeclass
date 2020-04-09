@@ -26,6 +26,7 @@
  */
 $require_login = true;
 $require_current_course = true;
+$require_user_registration = TRUE;
 $require_help = true;
 $helpTopic = 'groups';
 

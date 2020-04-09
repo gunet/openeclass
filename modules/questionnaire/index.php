@@ -25,6 +25,7 @@
  */
 
 $require_current_course = TRUE;
+$require_user_registration = true;
 $require_help = TRUE;
 $helpTopic = 'questionnaire';
 require_once '../../include/baseTheme.php';
@@ -36,6 +37,7 @@ $action->record(MODULE_ID_QUESTIONNAIRE);
 /* * *********************************** */
 
 $toolName = $langQuestionnaire;
+
 
 load_js('tools.js');
 if (isset($_GET['verification_code'])) {
