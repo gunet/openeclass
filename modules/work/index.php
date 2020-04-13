@@ -4648,7 +4648,13 @@ function show_assignment($id, $display_graph_results = false) {
 					$grade = $grade_review;
 					$count_ass++;
 				}*/
-                $icon_field = "<a class='link' href='grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
+                if (isset($_GET['unit'])) {
+                    $grade_edit_link = "../work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                } else {
+                    $grade_edit_link = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                }
+
+                $icon_field = "<a class='link' href='$grade_edit_link'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
                 if ($row->grading_scale_id && $row->grading_type == 1) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
