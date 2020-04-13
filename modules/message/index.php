@@ -168,10 +168,8 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'])
             }
             $tool_content .= "<div class='alert alert-success'>".sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released))."</div>";
         } else { //provide option to free some space
-            $tool_content .= "<div id='operations_container'>
-                                <ul id='opslist'>
-                                  <li><a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a></li>
-                                </ul>
+            $tool_content .= "<div class='alert alert-danger text-center'>                                
+                                <a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a>                                
                               </div>";
         }
     }
