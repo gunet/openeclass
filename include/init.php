@@ -398,7 +398,7 @@ if (isset($require_current_course) and $require_current_course) {
 }
 
 if (isset($require_user_registration) && $require_user_registration) {
-    if (!user_is_registered_to_course($uid, $course_id)) {
+    if (!($is_admin or user_is_registered_to_course($uid, $course_id))) {
         $toolContent_ErrorExists = $langCheckUserRegistration;
     }
 }
