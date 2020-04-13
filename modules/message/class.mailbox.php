@@ -146,7 +146,7 @@ Class Mailbox {
                       AND dropbox_index.recipient_id = ?d
                       AND dropbox_index.recipient_id <> dropbox_msg.author_id
                       AND dropbox_index.deleted = 0 $query_sql
-                    GROUP BY `dropbox_msg`.`id`) "
+                    GROUP BY `dropbox_msg`.`id`, dropbox_msg.timestamp) "
                     . "UNION " // include personal messages
                     . "(SELECT dropbox_msg.id, dropbox_msg.timestamp AS ts
                     FROM dropbox_msg
@@ -158,7 +158,7 @@ Class Mailbox {
                       AND dropbox_index.recipient_id = ?d
                       AND dropbox_index.recipient_id <> dropbox_msg.author_id
                       AND dropbox_index.deleted = 0 $query_sql
-                    GROUP BY `dropbox_msg`.`id`) ORDER BY ts DESC $extra_sql";
+                    GROUP BY `dropbox_msg`.`id`, dropbox_msg.timestamp) ORDER BY ts DESC $extra_sql";
             $res = Database::get()->queryArray($sql, MODULE_ID_MESSAGE, $this->uid, $args_1, $this->uid, $args_1, $args_2);
         } else { //messages in course context
             $sql = "SELECT `dropbox_msg`.`id`
@@ -218,7 +218,7 @@ Class Mailbox {
                       AND dropbox_msg.author_id = ?d
                       AND dropbox_msg.author_id = dropbox_index.recipient_id
                       AND dropbox_index.deleted = 0 $query_sql
-                    GROUP BY `dropbox_msg`.`id`) "
+                    GROUP BY `dropbox_msg`.`id`, dropbox_msg.timestamp) "
                     . "UNION " // include personal messages
                     . "(SELECT dropbox_msg.id, dropbox_msg.timestamp AS ts
                     FROM dropbox_msg
@@ -228,7 +228,7 @@ Class Mailbox {
                       AND dropbox_msg.author_id = ?d
                       AND dropbox_msg.author_id = dropbox_index.recipient_id
                       AND dropbox_index.deleted = 0 $query_sql
-                    GROUP BY `dropbox_msg`.`id` ) ORDER BY ts DESC $extra_sql";
+                    GROUP BY `dropbox_msg`.`id`, dropbox_msg.timestamp) ORDER BY ts DESC $extra_sql";
             $res = Database::get()->queryArray($sql, MODULE_ID_MESSAGE, $this->uid, $args_1, $this->uid, $args_1, $args_2);
 
 
