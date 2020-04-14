@@ -693,9 +693,11 @@ foreach ($questionList as $questionId) {
                 }
             }
         } elseif ($type == MULTIPLE_ANSWER) {
-            unset($answer[0]);
-            if (count($answer)) {
-                $answeredIds[] = $questionId;
+            if (is_array($answer)) {
+                unset($answer[0]);
+                if (count($answer)) {
+                    $answeredIds[] = $questionId;
+                }
             }
         } elseif ($type == MATCHING) {
             if (array_filter($answer)) {
