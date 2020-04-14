@@ -37,6 +37,7 @@ if (isset($_GET['exerciseId'])) {
     $exerciseId = getDirectReference($_GET['exerciseId']);
     $exerciseIdIndirect = $_GET['exerciseId'];
 }
+
 // if the object is not in the session
 if (!isset($_SESSION['objExercise'][$exerciseId])) {
     // construction of Exercise
@@ -52,8 +53,8 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
     }
 }
 
-if (isset($_SESSION['objExercise'][$exerciseIdIndirect])) {
-    $objExercise = $_SESSION['objExercise'][$exerciseIdIndirect];
+if (isset($_SESSION['objExercise'][$exerciseId])) {
+    $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
 if ($is_editor && isset($_GET['purgeAttempID'])) {
@@ -62,6 +63,8 @@ if ($is_editor && isset($_GET['purgeAttempID'])) {
     Session::Messages($langPurgeExerciseResultsSuccess);
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
+
+
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
