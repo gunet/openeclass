@@ -60,7 +60,7 @@ function list_assignments() {
                 $visible = icon('fa-eye-slash', $langInactive);
             }            
             $description = empty($row->description) ? '' :
-                    "<div>$row->description</div>";            
+                    "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $tool_content .= "<tr>" .
                     "<td> " . q($row->title) . "<br><br><div class='text-muted'>$description</div></td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
