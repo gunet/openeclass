@@ -5328,3 +5328,40 @@ $langAnalyticsMaxValue = 'Upper value';
 $langAnalyticsResourceNotAvailable = 'There are no resources';
 
 $langTagNotFound = 'This tag is not assigned to any resource.';
+
+
+
+
+// ticketing (aka request)
+$langRequests = "Requests";
+$langMyRequests = "My requests";
+$langSingleRequest = 'Request';
+$langNewRequest = "New request";
+$langEditRequest = "Edit request";
+$langRequestCreated = 'Request created.';
+$langRequestDeleted = 'Request deleted.';
+$langWatchers = 'Watchers';
+$langRequestState = 'Request state';
+$langRequestStateNew = 'New';
+$langRequestStateAssigned = 'Assigned';
+$langRequestStateLocked = 'Locked';
+$langRequestStateClosed = 'Closed';
+$langOpenedOn = 'Opened';
+$langUpdatedOn = 'Updated';
+$langChangeState = 'Change state to';
+$langChangeAssignees = 'Change assignees to: %s (from: %s)';
+$langChangeWatchers = 'Change watchers to: %s (from: %s)';
+$langTakeRequest = 'Take request';
+$langRequestTaken = 'User %s took the request.';
+$langRequestBasicType = 'Basic';
+$langRequestFieldChange = 'Field change %s to: %s';
+$langHourAgo = '%d hour ago';
+$langHoursAgo = '%d hours ago';
+$langMinuteAgo = '%d minute ago';
+$langMinutesAgo = '%d minutes ago';
+$langDayAgo = '%d day ago';
+$langDaysAgo = '%d days ago';
+$langHourAgo = '%d hour ago';
+$langHoursAgo = '%d hours ago';
+$langShowClosedRequests = 'Show closed requests';
+$langChangeDescription = 'Change description';
