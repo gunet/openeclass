@@ -642,7 +642,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <strong>$langExerciseDescription:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    $exerciseDescription
+                    " . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "
                 </div>
             </div>
             <div class='row margin-bottom-fat'>
