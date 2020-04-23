@@ -88,6 +88,50 @@ $head_content .= "<script type='text/javascript'>
 
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
+if (isset($_GET['edit_lb'])) {
+    $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
+    $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked = '';
+
+    if ($bbb_lb_algo == 'wll') {
+        $bbb_lb_wll_checked = "checked='true'";
+    } else if ($bbb_lb_algo == 'wlr') {
+        $bbb_lb_wlr_checked = "checked='true'";
+    } else if ($bbb_lb_algo == 'wlc') {
+        $bbb_lb_wlc_checked = "checked='true'";
+    } else {
+        $bbb_lb_wo_checked = "checked='true'"; // default
+    }
+
+    $tool_content .= "<div class='form-wrapper'>";
+    $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBLBMethod:</label>";
+    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wo' $bbb_lb_wo_checked>$langBBBLBMethodWO</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWOInfo'></span></label>";
+    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wll' $bbb_lb_wll_checked>$langBBBLBMethodWLL</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLLInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlr' $bbb_lb_wlr_checked>$langBBBLBMethodWLR</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLRInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlc' $bbb_lb_wlc_checked>$langBBBLBMethodWLC</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLCInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>
+                        <div class='col-sm-offset-3 col-sm-9'>
+                            <input class='btn btn-primary' type='submit' name='submit_lb' value='Υποβολή'>
+                        </div>
+                     </div>";
+    $tool_content .= "</form></div>";
+} else
 if (isset($_GET['delete_tc_course']) and $_GET['list']) {
     Database::get()->querySingle("DELETE FROM course_external_server 
                                           WHERE course_id = ?d 
@@ -324,6 +368,14 @@ else if (isset($_POST['submit'])) {
     Session::Messages($langFileUpdatedSuccess,"alert-success");
     redirect_to_home_page("modules/admin/bbbmoduleconf.php");
 } // end of if($submit)
+else if (isset($_POST['submit_lb'])) {
+    $bbb_lb_algo = $_POST['bbb_lb_algo'];
+    set_config('bbb_lb_algo', $bbb_lb_algo);
+
+    // Display result message
+    Session::Messages($langFileUpdatedSuccess,"alert-success");
+    redirect_to_home_page("modules/admin/bbbmoduleconf.php");
+}
 // Display config edit form
 else {
     if (isset($_GET['edit_server'])) {
@@ -446,6 +498,11 @@ else {
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
+           array('title' => $langBBBConfigLB,
+                'url' => "bbbmoduleconf.php?edit_lb",
+                'icon' => 'fa-expand',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
             array('title' => $langBack,
                 'url' => "extapp.php",
                 'icon' => 'fa-reply',
@@ -509,10 +566,23 @@ else {
             }
             $users_p = number_format($t_connected_users*100/$t_max_users, 0) . '%';
             $rooms_p = number_format($t_active_rooms*100/$t_max_rooms, 0) . '%';
+            $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
+
+            if ($bbb_lb_algo == 'wll') {
+                $bbb_lb_algo_info = $langBBBLBMethodWLL;
+            } else if ($bbb_lb_algo == 'wlr') {
+                $bbb_lb_algo_info = $langBBBLBMethodWLR;
+            } else if ($bbb_lb_algo == 'wlc') {
+                $bbb_lb_algo_info = $langBBBLBMethodWLC;
+            } else {
+                $bbb_lb_algo_info = $langBBBLBMethodWO;
+            }
+
             $tool_content .= "<tr>" .
                     "<td class = 'text-right' colspan='2'>$langTotal:</td>" .
                     "<td class = 'text-center'>$t_connected_users / $t_max_users ($users_p)</td>" .
                     "<td class = 'text-center'>$t_active_rooms / $t_max_rooms ($rooms_p)</td>" .
+                    "<td class = 'text-center'>$bbb_lb_algo_info</td>" .
                     "</tr>";
             $tool_content .= "</table></div>";
         } else {

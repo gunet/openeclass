@@ -4938,6 +4938,16 @@ $langBBBEnabled = 'Διαθέσιμος';
 $langBBBOptions = 'Τροποποίηση';
 $langBBBRemoveServer = 'Κατάργηση';
 $langBBBServerOrderP = "Σειρά";
+$langBBBConfigLB = 'Κατανομή φορτίου';
+$langBBBLBMethod = 'Μέθοδος Κατανομής φορτίου';
+$langBBBLBMethodWO = "$langBBBServerOrderP μόνο";
+$langBBBLBMethodWLL = "$langBBBServerOrderP, λιγότερος φόρτος";
+$langBBBLBMethodWLR = "$langBBBServerOrderP, λιγότερα δωμάτια";
+$langBBBLBMethodWLC = "$langBBBServerOrderP, λιγότεροι χρήστες";
+$langBBBLBMethodWOInfo = "$langBBBLBMethodWO: Λαμβάνεται υπόψιν μόνο η σειρά των εξυπηρετητών. Πρώτα γεμίζει ο εξυπηρετητης με τη χαμηλότερη σειρά και μετά χρησιμοποιείται ο επόμενος";
+$langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τον λιγότερο φόρτο";
+$langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τα λιγότερα δωμάτια";
+$langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τους λιγότερους χρήστες";
 
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
