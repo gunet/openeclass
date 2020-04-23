@@ -1410,6 +1410,120 @@ function is_bbb_server_available($server_id, $participants)
 }
 
 /**
+ * @brief get load of all active BBB servers
+ * @return array
+ */
+function get_bbb_servers_load()
+{
+    $servers = array();
+    // weight of all participants: they get the presentation
+    $participant_weight = 1;
+    // weight of audio: audio is sent to listeners. double weight due to free switch mixing in cpu
+    $audio_weight = 2;
+    // weight of video: video is sent to participants. double weight due to higher bandwidth and cpu of SFU
+    $video_weight = 2;
+    // each room allocates resources. take that into account
+    $room_load = 10;
+
+    $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' AND `enabled` = 'true' ORDER BY weight ASC");
+
+    $server_count = count($q);
+
+    if ($server_count <= 0 ) {
+        return $servers;
+    }
+
+    foreach ($q as $server) {
+        $rooms = $participants = $load = 0;
+        $bbb_url = $server->api_url;
+        $salt = $server->server_key;
+        // instantiate the BBB class
+        $bbb = new BigBlueButton($salt, $bbb_url);
+
+        $meetings = $bbb->getMeetingsWithXmlResponseArray();
+        // no active meetings
+        if (empty($meetings)) {
+            $continue;
+        }
+        foreach ($meetings as $meeting) {
+            if (!isset($meeting['meetingId'])) {
+                continue;
+            }
+            $rooms++;
+            $participantCount = $meeting['participantCount'];
+            if ($participantCount == 0) {
+                continue;
+            }
+            $listenerCount = $meeting['listenerCount'];
+            $voiceParticipantCount = $meeting['voiceParticipantCount'];
+            $videoCount = $meeting['videoCount'];
+
+            // presentation is going to all participants
+            $presentation_load = $participantCount * $participant_weight;
+            // voice is mixed. streams_in: voicePart / streams_out: listenPart
+            $audio_load = ($voiceParticipantCount + $listenerCount) * $audio_weight;
+            // video creates many streams
+            $video_load = ($videoCount + $participantCount - 1) * $video_weight;
+
+            $participants += $participantCount;
+            $load += $presentation_load + $audio_load + $video_load + $room_load;
+        }
+
+        $servers[] = array(
+            'id' => $server->id,
+            'weight' => $server->weight,
+            'rooms' => $rooms,
+            'participants' => $participants,
+            'load' => $load
+        );
+
+    }
+    return $servers;
+}
+
+/**
+ * @brief sort servers based on load balancing algorithm
+ * @return array
+ */
+function get_bbb_servers()
+{
+    $servers = get_bbb_servers_load();
+
+    $weight = array_column($servers, 'weight');
+    $load = array_column($servers, 'load');
+    $rooms = array_column($servers, 'rooms');
+    $participants = array_column($servers, 'participants');
+
+    // !!! algo should go in db settings. leave it for now...
+    $bbb_lb_algo = '';
+
+    switch ($bbb_lb_algo) {
+        // weighted least load. Sort first by weight, then by load
+        case 'wll':
+            array_multisort($weight, SORT_ASC, SORT_NUMERIC, $load, SORT_ASC, SORT_NUMERIC, $servers);
+            break;
+        // weighted least rooms, Sort first by weight, then by #rooms
+        case 'wlr':
+            array_multisort($weight, SORT_ASC, SORT_NUMERIC, $rooms, SORT_ASC, SORT_NUMERIC, $servers);
+            break;
+        // weighted least connections. Sort first by weight, then by #participants
+        case 'wlc':
+            array_multisort($weight, SORT_ASC, SORT_NUMERIC, $participants, SORT_ASC, SORT_NUMERIC, $servers);
+            break;
+        // Default. Sort by weight only. No distribution of load. Each server fills based
+        // max number of rooms and max number of participants. Then we move to next server
+        default:
+            break;
+    }
+
+    foreach ($servers as $server) {
+       $servers_ids[] = $server['id'];
+    }
+
+    return $servers_ids;
+}
+
+/**
  * @brief check if tc server has recordings enabled
  * @param type $server_id
  * @return type

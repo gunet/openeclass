@@ -327,7 +327,11 @@ and then handle the results that we get in the XML response.
                     'attendeePw' => $m->attendeePW,
                     'moderatorPw' => $m->moderatorPW,
                     'hasBeenForciblyEnded' => $m->hasBeenForciblyEnded,
-                    'running' => $m->running
+                    'running' => $m->running,
+                    'participantCount' => $m->participantCount,
+                    'listenerCount' => $m->listenerCount,
+                    'voiceParticipantCount' => $m->voiceParticipantCount,
+                    'videoCount' => $m->videoCount
                 );
             }
             return $result;
