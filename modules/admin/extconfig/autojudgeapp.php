@@ -57,9 +57,7 @@ class AutojudgeApp extends ExtApp {
     public static function getAutojudge() {
         $autojudge = ExtAppManager::getApp('autojudge');
         $connector = q(get_config('autojudge_connector'));
-        if(!$connector) {
-            $connector = new AutojudgeDnnaApp();
-        } else {
+        if ($connector) {
             $connector = new $connector();
         }
         $connector->setEnabled($autojudge->isEnabled());

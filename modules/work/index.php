@@ -72,6 +72,11 @@ $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "{$urlServer}modules/work/?course=$course_code", 'name' => $langWorks);
 $toolName = $langWorks;
 
+// Auto Judge settings (if any)
+$autojudge = new AutojudgeApp();
+if ($autojudge->isConfigured()) {
+    $autojudge = AutojudgeApp::getAutojudge();
+}
 
 //-------------------------------------------
 // main program
@@ -157,7 +162,7 @@ if ($is_editor) {
             });
         ';
 
-    if (AutojudgeApp::getAutojudge()->isEnabled() and !isset($_GET['disp_results'])) {
+    if ($autojudge->isEnabled() and !isset($_GET['disp_results'])) {
         $head_content .= "
     function check_weights() {
         /* function to check weight validity */
@@ -278,7 +283,7 @@ if ($is_editor) {
         $('input[id=assign_button_all]').click(hideAssignees);
         ";
 
-        if(AutojudgeApp::getAutojudge()->isEnabled()) {
+        if($autojudge->isEnabled()) {
             $head_content .= "
             $('input[name=auto_judge]').click(changeAutojudgeScenariosVisibility);
             $(document).ready(function() { changeAutojudgeScenariosVisibility.apply($('input[name=auto_judge]')); });
@@ -332,7 +337,7 @@ if ($is_editor) {
                 $('#assign_box').find('option').remove().end().append(select_content);
             });
         }";
-        if(AutojudgeApp::getAutojudge()->isEnabled()) {
+        if($autojudge->isEnabled()) {
             $head_content .= "
             function changeAutojudgeScenariosVisibility() {
                 if($(this).is(':checked')) {
@@ -715,7 +720,7 @@ function add_assignment() {
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
         $title = $_POST['title'];
-        $desc = $_POST['desc'];
+        $desc =$_POST['desc'];
         //aksiologhseis ana xrhsth
         $reviews_per_user = isset($_POST['reviews_per_user']) && !empty($_POST['reviews_per_user']) ? $_POST['reviews_per_user']: NULL;
         $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
@@ -1145,7 +1150,7 @@ function submit_work($id, $on_behalf_of = null) {
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
            $langAutoJudgeInvalidFileType, $langExerciseNotPermit,
-           $langAutoJudgeScenariosPassed, $is_editor;
+           $langAutoJudgeScenariosPassed, $is_editor, $autojudge;
 
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
@@ -1160,9 +1165,8 @@ function submit_work($id, $on_behalf_of = null) {
     $lang = $row->lang;
     $max_grade = $row->max_grade;
 
-    if (AutojudgeApp::getAutojudge()->isEnabled() && $auto_judge) {
-        $connector = AutojudgeApp::getAutojudge();
-        $langExt = $connector->getSupportedLanguages();
+    if ($autojudge->isEnabled() && $auto_judge) {
+        $langExt = $autojudge->getSupportedLanguages();
     }
 
     $nav[] = $works_url;
@@ -1336,7 +1340,7 @@ function submit_work($id, $on_behalf_of = null) {
         }
 
         // Send file to AutoJudge service
-        if(AutojudgeApp::getAutojudge()->isEnabled()) {
+        if($autojudge->isEnabled()) {
             if ($auto_judge && $ext === $langExt[$lang]) {
                     $content = file_get_contents("$workPath/$filename");
                     // Run each scenario and count how many passed
@@ -1357,7 +1361,7 @@ function submit_work($id, $on_behalf_of = null) {
                         $input->input = $curScenario['input'];
                         $input->code = $content;
                         $input->lang = $lang;
-                        $result = $connector->compile($input);
+                        $result = $autojudge->compile($input);
                         // Check if we have compilation errors.
                         if ($result->compileStatus !== $result::COMPILE_STATUS_OK) {
                             // Write down the error message.
@@ -1454,7 +1458,7 @@ function new_assignment() {
            $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
            $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
-           $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser,
+           $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
            $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock;
 
     load_js('bootstrap-datetimepicker');
@@ -2278,8 +2282,7 @@ function new_assignment() {
                 </div>
             </div>";
         // Auto Judge Options
-            if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                $connector = AutojudgeApp::getAutojudge();
+            if($autojudge->isEnabled()) {
                 $tool_content .= "
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
@@ -2298,7 +2301,7 @@ function new_assignment() {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                      <td><input type='text' name='auto_judge_scenarios[0][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
+                                      <td><input type='text' name='auto_judge_scenarios[0][input]' ".($autojudge->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
                                       <td>
                                         <select name='auto_judge_scenarios[0][assertion]' class='auto_judge_assertion'>
                                             <option value='eq' selected='selected'>".$langAutoJudgeAssertions['eq']."</option>
@@ -2347,7 +2350,7 @@ function new_assignment() {
                   <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
                   <div class='col-sm-10'>
                     <select id='lang' name='lang'>";
-                    foreach($connector->getSupportedLanguages() as $lang => $ext) {
+                    foreach($autojudge->getSupportedLanguages() as $lang => $ext) {
                         $tool_content .= "<option value='$lang'>$lang</option>\n";
                     }
                     $tool_content .= "</select>
@@ -2402,7 +2405,7 @@ function show_edit_assignment($id) {
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langWorkOnlineText, $langWorkSubType, $langGradeRubrics,
         $langGradeType, $langGradeNumbers, $langGradeScales,
-        $langAutoJudgeInputNotSupported, $langTitle,
+        $langAutoJudgeInputNotSupported, $langTitle, $autojudge,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
@@ -3190,7 +3193,7 @@ function show_edit_assignment($id) {
                     </div>
                 </div>";
                     // `auto judge` assignment
-                if (AutojudgeApp::getAutojudge()->isEnabled()) {
+                if ($autojudge->isEnabled()) {
                     $auto_judge = $row->auto_judge;
                     $lang = $row->lang;
                     $tool_content .= "
@@ -3210,7 +3213,6 @@ function show_edit_assignment($id) {
                             </thead>
                             <tbody>";
                     $auto_judge_scenarios = $auto_judge == true ? unserialize($row->auto_judge_scenarios) : null;
-                    $connector = AutojudgeApp::getAutojudge();
                     $rows    = 0;
                     $display = 'visible';
                     if ($auto_judge_scenarios != null) {
@@ -3218,7 +3220,7 @@ function show_edit_assignment($id) {
                         foreach ($auto_judge_scenarios as $aajudge) {
                             $tool_content .= "
                                 <tr>
-                                    <td><input type='text' value='".htmlspecialchars($aajudge['input'], ENT_QUOTES)."' name='auto_judge_scenarios[$rows][input]' ".($connector->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
+                                    <td><input type='text' value='".htmlspecialchars($aajudge['input'], ENT_QUOTES)."' name='auto_judge_scenarios[$rows][input]' ".($autojudge->supportsInput() ? '' : 'readonly="readonly" placeholder="'.$langAutoJudgeInputNotSupported.'"')." /></td>
                                     <td>
                                         <select name='auto_judge_scenarios[$rows][assertion]' class='auto_judge_assertion'>
                                             <option value='eq'"; if ($aajudge['assertion'] === 'eq') {$tool_content .= " selected='selected'";} $tool_content .=">".$langAutoJudgeAssertions['eq']."</option>
@@ -3311,7 +3313,7 @@ function show_edit_assignment($id) {
                       <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
                       <div class='col-sm-10'>
                         <select id='lang' name='lang'>";
-                        foreach($connector->getSupportedLanguages() as $llang => $ext) {
+                        foreach($autojudge->getSupportedLanguages() as $llang => $ext) {
                             $tool_content .= "<option value='$llang' ".($llang === $lang ? "selected='selected'" : "").">$llang</option>\n";
                         }
                         $tool_content .= "</select>
@@ -4301,7 +4303,7 @@ function assignment_details($id, $row, $x =false) {
                     <strong>$langDescription:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    $row->description
+                    " . mathfilter($row->description, 12 , "../../courses/mathimg/") . "
                 </div>
             </div>";
         }
@@ -4453,7 +4455,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress,
-    $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent,
+    $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
     $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
@@ -4729,7 +4731,7 @@ function show_assignment($id, $display_graph_results = false) {
                             </span>";
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
-                if(AutojudgeApp::getAutojudge()->isEnabled()) {
+                if($autojudge->isEnabled()) {
                     $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                     $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
                 }
