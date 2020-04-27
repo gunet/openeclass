@@ -1430,7 +1430,10 @@ function get_bbb_servers_load()
     $server_count = count($q);
 
     if ($server_count <= 0 ) {
-        return $servers;
+        return false;
+    } else if ($server_count == 1) {
+        $server[0]['id'] = $q[0]->id;
+        return $server;
     }
 
     foreach ($q as $server) {
@@ -1488,14 +1491,16 @@ function get_bbb_servers_load()
 function get_bbb_servers()
 {
     $servers = get_bbb_servers_load();
+    if (!$servers) {
+        return false;
+    }
 
     $weight = array_column($servers, 'weight');
     $load = array_column($servers, 'load');
     $rooms = array_column($servers, 'rooms');
     $participants = array_column($servers, 'participants');
 
-    // !!! algo should go in db settings. leave it for now...
-    $bbb_lb_algo = '';
+    $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
 
     switch ($bbb_lb_algo) {
         // weighted least load. Sort first by weight, then by load
