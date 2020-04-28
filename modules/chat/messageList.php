@@ -22,8 +22,10 @@
  * @file messageList.php
  * @brief Functionality of chat module
  */
+
 $require_current_course = TRUE;
 $require_login = TRUE;
+$require_user_registration = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
@@ -34,10 +36,6 @@ if (isset($_REQUEST['conference_id'])) {
     $conference_id = $_REQUEST['conference_id'];
 } else {
     redirect_to_home_page("modules/chat/messageList.php?course=$course_code");
-}
-
-if (!user_is_registered_to_course($uid, $course_id)) {
-    redirect_to_home_page("courses/$course_code/");
 }
 
 $fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';
@@ -112,9 +110,9 @@ if (isset($_GET['store']) && $is_editor) {
         $fchat = fopen($fileChatName, 'a');
         fwrite($fchat, $timeNow." ---- ".$langSaveMessage . " ---- !@#$ systemMsgSave\n");
         fclose($fchat);
-    } else {
+        @unlink($exportFileChat);
     }
-    @unlink($exportFileChat);
+
     if (isset($_REQUEST['unit'])) {
         redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=chat_actions&conference_id=$conference_id");
     } else {
