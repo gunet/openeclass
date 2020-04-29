@@ -149,8 +149,8 @@ if ($userdata) {
                                         <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
                                     </div>
                                     <div class='col-xs-8'>
-                                        <div class='profile-name'>" .q("$userdata->givenname $userdata->surname") . "</div>
-                                        <div class='not_visible'><strong>$userdata->username</strong></div>
+                                        <div class='profile-name'>" . q("$userdata->givenname $userdata->surname") . "</div>
+                                        <div class='not_visible'><strong>" . q($userdata->username) . "</strong></div>
                                     </div>
                                 </div>
                             </div>
