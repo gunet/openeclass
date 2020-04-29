@@ -274,7 +274,7 @@ function was_graded($uid, $id, $ret_val = FALSE) {
  */
 function show_submission_details($id) {
     
-    global $uid, $m, $course_id, $langSubmittedAndGraded, $tool_content, $course_code,
+    global $uid, $m, $course_id, $langSubmittedAndGraded, $tool_content, $course_code, $autojudge,
            $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView, $urlServer,
            $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content, $langCriteria;
 
@@ -443,7 +443,7 @@ function show_submission_details($id) {
                     </div>
                 </div>";
             }
-            if (AutojudgeApp::getAutojudge()->isEnabled()) {
+            if ($autojudge->isEnabled()) {
                 $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
                 $tool_content .= "
                     <div class='row margin-bottom-fat'>
