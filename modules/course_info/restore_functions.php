@@ -910,6 +910,34 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         restore_table($restoreThis, 'assignment_submit', array('delete' => array('id'),
             'map' => array('uid' => $userid_map, 'assignment_id' => $assignments_map, 'group_id' => $group_map)), $url_prefix_map, $backupData, $restoreHelper);
 
+        // delete assignment submission files which haven't been restored
+        $files = [];
+        $baseDir = "$webDir/courses/$new_course_code/work";
+        foreach ($assignments_map as $old_id => $new_id) {
+            Database::get()->queryFunc('SELECT file_path, grade_comments_filepath
+                FROM assignment_submit WHERE assignment_id = ?d',
+                function ($item) use (&$files, $baseDir) {
+                    if ($item->file_path) {
+                        $files[] = $baseDir . '/' . $item->file_path;
+                    }
+                    if ($item->grade_comments_filepath) {
+                        $files[] = $baseDir . '/admin_files/' . $item->grade_comments_filepath;
+                    }
+                }, $new_id);
+        }
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator("courses/$new_course_code/work"),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+        foreach ($iterator as $name => $file) {
+            if (!$file->isDir()) {
+                $filePath = "$webDir/$name";
+                if (!in_array($filePath, $files)) {
+                    unlink($filePath);
+                }
+            }
+        }
+
         // Agenda
         $agenda_map = restore_table($restoreThis, 'agenda', array(
             'return_mapping' => 'id',
