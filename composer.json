@@ -8,7 +8,6 @@
         "pragmarx/google2fa":"dev-master",
         "swiftmailer/swiftmailer": "^5.4",
         "vlucas/phpdotenv": "^2.3",
-        "dropbox/dropbox-sdk": "1.1.*",
         "sabre/dav": "~3.2.0",
         "google/apiclient": "1.0.*@beta",
         "hybridauth/hybridauth": "^2.9",
