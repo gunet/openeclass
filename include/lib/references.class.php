@@ -196,14 +196,13 @@ class References {
     public static function get_user_courselist(){
         if (isset($_SESSION['uid']) AND $_SESSION['uid']) {
             $uc = Database::get()->queryArray("SELECT CONCAT('course:',c.id) id, CONCAT(c.title, ' (',c.code,')') name FROM course_user cu JOIN course c ON c.id=cu.course_id
-                                             WHERE user_id = ?d AND visible > 0", $_SESSION['uid']);
+                                             WHERE user_id = ?d", $_SESSION['uid']);
             $user_courses = array();
             foreach($uc as $v){
                 $user_courses[$v->id] = $v->name;
             }
             return $user_courses;
-        }
-        else{
+        } else {
             return array();
         }    
     }
