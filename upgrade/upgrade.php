@@ -374,8 +374,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // ----------------------------------
     updateInfo(-1, $langIndexCreation);
 
-    create_indexes();
-
     // -----------------------------------
     // upgrade queries for 3.1
     // -----------------------------------
@@ -1597,13 +1595,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             // Move weekly_course_units to course_units
             $result = Database::get()->query("INSERT INTO course_units
                         (title, comments, start_week, finish_week, visible, public, `order`, course_id)
-                            SELECT CASE WHEN (title = '' OR title IS NULL) 
-                                THEN 
+                            SELECT CASE WHEN (title = '' OR title IS NULL)
+                                THEN
                                   TRIM(CONCAT_WS(' ','$langWeek', DATE_FORMAT(start_week, '%d-%m-%Y')))
-                                ELSE 
-                                  title  
-                                END 
-                              AS title, 
+                                ELSE
+                                  title
+                                END
+                              AS title,
                               comments, start_week, finish_week, visible, public, `order`, ?d
                                 FROM course_weekly_view
                                 WHERE course_id = ?d ORDER BY id", $courseid, $courseid);
@@ -1622,7 +1620,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query("INSERT INTO unit_resources
                                 (unit_id, title, comments, res_id, `type`, visible, `order`, `date`)
                             SELECT ?d, title, comments, res_id, `type`, visible, `order`, `date`
-                                FROM course_weekly_view_activities 
+                                FROM course_weekly_view_activities
                                 WHERE course_weekly_view_id = ?d", $unit_id, $weekly_id);
             }
             // update course with new view type (=units)
@@ -1773,17 +1771,17 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // user settings table
         if (!DBHelper::tableExists('user_settings')) {
             Database::get()->query("CREATE TABLE `user_settings` (
-                `setting_id` int(11) NOT NULL, 
-                `user_id` int(11) NOT NULL, 
-                `course_id` int(11) DEFAULT NULL, 
-                `value` int(11) NOT NULL DEFAULT '0', 
-                PRIMARY KEY (`setting_id`,`user_id`), 
-                KEY `user_id` (`user_id`), 
-                KEY `course_id` (`course_id`), 
-                  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
-                    ON DELETE CASCADE ON UPDATE CASCADE, 
-                  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
-                    ON DELETE CASCADE ON UPDATE CASCADE 
+                `setting_id` int(11) NOT NULL,
+                `user_id` int(11) NOT NULL,
+                `course_id` int(11) DEFAULT NULL,
+                `value` int(11) NOT NULL DEFAULT '0',
+                PRIMARY KEY (`setting_id`,`user_id`),
+                KEY `user_id` (`user_id`),
+                KEY `course_id` (`course_id`),
+                  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
+                  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+                    ON DELETE CASCADE ON UPDATE CASCADE
             ) $tbl_options");
         }
 
@@ -1989,6 +1987,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
+
+    create_indexes();
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
