@@ -569,7 +569,7 @@ if (isset($_GET['modifyAnswers'])) {
 
              $tool_content .= "<tr>
                <td class='text-right'><strong>$j</strong></td>
-               <td><input class='form-control' type='text' name='match[$i]' value='$optionText'></td>
+               <td><input class='form-control' type='text' name='match[$i]' value='" . q($optionText) . "'></td>
                <td><div class='text-right'><select class='form-control' name='sel[$i]'>";
              foreach ($optionsList as $key => $val) {
                  $tool_content .= "<option value='" . q($key) . "'";
