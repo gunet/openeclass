@@ -288,7 +288,7 @@ hContent;
             $tool_content .= "<div class='alert alert-success'>$langGlossaryUpdated</div>";
         }
     }
-    if (isset($_POST['add_submit'])) {  // add        
+    if (isset($_POST['add_submit'])) {  // add
         $uploaded = false;
         if (isset($_POST['URL'])) { // add videolink
             $url = $_POST['URL'];
@@ -322,7 +322,7 @@ hContent;
                         $tmpfile = $_FILES['userFile']['tmp_name'];
                     }
                 }
-                validateUploadedFile($file_name, $menuTypeID);                
+                validateUploadedFile($file_name, $menuTypeID);
                 $file_name = str_replace(" ", "%20", $file_name);
                 $file_name = str_replace("%20", "", $file_name);
                 $file_name = str_replace("\'", "", $file_name);
@@ -330,8 +330,8 @@ hContent;
             if ($uploaded) {
                 $safe_filename = sprintf('%x', time()) . randomkeys(16) . "." . get_file_extension($file_name);
                 if (isset($cloudfile)) {
-                    $iscopy = ($cloudfile->storeToLocalFile("$updir/$safe_filename") == CloudDriveResponse::OK);                    
-                } else {                    
+                    $iscopy = ($cloudfile->storeToLocalFile("$updir/$safe_filename") == CloudDriveResponse::OK);
+                } else {
                     $iscopy = copy("$tmpfile", "$updir/$safe_filename");
                 }
                 if (!$iscopy) {
@@ -348,7 +348,7 @@ hContent;
                         AntivirusApp::block($output->output);
                     }
                 }
-                
+
                 $path = '/' . $safe_filename;
                 $url = $file_name;
                 $id = Database::get()->query('INSERT INTO video
@@ -384,7 +384,7 @@ hContent;
                 if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $a->id)) {
                     delete_video($a->id, 'video');
                 } else {
-                    Session::Messages($langResourceBelongsToCert, "alert-warning");                    
+                    Session::Messages($langResourceBelongsToCert, "alert-warning");
                 }
             }
             $q = Database::get()->queryArray("SELECT id FROM videolink WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
@@ -398,7 +398,7 @@ hContent;
                 delete_video($_GET['id'], $table);
             } else {
                 Session::Messages($langResourceBelongsToCert, "alert-warning");
-            }            
+            }
         }
         $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div>";
     } else if (isset($_GET['form_input'])) { // display video form
@@ -659,10 +659,12 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                 }
                 $colspan = $display_tools? 2: 3;
                 $tool_content .= "<tr class='link-subcategory-title'><th class='category-link' colspan='$colspan'>$folder_icon ";
+                $embedParam = '';
                 if (isset($_REQUEST['embedtype'])) {
-                    $embedParam = '&amp;embedtype=' . q($_REQUEST['embedtype']);
-                } else {
-                    $embedParam = '';
+                    $embedParam .= '&amp;embedtype=' . urlencode($_REQUEST['embedtype']);
+                }
+                if (isset($_REQUEST['docsfilter'])) {
+                    $embedParam .= '&amp;docsfilter=' . urlencode($_REQUEST['docsfilter']);
                 }
                 if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code$embedParam' class='open-category'>" . q($myrow->name) . "</a>";
@@ -761,7 +763,7 @@ function select_proper_filters($requestDocsFilter) {
  */
 function submit_video_category() {
     global $langCategoryAdded, $langCategoryModded,
-    $categoryname, $description, $course_id, 
+    $categoryname, $description, $course_id,
 	$langTheFieldIsRequired, $langFormErrors, $course_code;
 
     register_posted_variables(array('categoryname' => true,
