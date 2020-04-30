@@ -322,7 +322,7 @@ function view($view_file, $view_data = array()) {
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
-            'display_admin_tools', 'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user');
+            'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user');
     $data = array_merge($global_data, $view_data);
     echo $blade->view()->make($view_file, $data)->render();
 }
