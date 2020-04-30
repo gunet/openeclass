@@ -11,21 +11,22 @@ class Event implements Sabre\Event\EventEmitterInterface {
     }
 
     protected function preDataListeners() {
-        //do something here
-        //$this->GetAnalyticsElementsInfo(1,37);
+        // do something here
+        // $this->GetAnalyticsElementsInfo(1,37);
 
     }
 
-    //Trigger after an action
+    // Trigger after an action
     public static function trigger($eventname, $data, $exists) {
         $course_id = $data->course_id;
         $element_type = $data->element_type;
-        
-        $resource = 0;
-        if(array_key_exists('resource', $data))
-            $resource = $data->resource;
 
-        //Check if there are analytics to compute this action
+        $resource = 0;
+        if (isset($data->resource)) {
+            $resource = $data->resource;
+        }
+
+        // Check if there are analytics to compute this action
         $now = date("Y-m-d");
 
         if ($exists) {
@@ -39,25 +40,11 @@ class Event implements Sabre\Event\EventEmitterInterface {
             AND a.end_date >= ?t
             AND a.active = ?d
             AND ae.resource = ?d", $element_type, $course_id, $now, $now, 1, $resource);
-           //print_r($data);
 
-            //print("Resource: $resource!! ");
-            
-            // print("SELECT ae.id as id, ae.upper_threshold as upper_threshold, ae.lower_threshold as lower_threshold, ae.weight as weight, ae.min_value as min_value, ae.max_value as max_value, a.periodType as periodType
-            // FROM analytics_element as ae
-            // INNER JOIN analytics as a
-            //     on ae.analytics_id = a.id
-            // WHERE ae.module_id = $element_type
-            // AND a.courseID = $course_id
-            // AND a.start_date <= $now
-            // AND a.end_date >= $now
-            // AND a.active = 1
-            // AND ae.resource = $resource");
-           
-            if(count($elements) > 0) { //If the query return something trigger calculation otherwise there is nothing to compute
+            if(count($elements) > 0) { // If the query returns something trigger calculation, otherwise there is nothing to compute
                 $class = get_called_class();
                 $event = new $class;
-//
+
                 $event->elements = $elements;
                 $event->exists = true;
                 $event->emit($eventname, [$data]);
@@ -76,13 +63,12 @@ class Event implements Sabre\Event\EventEmitterInterface {
         }
     }
 
-    //Saves data to context
+    // Save data to context
     public function getContext() {
         return $this->context;
     }
 
-    // In this fucntion we are getting all the analytics elements
-    // that are using this information.
+    // Get all the analytics elements that are using this information.
     protected function GetAnalyticsElementsInfo ($course, $module) {
         $now = date("Y-m-d H:i:s");
         $modules = Database::get()->queryArray("SELECT ae.id as id, ae.upper_threshold as upper_threshold, ae.lower_threshold as lower_threshold, ae.weight as weight, ae.min_value as min_value, ae.max_value as max_value, a.periodType as periodType
