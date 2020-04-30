@@ -817,7 +817,7 @@ function check_uid() {
 
 function user_is_registered_to_course($uid, $course_id) {
 
-    $q = Database::get()->querySingle('SELECT status FROM course_user 
+    $q = Database::get()->querySingle('SELECT status FROM course_user
                                       WHERE user_id = ?d AND course_id = ?d', $uid, $course_id);
     if (!$q or !$q->status) {
            return FALSE;
@@ -2986,6 +2986,7 @@ class HtmlCutString {
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
         $this->tempDiv = new DOMDocument('1.0', 'UTF-8');
+        libxml_use_internal_errors(true);
         $this->tempDiv->loadHTML('<?xml version="1.0" encoding="UTF-8" ?><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div>' . $string . '</div>', LIBXML_NONET | LIBXML_DTDLOAD | LIBXML_DTDATTR);
         // keep the characters count till now
         $this->charCount = 0;
