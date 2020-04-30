@@ -82,7 +82,7 @@ function bbb_session_form($session_id = 0) {
         $submit_name = 'update_bbb_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
-    } else {
+    } else { // new meeting
         $record = true;
         $status = 1;
         $unlock_interval = '10';
@@ -101,7 +101,7 @@ function bbb_session_form($session_id = 0) {
     }
 
     $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type'
-                                                AND enabled = 'true' ORDER BY weight ASC")->id;
+                                                AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
 
     $tool_content .= "
         <div class='form-wrapper'>
@@ -1472,12 +1472,19 @@ function get_bbb_servers_load()
             $load += $presentation_load + $audio_load + $video_load + $room_load;
         }
 
+        if ($server->enable_recordings == 'true') {
+            $enable_recordings = 1;
+        } else {
+            $enable_recordings = 0;
+        }
+
         $servers[] = array(
             'id' => $server->id,
             'weight' => $server->weight,
             'rooms' => $rooms,
             'participants' => $participants,
-            'load' => $load
+            'load' => $load,
+            'enable_recordings' => $enable_recordings,
         );
 
     }
@@ -1486,38 +1493,48 @@ function get_bbb_servers_load()
 
 /**
  * @brief sort servers based on load balancing algorithm
+ * @param bool $record sort servers by recording capability
  * @return array
  */
-function get_bbb_servers()
+function get_bbb_servers($record = true)
 {
     $servers = get_bbb_servers_load();
     if (!$servers) {
         return false;
     }
 
+    if (count($servers) == 1) {
+        $servers_ids[0] = $servers[0]['id'];
+        return $servers_ids;
+    }
+
     $weight = array_column($servers, 'weight');
     $load = array_column($servers, 'load');
     $rooms = array_column($servers, 'rooms');
     $participants = array_column($servers, 'participants');
+    $enable_recordings = array_column($servers, 'enable_recordings');
+
+    $record_sort = ($record) ? SORT_DESC : SORT_ASC;
 
     $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
 
     switch ($bbb_lb_algo) {
-        // weighted least load. Sort first by weight, then by load
+        // weighted least load. Sort first by recording, then by weight and last by load
         case 'wll':
-            array_multisort($weight, SORT_ASC, SORT_NUMERIC, $load, SORT_ASC, SORT_NUMERIC, $servers);
+            array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $load, SORT_ASC, SORT_NUMERIC, $servers);
             break;
-        // weighted least rooms, Sort first by weight, then by #rooms
+        // weighted least rooms, Sort first by recording, then by weight and last by #rooms
         case 'wlr':
-            array_multisort($weight, SORT_ASC, SORT_NUMERIC, $rooms, SORT_ASC, SORT_NUMERIC, $servers);
+            array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $rooms, SORT_ASC, SORT_NUMERIC, $servers);
             break;
-        // weighted least connections. Sort first by weight, then by #participants
+        // weighted least connections. Sort first by recording, then by weight and last by #participants
         case 'wlc':
-            array_multisort($weight, SORT_ASC, SORT_NUMERIC, $participants, SORT_ASC, SORT_NUMERIC, $servers);
+            array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $participants, SORT_ASC, SORT_NUMERIC, $servers);
             break;
-        // Default. Sort by weight only. No distribution of load. Each server fills based
+        // Default. Sort by recording and then by weight only. No distribution of load. Each server fills based
         // max number of rooms and max number of participants. Then we move to next server
         default:
+            array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $servers);
             break;
     }
 
