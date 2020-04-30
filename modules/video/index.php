@@ -52,8 +52,8 @@ $data = array();
 // common data for tinymce embedding, custom filtering, sorting, etc..
 $is_in_tinymce = $data['is_in_tinymce'] = isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce';
 $data['menuTypeID'] = $is_in_tinymce ? 5 : 2;
-list($filterv, $filterl, $compatiblePlugin) = isset($_REQUEST['docsfilter']) 
-        ? select_proper_filters($_REQUEST['docsfilter']) 
+list($filterv, $filterl, $compatiblePlugin) = isset($_REQUEST['docsfilter'])
+        ? select_proper_filters($_REQUEST['docsfilter'])
         : array('WHERE true', 'WHERE true', true);
 $data['filterv'] = $filterv;
 $data['filterl'] = $filterl;
@@ -83,7 +83,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         $data['showQuota'] = showquota($diskQuotaVideo, $diskUsed, "$_SERVER[SCRIPT_NAME]?course=$course_code");
         view('modules.video.showQuota', $data);
     }
-    
+
     // visibility commands
     if (isset($_GET['vis'])) {
         $table = select_table($_GET['table']);
@@ -102,7 +102,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         Database::get()->query("UPDATE $table SET public = ?d WHERE id = ?d", $new_public_status, $_GET['vid']);
         $action_message = "<div class='alert alert-success'>$langViMod</div>";
     }
-    
+
     if (isset($_GET['delete'])) {
         if ($_GET['delete'] == 'delcat') { // delete video category
             // delete category videos
@@ -124,7 +124,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         } else {  // delete video / videolink
             $table = select_table($_GET['table']);
             if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['id'])) {
-                delete_video($_GET['id'], $table);
+                delete_video($_GET['id'], $table, $course_id, $course_code, $webDir);
             } else {
                 Session::Messages($langResourceBelongsToCert, "alert-warning");
             }
@@ -132,7 +132,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
     }
 } // end of admin actions
 
-// list data    
+// list data
 $data['count_video'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d", $course_id)->count;
 $data['count_video_links'] = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d", $course_id)->count;
 $data['num_of_categories'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
@@ -145,5 +145,5 @@ if ($is_in_tinymce) {
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 add_units_navigation(TRUE); // TODO: test
-ModalBoxHelper::loadModalBox(true);    
+ModalBoxHelper::loadModalBox(true);
 view('modules.video.index', $data);

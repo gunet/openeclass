@@ -1,9 +1,10 @@
 <?php
     $display_tools = $is_editor && !$is_in_tinymce;
     $colspan = $display_tools ? 2 : 3;
-    $embedParam = (isset($_REQUEST['embedtype'])) ? '&amp;embedtype=' . q($_REQUEST['embedtype']) : '';
+    $embedParam = ((isset($_REQUEST['embedtype'])) ? '&amp;embedtype=' . urlencode($_REQUEST['embedtype']) : '') .
+        ((isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter=' . urlencode($_REQUEST['docsfilter']) : '');
     $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
-    
+
     if ($display_tools) {
         $actionBarArray = array(
             array('title' => $GLOBALS['langAddV'],
@@ -37,7 +38,7 @@
 @extends($is_in_tinymce ? 'layouts.embed' : 'layouts.default')
 
 @section('content')
-    {!! $action_bar or '' !!}
+    {!! isset($action_bar)? $action_bar: '' !!}
 
     @if ($count_video > 0 or $count_video_links > 0)
         @if (count($items))
@@ -58,7 +59,7 @@
                 </div>
             </div>
         @endif
-    
+
         @if ($num_of_categories > 0)
             <div class='row'>
                 <div class='col-sm-12'>
@@ -127,5 +128,5 @@
     @else
         <div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div>
     @endif
-    
+
 @endsection
