@@ -406,7 +406,7 @@ if (count($exercise_question_ids) > 0) {
                             }
                             if ($showResults) { // adds the correct word, followed by ] to close the blank
                                 $answer .= ' / <span class="text-success"><strong>' .
-                                    q(preg_replace('/\s*,\s*/', " $langOr ", substr($temp, 0, $pos))) .
+                                    preg_replace('/\s*\|\s*/', " </strong>$langOr<strong> ", q(substr($temp, 0, $pos))) .
                                     '</strong></span>';
                             }
                             $answer .= "]";
