@@ -392,10 +392,13 @@ if (count($exercise_question_ids) > 0) {
                                 $icon = "<span class='fa fa-check text-success'></span>";
                             }
                             // else if the word entered is not the same as the one defined by the professor
-                            elseif ($choice[$j] !== '' and $showResults) {
-                                // adds the word in red at the end of the string, and strikes it
-                                $answer .= '<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
-                                $icon = "<span class='fa fa-times text-danger'></span>";
+                            elseif ($choice[$j] !== '') {
+                                if ($showResults) { // adds the word in red at the end of the string, and strikes it
+                                    $answer .= '<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
+                                    $icon = "<span class='fa fa-times text-danger'></span>";
+                                }  else {
+                                    $answer .= '<strong>' . q($choice[$j]) . '</strong>';
+                                }
                             } else {
                                 // adds a tabulation if no word has been typed by the student
                                 $answer .= '&nbsp;&nbsp;&nbsp;';
