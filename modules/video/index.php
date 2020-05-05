@@ -165,6 +165,9 @@ hContent;
 
     $diskQuotaVideo = Database::get()->querySingle("SELECT video_quota FROM course WHERE code=?s", $course_code)->video_quota;
     $updir = "$webDir/video/$course_code"; //path to upload directory
+    if (!file_exists($updir)) { // mkdir directory `video` if not exists
+        mkdir($updir, 0755);
+    }
     $diskUsed = dir_total_space($updir);
 
     if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
@@ -335,8 +338,7 @@ hContent;
                     $iscopy = copy("$tmpfile", "$updir/$safe_filename");
                 }
                 if (!$iscopy) {
-                    $tool_content .= "<div class='alert alert-success'>$langFileNot<br>
-                                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
+                    $tool_content .= "<div class='text-center alert alert-danger'>$langFileNot<br><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
                     draw($tool_content, $menuTypeID, null, $head_content);
                     exit;
                 }
