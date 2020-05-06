@@ -2608,14 +2608,16 @@ function greek_to_latin($string) {
 // Convert to uppercase and remove accent marks
 // Limited coverage for now
 function remove_accents($string) {
-    return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
-        'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
-        'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
-        'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
-        'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
-        'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I',
-        'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O',
-        'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U'));
+    return strtr(mb_strtoupper($string, 'UTF-8'),
+        ['Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
+         'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
+         'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
+         'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
+         'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
+         'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I',
+         'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O',
+         'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U',
+         '’' => "'", '‘' => "'"]);
 }
 
 // resize an image ($source_file) of type $type to a new size ($maxheight and $maxwidth) and copies it to path $target_file

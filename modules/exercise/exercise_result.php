@@ -91,7 +91,7 @@ load_js('tools.js');
 if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
     $exercise_user_record = Database::get()->querySingle("SELECT *, DATE_FORMAT(record_start_date, '%Y-%m-%d %H:%i') AS record_start_date,
-                                                                      TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration 
+                                                                      TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration
                                                                     FROM exercise_user_record WHERE eurid = ?d", $eurid);
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id
                                                         FROM exercise_answer_record WHERE eurid = ?d", $eurid);
@@ -373,8 +373,8 @@ if (count($exercise_question_ids) > 0) {
                             }
                             $choice[$j] = canonicalize_whitespace($choice[$j]);
                             // if the word entered is the same as the one defined by the professor
-                            $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
-                            $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);
+                            $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? remove_accents($choice[$j]) : $choice[$j];
+                            $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? remove_accents(substr($temp, 0, $pos)) : substr($temp, 0, $pos);
                             $right_answers = array_map('canonicalize_whitespace',
                                 preg_split('/\s*\|\s*/', $canonical_match));
                             if (in_array($canonical_choice, $right_answers)) {
