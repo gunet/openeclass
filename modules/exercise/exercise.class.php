@@ -118,17 +118,16 @@ if (!class_exists('Exercise')) {
                 $this->password_lock = $object->password_lock;
                 $this->assign_to_specific = $object->assign_to_specific;
 
-                $result = Database::get()->queryArray("SELECT question_id, q_position FROM `exercise_with_questions`, `exercise_question`
-                WHERE course_id = ?d AND question_id = id AND exercise_id = ?d ORDER BY q_position", $course_id, $id);
+                $result = Database::get()->queryArray("SELECT question_id, q_position
+                    FROM `exercise_with_questions`, `exercise_question`
+                    WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
+                    ORDER BY q_position, question_id", $course_id, $id);
 
                 // fills the array with the question ID for this exercise
-                // the key of the array is the question position
+                $k = 1;
                 foreach ($result as $row) {
-                    // makes sure that the question position is unique
-                    while (isset($this->questionList[$row->q_position])) {
-                        $row->q_position++;
-                    }
-                    $this->questionList[$row->q_position] = $row->question_id;
+                    $this->questionList[$k] = $row->question_id;
+                    $k++;
                 }
                 // find the total weighting of an exercise
                 $this->totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
@@ -927,7 +926,7 @@ if (!class_exists('Exercise')) {
         function purge() {
             $id = $this->id;
 
-            Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s 
+            Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s
                               WHERE d.eurid = s.eurid AND s.eid = ?d", $id);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d",$id);
         }

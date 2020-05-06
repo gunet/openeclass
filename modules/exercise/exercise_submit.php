@@ -620,9 +620,8 @@ foreach ($questionList as $questionId) {
 
     if ($exerciseType == MULTIPLE_PAGE_TYPE) {
         // display question numbering buttons
-        $k = 1;
         $tool_content .= "<div style='margin-bottom: 20px;'>";
-        while ($k <= count($questionList)) {
+        foreach ($questionList as $k => $q_id) {
             $answered = false;
             $q_id = $questionList[$k];
             $t_question = new Question();
