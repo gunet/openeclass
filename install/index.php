@@ -48,9 +48,7 @@ if (!isset($Institution)) {
     $Institution = '';
 }
 
-if (function_exists('date_default_timezone_set')) { // only valid if PHP > 5.1
-    date_default_timezone_set('Europe/Athens');
-}
+date_default_timezone_set('Europe/Athens');
 
 // get installation language. Greek is the default language.
 if (isset($_REQUEST['lang'])) {
