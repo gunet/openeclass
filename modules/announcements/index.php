@@ -480,11 +480,9 @@ if ($is_editor) {
                                                  stop_display = ?t,
                                                  visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
                 $log_type = LOG_INSERT;
-
                 if (isset($_POST['tags'])) {
-                    $tagsArray = explode(',', $_POST['tags']);
                     $moduleTag = new ModuleElement($id);
-                    $moduleTag->attachTags($tagsArray);
+                    $moduleTag->attachTags($_POST['tags']);
                 }
             }
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
