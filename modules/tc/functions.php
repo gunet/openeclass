@@ -1606,7 +1606,7 @@ function get_tc_id($meeting_id) {
  * @return int
  */
 function get_tc_participants($meeting_id) {
-    $r = Database::get()->querySingle("SELECT participants FROM tc_session
+    $r = Database::get()->querySingle("SELECT sessionUsers FROM tc_session
                     WHERE meeting_id = ?s", $meeting_id)->participants;
 
     if ($r == '0') {

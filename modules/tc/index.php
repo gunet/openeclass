@@ -263,7 +263,11 @@ elseif(isset($_GET['choice']))
                 $mod_pw = $sess->mod_pw;
                 $record = ($serv->enable_recordings == 'true')? $sess->record: 'false';
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
-                    create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
+                    $title_meeting = "${_GET['title']} - $course_code";
+                    if (!empty($public_code)) {
+                        $title_meeting = "${_GET['title']} - $public_code";
+                    }
+                    create_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
                 }
                 if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
@@ -316,7 +320,7 @@ elseif(isset($_GET['choice']))
     if (isset($_POST['addAnnouncement']) and $_POST['addAnnouncement']) {
         $addAnnouncement = 1;
     }
-    $record = 'true';
+    $record = 'false';
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
