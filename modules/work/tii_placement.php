@@ -39,6 +39,7 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
     require_once 'modules/work/functions.php';
     require_once 'include/lib/fileUploadLib.inc.php';
     require_once 'modules/progress/AssignmentEvent.php';
+    require_once 'modules/analytics/AssignmentAnalyticsEvent.php';
     require_once 'include/log.class.php';
 
     // validate outcomes_tool_placement_url
