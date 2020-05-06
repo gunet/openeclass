@@ -777,10 +777,9 @@ if (!class_exists('Exercise')) {
                     // if user's choice is right assign rightAnswerWeight else 0
                     // Some more coding should be done if blank can have multiple answers
                     $canonical_choice = canonicalize_whitespace($objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
-                        strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice);
+                        remove_accents($row_choice) : $row_choice);
                     $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
-                        strtr(mb_strtoupper($blanks[$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") :
-                        $blanks[$row_key-1];
+                        remove_accents($blanks[$row_key-1]) : $blanks[$row_key-1];
                     $right_answers = array_map('canonicalize_whitespace', preg_split('/\s*\|\s*/', $canonical_match));
                     $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key-1] : 0;
                     Database::get()->query("INSERT INTO exercise_answer_record
@@ -870,8 +869,8 @@ if (!class_exists('Exercise')) {
                 $blanks = Question::getBlanks($answer);
                 foreach ($value as $row_key => $row_choice) {
                     // if user's choice is right assign rightAnswerWeight else 0
-                    $canonical_choice = canonicalize_whitespace($objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice);
-                    $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($blanks[$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $blanks[$row_key-1];
+                    $canonical_choice = canonicalize_whitespace($objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? remove_accents($row_choice) : $row_choice);
+                    $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? remove_accents($blanks[$row_key-1]) : $blanks[$row_key-1];
                     $right_answers = array_map('canonicalize_whitespace', preg_split('/\s*\|\s*/', $canonical_match));
                     $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key-1] : 0;
                     Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, weight = ?f, is_answered = 1
