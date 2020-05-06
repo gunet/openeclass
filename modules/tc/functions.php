@@ -1601,18 +1601,13 @@ function get_tc_id($meeting_id) {
 
 
 /**
- * @brief get tc meeting participants
+ * @brief get tc meeting session users
  * @param $meeting_id
  * @return int
  */
 function get_tc_participants($meeting_id) {
-    $r = Database::get()->querySingle("SELECT sessionUsers FROM tc_session
-                    WHERE meeting_id = ?s", $meeting_id)->participants;
+    $result = Database::get()->querySingle("SELECT sessionUsers FROM tc_session
+                    WHERE meeting_id = ?s", $meeting_id)->sessionUsers;
 
-    if ($r == '0') {
-        return 0;
-    } else {
-        return count(explode(',', preg_replace('/_/','', $r)));
-    }
-
+    return $result;
 }
