@@ -257,17 +257,17 @@ elseif(isset($_GET['choice']))
             break;
         case 'do_join':
             //get info
-            $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
+            $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s", $_GET['meeting_id']);
             $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
             if ($tc_type == 'bbb') { // if tc server is `bbb`
                 $mod_pw = $sess->mod_pw;
-                $record = ($serv->enable_recordings == 'true')? $sess->record: 'false';
+                $record = $sess->record;
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
                     $title_meeting = "${_GET['title']} - $course_code";
                     if (!empty($public_code)) {
                         $title_meeting = "${_GET['title']} - $public_code";
                     }
-                    create_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
+                    create_bbb_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
                 }
                 if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));

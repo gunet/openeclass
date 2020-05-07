@@ -64,7 +64,7 @@ if ($active <> '1'
 
 if ($server_type == 'bbb') { // bbb server
     if(bbb_session_running($meeting_id) == false) {
-        create_meeting($title,$meeting_id,$mod_pw,$att_pw,$record);
+        create_bbb_meeting($title,$meeting_id,$mod_pw,$att_pw,$record);
     }
     # Get session capacity
     $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session WHERE meeting_id=?s",$meeting_id);

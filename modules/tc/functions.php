@@ -828,33 +828,48 @@ function delete_bbb_session($id)
  * @param type $att_pw
  * @param type $record
  */
-function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
+function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
 {
     global $langBBBCreationRoomError, $langBBBConnectionError, $course_code,
-        $langBBBWelcomeMsg, $langBBBConnectionErrorOverload, $course_code, $urlServer;
+        $langBBBWelcomeMsg, $langBBBConnectionErrorOverload, $course_id, $urlServer;
 
-    $run_to = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s", $meeting_id)->running_at;
-    if (isset($run_to)) {
+    // get list of servers ordered by load balancing settings
+    $servers = get_bbb_servers($record);
+
+    if (is_array($servers) and count($servers) > 0) {
         $participants = get_tc_participants($meeting_id);
-        if (!is_bbb_server_available($run_to, $participants)) { // if existing bbb server is busy try to find next one
-            $r = Database::get()->queryArray("SELECT id FROM tc_servers
-                            WHERE `type`= 'bbb' AND enabled='true' AND id <> ?d ORDER BY weight ASC", $run_to);
-            if (($r) and count($r) > 0) {
-                foreach ($r as $server) {
-                    if (is_bbb_server_available($server->id, $participants)) {
-                        $run_to = $server->id;
-                        Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE meeting_id = ?s", $run_to, $meeting_id);
-                        break;
-                    } else {
-                        $run_to = -1; // no bbb server available
+        // check if course uses a specific server
+        $q = Database::get()->querySingle("SELECT external_server FROM course_external_server WHERE course_id = ?d", $course_id);
+        if ($q) { 
+            $run_to = $q->external_server;
+            if (in_array($run_to, $servers)) { // check if server is enabled
+
+                // Reorder servers to put specific server on top.
+                // Even if $record is 'true', recording will not be enabled if server has disabled recordings.
+                $tmp[0] = $run_to;
+                $i=1;
+                foreach ($servers as $server) {
+                    if ($server != $run_to) {
+                        $tmp[$i] = $server;
+                        $i++;
                     }
                 }
-            } else {
-                $run_to = -1; // no bbb server exists
+                $servers = $tmp;
             }
         }
-    }
 
+        foreach ($servers as $server_id) {
+            if (is_bbb_server_available($server_id, $participants)) {
+                $run_to = $server_id;
+                Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE meeting_id = ?s", $run_to, $meeting_id);
+                break;
+            } else {
+                $run_to = -1; // no bbb server available
+            }
+        }
+    } else {
+        $run_to = -1; // no bbb server exists
+    }
     if ($run_to == -1) {
         Session::Messages($langBBBConnectionErrorOverload, 'alert-danger');
         redirect_to_home_page("modules/tc/index.php?course=$course_code");
@@ -1493,10 +1508,10 @@ function get_bbb_servers_load()
 
 /**
  * @brief sort servers based on load balancing algorithm
- * @param bool $record sort servers by recording capability
+ * @param string $record sort servers by recording capability
  * @return array
  */
-function get_bbb_servers($record = true)
+function get_bbb_servers($record = 'false')
 {
     $servers = get_bbb_servers_load();
     if (!$servers) {
@@ -1514,7 +1529,7 @@ function get_bbb_servers($record = true)
     $participants = array_column($servers, 'participants');
     $enable_recordings = array_column($servers, 'enable_recordings');
 
-    $record_sort = ($record) ? SORT_DESC : SORT_ASC;
+    $record_sort = ($record=='true') ? SORT_DESC : SORT_ASC;
 
     $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
 
