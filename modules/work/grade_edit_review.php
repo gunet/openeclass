@@ -1,27 +1,27 @@
 <?php
 $require_current_course = true;
-//This component is the core of eclass. Each and every file that requires output to the user's browser must include this file and use the view() or draw() calls to output the UI to the user's browser.
-require_once '../../include/baseTheme.php';//
+
+require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
 $toolName = $langScore;
-if ( isset($_GET['assignment']) && isset($_GET['submission'])) {
-    $as_id = intval($_GET['assignment']);
-    $sub_id = intval($_GET['submission']);
+
+if (isset($_REQUEST['assignment']) && isset($_REQUEST['submission'])) {
+    $as_id = intval($_REQUEST['assignment']);
+    $sub_id = intval($_REQUEST['submission']);
     $assign = get_assignment_details($as_id);
     $cdate = date('Y-m-d H:i:s');
 
-    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
-    $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$as_id", "name" => q($assign->title));
+    if (isset($_REQUEST['unit'])) {
+        $navigation[] = array("url" => "index.php?course=$course_code&id=$_REQUEST[unit]", "name" => $langWorks);
+    } else {
+        $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
+        $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$as_id", "name" => q($assign->title));
+    }
 
-    //if ($assign->due_date_review > $cdate ) {
     show_form($as_id, $sub_id, $assign);
     draw($tool_content, 2);
-    //}else{
-     //   redirect_to_home_page("modules/work/index.php?course=$course_code&amp;id=$as_id");
-    //}
-
 } else {
     redirect_to_home_page('modules/work/index.php?course='.$course_code);
 }
@@ -58,6 +58,8 @@ function show_form($id, $sid, $assign) {
            $langBack, $assign, $langWorkOnlineText, $course_id, $pageName, $langEndPeerReview,
            $langReviewStart, $langReviewEnd;
 
+    $pageName = $m['addgradecomments'];
+
 	$cdate = date('Y-m-d H:i:s');
 	$sub = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d", $sid);
 	if ($sub) {
@@ -71,7 +73,6 @@ function show_form($id, $sid, $assign) {
 			$group_submission = '';
 		}*/
 		$comments = Session::has('comments') ? Session::get('comments') : q($sub->comments);
-		$pageName = $m['addgradecomments'];//addgradecomments=Προσθήκη σχολίων βαθμολογητή
 		//ean uparxei to to submission_type grapse ws etiketa online keimeno me to keimeno tou dipla alliws grapse ws etiketa onoma arxeioy kai to arxeio dipla ws download link
 		if($assign->submission_type) {
 			$submission = "<div class='form-group'>
@@ -81,10 +82,15 @@ function show_form($id, $sid, $assign) {
 							</div>
 						</div>";
 		} else {
+		    if (isset($_REQUEST['unit'])) {
+		        $get_link = "view.php?course=$course_code&amp;res_type=assignment&amp;id=$_REQUEST[unit]&amp;get=$sub->user_submit_id";
+            } else {
+                $get_link = "index.php?course=$course_code&amp;get=$sub->user_submit_id";
+            }
 			$submission = "<div class='form-group'>
 							<label class='col-sm-3 control-label'>$m[filename]:</label>
 							<div class='col-sm-9'>
-							<a href='index.php?course=$course_code&amp;get=$sub->user_submit_id'>".q($sub->file_name)."</a>
+							<a href='$get_link'>".q($sub->file_name)."</a>
 							</div>
 						</div>";
 		}
@@ -111,82 +117,90 @@ function show_form($id, $sid, $assign) {
 			}
 		}
 		$grade_field = "<div class='col-sm-9' id='myModalLabel'><h5>$rubric->name</h5>
-		<table class='table-default'>
-		<tr>
-			<td>
-				<ul class='list-unstyled'>
-					$criteria_list
-				</ul>
-			</td>
-		</tr>
-		</table>
+            <table class='table-default'>
+                <tr>
+                    <td>
+                        <ul class='list-unstyled'>
+                            $criteria_list
+                        </ul>
+                    </td>
+                </tr>
+            </table>
 		</div>";
+        if (isset($_REQUEST['unit'])) {
+            $form_link = "view.php?res_type=assignment&course=$course_code&unit=$_REQUEST[unit]";
+            $back_link = "index.php?course=$course_code&id=$_REQUEST[unit]";
+            $cancel_link = "index.php?course=$course_code&id=$_REQUEST[unit]";
+        } else {
+            $form_link = "index.php?course=$course_code&id=$sub->assignment_id";
+            $back_link = "index.php?course=$course_code&id=$sub->assignment_id";
+            $cancel_link = "index.php?course=$course_code&id=$sub->assignment_id";
+        }
 		$tool_content .= action_bar(array(
 			array(
 					'title' => $langBack,
-					'url' => "index.php?course=$course_code&id=$sub->assignment_id",
+					'url' => "$back_link",
 					'icon' => "fa-reply",
 					'level' => 'primary-label'
 					)
-			))."
-		<div class='form-wrapper'>
-			<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code&id=$sub->assignment_id' enctype='multipart/form-data'>
-			<input type='hidden' name='assignment' value='$id'>
-			<input type='hidden' name='submission' value='$sid'>
-			<fieldset>
-				<div class='form-group'>
-					<label class='col-sm-3 control-label'>$m[username]:</label>
-					<div class='col-sm-9'>
-					$uid_2_name 
-					</div>
-				</div>
-				<div class='form-group'>
-					<label class='col-sm-3 control-label'>$langReviewStart:</label>
-					<div class='col-sm-9'>
-						<span>".q($assign->start_date_review)."</span>
-					</div>
-				</div>
-				<div class='form-group'>
-					<label class='col-sm-3 control-label'>$langReviewEnd:</label>
-					<div class='col-sm-9'>
-						<span>".q($assign->due_date_review)."</span>
-					</div>
-				</div>
-				$submission
-				<div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-					<label for='grade' class='col-sm-3 control-label'>$langGradebookGrade:</label>                        
-						$grade_field
-						<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
-				</div>
-				<div class='form-group'>
-					<label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
-					<div class='col-sm-9'>
-						<textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
-					</div>
-				</div>";
-				if ($assign->due_date_review > $cdate) {
-					$tool_content .="
-					<div class='form-group'>
-						<div class='col-sm-9 col-sm-offset-3'>
-							<div class='checkbox'>
-								<label>
-									<input type='checkbox' value='1' id='email_button' name='email' checked>
-									$m[email_users]
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class='form-group'>
-						<div class='col-sm-9 col-sm-offset-3'>
-							<input class='btn btn-primary' type='submit' name='grade_comments_review' value='$langGradeOk'>
-							<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
-						</div>
-					</div>";
-				} else {
-					Session::Messages("$langEndPeerReview", 'alert-danger');
-				}
-			$tool_content .="
-			</fieldset>
+			));
+
+		$tool_content .= "<div class='form-wrapper'>
+			<form class='form-horizontal' role='form' method='post' action='$form_link'>
+                <input type='hidden' name='assignment' value='$id'>
+                <input type='hidden' name='submission' value='$sid'>			
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$m[username]:</label>
+                        <div class='col-sm-9'>
+                        $uid_2_name 
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langReviewStart:</label>
+                        <div class='col-sm-9'>
+                            <span>".q($assign->start_date_review)."</span>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langReviewEnd:</label>
+                        <div class='col-sm-9'>
+                            <span>".q($assign->due_date_review)."</span>
+                        </div>
+                    </div>
+                    $submission
+                    <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
+                        <label for='grade' class='col-sm-3 control-label'>$langGradebookGrade:</label>                        
+                            $grade_field
+                            <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
+                    </div>
+                    <div class='form-group'>
+                        <label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
+                        <div class='col-sm-9'>
+                            <textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
+                        </div>
+                    </div>";
+                    if ($assign->due_date_review > $cdate) {
+                        $tool_content .="
+                        <div class='form-group'>
+                            <div class='col-sm-9 col-sm-offset-3'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' value='1' id='email_button' name='email' checked>
+                                        $m[email_users]
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-9 col-sm-offset-3'>
+                                <input class='btn btn-primary' type='submit' name='grade_comments_review' value='$langGradeOk'>
+                                <a class='btn btn-default' href='$cancel_link'>$langCancel</a>
+                            </div>
+                        </div>";
+                    } else {
+                        Session::Messages("$langEndPeerReview", 'alert-danger');
+                    }
+			$tool_content .= "
 			</form>
 		</div>";
 	} else {

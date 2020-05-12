@@ -30,9 +30,6 @@ $require_user_registration = true;
 $require_help = true;
 $helpTopic = 'assignments';
 
-define('ASSIGNMENT_TYPE_ECLASS', 0);
-define('ASSIGNMENT_TYPE_TURNITIN', 1);
-
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'functions.php';
@@ -630,7 +627,9 @@ if ($is_editor) {
     if (isset($_POST['grade_comments_review'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
         $pageName = $work_title;
-        $navigation[] = $works_url;
+        if (!isset($_REQUEST['unit'])) {
+            $navigation[] = $works_url;
+        }
         submit_grade_reviews($_POST);
     }
 }
@@ -3590,7 +3589,7 @@ function delete_teacher_assignment_file($id) {
  */
 function show_student_assignment($id) {
 
-    global $tool_content, $m, $uid, $langUserOnly, $langBack, $course_code,
+    global $tool_content, $m, $uid, $langUserOnly, $langBack,
         $course_id, $course_code, $langAssignmentWillBeActive,
         $langCaptchaWrong, $langIPHasNoAccess, $langNoPeerReview,
         $langPendingPeerSubmissions;
@@ -3690,7 +3689,6 @@ function show_student_assignment($id) {
             } else {
                 //emfanizei mono thn forma ypovolhs
                 show_submission_form($id, $user_group_info, false, $submissions_exist);
-
             }
         }
         //h sunarthhsh theloume na kaleitai an einai peer review kai an exei upovalei ergasia o foithths
@@ -3699,27 +3697,21 @@ function show_student_assignment($id) {
                                  WHERE assignment_id = ?d AND uid = ?d ", $id, $uid);
         $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
                                  WHERE assignment_id = ?d ", $id);
-        if ($row->grading_type == 3 && $submissions_exist && $ass) {
+        if ($row->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $submissions_exist && $ass) {
             if ($row->start_date_review < $cdate) {
                 if ($row->reviews_per_assignment < $count_of_assign && $rows) {
                     show_assignment_review($id);
                 } elseif ($row->reviews_per_assignment < $count_of_assign && empty($rows)) {
-                    $tool_content .= "
-                      <p class='sub_title1'></p>
-                      <div class='alert alert-warning'>$langNoPeerReview</div>";
+                    $tool_content .= "<div class='alert alert-warning'>$langNoPeerReview</div>";
                 } elseif ($row->reviews_per_assignment > $count_of_assign) {
-                    $tool_content .= "
-                      <p class='sub_title1'></p>
-                      <div class='alert alert-warning'>$langNoPeerReview</div>";
+                    $tool_content .= "<div class='alert alert-warning'>$langNoPeerReview</div>";
                 }
             }
             else
             {
                 //auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
                 $start_date_review = nice_format($row->start_date_review, TRUE); //hmeromhnia enarkshs aksiologhshs
-                $tool_content .= "
-                       <p class='sub_title1'></p>
-                       <div class='alert alert-warning'>$langPendingPeerSubmissions</div>";
+                $tool_content .= "<div class='alert alert-warning'>$langPendingPeerSubmissions</div>";
 			}
         }
     } else {
@@ -3743,8 +3735,8 @@ function show_student_assignment($id) {
  */
 function show_assignment_review($id, $display_graph_results = false) {
     global $tool_content, $course_id, $works_url, $course_code, $uid,
-        $langWorkOnlineText, $m, $langGradebookGrade, $langSurnameName,
-        $langQuestionView, $langSGradebookBook, $langEdit;
+        $langWorkOnlineText, $m, $langGradebookGrade, $urlServer,
+        $langQuestionView, $langSGradebookBook, $langEdit, $langPeerSubmissions;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
         FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
@@ -3754,10 +3746,9 @@ function show_assignment_review($id, $display_graph_results = false) {
 
         $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
-            <input type='hidden' name='grades_id' value='$id'>
-            <br>
+            <input type='hidden' name='grades_id' value='$id'>            
             <div class='margin-bottom-thin'>
-              <b>$langPeerSubmissions:</b>&nbsp; $review_per_assignment
+              <strong>$langPeerSubmissions:</strong>&nbsp; $review_per_assignment
             </div>
             <div class='table-responsive'>
               <table class='table-default'>
@@ -3789,22 +3780,35 @@ function show_assignment_review($id, $display_graph_results = false) {
                     } else {
                         $filename = $row->file_name;
                     }
-                    $filelink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->user_submit_id'>" .
-                      q($filename) . "</a>";
+                    if (isset($_GET['unit'])) {
+                        $unit = intval($_GET['unit']);
+                        $filelink = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$unit&amp;get=$row->user_submit_id'>" . q($filename) . "</a>";
+                    } else {
+                        $filelink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->user_submit_id'>" . q($filename) . "</a>";
+                    }
+
                 }
             }
-            $icon_field = "<a class='link' href='grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
+            if (isset($_GET['unit'])) {
+                $edit_grade_link = "../units/view.php?course=$course_code&amp;res_type=assignment_grading&amp;unit=$unit&amp;assignment=$id&amp;submission=$row->id";
+            } else {
+                $edit_grade_link = "grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+            }
+            $icon_field = "<a class='link' href='$edit_grade_link'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
 
             $grade = Database::get()->querySingle("SELECT grade FROM assignment_grading_review WHERE id = ?d ", $row->id )->grade;
             if (!empty($grade)) {
                 $grade_field = "<input class='form-control' type='text' value='$grade' name='grade' maxlength='4' size='3' disabled>";
             } else {
                 $icon_field = '';
-                $grade_field = "<a class='link' href='grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'><span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span></a>";
+                if (isset($_GET['unit'])) {
+                    $grade_link = "../units/view.php?course=$course_code&amp;res_type=assignment_grading&amp;unit=$unit&amp;assignment=$id&amp;submission=$row->id";
+                } else {
+                    $grade_link = "grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                }
+                $grade_field = "<a class='link' href='$grade_link'><span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span></a>";
             }
-            $tool_content .= "<tr>
-                                <td class='text-right' width='4'>$i.</td>
-                                <td>$filelink";
+            $tool_content .= "<tr><td class='text-right' width='4'>$i.</td>";
             // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
             if (get_config('ext_unicheck_enabled') and valid_plagiarism_file_type($row->id)) {
                 $results = Plagiarism::get()->getResults($row->id);
@@ -3819,8 +3823,8 @@ function show_assignment_review($id, $display_graph_results = false) {
                 }
             }
             // ---------------------------------
-            $tool_content .= "</td>
-                <td class='text-center' width='180'>
+            $tool_content .= "
+                <td class='text-left'>
                   $filelink <br> $plagiarismlink
                 </td>
                 <td width='5' class='text-center'>
@@ -3880,7 +3884,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit,
     $langNotice3, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade, $langWarnAboutDeadLine, $urlServer;
+    $langGradebookGrade, $urlServer;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
@@ -3960,10 +3964,10 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
             $scale_options .= "<option value='$scale[scale_item_value]'>$scale[scale_item_name]</option>";
         }
         $grade_field = "<select name='grade' class='form-control' id='scales'>$scale_options</select>";
-    } elseif ($assignment->grading_type == 2) {
+    } elseif ($assignment->grading_type == ASSIGNMENT_RUBRIC_GRADE) {
         $valuegrade = (isset($grade)) ? $grade : '';
         $grade_field = "<input class='form-control' type='text' value='$valuegrade' name='grade' maxlength='4' size='3' readonly>";
-    } elseif ($assignment->grading_type == 3) {
+    } elseif ($assignment->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
         $valuegrade = (isset($grade)) ? $grade : '';
         $grade_field = "<input class='form-control' type='text' value='$valuegrade' name='grade' maxlength='4' size='3' readonly>";
     } else {
@@ -4148,9 +4152,9 @@ function assignment_details($id, $row, $x =false) {
     if ($grade_type == 0){
         $g_type = $langGradeNumber;
     }
-    elseif ($grade_type ==1) {
+    elseif ($grade_type == ASSIGNMENT_SCALING_GRADE) {
         $g_type = $langGradeScale;
-    } elseif ($grade_type ==2) {
+    } elseif ($grade_type == ASSIGNMENT_RUBRIC_GRADE) {
         $g_type = $langGradeRubric;
         $rubric_id = $row ->grading_scale_id;
         $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
@@ -4178,9 +4182,7 @@ function assignment_details($id, $row, $x =false) {
                 }
             }
         }
-    }
-    //edw ena else me aksiologhsh apo omotimous
-    elseif ($grade_type == 3) {
+    } elseif ($grade_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
         $g_type = $langGradeReviews;
         $rubric_id = $row ->grading_scale_id;
         $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
@@ -4460,15 +4462,17 @@ function show_assignment($id, $display_graph_results = false) {
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
-                                                        CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
+                                                        CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due,
+                                                        auto_judge
                                                     FROM assignment
                                                       WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $nav[] = $works_url;
     assignment_details($id, $assign);
+    $auto_judge_enabled_assign = $assign->auto_judge;
 
 	$cdate = date('Y-m-d H:i:s');
 	//to button anathesh tha emfanizetai sto xroniko diasthma apo deadline - start_date_review
-	if ( ($assign->grading_type == 3 && $cdate > $assign->deadline && $cdate < $assign->start_date_review)) {
+	if (($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline && $cdate < $assign->start_date_review)) {
 	    $count_of_ass = Database::get()->querySingle("SELECT COUNT(*) AS count_of_ass FROM assignment_submit
                                  WHERE assignment_id = ?d ", $id)->count_of_ass;
 		if ($assign->reviews_per_assignment < $count_of_ass) {
@@ -4563,7 +4567,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
 
 				$mess = '';
-				if ($assign->grading_type == 3 ){
+				if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE){
 					$grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
 					$condition ='';
 					$rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
@@ -4731,7 +4735,7 @@ function show_assignment($id, $display_graph_results = false) {
                             </span>";
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
-                if($autojudge->isEnabled()) {
+                if($autojudge->isEnabled() and $auto_judge_enabled_assign) {
                     $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                     $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
                 }
@@ -5029,7 +5033,7 @@ function assignment_password_bootbox() {
  * @global type $langIPUnlock
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $course_code, $urlServer,
+    global $tool_content, $m, $uid, $course_id, $urlServer,
         $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code,
         $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio,
         $langGradebookGrade, $langPassCode, $langIPUnlock;
@@ -5422,10 +5426,8 @@ function submit_grade_comments($args) {
  * @global type $workPath
  * @param type $args
  */
-//sunarthsh foithth paromoia me thn submit_grade_comments
 function submit_grade_reviews($args) {
-   global $langGrades, $course_id, $langTheField, $course_code,
-            $langFormErrors, $workPath, $langGradebookGrade, $uid, $gid;
+   global $langGrades, $course_id, $course_code, $langFormErrors;
 
     $id = $args['assignment'];//assignment=id_ergasias exei topotheththei ws pedio hidden sto grade_edit_review
     $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
@@ -5438,12 +5440,7 @@ function submit_grade_reviews($args) {
         if(is_numeric($value) || empty($value)) return true;
     });
     $v->rule('numeric', array('assignment', 'submission'));
-    //$v->rule('emptyOrNumeric', array('grade'));
-    //$v->rule('min', array('grade'), 0);
-    //$v->rule('max', array('grade'), $assignment->max_grade);
-    //$v->labels(array(
-        //'grade' => "$langTheField $langGradebookGrade"
-   // ));
+
     if($v->validate()) {
 
         $grade_rubric = serialize($args['grade_rubric']);
@@ -5463,9 +5460,13 @@ function submit_grade_reviews($args) {
 
 		//edw tha valoume ena if mexri thn hmeromhnia lhkshs review .otan perasei h hmera tha kanoume update ton vathmo pou vghke apo to ms sto pedio bathmos
 		$cdate = date('Y-m-d H:i:s');
-        //ΜΝΜ H βαθμολογία σας κατοχυρώθηκε με επιτυχία
         Session::Messages($langGrades, 'alert-success');
-        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+        } else {
+            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+        }
+
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/grade_edit.php?course=$course_code&assignment=$id&submission=$sid");
@@ -5642,10 +5643,27 @@ function send_file($id, $file_type) {
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->grade_comments_filepath", $info->grade_comments_filename, null, true);
         }
     } else {
+
         $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
         if (!$info) {
             return false;
         }
+
+        $a = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $info->assignment_id);
+
+        if ($a->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
+            $result = Database:: get()->queryArray("SELECT * FROM assignment_grading_review 
+                                        WHERE assignment_id = ?d 
+                                        AND users_id = ?d", $a->id, $uid);
+
+            foreach ($result as $data) {
+                $files_to_download[] = $data->file_path;
+            }
+            if (in_array($info->file_path, $files_to_download)) {
+                send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, null, true);
+            }
+        }
+
         if ($info->group_id) {
             initialize_group_info($info->group_id);
         }
@@ -5653,6 +5671,7 @@ function send_file($id, $file_type) {
             return false;
         }
         send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, null, true);
+
     }
     exit;
 }
