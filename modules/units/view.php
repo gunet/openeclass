@@ -11,6 +11,9 @@ switch ($_REQUEST['res_type']) {
     case 'assignment':
         require_once '../work/index.php';
         exit;
+    case 'assignment_grading':
+        require_once '../work/grade_edit_review.php';
+        exit;
     case 'exercise':
         require_once '../exercise/exercise_submit.php';
         exit;

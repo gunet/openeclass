@@ -2,9 +2,9 @@
 
 /*
  * ========================================================================
- * Open eClass 4.0 - E-learning and Course Management System
+ * Open eClass 3.8 - E-learning and Course Management System
  * ========================================================================
-  Copyright(c) 2003-2018  Greek Universities Network - GUnet
+  Copyright(c) 2003-2019  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
 
   Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -16,186 +16,19 @@
 
 /**
  * @file main.lib.php
- * @brief General useful functions for eClass.
+ * @brief General useful functions for eClass
+ * @authors many...
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-
-define('ECLASS_VERSION', '4.0-dev');
+define('ECLASS_VERSION', '3.8.1');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
     define("_MPDF_TEMP_PATH", $webDir . '/courses/temp/pdf/');
     define("_MPDF_TTFONTDATAPATH", $webDir . '/courses/temp/pdf/');
 }
-
-/* course status */
-define('COURSE_OPEN', 2);
-define('COURSE_REGISTRATION', 1);
-define('COURSE_CLOSED', 0);
-define('COURSE_INACTIVE', 3);
-
-/* hierarchy node status */
-define('NODE_OPEN', 2);
-define('NODE_SUBSCRIBED', 1);
-define('NODE_CLOSED', 0);
-
-/* user status */
-define('USER_TEACHER', 1);
-define('USER_STUDENT', 5);
-define('USER_GUEST', 10);
-define('USER_DEPARTMENTMANAGER', 11);
-
-// resized user image
-define('IMAGESIZE_LARGE', 256);
-define('IMAGESIZE_MEDIUM', 155);
-define('IMAGESIZE_SMALL', 32);
-
-// profile info access
-define('ACCESS_PRIVATE', 0);
-define('ACCESS_PROFS', 1);
-define('ACCESS_USERS', 2);
-
-// user admin rights
-define('ADMIN_USER', 0); // admin user can do everything
-define('POWER_USER', 1); // poweruser can admin only users and courses
-define('USERMANAGE_USER', 2); // usermanage user can admin only users
-define('DEPARTMENTMANAGE_USER', 3); // departmentmanage user can admin departments
-// user email status
-define('EMAIL_VERIFICATION_REQUIRED', 0);  /* email verification required. User cannot login */
-define('EMAIL_VERIFIED', 1); // email is verified. User can login.
-define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
-// course modules
-define('MODULE_ID_AGENDA', 1);
-define('MODULE_ID_LINKS', 2);
-define('MODULE_ID_DOCS', 3);
-define('MODULE_ID_VIDEO', 4);
-define('MODULE_ID_ASSIGN', 5);
-define('MODULE_ID_ANNOUNCE', 7);
-define('MODULE_ID_USERS', 8);
-define('MODULE_ID_FORUM', 9);
-define('MODULE_ID_EXERCISE', 10);
-define('MODULE_ID_COURSEINFO', 14);
-define('MODULE_ID_GROUPS', 15);
-define('MODULE_ID_MESSAGE', 16);
-define('MODULE_ID_GLOSSARY', 17);
-define('MODULE_ID_EBOOK', 18);
-define('MODULE_ID_CHAT', 19);
-define('MODULE_ID_DESCRIPTION', 20); /* deprecated. used only for compatibility in statistics*/
-define('MODULE_ID_QUESTIONNAIRE', 21);
-define('MODULE_ID_LP', 23);
-define('MODULE_ID_USAGE', 24);
-define('MODULE_ID_TOOLADMIN', 25);
-define('MODULE_ID_WIKI', 26);
-define('MODULE_ID_UNITS', 27);
-define('MODULE_ID_SEARCH', 28);
-define('MODULE_ID_CONTACT', 29);
-define('MODULE_ID_ATTENDANCE', 30);
-define('MODULE_ID_GRADEBOOK', 32);
-define('MODULE_ID_TC', 34);
-define('MODULE_ID_BLOG', 37);
-define('MODULE_ID_COMMENTS', 38);
-define('MODULE_ID_RATING', 39);
-define('MODULE_ID_SHARING', 40);
-define('MODULE_ID_ABUSE_REPORT', 42);
-define('MODULE_ID_COURSE_WIDGETS', 44);
-define('MODULE_ID_WALL', 46);
-define('MODULE_ID_MINDMAP', 47);
-define('MODULE_ID_PROGRESS', 48);
-define('MODULE_ID_COURSEPREREQUISITE', 49);
-define('MODULE_ID_LTI_CONSUMER', 50);  /* deprecated. used only for compatibility in statistics*/
-define('MODULE_ID_ANALYTICS', 51);
-define('MODULE_ID_REQUEST', 100);
-
-// user modules
-
-// not used only for backward compatibility in logs
-define('MODULE_ID_SETTINGS', 31); // use MODULE_ID_COURSEINFO instead !
-define('MODULE_ID_NOTES', 35);
-define('MODULE_ID_PERSONALCALENDAR',36);
-define('MODULE_ID_ADMINCALENDAR', 43);
-
-// Available course settings
-define('SETTING_BLOG_COMMENT_ENABLE', 1);
-define('SETTING_BLOG_STUDENT_POST', 2);
-define('SETTING_BLOG_RATING_ENABLE', 3);
-define('SETTING_BLOG_SHARING_ENABLE', 4);
-define('SETTING_COURSE_SHARING_ENABLE', 5);
-define('SETTING_COURSE_RATING_ENABLE', 6);
-define('SETTING_COURSE_COMMENT_ENABLE', 7);
-define('SETTING_COURSE_ANONYMOUS_RATING_ENABLE', 8);
-define('SETTING_FORUM_RATING_ENABLE', 9);
-define('SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE', 10);
-define('SETTING_COURSE_ABUSE_REPORT_ENABLE', 11);
-define('SETTING_GROUP_MULTIPLE_REGISTRATION', 12);
-define('SETTING_GROUP_STUDENT_DESCRIPTION', 13);
-define('SETTING_COURSE_USER_REQUESTS_DISABLE', 20);
-define('SETTING_COURSE_FORUM_NOTIFICATIONS', 21);
-define('SETTING_DOCUMENTS_PUBLIC_WRITE', 22);
-define('SETTING_OFFLINE_COURSE', 23);
-
-// Available user settings
-define('SETTING_FORUM_POST_VIEW', 1);
-
-// exercise answer types
-define('UNIQUE_ANSWER', 1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS', 3);
-define('MATCHING', 4);
-define('TRUE_FALSE', 5);
-define('FREE_TEXT', 6);
-define('FILL_IN_BLANKS_TOLERANT', 7);
-
-// exercise view type
-define('SINGLE_PAGE_TYPE', 1);
-define('MULTIPLE_PAGE_TYPE', 2);
-
-// exercise attempt types
-define('ATTEMPT_ACTIVE', 0);
-define('ATTEMPT_COMPLETED', 1);
-define('ATTEMPT_PENDING', 2);
-define('ATTEMPT_PAUSED', 3);
-define('ATTEMPT_CANCELED', 4);
-
-// Widget Areas
-define('HOME_PAGE_MAIN', 1);
-define('HOME_PAGE_SIDEBAR', 2);
-define('PORTFOLIO_PAGE_MAIN', 3);
-define('PORTFOLIO_PAGE_SIDEBAR', 4);
-define('COURSE_HOME_PAGE_MAIN', 5);
-define('COURSE_HOME_PAGE_SIDEBAR', 6);
-
-// for fill in blanks questions
-define('TEXTFIELD_FILL', 1);
-define('LISTBOX_FILL', 2); //
-
-// questionnaire (aka poll) types
-define('POLL_NORMAL', 0);
-define('POLL_COLLES', 1);
-define('POLL_ATTLS', 2);
-
-// gradebook activity type
-define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
-define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
-define('GRADEBOOK_ACTIVITY_LP', 3);
-define('GRADEBOOK_ACTIVITY_TC', 4);
-
-// Subsystem types (used in documents)
-define('MAIN', 0);
-define('GROUP', 1);
-define('EBOOK', 2);
-define('COMMON', 3);
-define('MYDOCS', 4);
-
-// path for certificates / badges templates
-define('CERT_TEMPLATE_PATH', "/courses/user_progress_data/cert_templates/");
-define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
-
-// interval in minutes for counting online users
-define('MAX_IDLE_TIME', 10);
-
-define('JQUERY_VERSION', '2.1.1');
-
+require_once 'constants.php';
 require_once 'lib/session.class.php';
 
 // ----------------------------------------------------------------------
@@ -229,17 +62,6 @@ function css_link($file) {
     global $urlAppend;
     $v = '?v=' . ECLASS_VERSION;
     return "<link href='{$urlAppend}js/$file$v' rel='stylesheet' type='text/css'>\n";
-}
-function widget_js_link($file, $folder) {
-    global $urlAppend, $head_content;
-    $v = '?v=' . ECLASS_VERSION;
-    $head_content .= "<script type='text/javascript' src='$urlAppend{$folder}/js/$file$v'></script>\n";
-}
-
-function widget_css_link($file, $folder) {
-    global $urlAppend, $head_content;
-    $v = '?v=' . ECLASS_VERSION;
-    $head_content .= "<link href='$urlAppend{$folder}/css/$file$v' rel='stylesheet' type='text/css'>\n";
 }
 
 /**
@@ -297,9 +119,6 @@ function load_js($file, $init='') {
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
             $file = 'datatables/media/js/dataTables.bootstrap.js';
-        } elseif ($file == 'datatables_tabletools') {
-            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
-            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
         } elseif ($file == 'jszip') {
             $file = 'jszip/dist/jszip.min.js';
         } elseif ($file == 'pdfmake') {
@@ -374,10 +193,7 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-colorpicker') {
             $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
             $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-        } elseif ($file == 'bootstrap-combobox') {
-            $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
-            $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
-        } elseif ($file == 'spectrum') {
+        }   elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
         } elseif ($file == 'sortable') {
@@ -971,8 +787,7 @@ function new_code($fac) {
 
     // Make sure the code returned isn't empty!
     } else {
-        Session::Messages(trans('langGeneralError'), 'alert-danger');
-        redirect_to_home_page('main/portfolio.php');
+        die("Course Code is empty!");
     }
     return $code;
 }
@@ -2107,7 +1922,10 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 init_instance_callback: function(editor) {
                     var parent = $(editor.contentAreaContainer.parentElement);
                     (editorToggleSecondToolbar(editor))();
-                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:1px solid #ddd');";
+                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:1px solid #ddd');
+                    if (typeof tinyMceCallback !== 'undefined') {
+                        tinyMceCallback(editor);
+                    }";
         if ($onFocus) {
             $focus_init .= "parent.find('.mce-toolbar-grp').hide();";
         }
@@ -2202,7 +2020,7 @@ tinymce.init({
     link_class_list: [
         {title: 'None', value: ''},
         {title: '".js_escape($langPopUp)."', value: 'colorbox'},
-        {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'}        
+        {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'}
     ],
     $filebrowser
     // Menubar options
@@ -2377,7 +2195,7 @@ function handle_unit_info_edit() {
             $moduleTag = new ModuleElement($unit_id);
             $moduleTag->syncTags($tagsArray);
         }
-        $successmsg = trans('langCourseUnitModified');
+        $successmsg = $langCourseUnitModified;
     } else { // add new course unit
         $order = units_get_maxorder()+1;
         $q = Database::get()->query("INSERT INTO course_units SET
@@ -2389,7 +2207,7 @@ function handle_unit_info_edit() {
                                  `order` = ?d, course_id = ?d", $title, $descr,
                                         $unitdurationfrom, $unitdurationto,
                                         $order, $course_id);
-        $successmsg = trans('langCourseUnitAdded');
+        $successmsg = $langCourseUnitAdded;
         $unit_id = $q->lastInsertID;
         // tags
         if (isset($_POST['tags'])) {
@@ -3159,12 +2977,12 @@ function copyright_info($cid, $noImg=1) {
         }
     }
     if ($noImg == 1) {
-        $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'><img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a><br>";
+        $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'><img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . q($license[$lic]['title']) . "' alt='" . q($license[$lic]['title']) . "' data-toggle='tooltip' data-placement='top' /></a><br>";
     } else if ($noImg == 0) {
         $link = "";
     }
 
-    return $link . q($license[$lic]['title']);
+    return $link;
 }
 
 /**
@@ -3305,43 +3123,6 @@ function csrf_token_error() {
 
 
 
-/**
- * Indirect Reference to HelpFul Functions
- * @param  ArrayObject
- * @return ArrayObject
- */
-
-function arrayValuesToIndirect($inputarray){
-    $outputarray = [];
-    foreach ($inputarray as $key => $value) {
-        $outputarray[$key] = getIndirectReference($value);
-    }
-    return $outputarray;
-}
-
-function arrayKeysToIndirect($inputarray){
-    $outputarray = [];
-    foreach ($inputarray as $key => $value) {
-        $outputarray[getIndirectReference($key)] = $value;
-    }
-    return $outputarray;
-}
-
-function arrayValuesDirect($inputarray){
-    $outputarray = [];
-    foreach ($inputarray as $key => $value) {
-        $outputarray[$key] = getDirectReference($value);
-    }
-    return $outputarray;
-}
-
-function arrayKeysToDirect($inputarray){
-    $outputarray = [];
-    foreach ($inputarray as $key => $value) {
-        $outputarray[getDirectReference($key)] = $value;
-    }
-    return $outputarray;
-}
 
 
 
@@ -3638,7 +3419,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         return "<div class='row action_bar'>
                     <div class='col-sm-12 clearfix'>
                         $page_title
-                        <div class='margin-top-thin margin-bottom-fat pull-right hidden-print'>
+                        <div class='margin-top-thin margin-bottom-fat pull-right'>
                             <div class='btn-group'>
                             $out
                             $action_button
@@ -3660,73 +3441,90 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  *
  */
 function action_button($options, $secondary_menu_options = array()) {
-    $primary_form_begin = $primary_form_end = $secondary = $primary = '';
-    foreach ($options as $option) {
+    global $langConfirmDelete, $langCancel, $langDelete;
+    $out_primary = $out_secondary = array();
+    $primary_form_begin = $primary_form_end = $primary_icon_class = '';
+    foreach (array_reverse($options) as $option) {
+        $level = isset($option['level'])? $option['level']: 'secondary';
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-
-        $icon = isset($option['icon'])? $option['icon']: 'question-circle-o';
-        $level = isset($option['level'])? $option['level']: null;
-        $class = isset($option['class'])? " $option[class]": '';
-        $btn_class = isset($option['btn-class'])? $option['btn-class']: 'btn-default';
-        $link_attrs = isset($option['link-attrs'])? $option['link-attrs']: '';
-        $icon_class = isset($option['icon-class'])? $option['icon-class']: '';
-        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $url = isset($option['url'])? $option['url']: null;
-        $form_begin = $form_end = '';
-        if (isset($option['confirm'])) {
-            $btn_class .= ' confirmAction';
-            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : trans('langConfirmDelete'));
-            $accept = q(isset($option['confirm_button']) ? $option['confirm_button'] : trans('langDelete'));
-            $form_begin = "<form method=post action='$url'>";
-            $form_end = '</form>';
-            $url = null;
-            $link_attrs .= " data-title='$title' data-message='" . q($option['confirm']) .
-                "' data-cancel-txt='" . trans('langCancel') .
-                "' data-action-txt='$accept' data-action-class='btn-danger'";
-        }
-        if ($level == 'primary-label' or $level == 'primary') {
-            if ($level == 'primary') {
-                $link_attrs .= " data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "'";
-                $btn_label = '';
-            } else {
-                $icon .= ' space-after-icon';
-                $btn_label = q($option['title']) . "<span class='hidden'>.</span>";
-            }
-            $element = ($url? "<a href='$url' class='btn $btn_class$disabled' $link_attrs>":
-                "<button class='btn $btn_class$disabled' $link_attrs>") .
-                "<span class='fa $icon$icon_class'></span>$btn_label" .
-                ($url? '</a>': '</button>');
-            $primary_form_begin = $form_begin;
-            $primary_form_end = $form_end;
-            $primary .= $element;
+        if (isset($option['class'])) {
+            $class = ' ' . $option['class'];
         } else {
-            $url = $url? $url: '#';
-            $class .= isset($option['confirm'])? ' confirmAction': '';
-            $secondary .= $form_begin .
-                "<a href='$url' class='list-group-item$class'$link_attrs>" .
-                "<span class='fa $icon $icon_class'></span> " . q($option['title']) .
-                '</a>' . $form_end;
+            $class = '';
+        }
+        if (isset($option['btn_class'])) {
+            $btn_class = ' ' . $option['btn_class'];
+        } else {
+            $btn_class = ' btn-default';
+        }
+        if (isset($option['link-attrs'])) {
+            $link_attrs = ' ' . $option['link-attrs'];
+        } else {
+            $link_attrs = '';
+        }
+        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
+        $icon_class = "class='list-group-item $class$disabled";
+        if (isset($option['icon-class'])) {
+            $icon_class .= " " . $option['icon-class'];
+        }
+        if (isset($option['confirm'])) {
+            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
+            $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $form_begin = "<form method=post action='$option[url]'>";
+            $form_end = '</form>';
+            if ($level == 'primary-label' or $level == 'primary') {
+                $primary_form_begin = $form_begin;
+                $primary_form_end = $form_end;
+                $form_begin = $form_end = '';
+                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+            } else {
+                $icon_class .= " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+                $primary_icon_class = '';
+            }
+            $url = '#';
+        } else {
+            $icon_class .= "'";
+            $confirm_extra = $form_begin = $form_end = '';
+            $url = isset($option['url'])? $option['url']: '#';
+        }
+        if (isset($option['icon-extra'])) {
+            $icon_class .= ' ' . $option['icon-extra'];
+        }
+
+        if ($level == 'primary-label') {
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "<span class='hidden'>.</span></a>");
+        } elseif ($level == 'primary') {
+            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'>.</span></a>");
+        } else {
+            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }
     }
-
-    if ($secondary) {
-        $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
-        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : 'fa-gear';
-        $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : 'btn-default';
-        $action_list = q("<div class='list-group' id='action_button_menu'>" . $secondary . "</div>");
-        $secondary = "
+    $primary_buttons = "";
+    if (count($out_primary)) {
+        $primary_buttons = implode('', $out_primary);
+    }
+    $action_button = "";
+    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
+    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
+    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
+    if (count($out_secondary)) {
+        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
+        $action_button = "
                 <a tabindex='1' class='menu-popover btn $secondary_btn_class' data-container='body' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm' role='group'>" .
-         $primary . $secondary .
-         '</div>' . $primary_form_end;
+         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+                $primary_buttons
+                $action_button
+          </div>" . $primary_form_end;
 }
 
 /**
@@ -4306,26 +4104,5 @@ function checkSecondFactorChallenge(){
         return secondfaApp::checkChallenge($_SESSION['uid']);
     } else {
         return "";
-    }
-}
-
-function trans($var_name, $var_array = []) {
-    if (preg_match("/\['.+'\]/", $var_name)) {
-        preg_match_all("([^\['\]]+)", $var_name, $matches);
-        global ${$matches[0][0]};
-
-        if ($var_array) {
-            return vsprintf(${$matches[0][0]}[$matches[0][1]], $var_array);
-        } else {
-            return ${$matches[0][0]}[$matches[0][1]];
-        }
-    } else {
-        global ${$var_name};
-
-        if ($var_array) {
-            return vsprintf(${$var_name}, $var_array);
-        } else {
-            return ${$var_name};
-        }
     }
 }
