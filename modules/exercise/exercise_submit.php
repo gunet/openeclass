@@ -471,8 +471,9 @@ if (isset($_POST['formSent'])) {
         if (!isset($paused_attempt)) {
             $objExercise->save_unanswered(0); // passing 0 to save like unanswered
         }
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?d, total_weighting = ?d, attempt_status = ?d, secs_remaining = ?d
-                WHERE eurid = ?d", $totalScore, $totalWeighting, ATTEMPT_PAUSED, $secs_remaining, $eurid);
+
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?f, total_weighting = ?f, attempt_status = ?d, secs_remaining = ?d
+                WHERE eurid = ?d", floatval($totalScore), floatval($totalWeighting), ATTEMPT_PAUSED, $secs_remaining, $eurid);
         if ($exerciseType == MULTIPLE_PAGE_TYPE and isset($_POST['choice']) and is_array($_POST['choice'])) {
             // for sequential exercises, return to current question
             // by setting is_answered to a special value
