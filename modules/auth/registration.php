@@ -146,15 +146,11 @@ if ($user_registration) {
         }
 
         // teacher registration
-        if ($eclass_prof_reg or $alt_auth_prof_reg) { // allow teacher registration
+        if ($eclass_prof_reg or $alt_auth_prof_reg)     { // allow teacher registration
             $tool_content .= "<table class='table-default'>";
             $tool_content .= "<tr class='list-header'><th>$langOfTeacher</th></tr>";
-            if ($eclass_prof_reg) {
-                if(empty($provider)) $tool_content .= "<tr><td><a href='formuser.php?p=1'>$langUserAccountInfo1</a></td></tr>";
-                    else $tool_content .= "<tr><td><a href='formuser.php$provider$provider_user_data&p=1'>$langUserAccountInfo1</a></td></tr>";
-            }
             if (count($auth) > 1 and $alt_auth_prof_reg) {
-                $tool_content .= "<td>$langUserAccountInfo1 $langWith:";
+                $tool_content .= "<td>$langUserAccountInfo1 $langwith:";
                 foreach ($auth as $k => $v) {
                     if ($v != 1) {  // bypass the eclass auth method
                         //hybridauth registration is performed in newuser.php rather than altnewuser
@@ -168,6 +164,10 @@ if ($user_registration) {
                     }
                 }
                 $tool_content .= "</td>";
+            }
+            if ($eclass_prof_reg) {
+                if(empty($provider)) $tool_content .= "<tr><td><a href='formuser.php?p=1'>$langUserAccountInfo1</a></td></tr>";
+                    else $tool_content .= "<tr><td><a href='formuser.php$provider$provider_user_data&p=1'>$langUserAccountInfo1</a></td></tr>";
             }
             $tool_content .= "</table>";
         } else {
