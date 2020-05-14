@@ -12,7 +12,7 @@
         "guzzlehttp/guzzle": "^6.2",
         "guzzlehttp/oauth-subscriber": "^0.3.0",
         "hybridauth/hybridauth": "^2.15",
-        "mpdf/mpdf": "^7.0",
+        "mpdf/mpdf": "^8.0",
         "philo/laravel-blade": "3.*",
         "hoa/ruler": "~2.0",
         "egulias/email-validator": "^2.1",
