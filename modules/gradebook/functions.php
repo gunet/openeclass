@@ -1561,7 +1561,7 @@ function add_gradebook_other_activity($gradebook_id) {
                             if ($modifyActivity) {
                                 $titleToModify = $modifyActivity->title;
                                 $contentToModify = $modifyActivity->description;
-                                if (is_null($modifyActivity->date) or strpos($modifyActivity->date, '0000-00-00') !== false) {
+                                if (is_null($modifyActivity->date)) {
                                     $oldDate = new DateTime();
                                 } else {
                                     $oldDate = DateTime::createFromFormat('Y-m-d H:i:s', $modifyActivity->date);
