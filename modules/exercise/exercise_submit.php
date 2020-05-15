@@ -729,11 +729,16 @@ foreach ($questionList as $questionId) {
 
 $disableCheck = 0;
 if (!$questionList) {
-    $tool_content .= "
-            <div class='alert alert-warning'>$langNoQuestion</div>
-            <div class='pull-right'>
-                <a href='index.php?course=$course_code' class='btn btn-default'>$langBack</a>
-            </div>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
+    if (isset($_REQUEST['unit'])) {
+        $backlink = "index.php?course=$course_code&id=$_REQUEST[unit]";
+    } else {
+        $backlink = "index.php?course=$course_code";
+    }
+
+    $tool_content .= "<div class='pull-right'>
+        <a href='$backlink' class='btn btn-default'>$langBack</a>
+    </div>";
 } else {
     if ($exerciseType == SINGLE_PAGE_TYPE || $nbrQuestions == $current_question_number) {
         $submitLabel = $langSubmit;
