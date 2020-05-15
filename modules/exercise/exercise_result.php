@@ -331,21 +331,21 @@ if (count($exercise_question_ids) > 0) {
                 }
                 $grade = 0;
                 switch ($answerType) {
-                    // for unique answer
+
                     case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $grade = $answerWeighting;
                         }
                         break;
-                    // for multiple answers
+
                     case MULTIPLE_ANSWER : $studentChoice = @$choice[$answerId];
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $grade = $answerWeighting;
                         }
                         break;
-                    // for fill in the blanks
+
                     case FILL_IN_BLANKS :
                     case FILL_IN_BLANKS_TOLERANT :
                         // splits weightings that are joined with a comma
@@ -417,7 +417,7 @@ if (count($exercise_question_ids) > 0) {
                             $temp = substr($temp, $pos + 1);
                         }
                         break;
-                    // for matching
+
                     case MATCHING : if ($answerCorrect) {
                             $thisChoice = isset($choice[$answerId])? $choice[$answerId]: null;
                             if ($answerCorrect == $thisChoice) {
@@ -446,6 +446,7 @@ if (count($exercise_question_ids) > 0) {
                                 $grade, $eurid, $row->question_id, $answerId);
                         }
                         break;
+
                     case TRUE_FALSE : $studentChoice = ($choice == $answerId) ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
@@ -510,6 +511,7 @@ if (count($exercise_question_ids) > 0) {
 
             } // end for()
         } else { // If FREE TEXT type
+            $questionScore = $question_weight;
             $tool_content .= "<tr class='even'><td>" . purify($choice) . "</td></tr>";
         }
 
