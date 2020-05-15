@@ -196,7 +196,7 @@
                         @foreach ($course_units as $key => $course_unit)
                             <?php
                                 $not_shown = false;
-                                if (!(($course_unit->start_week == '0000-00-00') or (is_null($course_unit->start_week))) and (date('Y-m-d') < $course_unit->start_week)) {
+                                if (!(is_null($course_unit->start_week)) and (date('Y-m-d') < $course_unit->start_week)) {
                                     $not_shown = true;
                                 }
                             ?>
@@ -218,14 +218,14 @@
                                                         <small>
                                                             <span class='help-block'>
                                                             <?php
-                                                                if (!(($course_unit->start_week == '0000-00-00') or (is_null($course_unit->start_week)))) {
+                                                                if (!(is_null($course_unit->start_week))) {
                                                                     echo $GLOBALS['langFrom2'];
                                                                     echo "&nbsp;";
                                                                     echo nice_format($course_unit->start_week);
                                                                 }
                                                             ?>
                                                             <?php
-                                                                if (!(($course_unit->finish_week == '0000-00-00') or (is_null($course_unit->finish_week)))) {
+                                                                if (!(is_null($course_unit->finish_week))) {
                                                                     echo $GLOBALS['langTill'];
                                                                     echo "&nbsp;";
                                                                     echo nice_format($course_unit->finish_week);

@@ -79,7 +79,7 @@ if ($is_editor) {
     $visibility_check = $check_start_week = '';
 } else {
     $visibility_check = "AND visible=1";
-    $check_start_week = " AND (start_week <= CURRENT_DATE() OR start_week IS NULL OR start_week = '0000-00-00')";
+    $check_start_week = " AND (start_week <= CURRENT_DATE() OR start_week IS NULL)";
 }
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units
@@ -89,10 +89,10 @@ if (isset($id) and $id !== false) {
         $data['comments'] = trim($info->comments);
         $data['unitId'] = $info->id;
         $data['course_start_week'] = $data['course_finish_week'] = '';
-        if (!(($info->start_week == '0000-00-00') or (is_null($info->start_week)))) {
+        if (!(is_null($info->start_week))) {
             $data['course_start_week'] = "$langFrom2 " . nice_format($info->start_week);
         }
-        if (!(($info->finish_week == '0000-00-00') or (is_null($info->finish_week)))) {
+        if (!(is_null($info->finish_week))) {
             $data['course_finish_week'] = "$langTill " . nice_format($info->finish_week);
         }
     } else {

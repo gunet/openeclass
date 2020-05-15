@@ -47,10 +47,10 @@ if (isset($_GET['edit'])) {
         redirect_to_home_page("courses/$course_code/");
     }
     $unitDescr = $cu->comments;
-    if (!(($cu->start_week == '0000-00-00') or (is_null($cu->start_week)))) {
+    if (!(is_null($cu->start_week))) {
         $data['start_week'] = DateTime::createFromFormat('Y-m-d', $cu->start_week)->format('d-m-Y');
-    }
-    if (!(($cu->finish_week == '0000-00-00') or (is_null($cu->finish_week)))) {        
+    } 
+    if (!(is_null($cu->finish_week))) {
         $data['finish_week'] = DateTime::createFromFormat('Y-m-d', $cu->finish_week)->format('d-m-Y');
     }
     $data['unitTitle'] = $cu->title;
