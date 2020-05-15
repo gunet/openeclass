@@ -23,8 +23,8 @@ if (isset($_POST['insert_analytics'])) {
     } else if ($_POST['start_date'] or $_POST['end_date']){
         $v->rule('required', array('start_date', 'end_date'));
     } else {
-        $start_date = date('0000-00-00');
-        $end_date = date('0000-00-00');
+        $start_date = null;
+        $end_date = null;
     }
 
     $v->labels(array(
@@ -55,8 +55,8 @@ if (isset($_POST['insert_analytics'])) {
     } else if ($_POST['start_date'] or $_POST['end_date']){
         $v->rule('required', array('start_date', 'end_date'));
     } else {
-        $start_date = date('0000-00-00');
-        $end_date = date('0000-00-00');
+        $start_date = null;
+        $end_date = null;
     }
 
     $v->labels(array(

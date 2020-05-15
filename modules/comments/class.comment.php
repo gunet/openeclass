@@ -27,7 +27,7 @@ Class Comment {
     
     private $id = 0;
     private $content = '';
-    private $creationTime = '0000-00-00 00:00:00';
+    private $creationTime = '1970-01-01 00:00:01';
     private $authorId = 0;
     private $rtype = '';
     private $rid = 0;
