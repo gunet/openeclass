@@ -59,10 +59,10 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $unittitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
     $tagsInput = eClassTag::tagInput($id);
     $unitdescr = $cu->comments;
-    if (!(($cu->start_week == '0000-00-00') or (is_null($cu->start_week)))) {
+    if (!(is_null($cu->start_week))) {
         $start_week = DateTime::createFromFormat('Y-m-d', $cu->start_week)->format('d-m-Y');
     }
-    if (!(($cu->finish_week == '0000-00-00') or (is_null($cu->finish_week)))) {
+    if (!(is_null($cu->finish_week))) {
         $finish_week = DateTime::createFromFormat('Y-m-d', $cu->finish_week)->format('d-m-Y');
     }
     $unit_id = $cu->id;

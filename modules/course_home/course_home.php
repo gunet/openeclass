@@ -714,7 +714,7 @@ if ($total_cunits > 0) {
     foreach ($sql as $cu) {
         $not_shown = false;
         // check if course unit has started
-        if (!(($cu->start_week == '0000-00-00') or (is_null($cu->start_week))) and (date('Y-m-d') < $cu->start_week)) {
+        if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
             $not_shown = true;
         }
         // check visibility
@@ -736,10 +736,10 @@ if ($total_cunits > 0) {
                 <div class='item-title h4'>
                     <a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
                     $cunits_content .= "<small><span class='help-block'>";
-                    if (!(($cu->start_week == '0000-00-00') or (is_null($cu->start_week)))) {
+                    if (!(is_null($cu->start_week))) {
                         $cunits_content .= "$langFrom2 " . nice_format($cu->start_week);
                     }
-                    if (!(($cu->finish_week == '0000-00-00') or (is_null($cu->finish_week)))) {
+                    if (!(is_null($cu->finish_week))) {
                         $cunits_content .= " $langTill " . nice_format($cu->finish_week);
                     }
                     $cunits_content .= "</span></small>";
