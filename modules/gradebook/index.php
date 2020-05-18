@@ -39,21 +39,21 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         } else {
             $data = array();
             $gradebook_id = intval(getDirectReference($_REQUEST['gradebook_id']));
-            // active users who don't participate in gradebook 
+            // active users who don't participate in gradebook
             $d1 = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                             FROM user, course_user
                                                 WHERE user.id = course_user.user_id
                                                 AND course_user.course_id = ?d
-                                                AND course_user.status = " . USER_STUDENT . " 
-                                                AND user.expires_at >= CURRENT_DATE() 
-                                            AND user.id NOT IN 
+                                                AND course_user.status = " . USER_STUDENT . "
+                                                AND user.expires_at >= CURRENT_DATE()
+                                            AND user.id NOT IN
                                             (SELECT uid FROM gradebook_users WHERE gradebook_id = ?d) ORDER BY surname", $course_id, $gradebook_id);
             $data[0] = $d1;
             // active users who already participate in gradebook
             $d2 = Database::get()->queryArray("SELECT uid AS id, givenname, surname FROM user, gradebook_users
-                                        WHERE gradebook_users.uid = user.id 
-                                        AND gradebook_id = ?d 
-                                        AND user.expires_at >= CURRENT_DATE() 
+                                        WHERE gradebook_users.uid = user.id
+                                        AND gradebook_id = ?d
+                                        AND user.expires_at >= CURRENT_DATE()
                                         ORDER BY surname", $gradebook_id);
             $data[1] = $d2;
         }
@@ -517,7 +517,7 @@ if ($is_editor) {
             $actDesc = purify($_POST['actDesc']);
             $auto = isset($_POST['auto']) ? 1 : 0;
             $weight = $_POST['weight'];
-            $type = $_POST['activity_type'];
+            $type = isset($_POST['activity_type'])? $_POST['activity_type']: null;
             $actDate = empty($_POST['date']) ? NULL :
                 DateTime::createFromFormat('d-m-Y H:i', $_POST['date'])->format('Y-m-d H:i');
             $visible = isset($_POST['visible']) ? 1 : 0;
