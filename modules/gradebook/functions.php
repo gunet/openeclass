@@ -590,7 +590,7 @@ function display_all_users_grades($gradebook_id) {
                                                     WHERE gradebook_id = ?d
                                                     AND gradebook_users.uid = user.id
                                                     AND `user`.id = `course_user`.`user_id`
-                                                    AND `course_user`.`course_id` = ?d 
+                                                    AND `course_user`.`course_id` = ?d
                                                     ORDER by surname,givenname", $gradebook_id, $course_id);
     if (count($resultUsers)> 0) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
@@ -1562,13 +1562,28 @@ function add_gradebook_other_activity($gradebook_id) {
                                 $titleToModify = $modifyActivity->title;
                                 $contentToModify = $modifyActivity->description;
                                 if (is_null($modifyActivity->date)) {
-                                    $oldDate = new DateTime();
+                                    $oldDate = '';
                                 } else {
-                                    $oldDate = DateTime::createFromFormat('Y-m-d H:i:s', $modifyActivity->date);
+                                    $oldDate = DateTime::createFromFormat('Y-m-d H:i:s', $modifyActivity->date)->format('d-m-Y H:i:s');
                                 }
-                                $date = Session::has('date') ? Session::get('date') :
-                                    $oldDate->format('d-m-Y H:i:s');
+                                $date = Session::has('date') ? Session::get('date') : $oldDate;
                                 $module_auto_id = $modifyActivity->module_auto_id;
+                                if ($modifyActivity->module_auto_type) {
+                                    switch ($modifyActivity->module_auto_type) {
+                                        case GRADEBOOK_ACTIVITY_ASSIGNMENT:
+                                            $module_auto_label = $GLOBALS['langAssignment'];
+                                            break;
+                                        case GRADEBOOK_ACTIVITY_EXERCISE:
+                                            $module_auto_label = $GLOBALS['langExercise'];
+                                            break;
+                                        case GRADEBOOK_ACTIVITY_LP:
+                                            $module_auto_label = $GLOBALS['langLearnPath'];
+                                            break;
+                                        case GRADEBOOK_ACTIVITY_TC:
+                                            $module_auto_label = $GLOBALS['langBBB'];
+                                            break;
+                                    }
+                                }
                                 $auto = $modifyActivity->auto;
                                 $weight = Session::has('weight') ? Session::get('title') : $modifyActivity->weight;
                                 $activity_type = $modifyActivity->activity_type;
@@ -1588,7 +1603,8 @@ function add_gradebook_other_activity($gradebook_id) {
                         @$tool_content .= "
                         <div class='form-group'>
                             <label for='activity_type' class='col-sm-2 control-label'>$langType:</label>
-                            <div class='col-sm-10'>
+                            <div class='col-sm-10'>" . (isset($module_auto_label)? "
+                                <p class='form-control-static'>$module_auto_label</p>": "
                                 <select name='activity_type' class='form-control'>
                                     <option value=''  " . typeSelected($activity_type, '') . " >-</option>
                                     <option value='4' " . typeSelected($activity_type, 4) . " >" . $langGradebookExams . "</option>
@@ -1596,7 +1612,7 @@ function add_gradebook_other_activity($gradebook_id) {
                                     <option value='1' " . typeSelected($activity_type, 1) . " >" . $langGradebookOral . "</option>
                                     <option value='3' " . typeSelected($activity_type, 3) . " >" . $langGradebookProgress . "</option>
                                     <option value='5' " . typeSelected($activity_type, 5) . " >" . $langGradebookOtherType . "</option>
-                                </select>
+                                </select>") . "
                             </div>
                         </div>
                         <div class='form-group'>
@@ -1755,14 +1771,15 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
 {
     $params = [$activity, $id];
     $sql = "SELECT gradebook_activities.id, gradebook_activities.gradebook_id
-                            FROM gradebook_activities, gradebook
-                            WHERE gradebook.start_date < gradebook_activities.date
-                            AND gradebook.end_date > gradebook_activities.date
-                            AND gradebook_activities.module_auto_type = ?d
-                            AND gradebook_activities.module_auto_id = ?d
-                            AND gradebook_activities.auto = 1
-                            AND gradebook_activities.gradebook_id = gradebook.id
-                            AND gradebook_activities.gradebook_id ";
+                FROM gradebook_activities, gradebook
+               WHERE (gradebook_activities.date IS NULL OR
+                      (gradebook.start_date < gradebook_activities.date AND
+                       gradebook.end_date > gradebook_activities.date))
+                 AND gradebook_activities.module_auto_type = ?d
+                 AND gradebook_activities.module_auto_id = ?d
+                 AND gradebook_activities.auto = 1
+                 AND gradebook_activities.gradebook_id = gradebook.id
+                 AND gradebook_activities.gradebook_id ";
     if ($gradebook_id) {
         $sql .= "= ?d";
         array_push($params, $gradebook_id);
