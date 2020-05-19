@@ -62,6 +62,7 @@ if (isset($_GET['mid'])) {
                                   'button-class' => 'back_index btn-default',
                                   'level' => 'primary-label'),
                             array('title' => $langDelete,
+                                  'url' => 'javascript:void(0)',
                                   'icon' => 'fa-times',
                                   'class' => 'delete_in_inner',
                                   'link-attrs' => "data-id='$msg->id'")
