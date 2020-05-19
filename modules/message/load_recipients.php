@@ -53,17 +53,17 @@ if (isset($_POST['course'])) {
 
             foreach ($result_g as $res_g)
             {
-            $jsonarr['_'.$res_g->id] = q($res_g->name);
+                $jsonarr['_'.$res_g->id] = q($res_g->name);
             }
         } else {
             //if user is student an student-student messages not allowed for course messages show teachers
             $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
                         FROM user u, course_user cu
         			    WHERE cu.course_id = ?d
-                        AND cu.user_id = u.id
-                        AND (cu.status = ?d OR cu.editor = ?d)
-                        AND u.id != ?d
-                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                            AND cu.user_id = u.id
+                            AND (cu.status = ?d OR cu.editor = ?d)
+                            AND u.id != ?d
+                        ORDER BY name";
 
             $res = Database::get()->queryArray($sql, $cid, USER_TEACHER, 1, $uid);
 
@@ -121,33 +121,33 @@ if (isset($_POST['course'])) {
         if (isset($_GET['q']) and $_GET['q'] !== '') {
             $res = Database::get()->queryArray("SELECT id user_id, CONCAT(surname,' ', givenname) AS name, username
                 FROM user
-                WHERE id != ?d AND (surname LIKE ?s OR username LIKE ?s)
-                ORDER BY UPPER(surname), UPPER(givenname)",
+                  WHERE id != ?d AND (surname LIKE ?s OR username LIKE ?s)
+                ORDER BY name",
                 $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
         } else {
             $res = Database::get()->queryArray("SELECT id user_id, CONCAT(surname,' ', givenname) AS name, username
                 FROM user
                 WHERE id != ?d
-                ORDER BY UPPER(surname), UPPER(givenname)",
+                ORDER BY name",
                 $uid);
         }
     } else {
         if (isset($_GET['q']) and $_GET['q'] !== '') {
             $res = Database::get()->queryArray("SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
                 FROM user u, course_user cu
-                WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
-                AND cu.user_id = u.id
-                AND cu.status != ?d
-                AND u.id != ?d
-                AND (u.surname LIKE ?s OR u.username LIKE ?s)
+                  WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
+                    AND cu.user_id = u.id
+                    AND cu.status != ?d
+                    AND u.id != ?d
+                    AND (u.surname LIKE ?s OR u.username LIKE ?s)
                 ORDER BY name", $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");            
         } else {
             $res = Database::get()->queryArray("SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
                 FROM user u, course_user cu
                 WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d) 
-                AND cu.user_id = u.id 
-                AND cu.status != ?d 
-                AND u.id != ?d 
+                    AND cu.user_id = u.id 
+                    AND cu.status != ?d 
+                    AND u.id != ?d 
                 ORDER BY name", $uid, USER_GUEST, $uid );
         }
     }
