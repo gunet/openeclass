@@ -132,6 +132,7 @@
             <div class='panel panel-default'>
                 <div class='panel-body'>
                     <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/' method='get'>
+                        <input type='hidden' name='course' value='{{ $course_code }}'>
                         <div class='form-group'>
                             <label class='col-sm-8 control-label'>{{ trans('langCourseUnits') }}</label>
                             <div class='col-sm-4'>
