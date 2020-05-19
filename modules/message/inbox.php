@@ -363,14 +363,6 @@ if (isset($_GET['mid'])) {
                             $('#select-recipients').select2({
                                 placeholder: '".js_escape($langSearch)."',
                                 multiple: true,
-                                ajax: {
-                                    url: 'load_recipients.php?autocomplete=1',
-                                    dataType: 'json',
-                                    quietMillis: 250,
-                                    processResults: function (data) {
-                                        return { results: data.items };
-                                    },
-                                },
                                 cache: true
                             });
                             return false;
@@ -384,15 +376,7 @@ if (isset($_GET['mid'])) {
                             }, 500);
                             $('#select-recipients-forward').select2({
                                 placeholder: '".js_escape($langSearch)."',
-                                multiple: true,
-                                ajax: {
-                                    url: 'load_recipients.php?autocomplete=1',
-                                    dataType: 'json',
-                                    quietMillis: 250,
-                                    processResults: function (data) {
-                                        return { results: data.items };
-                                    },
-                                },
+                                multiple: true,                                
                                 cache: true
                             });
                             return false;
@@ -618,6 +602,10 @@ if (isset($_GET['mid'])) {
 
 echo $out;
 
+
+/**
+ * @brief add recipients (in 'reply' and 'forward' message)
+ */
 function addRecipientOptions() {
     global $course_id, $is_editor, $student_to_student_allow, $out, $uid;
 
