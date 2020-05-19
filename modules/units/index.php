@@ -291,6 +291,7 @@ $tool_content .= "
         <div class='col-md-12'>
             <div class='form-wrapper'>
                 <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
+                    <input type='hidden' name='course' value='$course_code'>
                     <div class='form-group'>
                         <label class='col-sm-8 control-label'>$langCourseUnits</label>
                         <div class='col-sm-4'>
