@@ -1089,12 +1089,12 @@ class CourseXMLElement extends SimpleXMLElement {
      * return string
      */
     private static function serialize($ele) {
-        if (count($ele) == 1) {
+        if (!is_array($ele)) {
+            return null;
+        } else if (count($ele) == 1) {
             return (string) $ele;
         } else if (count($ele) > 1) {
             return base64_encode(serialize(self::prepareArrayForSerialization($ele)));
-        } else {
-            return null;
         }
     }
 
