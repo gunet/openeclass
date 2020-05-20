@@ -229,7 +229,7 @@ elseif(isset($_POST['update_bbb_session'])) {
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    if (isset($_POST['external_users'])) {
+    if (isset($_POST['external_users']) && is_array($_POST['external_users'])) {
         $ext_users = implode(',', $_POST['external_users']);
     } else {
         $ext_users = null;
@@ -324,7 +324,12 @@ elseif(isset($_GET['choice']))
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], implode(',', $_POST['external_users']), $record, $_POST['sessionUsers'], false);
+    if (isset($_POST['external_users']) && is_array($_POST['external_users'])) {
+        $external_users = implode(',', $_POST['external_users']);
+    } else {
+        $external_users = NULL;
+    }
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $_POST['sessionUsers'], false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
