@@ -304,7 +304,7 @@ elseif(isset($_GET['choice']))
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');
-    if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate'])) {
+    if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate']) and !empty($_POST['BBBEndDate'])) {
         $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
         $end = $endDate_obj->format('Y-m-d H:i:s');
     } else {
