@@ -22,7 +22,7 @@ require_once 'minit.php';
 
 if ($uid) {
     $username = Database::get()->querySingle('SELECT username FROM user WHERE id = ?d', $uid)->username;
-    header('Location: eclass-token:' . $username . '|' . session_id());
+    header('Location: eclass-token:' . $username . '%7C' . session_id());
 } else {
     echo RESPONSE_FAILED;
 }
