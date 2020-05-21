@@ -747,7 +747,7 @@ if (!$questionList) {
         $buttonName = '';
     }
     $tool_content .= "<div class='pull-right' style='margin-top: 15px;'>
-        <input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;";
+        <input class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>&nbsp;";
         if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // display `previous` button
             $prevLabel = '&lt; ' . $langPrevious;
             $tool_content .= "<input class='btn btn-primary blockUI' type='submit' name='prev' value='$prevLabel' >&nbsp;";
@@ -793,13 +793,35 @@ if ($questionList) {
                 attemptsAllowed: $exerciseAllowedAttempts,
                 eurid: $eurid,
                 disableCheck: $disableCheck
-            });
+            });            
             $('.qNavButton').click(function (e) {
                 e.preventDefault();
                 var panel = $($(this).attr('href'));
                 $('.qPanel').removeClass('panel-info').addClass('panel-default');
                 panel.removeClass('panel-default').addClass('panel-info');
                 $('html').animate({ scrollTop: ($(panel).offset().top - 20) + 'px' });
+            });
+            $('#cancelButton').click(function (e) {
+                var link = $(this).attr('href');
+                e.preventDefault();
+                bootbox.confirm({
+                    message: '" . js_escape($langCancelExConfirmation) . "', 
+                    buttons: {
+                        confirm: {
+                            label: '" . js_escape($langYes) . "',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: '" . js_escape($langNo) . "',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function(result) {
+                        if (result) {
+                            window.location = link;
+                        }
+                    }
+                });                
             });
         });
 </script>";

@@ -1961,6 +1961,7 @@ $langIPHasNoAccess = "Η IP διεύθυνση σας δεν έχει πρόσβ
 $langIPInvalid = "περιέχει μη έγκυρη IP ή IP CIDR";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
 $langRemainingTime = "Υπολειπόμενος χρόνος";
+$langCancelExConfirmation = "Προσοχή! Η άσκηση θα ακυρωθεί! Επιβεβαιώστε την ενέργειά σας";
 
 // exercise result.php
 $langStart = "Έναρξη";

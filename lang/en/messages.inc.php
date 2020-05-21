@@ -3194,6 +3194,7 @@ $langRecipients = "Recipients";
 $langParticipants = "Participants";
 $langLoading = "Loading";
 $langRemainingTime = "Remaining time";
+$langCancelExConfirmation = "Warning! Exercise will be canceled! Confirm your action";
 $langAnswerUngraded = "The answer haven't been graded yet.";
 $langAttemptCompleted = "Completed";
 $langAttemptPending = "Pending Grading";
