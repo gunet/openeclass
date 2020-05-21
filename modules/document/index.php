@@ -1247,7 +1247,7 @@ if (isset($dialogData)) {
 
 if ($curDirName) {
     $data['dirComment'] = Database::get()->querySingle("SELECT comment FROM document WHERE $group_sql AND path = ?s", $curDirPath)->comment;
-    $data['parentLink'] = $base_url . 'openDir=' . $cmdParentDir;
+    $data['parentLink'] = $base_url . 'openDir=' . rawurlencode($parentDir);
 }
 
 if (($can_upload or $user_upload) and !$is_in_tinymce) {
