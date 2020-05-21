@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2020  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -214,7 +214,7 @@ function move_dir($src, $dest) {
 }
 
 /*
- * Move a directory and its content to an other area
+ * Copy a directory and its content to an other area
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - $origDirPath (String) - the path of the directory to move
@@ -320,11 +320,12 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
     );
 
     foreach ($files as $name => $file) {
+        // Get real and filename to be added for current file
+        $filePath = fix_directory_separator($file->getRealPath());
+        $relativePath = substr($filePath, strlen($basedir));
+
         // Skip directories (they will be added automatically)
         if (!$file->isDir()) {
-            // Get real and filename to be added for current file
-            $filePath = $file->getRealPath();
-            $relativePath = substr($filePath, strlen($basedir));
             if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
                 continue; // skip invisible files for student
             } else {
@@ -332,8 +333,6 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
                 $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));
             }
         } else { // empty directory
-            $filePath = $file->getRealPath();
-            $relativePath = substr($filePath, strlen($basedir));
             if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
                 continue; // skip invisible files for student
             } else {
@@ -347,7 +346,6 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
         foreach ($GLOBALS['common_docs'] as $path => $real_path) {
             $common_filename = $GLOBALS['map_filenames'][$path];
             $zipFile->addFile($real_path, substr($common_filename, 1));
-
         }
     }
     if (!$zipFile->close()) {
