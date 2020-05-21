@@ -781,6 +781,8 @@ if ($questionList) {
                 question: '". js_escape($langUnansweredQuestionsQuestion) ."',
                 submit: '". js_escape($langSubmit) ."',
                 goBack: '". js_escape($langGoBackToEx) ."',
+                cancelMessage: '". js_escape($langCancelExConfirmation) ."',
+                cancelAttempt: '". js_escape($langCancelAttempt) ."',
                 refreshTime: $refresh_time,
                 exerciseId: $exerciseId,
                 answeredIds: ". json_encode($answeredIds) .",
@@ -788,35 +790,13 @@ if ($questionList) {
                 attemptsAllowed: $exerciseAllowedAttempts,
                 eurid: $eurid,
                 disableCheck: $disableCheck
-            });            
+            });
             $('.qNavButton').click(function (e) {
                 e.preventDefault();
                 var panel = $($(this).attr('href'));
                 $('.qPanel').removeClass('panel-info').addClass('panel-default');
                 panel.removeClass('panel-default').addClass('panel-info');
                 $('html').animate({ scrollTop: ($(panel).offset().top - 20) + 'px' });
-            });
-            $('#cancelButton').click(function (e) {
-                var link = $(this).attr('href');
-                e.preventDefault();
-                bootbox.confirm({
-                    message: '" . js_escape($langCancelExConfirmation) . "', 
-                    buttons: {
-                        confirm: {
-                            label: '" . js_escape($langYes) . "',
-                            className: 'btn-success'
-                        },
-                        cancel: {
-                            label: '" . js_escape($langNo) . "',
-                            className: 'btn-danger'
-                        }
-                    },
-                    callback: function(result) {
-                        if (result) {
-                            window.location = link;
-                        }
-                    }
-                });                
             });
         });
 </script>";

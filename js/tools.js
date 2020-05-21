@@ -495,7 +495,29 @@ function exercise_init_countdown(params) {
         });
     }
     var checkUnanswered = $('.qPanel').length >= 1 && !params.disableCheck;
-    $('.btn[name=buttonCancel], .btn[name=buttonSave]').click(continueSubmit);
+    $('.btn[name=buttonSave]').click(continueSubmit);
+    $('#cancelButton').click(function (e) {
+      e.preventDefault();
+      bootbox.confirm({
+        message: params.cancelMessage,
+        buttons: {
+          confirm: {
+            label: params.cancelAttempt,
+            className: 'btn-danger'
+          },
+          cancel: {
+            label: params.goBack,
+            className: 'btn-default'
+          }
+        },
+        callback: function(result) {
+          if (result) {
+            $('<input type="hidden" name="buttonCancel" value="true">').appendTo('.exercise');
+            continueSubmit();
+          }
+        }
+      });
+    });
     if (checkUnanswered) {
         exerciseCheckUnanswered();
     } else {
