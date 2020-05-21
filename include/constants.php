@@ -79,12 +79,14 @@ define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
 define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_ABUSE_REPORT', 42);
+define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_COURSEPREREQUISITE', 49);
 define('MODULE_ID_LTI_CONSUMER', 50);  /* deprecated. used only for compatibility in statistics*/
 define('MODULE_ID_ANALYTICS', 51);
+define('MODULE_ID_REQUEST', 100);
 
 // user modules
 
@@ -135,6 +137,14 @@ define('ATTEMPT_COMPLETED', 1);
 define('ATTEMPT_PENDING', 2);
 define('ATTEMPT_PAUSED', 3);
 define('ATTEMPT_CANCELED', 4);
+
+// Widget Areas
+define('HOME_PAGE_MAIN', 1);
+define('HOME_PAGE_SIDEBAR', 2);
+define('PORTFOLIO_PAGE_MAIN', 3);
+define('PORTFOLIO_PAGE_SIDEBAR', 4);
+define('COURSE_HOME_PAGE_MAIN', 5);
+define('COURSE_HOME_PAGE_SIDEBAR', 6);
 
 // for fill in blanks exercise questions
 define('TEXTFIELD_FILL', 1);

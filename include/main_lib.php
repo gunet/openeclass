@@ -2,9 +2,9 @@
 
 /*
  * ========================================================================
- * Open eClass 3.8 - E-learning and Course Management System
+ * Open eClass 4.0 - E-learning and Course Management System
  * ========================================================================
-  Copyright(c) 2003-2019  Greek Universities Network - GUnet
+  Copyright(c) 2003-2020  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
 
   Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -16,12 +16,12 @@
 
 /**
  * @file main.lib.php
- * @brief General useful functions for eClass
- * @authors many...
+ * @brief General useful functions for eClass.
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.8.1');
+
+define('ECLASS_VERSION', '4.0-dev');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -62,6 +62,17 @@ function css_link($file) {
     global $urlAppend;
     $v = '?v=' . ECLASS_VERSION;
     return "<link href='{$urlAppend}js/$file$v' rel='stylesheet' type='text/css'>\n";
+}
+function widget_js_link($file, $folder) {
+    global $urlAppend, $head_content;
+    $v = '?v=' . ECLASS_VERSION;
+    $head_content .= "<script type='text/javascript' src='$urlAppend{$folder}/js/$file$v'></script>\n";
+}
+
+function widget_css_link($file, $folder) {
+    global $urlAppend, $head_content;
+    $v = '?v=' . ECLASS_VERSION;
+    $head_content .= "<link href='$urlAppend{$folder}/css/$file$v' rel='stylesheet' type='text/css'>\n";
 }
 
 /**
@@ -119,6 +130,9 @@ function load_js($file, $init='') {
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
             $file = 'datatables/media/js/dataTables.bootstrap.js';
+        } elseif ($file == 'datatables_tabletools') {
+            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
+            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
         } elseif ($file == 'jszip') {
             $file = 'jszip/dist/jszip.min.js';
         } elseif ($file == 'pdfmake') {
@@ -193,7 +207,10 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-colorpicker') {
             $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
             $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-        }   elseif ($file == 'spectrum') {
+        } elseif ($file == 'bootstrap-combobox') {
+            $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
+            $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+        } elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
         } elseif ($file == 'sortable') {
@@ -787,7 +804,8 @@ function new_code($fac) {
 
     // Make sure the code returned isn't empty!
     } else {
-        die("Course Code is empty!");
+        Session::Messages(trans('langGeneralError'), 'alert-danger');
+        redirect_to_home_page('main/portfolio.php');
     }
     return $code;
 }
@@ -2195,7 +2213,7 @@ function handle_unit_info_edit() {
             $moduleTag = new ModuleElement($unit_id);
             $moduleTag->syncTags($tagsArray);
         }
-        $successmsg = $langCourseUnitModified;
+        $successmsg = trans('langCourseUnitModified');
     } else { // add new course unit
         $order = units_get_maxorder()+1;
         $q = Database::get()->query("INSERT INTO course_units SET
@@ -2207,7 +2225,7 @@ function handle_unit_info_edit() {
                                  `order` = ?d, course_id = ?d", $title, $descr,
                                         $unitdurationfrom, $unitdurationto,
                                         $order, $course_id);
-        $successmsg = $langCourseUnitAdded;
+        $successmsg = trans('langCourseUnitAdded');
         $unit_id = $q->lastInsertID;
         // tags
         if (isset($_POST['tags'])) {
@@ -3123,6 +3141,43 @@ function csrf_token_error() {
 
 
 
+/**
+ * Indirect Reference to HelpFul Functions
+ * @param  ArrayObject
+ * @return ArrayObject
+ */
+
+function arrayValuesToIndirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[$key] = getIndirectReference($value);
+    }
+    return $outputarray;
+}
+
+function arrayKeysToIndirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[getIndirectReference($key)] = $value;
+    }
+    return $outputarray;
+}
+
+function arrayValuesDirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[$key] = getDirectReference($value);
+    }
+    return $outputarray;
+}
+
+function arrayKeysToDirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[getDirectReference($key)] = $value;
+    }
+    return $outputarray;
+}
 
 
 
@@ -3419,7 +3474,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         return "<div class='row action_bar'>
                     <div class='col-sm-12 clearfix'>
                         $page_title
-                        <div class='margin-top-thin margin-bottom-fat pull-right'>
+                        <div class='margin-top-thin margin-bottom-fat pull-right hidden-print'>
                             <div class='btn-group'>
                             $out
                             $action_button
@@ -3441,90 +3496,73 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  *
  */
 function action_button($options, $secondary_menu_options = array()) {
-    global $langConfirmDelete, $langCancel, $langDelete;
-    $out_primary = $out_secondary = array();
-    $primary_form_begin = $primary_form_end = $primary_icon_class = '';
-    foreach (array_reverse($options) as $option) {
-        $level = isset($option['level'])? $option['level']: 'secondary';
+    $primary_form_begin = $primary_form_end = $secondary = $primary = '';
+    foreach ($options as $option) {
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-        if (isset($option['class'])) {
-            $class = ' ' . $option['class'];
-        } else {
-            $class = '';
-        }
-        if (isset($option['btn_class'])) {
-            $btn_class = ' ' . $option['btn_class'];
-        } else {
-            $btn_class = ' btn-default';
-        }
-        if (isset($option['link-attrs'])) {
-            $link_attrs = ' ' . $option['link-attrs'];
-        } else {
-            $link_attrs = '';
-        }
-        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $icon_class = "class='list-group-item $class$disabled";
-        if (isset($option['icon-class'])) {
-            $icon_class .= " " . $option['icon-class'];
-        }
-        if (isset($option['confirm'])) {
-            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
-            $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $form_begin = "<form method=post action='$option[url]'>";
-            $form_end = '</form>';
-            if ($level == 'primary-label' or $level == 'primary') {
-                $primary_form_begin = $form_begin;
-                $primary_form_end = $form_end;
-                $form_begin = $form_end = '';
-                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
-            } else {
-                $icon_class .= " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
-                $primary_icon_class = '';
-            }
-            $url = '#';
-        } else {
-            $icon_class .= "'";
-            $confirm_extra = $form_begin = $form_end = '';
-            $url = isset($option['url'])? $option['url']: '#';
-        }
-        if (isset($option['icon-extra'])) {
-            $icon_class .= ' ' . $option['icon-extra'];
-        }
 
-        if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "<span class='hidden'>.</span></a>");
-        } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'>.</span></a>");
+        $icon = isset($option['icon'])? $option['icon']: 'question-circle-o';
+        $level = isset($option['level'])? $option['level']: null;
+        $class = isset($option['class'])? " $option[class]": '';
+        $btn_class = isset($option['btn-class'])? $option['btn-class']: 'btn-default';
+        $link_attrs = isset($option['link-attrs'])? $option['link-attrs']: '';
+        $icon_class = isset($option['icon-class'])? $option['icon-class']: '';
+        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
+        $url = isset($option['url'])? $option['url']: null;
+        $form_begin = $form_end = '';
+        if (isset($option['confirm'])) {
+            $btn_class .= ' confirmAction';
+            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : trans('langConfirmDelete'));
+            $accept = q(isset($option['confirm_button']) ? $option['confirm_button'] : trans('langDelete'));
+            $form_begin = "<form method=post action='$url'>";
+            $form_end = '</form>';
+            $url = null;
+            $link_attrs .= " data-title='$title' data-message='" . q($option['confirm']) .
+                "' data-cancel-txt='" . trans('langCancel') .
+                "' data-action-txt='$accept' data-action-class='btn-danger'";
+        }
+        if ($level == 'primary-label' or $level == 'primary') {
+            if ($level == 'primary') {
+                $link_attrs .= " data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "'";
+                $btn_label = '';
+            } else {
+                $icon .= ' space-after-icon';
+                $btn_label = q($option['title']) . "<span class='hidden'>.</span>";
+            }
+            $element = ($url? "<a href='$url' class='btn $btn_class$disabled' $link_attrs>":
+                "<button class='btn $btn_class$disabled' $link_attrs>") .
+                "<span class='fa $icon$icon_class'></span>$btn_label" .
+                ($url? '</a>': '</button>');
+            $primary_form_begin = $form_begin;
+            $primary_form_end = $form_end;
+            $primary .= $element;
         } else {
-            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
+            $url = $url? $url: '#';
+            $class .= isset($option['confirm'])? ' confirmAction': '';
+            $secondary .= $form_begin .
+                "<a href='$url' class='list-group-item$class'$link_attrs>" .
+                "<span class='fa $icon $icon_class'></span> " . q($option['title']) .
+                '</a>' . $form_end;
         }
     }
-    $primary_buttons = "";
-    if (count($out_primary)) {
-        $primary_buttons = implode('', $out_primary);
-    }
-    $action_button = "";
-    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
-    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
-    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
-    if (count($out_secondary)) {
-        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
-        $action_button = "
+
+    if ($secondary) {
+        $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
+        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : 'fa-gear';
+        $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : 'btn-default';
+        $action_list = q("<div class='list-group' id='action_button_menu'>" . $secondary . "</div>");
+        $secondary = "
                 <a tabindex='1' class='menu-popover btn $secondary_btn_class' data-container='body' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
-                $primary_buttons
-                $action_button
-          </div>" . $primary_form_end;
+         "<div class='btn-group btn-group-sm' role='group'>" .
+         $primary . $secondary .
+         '</div>' . $primary_form_end;
 }
 
 /**
@@ -4104,5 +4142,26 @@ function checkSecondFactorChallenge(){
         return secondfaApp::checkChallenge($_SESSION['uid']);
     } else {
         return "";
+    }
+}
+
+function trans($var_name, $var_array = []) {
+    if (preg_match("/\['.+'\]/", $var_name)) {
+        preg_match_all("([^\['\]]+)", $var_name, $matches);
+        global ${$matches[0][0]};
+
+        if ($var_array) {
+            return vsprintf(${$matches[0][0]}[$matches[0][1]], $var_array);
+        } else {
+            return ${$matches[0][0]}[$matches[0][1]];
+        }
+    } else {
+        global ${$var_name};
+
+        if ($var_array) {
+            return vsprintf(${$var_name}, $var_array);
+        } else {
+            return ${$var_name};
+        }
     }
 }
