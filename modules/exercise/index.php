@@ -377,11 +377,10 @@ if (!$nbrExercises) {
                                 . "WHERE eid = ?d AND uid = ?d "
                                 . "AND attempt_status = ?d", $row->id, $uid, ATTEMPT_PAUSED);
                 if ($paused_exercises) {
-                    $password_protected = isset($row->password_lock) && !$is_editor ? " password_lock": "";
-                    $tool_content .= "<td><a class='paused_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
+                    $tool_content .= "<td><a class='ex_settings paused_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
                             . "&nbsp;&nbsp;(<font color='#a9a9a9'>$langAttemptPausedS</font>)";
                 } else {
-                    $tool_content .= "<td><a class='$link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
+                    $tool_content .= "<td><a class='ex_settings $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
                 }
 
              } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
@@ -465,24 +464,24 @@ $head_content .= "<script type='text/javascript'>
         });
     }
     $(document).ready(function(){
-        $('.paused_exercise').click(function(e){
-            e.preventDefault();
+        $('.ex_settings').click(function(e) {            
             var exercise = $(this);
             var link = $(this).attr('href');
-            bootbox.confirm('" . js_escape($langTemporarySaveNotice2) . "', function(result) {
-                if(result) {
-                    if(exercise.hasClass('password_lock')) {
-                        password_bootbox(link);
-                    } else {
-                        window.location = link;
+            if (exercise.hasClass('paused_exercise')) {
+               e.preventDefault();
+               bootbox.confirm('" . js_escape($langTemporarySaveNotice2) . "', function(result) {
+                    if (result) {
+                        if (exercise.hasClass('password_protected')) {
+                            password_bootbox(link);
+                        } else {
+                            window.location = link;
+                        }   
                     }
-                }
-            });
-        });
-        $('.password_protected').click(function(e){
-            e.preventDefault();
-            var link = $(this).attr('href');
-            password_bootbox(link);
+                }); 
+            } else if (exercise.hasClass('password_protected')) {
+                e.preventDefault();
+                password_bootbox(link);
+            }
         });
     });";
 
