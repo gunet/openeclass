@@ -28,7 +28,7 @@
 // set default time zone
 date_default_timezone_set("Europe/Athens");
 mb_internal_encoding('UTF-8');
-$webDir = dirname(dirname(__FILE__));
+$webDir = fix_directory_separator(dirname(dirname(__FILE__)));
 chdir($webDir);
 require 'vendor/autoload.php';
 require_once 'include/main_lib.php';
@@ -587,3 +587,10 @@ set_glossary_cache();
 
 $tool_content = $head_content = '';
 
+function fix_directory_separator($path) {
+	if (DIRECTORY_SEPARATOR !== '/') {
+	    return(str_replace(DIRECTORY_SEPARATOR, '/', $path));
+    } else {
+		return $path;
+	}
+}
