@@ -422,11 +422,6 @@ if (isset($_POST['formSent'])) {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }
 
-        // In sequential exercise we must add to the DB the non-given answers
-        // to questions the student didn't answered
-        if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-            $objExercise->save_unanswered();
-        }
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
         // record results of exercise
@@ -768,6 +763,13 @@ if (!$questionList) {
         $tool_content .= "&nbsp;<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
     }
     $tool_content .= "</div>";
+
+    // In sequential exercise we save all questions in the DB
+    // to avoid mixing up their order if user navigates non-sequentially
+    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+        $_POST['attempt_value'] = $attempt_value;
+        $objExercise->save_unanswered();
+    }
 }
 $tool_content .= "</form>";
 
@@ -803,5 +805,6 @@ if ($questionList) {
             });
         });
 </script>";
+
 }
 draw($tool_content, 2, null, $head_content);
