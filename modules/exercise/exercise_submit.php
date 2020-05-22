@@ -153,6 +153,9 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
     if ($paused_attempt) {
         $objDateTime = new DateTime($paused_attempt->record_start_date);
         $attempt_value = $objDateTime->getTimestamp();
+        Database::get()->query('UPDATE exercise_user_record
+            SET attempt_status = ?d WHERE eurid = ?d',
+            ATTEMPT_ACTIVE, $eurid);
     } else {
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
@@ -514,9 +517,9 @@ if (!empty($exerciseDescription_temp)) {
 $tool_content .= "</div>";
 
 if (isset($_REQUEST['unit'])) {
-    $form_action_link = "{$urlServer}modules/units/view.php?res_type=exercise&amp;unit=$_REQUEST[unit]&amp;course=$course_code&amp;exerciseId=$exerciseId".(isset($paused_attempt) ? "&amp;eurId=$eurid" : "")."";
+    $form_action_link = "{$urlServer}modules/units/view.php?res_type=exercise&amp;unit=$_REQUEST[unit]&amp;course=$course_code&amp;exerciseId=$exerciseId";
 } else {
-    $form_action_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId".(isset($paused_attempt) ? "&amp;eurId=$eurid" : "")."";
+    $form_action_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId";
 }
 
 $tool_content .= "
