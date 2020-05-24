@@ -19,6 +19,9 @@
  * ========================================================================
  */
 
+global $require_current_course,$require_login,$head_content,$pageName,$tool_content;
+global $langBBBRecordUserParticipation,$langWangBBBAttendance;
+
 $require_current_course = TRUE;
 $require_login = TRUE;
 
