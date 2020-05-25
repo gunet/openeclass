@@ -22,44 +22,81 @@
 $require_login = TRUE;
 $guest_allowed = FALSE;
 
-include '../../include/baseTheme.php';
-include 'include/lib/fileDisplayLib.inc.php';
+if (isset($_GET['course'])) {
+    $require_current_course = true;
+    $require_user_registration = true;
+}
 
-require_once("class.msg.php");
-require_once("class.mailbox.php");
+if (isset($_GET['course_id'])) {
+    $course_id = intval($_GET['course_id']);
+}
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'class.msg.php';
+require_once 'class.mailbox.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
-    if (isset($_GET['course_id'])) {
-        $course_id = intval($_GET['course_id']);
-    }
-    
+    $message_path = '';
     if (isset($_GET['mbox_type'])) {
         $mbox_type = $_GET['mbox_type'];
-    }    
-    
+    }
+
     if (isset($_POST['mid'])) {
         $mid = intval($_POST['mid']);
+        if (!isset($course_id)) { // messages from user portfolio
+            $msg = new Msg($mid, $uid, 'any');
+            $course_id = $msg->course_id;
+        }
+        $inbox = new Mailbox($uid, $course_id);
+        $message_path = $inbox->get_mailbox_path();
         $msg = new Msg($mid, $uid, 'any');
         if (!$msg->error) {
-            $msg->delete();
+            $msg->delete($message_path);
         }
         exit();
     } elseif (isset($_POST['all_inbox'])) {
-        $inbox = new Mailbox($uid, $course_id);
-        $msgs = $inbox->getInboxMsgs();
-        foreach ($msgs as $msg) {
-            if (!$msg->error) {
-                $msg->delete();
+        if (!isset($course_id)) {  // messages from user portfolio
+            $course_id = 0;
+            $inbox = new Mailbox($uid, $course_id);
+            $msgs = $inbox->getInboxMsgs();
+            foreach ($msgs as $msg) {
+                $message_path = $webDir . "/courses/" . course_id_to_code($msg->course_id) . "/dropbox";
+                if (!$msg->error) {
+                    $msg->delete($message_path);
+                }
+            }
+        } else {
+            $inbox = new Mailbox($uid, $course_id);
+            $message_path = $inbox->get_mailbox_path();
+            $msgs = $inbox->getInboxMsgs();
+            foreach ($msgs as $msg) {
+                if (!$msg->error) {
+                    $msg->delete($message_path);
+                }
             }
         }
         exit();
     } elseif (isset($_POST['all_outbox'])) {
-        $outbox = new Mailbox($uid, $course_id);
-        $msgs = $outbox->getOutboxMsgs();
-        foreach ($msgs as $msg) {
-            if (!$msg->error) {
-                $msg->delete();
+        if (!isset($course_id)) {  // messages from user portfolio
+            $course_id = 0;
+            $outbox = new Mailbox($uid, $course_id);
+            $message_path = $outbox->get_mailbox_path();
+            $msgs = $outbox->getInboxMsgs();
+            foreach ($msgs as $msg) {
+                $message_path = $webDir . "/courses/" . course_id_to_code($msg->course_id) . "/dropbox";
+                if (!$msg->error) {
+                    $msg->delete($message_path);
+                }
+            }
+        } else {
+            $outbox = new Mailbox($uid, $course_id);
+            $message_path = $outbox->get_mailbox_path();
+            $msgs = $outbox->getOutboxMsgs();
+            foreach ($msgs as $msg) {
+                if (!$msg->error) {
+                    $msg->delete($message_path);
+                }
             }
         }
         exit();
