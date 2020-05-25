@@ -275,9 +275,10 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
+            $sort_date = date("Y-m-d H:i", strtotime($row->start_date));
             $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
-            $tool_content .= "<td><small>
-                            <div style='color:green;'>$langStart: " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</div>";
+            $tool_content .= "<td data-sort='$sort_date'><small>
+                            <div style='color:green;'>$langStart: " . nice_format($sort_date, true) . "</div>";
             if (isset($row->end_date)) {
                 $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
             }
