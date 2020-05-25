@@ -38,6 +38,20 @@ Class Mailbox {
     }
 
     /**
+     * @brief get mailbox path
+     * @return string
+     */
+    public function get_mailbox_path() {
+
+        global $webDir;
+
+        $course_code = course_id_to_code($this->courseId);
+        $message_dir = $webDir . "/courses/" . $course_code . "/dropbox";
+
+        return $message_dir;
+    }
+
+    /**
      * Get the number of unread messages of a user
      * @return int
      */

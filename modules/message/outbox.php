@@ -27,12 +27,17 @@ if(isset($_GET['course'])) {//course messages
 }
 $guest_allowed = FALSE;
 
-include '../../include/baseTheme.php';
-include 'include/lib/fileDisplayLib.inc.php';
-require_once("class.msg.php");
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'class.msg.php';
 
 if (!isset($course_id)) {
+    $ajax_url = "ajax_handler.php";
+    $ajax_url_outbox = "$ajax_url?mbox_type=outbox";
     $course_id = 0;
+}  else {
+    $ajax_url = "ajax_handler.php?course=$course_code";
+    $ajax_url_outbox = "$ajax_url&mbox_type=outbox";
 }
 
 if (isset($_GET['mid'])) {
@@ -159,7 +164,7 @@ if (isset($_GET['mid'])) {
             if(result) {
                 $.ajax({
                  type: "POST",
-                 url: "ajax_handler.php",
+                 url: "'.$ajax_url.'",
                  datatype: "json",
                  data: string,
                  success: function(){
@@ -179,7 +184,7 @@ if (isset($_GET['mid'])) {
 
                 $.ajax({
                        type: "POST",
-                       url: "ajax_handler.php",
+                       url: "'.$ajax_url.'",
                        data: string,
                        cache: false,
                        success: function(){
@@ -224,7 +229,7 @@ if (isset($_GET['mid'])) {
                     'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                     'bServerSide': true,
                     'searchDelay': 1000,
-                    'sAjaxSource': 'ajax_handler.php?mbox_type=outbox&course_id=$course_id',
+                    'sAjaxSource': '$ajax_url_outbox',
                     'aLengthMenu': [
                        [10, 15, 20 , -1],
                        [10, 15, 20, '".js_escape($langAllOfThem)."'] // change per page values here
@@ -272,7 +277,7 @@ if (isset($_GET['mid'])) {
                             if (result) {
                                 $.ajax({
                                   type: 'POST',
-                                  url: 'ajax_handler.php?course_id=$course_id',
+                                  url: '$ajax_url',
                                   data: string,
                                   cache: false,
                                   success: function(){
@@ -300,7 +305,7 @@ if (isset($_GET['mid'])) {
                             var string = 'all_outbox=1';
                             $.ajax({
                               type: 'POST',
-                              url: 'ajax_handler.php?course_id=$course_id',
+                              url: '$ajax_url',
                               data: string,
                               cache: false,
                               success: function(){

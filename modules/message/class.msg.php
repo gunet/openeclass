@@ -21,7 +21,7 @@
 
 require_once 'include/log.class.php';
 
-Class Msg {
+class Msg {
 
     var $id;
     var $course_id;
@@ -43,7 +43,8 @@ Class Msg {
      * Takes either one argument to load the msg from db or multiple
      * arguments to create a new msg
      */
-    public function __construct($arg1, $arg2, $arg3, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null) {
+    public function __construct($arg1, $arg2, $arg3, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null) {
+
         if (func_num_args() > 3) {
             $this->uid = $arg1;
             $this->createNewMsg($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8);
@@ -172,7 +173,8 @@ Class Msg {
      * Mark message for deletion
      * Delete message if all users have marked it for deletion
      */
-    public function delete() {
+    public function delete($path = null) {
+
         $sql = "UPDATE `dropbox_index`
                 SET `deleted` = ?d
                 WHERE `recipient_id` = ?d
@@ -194,8 +196,7 @@ Class Msg {
             Database::get()->query($sql, $this->id);
             if ($this->course_id != 0) {//only course messages may have attachment
                 if ($this->filename != '') {
-                    global $message_dir;
-                    unlink($message_dir . "/" . $this->filename);
+                    unlink($path . "/" . $this->filename);
                     $sql = "DELETE FROM `dropbox_attachment` WHERE `msg_id` = ?d";
                     Database::get()->query($sql, $this->id);
                 }

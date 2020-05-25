@@ -26,7 +26,7 @@ if(isset($_GET['course'])) {//course messages
     $require_current_course = FALSE;
 }
 $guest_allowed = FALSE;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/sendMail.inc.php';

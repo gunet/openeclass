@@ -26,15 +26,20 @@ if(isset($_GET['course'])) {//course messages
 }
 $guest_allowed = FALSE;
 
-include '../../include/baseTheme.php';
-include 'include/lib/fileDisplayLib.inc.php';
-require_once("class.msg.php");
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'class.msg.php';
 
 $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
 $student_to_student_allow = get_config('dropbox_allow_student_to_student');
 
 if (!isset($course_id)) {
+    $ajax_url = "ajax_handler.php";
+    $ajax_url_inbox = "$ajax_url?mbox_type=inbox";
     $course_id = 0;
+} else {
+    $ajax_url = "ajax_handler.php?course=$course_code";
+    $ajax_url_inbox = "$ajax_url&mbox_type=inbox";
 }
 
 if (isset($_GET['mid'])) {
@@ -434,7 +439,7 @@ if (isset($_GET['mid'])) {
                          if(result) {
                              $.ajax({
                               type: "POST",
-                              url: "ajax_handler.php",
+                              url: "'.$ajax_url.'",
                               datatype: "json",
                               data: string,
                               success: function(){
@@ -450,12 +455,11 @@ if (isset($_GET['mid'])) {
                     $(".delete").click(function() {
                       if (confirm("' . js_escape($langConfirmDelete) . '")) {
                         var rowContainer = $(this).parent().parent();
-                        var id = rowContainer.attr("id");
-                        var string = \'mid=\'+ id ;
-
+                        var id = rowContainer.attr("id");                        
+                        var string = "mid="+id;
                         $.ajax({
                           type: "POST",
-                          url: "ajax_handler.php",
+                          url: "'.$ajax_url.'",
                           data: string,
                           cache: false,
                           success: function(){
@@ -492,7 +496,6 @@ if (isset($_GET['mid'])) {
                 <tbody>
                 </tbody>
               </table></div>";
-
     $out .= "<script type='text/javascript'>
                $(document).ready(function() {
 
@@ -503,7 +506,7 @@ if (isset($_GET['mid'])) {
                    'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                    'bServerSide': true,
                    'searchDelay': 1000,
-                   'sAjaxSource': 'ajax_handler.php?mbox_type=inbox&course_id=$course_id',
+                   'sAjaxSource': '$ajax_url_inbox',
                    'aLengthMenu': [
                        [10, 15, 20 , -1],
                        [10, 15, 20, '".js_escape($langAllOfThem)."'] // change per page values here
@@ -543,7 +546,7 @@ if (isset($_GET['mid'])) {
                      if (result) {
                          $.ajax({
                           type: 'POST',
-                          url: 'ajax_handler.php',
+                          url: '$ajax_url',
                           datatype: 'json',
                           data: string,
                           success: function(data){
@@ -576,7 +579,7 @@ if (isset($_GET['mid'])) {
                              var string = 'all_inbox=1';
                              $.ajax({
                                  type: 'POST',
-                                 url: 'ajax_handler.php?course_id=$course_id',
+                                 url: '$ajax_url',
                                  data: string,
                                  cache: false,
                                  success: function(){
