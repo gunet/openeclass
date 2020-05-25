@@ -58,9 +58,13 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
         $charset = '';
     }
     if ($send_name) {
-        if (preg_match('/[^\x20-\x7E]/', $filename) and
-                strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
-            $filename = urlencode($filename);
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        // Urlencode non-ASCII filenames for Internet Explorer and older Edge versions
+        $use_urlencode = (preg_match('|Edge/(\d+)|', $user_agent, $m) && $m[1] < 70) ||
+            (strstr($user_agent, 'MSIE') !== false) ||
+            (strstr($user_agent, 'Trident') !== false);
+        if (preg_match('/[^\x20-\x7E]/', $filename) and $use_urlencode) {
+            $filename = rawurlencode($filename);
         }
         // Add quotes to filename if it contains spaces
         if (strpos($filename, ' ') !== false) {
@@ -96,9 +100,9 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
         if ($delete) {
             register_shutdown_function('unlink', $real_filename);
         }
-        
+
         $size = filesize($real_filename);
-        
+
         if(isset($_SERVER['HTTP_RANGE'])) {
             // error_log('http range ON: ' . $_SERVER['HTTP_RANGE']); // debug output in apache error.log
             // Parse the range header to get the byte offset
@@ -109,7 +113,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
                     substr($_SERVER['HTTP_RANGE'], 6) // Skip the `bytes=` part of the header
                 )
             );
-            
+
             if (!$ranges[1]) { // Second number missing, return from byte $range[0] to end
                 $start = $ranges[0];
                 $end = $size - 1;
@@ -118,7 +122,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
                 $end = $ranges[1];
             }
             $length = $end - $start + 1;
-            
+
             // Send the appropriate headers
             header('HTTP/1.1 206 Partial Content');
             header('Accept-Ranges: bytes');
@@ -131,11 +135,11 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
                     $size // Total size of the file
                 )
             );
-            
+
             $f = fopen($real_filename, 'rb'); // Open the file in binary mode
             $chunkSize = 8192; // The size of each chunk to output
             fseek($f, $start); // Seek to the requested start range
-            
+
             stop_output_buffering();
             while ($length) { // Read in blocks of chunksize so we don't chew up memory on the server
                 $read = ($length > $chunkSize) ? $chunkSize : $length;
@@ -368,32 +372,32 @@ function public_path_to_disk_path($path_components, $path = '') {
 
     $depth = substr_count($path, '/') + 1;
     if (count($path_components) > 0) {
-        foreach ($path_components as $component) {        
+        foreach ($path_components as $component) {
             $component = urldecode(str_replace(chr(1), '/', $component));
             $r = Database::get()->querySingle("SELECT id, path, visible, public, format, extra_path,
                                           (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                           FROM document
                                           WHERE $group_sql AND
                                                 filename = ?s AND
-                                                path LIKE ?s 
+                                                path LIKE ?s
                                                 AND (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) = ?d",
                                         $component, $path . '%', $depth);
             if (!$r) {
                 not_found('/' . implode('/', $path_components));
-            }        
+            }
             $path = $r->path;
             $depth++;
-        }        
+        }
         if (!preg_match("/\.$r->format$/", $component)) {
             $component .= '.' . $r->format;
         }
         $r->filename = $component;
         return $r;
-        
+
     } else {
         return NULL;
     }
-    
+
 }
 
 function not_found($path) {
@@ -405,4 +409,3 @@ function not_found($path) {
     '" was not found.</p></body></html>';
     exit;
 }
-
