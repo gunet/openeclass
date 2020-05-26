@@ -270,8 +270,8 @@ $db->query("CREATE TABLE `loginout` (
     idLog int(11) NOT NULL auto_increment,
     id_user int(11) NOT NULL default 0,
     ip char(45) NOT NULL default '0.0.0.0',
-    loginout.when datetime NOT NULL,
-    loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
+    `when` datetime NOT NULL,
+    action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
     PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
