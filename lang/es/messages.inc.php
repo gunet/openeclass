@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2020-02-21 10:52:09
+// Generated 2020-05-26 11:19:09
 
 $langYes = "Si";
 $langNo = "No";
@@ -2570,7 +2570,7 @@ $langMailVerifyNoId = "The link is not valid. Please repeat the process.";
 $langMailVerifyDB = "An error occured. Please contact the database administrator.";
 $langMailVerifyNoApplication = "Your application has not been found. Please repeat the process.";
 $langMailVerifyNoAccount = "Your account has not been found. Please repeat the process or contact the platform administrator.";
-$langMailVerifySuccess = "Your email address verified with success.";
+$langMailVerifySuccess = "Your email address has been verified.";
 $langMailVerifySuccess2 = "Your e-mail address has been successfully verified.";
 $langMailVerifySuccessReq = "Creating account request has been renewed.";
 $langMailVerifySuccessU = "Your account has been activated.";
@@ -2734,7 +2734,6 @@ $langPwStrengthGood = "Buena";
 $langPwStrengthStrong = "Fuerte";
 $langRecipient = "Recipient";
 $langOnlineUsers = "Online users";
-$langActiveRooms = "Active rooms";
 $langIndexInfo = "Information about the Index";
 $langIndexNumDocs = "Number of Documents Indexed";
 $langIndexIsOptimized = "Is optimized?";
@@ -3491,7 +3490,7 @@ $langSearchExact = 'Exact values';
 $langSearchStartsWith = 'Starts with';
 $langSearchSubstring = 'Anywhere in names';
 $langUpgIndexingNotice = "Because of the number of $langsCourses, the search and indexing engines have been deactivated. Please look for their corresponding setting under Platform Settings and follow the instructions for indexing.";
-$langIdxErrorPermissions = "The Open eClass platform can't function due to an access permissions problem with the $langsCourses/idx/ subdirectory";
+$langIdxErrorPermissions = "Search Engine is disabled due to an access permissions problem with the $langsCourses/idx/ subdirectory";
 $langIndexCreation = "Index creation";
 $langUpgradeMulUsernames = 'The following changes were performed due to users with conflicting usernames:';
 $langUpgradeChangeUsername = "Username changed from %s to %s";
@@ -3576,16 +3575,6 @@ $langCMeta['fnscie'] = "Food Sciences and Nutrition";
 $langCMeta['otherinddep'] = "Other Independent Departments";
 $langCMeta['milit'] = "Military Departments";
 $langBBBServerOrderP = "Order";
-$langBBBConfigLB = 'Load Balancing';
-$langBBBLBMethod = 'Load Balancing Method';
-$langBBBLBMethodWO = "$langBBBServerOrderP only";
-$langBBBLBMethodWLL = "$langBBBServerOrderP, least load";
-$langBBBLBMethodWLR = "$langBBBServerOrderP, least rooms";
-$langBBBLBMethodWLC = "$langBBBServerOrderP, least users";
-$langBBBLBMethodWOInfo = "$langBBBLBMethodWO: Take into account server priority only. First use server with least priority, then move to the next";
-$langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: First take into account server priority, then server with least load";
-$langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: First take into account server priority, then server with least rooms";
-$langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: First take into account server priority, then server with least user connections";
 $langBBBNotServerAvailableStudent = "Teleconferences are not supoorted. Please contact the $langsCourse $langsTeacher.";
 $langBBBNotServerAvailableTeacher = "Teleconferences are not suported. Please contact the platform administrator.";
 $langBBBServerOrder = "Server selection priority";
@@ -4244,8 +4233,8 @@ $langGroupNowNotMember = "You unregistered from this group successfully.";
 $langAdminLoginPage = "Admin login";
 $langLoginVia = "Acceder via";
 $langPassResetIntro2 = "If this was not you, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
-$langPollParticipantInfo = 'Enter a valid email address. 
-            After poll completion, an email will be sent with a confirmation link. 
+$langPollParticipantInfo = 'Enter a valid email address.
+            After poll completion, an email will be sent with a confirmation link.
             You must click in it, otherwise your answers will not be taken into account.';
 $langPollEmailUsed = 'contains an account already used to answer the questionnaire';
 $langUnRegister = "Unregister";
@@ -4540,7 +4529,6 @@ $langToAllCourses = "For all $langsCourses";
 $langToAllCoursesInfo = "Select whether server will be available to all $langsCourses or only a subset.";
 $langToSomeCourses = "For specific $langsCourses";
 $langToSomeCoursesInfo = "Server will be used for specific $langsCourses. To set which $langsCourses will use it, please visit \"Search $langsCourses\" and select \"Actions\".";
-$langToNoCourses = "For none of the $langsCourses";
 $langWallExtVideo = 'External video';
 $langWallExtVideoLink = 'Youtube or Vimeo video url';
 $langWallExtVideoLinkNotValid = 'Not valid YouTube or Vimeo address';
@@ -5238,3 +5226,20 @@ $langAnalyticsEndDescription = 'Start date to compute learnng analytics';
 $langAnalyticsMinValue = 'Lower value';
 $langAnalyticsMaxValue = 'Upper value';
 $langAnalyticsResourceNotAvailable = 'There are no resources';
+$langActiveRooms = "Active rooms";
+$langwith = "with";
+$langCancelExConfirmation = "Warning! The exercise will be canceled. Please confirm your action.";
+$langCancelAttempt = 'Cancel Attempt';
+$langSearchTooManyFiles = "Search Engine is disabled. This is caused by a possible maximum open files (ulimit) problem for the search engine indexing directory (courses/idx/).";
+$langCheckUserRegistration = "<strong>$langCourse registration is required</strong>";
+$langBBBConfigLB = 'Load Balancing';
+$langBBBLBMethod = 'Load Balancing Method';
+$langBBBLBMethodWO = "$langBBBServerOrderP only";
+$langBBBLBMethodWLL = "$langBBBServerOrderP, least load";
+$langBBBLBMethodWLR = "$langBBBServerOrderP, least rooms";
+$langBBBLBMethodWLC = "$langBBBServerOrderP, least users";
+$langBBBLBMethodWOInfo = "$langBBBLBMethodWO: Take into account server priority only. First use server with least priority, then move to the next";
+$langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: First take into account server priority, then server with least load";
+$langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: First take into account server priority, then server with least rooms";
+$langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: First take into account server priority, then server with least user connections";
+$langToNoCourses = "For none of the $langsCourses";
