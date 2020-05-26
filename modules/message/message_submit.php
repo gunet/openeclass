@@ -232,7 +232,9 @@ if (isset($_POST['submit'])) {
                 $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
 
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
-                send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
+                if (valid_email($_SESSION['email'])) {
+                    send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
+                }
             } else { // message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 $list_of_recipients = array();
