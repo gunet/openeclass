@@ -5779,7 +5779,7 @@ function create_zip_index($path, $id) {
             </tr>');
 
     $assign = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-    if ($assign->grading_scale_id) {
+    if ($assign->grading_type == ASSIGNMENT_SCALING_GRADE) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);
         $scale_values = array_value_recursive('scale_item_value', $scales);
@@ -5803,10 +5803,13 @@ function create_zip_index($path, $id) {
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
 
         $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div style='color:red;'>$m[late_submission]</div>" : '';
-        if ($assign->grading_scale_id) {
-            $key = closest($row->grade, $scale_values, true)['key'];
-            $row->grade = $scales[$key]['scale_item_name'];
+        if ($assign->grading_type == ASSIGNMENT_SCALING_GRADE) {
+            if (($assign->grading_scale_id) and $row->grade !== null) {
+                $key = closest($row->grade, $scale_values)['key'];
+                $row->grade = $scales[$key]['scale_item_name'];
+            }
         }
+
         fputs($fp, '
             <tr class="sep">
                 <td>' . q(uid_to_name($row->uid)) . '</td>
