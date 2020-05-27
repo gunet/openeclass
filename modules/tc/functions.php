@@ -392,7 +392,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
     if ($notifyUsers == "1") {
         if (isset($_POST['groups']) and count($_POST['groups']) > 0) {
             $recipients = array();
-            if ($_POST['groups'][0] == 0) { // all users
+            if ($_POST['groups'][0] === '0') { // all users
                 $result = Database::get()->queryArray("SELECT cu.user_id, u.email FROM course_user cu
                                                         JOIN user u ON cu.user_id=u.id
                                                     WHERE cu.course_id = ?d
