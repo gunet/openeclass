@@ -733,11 +733,10 @@ function create_indexes() {
         Database::get()->query('CREATE INDEX courseID on analytics(courseID)');
     DBHelper::indexExists('loginout', 'useractionwhen') or
         Database::get()->query('CREATE INDEX useractionwhen on loginout (id_user,action,`when` desc)');
-    DBHelper::indexExists('user', 'index surname') or
-        Database::get()->query('CREATE INDEX surname on user(surname)');
+    DBHelper::indexExists('user', 'index_surname') or
+        Database::get()->query('CREATE INDEX index_surname on user(surname)');
     DBHelper::indexExists('wiki_properties', 'group_id') or
         Database::get()->query('CREATE INDEX group_id on wiki_properties(group_id)');
-
 }
 
 /**
