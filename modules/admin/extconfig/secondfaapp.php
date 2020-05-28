@@ -128,12 +128,12 @@ class secondfaApp extends ExtApp {
     }
 
 
-    /* User API Calls 
+    /* User API Calls
      *  secondfaApp::showUserProfile()
-     *  secondfaApp::saveUserProfile() 
-     *  
+     *  secondfaApp::saveUserProfile()
+     *
      *  secondfaApp::showChallenge()
-     *  secondfaApp::checkChallnge()                           
+     *  secondfaApp::checkChallnge()
      */
 
 
@@ -200,21 +200,21 @@ class secondfaApp extends ExtApp {
 
     public static function getInitialize($userid,$company,$email){
         global $langSFAadd, $langSFAremove, $langSFAScan, $langSFATypeWYS, $langSFAInsert, $langConfigError;
-        
+
         $keypack =  self::getsecondfa()->generateSecret($userid,$company,$email);
         if($keypack){
-            $sfa_url = $keypack[0];
+            $sfa_svg = $keypack[0];
             $sfa_secret = $keypack[1];
             $_SESSION['sfatempkey'] = $sfa_secret;
             return "<div name ='2fabutton'>
                     <input type='button'  class='btn' value='$langSFAadd' onclick='document.getElementsByName(\"2fa\")[0].style.display=\"block\";document.getElementsByName(\"2fa\")[0].style.visibility=\"visible\";document.getElementsByName(\"2fabutton\")[0].style.display=\"none\";document.getElementsByName(\"2fabutton\")[0].style.visibility=\"hidden\"'>
-                    </div> 
+                    </div>
                     <div name='2fa' style='visibility:hidden;display:none'>
                     <input type='button'   class='btn' value='$langSFAremove' onclick='document.getElementsByName(\"2fa\")[0].style.display=\"none\";document.getElementsByName(\"2fa\")[0].style.visibility=\"hidden\";document.getElementsByName(\"2fabutton\")[0].style.display=\"block\";document.getElementsByName(\"2fabutton\")[0].style.visibility=\"visible\"''>
                     <table style='width:100%'>
                     <tr><p>$langSFAScan</p></tr>
-                    <tr><img src='".$sfa_url."'/></tr>
-                    <tr><p>".$langSFAInsert."</p></tr>
+                    <tr>$sfa_svg</tr>
+                    <tr><p>$langSFAInsert</p></tr>
                     <p>
                     <div class=''>
                         <input class='form-control' type='text' autocomplete='off' name='sfasecret' disabled=disabled value='" . q($sfa_secret) . "'/></tr>
@@ -259,7 +259,7 @@ class secondfaApp extends ExtApp {
     }
 
 
-    /* Challenge Responce Functions */ 
+    /* Challenge Responce Functions */
 
     public static function challenge(){
         return "<input type='password' class='form-control'  autocomplete='off' name='sfaanswer' value=''/>";
