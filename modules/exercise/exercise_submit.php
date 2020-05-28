@@ -42,7 +42,6 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
@@ -55,7 +54,25 @@ function unset_exercise_var($exerciseId) {
     unset($_SESSION['questionList'][$exerciseId][$attempt_value]);
     unset($_SESSION['password'][$exerciseId][$attempt_value]);
 }
-// setting a cookie in OnBeforeUnload event in order to redirect user to the exercises page in case of refresh
+
+// Does nothing, just refreshes the session
+if (isset($_POST['action']) and $_POST['action'] == 'refreshSession') {
+    exit();
+}
+
+// POST request that cancels an active attempt (sent via onBeforeUnload)
+if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
+    $exerciseId = $_POST['eid'];
+    $record_end_date = date('Y-m-d H:i:s', time());
+    $eurid = $_POST['eurid'];
+    Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d, secs_remaining = ?d
+        WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, 0, $eurid);
+    Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+    unset_exercise_var($exerciseId);
+    exit();
+}
+
+// setting a cookie in onBeforeUnload event in order to redirect user to the exercises page in case of refresh
 // as the synchronous ajax call in onUnload event doen't work the same in all browsers in case of refresh
 // (It is executed after page load in Chrome and Mozilla and before page load in IE).
 // In current functionality if user leaves the exercise for another module the cookie will expire anyway in 30 seconds
@@ -65,25 +82,6 @@ function unset_exercise_var($exerciseId) {
 if (isset($_COOKIE['inExercise'])) {
     setcookie("inExercise", "", time() - 3600);
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-}
-
-// Identifying ajax request that cancels an active attempt
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-        if (isset($_POST['action']) and $_POST['action'] == 'refreshSession') {
-            // Does nothing just refreshes the session
-            exit();
-        }
-        if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
-
-            $exerciseId = $_POST['eid'];
-            $record_end_date = date('Y-m-d H:i:s', time());
-            $eurid = $_POST['eurid'];
-            Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d, secs_remaining = ?d
-                    WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, 0, $eurid);
-            Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-            unset_exercise_var($exerciseId);
-            exit();
-        }
 }
 
 // Check if an exercise ID exists in the URL
