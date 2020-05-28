@@ -87,8 +87,8 @@ class Log {
      */
     public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now, $script_page) {
 
-        global $tool_content, $modules;
-        global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
+        global $tool_content, $modules,
+            $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, $langConfig,
             $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
             $langModifyInfo, $langAbuseReport;
 
@@ -137,6 +137,8 @@ class Log {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
                 } elseif ($module_id == MODULE_ID_ABUSE_REPORT) {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
+                } elseif ($module_id == MODULE_ID_COURSEINFO) {
+                    $tool_content .= "<div class='alert alert-info'>$langConfig</div>";
                 } else {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
@@ -791,7 +793,7 @@ class Log {
         }
         $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . ellipsize($details['description'], 100) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
         }
         return $content;
     }
@@ -827,8 +829,6 @@ class Log {
      * @global type $langsOfGroupTutor
      * @global type $langGiveRight
      * @global type $langRemovedRight
-     * @global type $langRemoveRightAdmin
-     * @global type $langRemoveRightAdmin
      * @global type $langUnCourse
      * @global type $langTheU
      * @param type $details
@@ -836,10 +836,10 @@ class Log {
      */
     private function course_user_action_details($details, $type) {
 
-        global $langUnCourse, $langOfUser, $langToUser,
+        global $langOfUser, $langToUser,
         $langsOfTeacher, $langsOfEditor, $langNewUser, $langAddGUser,
-        $langRemoveRightAdmin, $langRemoveRightAdmin, $langUnCourse,
-        $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor,
+        $langUnCourse, $langTheU, $langGiveRight,
+        $langRemovedRight, $langsOfGroupTutor,
         $langDelUsers, $langParams;
 
         $details = unserialize($details);
@@ -1032,10 +1032,14 @@ class Log {
      * @return string
      */
     private function gradebook_action_details($details){
-        global $langTitle, $langType, $langDate, $langStart, $langEnd, $langDelete, $langGradebookWeight, $langVisibility, $langGradebookRange, $langOfGradebookActivity,
-                $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, $langGradebookDateIn,
-                $langModify, $langOfGradebookVisibility, $langOfUsers, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
-                $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, $langGradebookExams, $langVisibleVals, $langRefreshList;
+        global $langTitle, $langType, $langDate, $langStart, $langEnd, $langGradebookWeight, $langVisibility,
+                $langGradebookRange, $langOfGradebookActivity,
+                $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete,
+                $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, $langGradebookDateIn,
+                $langModify, $langOfGradebookVisibility, $langOfUsers, $langAction,
+                $langGradebookDateRange, $langGradebookRegistrationDateRange,
+                $langGradebookLabs, $langGradebookOral, $langGradebookProgress,
+                $langGradebookOtherType, $langGradebookExams, $langVisibleVals, $langRefreshList;
 
         $langActivityType = array('', $langGradebookOral, $langGradebookLabs, $langGradebookProgress, $langGradebookExams, $langGradebookOtherType);
 
