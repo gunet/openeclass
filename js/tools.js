@@ -348,11 +348,13 @@ function exercise_init_countdown(params) {
         $('.exercise').off().submit();
     }
 
-    $(window).on('beforeunload', function() {
+    $(window).on('beforeunload', function(e) {
         var date = new Date();
         date.setTime(date.getTime() + 30 * 1000);
         var expires = '; expires=' + date.toGMTString();
         document.cookie = 'inExercise=' + exerciseId + expires;
+        e.preventDefault();
+        e.returnValue = params.warning;
         return params.warning;
     });
     $(window).on('unload', function() {
