@@ -54,13 +54,13 @@ function js_escape($s) {
 
 function js_link($file) {
     global $urlAppend;
-    $v = '?v=' . ECLASS_VERSION;
+    $v = '?v=' . CACHE_SUFFIX;
     return "<script type='text/javascript' src='{$urlAppend}js/$file$v'></script>\n";
 }
 
 function css_link($file) {
     global $urlAppend;
-    $v = '?v=' . ECLASS_VERSION;
+    $v = '?v=' . CACHE_SUFFIX;
     return "<link href='{$urlAppend}js/$file$v' rel='stylesheet' type='text/css'>\n";
 }
 function widget_js_link($file, $folder) {
@@ -2013,7 +2013,7 @@ tinymce.init({
     // General options
     selector: 'textarea.mceEditor',
     language: '$language',
-    cache_suffix: '?v=" . ECLASS_VERSION . "',
+    cache_suffix: '?v=" . CACHE_SUFFIX . "',
     theme: 'modern',
     skin: 'light',
     image_advtab: true,
