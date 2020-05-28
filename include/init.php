@@ -54,6 +54,10 @@ try {
 } catch (Exception $e) {
     include_once 'include/not_installed.php';
 }
+
+// appended to JS and CSS links to break caching - changes per second in debug mode
+define('CACHE_SUFFIX', ECLASS_VERSION . (defined('DEBUG') && DEBUG ? ('-' . time()): ''));
+
 if (!isset($mysqlServer)) {
     include_once 'include/not_installed.php';
 }
