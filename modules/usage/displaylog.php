@@ -218,6 +218,7 @@ if (!isset($_GET['from_other'])) {
         $extra = 'selected';
     }
     $tool_content .= "<option value = " . MODULE_ID_USERS . " $extra>$langAdminUsers</option>";
+    $tool_content .= "<option value = " . MODULE_ID_COURSEINFO . " $extra>$langConfig</option>";
     $tool_content .= "<option value = " . MODULE_ID_TOOLADMIN . " $extra>$langExternalLinks</option>";
     $tool_content .= "<option value = " . MODULE_ID_ABUSE_REPORT . " $extra>$langAbuseReport</option>";
     $tool_content .= "</select></div></div>";
