@@ -100,8 +100,17 @@ $input_fields = array();
 $phpSysInfoURL = '../admin/sysinfo/';
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
-    $dbHostForm = 'localhost';
+    if (isset($_ENV['MYSQL_LOCATION'])) { // needed for docker image
+        $dbHostForm = $_ENV['MYSQL_LOCATION'];
+    } else {
+        $dbHostForm = 'localhost';
+    }
     $dbUsernameForm = 'root';
+    if (isset($_ENV['MYSQL_ROOT_PASSWORD'])) {  // needed for docker image
+        $dbPassForm = $_ENV['MYSQL_ROOT_PASSWORD'];
+    } else {
+        $dbPassForm = '';
+    }
     $dbNameForm = 'eclass';
     $dbMyAdmin = $emailForm = '';     
     $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']) ? 'https://' : 'http://') .
@@ -117,7 +126,8 @@ if (isset($_POST['welcomeScreen'])) {
     $helpdeskForm = '+30 2xx xxxx xxx';
     $institutionForm = $langDefaultInstitutionName;
     $institutionUrlForm = 'http://www.gunet.gr/';
-    $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
+    $helpdeskmail = $faxForm = $postaddressForm = '';
+
     $eclass_stud_reg = 2;
     $eclass_prof_reg = 1;
 
