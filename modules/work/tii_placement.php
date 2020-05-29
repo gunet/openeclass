@@ -131,15 +131,15 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
                                     WHERE uid = ?d AND assignment_id = ?d", $uid, $assignment_id)->cnt;
                 if ($exists) {
                     Database::get()->query("UPDATE assignment_submit SET submission_date = " . DBHelper::timeAfter() . ", 
-                                    submission_ip = ?s, file_path = ?s, file_name = ?s
+                                    submission_ip = ?s, file_path = ?s, file_name = ?s, comments = ''
                                     WHERE uid = ?d AND assignment_id = ?d", Log::get_client_ip(), $work_filename, $original_filename, $uid, $assignment_id);
                     triggerGame($assignment->course_id, $uid, $assignment_id);
                     triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
                     triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
                 } else {
                     Database::get()->query("INSERT INTO assignment_submit
-                                    (uid, assignment_id, submission_date, submission_ip, file_path, file_name)
-                                     VALUES (?d, ?d, " . DBHelper::timeAfter() . ", ?s, ?s, ?s)",
+                                    (uid, assignment_id, submission_date, submission_ip, file_path, file_name, comments)
+                                     VALUES (?d, ?d, " . DBHelper::timeAfter() . ", ?s, ?s, ?s, '')",
                         $uid, $assignment_id, Log::get_client_ip(), $work_filename, $original_filename);
                     triggerGame($assignment->course_id, $uid, $assignment_id);
                     triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
