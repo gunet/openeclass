@@ -475,7 +475,7 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
     $clean_title = str_replace(array("\r", "\n", "\""), " ", $resource_link_title);
     $clean_description = str_replace(array("\r", "\n", "&", "\""), " ",strip_tags( $resource_link_description));
     if (strlen($clean_description) > LTI_DESCRIPTION_MAX_LENGTH) {
-        $clean_description = substr($clean_description, 0, LTI_DESCRIPTION_MAX_LENGTH);
+        $clean_description = mb_substr($clean_description, 0, LTI_DESCRIPTION_MAX_LENGTH);
     }
     $clean_course_title = str_replace(array("\r", "\n", "\""), " ", course_id_to_title($course_id));
 
