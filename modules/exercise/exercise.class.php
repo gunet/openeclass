@@ -788,6 +788,8 @@ if (!class_exists('Exercise')) {
                         $eurid, $key, $row_key, $answer_weight, $as_answered, $q_position);
                 } else {
                     $objAnswersTmp = new Answer($key);
+                    Database::get()->query("DELETE FROM exercise_answer_record 
+                            WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                     foreach ($value as $row_key => $row_choice) {
                         $answer_weight = $objAnswersTmp->selectWeighting($row_key);
                         Database::get()->query("INSERT INTO exercise_answer_record
