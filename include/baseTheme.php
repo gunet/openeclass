@@ -434,8 +434,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->set_var('BREAD_TEXT', '<span class="fa fa-home"></span> ' . $langPortfolio);
                 $t->set_var('BREAD_HREF', $urlAppend . 'main/portfolio.php');
             } else {
-                $homebreadcrumb = get_config('homepage_name');
-                if (isset($homebreadcrumb)) {
+                $homebreadcrumb = getSerializedMessage(get_config('homepage_name'));
+                if ($homebreadcrumb) {
                     $t->set_var('BREAD_TEXT', $homebreadcrumb);
                 } else {
                     $t->set_var('BREAD_TEXT', get_config('defaultHomepageBcrmp', $langHomePage));
