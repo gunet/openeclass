@@ -286,7 +286,7 @@ if (count($exercise_question_ids) > 0) {
                 }
             }
         } else {
-             if (($showScore) and (!is_null($choice)) and (!$is_editor)) {
+             if (($showScore) and (!is_null($choice))) {
                  $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight</strong></span>)</small>";
              }
          }
