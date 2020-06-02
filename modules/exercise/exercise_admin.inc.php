@@ -67,13 +67,15 @@ if (isset($_POST['submitExercise'])) {
         'exerciseStartDate' => "$langTheField $langStart",
         'exerciseIPLock' => "$langTheField IPs"
     ));
-    if($v->validate()) {                
+    if($v->validate()) {
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($_POST['exerciseDescription']);
         $objExercise->updateType($_POST['exerciseType']);
         if (isset($_POST['exerciseIPLock'])) {
             $objExercise->updateIPLock(implode(',', $_POST['exerciseIPLock']));
+        } else {
+            $objExercise->updateIPLock('');
         }
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
         if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
@@ -81,7 +83,7 @@ if (isset($_POST['submitExercise'])) {
             $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
             $objExercise->updateStartDate($startDateTime_obj);
         }
-        
+
         $endDateTime_obj = isset($_POST['exerciseEndDate']) && !empty($_POST['exerciseEndDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseEndDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
@@ -484,23 +486,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
-                 <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
-                   <label for='exercisePasswordLock' class='col-sm-2 control-label'>$langPasswordUnlock:</label>
-                   <div class='col-sm-10'>
-                     <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
-                     <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
-                   </div>
-                 </div>
-                 <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
-                   <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
-                   <div class='col-sm-10'>
-                     <select name='exerciseIPLock[]' class='form-control' id='exerciseIPLock' multiple>
-                        $exerciseIPLockOptions
-                     </select>
-                     <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
-                   </div>
-                 </div>
-                <div class='form-group'>
+                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
@@ -550,9 +536,35 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                             </table>
                         </div>
                     </div>
-                </div>
-                 " . eClassTag::tagInput($exerciseId) . "
+                </div>";
 
+                $tool_content .= "<div class='course-info-title clearfix'>
+                            <a role='button' data-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
+                                 <h5 class='panel-heading'>
+                                       <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess
+                                 </h5>
+                            </a>
+                          </div>";
+
+                $tool_content .= "<div id='CheckAccess' class='collapse'>";
+                 $tool_content .= "<div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
+                       <label for='exercisePasswordLock' class='col-sm-2 control-label'>$langPassCode:</label>
+                       <div class='col-sm-10'>
+                         <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
+                         <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
+                       </div>
+                     </div>
+                     <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
+                       <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
+                       <div class='col-sm-10'>
+                         <select name='exerciseIPLock[]' class='form-control' id='exerciseIPLock' multiple>
+                            $exerciseIPLockOptions
+                         </select>
+                         <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
+                       </div>
+                     </div>
+                     " . eClassTag::tagInput($exerciseId) . "
+                 </div>
                  <div class='form-group'>
                    <div class='col-sm-offset-2 col-sm-10'>
                     " . form_buttons(array(
@@ -601,7 +613,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         case 4:
             $disp_score_message = $langScoreDispEndDate;
             break;
-    }    
+    }
     $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;

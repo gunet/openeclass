@@ -293,43 +293,23 @@ if (!class_exists('Exercise')) {
          *           without randomizing, otherwise, returns the list with questions selected randomly
          */
         function selectRandomList() {
-            // if the exercise is not a random exercise, or if there are not at least 2 questions
+
+            // if the exercise is not a random exercise,
+            // or if there are not at least 2 questions
+            // cancel randomization and return normal question list
             if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0) {
                 return $this->questionList;
             }
 
-            // takes all questions
-            if ($this->random > $this->selectNbrQuestions()) {
-                $draws = $this->selectNbrQuestions();
-            } else {
-                $draws = $this->random;
-            }
+            $questions = $this->questionList;
+            shuffle($questions);
+            $questions = array_slice($questions, 0, $this->random);
 
-            $randQuestionList = array();
-            $alreadyChosed = array();
+            // make array keys start from 1
+            array_unshift($questions, null);
+            unset($questions[0]);
 
-            // loop for the number of draws
-            for ($i = 0; $i < $draws; $i++) {
-                // selects a question randomly
-                do {
-                    $rand = crypto_rand_secure(0, $this->selectNbrQuestions() - 1);
-                }
-                // if the question has already been selected, continues in the loop
-                while (in_array($rand, $alreadyChosed));
-
-                $alreadyChosed[] = $rand;
-                $j = 0;
-
-                foreach ($this->questionList as $key => $val) {
-                    // if we have found the question chosed above
-                    if ($j == $rand) {
-                        $randQuestionList[$key] = $val;
-                        break;
-                    }
-                    $j++;
-                }
-            }
-            return $randQuestionList;
+            return $questions;
         }
 
         /**
@@ -638,7 +618,7 @@ if (!class_exists('Exercise')) {
             // if the user has answered at least one question
             if (is_array($choice)) {
                 // if all questions on the same page
-                if ($this->selectType() == 1) {
+                if ($this->selectType() == SINGLE_PAGE_TYPE) {
                     // $exerciseResult receives the content of the form.
                     // Each choice of the student is stored into the array $choice
                     $exerciseResult = $choice;
@@ -815,6 +795,8 @@ if (!class_exists('Exercise')) {
                         $eurid, $key, $row_key, $answer_weight, $as_answered, $q_position);
                 } else {
                     $objAnswersTmp = new Answer($key);
+                    Database::get()->query("DELETE FROM exercise_answer_record
+                            WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                     foreach ($value as $row_key => $row_choice) {
                         $answer_weight = $objAnswersTmp->selectWeighting($row_key);
                         Database::get()->query("INSERT INTO exercise_answer_record
