@@ -296,23 +296,20 @@ if (!class_exists('Exercise')) {
 
             // if the exercise is not a random exercise,
             // or if there are not at least 2 questions
-            // or number of random question > number of questions
             // cancel randomization and return normal question list
-            if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0 || $this->random > $this->selectNbrQuestions()) {
+            if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0) {
                 return $this->questionList;
             }
 
-            $randQuestionList = array();
-            if ($this->random == 1) { // if we pick up one random question
-                $rand_keys = array_rand($this->questionList);
-                $randQuestionList[1] = $this->questionList[$rand_keys];
-            } else { // if we pick up more than one random questions
-                $rand_keys = array_rand($this->questionList, $this->random);
-                for ($key = 1; $key <= $this->random; $key++) {
-                    $randQuestionList[$key] = $this->questionList[$rand_keys[$key-1]];
-                }
-            }
-            return $randQuestionList;
+            $questions = $this->questionList;
+            shuffle($questions);
+            $questions = array_slice($questions, 0, $this->random);
+
+            // make array keys start from 1
+            array_unshift($questions, null);
+            unset($questions[0]);
+
+            return $questions;
         }
 
         /**
@@ -798,7 +795,7 @@ if (!class_exists('Exercise')) {
                         $eurid, $key, $row_key, $answer_weight, $as_answered, $q_position);
                 } else {
                     $objAnswersTmp = new Answer($key);
-                    Database::get()->query("DELETE FROM exercise_answer_record 
+                    Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                     foreach ($value as $row_key => $row_choice) {
                         $answer_weight = $objAnswersTmp->selectWeighting($row_key);

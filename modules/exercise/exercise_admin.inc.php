@@ -67,13 +67,15 @@ if (isset($_POST['submitExercise'])) {
         'exerciseStartDate' => "$langTheField $langStart",
         'exerciseIPLock' => "$langTheField IPs"
     ));
-    if($v->validate()) {                
+    if($v->validate()) {
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($_POST['exerciseDescription']);
         $objExercise->updateType($_POST['exerciseType']);
         if (isset($_POST['exerciseIPLock'])) {
             $objExercise->updateIPLock(implode(',', $_POST['exerciseIPLock']));
+        } else {
+            $objExercise->updateIPLock('');
         }
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
         if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
@@ -81,7 +83,7 @@ if (isset($_POST['submitExercise'])) {
             $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
             $objExercise->updateStartDate($startDateTime_obj);
         }
-        
+
         $endDateTime_obj = isset($_POST['exerciseEndDate']) && !empty($_POST['exerciseEndDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseEndDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
@@ -539,7 +541,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 $tool_content .= "<div class='course-info-title clearfix'>
                             <a role='button' data-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
                                  <h5 class='panel-heading'>
-                                       <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess   
+                                       <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess
                                  </h5>
                             </a>
                           </div>";
@@ -560,7 +562,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </select>
                          <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
                        </div>
-                     </div>                
+                     </div>
                      " . eClassTag::tagInput($exerciseId) . "
                  </div>
                  <div class='form-group'>
@@ -611,7 +613,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         case 4:
             $disp_score_message = $langScoreDispEndDate;
             break;
-    }    
+    }
     $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
