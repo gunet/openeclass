@@ -287,9 +287,9 @@ if (count($exercise_question_ids) > 0) {
             }
         } else {
              if (($showScore) and (!is_null($choice))) {
-                 $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight</strong></span>)</small>";
+                 $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight / $questionWeighting</strong></span>)</small>";
              }
-         }
+        }
         $tool_content .= "<small class='help-block'>($questionType)</small>"; // question type
         $tool_content .= "</td></tr>";
 
