@@ -239,7 +239,7 @@ function find_child_posts($result, $post_data, $offset) {
  */
 function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $topic_date) {
     global $logo, $langNewForumNotify, $course_code, $course_id, $langForumFrom,
-        $uid, $langBodyForumNotify, $langInForums, $urlServer, $langDate, $langSender,
+        $uid, $is_editor, $langBodyForumNotify, $langInForums, $urlServer, $langDate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
         $langLinkUnsubscribe, $langHere, $langMailBody, $langMailSubject;
 
@@ -248,6 +248,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     $cat_name = category_name($category_id);
     $name = uid_to_name($uid);
     $title = course_id_to_title($course_id);
+    $group_id = init_forum_group_info($forum_id);
 
     $header_html_topic_notify = "<!-- Header Section -->
     <div id='mail-header'>
@@ -308,6 +309,20 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
        }
     $email = array();
     foreach ($users as $user) {
+        if ($group_id) {
+            $course_user = Database::get()->querySingle('SELECT status, editor, reviewer
+                FROM course_user WHERE course_id = ?d AND user_id = ?d',
+                $course_id, $user->user_id);
+            $is_student = $course_user->status == USER_STUDENT &&
+                !$course_user->editor && !$course_user->reviewer;
+            if ($is_student) {
+                $is_member = Database::get()->querySingle("SELECT user_id FROM group_members
+                               WHERE group_id = ?d AND user_id = ?d", $group_id, $user->user_id)->user_id;
+                if (!$is_member) {
+                    continue;
+                }
+            }
+        }
         if (get_user_email_notification($user->user_id, $course_id)) {
             $useremail = uid_to_email($user->user_id);
             if (valid_email($useremail)) { // if email is valid

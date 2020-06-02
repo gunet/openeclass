@@ -64,7 +64,7 @@ if (isset($_GET['forumcatnotify'])) { // modify forum category notification
         $cat_id = $_GET['cat_id'];
     }
     $rows = Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum_notify
-		WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $uid, $cat_id, $course_id);
+        WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $uid, $cat_id, $course_id);
     if ($rows->count > 0) {
         Database::get()->query("UPDATE forum_notify SET notify_sent = ?d WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $_GET['forumcatnotify'], $uid, $cat_id, $course_id);
     } else {
@@ -76,7 +76,7 @@ if (isset($_GET['forumcatnotify'])) { // modify forum category notification
         $forum_id = $_GET['forum_id'];
     }
     $rows = Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum_notify
-		WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d", $uid, $forum_id, $course_id);
+        WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d", $uid, $forum_id, $course_id);
     if ($rows->count > 0) {
         Database::get()->query("UPDATE forum_notify SET notify_sent = ?d WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d", $_GET['forumnotify'], $uid, $forum_id, $course_id);
     } else {
@@ -94,9 +94,9 @@ $total_categories = count($categories);
 
 if ($total_categories > 0) {
     $forum_row = Database::get()->queryArray("SELECT f.id forum_id, f.*, p.post_time, p.topic_id, p.poster_id
-		FROM forum f LEFT JOIN forum_post p ON p.id = f.last_post_id
-                WHERE f.course_id = ?d
-		ORDER BY f.cat_id, f.id", $course_id);
+            FROM forum f LEFT JOIN forum_post p ON p.id = f.last_post_id
+            WHERE f.course_id = ?d
+            ORDER BY f.cat_id, f.id", $course_id);
 
     foreach ($categories as $cat_row) {
         $cat_title = q($cat_row->cat_title);
@@ -106,11 +106,11 @@ if ($total_categories > 0) {
         if ($sql) {
             $action_notify = $sql->notify_sent;
         } else {
-            $action_notify = FALSE;
+            $action_notify = false;
         }
 
         if (!isset($action_notify)) {
-            $link_notify = FALSE;
+            $link_notify = false;
         } else {
             $link_notify = toggle_link($action_notify);
         }
@@ -201,7 +201,7 @@ if ($total_categories > 0) {
                         //  - forum belongs to group and group forums are enabled and
                         //     - user is member of group
                         if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
-                            $forum_action_notify = FALSE;
+                            $forum_action_notify = false;
                         } else { // if it's not set lookup user setting
                             $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
                                 WHERE user_id = ?d
@@ -210,11 +210,12 @@ if ($total_categories > 0) {
                             if ($forum_action_notify) {
                                 $forum_action_notify = $forum_action_notify->notify_sent;
                             } else {
-                                $forum_action_notify = FALSE;
+                                $forum_action_notify = false;
                             }
                         }
                         $tool_content .= "<tr><td>";
-                        if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
+                        if ($is_editor or !$group_id or ($has_forum and $is_member)) {
+                            $forum_active = true;
                             if ($forum_action_notify) {
                                 $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='" . q($langNotify) . "'><i class='fa fa-envelope'></i></span>";
                             }
@@ -222,6 +223,7 @@ if ($total_categories > 0) {
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member . "</div>";
                         } else {
+                            $forum_active = $is_editor || ($has_forum && $is_member);
                             $tool_content .= $forum_name;
                         }
                         $tool_content .= "<div class='smaller'>$desc</div>" .
@@ -257,7 +259,7 @@ if ($total_categories > 0) {
                                     'title' => $forum_action_notify ? $langStopNotify : $langNotify,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
                                     'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
-                                    'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS))),
+                                    'show' => $forum_active && !setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)),
                                 array(
                                     'title' => $langDelete,
                                     'url' => "forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
