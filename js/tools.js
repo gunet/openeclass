@@ -404,6 +404,11 @@ function exercise_init_countdown(params) {
         var qids = $('.qPanel').map(function () {
             return this.id.replace('qPanel', '');
         }).get();
+        if (params.unansweredIds) {
+            qids = qids.concat(params.unansweredIds.filter(function (id) {
+                return qids.indexOf(id) < 0;
+            }));
+        }
         $('.qPanel :input').change(function () {
             var el = $(this);
             var id = questionId(el);
@@ -426,6 +431,9 @@ function exercise_init_countdown(params) {
                 });
             }
         });
+        $('input[name=q_id], input.navbutton').click(function () {
+            continueSubmit();
+        });
         $('.exercise').submit(function (e) {
             var unansweredCount = 0, firstUnanswered;
 
@@ -446,7 +454,7 @@ function exercise_init_countdown(params) {
                     unansweredCount++;
                 }
             });
-            if (!cancelCheck && unansweredCount) {
+            if (unansweredCount) {
                 e.preventDefault();
                 var message = (unansweredCount === 1? params.oneUnanswered:
                     params.manyUnanswered.replace('_', unansweredCount)) +
@@ -466,15 +474,21 @@ function exercise_init_countdown(params) {
                             label: params.goBack,
                             className: 'btn-success',
                             callback: function () {
-                                $('html').animate({
-                                    scrollTop: $('#qPanel' + firstUnanswered).offset().top + 'px'
-                                }, 'fast');
+                                var moveTo = $('#qPanel' + firstUnanswered);
+                                if (moveTo.length) {
+                                    $('html').animate({
+                                        scrollTop: moveTo.offset().top + 'px'
+                                    }, 'fast');
+                                }
                             }
                         },
                         submit: {
                             label: params.submit,
                             className: 'btn-warning',
-                            callback: continueSubmit
+                            callback: function () {
+                                $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
+                                continueSubmit();
+                            }
                         },
                     }
                 });
@@ -483,8 +497,30 @@ function exercise_init_countdown(params) {
             }
         });
     }
-    var checkUnanswered = $('.qPanel').length > 1 || params.attemptsAllowed >= 1;
-    $('.btn[name=buttonCancel], .btn[name=buttonSave]').click(continueSubmit);
+    var checkUnanswered = $('.qPanel').length >= 1;
+    $('.btn[name=buttonSave]').click(continueSubmit);
+    $('#cancelButton').click(function (e) {
+      e.preventDefault();
+      bootbox.confirm({
+        message: params.cancelMessage,
+        buttons: {
+          confirm: {
+            label: params.cancelAttempt,
+            className: 'btn-danger'
+          },
+          cancel: {
+            label: params.goBack,
+            className: 'btn-default'
+          }
+        },
+        callback: function(result) {
+          if (result) {
+            $('<input type="hidden" name="buttonCancel" value="true">').appendTo('.exercise');
+            continueSubmit();
+          }
+        }
+      });
+    });
     if (checkUnanswered) {
         exerciseCheckUnanswered();
     } else {
