@@ -765,6 +765,8 @@ if (!class_exists('Exercise')) {
                }
             } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS || $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT) {
                 $objAnswersTmp = new Answer($key);
+                Database::get()->query("DELETE FROM exercise_answer_record
+                            WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                 $answer_field = $objAnswersTmp->selectAnswer(1);
                 list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
                 // split weightings that are joined with a comma
@@ -809,6 +811,8 @@ if (!class_exists('Exercise')) {
                 }
             } elseif ($objQuestionTmp->selectType() == MATCHING) {
                 $objAnswersTmp = new Answer($key);
+                Database::get()->query("DELETE FROM exercise_answer_record
+                            WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                 foreach ($value as $row_key => $row_choice) {
                     // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position
                     $correct_match = $objAnswersTmp->isCorrect($row_key);
