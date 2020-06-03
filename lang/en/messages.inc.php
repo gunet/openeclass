@@ -769,6 +769,7 @@ $langExerciseConstrainExplanation = "0 for no constrain";
 $langExerciseAttemptsAllowedExplanation = "0 for unlimited number of attempts";
 $langExerciseAttemptsAllowed = "Attempts allowed";
 $langExerciseAttemptsAllowedUnit = "times";
+$langExerciseAttemptsUnlimited = 'Unlimited';
 $langExerciseExpired = "The exercise has expired or is not active.";
 $langExerciseExpiredTime = "You have exceeded the time limit for this exercise.";
 $langExerciseLis = "List of exercises";

@@ -691,8 +691,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 <div class='col-sm-3'>
                     <strong>$langExerciseAttemptsAllowed:</strong>
                 </div>
-                <div class='col-sm-9'>
-                    $exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit
+                <div class='col-sm-9'>" .
+                    ($exerciseAttemptsAllowed?
+                     "$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit" :
+                     $langExerciseAttemptsUnlimited) . "
                 </div>
             </div>" . ($randomQuestions? "
             <div class='row margin-bottom-fat'>
