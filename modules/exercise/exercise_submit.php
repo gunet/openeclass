@@ -42,6 +42,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
+
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
@@ -397,8 +398,9 @@ if (isset($_POST['formSent'])) {
 
     $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $exerciseResult;
 
-    // if it is a non-sequential exercise OR
-    // if it is a sequential exercise in the last question OR the time has expired
+    // if it is a non-sequential exercise
+    // OR if it is a sequential exercise in the last question
+    // OR the time has expired
     if ($exerciseType == SINGLE_PAGE_TYPE && !isset($_POST['buttonSave']) ||
         $exerciseType == MULTIPLE_PAGE_TYPE && (isset($_POST['buttonFinish']) || $time_expired)) {
         if (isset($_POST['secsRemaining'])) {
@@ -723,7 +725,6 @@ foreach ($questionList as $questionId) {
     }
 } // end foreach()
 
-$disableCheck = 0;
 if (!$questionList) {
     $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
     if (isset($_REQUEST['unit'])) {
@@ -732,33 +733,29 @@ if (!$questionList) {
         $backlink = "index.php?course=$course_code";
     }
 
-    $tool_content .= "<div class='pull-right'>
-        <a href='$backlink' class='btn btn-default'>$langBack</a>
-    </div>";
+    $tool_content .= "<div class='pull-right'><a href='$backlink' class='btn btn-default'>$langBack</a></div>";
 } else {
-    if ($exerciseType == SINGLE_PAGE_TYPE || $nbrQuestions == $current_question_number) {
-        $submitLabel = $langSubmit;
-        $buttonName = "name='buttonFinish'";
-    } else {
-        $submitLabel = $langNext . ' &gt;';
-        $disableCheck = 1;
-        $buttonName = '';
-    }
-    $tool_content .= "<div class='pull-right' style='margin-top: 15px;'>
-        <input class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>&nbsp;";
-        if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // display `previous` button
+    $tool_content .= "<div style='margin-top: 15px;'>";
+        if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             $prevLabel = '&lt; ' . $langPrevious;
-            $tool_content .= "<input class='btn btn-primary blockUI' type='submit' name='prev' value='$prevLabel' >&nbsp;";
+            $nextLabel = $langNext . ' &gt';
+            if ($questionId != $questionList[1]) { // `prev` button
+                $tool_content .= "<input class='btn btn-primary pull-left blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
+            }
+            if ($questionId != $questionList[sizeof($questionList)]) { // `next` button
+                $tool_content .= "<input class='btn btn-primary pull-left blockUI navbutton' type='submit' value='$nextLabel'>";
+            }
         }
-        // display submit button
-        $tool_content .= "<input class='btn btn-primary blockUI' type='submit' $buttonName value='$submitLabel'>";
+        // `submit` button
+        $tool_content .= "<input class='btn btn-success pull-right blockUI' style='margin-left: 10px;' type='submit' name='buttonFinish' value='$langSubmit'>";
+        // `cancel` button
+        $tool_content .= "<input class='btn btn-danger pull-right' style='margin-left: 10px;' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
         }
-
-    if ($exerciseTempSave && !($exerciseType == MULTIPLE_PAGE_TYPE && ($i == $nbrQuestions))) {
-        $tool_content .= "&nbsp;<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
+    if ($exerciseTempSave && !($exerciseType == MULTIPLE_PAGE_TYPE && ($i == $nbrQuestions))) { // `temporary save` button
+        $tool_content .= "<input class='btn btn-primary pull-right blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
     }
     $tool_content .= "</div>";
 
@@ -791,8 +788,7 @@ if ($questionList) {
                 answeredIds: ". json_encode($answeredIds) .",
                 unansweredIds: ". json_encode($unansweredIds) .",
                 attemptsAllowed: $exerciseAllowedAttempts,
-                eurid: $eurid,
-                disableCheck: $disableCheck
+                eurid: $eurid
             });
             $('.qNavButton').click(function (e) {
                 e.preventDefault();

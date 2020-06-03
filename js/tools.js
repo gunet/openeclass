@@ -431,7 +431,7 @@ function exercise_init_countdown(params) {
                 });
             }
         });
-        $('input[name=q_id], input[name=prev]').click(function () {
+        $('input[name=q_id], input.navbutton').click(function () {
             continueSubmit();
         });
         $('.exercise').submit(function (e) {
@@ -496,7 +496,7 @@ function exercise_init_countdown(params) {
             }
         });
     }
-    var checkUnanswered = $('.qPanel').length >= 1 && !params.disableCheck;
+    var checkUnanswered = $('.qPanel').length >= 1;
     $('.btn[name=buttonSave]').click(continueSubmit);
     $('#cancelButton').click(function (e) {
       e.preventDefault();
