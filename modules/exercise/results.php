@@ -118,7 +118,7 @@ if ($is_editor) {
 }
 $extra_sql = ($status !== '' ) ? ' AND attempt_status = '.$status : '';
 
-foreach ($result as $row) {        
+foreach ($result as $row) {
     $sid = $row->uid;
     // check if there is exercise assigned to teacher
     $testTheStudent = Database::get()->querySingle("SELECT assigned_to FROM `exercise_user_record` 
@@ -173,7 +173,6 @@ foreach ($result as $row) {
             }
 
             $row_class = "";
-            $action_btn_state = true;
             if ($row2->attempt_status == ATTEMPT_COMPLETED) { // IF ATTEMPT COMPLETED
                 $status = $langAttemptCompleted;
                 if ($showScore) {
@@ -216,9 +215,6 @@ foreach ($result as $row) {
                         if ($now > $estimatedEndTime) {
                             $row_class = " class='warning' data-toggle='tooltip' title='$langAttemptActiveButDeadMsg'";
                         } else {
-                            if ($exerciseTimeConstraint) {
-                                $action_btn_state = false;
-                            }
                             $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";
                         }
                     }
@@ -244,8 +240,8 @@ foreach ($result as $row) {
                     <td class='text-center'>$results_link</td>
                     <td class='text-center'>$status</td>";
             if ($is_editor) {
-            $tool_content .= "
-                    <td class='option-btn-cell'>" . ($action_btn_state ? action_button(array(
+                $tool_content .= "
+                    <td class='option-btn-cell'>" . action_button(array(
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
@@ -253,10 +249,9 @@ foreach ($result as $row) {
                             'confirm' => $langConfirmPurgeExercises,
                             'class' => 'delete'
                         )
-                    )) : "") . "</td>";
+                    )).  "</td>";
             }
-            $tool_content .= "
-                </tr>";
+            $tool_content .= "</tr>";
             $k++;
         }
         $tool_content .= "</table></div><br>";

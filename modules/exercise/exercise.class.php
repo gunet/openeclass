@@ -750,23 +750,15 @@ if (!class_exists('Exercise')) {
             $id = $this->id;
             $attempt_value = $_POST['attempt_value'];
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
-            if ($objQuestionTmp->selectType() == FREE_TEXT) {
-                if (!empty($value)) {
-                    Database::get()->query("INSERT INTO exercise_answer_record
-                       (eurid, question_id, answer, answer_id, is_answered, q_position)
-                       VALUES (?d, ?d, ?s, ?d, ?d, ?d)",
-                       $eurid, $key, $value, 1, $as_answered, $q_position);
-                } else {
-                    $weight = ($as_answered == 1) ? 0 : NULL; // if the question is unanswered give 0 weight else give NULL
-                    Database::get()->query("INSERT INTO exercise_answer_record
-                       (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
-                       VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
-                       $eurid, $key, $value, 0, $weight, $as_answered, $q_position);
-               }
-            } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS || $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT) {
-                $objAnswersTmp = new Answer($key);
-                Database::get()->query("DELETE FROM exercise_answer_record
+            Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
+            if ($question_type == FREE_TEXT) {
+                Database::get()->query("INSERT INTO exercise_answer_record
+                   (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                   VALUES (?d, ?d, ?s, ?d, ?d, ?d)",
+                   $eurid, $key, $value, 1, NULL, $as_answered, $q_position);
+            } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
+                $objAnswersTmp = new Answer($key);
                 $answer_field = $objAnswersTmp->selectAnswer(1);
                 list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
                 // split weightings that are joined with a comma
@@ -787,7 +779,7 @@ if (!class_exists('Exercise')) {
                         $eurid, $key, $row_choice, $row_key, $weight, $as_answered, $q_position);
 
                 }
-            } elseif ($objQuestionTmp->selectType() == MULTIPLE_ANSWER) {
+            } elseif ($question_type == MULTIPLE_ANSWER) {
                 if ($value == 0) {
                     $row_key = 0;
                     $answer_weight = 0;
@@ -797,8 +789,6 @@ if (!class_exists('Exercise')) {
                         $eurid, $key, $row_key, $answer_weight, $as_answered, $q_position);
                 } else {
                     $objAnswersTmp = new Answer($key);
-                    Database::get()->query("DELETE FROM exercise_answer_record
-                            WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                     foreach ($value as $row_key => $row_choice) {
                         $answer_weight = $objAnswersTmp->selectWeighting($row_key);
                         Database::get()->query("INSERT INTO exercise_answer_record
@@ -809,10 +799,8 @@ if (!class_exists('Exercise')) {
                     }
                     unset($objAnswersTmp);
                 }
-            } elseif ($objQuestionTmp->selectType() == MATCHING) {
+            } elseif ($question_type == MATCHING) {
                 $objAnswersTmp = new Answer($key);
-                Database::get()->query("DELETE FROM exercise_answer_record
-                            WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                 foreach ($value as $row_key => $row_choice) {
                     // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position
                     $correct_match = $objAnswersTmp->isCorrect($row_key);
@@ -829,7 +817,7 @@ if (!class_exists('Exercise')) {
                     unset($answer_weight);
                 }
             } else {
-                if ($value!=0) {
+                if ($value) {
                     $objAnswersTmp = new Answer($key);
                     $answer_weight = $objAnswersTmp->selectWeighting($value);
                 } else {
