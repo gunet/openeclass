@@ -464,9 +464,9 @@ $head_content .= "<script type='text/javascript'>
                 }
             }
         });
-    }
-    $(document).ready(function(){
-        $('.ex_settings').click(function(e) {            
+    }    
+    $(document).ready(function() {
+        $(document).on('click', '.ex_settings', function(e) {        
             var exercise = $(this);
             var link = $(this).attr('href');
             if (exercise.hasClass('paused_exercise')) {
