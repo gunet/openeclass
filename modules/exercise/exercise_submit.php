@@ -734,27 +734,32 @@ if (!$questionList) {
 
     $tool_content .= "<div class='pull-right'><a href='$backlink' class='btn btn-default'>$langBack</a></div>";
 } else {
-    $tool_content .= "<div style='margin-top: 15px;'>";
-        if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-            $prevLabel = '&lt; ' . $langPrevious;
-            $nextLabel = $langNext . ' &gt';
-            if ($questionId != $questionList[1]) { // `prev` button
-                $tool_content .= "<input class='btn btn-primary pull-left blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
-            }
-            if ($questionId != $questionList[sizeof($questionList)]) { // `next` button
-                $tool_content .= "<input class='btn btn-primary pull-left blockUI navbutton' type='submit' value='$nextLabel'>";
-            }
-        }
-        // `submit` button
-        $tool_content .= "<input class='btn btn-success pull-right blockUI' style='margin-left: 10px;' type='submit' name='buttonFinish' value='$langSubmit'>";
-        // `cancel` button
-        $tool_content .= "<input class='btn btn-danger pull-right' style='margin-left: 10px;' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
-
-        if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-            $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
-        }
+    $tool_content .= "<div style='margin-top: 15px;' class='col-md-12'>";
+    //$tool_content .= "<div class='col-xs-8'>";
     if ($exerciseTempSave && !($exerciseType == MULTIPLE_PAGE_TYPE && ($i == $nbrQuestions))) { // `temporary save` button
-        $tool_content .= "<input class='btn btn-primary pull-right blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
+        $tool_content .= "<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
+    }
+    // `submit` button
+    $tool_content .= "<input class='btn btn-success blockUI' style='margin-left: 10px;' type='submit' name='buttonFinish' value='$langSubmit'>";
+    // `cancel` button
+    $tool_content .= "<input class='btn btn-danger' style='margin-left: 10px; margin-right: 10px;' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+
+    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+        $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
+    }
+
+    //$tool_content .= "</span>";
+    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+        $prevLabel = '&lt; ' . $langPrevious;
+        $nextLabel = $langNext . ' &gt';
+        //$tool_content .= "<span class='col-xs-4'>";
+        if ($questionId != $questionList[1]) { // `prev` button
+            $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
+        }
+        if ($questionId != $questionList[sizeof($questionList)]) { // `next` button
+            $tool_content .= "<input class='btn btn-primary blockUI navbutton' type='submit' value='$nextLabel'>";
+        }
+      //  $tool_content .= "</span>";
     }
     $tool_content .= "</div>";
 
