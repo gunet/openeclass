@@ -680,12 +680,12 @@ if (!class_exists('Exercise')) {
             return $exerciseResult;
         }
         /**
-         * Save User Unanswered Questions either as answered (default behaviour)
-         * or as unanswered by passing parameter 0 to the function
+         * Save User Unanswered Questions either as unanswered (default behaviour)
+         * or as answered by passing parameter 1 to the function
          * (Used for sequential exercises on time expiration
          * and when student wants to temporary save his answers)
          */
-        function save_unanswered($as_answered = 1) {
+        function save_unanswered($as_answered = 0) {
             $id = $this->id;
             $attempt_value = $_POST['attempt_value'];
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
@@ -717,7 +717,7 @@ if (!class_exists('Exercise')) {
                             }
                         }
                         unset($objAnswerTmp);
-                    } else if ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
+                    } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                         // construction of the Answer object
                         $objAnswerTmp = new Answer($question_id);
                         $answer = $objAnswerTmp->selectAnswer(1);
@@ -755,8 +755,8 @@ if (!class_exists('Exercise')) {
             if ($question_type == FREE_TEXT) {
                 Database::get()->query("INSERT INTO exercise_answer_record
                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
-                   VALUES (?d, ?d, ?s, ?d, ?d, ?d)",
-                   $eurid, $key, $value, 1, NULL, $as_answered, $q_position);
+                   VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",
+                   $eurid, $key, $value, $as_answered, $q_position);
             } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                 $objAnswersTmp = new Answer($key);
                 $answer_field = $objAnswersTmp->selectAnswer(1);
@@ -777,7 +777,6 @@ if (!class_exists('Exercise')) {
                         (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                         VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
                         $eurid, $key, $row_choice, $row_key, $weight, $as_answered, $q_position);
-
                 }
             } elseif ($question_type == MULTIPLE_ANSWER) {
                 if ($value == 0) {

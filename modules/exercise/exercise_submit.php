@@ -467,7 +467,7 @@ if (isset($_POST['formSent'])) {
         // the first pause), unanswered are already saved in the DB and they
         // only need an update
         if (!isset($paused_attempt)) {
-            $objExercise->save_unanswered(0); // passing 0 to save like unanswered
+            $objExercise->save_unanswered();
         }
 
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?f, total_weighting = ?f, attempt_status = ?d, secs_remaining = ?d
