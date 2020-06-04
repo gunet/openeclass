@@ -734,34 +734,66 @@ if (!$questionList) {
 
     $tool_content .= "<div class='pull-right'><a href='$backlink' class='btn btn-default'>$langBack</a></div>";
 } else {
-    $tool_content .= "<div style='margin-top: 15px;' class='col-md-12'>";
-    //$tool_content .= "<div class='col-xs-8'>";
-    if ($exerciseTempSave && !($exerciseType == MULTIPLE_PAGE_TYPE && ($i == $nbrQuestions))) { // `temporary save` button
-        $tool_content .= "<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
-    }
-    // `submit` button
-    $tool_content .= "<input class='btn btn-success blockUI' style='margin-left: 10px;' type='submit' name='buttonFinish' value='$langSubmit'>";
-    // `cancel` button
-    $tool_content .= "<input class='btn btn-danger' style='margin-left: 10px; margin-right: 10px;' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
-
-    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-        $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
+    // "Temporary save" button
+    if ($exerciseTempSave && !($exerciseType == MULTIPLE_PAGE_TYPE && ($i == $nbrQuestions))) {
+        $tempSaveButton = "<div class='exercise-action-buttons'>
+            <input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>
+        </div>";
+    } else {
+        $tempSaveButton = '';
     }
 
-    //$tool_content .= "</span>";
+    // Navigation buttons (previous / next)
     if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+        $head_content .= "<style>
+            @media only screen and (max-width: 680px) {
+                .exercise-nav-buttons { width: 100%; }
+                .exercise-action-buttons { text-align: center; }
+            }
+            @media only screen and (max-width: 460px) {
+                .exercise-nav-buttons { text-align: center !important; }
+                .exercise-action-buttons { width: 100%; }
+            }
+            .exercise-nav-buttons, .exercise-action-buttons { margin-top: 15px; }
+            .exercise-nav-buttons .btn, .exercise-action-buttons .btn { margin: 0 5px; }
+            .exercise-nav-buttons { float: right; text-align: right; }
+            .exercise-action-buttons { float: left; }
+        </style>";
+
+        $tool_content .= '<div class="exercise-nav-buttons">';
         $prevLabel = '&lt; ' . $langPrevious;
         $nextLabel = $langNext . ' &gt';
-        //$tool_content .= "<span class='col-xs-4'>";
         if ($questionId != $questionList[1]) { // `prev` button
             $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
         }
         if ($questionId != $questionList[sizeof($questionList)]) { // `next` button
             $tool_content .= "<input class='btn btn-primary blockUI navbutton' type='submit' value='$nextLabel'>";
         }
-      //  $tool_content .= "</span>";
+        $tool_content .= '</div>' . $tempSaveButton;
+        $tempSaveButton = '';
+    } else {
+        $head_content .= "<style>
+            @media only screen and (max-width: 460px) {
+                .exercise-action-buttons { text-align: center; width: 100%; }
+            }
+            .exercise-action-buttons { margin-top: 15px; }
+            .exercise-action-buttons .btn { margin: 0 5px; }
+            .exercise-action-buttons { float: right; }
+        </style>";
     }
-    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='exercise-action-buttons'>";
+
+    // "Cancel" button
+    $tool_content .= "<input class='btn btn-danger' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+
+    // "Submit" button
+    $tool_content .= "<input class='btn btn-success blockUI' type='submit' name='buttonFinish' value='$langSubmit'>";
+    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+        $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
+    }
+
+    $tool_content .= "</div>" . $tempSaveButton;
 
     // In sequential exercise we save all questions in the DB
     // to avoid mixing up their order if user navigates non-sequentially
