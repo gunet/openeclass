@@ -304,6 +304,7 @@ register_shutdown_function('restore_dbname_override');
 
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
+$is_editor = false;
 if (isset($require_current_course) and $require_current_course) {
     if (!isset($_SESSION['dbname'])) {
         $toolContent_ErrorExists = $langSessionIsLost;
@@ -529,7 +530,6 @@ if ($is_admin or $is_power_user) {
     $is_course_admin = false;
 }
 
-$is_editor = false;
 if (isset($_SESSION['courses'])) {
     if (isset($course_code)) {
         if (check_editor()) { // check if user is editor of course
