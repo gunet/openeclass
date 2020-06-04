@@ -315,30 +315,30 @@ if (isset($require_current_course) and $require_current_course) {
                                            FROM course, course_department, hierarchy
                                            WHERE course.id = course_department.course AND
                                                  hierarchy.id = course_department.department AND
-                                                 course.code=?s"
-                , function ($course_info) use (&$course_id, &$public_code, &$course_code, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseLanguage ) {
-            $course_id = $course_info->cid;
-            $public_code = $course_info->public_code;
-            $course_code = $course_info->code;
-            $fac = $course_info->faculte;
-            $titulaires = $course_info->prof_names;
-            $languageInterface = $course_info->lang;
-            $visible = $course_info->visible;
-            // New variables
-            $currentCourseName = $course_info->title;
-            $currentCourseLanguage = $languageInterface;
-        }
-                , function ($errormsg) use($urlServer) {
-            if (defined('M_INIT')) {
-                echo RESPONSE_FAILED . " Error: " . $errormsg;
-                exit();
-            } else {
-                restore_dbname_override(true);
-                header('Location: ' . $urlServer);
-                exit();
-            }
-        }
-                , $dbname);
+                                                 course.code=?s",
+            function ($course_info) use (&$course_id, &$public_code, &$course_code, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseLanguage ) {
+                $course_id = $course_info->cid;
+                $public_code = $course_info->public_code;
+                $course_code = $course_info->code;
+                $fac = $course_info->faculte;
+                $titulaires = $course_info->prof_names;
+                $languageInterface = $course_info->lang;
+                $visible = $course_info->visible;
+                // New variables
+                $currentCourseName = $course_info->title;
+                $currentCourseLanguage = $languageInterface;
+            },
+            function ($errormsg) use($urlServer) {
+                if (defined('M_INIT')) {
+                    echo RESPONSE_FAILED . " Error: " . $errormsg;
+                    exit();
+                } else {
+                    restore_dbname_override(true);
+                    header('Location: ' . $urlServer);
+                    exit();
+                }
+            },
+            $dbname);
 
         if (!isset($course_code) or empty($course_code)) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
@@ -378,8 +378,8 @@ if (isset($require_current_course) and $require_current_course) {
                 }
 
                 if ($atleastone) {
-                    $status = 1;
-                    $is_course_admin = true;
+                    $status = USER_TEACHER;
+                    $is_editor = $is_course_admin = true;
                     $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
                 }
             }
@@ -422,7 +422,7 @@ if (isset($require_current_course) and $require_current_course) {
 }
 
 if (isset($require_user_registration) && $require_user_registration) {
-    if (!($is_admin or user_is_registered_to_course($uid, $course_id))) {
+    if (!($is_admin or $is_editor or user_is_registered_to_course($uid, $course_id))) {
         $toolContent_ErrorExists = $langCheckUserRegistration;
     }
 }
@@ -576,7 +576,11 @@ $module_id = current_module_id();
 
 // Security check:: Users must not be able to access inactive (if students) or disabled tools.
 if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
-    if (!$uid or check_guest()) {
+    if ($is_editor) {
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                        WHERE module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              course_id = ?d", $course_id);
+    } elseif (!$uid or check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND
                               course_id = ?d AND
@@ -594,10 +598,6 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_REQUEST . ",
                                                 " . MODULE_ID_PROGRESS . ",
                                                 " . MODULE_ID_LP . ")", $course_id);
-    } elseif ($is_editor) {
-        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
-                        WHERE module_id NOT IN (SELECT module_id FROM module_disable) AND
-                              course_id = ?d", $course_id);
     } else {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND
@@ -619,9 +619,9 @@ set_glossary_cache();
 $tool_content = $head_content = '';
 
 function fix_directory_separator($path) {
-	if (DIRECTORY_SEPARATOR !== '/') {
-	    return(str_replace(DIRECTORY_SEPARATOR, '/', $path));
+    if (DIRECTORY_SEPARATOR !== '/') {
+        return(str_replace(DIRECTORY_SEPARATOR, '/', $path));
     } else {
-		return $path;
-	}
+        return $path;
+    }
 }
