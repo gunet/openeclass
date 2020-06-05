@@ -138,8 +138,10 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
                     triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
                 } else {
                     Database::get()->query("INSERT INTO assignment_submit
-                                    (uid, assignment_id, submission_date, submission_ip, file_path, file_name, comments)
-                                     VALUES (?d, ?d, " . DBHelper::timeAfter() . ", ?s, ?s, ?s, '')",
+                                    (uid, assignment_id, submission_date, submission_ip, file_path, 
+                                      file_name, comments, grade_comments, grade_comments_filename, 
+                                      grade_comments_filepath, grade_submission_ip)
+                                     VALUES (?d, ?d, " . DBHelper::timeAfter() . ", ?s, ?s, ?s, '', '', '', '', '')",
                         $uid, $assignment_id, Log::get_client_ip(), $work_filename, $original_filename);
                     triggerGame($assignment->course_id, $uid, $assignment_id);
                     triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
