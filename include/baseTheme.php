@@ -675,6 +675,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('HTML_FOOTER', $html_footer);
     }
 
+    if (file_exists('node_modules/mathjax/es5/tex-chtml.js')) {
+        $t->set_var('HTML_FOOTER', '<script type="text/javascript" id="MathJax-script" async src="'.
+            $urlAppend . 'node_modules/mathjax/es5/tex-chtml.js"></script>', true);
+    }
+
     //  At this point all variables are set and we are ready to send the final output
     //  back to the browser
     $t->parse('main', 'mainBlock', false);

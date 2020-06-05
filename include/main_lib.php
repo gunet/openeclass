@@ -55,7 +55,12 @@ function js_escape($s) {
 function js_link($file) {
     global $urlAppend;
     $v = '?v=' . CACHE_SUFFIX;
-    return "<script type='text/javascript' src='{$urlAppend}js/$file$v'></script>\n";
+    if (strpos($file, 'node_modules') === 0) {
+        $root = 'node_modules';
+    } else {
+        $root = 'js';
+    }
+    return "<script type='text/javascript' src='{$urlAppend}$root/$file$v'></script>\n";
 }
 
 function css_link($file) {

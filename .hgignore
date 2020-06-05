@@ -11,6 +11,7 @@ syntax: regexp
 ^composer\.phar
 ^storage/
 ^vendor/
+^node_modules/
 
 ^nbproject/private/
 ^.sass-cache/
