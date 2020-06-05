@@ -74,10 +74,52 @@ $head_content .= "
             });
         });
     </script>";
+
+$my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b 
+                              WHERE a.course_id = b.id 
+                                  AND a.course_id != ?d 
+                                  AND a.user_id = ?d 
+                                  AND a.status = " .USER_TEACHER . "", $course_id, $uid);
+$courses_options = "";
+foreach ($my_courses as $row) {
+    $courses_options .= "'<option value=\"$row->Course_id\">".q($row->Title)."</option>'+";
+}
+
+$head_content .= "<script>
+            $(function() {                    
+                $('.warnDup').on('click', function(e) {
+                    e.preventDefault();                                        
+                    bootbox.dialog({
+                        title: '" . js_escape($langCreateDuplicateIn) . "',
+                        message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_pool_form\">'+
+                                    '<select class=\"form-control\" id=\"course_id\" name=\"clone_pool_to_course_id\">'+                                        
+                                        $courses_options
+                                    '</select>'+
+                                  '</form>',
+                        buttons: {
+                            cancel: {
+                                label: '" . js_escape($langCancel) . "',
+                                className: 'btn-default'
+                            },
+                            success: {
+                                label: '" . js_escape($langCreateDuplicate) . "',
+                                className: 'btn-success',
+                                callback: function (d) {
+                                    $('#clone_pool_form').attr('action', '$_SERVER[SCRIPT_NAME]?course=$course_code&clone_pool=1');
+                                    $('#clone_pool_form').submit();
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+    </script>";
+
 $tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
 
 $toolName = $langQuestionPool;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
+
 
 if (isset($_GET['fromExercise'])) {
     $objExercise = new Exercise();
@@ -123,6 +165,10 @@ elseif (isset($_GET['recup']) && isset($fromExercise)) {
         $objExercise->save();
     }
     redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");
+} elseif (isset($_REQUEST['clone_pool'])) {
+    clone_question_pool($_POST['clone_pool_to_course_id']);
+    Session::Messages($langCopySuccess, 'alert-success');
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
 if (isset($fromExercise)) {
@@ -138,15 +184,19 @@ if (isset($fromExercise)) {
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
             'button-class' => 'btn-success'),
+        array('title' => $langCreateDuplicate,
+            'url' => "question_pool.php?course=$course_code&amp;dup=yes",
+            'icon' => 'fa-copy',
+            'level' => 'primary-label',
+            'class' => 'warnDup',
+            'button-class' => 'btn-success'),
         array('title' => $langImportQTI,
             'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
             'icon' => 'fa-download',
-            'level' => 'primary-label',
             'button-class' => 'btn-success'),
         array('title' => $langExportQTI,
             'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
             'icon' => 'fa-upload',
-            'level' => 'primary-label',
             'button-class' => 'btn-success')
      );
 }
@@ -353,3 +403,33 @@ $tool_content .= "
 ";
 
 draw($tool_content, 2, null, $head_content);
+
+
+/**
+ * @brief clone question pool to new course
+ * @param $new_course_id
+ */
+function clone_question_pool($clone_course_id)
+{
+    global $course_code, $course_id;
+
+    $old_path = "courses/$course_code/image/quiz-";
+    $new_path = 'courses/' . course_id_to_code($clone_course_id) . '/image/quiz-';
+    Database::get()->queryFunc("SELECT id FROM exercise_question WHERE course_id = ?d",
+        function ($question) use ($clone_course_id, $old_path, $new_path) {
+            $question_clone_id = Database::get()->query("INSERT INTO exercise_question
+                    (course_id, question, description, weight, type, difficulty, category)
+                    SELECT ?d, question, description, weight, type, difficulty, 0
+                        FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
+            Database::get()->query("INSERT INTO exercise_answer
+                    (question_id, answer, correct, comment, weight, r_position)
+                    SELECT ?d, answer, correct, comment, weight, r_position FROM exercise_answer
+                        WHERE question_id = ?d",
+                $question_clone_id, $question->id);
+            $old_image_path = $old_path . $question->id;
+            if (file_exists($old_image_path)) {
+                copy($old_image_path, $new_path . $question_clone_id);
+            }
+        },
+    $course_id);
+}
