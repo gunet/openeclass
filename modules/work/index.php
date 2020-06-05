@@ -82,7 +82,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if (isset($_POST['sid'])) {
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
-    } elseif ($_POST['assign_type']) {
+    } elseif (($_POST['assign_type']) or ($_POST['assign_g_type'] == 2)) {
         $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     } else {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
@@ -277,6 +277,7 @@ if ($is_editor) {
         });
         $('input[name=group_submissions]').click(changeAssignLabel);
         $('input[id=assign_button_some]').click(ajaxAssignees);
+        $('input[id=assign_button_group]').click(ajaxAssignees);
         $('input[id=assign_button_all]').click(hideAssignees);
         ";
 
@@ -296,39 +297,50 @@ if ($is_editor) {
         function changeAssignLabel()
         {
             var assign_to_specific = $('input:radio[name=assign_to_specific]:checked').val();
-            if(assign_to_specific==1){
+            if ((assign_to_specific==1) || (assign_to_specific==2)) {
                ajaxAssignees();
             }
-            if (this.id=='group_button') {
+            if (this.id=='group_button') {            
                $('#assign_button_all_text').text('$m[WorkToAllGroups]');
                $('#assign_button_some_text').text('$m[WorkToGroup]');
                $('#assignees').text('$langGroups');
-            } else {
+               $('#assign_group_div').hide();
+            } else {               
                $('#assign_button_all_text').text('$m[WorkToAllUsers]');
                $('#assign_button_some_text').text('$m[WorkToUser]');
+               $('#assign_button_group_text').text('$m[WorkToGroup]');
                $('#assignees').text('$langStudents');
+               $('#assign_group_div').show();
             }
         }
         function ajaxAssignees()
         {
-            $('#assignees_tbl').removeClass('hide');
+            $('#assignees_tbl').removeClass('hide');            
             var type = $('input:radio[name=group_submissions]:checked').val();
+            var g_type = $('input:radio[name=assign_to_specific]:checked').val();            
             $.post('$works_url[url]',
             {
-              assign_type: type
+              assign_type: type,
+              assign_g_type: g_type,
             },
-            function(data,status){
+            function(data,status) {
                 var index;
                 var parsed_data = JSON.parse(data);
                 var select_content = '';
-                if(type==0){
-                    for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                if (type == 0) {
+                    if (g_type == 1) {
+                        for (index = 0; index < parsed_data.length; ++index) {
+                            select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                        }
+                    } else if (g_type == 2) {                    
+                        for (index = 0; index < parsed_data.length; ++index) {
+                            select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                        }
                     }
                 } else {
-                    for (index = 0; index < parsed_data.length; ++index) {
+                   for (index = 0; index < parsed_data.length; ++index) {
                         select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
-                    }
+                    }                    
                 }
                 $('#assignee_box').find('option').remove();
                 $('#assign_box').find('option').remove().end().append(select_content);
@@ -865,15 +877,27 @@ function add_assignment() {
                     }
                 }
                 if ($assign_to_specific && !empty($assigned_to)) {
-                    if ($group_submissions == 1) {
-                        $column = 'group_id';
-                        $other_column = 'user_id';
+                    if ($assign_to_specific == 2) { // specific users belonging to group
+                        if (count($_POST['ingroup']) > 0) {
+                            foreach ($_POST['ingroup'] as $g) {
+                                $data = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
+                                foreach ($data as $u) {
+                                    Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id) 
+                                                  VALUES (?d, ?d, ?d)", $u, 0, $id);
+                                }
+                            }
+                        }
                     } else {
-                        $column = 'user_id';
-                        $other_column = 'group_id';
-                    }
-                    foreach ($assigned_to as $assignee_id) {
-                        Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
+                        if ($group_submissions == 1) {
+                            $column = 'group_id';
+                            $other_column = 'user_id';
+                        } else {
+                            $column = 'user_id';
+                            $other_column = 'group_id';
+                        }
+                        foreach ($assigned_to as $assignee_id) {
+                            Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
+                        }
                     }
                 }
                 Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $id,
@@ -1093,17 +1117,28 @@ function edit_assignment($id) {
         } else {
             $moduleTag->syncTags(array());
         }
-
         if ($assign_to_specific && !empty($assigned_to)) {
-            if ($group_submissions == 1) {
-                $column = 'group_id';
-                $other_column = 'user_id';
+            if ($assign_to_specific == 2) { // specific users belonging to group
+                if (count($_POST['ingroup']) > 0) {
+                    foreach ($_POST['ingroup'] as $g) {
+                        $data = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
+                        foreach ($data as $u) {
+                            Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id) 
+                                                  VALUES (?d, ?d, ?d)", $u, 0, $id);
+                        }
+                    }
+                }
             } else {
-                $column = 'user_id';
-                $other_column = 'group_id';
-            }
-            foreach ($assigned_to as $assignee_id) {
-                Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
+                if ($group_submissions == 1) {
+                    $column = 'group_id';
+                    $other_column = 'user_id';
+                } else {
+                    $column = 'user_id';
+                    $other_column = 'group_id';
+                }
+                foreach ($assigned_to as $assignee_id) {
+                    Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
+                }
             }
         }
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY,
@@ -2254,6 +2289,12 @@ function new_assignment() {
                         <span id='assign_button_some_text'>$m[WorkToUser]</span>
                       </label>
                     </div>
+                    <div class='radio' id='assign_group_div'>
+                      <label>
+                        <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'>
+                        <span id='assign_button_group_text'>$m[WorkToGroup]</span>
+                      </label>
+                    </div>
                 </div>
             </div>
             <div class='form-group'>
@@ -2818,6 +2859,26 @@ function show_edit_assignment($id) {
             foreach ($unassigned as $unassigned_row) {
                 $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
             }
+        } else if ($row->assign_to_specific == 2) {
+            $assignees = Database::get()->queryArray("SELECT `group`.id, `group`.name 
+                                          FROM `group`, group_members, assignment_to_specific 
+                                                WHERE course_id = ?d
+                                                    AND `group`.id = group_members.group_id 
+                                                    AND group_members.user_id = assignment_to_specific.user_id 
+                                                    AND assignment_to_specific.assignment_id = ?d
+                                                GROUP BY name, id", $course_id, $id);
+            $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+            foreach ($assignees as $assignee_row) {
+                $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
+            }
+            $unassigned = array_udiff($all_groups, $assignees,
+                function ($obj_a, $obj_b) {
+                    return $obj_a->id - $obj_b->id;
+                }
+            );
+            foreach ($unassigned as $unassigned_row) {
+                $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
+            }
         } else {
             $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                    FROM assignment_to_specific, user
@@ -3161,12 +3222,18 @@ function show_edit_assignment($id) {
                             <span id='assign_button_some_text'>$m[WorkToUser]</span>
                           </label>
                         </div>
+                        <div class='radio' id='assign_group_div'>
+                          <label>
+                            <input type='radio' id='assign_button_group' name='assign_to_specific' value='2' ".(($row->assign_to_specific==2) ? 'checked' : '').">
+                            <span id='assign_button_group_text'>$m[WorkToGroup]</span>
+                          </label>
+                        </div>
                     </div>
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <div class='table-responsive'>
-                            <table id='assignees_tbl' class='table-default ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
+                            <table id='assignees_tbl' class='table-default ".((($row->assign_to_specific==1) or ($row->assign_to_specific==2))? '' : 'hide')."'>
                             <tr class='title1'>
                               <td id='assignees'>$langStudents</td>
                               <td class='text-center'>$langMove</td>
@@ -3609,7 +3676,9 @@ function show_student_assignment($id) {
                                                      WHERE course_id = ?d
                                                         AND id = ?d
                                                         AND active = '1'
-                                                        AND (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
+                                                        AND (assign_to_specific = '0' 
+                                                            OR assign_to_specific = '1' 
+                                                            OR assign_to_specific = '2' AND id IN
                                                                (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
                                                                 UNION
                                                                 SELECT assignment_id FROM assignment_to_specific
@@ -5050,7 +5119,7 @@ function show_student_assignments() {
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                 FROM assignment WHERE course_id = ?d
                     AND active = '1' AND
-                    (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
+                    (assign_to_specific = '0' OR assign_to_specific = '1' OR assign_to_specific = '2' AND id IN
                         (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
                             UNION
                         SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
