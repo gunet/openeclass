@@ -490,8 +490,6 @@ if (isset($_POST['formSent'])) {
 }
 
 if (isset($timeleft)) {
-    // Submit 10 sec earlier to account for delays when submitting etc.
-    $timeleft -= 10;
     if ($timeleft <= 1) {
         $timeleft = 1;
     }
