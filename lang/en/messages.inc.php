@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2020-05-26 11:19:08
+// Generated 2020-06-05 17:55:38
 
 $langYes = "Yes";
 $langNo = "No";
@@ -769,7 +769,6 @@ $langExerciseConstrainExplanation = "0 for no constrain";
 $langExerciseAttemptsAllowedExplanation = "0 for unlimited number of attempts";
 $langExerciseAttemptsAllowed = "Attempts allowed";
 $langExerciseAttemptsAllowedUnit = "times";
-$langExerciseAttemptsUnlimited = 'Unlimited';
 $langExerciseExpired = "The exercise has expired or is not active.";
 $langExerciseExpiredTime = "You have exceeded the time limit for this exercise.";
 $langExerciseLis = "List of exercises";
@@ -5272,3 +5271,7 @@ $langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: First take into account server p
 $langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: First take into account server priority, then server with least rooms";
 $langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: First take into account server priority, then server with least user connections";
 $langToNoCourses = "For none of the $langsCourses";
+$langExerciseAttemptsUnlimited = 'Unlimited';
+$langWorkMultipleFiles = "Multiple files - maximum:";
+$langWorkFilesCountExceeded = 'The number of files you have submitted exceeds the maximum allowed.';
+$langWorkFileLimit = 'Files (up to %d)';

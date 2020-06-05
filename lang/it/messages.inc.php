@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2020-05-26 11:19:11
+// Generated 2020-06-05 17:55:41
 
 $langYes = "Sì";
 $langNo = "No";
@@ -5234,3 +5234,7 @@ $langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: First take into account server p
 $langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: First take into account server priority, then server with least rooms";
 $langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: First take into account server priority, then server with least user connections";
 $langToNoCourses = "For none of the $langsCourses";
+$langExerciseAttemptsUnlimited = 'Unlimited';
+$langWorkMultipleFiles = "Multiple files - maximum:";
+$langWorkFilesCountExceeded = 'The number of files you have submitted exceeds the maximum allowed.';
+$langWorkFileLimit = 'Files (up to %d)';
