@@ -3675,15 +3675,14 @@ function show_student_assignment($id) {
                                                      FROM assignment
                                                      WHERE course_id = ?d
                                                         AND id = ?d
-                                                        AND active = '1'
-                                                        AND (assign_to_specific = '0'
-                                                            OR assign_to_specific = '1'
-                                                            OR assign_to_specific = '2' AND id IN
+                                                        AND active = 1
+                                                        AND (assign_to_specific = 0 OR
+                                                             id IN
                                                                (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
                                                                 UNION
                                                                 SELECT assignment_id FROM assignment_to_specific
-                                                                   WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
-                                                    )", $course_id, $id, $uid);
+                                                                   WHERE group_id != 0 AND group_id IN ($gids_sql_ready)))",
+                                                    $course_id, $id, $uid);
 
 	$count_of_assign = Database::get()->querySingle("SELECT COUNT(*) AS count_of_assign FROM assignment_submit
                                  WHERE assignment_id = ?d ", $id)->count_of_assign;
@@ -5127,7 +5126,7 @@ function show_student_assignments() {
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                 FROM assignment WHERE course_id = ?d
                     AND active = '1' AND
-                    (assign_to_specific = '0' OR assign_to_specific = '1' OR assign_to_specific = '2' AND id IN
+                    (assign_to_specific = 0 OR id IN
                         (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
                             UNION
                         SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
@@ -5137,6 +5136,7 @@ function show_student_assignments() {
                     WHEN deadline IS NULL THEN 1 ELSE 0
                 END, title
                 ", $course_id, $uid);
+
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
             $add_eportfolio_res_th = "<th class='text-center'>".icon('fa-gears')."</th>";
