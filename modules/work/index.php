@@ -143,6 +143,9 @@ if ($is_editor) {
     }
 }
 
+// Whether to include AutoJudge JavaScript code
+$need_autojudge_js = isset($_GET['add']) || (isset($_GET['choice']) && $_GET['choice'] == 'edit');
+
 if ($is_editor) {
     load_js('tools.js');
     $head_content .= "<script type='text/javascript'>";
@@ -159,7 +162,7 @@ if ($is_editor) {
             });
         ';
 
-    if ($autojudge->isEnabled() and !isset($_GET['disp_results'])) {
+    if ($need_autojudge_js and $autojudge->isEnabled() and !isset($_GET['disp_results'])) {
         $head_content .= "
     function check_weights() {
         /* function to check weight validity */
@@ -281,7 +284,7 @@ if ($is_editor) {
         $('input[id=assign_button_all]').click(hideAssignees);
         ";
 
-        if($autojudge->isEnabled()) {
+        if ($need_autojudge_js and $autojudge->isEnabled()) {
             $head_content .= "
             $('input[name=auto_judge]').click(changeAutojudgeScenariosVisibility);
             $(document).ready(function() { changeAutojudgeScenariosVisibility.apply($('input[name=auto_judge]')); });
@@ -346,7 +349,7 @@ if ($is_editor) {
                 $('#assign_box').find('option').remove().end().append(select_content);
             });
         }";
-        if($autojudge->isEnabled()) {
+        if ($need_autojudge_js and $autojudge->isEnabled()) {
             $head_content .= "
             function changeAutojudgeScenariosVisibility() {
                 if($(this).is(':checked')) {
@@ -469,7 +472,6 @@ if ($is_editor) {
     }
     </script>";
 
-
      /* $head_content .= "<script type='text/javascript'>
          $(function() {
             // $('input[name=grading_type]').click( function(e){
@@ -492,15 +494,12 @@ if ($is_editor) {
         $pageName = $work_title;
         $navigation[] = $works_url;
         submit_grade_comments($_POST);
-
-
-
-	} if (isset($_POST['ass_review'])) {
-      // $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assign']))->title;
-       //$pageName = $work_title;
-       //$navigation[] = $works_url;
-	   // $id_sub = Database::get()->querySingle("SELECT id FROM assignment WHERE id = ?d", $id)->id;
-		$id = intval($_POST['assign']);
+    } elseif (isset($_POST['ass_review'])) {
+        // $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assign']))->title;
+        // $pageName = $work_title;
+        // $navigation[] = $works_url;
+        // $id_sub = Database::get()->querySingle("SELECT id FROM assignment WHERE id = ?d", $id)->id;
+        $id = intval($_POST['assign']);
         submit_review_per_ass($id);
     } elseif (isset($_GET['add'])) {
         $pageName = $langNewAssign;
@@ -711,7 +710,6 @@ function add_assignment() {
 		$v->rule('max', array('reviews_per_user'), 5);
         $v->labels(array('reviews_per_user' => "$langPeerReviewPerUserCompulsory"));
 
-
 		$v->rule('required', array('WorkStart_review'));
 		$v->labels(array('WorkStart_review' => "$langPeerReviewStartDateCompulsory"));
 
@@ -822,6 +820,8 @@ function add_assignment() {
             }
         }
 
+        $fileCount = isset($_POST['fileCount'])? $_POST['fileCount']: 0;
+
         if (make_dir("$workPath/$secret") and make_dir("$workPath/admin_files/$secret")) {
             $id = Database::get()->query("INSERT INTO assignment
                     (course_id, title, description, deadline, late_submission,
@@ -832,9 +832,10 @@ function add_assignment() {
                     launchcontainer, tii_feedbackreleasedate, tii_internetcheck, tii_institutioncheck,
                     tii_journalcheck, tii_report_gen_speed, tii_s_view_reports, tii_studentpapercheck,
                     tii_submit_papers_to, tii_use_biblio_exclusion, tii_use_quoted_exclusion,
-                    tii_exclude_type, tii_exclude_value, reviews_per_assignment, start_date_review, due_date_review)
+                    tii_exclude_type, tii_exclude_value, reviews_per_assignment,
+                    start_date_review, due_date_review, max_submissions)
                 VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t,
-                ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?t, ?t)",
+                ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?t, ?t, ?d)",
                 $course_id, $title, $desc, $deadline, $late_submission, '',
                 $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $grade_type,
                 $max_grade, $grading_scale_id, $assign_to_specific, $auto_judge,
@@ -842,7 +843,8 @@ function add_assignment() {
                 $ip_lock, $assignment_type, $lti_template, $launchcontainer, $tii_feedbackreleasedate,
                 $tii_internetcheck, $tii_institutioncheck, $tii_journalcheck, $tii_report_gen_speed,
                 $tii_s_view_reports, $tii_studentpapercheck, $tii_submit_papers_to, $tii_use_biblio_exclusion,
-                $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $reviews_per_user, $submission_date_review, $deadline_review)->lastInsertID;
+                $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $reviews_per_user,
+                $submission_date_review, $deadline_review, $fileCount)->lastInsertID;
 
             if ($id) {
                 // tags
@@ -907,11 +909,7 @@ function add_assignment() {
                     'secret' => $secret,
                     'group' => $group_submissions));
                 Session::Messages($langNewAssignSuccess, 'alert-success');
-                if ($assignment_type == 1) {
-                    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-                } else {
-                    redirect_to_home_page("modules/work/index.php?course=$course_code");
-                }
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
             } else {
                 @rmdir("$workPath/$secret");
                 Session::Messages($langGeneralError, 'alert-danger');
@@ -960,27 +958,27 @@ function edit_assignment($id) {
         $v->rule('numeric', array('max_grade'));
         $v->labels(array('max_grade' => "$langTheField $m[max_grade]"));
     }
-	//upoxrewtika pedia sthn epilogh aksiologhsh apo omotimous
-	if (isset($_POST['reviews_per_user']) and !empty($_POST['reviews_per_user'])) {
-		$v->rule('required', array('reviews_per_user'));
+    //upoxrewtika pedia sthn epilogh aksiologhsh apo omotimous
+    if (isset($_POST['reviews_per_user']) and !empty($_POST['reviews_per_user'])) {
+        $v->rule('required', array('reviews_per_user'));
         $v->rule('numeric', array('reviews_per_user'));
-		$v->rule('min', array('reviews_per_user'), 3);
-		$v->rule('max', array('reviews_per_user'), 5);
+        $v->rule('min', array('reviews_per_user'), 3);
+        $v->rule('max', array('reviews_per_user'), 5);
         $v->labels(array('reviews_per_user' => "$langPeerReviewPerUserCompulsory"));
 
-		$v->rule('required', array('WorkStart_review'));
-		$v->labels(array('WorkStart_review' => "$langPeerReviewStartDateCompulsory"));
-		$v->rule('required', array('WorkEnd_review'));
-		$v->labels(array('WorkEnd_review' => "$langPeerReviewEndDateCompulsory"));
+        $v->rule('required', array('WorkStart_review'));
+        $v->labels(array('WorkStart_review' => "$langPeerReviewStartDateCompulsory"));
+        $v->rule('required', array('WorkEnd_review'));
+        $v->labels(array('WorkEnd_review' => "$langPeerReviewEndDateCompulsory"));
 
-		$v->rule('required', array('WorkEnd'));
-		$v->labels(array('WorkEnd' => "$langPeerReviewDeadlineCompulsory"));
+        $v->rule('required', array('WorkEnd'));
+        $v->labels(array('WorkEnd' => "$langPeerReviewDeadlineCompulsory"));
 
-		if ($_POST['WorkStart_review'] < $_POST['WorkEnd']) {
-			$v->rule('min',array('WorkStart_review'), "$langPeerReviewStartDateError2");
-			$v->labels(array('WorkStart_review' => "$langPeerReviewStartDateError"));
-		}
-	}
+        if ($_POST['WorkStart_review'] < $_POST['WorkEnd']) {
+            $v->rule('min',array('WorkStart_review'), "$langPeerReviewStartDateError2");
+            $v->labels(array('WorkStart_review' => "$langPeerReviewStartDateError"));
+        }
+    }
 
 
     $v->labels(array('title' => "$langTheField $langTitle"));
@@ -1018,6 +1016,8 @@ function edit_assignment($id) {
         $auto_judge           = isset($_POST['auto_judge']) ? filter_input(INPUT_POST, 'auto_judge', FILTER_VALIDATE_INT) : 0;
         $auto_judge_scenarios = isset($_POST['auto_judge_scenarios']) ? serialize($_POST['auto_judge_scenarios']) : "";
         $lang                 = isset($_POST['lang']) ? filter_input(INPUT_POST, 'lang') : '';
+
+        $fileCount = isset($_POST['fileCount'])? $_POST['fileCount']: 0;
 
         if ($assign_to_specific == 1 && empty($assigned_to)) {
             $assign_to_specific = 0;
@@ -1095,7 +1095,9 @@ function edit_assignment($id) {
                 tii_feedbackreleasedate = ?t, tii_internetcheck = ?d, tii_institutioncheck = ?d,
                 tii_journalcheck = ?d, tii_report_gen_speed = ?d, tii_s_view_reports = ?d, tii_studentpapercheck = ?d,
                 tii_submit_papers_to = ?d, tii_use_biblio_exclusion = ?d, tii_use_quoted_exclusion = ?d,
-                tii_exclude_type = ?s, tii_exclude_value = ?d, reviews_per_assignment = ?d, start_date_review = ?t, due_date_review = ?t
+                tii_exclude_type = ?s, tii_exclude_value = ?d, reviews_per_assignment = ?d,
+                start_date_review = ?t, due_date_review = ?t,
+                max_submissions = ?d
             WHERE course_id = ?d AND id = ?d",
             $title, $desc, $group_submissions, $comments, $submission_type,
             $deadline, $late_submission, $submission_date, $grade_type, $max_grade,
@@ -1106,7 +1108,8 @@ function edit_assignment($id) {
             $assignment_type, $lti_template, $launchcontainer, $tii_feedbackreleasedate,
             $tii_internetcheck, $tii_institutioncheck, $tii_journalcheck, $tii_report_gen_speed,
             $tii_s_view_reports, $tii_studentpapercheck, $tii_submit_papers_to, $tii_use_biblio_exclusion,
-            $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $reviews_per_user, $submission_date_review, $deadline_review, $course_id, $id);
+            $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $reviews_per_user,
+            $submission_date_review, $deadline_review, $fileCount, $course_id, $id);
 
         Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
 
@@ -1149,11 +1152,7 @@ function edit_assignment($id) {
                   'group' => $group_submissions));
 
         Session::Messages($langEditSuccess,'alert-success');
-        if ($assignment_type == 1) {
-            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-        } else {
-            redirect_to_home_page("modules/work/index.php?course=$course_code");
-        }
+        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");
@@ -1188,7 +1187,7 @@ function submit_work($id, $on_behalf_of = null) {
 
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
-                            auto_judge, auto_judge_scenarios, lang, max_grade, notification
+                            auto_judge, auto_judge_scenarios, lang, max_grade, notification, max_submissions
                             FROM assignment
                             WHERE course_id = ?d AND id = ?d",
                             $course_id, $id);
@@ -1226,7 +1225,6 @@ function submit_work($id, $on_behalf_of = null) {
     } //checks for submission validity end here
     if ($submit_ok) {
         $success_msgs = array();
-        $error_msgs = array();
         //Preparing variables
         $user_id = isset($on_behalf_of) ? $on_behalf_of : $uid;
         if ($row->group_submissions) {
@@ -1236,11 +1234,11 @@ function submit_work($id, $on_behalf_of = null) {
             $group_id = 0;
         }
         // If submission type is Online Text
-        if($row->submission_type) {
+        if ($row->submission_type == 1) {
             $filename = '';
             $file_name = '';
             $success_msgs[] = $langUploadSuccess;
-        } else { // If submission type is File
+        } else { // If submission type is one or multiple files
             if ($row->group_submissions) {
                 $local_name = isset($gids[$group_id]) ? greek_to_latin($gids[$group_id]) : '';
             } else {
@@ -1248,40 +1246,82 @@ function submit_work($id, $on_behalf_of = null) {
                 $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $user_id)->am;
                 if (!empty($am)) {
-                    $local_name .= " " . $am;
+                    $local_name .= ' ' . $am;
                 }
                 $local_name = greek_to_latin($local_name);
             }
             $local_name .= ' (' . uid_to_name($user_id, 'username') . ')';
             $local_name = replace_dangerous_char($local_name);
-            if (isset($on_behalf_of) and !isset($_FILES)) {
-                $_FILES['userfile']['name'] = '';
-                $_FILES['userfile']['tmp_name'] = '';
-                $no_files = true;
-            } else {
-                $no_files = false;
-            }
-            $file_name = $_FILES['userfile']['name'];
-            validateUploadedFile($file_name, 2);
-            $secret = work_secret($row->id);
-            $ext = get_file_extension($file_name);
-            $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
-            if ($no_files or move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
-                if ($no_files) {
-                    $filename = '';
+            $local_name = work_secret($row->id) . '/' . $local_name;
+
+            $file_name = $filename = '';
+            $no_files = isset($on_behalf_of) && !isset($_FILES);
+
+            if (!$no_files) {
+                // Multiple files
+                if ($row->submission_type == 2) {
+                    $maxFiles = $row->max_submissions;
+                    $totalFiles = 0;
+                    $fileInfo = [];
+                    foreach ($_FILES['userfile']['name'] as $i => $name) {
+                        $status = $_FILES['userfile']['error'][$i];
+                        if (!in_array($status, [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE])) {
+                            Session::Messages($langUploadError, 'alert-danger');
+                            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                        }
+                        if ($status == UPLOAD_ERR_OK) {
+                            $totalFiles++;
+                        }
+                    }
+                    $fileCount = count($_FILES['userfile']['name']);
+                    if ($totalFiles > $maxFiles) {
+                        Session::Messages($GLOBALS['langWorkFilesCountExceeded'], 'alert-danger');
+                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                    }
+                    if ($totalFiles == 1) {
+                        $format = '';
+                    } else {
+                        $destDir = $workPath . '/' . $local_name;
+                        if (!is_dir($destDir)) {
+                            mkdir($destDir, 0755);
+                        }
+                        $format = '/%0' . strlen($totalFiles) . 'd';
+                    }
+                    $j = 1;
+                    foreach ($_FILES['userfile']['name'] as $i => $file_name) {
+                        if ($_FILES['userfile']['error'][$i] == UPLOAD_ERR_NO_FILE) {
+                            continue;
+                        }
+                        validateUploadedFile($file_name, 2);
+                        $ext = get_file_extension($file_name);
+                        $filename = $local_name . sprintf($format, $j) . (empty($ext) ? '' : '.' . $ext);
+                        $file_moved = move_uploaded_file($_FILES['userfile']['tmp_name'][$i], $workPath . '/' . $filename);
+                        if (!$file_moved) {
+                            break;
+                        }
+                        $fileInfo[] = [$filename, $file_name];
+                        $j++;
+                    }
+                    // keep details of first file for insert into DB
+                    list($filename, $file_name) = $fileInfo[0];
                 } else {
-                    @chmod("$workPath/$filename", 0644);
+                    // Single file
+                    $file_name = $_FILES['userfile']['name'];
+                    validateUploadedFile($file_name, 2);
+                    $ext = get_file_extension($file_name);
+                    $filename = $local_name . (empty($ext) ? '' : '.' . $ext);
+                    $file_moved = move_uploaded_file($_FILES['userfile']['tmp_name'], $workPath . '/' . $filename);
                 }
-                $success_msgs[] = $langUploadSuccess;
-            } elseif(!$is_editor) {
-                $error_msgs[] = $langUploadError;
-                Session::Messages($error_msgs, 'alert-danger');
-                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                if (!$file_moved) {
+                    Session::Messages($langUploadError, 'alert-danger');
+                    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                }
             }
         }
 
         $submit_ip = Log::get_client_ip();
         $submission_text = isset($_POST['submission_text']) ? purify($_POST['submission_text']) : NULL;
+        $grade_comments = $grade_ip = '';
         if (isset($on_behalf_of)) {
             if ($row->group_submissions) {
                 $stud_comments = sprintf($langOnBehalfOfGroupComment, uid_to_name($uid), $gids[$group_id]);
@@ -1309,12 +1349,11 @@ function submit_work($id, $on_behalf_of = null) {
             $stud_comments = $_POST['stud_comments'];
             $grade = NULL;
         }
-            if (isset($_POST['grade_rubric'])){
-                $grade_rubric = serialize($_POST['grade_rubric']);
-            } else {
-                $grade_rubric = "";
-            }
-            $grade_comments = $grade_ip = "";
+        if (isset($_POST['grade_rubric'])){
+            $grade_rubric = serialize($_POST['grade_rubric']);
+        } else {
+            $grade_rubric = '';
+        }
 
         if (!$row->group_submissions || array_key_exists($group_id, $gids)) {
             $data = array(
@@ -1336,6 +1375,21 @@ function submit_work($id, $on_behalf_of = null) {
                                      file_name, submission_text, comments, grade, grade_rubric, grade_comments, grade_submission_ip,
                                      grade_submission_date, group_id)
                                      VALUES (?d, ?d, ". DBHelper::timeAfter() . ", ?s, ?s, ?s, ?s, ?s, ?f, ?s, ?s, ?s, " . DBHelper::timeAfter() . ", ?d)", $data)->lastInsertID;
+
+            // for multifile submissions, add more records for files 2-n
+            if ($row->submission_type == 2 && $totalFiles > 1) {
+                array_shift($fileInfo); // first file has been inserted, so discard it
+                foreach ($fileInfo as $file) {
+                    $data = [$user_id, $row->id, $submit_ip, $file[0], $file[1], '', '', 0, '', '', '', $group_id];
+                    Database::get()->query("INSERT INTO assignment_submit
+                        (uid, assignment_id, submission_date, submission_ip, file_path,
+                         file_name, submission_text, comments, grade, grade_rubric, grade_comments, grade_submission_ip,
+                         grade_submission_date, group_id)
+                         VALUES (?d, ?d, ". DBHelper::timeAfter() . ", ?s, ?s, ?s, ?s, ?s, ?f, ?s, ?s, ?s, " .
+                         DBHelper::timeAfter() . ", ?d)", $data)->lastInsertID;
+                }
+            }
+
             triggerGame($course_id, $user_id, $row->id);
             triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
             triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
@@ -1477,7 +1531,7 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $course_code, $course_id, $langAssignmentStartHelpBlock,
            $desc, $language, $head_content, $langGradeRubrics,
-           $langBack, $langSave, $langStudents, $langMove, $langWorkFile,
+           $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langWorkMultipleFiles,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
            $langGradeNumbers, $langGradeType, $langGradeScales,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
@@ -1517,7 +1571,6 @@ function new_assignment() {
 
     $interval = new DateInterval('P1M');
     $tii_fwddate = (new DateTime('NOW'))->add($interval)->format('d-m-Y H:i');
-
 
     $head_content .= "<script type='text/javascript'>
         $(function() {
@@ -1916,6 +1969,8 @@ function new_assignment() {
             return $item ? ('<option selected>' . q($item) . '</option>') : '';
         }, $assignmentIPLock));
     enableCheckFileSize();
+    $fileCount = Session::has('fileCount')? Session::get('fileCount') : 2;
+
     $tool_content .= "
         <div class='row'><div class='col-sm-12'>
         <div class='form-wrapper'>
@@ -2080,6 +2135,7 @@ function new_assignment() {
         $tool_content .= "
             <input type='hidden' name='assignment_type' value='0' />";
     }
+    $fileCountOptions = range(2, get_config('max_work_file_count', 10));
     $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langGradeType:</label>
@@ -2185,13 +2241,22 @@ function new_assignment() {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='file_button' name='submission_type' value='0'". ($submission_type ? '' : ' checked') .">
+                        <input type='radio' id='file_button' name='submission_type' value='0'" .
+                        ($submission_type == 0 ? '' : ' checked') .">
                          $langWorkFile
+                      </label>
+                    </div>
+                    <div class='radio form-inline'>
+                      <label>
+                        <input type='radio' id='online_button' name='submission_type' value='2'" .
+                        ($submission_type == 2 ? ' checked' : '') .">
+                        $langWorkMultipleFiles " . selection($fileCountOptions, 'fileCount', $fileCount) . "
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='online_button' name='submission_type' value='1'". ($submission_type ? ' checked' : '') .">
+                        <input type='radio' id='online_button' name='submission_type' value='1'" .
+                        ($submission_type == 1 ? ' checked' : '') .">
                         $langWorkOnlineText
                       </label>
                     </div>
@@ -2443,7 +2508,7 @@ function show_edit_assignment($id) {
     global $tool_content, $m, $langBack, $course_code,
         $langSave, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
-        $langWorkOnlineText, $langWorkSubType, $langGradeRubrics,
+        $langWorkOnlineText, $langWorkSubType, $langGradeRubrics, $langWorkMultipleFiles,
         $langGradeType, $langGradeNumbers, $langGradeScales,
         $langAutoJudgeInputNotSupported, $langTitle, $autojudge,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
@@ -2936,7 +3001,6 @@ function show_edit_assignment($id) {
 	$review_error_user= Session::getError('reviews_per_user');
 	$review_error_rubric = Session::getError('rubric_review');
 
-
     $tool_content .= "
     <div class='form-wrapper'>
     <form class='form-horizontal' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
@@ -3010,6 +3074,7 @@ function show_edit_assignment($id) {
         $tool_content .= "
                 <input type='hidden' name='assignment_type' value='0' />";
     }
+    $fileCountOptions = range(2, get_config('max_work_file_count', 10));
     $tool_content .= "
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langGradeType:</label>
@@ -3110,25 +3175,33 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
 
-
-
-                <div class='form-group $subtype_hidden'>
+                <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langWorkSubType:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
                           <label>
-                            <input type='radio' id='file_button' name='submission_type' value='0'". ($row->submission_type ? '' : ' checked') .">
-                             $langWorkFile
+                            <input type='radio' id='file_button' name='submission_type' value='0'" .
+                            ($row->submission_type == 0 ? '' : ' checked') .">
+                            $langWorkFile
+                          </label>
+                        </div>
+                        <div class='radio form-inline'>
+                          <label>
+                            <input type='radio' id='online_button' name='submission_type' value='2'" .
+                            ($row->submission_type == 2 ? ' checked' : '') .">
+                            $langWorkMultipleFiles " . selection($fileCountOptions, 'fileCount', $row->max_submissions) . "
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
-                            <input type='radio' id='online_button' name='submission_type' value='1' ". ($row->submission_type ? ' checked' : '') .">
+                            <input type='radio' id='online_button' name='submission_type' value='1'" .
+                            ($row->submission_type == 1 ? ' checked' : '') .">
                             $langWorkOnlineText
                           </label>
                         </div>
                     </div>
                 </div>
+
                 <div class='input-append date form-group".(Session::getError('WorkStart') ? " has-error" : "")."' id='startdatepicker' data-date='$WorkStart' data-date-format='dd-mm-yyyy'>
                     <label for='WorkStart' class='col-sm-2 control-label'>$langStartDate:</label>
                     <div class='col-sm-10'>
@@ -3726,13 +3799,15 @@ function show_student_assignment($id) {
            )
         ));
 
-		//assignment_details($id, $row);
-		$user = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE assignment_id = ?d AND uid = ?d", $id, $uid);
-		if ($user){
-			assignment_details($id, $row, false); //emfanizodai hmeromhnies start, due otan uparxei peer review
-		}else{
-			assignment_details($id, $row, true); //den emfanizontai oi hmeromhnies start, due otan o foithths den exei upovalei parolo pou uparxei peer review
-		}
+        // assignment_details($id, $row);
+        $user = Database::get()->querySingle("SELECT * FROM assignment_submit
+            WHERE assignment_id = ?d AND uid = ?d
+            ORDER BY id LIMIT 1", $id, $uid);
+        if ($user) {
+            assignment_details($id, $row, false); // emfanizodai hmeromhnies start, due otan uparxei peer review
+        } else {
+            assignment_details($id, $row, true); // den emfanizontai oi hmeromhnies start, due otan o foithths den exei upovalei parolo pou uparxei peer review
+        }
 
         $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission);
         $submissions_exist = false;
@@ -3950,7 +4025,7 @@ function show_assignment_review($id, $display_graph_results = false) {
  * @return type
  */
 function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submissions_exist=false) {
-    global $tool_content, $m, $langWorkFile, $langSubmit,
+    global $tool_content, $m, $langWorkFile, $langSubmit, $langWorkFileLimit,
     $langNotice3, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
     $langGradebookGrade, $urlServer;
@@ -4066,7 +4141,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         } else {
             $password_input = '';
         }
-        if ($assignment->submission_type){
+        if ($assignment->submission_type == 1) {
+            // Online text submission
             $submission_form = "
                         <div class='form-group'>
                             <label for='submission_text' class='col-sm-2 control-label'>$langWorkOnlineText:</label>
@@ -4075,11 +4151,29 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             </div>
                         </div>";
         } else {
+            // Multiple or single file submission
+            if ($assignment->submission_type == 2) {
+                $label = sprintf($langWorkFileLimit, $assignment->max_submissions);
+                $maxFiles = $assignment->max_submissions;
+                $inputName = 'userfile[]';
+                $moreButton = "<div class='pull-right'>
+                                 <button class='btn btn-info btn-xs moreFiles'>
+                                   <span class='fa fa-plus'></span>
+                                 </button>
+                               </div>";
+                load_js('tools.js');
+                $GLOBALS['head_content'] .=
+                    "<script>$(function () { initialize_multifile_submission($maxFiles) });</script>";
+            } else {
+                $inputName = 'userfile';
+                $label = $langWorkFile;
+                $moreButton = '';
+            }
             $submission_form = "
                         <div class='form-group'>
-                            <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
-                            <div class='col-sm-10'>
-                              <input type='file'  name='userfile' id='userfile'>
+                            <label for='userfile' class='col-sm-2 control-label'>$label:</label>
+                            <div class='col-sm-10'>$moreButton
+                              <input type='file' name='$inputName' id='userfile'>
                             </div>
                         </div>";
         }
@@ -4610,7 +4704,7 @@ function show_assignment($id, $display_graph_results = false) {
                                                     assignment.grading_type
                                                    FROM assignment_submit AS assign, user, assignment
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
-                                                   ORDER BY $order $rev", $id);
+                                                   ORDER BY $order $rev, assign.id", $id);
 
             $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
                 <input type='hidden' name='grades_id' value='$id' />
@@ -4633,92 +4727,110 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "<th class='text-center tools-col'><i class='fa fa-cogs'></i></th></tr>";
             $i = 1;
             $plagiarismlink = '';
-			$count_ass = 0;
+            $count_ass = 0;
+            $seen = [];
             foreach ($result as $row) {
-                //is it a group assignment?
+                // is it a group assignment?
                 if (!empty($row->group_id)) {
+                    if (isset($seen[$row->group_id])) {
+                        continue;
+                    }
                     $subContentGroup = "$m[groupsubmit] " .
                             "<a href='{$urlServer}/modules/group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
                             "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
                 } else {
+                    if (isset($seen[$row->uid])) {
+                        continue;
+                    }
                     $subContentGroup = '';
                 }
 
-				$mess = '';
-				if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE){
-					$grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
-					$condition ='';
-					$rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
-                                 WHERE assignment_id = ?d ", $id);
-					if( $count_of_assignments > $assign->reviews_per_assignment && $rows){
-						//status aksiologhshs kathe foithth
-						if ( $cdate > $assign->start_date_review){
-							$assigns = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid);
-							$r_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid)->count;
-							$counter = 0;
-							foreach ($assigns as $ass){
-								if ( empty($ass->grade) ){
-									$counter++;
-								}
-							}
-							if ($counter == 0) {
-								$mess = "<span style='color: green;'><h6>$langPeerReviewCompletedByStudent</h6></span>";
-							} elseif ($counter < $r_count){
-								$mess = "<span style='color: darkorange;'><h6>$langPeerReviewPendingByStudent</h6></span>";
-							} else {
-								$mess = "<span style='color: red;'><h6>$langPeerReviewMissingByStudent</h6></span>";
-							}
-						}
-						//grade_field pedio
-						if ($cdate > $assign->due_date_review){
-							//select tous vathmous ths kathe upovolhs kai vres ton mo kai topothethse ton sto pedio
-							$grades= Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id = ?d", $row->id);
-							$count_grade = 0;
-							$sum = 0;
-							$grade_review = '';
-							foreach ($grades as $as){
-								if ($as->grade){
-									$count_grade++;
-								}
-								if ($count_grade == $assign->reviews_per_assignment){
-									$condition = "<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
-								}else{
-									$condition = "<span class='fa fa-fw fa-times text-danger' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
-								}
-								$sum = $sum + $as->grade;
-							}
-							if ($sum != 0){
-								$grade = $sum / $count_grade;
+                $mess = '';
+                if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
+                    $grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
+                    $condition ='';
+                    $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
+                        WHERE assignment_id = ?d ", $id);
+                    if( $count_of_assignments > $assign->reviews_per_assignment && $rows){
+                        //status aksiologhshs kathe foithth
+                        if ( $cdate > $assign->start_date_review){
+                            $assigns = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid);
+                            $r_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid)->count;
+                            $counter = 0;
+                            foreach ($assigns as $ass){
+                                if ( empty($ass->grade) ){
+                                    $counter++;
+                                }
+                            }
+                            if ($counter == 0) {
+                                $mess = "<span style='color: green;'><h6>$langPeerReviewCompletedByStudent</h6></span>";
+                            } elseif ($counter < $r_count){
+                                $mess = "<span style='color: darkorange;'><h6>$langPeerReviewPendingByStudent</h6></span>";
+                            } else {
+                                $mess = "<span style='color: red;'><h6>$langPeerReviewMissingByStudent</h6></span>";
+                            }
+                        }
+                        // grade_field pedio
+                        if ($cdate > $assign->due_date_review){
+                            //select tous vathmous ths kathe upovolhs kai vres ton mo kai topothethse ton sto pedio
+                            $grades= Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id = ?d", $row->id);
+                            $count_grade = 0;
+                            $sum = 0;
+                            $grade_review = '';
+                            foreach ($grades as $as){
+                                if ($as->grade){
+                                    $count_grade++;
+                                }
+                                if ($count_grade == $assign->reviews_per_assignment){
+                                    $condition = "<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
+                                }else{
+                                    $condition = "<span class='fa fa-fw fa-times text-danger' data-toggle='tooltip' data-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
+                                }
+                                $sum = $sum + $as->grade;
+                            }
+                            if ($sum != 0){
+                                $grade = $sum / $count_grade;
 
-								if (is_float($grade)){
-									$grade_review = number_format($grade,1);
-								}else{
-									$grade_review = $grade;
-								}
-							}
-							$grade_review_field = "<input class='form-control' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
-						}
-					}
-				}
+                                if (is_float($grade)){
+                                    $grade_review = number_format($grade,1);
+                                }else{
+                                    $grade_review = $grade;
+                                }
+                            }
+                            $grade_review_field = "<input class='form-control' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
+                        }
+                    }
+                }
                 $name = empty($row->group_id) ? display_user($row->uid) : display_group($row->group_id);
                 $stud_am = uid_to_am($row->uid);
-                if ($assign->submission_type) {
-                    $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
+                if ($assign->submission_type == 1) {
+                    $filelink = "<button class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</button>";
                 } else {
                     if (empty($row->file_name)) {
                         $filelink = '&nbsp;';
                     } else {
-                        $namelen = mb_strlen($row->file_name);
-                        if ($namelen > 30) {
-                            $extlen = mb_strlen(get_file_extension($row->file_name));
-                            $basename = mb_substr($row->file_name, 0, $namelen - $extlen - 3);
-                            $ext = mb_substr($row->file_name, $namelen - $extlen - 3);
-                            $filename = ellipsize($basename, 30, '...' . $ext);
+                        if ($assign->submission_type == 2) {
+                            // Get all files by the same user and group
+                            $allFiles = array_filter($result, function ($item) use ($row) {
+                                return $item->uid == $row->uid && $item->group_id == $row->group_id;
+                            });
                         } else {
-                            $filename = $row->file_name;
+                            $allFiles = [$row];
                         }
-                        $filelink = "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;get=$row->id'>" .
-                            q($filename) . "</a>";
+                        $filelink = implode('<br>', array_map(function ($item) {
+                            global $urlAppend, $course_code;
+                            $namelen = mb_strlen($item->file_name);
+                            if ($namelen > 30) {
+                                $extlen = mb_strlen(get_file_extension($item->file_name));
+                                $basename = mb_substr($item->file_name, 0, $namelen - $extlen - 3);
+                                $ext = mb_substr($item->file_name, $namelen - $extlen - 3);
+                                $filename = ellipsize($basename, 30, '...' . $ext);
+                            } else {
+                                $filename = $item->file_name;
+                            }
+                            return "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$item->id'>" .
+                                q($filename) . "</a>";
+                        }, $allFiles));
                     }
                 }
                 if (Session::has("grades")) {
@@ -4859,6 +4971,8 @@ function show_assignment($id, $display_graph_results = false) {
 								</a>
 							</td></tr>";
                 $i++;
+
+                $seen[$row->group_id] = $seen[$row->uid] = true;
             } //END of Foreach
 
 			/*if ($assign->grading_type == 3 && $count_of_assignments > $assign->reviews_per_assignment && $cdate > $assign->due_date_review ){
@@ -5304,7 +5418,9 @@ function show_assignments() {
             }
 
             // Check if assignment contains submissions
-            $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
+            $num_submitted = Database::get()->querySingle("SELECT COUNT(DISTINCT uid, group_id) AS count
+                FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
+            // For multiple file submissions, continuation records have grade=0 by default
             $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d AND grade IS NULL", $row->id)->count;
             if (!$num_ungraded) {
                 if ($num_submitted > 0) {
@@ -5486,10 +5602,7 @@ function submit_grade_comments($args) {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/grade_edit.php?course=$course_code&assignment=$id&submission=$sid");
     }
-
 }
-
-
 
 
 /**

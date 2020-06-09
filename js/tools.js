@@ -651,3 +651,45 @@ function enableCheckFileSize() {
         return checkFileSize(input, maxSize);
     });
 }
+
+// Multiple file submission support for assignments
+function initialize_multifile_submission(max) {
+    var formGroup = $('input[type=file]').closest('.form-group');
+    var fileInputCount = function () {
+        return formGroup.find('input[type=file]').length;
+    };
+    formGroup.on('change', 'input[type=file]', function () {
+        var emptyInputs = 0;
+        formGroup.find('input[type=file]').each(function () {
+            if (!$(this).val()) {
+                emptyInputs++;
+            }
+        });
+        if (emptyInputs == 0) {
+            $('.moreFiles.btn-info').click();
+        }
+    });
+    $('body').on('click', '.moreFiles.btn-info', function (e) {
+        e.preventDefault();
+        fileInputs = fileInputCount();
+        if (fileInputs < max) {
+            var newInput = $(this).closest('.col-sm-10').clone();
+            $(newInput).addClass('col-sm-offset-2').find('input').val(null);
+            if (fileInputs == max - 1) {
+                $(newInput).find('button').prop('disabled', true);
+            }
+            formGroup.append(newInput);
+            $(this).removeClass('btn-info').addClass('btn-danger')
+                .find('.fa-plus').removeClass('fa-plus').addClass('fa-times');
+        }
+    });
+    $('body').on('click', '.moreFiles.btn-danger', function (e) {
+        e.preventDefault();
+        fileInputs = fileInputCount();
+        if (fileInputs == max) {
+            formGroup.find('button').prop('disabled', false);
+        }
+        $(this).closest('.col-sm-10').remove();
+        formGroup.children('.col-sm-10').first().removeClass('col-sm-offset-2');
+    });
+}

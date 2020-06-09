@@ -1992,6 +1992,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('exercise', 'continue_time_limit')) {
             Database::get()->query("ALTER TABLE `exercise` ADD `continue_time_limit` INT(11) NOT NULL DEFAULT 0");
         }
+        if (!DBHelper::fieldExists('assignment', 'max_submissions')) {
+            Database::get()->query("ALTER TABLE `assignment` ADD `max_submissions` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1");
+        }
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!
