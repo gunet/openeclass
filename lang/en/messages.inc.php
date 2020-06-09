@@ -3998,6 +3998,9 @@ $langPasswordUnlock = "Unlock with password";
 $langPasswordModalTitle = "Enter the exercise password";
 $langIPHasNoAccess = "Your IP address has no access to the specific exercise.";
 $langIPInvalid = "contains an invalid IP or IP CIDR";
+$langExerciseAttemptGone = 'Your current attempt has been cancelled, either
+    because the course administrator has deleted it, or because
+    you have continued the attempt from another computer';
 $langAdminMessage = "Message by Administrator of $siteName";
 $langWarn2AboutPHP = "Warning: PHP >= 5.4.0 is required for proper operation of the platform. Please upgrade PHP as soon as possible; otherwise, some modules may not function correctly.";
 $langLinkSettings = "Link module settings";

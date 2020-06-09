@@ -198,21 +198,22 @@ $showScore = $displayScore == 1
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
 
-if (isset($user)) { // user details
-    $tool_content .= "<div class='alert alert-info'>" . q($user->surname) . " " . q($user->givenname);
+$tool_content .= "<div class='alert alert-info'>";
+if ($user) { // user details
+    $tool_content .= q($user->surname) . " " . q($user->givenname);
     if ($user->am) {
         $tool_content .= "($langAm:" . q($user->am) . ")";
     }
-    if ($showScore) {
-        $tool_content .= "<h5>$langYourTotalScore: <span id='total_score'><strong>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong></h5>";
-    }
-    $tool_content .= "<h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>";
-    $tool_content .= "<h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>";
-    /*if ($exerciseAttemptsAllowed > 0) {
-        $tool_content .= "<h5>$langAttempt: <em>$exerciseAttemptsAllowed</em></h5>";
-    }*/
-    $tool_content .= "</div>";
 }
+if ($showScore) {
+    $tool_content .= "<h5>$langYourTotalScore: <span id='total_score'><strong>{$exercise_user_record->total_score}</span> / {$exercise_user_record->total_weighting}</strong></h5>";
+}
+$tool_content .= "
+    <h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>
+    <h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
+    ($user && $exerciseAttemptsAllowed ? "<h5>$langAttempt: <em>{$exercise_user_record->attempt}</em></h5>" : '') . "
+  </div>";
+
 
 $tool_content .= "<div class='panel panel-default'>
                       <div class='panel-heading'>

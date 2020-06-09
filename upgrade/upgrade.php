@@ -1983,8 +1983,17 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `rubric_scales` TEXT) $tbl_options");
         }
         Database::get()->query("ALTER TABLE `ebook_subsection` CHANGE `section_id` `section_id` int(11) NOT NULL");
-
     }
+
+    // upgrade queries for version 3.9
+    if (version_compare($oldversion, '3.9', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.9'));
+
+        if (!DBHelper::fieldExists('exercise', 'continue_time_limit')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `continue_time_limit` INT(11) NOT NULL DEFAULT 0");
+        }
+    }
+
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
 

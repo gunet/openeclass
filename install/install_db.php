@@ -985,7 +985,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `submission_text` MEDIUMTEXT NULL DEFAULT NULL,
     `comments` TEXT NOT NULL,
     `grade` FLOAT DEFAULT NULL,
-	`grade_rubric` TEXT,
+    `grade_rubric` TEXT,
     `grade_comments` TEXT NOT NULL,
     `grade_comments_filepath` VARCHAR(200) NOT NULL DEFAULT '',
     `grade_comments_filename` VARCHAR(200) NOT NULL DEFAULT '',
@@ -1054,9 +1054,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `results` TINYINT(1) NOT NULL DEFAULT 1,
     `score` TINYINT(1) NOT NULL DEFAULT 1,
-    `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
+    `assign_to_specific` TINYINT NOT NULL DEFAULT 0,
     `ip_lock` TEXT NULL DEFAULT NULL,
-    `password_lock` VARCHAR(255) NULL DEFAULT NULL) $tbl_options");
+    `password_lock` VARCHAR(255) NULL DEFAULT NULL,
+    `continue_time_limit` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1137,7 +1138,7 @@ $db->query("CREATE TABLE `course_lti_app` (
       `course_id` int(11) NOT NULL,
       `lti_app` int(11) NOT NULL,
       FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-      FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) 
+      FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`))
    $tbl_options");
 
 
@@ -1668,7 +1669,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `user_id` varchar(255) default '0',
     `group_id` varchar(255) default '0',
     `chat_activity` boolean not null default false,
-    `agent_created` boolean not null default false, 
+    `agent_created` boolean not null default false,
     `chat_activity_id` int(11),
     `agent_id` int(11),
     PRIMARY KEY (`conf_id`,`course_id`)) $tbl_options");
@@ -1883,17 +1884,17 @@ $db->query("CREATE TABLE `user_consent` (
 ) $tbl_options");
 
 
-$db->query("CREATE TABLE `user_settings` ( 
-  `setting_id` int(11) NOT NULL, 
-  `user_id` int(11) NOT NULL, 
-  `course_id` int(11) DEFAULT NULL, 
-  `value` int(11) NOT NULL DEFAULT '0', 
-  PRIMARY KEY (`setting_id`,`user_id`), 
-  KEY `user_id` (`user_id`), 
-  KEY `course_id` (`course_id`), 
-  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
-    ON DELETE CASCADE ON UPDATE CASCADE, 
-  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
+$db->query("CREATE TABLE `user_settings` (
+  `setting_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `course_id` int(11) DEFAULT NULL,
+  `value` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`setting_id`,`user_id`),
+  KEY `user_id` (`user_id`),
+  KEY `course_id` (`course_id`),
+  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE ) $tbl_options");
 
 // learning analytics

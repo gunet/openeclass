@@ -82,6 +82,7 @@ if (!class_exists('Exercise')) {
             $this->assign_to_specific = 0;
             $this->password_lock = null;
             $this->questionList = array();
+            $this->continueTimeLimit = 5; // minutes
         }
 
         /**
@@ -95,7 +96,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
-            attempts_allowed, random, active, public, results, score, ip_lock, password_lock, assign_to_specific
+            attempts_allowed, random, active, public, results, score, ip_lock, password_lock, assign_to_specific, continue_time_limit
             FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -117,6 +118,7 @@ if (!class_exists('Exercise')) {
                 $this->ip_lock = $object->ip_lock;
                 $this->password_lock = $object->password_lock;
                 $this->assign_to_specific = $object->assign_to_specific;
+                $this->continueTimeLimit = $object->continue_time_limit;
 
                 $result = Database::get()->queryArray("SELECT question_id, q_position
                     FROM `exercise_with_questions`, `exercise_question`
@@ -245,6 +247,11 @@ if (!class_exists('Exercise')) {
         function selectAssignToSpecific() {
             return $this->assign_to_specific;
         }
+
+        function continueTimeLimit() {
+            return $this->continueTimeLimit;
+        }
+
         /**
          * tells if questions are selected randomly, and if so returns the draws
          *
@@ -380,6 +387,14 @@ if (!class_exists('Exercise')) {
         function updateScore($score) {
             $this->score = $score;
         }
+
+        function updateContinueTimeLimit($minutes) {
+            $this->continueTimeLimit = intval($minutes);
+            if ($this->continueTimeLimit < 0) {
+                $this->continueTimeLimit = 0;
+            }
+        }
+
         function updateIPLock($ips) {
             $this->ip_lock = (empty($ips)) ? null : $ips;
         }
@@ -474,11 +489,18 @@ if (!class_exists('Exercise')) {
             // exercise already exists
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
-                SET title = ?s, description = ?s, type = ?d," .
-                        "start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d," .
-                        "attempts_allowed = ?d, random = ?d, active = ?d, public = ?d, results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s, assign_to_specific = ?d
-                        WHERE course_id = ?d AND id = ?d",
-                        $exercise, $description, $type, $startDate, $endDate, $tempSave, $timeConstraint, $attemptsAllowed, $random, $active, $public, $results, $score, $ip_lock, $password_lock, $assign_to_specific, $course_id, $id)->affectedRows;
+                    SET title = ?s, description = ?s, type = ?d,
+                        start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d,
+                        attempts_allowed = ?d, random = ?d, active = ?d, public = ?d,
+                        results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
+                        assign_to_specific = ?d, continue_time_limit = ?d
+                    WHERE course_id = ?d AND id = ?d",
+                    $exercise, $description, $type,
+                    $startDate, $endDate, $tempSave, $timeConstraint,
+                    $attemptsAllowed, $random, $active, $public,
+                    $results, $score, $ip_lock, $password_lock,
+                    $assign_to_specific, $this->continueTimeLimit,
+                    $course_id, $id)->affectedRows;
                 if ($affected_rows > 0) {
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
                         'title' => $exercise,
@@ -487,11 +509,16 @@ if (!class_exists('Exercise')) {
             }
             // creates a new exercise
             else {
-                $this->id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, type, start_date,
-                        end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock, assign_to_specific)
-            VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d)",
-                        $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave,
-                        $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock, $assign_to_specific)->lastInsertID;
+                $this->id = Database::get()->query("INSERT INTO `exercise`
+                    (course_id, title, description, type, start_date, end_date,
+                     temp_save, time_constraint, attempts_allowed,
+                     random, active, results, score, ip_lock, password_lock,
+                     assign_to_specific, continue_time_limit)
+                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
+                    $course_id, $exercise, $description, $type, $startDate, $endDate,
+                    $tempSave, $timeConstraint, $attemptsAllowed,
+                    $random, $active, $results, $score, $ip_lock, $password_lock,
+                    $assign_to_specific, $this->continueTimeLimit)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                     'title' => $exercise,
