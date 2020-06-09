@@ -300,12 +300,12 @@ if ($is_editor) {
             if ((assign_to_specific==1) || (assign_to_specific==2)) {
                ajaxAssignees();
             }
-            if (this.id=='group_button') {            
+            if (this.id=='group_button') {
                $('#assign_button_all_text').text('$m[WorkToAllGroups]');
                $('#assign_button_some_text').text('$m[WorkToGroup]');
                $('#assignees').text('$langGroups');
                $('#assign_group_div').hide();
-            } else {               
+            } else {
                $('#assign_button_all_text').text('$m[WorkToAllUsers]');
                $('#assign_button_some_text').text('$m[WorkToUser]');
                $('#assign_button_group_text').text('$m[WorkToGroup]');
@@ -315,9 +315,9 @@ if ($is_editor) {
         }
         function ajaxAssignees()
         {
-            $('#assignees_tbl').removeClass('hide');            
+            $('#assignees_tbl').removeClass('hide');
             var type = $('input:radio[name=group_submissions]:checked').val();
-            var g_type = $('input:radio[name=assign_to_specific]:checked').val();            
+            var g_type = $('input:radio[name=assign_to_specific]:checked').val();
             $.post('$works_url[url]',
             {
               assign_type: type,
@@ -332,7 +332,7 @@ if ($is_editor) {
                         for (index = 0; index < parsed_data.length; ++index) {
                             select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
                         }
-                    } else if (g_type == 2) {                    
+                    } else if (g_type == 2) {
                         for (index = 0; index < parsed_data.length; ++index) {
                             select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
                         }
@@ -340,7 +340,7 @@ if ($is_editor) {
                 } else {
                    for (index = 0; index < parsed_data.length; ++index) {
                         select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
-                    }                    
+                    }
                 }
                 $('#assignee_box').find('option').remove();
                 $('#assign_box').find('option').remove().end().append(select_content);
@@ -882,7 +882,7 @@ function add_assignment() {
                             foreach ($_POST['ingroup'] as $g) {
                                 $data = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
                                 foreach ($data as $u) {
-                                    Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id) 
+                                    Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id)
                                                   VALUES (?d, ?d, ?d)", $u, 0, $id);
                                 }
                             }
@@ -1123,7 +1123,7 @@ function edit_assignment($id) {
                     foreach ($_POST['ingroup'] as $g) {
                         $data = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
                         foreach ($data as $u) {
-                            Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id) 
+                            Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id)
                                                   VALUES (?d, ?d, ?d)", $u, 0, $id);
                         }
                     }
@@ -2860,11 +2860,11 @@ function show_edit_assignment($id) {
                 $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
             }
         } else if ($row->assign_to_specific == 2) {
-            $assignees = Database::get()->queryArray("SELECT `group`.id, `group`.name 
-                                          FROM `group`, group_members, assignment_to_specific 
+            $assignees = Database::get()->queryArray("SELECT `group`.id, `group`.name
+                                          FROM `group`, group_members, assignment_to_specific
                                                 WHERE course_id = ?d
-                                                    AND `group`.id = group_members.group_id 
-                                                    AND group_members.user_id = assignment_to_specific.user_id 
+                                                    AND `group`.id = group_members.group_id
+                                                    AND group_members.user_id = assignment_to_specific.user_id
                                                     AND assignment_to_specific.assignment_id = ?d
                                                 GROUP BY name, id", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
@@ -3676,8 +3676,8 @@ function show_student_assignment($id) {
                                                      WHERE course_id = ?d
                                                         AND id = ?d
                                                         AND active = '1'
-                                                        AND (assign_to_specific = '0' 
-                                                            OR assign_to_specific = '1' 
+                                                        AND (assign_to_specific = '0'
+                                                            OR assign_to_specific = '1'
                                                             OR assign_to_specific = '2' AND id IN
                                                                (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
                                                                 UNION
@@ -3815,7 +3815,7 @@ function show_assignment_review($id, $display_graph_results = false) {
 
         $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
-            <input type='hidden' name='grades_id' value='$id'>            
+            <input type='hidden' name='grades_id' value='$id'>
             <div class='margin-bottom-thin'>
               <strong>$langPeerSubmissions:</strong>&nbsp; $review_per_assignment
             </div>
@@ -4521,13 +4521,23 @@ function assignment_details($id, $row, $x =false) {
  * @param type $display_graph_results
  */
 function show_assignment($id, $display_graph_results = false) {
-    global $tool_content, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
+    global $tool_content, $head_content, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
     $langWorkOnlineText, $langGradeOk, $langPlagiarismResult, $langHasAssignmentPublished,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
     $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
+
+    $head_content .= '<style>
+        .table-default { table-layout: fixed; }
+        .count-col { width: 3em; }
+        .user-col { width: 40%; }
+        .tools-col { width: 5em; }
+        .date-col, .grade-col { width: 7em; }
+        .filename-col { min-width: 4em; max-width: 20%; overflow-wrap: break-word; }
+        td pre { overflow: scroll; }
+    </style>';
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
@@ -4608,20 +4618,19 @@ function show_assignment($id, $display_graph_results = false) {
                 <div class='margin-bottom-thin'>
                     <b>$langSubmissions:</b>&nbsp; $count_of_assignments
                 </div>
-                <div class='table-responsive'>
                 <table class='table-default'>
                 <tbody>
                 <tr class='list-header'>
-                <th width='3'>&nbsp;</th>";
-            sort_link($langSurnameName, 'username');
-            $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
-            sort_link($m['sub_date'], 'date');
+                <th class='count-col'>&nbsp;</th>";
+            sort_link($langSurnameName, 'username', 'class="user-col"');
+            $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename', 'class="filename-col"');
+            sort_link($m['sub_date'], 'date', 'class="date-col"');
 			if ($assign->grading_type == 3){
 				//neo pedio vathmos aksiologhshs mono gia peer review
 				sort_link($langPeerReviewGrade, '');
 			}
-            sort_link($langGradebookGrade, 'grade');
-            $tool_content .= "<th width='8%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
+            sort_link($langGradebookGrade, 'grade', 'class="grade-col"');
+            $tool_content .= "<th class='text-center tools-col'><i class='fa fa-cogs'></i></th></tr>";
             $i = 1;
             $plagiarismlink = '';
 			$count_ass = 0;
@@ -4776,8 +4785,8 @@ function show_assignment($id, $display_graph_results = false) {
                     $am_field = "<h6>$langAmShort: " . q($stud_am) . "</h6>";
                 }
                 $tool_content .= "<tr>
-                                <td class='text-right' width='4'>$i.</td>
-                                <td>$name $am_field $mess";
+                                <td class='text-right count-col'>$i.</td>
+                                <td class='user-col'>$name $am_field $mess";
 
                 // student comment
                 if (trim($row->comments != '')) {
@@ -4825,7 +4834,7 @@ function show_assignment($id, $display_graph_results = false) {
                 // ---------------------------------
 				//$tool_content .= "$grade_review_field";<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='Κείμενο'></span>
                 $tool_content .= "</td>
-                            <td class='text-center' width='180'>
+                            <td class='text-center filename-col' width='180'>
                                     $filelink <br> $plagiarismlink
                             </td>
                             <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>";
@@ -4861,9 +4870,8 @@ function show_assignment($id, $display_graph_results = false) {
             $disabled_submit = ($assign->assignment_type == 1) ? ' disabled': '';
 
             $tool_content .= "
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
             <div class='form-group'>
                 <div class='col-xs-12'>
                     <div class='checkbox'>
@@ -4972,7 +4980,7 @@ function show_non_submitted($id) {
                             <div class='table-responsive'>
                             <table class='table-default sortable'>
                             <tr class='list-header'>
-                          <th width='3'>&nbsp;</th>";
+                          <th class='count-col'>&nbsp;</th>";
                 sort_link($langGroup, 'username');
                 $tool_content .= "</tr>";
                 $i=1;
@@ -5721,8 +5729,8 @@ function send_file($id, $file_type) {
         $a = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $info->assignment_id);
 
         if ($a->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
-            $result = Database:: get()->queryArray("SELECT * FROM assignment_grading_review 
-                                        WHERE assignment_id = ?d 
+            $result = Database:: get()->queryArray("SELECT * FROM assignment_grading_review
+                                        WHERE assignment_id = ?d
                                         AND users_id = ?d", $a->id, $uid);
 
             foreach ($result as $data) {
