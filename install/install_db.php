@@ -972,7 +972,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `tii_exclude_value` INT(11) NOT NULL DEFAULT '0',
     `reviews_per_assignment` int(4) DEFAULT NULL,
     `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-    `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP) $tbl_options");
+    `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    `max_submissions` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
