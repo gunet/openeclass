@@ -5928,7 +5928,6 @@ function download_assignments($id) {
             unlink($filename);
             exit;
         }
-die('ok');
     } else {
         return false;
     }
