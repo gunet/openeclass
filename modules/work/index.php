@@ -2136,7 +2136,6 @@ function new_assignment() {
         $tool_content .= "
             <input type='hidden' name='assignment_type' value='0' />";
     }
-    $fileCountOptions = range(2, get_config('max_work_file_count', 10));
     $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langGradeType:</label>
@@ -2251,7 +2250,7 @@ function new_assignment() {
                       <label>
                         <input type='radio' id='online_button' name='submission_type' value='2'" .
                         ($submission_type == 2 ? ' checked' : '') .">
-                        $langWorkMultipleFiles " . selection($fileCountOptions, 'fileCount', $fileCount) . "
+                        $langWorkMultipleFiles " . selection(fileCountOptions(), 'fileCount', $fileCount) . "
                       </label>
                     </div>
                     <div class='radio'>
@@ -3075,7 +3074,6 @@ function show_edit_assignment($id) {
         $tool_content .= "
                 <input type='hidden' name='assignment_type' value='0' />";
     }
-    $fileCountOptions = range(2, get_config('max_work_file_count', 10));
     $tool_content .= "
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langGradeType:</label>
@@ -3190,7 +3188,7 @@ function show_edit_assignment($id) {
                           <label>
                             <input type='radio' id='online_button' name='submission_type' value='2'" .
                             ($row->submission_type == 2 ? ' checked' : '') .">
-                            $langWorkMultipleFiles " . selection($fileCountOptions, 'fileCount', $row->max_submissions) . "
+                            $langWorkMultipleFiles " . selection(fileCountOptions(), 'fileCount', $row->max_submissions) . "
                           </label>
                         </div>
                         <div class='radio'>
@@ -6177,8 +6175,13 @@ function max_grade_from_rubric($rubric_id) {
         foreach($CritArrItems['crit_scales'] as $scalesArr){
             $max_scale_item_value = $max_scale_item_value<$scalesArr['scale_item_value']?$scalesArr['scale_item_value']:$max_scale_item_value;
         }
-        $max_grade = $max_grade+$CritArrItems['crit_weight']*$max_scale_item_value;
+        $max_grade = $max_grade + $CritArrItems['crit_weight'] * $max_scale_item_value;
     }
     //Session::Messages("<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
     return $max_grade/100;
+}
+
+// Returns an array of numbers like [ 2 => 2, 3 => 3, ... ] to use as file count options
+function fileCountOptions() {
+    return array_slice(range(0, get_config('max_work_file_count', 10)), 2, null, true);
 }
