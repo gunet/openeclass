@@ -732,9 +732,10 @@ function add_assignment() {
     if ($v->validate()) {
         $title = $_POST['title'];
         $desc =$_POST['desc'];
+        $submission_date = isset($_POST['WorkStart']) && !empty($_POST['WorkStart']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart'])->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
+        $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
         //aksiologhseis ana xrhsth
         $reviews_per_user = isset($_POST['reviews_per_user']) && !empty($_POST['reviews_per_user']) ? $_POST['reviews_per_user']: NULL;
-        $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
         //hmeromhnia enarkshs ths aksiologhshs apo omotimous
         $submission_date_review = isset($_POST['WorkStart_review']) && !empty($_POST['WorkStart_review']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart_review'])->format('Y-m-d H:i:s') : NULL;
         //deadline aksiologhshs apo omotimous
@@ -836,7 +837,7 @@ function add_assignment() {
                 VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t,
                 ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?t, ?t)",
                 $course_id, $title, $desc, $deadline, $late_submission, '',
-                $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $grade_type,
+                $submission_type, $submission_date, $secret, $group_submissions, $grade_type,
                 $max_grade, $grading_scale_id, $assign_to_specific, $auto_judge,
                 $auto_judge_scenarios, $lang, $notify_submission, $password_lock,
                 $ip_lock, $assignment_type, $lti_template, $launchcontainer, $tii_feedbackreleasedate,
