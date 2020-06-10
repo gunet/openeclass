@@ -252,6 +252,10 @@ $i = 1;
 if (count($exercise_question_ids) > 0) {
     // for each question
     foreach ($exercise_question_ids as $row) {
+        if (!$showResults) {
+            $tool_content .= "<div class='text-center alert alert-info'>$langExerciseCompleted</div>";
+            break;
+        }
         // creates a temporary Question object
         $objQuestionTmp = new Question();
         $is_question = $objQuestionTmp->read($row->question_id);
@@ -309,7 +313,7 @@ if (count($exercise_question_ids) > 0) {
         }
         $tool_content .= "</td></tr>";
 
-        if ($showResults && !is_null($choice)) {
+        if (!is_null($choice)) {
             $tool_content .= "<tr class='active'><th colspan='2'><u>$langAnswer</u></th></tr>";
         }
 
@@ -394,26 +398,20 @@ if (count($exercise_question_ids) > 0) {
                             }
                             // else if the word entered is not the same as the one defined by the professor
                             elseif ($choice[$j] !== '') {
-                                if ($showResults) { // adds the word in red at the end of the string, and strikes it
+                                 // adds the word in red at the end of the string, and strikes it
                                     $answer .= '<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
                                     $icon = "<span class='fa fa-times text-danger'></span>";
-                                }  else {
-                                    $answer .= '<strong>' . q($choice[$j]) . '</strong>';
-                                }
                             } else {
                                 // adds a tabulation if no word has been typed by the student
                                 $answer .= '&nbsp;&nbsp;&nbsp;';
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             }
-                            if ($showResults) { // adds the correct word, followed by ] to close the blank
-                                $answer .= ' / <span class="text-success"><strong>' .
-                                    preg_replace('/\s*\|\s*/', " </strong>$langOr<strong> ", q(substr($temp, 0, $pos))) .
-                                    '</strong></span>';
-                            }
+                                // adds the correct word, followed by ] to close the blank
+                            $answer .= ' / <span class="text-success"><strong>' .
+                                preg_replace('/\s*\|\s*/', " </strong>$langOr<strong> ", q(substr($temp, 0, $pos))) .
+                                '</strong></span>';
                             $answer .= "]";
-                            if ($showResults) {
-                                $answer .= "&nbsp;&nbsp;$icon";
-                            }
+                            $answer .= "&nbsp;&nbsp;$icon";
                             $j++;
                             $temp = substr($temp, $pos + 1);
                         }
@@ -429,13 +427,9 @@ if (count($exercise_question_ids) > 0) {
                             } elseif (!$thisChoice) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
                             } else {
-                                if ($showResults) {
-                                    $choice[$answerId] = "<span class='text-danger'><del>" .
-                                        $matching[$choice[$answerId]] . "</del></span>";
-                                    $icon = "<span class='fa fa-times text-danger'></span>";
-                                } else {
-                                    $choice[$answerId] = $matching[$choice[$answerId]];
-                                }
+                                $choice[$answerId] = "<span class='text-danger'><del>" .
+                                    $matching[$choice[$answerId]] . "</del></span>";
+                                $icon = "<span class='fa fa-times text-danger'></span>";
                             }
                         } else {
                             $matching[$answerId] = $answer;
@@ -480,21 +474,16 @@ if (count($exercise_question_ids) > 0) {
                             $style = "visibility: hidden;";
                         }
                         $tool_content .= "<span class='$student_choice_icon'></span>&nbsp;&nbsp;";
-
-                        if ($showResults) {
-                            $tool_content .= "<span style='$style' class='$answer_icon'></span>";
-                        }
+                        $tool_content .= "<span style='$style' class='$answer_icon'></span>";
                         $tool_content .= "</td>";
                         $tool_content .= "<td>" . standard_text_escape($answer);
-                        if ($showResults) {
-                            if ($answerCorrect) {
-                                $tool_content .= "&nbsp;<span class='text-success'><small>($langCorrectS)</small></span>";
-                            } else {
-                                $tool_content .= "&nbsp;<span class='text-danger'><small>($langIncorrectS)</small></span>";
-                            }
-                            if ($studentChoice or $answerCorrect) {
-                                $tool_content .= "<small><span class='help-block'>" . standard_text_escape(nl2br(make_clickable($answerComment))) ."</span></small>";
-                            }
+                        if ($answerCorrect) {
+                            $tool_content .= "&nbsp;<span class='text-success'><small>($langCorrectS)</small></span>";
+                        } else {
+                            $tool_content .= "&nbsp;<span class='text-danger'><small>($langIncorrectS)</small></span>";
+                        }
+                        if ($studentChoice or $answerCorrect) {
+                            $tool_content .= "<small><span class='help-block'>" . standard_text_escape(nl2br(make_clickable($answerComment))) ."</span></small>";
                         }
                         $tool_content .= "</td>";
                         $tool_content .= "</tr>";
@@ -503,10 +492,8 @@ if (count($exercise_question_ids) > 0) {
                     } else { // matching
                         $tool_content .= "<tr><td>" . standard_text_escape($answer) . "</td>";
                         $tool_content .= "<td>" . $choice[$answerId] . "";
-                        if ($showResults) {
-                            $tool_content .= " / <span class='text-success'><strong>" . $matching[$answerCorrect] . "</strong></span>&nbsp;&nbsp;$icon";
-                        }
-                       $tool_content .= "</td></tr>";
+                        $tool_content .= " / <span class='text-success'><strong>" . $matching[$answerCorrect] . "</strong></span>&nbsp;&nbsp;$icon";
+                        $tool_content .= "</td></tr>";
                     }
                 }
 
