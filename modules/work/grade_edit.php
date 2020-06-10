@@ -34,7 +34,7 @@ load_js('tools.js');
 // delete confirmation student review
 $head_content .= "<script type='text/javascript'>";
 $head_content .= '
-        $(function () {  
+        $(function () {
             $(document).on("click", ".linkdelete", function(e) {
                 var link = $(this).attr("href");
                 e.preventDefault();
@@ -51,13 +51,13 @@ $head_content .= "</script>";
 if (isset($_GET['ass_id']) ) { // delete student review
     $ass_id = intval($_GET['ass_id']);
     $id = intval($_GET['id']);
-	$a_id = intval($_GET['a_id']);
+    $a_id = intval($_GET['a_id']);
     if (delete_review($ass_id)) {
         Session::Messages($langStudentReviewDeleted, 'alert-success');
     } else {
         Session::Messages($langDelError, 'alert-danger');
     }
-	redirect_to_home_page('modules/work/grade_edit.php?course='.$course_code.'&assignment='.$id.'&submission='.$a_id);
+    redirect_to_home_page('modules/work/grade_edit.php?course='.$course_code.'&assignment='.$id.'&submission='.$a_id);
 }
 if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
     $as_id = intval($_GET['assignment']);
@@ -76,7 +76,7 @@ if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
  * @global type $course_id
  * @param type $id
  * @return type
- */ 
+ */
 function get_assignment_details($id) {
     global $course_id;
     return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
@@ -97,7 +97,7 @@ function delete_review($id) {
 
 
 /**
- * @brief Show to professor details of a student's submission and allow editing of fields            
+ * @brief Show to professor details of a student's submission and allow editing of fields
  * @global type $langNoAssignmentsForReview
  * @global type $langGradeOk
  * @global string $tool_content
@@ -116,23 +116,24 @@ function delete_review($id) {
  * @param type $assign (contains an array with the assignment's details)
  */
 function show_edit_form($id, $sid, $assign) {
-    
+
     global $m, $langGradeOk, $tool_content, $course_code, $langCancel,
            $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName,
            $langPeerReviewNoAssignments, $langNotGraded, $langDeletePeerReview,
-           $langGradebookGrade, $langGradeRubric, $langNoAssignmentsForReview;
+           $langGradebookGrade, $langGradeRubric, $langNoAssignmentsForReview,
+           $langOpenCoursesFiles;
 
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
-	$count_of_ass = Database::get()->querySingle("SELECT COUNT(*) FROM assignment_submit WHERE id = ?d", $id);
+    $count_of_ass = Database::get()->querySingle("SELECT COUNT(*) FROM assignment_submit WHERE id = ?d", $id);
 
-	///$reviews_per_ass = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d",$id)->reviews_per_assignment;
-	$reviews_per_ass = Database::get()->querySingle('SELECT reviews_per_assignment FROM assignment WHERE id = ?d ', $id)->reviews_per_assignment;
+    ///$reviews_per_ass = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d",$id)->reviews_per_assignment;
+    $reviews_per_ass = Database::get()->querySingle('SELECT reviews_per_assignment FROM assignment WHERE id = ?d ', $id)->reviews_per_assignment;
     if ($sub) {
-		if ($grading_type == 3 ) {
-			$cdate = date('Y-m-d H:i:s');
-			if($cdate < $assign->start_date_review){
-				 $tool_content .= "
+        if ($grading_type == 3 ) {
+            $cdate = date('Y-m-d H:i:s');
+            if($cdate < $assign->start_date_review){
+                $tool_content .= "
                     <p class='sub_title1'></p>
                     <div class='alert alert-warning'>$langPeerReviewNoAssignments</div>";
 			}
@@ -144,83 +145,82 @@ function show_edit_form($id, $sid, $assign) {
 						</div>
 					</div>";
 			}*/
-			if ($cdate > $assign->start_date_review){
-				//tha emfanistoun oi ergasies
-				//$tool_content .= "<input type='' name='assign' value='$id'>";
-				//$tool_content .= "<input type='' name='assign' value='$sid'>";
-				$rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
-                                 WHERE assignment_id = ?d ", $id);
-				if ($reviews_per_ass < $count_of_ass && $rows) {
-					$tool_content .= action_bar(array(
-						array(
-							'title' => $langBack,
-							'url' => "index.php?course=$course_code&id=$sub->assignment_id",
-							'icon' => "fa-reply",
-							'level' => 'primary-label'
-						)
-					))."";
-					$ass = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id =?d ", $sid);
-					//$tool_content .= "<input type='' name='gra' value='$sub->id' />";
-					foreach($ass AS $row){
-						$uid_2_name = display_user($row->users_id);
-						$grade = Session::has('grade') ? Session::get('grade') : $row->grade;
-						$comments = Session::has('comments') ? Session::get('comments') : q($row->comments);
-						$pageName = $m['addgradecomments'];
-						//roubrika
-						$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
-						$criteria = unserialize($rubric->scales);
-						//$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
-						$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d ", $row->id);
-						$sel_criteria = unserialize($submitted_grade->rubric_scales);
-						$criteria_list = "";
-						foreach ($criteria as $ci => $criterio ) {
-							$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
-							if(is_array($criterio['crit_scales'])){
-								$criteria_list .= "<li><ul class='list-unstyled'>";
-								foreach ($criterio['crit_scales'] as $si=>$scale) {
-									$selectedrb = ($sel_criteria[$ci]==$si?"checked=\"checked\"":"");
-									$criteria_list .= "<li class='list-group-item'>
-									<input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
-									$scale[scale_item_name] ( $scale[scale_item_value] )
-									</li>";
-								}
-								$criteria_list .= "</ul></li>";
+            if ($cdate > $assign->start_date_review){
+                //tha emfanistoun oi ergasies
+                //$tool_content .= "<input type='' name='assign' value='$id'>";
+                //$tool_content .= "<input type='' name='assign' value='$sid'>";
+                $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
+                    WHERE assignment_id = ?d ", $id);
+                if ($reviews_per_ass < $count_of_ass && $rows) {
+                    $tool_content .= action_bar(array(
+                        array(
+                            'title' => $langBack,
+                            'url' => "index.php?course=$course_code&id=$sub->assignment_id",
+                            'icon' => "fa-reply",
+                            'level' => 'primary-label'
+                        )));
+                    $ass = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id =?d ", $sid);
+                    //$tool_content .= "<input type='' name='gra' value='$sub->id' />";
+                    foreach($ass AS $row){
+                        $uid_2_name = display_user($row->users_id);
+                        $grade = Session::has('grade') ? Session::get('grade') : $row->grade;
+                        $comments = Session::has('comments') ? Session::get('comments') : q($row->comments);
+                        $pageName = $m['addgradecomments'];
+                        //roubrika
+                        $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
+                        $criteria = unserialize($rubric->scales);
+                        //$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
+                        $submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d ", $row->id);
+                        $sel_criteria = unserialize($submitted_grade->rubric_scales);
+                        $criteria_list = "";
+                        foreach ($criteria as $ci => $criterio ) {
+                            $criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
+                            if(is_array($criterio['crit_scales'])){
+                                $criteria_list .= "<li><ul class='list-unstyled'>";
+                                foreach ($criterio['crit_scales'] as $si=>$scale) {
+                                    $selectedrb = ($sel_criteria[$ci]==$si?"checked=\"checked\"":"");
+                                    $criteria_list .= "<li class='list-group-item'>
+                                        <input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
+                                        $scale[scale_item_name] ( $scale[scale_item_value] )
+                                    </li>";
+                                }
+                                $criteria_list .= "</ul></li>";
 
-							}
-						}
-						$grade_field = "<div class='col-sm-9' id='myModalLabel'><h5>$rubric->name</h5>
-								<table class='table-default'>
-								<tr>
-									<td>
-										<ul class='list-unstyled'>
-											$criteria_list
-										</ul>
-									</td>
-								</tr>
-								</table>
-								</div>";
+                            }
+                        }
+                        $grade_field = "<div class='col-sm-9' id='myModalLabel'><h5>$rubric->name</h5>
+                            <table class='table-default'>
+                              <tr>
+                                <td>
+                                  <ul class='list-unstyled'>
+                                    $criteria_list
+                                  </ul>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>";
 
-						if ($cdate > $assign->due_date_review && empty($row->grade)) {
-							$message = "<span style='color:#ff0000;text-align:center;'>$langNotGraded</span>";
-						} else {
-							$message = '';
-						}
+                        if ($cdate > $assign->due_date_review and empty($row->grade)) {
+                            $message = "<span style='color:#ff0000;text-align:center;'>$langNotGraded</span>";
+                        } else {
+                            $message = '';
+                        }
 
-						$tool_content .= "
+                        $tool_content .= "
 						    <div class='form-wrapper'>
                                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
                                     <input type='hidden' name='assignment' value='$id' />
-                                    <input type='hidden' name='submission' value='$row->id' />															
+                                    <input type='hidden' name='submission' value='$row->id' />
                                     <div class='btn-group pull-right'>
                                         <a class='linkdelete btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-placement='bottom' data-toggle='tooltip' title='$langDeletePeerReview' data-original-title=''>
                                             <span class='fa fa-times'></span>
-                                        </a>							
-                                    </div>							
-                                    <div class='form-group'>
-                                        <label class='col-sm-3 control-label'>$m[username]:</label>									
-                                        $uid_2_name &nbsp $message    									
+                                        </a>
                                     </div>
-                                    
+                                    <div class='form-group'>
+                                        <label class='col-sm-3 control-label'>$m[username]:</label>
+                                        $uid_2_name &nbsp $message
+                                    </div>
+
                                     <div class='form-group'>
                                         <label class='col-sm-3 control-label'>$m[sub_date]:</label>
                                         <div class='col-sm-9'>
@@ -228,9 +228,9 @@ function show_edit_form($id, $sid, $assign) {
                                         </div>
                                     </div>
                                     <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-                                        <label for='grade' class='col-sm-3 control-label'>$langGradeRubric:</label>                        
+                                        <label for='grade' class='col-sm-3 control-label'>$langGradeRubric:</label>
                                         $grade_field
-                                        <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
+                                        <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
                                     </div>
                                     <div class='form-group'>
                                         <label class='col-sm-3 control-label'>$langGradebookGrade:</label>
@@ -243,38 +243,38 @@ function show_edit_form($id, $sid, $assign) {
                                         <div class='col-sm-9'>
                                             <span>".q($row->comments)."</span>
                                         </div>
-                                    </div>													
-                                </form>		
+                                    </div>
+                                </form>
                             </div>";
-					    }
-					    $tool_content.= "
-								<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
-									<input type='hidden' name='assignment' value='$id' />
-									<input type='hidden' name='submission' value='$sid' />
-									<div class='form-group'>
-									<div class='col-sm-9 col-sm-offset-3'>
-										<div class='checkbox'>
-											<label>
-												<input type='checkbox' value='1' id='email_button' name='email' checked>
-												$m[email_users]
-											</label>
-										</div>
-									</div>
-									</div>
-									<div class='form-group'>
-										<div class='col-sm-9 col-sm-offset-3'>
-											<input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
-											<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
-										</div>
-									</div>
-							</form>";
-				} else {
-					 $tool_content .= "
-                    <p class='sub_title1'></p>
-                    <div class='alert alert-warning'>$langNoAssignmentsForReview</div>";
-				}
-			}
-		}
+                    }
+                    $tool_content.= "
+                            <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
+                                <input type='hidden' name='assignment' value='$id' />
+                                <input type='hidden' name='submission' value='$sid' />
+                                <div class='form-group'>
+                                    <div class='col-sm-9 col-sm-offset-3'>
+                                        <div class='checkbox'>
+                                            <label>
+                                                <input type='checkbox' value='1' id='email_button' name='email' checked>
+                                                $m[email_users]
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <div class='col-sm-9 col-sm-offset-3'>
+                                        <input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
+                                        <a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+                                    </div>
+                                </div>
+                            </form>";
+                } else {
+                    $tool_content .= "
+                            <p class='sub_title1'></p>
+                            <div class='alert alert-warning'>$langNoAssignmentsForReview</div>";
+                }
+            }
+        }
 
 		//an den exoyme peer_review
 		else {
@@ -289,18 +289,40 @@ function show_edit_form($id, $sid, $assign) {
 			$grade = Session::has('grade') ? Session::get('grade') : $sub->grade;
 			$comments = Session::has('comments') ? Session::get('comments') : q($sub->grade_comments);
 			$pageName = $m['addgradecomments'];
-			if($assign->submission_type) {
-				$submission = "<div class='form-group'>
+			if ($assign->submission_type == 1) {
+                // online text
+                $submission = "
+                        <div class='form-group'>
 							<label class='col-sm-3 control-label'>$langWorkOnlineText:</label>
-							<div class='col-sm-9'>
-								$sub->submission_text
+                            <div class='col-sm-9'>
+                                <p class='form-control-static'>$sub->submission_text</p>
 							</div>
 						</div>";
-			} else {
-				$submission = "<div class='form-group'>
+            } elseif ($assign->submission_type == 2 and preg_match('|/.*/|', $sub->file_path)) {
+                // multiple files
+                $files = Database::get()->queryArray('SELECT id, file_name
+                    FROM assignment_submit
+                    WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d
+                    ORDER BY id', $sub->assignment_id, $sub->uid, $sub->group_id);
+                $links = implode('<br>', array_map(function ($file) {
+                    global $urlAppend, $course_code;
+                    return "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$file->id'>" .
+                        q($file->file_name) . "</a>";
+                }, $files));
+                $submission = "
+                        <div class='form-group'>
+							<label class='col-sm-3 control-label'>$langOpenCoursesFiles:</label>
+							<div class='col-sm-9'><p class='form-control-static'>$links</p></div>
+						</div>";
+            } else {
+                // single file
+                $submission = "
+                        <div class='form-group'>
 							<label class='col-sm-3 control-label'>$m[filename]:</label>
 							<div class='col-sm-9'>
-								<a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
+                                <p class='form-control-static'>
+                                    <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
+                                </p>
 							</div>
 						</div>";
 			}
@@ -317,7 +339,7 @@ function show_edit_form($id, $sid, $assign) {
 						$scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
 					}
 					$grade_field = "<div class='col-sm-3'><select name='grade' class='form-control' id='scales'>$scale_options</select></div>";
-				} elseif($grading_type == 2) {
+				} elseif ($grading_type == 2) {
 					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 					$criteria = unserialize($rubric->scales);
 					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
@@ -382,9 +404,9 @@ function show_edit_form($id, $sid, $assign) {
 					</div>
 					$submission
 					<div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-						<label for='grade' class='col-sm-3 control-label'>$langGradebookGrade:</label>                        
+						<label for='grade' class='col-sm-3 control-label'>$langGradebookGrade:</label>
 							$grade_field
-							<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
+							<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
 					</div>
 					<div class='form-group'>
 						<label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>

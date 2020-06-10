@@ -113,9 +113,9 @@ function is_group_assignment($id) {
 }
 
 // Delete submissions to assignment $id if submitted by user $uid or group $gid
-// Doesn't delete files if they are the same with $new_filename
-function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
-    global $m;
+// Doesn't delete files if they are are one of the $files_to_keep
+function delete_submissions_by_uid($uid, $gid, $id, $files_to_keep = []) {
+    global $m, $workPath;
 
     $return = '';
     $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
@@ -123,8 +123,16 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
                                 WHERE assignment_id = ?d AND
 				      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
     foreach ($res as $row) {
-        if ($row->file_path != $new_filename) {
-            @unlink("$GLOBALS[workPath]/$row->file_path");
+        if (!in_array($row->file_path, $files_to_keep)) {
+            @unlink("$workPath/$row->file_path");
+            // try to remove parent dir if this was part of a multifile submission
+            $parts = explode('/', $row->file_path);
+            if (count($parts) == 3) {
+                $parent = "$workPath/$parts[0]/$parts[1]";
+                if (is_dir($parent)) {
+                    @rmdir($parent);
+                }
+            }
         }
         $ass_cid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = ?d", $id)->course_id;
         Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
@@ -141,7 +149,7 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
     return $return;
 }
 
-//function delete gia pinaka assignment_grade_review, to delete ginetai apo ton kathhghth
+// function delete gia pinaka assignment_grade_review, to delete ginetai apo ton kathhghth
 function delete_submissions($id) {
 
 	$return = '';
