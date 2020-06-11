@@ -770,7 +770,12 @@ function add_assignment() {
             $grade_type = 3;
 
         }
-
+        if (!isset($grade_type)) {
+            $grade_type = isset($_POST['grading_type'])? $_POST['grading_type']: 0;
+        }
+        if (!isset($max_grade)) {
+            $max_grade = isset($_POST['max_grade'])? $_POST['max_grade']: 0;
+        }
         $assign_to_specific = $_POST['assign_to_specific'];
         $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $auto_judge           = isset($_POST['auto_judge']) ? filter_input(INPUT_POST, 'auto_judge', FILTER_VALIDATE_INT) : 0;
