@@ -135,9 +135,6 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                             $(elem).parent().prev().hide();
                             $(elem).prop('disabled', true);
                             $(elem).css({'border-color':'#dfdfdf'});
-                            var prev_grade = parseInt($('span#total_score').html());
-                            var updated_grade = prev_grade + grade;
-                            $('span#total_score').html(updated_grade);
                             return true;
                         }
                     }
@@ -160,7 +157,8 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                            success = save_grade(this);
                         });
                         if (success) {
-                         $(this).parent().hide();
+                            $('a#submitButton').removeClass('btn-primary').addClass('btn-success');
+                            $('#text_submit').text('".js_escape($langGradebookLimit)."');
                         }
                     });
                     $('a#ungraded').click(function(e){
@@ -204,10 +202,18 @@ if ($user) { // user details
     if ($user->am) {
         $tool_content .= "($langAm:" . q($user->am) . ")";
     }
+
 }
 if ($showScore) {
-    $tool_content .= "<h5>$langYourTotalScore: <span id='total_score'><strong>{$exercise_user_record->total_score}</span> / {$exercise_user_record->total_weighting}</strong></h5>";
+    $tool_content .= "<h5>$langYourTotalScore: <span><strong>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong></h5>";
 }
+$tool_content .= "<h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>";
+$tool_content .= "<h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>";
+/*if ($exerciseAttemptsAllowed > 0) {
+    $tool_content .= "<h5>$langAttempt: <em>$exerciseAttemptsAllowed</em></h5>";
+}*/
+$tool_content .= "</div>";
+
 $tool_content .= "
     <h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>
     <h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
@@ -432,6 +438,7 @@ if (count($exercise_question_ids) > 0) {
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             }
                         } else {
+                            $icon = '';
                             $matching[$answerId] = $answer;
                         }
                         if ($regrade) {
@@ -598,7 +605,7 @@ if ($checking) {
 $tool_content .= "
   <div class='text-center'>";
     if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
-        $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>";
+        $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a>&nbsp;";
     }
     if (isset($_REQUEST['unit'])) {
         $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&id=$_REQUEST[unit]'>$langBack</a>";
