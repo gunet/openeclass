@@ -1385,7 +1385,7 @@ function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorde
         }
 
         if (!is_null($prevReorder)) {
-            $prevRank = Database::get()->querySingle("SELECT `$orderField` AS rank
+            $prevRank = Database::get()->querySingle("SELECT `$orderField` AS `rank`
                 FROM `$table` WHERE `$idField` = ?d", $prevReorder)->rank;
         } else {
             $prevRank = 0;
