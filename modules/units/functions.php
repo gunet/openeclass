@@ -458,7 +458,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
     } else {
         $status = $lp->visible;
         if ($is_editor) {
-            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1", $lp_id)->module_id;
+            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
             $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
             if (!$module_visible) {
                 $link .= " <i>($langInactiveModule)</i> ";
@@ -467,7 +467,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
             if ($status == 0) {
                 return '';
             }
-            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1", $lp_id)->module_id;
+            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
             $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
         }
         $imagelink = icon('fa-ellipsis-h');
