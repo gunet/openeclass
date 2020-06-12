@@ -1995,6 +1995,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('assignment', 'max_submissions')) {
             Database::get()->query("ALTER TABLE `assignment` ADD `max_submissions` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1");
         }
+        if (!DBHelper::fieldExists('group', 'visible')) {
+            Database::get()->query("ALTER TABLE `group` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1");
+        }
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!

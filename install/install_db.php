@@ -386,7 +386,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `group` (
     `forum_id` int(11) NULL,
     `category_id` int(11) NULL,
     `max_members` int(11) NOT NULL DEFAULT 0,
-    `secret_directory` varchar(30) NOT NULL DEFAULT 0) $tbl_options");
+    `secret_directory` varchar(30) NOT NULL DEFAULT 0,
+    `visible` TINYINT(4) NOT NULL DEFAULT 1) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `group_members` (
     `group_id` int(11) NOT NULL,
