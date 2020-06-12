@@ -47,8 +47,8 @@ final class ForeignKeys {
         $detailIDFieldName = DBHelper::primaryKeyOf($detailTableName);
         $defaultEntryID = is_null($defaultEntryResolver) ? null :
                 (is_numeric($defaultEntryResolver) ? $defaultEntryResolver :
-                        is_callable($defaultEntryResolver) ? $defaultEntryResolver() :
-                                null);
+                    (is_callable($defaultEntryResolver) ? $defaultEntryResolver() :
+                                null));
         $nullable = DBHelper::isColumnNullable($detailTableName, $detailFieldName);
 
         $wrongIDs = Database::get()->queryArray("select `$detailTableName`.`$detailIDFieldName` as detailid from `$detailTableName`
