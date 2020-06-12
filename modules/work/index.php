@@ -5123,8 +5123,8 @@ function show_student_assignments() {
     } else {
         $gids_sql_ready = "''";
     }
-    //to time exei mia tetoia morgh 261788726178872617887-5356113
-    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+
+    $result = Database::get()->queryArray("SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
                 FROM assignment WHERE course_id = ?d
                     AND active = '1' AND
                     (assign_to_specific = 0 OR id IN
@@ -5132,10 +5132,13 @@ function show_student_assignments() {
                             UNION
                         SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                     )
-                ORDER BY
-                CASE
-                    WHEN deadline IS NULL THEN 1 ELSE 0
-                END, title
+                ORDER BY                    
+                         CASE 
+                             WHEN time < 0 THEN 2
+                             WHEN deadline IS NULL THEN 1 
+                             ELSE 0                                                
+                        END,                
+                title
                 ", $course_id, $uid);
 
     if (count($result) > 0) {
@@ -5258,11 +5261,13 @@ function show_assignments() {
         $langPassCode, $langIPUnlock;
 
         // ordering assignments first by deadline then by title
-    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                        FROM assignment WHERE course_id = ?d ORDER BY
-                                            CASE
-                                                WHEN deadline IS NULL THEN 1 ELSE 0
-                                            END, title", $course_id);
+    $result = Database::get()->queryArray("SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
+                                        FROM assignment WHERE course_id = ?d ORDER BY                                            
+                                                CASE WHEN time < 0 THEN 2
+                                                     WHEN deadline IS NULL THEN 1 
+                                                     ELSE 0                                                
+                                                END, 
+                                            title", $course_id);
     $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
