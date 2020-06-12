@@ -108,7 +108,7 @@ foreach ($resultex as $listex) {
         $num = Database::get()->querySingle("SELECT COUNT(*) AS count " . $exerciseModuleFrom, $insertedExercise, CTEXERCISE_, $course_id)->count;
         $thisExerciseModule = Database::get()->querySingle("SELECT * " . $exerciseModuleFrom, $insertedExercise, CTEXERCISE_, $course_id);
         // determine the default order of this Learning path
-        $order = 1 + intval(Database::get()->querySingle("SELECT MAX(rank) AS max
+        $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
              FROM lp_rel_learnPath_module
             WHERE learnPath_id = ?d", $_SESSION['path_id'])->max);
         $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $insertedExercise);
