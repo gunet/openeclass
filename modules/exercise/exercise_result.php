@@ -211,8 +211,6 @@ if ($user) { // user details
     /*if ($exerciseAttemptsAllowed > 0) {
         $tool_content .= "<h5>$langAttempt: <em>$exerciseAttemptsAllowed</em></h5>";
     }*/
-    $tool_content .= "</div>";
-
     $tool_content .= "
         <h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>
         <h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
