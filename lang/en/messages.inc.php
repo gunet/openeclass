@@ -5278,3 +5278,6 @@ $langExerciseAttemptsUnlimited = 'Unlimited';
 $langWorkMultipleFiles = "Multiple files - maximum:";
 $langWorkFilesCountExceeded = 'The number of files you have submitted exceeds the maximum allowed.';
 $langWorkFileLimit = 'Files (up to %d)';
+$langNotice3Multiple = 'Warning: You can upload one or more new files. All
+    existing files you have currently submitted will be deleted and replaced
+    with the new set of files.';

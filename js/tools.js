@@ -693,3 +693,60 @@ function initialize_multifile_submission(max) {
         formGroup.children('.col-sm-10').first().removeClass('col-sm-offset-2');
     });
 }
+
+function initialize_filemodal(lang) {
+  $('.fileModal').click(function (e) {
+    e.preventDefault();
+    var fileURL = $(this).attr('href');
+    var downloadURL = fileURL + '&download=true';
+    var fileTitle = $(this).text();
+    var buttons = {};
+    buttons.download = {
+      label: '<i class="fa fa-download"></i> ' + lang.download,
+      className: 'btn-success',
+      callback: function (d) {
+        window.location = downloadURL;
+      }
+    };
+    buttons.print = {
+      label: '<i class="fa fa-print"></i> ' + lang.print,
+      className: 'btn-primary',
+      callback: function (d) {
+        var iframe = document.getElementById('fileFrame');
+        iframe.contentWindow.print();
+      }
+    };
+    if (screenfull.enabled) {
+      buttons.fullscreen = {
+        label: '<i class="fa fa-arrows-alt"></i> ' + lang.fullScreen,
+        className: 'btn-primary',
+        callback: function() {
+          screenfull.request(document.getElementById('fileFrame'));
+          return false;
+        }
+      };
+    }
+    buttons.newtab = {
+      label: '<i class="fa fa-plus"></i> ' + lang.newTab,
+      className: 'btn-primary',
+      callback: function() {
+        window.open(fileURL);
+        return false;
+      }
+    };
+    buttons.cancel = {
+      label: lang.cancel,
+      className: 'btn-default'
+    };
+    bootbox.dialog({
+      size: 'large',
+      title: fileTitle,
+      message: '<div class="row">'+
+        '<div class="col-sm-12">'+
+        '<div class="iframe-container"><iframe id="fileFrame" src="'+fileURL+'"></iframe></div>'+
+        '</div>'+
+        '</div>',
+      buttons: buttons
+    });
+  });
+}

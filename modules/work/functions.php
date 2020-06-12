@@ -293,14 +293,16 @@ function was_graded($uid, $id, $ret_val = FALSE) {
 function show_submission_details($id) {
 
     global $uid, $m, $course_id, $langSubmittedAndGraded, $tool_content, $course_code, $autojudge,
-           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView, $urlServer,
+           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView, $urlAppend,
            $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content, $langCriteria,
-           $langOpenCoursesFiles;
+           $langOpenCoursesFiles, $langDownload, $langPrint, $langFullScreen, $langNewTab, $langCancel;
 
     load_js('tools.js');
-    $head_content .= "<script type='text/javascript'>";
-    $head_content .= "$(function() {
-        $('.onlineText').click( function(e){
+    load_js('screenfull/screenfull.min.js');
+
+    $head_content .= "<script type='text/javascript'>
+    $(function() {
+        $('.onlineText').click(function(e){
             e.preventDefault();
             var sid = $(this).data('id');
             var assignment_title = $('#assignment_title').text();
@@ -326,8 +328,13 @@ function show_submission_details($id) {
               }
             });
         });
-    })";
-    $head_content .= "</script>";
+        initialize_filemodal({
+            download: '$langDownload',
+            print: '$langPrint',
+            fullScreen: '$langFullScreen',
+            newTab: '$langNewTab',
+            cancel: '$langCancel'});
+        });</script>";
 
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
@@ -422,9 +429,9 @@ function show_submission_details($id) {
     }
     if (isset($_GET['unit'])) {
         $unit = intval($_GET['unit']);
-        $file_comments_link = "../units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
+        $file_comments_link = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
     } else {
-        $file_comments_link = "{$urlServer}modules/work/?course=$course_code&amp;getcomment=$sub->id";
+        $file_comments_link = "{$urlAppend}modules/work/?course=$course_code&amp;getcomment=$sub->id";
     }
     $tool_content .= "</div>
                 </div>
@@ -449,11 +456,11 @@ function show_submission_details($id) {
             array_map(function ($item) {
                 global $course_code, $urlAppend;
                 if (isset($_GET['unit'])) {
-                    $url = "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$item->id";
+                    $url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$item->id";
                 } else {
-                    $url = "modules/work/?course=$course_code&amp;get=$item->id";
+                    $url = $urlAppend . "modules/work/?course=$course_code&amp;get=$item->id";
                 }
-                return "<a href='{$urlAppend}$url'>" . q($item->file_name) . '</a>';
+                return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $item->file_name, $item->file_name);
             }, Database::get()->queryArray('SELECT id, file_name FROM assignment_submit
                     WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d ORDER BY id',
                     $sub->assignment_id, $sub->uid, $sub->group_id)));
@@ -465,22 +472,25 @@ function show_submission_details($id) {
     } elseif ($assignment->submission_type == 0) {
         // single file
         if (isset($_GET['unit'])) {
-            $get_link = "<a href='../units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id'>";
+            $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
         } else {
-            $get_link = "<a href='{$urlServer}modules/work/?course=$course_code&amp;get=$sub->id'>";
+            $url = "{$urlAppend}modules/work/?course=$course_code&amp;get=$sub->id";
         }
+        $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
         $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong>$langFileName:</strong>
                     </div>
-                    <div class='col-sm-9'>$get_link" . q($sub->file_name) . "</a></div>";
+                    <div class='col-sm-9'>$filelink></div>";
     } else {
         // online text
         $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong>$langWorkOnlineText:</strong>
                     </div>
-                    <div class='col-sm-9'><a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>";
+                    <div class='col-sm-9'>
+                        <a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>
+                    </div>";
     }
     $tool_content .= "</div>";
 
@@ -506,9 +516,9 @@ function show_submission_details($id) {
 function was_submitted($uid, $gid, $id) {
 
     $q = Database::get()->querySingle("SELECT uid, group_id
-			      FROM assignment_submit
-			      WHERE assignment_id = ?d AND
-				    (uid = ?d or group_id = ?d)", $id, $uid, $gid);
+          FROM assignment_submit
+          WHERE assignment_id = ?d AND
+                (uid = ?d or group_id = ?d)", $id, $uid, $gid);
     if ($q) {
         if ($q->uid == $uid) {
             return 'user';

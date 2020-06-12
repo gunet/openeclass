@@ -148,19 +148,27 @@ $need_autojudge_js = isset($_GET['add']) || (isset($_GET['choice']) && $_GET['ch
 
 if ($is_editor) {
     load_js('tools.js');
-    $head_content .= "<script type='text/javascript'>";
-    // assignment delete confirmation
-    $head_content .= '
-            $(document).on("click", ".linkdelete", function(e) {
-                var link = $(this).attr("href");
+    $head_content .= "<script type='text/javascript'>
+        $(function () {
+            initialize_filemodal({
+                download: '$GLOBALS[langDownload]',
+                print: '$GLOBALS[langPrint]',
+                fullScreen: '$GLOBALS[langFullScreen]',
+                newTab: '$GLOBALS[langNewTab]',
+                cancel: '$GLOBALS[langCancel]'
+            });
+
+            // assignment delete confirmation
+            $(document).on('click', '.linkdelete', function(e) {
+                var link = $(this).attr('href');
                 e.preventDefault();
-                bootbox.confirm("'.$langDelWarnUserAssignment.'", function(result) {
+                bootbox.confirm('$langDelWarnUserAssignment', function(result) {
                     if (result) {
                         document.location.href = link;
                     }
                 });
             });
-        ';
+        });";
 
     if ($need_autojudge_js and $autojudge->isEnabled() and !isset($_GET['disp_results'])) {
         $head_content .= "
@@ -3764,7 +3772,7 @@ function show_student_assignment($id) {
                                                                    WHERE group_id != 0 AND group_id IN ($gids_sql_ready)))",
                                                     $course_id, $id, $uid);
 
-	$count_of_assign = Database::get()->querySingle("SELECT COUNT(*) AS count_of_assign FROM assignment_submit
+    $count_of_assign = Database::get()->querySingle("SELECT COUNT(*) AS count_of_assign FROM assignment_submit
                                  WHERE assignment_id = ?d ", $id)->count_of_assign;
     if ($row) {
         if ($row->password_lock !== '' and
@@ -3826,7 +3834,12 @@ function show_student_assignment($id) {
             $submit_ok = FALSE;
         } else {
             foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
-                $submissions_exist = true;
+                // if $submissions_exist is numeric > 1 displays different message
+                if ($row->submission_type = 2) {
+                    $submissions_exist = submission_count($sub->id);
+                } else {
+                    $submissions_exist = true;
+                }
                 if ($sub->grade != '' && $row->assignment_type != ASSIGNMENT_TYPE_TURNITIN) {
                     $submit_ok = false;
                 }
@@ -3841,8 +3854,8 @@ function show_student_assignment($id) {
                 show_submission_form($id, $user_group_info, false, $submissions_exist);
             }
         }
-        //h sunarthhsh theloume na kaleitai an einai peer review kai an exei upovalei ergasia o foithths
-        //dhladh an einai true h $submissions_exist
+        // h sunarthhsh theloume na kaleitai an einai peer review kai an exei
+        // upovalei ergasia o foithths dhladh an einai true h $submissions_exist
         $ass = Database::get()->querySingle("SELECT * FROM assignment_submit
                                  WHERE assignment_id = ?d AND uid = ?d ", $id, $uid);
         $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
@@ -3862,12 +3875,29 @@ function show_student_assignment($id) {
                 //auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
                 $start_date_review = nice_format($row->start_date_review, TRUE); //hmeromhnia enarkshs aksiologhshs
                 $tool_content .= "<div class='alert alert-warning'>$langPendingPeerSubmissions</div>";
-			}
+            }
         }
     } else {
         redirect_to_home_page("modules/work/?course=$course_code");
     }
 }
+
+
+/**
+ * Count number of submitted files for a submission where submission_type = multiple files
+ * @param integer $sub_id - a database id of a submission
+ * @return integer $count
+ */
+function submission_count($sub_id) {
+    $sub = Database::get()->querySingle('SELECT assignment_id, uid, group_id
+        FROM assignment_submit WHERE id = ?d', $sub_id);
+    return Database::get()->querySingle('SELECT COUNT(*) AS cnt
+        FROM assignment_submit
+        WHERE assignment_id = ?d AND
+              (uid = ?d OR group_id = ?d)',
+        $sub->assignment_id, $sub->uid, $sub->group_id)->cnt;
+}
+
 
 /**
  *sunarthsh foithth
@@ -3932,10 +3962,11 @@ function show_assignment_review($id, $display_graph_results = false) {
                     }
                     if (isset($_GET['unit'])) {
                         $unit = intval($_GET['unit']);
-                        $filelink = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$unit&amp;get=$row->user_submit_id'>" . q($filename) . "</a>";
+                        $fileUrl = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$unit&amp;get=$row->user_submit_id";
                     } else {
-                        $filelink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->user_submit_id'>" . q($filename) . "</a>";
+                        $fileUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->user_submit_id";
                     }
+                    $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $filename, $filename);
 
                 }
             }
@@ -4032,7 +4063,7 @@ function show_assignment_review($id, $display_graph_results = false) {
  */
 function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submissions_exist=false) {
     global $tool_content, $m, $langWorkFile, $langSubmit, $langWorkFileLimit,
-    $langNotice3, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
+    $langNotice3, $langNotice3Multiple, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
     $langGradebookGrade, $urlServer;
 
@@ -4104,8 +4135,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
             }
     }
+    $notice = $submissions_exist > 1? $langNotice3Multiple: $langNotice3;
     $notice = ($submissions_exist)?
-    "<div class='alert alert-info'>" . icon('fa-info-circle') . " $langNotice3</div>": '';
+    "<div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div>": '';
     if ($assignment->grading_type == 1) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);
@@ -4309,12 +4341,23 @@ EOF;*/
  * @param type $row
  */
 function assignment_details($id, $row, $x =false) {
-    global $tool_content, $is_editor, $course_code, $m, $langDaysLeft,$course_id, $uid,
+    global $tool_content, $head_content, $is_editor, $course_code, $m, $langDaysLeft, $course_id, $uid,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail, $urlServer,
            $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine,
            $langReviewStart, $langReviewEnd, $langGradeReviews, $langImportGrades;
+
+    load_js('screenfull/screenfull.min.js');
+    $head_content .= "<script>$(function () {
+            initialize_filemodal({
+                download: '$GLOBALS[langDownload]',
+                print: '$GLOBALS[langPrint]',
+                fullScreen: '$GLOBALS[langFullScreen]',
+                newTab: '$GLOBALS[langNewTab]',
+                cancel: '$GLOBALS[langCancel]'
+            });
+        });</script>";
 
     $preview_rubric = '';
     $grade_type = $row->grading_type;
@@ -4490,18 +4533,18 @@ function assignment_details($id, $row, $x =false) {
         }
         if (isset($_GET['unit'])) {
             $unit = intval($_GET['unit']);
-            $filelink = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
+            $fileUrl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
         } else {
-            $filelink = "{$urlServer}modules/work/?course=$course_code&amp;get=$row->id&amp;file_type=1";
+            $fileUrl = "{$urlServer}modules/work/?course=$course_code&amp;get=$row->id&amp;file_type=1";
         }
-
         if (!empty($row->file_name)) {
+            $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->file_name, $row->file_name);
             $tool_content .= "<div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langWorkFile:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    <a href='$filelink'>$row->file_name</a>
+                    $filelink
                 </div>
             </div>";
         }
@@ -4833,8 +4876,8 @@ function show_assignment($id, $display_graph_results = false) {
                             } else {
                                 $filename = $item->file_name;
                             }
-                            return "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$item->id'>" .
-                                q($filename) . "</a>";
+                            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$item->id";
+                            return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $item->file_name, $filename);
                         }, $allFiles));
                     }
                 }
@@ -5251,12 +5294,12 @@ function show_student_assignments() {
                             UNION
                         SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                     )
-                ORDER BY                    
-                         CASE 
+                ORDER BY
+                         CASE
                              WHEN time < 0 THEN 2
-                             WHEN deadline IS NULL THEN 1 
-                             ELSE 0                                                
-                        END,                
+                             WHEN deadline IS NULL THEN 1
+                             ELSE 0
+                        END,
                 title
                 ", $course_id, $uid);
 
@@ -5381,11 +5424,11 @@ function show_assignments() {
 
         // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
-                                        FROM assignment WHERE course_id = ?d ORDER BY                                            
+                                        FROM assignment WHERE course_id = ?d ORDER BY
                                                 CASE WHEN time < 0 THEN 2
-                                                     WHEN deadline IS NULL THEN 1 
-                                                     ELSE 0                                                
-                                                END, 
+                                                     WHEN deadline IS NULL THEN 1
+                                                     ELSE 0
+                                                END,
                                             title", $course_id);
     $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
@@ -5825,6 +5868,12 @@ function send_file($id, $file_type) {
         return false;
     }
 
+    if (isset($_GET['download']) and $_GET['download']) {
+        $disposition = null;
+    } else {
+        $disposition = 'inline';
+    }
+
     if (isset($file_type)) {
         if ($file_type == 1) {
             $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -5835,13 +5884,13 @@ function send_file($id, $file_type) {
             if (!($info->active)) {
                 return false;
             }
-            send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);
+            send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, $disposition, true);
         } elseif ($file_type == 2) { // download comments file
             $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
             if (!$info) {
                 return false;
             }
-            send_file_to_client("$GLOBALS[workPath]/admin_files/$info->grade_comments_filepath", $info->grade_comments_filename, null, true);
+            send_file_to_client("$GLOBALS[workPath]/admin_files/$info->grade_comments_filepath", $info->grade_comments_filename, $disposition, true);
         }
     } else {
 
@@ -5861,7 +5910,7 @@ function send_file($id, $file_type) {
                 $files_to_download[] = $data->file_path;
             }
             if (in_array($info->file_path, $files_to_download)) {
-                send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, null, true);
+                send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, $disposition, true);
             }
         }
 
@@ -5871,7 +5920,7 @@ function send_file($id, $file_type) {
         if (!($is_editor or $info->uid == $uid or $GLOBALS['is_member'])) {
             return false;
         }
-        send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, null, true);
+        send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, $disposition, true);
 
     }
     exit;
