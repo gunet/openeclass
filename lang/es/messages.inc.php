@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2020-06-05 17:55:38
+// Generated 2020-06-12 17:07:46
 
 $langYes = "Si";
 $langNo = "No";
@@ -5247,3 +5247,13 @@ $langExerciseAttemptsUnlimited = 'Unlimited';
 $langWorkMultipleFiles = "Multiple files - maximum:";
 $langWorkFilesCountExceeded = 'The number of files you have submitted exceeds the maximum allowed.';
 $langWorkFileLimit = 'Files (up to %d)';
+$langExerciseAttemptGone = 'Your current attempt has been cancelled, either
+    because the course administrator has deleted it, or because
+    you have continued the attempt from another computer';
+$langContinueAttemptNotice = 'Warning! An attempt you made to answer this exercise is currently in progress, possibly from another device or browser. You can continue this attempt if you want.';
+$langContinueAttempt = 'Continue Attempt';
+$langContinueAttemptExplanation = 'Activate the option to continue attempts to answer this exercise which were interrupted unexpectedly, for a limited time after the last action of the user.';
+$langContinueAttemptTime = 'Time Limit: [] minutes.';
+$langNotice3Multiple = 'Warning: You can upload one or more new files. All
+    existing files you have currently submitted will be deleted and replaced
+    with the new set of files.';

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2020-06-05 17:55:38
+// Generated 2020-06-12 17:07:45
 
 $langYes = "Yes";
 $langNo = "No";
@@ -3998,9 +3998,6 @@ $langPasswordUnlock = "Unlock with password";
 $langPasswordModalTitle = "Enter the exercise password";
 $langIPHasNoAccess = "Your IP address has no access to the specific exercise.";
 $langIPInvalid = "contains an invalid IP or IP CIDR";
-$langExerciseAttemptGone = 'Your current attempt has been cancelled, either
-    because the course administrator has deleted it, or because
-    you have continued the attempt from another computer';
 $langAdminMessage = "Message by Administrator of $siteName";
 $langWarn2AboutPHP = "Warning: PHP >= 5.4.0 is required for proper operation of the platform. Please upgrade PHP as soon as possible; otherwise, some modules may not function correctly.";
 $langLinkSettings = "Link module settings";
@@ -5278,6 +5275,13 @@ $langExerciseAttemptsUnlimited = 'Unlimited';
 $langWorkMultipleFiles = "Multiple files - maximum:";
 $langWorkFilesCountExceeded = 'The number of files you have submitted exceeds the maximum allowed.';
 $langWorkFileLimit = 'Files (up to %d)';
+$langExerciseAttemptGone = 'Your current attempt has been cancelled, either
+    because the course administrator has deleted it, or because
+    you have continued the attempt from another computer';
+$langContinueAttemptNotice = 'Warning! An attempt you made to answer this exercise is currently in progress, possibly from another device or browser. You can continue this attempt if you want.';
+$langContinueAttempt = 'Continue Attempt';
+$langContinueAttemptExplanation = 'Activate the option to continue attempts to answer this exercise which were interrupted unexpectedly, for a limited time after the last action of the user.';
+$langContinueAttemptTime = 'Time Limit: [] minutes.';
 $langNotice3Multiple = 'Warning: You can upload one or more new files. All
     existing files you have currently submitted will be deleted and replaced
     with the new set of files.';
