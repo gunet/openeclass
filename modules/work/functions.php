@@ -481,7 +481,7 @@ function show_submission_details($id) {
                     <div class='col-sm-3'>
                         <strong>$langFileName:</strong>
                     </div>
-                    <div class='col-sm-9'>$filelink></div>";
+                    <div class='col-sm-9'>$filelink</div>";
     } else {
         // online text
         $tool_content .= "<div class='row margin-bottom-fat'>
