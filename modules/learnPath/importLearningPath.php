@@ -508,7 +508,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             // init vars
             $replace_id = intval($_POST['replace_id']);
             $tempPathId = $replace_id;
-            $rankMax = intval(Database::get()->querySingle("SELECT rank AS max FROM lp_learnPath WHERE learnPath_id = ?d", $replace_id)->max);
+            $rankMax = intval(Database::get()->querySingle("SELECT `rank` AS max FROM lp_learnPath WHERE learnPath_id = ?d", $replace_id)->max);
 
             // delete old lp
             $lp_name = deleteLearningPath($replace_id);

@@ -1176,7 +1176,7 @@ function display_available_lps($element, $element_id) {
                 "</tr>";
         foreach ($lpinfo as $entry) {
             $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d
-                                                    AND rank = (SELECT MIN(rank) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)",
+                                                    AND `rank` = (SELECT MIN(`rank`) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)",
                                                 $entry['id'], $entry['id']);
             if (($m_id) and $m_id->module_id > 0) {
                 $lp_id = $entry['id'];
