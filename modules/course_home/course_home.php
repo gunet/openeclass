@@ -77,7 +77,7 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('sortable/Sortable.min.js');
 
 ModalBoxHelper::loadModalBox();
-$head_content .= "<style>        
+$head_content .= "<style>
     #collapseDescription {
         background-color: #f5f5f5;
     }
@@ -447,8 +447,8 @@ $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = ?d", $course_id)->numUsers;
 $studentUsers = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
-                                        WHERE status = " .USER_STUDENT . " 
-                                            AND editor = 0                                         
+                                        WHERE status = " .USER_STUDENT . "
+                                            AND editor = 0
                                             AND course_id = ?d", $course_id)->studentUsers;
 
 if ($uid) {
@@ -456,11 +456,11 @@ if ($uid) {
     if ($course_completion_id) {
         if ($is_editor) {
             $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
-                                                              JOIN course_user ON user_badge.user=course_user.user_id 
-                                                                    AND status = " .USER_STUDENT . " 
-                                                                    AND editor = 0 
-                                                                    AND course_id = ?d 
-                                                                    AND completed = 1 
+                                                              JOIN course_user ON user_badge.user=course_user.user_id
+                                                                    AND status = " .USER_STUDENT . "
+                                                                    AND editor = 0
+                                                                    AND course_id = ?d
+                                                                    AND completed = 1
                                                                     AND badge = ?d", $course_id, $course_completion_id)->t;
         } else {
             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
@@ -669,8 +669,8 @@ $action_bar
                         <div class='col-xs-12 course-below-wrapper' style='margin-top: 25px;'>
                             <div class='course-info-title clearfix'>
                                     <h5>
-                                  <a role='button' id='btn-syllabus' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>                                      
-                                            <span class='fa fa-chevron-right fa-fw'></span><span style='padding-left: 5px;'>$langCourseDescription</span></a> 
+                                  <a role='button' id='btn-syllabus' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
+                                            <span class='fa fa-chevron-right fa-fw'></span><span style='padding-left: 5px;'>$langCourseDescription</span></a>
                                             $edit_course_desc_link";
                                         // course license
                                     if ($course_license) {
@@ -726,7 +726,7 @@ if ($total_cunits > 0) {
         // Visibility icon and class
         $vis = $cu->visible;
         $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
-        $cu_indirect = getIndirectReference($cu->id);                
+        $cu_indirect = getIndirectReference($cu->id);
         if (!$is_editor and $not_shown) {
             continue;
         } else {
@@ -745,8 +745,8 @@ if ($total_cunits > 0) {
                     $cunits_content .= "</span></small>";
                 $cunits_content .= "</div>";
         }
-                
-        
+
+
         if ($is_editor) {
             $cunits_content .= "<div class='item-side'>
                                   <div class='reorder-btn'>
@@ -825,7 +825,7 @@ if ($course_info->view_type == 'activity') {
                         <div class='panel-body'>" . standard_text_escape($item->content) . "</div>";
             $resources = Database::get()->queryArray("SELECT * FROM unit_resources
                 WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
-            if (count($resources > 0)) {
+            if (count($resources)) {
                 $tool_content .= "
                         <div class='table-responsive'>
                             <table class='table table-striped table-hover'>
@@ -906,7 +906,7 @@ if (isset($course_completion_id) and $course_completion_id > 0) {
                             }
                             $tool_content .= "</a></div>";
                         }
-                            $tool_content .= "                        
+                            $tool_content .= "
                         </div>
                     </div>
                 </div>
@@ -1012,9 +1012,9 @@ function course_announcements() {
     if (visible_module(MODULE_ID_ANNOUNCE)) {
         $q = Database::get()->queryArray("SELECT title, `date`, id
                             FROM announcement
-                            WHERE course_id = ?d 
+                            WHERE course_id = ?d
                                 AND visible = 1
-                                AND (start_display <= NOW() OR start_display IS NULL) 
+                                AND (start_display <= NOW() OR start_display IS NULL)
                                 AND (stop_display >= NOW() OR stop_display IS NULL)
                             ORDER BY `date` DESC LIMIT 5", $course_id);
         if ($q) { // if announcements exist
