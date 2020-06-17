@@ -899,7 +899,7 @@ function add_assignment() {
                                 $data = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
                                 foreach ($data as $u) {
                                     Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id)
-                                                  VALUES (?d, ?d, ?d)", $u, 0, $id);
+                                                  VALUES (?d, ?d, ?d)", $u, $g, $id);
                                 }
                             }
                         }
@@ -1125,8 +1125,8 @@ function edit_assignment($id) {
             $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $reviews_per_user,
             $submission_date_review, $deadline_review, $fileCount, $course_id, $id);
 
+        // purge old entries (if any)
         Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
-
         // tags
         $moduleTag = new ModuleElement($id);
         if (isset($_POST['tags'])) {
@@ -1141,7 +1141,7 @@ function edit_assignment($id) {
                         $data = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
                         foreach ($data as $u) {
                             Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id)
-                                                  VALUES (?d, ?d, ?d)", $u, 0, $id);
+                                                  VALUES (?d, ?d, ?d)", $u, $g, $id);
                         }
                     }
                 }
@@ -2942,10 +2942,9 @@ function show_edit_assignment($id) {
             }
         } else if ($row->assign_to_specific == 2) {
             $assignees = Database::get()->queryArray("SELECT `group`.id, `group`.name
-                                          FROM `group`, group_members, assignment_to_specific
+                                          FROM `group`, assignment_to_specific
                                                 WHERE course_id = ?d
-                                                    AND `group`.id = group_members.group_id
-                                                    AND group_members.user_id = assignment_to_specific.user_id
+                                                    AND `group`.id = assignment_to_specific.group_id                                                    
                                                     AND assignment_to_specific.assignment_id = ?d
                                                 GROUP BY name, id", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
