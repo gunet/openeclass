@@ -167,9 +167,9 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                  total_weighting, attempt, attempt_status, secs_remaining,
                  assigned_to)
                 SELECT eid, uid, record_start_date, record_end_date, total_score,
-                       total_weighting, attempt, attempt_status, secs_remaining,
+                       total_weighting, attempt, ?d, secs_remaining,
                        assigned_to FROM exercise_user_record WHERE eurid = ?d',
-                $eurid)->lastInsertID;
+                ATTEMPT_ACTIVE, $eurid)->lastInsertID;
             if ($new_eurid) {
                 Database::get()->query('UPDATE exercise_answer_record
                     SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
