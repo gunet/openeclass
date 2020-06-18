@@ -145,15 +145,39 @@ if ($objExercise->assign_to_specific and !$is_editor) {
 if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
     $attempt_value = $_POST['attempt_value'];
 } elseif (isset($_GET['eurId'])) { // reinitialize paused attempt
-    // If there is a paused attempt get it
+    // If there is a paused or recent incomplete attempt get it
     $eurid = $_GET['eurId'];
-    $paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining FROM exercise_user_record WHERE eurid = ?d AND eid = ?d AND attempt_status = ?d AND uid = ?d", $eurid, $exerciseId, ATTEMPT_PAUSED, $uid);
+    $paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining
+        FROM exercise_user_record
+        WHERE eurid = ?d AND
+              eid = ?d AND
+              attempt_status = ?d OR
+                  (attempt_status = ?d AND TIME_TO_SEC(TIMEDIFF(NOW(), record_end_date)) < ?d) AND
+              uid = ?d", $eurid, $exerciseId, ATTEMPT_PAUSED, ATTEMPT_ACTIVE, 300, $uid);
     if ($paused_attempt) {
         $objDateTime = new DateTime($paused_attempt->record_start_date);
         $attempt_value = $objDateTime->getTimestamp();
-        Database::get()->query('UPDATE exercise_user_record
-            SET attempt_status = ?d WHERE eurid = ?d',
-            ATTEMPT_ACTIVE, $eurid);
+        // Regenerate eurid so that attempt can't be restarted from other browser
+        unset($_SESSION['exerciseResult'][$exerciseId][$attempt_value]);
+        Database::get()->transaction(function () {
+            global $eurid, $paused_attempt;
+            $new_eurid = Database::get()->query('INSERT INTO exercise_user_record
+                (eid, uid, record_start_date, record_end_date, total_score,
+                 total_weighting, attempt, attempt_status, secs_remaining,
+                 assigned_to)
+                SELECT eid, uid, record_start_date, record_end_date, total_score,
+                       total_weighting, attempt, attempt_status, secs_remaining,
+                       assigned_to FROM exercise_user_record WHERE eurid = ?d',
+                $eurid)->lastInsertID;
+            if ($new_eurid) {
+                Database::get()->query('UPDATE exercise_answer_record
+                    SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
+                Database::get()->query('DELETE FROM exercise_user_record
+                    WHERE eurid = ?d', $eurid);
+                $paused_attempt->eurid = $eurid = $new_eurid;
+            }
+        });
+        $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
     } else {
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
@@ -184,6 +208,7 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
         }
     }
 }
+
 // If the exercise is IP protected
 $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
@@ -197,13 +222,14 @@ if ($ips && !$is_editor){
         }
     }
 }
+
 // If the user has clicked on the "Cancel" button,
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
-
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     $exercisetotalweight = $objExercise->selectTotalWeighting();
-    Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
+    Database::get()->query("UPDATE exercise_user_record
+        SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
         WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
     unset_exercise_var($exerciseId);
@@ -363,8 +389,10 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
         if ($exerciseTimeConstraint) {
             $timeleft = $exerciseTimeConstraint * 60;
         }
-        $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status)
-                        VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt + 1)->lastInsertID;
+        $eurid = Database::get()->query("INSERT INTO exercise_user_record
+            (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status, secs_remaining)
+            VALUES (?d, ?d, ?t, 0, 0, ?d, 0, ?d)",
+            $exerciseId, $uid, $start, $attempt + 1, isset($timeleft)? $timeleft: 0)->lastInsertID;
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
    }
 }
@@ -394,11 +422,13 @@ if (isset($_POST['formSent'])) {
     $action = isset($paused_attempt) ? 'update' : 'insert';
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
     $questionNum = count($exerciseResult) + 1;
+    Database::get()->query('UPDATE exercise_user_record
+        SET record_end_date = NOW(), secs_remaining = ?d
+        WHERE eurid = ?d', isset($timeleft)? $timeleft: 0, $eurid);
 
     $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $exerciseResult;
 
     // if it is a non-sequential exercise
-    // OR if it is a sequential exercise in the last question
     // OR the time has expired
     if ($exerciseType == SINGLE_PAGE_TYPE && !isset($_POST['buttonSave']) ||
         $exerciseType == MULTIPLE_PAGE_TYPE && (isset($_POST['buttonFinish']) || $time_expired)) {
@@ -802,6 +832,18 @@ if (!$questionList) {
 }
 $tool_content .= "</form>";
 
+// If the attempt has disappeared or isn't in a valid state in the DB, redirect user to exercise home
+$attempt = Database::get()->querySingle('SELECT eurid FROM exercise_user_record
+        WHERE eurid = ?d AND attempt_status = ?d', $eurid, ATTEMPT_ACTIVE);
+if (!$attempt) {
+    Session::Messages($langExerciseAttemptGone, 'alert-danger');
+    if (isset($_REQUEST['unit'])) {
+        redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+    } else {
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    }
+}
+
 if ($questionList) {
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     // Enable check for unanswered questions when displaying more than one question
@@ -833,6 +875,7 @@ if ($questionList) {
             });
         });
 </script>";
+}
 
 }
 draw($tool_content, 2, null, $head_content);
