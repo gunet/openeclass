@@ -162,14 +162,21 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
         unset($_SESSION['exerciseResult'][$exerciseId][$attempt_value]);
         Database::get()->transaction(function () {
             global $eurid, $paused_attempt;
-            $new_eurid = Database::get()->querySingle('SELECT MAX(eurid) + 1 AS eurid
-                FROM exercise_user_record')->eurid;
-            Database::get()->query('UPDATE exercise_user_record
-                SET attempt_status = ?d, eurid = ?d WHERE eurid = ?d',
-                ATTEMPT_ACTIVE, $new_eurid, $eurid);
-            Database::get()->query('UPDATE exercise_answer_record
-                SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
-            $paused_attempt->eurid = $eurid = $new_eurid;
+            $new_eurid = Database::get()->query('INSERT INTO exercise_user_record
+                (eid, uid, record_start_date, record_end_date, total_score,
+                 total_weighting, attempt, attempt_status, secs_remaining,
+                 assigned_to)
+                SELECT eid, uid, record_start_date, record_end_date, total_score,
+                       total_weighting, attempt, attempt_status, secs_remaining,
+                       assigned_to FROM exercise_user_record WHERE eurid = ?d',
+                $eurid)->lastInsertID;
+            if ($new_eurid) {
+                Database::get()->query('UPDATE exercise_answer_record
+                    SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
+                Database::get()->query('DELETE FROM exercise_user_record
+                    WHERE eurid = ?d', $eurid);
+                $paused_attempt->eurid = $eurid = $new_eurid;
+            }
         });
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
     } else {
