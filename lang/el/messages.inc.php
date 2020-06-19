@@ -3006,6 +3006,7 @@ $langCopySuccess = "Το αντίγραφο δημιουργήθηκε με επ
 $langGeneralSurvey = "Γενικό ερωτηματολόγιο";
 $langCollesSurvey = "COLLES";
 $langATTLSSurvey = "A.T.T.L.S.";
+$langPollNoQuestions = "Στο ερωητηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 
 //COLLES survey
 $qcolles1 = "Σε αυτή την ενότητα εστιάζω μόνο σε ό,τι με ενδιαφέρει";

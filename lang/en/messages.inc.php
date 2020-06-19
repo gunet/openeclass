@@ -4450,6 +4450,7 @@ $langOpenParticipation = "Participation is open";
 $langGeneralSurvey = "General survey";
 $langCollesSurvey = "COLLES";
 $langATTLSSurvey = "A.T.T.L.S.";
+$langPollNoQuestions = "There are no poll questions!";
 $qcolles1 = "In this online unit my learning focuses on issues that interest me.";
 $qcolles2 = "In this online unit what I learn is important for my professional practice.";
 $qcolles3 = "In this online unit I learn how to improve my professional practice.";
