@@ -208,10 +208,11 @@ function find_submissions($is_group_assignment, $uid, $id, $gids) {
                 static $seen = [];
 
                 $return = !isset($seen[$item->group_id]);
-                $seen[$item->group_id] == true;
+                $seen[$item->group_id] = true;
                 return $return;
             });
         }
+
     } else {
         $res = Database::get()->querySingle("SELECT id, grade
             FROM assignment_submit

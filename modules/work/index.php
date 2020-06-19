@@ -893,27 +893,15 @@ function add_assignment() {
                     }
                 }
                 if ($assign_to_specific && !empty($assigned_to)) {
-                    if ($assign_to_specific == 2) { // specific users belonging to group
-                        if (count($_POST['ingroup']) > 0) {
-                            foreach ($_POST['ingroup'] as $g) {
-                                $data = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
-                                foreach ($data as $u) {
-                                    Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id)
-                                                  VALUES (?d, ?d, ?d)", $u, $g, $id);
-                                }
-                            }
-                        }
+                    if (($group_submissions == 1) or ($assign_to_specific == 2)) {
+                        $column = 'group_id';
+                        $other_column = 'user_id';
                     } else {
-                        if ($group_submissions == 1) {
-                            $column = 'group_id';
-                            $other_column = 'user_id';
-                        } else {
-                            $column = 'user_id';
-                            $other_column = 'group_id';
-                        }
-                        foreach ($assigned_to as $assignee_id) {
-                            Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
-                        }
+                        $column = 'user_id';
+                        $other_column = 'group_id';
+                    }
+                    foreach ($assigned_to as $assignee_id) {
+                        Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
                     }
                 }
                 Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $id,
@@ -1135,27 +1123,15 @@ function edit_assignment($id) {
             $moduleTag->syncTags(array());
         }
         if ($assign_to_specific && !empty($assigned_to)) {
-            if ($assign_to_specific == 2) { // specific users belonging to group
-                if (count($_POST['ingroup']) > 0) {
-                    foreach ($_POST['ingroup'] as $g) {
-                        $data = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
-                        foreach ($data as $u) {
-                            Database::get()->query("INSERT INTO assignment_to_specific (user_id, group_id, assignment_id)
-                                                  VALUES (?d, ?d, ?d)", $u, $g, $id);
-                        }
-                    }
-                }
+            if (($group_submissions == 1) or ($assign_to_specific == 2)) {
+                $column = 'group_id';
+                $other_column = 'user_id';
             } else {
-                if ($group_submissions == 1) {
-                    $column = 'group_id';
-                    $other_column = 'user_id';
-                } else {
-                    $column = 'user_id';
-                    $other_column = 'group_id';
-                }
-                foreach ($assigned_to as $assignee_id) {
-                    Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
-                }
+                $column = 'user_id';
+                $other_column = 'group_id';
+            }
+            foreach ($assigned_to as $assignee_id) {
+                Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
             }
         }
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY,
@@ -2924,10 +2900,12 @@ function show_edit_assignment($id) {
         //preparing options in select boxes for assigning to speficic users/groups
         $assignee_options = '';
         $unassigned_options = '';
-        if ($row->group_submissions) {
+        if (($row->group_submissions) or ($row->assign_to_specific == 2)) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
-                                   FROM assignment_to_specific, `group`
-                                   WHERE `group`.id = assignment_to_specific.group_id AND assignment_to_specific.assignment_id = ?d", $id);
+                                   FROM assignment_to_specific, `group` 
+                                    WHERE course_id = ?d
+                                    AND `group`.id = assignment_to_specific.group_id 
+                                    AND assignment_to_specific.assignment_id = ?d", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
@@ -2936,25 +2914,6 @@ function show_edit_assignment($id) {
               function ($obj_a, $obj_b) {
                 return $obj_a->id - $obj_b->id;
               }
-            );
-            foreach ($unassigned as $unassigned_row) {
-                $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
-            }
-        } else if ($row->assign_to_specific == 2) {
-            $assignees = Database::get()->queryArray("SELECT `group`.id, `group`.name
-                                          FROM `group`, assignment_to_specific
-                                                WHERE course_id = ?d
-                                                    AND `group`.id = assignment_to_specific.group_id                                                    
-                                                    AND assignment_to_specific.assignment_id = ?d
-                                                GROUP BY name, id", $course_id, $id);
-            $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
-            foreach ($assignees as $assignee_row) {
-                $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
-            }
-            $unassigned = array_udiff($all_groups, $assignees,
-                function ($obj_a, $obj_b) {
-                    return $obj_a->id - $obj_b->id;
-                }
             );
             foreach ($unassigned as $unassigned_row) {
                 $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
@@ -3195,7 +3154,7 @@ function show_edit_assignment($id) {
                         <div class='radio'>
                           <label>
                             <input type='radio' id='file_button' name='submission_type' value='0'" .
-                            ($row->submission_type == 0 ? '' : ' checked') .">
+                            ($row->submission_type == 0 ? ' checked' : '') .">
                             $langWorkFile
                           </label>
                         </div>
