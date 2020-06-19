@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2020  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -5767,18 +5767,19 @@ function send_file($id, $file_type) {
  * @return boolean
  */
 function download_assignments($id) {
-    global $workPath, $course_code;
+    global $workPath, $course_code, $webDir;
 
     $sub_type = Database::get()->querySingle("SELECT submission_type FROM assignment WHERE id = ?d", $id)->submission_type;
     $counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $id)->count;
     if ($counter>0) {
         $secret = work_secret($id);
         $filename = "{$course_code}_work_$id.zip";
+        $filepath = "$webDir/courses/temp/$filename";
         chdir($workPath);
         create_zip_index("$secret/index.html", $id);
         if ($sub_type == 1) { // free text assignment
             $zip = new ZipArchive();
-            $zip->open("$filename", ZipArchive::CREATE);
+            $zip->open($filepath, ZipArchive::CREATE);
             $sql = Database::get()->queryArray("SELECT uid, submission_text FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($sql as $data) {
                 $onlinetext = new \Mpdf\Mpdf([
@@ -5800,7 +5801,7 @@ function download_assignments($id) {
             $zip->addFile("$secret/index.html", "index.html");
         } else { // 'normal' assignment
             $zip = new ZipArchive();
-            $zip->open("$filename", ZipArchive::CREATE);
+            $zip->open($filepath, ZipArchive::CREATE);
             foreach (glob("$secret/*") as $file) {
                 if (file_exists($file) and is_readable($file)) {
                     $zip->addFile($file, "work_$id/".substr($file, strlen($secret)+1));
@@ -5810,9 +5811,10 @@ function download_assignments($id) {
         if ($zip->close()) {
             header("Content-Type: application/zip");
             header("Content-Disposition: attachment; filename=$filename");
-            header("Content-Length: " . filesize($filename));
+            header("Content-Length: " . filesize($filepath));
             stop_output_buffering();
-            readfile($filename);
+            ignore_user_abort(true);
+            readfile($filepath);
             unlink($filename);
             exit;
         }
