@@ -5944,9 +5944,11 @@ function download_assignments($id) {
             header("Content-Length: " . filesize($filepath));
             stop_output_buffering();
             readfile($filepath);
-            unlink($filename);
-            exit;
         }
+        if (file_exists($filepath)) {
+            unlink($filepath);
+        }
+        exit;
     } else {
         return false;
     }
