@@ -521,33 +521,6 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
 }
 
 /**
- * Validate a given uploaded zip archive contents against the whitelist and error if necessary.
- *
- * @param array   $listContent - The list contents of the zip arhive, preferably by directly wiring PclZip::listContent().
- * @param integer $menuTypeID  - The menu type to display in case of error.
- */
-function validateUploadedZipFile($listContent, $menuTypeID = 2) {
-    global $tool_content, $head_content, $langBack, $langUploadedZipFileNotAllowed, $langContactAdmin;
-
-    if (!is_array($listContent)) {
-        return false;
-    }
-    foreach ($listContent as $key => $entry) {
-        if ($entry['folder'] == 1) {
-            continue;
-        }
-
-        $filename = basename($entry['filename']);
-
-        if (!isWhitelistAllowed($filename)) {
-            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed <b>". q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
-            draw($tool_content, $menuTypeID, null, $head_content);
-            exit;
-        }
-    }
-}
-
-/**
  * Check whether a filename is allowed by the whitelist or not.
  *
  * @param  string  $filename - The filename to check against the whitelist.
