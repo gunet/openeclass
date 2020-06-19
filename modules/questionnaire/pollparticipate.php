@@ -51,7 +51,13 @@ if (!isset($_REQUEST['pid'])) {
 }
 
 $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $_REQUEST['pid']);
-if(!$p){
+if (!$p) {
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
+// check poll validity
+$pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $_REQUEST['pid']);
+if(!$pq) {
+    Session::messages($langPollNoQuestions);
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
