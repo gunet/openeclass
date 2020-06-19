@@ -183,7 +183,7 @@ function submit_work($uid, $group_id, $id, $file) {
     $source = $groupPath . $file;
     $destination = work_secret($id) . "/$local_name";
 
-    delete_submissions_by_uid($uid, $group_id, $id, $destination);
+    delete_submissions_by_uid($uid, $group_id, $id, [$destination]);
 
     if (is_dir($source)) {
         $original_filename = $original_filename . '.zip';

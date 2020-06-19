@@ -113,9 +113,9 @@ function is_group_assignment($id) {
 }
 
 // Delete submissions to assignment $id if submitted by user $uid or group $gid
-// Doesn't delete files if they are the same with $new_filename
-function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
-    global $m;
+// Doesn't delete files if they are are one of the $files_to_keep
+function delete_submissions_by_uid($uid, $gid, $id, $files_to_keep = []) {
+    global $m, $workPath;
 
     $return = '';
     $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
@@ -123,8 +123,16 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
                                 WHERE assignment_id = ?d AND
 				      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
     foreach ($res as $row) {
-        if ($row->file_path != $new_filename) {
-            @unlink("$GLOBALS[workPath]/$row->file_path");
+        if (!in_array($row->file_path, $files_to_keep)) {
+            @unlink("$workPath/$row->file_path");
+            // try to remove parent dir if this was part of a multifile submission
+            $parts = explode('/', $row->file_path);
+            if (count($parts) == 3) {
+                $parent = "$workPath/$parts[0]/$parts[1]";
+                if (is_dir($parent)) {
+                    @rmdir($parent);
+                }
+            }
         }
         $ass_cid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = ?d", $id)->course_id;
         Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
@@ -141,7 +149,7 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
     return $return;
 }
 
-//function delete gia pinaka assignment_grade_review, to delete ginetai apo ton kathhghth
+// function delete gia pinaka assignment_grade_review, to delete ginetai apo ton kathhghth
 function delete_submissions($id) {
 
 	$return = '';
@@ -189,22 +197,33 @@ function find_submissions($is_group_assignment, $uid, $id, $gids) {
     if ($is_group_assignment AND count($gids)) {
         $groups_sql = join(', ', array_keys($gids));
         $res = Database::get()->queryArray("SELECT id, uid, group_id, submission_date,
-					file_path, file_name, comments, grade,
-					grade_comments, grade_submission_date
-					FROM assignment_submit
-                                        WHERE assignment_id = ?d AND
-                                        group_id IN ($groups_sql)", $id);
+                file_path, file_name, comments, grade, grade_comments, grade_submission_date
+            FROM assignment_submit
+            WHERE assignment_id = ?d AND
+                  group_id IN ($groups_sql)", $id);
+        if (!$res) {
+            return [];
+        } else {
+            return array_filter($res, function ($item) {
+                static $seen = [];
+
+                $return = !isset($seen[$item->group_id]);
+                $seen[$item->group_id] = true;
+                return $return;
+            });
+        }
+
     } else {
-        $res = Database::get()->queryArray("SELECT id, grade FROM assignment_submit
-                                        WHERE assignment_id = ?d AND uid = ?d", $id ,$uid);
-    }
-    $subs = array();
-    if ($res) {
-        foreach ($res as $row) {
-            $subs[] = $row;
+        $res = Database::get()->querySingle("SELECT id, grade
+            FROM assignment_submit
+            WHERE assignment_id = ?d AND uid = ?d
+            ORDER BY id LIMIT 1", $id, $uid);
+        if (!$res) {
+            return [];
+        } else {
+            return [$res];
         }
     }
-    return $subs;
 }
 
 // Returns grade, if submission has been graded, or "Yes" (translated) if
@@ -273,15 +292,18 @@ function was_graded($uid, $id, $ret_val = FALSE) {
  * @param type $id
  */
 function show_submission_details($id) {
-    
+
     global $uid, $m, $course_id, $langSubmittedAndGraded, $tool_content, $course_code, $autojudge,
-           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView, $urlServer,
-           $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content, $langCriteria;
+           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView, $urlAppend,
+           $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content, $langCriteria,
+           $langOpenCoursesFiles, $langDownload, $langPrint, $langFullScreen, $langNewTab, $langCancel;
 
     load_js('tools.js');
-    $head_content .= "<script type='text/javascript'>";
-    $head_content .= "$(function() {
-        $('.onlineText').click( function(e){
+    load_js('screenfull/screenfull.min.js');
+
+    $head_content .= "<script type='text/javascript'>
+    $(function() {
+        $('.onlineText').click(function(e){
             e.preventDefault();
             var sid = $(this).data('id');
             var assignment_title = $('#assignment_title').text();
@@ -292,7 +314,7 @@ function show_submission_details($id) {
               data: {
                  sid: sid
               },
-              success: function(data){              
+              success: function(data){
                 data = $.parseJSON(data);
                 bootbox.alert({
                     title: assignment_title,
@@ -307,9 +329,14 @@ function show_submission_details($id) {
               }
             });
         });
-    })";
-    $head_content .= "</script>";
-    
+        initialize_filemodal({
+            download: '$langDownload',
+            print: '$langPrint',
+            fullScreen: '$langFullScreen',
+            newTab: '$langNewTab',
+            cancel: '$langCancel'});
+        });</script>";
+
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
         die("Error: submission $id doesn't exist.");
@@ -322,7 +349,7 @@ function show_submission_details($id) {
         $notice = $GLOBALS['langSubmitted'];
     }
 
-    //Κατάσταση υποβολής εργασίας από ομάδες
+    // Κατάσταση υποβολής εργασίας από ομάδες
     if ($sub->uid != $uid) {
         $notice .= "<br>$m[submitted_by_other_member] " .
                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
@@ -333,8 +360,9 @@ function show_submission_details($id) {
                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>";
     }
     $sel_criteria = unserialize($sub->grade_rubric);
-    $assignment_id = $sub -> assignment_id;
+    $assignment_id = $sub->assignment_id;
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $assignment_id);
+
     $rubric_id = $assignment -> grading_scale_id;
     $preview_rubric = '';
     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
@@ -351,7 +379,7 @@ function show_submission_details($id) {
                     if($sel_criteria[$ci]==$si)
                         $criteria_list .= "<li><strong>$scale[scale_item_name] ( $scale[scale_item_value] )</strong></li>";
                     else
-                        $criteria_list .= "<li>$scale[scale_item_name] ( $scale[scale_item_value] )</li>";				
+                        $criteria_list .= "<li>$scale[scale_item_name] ( $scale[scale_item_value] )</li>";
                 }
                 $criteria_list .= "</ul></li>";
             }
@@ -359,6 +387,7 @@ function show_submission_details($id) {
         $preview_rubric = $rubric -> preview_rubric;
         $points_to_graded = $rubric -> points_to_graded;
     }
+
     $tool_content .= "
     <div class='panel panel-default'>
         <div class='panel-heading list-header'>
@@ -375,11 +404,11 @@ function show_submission_details($id) {
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>" . $langGradebookGrade . ":</strong>
-                </div>					
+                </div>
                <div class='col-sm-9'>";
-                if ($preview_rubric == 1 AND $points_to_graded == 1) { 
-                    $tool_content .= "
-                            <a class='' role='button' data-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
+    if ($preview_rubric == 1 AND $points_to_graded == 1) {
+        $tool_content .= "
+                            <a role='button' data-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
                             . $sub->grade .
                             "</a>
                             <div class='table-responsive  collapse' id='collapseGrade'>
@@ -396,16 +425,16 @@ function show_submission_details($id) {
                             </tr>
                     </table>
                     </div>";
-                } else {
-                    $tool_content .= $sub->grade;
-                }
-                if (isset($_GET['unit'])) {
-                    $unit = intval($_GET['unit']);
-                    $file_comments_link = "../units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
-                } else {
-                    $file_comments_link = "{$urlServer}modules/work/?course=$course_code&amp;getcomment=$sub->id";
-                }
-                $tool_content .= "</div>
+    } else {
+        $tool_content .= $sub->grade;
+    }
+    if (isset($_GET['unit'])) {
+        $unit = intval($_GET['unit']);
+        $file_comments_link = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
+    } else {
+        $file_comments_link = "{$urlAppend}modules/work/?course=$course_code&amp;getcomment=$sub->id";
+    }
+    $tool_content .= "</div>
                 </div>
                 <div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
@@ -421,31 +450,54 @@ function show_submission_details($id) {
                     <div class='col-sm-9'>" . nice_format($sub->submission_date, true) . "
                     </div>
                 </div>";
-            if ($assignment->submission_type == 0) {
+
+    if ($assignment->submission_type == 2) {
+        // multiple files
+        $links = implode('<br>',
+            array_map(function ($item) {
+                global $course_code, $urlAppend;
                 if (isset($_GET['unit'])) {
-                    $get_link = "<a href='../units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id'>";
+                    $url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$item->id";
                 } else {
-                    $get_link = "<a href='{$urlServer}modules/work/?course=$course_code&amp;get=$sub->id'>";
+                    $url = $urlAppend . "modules/work/?course=$course_code&amp;get=$item->id";
                 }
-                $tool_content .= "<div class='row margin-bottom-fat'>
+                return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $item->file_name, $item->file_name);
+            }, Database::get()->queryArray('SELECT id, file_name FROM assignment_submit
+                    WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d ORDER BY id',
+                    $sub->assignment_id, $sub->uid, $sub->group_id)));
+        $tool_content .= "<div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langOpenCoursesFiles:</strong>
+                </div>
+                <div class='col-sm-9'>$links</div>";
+    } elseif ($assignment->submission_type == 0) {
+        // single file
+        if (isset($_GET['unit'])) {
+            $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
+        } else {
+            $url = "{$urlAppend}modules/work/?course=$course_code&amp;get=$sub->id";
+        }
+        $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
+        $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $langFileName . ":</strong>
+                        <strong>$langFileName:</strong>
                     </div>
-                        <div class='col-sm-9'>$get_link" . q($sub->file_name) . "</a>
-                    </div>
-                </div>";
-            } else {
-                $tool_content .= "<div class='row margin-bottom-fat'>
+                    <div class='col-sm-9'>$filelink</div>";
+    } else {
+        // online text
+        $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $langWorkOnlineText . ":</strong>
+                        <strong>$langWorkOnlineText:</strong>
                     </div>
-                        <div class='col-sm-9'><a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>
-                    </div>
-                </div>";
-            }
-            if ($autojudge->isEnabled()) {
-                $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
-                $tool_content .= "
+                    <div class='col-sm-9'>
+                        <a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>
+                    </div>";
+    }
+    $tool_content .= "</div>";
+
+    if ($assignment->auto_judge and $autojudge->isEnabled()) {
+        $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
+        $tool_content .= "
                     <div class='row margin-bottom-fat'>
                         <div class='col-sm-3'>
                             <strong>" . $langAutoJudgeEnable . ":</strong>
@@ -453,9 +505,11 @@ function show_submission_details($id) {
                         <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
                         </div>
                     </div>";
-            }
-        table_row($m['comments'], $sub->comments, true);
-        $tool_content .= "</div></div>";
+    }
+
+    table_row($m['comments'], $sub->comments, true);
+
+    $tool_content .= "</div></div>";
 }
 
 // Check if a file has been submitted by user uid or group gid
@@ -463,9 +517,9 @@ function show_submission_details($id) {
 function was_submitted($uid, $gid, $id) {
 
     $q = Database::get()->querySingle("SELECT uid, group_id
-			      FROM assignment_submit
-			      WHERE assignment_id = ?d AND
-				    (uid = ?d or group_id = ?d)", $id, $uid, $gid);
+          FROM assignment_submit
+          WHERE assignment_id = ?d AND
+                (uid = ?d or group_id = ?d)", $id, $uid, $gid);
     if ($q) {
         if ($q->uid == $uid) {
             return 'user';
@@ -530,16 +584,16 @@ function triggerAssignmentAnalytics($courseId, $uid, $assignmentId, $eventname) 
  * @param type $id
  */
 function export_grades_to_csv($id) {
-    
+
     global $course_code, $course_id,
-           $langSurname, $langName, $langAm, 
+           $langSurname, $langName, $langAm,
            $langUsername, $langEmail, $langGradebookGrade;
-    
-    $csv = new CSV();    
+
+    $csv = new CSV();
     $csv->filename = $course_code . "_" . $id . "_grades_list.csv";
     $csv->outputHeaders();
     // additional security
-    $q = Database::get()->querySingle("SELECT id, title FROM assignment 
+    $q = Database::get()->querySingle("SELECT id, title FROM assignment
                             WHERE id = ?d AND course_id = ?d", $id, $course_id);
     if ($q) {
         $assignment_id = $q->id;
@@ -550,7 +604,7 @@ function export_grades_to_csv($id) {
         $sql = Database::get()->queryArray("SELECT uid, grade FROM assignment_submit
                         WHERE assignment_id = ?d", $assignment_id);
         foreach ($sql as $data) {
-            $entries = Database::get()->querySingle('SELECT surname, givenname, username, am, email 
+            $entries = Database::get()->querySingle('SELECT surname, givenname, username, am, email
                         FROM user
                         WHERE id = ?d',
                         $data->uid);
@@ -576,11 +630,11 @@ function export_grades_to_csv($id) {
  * @param type $title
  */
 function notify_for_assignment_submission($title) {
-    
+
     global $logo, $langAssignmentPublished, $langTo, $course_id,
            $langsCourse, $langHasAssignmentPublished,
            $urlServer, $course_code, $langSender, $langAssignment;
-            
+
     $emailSubject = "$logo - $langAssignmentPublished";
     $emailHeaderContent = "
         <!-- Header Section -->
@@ -597,23 +651,23 @@ function notify_for_assignment_submission($title) {
     $emailBodyContent = "
         <!-- Body Section -->
         <div id='mail-body'>
-            <br>                
-            <div><b>$langAssignment:</b> <span class='left-space'>".q($title)."</span></div><br>                
+            <br>
+            <div><b>$langAssignment:</b> <span class='left-space'>".q($title)."</span></div><br>
         </div>";
-    
+
     $emailContent = $emailHeaderContent . $emailBodyContent;
     $emailBody = html2text($emailContent);
-        
+
     $profs = Database::get()->queryArray("SELECT user.id AS prof_uid, user.email AS email,
                               user.surname, user.givenname
                            FROM course_user JOIN user ON user.id = course_user.user_id
                            WHERE course_id = ?d AND course_user.status = " . USER_TEACHER . "", $course_id);
-    
+
     foreach ($profs as $prof) {
         if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {
             continue;
         } else {
-            $to_name = $prof->givenname . " " . $prof->surname;            
+            $to_name = $prof->givenname . " " . $prof->surname;
             if (!send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $to_name, $prof->email, $emailSubject, $emailBody, $emailContent)) {
                 continue;
             }
@@ -631,14 +685,14 @@ function notify_for_assignment_submission($title) {
  * @global type $course_code
  */
 function send_file_for_plagiarism($assign_id, $file_id, $true_file_path, $true_file_name) {
-    
+
     global $course_code, $langPlagiarismAlreadyCheck, $langPlagiarismFileSent;
-    
+
     if (!Plagiarism::get()->isFileSubmitted($file_id)) {
-        Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);        
+        Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);
         Session::Messages($langPlagiarismFileSent, 'alert-success');
     } else {
-        Session::Messages($langPlagiarismAlreadyCheck, 'alert-warning');        
+        Session::Messages($langPlagiarismAlreadyCheck, 'alert-warning');
     }
     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$assign_id");
 }
@@ -650,17 +704,17 @@ function send_file_for_plagiarism($assign_id, $file_id, $true_file_path, $true_f
  * @return boolean
  */
 function valid_plagiarism_file_type($file_id) {
-            
+
     $unplag_allowable_file_extensions = array('doc', 'docx', 'rtf', 'txt', 'odt', 'html', 'pdf');
-    
+
     $file_details = Database::get()->querySingle("SELECT file_name FROM assignment_submit WHERE id = ?d", $file_id);
     if ($file_details) {
-        $file_type = get_file_extension($file_details->file_name);        
+        $file_type = get_file_extension($file_details->file_name);
         if (in_array($file_type, $unplag_allowable_file_extensions)) {
             return TRUE;
         }
     }
-    return FALSE;    
+    return FALSE;
 }
 
 

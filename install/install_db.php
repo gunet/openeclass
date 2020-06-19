@@ -387,7 +387,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `group` (
     `forum_id` int(11) NULL,
     `category_id` int(11) NULL,
     `max_members` int(11) NOT NULL DEFAULT 0,
-    `secret_directory` varchar(30) NOT NULL DEFAULT 0) $tbl_options");
+    `secret_directory` varchar(30) NOT NULL DEFAULT 0,
+    `visible` TINYINT(4) NOT NULL DEFAULT 1) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `group_members` (
     `group_id` int(11) NOT NULL,
@@ -973,7 +974,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `tii_exclude_value` INT(11) NOT NULL DEFAULT '0',
     `reviews_per_assignment` int(4) DEFAULT NULL,
     `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-    `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP) $tbl_options");
+    `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    `max_submissions` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -986,7 +988,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `submission_text` MEDIUMTEXT NULL DEFAULT NULL,
     `comments` TEXT NOT NULL,
     `grade` FLOAT DEFAULT NULL,
-	`grade_rubric` TEXT,
+    `grade_rubric` TEXT,
     `grade_comments` TEXT NOT NULL,
     `grade_comments_filepath` VARCHAR(200) NOT NULL DEFAULT '',
     `grade_comments_filename` VARCHAR(200) NOT NULL DEFAULT '',
@@ -1055,9 +1057,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `results` TINYINT(1) NOT NULL DEFAULT 1,
     `score` TINYINT(1) NOT NULL DEFAULT 1,
-    `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
+    `assign_to_specific` TINYINT NOT NULL DEFAULT 0,
     `ip_lock` TEXT NULL DEFAULT NULL,
-    `password_lock` VARCHAR(255) NULL DEFAULT NULL) $tbl_options");
+    `password_lock` VARCHAR(255) NULL DEFAULT NULL,
+    `continue_time_limit` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1138,7 +1141,7 @@ $db->query("CREATE TABLE `course_lti_app` (
       `course_id` int(11) NOT NULL,
       `lti_app` int(11) NOT NULL,
       FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-      FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) 
+      FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`))
    $tbl_options");
 
 
@@ -1687,7 +1690,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `user_id` varchar(255) default '0',
     `group_id` varchar(255) default '0',
     `chat_activity` boolean not null default false,
-    `agent_created` boolean not null default false, 
+    `agent_created` boolean not null default false,
     `chat_activity_id` int(11),
     `agent_id` int(11),
     PRIMARY KEY (`conf_id`,`course_id`)) $tbl_options");
