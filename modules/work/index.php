@@ -2902,9 +2902,9 @@ function show_edit_assignment($id) {
         $unassigned_options = '';
         if (($row->group_submissions) or ($row->assign_to_specific == 2)) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
-                                   FROM assignment_to_specific, `group` 
+                                   FROM assignment_to_specific, `group`
                                     WHERE course_id = ?d
-                                    AND `group`.id = assignment_to_specific.group_id 
+                                    AND `group`.id = assignment_to_specific.group_id
                                     AND assignment_to_specific.assignment_id = ?d", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -5897,6 +5897,7 @@ function download_assignments($id) {
     $sub_type = Database::get()->querySingle("SELECT submission_type FROM assignment WHERE id = ?d", $id)->submission_type;
     $counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM assignment_submit WHERE assignment_id = ?d", $id)->count;
     if ($counter) {
+        ignore_user_abort(true); // needed to ensure zip file is deleted
         $secret = work_secret($id);
         $filename = "{$course_code}_work_$id.zip";
         $filepath = "$webDir/courses/temp/$filename";
@@ -5942,7 +5943,6 @@ function download_assignments($id) {
             header("Content-Disposition: attachment; filename=$filename");
             header("Content-Length: " . filesize($filepath));
             stop_output_buffering();
-            ignore_user_abort(true);
             readfile($filepath);
             unlink($filename);
             exit;
