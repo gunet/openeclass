@@ -1835,6 +1835,7 @@ $langEditCatSuccess = "Η κατηγορία τροποποιήθηκε με ε�
 $langDelCatSuccess = "Η κατηγορία διαγράφηκε με επιτυχία";
 $langImportQTI = "Εισαγωγή από IMS QTI";
 $langExportQTI = "Εξαγωγή σε IMS QTI";
+$langImportQTIAnswer = "Η εισαγωγή της ερώτησης έγινε με επιτυχία";
 $langIMSQTIUploadFile = "Αρχείο IMS QTI";
 $langExportWithAnswers = 'με απαντήσεις';
 $langCheckGrades = 'Έλεγχος βαθμολογιών';
@@ -2995,7 +2996,7 @@ $langCopySuccess = "Το αντίγραφο δημιουργήθηκε με επ
 $langGeneralSurvey = "Γενικό ερωτηματολόγιο";
 $langCollesSurvey = "COLLES";
 $langATTLSSurvey = "A.T.T.L.S.";
-$langPollNoQuestions = "Στο ερωητηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
+$langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 
 //COLLES survey
 $qcolles1 = "Σε αυτή την ενότητα εστιάζω μόνο σε ό,τι με ενδιαφέρει";
