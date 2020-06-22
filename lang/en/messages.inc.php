@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2019-04-25 12:38:59
+// Generated 2020-06-12 17:07:45
 
 $langYes = "Yes";
 $langNo = "No";
@@ -285,7 +285,7 @@ $langInactiveUsers = "Inactive Users";
 $langAddSixMonths = "Reactivate accounts";
 $langRestoredValues = "Restore old values";
 $langEclassConf = "Configuration File";
-$langFileUpdatedSuccess = "Config file edited with success!";
+$langFileUpdatedSuccess = "The platform configuration has been updated.";
 $langReplaceBackupFile = "Replace config_backup.php.";
 $langencryptedPasswd = "Mandatory passwords encryption";
 $langAdminAn = "Administrator Announcements";
@@ -757,9 +757,6 @@ $langExpectedChoice = "Expected Choice";
 $langYourTotalScore = "Your total score is";
 $langDoAnEx = "Do an exercise";
 $langCorrect = "Correct";
-$langIncorrect = "Wrong";
-$langCorrectS = "correct";
-$langIncorrectS = "wrong";
 $langExerciseNotFound = "The answer was not found";
 $langAlreadyAnswered = "You have already answered the question";
 $langExerciseStart = "Start";
@@ -5282,6 +5279,103 @@ $langUserConsentUnknown = "Has not yet consented or was not yet notified";
 $langTiiApp = "TurnItIn Application";
 $langGradeCorrect = 'Grade';
 
+$langEditAgent = "Edit Agent";
+$langHasBeenCompleted = $langUsersCertResults = "Completed by ";
+$langZipError = "File could not be unzipped";
+$langForumPostFlatViewAsc = "Date view (oldest first)";
+$langForumPostFlatViewDesc = "Date view (newest first)";
+$langForumPostThreadedView = "Threaded view";
+$langGradeScalesDeleted = "Grading Scale deleted";
+$langInsertChat = 'chat';
+$langEBooks = 'E-Books';
+$langBBBExternalUsers = "External Users";
+$langBBBAnnDisplay = "to be displayed in announcements";
+$langColmoocDescription = "ColMOOC Description";
+$langColmoocCreateAgentFailed = "Agent Create Error Detected. Please retry.";
+$langColmoocCreateAgentSuccess = "Agent created successfully. Please instruct your students to enroll the chat.";
+$langColmoocRegisterStudentFailed = "Student Chat Loading Error Detected. Please retry.";
+$langColmoocRegisterStudentSuccess = "Student Chat completed successfully. Please close this dialog and return the chat list.";
+$langColmoocFollowLink = "Please click the following link to visit the ColMOOC environment";
+$langColMoocAgentNeeded = "Please visit your new chat activity and get redirected to the ColMOOC environment for creating the chat agent in order for the students to be able to access it.";
+$langColMoocAgentCreateOrEdit = "Plese click Create or Edit Agent in order to get redirected to the ColMOOC enviroment.";
+$langPassCode = "Access password";
+$langGradeOfCourseCompletion = "Grade of $langCourse completion";
+$langGradeCourseCompletion = "Grade of $langCourse completion";
+$langOfGradebook = "Gradebook";
+$langNumInForum = "Number of posts in forums";
+$langNumInForumTopic = "Number of posts in forum topics";
+$langAttemptPausedS = "temporarily saved";
+$langHasAnswered = "has answered";
+$langPendingAnswered = "pending answer";
+$langCheckAccess = "Access Control";
+$langIncorrect = "Wrong";
+$langCorrectS = "correct";
+$langIncorrectS = "wrong";
+$langForumAttachmentDeleted = "Attached file has been deleted";
+$langPollParticipateConfirm = "Click on the following link to confirm your poll participation";
+$langPollParticipationValid = "Your answers were registered with success.";
+$langInvalidEmailRecipient = "Sender email address is not valid! Email wasn't sent! Please contact platform administrator";
+$langMyPortfolio = "My portfolio";
+$langImportInvalidUsers = 'The following usernames were not found on the platform:';
+$langImportExtraUsers = 'The following users were found, but had not made a submission to this assignment:';
+$langImportErrorLines = 'The following records were formatted incorrectly:<br>
+ (e.g. more than two fields, second field was not numeric, grade exceeded the maximum)';
+$langGradesImported = 'Grades imported successfully!';
+$langImportGrades = 'Import Grades From File';
+$langImportGradesError = 'No grades have been imported, due to the following errors.
+    Please fix them and try again.';
+$langImportGradesHelp = 'Please provide a spreadsheet file (e.g. xls, xlsx, csv) with two or three columns.
+    The first column should include the usernames of students who have submitted an
+    assignment.
+    The second column should contain a numerical grade. The third column is optional and can contain
+    a comment for the grade';
+$langGradeReviews = "Peer Review Grading";
+$langReviewsPerUser = "Reviews per User";
+$langAllowableReviewValues = "Allowable Values: 3-5";
+$langReviewStart = "Start of Review Date";
+$langReviewEnd = "End of Review Date";
+$langReviewDateHelpBlock = "Click here for different (future) start of review date";
+$langPeerReviewImpossible = "Number of assignments aren't sufficient for peer reviewing";
+$langPeerReviewGrade = "Review Grade";
+$langPeerReviewCompletedByStudent = "His reviews have completed";
+$langPeerReviewPendingByStudent = "His reviews haven't completed";
+$langPeerReviewMissingByStudent = "His reviews haven't done";
+$langPeerReviewPerUserCompulsory = "Field Reviews per User";
+$langPeerReviewStartDateCompulsory = "Field Start of Review Date";
+$langPeerReviewEndDateCompulsory = "Field End of Review Date";
+$langPeerReviewDeadlineCompulsory = "Field Review Deadline";
+$langPeerReviewStartDateError = "Start Date Review ";
+$langPeerReviewStartDateError2 = "ends after submission date";
+$langPeerReviewNoAssignments = "Assignments haven't been distributed yet";
+$langNotGraded = "(Didn't grade)";
+$langDeletePeerReview = "Delete review";
+$langNoAssignmentsForReview = "There are no assignments for reviewing";
+$langConfirmDeleteStudentReview = "Confirmation of assignment review";
+$langStudentReviewDeleted = "Assignment review deleted";
+$langEndPeerReview = "Peer Review has ended. You can't grade assignments.";
+$langAssignmentDistribution = 'Distribute assignments';
+$langNoPeerReview = 'No peer review.';
+$langPendingPeerSubmissions = 'No submissions to review yet.';
+$langPeerSubmissions = 'Submissions that have been assigned for review';
+$langDeleteAttachment = "Delete attachment";
+$langBBBWelcomeMsg = "Welcome to Teleconference!";
+$langTagNotFound = 'This tag is not assigned to any resource.';
+$langLTIOptions = "Turnitin Options";
+$langUseOfApp = "App Use";
+$langUseOfAppInfo = "Select $langsCourses that app will be used";
+$langColmoocRegisterStudentNoPartner = "Could not find partner for Student Chat. Please retry.";
+$langColmoocFollowLink1 = "Please click the following link";
+$langColmoocFollowLink2 = "in order to visit the ColMOOC environment";
+$langColMoocSessionStatusNoPair = "No pair found";
+$langColMoocSessionStatusFinished = "Completed";
+$langColMoocSessionStatusNoFinalAnswer = "No final answer given";
+$langColMoocCompletions = "Times Completed";
+$langColmoocPairLog = "Pairs Log";
+$langColmoocCompletionsLog = "Completions Log";
+$langColmoocModerator = "Moderator";
+$langColmoocPartner = "Partner";
+
+
 //---------------------------
 // Learning Analytics
 //---------------------------
@@ -5318,7 +5412,7 @@ $langAnalyticsWeight = 'Weight';
 $langAnalyticsConfirmDeletion = 'Are you sure that you want to delete?';
 $langAnalyticsResource = 'Resource';
 $langAnalyticsParameters = 'Learning Analytics Elements';
-$langAnaliticsTimeFrame = 'Time limit';
+$langAnalyticsTimeFrame = 'Analytics Time Frame';
 $langAnalyticsCalculation = 'Calculation';
 $langAnalyticsNoUsersToDisplay = 'There no users to dislay Analytics';
 $langPercentage = 'Percentage';
@@ -5331,9 +5425,6 @@ $langAnalyticsMaxValue = 'Upper value';
 $langAnalyticsResourceNotAvailable = 'There are no resources';
 
 $langTagNotFound = 'This tag is not assigned to any resource.';
-
-
-
 
 // ticketing (aka request)
 $langRequests = "Requests";
@@ -5368,3 +5459,42 @@ $langHourAgo = '%d hour ago';
 $langHoursAgo = '%d hours ago';
 $langShowClosedRequests = 'Show closed requests';
 $langChangeDescription = 'Change description';
+
+$langRefreshGrades = 'Refresh Grades from Activities';
+$langRefreshGrade = 'Refresh Grades from Activity';
+$langRefreshGradesDone = 'The gradebook activities with automatic grade registration have been refreshed.';
+
+$langActiveRooms = "Active rooms";
+$langwith = "with";
+$langCancelExConfirmation = "Warning! The exercise will be canceled. Please confirm your action.";
+$langCancelAttempt = 'Cancel Attempt';
+$langSearchTooManyFiles = "Search Engine is disabled. This is caused by a possible maximum open files (ulimit) problem for the search engine indexing directory (courses/idx/).";
+$langCheckUserRegistration = "<strong>$langCourse registration is required</strong>";
+$langBBBConfigLB = 'Load Balancing';
+$langBBBLBMethod = 'Load Balancing Method';
+$langBBBLBMethodWO = "$langBBBServerOrderP only";
+$langBBBLBMethodWLL = "$langBBBServerOrderP, least load";
+$langBBBLBMethodWLR = "$langBBBServerOrderP, least rooms";
+$langBBBLBMethodWLC = "$langBBBServerOrderP, least users";
+$langBBBLBMethodWOInfo = "$langBBBLBMethodWO: Take into account server priority only. First use server with least priority, then move to the next";
+$langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: First take into account server priority, then server with least load";
+$langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: First take into account server priority, then server with least rooms";
+$langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: First take into account server priority, then server with least user connections";
+$langToNoCourses = "For none of the $langsCourses";
+$langExerciseAttemptsUnlimited = 'Unlimited';
+$langWorkMultipleFiles = "Multiple files - maximum:";
+$langWorkFilesCountExceeded = 'The number of files you have submitted exceeds the maximum allowed.';
+$langWorkFileLimit = 'Files (up to %d)';
+$langExerciseAttemptGone = 'Your current attempt has been cancelled, either
+    because the course administrator has deleted it, or because
+    you have continued the attempt from another computer';
+$langContinueAttemptNotice = 'Warning! An attempt you made to answer this exercise is currently in progress, possibly from another device or browser. You can continue this attempt if you want.';
+$langContinueAttempt = 'Continue Attempt';
+$langContinueAttemptExplanation = 'Activate the option to continue attempts to answer this exercise which were interrupted unexpectedly, for a limited time after the last action of the user.';
+$langContinueAttemptTime = 'Time Limit: [] minutes.';
+$langNotice3Multiple = 'Warning: You can upload one or more new files. All
+    existing files you have currently submitted will be deleted and replaced
+    with the new set of files.';
+$langRefreshGrades = 'Refresh Grades from Activities';
+$langRefreshGrade = 'Refresh Grades from Activity';
+$langRefreshGradesDone = 'The gradebook activities with automatic grade registration have been refreshed.';

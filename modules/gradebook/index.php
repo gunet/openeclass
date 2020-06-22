@@ -501,7 +501,7 @@ if ($is_editor) {
     }
 
     //UPDATE/INSERT DB: add or edit activity to gradebook module (edit concerns and course activities like lps)
-    elseif(isset($_POST['submitGradebookActivity'])) {
+    elseif (isset($_POST['submitGradebookActivity'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('numeric', array('weight'));
         $v->rule('min', array('weight'), 0);
@@ -511,7 +511,7 @@ if ($is_editor) {
             'weight' => "$langTheField $langGradebookActivityWeight",
             'date' => "$langTheField $langGradebookActivityDate2"
         ));
-        if($v->validate()) {
+        if ($v->validate()) {
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $actTitle = isset($_POST['actTitle']) ? trim($_POST['actTitle']) : '';
             $actDesc = purify($_POST['actDesc']);
