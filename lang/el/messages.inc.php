@@ -1354,6 +1354,9 @@ $langGradebookDeleted = "To βαθμολόγιο διαγράφηκε με επ�
 $langSpecificUsers = "συγκεκριμένοι $langsStudents";
 $langExportGradebookWithUsers = "Εξαγωγή αποτελεσμάτων χρηστών";
 $langExportGradebook = "Εξαγωγή αποτελεσμάτων βαθμολογίων";
+$langRefreshGrades = 'Ανανέωση βαθμών από δραστηριότητες';
+$langRefreshGrade = 'Ανανέωση βαθμών από δραστηριότητα';
+$langRefreshGradesDone = 'Οι βαθμοί των δραστηριοτήτων του βαθμολογίου με αυτόματη καταχώρηση ανανεώθηκαν.';
 
 // ------------------
 // Certification - Badge
