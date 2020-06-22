@@ -5430,8 +5430,15 @@ function show_assignments() {
             }
 
             // Check if assignment contains submissions
-            $num_submitted = Database::get()->querySingle("SELECT COUNT(DISTINCT uid, group_id) AS count
-                FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
+            $num_submitted = Database::get()->querySingle('SELECT COUNT(*) AS count FROM (
+                    SELECT uid, group_id FROM assignment_submit
+                    WHERE assignment_id = ?d GROUP BY uid, group_id
+                ) AS distinct_submissions', $row->id);
+            if ($num_submitted) {
+                $num_submitted = $num_submitted->count;
+            } else {
+                $num_submitted = 0;
+            }
             // For multiple file submissions, continuation records have grade=0 by default
             $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d AND grade IS NULL", $row->id)->count;
             if (!$num_ungraded) {
