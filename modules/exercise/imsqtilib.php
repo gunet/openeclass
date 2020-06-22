@@ -21,9 +21,9 @@ function qti_import_file_form_submit($file, $course_id) {
         $item = (object)$item;
 
         if(qti_create_node($item, $course_id)) {
-            array_push($msgs, array(true, standard_text_escape($item->title)));
+            array_push($msgs, array(true, standard_text_escape($item->content)));
         } else {
-            array_push($msgs, array(false, standard_text_escape($item->title)));
+            array_push($msgs, array(false, standard_text_escape($item->content)));
         }
     }
     return $msgs;
@@ -90,7 +90,7 @@ function add_question($node) {
     *QTILite allows only single response multiple choice questions.
     **/
 
-    if($node->num_of_correct_answers > 1 ) {
+    if ($node->num_of_correct_answers > 1 ) {
         $objQuestion->updateType(2);
     } else {
         $objQuestion->updateType(1);
@@ -98,13 +98,17 @@ function add_question($node) {
 
     $objQuestion->save();
 
-    $questionId = $objQuestion->selectId();    
-    if($node->answers) {        
+    $questionId = $objQuestion->selectId();
+    $questionWeighting = 0;
+    if ($node->answers) {
         foreach ($node->answers as $answer) {
             $objAnswer = new Answer($questionId);
-            $objAnswer->createAnswer($answer['answer'], $answer['correct'], $answer['feedback'], $answer['weight'], 1, true);            
+            $objAnswer->createAnswer($answer['answer'], $answer['correct'], $answer['feedback'], $answer['weight'], 1, true);
+            $questionWeighting += $answer['weight'];
         }
     }
+    $objQuestion->updateWeighting($questionWeighting);
+    $objQuestion->save();
 }
 
 /**
@@ -138,7 +142,7 @@ function qti_extract_info($file) {
 
             $doc = new DOMDocument();
             //supress query path warnings.
-            @$doc->loadHTML($bodytext);
+            $doc->loadHTML($bodytext);
             $html = htmlqp($doc, 'body');
             //Handles emphasized text
             $contents = $html->get(0)->childNodes;
@@ -234,6 +238,11 @@ function node_to_text($body, $add_html_tags) {
     return $text;
 }
 
+/**
+ * @brief QTI export
+ * @param $result
+ * @return mixed
+ */
 function exportIMSQTI($result) {
 
     $xml_qti = '<?xml version = "1.0" encoding = "UTF-8" standalone = "no"?>
@@ -241,13 +250,9 @@ function exportIMSQTI($result) {
     <questestinterop></questestinterop>';
 
     $xml_qti = qp($xml_qti);
-
-    $answers_xml = array();
-
     $xml = "";
     foreach ($result as $row) {
-
-        $supported_question_types = array("1", "5");
+        $supported_question_types = array(UNIQUE_ANSWER, MULTIPLE_ANSWER, TRUE_FALSE);
         if (!in_array($row->type, $supported_question_types)) {
             continue;
         }

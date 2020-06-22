@@ -63,9 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
     /* --------------------------------------
       status messages
-      -------------------------------------- */      
+      -------------------------------------- */
+
       foreach ($okMsgs as $msg) {
-        $tool_content .= "<div class='alert alert-success'>$langSuccessOk&nbsp;" . $msg . "</div>";
+        $tool_content .= "<div class='alert alert-success'>$langImportQTIAnswer&nbsp;" . $msg . "</div>";
       }
       foreach ($errorMsgs as $msg) {
         $tool_content .= "<div class='alert alert-warning'>$langError&nbsp;" . $msg . "</div>";
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
       foreach ($msgs as $msg) {
         if ($msg[0]) {
-            $tool_content .= "<div class='alert alert-success'>$langSuccessOk&nbsp;" . $msg[1] . "</div>";
+            $tool_content .= "<div class='alert alert-success'>$langImportQTIAnswer&nbsp;(" . $msg[1] . ")</div>";
           } else {
             $tool_content .= "<div class='alert alert-warning'>$langError&nbsp;" . $msg[1] . "</div>";
           }
