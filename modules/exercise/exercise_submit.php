@@ -854,6 +854,8 @@ if ($questionList) {
                 unansweredQuestions: '". js_escape($langUnansweredQuestions) ."',
                 oneUnanswered: '". js_escape($langUnansweredQuestionsWarningOne) ."',
                 manyUnanswered: '". js_escape($langUnansweredQuestionsWarningMany) ."',
+                finalSubmit: '". js_escape($langExerciseFinalSubmit) ."',
+                finalSubmitWarn: '". js_escape($langExerciseFinalSubmitWarn) ."',
                 question: '". js_escape($langUnansweredQuestionsQuestion) ."',
                 submit: '". js_escape($langSubmit) ."',
                 goBack: '". js_escape($langGoBackToEx) ."',

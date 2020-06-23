@@ -454,47 +454,52 @@ function exercise_init_countdown(params) {
                     unansweredCount++;
                 }
             });
-            if (unansweredCount) {
-                e.preventDefault();
-                var message = (unansweredCount === 1? params.oneUnanswered:
-                    params.manyUnanswered.replace('_', unansweredCount)) +
-                    ' ' + params.question;
-                $.unblockUI();
-                bootbox.dialog({
-                    title: params.unansweredQuestions,
-                    message:
-                        '<div class="row">' +
-                          '<div class="col-md-12">' +
-                            '<h4>' + params.unansweredQuestions + '</h4>' +
-                            '<p>' + message + '</p>' +
-                          '</div>' +
-                        '</div>',
-                    buttons: {
-                        goBack: {
-                            label: params.goBack,
-                            className: 'btn-success',
-                            callback: function () {
-                                var moveTo = $('#qPanel' + firstUnanswered);
-                                if (moveTo.length) {
-                                    $('html').animate({
-                                        scrollTop: moveTo.offset().top + 'px'
-                                    }, 'fast');
-                                }
-                            }
-                        },
-                        submit: {
-                            label: params.submit,
-                            className: 'btn-warning',
-                            callback: function () {
-                                $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
-                                continueSubmit();
-                            }
-                        },
-                    }
-                });
+            e.preventDefault();
+            var message, title;
+
+            if (unansweredCount === 0) {
+                title = params.finalSubmit;
+                message = params.finalSubmitWarn;
             } else {
-                continueSubmit();
+                title = params.unansweredQuestions;
+                message = ((unansweredCount === 1)?
+                           message = params.oneUnanswered:
+                           params.manyUnanswered.replace('_', unansweredCount)) +
+                          ' ' + params.question;
             }
+            $.unblockUI();
+            bootbox.dialog({
+                title: title,
+                message:
+                    '<div class="row">' +
+                      '<div class="col-md-12">' +
+                        '<h4>' + title + '</h4>' +
+                        '<p>' + message + '</p>' +
+                      '</div>' +
+                    '</div>',
+                buttons: {
+                    goBack: {
+                        label: params.goBack,
+                        className: 'btn-success',
+                        callback: function () {
+                            var moveTo = $('#qPanel' + firstUnanswered);
+                            if (moveTo.length) {
+                                $('html').animate({
+                                    scrollTop: moveTo.offset().top + 'px'
+                                }, 'fast');
+                            }
+                        }
+                    },
+                    submit: {
+                        label: params.submit,
+                        className: 'btn-warning',
+                        callback: function () {
+                            $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
+                            continueSubmit();
+                        }
+                    },
+                }
+            });
         });
     }
     var checkUnanswered = $('.qPanel').length >= 1;

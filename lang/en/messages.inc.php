@@ -5499,3 +5499,5 @@ $langNotice3Multiple = 'Warning: You can upload one or more new files. All
 $langRefreshGrades = 'Refresh Grades from Activities';
 $langRefreshGrade = 'Refresh Grades from Activity';
 $langRefreshGradesDone = 'The gradebook activities with automatic grade registration have been refreshed.';
+$langExerciseFinalSubmit = 'Final Submission';
+$langExerciseFinalSubmitWarn = 'Warning! After submitting the exercise, your answers will be recorded as final. Proceed?';
