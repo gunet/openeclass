@@ -1799,11 +1799,17 @@ function deleteUser($id, $log) {
  * @return type
  */
 function get_config($key, $default = null) {
-
-    $r = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", $key);
-    if ($r) {
-        $row = $r->value;
-        return $row;
+    if (!isset($_SESSION['configCache'][$key])) {
+        $r = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", $key);
+        if ($r) {
+            $_SESSION['configCache'][$key] = $r->value;
+            return $r->value;
+        } else {
+            $_SESSION['configCache'][$key] = null;
+            return $default;
+        }
+    } elseif ($_SESSION['configCache'][$key]) {
+        return $_SESSION['configCache'][$key];
     } else {
         return $default;
     }
@@ -1815,7 +1821,7 @@ function get_config($key, $default = null) {
  * @param type $value
  */
 function set_config($key, $value) {
-
+    $_SESSION['configCache'][$key] = $value;
     Database::get()->query("REPLACE INTO config (`key`, `value`) VALUES (?s, ?s)", $key, $value);
 }
 

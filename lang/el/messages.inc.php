@@ -1108,6 +1108,8 @@ $langUnansweredQuestionsWarningOne = 'Δεν έχετε απαντήσει σε 
 $langUnansweredQuestionsWarningMany = 'Δεν έχετε απαντήσει σε _ ερωτήσεις.';
 $langUnansweredQuestionsQuestion = 'Θέλετε να προχωρήσετε στην υποβολή ή να επιστρέψετε στην πρώτη αναπάντητη ερώτηση;';
 $langNoDeadline = "Χωρίς προθεσμία";
+$langExerciseFinalSubmit = 'Οριστική υποβολή';
+$langExerciseFinalSubmitWarn = 'Προσοχή! Η άσκηση θα υποβληθεί οριστικά. Θέλετε να προχωρήσετε;';
 
 
 /* * ***************************************************
