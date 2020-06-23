@@ -30,7 +30,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-$pageName = $langResults;
+$toolName = $langResults;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
@@ -64,7 +64,6 @@ if ($is_editor && isset($_GET['purgeAttempID'])) {
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
 
-
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
@@ -78,28 +77,37 @@ $showScore = $displayScore == 1
             || $is_editor
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
-$tool_content .= "
-<div class='table-responsive'>
-    <table class='table-default'>
-    <tr>
-        <th>" . q_math($exerciseTitle) . "</th>
-    </tr>";
-if ($exerciseDescription_temp) {
-    $tool_content .= "
-        <tr>
-            <td>" . standard_text_escape($exerciseDescription_temp) . "</td>
-        </tr>";
-}
-$tool_content .= "</table></div>";
+
 
 if ($is_editor) {
     $tool_content .= action_bar([
         [ 'title' => $langCheckGrades,
           'icon' => 'fa-bar-chart',
           'class' => 'check-grades',
-          'level' => 'primary-label' ]
+          'level' => 'primary-label'
+        ],
+        [ 'title' => $langExport,
+          'url' => "csv.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
+          'icon' => 'fa-area-chart',
+          'button-class' => 'btn-success',
+          'level' => 'primary-label'
+        ],
+        [ 'title' => "$langExport $langExportWithAnswers",
+          'url' => "csv.php?course=$course_code&amp;full=true&amp;exerciseId=$exerciseIdIndirect",
+          'icon' => 'fa-area-chart',
+          'button-class' => 'btn-success',
+          'level' => 'primary-label'
+        ]
     ]);
 }
+
+$tool_content .= "<div class='panel panel-primary'>
+    <div class='panel panel-heading'>" . q_math($exerciseTitle) . "</div>";
+if ($exerciseDescription_temp) {
+    $tool_content .= "<div class='panel panel-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
+}
+$tool_content .= "</div>";
+
 
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
