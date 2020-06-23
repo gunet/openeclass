@@ -298,19 +298,18 @@ if (!$nbrExercises) {
 
 
             $eid = getIndirectReference($row->id);
-            $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
-                FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
-
+            $NumOfResults = Database::get()->queryArray("SELECT DISTINCT(uid) AS count
+                FROM exercise_user_record WHERE eid = ?d", $row->id);
+            $countNumOfResults = count($NumOfResults);
             $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status=2", $row->id);
             $counter1 = count($TotalExercises);
 
-            if ($NumOfResults) {
+            if ($countNumOfResults > 0) {
                 $tool_content .= "<td class='text-center'>"
                         . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
-                           <div>
-                           <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
-                           (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)"
-                        . "</div>"
+                           <span class='label label-success'>
+                                <small>$countNumOfResults $langExercisesSubmissions</small>
+                           </span>"
                         . "</td>";
             } else {
                 $tool_content .= "<td class='text-center'>  &mdash; </td>";
