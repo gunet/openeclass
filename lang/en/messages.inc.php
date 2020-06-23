@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2020-06-12 17:07:45
+// Generated 2020-06-23 17:05:17
 
 $langYes = "Yes";
 $langNo = "No";
@@ -4450,7 +4450,6 @@ $langOpenParticipation = "Participation is open";
 $langGeneralSurvey = "General survey";
 $langCollesSurvey = "COLLES";
 $langATTLSSurvey = "A.T.T.L.S.";
-$langPollNoQuestions = "There are no poll questions!";
 $qcolles1 = "In this online unit my learning focuses on issues that interest me.";
 $qcolles2 = "In this online unit what I learn is important for my professional practice.";
 $qcolles3 = "In this online unit I learn how to improve my professional practice.";
@@ -5144,7 +5143,6 @@ $langNumInForumTopic = "Number of posts in forum topics";
 $langAttemptPausedS = "temporarily saved";
 $langHasAnswered = "has answered";
 $langPendingAnswered = "pending answer";
-$langExercisesSubmissions = "submissions";
 $langCheckAccess = "Access Control";
 $langIncorrect = "Wrong";
 $langCorrectS = "correct";
@@ -5287,8 +5285,11 @@ $langContinueAttemptTime = 'Time Limit: [] minutes.';
 $langNotice3Multiple = 'Warning: You can upload one or more new files. All
     existing files you have currently submitted will be deleted and replaced
     with the new set of files.';
+$langExerciseFinalSubmit = 'Final Submission';
+$langExerciseFinalSubmitWarn = 'Warning! After submitting the exercise, your answers will be recorded as final. Proceed?';
 $langRefreshGrades = 'Refresh Grades from Activities';
 $langRefreshGrade = 'Refresh Grades from Activity';
 $langRefreshGradesDone = 'The gradebook activities with automatic grade registration have been refreshed.';
-$langExerciseFinalSubmit = 'Final Submission';
-$langExerciseFinalSubmitWarn = 'Warning! After submitting the exercise, your answers will be recorded as final. Proceed?';
+$langImportQTIAnswer = 'The question was imported successfully.';
+$langExercisesSubmissions = "submissions";
+$langPollNoQuestions = "There are no poll questions!";
