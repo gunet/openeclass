@@ -792,3 +792,20 @@ function doScenarioAssertion($scenarionAssertion, $scenarioInputResult, $scenari
 
     return $assertionResult;
 }
+
+/**
+ * @brief Count number of submissions to an assignment
+ * @param int $assignment_id
+ * @return int
+ */
+function countSubmissions($assignment_id) {
+    $num_submitted = Database::get()->querySingle('SELECT COUNT(*) AS count FROM (
+            SELECT uid, group_id FROM assignment_submit
+            WHERE assignment_id = ?d GROUP BY uid, group_id
+        ) AS distinct_submissions', $assignment_id);
+    if ($num_submitted) {
+        return $num_submitted->count;
+    } else {
+        return 0;
+    }
+}
