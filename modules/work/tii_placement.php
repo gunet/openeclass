@@ -52,7 +52,7 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
 
     // extract sourcedid info
     $sourcedid = $data['lis_result_sourcedid'];
-    list($assignment_id, $uid, $assignment, $lti, $user) = lti_verify_extract_sourcedid($sourcedid, 3600);
+    list($assignment_id, $uid, $assignment, $lti, $user) = lti_verify_extract_sourcedid($sourcedid, PHP_INT_MAX);
     $course_code = Database::get()->querySingle("SELECT code FROM course WHERE id = ?d", $assignment->course_id)->code;
 
     // POST to outcomes tool placement url
