@@ -251,25 +251,42 @@ if (!$nbrExercises) {
     // display exercise list
     foreach ($result as $row) {
         $cf_result_data[] = ['id' => $row->id];
-        $tool_content .= "<tr ".($is_editor && !$row->active ? "class='not_visible'" : "").">";
         $row->description = standard_text_escape($row->description);
         $exclamation_icon = '';
         $lock_icon = '';
         $link_class = '';
-        if (isset($row->password_lock) || isset($row->ip_lock)) {
+        $answer_exists = Database::get()->querySingle('SELECT question_id
+            FROM exercise_with_questions WHERE exercise_id = ?d LIMIT 1',
+            $row->id);
+        if (!$answer_exists and !$is_editor) {
+            continue;
+        }
+        if (!$answer_exists or isset($row->password_lock) or isset($row->ip_lock)) {
             $lock_description = "<ul>";
             if ($row->password_lock) {
                 $lock_description .= "<li>$langPassCode</li>";
-                $link_class = "password_protected";
+                $link_class = $is_editor? '': 'password_protected';
             }
             if ($row->ip_lock) {
                 $lock_description .= "<li>$langIPUnlock</li>";
+            }
+            if (!$answer_exists) {
+                $lock_description .= "<li>$langNoQuestion</li>";
+                $link_class = 'not_visible';
             }
             $lock_description .= "</ul>";
             $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
         }
         if (!$row->public) {
             $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
+        }
+        if (!$row->active) {
+            $link_class = 'not_visible';
+        }
+        if ($link_class) {
+            $tool_content .= "<tr class='$link_class'>";
+        } else {
+            $tool_content .= '<tr>';
         }
         // prof only
         if ($is_editor) {
