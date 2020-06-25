@@ -260,6 +260,9 @@ if (count($exercise_question_ids) > 0) {
         // creates a temporary Question object
         $objQuestionTmp = new Question();
         $is_question = $objQuestionTmp->read($row->question_id);
+        if (!$is_question) { // no question found
+            continue;
+        }
         // gets the student choice for this question
         $choice = $objQuestionTmp->get_answers_record($eurid);
         $questionName = $objQuestionTmp->selectTitle();
@@ -300,18 +303,13 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "</td></tr>";
 
         $tool_content .= "<tr><td colspan='2'>";
-        if ($is_question) {
-            $tool_content .= "<strong>" . q_math($questionName) . "</strong>
-                <br>" .
-                standard_text_escape($questionDescription);
-                if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
-                    $tool_content .= "<div style='padding: 20px;' class='text-center'>
-                                        <img src='../../$picturePath/quiz-" . $row->question_id . "'>
-                                      </div>";
-                }
-        } else {
-            $tool_content .= "<div class='alert alert-warning'>$langQuestionAlreadyDeleted</div>";
+        $tool_content .= "<strong>" . q_math($questionName) . "</strong><br>" . standard_text_escape($questionDescription);
+        if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
+            $tool_content .= "<div style='padding: 20px;' class='text-center'>
+                                <img src='../../$picturePath/quiz-" . $row->question_id . "'>
+                              </div>";
         }
+
         $tool_content .= "</td></tr>";
 
         if (!is_null($choice)) {

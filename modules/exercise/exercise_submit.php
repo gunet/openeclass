@@ -575,7 +575,9 @@ if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering button
     foreach ($questionList as $q_id) {
         $q_num++;
         $q_temp = new Question();
-        $q_temp->read($q_id);
+        if (!$q_temp->read($q_id)) { // if question is invalid skip it
+            continue;
+        }
         if (($q_temp->selectType() == UNIQUE_ANSWER or $q_temp->selectType() == MULTIPLE_ANSWER or $q_temp->selectType() == TRUE_FALSE)
             and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) { // if question has answered button color is `blue``
             $class = 'btn btn-info';
@@ -643,7 +645,9 @@ foreach ($questionList as $questionId) {
 
     // check if question is actually answered
     $question = new Question();
-    $question->read($questionId);
+    if (!$question->read($questionId)) {  // if question is invalid skip it
+        continue;
+    }
 
     if ($exerciseType == MULTIPLE_PAGE_TYPE) {
         // display question numbering buttons
