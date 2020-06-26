@@ -795,6 +795,9 @@ class Log {
         if (!empty($details['description'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
         }
+        if (!empty($details['legend'])) {
+            $content .= "&nbsp;&mdash;&nbsp;" . q($details['legend']) ;
+        }
         return $content;
     }
 
