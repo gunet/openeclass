@@ -204,7 +204,6 @@ function showgroupcategoryadmintools($categoryid) {
  * @global type $is_editor
  * @global type $course_id
  * @global type $tool_content
- * @global type $langConfig
  * @global type $langUnRegister
  * @global type $course_code
  * @global type $langGroupDelconfirm
@@ -234,7 +233,7 @@ function showgroupcategoryadmintools($categoryid) {
  */
 function showgroupsofcategory($catid) {
 
-    global $is_editor, $course_id, $tool_content, $langConfig, $langUnRegister,
+    global $is_editor, $course_id, $tool_content, $langUnRegister,
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
     $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
     $langEditChange, $groups_num, $uid, $totalRegistered, $student_desc, $allow_unreg,
@@ -307,20 +306,21 @@ function showgroupsofcategory($catid) {
             ));
             $tool_content .= "</td>";
         } else {
-            $tool_content .= "<td class='text-center'>";
             // If self-registration and multi registration allowed by admin and group is not full
-            if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
-                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=".getIndirectReference($group_id)."");
-            } elseif (!$self_reg) {
-                $tool_content .= ' - ';
-            } else {
-                if (!$allow_unreg) {
-                    $tool_content .= '&mdash;';
-                } else {
-                    $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=".getIndirectReference($group_id)."", " style='color:#d9534f;'");
+            $tool_content .= "<td class='text-center'>";
+            $group_id_indirect = getIndirectReference($group_id);
+            $control = '';
+
+            if ($uid) {
+                if (!$is_member) {
+                    if ($self_reg and (!$user_groups or $multi_reg) and (!$max_members or $member_count < $max_members)) {
+                        $control = icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
+                    }
+                } elseif ($allow_unreg) {
+                    $control = icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id_indirect", " style='color:#d9534f;'");
                 }
             }
-            $tool_content .= "</td>";
+            $tool_content .= ($control? $control: '&mdash;') . "</td>";
         }
         $tool_content .= "</tr>";
     }
@@ -389,11 +389,10 @@ function makedefaultviewcode($locatie) {
 /**
  * @brief delete group
  * @global type $course_id
- * @global type $langGroupDeleted
  * @param type $id
  */
 function delete_group($id) {
-    global $course_id, $langGroupDeleted;
+    global $course_id;
 
     $tuple = Database::get()->querySingle("SELECT name, category_id FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $name = $tuple->name;
