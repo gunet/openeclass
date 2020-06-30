@@ -5292,4 +5292,5 @@ $langRefreshGrade = 'Refresh Grades from Activity';
 $langRefreshGradesDone = 'The gradebook activities with automatic grade registration have been refreshed.';
 $langImportQTIAnswer = 'The question was imported successfully.';
 $langExercisesSubmissions = "submissions";
+$langExercisesSubmission = "submission";
 $langPollNoQuestions = "There are no poll questions!";

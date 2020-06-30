@@ -325,10 +325,13 @@ if (!$nbrExercises) {
             $counter1 = count($TotalExercises);
 
             if ($countNumOfResults > 0) {
+                $submissionCount = ($countNumOfResults == 1 ?
+                    "1 $langExercisesSubmission":
+                    "$countNumOfResults $langExercisesSubmissions");
                 $tool_content .= "<td class='text-center'>"
                         . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
                            <span class='label label-success'>
-                                <small>$countNumOfResults $langExercisesSubmissions</small>
+                                <small>$submissionCount</small>
                            </span>"
                         . "</td>";
             } else {
