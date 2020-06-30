@@ -161,7 +161,7 @@ foreach ($result as $row) {
             } else {
                 $studentam = $theStudent->am;
             }
-            $tool_content .= "<b>$langUser:</b> " . q($theStudent->surname) . " " . q($theStudent->givenname) . "  <div class='smaller'>($langAm: " . q($studentam) . ")</div>";
+            $tool_content .= "<strong>$langUser:</strong> " . q($theStudent->surname) . " " . q($theStudent->givenname) . "  <div class='smaller'>($langAm: " . q($studentam) . ")</div>";
         }
         $tool_content .= "</td>
                 </tr>
@@ -203,53 +203,47 @@ foreach ($result as $row) {
                             break;
                     }
                 }
-            } else { // IF ATTEMPT ANYTHING BUT COMPLETED
-                // IF ATTEMPT PAUSED OR ACTIVE
-                if ($row2->attempt_status == ATTEMPT_PAUSED || $row2->attempt_status == ATTEMPT_ACTIVE) {
-                    $results_link = "-/-";
-                    if ($row2->attempt_status == ATTEMPT_PAUSED) {
-                        $status = $langAttemptPaused;
-                    } else {
-                        $status = $langAttemptActive;
-                        $now = new DateTime('NOW');
-                        $estimatedEndTime = DateTime::createFromFormat('Y-m-d / H:i', $row2->record_start_date);
-                        // in an active exercise if a time constaint passes the exercise can safely be deleted
-                        // if not it can be deleted after a day
-                        if ($exerciseTimeConstraint) {
-                            $estimatedEndTime->add(new DateInterval('PT' . $exerciseTimeConstraint . 'M'));
-                        } else {
-                            $estimatedEndTime->add(new DateInterval('P1D'));
-                        }
-                        if ($now > $estimatedEndTime) {
-                            $row_class = " class='warning' data-toggle='tooltip' title='$langAttemptActiveButDeadMsg'";
-                        } else {
-                            $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";
-                        }
-                    }
-                // IF ATTEMPT PENDING OR CANCELED
+            } else if ($row2->attempt_status == ATTEMPT_PAUSED) {
+                $results_link = "-/-";
+                $status = $langAttemptPaused;
+            } else if ($row2->attempt_status == ATTEMPT_ACTIVE) {
+                $results_link = "-/-";
+                $status = $langAttemptActive;
+                $now = new DateTime('NOW');
+                $estimatedEndTime = DateTime::createFromFormat('Y-m-d / H:i', $row2->record_start_date);
+                // in an active exercise if a time constaint passes the exercise can safely be deleted
+                // if not it can be deleted after a day
+                if ($exerciseTimeConstraint) {
+                    $estimatedEndTime->add(new DateInterval('PT' . $exerciseTimeConstraint . 'M'));
                 } else {
-                    $results_link = q($row2->total_score). "/" . q($row2->total_weighting);
-                    if ($row2->attempt_status == ATTEMPT_PENDING) {
-                        $status = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" .$langAttemptPending. "</a>";
-                    } else {
-                        $status = $langAttemptCanceled;
-                    }
+                    $estimatedEndTime->add(new DateInterval('P1D'));
                 }
+                if ($now > $estimatedEndTime) {
+                    $row_class = " class='warning' data-toggle='tooltip' title='$langAttemptActiveButDeadMsg'";
+                } else {
+                    $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";
+                }
+                // IF ATTEMPT PENDING OR CANCELED
+            } else if ($row2->attempt_status == ATTEMPT_PENDING) {
+                $results_link = q($row2->total_score) . "/" . q($row2->total_weighting);
+                $status = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $langAttemptPending . "</a>";
+            } else if ($row2->attempt_status == ATTEMPT_CANCELED) {
+                $results_link = "-/-";
+                $status = $langAttemptCanceled;
+                $row_class = " class='danger' data-toggle='tooltip' title='$langAttemptCanceled''";
             }
-            $tool_content .= "
-                        <tr$row_class>
-                            <td class='text-center'>" . q($row2->record_start_date) . "</td>";
+
+            $tool_content .= "<tr$row_class><td class='text-center'>" . q($row2->record_start_date) . "</td>";
             if ($row2->time_duration == '00:00:00' || empty($row2->time_duration) || $row2->attempt_status == ATTEMPT_ACTIVE) { // for compatibility
                 $tool_content .= "<td class='text-center'>$langNotRecorded</td>";
             } else {
                 $tool_content .= "<td class='text-center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $tool_content .= "
-                    <td class='text-center'>$results_link</td>
-                    <td class='text-center'>$status</td>";
+            $tool_content .= "<td class='text-center'>$results_link</td>
+                              <td class='text-center'>$status</td>";
             if ($is_editor) {
                 $tool_content .= "
-                    <td class='option-btn-cell'>" . action_button(array(
+                <td class='option-btn-cell'>" . action_button(array(
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
@@ -257,7 +251,7 @@ foreach ($result as $row) {
                             'confirm' => $langConfirmPurgeExercises,
                             'class' => 'delete'
                         )
-                    )).  "</td>";
+                    )) . "</td>";
             }
             $tool_content .= "</tr>";
             $k++;
@@ -265,6 +259,7 @@ foreach ($result as $row) {
         $tool_content .= "</table></div><br>";
     }
 }
+
 $tool_content .= "
     <script type='text/javascript'>
         $(function () {

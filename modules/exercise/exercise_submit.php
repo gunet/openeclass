@@ -241,16 +241,9 @@ if ($ips && !$is_editor){
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-    /*if ($objExercise->isRandom()) {
-        $exercisetotalweight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
-                                          SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
-    } else {
-        $exercisetotalweight = $objExercise->selectTotalWeighting();
-    } */
-    $exercisetotalweight = $objExercise->selectTotalWeighting();
     Database::get()->query("UPDATE exercise_user_record
-        SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?f
-        WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
+        SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = 0
+        WHERE eurid = ?d", ATTEMPT_CANCELED, $eurid);
     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
 
     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
