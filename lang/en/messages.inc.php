@@ -5496,8 +5496,12 @@ $langContinueAttemptTime = 'Time Limit: [] minutes.';
 $langNotice3Multiple = 'Warning: You can upload one or more new files. All
     existing files you have currently submitted will be deleted and replaced
     with the new set of files.';
+$langExerciseFinalSubmit = 'Final Submission';
+$langExerciseFinalSubmitWarn = 'Warning! After submitting the exercise, your answers will be recorded as final. Proceed?';
 $langRefreshGrades = 'Refresh Grades from Activities';
 $langRefreshGrade = 'Refresh Grades from Activity';
 $langRefreshGradesDone = 'The gradebook activities with automatic grade registration have been refreshed.';
-$langExerciseFinalSubmit = 'Final Submission';
-$langExerciseFinalSubmitWarn = 'Warning! After submitting the exercise, your answers will be recorded as final. Proceed?';
+$langImportQTIAnswer = 'The question was imported successfully.';
+$langExercisesSubmissions = "submissions";
+$langExercisesSubmission = "submission";
+$langPollNoQuestions = "There are no poll questions!";

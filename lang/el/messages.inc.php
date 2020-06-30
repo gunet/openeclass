@@ -1851,6 +1851,7 @@ $langRegradeNotNeeded = 'Δεν απαιτείται αναβαθμολόγησ�
 $langRegradeAll = 'Αναβαθμολόγηση όλων';
 $langHasAnswered = "έχει απαντηθεί";
 $langPendingAnswered = "εκκρεμεί απάντηση";
+$langExercisesSubmission = "υποβολή";
 $langExercisesSubmissions = "υποβολές";
 
 // admin.php
