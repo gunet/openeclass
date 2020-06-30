@@ -97,14 +97,18 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
                     // construction of the duplicated Question
                     $objQuestion = new Question();
                     $objQuestion->read($new_question_id);
-                    // copies answers from the old qustion to the new
+                    // copies answers from the old question to the new
                     $objAnswer = new Answer($question_id);
                     $objAnswer->duplicate($new_question_id);                
                 // if user comes from question pool
                 } else {
                     $new_question_id = $objQuestion->duplicate();
+                    $objQuestion = new Question();
+                    $objQuestion->read($new_question_id);
                     $objAnswer = new Answer($question_id);
-                    $objAnswer->duplicate($new_question_id);                
+                    $objAnswer->duplicate($new_question_id);
+                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyQuestion=$new_question_id");
+                    exit();
                 }
             } else {
                 $objAnswer = new Answer($question_id);                

@@ -484,7 +484,7 @@ if (!class_exists('Question')) {
             $difficulty = $this->difficulty;
             $category = $this->category;
 
-            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, type, difficulty, category)
+            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, `type`, difficulty, category)
                         VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $type, $difficulty, $category)->lastInsertID;
 
             // duplicates the picture
