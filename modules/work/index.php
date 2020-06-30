@@ -1315,6 +1315,7 @@ function submit_work($id, $on_behalf_of = null) {
         $submit_ip = Log::get_client_ip();
         $submission_text = isset($_POST['submission_text']) ? purify($_POST['submission_text']) : NULL;
         $grade_comments = $grade_ip = '';
+        $grade = null;
         if (isset($on_behalf_of)) {
             if ($row->group_submissions) {
                 $stud_comments = sprintf($langOnBehalfOfGroupComment, uid_to_name($uid), $gids[$group_id]);
@@ -1340,7 +1341,6 @@ function submit_work($id, $on_behalf_of = null) {
                 }
             }
             $stud_comments = $_POST['stud_comments'];
-            $grade = NULL;
         }
         if (isset($_POST['grade_rubric'])){
             $grade_rubric = serialize($_POST['grade_rubric']);
@@ -1411,7 +1411,8 @@ function submit_work($id, $on_behalf_of = null) {
                 // update attendance book as well
                 update_attendance_book($quserid, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                 //update gradebook if needed
-                update_gradebook_book($quserid, $id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                $book_grade = is_null($grade)? null: $grade / $row->max_grade;
+                update_gradebook_book($quserid, $id, $book_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             }
             if ($on_behalf_of and isset($_POST['email'])) {
                 $email_grade = $_POST['grade'];
