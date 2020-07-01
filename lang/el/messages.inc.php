@@ -1853,6 +1853,9 @@ $langHasAnswered = "έχει απαντηθεί";
 $langPendingAnswered = "εκκρεμεί απάντηση";
 $langExercisesSubmission = "υποβολή";
 $langExercisesSubmissions = "υποβολές";
+$langQuestionPoolPurge = "Διαγραφή αχρησιμοποίητων ερωτήσεων";
+$langConfirmQuestionPoolPurge = "Οι ερωτήσεις που δεν χρησιμοποιούνται σε καμμία άσκηση θα διαγραφούν.";
+$langQuestionPoolPurgeSuccess = "Η διαγραφή των αχρησιμοποίητων ερωτήσεων από την τράπεζα ερωτήσεων πραγματοποιήθηκε.";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";

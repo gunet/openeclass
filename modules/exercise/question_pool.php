@@ -150,7 +150,6 @@ if (isset($_GET['delete'])) {
     }
     // destruction of the Question object
     unset($objQuestionTmp);
-    //Session::set_flashdata($message, $class);
     redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&amp;fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");
 }
 // gets an existing question and copies it into a new exercise
@@ -169,6 +168,10 @@ elseif (isset($_GET['recup']) && isset($fromExercise)) {
     clone_question_pool($_POST['clone_pool_to_course_id']);
     Session::Messages($langCopySuccess, 'alert-success');
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+} elseif (isset($_REQUEST['purge'])) {
+    purge_question_pool($course_id);
+    Session::Messages($langQuestionPoolPurgeSuccess, 'alert-success');
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
 if (isset($fromExercise)) {
@@ -180,24 +183,29 @@ if (isset($fromExercise)) {
 } else {
     $action_bar_options = array(
         array('title' => $langNewQu,
-            'url' => "admin.php?course=$course_code&amp;newQuestion=yes",
-            'icon' => 'fa-plus-circle',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success'),
+              'url' => "admin.php?course=$course_code&amp;newQuestion=yes",
+              'icon' => 'fa-plus-circle',
+              'level' => 'primary-label',
+              'button-class' => 'btn-success'),
         array('title' => $langCreateDuplicate,
-            'url' => "question_pool.php?course=$course_code&amp;dup=yes",
-            'icon' => 'fa-copy',
-            'level' => 'primary-label',
-            'class' => 'warnDup',
-            'button-class' => 'btn-success'),
+              'url' => "question_pool.php?course=$course_code&amp;dup=yes",
+              'icon' => 'fa-copy',
+              'level' => 'primary-label',
+              'class' => 'warnDup',
+              'button-class' => 'btn-success'),
+        array('title' => $langQuestionPoolPurge,
+              'url' => "question_pool.php?course=$course_code&amp;purge=yes",
+              'icon' => 'fa-eraser',
+              'class' => 'delete',
+              'confirm' => $langConfirmQuestionPoolPurge),
         array('title' => $langImportQTI,
-            'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
-            'icon' => 'fa-download',
-            'button-class' => 'btn-success'),
+              'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
+              'icon' => 'fa-download',
+              'button-class' => 'btn-success'),
         array('title' => $langExportQTI,
-            'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
-            'icon' => 'fa-upload',
-            'button-class' => 'btn-success')
+              'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
+              'icon' => 'fa-upload',
+              'button-class' => 'btn-success')
      );
 }
 
@@ -432,4 +440,18 @@ function clone_question_pool($clone_course_id)
             }
         },
     $course_id);
+}
+
+
+/**
+ * @brief purge orphan questions in question pool
+ * @param $course_id
+ */
+function purge_question_pool($course_id) {
+
+    Database::get()->query("DELETE FROM exercise_question 
+            WHERE exercise_question.course_id = ?d
+            AND exercise_question.id NOT IN 
+              (SELECT question_id FROM exercise_with_questions)", $course_id);
+
 }
