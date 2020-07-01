@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2020-06-23 17:05:17
+// Generated 2020-07-01 16:14:46
 
 $langYes = "Yes";
 $langNo = "No";
@@ -2064,7 +2064,7 @@ $langWikiEditPrivilege = "Edit Pages";
 $langWikiEditProperties = "Edit properties";
 $langWikiEditionSucceed = "Wiki modified successfully";
 $langWikiGroupMembers = "Group members";
-$langWikiIdenticalContent = "Same content<br />no modification is saved";
+$langWikiIdenticalContent = "Same content - no modification is saved";
 $langWikiInvalidWikiId = "Invalid Wiki Id";
 $langWikiList = "List of Wiki";
 $langWikiMainPage = "Main page";
@@ -4848,7 +4848,7 @@ $langRegisteredUserAlreadyExists = "An account with the provided registration de
 $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
 $langNoEntriesFound = 'No results found matching your search';
-$langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
+$langBBBNoParticipation = "No participation in any teleconference recorded.";
 $langMergeUserWithSelf = 'Unable to merge an account with itself.';
 $langNotifyAssignmentSubmission = "Notify me via email for new submissions";
 $langAssignmentPublished = "Assignment submission";
@@ -5143,9 +5143,6 @@ $langNumInForumTopic = "Number of posts in forum topics";
 $langAttemptPausedS = "temporarily saved";
 $langHasAnswered = "has answered";
 $langPendingAnswered = "pending answer";
-$langQuestionPoolPurge = "Delete unused questions";
-$langConfirmQuestionPoolPurge = "Unused exercise questions will be deleted.";
-$langQuestionPoolPurgeSuccess = "Unused questions were deleted from question pool.";
 $langCheckAccess = "Access Control";
 $langIncorrect = "Wrong";
 $langCorrectS = "correct";
@@ -5295,5 +5292,8 @@ $langRefreshGrade = 'Refresh Grades from Activity';
 $langRefreshGradesDone = 'The gradebook activities with automatic grade registration have been refreshed.';
 $langImportQTIAnswer = 'The question was imported successfully.';
 $langExercisesSubmissions = "submissions";
-$langExercisesSubmission = "submission";
 $langPollNoQuestions = "There are no poll questions!";
+$langExercisesSubmission = "submission";
+$langQuestionPoolPurge = "Delete unused questions";
+$langConfirmQuestionPoolPurge = "Unused exercise questions will be deleted.";
+$langQuestionPoolPurgeSuccess = "Unused questions were deleted from question pool.";

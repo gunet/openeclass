@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2020-06-23 17:05:19
+// Generated 2020-07-01 16:14:49
 
 $langYes = "Ja";
 $langNo = "Nein";
@@ -4738,7 +4738,7 @@ $langRegisteredUserAlreadyExists = "An account with the provided registration de
 $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
 $langNoEntriesFound = 'Keine Ergebnisse stimmen mit der Suche überein';
-$langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
+$langBBBNoParticipation = "No participation in any teleconference recorded.";
 $langMergeUserWithSelf = 'Unable to merge an account with itself.';
 $langNotifyAssignmentSubmission = "Notify me via email for new submissions";
 $langAssignmentPublished = "Assignment submission";
@@ -5183,3 +5183,7 @@ $langRefreshGradesDone = 'The gradebook activities with automatic grade registra
 $langImportQTIAnswer = 'The question was imported successfully.';
 $langExercisesSubmissions = "submissions";
 $langPollNoQuestions = "There are no poll questions!";
+$langExercisesSubmission = "submission";
+$langQuestionPoolPurge = "Delete unused questions";
+$langConfirmQuestionPoolPurge = "Unused exercise questions will be deleted.";
+$langQuestionPoolPurgeSuccess = "Unused questions were deleted from question pool.";
