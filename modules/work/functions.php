@@ -119,9 +119,8 @@ function delete_submissions_by_uid($uid, $gid, $id, $files_to_keep = []) {
 
     $return = '';
     $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
-				FROM assignment_submit
-                                WHERE assignment_id = ?d AND
-				      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
+        FROM assignment_submit
+        WHERE assignment_id = ?d AND (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
     foreach ($res as $row) {
         if (!in_array($row->file_path, $files_to_keep)) {
             @unlink("$workPath/$row->file_path");
@@ -152,18 +151,18 @@ function delete_submissions_by_uid($uid, $gid, $id, $files_to_keep = []) {
 // function delete gia pinaka assignment_grade_review, to delete ginetai apo ton kathhghth
 function delete_submissions($id) {
 
-	$return = '';
-	$res = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
-	if ($res){
-		$return = "Οι εργασίες ανατέθηκαν σε χρήστες. Διαγράφτηκαν οι παλιές αναθέσεις.";
-	}
-	else{
-		$return = "Οι εργασίες ανατέθηκαν.";
-	}
-	foreach ($res as $row) {
-		Database::get()->query("DELETE FROM  assignment_grading_review WHERE assignment_id = ?d ", $id);
-	}
-	return $return;
+    $return = '';
+    $res = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
+    if ($res){
+        $return = "Οι εργασίες ανατέθηκαν σε χρήστες. Διαγράφτηκαν οι παλιές αναθέσεις.";
+    }
+    else{
+        $return = "Οι εργασίες ανατέθηκαν.";
+    }
+    foreach ($res as $row) {
+        Database::get()->query("DELETE FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
+    }
+    return $return;
 }
 
 
@@ -173,12 +172,12 @@ function delete_submissions($id) {
 	global $m;
 	$res = Database::get()->queryArray("SELECT id, grade,id_assignment_submit, assignment_id, user_id,gid FROM assignment_grading_review WHERE id_assignment_submit = ?d AND user_id = ?d ", $sid, $uid);
 	foreach ($res as $row) {
-		Database::get()->query("DELETE FROM  assignment_grading_review WHERE id = ?d", $row->id);
+		Database::get()->query("DELETE FROM assignment_grading_review WHERE id = ?d", $row->id);
         /*if ($row->grade != $grade) {
             @unlink("$GLOBALS[workPath]/$row->file_path");
         }*/
         //$ass_cid = Database::get()->querySingle("SELECT id FROM assignment_submit WHERE id = ?d", $sid)->id;
-      //  Database::get()->query("DELETE FROM  assignment_grading_review WHERE id = ?d", $row->id)
+      //  Database::get()->query("DELETE FROM assignment_grading_review WHERE id = ?d", $row->id)
 		//triggerGame($row->assignment_id, $row->uid, $id);
 		//if ($GLOBALS['uid'] == $row->user_id) {
 		/*if (gid != 1 ){
