@@ -3588,7 +3588,7 @@ function delete_assignment($id) {
         $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
         if (Database::get()->query("DELETE FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows > 0){
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
-			Database::get()->query("DELETE FROM assignment_grading_review WHERE assignment_id = ?d", $id);
+            Database::get()->query("DELETE FROM assignment_grading_review WHERE assignment_id = ?d", $id);
             foreach ($uids as $user_id) {
                 triggerGame($course_id, $user_id, $id);
                 triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
@@ -3649,21 +3649,32 @@ function purge_assignment_subs($id) {
 function delete_user_assignment($id) {
     global $course_code, $webDir, $course_id;
 
-    $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?d", $id);
-    $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $id)->uid;
-    if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
-        triggerGame($course_id, $quserid, $id);
-        triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
-        triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
-        if ($filename->file_path) {
-            $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
-            if (!my_delete($file)) {
-                return false;
+    $return = true;
+    $info = Database::get()->querySingle('SELECT uid, group_id, assignment_id
+        FROM assignment_submit WHERE id = ?d', $id);
+    $records = Database::get()->queryArray('SELECT id, file_path FROM assignment_submit
+        WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d',
+        $info->assignment_id, $info->uid, $info->group_id);
+    foreach ($records as $record) {
+        if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $record->id)->affectedRows > 0) {
+            if ($record->file_path) {
+                $file = $webDir . "/courses/" . $course_code . "/work/" . $record->file_path;
+                if (!my_delete($file)) {
+                    $return = false;
+                }
             }
         }
-        return true;
     }
-    return false;
+    if ($return) {
+        if (count($records) > 1) {
+            $userdir = preg_replace('|/[^/]+$|', '', $file);
+            rmdir($userdir);
+        }
+        triggerGame($course_id, $info->uid, $id);
+        triggerAssignmentAnalytics($course_id, $info->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+        triggerAssignmentAnalytics($course_id, $info->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
+    }
+    return $return;
 }
 /**
  * @brief delete teacher assignment file
