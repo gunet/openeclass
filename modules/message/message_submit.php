@@ -233,6 +233,11 @@ if (isset($_POST['submit'])) {
 
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 if (valid_email($_SESSION['email'])) {
+                    while (count($list_of_recipients) > 30) {
+                        $r = array_splice($list_of_recipients, 0, 30);
+                        send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $r, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
+                    }
+                    // the last ones
                     send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
                 }
             } else { // message in personal context
@@ -282,6 +287,11 @@ if (isset($_POST['submit'])) {
                 $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 $emailaddr = uid_to_email($userid);
+                while (count($list_of_recipients) > 30) {
+                    $r = array_splice($list_of_recipients, 0, 30);
+                    send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $r, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
+                }
+                // the last ones
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
             }
         }
