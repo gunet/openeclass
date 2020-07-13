@@ -51,15 +51,28 @@ EOF;
 // Store mail configuration from POST variables
 function store_mail_config() {
     global $smtp_server, $smtp_port, $smtp_encryption, $smtp_username,
-        $smtp_password, $dont_mail_unverified_mails, $email_from;
+        $smtp_password, $dont_mail_unverified_mails, $email_from,
+        $langInvalidEmail, $langEmailAnnounce, $langEmailBounces;
 
     register_posted_variables(array(
         'dont_mail_unverified_mails' => true,
         'email_from' => true), 'all', 'intval');
     set_config('dont_mail_unverified_mails', $dont_mail_unverified_mails);
     set_config('email_from', $email_from);
-    set_config('email_announce', $_POST['email_announce']);
-    set_config('email_bounces', $_POST['email_bounces']);
+    $email_announce = trim($_POST['email_announce']);
+    if ($email_announce == '' or valid_email($email_announce)) {
+        set_config('email_announce', $email_announce);
+    } else {
+        Session::Messages("$langEmailAnnounce: $langInvalidEmail: " . q($email_announce),
+            'alert-warning');
+    }
+    $email_bounces = trim($_POST['email_bounces']);
+    if ($email_bounces == '' or valid_email($email_bounces)) {
+        set_config('email_bounces', $email_bounces);
+    } else {
+        Session::Messages("$langEmailBounces: $langInvalidEmail: " . q($email_bounces),
+            'alert-warning');
+    }
     if ($_POST['email_transport'] == 1) {
         set_config('email_transport', 'smtp');
         register_posted_variables(array('smtp_encryption' => true,
