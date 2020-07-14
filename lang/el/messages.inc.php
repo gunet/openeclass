@@ -653,6 +653,7 @@ $langPrivacyPolicyConsentRedisplay = 'Νέο αίτημα συναίνεσης';
 $langYouHaveConsentedToPrivacyPolicy = 'Συναινέσατε στην {Πολιτική Απορρήτου} στις %date.';
 $langYouHaveRejectedPrivacyPolicy = 'Απορρίψατε την {Πολιτική Απορρήτου} στις %date.';
 $langYouHaveNotConsentedToPrivacyPolicy = 'Δεν έχετε συναινέσει στην {Πολιτική Απορρήτου}.';
+$langInvalidEmail = 'Μη έγκυρο e-mail';
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";

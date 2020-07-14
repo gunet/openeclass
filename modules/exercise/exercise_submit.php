@@ -297,14 +297,12 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_
         $objExercise->save_unanswered();
         $objExercise->record_answers($choice, $exerciseResult, 'update');
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
-        if ($objExercise->isRandom()) {
-            $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
-                                          SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
-        } else {
-            $totalWeighting = $objExercise->selectTotalWeighting();
-        }
+        $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
+                                      SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
+        $totalWeighting = is_null($totalWeighting)? 0: $totalWeighting;
+        $totalScore = is_null($totalScore)? 0: $totalScore;
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                         total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
         // update attendance book

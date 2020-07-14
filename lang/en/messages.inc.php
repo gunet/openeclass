@@ -5297,3 +5297,4 @@ $langExercisesSubmission = "submission";
 $langQuestionPoolPurge = "Delete unused questions";
 $langConfirmQuestionPoolPurge = "Unused exercise questions will be deleted.";
 $langQuestionPoolPurgeSuccess = "Unused questions were deleted from question pool.";
+$langInvalidEmail = 'Invalid address';

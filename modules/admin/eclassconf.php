@@ -346,11 +346,21 @@ if (isset($_POST['submit'])) {
     set_config('base_url', $_POST['formurlServer']);
     set_config('phpMyAdminURL', $_POST['formphpMyAdminURL']);
     set_config('phpSysInfoURL', $_POST['formphpSysInfoURL']);
-    set_config('email_sender', $_POST['formemailAdministrator']);
+    if (valid_email($_POST['formemailAdministrator'])) {
+        set_config('email_sender', $_POST['formemailAdministrator']);
+    } else {
+        Session::Messages("$langAdminEmail: $langInvalidEmail: " . q($_POST['formemailAdministrator']),
+            'alert-warning');
+    }
     set_config('admin_name', $_POST['formadministratorName']);
     set_config('site_name', $_POST['formsiteName']);
     set_config('phone', $_POST['formtelephone']);
-    set_config('email_helpdesk', $_POST['formemailhelpdesk']);
+    if (valid_email($_POST['formemailhelpdesk'])) {
+        set_config('email_helpdesk', $_POST['formemailhelpdesk']);
+    } else {
+        Session::Messages("$langHelpDeskEmail: $langInvalidEmail: " . q($_POST['formemailhelpdesk']),
+            'alert-warning');
+    }
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
     set_config('postaddress', $_POST['formpostaddress']);
@@ -1453,13 +1463,13 @@ $tool_content .= "
     foreach ($session->active_ui_languages as $langcode) {
         $langname = $langNameOfLang[langcode_to_name($langcode)];
         $policy = get_config('privacy_policy_text_' . $langcode);
-        if (!$policy) { 
+        if (!$policy) {
             $policyFile = "lang/$langcode/privacy.html";
             if (file_exists($policyFile)) {
                 $policy = file_get_contents($policyFile);
             } else {
                 $policy = get_config('privacy_policy_text_en');
-                if (!$policy) { 
+                if (!$policy) {
                     $policyFile = "lang/en/privacy.html";
                 }
             }
