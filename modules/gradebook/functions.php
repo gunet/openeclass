@@ -669,11 +669,17 @@ function student_view_gradebook($gradebook_id, $uid) {
            $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack,
            $langAssignment, $langExercise, $langGradebookActivityAct, $langAttendanceActivity;
 
+    if ($is_editor) {
+        $extra = "";
+    } else {
+        $extra = "AND gradebook_activities.visible = 1";
+    }
+
     //check if there are grade records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) AS count
                                             FROM gradebook_book, gradebook_activities
                                         WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id
-                                            AND gradebook_activities.visible = 1
+                                            $extra 
                                             AND uid = ?d
                                             AND gradebook_activities.gradebook_id = ?d", $uid, $gradebook_id)->count;
 
@@ -690,7 +696,7 @@ function student_view_gradebook($gradebook_id, $uid) {
     }
 
     $result = Database::get()->queryArray("SELECT * FROM gradebook_activities
-                                WHERE gradebook_activities.visible = 1 AND gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
+                                WHERE gradebook_id = ?d $extra ORDER BY `DATE` DESC", $gradebook_id);
     $results = count($result);
 
     if ($results > 0) {
@@ -715,7 +721,7 @@ function student_view_gradebook($gradebook_id, $uid) {
             $tool_content .= "
                 <tr>
                     <td>
-                        <b>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</b>
+                        <strong>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</strong>
                     </td>
                     <td>
                         <div class='smaller'>" . nice_format($details->date, true, true) . "</div>
@@ -1942,6 +1948,13 @@ function attendForAutoGrades($userID, $exeID, $exeType, $range) {
  */
 function userGradeTotal($gradebook_id, $userID, $csv_output = false) {
 
+    global $is_editor;
+
+    if ($is_editor) {
+        $extra = "";
+    } else {
+        $extra = "AND gradebook_activities.visible = 1";
+    }
     $character = ($csv_output)? "-": "&mdash;";
 
     $range = Database::get()->querySingle("SELECT * FROM gradebook WHERE id = ?d", $gradebook_id)->range;
@@ -1949,8 +1962,8 @@ function userGradeTotal($gradebook_id, $userID, $csv_output = false) {
                                                     WHERE gradebook_book.uid = ?d
                                                         AND gradebook_book.gradebook_activity_id = gradebook_activities.id
                                                         AND gradebook.id = gradebook_activities.gradebook_id
-                                                        AND gradebook_activities.gradebook_id = ?d
-                                                        AND gradebook_activities.visible = 1", $userID, $gradebook_id)->count;
+                                                        AND gradebook_activities.gradebook_id = ?d $extra",
+                                                    $userID, $gradebook_id)->count;
 
     if ($userGradeTotal) {
         return round($userGradeTotal, 2);
