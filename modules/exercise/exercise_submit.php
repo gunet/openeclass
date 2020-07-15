@@ -127,17 +127,19 @@ if ($objExercise->assign_to_specific and !$is_editor) {
     $assignees = Database::get()->queryArray('SELECT user_id, group_id
         FROM exercise_to_specific WHERE exercise_id = ?d', $exerciseId);
     $accessible = false;
-    foreach ($assignees as $item) {
-        if ($item->user_id == $uid) {
-            $accessible = true;
-            break;
-        } elseif ($item->group_id) {
-            if (!isset($groups)) {
-                $groups = user_group_info($uid, $course_id);
-            }
-            if (isset($groups[$item->group_id])) {
+    if ($uid > 0) { // we are logged in
+        foreach ($assignees as $item) {
+            if ($item->user_id == $uid) {
                 $accessible = true;
                 break;
+            } elseif ($item->group_id) {
+                if (!isset($groups)) {
+                    $groups = user_group_info($uid, $course_id);
+                }
+                if (isset($groups[$item->group_id])) {
+                    $accessible = true;
+                    break;
+                }
             }
         }
     }

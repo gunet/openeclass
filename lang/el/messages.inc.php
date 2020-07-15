@@ -1805,6 +1805,7 @@ $langScoreDispEndDate = "Εμφάνιση βαθμολογίας μετά την
 $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
 $langFromRandomQuestions = "τυχαίες ερωτήσεις από το σύνολο";
+$langFromRandomDifficultyQuestions = "τυχαίες ερωτήσεις με βαθμό δυσκολίας";
 $langPurgeExercises = "Εκκαθάριση αποτελεσμάτων";
 $langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
 $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
@@ -5053,7 +5054,7 @@ $langToAllCourses = "Σε όλα τα $langsCourses";
 $langToAllCoursesInfo = "Επιλέξτε αν ο εξυπηρέτης θα μπορεί να χρησιμοποιείται από όλα τα $langsCourses ή από ορισμένα";
 $langToSomeCourses = "Σε συγκεκριμένα $langsCourses";
 $langToSomeCoursesInfo = "Ο εξυπηρέτης θα μπορεί να χρησιμοποιείται από συγκεκριμένα $langsCourses. Για να ορίσετε ποια $langsCourses θα τον χρησιμοποιούν μεταβείτε στην \"Αναζήτηση $langsOfCourses\" και επιλέξτε \"Ενέργειες\".";
-$langToNoCourses = "Σε κάνενα από τα $langsCourses";
+$langToNoCourses = "Σε κανένα από τα $langsCourses";
 
 /* * ***********************************************************
  * blog.php

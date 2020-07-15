@@ -170,21 +170,21 @@ if ($is_editor) {
         ORDER BY start_date DESC', $course_id);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
-    $gids = user_group_info($uid, $course_id);
-    if (!empty($gids)) {
-        $gids_sql_ready = implode(',',array_keys($gids));
-    } else {
-        $gids_sql_ready = "''";
+    $gids_sql_ready = "''";
+    if ($uid > 0) {
+        $gids = user_group_info($uid, $course_id);
+        if (!empty($gids)) {
+            $gids_sql_ready = implode("','", array_keys($gids));
+        }
     }
     $result = Database::get()->queryArray("SELECT * FROM exercise
         WHERE course_id = ?d AND active = 1 AND
               (assign_to_specific = '0' OR
-               assign_to_specific != '0' AND id IN (
-                    SELECT exercise_id FROM exercise_to_specific
-                        WHERE user_id = ?d
-                    UNION SELECT exercise_id FROM exercise_to_specific
-                        WHERE group_id IN ($gids_sql_ready)))
-        ORDER BY start_date DESC", $course_id, $uid);
+               (assign_to_specific != '0' AND id IN (
+                  SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d
+                    UNION 
+                   SELECT exercise_id FROM exercise_to_specific WHERE group_id IN (?s))))
+        ORDER BY start_date DESC", $course_id, $uid, $gids_sql_ready);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
 
