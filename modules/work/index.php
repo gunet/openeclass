@@ -2513,7 +2513,7 @@ function show_edit_assignment($id) {
         $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
         $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
         $langTiiExcludeValue, $langGradeReviews, $langReviewsPerUser, $langAllowableReviewValues,
-        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock;
+        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2616,6 +2616,10 @@ function show_edit_assignment($id) {
                 var choice = $(this).val();
                 if (choice == 0) {
                     // lti fields
+                    $('#lti_label')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
                     $('#lti_templates')
                         .prop('disabled', true)
                         .closest('div.form-group')
@@ -2690,6 +2694,10 @@ function show_edit_assignment($id) {
 
                 } else if (choice == 1) {
                     // lti fields
+                    $('#lti_label')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
                     $('#lti_templates')
                         .prop('disabled', false)
                         .closest('div.form-group')
@@ -3028,21 +3036,124 @@ function show_edit_assignment($id) {
                         <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
                     </div>
                 </div>
-                <div class='form-group $lti_hidden'>
-                    <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
+                
+                <div class='container-fluid form-group " . ($assignment_type == 0 ? " hidden" : "") . "' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
+                    <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
+                    <div class='form-group $lti_hidden'>
+                        <label for='title' class='col-sm-2 control-label'>$langTiiApp:</label>
+                        <div class='col-sm-10'>
+                          <select name='lti_template' class='form-control' id='lti_templates' $lti_disabled>
+                                $lti_template_options
+                          </select>
+                        </div>
+                    </div>
+                    <div class='form-group $lti_hidden'>
+                        <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
+                        <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', $row->launchcontainer, 'id="lti_launchcontainer"' . $lti_disabled) . "</div>
+                    </div>";
+
+                $tool_content .= "
+                <!--<div class='form-group $lti_hidden'>
+                    <label for='tii_submit_papers_to' class='col-sm-2 control-label'>$langTiiSubmissionSettings:</label>
                     <div class='col-sm-10'>
-                      <select name='lti_template' class='form-control' id='lti_templates' $lti_disabled>
-                            $lti_template_options
+                      <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' $lti_disabled>
+                            <option value='0' " . (($row->tii_submit_papers_to == 0) ? 'selected' : '') . ">$langTiiSubmissionNoStore</option>
+                            <option value='1' " . (($row->tii_submit_papers_to == 1) ? 'selected' : '') . ">$langTiiSubmissionStandard</option>
+                            <option value='2' " . (($row->tii_submit_papers_to == 2) ? 'selected' : '') . ">$langTiiSubmissionInstitutional</option>
                       </select>
+                    </div>
+                </div>-->
+                <div class='form-group $lti_hidden'>
+                    <label class='col-sm-2 control-label'>$langTiiCompareAgainst:</label>
+                    <div class='col-sm-10'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' " . ((($row->tii_studentpapercheck == 1) or ($assignment_type == 0)) ? 'checked' : '') . " $lti_disabled>
+                            $langTiiStudentPaperCheck
+                          </label>
+                        </div>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' " . ((($row->tii_internetcheck == 1)  or ($assignment_type == 0)) ? 'checked' : '') . " $lti_disabled>
+                            $langTiiInternetCheck
+                          </label>
+                        </div>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' " . ((($row->tii_journalcheck == 1) or ($assignment_type == 0)) ? 'checked' : '') . " $lti_disabled>
+                            $langTiiJournalCheck
+                          </label>
+                        </div>
+                        <!--<div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' " . (($row->tii_institutioncheck == 1) ? 'checked' : '') . " $lti_disabled>
+                            $langTiiInstitutionCheck
+                          </label>
+                        </div>-->
                     </div>
                 </div>
                 <div class='form-group $lti_hidden'>
-                    <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
-                    <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', $row->launchcontainer, 'id="lti_launchcontainer"' . $lti_disabled) . "</div>
-                </div>";
+                    <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
+                    <div class='col-sm-10'>
+                      <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' $lti_disabled>
+                            <option value='0' " . (($row->tii_report_gen_speed == 0) ? 'selected' : '') . ">$langTiiReportGenImmediatelyNoResubmit</option>
+                            <option value='1' " . (($row->tii_report_gen_speed == 1) ? 'selected' : '') . ">$langTiiReportGenImmediatelyWithResubmit</option>
+                            <option value='2' " . (($row->tii_report_gen_speed == 2) ? 'selected' : '') . ">$langTiiReportGenOnDue</option>
+                      </select>
+                    </div>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' " . (($row->tii_s_view_reports == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiSViewReports
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' " . (($row->tii_use_biblio_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiExcludeBiblio
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' " . (($row->tii_use_quoted_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
+                       $langTiiExcludeQuoted
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' " . (($row->tii_exclude_type != 'none') ? 'checked' : '') . " $lti_disabled>
+                       $langTiiExcludeSmall
+                      </label>
+                    </div>
+                </div>
+                </div>
+                    <div class='form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . "'>
+                        <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
+                        <div class='col-sm-10'>
+                            <div class='radio'>
+                              <label>
+                                <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' " . (($row->tii_exclude_type == 'words' || $row->tii_exclude_type == 'none') ? 'checked' : '') . " $lti_disabled>
+                                $langTiiExcludeTypeWords
+                              </label>
+                            </div>
+                            <div class='radio'>
+                              <label>
+                                <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' " . (($row->tii_exclude_type == 'percentage') ? 'checked' : '') . " $lti_disabled>
+                                $langTiiExcludeTypePercentage
+                              </label>
+                            </div>
+                        </div>
+                </div>
+                <div class='form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . "'>
+                    <label for='tii_exclude_value' class='col-sm-2 control-label'>$langTiiExcludeValue:</label>
+                    <div class='col-sm-10'>
+                        <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='" . intval($row->tii_exclude_value) . "' $lti_disabled>
+                    </div>
+                </div>
+            </div>";
     } else {
-        $tool_content .= "
-                <input type='hidden' name='assignment_type' value='0' />";
+        $tool_content .= "<input type='hidden' name='assignment_type' value='0' />";
     }
     $tool_content .= "
                 <div class='form-group'>
@@ -3446,110 +3557,9 @@ function show_edit_assignment($id) {
                     </div>
                 </div>" .
                 eClassTag::tagInput($id);
-    if (is_active_lti_app($turnitinapp, $course_id)) {
         $tool_content .= "
-            <!--<div class='form-group $lti_hidden'>
-                <label for='tii_submit_papers_to' class='col-sm-2 control-label'>$langTiiSubmissionSettings:</label>
-                <div class='col-sm-10'>
-                  <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' $lti_disabled>
-                        <option value='0' " . (($row->tii_submit_papers_to == 0) ? 'selected' : '') . ">$langTiiSubmissionNoStore</option>
-                        <option value='1' " . (($row->tii_submit_papers_to == 1) ? 'selected' : '') . ">$langTiiSubmissionStandard</option>
-                        <option value='2' " . (($row->tii_submit_papers_to == 2) ? 'selected' : '') . ">$langTiiSubmissionInstitutional</option>
-                  </select>
-                </div>
-            </div>-->
-            <div class='form-group $lti_hidden'>
-                <label class='col-sm-2 control-label'>$langTiiCompareAgainst:</label>
-                <div class='col-sm-10'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' " . (($row->tii_studentpapercheck == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiStudentPaperCheck
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' " . (($row->tii_internetcheck == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiInternetCheck
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' " . (($row->tii_journalcheck == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiJournalCheck
-                      </label>
-                    </div>
-                    <!--<div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' " . (($row->tii_institutioncheck == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiInstitutionCheck
-                      </label>
-                    </div>-->
-                </div>
-            </div>
-            <div class='form-group $lti_hidden'>
-                <label class='col-sm-2 control-label'>$langTiiSimilarityReport:</label>
-                <div class='col-sm-10'>
-                  <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' $lti_disabled>
-                        <option value='0' " . (($row->tii_report_gen_speed == 0) ? 'selected' : '') . ">$langTiiReportGenImmediatelyNoResubmit</option>
-                        <option value='1' " . (($row->tii_report_gen_speed == 1) ? 'selected' : '') . ">$langTiiReportGenImmediatelyWithResubmit</option>
-                        <option value='2' " . (($row->tii_report_gen_speed == 2) ? 'selected' : '') . ">$langTiiReportGenOnDue</option>
-                  </select>
-                </div>
-                <div class='col-sm-10'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' " . (($row->tii_s_view_reports == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiSViewReports
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' " . (($row->tii_use_biblio_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiExcludeBiblio
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' " . (($row->tii_use_quoted_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
-                       $langTiiExcludeQuoted
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' " . (($row->tii_exclude_type != 'none') ? 'checked' : '') . " $lti_disabled>
-                       $langTiiExcludeSmall
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . "'>
-                <label class='col-sm-2 control-label'>$langTiiExcludeType:</label>
-                <div class='col-sm-10'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' " . (($row->tii_exclude_type == 'words' || $row->tii_exclude_type == 'none') ? 'checked' : '') . " $lti_disabled>
-                        $langTiiExcludeTypeWords
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' " . (($row->tii_exclude_type == 'percentage') ? 'checked' : '') . " $lti_disabled>
-                        $langTiiExcludeTypePercentage
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . "'>
-                <label for='tii_exclude_value' class='col-sm-2 control-label'>$langTiiExcludeValue:</label>
-                <div class='col-sm-10'>
-                    <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='" . intval($row->tii_exclude_value) . "' $lti_disabled>
-                </div>
-            </div>";
-    }
-    $tool_content .= "
             <div class='form-group'>
-            <div class='col-sm-offset-2 col-sm-10'>".
+                <div class='col-sm-offset-2 col-sm-10'>".
                     form_buttons(array(
                         array(
                             'class'         => 'btn-primary',
