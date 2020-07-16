@@ -2232,7 +2232,7 @@ function new_assignment() {
                     <div class='radio'>
                       <label>
                         <input type='radio' id='file_button' name='submission_type' value='0'" .
-                        ($submission_type == 0 ? '' : ' checked') .">
+                        ($submission_type == 0 ? ' checked' : '') .">
                          $langWorkFile
                       </label>
                     </div>
