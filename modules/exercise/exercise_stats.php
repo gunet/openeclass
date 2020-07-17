@@ -28,9 +28,14 @@ include 'question.class.php';
 
 $exerciseId = $_GET['exerciseId'];
 $objExercise = new Exercise();
-$objExercise->read($exerciseId);
+$found = $objExercise->read($exerciseId);
+if (!$found) { // exercise not found
+    Session::Messages($langExerciseNotFound, 'alert-danger');
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+}
 
-$pageName = $langExerciseStats;
+$toolName = $langExerciseStats;
+$pageName = $objExercise->selectTitle();
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
 $tool_content .= action_bar(array(
@@ -104,8 +109,7 @@ $tool_content .= "
             <tbody>
                 <tr>
                     <td>$langHighestGrade</th>
-                    <td>$max_grade</td>
-                    
+                    <td>$max_grade</td>                    
                 </tr>
                 <tr>
                     <td>$langLowestGrade</th>
