@@ -183,8 +183,8 @@ if ($is_editor) {
                (assign_to_specific != '0' AND id IN (
                   SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d
                     UNION 
-                   SELECT exercise_id FROM exercise_to_specific WHERE group_id IN (?s))))
-        ORDER BY start_date DESC", $course_id, $uid, $gids_sql_ready);
+                   SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ('$gids_sql_ready'))))
+        ORDER BY start_date DESC", $course_id, $uid);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
 
