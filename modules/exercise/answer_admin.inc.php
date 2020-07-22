@@ -23,7 +23,7 @@
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
 $questionId = $objQuestion->selectId();
-$questionTypeWord = $objQuestion->selectTypeWord($answerType);
+$questionTypeWord = $objQuestion->selectTypeLegend($answerType);
 $questionDescription = standard_text_escape($objQuestion->selectDescription());
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
 

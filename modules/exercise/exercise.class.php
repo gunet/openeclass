@@ -50,6 +50,7 @@ if (!class_exists('Exercise')) {
         var $timeConstraint;
         var $attemptsAllowed;
         var $random;
+        var $random_criteria;
         var $active;
         var $results;
         var $score;
@@ -74,6 +75,7 @@ if (!class_exists('Exercise')) {
             $this->timeConstraint = 0;
             $this->attemptsAllowed = 0;
             $this->random = 0;
+            $this->random_criteria = null;
             $this->active = 1;
             $this->public = 1;
             $this->results = 1;
@@ -86,7 +88,7 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * reads exercise informations from the data base
+         * reads exercise information    from the data base
          *
          * @author - Olivier Brouckaert
          * @param - integer $id - exercise ID
@@ -96,7 +98,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
-            attempts_allowed, random, active, public, results, score, ip_lock, password_lock, assign_to_specific, continue_time_limit
+            attempts_allowed, random, random_criteria, active, public, results, score, ip_lock, password_lock, assign_to_specific, continue_time_limit
             FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -111,6 +113,7 @@ if (!class_exists('Exercise')) {
                 $this->timeConstraint = $object->time_constraint;
                 $this->attemptsAllowed = $object->attempts_allowed;
                 $this->random = $object->random;
+                $this->random_criteria = $object->random_criteria;
                 $this->active = $object->active;
                 $this->public = $object->public;
                 $this->results = $object->results;
@@ -238,12 +241,15 @@ if (!class_exists('Exercise')) {
         function selectScore() {
             return $this->score;
         }
+
         function selectIPLock() {
             return $this->ip_lock;
         }
+
         function selectPasswordLock() {
             return $this->password_lock;
         }
+
         function selectAssignToSpecific() {
             return $this->assign_to_specific;
         }
@@ -260,6 +266,14 @@ if (!class_exists('Exercise')) {
          */
         function isRandom() {
             return $this->random;
+        }
+
+        /**
+         * @brief check if there are random criteria
+         * @return null
+         */
+        function hasRandomCriteria() {
+            return $this->random_criteria;
         }
 
         /**
@@ -283,6 +297,35 @@ if (!class_exists('Exercise')) {
         }
 
         /**
+         * @brief get questions with difficulty
+         * $param $number
+         * @param $difficulty
+         */
+        function selectQuestionListWithDifficulty($number, $difficulty) {
+
+            global $course_id;
+            $questions = array();
+
+            $result = Database::get()->queryArray("SELECT question_id, q_position
+                    FROM `exercise_with_questions`, `exercise_question`
+                    WHERE course_id = ?d 
+                        AND question_id = id 
+                        AND exercise_id = ?d
+                        AND difficulty = ?d
+                    ORDER BY q_position, question_id",
+                $course_id, $this->id, $difficulty);
+
+            if (count($result) > 0) { // if questions found
+                foreach ($result as $row) {
+                    $questions[] = $row->question_id;
+                }
+                shuffle($questions);
+                $questions = array_slice($questions, 0, $number);
+            }
+            return $questions;
+        }
+
+        /**
          * returns the number of questions in this exercise
          *
          * @author - Olivier Brouckaert
@@ -292,32 +335,60 @@ if (!class_exists('Exercise')) {
             return sizeof($this->questionList);
         }
 
+
         /**
-         * selects questions randomly in the question list
+         * @brief get randomization criteria
+         * @return mixed
+         */
+        function selectRandomizationCriteria() {
+            return unserialize($this->random_criteria);
+        }
+        /***
          *
-         * @author - Olivier Brouckaert
-         * @return - array - if the exercise is not set to take questions randomly, returns the question list
-         *           without randomizing, otherwise, returns the list with questions selected randomly
+         * @brief get random questions
+         * @return array with questions
          */
         function selectRandomList() {
 
             // if the exercise is not a random exercise,
             // or if there are not at least 2 questions
             // cancel randomization and return normal question list
-            if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0) {
+
+            /*if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0) {
+                return $this->questionList;
+            } */
+
+            if ($this->selectNbrQuestions() < 2) {
                 return $this->questionList;
             }
+            $questions_without_criteria = $questions_with_criteria = array(); // initialization
 
-            $questions = $this->questionList;
-            shuffle($questions);
-            $questions = array_slice($questions, 0, $this->random);
-
+            $randomization_criteria = $this->selectRandomizationCriteria();
+            if (is_array($randomization_criteria)) {// questions with specific difficulty
+                foreach ($randomization_criteria as $number => $difficulty) {
+                    $q = $this->selectQuestionListWithDifficulty($number, $difficulty);
+                    foreach ($q as $data) {
+                        $questions_with_criteria[] = $data; // push it in questions list
+                    }
+                }
+            }
+            if ($this->random > 0) { // questions without criteria
+                $questions_without_criteria = array_diff($this->questionList, $questions_with_criteria);
+                shuffle($questions_without_criteria);
+                $questions_without_criteria = array_slice($questions_without_criteria, 0, $this->random);
+            }
+            if (count($questions_with_criteria) > 0) {
+                $questions = array_merge($questions_with_criteria, $questions_without_criteria);
+            } else {
+                $questions = $questions_without_criteria;
+            }
             // make array keys start from 1
             array_unshift($questions, null);
             unset($questions[0]);
 
             return $questions;
         }
+
 
         /**
          * returns 'true' if the question ID is in the question list
@@ -418,6 +489,19 @@ if (!class_exists('Exercise')) {
                 }
             }
         }
+
+        /**
+         * @brief update randomization criteria
+         * @param $number
+         * @param $criteria
+         */
+        function setRandomizationCriteria($number, $criteria) {
+            if (!is_null($number) and !is_null($criteria)) {
+                $this->random_criteria = serialize(array_combine($number, $criteria));
+            } else {
+                $this->random_criteria = null;
+            }
+        }
         /**
          * sets to 0 if questions are not selected randomly
          * if questions are selected randomly, sets the draws
@@ -479,6 +563,7 @@ if (!class_exists('Exercise')) {
             $timeConstraint = $this->timeConstraint;
             $attemptsAllowed = $this->attemptsAllowed;
             $random = $this->random;
+            $random_criteria = $this->random_criteria;
             $active = $this->active;
             $public = $this->public;
             $results = $this->results;
@@ -491,13 +576,13 @@ if (!class_exists('Exercise')) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
                     SET title = ?s, description = ?s, type = ?d,
                         start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d,
-                        attempts_allowed = ?d, random = ?d, active = ?d, public = ?d,
+                        attempts_allowed = ?d, random = ?d, random_criteria = ?s, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
                         assign_to_specific = ?d, continue_time_limit = ?d
                     WHERE course_id = ?d AND id = ?d",
                     $exercise, $description, $type,
                     $startDate, $endDate, $tempSave, $timeConstraint,
-                    $attemptsAllowed, $random, $active, $public,
+                    $attemptsAllowed, $random, $random_criteria, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit,
                     $course_id, $id)->affectedRows;
@@ -512,12 +597,12 @@ if (!class_exists('Exercise')) {
                 $this->id = Database::get()->query("INSERT INTO `exercise`
                     (course_id, title, description, type, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
-                     random, active, results, score, ip_lock, password_lock,
+                     random, random_criteria, active, results, score, ip_lock, password_lock,
                      assign_to_specific, continue_time_limit)
-                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
+                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
                     $course_id, $exercise, $description, $type, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
-                    $random, $active, $results, $score, $ip_lock, $password_lock,
+                    $random, $random_criteria, $active, $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,

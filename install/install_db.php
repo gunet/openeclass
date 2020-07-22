@@ -1052,6 +1052,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `time_constraint` INT(11) DEFAULT 0,
     `attempts_allowed` INT(11) DEFAULT 0,
     `random` SMALLINT(6) NOT NULL DEFAULT 0,
+    `random_criteria` TEXT,
     `active` TINYINT(4) DEFAULT NULL,
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `results` TINYINT(1) NOT NULL DEFAULT 1,

@@ -2834,6 +2834,7 @@ $langDropboxMailNotify = "you have received a new message. You will find it in '
 $langNewDropboxFile = "New message notification";
 $langMaxMessageSize = "Your message must not exceed 1000 characters.";
 $langAttachedFile = "Attached file";
+$langFromRandomDifficultyQuestions = "random questions with difficulty";
 $langPurgeExercises = "Delete results";
 $langConfirmPurgeExercises = "Confirm results deletion";
 $langInGroup = "in group";

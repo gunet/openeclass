@@ -269,7 +269,7 @@ if (count($exercise_question_ids) > 0) {
         $questionDescription = $objQuestionTmp->selectDescription();
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
-        $questionType = $objQuestionTmp->selectTypeWord($answerType);
+        $questionType = $objQuestionTmp->selectTypeLegend($answerType);
 
         // destruction of the Question object
         unset($objQuestionTmp);

@@ -47,13 +47,21 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
+$head_content .= "
+    <script>
+        $(function () {
+            AddMoreRandomChoices();
+            LessRandomChoices();
+            }
+        );
+    </script>
+";
+
 $toolName = $langExercices;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 // picture path
 $picturePath = "courses/$course_code/image";
-// the 4 types of answers
-$aType = array($langUniqueSelect, $langMultipleSelect, "$langFillBlanks ($langFillBlanksStrict)", $langMatching, $langTrueFalse, $langFreeText, "$langFillBlanks ($langFillBlanksTolerant)");
 
 // construction of the Exercise object
 $objExercise = new Exercise();
@@ -63,7 +71,7 @@ if (isset($_GET['exerciseId'])) {
     $nbrQuestions = $objExercise->selectNbrQuestions();
 }
 
-// intializes the Question object
+// initializes the Question object
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
     // construction of the Question object
     $objQuestion = new Question();

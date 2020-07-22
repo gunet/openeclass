@@ -249,7 +249,8 @@ if ($nbrQuestions) {
     foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
         $objQuestionTmp->read($id);
-
+        $aType = $objQuestionTmp->selectType();
+        $question_difficulty_legend = $objQuestionTmp->selectDifficultyLegend($objQuestionTmp->selectDifficulty());
         $addon = '';
         if ($objQuestionTmp->selectType() == MATCHING) {
             $sql = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $id);
@@ -258,8 +259,8 @@ if ($nbrQuestions) {
 
         $tool_content .= "<tr>
             <td align='right' width='1'>" . $i . ".</td>
-            <td> " . q_math($objQuestionTmp->selectTitle()) . "<br />
-            " . $aType[$objQuestionTmp->selectType() - 1] . "</td>
+            <td> " . q_math($objQuestionTmp->selectTitle()) . "<br>
+            <small>" . $objQuestionTmp->selectTypeLegend($aType) . "</small>&nbsp;$question_difficulty_legend</td>
             <td class='option-btn-cell'>".
                     action_button(array(
                         array('title' => $langEditChange,

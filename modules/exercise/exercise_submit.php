@@ -266,6 +266,7 @@ load_js('tools.js');
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $randomQuestions = $objExercise->isRandom();
+$randomQuestionsWithCriteria = $objExercise->hasRandomCriteria();
 $exerciseType = $objExercise->selectType();
 $exerciseTempSave = $objExercise->selectTempSave();
 $exerciseTimeConstraint = (int) $objExercise->selectTimeConstraint();
@@ -351,7 +352,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     } else {
         // selects the list of question ID
-        $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
+        $questionList = ($randomQuestions or !is_null($randomQuestionsWithCriteria))? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
     }
     // saves the question list into the session if there are questions
     if (count($questionList)) {

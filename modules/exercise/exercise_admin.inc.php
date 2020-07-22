@@ -68,6 +68,8 @@ if (isset($_POST['submitExercise'])) {
         'exerciseIPLock' => "$langTheField IPs"
     ));
     if($v->validate()) {
+        print_a($_POST);
+        //die;
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($_POST['exerciseDescription']);
@@ -90,8 +92,24 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTempSave($_POST['exerciseTempSave']);
         $objExercise->updateTimeConstraint($_POST['exerciseTimeConstraint']);
         $objExercise->updateAttemptsAllowed($_POST['exerciseAttemptsAllowed']);
-        $randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
-        $objExercise->setRandom($randomQuestions);
+        // random questions
+        if (isset($_POST['randomDrawSubset'])) {
+            if (is_null($_POST['questionDrawn'])) { //default value
+                $randomQuestions = count($objExercise->selectQuestionList());
+            } else {
+                $randomQuestions = intval($_POST['questionDrawn']);
+            }
+            $objExercise->setRandom($randomQuestions);
+        } else {
+            $objExercise->setRandom(0);
+        }
+        //$randomDifficultyQuestions = (isset($_POST['questionDifficultyDrawn'])) ? intval($_POST['questionDifficultyDrawn']) : 0;
+        if (isset($_POST['questionDifficultyDrawn']) and isset($_POST['difficultyId'])) {
+            $objExercise->setRandomizationCriteria($_POST['questionDifficultyDrawn'], $_POST['difficultyId']);
+        } else {
+            $objExercise->setRandomizationCriteria(null, null);
+        }
+
         $objExercise->updateResults($_POST['dispresults']);
         $objExercise->updateScore($_POST['dispscore']);
         $objExercise->updateAssignToSpecific($_POST['assign_to_specific']);
@@ -247,9 +265,21 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $('#questionDrawnInput').val('');
                     $('#questionDrawnInput').prop('disabled', true);
                     $('#questionDrawnInput').closest('div.form-group').addClass('hidden');
+                    $('#checkMoreRandomChoices').val('');
+                    $('#checkMoreRandomChoices').prop('disabled', true);
+                    $('#checkMoreRandomChoices').closest('div.form-group').addClass('hidden');
+                    $('#questionDifficultyDrawnInput').prop('disabled', true);
+                    $('#questionDifficultyDrawnInput').closest('div.form-group').addClass('hidden');
+                    $('#questionDifficultyDrawnInput').val('');
+                    $('#questionDifficultyDrawnInput').prop('disabled', true);
+                    $('#questionDifficultyDrawnInput').closest('div.form-group').addClass('hidden');
                 } else {
                     $('#questionDrawnInput').prop('disabled', true);
-                    $('#questionDrawnInput').closest('div.form-group').removeClass('hidden');
+                    $('#questionDrawnInput').closest('div.form-group').removeClass('hidden');                    
+                    $('#checkMoreRandomChoices').prop('disabled', true);
+                    $('#checkMoreRandomChoices').closest('div.form-group').removeClass('hidden');
+                    $('#questionDifficultyDrawnInput').prop('disabled', true);
+                    $('#questionDifficultyDrawnInput').closest('div.form-group').removeClass('hidden');
                 }
             });
             $('#randomDrawnSubset').change(function() {
@@ -258,6 +288,15 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $('.questionDrawnRadio').prop('disabled', true);
                 } else {
                     $('#questionDrawnInput').prop('disabled', true);
+                    $('.questionDrawnRadio').prop('disabled', false);
+                }
+            });
+            $('#randomDifficultyDrawnSubset').change(function() {
+                if($(this).prop('checked')){
+                    $('#questionDifficultyDrawnInput').prop('disabled', false);
+                    $('.questionDrawnRadio').prop('disabled', true);
+                } else {
+                    $('#questionDifficultyDrawnInput').prop('disabled', true);
                     $('.questionDrawnRadio').prop('disabled', false);
                 }
             });
@@ -425,26 +464,58 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                          <div class='radio'>
                            <label>
-                             <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='32767'".(($randomQuestions > 0)? ' checked' : '').(($randomQuestions > 0 && $randomQuestions < 32767)? ' disabled' : '').">
+                             <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='1'".(($randomQuestions > 0)? ' checked' : '').(($randomQuestions > 0 && $randomQuestions < 32767)? ' disabled' : '').">
                              $langActivate
                            </label>
                          </div>
                      </div>
-                 </div>
+                 </div>                 
                  <div class='form-group ".(($randomQuestions > 0)? '' : 'hidden')."'>
-                    <div class='col-sm-5 col-sm-offset-2'>
+                    <div class='col-sm-1 col-sm-offset-2'>
                         <input type='text' class='form-control' name='questionDrawn' id='questionDrawnInput' value='".(($randomQuestions < 32767) ? $randomQuestions : null)."'".(($randomQuestions > 0 && $randomQuestions < 32767)? '' : 'disabled').">
                     </div>
-                    <div class='col-sm-5'>
+                    <div class='col-sm-8'>
                         <div class='checkbox'>
                           <label>
-                            <input id='randomDrawnSubset' value='1' type='checkbox' ".(($randomQuestions > 0 && $randomQuestions < 32767)? 'checked' : '').">
+                            <input id='randomDrawnSubset' name='randomDrawSubset' value='1' type='checkbox' ".(($randomQuestions > 0 && $randomQuestions < 32767)? 'checked' : '').">
                             $langFromRandomQuestions
                           </label>
                         </div>
                     </div>
-                 </div>
-                 <div class='form-group'>
+                </div>
+                <div class='form-group' id='checkMoreRandomChoices' ".(($randomQuestions > 0)? '' : 'hidden')."'>                
+                    <div class='col-sm-offset-2 col-sm-10'>
+                        <div class='checkbox'>
+                          <label>
+                            <input id='randomDifficultyDrawnSubset' value='1' type='checkbox' ".(($randomQuestions > 0 && $randomQuestions < 32767)? 'checked' : '').">
+                            $langFromRandomDifficultyQuestions
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div id='moreRandomChoices' class='form-group ".(($randomQuestions > 0)? '' : 'hidden')."'>
+                    <div class='col-sm-offset-2 col-sm-2'>
+                        <button id='buttonMoreRandomChoices' type='button'>
+                            <span class='btn btn-default btn-xs fa fa-plus' style='border:none; background: none; padding: 0;'></span>
+                        </button>
+                        <button id='buttonLessRandomChoices' type='button'>
+                            <span class='btn btn-default btn-xs fa fa-times' style='border:none; background: none; padding: 0;'></span>
+                        </button>                                              
+                    </div>
+                    <div class='col-sm-1'>
+                        <input type='text' class='form-control' name='questionDifficultyDrawn[]' id='questionDifficultyDrawnInput' value='".(($randomQuestions < 32767) ? $randomQuestions : null)."'".(($randomQuestions > 0 && $randomQuestions < 32767)? '' : 'disabled').">
+                    </div>                    
+                    <div class='col-sm-3'>
+                        <select name='difficultyId[]' class='form-control'>                        
+                            <option value='1'>$langQuestionVeryEasy</option>
+                            <option value='2'>$langQuestionEasy</option>
+                            <option value='3'>$langQuestionModerate</option>
+                            <option value='4'>$langQuestionDifficult</option>
+                            <option value='5'>$langQuestionVeryDifficult</option>
+                        </select>
+                    </div>                    
+                </div>
+                <div class='form-group'>
                      <label for='dispresults' class='col-sm-2 control-label'>$langAnswers:</label>
                      <div class='col-sm-10'>
                          <div class='radio'>

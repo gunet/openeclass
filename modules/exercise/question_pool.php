@@ -278,12 +278,12 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
     }
     $result_query_vars = isset($fromExercise) ? array_merge($result_query_vars, array($fromExercise, $fromExercise)) : $result_query_vars;
     if (isset($fromExercise)) {
-        $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+        $result_query = "SELECT id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                         ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                         question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
                         GROUP BY id ORDER BY question";
     } else {
-        $result_query = "SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
+        $result_query = "SELECT id FROM `exercise_with_questions`, `exercise_question`
                         WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$extraSql
                         ORDER BY q_position";
     }
@@ -304,16 +304,16 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
     }
     //When user selected orphan questions
     if (isset($exerciseId) && $exerciseId == -1) {
-        $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+        $result_query = "SELECT id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                         ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$extraSql ORDER BY question";
     } else { // if user selected all questions
         if (isset($fromExercise)) { // if is coming to question pool from an exercise
-            $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+            $result_query = "SELECT id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
                             GROUP BY id, question, type ORDER BY question";
         } else {
-            $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+            $result_query = "SELECT id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d$extraSql
                             GROUP BY id, question, type ORDER BY question";
         }
@@ -337,28 +337,24 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
       <th class='text-center'>".icon('fa-gears')."</th>
     </tr></thead><tbody>";
     foreach ($result as $row) {
+        $question_temp = new Question();
+        $question_temp->read($row->id);
+        $question_title = q_math($question_temp->selectTitle());
+        $question_difficulty_legend = $question_temp->selectDifficultyLegend($question_temp->selectDifficulty());
+        $question_type_legend = $question_temp->selectTypeLegend($question_temp->selectType());
         $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
         if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
-            if ($row->type == UNIQUE_ANSWER) {
-                $answerType = $langUniqueSelect;
-            } elseif ($row->type == MULTIPLE_ANSWER) {
-                $answerType = $langMultipleSelect;
-            } elseif ($row->type == FILL_IN_BLANKS) {
-                $answerType = "$langFillBlanks ($langFillBlanksStrict)";
-            } elseif ($row->type == MATCHING) {
-                $answerType = $langMatching;
-            } elseif ($row->type == TRUE_FALSE) {
-                $answerType = $langTrueFalse;
-            } elseif ($row->type == FREE_TEXT) {
-                $answerType = $langFreeText;
-            } elseif ($row->type == FILL_IN_BLANKS_TOLERANT) {
-                $answerType = "$langFillBlanks ($langFillBlanksTolerant)";
-            }
             $tool_content .= "<tr>";
             if (!isset($fromExercise)) {
-                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")." href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
+                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")." href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . $question_title . "</a>                         
+                        <br><small>" . $question_type_legend . "</small> 
+                        &nbsp;" . $question_difficulty_legend . "
+                        </td>";
             } else {
-                $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br>" . $answerType . "</td>";
+                $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . $question_title . "</a>
+                        <br><small>" . $question_type_legend . "</small> 
+                            &nbsp;" . $question_difficulty_legend . "
+                        </td>";
             }
 
             $tool_content .= "<td class='option-btn-cell'>".
@@ -386,6 +382,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
                  )) .
                  "</td></tr>";
         }
+        unset($question_temp);
     }
     $tool_content .= "</tbody></table>";
 }

@@ -56,7 +56,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
 
     $questionName = $objQuestionTmp->selectTitle();
     $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
-    $questionTypeWord = $objQuestionTmp->selectTypeWord($answerType);
+    $questionTypeWord = $objQuestionTmp->selectTypeLegend($answerType);
     if ($exerciseType == MULTIPLE_PAGE_TYPE) {
         $qNumber = "$question_number / $nbrQuestions";
     } else {

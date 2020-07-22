@@ -2000,6 +2000,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
+
+    // upgrade queries for version 3.10
+    if (version_compare($oldversion, '3.10', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.10'));
+
+        if (!DBHelper::fieldExists('exercise', 'random_criteria')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `random_criteria` TEXT AFTER `random`");
+        }
+    }
+
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
 
