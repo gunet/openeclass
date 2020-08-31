@@ -421,11 +421,10 @@ function del_work_subs()  {
 function purge_exercises() {
     global $langPurgeExercisesResults, $course_id;
 
-    Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid IN (
-                                SELECT eurid FROM exercise_user_record WHERE eid IN
-                                    (SELECT id FROM exercise WHERE course_id = ?d))", $course_id);
-    Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN
-                                (SELECT id FROM exercise WHERE course_id = ?d)",$course_id);
+    Database::get()->query("DELETE d FROM exercise_answer_record d,exercise_question s 
+                    WHERE d.question_id =s.id AND s.course_id = ?d", $course_id);
+    Database::get()->query("DELETE d FROM exercise_user_record d,exercise s 
+                    WHERE d.eid=s.id AND s.course_id = ?d", $course_id);
 
     return "<p>$langPurgeExercisesResults</p>";
 }
