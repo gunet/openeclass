@@ -216,7 +216,6 @@ function showgroupcategoryadmintools($categoryid) {
  * @global type $langMyGroup
  * @global type $langAddDescription
  * @global type $langEditChange
- * @global type $groups_num
  * @global type $uid
  * @global type $totalRegistered
  * @global type $student_desc
@@ -233,11 +232,14 @@ function showgroupcategoryadmintools($categoryid) {
  */
 function showgroupsofcategory($catid) {
 
-    global $is_editor, $course_id, $tool_content, $langUnRegister,
-    $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
-    $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
-    $langEditChange, $groups_num, $uid, $totalRegistered, $student_desc, $allow_unreg,
-    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members, $group_description, $langCommentsUser;
+    global $is_editor, $course_id, $tool_content, $langUnRegister, $is_tutor,
+        $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
+        $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
+        $langEditChange, $uid, $totalRegistered, $student_desc, $allow_unreg,
+        $tutors, $group_name, $self_reg, $user_group_description, $user_groups,
+        $max_members, $group_description, $langCommentsUser;
+
+    $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
     $q = Database::get()->queryArray("SELECT id FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
@@ -250,9 +252,9 @@ function showgroupsofcategory($catid) {
         if ($is_editor) {
             $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
         } else {
-            if ($is_member) {
+            if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
-                $tool_content .= "&nbsp;<span style='color:#900; weight:bold;'>($langMyGroup)</span>";
+                $tool_content .= "&nbsp;<span class='pull-right label label-success'>$langMyGroup</span>";
             } else {
                 $tool_content .= q($group_name);
             }
@@ -313,7 +315,16 @@ function showgroupsofcategory($catid) {
 
             if ($uid) {
                 if (!$is_member) {
-                    if ($self_reg and (!$user_groups or $multi_reg) and (!$max_members or $member_count < $max_members)) {
+                    if (($multi_reg == 0) and (!$user_groups)) {
+                        $user_can_register_to_group = true;
+                    } else if ($multi_reg == 1) {
+                        $user_can_register_to_group = true;
+                    } else if (($multi_reg == 2) and (is_user_register_to_group_category_course($uid, $catid, $course_id))) {
+                        $user_can_register_to_group = true;
+                    } else {
+                        $user_can_register_to_group = false;
+                    }
+                    if ($self_reg and $user_can_register_to_group and (!$max_members or $member_count < $max_members)) {
                         $control = icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
                     }
                 } elseif ($allow_unreg) {
@@ -420,12 +431,12 @@ function delete_group_category($id) {
 }
 
 /**
- * @brief check whether a user can register to another group in a course
+ * @brief check whether user can register to another group in a course
  * @param type $uid
  * @param type $course_id
  * @return type
  */
-function user_can_add_group($uid, $course_id) {
+function user_can_register_to_group($uid, $course_id) {
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
     if ($multi_reg) {
         return true; // user can register to unlimited groups
@@ -441,4 +452,46 @@ function user_can_add_group($uid, $course_id) {
         return false; // user can register to single group and already registered
     }
     return true;
+}
+
+
+/**
+ * @brief check if course has group categories
+ * @param $course_id
+ * @return bool
+ */
+function has_group_categories($course_id) {
+
+    $q = Database::get()->querySingle("SELECT * FROM `group` WHERE 
+                                      category_id > 0 
+                                      AND course_id = ?d", $course_id);
+    if ($q) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @brief check whether is registered to more than one group belonging to category
+ * @param $uid
+ * @param $course_id
+ */
+function is_user_register_to_group_category_course($uid, $category_id, $course_id) {
+
+    $q = Database::get()->querySingle("SELECT COUNT(group_category.id) AS cnt
+                    FROM group_members, `group`, group_category
+                      WHERE group_members.group_id = `group`.id
+                        AND group.category_id = group_category.id
+                        AND user_id = ?d
+                        AND `group`.course_id = ?d 
+                        AND group_category.id = ?d",
+                    $uid, $course_id, $category_id);
+    if ($q) {
+        if ($q->cnt < 1) {
+            return true;
+        }
+    } else {
+        return false;
+    }
 }

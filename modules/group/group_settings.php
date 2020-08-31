@@ -25,6 +25,7 @@ $require_editor = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
+require_once 'modules/group/group_functions.php';
 
 $toolName = $langGroups;
 
@@ -38,18 +39,30 @@ $tool_content .= action_bar(array(
                 'level' => 'primary-label'),
     ));
 
-$checked_multi_reg = '';
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 $student_desc = setting_get(SETTING_GROUP_STUDENT_DESCRIPTION, $course_id);
 
-$checked_multi_reg = $multi_reg ? ' checked' : '';
+$checked_single_reg = $checked_category_reg = $checked_multi_reg = '';
+
+$checked_single_reg = ($multi_reg == 0)? ' checked' : '';
+$checked_multi_reg = ($multi_reg == 1)? ' checked' : '';
+if (!has_group_categories($course_id)) {
+    $checked_category_reg = " disabled";
+} else {
+    $checked_category_reg = ($multi_reg == 2)? ' checked' : '';
+}
+
 $checked_student_desc = $student_desc ? ' checked' : '';
 
 if (isset($_POST['submit'])) {
-    if (isset($_POST['multi_reg'])) {
-        setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, $_POST['multi_reg'], $course_id);
-    } else {
-        setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, 0, $course_id);
+    if (isset($_POST['group_reg'])) {
+        if ($_POST['group_reg'] == 1) {
+            setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, 1, $course_id);
+        } elseif ($_POST['group_reg'] == 2) {
+            setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, 2, $course_id);
+        } else {
+            setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, 0, $course_id);
+        }
     }
     if (isset($_POST['student_desc'])) {
         setting_set(SETTING_GROUP_STUDENT_DESCRIPTION, $_POST['student_desc'], $course_id);
@@ -63,18 +76,32 @@ if (isset($_POST['submit'])) {
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                     <div class='form-group'>
                         <div class='col-sm-12'>
-                            <div class='checkbox'>
-                              <label>
-                                <input type='checkbox' name='multi_reg' value='1'$checked_multi_reg>$langGroupAllowMultipleRegistration
-                              </label>
+                            <div class='radio'>
+                                  <label>
+                                    <input type='radio' name='group_reg' value='0'$checked_single_reg>$langGroupAllowRegistration
+                                  </label>
                             </div>
+                            <div class='radio'>
+                                  <label>
+                                    <input type='radio' name='group_reg' value='2'$checked_category_reg>$langGroupAllowCategoryRegistration
+                                  </label>
+                            </div>
+                            <div class='radio'>
+                                  <label>
+                                    <input type='radio' name='group_reg' value='1'$checked_multi_reg>$langGroupAllowMultipleRegistration
+                                  </label>
+                             </div>
+                         </div>
+                     </div>
+                    <div class='form-group'>
+                         <div class='col-sm-12'>
                             <div class='checkbox'>
-                              <label>
-                                <input type='checkbox' name='student_desc' value='1'$checked_student_desc>$langGroupAllowStudentGroupDescription
-                              </label>
-                            </div>                            
-                        </div>
-                    </div>
+                                  <label>
+                                    <input type='checkbox' name='student_desc' value='1'$checked_student_desc>$langGroupAllowStudentGroupDescription
+                                  </label>
+                             </div>
+                         </div>
+                     </div>                    
                     <div class='form-group'>
                         <div class='col-sm-12'>".form_buttons(array(
                                 array(

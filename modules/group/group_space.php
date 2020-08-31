@@ -40,18 +40,31 @@ if ((isset($_GET['selfReg']) or isset($_GET['selfUnReg'])) and isset($_GET['grou
     initialize_group_id();
 }
 initialize_group_info($group_id);
+$user_groups = user_group_info($uid, $course_id);
 
 $toolName = $langGroups;
 $pageName = $group_name;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
-if (!$is_editor) {
+$multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
+
+if ((!$is_editor) and ($status != USER_GUEST)) {
     if (!$is_member and !$self_reg) { // check if we are group member
         Session::Messages($langForbidden, 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
     }
     if (isset($_GET['selfReg']) and $_GET['selfReg'] == 1) {
-        if (user_can_add_group($uid, $course_id) and !$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) { // if registration is possible
+
+        if (($multi_reg == 0) and (!$user_groups)) {
+            $user_can_register_to_group = true;
+        } else if ($multi_reg == 1) {
+            $user_can_register_to_group = true;
+        } else if (($multi_reg == 2) and (is_user_register_to_group_category_course($uid, $group_category, $course_id))) {
+            $user_can_register_to_group = true;
+        } else {
+            $user_can_register_to_group = false;
+        }
+        if ($user_can_register_to_group and (!$max_members or $member_count < $max_members)) {
             $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array( 'uid' => $uid, 'name' => $group));
@@ -62,6 +75,7 @@ if (!$is_editor) {
             Session::Messages($langForbidden, 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
+
     }
     if (isset($_GET['selfUnReg']) and $_GET['selfUnReg'] == 1) {
         if ($is_member and $allow_unreg and $status != USER_GUEST) { // if registration is possible
