@@ -439,6 +439,10 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'level' => 'primary-label',
                       'button-class' => 'btn-success'),
+                array('title' => $langGroupProperties,
+                      'url' => "group_settings.php?course=$course_code",
+                      'icon' => 'fa-gears',
+                      'level' => 'primary-label'),
                 array('title' => $langCategoryAdd,
                       'url' => "group_category.php?course=$course_code&amp;addcategory=1",
                       'icon' => 'fa-plus-circle'),
@@ -457,13 +461,11 @@ if ($is_editor) {
                       'class' => 'delete',
                       'confirm' => $langEmptyGroups,
                       'confirm_title' => $langEmptyGroupsAll,
-                      'show' => $num_of_groups > 0),
-                array('title' => $langGroupProperties,
-                      'url' => "group_settings.php?course=$course_code",
-                      'icon' => 'fa-gears')));
+                      'show' => $num_of_groups > 0)
+                ));
 
-        $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
-        $num_of_groups = count($groupSelect);
+    $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
+    $num_of_groups = count($groupSelect);
     $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
     $num_of_cat = count($cat);
     $q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
@@ -618,7 +620,14 @@ if ($is_editor) {
             $control = '';
             if ($uid) {
                 if (!$is_member) {
-                    if ($self_reg and (!$user_groups or $multi_reg) and (!$max_members or $member_count < $max_members)) {
+                    if (($multi_reg == 0) and (!$user_groups)) {
+                        $user_can_register_to_group = true;
+                    } else if ($multi_reg == 1) {
+                        $user_can_register_to_group = true;
+                    } else {
+                        $user_can_register_to_group = false;
+                    }
+                    if ($self_reg and $user_can_register_to_group and (!$max_members or $member_count < $max_members)) {
                         $control = icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
                     }
                 } elseif ($allow_unreg) {
@@ -689,12 +698,6 @@ if ($is_editor) {
                 $tool_content .= "</tr>";
                 // display category groups
                 showgroupsofcategory($myrow->id);
-
-                if ($groups_num == 1) {
-                    $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>" .
-                        ($is_editor? '<td></td>': '') . "<tr>";
-                }
-
             } else {
                 $tool_content .= "
                         <tr class='link-subcategory-title'>
