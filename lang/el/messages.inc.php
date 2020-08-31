@@ -2132,10 +2132,12 @@ $langInGroup = "στην ομάδα χρηστών";
 $langGroupInfiniteUsers = "0 = απεριόριστος αριθμός χρηστών";
 
 // Group Properties
-$langGroupProperties = "Ρυθμίσεις Ομάδων Χρηστών";
+$langGroupProperties = "Ρυθμίσεις";
 $langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπεται να εγγραφούν";
 $langGroupAllowStudentUnregister = "Οι " . $langsStudents . " επιτρέπεται να απεγγραφούν";
-$langGroupAllowMultipleRegistration = "Δυνατότητα εγγραφής χρηστών σε περισσότερες από μία ομάδες";
+$langGroupAllowRegistration = "Εγγραφή χρηστών σε μια ομάδα";
+$langGroupAllowCategoryRegistration = "Εγγραφή χρηστών σε μια ομάδα ανά κατηγορία";
+$langGroupAllowMultipleRegistration = "Εγγραφή χρηστών σε περισσότερες από μία ομάδες";
 $langGroupAllowStudentGroupDescription = "Δυνατότητα προσθήκης περιγραφής ομάδας από τα μέλη της ομάδας";
 $langGroupStudentRegistrationType = "Δυνατότητα εγγραφής";
 $langGroupAllowUnregister = "Δυνατότητα απεγγραφής";
