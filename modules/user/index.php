@@ -132,16 +132,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $full_name = sanitize_utf8($myrow->givenname . " " . $myrow->surname);
         $am_message = sanitize_utf8(empty($myrow->am) ? '' : ("<div class='right'>" . q($myrow->am) . "</div>"));
         $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/index.php?course=$course_code&amp;id=$myrow->id");
-        /* $link_parent_email = "";
-          if (get_config('enable_secondary_email')) {
-          if ($myrow->editor == 1 or $myrow->tutor == 1 or $myrow->status == 1 or empty($myrow['parent_email'])) {
-          $link_parent_email = "";
-          } else {
-          $link_parent_email = "<a href='emailparent.php?course=$course_code&amp;id=$myrow->id'>
-          <img src='$themeimg/email.png' title='".q($langEmailToParent)."' alt='".q($langEmailToParent)."' />
-          </a>";
-          }
-          } */
         //create date field with unregister button
         $date_field = $myrow->reg_date ? claro_format_locale_date( $dateFormatMiddle, strtotime($myrow->reg_date)) : $langUnknownDate;
 
@@ -222,7 +212,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $roleColumn = "<div class='text-muted'>$user_role_string</div>";
         // search for inactive users
         $inactive_user = is_inactive_user($myrow->id);
-        //setting datables column data
+        //setting data table column data
         $data['aaData'][] = array(
             'DT_RowId' => getIndirectReference($myrow->id),
             'DT_RowClass' => 'smaller',

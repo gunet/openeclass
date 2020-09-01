@@ -237,7 +237,7 @@ function showgroupsofcategory($catid) {
         $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
         $langEditChange, $uid, $totalRegistered, $student_desc, $allow_unreg,
         $tutors, $group_name, $self_reg, $user_group_description, $user_groups,
-        $max_members, $group_description, $langCommentsUser;
+        $max_members, $group_description, $langCommentsUser, $langViewHide, $langViewShow;
 
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
@@ -246,9 +246,20 @@ function showgroupsofcategory($catid) {
                                    ORDER BY `id`", $course_id, $catid);
 
     foreach ($q as $row) {
-        $tool_content .= "<tr><td style='padding-left: 25px;'>";
         $group_id = $row->id;
         initialize_group_info($group_id);
+
+        // group visibility
+        if (!is_group_visible($group_id, $course_id) and !$is_editor) {
+            continue;
+        }
+
+        if (!is_group_visible($group_id, $course_id)) {
+            $link_class = 'not_visible';
+        } else {
+            $link_class = '';
+        }
+        $tool_content .= "<tr class='$link_class'><td style='padding-left: 25px;'>";
         if ($is_editor) {
             $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
         } else {
@@ -260,7 +271,7 @@ function showgroupsofcategory($catid) {
             }
         }
         $tool_content .= "<br><p style='padding-top:10px;'>$group_description</p>";
-        if (!$is_editor){
+        if (!$is_editor) {
             if ($student_desc) {
                 if ($user_group_description) {
                     $tool_content .= "<br>
@@ -295,11 +306,23 @@ function showgroupsofcategory($catid) {
         $totalRegistered += $member_count;
 
         if ($is_editor) {
+            if (is_group_visible($group_id, $course_id)) {
+                $visibility_text = $langViewHide;
+                $visibility_icom = 'fa-eye-slash';
+                $visibility_url = 'choice=disable';
+            } else {
+                $visibility_text = $langViewShow;
+                $visibility_icom = 'fa-eye';
+                $visibility_url = 'choice=enable';
+            }
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
                       'url' => "group_edit.php?course=$course_code&amp;category=$catid&amp;group_id=$group_id"),
+                array('title' => $visibility_text,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;$visibility_url",
+                    'icon' => $visibility_icom),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
@@ -454,6 +477,26 @@ function user_can_register_to_group($uid, $course_id) {
     return true;
 }
 
+
+/**
+ * @brief change group visibility
+ * @param $choice
+ * @param $group_id
+ * @param $course_id
+ */
+function change_group_visibility($choice, $group_id, $course_id) {
+
+    if ($choice == 'enable') {
+        $vis = 1;
+    } else {
+        $vis = 0;
+    }
+    Database::get()->query("UPDATE `group` SET visible = ?d 
+                                      WHERE id = ?d 
+                                      AND course_id = ?d",
+                                $vis, $group_id, $course_id);
+
+}
 
 /**
  * @brief check if course has group categories

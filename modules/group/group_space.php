@@ -39,6 +39,12 @@ if ((isset($_GET['selfReg']) or isset($_GET['selfUnReg'])) and isset($_GET['grou
 } else {
     initialize_group_id();
 }
+
+if (!is_group_visible($group_id, $course_id) and !$is_editor) {
+    Session::Messages($langForbidden, 'alert-danger');
+    redirect_to_home_page("modules/group/index.php?course=$course_code");
+}
+
 initialize_group_info($group_id);
 $user_groups = user_group_info($uid, $course_id);
 

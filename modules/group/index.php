@@ -72,6 +72,9 @@ if (isset($_GET['urlview'])) {
 }
 
 if ($is_editor) {
+    if (isset($_GET['choice'])) { // change group visibility
+        change_group_visibility($_GET['choice'], $_GET['group_id'], $course_id);
+    }
     if (isset($_GET['deletecategory'])) { // delete group category
         $id = $_GET['id'];
         delete_group_category($id);
@@ -509,8 +512,13 @@ if ($is_editor) {
                 </tr>";
 
         foreach ($groupSelect as $group) {
+            if (!is_group_visible($group->id, $course_id)) {
+                $link_class = 'not_visible';
+            } else {
+                $link_class = '';
+            }
             initialize_group_info($group->id);
-            $tool_content .= "<tr>";
+            $tool_content .= "<tr class='$link_class'>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p style='padding-top:10px;'>$group_description</p>";
             if ($user_group_description && $student_desc) {
@@ -526,11 +534,25 @@ if ($is_editor) {
             } else {
                 $tool_content .= "<td class='text-center'>$max_members</td>";
             }
+
+            if (is_group_visible($group->id, $course_id)) {
+                $visibility_text = $langViewHide;
+                $visibility_icom = 'fa-eye-slash';
+                $visibility_url = 'choice=disable';
+            } else {
+                $visibility_text = $langViewShow;
+                $visibility_icom = 'fa-eye';
+                $visibility_url = 'choice=enable';
+            }
+
             $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
                             'icon' => 'fa-edit'),
+                        array('title' => $visibility_text,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group->id&amp;$visibility_url",
+                            'icon' => $visibility_icom),
                         array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
                             'icon' => 'fa-times',
@@ -582,6 +604,10 @@ if ($is_editor) {
             $group_id = $row->id;
 
             initialize_group_info($group_id);
+            // group visibility
+            if (!is_group_visible($group_id, $course_id)) {
+                continue;
+            }
 
             $tool_content .= "<tr>";
             $tool_content .= "<td class='text-left'>";
