@@ -438,7 +438,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
     $q = Database::get()->queryArray("SELECT `group`.id, `group`.name FROM `group`, group_members
                        WHERE `group`.course_id = ?d AND
                              `group`.id = group_members.group_id AND
-                             `group_members`.user_id = ?d
+                             `group_members`.user_id = ?d                    
                        ORDER BY `group`.name", $course_id, $user_id);
 
     if (!$q) {
@@ -449,9 +449,13 @@ function user_groups($course_id, $user_id, $format = 'html') {
         }
     }
     foreach ($q as $r) {
+        $visibility = '';
+        if (!is_group_visible($r->id, $course_id)) {
+            $visibility = 'not_visible';
+        }
         if ($format == 'html') {
             $groups .= ((count($q) > 1) ? '<li>' : '') .
-                    "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r->id' title='" .
+                    "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r->id' class='$visibility' title='" .
                     q($r->name) . "'>" .
                     q(ellipsize($r->name, 40)) . "</a>" .
                     ((count($q) > 1) ? '</li>' : '');
@@ -467,6 +471,24 @@ function user_groups($course_id, $user_id, $format = 'html') {
         }
     } else {
         return $groups;
+    }
+}
+
+/**
+ * @brief get group visibility
+ * @param $group_id
+ * @param $course_id
+ * @return bool
+ */
+function is_group_visible($group_id, $course_id) {
+
+    $q = Database::get()->querySingle("SELECT visible FROM `group` WHERE
+                                        id = ?d AND course_id = ?d", $group_id, $course_id);
+
+    if ($q->visible == 1) {
+        return true;
+    } else {
+        return false;
     }
 }
 
