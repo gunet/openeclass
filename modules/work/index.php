@@ -83,13 +83,18 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
     } elseif (($_POST['assign_type']) or ($_POST['assign_g_type'] == 2)) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` 
+                                                        WHERE course_id = ?d 
+                                                        AND visible = 1 
+                                                      ORDER BY name", $course_id);
     } else {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id
-                                AND course_user.course_id = ?d AND course_user.status = 5
-                                AND user.id ORDER BY surname", $course_id);
+                                AND course_user.course_id = ?d 
+                                AND course_user.status = " . USER_STUDENT . "
+                                AND user.id 
+                                ORDER BY surname", $course_id);
 
     }
     echo json_encode($data);
@@ -2902,7 +2907,7 @@ function show_edit_assignment($id) {
     }
     $turnitinapp = ExtAppManager::getApp(strtolower(TurnitinApp::NAME));
     if ($row->assign_to_specific) {
-        //preparing options in select boxes for assigning to speficic users/groups
+        //preparing options in select boxes for assigning to specific users/groups
         $assignee_options = '';
         $unassigned_options = '';
         if (($row->group_submissions) or ($row->assign_to_specific == 2)) {
@@ -2910,8 +2915,9 @@ function show_edit_assignment($id) {
                                    FROM assignment_to_specific, `group`
                                     WHERE course_id = ?d
                                     AND `group`.id = assignment_to_specific.group_id
+                                    AND `group`.visible = 1 
                                     AND assignment_to_specific.assignment_id = ?d", $course_id, $id);
-            $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+            $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
             }
@@ -2930,7 +2936,7 @@ function show_edit_assignment($id) {
             $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id
-                                    AND course_user.course_id = ?d AND course_user.status = 5
+                                    AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
                                     AND user.id", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";

@@ -29,12 +29,15 @@ require_once 'modules/tags/moduleElement.class.php';
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+            $data = Database::get()->queryArray("SELECT name,id FROM `group` 
+                                          WHERE course_id = ?d 
+                                          AND visible = 1 
+                                      ORDER BY name", $course_id);
         } elseif ($_POST['assign_type'] == 1) {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id
-                                    AND course_user.course_id = ?d AND course_user.status = 5
+                                    AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
                                     AND user.id ORDER BY surname", $course_id);
         }
         echo json_encode($data);
@@ -68,7 +71,7 @@ if (isset($_POST['submitExercise'])) {
         'exerciseIPLock' => "$langTheField IPs"
     ));
     if($v->validate()) {
-        print_a($_POST);
+        //print_a($_POST);
         //die;
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
@@ -173,14 +176,16 @@ if (isset($_POST['submitExercise'])) {
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
     if ($objExercise->selectAssignToSpecific()) {
-        //preparing options in select boxes for assigning to speficic users/groups
+        //preparing options in select boxes for assigning to specific users/groups
         $assignee_options='';
         $unassigned_options='';
         if ($objExercise->selectAssignToSpecific() == 2) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                 FROM exercise_to_specific, `group`
-                WHERE `group`.id = exercise_to_specific.group_id AND exercise_to_specific.exercise_id = ?d", $exerciseId);
-            $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+                WHERE `group`.id = exercise_to_specific.group_id
+                    AND `group`.visible = 1 
+                    AND exercise_to_specific.exercise_id = ?d", $exerciseId);
+            $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
             }
@@ -199,7 +204,8 @@ if (isset($_POST['submitExercise'])) {
             $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
                 FROM user, course_user
                 WHERE user.id = course_user.user_id
-                AND course_user.course_id = ?d AND course_user.status = 5
+                AND course_user.course_id = ?d 
+                AND course_user.status = " . USER_STUDENT . "
                 AND user.id", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
