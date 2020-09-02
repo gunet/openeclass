@@ -528,6 +528,7 @@ function is_user_register_to_group_category_course($uid, $category_id, $course_i
                         AND group.category_id = group_category.id
                         AND user_id = ?d
                         AND `group`.course_id = ?d 
+                        AND `group`.visible = 1 
                         AND group_category.id = ?d",
                     $uid, $course_id, $category_id);
     if ($q) {

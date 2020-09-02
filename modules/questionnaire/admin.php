@@ -40,13 +40,18 @@ if (isset($_REQUEST['pid'])) {
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+            $data = Database::get()->queryArray("SELECT name, id FROM `group` 
+                                WHERE course_id = ?d 
+                                  AND `group`.visible = 1   
+                                ORDER BY name", $course_id);
         } elseif ($_POST['assign_type'] == 1) {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id
-                                    AND course_user.course_id = ?d AND course_user.status = 5
-                                    AND user.id ORDER BY surname", $course_id);
+                                        AND course_user.course_id = ?d 
+                                        AND course_user.status = " . USER_STUDENT . "
+                                        AND user.id 
+                                    ORDER BY surname", $course_id);
         }
         echo json_encode($data);
     }
@@ -285,14 +290,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     </script>";
 
         if (isset($poll) && $poll->assign_to_specific) {
-            //preparing options in select boxes for assigning to speficic users/groups
+            //preparing options in select boxes for assigning to specific users/groups
             $assignee_options='';
             $unassigned_options='';
             if ($poll->assign_to_specific == 2) {
                 $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                        FROM poll_to_specific, `group`
-                                       WHERE `group`.id = poll_to_specific.group_id AND poll_to_specific.poll_id = ?d", $poll->pid);
-                $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+                                       WHERE `group`.id = poll_to_specific.group_id
+                                       AND `group`.visible = 1 
+                                       AND `group`.course_id = ?d
+                                       AND poll_to_specific.poll_id = ?d", $poll->pid, $course_id);
+                $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` 
+                                        WHERE course_id = ?d AND `group`.visible = 1", $course_id);
                 foreach ($assignees as $assignee_row) {
                     $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
                 }
@@ -311,7 +320,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
                                         FROM user, course_user
                                         WHERE user.id = course_user.user_id
-                                        AND course_user.course_id = ?d AND course_user.status = 5
+                                        AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
                                         AND user.id", $course_id);
                 foreach ($assignees as $assignee_row) {
                     $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
