@@ -631,17 +631,32 @@ $action_bar
 
                         ($is_course_admin? "<li class='access pull-right'><a href='{$urlAppend}modules/course_info/?course=$course_code' style='color: #23527C;'><span class='fa fa-wrench fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInfo'></span></a></li>": '') . "
                         <li class='access pull-right'><a href='javascript:void(0);'>". course_access_icon($visible) . "</a></li>
-                        <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span><span class='hidden'>.</span></a></li>" .
-
-                        ($uid? ("<li class='access pull-right'><a href='{$urlAppend}modules/user/" .
-                                ($is_course_admin? '': 'userslist.php') .
-                                "?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>"): '') .
-                        ($offline_course?
-                                "<li class='access pull-right'>
+                        <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span><span class='hidden'>.</span></a></li>";
+                        if ($uid) {
+                            $tool_content .= "<li class='access pull-right'>";
+                            if ($is_course_admin) {
+                                $tool_content .= "<a href='{$urlAppend}modules/user/index.php?course=$course_code'>
+                                        <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
+                                        <span class='hidden'>.</span>
+                                    </a>";
+                            } else {
+                                if ($visible == COURSE_CLOSED) {
+                                    $tool_content .= "<a href = '{$urlAppend}modules/user/userslist.php?course=$course_code'>
+                                            <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
+                                            <span class='hidden'>.</span>
+                                        </a>";
+                                }
+                            }
+                            $tool_content .= "</li>";
+                        }
+                        if ($offline_course) {
+                            $tool_content .= "<li class='access pull-right'>
                                     <a href='{$urlAppend}modules/offline/index.php?course={$course_code}'>
                                         <span class='fa fa-download fa-fw' data-toggle='tooltip' data-placement='top' title='$langDownloadCourse'></span>
                                     </a>
-                                </li>" : '') . "
+                                </li>";
+                        }
+                        $tool_content .= "
                     </ul>
                 </div>
                 $left_column

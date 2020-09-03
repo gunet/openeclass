@@ -26,6 +26,10 @@ $require_user_registration = true;
 
 require_once '../../include/baseTheme.php';
 
+if (course_status($course_id) != COURSE_CLOSED) {
+    Session::Messages($langForbidden, 'alert-danger');
+    redirect_to_home_page("courses/$course_code/");
+}
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
