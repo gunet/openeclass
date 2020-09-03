@@ -36,37 +36,28 @@
 
                 <div class='panel-body'>
                     <div id='course-title-wrapper' class='course-info-title clearfix'>
-                        <div class='pull-left h4'>{{ trans('langDescription') }}</div>
-                        @if ($is_editor)
-                            <div class='access access-edit pull-left'>
-                                <a href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
-                                    <span class='fa fa-pencil' style='line-height: 30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία πληροφοριών'></span>
-                                    <span class='hidden'>.</span>
-                                </a>
-                            </div>
-                        @endif
-                        <ul class='course-title-actions clearfix pull-right list-inline'>
-                            <li class='access pull-right'>
-                                <a href='javascript:void(0);' style='color: #23527C;''>
-                                    <span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='{{ $course_info_popover }}'></span>
-                                    <span class='hidden'>.</span>
-                                </a>
+                        <div class='pull-left h4'>{{ trans('langDescription') }}</div>{!! $edit_link !!}
+                        <ul class="course-title-actions clearfix pull-right list-inline">
+                            @if ($is_course_admin)
+                                <li class="access pull-right"><a href="{{$urlAppend}}modules/course_info/?course={{$course_code}}" style="color: #23527C;"><span class="fa fa-wrench fa-fw" data-toggle="tooltip" data-placement="top" title='{{trans('langCourseInfo')}}'></span></a></li>
+                            @endif
+                            <li class="access pull-right">
+                                <a href='javascript:void(0);'>{!! course_access_icon($visible) !!}</a>
                             </li>
-                            <li class='access pull-right'>
-                                <a href='javascript:void(0);'>{!! $lessonStatus !!}</a>
+                            <li class="access pull-right">
+                                <a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='{{ trans('langCitation') }}'></span><span class='hidden'>.</span></a>
                             </li>
-                            <li class='access pull-right'>
-                                <a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>
-                                    <span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='{{ trans('langCitation') }}'></span>
-                                    <span class='hidden'>.</span>
-                                </a>
-                            </li>
-                            <li class='access pull-right'>
-                                <a href='{{ $urlAppend }}modules/user/{{ $is_course_admin ? '' : 'userslist.php' }}?course={{ $course_code }}'>
-                                    <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='{{ $numUsers }} {{ trans('langRegistered') }}'></span>
-                                    <span class='hidden'>.</span>
-                                </a>
-                            </li>
+                            @if ($uid)
+                                <li class="access pull-right">
+                                 @if ($is_course_admin)
+                                     <a href="{{ $urlAppend }}modules/user/index.php?course=={{$course_code}}"><span class="fa fa-users fa-fw" data-toggle="tooltip" data-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span><span class="hidden">.</span></a>
+                                 @else
+                                     @if ($visible == COURSE_CLOSED)
+                                            <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}"><span class="fa fa-users fa-fw" data-toggle="tooltip" data-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span></a>
+                                     @endif
+                                 @endif
+                                </li>
+                            @endif
                             @if ($offline_course)
                                 <li class='access pull-right'>
                                     <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}">
@@ -104,36 +95,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class='col-xs-12 course-below-wrapper'>
-                        <div class='row text-muted course-below-info'>
-                            <div class='col-xs-6'>
-                                <strong>{{ trans('langCode') }}:</strong> {{ $course_info->public_code }}<br>
-                                <strong>{{ trans('langFaculty') }}:</strong>
-                                @foreach ($departments as $key => $department)
-                                    {!! $tree->getFullPath($department) !!}
-                                    @if ($key+1 < count($departments))
-                                        <br>
-                                    @endif
-                                @endforeach
-                             </div>
-                            <div class='col-xs-6'>
-                                @if ($course_info->course_license)
-                                    <div class ='text-center'>
-                                        <span>{!! copyright_info($course_id) !!}</span>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
 
-                    @if ($courseDescriptionVisible or $is_editor)
+                    @if ((!$is_editor) and (!$courseDescriptionVisible))
+                        @if ($course_info->course_license)
+                            <span class='pull-right' style="margin-top: 15px;">{!! copyright_info($course_id) !!}</span>
+                        @endif
+                    @else
                         <div class='col-xs-12 course-below-wrapper'>
                             <div class='row text-muted course-below-info'>
-                                <a role='button' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
-                                    <h4 class='panel-heading panel-title'>
-                                        <span class='fa fa-chevron-down fa-fw'></span> {{ trans('langCourseDescription') }} {!! $edit_course_desc_link !!}
-                                    </h4>
-                                </a>
+                                <a role='button' id='btn-syllabus' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
+                                        <span class='fa fa-chevron-right fa-fw'></span><span style='padding-left: 5px;'>{{ trans('langCourseDescription') }}</span></a>
+                                {!! $edit_course_desc_link !!}
+                                @if ($course_info->course_license)
+                                    <span class="pull-right">{!! copyright_info($course_id) !!}</span>
+                                @endif
                                 <div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px;'>
                                     @foreach ($course_descriptions as $row)
                                         <h3 class='panel-title' style='margin: 1em 0 .5em;'>{{ q($row->title) }}</h3> {!! standard_text_escape($row->comments) !!}
@@ -400,7 +375,6 @@
             </div>
         </div>
     </div>
-    {!! $course_descriptions_modals !!}
     @if (!$registered)
         <script type='text/javascript'>
             $(function() {
