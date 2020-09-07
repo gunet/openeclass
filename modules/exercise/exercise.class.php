@@ -354,13 +354,13 @@ if (!class_exists('Exercise')) {
             // or if there are not at least 2 questions
             // cancel randomization and return normal question list
 
-            /*if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0) {
-                return $this->questionList;
-            } */
-
-            if ($this->selectNbrQuestions() < 2) {
+            if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0) {
                 return $this->questionList;
             }
+
+            /*if ($this->selectNbrQuestions() < 2) {
+                return $this->questionList;
+            }*/
             $questions_without_criteria = $questions_with_criteria = array(); // initialization
 
             $randomization_criteria = $this->selectRandomizationCriteria();
