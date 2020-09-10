@@ -1051,8 +1051,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `temp_save` TINYINT(1) NOT NULL DEFAULT 0,
     `time_constraint` INT(11) DEFAULT 0,
     `attempts_allowed` INT(11) DEFAULT 0,
-    `random` SMALLINT(6) NOT NULL DEFAULT 0,
-    `random_criteria` TEXT,
+    `random` SMALLINT(6) NOT NULL DEFAULT 0,    
     `active` TINYINT(4) DEFAULT NULL,
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `results` TINYINT(1) NOT NULL DEFAULT 1,
@@ -1116,10 +1115,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
     `r_position` INT(11) DEFAULT NULL ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
-    `question_id` INT(11) NOT NULL DEFAULT 0,
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `question_id` INT(11) DEFAULT 0,
     `exercise_id` INT(11) NOT NULL DEFAULT 0,
     `q_position` INT(11) NOT NULL DEFAULT 1,
-    PRIMARY KEY (question_id, exercise_id) ) $tbl_options");
+    `random_criteria` TEXT) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `id` int(11) NOT NULL AUTO_INCREMENT,

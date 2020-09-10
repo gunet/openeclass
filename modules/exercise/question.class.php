@@ -157,7 +157,7 @@ if (!class_exists('Question')) {
          * @param $difficulty
          * @return string
          */
-        function selectDifficultyLegend($difficulty) {
+        function selectDifficultyIcon($difficulty) {
             global $langQuestionVeryEasy, $langQuestionEasy, $langQuestionModerate,
                    $langQuestionDifficult, $langQuestionVeryDifficult;
 
@@ -167,6 +167,25 @@ if (!class_exists('Question')) {
                 case 3: return icon('fa-meh-o', $langQuestionModerate);
                 case 4: return icon('fa-exclamation', $langQuestionDifficult);
                 case 5: return icon('fa-fire', $langQuestionVeryDifficult);
+            }
+        }
+
+        /**
+         * @brief get
+         * @param $difficulty text
+         * @return string
+         */
+        function selectDifficultyLegend($difficulty) {
+            global $langQuestionVeryEasy, $langQuestionEasy, $langQuestionModerate,
+                   $langQuestionDifficult, $langQuestionVeryDifficult;
+
+
+            switch($difficulty) {
+                case 1: return $langQuestionVeryEasy;
+                case 2: return $langQuestionEasy;
+                case 3: return $langQuestionModerate;
+                case 4: return $langQuestionDifficult;
+                case 5: return $langQuestionVeryDifficult;
             }
         }
 

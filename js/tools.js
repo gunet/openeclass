@@ -755,17 +755,3 @@ function initialize_filemodal(lang) {
     });
   });
 }
-
-function AddMoreRandomChoices() {
-    $('body').on('click', '#buttonMoreRandomChoices', function (e) {
-        e.preventDefault();
-        var newInput = $(this).closest('#moreRandomChoices').clone().appendTo('#moreRandomChoices');
-    });
-}
-
-function LessRandomChoices() {
-    $('body').on('click', '#buttonLessRandomChoices', function (e) {
-        e.preventDefault();
-        var newInput = $(this).closest('#moreRandomChoices').remove();
-    });
-}

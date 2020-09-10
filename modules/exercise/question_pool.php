@@ -278,13 +278,13 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
     }
     $result_query_vars = isset($fromExercise) ? array_merge($result_query_vars, array($fromExercise, $fromExercise)) : $result_query_vars;
     if (isset($fromExercise)) {
-        $result_query = "SELECT id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                        ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+        $result_query = "SELECT exercise_question.id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                        ON question_id = exercise_question.id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                         question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                        GROUP BY id ORDER BY question";
+                        GROUP BY exercise_question.id ORDER BY question";
     } else {
-        $result_query = "SELECT id FROM `exercise_with_questions`, `exercise_question`
-                        WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$extraSql
+        $result_query = "SELECT exercise_question.id FROM `exercise_with_questions`, `exercise_question`
+                        WHERE course_id = ?d AND question_id = exercise_question.id AND exercise_id = ?d$extraSql
                         ORDER BY q_position";
     }
 } else { // if user selected either Orphan Question or All Questions
@@ -304,18 +304,18 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
     }
     //When user selected orphan questions
     if (isset($exerciseId) && $exerciseId == -1) {
-        $result_query = "SELECT id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                        ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$extraSql ORDER BY question";
+        $result_query = "SELECT exercise_question.id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                        ON question_id = exercise_question.id WHERE course_id = ?d AND exercise_id IS NULL$extraSql ORDER BY question";
     } else { // if user selected all questions
         if (isset($fromExercise)) { // if is coming to question pool from an exercise
-            $result_query = "SELECT id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+            $result_query = "SELECT exercise_question.id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = exercise_question.id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            GROUP BY id, question, type ORDER BY question";
+                            GROUP BY exercise_question.id, question, type ORDER BY question";
         } else {
-            $result_query = "SELECT id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d$extraSql
-                            GROUP BY id, question, type ORDER BY question";
+            $result_query = "SELECT exercise_question.id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = exercise_question.id WHERE course_id = ?d$extraSql
+                            GROUP BY exercise_question.id, question, type ORDER BY question";
         }
         // forces the value to 0
         $exerciseId = 0;
@@ -340,7 +340,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         $question_temp = new Question();
         $question_temp->read($row->id);
         $question_title = q_math($question_temp->selectTitle());
-        $question_difficulty_legend = $question_temp->selectDifficultyLegend($question_temp->selectDifficulty());
+        $question_difficulty_legend = $question_temp->selectDifficultyIcon($question_temp->selectDifficulty());
         $question_type_legend = $question_temp->selectTypeLegend($question_temp->selectType());
         $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
         if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {

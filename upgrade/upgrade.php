@@ -2005,8 +2005,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '3.10', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.10'));
 
-        if (!DBHelper::fieldExists('exercise', 'random_criteria')) {
-            Database::get()->query("ALTER TABLE `exercise` ADD `random_criteria` TEXT AFTER `random`");
+        if (!DBHelper::fieldExists('exercise_with_questions', 'random_criteria')) {
+            Database::get()->query("ALTER TABLE exercise_with_questions ADD `random_criteria` TEXT");
+            Database::get()->query("ALTER TABLE exercise_with_questions DROP PRIMARY KEY");
+            Database::get()->query("ALTER TABLE exercise_with_questions ADD id NOT NULL PRIMARY KEY AUTO_INCREMENT FIRST");
         }
     }
 

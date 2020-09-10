@@ -50,7 +50,6 @@ if (!class_exists('Exercise')) {
         var $timeConstraint;
         var $attemptsAllowed;
         var $random;
-        var $random_criteria;
         var $active;
         var $results;
         var $score;
@@ -75,7 +74,6 @@ if (!class_exists('Exercise')) {
             $this->timeConstraint = 0;
             $this->attemptsAllowed = 0;
             $this->random = 0;
-            $this->random_criteria = null;
             $this->active = 1;
             $this->public = 1;
             $this->results = 1;
@@ -98,7 +96,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
-            attempts_allowed, random, random_criteria, active, public, results, score, ip_lock, password_lock, assign_to_specific, continue_time_limit
+            attempts_allowed, random, active, public, results, score, ip_lock, password_lock, assign_to_specific, continue_time_limit
             FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -113,7 +111,6 @@ if (!class_exists('Exercise')) {
                 $this->timeConstraint = $object->time_constraint;
                 $this->attemptsAllowed = $object->attempts_allowed;
                 $this->random = $object->random;
-                $this->random_criteria = $object->random_criteria;
                 $this->active = $object->active;
                 $this->public = $object->public;
                 $this->results = $object->results;
@@ -123,17 +120,22 @@ if (!class_exists('Exercise')) {
                 $this->assign_to_specific = $object->assign_to_specific;
                 $this->continueTimeLimit = $object->continue_time_limit;
 
-                $result = Database::get()->queryArray("SELECT question_id, q_position
-                    FROM `exercise_with_questions`, `exercise_question`
-                    WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
-                    ORDER BY q_position, question_id", $course_id, $id);
+                $result = Database::get()->queryArray("SELECT question_id, q_position, random_criteria
+                    FROM `exercise_with_questions`
+                    WHERE exercise_id = ?d
+                    ORDER BY q_position, question_id", $id);
 
                 // fills the array with the question ID for this exercise
                 $k = 1;
                 foreach ($result as $row) {
-                    $this->questionList[$k] = $row->question_id;
+                    if (is_null($row->question_id)) {
+                        $this->questionList[$k] = unserialize($row->random_criteria);
+                    } else {
+                        $this->questionList[$k] = $row->question_id;
+                    }
                     $k++;
                 }
+
                 // find the total weighting of an exercise
                 $this->totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
                                                 FROM exercise_question, exercise_with_questions
@@ -269,14 +271,6 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * @brief check if there are random criteria
-         * @return null
-         */
-        function hasRandomCriteria() {
-            return $this->random_criteria;
-        }
-
-        /**
          * returns the exercise status (1 = enabled ; 0 = disabled)
          *
          * @author - Olivier Brouckaert
@@ -296,6 +290,21 @@ if (!class_exists('Exercise')) {
             return $this->questionList;
         }
 
+        /**
+         * @brief checks if exercise has questions with random criteria
+         * @return bool
+         */
+        function hasQuestionListWithRandomCriteria() {
+            $result = Database::get()->queryArray("SELECT random_criteria FROM exercise_with_questions 
+                                            WHERE exercise_id = ?d", $this->id);
+            foreach ($result as $data) {
+                if (!is_null($data->random_criteria)) {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        }
         /**
          * @brief get questions with difficulty
          * $param $number
@@ -358,9 +367,6 @@ if (!class_exists('Exercise')) {
                 return $this->questionList;
             }
 
-            /*if ($this->selectNbrQuestions() < 2) {
-                return $this->questionList;
-            }*/
             $questions_without_criteria = $questions_with_criteria = array(); // initialization
 
             $randomization_criteria = $this->selectRandomizationCriteria();
@@ -495,13 +501,14 @@ if (!class_exists('Exercise')) {
          * @param $number
          * @param $criteria
          */
-        function setRandomizationCriteria($number, $criteria) {
+        /*function setRandomizationCriteria($number, $criteria) {
             if (!is_null($number) and !is_null($criteria)) {
                 $this->random_criteria = serialize(array_combine($number, $criteria));
             } else {
                 $this->random_criteria = null;
             }
-        }
+        }*/
+
         /**
          * sets to 0 if questions are not selected randomly
          * if questions are selected randomly, sets the draws
@@ -563,7 +570,6 @@ if (!class_exists('Exercise')) {
             $timeConstraint = $this->timeConstraint;
             $attemptsAllowed = $this->attemptsAllowed;
             $random = $this->random;
-            $random_criteria = $this->random_criteria;
             $active = $this->active;
             $public = $this->public;
             $results = $this->results;
@@ -576,13 +582,13 @@ if (!class_exists('Exercise')) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
                     SET title = ?s, description = ?s, type = ?d,
                         start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d,
-                        attempts_allowed = ?d, random = ?d, random_criteria = ?s, active = ?d, public = ?d,
+                        attempts_allowed = ?d, random = ?d, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
                         assign_to_specific = ?d, continue_time_limit = ?d
                     WHERE course_id = ?d AND id = ?d",
                     $exercise, $description, $type,
                     $startDate, $endDate, $tempSave, $timeConstraint,
-                    $attemptsAllowed, $random, $random_criteria, $active, $public,
+                    $attemptsAllowed, $random, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit,
                     $course_id, $id)->affectedRows;
@@ -597,63 +603,35 @@ if (!class_exists('Exercise')) {
                 $this->id = Database::get()->query("INSERT INTO `exercise`
                     (course_id, title, description, type, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
-                     random, random_criteria, active, results, score, ip_lock, password_lock,
+                     random, active, results, score, ip_lock, password_lock,
                      assign_to_specific, continue_time_limit)
                     VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
                     $course_id, $exercise, $description, $type, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
-                    $random, $random_criteria, $active, $results, $score, $ip_lock, $password_lock,
+                    $random, $active, $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                     'title' => $exercise,
                     'description' => $description));
             }
-            // updates the question position
+
+            // updates question list
+            Database::get()->query("DELETE FROM exercise_with_questions WHERE exercise_id = ?d", $this->id);
             foreach ($this->questionList as $position => $questionId) {
-                Database::get()->query('INSERT INTO exercise_with_questions
-                    (exercise_id, question_id, q_position) VALUES (?d, ?d, ?d)
-                    ON DUPLICATE KEY UPDATE q_position = ?d',
-                    $this->id, $questionId, $position, $position);
+                if (is_array($questionId)) {
+                    Database::get()->query('INSERT INTO exercise_with_questions
+                                (exercise_id, question_id, q_position, random_criteria) VALUES (?d, NULL, ?d, ?s)',
+                            $this->id, $position, serialize($questionId));
+                } else {
+                    Database::get()->query('INSERT INTO exercise_with_questions
+                              (exercise_id, question_id, q_position) VALUES (?d, ?d, ?d)',
+                                $this->id, $questionId, $position);
+                }
             }
+
         }
 
-        /**
-         * swaps question with $id with the next or previous one
-         *
-         * @param - integer $id - question ID to move up or down
-         * @param - integer $offset - 1 to move down, -1 to move up
-         */
-        private function swapQuestionWith($id, $offset) {
-            $keys = array_keys($this->questionList);
-            $keyPositions = array_flip($keys);
-            $thisIndex = array_search($id, $this->questionList);
-            $thisPosition = $keyPositions[$thisIndex];
-            if (isset($keys[$thisPosition + $offset])) {
-                $nextIndex = $keys[$thisPosition + $offset];
-                $temp = $this->questionList[$nextIndex];
-                $this->questionList[$nextIndex] = $this->questionList[$thisIndex];
-                $this->questionList[$thisIndex] = $temp;
-            }
-        }
-
-        /**
-         * moves a question up in the list
-         *
-         * @param - integer $id - question ID to move up
-         */
-        function moveUp($id) {
-            $this->swapQuestionWith($id, -1);
-        }
-
-        /**
-         * moves a question down in the list
-         *
-         * @param - integer $id - question ID to move down
-         */
-        function moveDown($id) {
-            $this->swapQuestionWith($id, 1);
-        }
 
         /**
          * adds a question into the question list

@@ -121,8 +121,6 @@ if (isset($_POST['submitExercise'])) {
         } else {
             $moduleTag->syncTags(array());
         }
-
-
         redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);
     } else {
         $new_or_modify = isset($_GET['NewExercise']) ? "&NewExercise=Yes" : "&exerciseId=$_GET[exerciseId]&modifyExercise=yes";
@@ -134,7 +132,7 @@ if (isset($_POST['submitExercise'])) {
     $exerciseTitle = Session::has('exerciseTitle') ? Session::get('exerciseTitle') : $objExercise->selectTitle();
     $exerciseDescription = Session::has('exerciseDescription') ? Session::get('exerciseDescription') : $objExercise->selectDescription();
     $exerciseType = Session::has('exerciseType') ? Session::get('exerciseType') : $objExercise->selectType();
-    //more repopulation need to be done
+    //more population need to be done
     $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
     $exerciseEndDate = $objExercise->selectEndDate();
     if (is_null($exerciseEndDate) && !Session::has('exerciseEndDate')) {
@@ -413,31 +411,35 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
                      <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
                    </div>
-                 </div>
-                 <div class='form-group'>
-                     <label for='exerciseDescription' class='col-sm-2 control-label'>$langRandomQuestions:</label>
-                     <div class='col-sm-10'>
-                         <div class='radio'>
-                           <label>
-                             <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='0' ".(($randomQuestions == 0)? 'checked' : '').">
-                             $langDeactivate
-                           </label>
+                 </div>";
+
+                if (!$objExercise->hasQuestionListWithRandomCriteria()) {
+                    $tool_content .= "<div class='form-group'>
+                         <label for='exerciseDescription' class='col-sm-2 control-label'>$langRandomQuestions:</label>
+                         <div class='col-sm-10'>
+                             <div class='radio'>
+                               <label>
+                                 <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='0' ".(($randomQuestions == 0)? 'checked' : '').">
+                                 $langDeactivate
+                               </label>
+                             </div>
+                             <div class='radio'>
+                               <label>
+                                 <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='1'".(($randomQuestions > 0)? ' checked' : '').">
+                                 $langActivate
+                               </label>
+                             </div>
                          </div>
-                         <div class='radio'>
-                           <label>
-                             <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='1'".(($randomQuestions > 0)? ' checked' : '').">
-                             $langActivate
-                           </label>
-                         </div>
-                     </div>
-                 </div>                 
-                 <div class='form-group ".(($randomQuestions > 0)? '' : 'hidden')."'>
-                    <div class='col-sm-offset-2 col-sm-10'>
-                        <span class='col-sm-2'><input type='text' class='form-control' name='questionDrawn' id='questionDrawnInput' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
-                        <span class='col-sm-8'>$langFromRandomQuestions</span>                                                                        
-                    </div>
-                </div>                                
-                <div class='form-group'>
+                     </div>                 
+                     <div class='form-group ".(($randomQuestions > 0)? '' : 'hidden')."'>
+                        <div class='col-sm-offset-2 col-sm-10'>
+                            <span class='col-sm-2'><input type='text' class='form-control' name='questionDrawn' id='questionDrawnInput' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
+                            <span class='col-sm-8'>$langFromRandomQuestions</span>                                                                        
+                        </div>
+                    </div>";
+                }
+
+                $tool_content .= "<div class='form-group'>
                      <label for='dispresults' class='col-sm-2 control-label'>$langAnswers:</label>
                      <div class='col-sm-10'>
                          <div class='radio'>
@@ -717,15 +719,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      "$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit" :
                      $langExerciseAttemptsUnlimited) . "
                 </div>
-            </div>" . ($randomQuestions? "
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langRandomQuestions:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . ($randomQuestions >= 32767 ? $langYes: "$langSelection $randomQuestions $langFromRandomQuestions") . "
-                </div>
-            </div>" : '') . "
+            </div>            
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langAnswers:</strong>

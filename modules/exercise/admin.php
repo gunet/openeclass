@@ -45,17 +45,8 @@ if (isset($_GET['htopic'])) {
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox();
-
-$head_content .= "
-    <script>
-        $(function () {
-            AddMoreRandomChoices();
-            LessRandomChoices();
-            }
-        );
-    </script>
-";
 
 $toolName = $langExercices;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
