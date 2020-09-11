@@ -240,7 +240,7 @@ foreach ($resultNotMember as $myNotMember) {
             q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
 }
 
-$q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname
+$q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.am
                FROM user, group_members
                WHERE group_members.user_id = user.id AND
                      group_members.group_id = ?d AND
@@ -249,27 +249,24 @@ $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname
 
 $tool_content_group_members = '';
 foreach ($q as $member) {
-    $tool_content_group_members .= "<option value='$member->id'>" . q("$member->surname $member->givenname") .
-            "</option>";
+    $tool_content_group_members .= "<option value='$member->id'>" .
+        q("$member->surname $member->givenname" .
+          ($member->am? " ($member->am)": '')) . "</option>";
 }
 
 if (!empty($message)) {
     $tool_content .= $message;
 }
 $back_url = isset($_GET['from']) && $_GET['from'] == 'group' ? "group_space.php?course=$course_code&group_id=$group_id" : "index.php?course=$course_code";
-$tool_content .=  action_bar(array(
+$tool_content .= action_bar(array(
       array('title' => $langAdminUsers,
-          'url' => "../user/?course=$course_code",
-          'icon' => 'fa-users',
-          'level' => 'primary-label'),
-      array(
-          'title' => $langBack,
-          'level' => 'primary-label',
-          'icon' => 'fa-reply',
-          'url' => $back_url,
-           )
-  ));
-
+            'url' => "../user/?course=$course_code",
+            'icon' => 'fa-users',
+            'level' => 'primary-label'),
+      array('title' => $langBack,
+            'level' => 'primary-label',
+            'icon' => 'fa-reply',
+            'url' => $back_url)));
 
 $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
