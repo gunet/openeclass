@@ -238,27 +238,14 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
 
 
 /**
- * @brief exercise teacher view
- * @global type $tool_content
- * @global type $course_code
- * @global type $langBack
- * @global type $langModify
- * @global type $langQuestion
- * @global type $picturePath
- * @global type $langAnswer
- * @global type $langComment
- * @global type $langQuestionScore
- * @global type $langYourTotalScore
- * @global type $langScore
- * @global type $langChoice
- * @global type $langCorrespondsTo
+ * @brief exercise teacher view*
  * @param type $exercise_id
  */
 function display_exercise($exercise_id) {
 
     global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore,
-           $langScore, $course_code, $langBack, $langModify;
+           $langScore, $course_code, $langBack, $langModify, $langFromRandomDifficultyQuestions;
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -302,8 +289,22 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "
-            <table class = 'table-default'>
+        $tool_content .= "<table class = 'table-default'>";
+        if (is_array($qid)) { // placeholder for random questions (if any)
+            foreach ($qid as $num_of_q => $d) {
+                $tool_content .= "<tr class='active'>
+                                <td colspan='$colspan'>
+                                    <strong><u>$langQuestion</u>: $i</strong>
+                                </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span style='color: red;'>$num_of_q $langFromRandomDifficultyQuestions " . $question->selectDifficultyLegend($d) . "</span>
+                                    </td>
+                                </tr>";
+            }
+        } else {
+            $tool_content .= "
             <tr class='active'>
               <td colspan='$colspan'>
                 <strong><u>$langQuestion</u>: $i</strong>
@@ -314,73 +315,74 @@ function display_exercise($exercise_id) {
             </tr>
             <tr>
               <td colspan='$colspan'>";
-        $tool_content .= "
+            $tool_content .= "
             <strong>" . q_math($questionName) . "</strong>
             <br>" . standard_text_escape($questionDescription) . "<br><br>
             </td></tr>";
 
-        if (file_exists($picturePath . '/quiz-' . $qid)) {
-            $tool_content .= "<tr><td class='text-center' colspan='$colspan'><img src='../../$picturePath/quiz-" . $qid . "'></td></tr>";
-        }
+            if (file_exists($picturePath . '/quiz-' . $qid)) {
+                $tool_content .= "<tr><td class='text-center' colspan='$colspan'><img src='../../$picturePath/quiz-" . $qid . "'></td></tr>";
+            }
 
-        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-            $tool_content .= "
+            if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+                $tool_content .= "
                 <tr>
                   <td colspan='2'><strong>$langAnswer</strong></td>
                   <td><strong>$langComment</strong></td>
                 </tr>";
-        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-            $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
-        } elseif ($answerType == MATCHING) {
-            $tool_content .= "
+            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+                $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
+            } elseif ($answerType == MATCHING) {
+                $tool_content .= "
                 <tr>
                   <td><strong>$langChoice</strong></td>
                   <td><strong>$langCorrespondsTo</strong></td>
                 </tr>";
-        }
+            }
 
-        if ($answerType != FREE_TEXT) {
-            $answer = new Answer($qid);
-            $nbrAnswers = $answer->selectNbrAnswers();
+            if ($answerType != FREE_TEXT) {
+                $answer = new Answer($qid);
+                $nbrAnswers = $answer->selectNbrAnswers();
 
-            for ($answer_id = 1; $answer_id <= $nbrAnswers; $answer_id++) {
-                $answerTitle = $answer->selectAnswer($answer_id);
-                $answerComment = standard_text_escape($answer->selectComment($answer_id));
-                $answerCorrect = $answer->isCorrect($answer_id);
-                $answerWeighting = $answer->selectWeighting($answer_id);
+                for ($answer_id = 1; $answer_id <= $nbrAnswers; $answer_id++) {
+                    $answerTitle = $answer->selectAnswer($answer_id);
+                    $answerComment = standard_text_escape($answer->selectComment($answer_id));
+                    $answerCorrect = $answer->isCorrect($answer_id);
+                    $answerWeighting = $answer->selectWeighting($answer_id);
 
-                if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
-                    list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
-                } else {
-                    $answerTitle = standard_text_escape($answerTitle);
-                }
+                    if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
+                        list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
+                    } else {
+                        $answerTitle = standard_text_escape($answerTitle);
+                    }
 
-                if ($answerType != MATCHING || $answerCorrect) {
-                    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                        $tool_content .= "<tr><td style='width: 70px;'><div align='center'>";
-                        if ($answerCorrect) {
-                            $icon_choice= "fa-check-square-o";
-                        } else {
-                            $icon_choice = "fa-square-o";
-                        }
-                        $tool_content .= icon($icon_choice)."</div>";
-                        $tool_content .= "</td><td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
+                    if ($answerType != MATCHING || $answerCorrect) {
+                        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+                            $tool_content .= "<tr><td style='width: 70px;'><div align='center'>";
+                            if ($answerCorrect) {
+                                $icon_choice = "fa-check-square-o";
+                            } else {
+                                $icon_choice = "fa-square-o";
+                            }
+                            $tool_content .= icon($icon_choice) . "</div>";
+                            $tool_content .= "</td><td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
                                                <td style='width: 250px;'>" . $answerComment . "</td>
                                         </tr>";
-                    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-                        $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong>
+                        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+                            $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong>
                                           </td></tr>";
-                    } else {
-                        $tool_content .= "<tr><td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>";
-                        $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>";
-                        $tool_content .= "</tr>";
+                        } else {
+                            $tool_content .= "<tr><td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>";
+                            $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>";
+                            $tool_content .= "</tr>";
+                        }
                     }
                 }
             }
+            $tool_content .= "<tr class='active'><th colspan='$colspan'>";
+            $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
+            $tool_content .= "</th></tr>";
         }
-        $tool_content .= "<tr class='active'><th colspan='$colspan'>";
-        $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
-        $tool_content .= "</th></tr>";
         $tool_content .= "</table>";
 
         unset($answer);

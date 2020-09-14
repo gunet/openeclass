@@ -304,18 +304,19 @@ $head_content .= "
 ";
 $tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
 
-// deletes a question from the exercise (not from the data base)
+// deletes a question from the exercise
 if (isset($_GET['deleteQuestion'])) {
     $deleteQuestion = $_GET['deleteQuestion'];
-    // construction of the Question object
     $objQuestionTmp = new Question();
-    // if the question exists
+    // if the question exists and it is not random
     if ($objQuestionTmp->read($deleteQuestion)) {
         $objQuestionTmp->delete($exerciseId);
         // if the question has been removed from the exercise
         if ($objExercise->removeFromList($deleteQuestion)) {
             $nbrQuestions--;
         }
+    } else { // random
+        $objQuestionTmp->removeRandomQuestionsFromList($deleteQuestion, $exerciseId);
     }
     redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }

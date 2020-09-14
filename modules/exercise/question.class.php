@@ -451,6 +451,18 @@ if (!class_exists('Question')) {
             }
         }
 
+
+        /**
+         * @brief delete random questions
+         * @param $id
+         * @param $exerciseId
+         */
+        function removeRandomQuestionsFromList($id, $exerciseId) {
+
+            Database::get()->query("DELETE FROM `exercise_with_questions` WHERE id = ?d AND exercise_id = ?d", $id, $exerciseId);
+
+        }
+
         /**
          * deletes a question from the database
          * the parameter tells if the question is removed from all exercises (value = 0),

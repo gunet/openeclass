@@ -351,7 +351,9 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     } else {
         // selects the list of question ID
-        $questionList = ($randomQuestions)? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
+        //$questionList = ($randomQuestions)? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
+        $questionList = ($randomQuestions)? $objExercise->selectRandomList() : $objExercise->selectQuestions();
+        //print_a($questionList);
     }
     // saves the question list into the session if there are questions
     if (count($questionList)) {

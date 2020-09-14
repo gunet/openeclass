@@ -287,8 +287,41 @@ if (!class_exists('Exercise')) {
          * @return - array - question ID list
          */
         function selectQuestionList() {
+
             return $this->questionList;
         }
+
+
+        /**
+         * returns the array with the question ID list
+         *
+         * @author - Olivier Brouckaert
+         * @return - array - question ID list
+         */
+        function selectQuestions() {
+
+            $q = array(); // temp array
+            foreach ($this->questionList as $id => $qid) {
+                if (is_array($qid)) { // check for random questions
+                    foreach($qid as $number => $difficulty) {
+                        $random_questions = $this->selectQuestionListWithDifficulty($number, $difficulty);
+                    }
+                    if (count($random_questions) > 0) { // found?
+                        $q = array_merge($q, $random_questions);
+                    }
+                } else {
+                    $q[] = $this->questionList[$id];
+                }
+            }
+            // make array start from 1
+            array_unshift($q, null);
+            unset($q[0]);
+
+            $this->questionList = $q; // new question List
+
+            return $this->questionList;
+        }
+
 
         /**
          * @brief checks if exercise has questions with random criteria
@@ -315,18 +348,15 @@ if (!class_exists('Exercise')) {
             global $course_id;
             $questions = array();
 
-            $result = Database::get()->queryArray("SELECT question_id, q_position
-                    FROM `exercise_with_questions`, `exercise_question`
-                    WHERE course_id = ?d 
-                        AND question_id = id 
-                        AND exercise_id = ?d
-                        AND difficulty = ?d
-                    ORDER BY q_position, question_id",
-                $course_id, $this->id, $difficulty);
+            $result = Database::get()->queryArray("SELECT id
+                            FROM `exercise_question`
+                                WHERE difficulty = ?d
+                                AND course_id = ?d",
+                         $difficulty, $course_id);
 
             if (count($result) > 0) { // if questions found
                 foreach ($result as $row) {
-                    $questions[] = $row->question_id;
+                    $questions[] = $row->id;
                 }
                 shuffle($questions);
                 $questions = array_slice($questions, 0, $number);
