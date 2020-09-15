@@ -2000,7 +2000,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-
     // upgrade queries for version 3.10
     if (version_compare($oldversion, '3.10', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.10'));
@@ -2008,7 +2007,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('exercise_with_questions', 'random_criteria')) {
             Database::get()->query("ALTER TABLE exercise_with_questions ADD `random_criteria` TEXT");
             Database::get()->query("ALTER TABLE exercise_with_questions DROP PRIMARY KEY");
-            Database::get()->query("ALTER TABLE exercise_with_questions ADD id NOT NULL PRIMARY KEY AUTO_INCREMENT FIRST");
+            Database::get()->query("ALTER TABLE exercise_with_questions ADD id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT FIRST");
         }
     }
 
