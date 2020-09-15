@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2020  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -93,12 +93,6 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTempSave($_POST['exerciseTempSave']);
         $objExercise->updateTimeConstraint($_POST['exerciseTimeConstraint']);
         $objExercise->updateAttemptsAllowed($_POST['exerciseAttemptsAllowed']);
-        // random questions
-        if (isset($_POST['questionDrawn']) and $_POST['questionDrawn'] > 0) {
-            $randomQuestions = intval($_POST['questionDrawn']);
-            $objExercise->setRandom($randomQuestions);
-        }
-
         $objExercise->updateResults($_POST['dispresults']);
         $objExercise->updateScore($_POST['dispscore']);
         $objExercise->updateAssignToSpecific($_POST['assign_to_specific']);
@@ -145,7 +139,6 @@ if (isset($_POST['submitExercise'])) {
     $exerciseTempSave = Session::has('exerciseTempSave') ? Session::get('exerciseTempSave') : $objExercise->selectTempSave();
     $exerciseTimeConstraint = Session::has('exerciseTimeConstraint') ? Session::get('exerciseTimeConstraint') : $objExercise->selectTimeConstraint();
     $exerciseAttemptsAllowed = Session::has('exerciseAttemptsAllowed') ? Session::get('exerciseAttemptsAllowed') : $objExercise->selectAttemptsAllowed();
-    $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
     $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
     $continueTimeLimit = Session::has('continueTimeLimit') ? Session::get('continueTimeLimit') : $objExercise->continueTimeLimit();
@@ -248,17 +241,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     }
                     $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                 }
-            });
-            $('.questionDrawnRadio').change(function() {
-                if($(this).val()==0) {
-                    $('#questionDrawnInput').val('');
-                    $('#questionDrawnInput').prop('disabled', true);
-                    $('#questionDrawnInput').closest('div.form-group').addClass('hidden');
-                } else {
-                    $('#questionDrawnInput').prop('disabled', false);
-                    $('#questionDrawnInput').closest('div.form-group').removeClass('hidden');                                                            
-                }
-            });                        
+            });                                    
             $('#exerciseAttemptsAllowed').blur(function(){
                 var attempts = $(this).val();
                 if (attempts ==0) {
@@ -412,32 +395,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
                    </div>
                  </div>";
-
-                if (!$objExercise->hasQuestionListWithRandomCriteria()) {
-                    $tool_content .= "<div class='form-group'>
-                         <label for='exerciseDescription' class='col-sm-2 control-label'>$langRandomQuestions:</label>
-                         <div class='col-sm-10'>
-                             <div class='radio'>
-                               <label>
-                                 <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='0' ".(($randomQuestions == 0)? 'checked' : '').">
-                                 $langDeactivate
-                               </label>
-                             </div>
-                             <div class='radio'>
-                               <label>
-                                 <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='1'".(($randomQuestions > 0)? ' checked' : '').">
-                                 $langActivate
-                               </label>
-                             </div>
-                         </div>
-                     </div>                 
-                     <div class='form-group ".(($randomQuestions > 0)? '' : 'hidden')."'>
-                        <div class='col-sm-offset-2 col-sm-10'>
-                            <span class='col-sm-2'><input type='text' class='form-control' name='questionDrawn' id='questionDrawnInput' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
-                            <span class='col-sm-8'>$langFromRandomQuestions</span>                                                                        
-                        </div>
-                    </div>";
-                }
 
                 $tool_content .= "<div class='form-group'>
                      <label for='dispresults' class='col-sm-2 control-label'>$langAnswers:</label>

@@ -634,8 +634,8 @@ if (!class_exists('Exercise')) {
                     (course_id, title, description, type, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit)
-                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
+                     assign_to_specific, continue_time_limit)                    
+                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
                     $course_id, $exercise, $description, $type, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
                     $random, $active, $results, $score, $ip_lock, $password_lock,

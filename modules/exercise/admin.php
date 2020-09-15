@@ -60,6 +60,7 @@ if (isset($_GET['exerciseId'])) {
     $exerciseId = intval($_GET['exerciseId']);
     $objExercise->read($exerciseId);
     $nbrQuestions = $objExercise->selectNbrQuestions();
+    $randomQuestions = $objExercise->isRandom();
 }
 
 // initializes the Question object
