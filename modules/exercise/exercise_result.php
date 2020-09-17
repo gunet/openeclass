@@ -67,14 +67,15 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 WHERE eurid = ?d",
                 ATTEMPT_COMPLETED, $eurid, $eurid);
         } else {
-            // else increment total by just this grade
+            // if ungraded questions still exist, just update the grade sum
             Database::get()->query("UPDATE exercise_user_record
-                SET total_score = total_score + ?f WHERE eurid = ?d",
-                $grade, $eurid);
+                SET total_score = (SELECT SUM(weight) FROM exercise_answer_record
+                                        WHERE eurid = ?d AND weight IS NOT NULL)",
+                $eurid);
         }
         $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting
                              FROM exercise_user_record WHERE eurid = ?d", $eurid);
-            // update gradebook
+        // update gradebook
         update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
         triggerGame($course_id, $uid, $data->eid);
         triggerExerciseAnalytics($course_id, $uid, $data->eid);
@@ -241,7 +242,7 @@ $tool_content .= "
   </div>";
 
 
-if ($is_editor and $exercise_user_record->attempt_status == ATTEMPT_COMPLETED and isset($_POST['regrade'])) {
+if ($is_editor and in_array($exercise_user_record->attempt_status, [ATTEMPT_COMPLETED, ATTEMPT_PENDING]) and isset($_POST['regrade'])) {
     $regrade = true;
 } else {
     $regrade = false;
