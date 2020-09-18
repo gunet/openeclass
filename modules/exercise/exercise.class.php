@@ -86,7 +86,7 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * reads exercise information    from the data base
+         * read exercise information from database
          *
          * @author - Olivier Brouckaert
          * @param - integer $id - exercise ID
@@ -120,10 +120,10 @@ if (!class_exists('Exercise')) {
                 $this->assign_to_specific = $object->assign_to_specific;
                 $this->continueTimeLimit = $object->continue_time_limit;
 
-                $result = Database::get()->queryArray("SELECT question_id, q_position, random_criteria
-                    FROM `exercise_with_questions`
-                    WHERE exercise_id = ?d
-                    ORDER BY q_position, question_id", $id);
+(??)                $result = Database::get()->queryArray("SELECT question_id, q_position
+(??)                    FROM `exercise_with_questions`, `exercise_question`
+(??)                    WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
+(??)                    ORDER BY q_position, question_id", $course_id, $id);
 
                 // fills the array with the question ID for this exercise
                 $k = 1;
