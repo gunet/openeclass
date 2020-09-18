@@ -2009,6 +2009,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE exercise_with_questions DROP PRIMARY KEY");
             Database::get()->query("ALTER TABLE exercise_with_questions ADD id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT FIRST");
         }
+        if (!DBHelper::fieldExists('exercise', 'shuffle')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `shuffle` SMALLINT NOT NULL DEFAULT '0' AFTER `random`");
+        }
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!

@@ -123,7 +123,7 @@ if (isset($_REQUEST['exerciseId'])) {
 }
 
 // If the exercise is assigned to specific users / groups
-if ($objExercise->assign_to_specific and !$is_editor) {
+if ($objExercise->selectAssignToSpecific() and !$is_editor) {
     $assignees = Database::get()->queryArray('SELECT user_id, group_id
         FROM exercise_to_specific WHERE exercise_id = ?d', $exerciseId);
     $accessible = false;
@@ -351,7 +351,6 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     } else {
         // selects the list of question ID
-        //$questionList = ($randomQuestions)? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
         $questionList = ($randomQuestions)? $objExercise->selectRandomList() : $objExercise->selectQuestions();
         //print_a($questionList);
     }

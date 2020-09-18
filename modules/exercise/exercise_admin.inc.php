@@ -594,118 +594,98 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             $disp_score_message = $langScoreDispEndDate;
             break;
     }
-    $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
-    $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
-    $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
+    switch ($exerciseAssignToSpecific) {
+        case 1: $assign_to_users_message = $m['WorkToUser'];
+            break;
+        case 2: $assign_to_users_message = $m['WorkToGroup'];
+            break;
+    }
+    $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise;
     $moduleTag = new ModuleElement($exerciseId);
     $tool_content .= action_bar(array(
+        array('title' => $langModify,
+            'url' => "$_SERVER[SCRIPT_NAME]?$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
+            'icon' => 'fa-edit',
+            'level' => 'primary-label',
+            'button-class' => 'btn btn-success'),
         array('title' => $langBack,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label'
         )
     ));
+    if (!empty($exerciseDescription)) {
+        $tool_content .= "
+                <div class='row margin-bottom-fat'>                
+                    <div class='col-sm-12'>
+                        <span class='help-block'>" . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "</span>
+                    </div>
+                </div>";
+    }
+
+    //$tool_content .= "<div class='panel panel-primary'>";
+    //$tool_content .= "<div class='panel-body'>";
+    $tool_content .= "<div class='alert alert-info'>";
     $tool_content .= "
-    <div class='panel panel-primary'>
-        <div class='panel-heading'>
-            <h3 class='panel-title'>$langInfoExercise &nbsp;". icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes") ."</h3>
-        </div>
-        <div class='panel-body'>
             <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseName:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . q($exerciseTitle) . "
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseDescription:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseType:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseType
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langStart:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseStartDate
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langFinish:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseEndDate
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langTemporarySave:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseTempSave
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseConstrain:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseTimeConstraint $langExerciseConstrainUnit
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseAttemptsAllowed:</strong>
-                </div>
-                <div class='col-sm-9'>" .
-                    ($exerciseAttemptsAllowed?
-                     "$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit" :
-                     $langExerciseAttemptsUnlimited) . "
-                </div>
-            </div>            
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langAnswers:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $disp_results_message
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langScore:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $disp_score_message
+                <div class='col-sm-12'>
+                    $langType: <em><strong>$exerciseType</strong></em>
                 </div>
             </div>";
-        $tags_list = $moduleTag->showTags();
-        if ($tags_list) {
-            $tool_content .= "<div class='row margin-bottom-fat'>
-                                <div class='col-sm-3'>
-                                    <strong>$langTags:</strong>
-                                </div>
-                                <div class='col-sm-9'>
-                                    $tags_list
-                                </div>
-                              </div>";
-        }
 
-    $tool_content .= "
-        </div>
-    </div>";
+    $tool_content .= "<div class='row margin-bottom-fat'>                
+                    <div class='col-sm-12'>";
+    if (isset($exerciseStartDate)) {
+        $tool_content .= "<span style='color: green; padding-right: 30px;'>$langStart: <em>$exerciseStartDate</em></span>";
+    }
+    if (isset($exerciseEndDate) && !empty($exerciseEndDate)) {
+        $tool_content .= "<span style='color: red;'>$langFinish: <em>$exerciseEndDate</em></span>";
+    }
+    $tool_content .= "</div></div>";
+
+    $tool_content .= "<div class='row margin-bottom-fat'>                
+                    <div class='col-sm-12'>";
+    if ($exerciseTempSave == 1) {
+        $tool_content .= "<span style='padding-right: 30px';>$langTemporarySave: <em><strong>$langYes</strong></em></span>";
+    }
+    if ($exerciseTimeConstraint > 0) {
+        $tool_content .= "<span style='padding-right: 30px';>$langDuration: <em><strong>$exerciseTimeConstraint</strong> $langExerciseConstrainUnit</em></span>";
+    }
+    if ($exerciseAttemptsAllowed > 0) {
+        $tool_content .= "$langExerciseAttemptsAllowed: <em><strong>$exerciseAttemptsAllowed</strong> $langExerciseAttemptsAllowedUnit</em>";
+    }
+    $tool_content .= "</div></div>";
+
+    $tool_content .= "<div class='row margin-bottom-fat'>
+                    <div class='col-sm-12'>
+                        $langAnswers: <em><strong>$disp_results_message</strong></em>
+                    </div>
+                </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-12'>
+                    $langScore: <em><strong>$disp_score_message</strong></em>
+                </div>
+            </div>";
+
+    if ($exerciseAssignToSpecific > 0) {
+        $tool_content .= "<div class='row margin-bottom-fat'>
+                        <div class='col-sm-12'>
+                         $m[WorkAssignTo]: <strong>$assign_to_users_message</strong>
+                    </div></div>";
+    }
+
+    $tags_list = $moduleTag->showTags();
+    if ($tags_list) {
+        $tool_content .= "<div class='row margin-bottom-fat'>
+                            <div class='col-sm-3'>
+                                <strong>$langTags:</strong>
+                            </div>
+                            <div class='col-sm-9'>
+                                $tags_list
+                            </div>
+                          </div>";
+    }
+    $tool_content .= "</div>";
+    //$tool_content .= "</div>";
+    //$tool_content .= "</div>";
 }
