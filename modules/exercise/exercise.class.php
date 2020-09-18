@@ -125,10 +125,10 @@ if (!class_exists('Exercise')) {
                 $this->assign_to_specific = $object->assign_to_specific;
                 $this->continueTimeLimit = $object->continue_time_limit;
 
-                $result = Database::get()->queryArray("SELECT question_id, q_position
-                    FROM `exercise_with_questions`, `exercise_question`
-                    WHERE course_id = ?d AND question_id = exercise_question.id AND exercise_id = ?d
-                    ORDER BY q_position, question_id", $course_id, $id);
+                $result = Database::get()->queryArray("SELECT question_id, q_position, random_criteria
+                    FROM `exercise_with_questions`
+                    WHERE exercise_id = ?d
+                    ORDER BY q_position, question_id", $id);
 
                 // fills the array with the question ID for this exercise
                 $k = 1;
@@ -140,7 +140,6 @@ if (!class_exists('Exercise')) {
                     }
                     $k++;
                 }
-
                 // find the total weighting of an exercise
                 $this->totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
                                                 FROM exercise_question, exercise_with_questions
