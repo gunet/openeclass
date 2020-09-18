@@ -120,10 +120,10 @@ if (!class_exists('Exercise')) {
                 $this->assign_to_specific = $object->assign_to_specific;
                 $this->continueTimeLimit = $object->continue_time_limit;
 
-(??)                $result = Database::get()->queryArray("SELECT question_id, q_position
-(??)                    FROM `exercise_with_questions`, `exercise_question`
-(??)                    WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
-(??)                    ORDER BY q_position, question_id", $course_id, $id);
+                $result = Database::get()->queryArray("SELECT question_id, q_position
+                    FROM `exercise_with_questions`, `exercise_question`
+                    WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
+                    ORDER BY q_position, question_id", $course_id, $id);
 
                 // fills the array with the question ID for this exercise
                 $k = 1;
@@ -328,7 +328,7 @@ if (!class_exists('Exercise')) {
          * @return bool
          */
         function hasQuestionListWithRandomCriteria() {
-            $result = Database::get()->queryArray("SELECT random_criteria FROM exercise_with_questions 
+            $result = Database::get()->queryArray("SELECT random_criteria FROM exercise_with_questions
                                             WHERE exercise_id = ?d", $this->id);
             foreach ($result as $data) {
                 if (!is_null($data->random_criteria)) {
@@ -634,7 +634,7 @@ if (!class_exists('Exercise')) {
                     (course_id, title, description, type, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit)                    
+                     assign_to_specific, continue_time_limit)
                     VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
                     $course_id, $exercise, $description, $type, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
