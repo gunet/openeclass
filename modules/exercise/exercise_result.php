@@ -70,8 +70,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             // if ungraded questions still exist, just update the grade sum
             Database::get()->query("UPDATE exercise_user_record
                 SET total_score = (SELECT SUM(weight) FROM exercise_answer_record
-                                        WHERE eurid = ?d AND weight IS NOT NULL)",
-                $eurid);
+                                        WHERE eurid = ?d AND weight IS NOT NULL)
+                WHERE eurid = ?d",
+                $eurid, $eurid);
         }
         $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting
                              FROM exercise_user_record WHERE eurid = ?d", $eurid);

@@ -122,7 +122,7 @@ if (!class_exists('Exercise')) {
 
                 $result = Database::get()->queryArray("SELECT question_id, q_position
                     FROM `exercise_with_questions`, `exercise_question`
-                    WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
+                    WHERE course_id = ?d AND question_id = exercise_question.id AND exercise_id = ?d
                     ORDER BY q_position, question_id", $course_id, $id);
 
                 // fills the array with the question ID for this exercise
