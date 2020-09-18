@@ -62,15 +62,15 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             // recalculate sum of grades
             Database::get()->query("UPDATE exercise_user_record
                 SET attempt_status = ?d,
-                    total_score = (SELECT SUM(weight) FROM exercise_answer_record
-                                        WHERE eurid = ?d)
+                    total_score = GREATEST(0, (SELECT SUM(weight) FROM exercise_answer_record
+                                        WHERE eurid = ?d))
                 WHERE eurid = ?d",
                 ATTEMPT_COMPLETED, $eurid, $eurid);
         } else {
             // if ungraded questions still exist, just update the grade sum
             Database::get()->query("UPDATE exercise_user_record
-                SET total_score = (SELECT SUM(weight) FROM exercise_answer_record
-                                        WHERE eurid = ?d AND weight IS NOT NULL)
+                SET total_score = GREATEST(0, (SELECT SUM(weight) FROM exercise_answer_record
+                                        WHERE eurid = ?d AND weight IS NOT NULL))
                 WHERE eurid = ?d",
                 $eurid, $eurid);
         }
@@ -545,6 +545,10 @@ if (count($exercise_question_ids) > 0) {
     } // end foreach()
 } else {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+}
+
+if ($totalScore < 0) {
+    $totalScore = 0;
 }
 
 if ($regrade) {
