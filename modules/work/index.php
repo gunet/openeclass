@@ -83,17 +83,17 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
     } elseif (($_POST['assign_type']) or ($_POST['assign_g_type'] == 2)) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` 
-                                                        WHERE course_id = ?d 
-                                                        AND visible = 1 
+        $data = Database::get()->queryArray("SELECT name,id FROM `group`
+                                                        WHERE course_id = ?d
+                                                        AND visible = 1
                                                       ORDER BY name", $course_id);
     } else {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id
-                                AND course_user.course_id = ?d 
+                                AND course_user.course_id = ?d
                                 AND course_user.status = " . USER_STUDENT . "
-                                AND user.id 
+                                AND user.id
                                 ORDER BY surname", $course_id);
 
     }
@@ -2915,7 +2915,7 @@ function show_edit_assignment($id) {
                                    FROM assignment_to_specific, `group`
                                     WHERE course_id = ?d
                                     AND `group`.id = assignment_to_specific.group_id
-                                    AND `group`.visible = 1 
+                                    AND `group`.visible = 1
                                     AND assignment_to_specific.assignment_id = ?d", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -3042,7 +3042,7 @@ function show_edit_assignment($id) {
                         <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
                     </div>
                 </div>
-                
+
                 <div class='container-fluid form-group " . ($assignment_type == 0 ? " hidden" : "") . "' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
                     <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
                     <div class='form-group $lti_hidden'>
@@ -5842,7 +5842,7 @@ function submit_grades($grades_id, $grades, $email = false) {
 function send_file($id, $file_type) {
     global $uid, $is_editor;
 
-    if (is_module_disable(MODULE_ID_ASSIGN)) {
+    if (!$is_editor and is_module_disable(MODULE_ID_ASSIGN)) {
         return false;
     }
 
@@ -5855,11 +5855,8 @@ function send_file($id, $file_type) {
     if (isset($file_type)) {
         if ($file_type == 1) {
             $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-            // don't show file if: assignment nonexistent of assignment not active
-            if (!$info) {
-                return false;
-            }
-            if (!($info->active)) {
+            // don't show file if assignment nonexistent or not active and user is student
+            if (!$info or !($is_editor or $info->active)) {
                 return false;
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, $disposition, true);
