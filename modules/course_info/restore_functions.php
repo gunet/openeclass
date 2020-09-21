@@ -52,7 +52,29 @@ function unpack_zip_inner($zipfile, $clone) {
         Session::Messages($langGeneralError, 'alert-danger');
         redirect_to_home_page('modules/course_info/restore_course.php');
     }
+    // see if any files use backslash as directory separator
+    $filesToMove = [];
+    for ($i = 0; $i < $zip->numFiles; $i++) {
+        $filename = $zip->getNameIndex($i);
+        if (strpos($filename, '\\') !== false) {
+            $filesToMove[] = $filename;
+        }
+    }
     $zip->close();
+
+    foreach ($filesToMove as $filename) {
+        $filename = $destdir . '/' . $filename;
+        $newname = str_replace('\\', '/', $filename);
+        $parentdir = my_dirname($newname);
+        if (!is_dir($parentdir)) {
+            mkdir($parentdir, 0700, true);
+        }
+        if (!is_dir($filename)) {
+            rename($filename, $newname);
+        } else {
+            rmdir($filename);
+        }
+    }
 
     $retArr = array();
     foreach (find_backup_folders($destdir) as $folder) {
