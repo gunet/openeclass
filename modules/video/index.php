@@ -885,6 +885,9 @@ function showlinksofcategory($cat_id = 0) {
                 }
                 $row_class = !$myrow->visible ? "class='not_visible'" : "";
                 $tool_content .= "<tr $row_class><td class='nocategory-link'>" . $link_href;
+                if ($display_tools and !$myrow->public) {
+                    $tool_content .= '&nbsp;' . icon('fa-lock', $langNonPublicFile);
+                }
                 if (!$is_in_tinymce and ( !empty($myrow->creator) or ! empty($myrow->publisher))) {
                     $tool_content .= '<br><small>';
                     if ($myrow->creator == $myrow->publisher) {
