@@ -386,6 +386,30 @@ function display_group($gid) {
         return false;
     }
 }
+
+/**
+ * @brief get registered users to course (except teachers)
+ * @param $cid
+ * @return array
+ */
+function get_course_users($cid) {
+
+    $users = array();
+
+    $q = Database::get()->queryArray("SELECT user_id FROM course_user WHERE
+                                                        course_id = ?d AND 
+                                                        status = " . USER_STUDENT . " AND
+                                                        tutor = 0 AND 
+                                                        editor = 0 AND 
+                                                        reviewer = 0", $cid);
+    if (count($q) > 0) {
+        foreach ($q as $data) {
+            $users[] = $data->user_id;
+        }
+    }
+    return $users;
+}
+
 /**
  * @brief Return the URL for a user profile image
  * @param int $uid user id

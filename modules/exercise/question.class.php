@@ -26,15 +26,15 @@ if (!class_exists('Question')) {
      */
     class Question {
 
-        var $id;
-        var $question;
-        var $description;
-        var $weighting;
-        var $position;
-        var $type;
-        var $difficulty;
-        var $category;
-        var $exerciseList;  // array with the list of exercises which this question is in
+        private $id;
+        private $question;
+        private $description;
+        private $weighting;
+        private $position;
+        private $type;
+        private $difficulty;
+        private $category;
+        private $exerciseList;  // array with the list of exercises which this question is in
 
         /**
          * constructor of the class
