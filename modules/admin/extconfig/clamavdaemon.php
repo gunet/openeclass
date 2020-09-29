@@ -27,6 +27,9 @@ class clamavdaemon extends AntivirusApp implements AntivirusConnector {
 
         $filelocation =  escapeshellcmd(preg_replace('/[^A-Za-z0-9-.\/]/', '', $input));
 
+        $host = get_config('clamd_host');
+        $port = get_config('clamd_port');
+
         if (!$host || !$port){
             $output = new AntivirusConnectorResult();
             $output->status = $output::STATUS_NOTCHECKED;
