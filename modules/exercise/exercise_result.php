@@ -582,7 +582,7 @@ if ($regrade) {
 
 $totalScore = round($totalScore, 2);
 $totalWeighting = round($totalWeighting, 2);
-$oldScore = round($exercise_user_record->total_score);
+$oldScore = round($exercise_user_record->total_score, 2);
 $oldWeighting = round($exercise_user_record->total_weighting, 2);
 if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting)) {
     if ($checking) {

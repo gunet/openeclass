@@ -46,7 +46,7 @@ if ($q) {
     $active = $q->active;
     $unlock_interval = $q->unlock_interval;
     $external_users = $q->external_users;
-    $r_group = explode(",",$external_users);    
+    $r_group = explode(",",$external_users);
 } else {
     redirect_to_home_page();
     exit;
