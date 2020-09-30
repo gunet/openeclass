@@ -568,7 +568,11 @@ if ($regrade) {
     }
 }
 
-if ($is_editor and ($totalScore != $exercise_user_record->total_score or $totalWeighting != $exercise_user_record->total_weighting)) {
+$totalScore = round($totalScore, 2);
+$totalWeighting = round($totalWeighting, 2);
+$oldScore = round($exercise_user_record->total_score);
+$oldWeighting = round($exercise_user_record->total_weighting, 2);
+if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting)) {
     if ($checking) {
         echo json_encode(['result' => 'regrade', 'eurid' => $eurid,
             'title' => "$user->surname $user->givenname (" .
