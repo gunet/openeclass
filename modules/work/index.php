@@ -1178,7 +1178,8 @@ function submit_work($id, $on_behalf_of = null) {
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
            $langAutoJudgeInvalidFileType, $langExerciseNotPermit,
-           $langAutoJudgeScenariosPassed, $is_editor, $autojudge;
+           $langAutoJudgeScenariosPassed, $is_editor, $autojudge, $langEmptyFaculte;
+
 
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
@@ -1319,6 +1320,11 @@ function submit_work($id, $on_behalf_of = null) {
 
         $submit_ip = Log::get_client_ip();
         $submission_text = isset($_POST['submission_text']) ? purify($_POST['submission_text']) : NULL;
+        if (empty($submission_text)) {
+            Session::Messages($langEmptyFaculte, 'alert-warning');
+            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+        }
+
         $grade_comments = $grade_ip = '';
         $grade = null;
         if (isset($on_behalf_of)) {
@@ -4118,7 +4124,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     $notice = $submissions_exist > 1? $langNotice3Multiple: $langNotice3;
     $notice = ($submissions_exist)?
     "<div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div>": '';
-    if ($assignment->grading_type == 1) {
+    if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);
         $scale_options = "<option value> - </option>";
@@ -5918,11 +5924,14 @@ function download_assignments($id) {
         $secret = work_secret($id);
         $filename = "{$course_code}_work_$id.zip";
         $filepath = "$webDir/courses/temp/$filename";
+        $temp_online_text_path = $workPath . "/t";
         chdir($workPath);
         create_zip_index("$secret/index.html", $id);
         if ($sub_type == 1) { // free text assignment
             $zip = new ZipArchive();
             $zip->open($filepath, ZipArchive::CREATE);
+            mkdir($temp_online_text_path);
+            chdir($temp_online_text_path);
             $sql = Database::get()->queryArray("SELECT uid, submission_text FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($sql as $data) {
                 $onlinetext = new \Mpdf\Mpdf([
@@ -5941,7 +5950,7 @@ function download_assignments($id) {
                 $onlinetext->Output($pdfname, 'F');
                 $zip->addFile($pdfname);
             }
-            $zip->addFile("$secret/index.html", "index.html");
+            $zip->addFile($workPath . "/" . $secret . "/index.html", "index.html");
         } else { // 'normal' assignment
             $zip = new ZipArchive();
             $zip->open($filepath, ZipArchive::CREATE);
@@ -5961,6 +5970,9 @@ function download_assignments($id) {
             header("Content-Length: " . filesize($filepath));
             stop_output_buffering();
             readfile($filepath);
+        }
+        if (file_exists($temp_online_text_path)) {
+            removeDir($temp_online_text_path);
         }
         if (file_exists($filepath)) {
             unlink($filepath);
