@@ -33,10 +33,10 @@ function create_webconf_jnlp_file($meeting_id)
     if (!file_exists("$webDir/courses/$course_code/rooms/")) {
         make_dir("$webDir/courses/$course_code/rooms/");
     }
-
+       
     $jnlp_file = $webDir.'/courses/'.$course_code.'/rooms/'.$meeting_id.'.jnlp';
     $jar_file = $urlServer.'modules/tc/webconf/screenshare.jar';
-
+    
     $file = fopen($jnlp_file,"w");    
     fwrite($file,
                 "<?xml version='1.0' encoding='utf-8'?>

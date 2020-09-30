@@ -229,7 +229,7 @@ elseif(isset($_POST['update_bbb_session'])) {
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    if (isset($_POST['external_users'])) {
+    if (isset($_POST['external_users']) && is_array($_POST['external_users'])) {
         $ext_users = implode(',', $_POST['external_users']);
     } else {
         $ext_users = null;
@@ -257,13 +257,17 @@ elseif(isset($_GET['choice']))
             break;
         case 'do_join':
             //get info
-            $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
+            $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s", $_GET['meeting_id']);
             $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
             if ($tc_type == 'bbb') { // if tc server is `bbb`
                 $mod_pw = $sess->mod_pw;
-                $record = ($serv->enable_recordings == 'true')? $sess->record: 'false';
+                $record = $sess->record;
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
-                    create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
+                    $title_meeting = "${_GET['title']} - $course_code";
+                    if (!empty($public_code)) {
+                        $title_meeting = "${_GET['title']} - $public_code";
+                    }
+                    create_bbb_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
                 }
                 if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
@@ -300,7 +304,7 @@ elseif(isset($_GET['choice']))
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');
-    if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate'])) {
+    if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate']) and !empty($_POST['BBBEndDate'])) {
         $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
         $end = $endDate_obj->format('Y-m-d H:i:s');
     } else {
@@ -316,11 +320,16 @@ elseif(isset($_GET['choice']))
     if (isset($_POST['addAnnouncement']) and $_POST['addAnnouncement']) {
         $addAnnouncement = 1;
     }
-    $record = 'true';
+    $record = 'false';
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], implode(',', $_POST['external_users']), $record, $_POST['sessionUsers'], false);
+    if (isset($_POST['external_users']) && is_array($_POST['external_users'])) {
+        $external_users = implode(',', $_POST['external_users']);
+    } else {
+        $external_users = NULL;
+    }
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $_POST['sessionUsers'], false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
