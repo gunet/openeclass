@@ -840,7 +840,7 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
         $participants = get_tc_participants($meeting_id);
         // check if course uses a specific server
         $q = Database::get()->querySingle("SELECT external_server FROM course_external_server WHERE course_id = ?d", $course_id);
-        if ($q) { 
+        if ($q) {
             $run_to = $q->external_server;
             if (in_array($run_to, $servers)) { // check if server is enabled
 
