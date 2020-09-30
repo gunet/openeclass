@@ -152,6 +152,11 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                             }
                         }
                     });
+                    if ($('*').hasClass('questionGradeBox')) {
+                        $('a#submitButton').show();
+                    } else {
+                        $('a#submitButton').hide();    
+                    }                    
                     $('a#submitButton').click(function(e){
                         e.preventDefault();
                         var success = true;
@@ -607,7 +612,7 @@ if ($checking) {
 
 $tool_content .= "
   <div class='text-center'>";
-    if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
+    if ($is_editor) {
         $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a>&nbsp;";
     }
     if (isset($_REQUEST['unit'])) {
