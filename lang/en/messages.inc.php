@@ -4369,8 +4369,8 @@ $langGroupNowNotMember = "You unregistered from this group successfully.";
 $langAdminLoginPage = "Admin login";
 $langLoginVia = "Login via";
 $langPassResetIntro2 = "If this was not you, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
-$langPollParticipantInfo = 'Enter a valid email address. 
-            After poll completion, an email will be sent with a confirmation link. 
+$langPollParticipantInfo = 'Enter a valid email address.
+            After poll completion, an email will be sent with a confirmation link.
             You must click in it, otherwise your answers will not be taken into account.';
 $langPollParticipateConfirm = "Click on the following link to confirm your poll participation";
 $langPollParticipationValid = "Your answers were registered with success.";
@@ -5309,7 +5309,6 @@ $langNumInForumTopic = "Number of posts in forum topics";
 $langAttemptPausedS = "temporarily saved";
 $langHasAnswered = "has answered";
 $langPendingAnswered = "pending answer";
-(??)
 $langCheckAccess = "Access Control";
 $langIncorrect = "Wrong";
 $langCorrectS = "correct";
