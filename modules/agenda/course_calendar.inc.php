@@ -79,11 +79,13 @@ require_once 'include/lib/references.class.php';
      * @return array of user events with details
      */
     function get_calendar_events($scope = "month", $agenda_events_only = true, $startdate = null, $enddate = null, $cid = NULL){
-        global $uid, $is_admin;
+
         global $course_id;
+
         if(is_null($cid)){
             $cid = $course_id;
         }
+
         //form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
@@ -713,6 +715,7 @@ require_once 'include/lib/references.class.php';
      * @return array of user events with details
      */
     function get_course_events($scope = "month", $startdate = null, $enddate = null){
+
 
         global $course_id, $is_editor;
         //form date range condition
