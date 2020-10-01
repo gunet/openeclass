@@ -169,7 +169,7 @@ class Calendar_Events {
      * @return array of user events with details
      */
     public static function get_calendar_events($scope = "month", $startdate = null, $enddate = null, $user_id = NULL) {
-        global $uid, $is_admin;
+        global $uid;
 
         if (is_null($user_id)) {
             $user_id = $uid;
@@ -194,8 +194,10 @@ class Calendar_Events {
             WHERE group_id = `group`.id AND user_id = ?d', $uid));
         if (count($student_groups)) {
             $group_sql_template = 'OR group_id IN (' . implode(', ', array_fill(0, count($student_groups), '?d')) . ')';
+            $group_sql_template2 = 'AND group_id IN (' . implode(', ', array_fill(0, count($student_groups), '?d')) . ')';
         } else {
             $group_sql_template = '';
+            $group_sql_template2 = '';
         }
         //retrieve events from various tables according to user preferences on what type of events to show
         $q = '';
@@ -270,12 +272,20 @@ class Calendar_Events {
                 if (!empty($q)) {
                     $q .= " UNION ";
                 }
+
                 $dc = str_replace('start', 'ass.deadline', $datecond);
                 $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline, '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                         . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
-                        . "WHERE cu.user_id = ?d AND (assign_to_specific = 0 OR ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
-                        . $dc;
-                $q_args = array_merge($q_args, array($user_id), $q_args_templ);
+                        . "WHERE cu.user_id = ?d " . $dc
+                        . "AND (assign_to_specific = 0 OR
+                            ass.id IN
+                            (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                                UNION
+                            SELECT assignment_id FROM assignment_to_specific
+                               WHERE group_id != 0 $group_sql_template2)
+                                OR cu.status = 1) "
+                        . "AND ass.active = 1";
+                $q_args = array_merge($q_args, $q_args_templ, array($user_id), $student_groups);
 
                 // exercises
                 if (!empty($q)) {
@@ -689,8 +699,10 @@ class Calendar_Events {
             WHERE group_id = `group`.id AND course_id = ?d AND user_id = ?d', $course_id, $uid));
         if (count($student_groups)) {
             $group_sql_template = 'OR group_id IN (' . implode(', ', array_fill(0, count($student_groups), '?d')) . ')';
+            $group_sql_template2 = 'AND group_id IN (' . implode(', ', array_fill(0, count($student_groups), '?d')) . ')';
         } else {
             $group_sql_template = '';
+            $group_sql_template2 = '';
         }
         // retrieve events from various tables according to user preferences on what type of events to show
         $q = '';
@@ -736,9 +748,14 @@ class Calendar_Events {
                 . "FROM assignment ass JOIN course c ON ass.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
                 . "WHERE ass.course_id =?d AND ass.active = 1 "
                 . $dc .
-                "AND (assign_to_specific = '0' OR ass_sp.user_id = ?d) "
-                ;
-        $q_args = array_merge($q_args, $q_args_templ, array($uid));
+                "AND (assign_to_specific = 0 OR
+                    ass.id IN
+                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                            UNION
+                        SELECT assignment_id FROM assignment_to_specific
+                           WHERE group_id != 0 $group_sql_template2)
+                    )";
+        $q_args = array_merge($q_args, $q_args_templ, array($uid), $student_groups);
 
         // exercises
         if (!empty($q)) {
