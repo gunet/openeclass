@@ -42,7 +42,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
     $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
 
-    $questionId = $objQuestionTmp->id;
+    $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
     $answerType = $objQuestionTmp->selectType();
 
