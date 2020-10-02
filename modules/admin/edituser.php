@@ -117,7 +117,7 @@ if ($u) {
         }
         $data['menuTypeID'] = 3;
         view('admin.users.edituserauth', $data);
-        exit();    
+        exit();
     }
     if (!$u_submitted) { // if the form was not submitted
         // Display Actions Toolbar
@@ -129,7 +129,7 @@ if ($u) {
                 'level' => 'primary-label',
                 'show' => ($u != 1 and get_admin_rights($u) < 0)),
             array('title' => $langChangePass,
-                'url' => "password.php?userid=$u",
+                'url' => "password.php?userid=$ind_u",
                 'icon' => 'fa-key',
                 'level' => 'primary-label',
                 'show' => !(in_array($info->password, $auth_ids))),
@@ -188,15 +188,15 @@ if ($u) {
 
         // Show HybridAuth provider data
         $data['ext_uid'] = Database::get()->queryArray('SELECT * FROM user_ext_uid WHERE user_id = ?d', $u);
-        
+
         $data['sql'] = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status
-                            FROM course AS a                            
+                            FROM course AS a
                             LEFT JOIN course_user AS b ON a.id = b.course_id
                             WHERE b.user_id = ?s ORDER BY b.status", $u);
         $data['auth_ids'] = $auth_ids;
         $data['menuTypeID'] = 3;
         view('admin.users.edituser', $data);
-        exit();            
+        exit();
     } else { // if the form was submitted then update user
 
         // get the variables from the form and initialize them
@@ -301,5 +301,3 @@ if ($u) {
 } else {
     redirect_to_home_page('modules/admin/listusers.php?search=yes');
 }
-
-
