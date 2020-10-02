@@ -178,7 +178,7 @@ if (isset($_POST['submit'])) {
             if ($course_id != 0 || isset($_POST['course'])) {// message in course context
                 $list_of_recipients = array();
                 $c = course_id_to_title($cid);
-                $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
+                $subject_dropbox = "$c (".course_id_to_public_code($cid).") - $langNewDropboxFile";
                 foreach ($recipients as $userid) {
                     $emailaddr = uid_to_email($userid);
                     if (get_user_email_notification($userid, $cid) and valid_email($emailaddr)) {
@@ -230,7 +230,6 @@ if (isset($_POST['submit'])) {
                     </div>";
 
                 $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
-
                 $plain_body_dropbox_message = html2text($body_dropbox_message);
                 if (valid_email($_SESSION['email'])) {
                     while (count($list_of_recipients) > 30) {
