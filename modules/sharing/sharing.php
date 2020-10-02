@@ -26,7 +26,7 @@
  * @return string html list with social sharing icons
  */
 function print_sharing_links ($url, $text) {
-    global $langShare, $themeimg, $head_content, $urlServer;
+    global $head_content, $urlServer;
     
     $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/sharing/style.css">';
     
@@ -39,9 +39,6 @@ function print_sharing_links ($url, $text) {
     //twitter
     $sharer = "https://twitter.com/intent/tweet?url=".rawurlencode($url)."&text=".rawurlencode($text);
     $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-twitter-square fa-2x'></i></a></li>";
-    //google+
-    $sharer = "https://plus.google.com/share?url=".rawurlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-google-plus-square fa-2x'></i></a></li>";
     //linkedin
     $sharer = "http://www.linkedin.com/shareArticle?mini=true&url=".rawurlencode($url)."&title=".rawurlencode($text);
     $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-linkedin-square fa-2x'></i></a></li>";
