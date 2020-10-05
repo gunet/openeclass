@@ -143,14 +143,14 @@ if (isset($_POST['submit'])) {
                                 password = ?s,
                                 view_type = ?s                                
                             WHERE id = ?d",
-                                $_POST['title'], $_POST['fcode'], $_POST['course_keywords'],
+                                $_POST['title'], mb_substr($_POST['fcode'], 0 ,20), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
                                 $session->language, $password, $view_type, $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
                 array('title' => $_POST['title'],
-                      'public_code' => $_POST['fcode'],
+                      'public_code' => mb_substr($_POST['fcode']),
                       'visible' => $_POST['formvisible'],
                       'prof_names' => $_POST['teacher_name'],
                       'lang' => $session->language));
