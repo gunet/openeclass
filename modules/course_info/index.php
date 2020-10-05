@@ -150,7 +150,7 @@ if (isset($_POST['submit'])) {
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
                 array('title' => $_POST['title'],
-                      'public_code' => mb_substr($_POST['fcode']),
+                      'public_code' => mb_substr($_POST['fcode'], 0 ,20),
                       'visible' => $_POST['formvisible'],
                       'prof_names' => $_POST['teacher_name'],
                       'lang' => $session->language));
