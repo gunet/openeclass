@@ -180,7 +180,7 @@ if (!isset($_POST['create_course'])) {
     if (empty($_POST['public_code'])) {
         $public_code = $code;
     } else {
-        $public_code = $_POST['public_code'];
+        $public_code = mb_substr($_POST['public_code'], 0 ,20);
     }
     $description = purify($_POST['description']);
     $result = Database::get()->query("INSERT INTO course SET
