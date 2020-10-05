@@ -290,7 +290,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                        WHERE `group`.id = poll_to_specific.group_id
                                        AND `group`.visible = 1 
                                        AND `group`.course_id = ?d
-                                       AND poll_to_specific.poll_id = ?d", $poll->pid, $course_id);
+                                       AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid, );
                 $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` 
                                         WHERE course_id = ?d AND `group`.visible = 1", $course_id);
                 foreach ($assignees as $assignee_row) {
@@ -304,6 +304,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 foreach ($unassigned as $unassigned_row) {
                     $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
                 }
+
             } else {
                 $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                        FROM poll_to_specific, user
