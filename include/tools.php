@@ -26,6 +26,7 @@
 
 require_once 'modules/tc/functions.php';
 require_once 'modules/message/class.mailbox.php';
+require_once 'modules/lti_consumer/lti-functions.php';
 
 /**
  * @brief Offers an upper-layer logic. Decides what function should be called to
@@ -728,7 +729,6 @@ function lessonToolsMenu($rich=true) {
         }
 
         if ($section['type'] == 'Public') {
-            require_once 'modules/lti_consumer/lti-functions.php';
             $result3 = getLTILinksForTools();
             if ($result3) { // display lti apps as links (if any)
                 foreach ($result3 as $lti_link) {
