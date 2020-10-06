@@ -247,7 +247,7 @@ function display_attendance_activities($attendance_id) {
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1,
            $langHere, $langAttendanceNoActMessage3, $langcsvenc2, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
-           $langAdd, $langExport, $langBack, $langNoRegStudent, $langBBB;
+           $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     $tool_content .= action_bar(
@@ -297,7 +297,7 @@ function display_attendance_activities($attendance_id) {
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count
                                             FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
     if ($participantsNumber == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance->id . "&amp;editUsers=1'>$langHere</a>.</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance->id . "&amp;editUsers=1'>$langHere</a>.</div>";
     }
     //get all the available activities
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
@@ -991,7 +991,7 @@ function display_all_users_presences($attendance_id) {
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
            $langID, $langAm, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAttendanceBook, $langAttendanceDelete, $langConfirmDelete,
-           $langNoRegStudent, $langHere, $dateFormatMiddle;
+           $langNoStudentsInAttendance, $langHere, $dateFormatMiddle;
 
     $attendance_limit = get_attendance_limit($attendance_id);
 
@@ -1041,7 +1041,7 @@ function display_all_users_presences($attendance_id) {
         }
         $tool_content .= "</tbody></table>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</div>";
     }
 }
 

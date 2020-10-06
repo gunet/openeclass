@@ -323,7 +323,7 @@ if ($is_editor) {
 	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
 	              'icon' => 'fa-print',
 	              'level' => 'primary-label',
-	              'show' => has_certificate_completed($_GET['u'], $element, $element_id)),
+	              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate"),
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
