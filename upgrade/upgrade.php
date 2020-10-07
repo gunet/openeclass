@@ -235,7 +235,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     if (isset($_POST['email_transport'])) {
         store_mail_config();
     }
-    $logdate = date("Y-m-d_G.i:s");
+    $logdate = date("Y-m-d_G.i.s");
     $logfile = "log-$logdate.html";
     if (!($logfile_handle = @fopen("$logfile_path/$logfile", 'w'))) {
         $error = error_get_last();
