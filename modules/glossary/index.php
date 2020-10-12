@@ -55,10 +55,6 @@ Database::get()->queryFunc("SELECT id, name, description, `order`
     $categories[intval($cat->id)] = $cat->name;
 }, $course_id);
 
-$indirectcategories = array();
-foreach ($categories as $k => $v) {
-    $indirectcategories[getIndirectReference($k)] = $v;
-}
 if (isset($_GET['cat'])) {
     $cat_id = intval(getDirectReference($_GET['cat']));
     $edit_url .= "&amp;cat=$cat_id";
@@ -163,10 +159,8 @@ if ($is_editor) {
             'url' => "$langTheField $langGlossaryUrl"
         ));
         if($v->validate()) {
-            if (!isset($_POST['category_id']) || getDirectReference($_POST['category_id']) == 0) {
+            if (!isset($_POST['category_id']) || ($_POST['category_id'] == 0)) {
                 $category_id = NULL;
-            } else {
-                $category_id = intval(getDirectReference($_POST['category_id']));
             }
 
             if (isset($_POST['url'])) {
@@ -177,7 +171,6 @@ if ($is_editor) {
             } else {
                 $url = '';
             }
-
             if (isset($_POST['id'])) {
                 $id = intval(getDirectReference($_POST['id']));
                 $q = Database::get()->query("UPDATE glossary
@@ -185,10 +178,10 @@ if ($is_editor) {
                                                       definition = ?s,
                                                       url = ?s,
                                                       notes = ?s,
-                                                      category_id = ?d ,
+                                                      category_id = ?d,
                                                       datestamp = NOW()
                                                   WHERE id = ?d AND course_id = ?d"
-                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $category_id, $id, $course_id);
+                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $id, $course_id);
                 $log_action = LOG_MODIFY;
                 $success_message = $langGlossaryUpdated;
             } else {
@@ -201,7 +194,7 @@ if ($is_editor) {
                                                       datestamp = NOW(),
                                                       course_id = ?d,
                                                       `order` = ?d"
-                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $category_id, $course_id, findorder($course_id));
+                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $course_id, findorder($course_id));
                 $log_action = LOG_INSERT;
                 $success_message = $langGlossaryAdded;
             }
@@ -308,16 +301,13 @@ if ($is_editor) {
         $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $data->notes );
         if ($categories) {
             $categories[0] = '-';
-            $indirectcategories[0] = '-';
             $category_selection = "
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
                              <div class='col-sm-10'>
-                                 " . selection($indirectcategories, 'category_id', ($category_id), 'class="form-control"') . "
+                                 " . selection($categories, 'category_id', $category_id, 'class="form-control"') . "
                              </div>
                         </div>";
-            unset($categories['none']);
-            unset($indirectcategories['none']);
         } else {
             $category_selection = '';
         }
