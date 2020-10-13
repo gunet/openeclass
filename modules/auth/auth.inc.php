@@ -1163,7 +1163,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
                 $auth_allow = 1;
             } else {
                 $auth_allow = 3;
-                $user = $user_info_object->id;
+                $GLOBALS['inactive_uid'] = $user_info_object->id;
             }
         } else {
             $auth_allow = 2;
