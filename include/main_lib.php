@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.9.2');
+define('ECLASS_VERSION', '3.10-dev');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -397,10 +397,10 @@ function get_course_users($cid) {
     $users = array();
 
     $q = Database::get()->queryArray("SELECT user_id FROM course_user WHERE
-                                                        course_id = ?d AND 
+                                                        course_id = ?d AND
                                                         status = " . USER_STUDENT . " AND
-                                                        tutor = 0 AND 
-                                                        editor = 0 AND 
+                                                        tutor = 0 AND
+                                                        editor = 0 AND
                                                         reviewer = 0", $cid);
     if (count($q) > 0) {
         foreach ($q as $data) {
@@ -450,7 +450,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
     $q = Database::get()->queryArray("SELECT `group`.id, `group`.name FROM `group`, group_members
                        WHERE `group`.course_id = ?d AND
                              `group`.id = group_members.group_id AND
-                             `group_members`.user_id = ?d                    
+                             `group_members`.user_id = ?d
                        ORDER BY `group`.name", $course_id, $user_id);
 
     if (!$q) {
