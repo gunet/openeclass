@@ -33,7 +33,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 if (isset($_REQUEST['username'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $sql = "SELECT user.id, surname, username, password, givenname, status, email,
-                   admin.user_id AS is_admin, lang
+                   admin.user_id AS is_admin, admin.privilege, lang
                 FROM user LEFT JOIN admin ON user.id = admin.user_id
                 WHERE username ";
 
@@ -52,7 +52,12 @@ if (isset($_REQUEST['username'])) {
         $_SESSION['givenname'] = $myrow->givenname;
         $_SESSION['status'] = $myrow->status;
         $_SESSION['email'] = $myrow->email;
-        $_SESSION['is_admin'] = !(!($myrow->is_admin)); // double 'not' to handle NULL
+        if (!is_null($myrow->is_admin)) {
+            $_SESSION['is_admin'] = $myrow->privilege == ADMIN_USER;
+            $_SESSION['is_power_user'] = $myrow->privilege == POWER_USER;
+            $_SESSION['is_usermanage_user'] = $myrow->privilege == USERMANAGE_USER;
+            $_SESSION['is_departmentmanage_user'] = $myrow->privilege == DEPARTMENTMANAGE_USER;
+        }
         $_SESSION['uname'] = $myrow->username;
         $_SESSION['langswitch'] = $myrow->lang;
         redirect_to_home_page();
@@ -81,7 +86,7 @@ $tool_content .= "<div class='form-wrapper'>
                     <input class='btn btn-primary' type='submit' value='$langSubmit'>
                 </div>
             </div>
-            ". generate_csrf_token_form_field() ."            
+            ". generate_csrf_token_form_field() ."
         </form>
         </div>";
 draw($tool_content, 3);
