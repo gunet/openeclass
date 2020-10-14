@@ -106,8 +106,8 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         $reponse = trim($_POST['reponse']);
         if (isset($_POST['weighting']) and isset($_POST['blanksDefined'])) {
             // a blank can't have a negative weighting
-            $weighting = array_map('abs', $_POST['weighting']);
-            $weighting = array_map('fix_float', $weighting);
+            $weighting = array_map('fix_float', $_POST['weighting']);
+            $weighting = array_map('abs', $weighting);
             // separate text and weightings by '::'
             $reponse .= '::' . implode(',', $weighting);
             $questionWeighting = array_sum($weighting);
