@@ -42,7 +42,7 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
     }
     $pageName = $langUserProfile;
 } else {
-    $data['id'] = $uid;
+    $data['id'] = $id = $uid;
 }
 
 $data['action_bar_blog_portfolio'] = $data['action_bar'] = $data['action_bar_unreg'] = '';
@@ -51,7 +51,6 @@ $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, use
                                             email_public, phone_public, am_public
                                         FROM user
                                         WHERE id = ?d", $data['id']);
-
 if ($data['userdata']) {
     $auth = array_search($data['userdata']->password, $auth_ids);
     if (!$auth) {
@@ -159,7 +158,11 @@ view('main.profile.index', $data);
 
 function allow_access($level) {
 
-    if ($level == ACCESS_USERS) { // if we have allowed it
+    global $id;
+
+    if ($id == $_SESSION['uid']) { // if we are current user
+        return true;
+    } else if ($level == ACCESS_USERS) { // if we have allowed it
         return true;
     } elseif ($_SESSION['status'] == USER_TEACHER) { // if we are teacher
         return true;

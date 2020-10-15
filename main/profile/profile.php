@@ -65,10 +65,10 @@ if (!$auth) {
 $data['auth_text'] = get_auth_info($auth);
 
 if ($auth != 1) {
-    $data['allow_username_change'] = false;
+    $data['allow_username_change'] = $allow_username_change= false;
     $allow_password_change = false;
 } else {
-    $data['allow_username_change'] = !get_config('block_username_change');
+    $data['allow_username_change'] = $allow_username_change = !get_config('block_username_change');
     $allow_password_change = true;
 }
 
@@ -235,7 +235,7 @@ if (isset($_POST['submit'])) {
             redirect_to_home_page("modules/auth/mail_verify_change.php?from_profile=true");
         } else {
             Session::Messages($langProfileReg, 'alert-success');
-            redirect_to_home_page("main/profile/display_profile.php");    
+            redirect_to_home_page("main/profile/display_profile.php");
         }
     }
     if ($old_language != $language) {

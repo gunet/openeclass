@@ -60,85 +60,78 @@
                                     {{ trans('langProfilePersInfo') }}
                                 </div>
                                 <div class="profile-content-panel-text">
-                                    <div style="line-height:26px;">
-                                        <span style="font-weight: bold; color: #888;">
-                                            {{ trans('langEmail') }}:
-                                        </span>
-                                        @if (!empty($userdata->email) and allow_access($userdata->email_public))
-                                            {!! mailto($userdata->email) !!}
-                                         @else
-                                            <span class='tag-value not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
-                                        @endif
+                                    @if (!empty($userdata->email) and allow_access($userdata->email_public))
+                                        <span style='font-weight: bold; color: #888;'>{{ trans('langEmail') }}:</span>
+                                        {!! mailto($userdata->email) !!}
+                                    @endif
+                                </div>
+
+                                @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
+                                    <div style='line-height:26px;'>
+                                    <span style='font-weight: bold; color: #888;'>
+                                        {{ trans('langPhone') }}:
+                                    </span>
+                                        {{ q($userdata->phone) }}
                                     </div>
-                                    <div style="line-height:26px;">
-                                        <span style="font-weight: bold; color: #888;">
-                                            {{ trans('langPhone') }}:
-                                        </span>
-                                        @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
-                                            {{ q($userdata->phone) }}
-                                        @else
-                                            <span class='tag-value not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
-                                        @endif
-                                    </div>
-                                    <div style="line-height:26px;">
+                                @endif
+                                <div style="line-height:26px;">
                                         <span style="font-weight: bold; color: #888;">
                                             {{ trans('langStatus') }}:
                                         </span>{{ $userdata->status==1 ? trans('langTeacher'): trans('langStudent') }}
-                                    </div>
+                                </div>
+
+                                @if (!empty($userdata->am) and allow_access($userdata->am_public))
                                     <div style="line-height:26px;">
                                         <span style="font-weight: bold; color: #888;">
                                             {{ trans('langAm') }}:
                                         </span>
-                                        @if (!empty($userdata->am) and allow_access($userdata->am_public))
                                             {{ q($userdata->am) }}
-                                        @else
-                                            <span class='tag-value not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
-                                        @endif
                                     </div>
-                                    @if($id == $uid && !empty($extAuthList))
-                                        <div>
-                                            @foreach ($extAuthList as $item)
-                                                <span class='tag'>{{ trans('langProviderConnectWith') }} : </span>
-                                                <span class='tag-value'><img src='{{ $themeimg }}/{{ $item->auth_name }}.png' alt=''> {{ $authFullName[$item->auth_id] }}</span><br>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                    <div style="line-height:26px;">
-                                        <span style="font-weight: bold; color: #888;">
-                                            {{ trans('langFaculty') }}:
-                                        </span>
-                                        @foreach ($user->getDepartmentIds($id) as $i=>$dep)
-                                            {!! $tree->getFullPath($dep) !!}
-                                            @if($i+1 < count($user->getDepartmentIds($id)))
-                                                <br/>
-                                            @endif
+                                @endif
+
+                                @if($id == $uid && !empty($extAuthList))
+                                    <div>
+                                        @foreach ($extAuthList as $item)
+                                            <span class='tag'>{{ trans('langProviderConnectWith') }} : </span>
+                                            <span class='tag-value'><img src='{{ $themeimg }}/{{ $item->auth_name }}.png' alt=''> {{ $authFullName[$item->auth_id] }}</span><br>
                                         @endforeach
                                     </div>
-                                    <div style="line-height:26px;">
-                                        <span style="font-weight: bold; color: #888;">
-                                            {{ trans('langProfileMemberSince') }}:
-                                        </span>{{ $userdata->registered_at }}
-                                    </div>
+                                @endif
+                                <div style="line-height:26px;">
+                                    <span style="font-weight: bold; color: #888;">
+                                        {{ trans('langFaculty') }}:
+                                    </span>
+                                    @foreach ($user->getDepartmentIds($id) as $i=>$dep)
+                                        {!! $tree->getFullPath($dep) !!}
+                                        @if($i+1 < count($user->getDepartmentIds($id)))
+                                            <br/>
+                                        @endif
+                                    @endforeach
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="profile-content-panel">
-                                <div class="profile-content-panel-title">
-                                    {{ trans('langProfileAboutMe') }}
-                                </div>
-                                <div class="profile-content-panel-text">
-                                    <p>
-                                    @if (!empty($userdata->description))
-                                        {!! standard_text_escape($userdata->description) !!}
-                                    @endif
-                                    </p>
+                                <div style="line-height:26px;">
+                                    <span style="font-weight: bold; color: #888;">
+                                        {{ trans('langProfileMemberSince') }}:
+                                    </span>{{ $userdata->registered_at }}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {!! render_profile_fields_content(array('user_id' => $id)) !!}
+                    <div class="col-sm-6">
+                        <div class="profile-content-panel">
+                            <div class="profile-content-panel-title">
+                                {{ trans('langProfileAboutMe') }}
+                            </div>
+                            <div class="profile-content-panel-text">
+                                <p>
+                                @if (!empty($userdata->description))
+                                    {!! standard_text_escape($userdata->description) !!}
+                                @endif
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                    {!! render_profile_fields_content(array('user_id' => $id)) !!}
             </div>
         </div>
     </div>
