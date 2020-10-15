@@ -278,7 +278,7 @@ if (!$nbrExercises) {
             $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
         }
         if (!$row->public) {
-            $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
+            $lock_icon = "&nbsp;" . icon('fa-lock', $langNonPublicFile);
         }
         if (!$row->active) {
             $link_class = 'not_visible';

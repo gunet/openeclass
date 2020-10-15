@@ -1598,7 +1598,7 @@ if ($doc_count == 0) {
                                     array('title' => $entry['public'] ? $langResourceAccessLock : $langResourceAccessUnlock,
                                           'url' => $entry['public'] ? "{$base_url}limited=$cmdDirName" : "{$base_url}public=$cmdDirName",
                                           'icon' => $entry['public'] ? 'fa-lock' : 'fa-unlock',
-                                          'show' => !$uploading_as_user),
+                                          'show' => !$uploading_as_user and (course_status($course_id) == COURSE_OPEN)),
                                     array('title' => $langDownload,
                                           'url' => $download_url,
                                           'icon' => 'fa-download'),
