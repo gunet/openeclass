@@ -164,49 +164,44 @@ if ($userdata) {
                                     <div class='profile-content-panel-title'>
                                         $langProfilePersInfo
                                     </div>
-                                    <div class='profile-content-panel-text'>
-                                        <div style='line-height:26px;'>
-                                        <span style='font-weight: bold; color: #888;'>
-                                            $langEmail:
-                                        </span>";
+                                    <div class='profile-content-panel-text'>";
+                                        // user email
                                         if (!empty($userdata->email) and allow_access($userdata->email_public)) {
+                                            $tool_content .= "<div style='line-height:26px;'>
+                                            <span style='font-weight: bold; color: #888;'>
+                                                $langEmail:
+                                            </span>";
                                             $tool_content .= mailto($userdata->email);
-                                        } else {
-                                            $tool_content .= "<span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                                            $tool_content .= $providers;
+                                            $tool_content .= "</div>";
                                         }
-                                        $tool_content .= $providers;
-                                        $tool_content .= "</div>
-                                            <div style='line-height:26px;'>
-                                            <span style='font-weight: bold; color: #888;'>
-                                                $langPhone:
-                                            </span>";
-                                            if (!empty($userdata->phone) and allow_access($userdata->phone_public)) {
-                                                $tool_content .= q($userdata->phone);
-                                            } else {
-                                                $tool_content .= "<span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
-                                            }
-                                        $tool_content .= "</div>
-                                            <div style='line-height:26px;'>
-                                            <span style='font-weight: bold; color: #888;'>
-                                                $langStatus:
-                                            </span>";
-                                            if ($userdata->status == USER_TEACHER) {
-                                                $tool_content .= $langTeacher;
-                                            } else {
-                                                $tool_content .= $langStudent;
-                                            }
-                                            $tool_content .= "
-                                            </div>
-                                            <div style='line-height:26px;'>
+                                        // user phone
+                                        if (!empty($userdata->phone) and allow_access($userdata->phone_public)) {
+                                            $tool_content .= "<div style='line-height:26px;'>
+                                                    <span style='font-weight: bold; color: #888;'>
+                                                        $langPhone:
+                                                    </span>";
+                                            $tool_content .= q($userdata->phone);$tool_content .= "</div>";
+                                        }
+                                        $tool_content .= "<div style='line-height:26px;'>
+                                        <span style='font-weight: bold; color: #888;'>
+                                            $langStatus:
+                                        </span>";
+                                        if ($userdata->status == USER_TEACHER) {
+                                            $tool_content .= $langTeacher;
+                                        } else {
+                                            $tool_content .= $langStudent;
+                                        }
+                                        $tool_content .= "</div>";
+                                        // user 'am'
+                                        if (!empty($userdata->am) and allow_access($userdata->am_public)) {
+                                            $tool_content .= "<div style='line-height:26px;'>
                                             <span style='font-weight: bold; color: #888;'>
                                                 $langAm:
                                             </span>";
-                                            if (!empty($userdata->am) and allow_access($userdata->am_public)) {
-                                                $tool_content .= q($userdata->am);
-                                            } else {
-                                                $tool_content .= "<span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
-                                            }
-                                        $tool_content .= "</div>";
+                                            $tool_content .= q($userdata->am);
+                                            $tool_content .= "</div>";
+                                        }
                                         $tool_content .= "<div style='line-height:26px;'>
                                             <span style='font-weight: bold; color: #888;'>
                                                 $langFaculty:
@@ -397,7 +392,11 @@ draw($tool_content, 1, 'profile');
  */
 function allow_access($level) {
 
-    if ($level == ACCESS_USERS) { // if we have allowed it
+    global $id;
+
+    if ($id == $_SESSION['uid']) { // if we are current user
+        return true;
+    } else if ($level == ACCESS_USERS) { // if we have allowed it
         return true;
     } elseif ($_SESSION['status'] == USER_TEACHER) { // if we are teacher
         return true;
