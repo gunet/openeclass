@@ -1089,12 +1089,26 @@ class CourseXMLElement extends SimpleXMLElement {
      * return string
      */
     private static function serialize($ele) {
-        if (!is_array($ele)) {
+        if (!is_object($ele) && !is_string($ele)) {
             return null;
-        } else if (count($ele) == 1) {
+        }
+
+        // ele can either be a string or a countable object
+        // as a future reference, for PHP >= 7.3.0, there is an is_countable() function
+        // https://www.php.net/manual/en/function.is-countable.php
+
+        if (is_string($ele)) {
+            return (string) $ele;
+        }
+
+        // ele is a countable CourseXMLElement object
+
+        if (count($ele) == 1) {
             return (string) $ele;
         } else if (count($ele) > 1) {
             return base64_encode(serialize(self::prepareArrayForSerialization($ele)));
+        } else {
+            return null;
         }
     }
 
