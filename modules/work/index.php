@@ -6165,21 +6165,35 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
     }
 }
 
+/**
+ * @brief send email to user groups
+ * @param $gid
+ * @param $subject
+ * @param $plainBody
+ * @param $body
+ */
 function send_mail_to_group_id($gid, $subject, $plainBody, $body) {
-    global $charset;
+
     $res = Database::get()->queryArray("SELECT surname, givenname, email
                                  FROM user, group_members AS members
                                  WHERE members.group_id = ?d
                                  AND user.id = members.user_id", $gid);
     foreach ($res as $info) {
-        send_mail_multipart('', '', "$info->givenname $info->surname", $info->email, $subject, $plainBody, $body);
+        send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], "$info->givenname $info->surname", $info->email, $subject, $plainBody, $body);
     }
 }
 
+/**
+ * @brief send mail to users
+ * @param $uid
+ * @param $subject
+ * @param $plainBody
+ * @param $body
+ */
 function send_mail_to_user_id($uid, $subject, $plainBody, $body) {
-    global $charset;
+
     $user = Database::get()->querySingle("SELECT surname, givenname, email FROM user WHERE id = ?d", $uid);
-    send_mail_multipart('', '', "$user->givenname $user->surname", $user->email, $subject, $plainBody, $body);
+    send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'],"$user->givenname $user->surname", $user->email, $subject, $plainBody, $body);
 }
 
 // Return a list of users with no submissions for assignment $id
