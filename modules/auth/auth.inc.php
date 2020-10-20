@@ -1437,6 +1437,7 @@ function shib_cas_login($type) {
     $_SESSION['status'] = $status;
     //$_SESSION['is_admin'] = $is_admin;
     $_SESSION['shib_user'] = 1; // now we are shibboleth user
+    unset_shib_cas_session();
 
     Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')",
