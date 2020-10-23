@@ -1755,7 +1755,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
 
-    // upgrade queries for versions 3.8, 3.9 and 4.0
+    // upgrade queries for versions 3.8, 3.9, 3.10 and 4.0
     if (version_compare($oldversion, '4.0', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.8'));
 
@@ -1986,7 +1986,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         Database::get()->query("ALTER TABLE `ebook_subsection` CHANGE `section_id` `section_id` int(11) NOT NULL");
 
-
         updateInfo(-1, sprintf($langUpgForVersion, '3.9'));
 
         if (!DBHelper::fieldExists('exercise', 'continue_time_limit')) {
@@ -1999,6 +1998,17 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `group` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1");
         }
 
+        // upgrade queries for version 3.10
+        updateInfo(-1, sprintf($langUpgForVersion, '3.10'));
+
+        if (!DBHelper::fieldExists('exercise_with_questions', 'random_criteria')) {
+            Database::get()->query("ALTER TABLE exercise_with_questions ADD `random_criteria` TEXT");
+            Database::get()->query("ALTER TABLE exercise_with_questions DROP PRIMARY KEY");
+            Database::get()->query("ALTER TABLE exercise_with_questions ADD id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT FIRST");
+        }
+        if (!DBHelper::fieldExists('exercise', 'shuffle')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `shuffle` SMALLINT NOT NULL DEFAULT '0' AFTER `random`");
+        }
 
         updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
 
