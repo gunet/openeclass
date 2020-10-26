@@ -905,7 +905,7 @@ function showlinksofcategory($cat_id = 0) {
                     $tool_content .= "</small>";
                 }
                 if ($myrow->description) {
-                    $tool_content .= "<p>" . nl2br(q($myrow->description)) . "</p";
+                    $tool_content .= "<p>" . nl2br(q($myrow->description)) . "</p>";
                 }
                 $tool_content .= "</td>
                     <td class='text-center'>" . nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
