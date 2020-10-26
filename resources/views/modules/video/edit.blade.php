@@ -17,15 +17,15 @@
         )
     )
     !!}
-    
+
     <div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' 
-                      role='form' 
-                      method='POST' 
-                      action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}' 
-                      enctype='{{ $form_enctype }}' 
+                <form class='form-horizontal'
+                      role='form'
+                      method='POST'
+                      action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}'
+                      enctype='{{ $form_enctype }}'
                       onsubmit="return checkrequired(this, 'title');">
                     <fieldset>
                         <div class='form-group'>
@@ -58,14 +58,14 @@
                                 <div class='col-sm-10 margin-top-thin'>{{ $edititem->url }}</div>
                             @endif
                         </div>
-                    
+
                         <div class='form-group'>
                             <label for='Title' class='col-sm-2 control-label'>{{ trans('langTitle') }}:</label>
                             <div class='col-sm-10'>
-                                @if (isset($form_input))
-                                    <input class='form-control' type='text' name='title' size='55'>
-                                @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
+                                @if (isset($edititem))
                                     <input class='form-control' type='text' name='title' value='{{ $edititem->title }}'>
+                                @else
+                                    <input class='form-control' type='text' name='title' size='55'>
                                 @endif
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                                         if (isset($form_input)) {
                                             $selected = '';
                                         } else if (isset($_GET['id']) && isset($_GET['table_edit'])) {
-                                            $selected = ''; 
+                                            $selected = '';
                                             if (isset($edititem->category) && $edititem->category == $cat->id) {
                                                 $selected = " selected='selected'";
                                             }

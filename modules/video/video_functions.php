@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 function headlink($label, $this_sort) {
@@ -115,20 +115,20 @@ function delete_video($id, $table, $course_id, $course_code, $webDir) {
 
     $myrow = Database::get()->querySingle("SELECT * FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $title = $myrow->title;
-    
+
     if ($table == "video") {
         unlink("$webDir/video/$course_code/" . $myrow->path);
     }
-    
+
     Database::get()->query("DELETE FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    
+
     // index and log
     if ($table == 'video') {
         Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_VIDEO, $id);
     } elseif ($table == 'videolink') {
         Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_VIDEOLINK, $id);
     }
-    
+
     Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $title));
 }
 
@@ -142,7 +142,7 @@ function delete_video_category($id) {
 
 function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin) {
     $uncatresults = array();
-    
+
     $vis_q = ($is_editor) ? '' : "AND visible = 1";
     if ($cat_id > 0) {
         $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND category = ?d $vis_q $order", $course_id, $cat_id);
@@ -197,12 +197,15 @@ function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $
                         }
                     }
                     $resultObj->extradescription .= "</small>";
+                    if ($myrow->description) {
+                        $resultObj->extradescription .= "<p>" . nl2br(q($myrow->description)) . "</p>";
+                    }
                 }
                 $uncatresults[] = $resultObj;
             }
         }
     }
-    
+
     return ($uncatresults);
 }
 
