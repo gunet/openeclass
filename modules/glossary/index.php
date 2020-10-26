@@ -56,10 +56,6 @@ Database::get()->queryFunc("SELECT id, name, description, `order`
 }, $course_id);
 $data['categories'] = $categories;
 
-$indirectcategories = array();
-foreach ($categories as $k => $v) {
-    $indirectcategories[getIndirectReference($k)] = $v;
-}
 if (isset($_GET['cat'])) {
     $data['cat_id'] = $cat_id = intval(getDirectReference($_GET['cat']));
     $data['edit_url'] = $base_url."&amp;cat=$cat_id";
@@ -167,10 +163,8 @@ if ($is_editor) {
             'url' => "$langTheField $langGlossaryUrl"
         ));
         if($v->validate()) {
-            if (!isset($_POST['category_id']) || getDirectReference($_POST['category_id']) == 0) {
+            if (!isset($_POST['category_id']) || ($_POST['category_id'] == 0)) {
                 $category_id = NULL;
-            } else {
-                $category_id = intval(getDirectReference($_POST['category_id']));
             }
 
             if (isset($_POST['url'])) {
@@ -189,10 +183,10 @@ if ($is_editor) {
                                                       definition = ?s,
                                                       url = ?s,
                                                       notes = ?s,
-                                                      category_id = ?d ,
+                                                      category_id = ?d,
                                                       datestamp = NOW()
                                                   WHERE id = ?d AND course_id = ?d"
-                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $category_id, $id, $course_id);
+                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $id, $course_id);
                 $log_action = LOG_MODIFY;
                 $success_message = $langGlossaryUpdated;
             } else {
@@ -298,16 +292,13 @@ if ($is_editor) {
 
         if ($categories) {
             $categories[0] = '-';
-            array_unshift($indirectcategories, "-");
             $data['category_selection'] = "
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
                              <div class='col-sm-10'>
-                                 " . selection($indirectcategories, 'category_id', ($category_id), 'class="form-control"') . "
+                                 " . selection($categories, 'category_id', $category_id, 'class="form-control"') . "
                              </div>
                         </div>";
-            unset($categories['none']);
-            unset($indirectcategories['none']);
         }
         $data['notes_rich'] = rich_text_editor('notes', 4, 60, $notes);
         $data['form_buttons'] =
