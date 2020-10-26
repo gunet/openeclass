@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
 $toolName = $langBasicCfgSetting;
 $data['connectorOptions'] = array_map(function($connectorClass) {
     $connector = new $connectorClass();
-    $selected = q(get_config('aantivirus_connector')) == $connectorClass ? " selected='selected'" : '';
+    $selected = q(get_config('antivirus_connector')) == $connectorClass ? " selected='selected'" : '';
     return "<option value='$connectorClass'$selected>".$connector->getName()."</option>";
 }, $connectorClasses);
 
