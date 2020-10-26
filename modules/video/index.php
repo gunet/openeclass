@@ -847,7 +847,7 @@ function showlinksofcategory($cat_id = 0) {
         $langDelete, $langViewHide, $langViewShow, $langConfirmDelete,
         $display_tools, $is_in_tinymce, $langDownload, $langResourceAccessLock,
         $langResourceAccessUnlock, $langEditChange, $filterv, $filterl, $order,
-        $compatiblePlugin, $langcreator, $langpublisher;
+        $compatiblePlugin, $langcreator, $langpublisher, $langNonPublicFile;
 
     if ($is_editor) {
         $vis_q = '';
