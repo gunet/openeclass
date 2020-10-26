@@ -38,7 +38,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['recordsTotal'] = Database::get()->querySingle('SELECT COUNT(*) AS total
         FROM request LEFT JOIN request_watcher ON request.id = request_watcher.request_id
         WHERE request_watcher.user_id = ?d',
-        $course_id, $uid)->total;
+        $uid)->total;
     if (isset($_GET['search']) and isset($_GET['search']['value']) and $_GET['search']['value'] !== '') {
         $search_sql = 'AND title LIKE ?s';
         $keyword = '%' . $_GET['search']['value'] . '%';
@@ -71,7 +71,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $result = Database::get()->queryArray("SELECT * FROM request
         WHERE course_id = ?d $search_sql $watcher_sql
         ORDER BY $order $extra_sql",
-        $course_id, $keyword, $watcher_params, $extra_terms);
+        $keyword, $watcher_params, $extra_terms);
 
     $data['data'] = array();
     foreach ($result as $request) {
