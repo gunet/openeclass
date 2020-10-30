@@ -49,9 +49,8 @@ load_js('jstree3');
 
 // Update course basic information
 if (isset($_POST['submit'])) {
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
-    $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
+
+    $departments = isset($_POST['department']) ? $_POST['department'] : array();
 
     // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
     if (isDepartmentAdmin()) {
@@ -75,7 +74,6 @@ if (isset($_POST['submit'])) {
                     prof_names = ?s
                     WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
     $course->refresh($cId, $departments);
-    
     Session::Messages($langModifDone, 'alert-success');
     redirect_to_home_page('modules/admin/infocours.php?c='.$_GET['c']);
 }

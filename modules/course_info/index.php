@@ -110,7 +110,6 @@ if (isset($_POST['submit'])) {
         if (get_config('opencourses_enable') && $isOpenCourseCertified) {
             $_POST['formvisible'] = '2';
         }
-
         // validate departments
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
@@ -120,7 +119,6 @@ if (isset($_POST['submit'])) {
                 break;
             }
         }
-
 
         $old_deps = $course->getDepartmentIds($course_id);
         $deps_changed = count(array_diff($old_deps, $departments)) +
@@ -233,9 +231,9 @@ if (isset($_POST['submit'])) {
                 	       course_license, password, id, view_type, start_date, finish_date
                       FROM course WHERE code = ?s", $course_code);
     if ($depadmin_mode) {
-        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
     } else {
-        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($c->id)));
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id)));
     }
     $head_content .= $js;
     $data['buildusernode'] = $html;
@@ -251,7 +249,7 @@ if (isset($_POST['submit'])) {
     $data['course_inactive'] = $visibleChecked[COURSE_INACTIVE];
 
     $data['public_code'] = q($c->public_code);
-    $data['titulary'] = q($c->prof_names);
+    $data['teacher_name'] = q($c->prof_names);
 
     $language = $c->lang;
     $data['lang_select_options'] = lang_select_options('localize', "class='form-control'");

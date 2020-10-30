@@ -99,9 +99,9 @@
             </div>
         </div>
         <div class='form-group'>
-            <label for='titulary' class='col-sm-2 control-label'>{{ trans('langTeachers') }}:</label>
+            <label for='teacher_name' class='col-sm-2 control-label'>{{ trans('langTeachers') }}:</label>
             <div class='col-sm-10'>
-                <input type='text' class='form-control' name='titulary' id='titulary' value='{{ $titulary}} '>
+                <input type='text' class='form-control' name='teacher_name' id='teacher_name' value='{{ $teacher_name }} '>
             </div>
         </div>
         <div class='form-group'>
