@@ -19,29 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/* ===========================================================================
-  insertMyDoc.php
-  @last update: 30-06-2006 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7 licensed under GPL
-  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-  original file: insertMyDoc.php Revision: 1.18.2.1
-
-  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-  Lederer Guillaume <led@cerdecam.be>
-  ==============================================================================
-  @Description: This script lists all available documents and the course
-  admin can add them to a learning path
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
- */
-
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
@@ -159,7 +136,7 @@ if (isset($_POST['submitInsertedDocument'])) {
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
                         VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);               
-                Session::Messages($langInsertedAsModule, 'alert-info');               
+                Session::Messages($langInsertedAsModule, 'alert-info');
             } else {                
                 // check if this is this LP that used this document as a module
                 $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
@@ -195,106 +172,48 @@ if (isset($_POST['submitInsertedDocument'])) {
 
 
 /* ======================================
-  DEFINE CURRENT DIRECTORY
-  ====================================== */
-
-if (isset($_REQUEST['openDir'])) { // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
-    $curDirPath = $_REQUEST['openDir'];
-} else {
-    $curDirPath = '';
-}
-
-if ($curDirPath == '/' or $curDirPath == '\\' or strstr($curDirPath, '..')) {
-    $curDirPath = ''; // manage the root directory problem
-}
-
-$parentDir = dirname($curDirPath);
-
-if ($parentDir == '/' or $parentDir == '\\') {
-    $parentDir = ''; // manage the root directory problem
-}
-
-/* ======================================
   READ CURRENT DIRECTORY CONTENT
   ====================================== */
-/* Search infos in the DB about the current directory the user is in */
-$result = Database::get()->queryArray("SELECT * FROM document
-                 WHERE $group_sql AND
-                       path LIKE ?s AND
-                       path NOT LIKE ?s",
-            $curDirPath . '/%', $curDirPath . '/%/%');
 
-$attribute = array();
-$fileList = array();
+$path = get_dir_path('path');
+$dir_param = get_dir_path('dir');
+$dir_setter = $dir_param ? ('&amp;dir=' . $dir_param) : '';
+
+$result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
+                                WHERE $group_sql AND                                        
+                                      visible = 1 AND
+                                      path LIKE ?s AND
+                                      path NOT LIKE ?s
+                                ORDER BY sort_key COLLATE utf8_unicode_ci",
+    "$path/%", "$path/%/%");
+
+$fileinfo = array();
+$urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code$dir_setter&amp;path=";
 
 foreach ($result as $row) {
-    $attribute['path'][] = $row->path;
-    $attribute['visible'][] = $row->visible;
-    $attribute['comment'][] = $row->comment;
-    $attribute['filename'][] = $row->filename;
-    $attribute['id'][] = $row->id;
-}
-/* --------------------------------------
-  LOAD FILES AND DIRECTORIES INTO ARRAYS
-  -------------------------------------- */
-chdir(realpath($baseWorkDir . $curDirPath));
-$handle = opendir(".");
-
-define('A_DIRECTORY', 1);
-define('A_FILE', 2);
-
-while ($file = readdir($handle)) {
-    if ($file == '.' || $file == '..') {
-        continue; // Skip current and parent directories
-    }
-
-    $fileList['name'][] = $file;
-    
-    if (is_dir($file)) {
-        $fileList['type'][] = A_DIRECTORY;
-        $fileList['size'][] = false;
-        $fileList['date'][] = false;
-    } elseif (is_file($file)) {
-        $fileList['type'][] = A_FILE;
-        $fileList['size'][] = filesize($file);
-        $fileList['date'][] = date('Y-m-d', filectime($file));
-    }    
-    /*
-     * Make the correspondance between
-     * info given by the file system
-     * and info given by the DB
-     */
-    if (!isset($dirNameList)) {
-        $dirNameList = array();
-    }
-    $keyDir = sizeof($dirNameList) - 1;
-
-    if (isset($attribute)) {
-        if (isset($attribute['path'])) {
-            $keyAttribute = array_search($curDirPath . "/" . $file, $attribute['path']);
-        } else {
-            $keyAttribute = false;
-        }
-    }
-
-    if ($keyAttribute !== false) {        
-        $fileList['comment'][] = $attribute['comment'][$keyAttribute];
-        $fileList['visible'][] = $attribute['visible'][$keyAttribute];
-        $fileList['filename'][] = $attribute['filename'][$keyAttribute];
-        $fileList['path'][] = $attribute['path'][$keyAttribute];
-        $fileList['id'][] = $attribute['id'][$keyAttribute];
+    $fullpath = $basedir . $row->path;
+    if ($row->extra_path) {
+        $size = 0;
     } else {
-        $fileList['comment'][] = false;
-        $fileList['visible'][] = false;
-        $fileList['filename'][] = false;                
+        $size = file_exists($fullpath)? filesize($fullpath): 0;
     }
-} // end while ($file = readdir($handle))
+    $fileinfo[] = array(
+        'id' => $row->id,
+        'is_dir' => is_dir($fullpath),
+        'size' => $size,
+        'title' => $row->title,
+        'name' => htmlspecialchars($row->filename),
+        'format' => $row->format,
+        'path' => $row->path,
+        'visible' => $row->visible,
+        'comment' => $row->comment,
+        'copyrighted' => $row->copyrighted,
+        'date' => $row->date_modified,
+        'object' => MediaResourceFactory::initFromDocument($row));
+}
 
-closedir($handle);
-unset($attribute);
 
 // display list of available documents
 $tool_content .= display_my_documents($dialogBox, $style);
 
-chdir($pwd);
 draw($tool_content, 2, null, $head_content);
