@@ -1476,7 +1476,7 @@ if ($doc_count == 0) {
                         // External file URL
                         $file_url = $entry['extra_path'];
                         if ($can_upload) {
-                            $link_title_extra .= '&nbsp;' . icon('fa-external-link', $langExternalFile);
+                            $link_title_extra .= '&nbsp;' . icon('fa-external-link', $langLINKTypeDesc);
                         }
                     }
                 }
@@ -1552,7 +1552,7 @@ if ($doc_count == 0) {
             $tool_content .= "</td>";
             $date = nice_format($entry['date'], true, true);
             $date_with_time = nice_format($entry['date'], true);
-            if ($is_dir) {
+            if (($is_dir) or ($entry['extra_path'] != '')) {
                 $tool_content .= "<td>&nbsp;</td><td class='center'>$date</td>";
             } else if ($entry['format'] == ".meta") {
                 $size = format_file_size($entry['size']);
@@ -1582,11 +1582,11 @@ if ($doc_count == 0) {
                                     array('title' => $langRename,
                                           'url' => "{$base_url}rename=$cmdDirName",
                                           'icon' => 'fa-pencil',
-                                          'show' => $entry['format'] != '.meta'),
+                                          'show' => ($entry['format'] != '.meta') && ($entry['extra_path'] == '')),
                                     array('title' => $langReplace,
                                           'url' => "{$base_url}replace=$cmdDirName",
                                           'icon' => 'fa-exchange',
-                                          'show' => !$is_dir && $entry['format'] != '.meta'),
+                                          'show' => (!$is_dir) && ($entry['format'] != '.meta') && ($entry['extra_path'] == '')),
                                     array('title' => $langMetadata,
                                           'url' =>  "{$base_url}metadata=$xmlCmdDirName",
                                           'icon' => 'fa-tags',
