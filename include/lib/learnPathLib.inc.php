@@ -37,6 +37,7 @@
 
 require_once 'modules/progress/LearningPathEvent.php';
 require_once 'modules/analytics/LpAnalyticsEvent.php';
+require_once 'include/lib/mediaresource.factory.php';
 
 /*
  * content type
@@ -613,133 +614,100 @@ function display_my_exercises($dialogBox, $style) {
 }
 
 /*
- * This function is used to display the list of document available in the course
- * It also displays the form used to add selected document in the learning path
- *
- * @param string $dialogBox Error or confirmation text
- * @return nothing
- *
- * @author Thanos Kyritsis <atkyritsis@upnet.gr>
- * @author Piraux Sebastien <pir@cerdecam.be>
- * @author Lederer Guillaume <led@cerdecam.be>
+ * @brief display documents list
+ * based in function list_docs() in 'modules/units/insert_doc.php'
  */
 
-function display_my_documents($dialogBox, $style) {
-    global $curDirName;
-    global $curDirPath;
-    global $parentDir;
-    global $langUp;
-    global $langName;
-    global $langSize;
-    global $langDate;
-    global $langAddModulesButton;
-    global $fileList;    
-    global $themeimg;
-    global $langSelection, $langDirectory, $course_code;
+function display_my_documents($dialogBox, $style)
+{
+    global $langUp, $langName, $langSize, $langDate, $langAddModulesButton,
+           $fileinfo, $langChoice,$langDirectory,
+           $course_code, $group_sql, $urlbase, $path;
 
-    $output = '';
-    
-    $dspCurDirName = htmlspecialchars($curDirName);    
-    $cmdParentDir = rawurlencode($parentDir);
-    
-    $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method = "post">';
-    /* --------------------------------------
-      DIALOG BOX SECTION
-      -------------------------------------- */
-    $colspan = 5;
-    if (!empty($dialogBox)) {
-        $output .= disp_message_box($dialogBox, $style) . "<br />";
+
+    if (!empty($path)) {
+        $dirname = Database::get()->querySingle("SELECT filename FROM document
+                                                                   WHERE $group_sql AND path = ?s", $path);
+        $parentpath = dirname($path);
+        $dirname = htmlspecialchars($dirname->filename);
+        $parentlink = $urlbase . $parentpath;
+        $parenthtml = "<span class='pull-right'><a href='$parentlink'>$langUp " .
+            icon('fa-level-up') . "</a></span>";
+        $colspan = 4;
     }
-    
-    /* CURRENT DIRECTORY */
-    if ($curDirName) {
-        $output .= '
-        <table class="table-default">
-        <tr>
-          <td width="1" class="right">'.icon('fa-folder-o').'</td>
-          <td>' . $langDirectory . ': <b>' . $dspCurDirName . '</b></td>';
-        /* GO TO PARENT DIRECTORY */
-        if ($curDirName) /* if the $curDirName is empty, we're in the root point
-          and we can't go to a parent dir */ {
-            $linkup = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;openDir=$cmdParentDir'>";
-            $output .= "<td width='1'>$linkup<img src='$themeimg/folder_up.png' " .
-                    "hspace='5' alt='$langUp' title='$langUp' /></a></td>" .
-                    "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
-        }
-        $output .= '</tr></table>';
+    $content = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>" .
+        "<table class='table-default'>";
+    if (!empty($path)) {
+        $content .=
+            "<tr>" .
+            "<th colspan='$colspan'><div class='text-left'>$langDirectory: $dirname$parenthtml</div></th>" .
+            "</tr>";
     }
+    $content .=
+        "<tr class='list-header'>" .
+        "<th class='text-left'>$langName</th>" .
+        "<th class='text-center'>$langSize</th>" .
+        "<th class='text-center'>$langDate</th>" .
+        "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+        "</tr>";
 
-    $output .= '<div class="table-responsive"><table class="table-default" >';
-    $output .= "<tr class='list-header'>
-                    <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
-                    <th>$langSize</th>
-                    <th>$langDate</th>
-                    <th>$langSelection</th>
-                </tr>";
-
-    // display file list
-    if ($fileList) {
-        while (list($fileKey, $fileName) = each($fileList['name'])) {
-            $dspFileName = q($fileList['filename'][$fileKey]);
-            $cmdFileName = str_replace("%2F", "/", rawurlencode($curDirPath . "/" . $fileName));
-            if ($fileList['visible'][$fileKey] == 0) {
-                continue; // skip the display of this file
+    $counter = 0;
+    foreach (array(true, false) as $is_dir) {
+        foreach ($fileinfo as $entry) {
+            if ($entry['is_dir'] != $is_dir) {
+                continue;
             }
-            if ($fileList['type'][$fileKey] == A_FILE) {
-                $image = choose_image($fileName);
-                $size = format_file_size($fileList['size'][$fileKey]);
-                $date = nice_format($fileList['date'][$fileKey]);
-                $file_url = file_url($fileList['path'][$fileKey], $dspFileName);                
-                $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
-                $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);                
-                $file_id = $fileList['id'][$fileKey];                
-            } elseif ($fileList['type'][$fileKey] == A_DIRECTORY) {
-                $image = 'fa-folder';
-                $size = '&nbsp;';
-                $date = '&nbsp;';
-                $urlFileName = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;openDir=' . $cmdFileName . '">' . $dspFileName . '</a>';
-            }
+            $dir = $entry['path'];
+            if ($is_dir) {
+                $image = 'fa-folder-o';
+                $file_url = $urlbase . $dir;
+                $link_text = $entry['name'];
 
-            $output .= '<tr>
-                <td class="center" width="1">' . icon($image, '') . '</td>
-                <td align="left">' . $urlFileName . '</td>
-                <td width="80" class="center">' . $size . '</td>
-                <td width="80" class="center">' . $date . '</td>';
-
-            if ($fileList['type'][$fileKey] == A_FILE) {                                
-                $output .= '
-                    <td width="10" class="center">
-                        <input type="checkbox" name="document[]" value = ' . $file_id . '>
-                    </td>';
+                $link_href = "<a href='$file_url'>$link_text</a>";
             } else {
-                $output .= '<td>&nbsp;</td>';
-            }
-            $output .= '</tr>';
-            /* COMMENTS */
-            if ($fileList['comment'][$fileKey] != "") {
-                $fileList['comment'][$fileKey] = q($fileList['comment'][$fileKey]);
-                $fileList['comment'][$fileKey] = parse_user_text($fileList['comment'][$fileKey]);
-                $output .= '<tr>
-                <td>&nbsp;</td>
-                <td colspan="' . $colspan . '"><span class="comment">' . $fileList['comment'][$fileKey] . '</span></td>
-                </tr>';
-            }
-        }  // end each ($fileList)
-        // form button
+                $image = choose_image('.' . $entry['format']);
+                $file_url = file_url($entry['path'], $entry['name'], $course_code);
 
-        $output .= '
-            <tr>
-              <th colspan="' . $colspan . '"><div class="pull-right">
-                <input type="hidden" name="openDir" value="' . $curDirPath . '" />                
-                <input class="btn btn-primary" type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'">        
-              </th>
-            </tr>';
-    } // end if ( $fileList)
-    else {
-        $output .= '<tr><td colspan="4">&nbsp;</td></tr>';
+                $dObj = $entry['object'];
+                $dObj->setAccessURL($file_url);
+                $dObj->setPlayURL(file_playurl($entry['path'], $entry['name'], $course_code));
+
+                $link_href = MultimediaHelper::chooseMediaAhref($dObj);
+            }
+            if ($entry['visible'] == 'i') {
+                $vis = 'invisible';
+            } else {
+                $vis = '';
+            }
+            $content .= "<tr class='$vis'>";
+            $content .= "<td>" . icon($image, '') . "&nbsp;&nbsp;&nbsp;$link_href";
+
+            /* * * comments ** */
+            if (!empty($entry['comment'])) {
+                $content .= "<br /><div class='comment'>" .
+                    standard_text_escape($entry['comment']) .
+                    "</div>";
+            }
+            $content .= "</td>";
+            if ($is_dir) {
+                // skip display of date and time for directories
+                $content .= "<td>&nbsp;</td><td>&nbsp;</td>";
+            } else {
+                $size = format_file_size($entry['size']);
+                $date = nice_format($entry['date'], true, true);
+                $content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
+            }
+            $content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
+            $content .= "</tr>";
+            $counter++;
+        }
     }
-    $output .= '</table></div></form>';
-    return $output;
+    $content .= "</table>";
+    $content .= "<div class='text-right'>";
+    $content .= "<input class='btn btn-primary' type='submit' name='submitInsertedDocument' value='$langAddModulesButton'>";
+    $content .= "</div>";
+
+    return $content;
 }
 
 /**
