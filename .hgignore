@@ -34,4 +34,6 @@ syntax: regexp
 
 \.sass-cache
 
+\.idea
+
 ^modules/drives/plugins/googledrive_key.p12
