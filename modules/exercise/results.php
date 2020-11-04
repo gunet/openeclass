@@ -156,12 +156,16 @@ foreach ($result as $row) {
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
-            if ($theStudent->am == '') {
-                $studentam = '-';
-            } else {
-                $studentam = $theStudent->am;
+            $user_group = $studentam = '';
+            $ug = user_groups($course_id, $sid, 'txt');
+            if ($ug != '-') {
+                $user_group = "$langGroup: $ug";
             }
-            $tool_content .= "<strong>$langUser:</strong> " . q($theStudent->surname) . " " . q($theStudent->givenname) . "  <div class='smaller'>($langAm: " . q($studentam) . ")</div>";
+            if ($theStudent->am != '') {
+                $studentam = "$langAmShort: $theStudent->am";
+            }
+            $tool_content .= "<strong>$langUser:</strong> " . q($theStudent->surname) . " " . q($theStudent->givenname) . "
+                            <div><small>$studentam<span style='padding-left: 10px;'>$user_group</span></small></div>";
         }
         $tool_content .= "</td>
                 </tr>
