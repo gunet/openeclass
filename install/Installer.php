@@ -56,11 +56,11 @@ EOT;
 	    }
 	  }
 
-	  
+
 	public static function vendorTestCodeCleanup(PackageEvent $event) {
 	    $vendor_dir = $event->getComposer()->getConfig()->get('vendor-dir');
 	    $op = $event->getOperation();
-	    if ($op->getJobType() == 'update') {
+	    if ($op instanceof UpdateOperation) {
 	      $package = $op->getTargetPackage();
 	    }
 	    else {
@@ -74,7 +74,7 @@ EOT;
 	          if (!static::deleteRecursive($dir_to_remove)) {
 	            $io = $event->getIO();
         		if ($io->askConfirmation(sprintf("Failure removing directory '%s' in package '%s'. Are you sure you want to proceed? ",$path, $package->getPrettyName()), false)) {
-        		
+
         		}else{
         			die('An error occured.');
         		}
@@ -83,7 +83,7 @@ EOT;
 	        else {
 	          	$io = $event->getIO();
 	    		if ($io->askConfirmation(sprintf("The directory '%s' in package '%s' does not exist. Are you sure you want to proceed? ",$path, $package->getPrettyName()), false)) {
-	    		
+
 	    		}else{
 	    			die('An error occured.');
 	    		}
