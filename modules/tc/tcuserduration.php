@@ -49,8 +49,8 @@ if (isset($_GET['id'])) {
 
 $result = [];
 if (isset($_GET['u']) and $_GET['u']) { // if we want specific user
-    $name = uid_to_name($uid);
-    $bbb_name = Database::get()->queryArray("SELECT DISTINCT(bbbuserid) FROM tc_log WHERE fullName = ?s", $name);
+    $name = $_SESSION['uname'];
+    $bbb_name = Database::get()->queryArray("SELECT DISTINCT(bbbuserid) FROM tc_log WHERE bbbuserid = ?s", $name);
     foreach ($bbb_name as $data) {
         $r = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM tc_attendance, tc_session 
                                                 WHERE tc_attendance.meetingid = tc_session.meeting_id
@@ -95,13 +95,12 @@ if (count($result) > 0) {
             $temp_date = $row->date;
         }        
         $user_full_name = Database::get()->querySingle("SELECT fullName FROM tc_log
-                                WHERE tc_log.bbbuserid = ?s", $row->bbbuserid)->fullName;
+                            WHERE tc_log.bbbuserid = ?s ORDER BY id DESC LIMIT 1", $row->bbbuserid)->fullName;
         $tc_title = get_tc_title($row->meetingid);        
         $tool_content .= "<tr><td class='bullet'>$user_full_name</td>                            
                             <td class='center'>$tc_title</td>
                             <td class='center'>" . format_time_duration(0 + 60 * $row->totaltime) . "</td>
                             </tr>";
-        
     }
     $tool_content .= "</table>";
 } else {
