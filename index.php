@@ -29,9 +29,9 @@
 session_start();
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
-if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
+if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
     $dbname = $matches[1];
-    if (!@chdir('courses/' . $dbname)) {
+    if (!is_dir('courses/' . $dbname)) {
         header('HTTP/1.0 404 Not Found');
         echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
@@ -44,6 +44,7 @@ if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $m
         exit;
     }
     $_SESSION['dbname'] = $dbname;
+    chdir('modules/course_home');
     require_once '../../modules/course_home/course_home.php';
     exit;
 }
