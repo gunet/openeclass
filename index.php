@@ -36,18 +36,15 @@ if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $m
     $dbname = $matches[1];
     if (!is_dir('courses/' . $dbname)) {
         header('HTTP/1.0 404 Not Found');
-        echo '  <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-                <html><head>
-                <title>404 Not Found</title>
-                </head><body>
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+                <html><head><title>404 Not Found</title></head><body>
                 <h1>Not Found</h1>
                 <p>The requested URL ',htmlspecialchars($_SERVER['REQUEST_URI']),' was not found on this server.</p>
-                </body></html>
-                ';
+                </body></html>';
         exit;
     }
     $_SESSION['dbname'] = $dbname;
-    chdir('main/profile');
+    chdir('modules/course_home');
     require_once '../../modules/course_home/course_home.php';
     exit;
 }
@@ -119,7 +116,7 @@ if (isset($_SESSION['shib_uname'])) {
     hybridauth_login();
 } else {
     // normal authentication
-    process_login();    
+    process_login();
 }
 
 // if the user logged in include the correct language files
@@ -318,7 +315,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             $tool_content .= "<div class='panel mobile-apps'>
                 <div class='panel-body'>
                 <div class='row'>
-                <div class='col-xs-6'>                
+                <div class='col-xs-6'>
                     <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank><img src='$themeimg/appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a>
                 </div>
                 <div class='col-xs-6'>
