@@ -883,7 +883,7 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             $now = new DateTime('now');
             $end = new DateTime($r->end_date);
             $interval = $now->diff($end);
-            $duration = $interval->d * 24 * 60 + $interval->h * 60 + $interval->i + ($interval->s >= 30? 1: 0);
+            $duration = $interval->y * 365 * 24 * 60 + $interval->m * 31 * 24 * 60 + $interval->d * 24 * 60 + $interval->h * 60 + $interval->i + ($interval->s >= 30? 1: 0);
         }
 
         $bbb = new BigBlueButton($salt, $bbb_url);
