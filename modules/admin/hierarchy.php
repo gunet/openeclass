@@ -78,7 +78,7 @@ if (!isset($_REQUEST['action'])) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 } else {
-    $data['action_bar'] = action_bar(array(            
+    $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]",
                 'icon' => 'fa-reply',
@@ -178,7 +178,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
         $code = canonicalize_whitespace($_POST['code']);
 
-        $names = array();
+        $names = [];
         foreach ($session->active_ui_languages as $key => $langcode) {
             $n = (isset($_POST['name-' . $langcode])) ? canonicalize_whitespace($_POST['name-' . $langcode]) : null;
             if (!empty($n)) {
@@ -187,7 +187,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         }
         $name = serialize($names);
 
-        $descriptions = array();
+        $descriptions = [];
         foreach ($session->active_ui_languages as $key => $langcode) {
             $d = (isset($_POST['description-' . $langcode])) ? $_POST['description-' . $langcode] : null;
             if (!empty($d)) {
@@ -211,23 +211,28 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         // Check for greek letters
         elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
             Session::Messages($langGreekCode, 'alert-danger');
-            redirect_to_home_page($_SERVER['SCRIPT_NAME'] . "?a=1");            
+            redirect_to_home_page($_SERVER['SCRIPT_NAME'] . "?a=1");
         } else {
             // OK Create the new node
-            $pid = intval(getDirectReference($_POST['parentid']));
+            $pid = intval($_POST['parentid']);
             validateParentId($pid, isDepartmentAdmin());
             $tree->addNode($name, $description, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority, $visible);
             Session::Messages($langAddSuccess, 'alert-success');
-            redirect_to_home_page("modules/admin/hierarchy.php");               
+            redirect_to_home_page("modules/admin/hierarchy.php");
         }
     } else {
+        $data['names'] = $data['descriptions'] = [];
+        foreach ($session->active_ui_languages as $langCode) {
+            $data['names'][$langCode] = $data['descriptions'][$langCode] = '';
+        }
+
         $data['visibleChecked'] = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
         $data['visibleChecked'][intval(NODE_OPEN)] = " checked='checked'";
         list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="parentid"', 'tree' => array('0' => 'Top'), 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
         $head_content .= $js;
         $data['html'] = $html;
         $view = 'admin.courses.hierarchy.create';
-    }    
+    }
 }
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
@@ -268,12 +273,12 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
     if (isset($_POST['edit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
         checkSecondFactorChallenge();
-        // Check for empty fields
 
+        // Check for empty fields
         $names = array();
         foreach ($session->active_ui_languages as $key => $langcode) {
-            $n = (isset($_POST['name-' . $langcode])) ? canonicalize_whitespace($_POST['name-' . $langcode]) : null;
-            if (!empty($n)) {
+            $n = (isset($_POST['name-' . $langcode])) ? canonicalize_whitespace($_POST['name-' . $langcode]) : '';
+            if ($n !== '') {
                 $names[$langcode] = $n;
             }
         }
@@ -281,8 +286,8 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
         $descriptions = array();
         foreach ($session->active_ui_languages as $key => $langcode) {
-            $d = (isset($_POST['description-' . $langcode])) ? $_POST['description-' . $langcode] : null;
-            if (!empty($d)) {
+            $d = (isset($_POST['description-' . $langcode])) ? purify(canonicalize_whitespace($_POST['description-' . $langcode])) : '';
+            if ($d !== '') {
                 $descriptions[$langcode] = $d;
             }
         }
@@ -291,18 +296,18 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $code = canonicalize_whitespace($_POST['code']);
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
-        $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
+        $order_priority = empty($_POST['order_priority']) ? 'null': intval($_POST['order_priority']);
         $visible = (isset($_POST['visible'])) ? intval($_POST['visible']) : 2;
         if ($visible < 0 || $visible > 2) {
             $visible = 2;
         }
         if (empty($name)) {
             Session::Messages($langEmptyNodeName, 'alert-danger');
-            redirect_to_home_page("modules/admin/hierarchy.php?action=edit&amp;id=" . getIndirectReference($id));            
+            redirect_to_home_page("modules/admin/hierarchy.php?action=edit&id=" . $id);
         } else {
             // OK Update the node
-            $oldpid = intval(getDirectReference($_POST['oldparentid']));
-            $newpid = intval(getDirectReference($_POST['newparentid']));
+            $oldpid = intval($_POST['oldparentid']);
+            $newpid = intval($_POST['newparentid']);
             validateParentId($newpid, isDepartmentAdmin());
             $tree->updateNode($id, $name, $description, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority, $visible);
             Session::Messages($langEditNodeSuccess, 'alert-success');
@@ -310,7 +315,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         }
     } else {
         // Get node information
-        $data['id'] = $id = intval(getDirectReference($_GET['id']));
+        $data['id'] = $id;
         $data['mynode'] = $mynode = Database::get()->querySingle("SELECT name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible FROM hierarchy WHERE id = ?d", $id);
         $parent = $tree->getParent($mynode->lft, $mynode->rgt);
         $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
@@ -324,11 +329,16 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         }
 
         // description multi-lang field
-        $data['desc_is_ser'] = false;
         $descriptions = @unserialize($mynode->description);
-        if ($descriptions !== false) {
+        if (is_array($descriptions)) {
             $data['descriptions'] = $descriptions;
-            $data['desc_is_ser'] = true;
+        } else {
+            $data['descriptions'][get_config('default_language')] = $mynode->description;
+        }
+        foreach ($session->active_ui_languages as $langCode) {
+            if (!isset($data['descriptions'][$langCode])) {
+                $data['descriptions'][$langCode] = '';
+            }
         }
 
         $data['formOPid'] = 0;
@@ -351,7 +361,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
         $data['visibleChecked'] = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
         $data['visibleChecked'][intval($mynode->visible)] = " checked='checked'";
-        
+
         $head_content .= $js;
         $data['html'] = $html;
         $view = 'admin.courses.hierarchy.create';

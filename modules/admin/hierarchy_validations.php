@@ -35,10 +35,9 @@
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
 function validateNode($id, $checkOwn) {
-    global $tool_content, $head_content, $tree, $user, $uid,
-    $langBack, $langNotAllowed;
+    global $tool_content, $head_content, $tree, $user, $uid;
 
-    $notallowed = "$langNotAllowed";
+    $notallowed = trans('langNotAllowed');
 
     if ($id <= 0) {
         exitWithError($notallowed);
@@ -59,9 +58,9 @@ function validateNode($id, $checkOwn) {
 
 /**
  * Validate a tree node's existence (and proper integer) based on its id value.
- * Optionally, validate that the current user has proper access for this node 
+ * Optionally, validate that the current user has proper access for this node
  * (the node must be within the nodes subtree that this user belongs to).
- * 
+ *
  * @param int     $id       - The node's id value
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
@@ -168,10 +167,10 @@ function validateCourseNodes($courseId, $checkOwn) {
 
 /**
  * Terminate execution and display an (optional) error message.
- * 
- * @param string $message - The optional error message to display 
+ *
+ * @param string $message - The optional error message to display
  */
-function exitWithError($message) {    
+function exitWithError($message) {
     Session::Messages($message, 'alert-danger');
 }
 
@@ -179,7 +178,7 @@ function exitWithError($message) {
  * Checks if the current user's role is Department Admin.
  * The role is defined by having specific permissions (dep/user manage)
  * and lacking specific permissions (power and admin).
- * 
+ *
  * @return boolean $checkOwn
  */
 function isDepartmentAdmin() {

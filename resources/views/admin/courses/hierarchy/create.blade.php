@@ -18,9 +18,9 @@
                     <label class='col-sm-3 control-label'>{{ trans('langNodeName') }}:</label>
                     <div class='col-sm-9'>
                             @if (isset($is_serialized) && $is_serialized && isset($names[$langcode]))
-                                <input class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $names[$langcode] }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>                        
+                                <input class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $names[$langcode] }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
                             @elseif (isset($is_serialized) && !$is_serialized && $key == 0)
-                                <input class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $mynode->name }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>                        
+                                <input class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $mynode->name }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
                             @else
                                 <input class='form-control' type='text' name='name-{{ $langcode }}' value='' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
                             @endif
@@ -31,13 +31,7 @@
                 <div class='form-group'>
                     <label class='col-sm-3 control-label'>{{ trans('langNodeDescription') }}:</label>
                     <div class='col-sm-9'>
-                        @if (isset($desc_is_ser) && $desc_is_ser && isset($names[$langcode]))
-                            {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode]) !!}
-                        @elseif (isset($desc_is_ser) && !$desc_is_ser && $key == 0)
-                            {!! rich_text_editor('description-' . $langcode, 8, 20, $mynode->description) !!}
-                        @else
-                            {!! rich_text_editor('description-' . $langcode, 8, 20, '') !!}
-                        @endif
+                        {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode]) !!}
                     </div>
                 </div>
             @endforeach
@@ -49,7 +43,7 @@
                         <small>{{ trans('langNodeParent2') }}</small>
                     </span>
                 </div>
-            </div>        
+            </div>
             <div class='form-group'>
                 <label class='col-sm-3 control-label'>{{ trans('langNodeAllowCourse') }}:</label>
                 <div class='col-sm-9'>
@@ -69,7 +63,7 @@
                 </div>
             </div>
         <div class='form-group'>
-            <label class='col-sm-3 control-label'>{{ trans('langNodeOrderPriority') }}</label>      
+            <label class='col-sm-3 control-label'>{{ trans('langNodeOrderPriority') }}</label>
             <div class='col-sm-9'>
                 <input class='form-control' type='text' name='order_priority' value='{{ isset($mynode) ? $mynode->order_priority : '' }}'>
                 <span class='help-block'>
@@ -108,8 +102,8 @@
         </div>
 
         @if (isset($mynode))
-            <input type='hidden' name='id' value='{{ getIndirectReference($id) }}'>
-            <input type='hidden' name='oldparentid' value='{{ getIndirectReference($formOPid) }}'>
+            <input type='hidden' name='id' value='{{ $id }}'>
+            <input type='hidden' name='oldparentid' value='{{ $formOPid }}'>
             <input type='hidden' name='lft' value='{{ $mynode->lft }}'>
             <input type='hidden' name='rgt' value='{{ $mynode->rgt }}'>
         @endif
@@ -127,9 +121,9 @@
                     ]
                 ]) !!}
             </div>
-        </div>        
+        </div>
         </fieldset>
         {!! generate_csrf_token_form_field() !!}
         </form>
-    </div>   
+    </div>
 @endsection
