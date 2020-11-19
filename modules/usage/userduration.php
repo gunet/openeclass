@@ -34,71 +34,146 @@ $require_login = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/csv.class.php';
+require_once 'modules/usage/usage.lib.php';
 
-if (isset($_GET['format']) and $_GET['format'] == 'csv') {
-    $format = 'csv';
-    $csv = new CSV();
-    if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-        $csv->setEncoding('UTF-8');
+if (isset($_GET['u'])) { //  stats per user
+
+    $am_legend = $csv_am_legend = $grp_legend = $csv_grp_legend = '';
+    $am = uid_to_am($_GET['u']);
+    if (!empty($am)) {
+        $am_legend = "<div><small>$langAmShort: " . $am . "</small></div>"; // user am
+        $csv_am_legend = "$langAmShort: $am";
     }
-    $csv->filename = $course_code . '_user_duration.csv';
+    $grp_name = user_groups($course_id, $_GET['u'], false);
+    if ($grp_name != '-') {
+        $grp_legend = "<div><small>$langGroup: " . $grp_name . "</small></div>"; // user group
+        $csv_grp_legend = "$langGroup: $grp_name";
+    }
 
-    $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langDuration);
+    $user_actions = Database::get()->queryArray("SELECT 
+                            SUM(actions_daily.duration) AS duration, 
+                              module_id 
+                            FROM actions_daily
+                            WHERE course_id = ?d
+                              AND user_id = ?d
+                            GROUP BY module_id", $course_id, $_GET['u']);
+
+
+    if (isset($_GET['format']) and $_GET['format'] == 'csv') { // csv output
+        $csv = new CSV();
+        if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+            $csv->setEncoding('UTF-8');
+        }
+        $csv->filename = $course_code . '_user_duration.csv';
+        $csv->outputRecord(uid_to_name($_GET['u']), "$csv_am_legend $csv_grp_legend");
+        $csv->outputRecord($langModule, $langDuration);
+        foreach ($user_actions as $ua) {
+            $csv->outputRecord(which_module($ua->module_id), format_time_duration(0 + $ua->duration));
+        }
+    } else { // html output
+        $toolName = "$langParticipate $langOfUser";
+        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+        $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
+
+        $tool_content .= action_bar(array(
+            array('title' => $langGlossaryToCsv,
+                'url' => "userduration.php?course=$course_code&amp;u=$_GET[u]&amp;format=csv",
+                'icon' => 'fa-download',
+                'level' => 'primary-label'),
+            array('title' => $langBack,
+                'url' => "userduration.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')
+        ), false);
+
+        $tool_content .= "<div class='alert alert-info'>" . uid_to_name($_GET['u']) . " $am_legend $grp_legend</div>";
+
+        $tool_content .= "
+            <table class='table-default'>
+            <tr>
+              <th>$langModule</th>          
+              <th>$langDuration</th>          
+            </tr>";
+        foreach ($user_actions as $ua) {
+            $tool_content .= "<tr>";
+            $tool_content .= "<td>" . which_module($ua->module_id) . "</td>";
+            $tool_content .= "<td>" . format_time_duration(0 + $ua->duration) . "</td>";
+            $tool_content .= "</tr>";
+        }
+        $tool_content .= "</table>";
+        draw($tool_content, 2);
+    }
 } else {
-    $format = 'html';
-    $toolName = $langUserDuration;
+    if (isset($_GET['format']) and $_GET['format'] == 'csv') {
+        $format = 'csv';
+        $csv = new CSV();
+        if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+            $csv->setEncoding('UTF-8');
+        }
+        $csv->filename = $course_code . '_user_duration.csv';
+        $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langDuration);
+    } else {
+        $format = 'html';
+        $toolName = $langUserDuration;
 
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
-    $tool_content .= action_bar(array(
-        array('title' => $langUsage,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-bar-chart',
-            'level' => 'primary-label'),
-        array('title' => $langGlossaryToCsv,
-            'url' => "userduration.php?course=$course_code&amp;format=csv",
-            'icon' => 'fa-download',
-            'level' => 'primary-label'),
-        array('title' => $langBack,
-            'url' => "../../courses/{$course_code}/",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')
-    ),false);
+        $tool_content .= action_bar(array(
+            array('title' => $langUsage,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-bar-chart',
+                'level' => 'primary-label'),
+            array('title' => $langGlossaryToCsv,
+                'url' => "userduration.php?course=$course_code&amp;format=csv",
+                'icon' => 'fa-download',
+                'level' => 'primary-label'),
+            array('title' => $langBack,
+                'url' => "../../courses/{$course_code}/",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')
+        ), false);
 
-    $tool_content .= "
+        $tool_content .= "
         <table class='table-default'>
         <tr>
           <th>$langSurnameName</th>
           <th>$langAm</th>
           <th>$langGroup</th>
           <th>$langDuration</th>
+          <th class='text-center'>" . icon('fa-gears') . "</th>
         </tr>";
-}
+    }
 
-$result = user_duration_query($course_id);
-if (count($result) > 0) {
-    foreach ($result as $row) {
-        $grp_name = user_groups($course_id, $row->id, $format);
-        if ($format == 'html') {
-            $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>
+    $result = user_duration_query($course_id);
+    if (count($result) > 0) {
+        foreach ($result as $row) {
+            $grp_name = user_groups($course_id, $row->id, $format);
+            if ($format == 'html') {
+                $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>
                                 <td class='center'>$row->am</td>
                                 <td class='center'>$grp_name</td>
                                 <td class='center'>" . format_time_duration(0 + $row->duration) . "</td>
-                                </tr>";
-        } else {
-            $csv->outputRecord($row->surname, $row->givenname,
-                $row->am, $grp_name, format_time_duration(0 + $row->duration));
+                                <td class='option-btn-cell'>" . action_button(array(
+                        array('title' => $langDetails,
+                            'url' => "userduration.php?course=$course_code&amp;u=$row->id",
+                            'icon' => 'fa-line-chart',
+                            'show' => $row->id > 0)
+                    )) .
+                    "</td>
+                            </tr>";
+            } else {
+                $csv->outputRecord($row->surname, $row->givenname,
+                    $row->am, $grp_name, format_time_duration(0 + $row->duration));
+            }
+        }
+        if ($format == 'html') {
+            $tool_content .= "</table>";
         }
     }
     if ($format == 'html') {
-        $tool_content .= "</table>";
+        draw($tool_content, 2);
     }
 }
-
-if ($format == 'html') {
-    draw($tool_content, 2);
-}
-
 
 /**
  * @brief Do the queries to calculate usage between timestamps $start and $end
