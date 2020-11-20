@@ -149,6 +149,8 @@ if (!isset($_SESSION['was_validated']) or
     } else {
         $tool_content .= "<div class='alert alert-danger'>$langConnNo<br>$langAuthNoValidUser</div>" .
                 "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
+        draw($tool_content, 0, null, $head_content);
+        exit();
     }
 } else {
     $is_valid = true;
@@ -232,7 +234,7 @@ if ($is_valid) {
     } elseif (isset($_SESSION['uname_exists'])) {
         unset($_SESSION['uname_exists']);
     }
-    // user allready applied for account
+    // user already applied for account
     if (user_app_exists($uname)) {
         $_SESSION['uname_app_exists'] = 1;
     } elseif (isset($_SESSION['uname_app_exists'])) {
@@ -339,11 +341,14 @@ if ($is_valid) {
             $_SESSION['uname'] = canonicalize_whitespace($uname);
             $session->setLoginTimestamp();
 
-            $tool_content .= "<div class='alert alert-success'><p>$greeting,</p><p>";
+            $tool_content .= "<div class='alert alert-success'>$greeting,<br><br>";
             $tool_content .=!empty($email) ? $langPersonalSettings : $langPersonalSettingsLess;
-            $tool_content .= "</p></div>
-                                                <br /><br />
-                                                <p>$langPersonalSettingsMore</p>";
+            $tool_content .= "$langClick
+                                <a href='$urlServer' class='mainpage'>$langHere</a> $langPersonalSettingsMore
+                              <ul>
+                                <li>$langPersonalSettingsMore1</li>
+                                <li>$langPersonalSettingsMore2</li>
+                              </ul></div>";
         } else {
             $tool_content .= "<div class='alert alert-success'>" .
                     ($prof ? $langDearProf : $langDearUser) .
