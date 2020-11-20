@@ -307,6 +307,7 @@ function get_mime_type($filename) {
         'html' => 'text/html',
         'asc' => 'text/plain',
         'txt' => 'text/plain',
+        'glo' => 'text/plain',
         'rtx' => 'text/richtext',
         'rtf' => 'text/rtf',
         'sgml' => 'text/sgml',

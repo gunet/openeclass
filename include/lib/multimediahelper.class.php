@@ -597,7 +597,7 @@ class MultimediaHelper {
     }
     
     public static function getSupportedModalFiles() {
-        return array("htm", "html", "txt", "pdf");
+        return array("htm", "html", "txt", "glo", "pdf");
     }
     
     public static function getYoutubePatterns() {
