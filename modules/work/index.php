@@ -1552,7 +1552,8 @@ function new_assignment() {
            $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
            $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
-           $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock;
+           $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock,
+           $langNoGradeRubrics, $langNoGradeScales;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2150,11 +2151,12 @@ function new_assignment() {
                     if (!grading_scales_exist()) {
                         $addon = "disabled";
                         $class_not_visible = 'not_visible';
+                        $label = "data-toggle='tooltip' data-placement='top' title='$langNoGradeScales'";
                     } else {
-                        $addon = $class_not_visible = '';
+                        $addon = $class_not_visible = $label = '';
                     }
                     $tool_content .= "<div class='radio $class_not_visible'>
-                      <label>
+                      <label $label>
                         <input type='radio' id='scales_button' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") ." $addon>
                         $langGradeScales
                       </label>
@@ -2162,18 +2164,19 @@ function new_assignment() {
                     if (!rubrics_exist()) {
                         $addon = "disabled";
                         $class_not_visible = 'not_visible';
+                        $label = "data-toggle='tooltip' data-placement='top' title='$langNoGradeRubrics'";
                     } else {
-                        $addon = $class_not_visible = '';
+                        $addon = $class_not_visible = $label = '';
                     }
                     $tool_content .= "<div class='radio $class_not_visible'>
-                      <label>
+                      <label $label>
                         <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") ." $addon>
                         $langGradeRubrics
                       </label>
                     </div>";
 
                     $tool_content .= "<div class='radio $class_not_visible'>
-                      <label>
+                      <label $label>
                         <input type='radio' id='reviews_button' name='grading_type' value='3'". ($grading_type==3 ? " checked" : "") ." $addon>
                         $langGradeReviews
                       </label>
