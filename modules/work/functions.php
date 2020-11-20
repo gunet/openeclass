@@ -808,3 +808,39 @@ function countSubmissions($assignment_id) {
         return 0;
     }
 }
+
+
+/**
+ * @brief check if rubrics exist in course
+ * @return bool
+ */
+function rubrics_exist() {
+
+    global $course_id;
+
+    $q = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d", $course_id);
+
+    if ($q) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+/**
+ * @brief check if grading scales exist in course
+ * @return bool
+ */
+function grading_scales_exist() {
+
+    global $course_id;
+
+    $q = Database::get()->querySingle("SELECT * FROM grading_scale WHERE course_id = ?d", $course_id);
+
+    if ($q) {
+        return true;
+    } else {
+        return false;
+    }
+}
