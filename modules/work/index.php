@@ -2146,26 +2146,39 @@ function new_assignment() {
                         <input type='radio' id='numbers_button' name='grading_type' value='0'". ($grading_type==0 ? " checked" : "") .">
                          $langGradeNumbers
                       </label>
-                    </div>
-                    <div class='radio'>
+                    </div>";
+                    if (!grading_scales_exist()) {
+                        $addon = "disabled";
+                        $class_not_visible = 'not_visible';
+                    } else {
+                        $addon = $class_not_visible = '';
+                    }
+                    $tool_content .= "<div class='radio $class_not_visible'>
                       <label>
-                        <input type='radio' id='scales_button' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") .">
+                        <input type='radio' id='scales_button' name='grading_type' value='1'". ($grading_type==1 ? " checked" : "") ." $addon>
                         $langGradeScales
                       </label>
-                    </div>
-                    <div class='radio'>
+                    </div>";
+                    if (!rubrics_exist()) {
+                        $addon = "disabled";
+                        $class_not_visible = 'not_visible';
+                    } else {
+                        $addon = $class_not_visible = '';
+                    }
+                    $tool_content .= "<div class='radio $class_not_visible'>
                       <label>
-                        <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") .">
+                        <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==2 ? " checked" : "") ." $addon>
                         $langGradeRubrics
                       </label>
-                    </div>
-                    <div class='radio'>
+                    </div>";
+
+                    $tool_content .= "<div class='radio $class_not_visible'>
                       <label>
-                        <input type='radio' id='reviews_button' name='grading_type' value='3'". ($grading_type==3 ? " checked" : "") .">
+                        <input type='radio' id='reviews_button' name='grading_type' value='3'". ($grading_type==3 ? " checked" : "") ." $addon>
                         $langGradeReviews
                       </label>
-                    </div>
-                </div>
+                    </div>";
+                $tool_content .= "</div>
             </div>
             <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type==0 ? "" : " hidden")."'>
                 <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
