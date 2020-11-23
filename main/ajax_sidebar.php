@@ -33,10 +33,10 @@ require_once 'main/notifications/notifications.inc.php';
 header('Content-Type: application/json; charset=UTF-8');
 
 function getSidebarNotifications() {
-    global $modules, $admin_modules, $theme_settings, $urlAppend;
+    global $modules, $theme_settings, $urlAppend;
 
     $notifications_html = array();
-    if (isset($_GET['courseIDs']) and count($_GET['courseIDs'])) {
+    if (isset($_GET['courseIDs']) and count($_GET['courseIDs']) > 0) {
         $t = new Template();
         $t->set_var('sideBarCourseNotifyBlock', $_SESSION['template']['sideBarCourseNotifyBlock']);
         foreach ($_GET['courseIDs'] as $id) {
@@ -44,7 +44,11 @@ function getSidebarNotifications() {
             $notifications = get_course_notifications($id);
             $course_code = course_id_to_code($id);
             foreach ($notifications as $n) {
-                $modules_array = (isset($modules[$n->module_id]))? $modules: $admin_modules;
+                $modules_array = (isset($modules[$n->module_id]))? $modules : '';
+                if (isset($modules_array[$n->module_id]) &&
+                    (!is_module_visible($n->module_id, $id))) {
+                        continue;
+                }
                 if (isset($modules_array[$n->module_id]) &&
                     isset($modules_array[$n->module_id]['image']) &&
                     isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])) {
@@ -103,6 +107,21 @@ function getSidebarMessages() {
     }
     return $message_content;
 }
+
+
+function is_module_visible($mid, $cid) {
+
+    $v = Database::get()->querySingle("SELECT visible FROM course_module
+                                WHERE module_id = ?d AND
+                                course_id = ?d", $mid, $cid)->visible;
+
+    if ($v == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 $json_obj = array(
     'messages' => getSidebarMessages(),
