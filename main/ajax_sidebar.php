@@ -33,28 +33,34 @@ require_once 'main/notifications/notifications.inc.php';
 header('Content-Type: application/json; charset=UTF-8');
 
 function getSidebarNotifications() {
-    global $modules, $admin_modules, $urlAppend;
+    global $modules, $theme_settings, $urlAppend;
+
     $notifications_html = array();
-    if (isset($_GET['courseIDs']) and count($_GET['courseIDs'])) {
+    if (isset($_GET['courseIDs']) and count($_GET['courseIDs']) > 0) {
         $t = new Template();
         $t->set_var('sideBarCourseNotifyBlock', $_SESSION['template']['sideBarCourseNotifyBlock']);
         foreach ($_GET['courseIDs'] as $id) {
-            $course_notifications = '';
+            $t->set_var('sideBarCourseNotify', '');
             $notifications = get_course_notifications($id);
             $course_code = course_id_to_code($id);
             foreach ($notifications as $n) {
-                $modules_array = (isset($modules[$n->module_id]))? $modules: $admin_modules;
+                $modules_array = (isset($modules[$n->module_id]))? $modules : '';
                 if (isset($modules_array[$n->module_id]) &&
-                    isset($modules_array[$n->module_id]['image'])) {
-                    
-                    $sideBarCourseNotifyCount = $n->notcount;
-                    $sideBarCourseNotifyIcon = $modules_array[$n->module_id]['image'];
-                    $sideBarCourseNotifyURL = $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .'/?course=' . $course_code;
-                    $sideBarCourseNotifyTitle = q($modules_array[$n->module_id]['title']);
-                    $course_notifications .= "<a href='$sideBarCourseNotifyURL' class='item' title='$sideBarCourseNotifyTitle' data-toggle='tooltip'><i class='fa $sideBarCourseNotifyIcon'></i><span class='count'>$sideBarCourseNotifyCount</span></a>";
+                    (!is_module_visible($n->module_id, $id))) {
+                        continue;
+                }
+                if (isset($modules_array[$n->module_id]) &&
+                    isset($modules_array[$n->module_id]['image']) &&
+                    isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])) {
+                    $t->set_var('sideBarCourseNotifyIcon', $theme_settings['icon_map'][$modules_array[$n->module_id]['image']]);
+                    $t->set_var('sideBarCourseNotifyCount', $n->notcount);
+                    $t->set_var('sideBarCourseNotifyTitle', q($modules_array[$n->module_id]['title']));
+                    $t->set_var('sideBarCourseNotifyURL', $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .
+                                                    '/?course=' . $course_code);
+                    $t->parse('sideBarCourseNotify', 'sideBarCourseNotifyBlock', true);
                 }
             }
-            $notifications_html[$id] = $course_notifications;
+            $notifications_html[$id] = $t->get_var('sideBarCourseNotify');
         }
     }
     return $notifications_html;
@@ -92,7 +98,7 @@ function getSidebarMessages() {
                                         q($message->subject) . "</a>
                                 </div>";
                                     if ($course_title) {
-                                       $message_content .= "<div class='text-grey'>$langCourse: $course_title</div>";
+                                       $message_content .= "<div class='text-grey'>$langCourse: $course_title</div>"; 
                                     }
                                 $message_content .= "<div>$message_date</div>
                                 </span>
@@ -101,6 +107,21 @@ function getSidebarMessages() {
     }
     return $message_content;
 }
+
+
+function is_module_visible($mid, $cid) {
+
+    $v = Database::get()->querySingle("SELECT visible FROM course_module
+                                WHERE module_id = ?d AND
+                                course_id = ?d", $mid, $cid)->visible;
+
+    if ($v == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 $json_obj = array(
     'messages' => getSidebarMessages(),
