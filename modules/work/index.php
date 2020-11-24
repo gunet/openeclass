@@ -756,36 +756,26 @@ function add_assignment() {
         $group_submissions = $_POST['group_submissions'];
         $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;
 
+        if (isset($_POST['grading_type'])) {
+            $grade_type = $_POST['grading_type'];
+        } else {
+            $grade_type = ASSIGNMENT_STANDARD_GRADE;
+        }
+
         if (isset($_POST['scale'])) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
-            $grade_type = 1;
-        }
-        elseif (isset($_POST['rubric'])) {
+        } elseif (isset($_POST['rubric'])) {
             $max_grade = max_grade_from_rubric($_POST['rubric']);
             $grading_scale_id = $_POST['rubric'];
-            $grade_type = 2;
-        }
-        elseif (isset($_POST['max_grade'])) {
+        } elseif (isset($_POST['max_grade'])) {
             $max_grade = $_POST['max_grade'];
             $grading_scale_id = 0;
-            $grade_type = 0;
-        }
-        elseif (isset($_POST['reviews_per_user'])){//f (isset($_POST['reviews_per_user'])) {//if (isset($_POST['reviews_per_user']))  {
-            //aksiologhseis ana xrhsth
-            //$reviews_per_user = $_POST['reviews_per_user'];
-            //hmeromhnia enarkshs ths aksiologhshs apo omotimous
-            //$submission_date_review =  DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart_review'])->format('Y-m-d H:i:s');
-            //deadline aksiologhshs apo omotimous
-            //$deadline_review = DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd_review'])->format('Y-m-d H:i:s');
+        } elseif (isset($_POST['reviews_per_user'])) { // peer review
             $max_grade = max_grade_from_rubric($_POST['rubric_review']);
             $grading_scale_id = $_POST['rubric_review'];
-            $grade_type = 3;
+        }
 
-        }
-        if (!isset($grade_type)) {
-            $grade_type = isset($_POST['grading_type'])? $_POST['grading_type']: 0;
-        }
         if (!isset($max_grade)) {
             $max_grade = isset($_POST['max_grade'])? $_POST['max_grade']: 0;
         }
@@ -987,13 +977,14 @@ function edit_assignment($id) {
         }
     }
 
-
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
         $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
         $title = $_POST['title'];
         $desc = purify($_POST['desc']);
-        $reviews_per_user = $_POST['reviews_per_user'];
+        if (isset($_POST['reviews_per_user'])) {
+            $reviews_per_user = $_POST['reviews_per_user'];
+        }
         $submission_type = isset($_POST['submission_type']) ? intval($_POST['submission_type']) : 0;
         $submission_date = isset($_POST['WorkStart']) && !empty($_POST['WorkStart']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart'])->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
         $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
@@ -1004,16 +995,17 @@ function edit_assignment($id) {
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
         $grade_type = $_POST['grading_type'];
-        if (isset($_POST['rubric_review']) && $reviews_per_user ) {
+
+        if (isset($_POST['rubric_review']) && isset($_POST['reviews_per_user']) && ($grade_type == ASSIGNMENT_PEER_REVIEW_GRADE)) {
             $max_grade = max_grade_from_rubric($_POST['rubric_review']);
             $grading_scale_id = $_POST['rubric_review'];
-        } elseif (isset($_POST['scale'])) {
+        } elseif (isset($_POST['scale']) && ($grade_type == ASSIGNMENT_SCALING_GRADE)) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
-        } elseif (isset($_POST['rubric']) ){
+        } elseif (isset($_POST['rubric']) && ($grade_type == ASSIGNMENT_RUBRIC_GRADE)) {
             $max_grade = max_grade_from_rubric($_POST['rubric']);
             $grading_scale_id = $_POST['rubric'];
-        } elseif (isset($_POST['max_grade'])) {
+        } elseif (isset($_POST['max_grade']) && ($grade_type == ASSIGNMENT_STANDARD_GRADE)) {
             $max_grade = $_POST['max_grade'];
             $grading_scale_id = 0;
         }
@@ -1233,7 +1225,14 @@ function submit_work($id, $on_behalf_of = null) {
         if ($row->submission_type == 1) {
             $filename = '';
             $file_name = '';
-            $success_msgs[] = $langUploadSuccess;
+            $files_to_keep = [];
+            if (isset($_POST['submission_text']) and !empty($_POST['submission_text'])) {
+                $submission_text = purify($_POST['submission_text']);
+                $success_msgs[] = $langUploadSuccess;
+            } else {
+                Session::Messages($langEmptyFaculte, 'alert-warning');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+            }
         } else { // If submission type is one or multiple files
             if ($row->group_submissions) {
                 $local_name = isset($gids[$group_id]) ? greek_to_latin($gids[$group_id]) : '';
@@ -1316,14 +1315,10 @@ function submit_work($id, $on_behalf_of = null) {
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                 }
             }
+            $success_msgs[] = $langUploadSuccess;
         }
 
         $submit_ip = Log::get_client_ip();
-        $submission_text = isset($_POST['submission_text']) ? purify($_POST['submission_text']) : NULL;
-        if (empty($submission_text)) {
-            Session::Messages($langEmptyFaculte, 'alert-warning');
-            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-        }
 
         $grade_comments = $grade_ip = '';
         $grade = null;
