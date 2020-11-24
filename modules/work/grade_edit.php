@@ -327,7 +327,7 @@ function show_edit_form($id, $sid, $assign) {
 						</div>";
 			}
 			if ($assign->grading_scale_id) {
-				if ($grading_type == 1) {
+				if ($grading_type == ASSIGNMENT_SCALING_GRADE) {
 					$serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
 					$scales = unserialize($serialized_scale_data);
 					$scale_options = "<option value> - </option>";
@@ -339,22 +339,35 @@ function show_edit_form($id, $sid, $assign) {
 						$scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
 					}
 					$grade_field = "<div class='col-sm-3'><select name='grade' class='form-control' id='scales'>$scale_options</select></div>";
-				} elseif ($grading_type == 2) {
+				} elseif ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
 					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 					$criteria = unserialize($rubric->scales);
-					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
-					$sel_criteria = unserialize($submitted_grade->grade_rubric);
+					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a 
+                                                                                JOIN assignment as b 
+                                                                              WHERE course_id = ?d 
+                                                                              AND a.assignment_id = b.id 
+                                                                              AND b.id = ?d 
+                                                                              AND a.id = ?d", $course_id, $id, $sid);
+					if (!empty($submitted_grade->grade_rubric)) {
+                        $sel_criteria = unserialize($submitted_grade->grade_rubric);
+                    } else {
+                        $sel_criteria = array();
+                    }
+
 					$criteria_list = "";
 					foreach ($criteria as $ci => $criterio ) {
 						$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
-						if(is_array($criterio['crit_scales'])){
+						if(is_array($criterio['crit_scales'])) {
 							$criteria_list .= "<li><ul class='list-unstyled'>";
 							foreach ($criterio['crit_scales'] as $si=>$scale) {
+							    if (!isset($sel_criteria[$ci])) {
+                                    $sel_criteria[$ci] = '';
+                                }
 								$selectedrb = ($sel_criteria[$ci]==$si?"checked=\"checked\"":"");
 								$criteria_list .= "<li class='list-group-item'>
-								<input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
-								$scale[scale_item_name] ( $scale[scale_item_value] )
-								</li>";
+                                    <input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
+                                    $scale[scale_item_name] ( $scale[scale_item_value] )
+                                    </li>";
 							}
 							$criteria_list .= "</ul></li>";
 						}

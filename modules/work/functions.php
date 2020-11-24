@@ -366,8 +366,8 @@ function show_submission_details($id) {
     $preview_rubric = '';
     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
     if ($rubric) {
-        $rubric_name =  $rubric -> name;
-        $rubric_desc = $rubric -> description;
+        $rubric_name =  $rubric->name;
+        $rubric_desc = $rubric->description;
         $criteria = unserialize($rubric->scales);
         $criteria_list = "";
         foreach ($criteria as $ci => $criterio) {
@@ -375,16 +375,20 @@ function show_submission_details($id) {
             if(is_array($criterio['crit_scales'])){
                 $criteria_list .= "<li><ul>";
                 foreach ($criterio['crit_scales'] as $si=>$scale) {
-                    if($sel_criteria[$ci]==$si)
+                    if (!isset($sel_criteria[$ci])) {
+                        $sel_criteria[$ci] = '';
+                    }
+                    if ($sel_criteria[$ci]==$si) {
                         $criteria_list .= "<li><strong>$scale[scale_item_name] ( $scale[scale_item_value] )</strong></li>";
-                    else
+                    } else {
                         $criteria_list .= "<li>$scale[scale_item_name] ( $scale[scale_item_value] )</li>";
+                    }
                 }
                 $criteria_list .= "</ul></li>";
             }
         }
-        $preview_rubric = $rubric -> preview_rubric;
-        $points_to_graded = $rubric -> points_to_graded;
+        $preview_rubric = $rubric->preview_rubric;
+        $points_to_graded = $rubric->points_to_graded;
     }
 
     $tool_content .= "
@@ -407,23 +411,23 @@ function show_submission_details($id) {
                <div class='col-sm-9'>";
     if ($preview_rubric == 1 AND $points_to_graded == 1) {
         $tool_content .= "
-                            <a role='button' data-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
-                            . $sub->grade .
-                            "</a>
-                            <div class='table-responsive  collapse' id='collapseGrade'>
-                            <table class='table-default'>
-                            <thead>
-                                    <th>$langCriteria</th>
-                            </thead>
-                            <tr>
-                                <td>
-                                    <ul class='list-unstyled'>
-                                        $criteria_list
-                                    </ul>
-                                </td>
-                            </tr>
-                    </table>
-                    </div>";
+            <a role='button' data-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
+            . $sub->grade .
+            "</a>
+            <div class='table-responsive  collapse' id='collapseGrade'>
+            <table class='table-default'>
+            <thead>
+                    <th>$langCriteria</th>
+            </thead>
+            <tr>
+                <td>
+                    <ul class='list-unstyled'>
+                        $criteria_list
+                    </ul>
+                </td>
+            </tr>
+            </table>
+        </div>";
     } else {
         $tool_content .= $sub->grade;
     }
@@ -450,7 +454,7 @@ function show_submission_details($id) {
                     </div>
                 </div>";
 
-    if ($assignment->submission_type == 2) {
+    if ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {
         // multiple files
         $links = implode('<br>',
             array_map(function ($item) {
@@ -469,7 +473,7 @@ function show_submission_details($id) {
                     <strong>$langOpenCoursesFiles:</strong>
                 </div>
                 <div class='col-sm-9'>$links</div>";
-    } elseif ($assignment->submission_type == 0) {
+    } elseif ($assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) {
         // single file
         if (isset($_GET['unit'])) {
             $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
