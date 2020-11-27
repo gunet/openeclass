@@ -24,6 +24,17 @@
 $exerciseId = $_GET['exerciseId'];
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
+    // shuffle (aka random questions)
+    /*if (isset($_GET['shuffleQuestions'])) {
+        if ($_GET['shuffleQuestions'] == 'true') {
+            $objExercise->setShuffle(1);
+        } else {
+            $objExercise->setShuffle(0);
+        }
+        $objExercise->save();
+        exit();
+    }*/
+
     if (isset($_POST['toReorder'])) {
         reorder_table('exercise_with_questions', 'exercise_id', $exerciseId, $_POST['toReorder'],
             isset($_POST['prevReorder'])? $_POST['prevReorder']: null,'id','q_position');
@@ -117,6 +128,8 @@ $diff_options = "<option value=\"-1\">-- $langQuestionAllDiffs --</option>"
     . "<option value=\"4\">$langQuestionDifficult</option>"
     . "<option value=\"5\">$langQuestionVeryDifficult</option>";
 
+
+$ajax_shuffle_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$exerciseId&shuffleQuestions=";
 // for sorting
 $head_content .= "
     <script>
@@ -141,6 +154,14 @@ $head_content .= "
                     });
                 }
             });
+            $('#shuffleCheckBox').click(function(e) {
+                e.preventDefault();
+                var checked = $(this).is(':checked');                
+                $.ajax({
+                    type: 'get',
+                    url: '" . $ajax_shuffle_url . "' + checked
+                });
+            })
         });
     </script>
 ";
@@ -158,7 +179,7 @@ $head_content .= "
     $('.questionSelection').click( function(e){
         e.preventDefault();
         bootbox.dialog({
-            title: '$langSelection $langWithCriteria',
+            title: '$langSelection $langFrom2 $langQuestionPool ($langWithCriteria)',
             message: '<div class=\"row\">' +
                         '<div class=\"col-md-12\">' +
                             '<form class=\"form-horizontal\"> ' +
@@ -264,17 +285,7 @@ $head_content .= "
                 }
             }        
         });
-    });
-    $('.questionDrawnRadio').change(function() {
-        if($(this).val()==0) {
-            $('#questionDrawnInput').val('');
-            $('#questionDrawnInput').prop('disabled', true);
-            $('#questionDrawnInput').closest('div.form-group').addClass('hidden');
-        } else {
-            $('#questionDrawnInput').prop('disabled', false);
-            $('#questionDrawnInput').closest('div.form-group').removeClass('hidden');                                                            
-        }
-    });
+    });    
     $('.menu-popover').on('shown.bs.popover', function () {
         $('.warnLink').on('click', function(e){
               var modifyAllLink = $(this).attr('href');
@@ -286,7 +297,6 @@ $head_content .= "
   });
 </script>
 ";
-
 
 $tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
 
@@ -307,56 +317,12 @@ if (isset($_GET['deleteQuestion'])) {
     redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }
 
-// random questions
-if (isset($_POST['questionDrawn'])) {
-    if (isset($_POST['questionDrawnInput']) and $_POST['questionDrawnInput'] > 0) {
-        $randomQuestions = intval($_POST['questionDrawnInput']);
-        $objExercise->setRandom($randomQuestions);
-    } else {
-        $objExercise->setRandom(0);
-    }
-    $objExercise->save();
-}
 $randomQuestions = $objExercise->isRandom();
 
 $disabled = '';
 if ($objExercise->hasQuestionListWithRandomCriteria()) {
     $disabled = ' disabled';
 }
-
-
-$tool_content .= "<div id='RandomizationForm' class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>
-            <div class='form-group'>
-                 <label for='exerciseDescription' class='col-sm-2 control-label'>$langRandomQuestions:</label>
-                 <div class='col-sm-10'>
-                     <div class='radio'>
-                       <label>
-                         <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='0' ".(($randomQuestions == 0)? 'checked' : '').">
-                         $langDeactivate
-                       </label>
-                     </div>
-                     <div class='radio'>
-                       <label>
-                         <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='1'".(($randomQuestions > 0)? ' checked' : '').">
-                         $langActivate
-                       </label>
-                     </div>
-                 </div>
-             </div>                 
-             <div class='form-group ".(($randomQuestions > 0)? '' : 'hidden')."'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <span class='col-sm-2'><input type='text' class='form-control' name='questionDrawnInput' id='questionDrawnInput' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
-                    <span class='col-sm-8'>$langFromRandomQuestions</span>                                                                        
-                </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <input type='submit' value='$langSubmit' name='submitRandomQuestions'>
-                </div>
-            </div>
-        </form>
-    </div>";
 
 $tool_content .= action_bar(array(
     array('title' => $langNewQu,
@@ -370,15 +336,14 @@ $tool_content .= action_bar(array(
           'icon' => 'fa-random',
           'level' => 'primary-label',
            'show' => !$randomQuestions),
-    array('title' => $langImport.' '.$langWithCriteria,
-          'class' => 'questionSelection',
-          'url' => "#",
-          'icon' => 'fa-plus-circle',
-          'level' => 'primary-label'),
-    array('title' => $langImport.' '.$langFrom2.' '.$langQuestionPool,
+    array('title' => "$langImport $langFrom2 $langQuestionPool ($langWithoutCriteria)",
           'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
-          'icon' => 'fa-bank',
-          'level' => 'primary-label')), false);
+          'icon' => 'fa-bank'),
+    array('title' => "$langImport $langFrom2 $langQuestionPool ($langWithCriteria)",
+        'class' => 'questionSelection',
+        'url' => "#",
+        'icon' => 'fa-bank')),
+    false);
 
 if ($nbrQuestions) {
     $info_random_text = '';
@@ -386,6 +351,12 @@ if ($nbrQuestions) {
         $info_random_text = "<small><span class='help-block'>$langShow $randomQuestions $langFromRandomQuestions</span></small>";
     }
     $questionList = $objExercise->selectQuestionList();
+
+    $tool_content .= "<label>
+                         <input id='shuffleCheckBox' type='checkbox' name='questionShuffle' value='1' ".(($shuffleQuestions == 1)? 'checked' : '').">
+                         $langShuffleQuestions
+                       </label>";
+
     $i = 1;
     $tool_content .= "
         <div class='table-responsive'>

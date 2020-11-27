@@ -540,8 +540,8 @@ if (!class_exists('Exercise')) {
             $this->random = $random;
         }
         
-        function setShuffle() {
-            $this->shuffle = 1;
+        function setShuffle($shuffle) {
+            $this->shuffle = $shuffle;
         }
 
         /**

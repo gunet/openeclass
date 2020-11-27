@@ -1807,7 +1807,7 @@ $langInfoGrade = "βαθμός";
 $langShow = "Εμφάνιση";
 $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύνολο των ερωτήσεων της άσκησης";
 $langFromRandomDifficultyQuestions = "τυχαίες ερωτήσεις με βαθμό δυσκολίας";
-$langRandomQuestionsWithCriteria = "Τυχαιοποίηση με κριτήρια";
+$langRandomQuestionsWithCriteria = "Δυναμική επιλογή ερωτήσεων";
 $langSelectRandomCriteria = "Επιλέξτε κριτήρια τυχαιοποίησης";
 $langPurgeExercises = "Εκκαθάριση αποτελεσμάτων";
 $langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
@@ -1860,11 +1860,13 @@ $langExercisesSubmissions = "υποβολές";
 $langQuestionPoolPurge = "Διαγραφή αχρησιμοποίητων ερωτήσεων";
 $langConfirmQuestionPoolPurge = "Οι ερωτήσεις που δεν χρησιμοποιούνται σε καμμία άσκηση θα διαγραφούν.";
 $langQuestionPoolPurgeSuccess = "Η διαγραφή των αχρησιμοποίητων ερωτήσεων από την τράπεζα ερωτήσεων πραγματοποιήθηκε.";
+$langShuffleQuestions = "Ανακάτεμα ερωτήσεων";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";
-$langQuestionManagement = "Διαχείριση Ερώτησης";
+$langQuestionManagement = "Διαχείριση ερώτησης";
+$langQuestionsManagement = "Διαχείριση ερωτήσεων";
 $langQuestionNotFound = "Δεν βρέθηκε η ερώτηση";
 $langAlertAdmin = "Παρακαλώ δηλώστε τουλάχιστον έναν διαχειριστή για το $langsCourse!";
 $langBackExerciseManagement = "Επιστροφή στη διαχείριση άσκησης";
@@ -1934,9 +1936,10 @@ $langColumnB = "Στήλη B";
 $langMoreLessChoices = "Προσθήκη/Αφαίρεση επιλογών";
 
 // question_list_admin.php
-$langQuestionList = "Κατάλογος ερωτήσεων της άσκησης";
+$langQuestionList = "Ερωτήσεις της άσκησης";
 $langGetExistingQuestion = "Ερώτηση από άλλη άσκηση";
-$langWithCriteria = 'με Κριτήρια';
+$langWithCriteria = 'με κριτήρια';
+$langWithoutCriteria = 'χωρίς κριτήρια';
 $langSelectionRule = 'Κανόνας Επιλογής';
 
 // question_pool.php

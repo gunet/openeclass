@@ -244,10 +244,16 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
 function display_exercise($exercise_id) {
 
     global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
-           $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore,
+           $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore, $langQuestionsManagement,
            $langScore, $course_code, $langBack, $langModify, $langFromRandomDifficultyQuestions;
 
     $tool_content .= action_bar(array(
+        array('title' => $langQuestionsManagement,
+            'url' => "admin.php?course=$course_code&exerciseId=$exercise_id",
+            'icon' => 'fa-cogs',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'
+        ),
         array('title' => $langBack,
               'url' => "index.php?course=$course_code",
               'icon' => 'fa-reply',
