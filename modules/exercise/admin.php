@@ -45,6 +45,7 @@ if (isset($_GET['htopic'])) {
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox();
 
 $toolName = $langExercices;
@@ -52,8 +53,6 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langE
 
 // picture path
 $picturePath = "courses/$course_code/image";
-// the 4 types of answers
-$aType = array($langUniqueSelect, $langMultipleSelect, "$langFillBlanks ($langFillBlanksStrict)", $langMatching, $langTrueFalse, $langFreeText, "$langFillBlanks ($langFillBlanksTolerant)");
 
 // construction of the Exercise object
 $objExercise = new Exercise();
@@ -61,9 +60,26 @@ if (isset($_GET['exerciseId'])) {
     $exerciseId = intval($_GET['exerciseId']);
     $objExercise->read($exerciseId);
     $nbrQuestions = $objExercise->selectNbrQuestions();
+    $randomQuestions = $objExercise->isRandom();
+    $shuffleQuestions = $objExercise->selectShuffle();
 }
 
-// intializes the Question object
+
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+
+    // shuffle (aka random questions)
+    if (isset($_GET['shuffleQuestions'])) {
+        if ($_GET['shuffleQuestions'] == 'true') {
+            $objExercise->setShuffle(1);
+        } else {
+            $objExercise->setShuffle(0);
+        }
+        $objExercise->save();
+        exit();
+    }
+}
+
+// initializes the Question object
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
     // construction of the Question object
     $objQuestion = new Question();
