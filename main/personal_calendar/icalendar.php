@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,15 +17,25 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
-$require_login = TRUE;
+// Support public iCal links authorized via token
+if (!isset($_GET['uid']) and !isset($_GET['token'])) {
+    $require_login = true;
+}
 
 require_once '../../include/init.php';
 require_once 'calendar_events.class.php';
 
-header('Content-Type:text/calendar; charset='.$charset); 
+if (empty($require_login)) {
+    $uid = $_GET['uid'];
+    if (!token_validate('ical' . $uid, $_GET['token'])) {
+        forbidden();
+    }
+}
+
+header('Content-Type:text/calendar; charset='.$charset);
 header("Content-Disposition: attachment; filename=\"mycalendar.ics\"");
 Calendar_Events::get_calendar_settings();
 echo Calendar_Events::icalendar();

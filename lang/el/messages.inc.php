@@ -4614,6 +4614,10 @@ $langEventpersonal = "προσωπικά γεγονότα";
 $langEventsDeleted = "Τα γεγονότα σας διαγράφηκαν.";
 $langEvery = "κάθε";
 $langiCalExport = "Εξαγωγή iCal";
+$langiCalFeed = "Ροή iCal";
+$langiCalExplanation = "Το παρακάτω URL μπορεί να εισαχθεί σε οποιαδήποτε
+    εφαρμογή υποστηρίζει εισαγωγή δεδομένων σε μορφή iCal, ώστε τα γεγονότα
+    του προσωπικού σας ημερολογίου να συγχρονίζονται με αυτή.";
 $langLanguageCode = "el-GR";
 $langModifEvent = "Αλλαγή γεγονότος";
 $langMonthsAbstract = "μήνες";

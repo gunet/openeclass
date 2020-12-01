@@ -68,13 +68,13 @@ $head_content .= "
 <script type='text/javascript'>
 $(function() {
     $('#startdate').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', 
+        format: 'dd-mm-yyyy hh:ii',
         pickerPosition: 'bottom-right',
         language: '".$language."',
         autoclose: true
     });
     $('#enddatecal').datepicker({
-        format: 'dd-mm-yyyy', 
+        format: 'dd-mm-yyyy',
         pickerPosition: 'bottom-right',
         language: '".$language."',
         autoclose: true
@@ -82,7 +82,7 @@ $(function() {
     $('#duration').timepicker({
         showMeridian: false,
         pickerPosition: 'bottom-right',
-        minuteStep: 1, 
+        minuteStep: 1,
         defaultTime: false,
         autoclose: true});
 });
@@ -95,19 +95,19 @@ function show_month(day,month,year){
     selectedday = day;
     selectedmonth = month;
     selectedyear = year;
-    $.get("../calendar_data.php",{day:day, month: month, year: year}, function(data){$("#monthcalendar").html(data);});    
+    $.get("../calendar_data.php",{day:day, month: month, year: year}, function(data){$("#monthcalendar").html(data);});
 }
 function show_week(day,month,year){
     selectedday = day;
     selectedmonth = month;
     selectedyear = year;
-    $.get("../calendar_data.php",{day:day, month: month, year: year, caltype: "week"}, function(data){$("#monthcalendar").html(data);});    
+    $.get("../calendar_data.php",{day:day, month: month, year: year, caltype: "week"}, function(data){$("#monthcalendar").html(data);});
 }
 function show_day(day,month,year){
     selectedday = day;
     selectedmonth = month;
     selectedyear = year;
-    $.get("../calendar_data.php",{day:day, month: month, year: year, caltype: "day"}, function(data){$("#monthcalendar").html(data);});    
+    $.get("../calendar_data.php",{day:day, month: month, year: year, caltype: "day"}, function(data){$("#monthcalendar").html(data);});
 }
 '
 ."var dialogUpdateOptions = {
@@ -149,11 +149,11 @@ var dialogDeleteOptions = {
 
 $(document).ready(function(){
     $('#enddatecal').hide();
-    $('#submitEvent').on('click', 
+    $('#submitEvent').on('click',
             function(e){
                 checkrequired($('#myeventform'));
     });
-    
+
     $('#frequencynumber').change(function(){checkenableenddate();});
     $('#frequencyperiod').change(function(){checkenableenddate();});
 });
@@ -165,7 +165,7 @@ function checkenableenddate(){
         $('#enddatecal').show();
     }
 }
-    
+
 function checkrequired(thisform) {
     if ($('#newTitle').val()=='' || $('#startdate').val()=='') {
             bootbox.alert('$langTitleDateNotEmpty');
@@ -215,7 +215,7 @@ if (isset($_POST['newTitle'])) {
             } else {
               $resp = Calendar_Events::update_event($id, $newTitle, $start, $duration, $newContent, false, $recursion, $refobjid);
             }
-            
+
         } else {
             $resp = Calendar_Events::update_admin_event($id, $newTitle, $start, $duration, $newContent, $visibility, $recursion);
             if(isset($_POST['rep']) && $_POST['rep'] == 'yes'){
@@ -230,7 +230,7 @@ if (isset($_POST['newTitle'])) {
             Session::Messages($resp['message']);
         }
         redirect_to_home_page('main/personal_calendar/index.php');
-    } else { // new event 
+    } else { // new event
         $recursion = null;
         if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
             $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
@@ -247,8 +247,8 @@ if (isset($_POST['newTitle'])) {
 
 /* delete */
 if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' || $_GET['et'] == 'admin'))) {
-    $thisEventId = intval($_GET['delete']);    
-    if(isset($_GET['rep']) && $_GET['rep'] == 'yes'){        
+    $thisEventId = intval($_GET['delete']);
+    if(isset($_GET['rep']) && $_GET['rep'] == 'yes'){
         $resp = Calendar_Events::delete_recursive_event($thisEventId, $_GET['et']);
     } else {
         $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
@@ -263,10 +263,10 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
 $is_recursive_event = false;
 $enddate = '';/* edit */
 $applytogroup = '';
-if (isset($_GET['modify'])) {    
+if (isset($_GET['modify'])) {
     $modify = intval($_GET['modify']);
     $displayForm = false;
-    if (isset($_GET['admin']) and $is_admin) {                
+    if (isset($_GET['admin']) and $is_admin) {
         $event = Calendar_Events::get_admin_event($modify);
         if ($event) {
             $eventToModify = $event->id;
@@ -288,7 +288,7 @@ if (isset($_GET['modify'])) {
             $displayForm = true;
         }
     } else {
-        $event = Calendar_Events::get_event($modify);        
+        $event = Calendar_Events::get_event($modify);
         if ($event) {
             $eventToModify = $event->id;
             $contentToModify = $event->content;
@@ -310,13 +310,13 @@ if (isset($_GET['modify'])) {
                 $repeatperiod = substr($event->recursion_period, -1);
                 $enddate = DateTime::createFromFormat('Y-m-d', $event->recursion_end)->format('d-m-Y');
             }
-            
+
         }
     }
 }
 
 /* display form */
-if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) { 
+if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
     if (isset($_GET['modify'])) {
         $pageName = $langModifEvent;
     } else {
@@ -327,9 +327,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                       'url' => "index.php",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
-    
+
     $navigation[] = array('url' => "index.php", 'name' => $langMyAgenda);
-    
+
     if (!isset($eventToModify))
         $eventToModify = "";
     if (!isset($contentToModify))
@@ -347,7 +347,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
     if (!isset($type_selected))
         $type_selected = null;
     if (!isset($object_selected))
-        $object_selected = null;    
+        $object_selected = null;
     $tool_content .= "
     <div class='form-wrapper'>
         <form id='myeventform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' style='display:inline'>
@@ -435,7 +435,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             $selectedvis = array(0 => "", USER_TEACHER => "", USER_STUDENT => "", USER_GUEST => "");
             if (isset($visibility_level)) {
                 $selectedvis[$visibility_level] = "selected";
-            }            
+            }
             $tool_content .= "
             <div class='form-group'>
               <label for='startdate' class='col-sm-2 control-label'>$langShowTo:</label>
@@ -444,10 +444,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                     <option value=\"" . USER_STUDENT . "\" " . $selectedvis[USER_STUDENT] . ">$langShowToAllregistered</option>
                     <option value=\"" . USER_GUEST . "\" " . $selectedvis[USER_GUEST] . ">$langShowToAll</option>
                     <option value='0' $selectedvis[0]>$langShowToAdminsOnly</option>
-                    <option value=\"" . USER_TEACHER . "\" " . $selectedvis[USER_TEACHER] . ">$langShowToAdminsandProfs</option>                                        
+                    <option value=\"" . USER_TEACHER . "\" " . $selectedvis[USER_TEACHER] . ">$langShowToAdminsandProfs</option>
                 </select>
               </div>
-            </div>";            
+            </div>";
         }
         $tool_content .= "
             <div class='form-group'>
@@ -455,12 +455,12 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                    <input class='btn btn-primary' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
                    <a class='btn btn-default' href='index.php'>$langCancel</a>
               </div>
-            </div>            
+            </div>
             </form>
-        </div>";    
+        </div>";
 } else {
     /* display actions toolbar */
-    $tool_content .= 
+    $tool_content .=
                 action_bar(array(
                     array('title' => $langAddEvent,
                         'url' => "$_SERVER[SCRIPT_NAME]?addEvent=1",
@@ -489,8 +489,16 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             $personal_event = array('0' => Calendar_Events::get_event($id));
             $tool_content .= event_list($personal_event, 'ASC', 'personal');
         }
-        
+
     } else {
+        // Define iCal feed icon
+        $link = "main/personal_calendar/icalendar.php?uid=$uid&amp;token=" .
+            token_generate('ical' . $uid);
+        define('RSS', $link);
+        define('RSS_ICON', 'fa-calendar');
+        define('RSS_TITLE', $langiCalFeed);
+        $iCalFeedLink = $urlServer . $link;
+
         /* display events */
         $day = (isset($_GET['day'])) ? intval($_GET['day']) : null;
         $month = (isset($_GET['month'])) ? intval($_GET['month']) : null;
@@ -548,10 +556,40 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             $this.click(function() {
                 calendar.view($this.data("calendar-view"));
             });
-        });    
         });
 
-        </script>';
+        $(".tiny-icon-rss").click(function (e) {
+            e.preventDefault();
+            $("#iCalDescription").modal();
+        });
+
+        });
+
+        </script>' . "
+        <div class='modal fade' id='iCalDescription' tabindex='-1' role='dialog' aria-labelledby='iCalDescriptionLabel'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <button type='button' class='close' data-dismiss='modal' aria-label='$langClose'><span aria-hidden='true'>&times;</span></button>
+                        <h4 class='modal-title' id='iCalDescriptionLabel'>$langiCalFeed</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <form>
+                            <div class='form-group'>
+                                <p class='form-control-static'>$langiCalExplanation</p>
+                            </div>
+                            <div class='form-group'>
+                                <input type='text' class='form-control' value='$iCalFeedLink' readonly>
+                            </div>
+                            <div class='form-group text-right'>
+                                <button class='btn btn-default' data-dismiss='modal'>$langClose</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>";
+
     }
 }
 add_units_navigation(TRUE);

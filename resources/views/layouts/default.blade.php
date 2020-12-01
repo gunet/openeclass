@@ -219,9 +219,9 @@
                                                     <span class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'></span>
                                                 </a>
                                             @endif
-                                            @if(defined('RSS'))
+                                            @if (defined('RSS'))
                                                 <a href='{{ $urlAppend.RSS }}'>
-                                                    <span class='fa fa-rss-square tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='RSS Feed'></span>
+                                                    <span class='fa tiny-icon tiny-icon-rss tiny-icon {{ defined('RSS_ICON')? RSS_ICON: 'fa-rss-square' }} data-toggle='tooltip' data-placement='top' title='{{ defined('RSS_TITLE')? RSS_TITLE: trans('langRSSFeed') }}'></span>
                                                 </a>
                                             @endif
                                             @if ($is_editor and isset($course_code) and display_activation_link($module_id))
