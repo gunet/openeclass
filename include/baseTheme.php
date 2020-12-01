@@ -627,14 +627,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     if (defined('RSS')) {
+        $rss_icon = defined('RSS_ICON')? RSS_ICON: 'fa-rss-square';
+        $rss_title = q(defined('RSS_TITLE')? RSS_TITLE: $GLOBALS['langRSSFeed']);
         $t->set_var('RSS_LINK_ICON', "
-
             <a href='$urlAppend" . RSS . "'>
-                <span class='fa fa-rss-square tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='RSS Feed'></span>
-            </a>
-
-
-        ");
+                <span class='fa $rss_icon tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='$rss_title'></span>
+            </a>");
     }
 
     if ($perso_tool_content) {
