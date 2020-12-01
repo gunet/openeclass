@@ -82,6 +82,7 @@ if (isset($_GET['delete'])) {
 
     $pageName = isset($_GET['add'])? $langAutoEnrollNew: $langEditChange;
     $navigation[] = array('url' => 'autoenroll.php', 'name' => $langAutoEnroll);
+    $coursesOptions = '';
 
     if (isset($_GET['edit'])) {
         if (!($rule = getDirectReference($_GET['edit']))) {
