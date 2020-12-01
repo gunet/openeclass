@@ -24,17 +24,6 @@
 $exerciseId = $_GET['exerciseId'];
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
-    // shuffle (aka random questions)
-    /*if (isset($_GET['shuffleQuestions'])) {
-        if ($_GET['shuffleQuestions'] == 'true') {
-            $objExercise->setShuffle(1);
-        } else {
-            $objExercise->setShuffle(0);
-        }
-        $objExercise->save();
-        exit();
-    }*/
-
     if (isset($_POST['toReorder'])) {
         reorder_table('exercise_with_questions', 'exercise_id', $exerciseId, $_POST['toReorder'],
             isset($_POST['prevReorder'])? $_POST['prevReorder']: null,'id','q_position');
@@ -109,6 +98,22 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit();
 }
 
+
+// shuffle (aka random questions)
+if (isset($_POST['shuffleQuestions'])) {
+    if ($_POST['enableShuffleQuestions'] == 1) {
+        $objExercise->setShuffle(1); // shuffle all questions
+        if (($_POST['numberOfRandomQuestions']) > 0) {
+            $objExercise->setRandom($_POST['numberOfRandomQuestions']);  // shuffle some questions
+        } else {
+            $objExercise->setRandom(0);
+        }
+    } else {
+        $objExercise->setShuffle(0);
+    }
+    $objExercise->save();
+}
+
 $formRandomQuestions = '';
 if ($objExercise->hasQuestionListWithRandomCriteria()) {
     $formRandomQuestions = 'disable';
@@ -153,15 +158,7 @@ $head_content .= "
                         }
                     });
                 }
-            });
-            $('#shuffleCheckBox').click(function(e) {
-                e.preventDefault();
-                var checked = $(this).is(':checked');                
-                $.ajax({
-                    type: 'get',
-                    url: '" . $ajax_shuffle_url . "' + checked
-                });
-            })
+            });            
         });
     </script>
 ";
@@ -318,6 +315,7 @@ if (isset($_GET['deleteQuestion'])) {
 }
 
 $randomQuestions = $objExercise->isRandom();
+$shuffleQuestions = $objExercise->selectShuffle();
 
 $disabled = '';
 if ($objExercise->hasQuestionListWithRandomCriteria()) {
@@ -350,12 +348,27 @@ if ($nbrQuestions) {
     if ($randomQuestions > 0) {
         $info_random_text = "<small><span class='help-block'>$langShow $randomQuestions $langFromRandomQuestions</span></small>";
     }
-    $questionList = $objExercise->selectQuestionList();
 
-    $tool_content .= "<label>
-                         <input id='shuffleCheckBox' type='checkbox' name='questionShuffle' value='1' ".(($shuffleQuestions == 1)? 'checked' : '').">
-                         $langShuffleQuestions
-                       </label>";
+    $questionList = $objExercise->selectQuestionList();
+    $tool_content .= "<div id='RandomizationForm' class='form-wrapper'>   
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>
+                <div class='form-group'>
+                    <div class='col-sm-12'>                        
+                        <label class='col-sm-3'>
+                             <input type='checkbox' name='enableShuffleQuestions' value='1' ".(($shuffleQuestions == 1)? 'checked' : '').">
+                             $langShuffleQuestions 
+                         </label>
+                         <span class='col-sm-1'><input type='text' class='form-control' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
+                         <span class='col-sm-8'>$langFromRandomQuestions</span>                        
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-12'>
+                        <input class='btn btn-primary' type='submit' value='$langSubmit' name='shuffleQuestions'>
+                    </div>
+                </div>
+            </form>
+        </div>";
 
     $i = 1;
     $tool_content .= "
