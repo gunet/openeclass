@@ -47,6 +47,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 load_js('tools.js');
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
+
     $v = new Valitron\Validator($_POST);
     $v->addRule('ipORcidr', function($field, $value, array $params) {
         //matches IPv4/6 and IPv4/6 CIDR ranges
@@ -81,12 +82,15 @@ if (isset($_POST['submitExercise'])) {
             $objExercise->updateIPLock('');
         }
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
-        if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
+        /*if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
             $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate']);
             $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
             $objExercise->updateStartDate($startDateTime_obj);
-        }
+        }*/
 
+        $startDateTime_obj = isset($_POST['exerciseStartDate']) && !empty($_POST['exerciseStartDate']) ?
+            DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate'])->format('Y-m-d H:i:s') : NULL;
+        $objExercise->updateStartDate($startDateTime_obj);
         $endDateTime_obj = isset($_POST['exerciseEndDate']) && !empty($_POST['exerciseEndDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseEndDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
@@ -127,14 +131,19 @@ if (isset($_POST['submitExercise'])) {
     $exerciseDescription = Session::has('exerciseDescription') ? Session::get('exerciseDescription') : $objExercise->selectDescription();
     $exerciseType = Session::has('exerciseType') ? Session::get('exerciseType') : $objExercise->selectType();
     //more population need to be done
-    $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
+    $exerciseStartDate = $objExercise->selectStartDate();
+    if (is_null($exerciseStartDate) && !Session::has('exerciseStartDate')) {
+        $exerciseStartDate = '';
+    } else {
+        $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
+    }
     $exerciseEndDate = $objExercise->selectEndDate();
     if (is_null($exerciseEndDate) && !Session::has('exerciseEndDate')) {
         $exerciseEndDate = '';
     } else {
         $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
     }
-    $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : null;
+    $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : ($exerciseStartDate ? 1 : 0);;
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($exerciseEndDate ? 1 : 0);
     $exerciseTempSave = Session::has('exerciseTempSave') ? Session::get('exerciseTempSave') : $objExercise->selectTempSave();
     $exerciseTimeConstraint = Session::has('exerciseTimeConstraint') ? Session::get('exerciseTimeConstraint') : $objExercise->selectTimeConstraint();
@@ -686,6 +695,4 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                           </div>";
     }
     $tool_content .= "</div>";
-    //$tool_content .= "</div>";
-    //$tool_content .= "</div>";
 }
