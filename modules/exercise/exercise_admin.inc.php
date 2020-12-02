@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2020  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,12 +29,15 @@ require_once 'modules/tags/moduleElement.class.php';
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+            $data = Database::get()->queryArray("SELECT name,id FROM `group` 
+                                          WHERE course_id = ?d 
+                                          AND visible = 1 
+                                      ORDER BY name", $course_id);
         } elseif ($_POST['assign_type'] == 1) {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id
-                                    AND course_user.course_id = ?d AND course_user.status = 5
+                                    AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
                                     AND user.id ORDER BY surname", $course_id);
         }
         echo json_encode($data);
@@ -44,6 +47,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 load_js('tools.js');
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
+
     $v = new Valitron\Validator($_POST);
     $v->addRule('ipORcidr', function($field, $value, array $params) {
         //matches IPv4/6 and IPv4/6 CIDR ranges
@@ -78,23 +82,29 @@ if (isset($_POST['submitExercise'])) {
             $objExercise->updateIPLock('');
         }
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
-        if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
+        /*if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
             $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate']);
             $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
             $objExercise->updateStartDate($startDateTime_obj);
-        }
+        }*/
 
+        $startDateTime_obj = isset($_POST['exerciseStartDate']) && !empty($_POST['exerciseStartDate']) ?
+            DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate'])->format('Y-m-d H:i:s') : NULL;
+        $objExercise->updateStartDate($startDateTime_obj);
         $endDateTime_obj = isset($_POST['exerciseEndDate']) && !empty($_POST['exerciseEndDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseEndDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
         $objExercise->updateTempSave($_POST['exerciseTempSave']);
         $objExercise->updateTimeConstraint($_POST['exerciseTimeConstraint']);
         $objExercise->updateAttemptsAllowed($_POST['exerciseAttemptsAllowed']);
-        $randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
-        $objExercise->setRandom($randomQuestions);
         $objExercise->updateResults($_POST['dispresults']);
         $objExercise->updateScore($_POST['dispscore']);
         $objExercise->updateAssignToSpecific($_POST['assign_to_specific']);
+        if (!isset($_POST['continueAttempt']) or !isset($_POST['continueTimeLimit'])) {
+            $objExercise->updateContinueTimeLimit(0);
+        } else {
+            $objExercise->updateContinueTimeLimit($_POST['continueTimeLimit']);
+        }
         $objExercise->save();
         // reads the exercise ID (only useful for a new exercise)
         $exerciseId = $objExercise->selectId();
@@ -109,8 +119,6 @@ if (isset($_POST['submitExercise'])) {
         } else {
             $moduleTag->syncTags(array());
         }
-
-
         redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);
     } else {
         $new_or_modify = isset($_GET['NewExercise']) ? "&NewExercise=Yes" : "&exerciseId=$_GET[exerciseId]&modifyExercise=yes";
@@ -122,22 +130,30 @@ if (isset($_POST['submitExercise'])) {
     $exerciseTitle = Session::has('exerciseTitle') ? Session::get('exerciseTitle') : $objExercise->selectTitle();
     $exerciseDescription = Session::has('exerciseDescription') ? Session::get('exerciseDescription') : $objExercise->selectDescription();
     $exerciseType = Session::has('exerciseType') ? Session::get('exerciseType') : $objExercise->selectType();
-    //more repopulation need to be done
-    $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
+    //more population need to be done
+    $exerciseStartDate = $objExercise->selectStartDate();
+    if (is_null($exerciseStartDate) && !Session::has('exerciseStartDate')) {
+        $exerciseStartDate = '';
+    } else {
+        $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
+    }
     $exerciseEndDate = $objExercise->selectEndDate();
     if (is_null($exerciseEndDate) && !Session::has('exerciseEndDate')) {
         $exerciseEndDate = '';
     } else {
         $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
     }
-    $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : null;
+    $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : ($exerciseStartDate ? 1 : 0);;
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($exerciseEndDate ? 1 : 0);
     $exerciseTempSave = Session::has('exerciseTempSave') ? Session::get('exerciseTempSave') : $objExercise->selectTempSave();
     $exerciseTimeConstraint = Session::has('exerciseTimeConstraint') ? Session::get('exerciseTimeConstraint') : $objExercise->selectTimeConstraint();
     $exerciseAttemptsAllowed = Session::has('exerciseAttemptsAllowed') ? Session::get('exerciseAttemptsAllowed') : $objExercise->selectAttemptsAllowed();
-    $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
     $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
+    $continueTimeLimit = Session::has('continueTimeLimit') ? Session::get('continueTimeLimit') : $objExercise->continueTimeLimit();
+    $continueTimeField = str_replace('[]',
+        "<input type='text' class='form-control' name='continueTimeLimit' value='$continueTimeLimit'>",
+        $langContinueAttemptTime);
     $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : explode(',', $objExercise->selectIPLock());
     $exerciseIPLockOptions = implode('', array_map(
         function ($item) {
@@ -145,48 +161,51 @@ if (isset($_POST['submitExercise'])) {
         }, $exerciseIPLock));
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
-        if ($objExercise->selectAssignToSpecific()) {
-            //preparing options in select boxes for assigning to speficic users/groups
-            $assignee_options='';
-            $unassigned_options='';
-            if ($objExercise->selectAssignToSpecific() == 2) {
-                $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
-                                       FROM exercise_to_specific, `group`
-                                       WHERE `group`.id = exercise_to_specific.group_id AND exercise_to_specific.exercise_id = ?d", $exerciseId);
-                $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
-                foreach ($assignees as $assignee_row) {
-                    $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
-                }
-                $unassigned = array_udiff($all_groups, $assignees,
-                  function ($obj_a, $obj_b) {
+    if ($objExercise->selectAssignToSpecific()) {
+        //preparing options in select boxes for assigning to specific users/groups
+        $assignee_options='';
+        $unassigned_options='';
+        if ($objExercise->selectAssignToSpecific() == 2) {
+            $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
+                FROM exercise_to_specific, `group`
+                WHERE `group`.id = exercise_to_specific.group_id
+                    AND `group`.visible = 1 
+                    AND exercise_to_specific.exercise_id = ?d", $exerciseId);
+            $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
+            foreach ($assignees as $assignee_row) {
+                $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
+            }
+            $unassigned = array_udiff($all_groups, $assignees,
+                function ($obj_a, $obj_b) {
                     return $obj_a->id - $obj_b->id;
-                  }
-                );
-                foreach ($unassigned as $unassigned_row) {
-                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
                 }
-            } else {
-                $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
-                                       FROM exercise_to_specific, user
-                                       WHERE user.id = exercise_to_specific.user_id AND exercise_to_specific.exercise_id = ?d", $exerciseId);
-                $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
-                                        FROM user, course_user
-                                        WHERE user.id = course_user.user_id
-                                        AND course_user.course_id = ?d AND course_user.status = 5
-                                        AND user.id", $course_id);
-                foreach ($assignees as $assignee_row) {
-                    $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
-                }
-                $unassigned = array_udiff($all_users, $assignees,
-                  function ($obj_a, $obj_b) {
+            );
+            foreach ($unassigned as $unassigned_row) {
+                $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
+            }
+        } else {
+            $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                FROM exercise_to_specific, user
+                WHERE user.id = exercise_to_specific.user_id AND exercise_to_specific.exercise_id = ?d", $exerciseId);
+            $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
+                FROM user, course_user
+                WHERE user.id = course_user.user_id
+                AND course_user.course_id = ?d 
+                AND course_user.status = " . USER_STUDENT . "
+                AND user.id", $course_id);
+            foreach ($assignees as $assignee_row) {
+                $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
+            }
+            $unassigned = array_udiff($all_users, $assignees,
+                function ($obj_a, $obj_b) {
                     return $obj_a->id - $obj_b->id;
-                  }
-                );
-                foreach ($unassigned as $unassigned_row) {
-                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->surname $unassigned_row->givenname</option>";
                 }
+            );
+            foreach ($unassigned as $unassigned_row) {
+                $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->surname $unassigned_row->givenname</option>";
             }
         }
+    }
 }
 
 // shows the form to modify the exercise
@@ -231,27 +250,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     }
                     $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                 }
-            });
-
-            $('.questionDrawnRadio').change(function() {
-                if($(this).val()==0){
-                    $('#questionDrawnInput').val('');
-                    $('#questionDrawnInput').prop('disabled', true);
-                    $('#questionDrawnInput').closest('div.form-group').addClass('hidden');
-                } else {
-                    $('#questionDrawnInput').prop('disabled', true);
-                    $('#questionDrawnInput').closest('div.form-group').removeClass('hidden');
-                }
-            });
-            $('#randomDrawnSubset').change(function() {
-                if($(this).prop('checked')){
-                    $('#questionDrawnInput').prop('disabled', false);
-                    $('.questionDrawnRadio').prop('disabled', true);
-                } else {
-                    $('#questionDrawnInput').prop('disabled', true);
-                    $('.questionDrawnRadio').prop('disabled', false);
-                }
-            });
+            });                                    
             $('#exerciseAttemptsAllowed').blur(function(){
                 var attempts = $(this).val();
                 if (attempts ==0) {
@@ -270,6 +269,13 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             });
             $('#assign_button_all').click(hideAssignees);
             $('#assign_button_user, #assign_button_group').click(ajaxAssignees);
+            $('#continueAttempt').change(function () {
+                if ($(this).prop('checked')) {
+                    $('#continueTimeField').show('fast');
+                } else {
+                    $('#continueTimeField').hide('fast');
+                }
+            }).change();
         });
         function ajaxAssignees()
         {
@@ -397,38 +403,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
                      <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
                    </div>
-                 </div>
-                 <div class='form-group'>
-                     <label for='exerciseDescription' class='col-sm-2 control-label'>$langRandomQuestions:</label>
-                     <div class='col-sm-10'>
-                         <div class='radio'>
-                           <label>
-                             <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='0' ".(($randomQuestions == 0)? 'checked' : '').(($randomQuestions > 0 && $randomQuestions < 32767)? ' disabled' : '').">
-                             $langDeactivate
-                           </label>
-                         </div>
-                         <div class='radio'>
-                           <label>
-                             <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='32767'".(($randomQuestions > 0)? ' checked' : '').(($randomQuestions > 0 && $randomQuestions < 32767)? ' disabled' : '').">
-                             $langActivate
-                           </label>
-                         </div>
-                     </div>
-                 </div>
-                 <div class='form-group ".(($randomQuestions > 0)? '' : 'hidden')."'>
-                    <div class='col-sm-5 col-sm-offset-2'>
-                        <input type='text' class='form-control' name='questionDrawn' id='questionDrawnInput' value='".(($randomQuestions < 32767) ? $randomQuestions : null)."'".(($randomQuestions > 0 && $randomQuestions < 32767)? '' : 'disabled').">
-                    </div>
-                    <div class='col-sm-5'>
-                        <div class='checkbox'>
-                          <label>
-                            <input id='randomDrawnSubset' value='1' type='checkbox' ".(($randomQuestions > 0 && $randomQuestions < 32767)? 'checked' : '').">
-                            $langFromRandomQuestions
-                          </label>
-                        </div>
-                    </div>
-                 </div>
-                 <div class='form-group'>
+                 </div>";
+
+                $tool_content .= "<div class='form-group'>
                      <label for='dispresults' class='col-sm-2 control-label'>$langAnswers:</label>
                      <div class='col-sm-10'>
                          <div class='radio'>
@@ -536,52 +513,64 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                             </table>
                         </div>
                     </div>
-                </div>";
+                </div>
 
-                $tool_content .= "<div class='course-info-title clearfix'>
-                            <a role='button' data-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
-                                 <h5 class='panel-heading'>
-                                       <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess
-                                 </h5>
-                            </a>
-                          </div>";
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langContinueAttempt:</label>
+                    <div class='col-sm-10'>
+                        <div class='checkbox'>
+                            <label>
+                                <input id='continueAttempt' name='continueAttempt' type='checkbox' " . ($continueTimeLimit? 'checked' : '') . ">
+                                $langContinueAttemptExplanation
+                            </label>
+                        </div>
+                        <div id='continueTimeField' class='form-inline' style='margin-top: 15px; " .
+                            ($continueTimeLimit? '': 'display: none') . "'>$continueTimeField</div>
+                    </div>
+                </div>
 
-                $tool_content .= "<div id='CheckAccess' class='collapse'>";
-                 $tool_content .= "<div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
-                       <label for='exercisePasswordLock' class='col-sm-2 control-label'>$langPassCode:</label>
-                       <div class='col-sm-10'>
-                         <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
-                         <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
-                       </div>
-                     </div>
-                     <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
-                       <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
-                       <div class='col-sm-10'>
-                         <select name='exerciseIPLock[]' class='form-control' id='exerciseIPLock' multiple>
-                            $exerciseIPLockOptions
-                         </select>
-                         <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
-                       </div>
-                     </div>
-                     " . eClassTag::tagInput($exerciseId) . "
+                <div class='course-info-title clearfix'>
+                    <a role='button' data-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
+                        <h5 class='panel-heading'>
+                            <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess
+                        </h5>
+                    </a>
+                </div>
+
+                <div id='CheckAccess' class='collapse'>
+                    <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
+                        <label for='exercisePasswordLock' class='col-sm-2 control-label'>$langPassCode:</label>
+                        <div class='col-sm-10'>
+                            <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
+                            <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
+                        </div>
+                    </div>
+                    <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
+                        <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
+                        <div class='col-sm-10'>
+                            <select name='exerciseIPLock[]' class='form-control' id='exerciseIPLock' multiple>
+                                $exerciseIPLockOptions
+                            </select>
+                            <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
+                        </div>
+                    </div>" .
+                    eClassTag::tagInput($exerciseId) . "
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-offset-2 col-sm-10'>" .
+                        form_buttons([
+                            [ 'text'  => $langSave,
+                              'name'  => 'submitExercise',
+                              'value' => (isset($_GET['NewExercise']) ? $langCreate : $langModify),
+                              'javascript' => "selectAll('assignee_box',true)"
+                            ],
+                            [ 'href' => $exerciseId ?
+                                "admin.php?course=$course_code&exerciseId=$exerciseId" :
+                                "index.php?course=$course_code",
+                            ]
+                        ]) . "
+                    </div>
                  </div>
-                 <div class='form-group'>
-                   <div class='col-sm-offset-2 col-sm-10'>
-                    " . form_buttons(array(
-                        array(
-                            'text'  => $langSave,
-                            'name'  => 'submitExercise',
-                            'value' => (isset($_GET['NewExercise']) ? $langCreate : $langModify),
-                            'javascript' => "selectAll('assignee_box',true)"
-                        ),
-                        array(
-                            'href' => $exerciseId ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code",
-                        )
-                    ))
-                    ."
-                   </div>
-                 </div>
-
              </fieldset>
              </form>
         </div>";
@@ -614,126 +603,96 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             $disp_score_message = $langScoreDispEndDate;
             break;
     }
-    $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
-    $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
-    $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
+    switch ($exerciseAssignToSpecific) {
+        case 1: $assign_to_users_message = $m['WorkToUser'];
+            break;
+        case 2: $assign_to_users_message = $m['WorkToGroup'];
+            break;
+    }
+    $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise;
     $moduleTag = new ModuleElement($exerciseId);
     $tool_content .= action_bar(array(
+        array('title' => $langModify,
+            'url' => "$_SERVER[SCRIPT_NAME]?$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
+            'icon' => 'fa-edit',
+            'level' => 'primary-label',
+            'button-class' => 'btn btn-success'),
         array('title' => $langBack,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label'
         )
     ));
+    if (!empty($exerciseDescription)) {
+        $tool_content .= "
+                <div class='row margin-bottom-fat'>                
+                    <div class='col-sm-12'>
+                        <span class='help-block'>" . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "</span>
+                    </div>
+                </div>";
+    }
+
+    //$tool_content .= "<div class='panel panel-primary'>";
+    //$tool_content .= "<div class='panel-body'>";
+    $tool_content .= "<div class='alert alert-info'>";
     $tool_content .= "
-    <div class='panel panel-primary'>
-        <div class='panel-heading'>
-            <h3 class='panel-title'>$langInfoExercise &nbsp;". icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes") ."</h3>
-        </div>
-        <div class='panel-body'>
             <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseName:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . q($exerciseTitle) . "
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseDescription:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseType:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseType
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langStart:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseStartDate
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langFinish:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseEndDate
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langTemporarySave:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseTempSave
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseConstrain:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $exerciseTimeConstraint $langExerciseConstrainUnit
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseAttemptsAllowed:</strong>
-                </div>
-                <div class='col-sm-9'>" .
-                    ($exerciseAttemptsAllowed?
-                     "$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit" :
-                     $langExerciseAttemptsUnlimited) . "
-                </div>
-            </div>" . ($randomQuestions? "
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langRandomQuestions:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . ($randomQuestions >= 32767 ? $langYes: "$langSelection $randomQuestions $langFromRandomQuestions") . "
-                </div>
-            </div>" : '') . "
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langAnswers:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $disp_results_message
-                </div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langScore:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $disp_score_message
+                <div class='col-sm-12'>
+                    $langType: <em><strong>$exerciseType</strong></em>
                 </div>
             </div>";
-        $tags_list = $moduleTag->showTags();
-        if ($tags_list) {
-            $tool_content .= "<div class='row margin-bottom-fat'>
-                                <div class='col-sm-3'>
-                                    <strong>$langTags:</strong>
-                                </div>
-                                <div class='col-sm-9'>
-                                    $tags_list
-                                </div>
-                              </div>";
-        }
 
-    $tool_content .= "
-        </div>
-    </div>";
+    $tool_content .= "<div class='row margin-bottom-fat'>                
+                    <div class='col-sm-12'>";
+    if (isset($exerciseStartDate)) {
+        $tool_content .= "<span style='color: green; padding-right: 30px;'>$langStart: <em>$exerciseStartDate</em></span>";
+    }
+    if (isset($exerciseEndDate) && !empty($exerciseEndDate)) {
+        $tool_content .= "<span style='color: red;'>$langFinish: <em>$exerciseEndDate</em></span>";
+    }
+    $tool_content .= "</div></div>";
+
+    $tool_content .= "<div class='row margin-bottom-fat'>                
+                    <div class='col-sm-12'>";
+    if ($exerciseTempSave == 1) {
+        $tool_content .= "<span style='padding-right: 30px';>$langTemporarySave: <em><strong>$langYes</strong></em></span>";
+    }
+    if ($exerciseTimeConstraint > 0) {
+        $tool_content .= "<span style='padding-right: 30px';>$langDuration: <em><strong>$exerciseTimeConstraint</strong> $langExerciseConstrainUnit</em></span>";
+    }
+    if ($exerciseAttemptsAllowed > 0) {
+        $tool_content .= "$langExerciseAttemptsAllowed: <em><strong>$exerciseAttemptsAllowed</strong> $langExerciseAttemptsAllowedUnit</em>";
+    }
+    $tool_content .= "</div></div>";
+
+    $tool_content .= "<div class='row margin-bottom-fat'>
+                    <div class='col-sm-12'>
+                        $langAnswers: <em><strong>$disp_results_message</strong></em>
+                    </div>
+                </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-12'>
+                    $langScore: <em><strong>$disp_score_message</strong></em>
+                </div>
+            </div>";
+
+    if ($exerciseAssignToSpecific > 0) {
+        $tool_content .= "<div class='row margin-bottom-fat'>
+                        <div class='col-sm-12'>
+                         $m[WorkAssignTo]: <strong>$assign_to_users_message</strong>
+                    </div></div>";
+    }
+
+    $tags_list = $moduleTag->showTags();
+    if ($tags_list) {
+        $tool_content .= "<div class='row margin-bottom-fat'>
+                            <div class='col-sm-3'>
+                                <strong>$langTags:</strong>
+                            </div>
+                            <div class='col-sm-9'>
+                                $tags_list
+                            </div>
+                          </div>";
+    }
+    $tool_content .= "</div>";
 }
