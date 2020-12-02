@@ -382,12 +382,15 @@ if (!class_exists('Exercise')) {
          */
         function selectShuffleQuestions() {
 
-            if (!$this->shuffle || $this->selectNbrQuestions() < 2) {
+            if (!$this->shuffle || $this->selectNbrQuestions() < 2) { // randomization is invalid
                 return $this->questionList;
             }
 
             $questions = $this->questionList;
-            shuffle($questions);
+            shuffle($questions); // shuffle all questions
+            if ($this->random > 0) {
+                $questions = array_slice($questions, 0, $this->random);  // shuffle $this->random of them
+            }
 
             // make array keys start from 1
             array_unshift($questions, null);
@@ -401,7 +404,7 @@ if (!class_exists('Exercise')) {
          * @brief get random questions
          * @return array with questions
          */
-        function selectRandomList() {
+        /*function selectRandomList() {
 
             // if the exercise is not a random exercise,
             // or if there are not at least 2 questions
@@ -420,7 +423,7 @@ if (!class_exists('Exercise')) {
             unset($questions[0]);
 
             return $questions;
-        }
+        } */
 
         /**
          * returns 'true' if the question ID is in the question list
