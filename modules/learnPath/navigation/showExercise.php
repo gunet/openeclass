@@ -142,6 +142,7 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $randomQuestions = $objExercise->isRandom();
+$shuffleQuestions = $objExercise->selectShuffle();
 $exerciseType = $objExercise->selectType();
 $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
@@ -179,7 +180,12 @@ if (isset($_SESSION['questionList'][$exerciseId])) {
 
 if (!isset($_SESSION['questionList'][$exerciseId])) {
     // selects the list of question ID
-    $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
+    if ($shuffleQuestions) {
+        $objExercise->selectShuffleQuestions();
+    } else {
+        $questionList = $objExercise->selectQuestions();
+    }
+    //$questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
     // saves the question list into the session
     $_SESSION['questionList'][$exerciseId] = $questionList;
 }

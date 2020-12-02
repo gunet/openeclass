@@ -101,7 +101,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
 // shuffle (aka random questions)
 if (isset($_POST['shuffleQuestions'])) {
-    if ($_POST['enableShuffleQuestions'] == 1) {
+    if (isset($_POST['enableShuffleQuestions']) and ($_POST['enableShuffleQuestions'] == 1)) {
         $objExercise->setShuffle(1); // shuffle all questions
         if (($_POST['numberOfRandomQuestions']) > 0) {
             $objExercise->setRandom($_POST['numberOfRandomQuestions']);  // shuffle some questions

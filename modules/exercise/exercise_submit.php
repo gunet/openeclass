@@ -265,6 +265,7 @@ load_js('tools.js');
 
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
+$shuffleQuestions = $objExercise->selectShuffle();
 $randomQuestions = $objExercise->isRandom();
 $exerciseType = $objExercise->selectType();
 $exerciseTempSave = $objExercise->selectTempSave();
@@ -351,7 +352,12 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     } else {
         // selects the list of question ID
-        $questionList = ($randomQuestions)? $objExercise->selectRandomList() : $objExercise->selectQuestions();
+        //$questionList = ($randomQuestions)? $objExercise->selectRandomList() : $objExercise->selectQuestions();
+        if ($shuffleQuestions) {
+            $questionList = $objExercise->selectShuffleQuestions();
+        } else {
+            $questionList = $objExercise->selectQuestions();
+        }
         //print_a($questionList);
     }
     // saves the question list into the session if there are questions

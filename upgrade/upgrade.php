@@ -2011,6 +2011,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (!DBHelper::fieldExists('exercise', 'shuffle')) {
             Database::get()->query("ALTER TABLE `exercise` ADD `shuffle` SMALLINT NOT NULL DEFAULT '0' AFTER `random`");
+            // update old records
+            Database::get()->query("UPDATE exercise SET shuffle=1, random=0 WHERE random=32767");
+            Database::get()->query("UPDATE exercise SET shuffle=1 WHERE random>0");
         }
     }
 
