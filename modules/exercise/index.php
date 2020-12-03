@@ -296,10 +296,16 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $sort_date = date("Y-m-d H:i", strtotime($row->start_date));
+            if (isset($row->start_date)) {
+                $sort_date = date("Y-m-d H:i", strtotime($row->start_date));
+            } else {
+                $sort_date = '';
+            }
             $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
-            $tool_content .= "<td data-sort='$sort_date'><small>
-                            <div style='color:green;'>$langStart: " . nice_format($sort_date, true) . "</div>";
+            $tool_content .= "<td data-sort='$sort_date'><small>";
+            if (isset($row->start_date)) {
+                $tool_content .= "<div style='color:green;'>$langStart: " . nice_format($sort_date, true) . "</div>";
+            }
             if (isset($row->end_date)) {
                 $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
             }
@@ -391,7 +397,7 @@ if (!$nbrExercises) {
             }
 
             $currentDate = new DateTime('NOW');
-            $temp_StartDate = new DateTime($row->start_date);
+            $temp_StartDate = isset($row->start_date) ? new DateTime($row->start_date) : null;
             $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
 
             if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
@@ -413,9 +419,15 @@ if (!$nbrExercises) {
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
             }
             $tool_content .= $row->description . "</td>";
-            $sort_date = date("Y-m-d H:i", strtotime($row->start_date));
-            $tool_content .= "<td data-sort='$sort_date'><small>
-                            <div style='color:green;'>$langStart: " . nice_format($sort_date, true) . "</div>";
+            if (isset($row->start_date)) {
+                $sort_date = date("Y-m-d H:i", strtotime($row->start_date));
+            } else {
+                $sort_date = '';
+            }
+            $tool_content .= "<td data-sort='$sort_date'><small>";
+            if (isset($row->start_date)) {
+                $tool_content .= "<div style='color:green;'>$langStart: " . nice_format($sort_date, true) . "</div>";
+            }
             if (isset($row->end_date)) {
                 $tool_content .= "<div style='color:red;'>$langFinish: " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</div>";
             }
