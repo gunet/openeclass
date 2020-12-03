@@ -2015,6 +2015,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("UPDATE exercise SET shuffle=1, random=0 WHERE random=32767");
             Database::get()->query("UPDATE exercise SET shuffle=1 WHERE random>0");
         }
+        if (!DBHelper::fieldExists('tc_session', 'options')) {
+            Database::get()->query("ALTER TABLE `tc_session` ADD `options` TEXT DEFAULT NULL");
+        }
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!
