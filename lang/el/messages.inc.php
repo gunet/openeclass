@@ -4989,7 +4989,14 @@ $langBBBLBMethodWOInfo = "$langBBBLBMethodWO: Λαμβάνεται υπόψιν 
 $langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τον λιγότερο φόρτο";
 $langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τα λιγότερα δωμάτια";
 $langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τους λιγότερους χρήστες";
-
+$langBBBmuteOnStart = "Σίγαση μικροφώνου όλων των χρηστών κατά την είσοδο";
+$langBBBlockSettingsDisableCam = "Να μην επιτρέπεται διαμοιρασμός κάμερας από τους φοιτητές";
+$langBBBwebcamsOnlyForModerator = "Εμφάνιση κάμερας φοιτητών μόνο στους καθηγητές";
+$langBBBlockSettingsDisableMic = "Να μην επιτρέπεται η χρήση μικροφώνου από τους φοιτητές";
+$langBBBlockSettingsDisablePrivateChat = "Απενεργοποίηση ιδιωτικών συνομιλιών μεταξύ φοιτητών";
+$langBBBlockSettingsDisablePublicChat = "Απενεργοποίηση δημόσιων συνομιλιών από τους φοιτητές";
+$langBBBlockSettingsDisableNote = "Απενεργοποίηση κοινόχρηστων σημειώσεων από τους φοιτητές";
+$langBBBlockSettingsHideUserList = "Απόκρυψη λίστας χρηστών στους φοιτητές";
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
 $langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";

@@ -40,6 +40,10 @@ function bbb_session_form($session_id = 0) {
     global $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2;
     global $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
     global $langEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers;
+    global $langReadMore, $langBBBmuteOnStart, $langBBBlockSettingsDisableCam;
+    global $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat;
+    global $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote;
+    global $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -50,7 +54,7 @@ function bbb_session_form($session_id = 0) {
     }
     $found_selected = false;
 
-    if ($session_id > 0 ) { // edit session details
+    if ($session_id > 0 ) { // edit existing BBB session
         $row = Database::get()->querySingle("SELECT * FROM tc_session WHERE id = ?d", $session_id);
         $status = ($row->active == 1 ? 1 : 0);
         $record = ($row->record == "true" ? true : false);
@@ -79,10 +83,17 @@ function bbb_session_form($session_id = 0) {
         } else {
             $init_external_users = '';
         }
+        if (!empty($row->options)) {
+            $options = unserialize($row->options);
+            $options_show = "show";
+        } else {
+            $options = NULL;
+            $options_show = "";
+        }
         $submit_name = 'update_bbb_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
-    } else { // new meeting
+    } else { // new BBB meeting
         $record = true;
         $status = 1;
         $unlock_interval = '10';
@@ -98,7 +109,17 @@ function bbb_session_form($session_id = 0) {
         $submit_name = 'new_bbb_session';
         $submit_id = '';
         $value_message = $langAdd;
+        $options = NULL;
+        $options_show = "";
     }
+    $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
+    $checked_lockSettingsDisableCam = isset($options['lockSettingsDisableCam']) ? 'checked' : '';
+    $checked_webcamsOnlyForModerator = isset($options['webcamsOnlyForModerator']) ? 'checked' : '';
+    $checked_lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? 'checked' : '';
+    $checked_lockSettingsDisablePrivateChat = isset($options['lockSettingsDisablePrivateChat']) ? 'checked' : '';
+    $checked_lockSettingsDisablePublicChat = isset($options['lockSettingsDisablePublicChat']) ? 'checked' : '';
+    $checked_lockSettingsDisableNote = isset($options['lockSettingsDisableNote']) ? 'checked' : '';
+    $checked_lockSettingsHideUserList = isset($options['lockSettingsHideUserList']) ? 'checked' : '';
 
     $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
@@ -272,7 +293,89 @@ function bbb_session_form($session_id = 0) {
                       </label>
                     </div>
             </div>
+        </div>";
+        $tool_content .= "<div class='clearfix'>
+                            <a role='button' data-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
+                                 <h5 class='panel-heading' style='margin-bottom: 0px;'>
+                                       <span class='fa fa-chevron-down fa-fw'></span> $langReadMore   
+                                 </h5>
+                            </a>
+                          </div>";
+        $tool_content .= "<div class='collapse $options_show' id='MoreInfo'>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='muteOnStart' $checked_muteOnStart value='1'>$langBBBmuteOnStart
+                      </label>
+                    </div>
+            </div>
         </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='lockSettingsDisableMic' $checked_lockSettingsDisableMic value='1'>$langBBBlockSettingsDisableMic
+                      </label>
+                    </div>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='lockSettingsDisableCam' $checked_lockSettingsDisableCam value='1'>$langBBBlockSettingsDisableCam
+                      </label>
+                    </div>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='webcamsOnlyForModerator' $checked_webcamsOnlyForModerator value='1'>$langBBBwebcamsOnlyForModerator
+                      </label>
+                    </div>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='lockSettingsDisablePrivateChat' $checked_lockSettingsDisablePrivateChat value='1'>$langBBBlockSettingsDisablePrivateChat
+                      </label>
+                    </div>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='lockSettingsDisablePublicChat' $checked_lockSettingsDisablePublicChat value='1'>$langBBBlockSettingsDisablePublicChat
+                      </label>
+                    </div>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='lockSettingsDisableNote' $checked_lockSettingsDisableNote value='1'>$langBBBlockSettingsDisableNote
+                      </label>
+                    </div>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='lockSettingsHideUserList' $checked_lockSettingsHideUserList value='1'>$langBBBlockSettingsHideUserList
+                      </label>
+                    </div>
+            </div>
+        </div>";
+
+        $tool_content .= "</div>
         $submit_id
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
@@ -318,10 +421,13 @@ function bbb_session_form($session_id = 0) {
  * @param type $addAnnouncement
  * @param type $minutes_before
  * @param type $external_users
+ * @param type $record
+ * @param type $sessionUsers
+ * @param type $options
  * @param type $update // true == add, false == update
  * @param type $session
  */
-function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $notifyExternalUsers, $addAnnouncement, $minutes_before, $external_users, $record, $sessionUsers, $update, $session_id = '')
+function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $notifyExternalUsers, $addAnnouncement, $minutes_before, $external_users, $record, $sessionUsers, $options, $update, $session_id = '')
 {
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
@@ -341,19 +447,19 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
     } else {
         $r_group = '0';
     }
-    if (isset($update) and $update) {
+    if (isset($update) and $update) { // update existing BBB session
         Database::get()->querySingle("UPDATE tc_session SET title=?s, description=?s, start_date=?t, end_date=?t,
                                         public=?s, active=?s, unlock_interval=?d, external_users=?s,
-                                        participants=?s, record=?s, sessionUsers=?d WHERE id=?d",
+                                        participants=?s, record=?s, sessionUsers=?d, options=?s WHERE id=?d",
                                 $title, $desc, $start_session, $BBBEndDate, 1, $status, $minutes_before,
-                                $external_users, $r_group, $record, $sessionUsers, $session_id);
+                                $external_users, $r_group, $record, $sessionUsers, $options, $session_id);
         // logging
         Log::record($course_id, MODULE_ID_TC, LOG_MODIFY, array('id' => $session_id,
                                                                 'title' => $title,
                                                                 'desc' => html2text($desc)));
 
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $session_id);
-    } else {
+    } else { // new BBB session
         // check if course uses specific tc_server
         $t = Database::get()->querySingle("SELECT external_server FROM course_external_server WHERE course_id = ?d", $course_id);
         if ($t) {
@@ -376,11 +482,12 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                                                             external_users = ?s,
                                                             participants = ?s,
                                                             record = ?s,
-                                                            sessionUsers = ?s",
+                                                            sessionUsers = ?s,
+                                                            options = ?s",
                                                         $course_id, $title, $desc, $start_session, $BBBEndDate,
                                                         $status, $server_id,
                                                         generateRandomString(), generateRandomString() , generateRandomString() ,
-                                                        $minutes_before, $external_users, $r_group, $record, $sessionUsers);
+                                                        $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
 
         // logging
         Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID,
@@ -833,8 +940,9 @@ function delete_bbb_session($id)
  * @param type $mod_pw
  * @param type $att_pw
  * @param type $record
+ * @param type $options
  */
-function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
+function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $options)
 {
     global $langBBBCreationRoomError, $langBBBConnectionError, $course_code,
         $langBBBWelcomeMsg, $langBBBConnectionErrorOverload, $course_id, $urlServer;
@@ -900,6 +1008,15 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             $logoutUrl = '';
         }
 
+        $muteOnStart = isset($options['muteOnStart']) ? "true" : "false";
+        $lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? "true" : "false";
+        $lockSettingsDisableCam = isset($options['lockSettingsDisableCam']) ? "true" : "false";
+        $webcamsOnlyForModerator = isset($options['webcamsOnlyForModerator']) ? "true" : "false";
+        $lockSettingsDisablePrivateChat = isset($options['lockSettingsDisablePrivateChat']) ? "true" : "false";
+        $lockSettingsDisablePublicChat = isset($options['lockSettingsDisablePublicChat']) ? "true" : "false";
+        $lockSettingsDisableNote = isset($options['lockSettingsDisableNote']) ? "true" : "false";
+        $lockSettingsHideUserList = isset($options['lockSettingsHideUserList']) ? "true" : "false";
+
         $creationParams = array(
             'meetingId' => $meeting_id, // REQUIRED
             'meetingName' => $title, // REQUIRED
@@ -912,10 +1029,17 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             'logoutUrl' => $logoutUrl,
             'maxParticipants' => '-1', // Optional. -1 = unlimited. Not supported in BBB. [number]
             'record' => $record, // New. 'true' will tell BBB to record the meeting.
-            'duration' => $duration // Default = 0 which means no set duration in minutes. [number]
+            'duration' => $duration, // Default = 0 which means no set duration in minutes. [number]
+            'muteOnStart' => $muteOnStart, // Default = false. true will mute all users when the meeting starts
+            'lockSettingsDisableMic' => $lockSettingsDisableMic, // Default = false. true will disable viewer's mic
+            'lockSettingsDisableCam' => $lockSettingsDisableCam, // Default = false. true will prevent viewers from sharing their camera in the meeting
+            'webcamsOnlyForModerator' => $webcamsOnlyForModerator, // Default = false. With true, webcams shared by viewers will only appear to moderators
+            'lockSettingsDisablePrivateChat' => $lockSettingsDisablePrivateChat, // Default = false. true will disable private chats for viewers
+            'lockSettingsDisablePublicChat' => $lockSettingsDisablePublicChat, // Default = false. true will disable public chat for viewers
+            'lockSettingsDisableNote' => $lockSettingsDisableNote, // Default = false. true will disable shared notes for viewers
+            'lockSettingsHideUserList' => $lockSettingsHideUserList, // Default = false. true will hide viewer's list for viewers
             //'meta_category' => '', // Use to pass additional info to BBB server. See API docs.
         );
-
 
         // Create the meeting and get back a response:
         $result = $bbb->createMeetingWithXmlResponseArray($creationParams);

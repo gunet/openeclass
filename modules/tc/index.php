@@ -204,7 +204,7 @@ if (isset($_GET['add'])) {
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
     bbb_session_form();
 }
-elseif(isset($_POST['update_bbb_session'])) {
+elseif(isset($_POST['update_bbb_session'])) { // update existing BBB session
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate'])) {
         $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
@@ -234,7 +234,40 @@ elseif(isset($_POST['update_bbb_session'])) {
     } else {
         $ext_users = null;
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $_POST['sessionUsers'], true, getDirectReference($_POST['id']));
+
+    $options_arr = array();
+    if (isset($_POST['muteOnStart']) and $_POST['muteOnStart']) {
+        $options_arr['muteOnStart'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisableMic']) and $_POST['lockSettingsDisableMic']) {
+        $options_arr['lockSettingsDisableMic'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisableCam']) and $_POST['lockSettingsDisableCam']) {
+        $options_arr['lockSettingsDisableCam'] = 1;
+    }
+    if (isset($_POST['webcamsOnlyForModerator']) and $_POST['webcamsOnlyForModerator']) {
+        $options_arr['webcamsOnlyForModerator'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisablePrivateChat']) and $_POST['lockSettingsDisablePrivateChat']) {
+        $options_arr['lockSettingsDisablePrivateChat'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisablePublicChat']) and $_POST['lockSettingsDisablePublicChat']) {
+        $options_arr['lockSettingsDisablePublicChat'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisableNote']) and $_POST['lockSettingsDisableNote']) {
+        $options_arr['lockSettingsDisableNote'] = 1;
+    }
+    if (isset($_POST['lockSettingsHideUserList']) and $_POST['lockSettingsHideUserList']) {
+        $options_arr['lockSettingsHideUserList'] = 1;
+    }
+    if (count($options_arr) > 0) {
+        $options = serialize($options_arr);
+    } else {
+        $options = NULL;
+    }
+
+    // update existing BBB session
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $_POST['sessionUsers'], $options, true, getDirectReference($_POST['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -267,7 +300,12 @@ elseif(isset($_GET['choice']))
                     if (!empty($public_code)) {
                         $title_meeting = "${_GET['title']} - $public_code";
                     }
-                    create_bbb_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
+                    if (!empty($sess->options)) {
+                        $options = unserialize($sess->options);
+                    } else {
+                        $options = NULL;
+                    }
+                    create_bbb_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record, $options);
                 }
                 if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
@@ -329,7 +367,40 @@ elseif(isset($_GET['choice']))
     } else {
         $external_users = NULL;
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $_POST['sessionUsers'], false);
+
+    $options_arr = array();
+    if (isset($_POST['muteOnStart']) and $_POST['muteOnStart']) {
+        $options_arr['muteOnStart'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisableMic']) and $_POST['lockSettingsDisableMic']) {
+        $options_arr['lockSettingsDisableMic'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisableCam']) and $_POST['lockSettingsDisableCam']) {
+        $options_arr['lockSettingsDisableCam'] = 1;
+    }
+    if (isset($_POST['webcamsOnlyForModerator']) and $_POST['webcamsOnlyForModerator']) {
+        $options_arr['webcamsOnlyForModerator'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisablePrivateChat']) and $_POST['lockSettingsDisablePrivateChat']) {
+        $options_arr['lockSettingsDisablePrivateChat'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisablePublicChat']) and $_POST['lockSettingsDisablePublicChat']) {
+        $options_arr['lockSettingsDisablePublicChat'] = 1;
+    }
+    if (isset($_POST['lockSettingsDisableNote']) and $_POST['lockSettingsDisableNote']) {
+        $options_arr['lockSettingsDisableNote'] = 1;
+    }
+    if (isset($_POST['lockSettingsHideUserList']) and $_POST['lockSettingsHideUserList']) {
+        $options_arr['lockSettingsHideUserList'] = 1;
+    }
+    if (count($options_arr) > 0) {
+        $options = serialize($options_arr);
+    } else {
+        $options = NULL;
+    }
+
+    // new BBB session
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $_POST['sessionUsers'], $options, false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }

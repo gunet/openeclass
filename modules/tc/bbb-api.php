@@ -111,7 +111,7 @@ class BigBlueButton {
     -- end
     */
 
-    public function getCreateMeetingUrl($creationParams) {
+    public function getCreateMeetingURL($creationParams) {
         /*
         USAGE:
         (see $creationParams array in createMeetingArray method.)
@@ -132,7 +132,15 @@ class BigBlueButton {
             '&logoutURL='.urlencode($creationParams['logoutUrl']).
             '&maxParticipants='.urlencode($creationParams['maxParticipants']).
             '&record='.urlencode($creationParams['record']).
-            '&duration='.urlencode($creationParams['duration']);
+            '&duration='.urlencode($creationParams['duration']).
+            '&muteOnStart='.urlencode($creationParams['muteOnStart']).
+            '&lockSettingsDisableMic='.urlencode($creationParams['lockSettingsDisableMic']).
+            '&lockSettingsDisableCam='.urlencode($creationParams['lockSettingsDisableCam']).
+            '&webcamsOnlyForModerator='.urlencode($creationParams['webcamsOnlyForModerator']).
+            '&lockSettingsDisablePrivateChat='.urlencode($creationParams['lockSettingsDisablePrivateChat']).
+            '&lockSettingsDisablePublicChat='.urlencode($creationParams['lockSettingsDisablePublicChat']).
+            '&lockSettingsDisableNote='.urlencode($creationParams['lockSettingsDisableNote']).
+            '&lockSettingsHideUserList='.urlencode($creationParams['lockSettingsHideUserList']);
             //'&meta_category='.urlencode($creationParams['meta_category']);
             $welcomeMessage = $creationParams['welcomeMsg'];
         if (trim($welcomeMessage)) {
@@ -158,6 +166,14 @@ class BigBlueButton {
         'maxParticipants' => '-1', -- Optional. -1 = unlimitted. Not supported in BBB. [number]
         'record' => 'false', -- New. 'true' will tell BBB to record the meeting.
         'duration' => '0', -- Default = 0 which means no set duration in minutes. [number]
+        'muteOnStart' => $muteOnStart, // Default = false. true will mute all users when the meeting starts
+        'lockSettingsDisableMic' => $lockSettingsDisableMic, // Default = false. true will disable viewer's mic
+        'lockSettingsDisableCam' => $lockSettingsDisableCam, // Default = false. true will prevent viewers from sharing their camera in the meeting
+        'webcamsOnlyForModerator' => $webcamsOnlyForModerator, // Default = false. With true, webcams shared by viewers will only appear to moderators
+        'lockSettingsDisablePrivateChat' => $lockSettingsDisablePrivateChat, // Default = false. true will disable private chats for viewers
+        'lockSettingsDisablePublicChat' => $lockSettingsDisablePublicChat, // Default = false. true will disable public chat for viewers
+        'lockSettingsDisableNote' => $lockSettingsDisableNote, // Default = false. true will disable shared notes for viewers
+        'lockSettingsHideUserList' => $lockSettingsHideUserList, // Default = false. true will hide viewer's list for viewers
         'meta_category' => '', -- Use to pass additional info to BBB server. See API docs to enable.
         );
         */
