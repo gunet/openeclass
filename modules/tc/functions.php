@@ -330,10 +330,14 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
     // Groups of participants per session
     $r_group = '';
     if (isset($_POST['groups']) and count($_POST['groups']) > 0) {
-        foreach ($_POST['groups'] as $group) {
-            $r_group .= "$group" .',';
+        if (in_array("0", $_POST['groups'])) {
+            $r_group = '0';
+        } else {
+            foreach ($_POST['groups'] as $group) {
+                $r_group .= "$group" .',';
+            }
+            $r_group = mb_substr($r_group, 0, -1); // remove last `comma` character
         }
-        $r_group = mb_substr($r_group, 0, -1); // remove last `comma` character
     } else {
         $r_group = '0';
     }
