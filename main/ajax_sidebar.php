@@ -92,7 +92,7 @@ function getSidebarMessages() {
                                         q($message->subject) . "</a>
                                 </div>";
                                     if ($course_title) {
-                                       $message_content .= "<div class='text-grey'>$langCourse: $course_title</div>"; 
+                                       $message_content .= "<div class='text-grey'>$langCourse: $course_title</div>";
                                     }
                                 $message_content .= "<div>$message_date</div>
                                 </span>
