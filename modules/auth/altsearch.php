@@ -191,15 +191,17 @@ if ($is_valid) {
         $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</div>";
     }
     $depid = intval($department);
-    if (isset($_SESSION['auth_user_info'])) {
+    if (!empty($_SESSION['auth_user_info']['givenname'])) {
         $givenname_form = $_SESSION['auth_user_info']['givenname'];
+    }
+    if (!empty($_SESSION['auth_user_info']['surname'])) {
         $surname_form = $_SESSION['auth_user_info']['surname'];
-        if (!empty($_SESSION['auth_user_info']['studentid'])) {
-            $am = $_SESSION['auth_user_info']['studentid'];
-        }
-        if (!$email and !empty($_SESSION['auth_user_info']['email'])) {
-            $email = $_SESSION['auth_user_info']['email'];
-        }
+    }
+    if (!empty($_SESSION['auth_user_info']['studentid'])) {
+        $am = $_SESSION['auth_user_info']['studentid'];
+    }
+    if (!$email and !empty($_SESSION['auth_user_info']['email'])) {
+        $email = $_SESSION['auth_user_info']['email'];
     }
     if (!empty($email) and !valid_email($email)) {
         $ok = NULL;

@@ -347,6 +347,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
                             if ($userinfo['count'] == 1) {
+                                $surname = $givenname = '';
                                 if (isset($settings['ldap_surname_attr']) and !empty($settings['ldap_surname_attr'])) {
                                     // find ldap surname attribute
                                     $attr_surname = explode(' ', $settings['ldap_surname_attr']);
