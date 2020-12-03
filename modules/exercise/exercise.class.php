@@ -324,22 +324,6 @@ if (!class_exists('Exercise')) {
             return $this->questionList;
         }
 
-
-        /**
-         * @brief checks if exercise has questions with random criteria
-         * @return bool
-         */
-        function hasQuestionListWithRandomCriteria() {
-            $result = Database::get()->queryArray("SELECT random_criteria FROM exercise_with_questions
-                                            WHERE exercise_id = ?d", $this->id);
-            foreach ($result as $data) {
-                if (!is_null($data->random_criteria)) {
-                    return true;
-                    break;
-                }
-            }
-            return false;
-        }
         /**
          * @brief get questions with difficulty
          * $param $number
@@ -399,31 +383,21 @@ if (!class_exists('Exercise')) {
             return $questions;
         }
 
-        /***
-         *
-         * @brief get random questions
-         * @return array with questions
+        /**
+         * @brief checks if exercise has questions with random criteria
+         * @return bool
          */
-        /*function selectRandomList() {
-
-            // if the exercise is not a random exercise,
-            // or if there are not at least 2 questions
-            // cancel randomization and return normal question list
-
-            if (!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0) {
-                return $this->questionList;
+        function hasQuestionListWithRandomCriteria() {
+            $result = Database::get()->queryArray("SELECT random_criteria FROM exercise_with_questions
+                                            WHERE exercise_id = ?d", $this->id);
+            foreach ($result as $data) {
+                if (!is_null($data->random_criteria)) {
+                    return true;
+                    break;
+                }
             }
-
-            $questions = $this->questionList;
-            shuffle($questions);
-            $questions = array_slice($questions, 0, $this->random);
-
-            // make array keys start from 1
-            array_unshift($questions, null);
-            unset($questions[0]);
-
-            return $questions;
-        } */
+            return false;
+        }
 
         /**
          * returns 'true' if the question ID is in the question list

@@ -139,26 +139,28 @@ $ajax_shuffle_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$exerc
 $head_content .= "
     <script>
         $(document).ready(function(){
-            Sortable.create(q_sort,{
-                handle: '.fa-arrows',
-                animation: 150,
-                onEnd: function (evt) {
-
-                var itemEl = $(evt.item);
-
-                var idReorder = itemEl.attr('data-id');
-                var prevIdReorder = itemEl.prev().attr('data-id');
-
-                $.ajax({
-                  type: 'post',
-                  dataType: 'text',
-                  data: {
-                          toReorder: idReorder,
-                          prevReorder: prevIdReorder,
-                        }
-                    });
-                }
-            });            
+            if (typeof(q_sort) !== 'undefined') {            
+                Sortable.create(q_sort,{
+                    handle: '.fa-arrows',
+                    animation: 150,
+                    onEnd: function (evt) {
+    
+                    var itemEl = $(evt.item);
+    
+                    var idReorder = itemEl.attr('data-id');
+                    var prevIdReorder = itemEl.prev().attr('data-id');
+    
+                    $.ajax({
+                      type: 'post',
+                      dataType: 'text',
+                      data: {
+                              toReorder: idReorder,
+                              prevReorder: prevIdReorder,
+                            }
+                        });
+                    }
+                });    
+            }
         });
     </script>
 ";
@@ -228,7 +230,7 @@ $head_content .= "
                     }
                 ).find('div.modal-dialog').addClass('modal-lg');                
     });    
-    $('.randomWithCriteria').click(function(e) {
+    $('.randomWithCriteria').click(function(e) {        
         e.preventDefault();
         bootbox.dialog({
             title: '$langSelectRandomCriteria',

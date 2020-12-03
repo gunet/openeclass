@@ -64,20 +64,6 @@ if (isset($_GET['exerciseId'])) {
     $shuffleQuestions = $objExercise->selectShuffle();
 }
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
-    // shuffle (aka random questions)
-    if (isset($_GET['shuffleQuestions'])) {
-        if ($_GET['shuffleQuestions'] == 'true') {
-            $objExercise->setShuffle(1);
-        } else {
-            $objExercise->setShuffle(0);
-        }
-        $objExercise->save();
-        exit();
-    }
-}
-
 // initializes the Question object
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
     // construction of the Question object
