@@ -51,7 +51,7 @@ if (isset($_GET['u'])) { //  stats per user
     }
 
     $user_actions = Database::get()->queryArray("SELECT 
-                            SUM(actions_daily.duration) AS duration, 
+                            SUM(ABS(actions_daily.duration)) AS duration, 
                               module_id 
                             FROM actions_daily
                             WHERE course_id = ?d
@@ -76,8 +76,8 @@ if (isset($_GET['u'])) { //  stats per user
         $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
 
         $tool_content .= action_bar(array(
-            array('title' => $langGlossaryToCsv,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=csv",
+            array('title' => $langDumpUser,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=csv&amp;enc=UTF-8",
                 'icon' => 'fa-download',
                 'level' => 'primary-label'),
             array('title' => $langBack,
@@ -133,8 +133,8 @@ if (isset($_GET['u'])) { //  stats per user
         $navigation[] = array('url' => '$_SERVER[SCRIPT_NAME]?course=' . $course_code, 'name' => $langUserDuration);
 
         $tool_content .= action_bar(array(
-            array('title' => $langGlossaryToCsv,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=csv",
+            array('title' => $langDumpUser,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=csv&amp;enc=UTF-8",
                 'icon' => 'fa-download',
                 'level' => 'primary-label'),
             array('title' => $langBack,
@@ -185,8 +185,8 @@ if (isset($_GET['u'])) { //  stats per user
         $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
         $tool_content .= action_bar(array(
-            array('title' => $langGlossaryToCsv,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=csv",
+            array('title' => $langDumpUser,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=csv&amp;enc=UTF-8",
                 'icon' => 'fa-download',
                 'level' => 'primary-label'),
             array('title' => $langBack,
