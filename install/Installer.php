@@ -60,7 +60,7 @@ EOT;
 	public static function vendorTestCodeCleanup(PackageEvent $event) {
 	    $vendor_dir = $event->getComposer()->getConfig()->get('vendor-dir');
 	    $op = $event->getOperation();
-	    if ($op instanceof UpdateOperation) {
+	    if ($op instanceof Composer\DependencyResolver\Operation\UpdateOperation) {
 	      $package = $op->getTargetPackage();
 	    }
 	    else {
