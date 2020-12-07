@@ -305,13 +305,24 @@ if (!class_exists('Exercise')) {
             $q = array(); // temp array
             foreach ($this->questionList as $id => $qid) {
                 if (is_array($qid)) { // check for random questions
-                    foreach($qid as $number => $difficulty) {
+                    if ($qid['criteria'] == 'difficulty') { // random difficulty questions
+                        next($qid);
+                        $number = key($qid);
+                        $difficulty = $qid[$number];
                         $random_questions = $this->selectQuestionListWithDifficulty($number, $difficulty);
+                        if (count($random_questions) > 0) { // found?
+                            $q = array_merge($q, $random_questions);
+                        }
+                    } else if ($qid['criteria'] == 'category') { // random category questions
+                        next($qid);
+                        $number = key($qid);
+                        $category = $qid[$number];
+                        $random_questions = $this->selectQuestionListWithCategory($number, $category);
+                        if (count($random_questions) > 0) { // found?
+                            $q = array_merge($q, $random_questions);
+                        }
                     }
-                    if (count($random_questions) > 0) { // found?
-                        $q = array_merge($q, $random_questions);
-                    }
-                } else {
+                } else { // `normal` questions
                     $q[] = $this->questionList[$id];
                 }
             }
@@ -328,6 +339,7 @@ if (!class_exists('Exercise')) {
          * @brief get questions with difficulty
          * $param $number
          * @param $difficulty
+         * @return array
          */
         function selectQuestionListWithDifficulty($number, $difficulty) {
 
@@ -349,6 +361,35 @@ if (!class_exists('Exercise')) {
             }
             return $questions;
         }
+
+        /**
+         * @brief get questions with category
+         * @param $number
+         * @param $category
+         * @return array
+         */
+        function selectQuestionListWithCategory($number, $category) {
+
+            global $course_id;
+            $questions = array();
+
+            $result = Database::get()->queryArray("SELECT id
+                            FROM `exercise_question`
+                                WHERE category = ?d
+                                AND course_id = ?d",
+                $category, $course_id);
+
+            if (count($result) > 0) { // if questions found
+                foreach ($result as $row) {
+                    $questions[] = $row->id;
+                }
+                shuffle($questions);
+                $questions = array_slice($questions, 0, $number);
+            }
+            return $questions;
+        }
+
+
 
         /**
          * returns the number of questions in this exercise

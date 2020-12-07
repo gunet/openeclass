@@ -63,7 +63,7 @@ if (!class_exists('Question')) {
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, weight, type, difficulty, category
+            $object = Database::get()->querySingle("SELECT question, description, weight, `type`, difficulty, category
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -195,6 +195,24 @@ if (!class_exists('Question')) {
          */
         function selectCategory() {
             return $this->category;
+        }
+
+
+        /*
+         * @brief get category name
+         */
+        function selectCategoryName($cat_id) {
+
+            global $course_id;
+
+            $q = Database::get()->querySingle("SELECT question_cat_name FROM exercise_question_cats 
+                                  WHERE question_cat_id = ?d 
+                                  AND course_id = ?d", $cat_id, $course_id);
+            if ($q) {
+                return $q->question_cat_name;
+            } else {
+                return null;
+            }
         }
 
         /**

@@ -101,8 +101,32 @@ if (isset($_GET['u'])) { //  stats per user
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        draw($tool_content, 2);
+
+        // user last 10 logins
+        $user_logins = Database::get()->queryArray("SELECT last_update
+                      FROM actions_daily
+                            WHERE course_id = ?d
+                              AND user_id = ?d
+                    AND module_id = ". MODULE_ID_UNITS . " 
+                    ORDER BY last_update 
+                    DESC 
+                    LIMIT 0,10", $course_id, $_GET['u']);
+
+        if (count($user_logins) > 0) {
+            $tool_content .= "<table class='table-default'>
+            <tr>
+                <th>$langLastUserVisits</th>
+            </tr>";
+            foreach ($user_logins as $ul) {
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>" . nice_format($ul->last_update, true) . "</td>";
+                $tool_content .= "</tr>";
+            }
+            $tool_content .= "</table>";
+        }
     }
+    draw($tool_content, 2);
+
 } else if (isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
     $module = $_GET['m'];
     $user_actions = Database::get()->queryArray("SELECT 

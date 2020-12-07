@@ -341,19 +341,22 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         $question_temp->read($row->id);
         $question_title = q_math($question_temp->selectTitle());
         $question_difficulty_legend = $question_temp->selectDifficultyIcon($question_temp->selectDifficulty());
+        $question_category_legend = $question_temp->selectCategoryName($question_temp->selectCategory());
         $question_type_legend = $question_temp->selectTypeLegend($question_temp->selectType());
         $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
         if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
             $tool_content .= "<tr>";
             if (!isset($fromExercise)) {
                 $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")." href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . $question_title . "</a>                         
-                        <br><small>" . $question_type_legend . "</small> 
-                        &nbsp;" . $question_difficulty_legend . "
+                        <br>
+                        <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend . "
+                        </small>
                         </td>";
             } else {
                 $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . $question_title . "</a>
-                        <br><small>" . $question_type_legend . "</small> 
-                            &nbsp;" . $question_difficulty_legend . "
+                        <br>
+                        <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend . "
+                        </small> 
                         </td>";
             }
 

@@ -155,11 +155,11 @@ if ($myrow) {
 }
 
 // Find last prof registration
-$myrow = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = 1 ORDER BY id DESC LIMIT 0,1");
+$myrow = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = ". USER_TEACHER . " ORDER BY id DESC LIMIT 0,1");
 $last_prof_info = "<b>" . q($myrow->givenname) . " " . q($myrow->surname) . "</b> (" . q($myrow->username) . ", " . date("j/n/Y H:i", strtotime($myrow->registered_at)) . ")";
 
 // Find last stud registration
-$myrow = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = 5 ORDER BY id DESC LIMIT 0,1");
+$myrow = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = ". USER_STUDENT . " ORDER BY id DESC LIMIT 0,1");
 if ($myrow) {
     $last_stud_info = "<b>" . q($myrow->givenname) . " " . q($myrow->surname) . "</b> (" . q($myrow->username) . ", " . date("j/n/Y H:i", strtotime($myrow->registered_at)) . ")";
 } else {
@@ -174,9 +174,9 @@ $lastregisteredstuds = 0;
 if ($lastadminloginres && $lastadminloginres->when) {
     $lastadminlogin = $lastadminloginres->when;
     // Count profs registered after last login
-    $lastregisteredprofs = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 1 AND registered_at > ?t", $lastadminlogin)->cnt;
+    $lastregisteredprofs = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = ". USER_TEACHER . " AND registered_at > ?t", $lastadminlogin)->cnt;
     // Count studs registered after last login
-    $lastregisteredstuds = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 5 AND registered_at > ?t", $lastadminlogin)->cnt;
+    $lastregisteredstuds = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = ". USER_STUDENT ." AND registered_at > ?t", $lastadminlogin)->cnt;
 }
 
 
