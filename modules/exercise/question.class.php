@@ -63,7 +63,7 @@ if (!class_exists('Question')) {
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, weight, type, difficulty, category
+            $object = Database::get()->querySingle("SELECT question, description, weight, `type`, difficulty, category
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -140,9 +140,6 @@ if (!class_exists('Question')) {
 
         /**
          * returns the answer type
-         *
-         * @author - Olivier Brouckaert
-         * @return - integer - answer type
          */
         function selectType() {
             return $this->type;
@@ -153,16 +150,75 @@ if (!class_exists('Question')) {
         function selectDifficulty() {
             return $this->difficulty;
         }
+
+
+        /**
+         * @brief get difficulty icon + text
+         * @param $difficulty
+         * @return string
+         */
+        function selectDifficultyIcon($difficulty) {
+            global $langQuestionVeryEasy, $langQuestionEasy, $langQuestionModerate,
+                   $langQuestionDifficult, $langQuestionVeryDifficult;
+
+            switch($difficulty) {
+                case 1: return icon('fa-smile-o', $langQuestionVeryEasy);
+                case 2: return icon('fa-smile-o', $langQuestionEasy);
+                case 3: return icon('fa-meh-o', $langQuestionModerate);
+                case 4: return icon('fa-exclamation', $langQuestionDifficult);
+                case 5: return icon('fa-fire', $langQuestionVeryDifficult);
+            }
+        }
+
+        /**
+         * @brief get
+         * @param $difficulty text
+         * @return string
+         */
+        function selectDifficultyLegend($difficulty) {
+            global $langQuestionVeryEasy, $langQuestionEasy, $langQuestionModerate,
+                   $langQuestionDifficult, $langQuestionVeryDifficult;
+
+
+            switch($difficulty) {
+                case 1: return $langQuestionVeryEasy;
+                case 2: return $langQuestionEasy;
+                case 3: return $langQuestionModerate;
+                case 4: return $langQuestionDifficult;
+                case 5: return $langQuestionVeryDifficult;
+            }
+        }
+
+
         /**
          * returns the question category
          */
         function selectCategory() {
             return $this->category;
         }
+
+
+        /*
+         * @brief get category name
+         */
+        function selectCategoryName($cat_id) {
+
+            global $course_id;
+
+            $q = Database::get()->querySingle("SELECT question_cat_name FROM exercise_question_cats 
+                                  WHERE question_cat_id = ?d 
+                                  AND course_id = ?d", $cat_id, $course_id);
+            if ($q) {
+                return $q->question_cat_name;
+            } else {
+                return null;
+            }
+        }
+
         /**
          * returns the relative verbal answer type
          */
-        function selectTypeWord($answerTypeId) {
+        function selectTypeLegend($answerTypeId) {
             global $langUniqueSelect, $langMultipleSelect, $langFillBlanks,
                    $langMatching, $langTrueFalse, $langFreeText,
                    $langFillBlanksStrict, $langFillBlanksTolerant;
@@ -413,6 +469,18 @@ if (!class_exists('Question')) {
             }
         }
 
+
+        /**
+         * @brief delete random questions
+         * @param $id
+         * @param $exerciseId
+         */
+        function removeRandomQuestionsFromList($id, $exerciseId) {
+
+            Database::get()->query("DELETE FROM `exercise_with_questions` WHERE id = ?d AND exercise_id = ?d", $id, $exerciseId);
+
+        }
+
         /**
          * deletes a question from the database
          * the parameter tells if the question is removed from all exercises (value = 0),
@@ -551,7 +619,6 @@ if (!class_exists('Question')) {
                     $j = 1;
                     $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
                     $q_incorrect_answers_sql .= ($i!=1) ? ' OR ' : '';
-                    $placeholder = "";
                     foreach ($correct_answers as $value) {
                         $placeholder = "?s";
                         $q_correct_answers_sql .= ($j!=1) ? ' OR ' : '';
@@ -577,20 +644,21 @@ if (!class_exists('Question')) {
                 // This query groups attempts and counts correct and incorrect answers
                 // then counts attempts where (correct answers == total anticipated correct attempts)
                 // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)
-                if ($q_correct_answers_cnt > 0) {
-                    $correct_answer_attempts = Database::get()->querySingle("
-                        SELECT COUNT(*) AS counter FROM (
-                            SELECT a.eurid,
-                            SUM($q_correct_answers_sql) as correct_answer_cnt,
-                            SUM($q_incorrect_answers_sql) as incorrect_answer_cnt
-                            FROM exercise_answer_record a, exercise_user_record b
-                            WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status = ?d$extra_sql
-                            GROUP BY(a.eurid) HAVING correct_answer_cnt = ?d AND incorrect_answer_cnt = 0
-                        ) AS sub", $query_vars, $q_correct_answers_cnt)->counter;
-                } else {
-                    $correct_answer_attempts = 0;
+                    if ($q_correct_answers_cnt > 0) {
+                        $correct_answer_attempts = Database::get()->querySingle("
+                            SELECT COUNT(*) AS counter FROM (
+                                SELECT a.eurid,
+                                SUM($q_correct_answers_sql) as correct_answer_cnt,
+                                SUM($q_incorrect_answers_sql) as incorrect_answer_cnt
+                                FROM exercise_answer_record a, exercise_user_record b
+                                WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status = ?d$extra_sql
+                                GROUP BY(a.eurid) HAVING correct_answer_cnt = ?d AND incorrect_answer_cnt = 0
+                            ) AS sub", $query_vars, $q_correct_answers_cnt)->counter;
+                    } else {
+                        $correct_answer_attempts = 0;
+                    }
                 }
-            }
+
             if ($total_answer_attempts>0) {
                 $successRate = round($correct_answer_attempts/$total_answer_attempts*100, 2);
             } else {

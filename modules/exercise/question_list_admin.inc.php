@@ -31,41 +31,56 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
 
     $action = $_POST['action'];
-    $category = $_POST['category'];
-    $difficulty = $_POST['difficulty'];
-    $query_vars = array($course_id);
-    $extraSql = '';
-    if ($difficulty > -1) {
-        $query_vars[] = $difficulty;
-        $extraSql .= " AND difficulty = ?d";
-    }
-    if ($category > -1) {
-        $query_vars[] = $category;
-        $extraSql .= " AND category = ?d";
-    }
-    $query_vars[] = $exerciseId;
-    if ($action == 'random_difficulty_criteria') { // random criteria (based upon difficulty)
+    if ($action == 'random_criteria') { // random criteria (based upon difficulty)
 
-        $questionDifficultyDrawn = intval($_POST['questionDifficultyDrawn']);
-        $difficultyId = intval($_POST['difficultyId']);
-        $random_criteria = serialize(array($questionDifficultyDrawn => $difficultyId));
-
-        $m = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM exercise_with_questions WHERE exercise_id = ?d", $exerciseId);
-        if ($m) {
-            $new_q_position = $m->position + 1;
-        } else {
-            $new_q_position = 1;
-        }
-
-        Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria) 
+        if (isset($_POST['questionDifficultyDrawn']) and intval($_POST['questionDifficultyDrawn']) > 0) { // random difficulty questions
+            $difficultyId = intval($_POST['difficultyId']);
+            $questionDifficultyDrawn = intval($_POST['questionDifficultyDrawn']);
+            $random_criteria = serialize(array('criteria' => 'difficulty', $questionDifficultyDrawn => $difficultyId));
+            $m = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM exercise_with_questions WHERE exercise_id = ?d", $exerciseId);
+            if ($m) {
+                $new_q_position = $m->position + 1;
+            } else {
+                $new_q_position = 1;
+            }
+            Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria) 
                                             VALUES (?d, ?d, ?d, ?s)",
-                                        NULL, $exerciseId, $new_q_position, $random_criteria);
+                NULL, $exerciseId, $new_q_position, $random_criteria);
+        }
+        if (isset($_POST['questionCategoryDrawn']) and intval($_POST['questionCategoryDrawn'] > 0)) {  // random category questions
+            $categoryId = intval($_POST['categoryId']);
+            $questionCategoryDrawn = intval($_POST['questionCategoryDrawn']);
+            $random_criteria = serialize(array('criteria' => 'category', $questionCategoryDrawn => $categoryId));
 
-        Database::get()->query("UPDATE exercise SET random = 0 WHERE exercise_id = ?d", $exerciseId);
+            $m = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM exercise_with_questions WHERE exercise_id = ?d", $exerciseId);
+            if ($m) {
+                $new_q_position = $m->position + 1;
+            } else {
+                $new_q_position = 1;
+            }
+            Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria) 
+                                            VALUES (?d, ?d, ?d, ?s)",
+                NULL, $exerciseId, $new_q_position, $random_criteria);
+        }
 
         $data = array('success' => true);
 
     } else if ($action == 'add_questions') { // add questions
+
+        $category = $_POST['category'];
+        $difficulty = $_POST['difficulty'];
+        $query_vars = array($course_id);
+        $extraSql = '';
+        if ($difficulty > -1) {
+            $query_vars[] = $difficulty;
+            $extraSql .= " AND difficulty = ?d";
+        }
+        if ($category > -1) {
+            $query_vars[] = $category;
+            $extraSql .= " AND category = ?d";
+        }
+        $query_vars[] = $exerciseId;
+
         $qnum = $_POST['qnum'];
         $query_vars[] = $qnum;
         if ($qnum > 0) {
@@ -121,8 +136,10 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
 
 $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
 $cat_options = "<option value=\"-1\">-- $langQuestionAllCats --</option><option value=\"0\">-- $langQuestionWithoutCat --</option>";
+$cat_options_2 = "<option>-- $langQuestionNotDefined --</option>";
 foreach ($q_cats as $qcat) {
     $cat_options .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
+    $cat_options_2 .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
 }
 
 $diff_options = "<option value=\"-1\">-- $langQuestionAllDiffs --</option>"
@@ -233,14 +250,15 @@ $head_content .= "
     $('.randomWithCriteria').click(function(e) {        
         e.preventDefault();
         bootbox.dialog({
-            title: '$langSelectRandomCriteria',
+            title: '$langRandomQuestionsWithCriteria',
             message: '<div class=\"row\">' +
                         '<div class=\"col-md-12\">' +
                             '<form class=\"form-horizontal\">' +
-                                '<h4>$langQuestionDiffGrade</h4>' +                                                            
+                                '<h5>$langQuestionDiffGrade</h5>' +                                                            
                                 '<div class=\"form-group\">' +
                                     '<div class=\"col-sm-5\">' +
                                         '<select id=\"difficultyId\" class=\"form-control\">' +
+                                            '<option value=\"0\">-- $langQuestionNotDefined --</option>' +
                                             '<option value=\"1\">$langQuestionVeryEasy</option>' +
                                             '<option value=\"2\">$langQuestionEasy</option>' +
                                             '<option value=\"3\">$langQuestionModerate</option>' +
@@ -252,6 +270,15 @@ $head_content .= "
                                         '<input class=\"form-control\" type=\"text\" id=\"questionDifficultyDrawn\" value=\"2\"> $langQuestions' +
                                     '</div>' +
                                 '</div>' +
+                                '<h5>$langQuestionCats</h5>' +
+                                '<div class=\"form-group\">' +
+                                    '<div class=\"col-sm-5\">' +
+                                        '<select id=\"categoryId\" class=\"form-control\">$cat_options_2</select>' +
+                                    '</div>' +                                    
+                                    '<div class=\"col-sm-2\">' +
+                                        '<input class=\"form-control\" type=\"text\" id=\"questionCategoryDrawn\" value=\"2\"> $langQuestions' +
+                                    '</div>' +
+                                '</div>' +                                
                             '</form>' +
                         '</div>' +
                       '</div>',
@@ -261,15 +288,19 @@ $head_content .= "
                     className: 'btn-success',
                     callback: function () {
                         var difficultyIdValue = $('select#difficultyId').val();
-                        var questionDifficultyDrawnValue = $('input#questionDifficultyDrawn').val();                                                
+                        var questionDifficultyDrawnValue = $('input#questionDifficultyDrawn').val();
+                        var categoryIdValue = $('select#categoryId').val();
+                        var questionCategoryDrawnValue = $('input#questionCategoryDrawn').val();
                         $.ajax({
                           type: 'POST',
                           url: '',
                           datatype: 'json',
                           data: {
-                             action: 'random_difficulty_criteria',
+                             action: 'random_criteria',
                              difficultyId: difficultyIdValue,
-                             questionDifficultyDrawn: questionDifficultyDrawnValue                             
+                             questionDifficultyDrawn: questionDifficultyDrawnValue,
+                             categoryId: categoryIdValue,
+                             questionCategoryDrawn: questionCategoryDrawnValue                             
                           },
                           success: function(data) {
                             window.location.href = '$_SERVER[REQUEST_URI]';
@@ -384,16 +415,17 @@ if ($nbrQuestions) {
         </thead>
         <tbody id='q_sort'>";
 
-    foreach ($questionList as $id) {
 
+    foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
-        $objQuestionTmp->read($id);
-        $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions 
-                                    WHERE exercise_id = ?d 
-                                    AND (question_id = ?d OR question_id IS NULL)", $exerciseId, $id);
+        if (!is_array($id)) {
+            $objQuestionTmp->read($id);
+        }
+        $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions WHERE exercise_id = ?d", $exerciseId);
         $ewq_id = $q->id;
         $aType = $objQuestionTmp->selectType();
         $question_difficulty_legend = $objQuestionTmp->selectDifficultyIcon($objQuestionTmp->selectDifficulty());
+        $question_category_legend = $objQuestionTmp->selectCategoryName($objQuestionTmp->selectCategory());
         $addon = '';
         if ($objQuestionTmp->selectType() == MATCHING) {
             $sql = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $id);
@@ -401,12 +433,20 @@ if ($nbrQuestions) {
         }
 
         if (is_array($id)) {
-            foreach ($id as $num_of_q => $d) {
-                $legend = "<span style='color: red;'>$num_of_q $langFromRandomDifficultyQuestions " . $objQuestionTmp->selectDifficultyLegend($d) . "</span>";
+            if ($id['criteria'] == 'difficulty') {
+                next($id);
+                $number = key($id);
+                $difficulty = $id[$number];
+                $legend = "<span style='color: red;'>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) . "'</span>";
+            } else if ($id['criteria'] == 'category') {
+                next($id);
+                $number = key($id);
+                $category = $id[$number];
+                $legend = "<span style='color: red;'>$number $langFromRandomCategoryQuestions '" . $objQuestionTmp->selectCategoryName($category) . "'</span>";
             }
         } else {
             $legend = q_math($objQuestionTmp->selectTitle()) . "<br>
-            <small>" . $objQuestionTmp->selectTypeLegend($aType) . "</small>&nbsp;$question_difficulty_legend";
+            <small>" . $objQuestionTmp->selectTypeLegend($aType) . "&nbsp;$question_difficulty_legend $question_category_legend</small>";
         }
 
         $tool_content .= "<tr data-id='$ewq_id'>

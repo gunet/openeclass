@@ -1609,7 +1609,7 @@ $langNoCoursesRegistered = "<p>You didn't register to any course.</p><p> You can
 $langIfYouWantToAddManyUsers = "If you want to add a list of users in
             your course, please contact your web administrator.";
 $langLastVisits = "My last visits";
-$langLastUserVisits = "Last Visits of User ";
+$langLastUserVisits = "Last Visits στο $langsCourse";
 $langDumpUser = "Export users";
 $langCsv = "in csv:";
 $langcsvenc1 = "windows encoding ((windows-1253)";
@@ -2839,6 +2839,7 @@ $langNewDropboxFile = "New message notification";
 $langMaxMessageSize = "Your message must not exceed 1000 characters.";
 $langAttachedFile = "Attached file";
 $langFromRandomDifficultyQuestions = "random questions with difficulty";
+$langFromRandomCategoryQuestions = "random questions from category";
 $langRandomQuestionsWithCriteria = "Dynamic selection of questions";
 $langSelectRandomCriteria = "Select randomization criteria";
 $langPurgeExercises = "Delete results";

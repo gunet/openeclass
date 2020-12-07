@@ -44,13 +44,13 @@ $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;
 
 // Count prof requests with status = 1
-$data['count_prof_requests'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user_request WHERE state = 1 AND status = 1")->cnt;
+$data['count_prof_requests'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user_request WHERE state = 1 AND status = " . USER_TEACHER)->cnt;
 // Find last course created
 $data['lastCreatedCourse'] = Database::get()->querySingle("SELECT code, title, prof_names FROM course ORDER BY id DESC LIMIT 0, 1");
 // Find last prof registration
-$data['lastProfReg'] = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = 1 ORDER BY id DESC LIMIT 0,1");
+$data['lastProfReg'] = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = " . USER_TEACHER . " ORDER BY id DESC LIMIT 0,1");
 // Find last stud registration
-$data['lastStudReg'] = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = 5 ORDER BY id DESC LIMIT 0,1");
+$data['lastStudReg'] = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = " . USER_STUDENT . " ORDER BY id DESC LIMIT 0,1");
 // Find admin's last login
 $lastadminloginres = Database::get()->querySingle("SELECT `when` FROM loginout WHERE id_user = ?d AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1", $uid);
 $data['lastregisteredprofs'] = 0;
@@ -58,9 +58,9 @@ $data['lastregisteredstuds'] = 0;
 if ($lastadminloginres && $lastadminloginres->when) {
     $lastadminlogin = $lastadminloginres->when;
     // Count profs registered after last login
-    $data['lastregisteredprofs'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 1 AND registered_at > ?t", $lastadminlogin)->cnt;
+    $data['lastregisteredprofs'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_TEACHER . " AND registered_at > ?t", $lastadminlogin)->cnt;
     // Count studs registered after last login
-    $data['lastregisteredstuds'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 5 AND registered_at > ?t", $lastadminlogin)->cnt;
+    $data['lastregisteredstuds'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_STUDENT . " AND registered_at > ?t", $lastadminlogin)->cnt;
 }
 // INDEX RELATED
 if (get_config('enable_indexing')) {
