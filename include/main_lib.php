@@ -462,7 +462,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
     $q = Database::get()->queryArray("SELECT `group`.id, `group`.name FROM `group`, group_members
                        WHERE `group`.course_id = ?d AND
                              `group`.id = group_members.group_id AND
-                             `group_members`.user_id = ?d                    
+                             `group_members`.user_id = ?d
                        ORDER BY `group`.name", $course_id, $user_id);
 
     if (!$q) {
