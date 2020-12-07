@@ -86,6 +86,7 @@ define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_COURSEPREREQUISITE', 49);
 define('MODULE_ID_LTI_CONSUMER', 50);  /* deprecated. used only for compatibility in statistics*/
 define('MODULE_ID_ANALYTICS', 51);
+define('MODULE_ID_H5P', 60);
 define('MODULE_ID_REQUEST', 100);
 
 // user modules
@@ -186,4 +187,3 @@ define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
 define('MAX_IDLE_TIME', 10);
 
 define('JQUERY_VERSION', '2.1.1');
-
