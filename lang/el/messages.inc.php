@@ -119,6 +119,7 @@ $langPlatformStats = "Στατιστικά Πλατφόρμας";
 $langPlatformGenStats = "Γενικά στατιστικά";
 $langVisitsStats = "Στατιστικά επισκέψεων";
 $langMonthlyReport = "Μηνιαίες αναφορές";
+$langStatsReports = "Στατιστικές αναφορές";
 $langReport = "Αναφορά για το μήνα";
 $langNoReport = "Δεν υπάρχουν διαθέσιμα στοιχεία για το μήνα";
 $langEmailNotSend = "Σφάλμα κατά την αποστολή e-mail στη διεύθυνση";
