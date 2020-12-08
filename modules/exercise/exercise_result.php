@@ -155,8 +155,8 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                     if ($('*').hasClass('questionGradeBox')) {
                         $('a#submitButton').show();
                     } else {
-                        $('a#submitButton').hide();    
-                    }                    
+                        $('a#submitButton').hide();
+                    }
                     $('a#submitButton').click(function(e){
                         e.preventDefault();
                         var success = true;
@@ -427,7 +427,7 @@ if (count($exercise_question_ids) > 0) {
                                 $choice[$answerId] = $matching[$choice[$answerId]];
                                 $icon = "<span class='fa fa-check text-success'></span>";
                             } elseif (!$thisChoice) {
-                                $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
+                                $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             } else {
                                 $choice[$answerId] = "<span class='text-danger'><del>" .
