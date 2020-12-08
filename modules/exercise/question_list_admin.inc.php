@@ -382,17 +382,16 @@ if ($nbrQuestions) {
         $info_random_text = "<small><span class='help-block'>$langShow $randomQuestions $langFromRandomQuestions</span></small>";
     }
 
-    $questionList = $objExercise->selectQuestionList();
-    $tool_content .= "<div id='RandomizationForm' class='form-wrapper'>   
+    $tool_content .= "<div id='RandomizationForm' class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>
                 <div class='form-group'>
-                    <div class='col-sm-12'>                        
-                        <label class='col-sm-3'>
+                    <div class='col-sm-12'>
+                        <label class='pull-left'>
                              <input type='checkbox' name='enableShuffleQuestions' value='1' ".(($shuffleQuestions == 1)? 'checked' : '').">
-                             $langShuffleQuestions 
+                             <span class='form-control-static'>$langShuffleQuestions</span> 
                          </label>
-                         <span class='col-sm-1'><input type='text' class='form-control' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
-                         <span class='col-sm-8'>$langFromRandomQuestions</span>                        
+                         <span class='col-xs-1'><input type='text' class='form-control' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
+                         <span>$langFromRandomQuestions</span>                        
                     </div>
                 </div>
                 <div class='form-group'>
@@ -408,13 +407,14 @@ if ($nbrQuestions) {
         <div class='table-responsive'>
         <table class='table-default'>
         <thead>        
-        <tr>
-          <th colspan='2' class='text-left'>$langQuestionList $info_random_text</th>
-          <th class='text-center'>".icon('fa-gears', $langActions)."</th>
-        </tr>
+            <tr>
+                 <th colspan='2' class='text-left'>$langQuestionList $info_random_text</th>
+                 <th class='text-center'>".icon('fa-gears', $langActions)."</th>
+            </tr>
         </thead>
         <tbody id='q_sort'>";
 
+    $questionList = $objExercise->selectQuestionList();
 
     foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
