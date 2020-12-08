@@ -82,12 +82,6 @@ if (isset($_POST['submitExercise'])) {
             $objExercise->updateIPLock('');
         }
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
-        /*if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
-            $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate']);
-            $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
-            $objExercise->updateStartDate($startDateTime_obj);
-        }*/
-
         $startDateTime_obj = isset($_POST['exerciseStartDate']) && !empty($_POST['exerciseStartDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateStartDate($startDateTime_obj);
@@ -625,16 +619,14 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     ));
     if (!empty($exerciseDescription)) {
         $tool_content .= "
-                <div class='row margin-bottom-fat'>                
+                <div class='row margin-bottom-fat' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px;'>                
                     <div class='col-sm-12'>
-                        <span class='help-block'>" . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "</span>
+                        <em>" . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "</em>
                     </div>
                 </div>";
     }
 
-    //$tool_content .= "<div class='panel panel-primary'>";
-    //$tool_content .= "<div class='panel-body'>";
-    $tool_content .= "<div class='alert alert-info'>";
+    $tool_content .= "<div class='alert alert-default' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>";
     $tool_content .= "
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-12'>
