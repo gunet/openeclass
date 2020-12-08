@@ -419,6 +419,7 @@ if (count($exercise_question_ids) > 0) {
                                 $icon = "<span class='fa fa-check text-success'></span>";
                             } elseif (!$thisChoice) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
+                                $icon = "<span class='fa fa-times text-danger'></span>";
                             } else {
                                 $choice[$answerId] = "<span class='text-danger'><del>" .
                                     $matching[$choice[$answerId]] . "</del></span>";
