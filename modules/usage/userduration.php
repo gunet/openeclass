@@ -102,15 +102,14 @@ if (isset($_GET['u'])) { //  stats per user
         }
         $tool_content .= "</table>";
 
-        // user last 10 logins
+        // user last logins
         $user_logins = Database::get()->queryArray("SELECT last_update
                       FROM actions_daily
                             WHERE course_id = ?d
                               AND user_id = ?d
                     AND module_id = ". MODULE_ID_UNITS . " 
                     ORDER BY last_update 
-                    DESC 
-                    LIMIT 0,10", $course_id, $_GET['u']);
+                    DESC ", $course_id, $_GET['u']);
 
         if (count($user_logins) > 0) {
             $tool_content .= "<table class='table-default'>
