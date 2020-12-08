@@ -589,7 +589,7 @@ function triggerAssignmentAnalytics($courseId, $uid, $assignmentId, $eventname) 
 function export_grades_to_csv($id) {
 
     global $course_code, $course_id,
-           $langSurname, $langName, $langAm,
+           $langSurname, $langName, $langAm, $langGroup,
            $langUsername, $langEmail, $langGradebookGrade;
 
     $csv = new CSV();
@@ -603,7 +603,7 @@ function export_grades_to_csv($id) {
         $title = $q->title;
         $csv->outputRecord($title);
         $csv->outputRecord();
-        $csv->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade);
+        $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langUsername, $langEmail, $langGradebookGrade);
         $sql = Database::get()->queryArray("SELECT uid, grade FROM assignment_submit
                         WHERE assignment_id = ?d", $assignment_id);
         foreach ($sql as $data) {
@@ -611,7 +611,8 @@ function export_grades_to_csv($id) {
                         FROM user
                         WHERE id = ?d',
                         $data->uid);
-            $csv->outputRecord($entries->surname, $entries->givenname, $entries->am,
+            $ug = user_groups($course_id, $data->uid, 'txt');
+            $csv->outputRecord($entries->surname, $entries->givenname, $entries->am, $ug,
                     $entries->username, $entries->email, $data->grade);
             $csv->outputRecord();
         }
