@@ -88,7 +88,9 @@ $head_content .= "<script type='text/javascript'>
 
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
-if (isset($_GET['edit_lb'])) {
+if (isset($_GET['edit_config'])) {
+    $bbb_max_duration = get_config('bbb_max_duration', 0);
+    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
     $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
     $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked = '';
 
@@ -125,9 +127,21 @@ if (isset($_GET['edit_lb'])) {
     $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlc' $bbb_lb_wlc_checked>$langBBBLBMethodWLC</label></span>";
     $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLCInfo'></span></label>";
     $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBMaxDuration:</label>";
+    $tool_content .= "<span class='col-sm-1'><label><input class='form-control' type='text' id='bbb_max_duration' name='bbb_max_duration' value='$bbb_max_duration'></label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langInMinutes'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBMaxPartPerRoom:</label>";
+    $tool_content .= "<span class='col-sm-1'><label><input class='form-control' type='text' id='bbb_max_part_per_room' name='bbb_max_part_per_room' value='$bbb_max_part_per_room'></label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBMaxPartPerRoomInfo'></span></label>";
+    $tool_content .= "</div>";
+
     $tool_content .= "<div class='form-group'>
-                        <div class='col-sm-offset-3 col-sm-9'>
-                            <input class='btn btn-primary' type='submit' name='submit_lb' value='Υποβολή'>
+                        <div class='col-sm-offset-3'>
+                            <input class='btn btn-primary' type='submit' name='submit_config' value='Υποβολή'>
                         </div>
                      </div>";
     $tool_content .= "</form></div>";
@@ -368,9 +382,10 @@ else if (isset($_POST['submit'])) {
     Session::Messages($langFileUpdatedSuccess,"alert-success");
     redirect_to_home_page("modules/admin/bbbmoduleconf.php");
 } // end of if($submit)
-else if (isset($_POST['submit_lb'])) {
-    $bbb_lb_algo = $_POST['bbb_lb_algo'];
-    set_config('bbb_lb_algo', $bbb_lb_algo);
+else if (isset($_POST['submit_config'])) {
+    set_config('bbb_lb_algo', $_POST['bbb_lb_algo']);
+    set_config('bbb_max_duration', trim($_POST['bbb_max_duration']));
+    set_config('bbb_max_part_per_room', trim($_POST['bbb_max_part_per_room']));
 
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
@@ -498,11 +513,10 @@ else {
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
-           array('title' => $langBBBConfigLB,
-                'url' => "bbbmoduleconf.php?edit_lb",
-                'icon' => 'fa-expand',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success'),
+           array('title' => $langConfig,
+                'url' => "bbbmoduleconf.php?edit_config",
+                'icon' => 'fa-gear',
+                'level' => 'primary-label'),
             array('title' => $langBack,
                 'url' => "extapp.php",
                 'icon' => 'fa-reply',

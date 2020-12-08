@@ -44,6 +44,7 @@ function bbb_session_form($session_id = 0) {
     global $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat;
     global $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote;
     global $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator;
+    global $langBBBMaxPartPerRoom;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -51,6 +52,11 @@ function bbb_session_form($session_id = 0) {
     $c = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
     if ($c > 80) {
         $c = floor($c/2); // If more than 80 course users, we suggest 50% of them
+    }
+    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+    if (!empty($bbb_max_part_per_room) and ($c > $bbb_max_part_per_room)) {
+        $c = $bbb_max_part_per_room;
+        $bbb_max_part_per_room_limit = true;
     }
     $found_selected = false;
 
@@ -212,8 +218,13 @@ function bbb_session_form($session_id = 0) {
         <div class='form-group'>
             <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type='text' name='sessionUsers' id='sessionUsers' value='$value_session_users'> $langBBBSessionSuggestedUsers:
-                <strong>$c</strong> ($langBBBSessionSuggestedUsers2)
+                <input class='form-control' type='text' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
+        if (isset($bbb_max_part_per_room_limit)) {
+            $tool_content .= " $langBBBMaxPartPerRoom: <strong>$bbb_max_part_per_room</strong>";
+        } else {
+            $tool_content .= " $langBBBSessionSuggestedUsers: <strong>$c</strong> ($langBBBSessionSuggestedUsers2)";
+        }
+        $tool_content .= "
             </div>
         </div>";
         $tool_content .= "<div class='form-group'>
@@ -1000,6 +1011,11 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $opt
             $duration = $interval->y * 365 * 24 * 60 + $interval->m * 31 * 24 * 60 + $interval->d * 24 * 60 + $interval->h * 60 + $interval->i + ($interval->s >= 30? 1: 0);
         }
 
+        $bbb_max_duration = get_config('bbb_max_duration', 0);
+        if ($bbb_max_duration > 0 and ($duration === 0 or $duration > $bbb_max_duration)) {
+            $duration = $bbb_max_duration;
+        }
+
         $bbb = new BigBlueButton($salt, $bbb_url);
 
         if (isset($course_code) and $course_code) {
@@ -1568,7 +1584,7 @@ function get_bbb_servers_load()
     // weight of video: video is sent to participants. double weight due to higher bandwidth and cpu of SFU
     $video_weight = 2;
     // each room allocates resources. take that into account
-    $room_load = 10;
+    $room_load = 50;
 
     $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' AND `enabled` = 'true' ORDER BY weight ASC");
 

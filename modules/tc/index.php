@@ -266,8 +266,14 @@ elseif(isset($_POST['update_bbb_session'])) { // update existing BBB session
         $options = NULL;
     }
 
+    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+    $sessionUsers = $_POST['sessionUsers'];
+    if (!empty($bbb_max_part_per_room) and ($sessionUsers > $bbb_max_part_per_room)) {
+        $sessionUsers = $bbb_max_part_per_room;
+    }
+
     // update existing BBB session
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $_POST['sessionUsers'], $options, true, getDirectReference($_POST['id']));
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $sessionUsers, $options, true, getDirectReference($_POST['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -399,8 +405,14 @@ elseif(isset($_GET['choice']))
         $options = NULL;
     }
 
+    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+    $sessionUsers = $_POST['sessionUsers'];
+    if (!empty($bbb_max_part_per_room) and ($sessionUsers > $bbb_max_part_per_room)) {
+        $sessionUsers = $bbb_max_part_per_room;
+    }
+
     // new BBB session
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $_POST['sessionUsers'], $options, false);
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $sessionUsers, $options, false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
