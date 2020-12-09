@@ -299,7 +299,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                        WHERE `group`.id = poll_to_specific.group_id
                                        AND `group`.visible = 1 
                                        AND `group`.course_id = ?d
-                                       AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid, );
+                                       AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid);
                 $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` 
                                         WHERE course_id = ?d AND `group`.visible = 1", $course_id);
                 foreach ($assignees as $assignee_row) {
