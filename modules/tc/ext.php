@@ -47,6 +47,11 @@ if ($q) {
     $unlock_interval = $q->unlock_interval;
     $external_users = $q->external_users;
     $r_group = explode(",",$external_users);
+    if (!empty($q->options))  {
+        $options = unserialize($q->options);
+    } else {
+        $options = NULL;
+    }
 } else {
     redirect_to_home_page();
     exit;
@@ -64,7 +69,7 @@ if ($active <> '1'
 
 if ($server_type == 'bbb') { // bbb server
     if(bbb_session_running($meeting_id) == false) {
-        create_bbb_meeting($title,$meeting_id,$mod_pw,$att_pw,$record);
+        create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $options);
     }
     # Get session capacity
     $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session WHERE meeting_id=?s",$meeting_id);
