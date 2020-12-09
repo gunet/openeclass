@@ -245,7 +245,8 @@ function display_exercise($exercise_id) {
 
     global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore, $langQuestionsManagement,
-           $langScore, $course_code, $langBack, $langModify, $langFromRandomDifficultyQuestions;
+           $langScore, $course_code, $langBack, $langModify,
+           $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions;
 
     $tool_content .= action_bar(array(
         array('title' => $langQuestionsManagement,
@@ -279,9 +280,17 @@ function display_exercise($exercise_id) {
     $totalWeighting = $exercise->selectTotalWeighting();
     $i = 0;
     foreach ($question_list as $qid) {
-        $i++;
+        if (isset($number) and $number > 0) {
+            $i = $i + $number;
+            $number = 0;
+        } else {
+            $i++;
+        }
+
         $question = new Question();
-        $question->read($qid);
+        if (!is_array($qid)) {
+            $question->read($qid);
+        }
         $questionName = $question->selectTitle();
         $questionDescription = $question->selectDescription();
         $questionWeighting = $question->selectWeighting();
@@ -297,17 +306,25 @@ function display_exercise($exercise_id) {
 
         $tool_content .= "<table class = 'table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
-            foreach ($qid as $num_of_q => $d) {
-                $tool_content .= "<tr class='active'>
+            $tool_content .= "<tr class='active'>
                                 <td colspan='$colspan'>
                                     <strong><u>$langQuestion</u>: $i</strong>
                                 </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span style='color: red;'>$num_of_q $langFromRandomDifficultyQuestions " . $question->selectDifficultyLegend($d) . "</span>
-                                    </td>
-                                </tr>";
+                               </tr>";
+            if ($qid['criteria'] == 'difficulty') {
+                next($qid);
+                $number = key($qid);
+                $difficulty = $qid[$number];
+                $tool_content .= "<tr><td>";
+                $tool_content .= "<span style='color: red;'>$number $langFromRandomDifficultyQuestions '" . $question->selectDifficultyLegend($difficulty) . "'</span>";
+                $tool_content .= "</td></tr>";
+            } else if ($qid['criteria'] == 'category') {
+                next($qid);
+                $number = key($qid);
+                $category = $qid[$number];
+                $tool_content .= "<tr><td>";
+                $tool_content .= "<span style='color: red;'>$number $langFromRandomCategoryQuestions '" . $question->selectCategoryName($category) . "'</span>";
+                $tool_content .= "</td></tr>";
             }
         } else {
             $tool_content .= "
