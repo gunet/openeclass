@@ -136,7 +136,7 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
 
 $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
 $cat_options = "<option value=\"-1\">-- $langQuestionAllCats --</option><option value=\"0\">-- $langQuestionWithoutCat --</option>";
-$cat_options_2 = "<option>-- $langQuestionNotDefined --</option>";
+$cat_options_2 = "<option> ---- </option>";
 foreach ($q_cats as $qcat) {
     $cat_options .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
     $cat_options_2 .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
@@ -258,7 +258,7 @@ $head_content .= "
                                 '<div class=\"form-group\">' +
                                     '<div class=\"col-sm-5\">' +
                                         '<select id=\"difficultyId\" class=\"form-control\">' +
-                                            '<option value=\"0\">-- $langQuestionNotDefined --</option>' +
+                                            '<option value=\"0\">  ----  </option>' +
                                             '<option value=\"1\">$langQuestionVeryEasy</option>' +
                                             '<option value=\"2\">$langQuestionEasy</option>' +
                                             '<option value=\"3\">$langQuestionModerate</option>' +
@@ -267,7 +267,7 @@ $head_content .= "
                                         '</select>' +
                                     '</div>' +                                    
                                     '<div class=\"col-sm-2\">' +
-                                        '<input class=\"form-control\" type=\"text\" id=\"questionDifficultyDrawn\" value=\"2\"> $langQuestions' +
+                                        '<input class=\"form-control\" type=\"text\" id=\"questionDifficultyDrawn\" value=\"\"> $langQuestions' +
                                     '</div>' +
                                 '</div>' +
                                 '<h5>$langQuestionCats</h5>' +
@@ -276,7 +276,7 @@ $head_content .= "
                                         '<select id=\"categoryId\" class=\"form-control\">$cat_options_2</select>' +
                                     '</div>' +                                    
                                     '<div class=\"col-sm-2\">' +
-                                        '<input class=\"form-control\" type=\"text\" id=\"questionCategoryDrawn\" value=\"2\"> $langQuestions' +
+                                        '<input class=\"form-control\" type=\"text\" id=\"questionCategoryDrawn\" value=\"\"> $langQuestions' +
                                     '</div>' +
                                 '</div>' +                                
                             '</form>' +
@@ -415,14 +415,20 @@ if ($nbrQuestions) {
         <tbody id='q_sort'>";
 
     $questionList = $objExercise->selectQuestionList();
-
+    $limit = 0;
     foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
         if (!is_array($id)) {
             $objQuestionTmp->read($id);
+            $ewq_id = $id;
+        } else {
+            $next_limit = $limit+1;
+            $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions 
+                                      WHERE exercise_id = ?d 
+                                      AND question_id IS NULL LIMIT $limit,$next_limit", $exerciseId);
+            $ewq_id = $q->id;
+            $limit++;
         }
-        $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions WHERE exercise_id = ?d", $exerciseId);
-        $ewq_id = $q->id;
         $aType = $objQuestionTmp->selectType();
         $question_difficulty_legend = $objQuestionTmp->selectDifficultyIcon($objQuestionTmp->selectDifficulty());
         $question_category_legend = $objQuestionTmp->selectCategoryName($objQuestionTmp->selectCategory());
@@ -487,7 +493,12 @@ if ($nbrQuestions) {
         $tool_content .= "</div>";
         $tool_content .= "</td>";
         $tool_content .= "</tr>";
-        $i++;
+        if (isset($number) and $number > 0) {
+            $i = $i + $number;
+            $number = 0;
+        } else {
+            $i++;
+        }
         unset($objQuestionTmp);
     }
     $tool_content .= "</tbody></table></div>";
