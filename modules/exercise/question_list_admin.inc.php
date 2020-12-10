@@ -113,17 +113,18 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit();
 }
 
-
 // shuffle (aka random questions)
-if (isset($_POST['shuffleQuestions'])) {
-    if (isset($_POST['enableShuffleQuestions']) and ($_POST['enableShuffleQuestions'] == 1)) {
-        $objExercise->setShuffle(1); // shuffle all questions
-        if (($_POST['numberOfRandomQuestions']) > 0) {
+if (isset($_POST['shuffleQuestions'])) {  // shuffle all questions
+    if (isset($_POST['enableShuffleQuestions'])) {
+        $objExercise->setShuffle(1);
+        $objExercise->setRandom(0);
+    } else if (isset($_POST['enableRandomQuestions'])) {
+        if (isset($_POST['numberOfRandomQuestions']) and ($_POST['numberOfRandomQuestions']) > 0) {
             $objExercise->setRandom($_POST['numberOfRandomQuestions']);  // shuffle some questions
-        } else {
-            $objExercise->setRandom(0);
+            $objExercise->setShuffle(0);
         }
-    } else {
+    } else { // reset everything
+        $objExercise->setRandom(0);
         $objExercise->setShuffle(0);
     }
     $objExercise->save();
@@ -150,8 +151,6 @@ $diff_options = "<option value=\"-1\">-- $langQuestionAllDiffs --</option>"
     . "<option value=\"4\">$langQuestionDifficult</option>"
     . "<option value=\"5\">$langQuestionVeryDifficult</option>";
 
-
-$ajax_shuffle_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$exerciseId&shuffleQuestions=";
 // for sorting
 $head_content .= "
     <script>
@@ -192,6 +191,26 @@ $head_content .= "
     }
   $(function() {
      RandomizationForm();
+     $('#checkboxShuffleQuestions').click(function() {
+         if ($(this).is(':checked')) {            
+            $('#checkboxRandomQuestions').prop('disabled', true);
+            $('#inputRandomQuestions').prop('disabled', true);
+            $('#divcheckboxRandomQuestions').addClass('not_visible');
+         } else {
+             $('#inputRandomQuestions').prop('disabled', false);
+             $('#checkboxRandomQuestions').prop('disabled', false);
+             $('#divcheckboxRandomQuestions').removeClass('not_visible');             
+         }         
+     });
+     $('#checkboxRandomQuestions').click(function() {
+         if ($(this).is(':checked')) {
+             $('#checkboxShuffleQuestions').prop('disabled', true);
+             $('#divcheckboxShuffleQuestions').addClass('not_visible');                          
+         } else {
+             $('#checkboxShuffleQuestions').prop('disabled', false);
+             $('#divcheckboxShuffleQuestions').removeClass('not_visible');             
+         }
+     });
     $('.questionSelection').click( function(e){
         e.preventDefault();
         bootbox.dialog({
@@ -337,11 +356,10 @@ if (isset($_GET['deleteQuestion'])) {
     // if the question exists and it is not random
     if ($objQuestionTmp->read($deleteQuestion)) {
         $objQuestionTmp->delete($exerciseId);
-        // if the question has been removed from the exercise
         if ($objExercise->removeFromList($deleteQuestion)) {
             $nbrQuestions--;
         }
-    } else { // random
+    } else { // random question
         $objQuestionTmp->removeRandomQuestionsFromList($deleteQuestion, $exerciseId);
     }
     redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
@@ -386,12 +404,20 @@ if ($nbrQuestions) {
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>
                 <div class='form-group'>
                     <div class='col-sm-12'>
-                        <label class='pull-left'>
-                             <input type='checkbox' name='enableShuffleQuestions' value='1' ".(($shuffleQuestions == 1)? 'checked' : '').">
-                             <span class='form-control-static'>$langShuffleQuestions</span> 
-                         </label>
-                         <span class='col-xs-1'><input type='text' class='form-control' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
-                         <span>$langFromRandomQuestions</span>                        
+                        <div class='checkbox' id='divcheckboxShuffleQuestions'>
+                            <label class='form-control-static'>
+                                 <input id='checkboxShuffleQuestions' type='checkbox' name='enableShuffleQuestions' value='1' ".(($shuffleQuestions == 1)? 'checked' : '').">
+                                 $langShuffleQuestions
+                             </label>                         
+                         </div>
+                     </div>
+                     <div class='col-sm-12'>
+                        <div class='checkbox' id='divcheckboxRandomQuestions'>
+                            <label class='form-control-static'>
+                             <input id='checkboxRandomQuestions'type='checkbox' name='enableRandomQuestions' value='1' ".(($randomQuestions > 0)? 'checked' : '').">
+                             $langChooseRandomQuestions</label>
+                             <input id='inputRandomQuestions' type='text' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '').">&nbsp;$langsQuestions
+                         </div>
                     </div>
                 </div>
                 <div class='form-group'>
@@ -424,8 +450,11 @@ if ($nbrQuestions) {
         } else {
             $next_limit = $limit+1;
             $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions 
-                                      WHERE exercise_id = ?d 
-                                      AND question_id IS NULL LIMIT $limit,$next_limit", $exerciseId);
+                                        WHERE exercise_id = ?d 
+                                      AND question_id IS NULL 
+                                          ORDER BY q_position 
+                                          ASC  
+                                          LIMIT $limit,$next_limit", $exerciseId);
             $ewq_id = $q->id;
             $limit++;
         }
