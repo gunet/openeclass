@@ -278,15 +278,9 @@ function display_exercise($exercise_id) {
 
     $question_list = $exercise->selectQuestionList();
     $totalWeighting = $exercise->selectTotalWeighting();
-    $i = 0;
+    $i = 1;
+    $hasRandomQuestions = false;
     foreach ($question_list as $qid) {
-        if (isset($number) and $number > 0) {
-            $i = $i + $number;
-            $number = 0;
-        } else {
-            $i++;
-        }
-
         $question = new Question();
         if (!is_array($qid)) {
             $question->read($qid);
@@ -306,6 +300,7 @@ function display_exercise($exercise_id) {
 
         $tool_content .= "<table class = 'table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
+            $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
                                 <td colspan='$colspan'>
                                     <strong><u>$langQuestion</u>: $i</strong>
@@ -409,9 +404,15 @@ function display_exercise($exercise_id) {
         $tool_content .= "</table>";
 
         unset($answer);
+        // question  numbering
+        if (isset($number) and $number > 0) {
+            $i = $i + $number;
+            $number = 0;
+        } else {
+            $i++;
+        }
     }
-    $tool_content .= "<br>
-            <table class='table-default'>
-            <tr><td class='text-right'><strong>$langYourTotalScore: $totalWeighting</strong></td></tr>
-            </table>";
+    if (!$hasRandomQuestions) {
+        $tool_content .= "<div class='col-sm-12'><span class='pull-right'><strong>$langYourTotalScore: $totalWeighting</strong></span></div>";
+    }
 }
