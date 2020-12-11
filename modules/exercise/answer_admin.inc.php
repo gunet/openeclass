@@ -140,15 +140,19 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
     } elseif ($answerType == MATCHING) {
 
+        function check_empty($item) {
+            $item = trim($item);
+            return $item !== '';
+        }
         if (isset($_POST['match'])) { // check for blank matches
-            if ($_POST['match'] != array_filter($_POST['match'])) {
+            if ($_POST['match'] != array_filter($_POST['match'],'check_empty')) {
                 Session::Messages($langGiveAnswers, 'alert-warning');
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             }
         }
 
         if (isset($_POST['option'])) { // check for blank options
-            if ($_POST['option'] != array_filter($_POST['option'])) {
+            if ($_POST['option'] != array_filter($_POST['option'], 'check_empty')) {
                 Session::Messages($langGiveAnswers, 'alert-warning');
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             }
@@ -162,6 +166,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         $questionWeighting = 0;
         // merge arrays $_POST['options'] + $_POST['match']
         $temp_data = array_merge($option, $_POST['match']);
+
         for ($k = 0; $k < count($temp_data); $k++) {
             // start keys of previous array from index 1
             $data[$k+1] = $temp_data[$k];
