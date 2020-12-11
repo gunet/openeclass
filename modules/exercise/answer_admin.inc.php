@@ -562,9 +562,9 @@ if (isset($_GET['modifyAnswers'])) {
          $i = $objAnswer->getFirstMatchingPosition();
          for ($j = 1; $j <= $nbrMatches; $i++, $j++) {
              if (isset($_POST['match'][$i])) {
-                 $optionText = htmlspecialchars($_POST['match'][$i]);
+                 $optionText = $_POST['match'][$i];
              } elseif (isset($match[$i])) {
-                 $optionText = htmlspecialchars($match[$i]);
+                 $optionText = $match[$i];
              } elseif (!count($match)) {
                  $optionText = ${'langDefaultMakeCorrespond' . $j}; // Default example option
              } else {
