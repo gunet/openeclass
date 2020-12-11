@@ -293,34 +293,25 @@ function quote($s) {
 
 
 /**
- * @brief import new theme
+ * @brief import themes
  */
 function importThemes($themes = null) {
     global $webDir;
-    if (!isset($themes) || isset($themes) && !empty($themes)) {
-        $themesDir = "$webDir/template/$_SESSION[theme]/themes";
-        if(!is_dir("$webDir/courses/theme_data")) make_dir("$webDir/courses/theme_data");
-        if (is_dir($themesDir) && $handle = opendir($themesDir)) {
-            if (!isset($themes)) {
-                while (false !== ($file_name = readdir($handle))) {
-                    if ($file_name != "." && $file_name != "..") {
-                        installTheme($themesDir, $file_name);
-                    }
-                }
-            } else {
-                while (false !== ($file_name = readdir($handle))) {
-                    if ($file_name != "." && $file_name != ".." && in_array($file_name, $themes)) {
-                        installTheme($themesDir, $file_name);
-                    }
-                }
+
+    $themesDir = "$webDir/template/$_SESSION[theme]/themes";
+    if(!is_dir("$webDir/courses/theme_data")) make_dir("$webDir/courses/theme_data");
+    if (is_dir($themesDir) && $handle = opendir($themesDir)) {
+        while (false !== ($file_name = readdir($handle))) {
+            if ($file_name != '.' && $file_name != '..') {
+                installTheme($themesDir, $file_name);
             }
-            closedir($handle);
         }
+        closedir($handle);
     }
 }
 
 /**
- * @brier install new theme
+ * @brief install new theme (only if a theme with this name doesn't already exist)
  * @param $themesDir
  * @param $file_name
  */
@@ -335,10 +326,14 @@ function installTheme($themesDir, $file_name) {
     $base64_str = file_get_contents("$tempdir/theme_options.txt");
     unlink("$tempdir/theme_options.txt");
     $theme_options = unserialize(base64_decode($base64_str));
-    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)",
-        $theme_options->name, $theme_options->styles)->lastInsertID;
-    rename($tempdir . '/' . $theme_options->id, "$webDir/courses/theme_data/$new_theme_id");
-    rmdir($tempdir);
+    $exists = Database::get()->querySingle('SELECT id FROM theme_options
+        WHERE name = ?s', $theme_options->name);
+    if (!$exists) {
+        $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)",
+            $theme_options->name, $theme_options->styles)->lastInsertID;
+        rename($tempdir . '/' . $theme_options->id, "$webDir/courses/theme_data/$new_theme_id");
+    }
+    removeDir($tempdir);
 }
 
 
@@ -472,7 +467,7 @@ function updateAnnouncementSticky( $table ) {
  */
 
 function create_indexes() {
-    
+
     DBHelper::indexExists('actions_daily', 'actions_daily_index') or
         Database::get()->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
     DBHelper::indexExists('actions_summary', 'actions_summary_index') or
