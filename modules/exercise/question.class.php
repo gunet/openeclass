@@ -165,7 +165,7 @@ if (!class_exists('Question')) {
                 case 1: return icon('fa-smile-o', $langQuestionVeryEasy);
                 case 2: return icon('fa-smile-o', $langQuestionEasy);
                 case 3: return icon('fa-meh-o', $langQuestionModerate);
-                case 4: return icon('fa-exclamation', $langQuestionDifficult);
+                case 4: return icon('fa-frown-o', $langQuestionDifficult);
                 case 5: return icon('fa-fire', $langQuestionVeryDifficult);
             }
         }

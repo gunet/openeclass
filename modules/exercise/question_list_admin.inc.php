@@ -135,7 +135,7 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
     $formRandomQuestions = 'disable';
 }
 
-$q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
+$q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
 $cat_options = "<option value=\"-1\">-- $langQuestionAllCats --</option><option value=\"0\">-- $langQuestionWithoutCat --</option>";
 $cat_options_2 = "<option> ---- </option>";
 foreach ($q_cats as $qcat) {

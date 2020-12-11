@@ -184,7 +184,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             'level' => 'primary-label'
         )
     ));
-    $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
+    $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
 
     $options = "<option value='0'>-- $langQuestionWithoutCat --</option>\n";
     foreach ($q_cats as $q_cat) {

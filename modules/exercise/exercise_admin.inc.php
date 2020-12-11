@@ -619,7 +619,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     ));
 
     $tool_content .= "<div class='row margin-bottom-fat form-wrapper' style='margin-top: 10px; margin-bottom: 30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>";
-
+    $tool_content .= "<div class='col-sm-12 row-main'><strong>$exerciseTitle</strong></div>";
     if (!empty($exerciseDescription)) {
         $tool_content .= "<div class='col-sm-12'>
                             <em>" . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "</em>
