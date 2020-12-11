@@ -62,7 +62,7 @@ $data['settings'] = get_auth_settings($auth);
 $data['auth_instructions'] = q($settings['auth_instructions']);
 
 if (($auth != 7) and ($auth != 6)) {
-    $data['set_uname'] = isset($_GET['uname']) ? (" value='" . q(canonicalize_whitespace($_GET['uname'])) . "'") : '';
+    $data['set_uname'] = isset($_GET['uname']) ? (" value=" . q(canonicalize_whitespace($_GET['uname'])) . "") : '';
     $data['form_buttons'] = form_buttons(array(
                                 array(
                                     'text' => q($langSubmit),
