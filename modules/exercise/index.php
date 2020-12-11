@@ -69,10 +69,6 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[1, 'desc']],
-                'drawCallback': function( oSettings ) {
-                    tooltip_init();
-                    popover_init();
-                },
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -169,23 +165,26 @@ if ($is_editor) {
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, temp_save, time_constraint, attempts_allowed, ip_lock, password_lock FROM exercise "
-                                . "WHERE course_id = ?d "
-                                . "ORDER BY start_date DESC", $course_id);
+    $result = Database::get()->queryArray('SELECT * FROM exercise
+        WHERE course_id = ?d
+        ORDER BY start_date DESC', $course_id);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
+    $gids_sql_ready = "''";
+    if ($uid > 0) {
         $gids = user_group_info($uid, $course_id);
         if (!empty($gids)) {
-            $gids_sql_ready = implode(',',array_keys($gids));
-        } else {
-            $gids_sql_ready = "''";
+            $gids_sql_ready = implode("','", array_keys($gids));
         }
-    $result = Database::get()->queryArray("SELECT start_date, id, title, description, type, active, public, end_date, temp_save, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
-            "FROM exercise WHERE course_id = ?d AND active = 1 "
-            . "AND (assign_to_specific = '0' OR assign_to_specific != '0' AND id IN
-                       (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d UNION SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ($gids_sql_ready))
-                    ) "
-            ."ORDER BY start_date DESC", $course_id, $uid);
+    }
+    $result = Database::get()->queryArray("SELECT * FROM exercise
+        WHERE course_id = ?d AND active = 1 AND
+              (assign_to_specific = '0' OR
+               (assign_to_specific != '0' AND id IN (
+                  SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d
+                    UNION 
+                   SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ('$gids_sql_ready'))))
+        ORDER BY start_date DESC", $course_id, $uid);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
 
@@ -406,11 +405,26 @@ if (!$nbrExercises) {
 
             if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
 
-                $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
-                                . "FROM exercise_user_record "
-                                . "WHERE eid = ?d AND uid = ?d "
-                                . "AND attempt_status = ?d", $row->id, $uid, ATTEMPT_PAUSED);
-                if ($paused_exercises) {
+                $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt
+                                FROM exercise_user_record
+                                WHERE eid = ?d AND uid = ?d AND
+                                      attempt_status = ?d",
+                                $row->id, $uid, ATTEMPT_PAUSED);
+                if ($row->continue_time_limit) {
+                    $incomplete_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                                    FROM exercise_user_record
+                                    WHERE eid = ?d AND uid = ?d AND
+                                          attempt_status = ?d AND
+                                          TIME_TO_SEC(TIMEDIFF(NOW(), record_end_date)) < ?d
+                                    ORDER BY eurid DESC LIMIT 1",
+                        $row->id, $uid, ATTEMPT_ACTIVE, 60 * $row->continue_time_limit);
+                } else {
+                    $incomplete_attempt = null;
+                }
+                if ($incomplete_attempt) {
+                    $tool_content .= "<td><a class='ex_settings active_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$incomplete_attempt->eurid'>" . q($row->title) . "</a>"
+                            . "&nbsp;&nbsp;(<font color='#a9a9a9'>$langAttemptActive</font>)";
+                } elseif ($paused_exercises) {
                     $tool_content .= "<td><a class='ex_settings paused_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
                             . "&nbsp;&nbsp;(<font color='#a9a9a9'>$langAttemptPausedS</font>)";
                 } else {
@@ -503,22 +517,25 @@ $head_content .= "<script type='text/javascript'>
                 }
             }
         });
-    }    
+    }
     $(document).ready(function() {
-        $(document).on('click', '.ex_settings', function(e) {        
+        $(document).on('click', '.ex_settings', function(e) {
             var exercise = $(this);
             var link = $(this).attr('href');
-            if (exercise.hasClass('paused_exercise')) {
+            if (exercise.hasClass('paused_exercise') || exercise.hasClass('active_exercise')) {
+               var message = exercise.hasClass('paused_exercise')?
+                   '" . js_escape($langTemporarySaveNotice2) . "':
+                   '" . js_escape($langContinueAttemptNotice) . "';
                e.preventDefault();
-               bootbox.confirm('" . js_escape($langTemporarySaveNotice2) . "', function(result) {
+               bootbox.confirm(message, function(result) {
                     if (result) {
                         if (exercise.hasClass('password_protected')) {
                             password_bootbox(link);
                         } else {
                             window.location = link;
-                        }   
+                        }
                     }
-                }); 
+                });
             } else if (exercise.hasClass('password_protected')) {
                 e.preventDefault();
                 password_bootbox(link);

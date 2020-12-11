@@ -154,7 +154,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
         $pageName = $langInfoExercise;
         $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
     } else {
-        $pageName = $objExercise->selectTitle();
+        $pageName = $langExerciseManagement;
     }
     include 'exercise_admin.inc.php';
     if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {

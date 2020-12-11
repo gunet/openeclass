@@ -23,7 +23,7 @@
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
 $questionId = $objQuestion->selectId();
-$questionTypeWord = $objQuestion->selectTypeWord($answerType);
+$questionTypeWord = $objQuestion->selectTypeLegend($answerType);
 $questionDescription = standard_text_escape($objQuestion->selectDescription());
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
 
@@ -106,8 +106,8 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         $reponse = trim($_POST['reponse']);
         if (isset($_POST['weighting']) and isset($_POST['blanksDefined'])) {
             // a blank can't have a negative weighting
-            $weighting = array_map('abs', $_POST['weighting']);
-            $weighting = array_map('fix_float', $weighting);
+            $weighting = array_map('fix_float', $_POST['weighting']);
+            $weighting = array_map('abs', $weighting);
             // separate text and weightings by '::'
             $reponse .= '::' . implode(',', $weighting);
             $questionWeighting = array_sum($weighting);
@@ -205,7 +205,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 }
             } else {
                 // a bad answer can't have a positive weighting
-                $weighting[$i] = abs(fix_float($_POST['weighting'][$i]));
+                $weighting[$i] = -abs(fix_float($_POST['weighting'][$i]));
             }
             // checks if field is empty
             if (!isset($_POST['reponse'][$i]) || ($_POST['reponse'][$i] === '')) {

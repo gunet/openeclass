@@ -62,19 +62,21 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             // recalculate sum of grades
             Database::get()->query("UPDATE exercise_user_record
                 SET attempt_status = ?d,
-                    total_score = (SELECT SUM(weight) FROM exercise_answer_record
-                                        WHERE eurid = ?d)
+                    total_score = GREATEST(0, (SELECT SUM(weight) FROM exercise_answer_record
+                                        WHERE eurid = ?d))
                 WHERE eurid = ?d",
                 ATTEMPT_COMPLETED, $eurid, $eurid);
         } else {
-            // else increment total by just this grade
+            // if ungraded questions still exist, just update the grade sum
             Database::get()->query("UPDATE exercise_user_record
-                SET total_score = total_score + ?f WHERE eurid = ?d",
-                $grade, $eurid);
+                SET total_score = GREATEST(0, (SELECT SUM(weight) FROM exercise_answer_record
+                                        WHERE eurid = ?d AND weight IS NOT NULL))
+                WHERE eurid = ?d",
+                $eurid, $eurid);
         }
         $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting
                              FROM exercise_user_record WHERE eurid = ?d", $eurid);
-            // update gradebook
+        // update gradebook
         update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
         triggerGame($course_id, $uid, $data->eid);
         triggerExerciseAnalytics($course_id, $uid, $data->eid);
@@ -150,6 +152,11 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                             }
                         }
                     });
+                    if ($('*').hasClass('questionGradeBox')) {
+                        $('a#submitButton').show();
+                    } else {
+                        $('a#submitButton').hide();
+                    }
                     $('a#submitButton').click(function(e){
                         e.preventDefault();
                         var success = true;
@@ -196,19 +203,21 @@ $showScore = $displayScore == 1
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
 
-if (isset($user)) { // user details
-    $tool_content .= "<div class='alert alert-info'>" . q($user->surname) . " " . q($user->givenname);
+$tool_content .= "<div class='alert alert-info'>";
+if ($user) { // user details
+    $tool_content .= q($user->surname) . " " . q($user->givenname);
     if ($user->am) {
-        $tool_content .= " ($langAm:" . q($user->am) . ")";
+        $tool_content .= " ($langAm: " . q($user->am) . ")";
     }
-    if ($showScore) {
-        $tool_content .= "<h5>$langYourTotalScore: <span><strong>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong></h5>";
-    }
-    /*if ($exerciseAttemptsAllowed > 0) {
-        $tool_content .= "<h5>$langAttempt: <em>$exerciseAttemptsAllowed</em></h5>";
-    }*/
-    $tool_content .= "</div>";
 }
+if ($showScore) {
+    $tool_content .= "<h5>$langYourTotalScore: <span><strong>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong></h5>";
+}
+$tool_content .= "
+    <h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>
+    <h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
+    ($user && $exerciseAttemptsAllowed ? "<h5>$langAttempt: <em>{$exercise_user_record->attempt}</em></h5>" : '') . "
+  </div>";
 
 $tool_content .= "<div class='panel panel-default'>
                       <div class='panel-heading'>
@@ -235,7 +244,7 @@ $tool_content .= "
   </div>";
 
 
-if ($is_editor and $exercise_user_record->attempt_status == ATTEMPT_COMPLETED and isset($_POST['regrade'])) {
+if ($is_editor and in_array($exercise_user_record->attempt_status, [ATTEMPT_COMPLETED, ATTEMPT_PENDING]) and isset($_POST['regrade'])) {
     $regrade = true;
 } else {
     $regrade = false;
@@ -263,7 +272,7 @@ if (count($exercise_question_ids) > 0) {
         $questionDescription = $objQuestionTmp->selectDescription();
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
-        $questionType = $objQuestionTmp->selectTypeWord($answerType);
+        $questionType = $objQuestionTmp->selectTypeLegend($answerType);
 
         // destruction of the Question object
         unset($objQuestionTmp);
@@ -418,7 +427,7 @@ if (count($exercise_question_ids) > 0) {
                                 $choice[$answerId] = $matching[$choice[$answerId]];
                                 $icon = "<span class='fa fa-check text-success'></span>";
                             } elseif (!$thisChoice) {
-                                $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
+                                $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             } else {
                                 $choice[$answerId] = "<span class='text-danger'><del>" .
@@ -540,6 +549,10 @@ if (count($exercise_question_ids) > 0) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
+if ($totalScore < 0) {
+    $totalScore = 0;
+}
+
 if ($regrade) {
     Database::get()->query('UPDATE exercise_user_record
         SET total_score = ?f, total_weighting = ?f
@@ -571,7 +584,7 @@ if ($regrade) {
 
 $totalScore = round($totalScore, 2);
 $totalWeighting = round($totalWeighting, 2);
-$oldScore = round($exercise_user_record->total_score);
+$oldScore = round($exercise_user_record->total_score, 2);
 $oldWeighting = round($exercise_user_record->total_weighting, 2);
 if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting)) {
     if ($checking) {
@@ -596,7 +609,7 @@ if ($checking) {
 
 $tool_content .= "
   <div class='text-center'>";
-    if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
+    if ($is_editor) {
         $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a>&nbsp;";
     }
     if (isset($_REQUEST['unit'])) {
