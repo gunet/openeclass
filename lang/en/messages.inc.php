@@ -4683,6 +4683,7 @@ $langNoActivityHeadings = 'There are no activity category headings';
 $langActivityCourseAdd = 'Add Activity Category Heading';
 $langActivityEdit = 'Activity Edit';
 $langCourseActivityFormat = 'Activity Format';
+$langCourseWallFormat = 'Wall Format';
 $langHomePageSettings = "Home Page Settings";
 $langHomePageTitleHelpText = "Home Page Title";
 $langHomePageNavTitleHelp = "Home Page Navigation Title (breadcrumb)";

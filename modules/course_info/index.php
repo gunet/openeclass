@@ -506,6 +506,12 @@ if (isset($_POST['submit'])) {
                         $langCourseActivityFormat
                       </label>
                     </div>"): '') . "
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='view_type' value='wall' id='wall'".($c->view_type == "wall" ? " checked" : "").">
+                        $langCourseWallFormat
+                      </label>
+                    </div>
                 </div>
             </div>";
 

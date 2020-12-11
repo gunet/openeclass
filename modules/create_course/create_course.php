@@ -245,6 +245,12 @@ if (!isset($_POST['create_course'])) {
                         $langCourseActivityFormat
                       </label>
                     </div>": '') . "
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='view_type' value='wall' id='wall'>
+                        $langCourseWallFormat
+                      </label>
+                    </div>
                 </div>
             </div>
             <div class='form-group'>
