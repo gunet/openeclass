@@ -4532,6 +4532,7 @@ $langMailVerifyNoApplication = "Δεν βρέθηκε η αίτησή σας. Π
 $langMailVerifyNoAccount = "Δεν βρέθηκε ο λογαριασμός σας. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία ή επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langMailVerifySuccess = "Το email σας επιβεβαιώθηκε με επιτυχία.";
 $langMailVerifySuccess2 = "Το email σας έχει επιβεβαιωθεί με επιτυχία.";
+$langMailVerifySuccessReq = "Η αίτηση δημιουργίας λογαριασμού ανανεώθηκε.";
 $langMailVerifySuccessU = "Ο λογαριασμός σας ενεργοποιήθηκε.";
 $langVerifiedMail = "Επιβεβαιωμένη διεύθυνση email";
 $langMailNotVerified = "Το email σας δεν είναι επιβεβαιωμένο. Δεν θα μπορείτε να λαμβάνετε emails από τα $langsCourses έως ότου το επιβεβαιώσετε.
@@ -4643,6 +4644,10 @@ $langEventpersonal = "προσωπικά γεγονότα";
 $langEventsDeleted = "Τα γεγονότα σας διαγράφηκαν.";
 $langEvery = "κάθε";
 $langiCalExport = "Εξαγωγή iCal";
+$langiCalFeed = "Ροή iCal";
+$langiCalExplanation = "Το παρακάτω URL μπορεί να εισαχθεί σε οποιαδήποτε
+    εφαρμογή υποστηρίζει εισαγωγή δεδομένων σε μορφή iCal, ώστε τα γεγονότα
+    του προσωπικού σας ημερολογίου να συγχρονίζονται με αυτή.";
 $langLanguageCode = "el-GR";
 $langModifEvent = "Αλλαγή γεγονότος";
 $langMonthsAbstract = "μήνες";
@@ -5021,7 +5026,7 @@ $langNewBBBSessionStatus = "Κατάσταση";
 $langBBBAddSuccessful = "Ο προγραμματισμός της νέας τηλεσυνεργασίας πραγματοποιήθηκε με επιτυχία.";
 $langBBBNoteEnableJoin = "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίες είναι σε εξέλιξη.";
 $langBBBNoteEnableJoinEditor = "Ο σύνδεσμος ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης.";
-$langBBBNoParticipation = "Δεν υπάρχει συμμετοχή σε καμία τηλεσυνεργασία.";
+$langBBBNoParticipation = "Δεν υπάρχει συμμετοχή σε καμμία τηλεσυνεργασία.";
 $langBBBNotifyUsers = "Ειδοποίηση συμμετεχόντων για τον προγραμματισμό της τηλεδιάσκεψης";
 $langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων για τον προγραμματισμό της τηλεδιάσκεψης";
 $langBBBExternalUsers = "Εξωτερικοί συμμετέχοντες";
@@ -5811,3 +5816,42 @@ $langAnalyticsEndDescription = 'Ημερομηνία μέχρι την οποί�
 $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
+
+// ticketing (aka request)
+$langRequests = "Αιτήματα";
+$langMyRequests = "Τα αιτήματά μου";
+$langSingleRequest = 'Αίτημα';
+$langNewRequest = "Νέο αίτημα";
+$langEditRequest = "Επεξεργασία αιτήματος";
+$langRequestCreated = 'Το αίτημα δημιουργήθηκε.';
+$langRequestDeleted = 'Το αίτημα διαγράφτηκε.';
+$langWatchers = 'Παρατηρητές';
+$langRequestState = 'Κατάσταση αιτήματος';
+$langRequestStateNew = 'Νέο';
+$langRequestStateAssigned = 'Ανειλημμένο';
+$langRequestStateLocked = 'Κλειδωμένο';
+$langRequestStateClosed = 'Κλειστό';
+$langOpenedOn = 'Δημιουργία';
+$langUpdatedOn = 'Τροποποίηση';
+$langChangeState = 'Αλλαγή κατάστασης σε';
+$langChangeAssignees = 'Αλλαγή ανάθεσης σε: %s (από: %s)';
+$langChangeWatchers = 'Αλλαγή παρατηρητών σε: %s (από: %s)';
+$langTakeRequest = 'Ανάληψη αιτήματος';
+$langRequestTaken = 'Ο χρήστης %s ανέλαβε το αίτημα.';
+$langRequestBasicType = 'Βασικό αίτημα';
+$langRequestFieldChange = 'Αλλαγή πεδίου %s σε: %s';
+$langHourAgo = '%d ώρα πριν';
+$langHoursAgo = '%d ώρες πριν';
+$langMinuteAgo = '%d λεπτό πριν';
+$langMinutesAgo = '%d λεπτά πριν';
+$langDayAgo = '%d μέρα πριν';
+$langDaysAgo = '%d μέρες πριν';
+$langHourAgo = '%d ώρα πριν';
+$langHoursAgo = '%d ώρες πριν';
+$langShowClosedRequests = 'Εμφάνιση κλειστών αιτημάτων';
+$langChangeDescription = 'Περιγραφή αλλαγών';
+
+// H5P
+$langH5P = 'Διαδραστικό περιεχόμενο';
+$langNoH5PContent = 'Δεν υπάρχει διαδραστικό περιεχόμενο';
+
