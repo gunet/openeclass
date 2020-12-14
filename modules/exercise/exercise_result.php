@@ -186,6 +186,8 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = mathfilter(nl2br(make_clickable($objExercise->selectDescription())), 12, "../../courses/mathimg/");
 $displayResults = $objExercise->selectResults();
+$exerciseRange = $objExercise->selectRange();
+$canonical_score = $objExercise->canonicalize_exercise_score($exercise_user_record->total_score, $exercise_user_record->total_weighting);
 $displayScore = $objExercise->selectScore();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
@@ -210,8 +212,16 @@ if ($user) { // user details
         $tool_content .= " ($langAm: " . q($user->am) . ")";
     }
 }
+
+$message_range = '';
+$canonicalized_message_range = "<strong><span>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong>";
+if ($exerciseRange > 0) { // exercise grade range (if any)
+    $canonicalized_message_range = "<strong><span>$canonical_score</span> / $exerciseRange</strong>";
+    $message_range = "<small> (<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>)</small>";
+}
+
 if ($showScore) {
-    $tool_content .= "<h5>$langYourTotalScore: <span><strong>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong></h5>";
+    $tool_content .= "<h5>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h5>";
 }
 $tool_content .= "
     <h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>

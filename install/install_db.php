@@ -1047,6 +1047,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `title` VARCHAR(250) DEFAULT NULL,
     `description` TEXT,
     `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT 1,
+    `range` TINYINT UNSIGNED DEFAULT 0,
     `start_date` DATETIME DEFAULT NULL,
     `end_date` DATETIME DEFAULT NULL,
     `temp_save` TINYINT(1) NOT NULL DEFAULT 0,

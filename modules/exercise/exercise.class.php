@@ -46,6 +46,7 @@ if (!class_exists('Exercise')) {
         private $exercise;
         private $description;
         private $type;
+        private $range;
         private $startDate;
         private $endDate;
         private $tempSave;
@@ -71,6 +72,7 @@ if (!class_exists('Exercise')) {
             $this->exercise = '';
             $this->description = '';
             $this->type = 1;
+            $this->range = 0;
             $this->startDate = date("Y-m-d H:i:s");
             $this->endDate = null;
             $this->tempSave = 0;
@@ -99,7 +101,7 @@ if (!class_exists('Exercise')) {
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
+            $object = Database::get()->querySingle("SELECT title, description, type, `range`, start_date, end_date, temp_save, time_constraint,
             attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock, assign_to_specific, continue_time_limit
             FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
@@ -109,6 +111,7 @@ if (!class_exists('Exercise')) {
                 $this->exercise = $object->title;
                 $this->description = $object->description;
                 $this->type = $object->type;
+                $this->range = $object->range;
                 $this->startDate = $object->start_date;
                 $this->endDate = $object->end_date;
                 $this->tempSave = $object->temp_save;
@@ -218,6 +221,10 @@ if (!class_exists('Exercise')) {
          */
         function selectType() {
             return $this->type;
+        }
+
+        function selectRange() {
+            return $this->range;
         }
 
         function selectStartDate() {
@@ -481,6 +488,10 @@ if (!class_exists('Exercise')) {
             $this->type = $type;
         }
 
+        function updateRange($range) {
+            $this->range = $range;
+        }
+
         function updateStartDate($startDate) {
             $this->startDate = $startDate;
         }
@@ -540,20 +551,7 @@ if (!class_exists('Exercise')) {
             }
         }
 
-        /**
-         * @brief update randomization criteria
-         * @param $number
-         * @param $criteria
-         */
-        /*function setRandomizationCriteria($number, $criteria) {
-            if (!is_null($number) and !is_null($criteria)) {
-                $this->random_criteria = serialize(array_combine($number, $criteria));
-            } else {
-                $this->random_criteria = null;
-            }
-        }*/
 
-        
         function setRandom($random) {
             $this->random = $random;
         }
@@ -606,6 +604,7 @@ if (!class_exists('Exercise')) {
             $exercise = $this->exercise;
             $description = purify($this->description);
             $type = $this->type;
+            $range = $this->range;
             $startDate = $this->startDate;
             $endDate = $this->endDate;
             $tempSave = $this->tempSave;
@@ -623,13 +622,13 @@ if (!class_exists('Exercise')) {
             // exercise already exists
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
-                    SET title = ?s, description = ?s, type = ?d,
+                    SET title = ?s, description = ?s, type = ?d, `range` = ?d,
                         start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d,
                         attempts_allowed = ?d, random = ?d, shuffle = ?d, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
                         assign_to_specific = ?d, continue_time_limit = ?d
                     WHERE course_id = ?d AND id = ?d",
-                    $exercise, $description, $type,
+                    $exercise, $description, $type, $range,
                     $startDate, $endDate, $tempSave, $timeConstraint,
                     $attemptsAllowed, $random, $shuffle, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
@@ -644,12 +643,12 @@ if (!class_exists('Exercise')) {
             // creates a new exercise
             else {
                 $this->id = Database::get()->query("INSERT INTO `exercise`
-                    (course_id, title, description, type, start_date, end_date,
+                    (course_id, title, description, type, `range`, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, shuffle, active, results, score, ip_lock, password_lock,
                      assign_to_specific, continue_time_limit)                    
-                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
-                        $course_id, $exercise, $description, $type, $startDate, $endDate,
+                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
+                        $course_id, $exercise, $description, $type, $range, $startDate, $endDate,
                         $tempSave, $timeConstraint, $attemptsAllowed,
                         $random, $shuffle, $active, $results, $score, $ip_lock, $password_lock,
                         $assign_to_specific, $this->continueTimeLimit)->lastInsertID;
@@ -1164,6 +1163,21 @@ if (!class_exists('Exercise')) {
                 Database::get()->query("UPDATE exercise_user_record SET assigned_to = NULL WHERE eurid = ?d", $row->eurid);
             }
         }
+
+        /**
+         * @brief canonicalize user grade (if defined)
+         * @param $user_score
+         * @param $total_score
+         * @return float
+         */
+        function canonicalize_exercise_score($user_score, $total_score) {
+
+            $canonical_score = round(($user_score / $total_score) * $this->range, 2);
+
+            return $canonical_score;
+        }
+
+
     }
 
 }

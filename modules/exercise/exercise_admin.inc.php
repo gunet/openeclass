@@ -76,6 +76,7 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($_POST['exerciseDescription']);
         $objExercise->updateType($_POST['exerciseType']);
+        $objExercise->updateRange($_POST['exerciseRange']);
         if (isset($_POST['exerciseIPLock'])) {
             $objExercise->updateIPLock(implode(',', $_POST['exerciseIPLock']));
         } else {
@@ -124,6 +125,7 @@ if (isset($_POST['submitExercise'])) {
     $exerciseTitle = Session::has('exerciseTitle') ? Session::get('exerciseTitle') : $objExercise->selectTitle();
     $exerciseDescription = Session::has('exerciseDescription') ? Session::get('exerciseDescription') : $objExercise->selectDescription();
     $exerciseType = Session::has('exerciseType') ? Session::get('exerciseType') : $objExercise->selectType();
+    $exerciseRange = Session::has('exerciseRange') ? Session::get('exerciseRange') : $objExercise->selectRange();
     //more population need to be done
     $exerciseStartDate = $objExercise->selectStartDate();
     if (is_null($exerciseStartDate) && !Session::has('exerciseStartDate')) {
@@ -314,20 +316,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
              <fieldset>
                  <div class='form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
-                   <label for='exerciseTitle' class='col-sm-2 control-label'>$langExerciseName:</label>
+                   <label for='exerciseTitle' class='col-sm-2 control-label'>$langName:</label>
                    <div class='col-sm-10'>
                      <input name='exerciseTitle' type='text' class='form-control' id='exerciseTitle' value='" . q($exerciseTitle) . "' placeholder='$langExerciseName'>
                      <span class='help-block'>".Session::getError('exerciseTitle')."</span>
                    </div>
                  </div>
                  <div class='form-group'>
-                   <label for='exerciseDescription' class='col-sm-2 control-label'>$langExerciseDescription:</label>
+                   <label for='exerciseDescription' class='col-sm-2 control-label'>$langDescription:</label>
                    <div class='col-sm-10'>
                    " . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription) . "
                    </div>
                  </div>
                  <div class='form-group'>
-                     <label for='exerciseDescription' class='col-sm-2 control-label'>$langExerciseType:</label>
+                     <label for='exerciseDescription' class='col-sm-2 control-label'>$langViewShow:</label>
                      <div class='col-sm-10'>
                          <div class='radio'>
                            <label>
@@ -343,6 +345,18 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
+                 <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langExerciseScaleGrade:</label>
+                    <div class='col-sm-10'>
+                        <select name='exerciseRange' class='form-control'>
+                            <option value".($exerciseRange == 0 ? ' selected' : '').">-- $langExerciseNoScaleGrade --</option>
+                            <option value='10'" . ($exerciseRange == 10 ? " selected" : "") .">0-10</option>
+                            <option value='20'" . ($exerciseRange == 20 ? " selected" : "") .">0-20</option>
+                            <option value='5'" . ($exerciseRange == 5 ? " selected " : "") .">0-5</option>
+                            <option value='100'" . ($exerciseRange == 100 ? " selected" : "") .">0-100</option>
+                        </select>
+                    </div>
+                </div>
                  <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langStart:</label>
                      <div class='col-sm-10'>

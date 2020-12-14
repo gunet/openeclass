@@ -19,6 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once 'exercise.class.php';
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
@@ -30,6 +31,8 @@ require_once 'modules/exercise/answer.class.php';
 
 $full = isset($_GET['full']) and $_GET['full'];
 $exerciseId = getDirectReference($_GET['exerciseId']);
+$objExercise = new Exercise();
+$objExercise->read($exerciseId);
 $csv = new CSV();
 $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
 
@@ -89,13 +92,22 @@ foreach ($result as $row) {
     $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
         record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
         total_score, total_weighting, eurid
-        FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d", $sid, $exerciseId);
+        FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d AND attempt_status = " . ATTEMPT_COMPLETED . " 
+        ORDER BY record_start_date DESC", $sid, $exerciseId);
 
     foreach ($result2 as $row2) {
         if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
             $duration = $langNotRecorded;
         } else {
             $duration = format_time_duration($row2->time_duration);
+        }
+        $exerciseRange = $objExercise->selectRange();
+        if ($exerciseRange > 0) {
+            $total_score = $objExercise->canonicalize_exercise_score($row2->total_score, $row2->total_weighting);
+            $total_weighting = $exerciseRange;
+        } else {
+            $total_score = $row2->total_score;
+            $total_weighting = $row2->total_weighting;
         }
 
         if ($full) {
@@ -150,7 +162,7 @@ foreach ($result as $row) {
         }
 
         $csv->outputRecord($surname, $name, $am, $ug, $row2->record_start_date,
-            $duration, $row2->total_score, $row2->total_weighting,
+            $duration, $total_score, $total_weighting,
             $values);
     }
 }
