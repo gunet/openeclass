@@ -245,10 +245,23 @@ function display_exercise($exercise_id) {
 
     global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore, $langQuestionsManagement,
-           $langScore, $course_code, $langBack, $langModify,
+           $langScore, $course_code, $langBack, $langModify, $langExerciseExecute,
            $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions;
 
+
+    $exercise = new Exercise();
+    $exercise->read($exercise_id);
+    $question_list = $exercise->selectQuestionList();
+    $totalWeighting = $exercise->selectTotalWeighting();
+
     $tool_content .= action_bar(array(
+        array('title' => $langExerciseExecute,
+            'url' => "exercise_submit.php?course=$course_code&exerciseId=$exercise_id",
+            'icon' => 'fa-play-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-danger',
+            'show' => (!empty($question_list))
+        ),
         array('title' => $langQuestionsManagement,
             'url' => "admin.php?course=$course_code&exerciseId=$exercise_id",
             'icon' => 'fa-cogs',
@@ -256,14 +269,12 @@ function display_exercise($exercise_id) {
             'button-class' => 'btn-success'
         ),
         array('title' => $langBack,
-              'url' => "index.php?course=$course_code",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label'
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
         )
     ));
 
-    $exercise = new Exercise();
-    $exercise->read($exercise_id);
 
     $tool_content .= "<div class='panel panel-primary'>
             <div class='panel-heading'>
@@ -276,8 +287,6 @@ function display_exercise($exercise_id) {
             <div class='panel-body'>" . $exercise->selectDescription() . "</div>
         </div>";
 
-    $question_list = $exercise->selectQuestionList();
-    $totalWeighting = $exercise->selectTotalWeighting();
     $i = 1;
     $hasRandomQuestions = false;
     foreach ($question_list as $qid) {

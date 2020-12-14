@@ -292,7 +292,10 @@ if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
 
 // exercise has ended or hasn't been enabled yet due to declared dates or was submitted automatically due to expiring time
 $autoSubmit = isset($_POST['autoSubmit']) && $_POST['autoSubmit'] == 'true';
-if ($temp_CurrentDate < $exercise_StartDate->getTimestamp() or (isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) or $autoSubmit) {
+if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()
+    or (isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp()))
+    or $autoSubmit)
+    and !$is_editor) {
     // if that happens during an active attempt
     if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
@@ -352,13 +355,11 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     } else {
         // selects the list of question ID
-        //$questionList = ($randomQuestions)? $objExercise->selectRandomList() : $objExercise->selectQuestions();
         if ($shuffleQuestions) {
             $questionList = $objExercise->selectShuffleQuestions();
         } else {
             $questionList = $objExercise->selectQuestions();
         }
-        //print_a($questionList);
     }
     // saves the question list into the session if there are questions
     if (count($questionList)) {
@@ -377,7 +378,6 @@ $nbrQuestions = count($questionList);
 // either start a new attempt and count now() as begin time.
 
 if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || isset($paused_attempt)) {
-
     $eurid = isset($paused_attempt) ? $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $paused_attempt->eurid : $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     $recordStartDate = Database::get()->querySingle("SELECT record_start_date FROM exercise_user_record WHERE eurid = ?d", $eurid)->record_start_date;
     $recordStartDate = strtotime($recordStartDate);
@@ -389,15 +389,15 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
 
     // Check if allowed number of attempts exceeded and if so redirect
-   if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
+    if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseMaxAttemptsReached);
-       if (isset($_REQUEST['unit'])) {
-           redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-       } else {
-           redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-       }
-   } else {
+        if (isset($_REQUEST['unit'])) {
+            redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $_REQUEST['unit']);
+        } else {
+            redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+        }
+    } else {
         if ($exerciseAllowedAttempts > 0 && !isset($_POST['acceptAttempt'])) {
             $left_attempts = $exerciseAllowedAttempts - $attempt;
             if (isset($_REQUEST['unit'])) {
@@ -408,30 +408,31 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
                 $form_cancel_link = "{$urlServer}modules/exercise/index.php?course=$course_code";
             }
             $tool_content .= "<div class='alert alert-warning text-center'>" .
-                ($left_attempts == 1? $langExerciseAttemptLeft: sprintf($langExerciseAttemptsLeft, $left_attempts)) .
+                ($left_attempts == 1 ? $langExerciseAttemptLeft : sprintf($langExerciseAttemptsLeft, $left_attempts)) .
                 ' ' . $langExerciseAttemptContinue . "</div>
-                <div class='text-center'>
-                    <form action='$form_next_link' method='post'>
-                        <input class='btn btn-primary' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
-                        <a href='$form_cancel_link' class='btn btn-default'>$langCancel</a>
-                    </form>
-                </div>";
+            <div class='text-center'>
+                <form action='$form_next_link' method='post'>
+                    <input class='btn btn-primary' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
+                    <a href='$form_cancel_link' class='btn btn-default'>$langCancel</a>
+                </form>
+            </div>";
             unset_exercise_var($exerciseId);
             draw($tool_content, 2, null, $head_content);
             exit;
-         }
+        }
         // count this as an attempt by saving it as an incomplete record, if there are any available attempts left
         $start = date('Y-m-d H:i:s', $attempt_value);
         if ($exerciseTimeConstraint) {
             $timeleft = $exerciseTimeConstraint * 60;
         }
         $eurid = Database::get()->query("INSERT INTO exercise_user_record
-            (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status, secs_remaining)
-            VALUES (?d, ?d, ?t, 0, 0, ?d, 0, ?d)",
-            $exerciseId, $uid, $start, $attempt + 1, isset($timeleft)? $timeleft: 0)->lastInsertID;
+        (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status, secs_remaining)
+        VALUES (?d, ?d, ?t, 0, 0, ?d, 0, ?d)",
+            $exerciseId, $uid, $start, $attempt + 1, isset($timeleft) ? $timeleft : 0)->lastInsertID;
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
-   }
+    }
 }
+
 if ($exercise_EndDate) {
     $exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
     if ($exerciseTimeLeft < 3 * 3600) {
@@ -754,7 +755,7 @@ foreach ($questionList as $questionId) {
     }
 
     if (isset($exerciseResult[$questionId])) {
-        $type = $question->type;
+        $type = $question->selectType();
         $answer = $exerciseResult[$questionId];
         if ($type == FREE_TEXT) {
             if (trim($answer) !== '') {
@@ -879,7 +880,7 @@ $tool_content .= "</form>";
 // If the attempt has disappeared or isn't in a valid state in the DB, redirect user to exercise home
 $attempt = Database::get()->querySingle('SELECT eurid FROM exercise_user_record
         WHERE eurid = ?d AND attempt_status = ?d', $eurid, ATTEMPT_ACTIVE);
-if (!$attempt) {
+if (!$attempt && !$is_editor) {
     Session::Messages($langExerciseAttemptGone, 'alert-danger');
     if (isset($_REQUEST['unit'])) {
         redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
