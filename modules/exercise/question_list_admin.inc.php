@@ -275,13 +275,13 @@ $head_content .= "
     $('.randomWithCriteria').click(function(e) {        
         e.preventDefault();
         bootbox.dialog({
-            title: '$langRandomQuestionsWithCriteria',
+            title: '<span class=\"fa fa-random\" style=\"margin-right: 10px; color:grey\"></span>$langRandomQuestionsWithCriteria',
             message: '<div class=\"row\">' +
                         '<div class=\"col-md-12\">' +
                             '<form class=\"form-horizontal\">' +                                
-                                '<div class=\"col-sm-12\" style=\"margin-bottom: 10px;\">' +
+                                '<div class=\"row\" style=\"margin-bottom: 10px;\">' +
                                 '<span class=\"col-sm-5\">$langQuestionDiffGrade</span>' +
-                                '<span class=\"col-sm-5\">$langQuestions</span>' +
+                                '<span class=\"col-sm-5\">$langNumQuestions</span>' +
                                 '</div>'+
                                 '<div class=\"form-group\">' +
                                     '<div class=\"col-sm-5\">' +
@@ -393,14 +393,15 @@ $tool_content .= action_bar(array(
           'url' => "#",
           'icon' => 'fa-random',
           'level' => 'primary-label',
-           'show' => !$randomQuestions),
+          'button-class' => 'btn-default',
+          'show' => !$randomQuestions),
     array('title' => "$langImport $langFrom2 $langQuestionPool ($langWithoutCriteria)",
           'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
           'icon' => 'fa-bank'),
     array('title' => "$langImport $langFrom2 $langQuestionPool ($langWithCriteria)",
-        'class' => 'questionSelection',
-        'url' => "#",
-        'icon' => 'fa-bank')),
+          'class' => 'questionSelection',
+          'url' => "#",
+          'icon' => 'fa-bank')),
     false);
 
 if ($nbrQuestions) {
@@ -472,7 +473,7 @@ if ($nbrQuestions) {
         $question_category_legend = $objQuestionTmp->selectCategoryName($objQuestionTmp->selectCategory());
         $addon = '';
         if ($objQuestionTmp->selectType() == MATCHING) {
-            $sql = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $id);
+            $sql = Database::get()->querySingle("SELECT * FROM exercise_answer WHERE question_id = ?d", $id);
             if (!$sql) $addon = "&amp;htopic=4";
         }
 
@@ -481,12 +482,12 @@ if ($nbrQuestions) {
                 next($id);
                 $number = key($id);
                 $difficulty = $id[$number];
-                $legend = "<span style='color: red;'>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) . "'</span>";
+                $legend = "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) . "</em>'";
             } else if ($id['criteria'] == 'category') {
                 next($id);
                 $number = key($id);
                 $category = $id[$number];
-                $legend = "<span style='color: red;'>$number $langFromRandomCategoryQuestions '" . $objQuestionTmp->selectCategoryName($category) . "'</span>";
+                $legend = "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomCategoryQuestions '" . $objQuestionTmp->selectCategoryName($category) . "</em>'";
             }
         } else {
             $legend = q_math($objQuestionTmp->selectTitle()) . "<br>

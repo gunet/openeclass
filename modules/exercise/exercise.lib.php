@@ -320,14 +320,14 @@ function display_exercise($exercise_id) {
                 $number = key($qid);
                 $difficulty = $qid[$number];
                 $tool_content .= "<tr><td>";
-                $tool_content .= "<span style='color: red;'>$number $langFromRandomDifficultyQuestions '" . $question->selectDifficultyLegend($difficulty) . "'</span>";
+                $tool_content .= "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomDifficultyQuestions '" . $question->selectDifficultyLegend($difficulty) . "'</em>";
                 $tool_content .= "</td></tr>";
             } else if ($qid['criteria'] == 'category') {
                 next($qid);
                 $number = key($qid);
                 $category = $qid[$number];
                 $tool_content .= "<tr><td>";
-                $tool_content .= "<span style='color: red;'>$number $langFromRandomCategoryQuestions '" . $question->selectCategoryName($category) . "'</span>";
+                $tool_content .= "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomCategoryQuestions '" . $question->selectCategoryName($category) . "'</em>";
                 $tool_content .= "</td></tr>";
             }
         } else {

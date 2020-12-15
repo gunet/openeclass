@@ -632,8 +632,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         )
     ));
 
-    $tool_content .= "<div class='row margin-bottom-fat form-wrapper' style='margin-top: 10px; margin-bottom: 30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>";
-    $tool_content .= "<div class='col-sm-12 row-main'><strong>$exerciseTitle</strong></div>";
+    $tool_content .= "<div class='row margin-bottom-fat form-wrapper' style='margin-top: 10px; margin-bottom: 30px; margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
+    $tool_content .= "<div class='col-sm-12'><h4 style='font-weight: bold;'>$exerciseTitle</h4></div>";
     if (!empty($exerciseDescription)) {
         $tool_content .= "<div class='col-sm-12'>
                             <em>" . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "</em>
@@ -657,7 +657,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     }
     $tool_content .= "</span>";
 
-    $tool_content .= "<span class='col-sm-12'>$langType: <em><strong>$exerciseType</strong></em></span>";
+    $tool_content .= "<span class='col-sm-12'>$langViewShow: <em><strong>$exerciseType</strong></em></span>";
 
     $tool_content .= "<span class='col-sm-12' style='margin-top: 15px;'>";
     if ($exerciseTempSave == 1) {
