@@ -1412,14 +1412,21 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 // Handle reordering of a table (from AJAX drag-and-drop) by
 // updating the `order` field (or $orderField if set) in table $table
 // Limit update to records with value $limitValue in `$limitField`
+// $limitValue and $limitField can also be arrays, in which case all apply
+// $limitValue should be integer or array of integers
 function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorder = null, $idField = 'id', $orderField = 'order') {
     Database::get()->transaction(function ()
             use ($table, $limitField, $limitValue, $toReorder, $prevReorder, $idField, $orderField) {
-        if ($limitField) {
+        if (is_array($limitField)) {
+            $where = 'WHERE (' . implode(' AND ',
+                array_map(function ($field) {
+                    return "`$field` = ?d";
+                }, $limitValue)) . ')';
+        } elseif ($limitField) {
             $where = "WHERE `$limitField` = ?d";
         } else {
             $where = '';
-            $limitValue = array();
+            $limitValue = [];   // no limit, so no arguments to compare with
         }
         $max = Database::get()->querySingle("SELECT MAX(`$orderField`) AS max_order
             FROM `$table` $where", $limitValue)->max_order;
