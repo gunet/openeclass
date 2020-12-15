@@ -69,6 +69,7 @@ $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $displayScore = $objExercise->selectScore();
+$exerciseRange = $objExercise->selectRange();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
 $cur_date = new DateTime("now");
@@ -189,10 +190,18 @@ foreach ($result as $row) {
                 $status = $langAttemptCompleted;
                 if ($showScore) {
                     $answersCount = Database::get()->querySingle("SELECT count(*) AS answers_cnt FROM `exercise_answer_record` WHERE `eurid` = ?d", $row2->eurid)->answers_cnt;
-                    if ($answersCount) {
-                        $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
+                    if ($exerciseRange > 0) {
+                        $total_score = $objExercise->canonicalize_exercise_score($row2->total_score, $row2->total_weighting);
+                        $total_weighting = $exerciseRange;
                     } else {
-                        $results_link = q($row2->total_score) . "/" . q($row2->total_weighting);
+                        $total_score = q($row2->total_score);
+                        $total_weighting = q($row2->total_weighting);
+                    }
+
+                    if ($answersCount) {
+                        $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                    } else {
+                        $results_link = $total_score . "/" . $total_weighting;
                     }
                 } else {
                     switch ($displayScore) {

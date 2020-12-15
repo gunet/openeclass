@@ -446,9 +446,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
 
-        //importing new themes
-        importThemes();
-        //unlinking files that were used with the old theme import mechanism
+        // unlink files that were used with the old theme import mechanism
         @unlink("$webDir/template/default/img/bcgr_lines_petrol_les saturation.png");
         @unlink("$webDir/template/default/img/eclass-new-logo_atoms.png");
         @unlink("$webDir/template/default/img/OpenCourses_banner_Color_theme1-1.png");
@@ -2015,6 +2013,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("UPDATE exercise SET shuffle=1, random=0 WHERE random=32767");
             Database::get()->query("UPDATE exercise SET shuffle=1 WHERE random>0");
         }
+        if (!DBHelper::fieldExists('exercise', 'range')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `range` TINYINT DEFAULT 0 AFTER `type`");
+        }
         if (!DBHelper::fieldExists('tc_session', 'options')) {
             Database::get()->query("ALTER TABLE `tc_session` ADD `options` TEXT DEFAULT NULL");
         }
@@ -2024,6 +2025,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     refreshHierarchyProcedures();
 
     create_indexes();
+
+    // Importing new themes
+    importThemes();
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);

@@ -46,6 +46,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria) 
                                             VALUES (?d, ?d, ?d, ?s)",
                 NULL, $exerciseId, $new_q_position, $random_criteria);
+            // cancel shuffling
+            Database::get()->query("UPDATE exercise SET shuffle = 0 WHERE id = ?d", $exerciseId);
+            Database::get()->query("UPDATE exercise SET random = 0 WHERE id = ?d", $exerciseId);
         }
         if (isset($_POST['questionCategoryDrawn']) and intval($_POST['questionCategoryDrawn'] > 0)) {  // random category questions
             $categoryId = intval($_POST['categoryId']);
@@ -61,6 +64,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria) 
                                             VALUES (?d, ?d, ?d, ?s)",
                 NULL, $exerciseId, $new_q_position, $random_criteria);
+            // cancel shuffling
+            Database::get()->query("UPDATE exercise SET shuffle = 0 WHERE id = ?d", $exerciseId);
+            Database::get()->query("UPDATE exercise SET random = 0 WHERE id = ?d", $exerciseId);
         }
 
         $data = array('success' => true);
@@ -272,8 +278,11 @@ $head_content .= "
             title: '$langRandomQuestionsWithCriteria',
             message: '<div class=\"row\">' +
                         '<div class=\"col-md-12\">' +
-                            '<form class=\"form-horizontal\">' +
-                                '<h5>$langQuestionDiffGrade</h5>' +                                                            
+                            '<form class=\"form-horizontal\">' +                                
+                                '<div class=\"col-sm-12\" style=\"margin-bottom: 10px;\">' +
+                                '<span class=\"col-sm-5\">$langQuestionDiffGrade</span>' +
+                                '<span class=\"col-sm-5\">$langQuestions</span>' +
+                                '</div>'+
                                 '<div class=\"form-group\">' +
                                     '<div class=\"col-sm-5\">' +
                                         '<select id=\"difficultyId\" class=\"form-control\">' +
@@ -286,7 +295,7 @@ $head_content .= "
                                         '</select>' +
                                     '</div>' +                                    
                                     '<div class=\"col-sm-2\">' +
-                                        '<input class=\"form-control\" type=\"text\" id=\"questionDifficultyDrawn\" value=\"\"> $langQuestions' +
+                                        '<input class=\"form-control\" type=\"text\" id=\"questionDifficultyDrawn\" value=\"\">' +
                                     '</div>' +
                                 '</div>' +
                                 '<h5>$langQuestionCats</h5>' +
@@ -295,7 +304,7 @@ $head_content .= "
                                         '<select id=\"categoryId\" class=\"form-control\">$cat_options_2</select>' +
                                     '</div>' +                                    
                                     '<div class=\"col-sm-2\">' +
-                                        '<input class=\"form-control\" type=\"text\" id=\"questionCategoryDrawn\" value=\"\"> $langQuestions' +
+                                        '<input class=\"form-control\" type=\"text\" id=\"questionCategoryDrawn\" value=\"\">' +
                                     '</div>' +
                                 '</div>' +                                
                             '</form>' +
