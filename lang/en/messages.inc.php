@@ -3494,6 +3494,7 @@ $langIMSQTIUploadFile = "IMS QTI file";
 $langModifyInQuestionPool = "only in question pool";
 $langScale = "Scale";
 $langQuestionDiffGrade = "Difficulty Grade";
+$langNumQuestions = "Num of questions";
 $langQuestionAllDiffs = "All Difficulty Grades";
 $langQuestionNotDefined = "Not defined";
 $langQuestionVeryEasy = "Very easy";
