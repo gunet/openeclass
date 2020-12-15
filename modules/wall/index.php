@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
                 Session::flash('extvideo', $_POST['extvideo']);
             }
         }
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+        decide_wall_redirect();
     }
 } elseif (isset($_GET['delete'])) { //handle delete
     $id = intval($_GET['delete']);
@@ -117,7 +117,7 @@ if (isset($_POST['submit'])) {
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
         Session::Messages($langWallPostDeleted, 'alert-success');
     }
-    redirect_to_home_page("modules/wall/index.php?course=$course_code");
+    decide_wall_redirect();
 } elseif (isset($_POST['edit_submit'])) { //handle edit form submit
     $id = intval($_GET['edit']);
     if (allow_to_edit($id, $uid, $is_editor)) {
@@ -171,7 +171,7 @@ if (isset($_POST['submit'])) {
             }
             
             Session::Messages($langWallPostSaved, 'alert-success');
-            redirect_to_home_page("modules/wall/index.php?course=$course_code");
+            decide_wall_redirect();
         } else {
             Session::Messages($langWallMessageEmpty);
             if (!empty($_POST['extvideo'])) {
@@ -185,7 +185,7 @@ if (isset($_POST['submit'])) {
     if ($is_editor && allow_to_edit($id, $uid, $is_editor)) {
         Database::get()->query("UPDATE wall_post SET pinned = !pinned WHERE id = ?d", $id);
         Session::Messages($langWallGeneralSuccess, 'alert-success');
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+        decide_wall_redirect();
     }
 }
 
@@ -201,7 +201,7 @@ if (isset($_GET['showPost'])) { //show comments case
         ),false);
         $tool_content .= generate_single_post_html($post);
     } else {
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+        decide_wall_redirect();
     }
 } elseif (isset($_GET['edit'])) {
     $id = intval($_GET['edit']);
@@ -294,7 +294,7 @@ if (isset($_GET['showPost'])) { //show comments case
             </div>
         </div>';
     } else {
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+        decide_wall_redirect();
     }
 } else {
     //show post form
