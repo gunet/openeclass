@@ -72,6 +72,10 @@ if (isset($_POST['submit'])) {
                 if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
                     insert_docs($id,'mydocs');
                 }
+                //save links
+                if (visible_module(MODULE_ID_LINKS)) {
+                    insert_links($id);
+                }
             }
         } else {
             Session::Messages($langWallMessageEmpty);
@@ -169,6 +173,11 @@ if (isset($_POST['submit'])) {
             if (($post_author == $uid) && (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) ) {
                 insert_docs($id,'mydocs');
             }
+
+            //save links
+            if (visible_module(MODULE_ID_LINKS)) {
+                insert_links($id);
+            }
             
             Session::Messages($langWallPostSaved, 'alert-success');
             decide_wall_redirect();
@@ -250,6 +259,16 @@ if (isset($_GET['showPost'])) { //show comments case
             $mydocs_div = '';
             $mydocs_li = '';
         }
+
+        if (visible_module(MODULE_ID_LINKS)) {
+            $links_div = '<div class="form-group tab-pane fade" id="links_div" style="padding:10px">
+                              '.list_links($id).'
+                          </div>';
+            $links_li = '<li><a data-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
+        } else {
+            $links_div = '';
+            $links_li = '';
+        }
         
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
@@ -266,7 +285,8 @@ if (isset($_GET['showPost'])) { //show comments case
                                         <li class="active"><a data-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
-                                        '.$mydocs_li.'        
+                                        '.$mydocs_li.'
+                                        '.$links_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -276,6 +296,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$video_div.'
                                         '.$docs_div.'
                                         '.$mydocs_div.'
+                                        '.$links_div.'
                                     </div>
                                 </div>
                             </div>

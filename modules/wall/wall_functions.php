@@ -401,6 +401,18 @@ function insert_docs($post_id, $subsystem = NULL) {
     }
 }
 
+function insert_links($post_id) {
+    global $course_id;
+
+    if (isset($_POST['link']) and count($_POST['link'] > 0)) {
+        foreach ($_POST['link'] as $link_id) {
+            $row = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
+            Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                $post_id, 'link', $row->title, $link_id);
+        }
+    }
+}
+
 function show_resources($post_id) {
     global $is_editor, $langWallAttachedResources;
     
@@ -429,6 +441,9 @@ function show_resource($info) {
             break;
         case 'document' :
             $ret_str = show_document($info->title, $info->id, $info->res_id);
+            break;
+        case 'link' :
+            $ret_str = show_link($info->title, $info->id, $info->res_id);
             break;
     }
     return $ret_str;
@@ -545,6 +560,27 @@ function show_video($table, $title, $resource_id, $video_id) {
     $ret_str = "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>$videolink</td></tr>";
     
     return $ret_str;
+}
+
+function show_link($title, $resource_id, $link_id) {
+    global $course_id;
+    $row = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
+    if ($row) {
+        $visibility = 1;
+        if ($row->title == '') {
+            $title = q($row->url);
+        } else {
+            $title = q($title);
+        }
+        $linktitle = "<a href='" . q($row->url) . "' target='_blank'>$title</a>";
+        $imagelink = 'fa-link';
+    } else {
+        $linktitle = q($title);
+        $imagelink = "fa-times";
+        $visibility = 0;
+    }
+    $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
+    return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$linktitle."</td></tr>";
 }
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {
