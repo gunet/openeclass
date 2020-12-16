@@ -82,7 +82,7 @@ $head_content .= "<style>
         background-color: #f5f5f5;
     }
     #collapseDescription > div {
-        padding: 20px;
+        padding: 5px 20px;        
     }
 </style>";
 
@@ -693,10 +693,10 @@ $action_bar
                                     }
                                   $tool_content .= "</h4>";
                                     // course description
-                                  $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-top: 20px;'>";
+                                  $tool_content .= "<div class='collapse' id='collapseDescription' style='margin-top: 20px; padding-top: 20px;'>";
                                   foreach ($res as $row) {
                                       $tool_content .= "<div style='margin-top: 1px;'><strong>" . q($row->title) . "</strong></div>
-                                                        <div style='margin-left: 10px; margin-right: 10px;'>" . standard_text_escape($row->comments) . "</div>";
+                                                        <div>" . standard_text_escape($row->comments) . "</div>";
                                   }
                     $tool_content .= "</div></div></div>";
                 }

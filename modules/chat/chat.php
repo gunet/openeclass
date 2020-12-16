@@ -114,7 +114,7 @@ if (!$conference_activity) {
         $wash_link = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]&amp;reset=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
     } else {
         $save_link = "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
-        $back_link = "index.php";
+        $back_link = "index.php?course=$course_code";
         $wash_link = "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
     }
     $tool_content .= action_bar(array(

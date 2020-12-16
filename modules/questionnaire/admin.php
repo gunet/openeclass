@@ -463,7 +463,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
             <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langSurveyType:</label>
+                <label class='col-sm-2 control-label'>$langType:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
@@ -573,7 +573,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </script>";
         $tool_content .= "
             <div class='form-group'>
-                <label for='answerType' class='col-sm-2 control-label'>$langSurveyType:</label>
+                <label for='answerType' class='col-sm-2 control-label'>$langType:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
@@ -772,7 +772,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langSurveyType:</strong>
+                    <strong>$langType:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $poll_type
