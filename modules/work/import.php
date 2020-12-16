@@ -22,10 +22,11 @@ if (isset($_FILES['userfile'])) {
         $cellIterator = $row->getCellIterator();
         foreach ($cellIterator as $cell) {
             $value = trim($cell->getValue());
-            if ($value) {
+            if ($value !== '') {
                 $data[] = $value;
             }
         }
+
         if (!in_array(count($data), [2, 3]) or !is_numeric($data[1]) or $data[1] < 0 or $data[1] > $assignment->max_grade) {
             $errorLines[] = $data;
         }
