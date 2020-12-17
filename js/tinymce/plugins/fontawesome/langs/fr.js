@@ -1,0 +1,20 @@
+tinymce.addI18n('fr', {
+    'Icons': 'Icônes',
+    'Web Application': 'Application Web',
+    'File Type': 'Type de fichier',
+    'Spinner': 'Spinner',
+    'Form Control': 'Contrôle formulaire',
+    'Currency': 'Monnaies',
+    'Text Editor': 'Editeur de texte',
+    'Directional': 'Directionel',
+    'Video Player': 'Video Player',
+    'Brand': 'Marque',
+    'Medical': 'Médical',
+    'Transportation': 'Transport',
+    'Gender': 'Genre',
+    'Payment': 'Paiement',
+    'Chart': 'Diagramme',
+    'Hand': 'Main',
+    'Search': 'Recherche',
+    'No icons matched your search': 'Aucune icône correspondant à votre recherche'
+});

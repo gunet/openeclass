@@ -1,0 +1,20 @@
+tinymce.addI18n('nl', {
+    'Icons': 'Iconen',
+    'Web Application': 'Webapplicaties',
+    'File Type': 'Bestandstypen',
+    'Spinner': 'Laad iconen',
+    'Form Control': 'Formulieren',
+    'Currency': 'Valuta',
+    'Text Editor': 'Tekstbewerker',
+    'Directional': 'Richting',
+    'Video Player': 'Video speler',
+    'Brand': 'Merken',
+    'Medical': 'Medisch',
+    'Transportation': 'Transport',
+    'Gender': 'Geslacht',
+    'Payment': 'Betalen',
+    'Chart': 'Grafieken',
+    'Hand': 'Handen',
+    'Search': 'Zoeken',
+    'No icons matched your search': 'Geen iconen gevonden die aan je zoekopdracht voldoen'
+});
