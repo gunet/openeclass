@@ -1594,6 +1594,11 @@ function get_bbb_servers_load()
         return false;
     } else if ($server_count == 1) {
         $server[0]['id'] = $q[0]->id;
+        $server[0]['weight'] = $q[0]->weight;
+        $server[0]['rooms'] = 0;
+        $server[0]['participants'] = 0;
+        $server[0]['load'] = 0;
+        $server[0]['enable_recordings'] = $q[0]->enable_recordings;
         return $server;
     }
 
@@ -1607,7 +1612,7 @@ function get_bbb_servers_load()
         $meetings = $bbb->getMeetingsWithXmlResponseArray();
         // no active meetings
         if (empty($meetings)) {
-            $continue;
+            continue;
         }
         foreach ($meetings as $meeting) {
             if (!isset($meeting['meetingId'])) {

@@ -88,80 +88,32 @@ $head_content .= "<script type='text/javascript'>
 
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
-if (isset($_GET['edit_config'])) {
-    $bbb_max_duration = get_config('bbb_max_duration', 0);
-    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
-    $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
-    $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked = '';
-
-    if ($bbb_lb_algo == 'wll') {
-        $bbb_lb_wll_checked = "checked='true'";
-    } else if ($bbb_lb_algo == 'wlr') {
-        $bbb_lb_wlr_checked = "checked='true'";
-    } else if ($bbb_lb_algo == 'wlc') {
-        $bbb_lb_wlc_checked = "checked='true'";
-    } else {
-        $bbb_lb_wo_checked = "checked='true'"; // default
-    }
-
-    $tool_content .= "<div class='form-wrapper'>";
-    $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBLBMethod:</label>";
-    $tool_content .= "</div>";
-
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wo' $bbb_lb_wo_checked>$langBBBLBMethodWO</label></span>";
-    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWOInfo'></span></label>";
-    $tool_content .= "</div>";
-
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wll' $bbb_lb_wll_checked>$langBBBLBMethodWLL</label></span>";
-    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLLInfo'></span></label>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlr' $bbb_lb_wlr_checked>$langBBBLBMethodWLR</label></span>";
-    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLRInfo'></span></label>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlc' $bbb_lb_wlc_checked>$langBBBLBMethodWLC</label></span>";
-    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLCInfo'></span></label>";
-    $tool_content .= "</div>";
-
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBMaxDuration:</label>";
-    $tool_content .= "<span class='col-sm-1'><label><input class='form-control' type='text' id='bbb_max_duration' name='bbb_max_duration' value='$bbb_max_duration'></label></span>";
-    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langInMinutes'></span></label>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBMaxPartPerRoom:</label>";
-    $tool_content .= "<span class='col-sm-1'><label><input class='form-control' type='text' id='bbb_max_part_per_room' name='bbb_max_part_per_room' value='$bbb_max_part_per_room'></label></span>";
-    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBMaxPartPerRoomInfo'></span></label>";
-    $tool_content .= "</div>";
-
-    $tool_content .= "<div class='form-group'>
-                        <div class='col-sm-offset-3'>
-                            <input class='btn btn-primary' type='submit' name='submit_config' value='Υποβολή'>
-                        </div>
-                     </div>";
-    $tool_content .= "</form></div>";
-} else
 if (isset($_GET['delete_tc_course']) and $_GET['list']) {
     Database::get()->querySingle("DELETE FROM course_external_server 
                                           WHERE course_id = ?d 
                                           AND external_server = ?d", $_GET['delete_tc_course'], $_GET['list']);
-    Session::Messages("Η τηλεσυνεργασία απενεργοποιήθηκε για το μάθημα",'alert-success');
+    Session::Messages($langBBBDeleteCourseSuccess, 'alert-success');
 }
 if (isset($_POST['code_to_assign'])) {
     $course_id_to_assign = course_code_to_id($_POST['code_to_assign']);
-    Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d",
+    if (empty($course_id_to_assign)) {
+        Session::Messages($langBBBAddCourseFail, 'alert-warning');
+    } else {
+        $q = Database::get()->querySingle("SELECT course_id from course_external_server
+                                           WHERE course_id = ?d", $course_id_to_assign);
+        if (empty($q->course_id)) {
+            Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d",
                                     $course_id_to_assign, $_POST['tc_server']);
-    Session::Messages("Το μάθημα προστέθηκε",'alert-success');
+            Session::Messages($langBBBAddCourseSuccess,'alert-success');
+        } else {
+            Session::Messages($langBBBAddCourseFailExits,'alert-warning');
+        }
+    }
 }
 if (isset($_GET['add_course_to_tc'])) {
     $tc_server = $_GET['tc_server'];
     $tool_content .= "<div class='form-wrapper'>";
-        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='form-horizontal' role='form'>                        
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?list=$tc_server' method='post' class='form-horizontal' role='form'>                        
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langCourseCode :</label>
                             <div class='col-xs-3'>
@@ -179,10 +131,11 @@ if (isset($_GET['add_course_to_tc'])) {
     $tool_content .= "</div>";
 }
 
-// list of courses with bbb enabled
+// list of courses with specific bbb server
 else if (isset($_GET['list'])) {
+    $pageName = $langOtherCourses;
     $tool_content .= action_bar(array(
-        array('title' => $langAdd,
+        array('title' => $langBBBAddCourse,
             'url' => "$_SERVER[SCRIPT_NAME]?tc_server=$_GET[list]&amp;add_course_to_tc",
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
@@ -232,7 +185,8 @@ else if (isset($_GET['list'])) {
     }
     $tool_content .= "</tbody>";
     $tool_content .= "</table>";
-}  else if (isset($_GET['add_server'])) {
+}
+else if (isset($_GET['add_server'])) {
     $pageName = $langAddServer;
     $toolName = $langBBBConf;
     $navigation[] = array('url' => 'bbbmoduleconf.php', 'name' => $langBBBConf);
@@ -326,9 +280,10 @@ else if (isset($_GET['list'])) {
     redirect_to_home_page('modules/admin/bbbmoduleconf.php');
 }
 
-// Save new config
+// Save new config: edit/add tc server, course add/delete into tc server
 else if (isset($_POST['submit'])) {
     $key = $_POST['key_form'];
+    $hostname = $_POST['hostname_form'];
     $api_url = $_POST['api_url_form'];
     if (!preg_match('/\/$/', $api_url)) { // append '/' if doesn't exist
         $api_url = $api_url . '/';
@@ -352,6 +307,7 @@ else if (isset($_POST['submit'])) {
         $id = $_POST['id_form'];
         Database::get()->querySingle("UPDATE tc_servers SET
                 server_key = ?s,
+                hostname = ?s,
                 api_url = ?s,
                 max_rooms =?s,
                 max_users =?s,
@@ -359,7 +315,7 @@ else if (isset($_POST['submit'])) {
                 enabled = ?s,
                 weight = ?d,
                 all_courses = ?d
-                WHERE id =?d", $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses, $id);
+                WHERE id =?d", $key, $hostname, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses, $id);
         Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $id);
         if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
@@ -369,7 +325,7 @@ else if (isset($_POST['submit'])) {
         }
     } else {
         $q = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, ip, server_key, api_url, max_rooms, max_users, enable_recordings, enabled, weight, all_courses) VALUES
-        ('bbb', '', '', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d)", $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses);
+        ('bbb', ?s, '', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d)", $hostname, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses);
         $tc_id = $q->lastInsertID;
         if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
@@ -381,17 +337,90 @@ else if (isset($_POST['submit'])) {
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
     redirect_to_home_page("modules/admin/bbbmoduleconf.php");
-} // end of if($submit)
+} // end of if($submit): edit/add tc server, course add/delete into tc server
+
+// submit bbb config
 else if (isset($_POST['submit_config'])) {
+    $bbb_max_duration = isset($_POST['bbb_max_duration']) ? intval($_POST['bbb_max_duration']) : '';
+    $bbb_max_part_per_room = isset($_POST['bbb_max_part_per_room']) ? intval($_POST['bbb_max_part_per_room']) : '';
+
+    set_config('bbb_max_duration', $bbb_max_duration);
+    set_config('bbb_max_part_per_room', $bbb_max_part_per_room);
     set_config('bbb_lb_algo', $_POST['bbb_lb_algo']);
-    set_config('bbb_max_duration', trim($_POST['bbb_max_duration']));
-    set_config('bbb_max_part_per_room', trim($_POST['bbb_max_part_per_room']));
 
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
     redirect_to_home_page("modules/admin/bbbmoduleconf.php");
 }
-// Display config edit form
+
+// bbb config form
+else if (isset($_GET['edit_config'])) {
+    $pageName = $langBBBConfig;
+    $bbb_max_duration = get_config('bbb_max_duration', 0);
+    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+    $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
+    $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked = '';
+
+    if ($bbb_lb_algo == 'wll') {
+        $bbb_lb_wll_checked = "checked='true'";
+    } else if ($bbb_lb_algo == 'wlr') {
+        $bbb_lb_wlr_checked = "checked='true'";
+    } else if ($bbb_lb_algo == 'wlc') {
+        $bbb_lb_wlc_checked = "checked='true'";
+    } else {
+        $bbb_lb_wo_checked = "checked='true'"; // default
+    }
+
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "bbbmoduleconf.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+
+    $tool_content .= "<div class='form-wrapper'>";
+    $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBLBMethod:</label>";
+    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wo' $bbb_lb_wo_checked>$langBBBLBMethodWO</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWOInfo'></span></label>";
+    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wll' $bbb_lb_wll_checked>$langBBBLBMethodWLL</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLLInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlr' $bbb_lb_wlr_checked>$langBBBLBMethodWLR</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLRInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlc' $bbb_lb_wlc_checked>$langBBBLBMethodWLC</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLCInfo'></span></label>";
+    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBMaxDuration:</label>";
+    $tool_content .= "<span class='col-sm-1'><label><input class='form-control' type='text' id='bbb_max_duration' name='bbb_max_duration' value='$bbb_max_duration'></label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langInMinutes'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBMaxPartPerRoom:</label>";
+    $tool_content .= "<span class='col-sm-1'><label><input class='form-control' type='text' id='bbb_max_part_per_room' name='bbb_max_part_per_room' value='$bbb_max_part_per_room'></label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBMaxPartPerRoomInfo'></span></label>";
+    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>
+                        <div class='col-sm-offset-3'>
+                            <input class='btn btn-primary' type='submit' name='submit_config' value='Υποβολή'>
+                        </div>
+                     </div>";
+    $tool_content .= "</form></div>";
+} // end of bbb config
+
+// edit server form
 else {
     if (isset($_GET['edit_server'])) {
         $pageName = $langEdit;
@@ -405,6 +434,10 @@ else {
 
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='hostname_form' class='col-sm-3 control-label'>$langName:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' id='hostname_form' name='hostname_form' value='$server->hostname'></div>";
+        $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='api_url_form' class='col-sm-3 control-label'>API URL:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' id='api_url_form' name='api_url_form' value='$server->api_url'></div>";
@@ -496,6 +529,7 @@ else {
                 //<![CDATA[
                     var chkValidator  = new Validator("serverForm");
                     chkValidator.addValidation("key_form","req","' . $langBBBServerAlertKey . '");
+                    chkValidator.addValidation("hostname_form","req","' . $langBBBServerAlertName . '");
                     chkValidator.addValidation("api_url_form","req","' . $langBBBServerAlertAPIUrl . '");
                     chkValidator.addValidation("max_rooms_form","req","' . $langBBBServerAlertMaxRooms . '");
                     chkValidator.addValidation("max_rooms_form","numeric","' . $langBBBServerAlertMaxRooms . '");
@@ -506,7 +540,7 @@ else {
                 //]]></script>';
 
     } else {
-        //display available BBB servers
+        //display available BBB servers and running meetings
         $tool_content .= action_bar(array(
             array('title' => $langAddServer,
                 'url' => "bbbmoduleconf.php?add_server",
@@ -527,29 +561,34 @@ else {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr><th class = 'text-center'>API URL</th>
+                <tr><th class = 'text-center'>$langName</th>
                     <th class = 'text-center'>$langBBBEnabled</th>
                     <th class = 'text-center'>$langOnlineUsers</th>
                     <th class = 'text-center'>$langActiveRooms</th>
-                    <th class = 'text-center'>$langBBBServerOrderP</th>
+                    <th class = 'text-center'>$langBBBServerOrderP / $langBBBServerLoad</th>
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";
             $t_connected_users = 0;
             $t_active_rooms = 0;
             $t_max_users = 0;
             $t_max_rooms = 0;
+            $servers = get_bbb_servers_load();
+            foreach ($servers as $server) {
+                $servers_load[$server['id']] = $server['load'];
+            }
             foreach ($q as $srv) {
                 $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
-                $connected_users = get_connected_users($srv->server_key, $srv->api_url);
-                $active_rooms = get_active_rooms($srv->server_key, $srv->api_url);
-                $t_connected_users += $connected_users;
-                $t_active_rooms += $active_rooms;
-                $t_max_users += $srv->max_users;
-                $t_max_rooms += $srv->max_rooms;
-                $q = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_external_server WHERE external_server = ?d", $srv->id);
-                $num_of_tc_courses = $q->cnt;
-                $mess = '';
+                $mess = $connected_users = $active_rooms = $server_load = '';
                 if ($srv->enabled == "true") {
+                    $server_load = $servers_load[$srv->id];
+                    $connected_users = get_connected_users($srv->server_key, $srv->api_url);
+                    $active_rooms = get_active_rooms($srv->server_key, $srv->api_url);
+                    $t_connected_users += $connected_users;
+                    $t_active_rooms += $active_rooms;
+                    $t_max_users += $srv->max_users;
+                    $t_max_rooms += $srv->max_rooms;
+                    $q = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_external_server WHERE external_server = ?d", $srv->id);
+                    $num_of_tc_courses = $q->cnt;
                     if ($srv->all_courses === "1") {
                         $mess = " <small>($langToAllCourses)</small>";
                     } else if ($srv->all_courses === "0") {
@@ -561,11 +600,11 @@ else {
                     }
                 }
                 $tool_content .= "<tr>" .
-                    "<td>$srv->api_url</td>" .
+                    "<td class = 'text-center'>$srv->hostname</td>" .
                     "<td class = 'text-center'>$enabled_bbb_server $mess</td>" .
                     "<td class = 'text-center'>$connected_users / $srv->max_users</td>" .
                     "<td class = 'text-center'>$active_rooms / $srv->max_rooms</td>" .
-                    "<td class = 'text-center'>$srv->weight</td>" .
+                    "<td class = 'text-center'>$srv->weight / $server_load</td>" .
                     "<td class='option-btn-cell'>" .
                     action_button(array(
                         array('title' => $langEditChange,
@@ -609,7 +648,7 @@ else {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr><th class = 'text-center'>API URL</th>
+                <tr><th class = 'text-center'>$langServer</th>
                     <th class = 'text-center'>$langCourse</th>
                     <th class = 'text-center'>$langTitle</th>
                     <th class = 'text-center'>$langOnlineUsers</th>
@@ -641,7 +680,7 @@ else {
                         $joinLink = "<a href='/modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($mtitle) . "</a>";
 
                         $tool_content .= "<tr>" .
-                            "<td>$srv->api_url</td>" .
+                            "<td>$srv->hostname</td>" .
                             "<td>$courseLink ($course_code)</td>" .
                             "<td>$joinLink</td>" .
                             "<td class = 'text-center'>$mparticipants</td>" .
@@ -654,7 +693,6 @@ else {
         }
     }
 }
-
 
 draw($tool_content, 3, null, $head_content);
 
