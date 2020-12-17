@@ -356,9 +356,15 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     } else {
         // selects the list of question ID
         if ($shuffleQuestions) {
-            $questionList = $objExercise->selectShuffleQuestions();
+            $qList = $objExercise->selectShuffleQuestions();
         } else {
-            $questionList = $objExercise->selectQuestions();
+            $qList = $objExercise->selectQuestions();
+        }
+        $qList = array_unique($qList); // avoid duplicates (if any)
+        $i = 1;
+        foreach ($qList as $data) { // just make sure that array key / values are ok
+            $questionList[$i] = $data;
+            $i++;
         }
     }
     // saves the question list into the session if there are questions
