@@ -343,21 +343,24 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         $question_difficulty_legend = $question_temp->selectDifficultyIcon($question_temp->selectDifficulty());
         $question_category_legend = $question_temp->selectCategoryName($question_temp->selectCategory());
         $question_type_legend = $question_temp->selectTypeLegend($question_temp->selectType());
-        $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
+        $exercise_ids = $question_temp->selectExerciseList();
+        $exercises_used_in = '';
+        foreach ($exercise_ids as $ex_id) {
+            $q = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $ex_id);
+            $exercises_used_in .= "<span class='help-block' style='margin-bottom: 0px;'>" . q($q->title) . "</span>";
+        }
         if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
             $tool_content .= "<tr>";
             if (!isset($fromExercise)) {
                 $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")." href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . $question_title . "</a>                         
-                        <br>
-                        <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend . "
-                        </small>
-                        </td>";
+                    <br>
+                    <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend  . " " . $exercises_used_in . "</small>
+                    </td>";
             } else {
                 $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . $question_title . "</a>
-                        <br>
-                        <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend . "
-                        </small> 
-                        </td>";
+                    <br>
+                    <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend . $exercises_used_in ."</small> 
+                    </td>";
             }
 
             $tool_content .= "<td class='option-btn-cell'>".
