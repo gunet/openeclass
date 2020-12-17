@@ -572,17 +572,17 @@ else {
             $t_active_rooms = 0;
             $t_max_users = 0;
             $t_max_rooms = 0;
-            $servers = get_bbb_servers_load();
-            foreach ($servers as $server) {
-                $servers_load[$server['id']] = $server['load'];
-            }
+
+            // get load and metrics of enabled servers
+            $servers = get_bbb_servers_load_by_id();
+
             foreach ($q as $srv) {
                 $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
                 $mess = $connected_users = $active_rooms = $server_load = '';
                 if ($srv->enabled == "true") {
-                    $server_load = $servers_load[$srv->id];
-                    $connected_users = get_connected_users($srv->server_key, $srv->api_url);
-                    $active_rooms = get_active_rooms($srv->server_key, $srv->api_url);
+                    $server_load = $servers[$srv->id]['load'];
+                    $connected_users = $servers[$srv->id]['participants'];
+                    $active_rooms = $servers[$srv->id]['rooms'];
                     $t_connected_users += $connected_users;
                     $t_active_rooms += $active_rooms;
                     $t_max_users += $srv->max_users;
