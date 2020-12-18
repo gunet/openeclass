@@ -61,11 +61,11 @@ if (isset($_POST['submit'])) {
             }
             if (isset($id)) { //check if wall resources need to get saved
                 //save multimedia content
-                if (visible_module(MODULE_ID_VIDEO)) {
+                if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
                     insert_video($id);
                 }
                 //save documents
-                if (visible_module(MODULE_ID_DOCS)) {
+                if ($is_editor || visible_module(MODULE_ID_DOCS)) {
                     insert_docs($id);
                 }
                 //save my documents
@@ -73,7 +73,7 @@ if (isset($_POST['submit'])) {
                     insert_docs($id,'mydocs');
                 }
                 //save links
-                if (visible_module(MODULE_ID_LINKS)) {
+                if ($is_editor || visible_module(MODULE_ID_LINKS)) {
                     insert_links($id);
                 }
             }
@@ -159,11 +159,11 @@ if (isset($_POST['submit'])) {
             }
             
             //save multimedia content
-            if (visible_module(MODULE_ID_VIDEO)) {
+            if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
                 insert_video($id);
             }
             //save documents
-            if (visible_module(MODULE_ID_DOCS)) {
+            if ($is_editor || visible_module(MODULE_ID_DOCS)) {
                 insert_docs($id);
             }
             
@@ -175,7 +175,7 @@ if (isset($_POST['submit'])) {
             }
 
             //save links
-            if (visible_module(MODULE_ID_LINKS)) {
+            if ($is_editor || visible_module(MODULE_ID_LINKS)) {
                 insert_links($id);
             }
             
@@ -226,7 +226,7 @@ if (isset($_GET['showPost'])) { //show comments case
         $content = Session::has('content')? Session::get('content') : $post->content;
         $extvideo = Session::has('extvideo')? Session::get('extvideo') : $post->extvideo;
         
-        if (visible_module(MODULE_ID_VIDEO)) {
+        if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
                               '.list_videos($id).'
                           </div>';
@@ -236,7 +236,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_li = '';
         }
         
-        if (visible_module(MODULE_ID_DOCS)) {
+        if ($is_editor || visible_module(MODULE_ID_DOCS)) {
             $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
                               <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id, NULL, TRUE).'
@@ -260,7 +260,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $mydocs_li = '';
         }
 
-        if (visible_module(MODULE_ID_LINKS)) {
+        if ($is_editor || visible_module(MODULE_ID_LINKS)) {
             $links_div = '<div class="form-group tab-pane fade" id="links_div" style="padding:10px">
                               '.list_links($id).'
                           </div>';

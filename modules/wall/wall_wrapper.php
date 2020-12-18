@@ -39,7 +39,7 @@ function show_post_form() {
         $content = Session::has('content')? Session::get('content'): '';
         $extvideo = Session::has('extvideo')? Session::get('extvideo'): '';
 
-        if (visible_module(MODULE_ID_VIDEO)) {
+        if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
                               '.list_videos().'
                           </div>';
@@ -49,7 +49,7 @@ function show_post_form() {
             $video_li = '';
         }
 
-        if (visible_module(MODULE_ID_DOCS)) {
+        if ($is_editor || visible_module(MODULE_ID_DOCS)) {
             $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
                             <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
@@ -71,7 +71,7 @@ function show_post_form() {
             $mydocs_li = '';
         }
 
-        if (visible_module(MODULE_ID_LINKS)) {
+        if ($is_editor || visible_module(MODULE_ID_LINKS)) {
             $links_div = '<div class="form-group tab-pane fade" id="links_div" style="padding:10px">
                               '.list_links().'
                           </div>';
@@ -138,7 +138,7 @@ function show_post_form() {
 }
 
 function show_wall_posts() {
-    global $tool_content, $course_id, $langNoWallPosts;
+    global $tool_content, $head_content, $course_id, $langNoWallPosts, $langDownload, $langPrint, $langCancel, $langFullScreen, $langNewTab;
 
     $posts_per_page = 10;
 
@@ -163,6 +163,70 @@ function show_wall_posts() {
                               $('.colorbox').colorbox();
                             });
                           </script>";
+
+        load_js('screenfull/screenfull.min.js');
+        $head_content .= "<script>
+        $(function(){
+            $('.fileModal').click(function (e)
+            {
+                e.preventDefault();
+                var fileURL = $(this).attr('href');
+                var downloadURL = $(this).prev('input').val();
+                var fileTitle = $(this).attr('title');
+                var buttons = {};
+                if (downloadURL) {
+                    buttons.download = {
+                            label: '<i class=\"fa fa-download\"></i> $langDownload',
+                            className: 'btn-success',
+                            callback: function (d) {
+                                window.location = downloadURL;
+                            }
+                    };
+                }
+                buttons.print = {
+                            label: '<i class=\"fa fa-print\"></i> $langPrint',
+                            className: 'btn-primary',
+                            callback: function (d) {
+                                var iframe = document.getElementById('fileFrame');
+                                iframe.contentWindow.print();
+                            }
+                        };
+                if (screenfull.enabled) {
+                    buttons.fullscreen = {
+                        label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
+                        className: 'btn-primary',
+                        callback: function() {
+                            screenfull.request(document.getElementById('fileFrame'));
+                            return false;
+                        }
+                    };
+                }
+                buttons.newtab = {
+                    label: '<i class=\"fa fa-plus\"></i> $langNewTab',
+                    className: 'btn-primary',
+                    callback: function() {
+                        window.open(fileURL);
+                        return false;
+                    }
+                };
+                buttons.cancel = {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        };
+                bootbox.dialog({
+                    size: 'large',
+                    title: fileTitle,
+                    message: '<div class=\"row\">'+
+                                '<div class=\"col-sm-12\">'+
+                                    '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                '</div>'+
+                            '</div>',
+                    buttons: buttons
+                });
+            });
+        });
+
+        </script>";
     }
 }
 
