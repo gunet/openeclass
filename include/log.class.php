@@ -289,6 +289,8 @@ class Log {
                 break;
             case MODULE_ID_TC: $content = $this->tc_action_details($details);
                 break;
+            case MODULE_ID_CHAT: $content = $this->chat_action_details($details);
+                break;
             case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
                 break;
             default: $content = $langUnknownModule;
@@ -1269,6 +1271,29 @@ class Log {
         $content .= "$langTitle " . "&laquo" . $d['title'] . "&raquo";
         if (isset($d['desc'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription " . "&laquo" . $d['desc']. "&raquo";
+        }
+
+        return $content;
+
+    }
+
+    /**
+     * @brief action details in chat module
+     * @param $details
+     * @return string
+     */
+    private function chat_action_details($details) {
+
+        global $langTitle, $langDescription, $langModify, $langOfGradebookVisibility;
+
+        $d = unserialize($details);
+
+        $content = "$langTitle " . "&laquo" . $d['title'] . "&raquo";
+        if (isset($d['desc'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription " . "&laquo" . $d['desc']. "&raquo";
+        }
+        if (isset($d['status'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langModify $langOfGradebookVisibility " . "&laquo" . $d['status']. "&raquo";
         }
 
         return $content;
