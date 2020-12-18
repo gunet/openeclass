@@ -28,6 +28,7 @@ $helpTopic = 'chat';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'functions.php';
+require_once 'include/log.class.php';
 $coursePath = $webDir . '/courses/';
 
 $toolName = $langChat;
@@ -66,7 +67,11 @@ if ($is_editor) {
             $status = 'inactive';
         }
         $conf_id = $_GET['id'];
+        $conf_title = Database::get()->querySingle("SELECT conf_title FROM conference WHERE conf_id = ?d", $conf_id)->conf_title;
         Database::get()->querySingle("UPDATE conference SET status = ?s WHERE conf_id =?d",  $status, $conf_id);
+        Log::record($course_id, MODULE_ID_CHAT,LOG_MODIFY, array('id' => $conf_id,
+                                                                                     'title' => $conf_title,
+                                                                                     'status' => $status));
     }
     if (isset($_GET['add_conference'])) {
         $display = FALSE;
@@ -81,7 +86,6 @@ if ($is_editor) {
 
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
-        $tool_content .= "<fieldset>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>";
         $tool_content .= "<div class='col-sm-10'>";
@@ -135,7 +139,7 @@ if ($is_editor) {
             </div>";
 
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
-        $tool_content .= "</fieldset></form></div>";
+        $tool_content .= "</form></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
             //<![CDATA[
                 var chkValidator  = new Validator("confForm");
@@ -144,7 +148,10 @@ if ($is_editor) {
 
     } else if (isset($_GET['delete_conference'])) {
         $id = $_GET['delete_conference'];
+        $conf_title = Database::get()->querySingle("SELECT conf_title FROM conference WHERE conf_id = ?d", $id)->conf_title;
         Database::get()->querySingle("DELETE FROM conference WHERE conf_id=?d", $id);
+        Log::record($course_id, MODULE_ID_CHAT, LOG_DELETE, array('id' => $id,
+                                                                                      'title' => $conf_title));
         $fileChatName = $coursePath . $course_code . '/'.$id.'_chat.txt';
         $tmpArchiveFile = $coursePath . $course_code . '/'.$id.'_tmpChatArchive.txt';
 
@@ -183,6 +190,9 @@ if ($is_editor) {
             Database::get()->querySingle("UPDATE conference SET conf_title= ?s,conf_description = ?s, status = ?s, chat_activity = ?b, user_id = ?s, group_id = ?s
                                             WHERE conf_id =?d", $title, $description, $status, $chat_activity, $chat_user_id, $chat_group_id, $conf_id);
 
+            Log::record($course_id, MODULE_ID_CHAT, LOG_MODIFY, array('id' => $id,
+                                                                                          'title' => $title,
+                                                                                          'description' => $description));
             // handle chat that was colmooc false and became true
             if ($chat_activity) {
                 $colmooc_activity_id = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id)->chat_activity_id;
@@ -201,6 +211,9 @@ if ($is_editor) {
             $newChatId = Database::get()->query("INSERT INTO conference (course_id, conf_title, conf_description, status, chat_activity, user_id, group_id)
                       VALUES (?d, ?s, ?s, ?s, ?b, ?s, ?s)", $course_id, $title, $description, $status, $chat_activity, $chat_user_id, $chat_group_id)->lastInsertID;
 
+            Log::record($course_id, MODULE_ID_CHAT,LOG_INSERT, array('id' => $newChatId,
+                                                                                         'title' => $title,
+                                                                                         'description' => $description));
             if ($chat_activity) {
                 $colmooc_activity_id = colmooc_create_activity($newChatId, $title);
                 if ($colmooc_activity_id) {
