@@ -21,19 +21,13 @@
 $require_current_course = TRUE;
 
 require_once '../../include/baseTheme.php';
-require_once 'modules/wall/wall_functions.php';
-require_once 'modules/wall/ExtVideoUrlParser.class.php';
-require_once 'insert_video.php';
-require_once 'insert_doc.php';
-require_once 'include/log.class.php';
+require_once 'modules/wall/wall_wrapper.php';
 
 ModalBoxHelper::loadModalBox(false);
 
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
 load_js('waypoints-infinite');
-
-$posts_per_page = 10;
 
 $pageName = $langWall;
 
@@ -67,16 +61,20 @@ if (isset($_POST['submit'])) {
             }
             if (isset($id)) { //check if wall resources need to get saved
                 //save multimedia content
-                if (visible_module(MODULE_ID_VIDEO)) {
+                if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
                     insert_video($id);
                 }
                 //save documents
-                if (visible_module(MODULE_ID_DOCS)) {
+                if ($is_editor || visible_module(MODULE_ID_DOCS)) {
                     insert_docs($id);
                 }
                 //save my documents
                 if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
                     insert_docs($id,'mydocs');
+                }
+                //save links
+                if ($is_editor || visible_module(MODULE_ID_LINKS)) {
+                    insert_links($id);
                 }
             }
         } else {
@@ -85,7 +83,7 @@ if (isset($_POST['submit'])) {
                 Session::flash('extvideo', $_POST['extvideo']);
             }
         }
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+        decide_wall_redirect();
     }
 } elseif (isset($_GET['delete'])) { //handle delete
     $id = intval($_GET['delete']);
@@ -123,7 +121,7 @@ if (isset($_POST['submit'])) {
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
         Session::Messages($langWallPostDeleted, 'alert-success');
     }
-    redirect_to_home_page("modules/wall/index.php?course=$course_code");
+    decide_wall_redirect();
 } elseif (isset($_POST['edit_submit'])) { //handle edit form submit
     $id = intval($_GET['edit']);
     if (allow_to_edit($id, $uid, $is_editor)) {
@@ -161,11 +159,11 @@ if (isset($_POST['submit'])) {
             }
             
             //save multimedia content
-            if (visible_module(MODULE_ID_VIDEO)) {
+            if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
                 insert_video($id);
             }
             //save documents
-            if (visible_module(MODULE_ID_DOCS)) {
+            if ($is_editor || visible_module(MODULE_ID_DOCS)) {
                 insert_docs($id);
             }
             
@@ -175,9 +173,14 @@ if (isset($_POST['submit'])) {
             if (($post_author == $uid) && (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) ) {
                 insert_docs($id,'mydocs');
             }
+
+            //save links
+            if ($is_editor || visible_module(MODULE_ID_LINKS)) {
+                insert_links($id);
+            }
             
             Session::Messages($langWallPostSaved, 'alert-success');
-            redirect_to_home_page("modules/wall/index.php?course=$course_code");
+            decide_wall_redirect();
         } else {
             Session::Messages($langWallMessageEmpty);
             if (!empty($_POST['extvideo'])) {
@@ -191,7 +194,7 @@ if (isset($_POST['submit'])) {
     if ($is_editor && allow_to_edit($id, $uid, $is_editor)) {
         Database::get()->query("UPDATE wall_post SET pinned = !pinned WHERE id = ?d", $id);
         Session::Messages($langWallGeneralSuccess, 'alert-success');
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+        decide_wall_redirect();
     }
 }
 
@@ -207,7 +210,7 @@ if (isset($_GET['showPost'])) { //show comments case
         ),false);
         $tool_content .= generate_single_post_html($post);
     } else {
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+        decide_wall_redirect();
     }
 } elseif (isset($_GET['edit'])) {
     $id = intval($_GET['edit']);
@@ -223,7 +226,7 @@ if (isset($_GET['showPost'])) { //show comments case
         $content = Session::has('content')? Session::get('content') : $post->content;
         $extvideo = Session::has('extvideo')? Session::get('extvideo') : $post->extvideo;
         
-        if (visible_module(MODULE_ID_VIDEO)) {
+        if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
                               '.list_videos($id).'
                           </div>';
@@ -233,7 +236,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_li = '';
         }
         
-        if (visible_module(MODULE_ID_DOCS)) {
+        if ($is_editor || visible_module(MODULE_ID_DOCS)) {
             $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
                               <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id, NULL, TRUE).'
@@ -256,6 +259,16 @@ if (isset($_GET['showPost'])) { //show comments case
             $mydocs_div = '';
             $mydocs_li = '';
         }
+
+        if ($is_editor || visible_module(MODULE_ID_LINKS)) {
+            $links_div = '<div class="form-group tab-pane fade" id="links_div" style="padding:10px">
+                              '.list_links($id).'
+                          </div>';
+            $links_li = '<li><a data-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
+        } else {
+            $links_div = '';
+            $links_li = '';
+        }
         
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
@@ -272,7 +285,8 @@ if (isset($_GET['showPost'])) { //show comments case
                                         <li class="active"><a data-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
-                                        '.$mydocs_li.'        
+                                        '.$mydocs_li.'
+                                        '.$links_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -282,6 +296,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$video_div.'
                                         '.$docs_div.'
                                         '.$mydocs_div.'
+                                        '.$links_div.'
                                     </div>
                                 </div>
                             </div>
@@ -300,124 +315,14 @@ if (isset($_GET['showPost'])) { //show comments case
             </div>
         </div>';
     } else {
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+        decide_wall_redirect();
     }
 } else {
     //show post form
-    if (allow_to_post($course_id, $uid, $is_editor)) {
-        
-        load_js('autosize');
-        
-        $content = Session::has('content')? Session::get('content'): '';
-        $extvideo = Session::has('extvideo')? Session::get('extvideo'): '';
-        
-        if (visible_module(MODULE_ID_VIDEO)) {
-            $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
-                              '.list_videos().'
-                          </div>';
-            $video_li = '<li><a data-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
-        } else {
-            $video_div = '';
-            $video_li = '';
-        }
-        
-        if (visible_module(MODULE_ID_DOCS)) {
-            $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
-                            <input type="hidden" name="doc_ids" id="docs">
-                              '.list_docs().'
-                          </div>';
-            $docs_li = '<li><a data-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
-        } else {
-             $docs_div = '';
-             $docs_li = '';
-        }
-        
-        if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
-            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" style="padding:10px">
-                            <input type="hidden" name="mydoc_ids" id="mydocs">
-                              '.list_docs(NULL,'mydocs').'
-                          </div>';
-            $mydocs_li = '<li><a data-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
-        } else {
-            $mydocs_div = '';
-            $mydocs_li = '';
-        }
-        
-        $head_content .= '<script>
-                              function expand_form() {
-                                  $("#resources_panel").collapse(\'show\');
-                              }
-                          </script>';
-        
-        $tool_content .= '<div class="row">
-            <div class="col-sm-12">
-                <div class="form-wrapper">
-                    <form id="wall_form" method="post" action="" enctype="multipart/form-data">
-                        <fieldset> 
-                            <div class="form-group">
-                                <label for="message_input">'.$langMessage.'</label>
-                                <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">'.$content.'</textarea>
-                            </div>
-                            <div id="resources_panel" class="panel panel-default collapse">
-                                <div class="panel-body">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
-                                        '.$video_li.'
-                                        '.$docs_li.'
-                                        '.$mydocs_li.'
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
-                                            <label for="extvideo_video">'.$langWallExtVideoLink.'</label>
-                                            <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
-                                        </div>
-                                        '.$video_div.'
-                                        '.$docs_div.'
-                                        '.$mydocs_div.'
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <div class="form-group">'.
-                            form_buttons(array(
-                                array(
-                                    'text'  =>  $langSubmit,
-                                    'name'  =>  'submit',
-                                    'value' =>  $langSubmit
-                                )
-                            ))
-                      .'</div>        
-                    </form>
-                </div>
-            </div>
-        </div>';
-        
-        //auto-expand textarea while typing
-        $tool_content .= "<script>autosize(document.querySelector('textarea'));</script>";
-    }
-    
+    show_post_form();
+
     //show wall posts
-    $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
-    if (count($posts) == 0) {
-        $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
-    } else {
-        $tool_content .= generate_infinite_container_html($posts, 2);
-        
-        $tool_content .= '<script>
-                              var infinite = new Waypoint.Infinite({
-                                  element: $(".infinite-container")[0]
-                              })
-                          </script>';
-        
-        $tool_content .= "<script>
-                            $('body').on('click', '.colorboxframe', function() {
-                              $('.colorboxframe').colorbox();
-                            });
-                            $('body').on('click', '.colorbox', function() {
-                              $('.colorbox').colorbox();
-                            });
-                          </script>";
-    }   
+    show_wall_posts();
 }
 
 draw($tool_content, 2, null, $head_content);

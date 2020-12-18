@@ -284,7 +284,7 @@ function generate_infinite_container_html($posts, $next_page) {
         $rating_content = $rating->put($is_editor, $uid, $course_id);
         
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a class='btn btn-primary btn-xs pull-right' href='index.php?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+        $comm_content = "<a class='btn btn-primary btn-xs pull-right' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
         
         if (allow_to_edit($id, $uid, $is_editor)) {
             $post_actions = '<div class="action-btns pull-right">';
@@ -401,8 +401,20 @@ function insert_docs($post_id, $subsystem = NULL) {
     }
 }
 
+function insert_links($post_id) {
+    global $course_id;
+
+    if (isset($_POST['link']) and count($_POST['link'] > 0)) {
+        foreach ($_POST['link'] as $link_id) {
+            $row = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
+            Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                $post_id, 'link', $row->title, $link_id);
+        }
+    }
+}
+
 function show_resources($post_id) {
-    global $is_editor, $langWallAttachedResources;
+    global $langWallAttachedResources;
     
     $ret_str = '';
     
@@ -430,76 +442,41 @@ function show_resource($info) {
         case 'document' :
             $ret_str = show_document($info->title, $info->id, $info->res_id);
             break;
+        case 'link' :
+            $ret_str = show_link($info->title, $info->id, $info->res_id);
+            break;
     }
     return $ret_str;
 }
 
 function show_document($title, $resource_id, $doc_id) {
-    global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code, 
-           $langWallHiddenResource, $langInactiveModule;
+    global $is_editor, $langWasDeleted;
     
     $file = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d", $doc_id);
     
     if (!$file) {
-        $status = 'del';
+        if (!$is_editor) {
+            return '';
+        }
         $image = 'fa-times';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
-        $module_visible = true;
     } else {
-        $status = $file->visible;
         $file->title = $title;
         $image = choose_image('.' . $file->format);
         $file_obj = MediaResourceFactory::initFromDocument($file);
-        
-        if ($file->subsystem == MYDOCS) { //my documents
-            $sql = Database::get()->querySingle("SELECT status FROM course_user WHERE course_id = ?d AND user_id = ?d", $course_id, $file->subsystem_id);
-            if ($sql->status == USER_TEACHER) {
-                $module_visible = get_config('mydocs_teacher_enable');
-            } else {
-                $module_visible = get_config('mydocs_student_enable');
-            }
-        } else { //main documents
-            $module_visible = visible_module(MODULE_ID_DOCS);
-        }
-                
         $file_obj->setAccessURL(file_url_replacement($file->path, $file->filename, $file->subsystem, $file->subsystem_id));
         $file_obj->setPlayURL(file_playurl_replacement($file->path, $file->filename, $file->subsystem, $file->subsystem_id));
         $link = MultimediaHelper::chooseMediaAhref($file_obj);
     }
-    
-    if (!$module_visible) {
-        $class_vis = ' class="not_visible"';
-        if (!$is_editor) {
-            $link = $title;
-        }
-        $link .= ' <i>('.$langInactiveModule.')</i>';
-    } else {
-        if ($status == '0') {
-            $class_vis = ' class="not_visible"';
-            if (!$is_editor) {
-                $link = $title;
-            }
-            $link .= ' <i>('.$langWallHiddenResource.')</i>';
-        } else if ($status == 'del') {
-            $class_vis = ' class="not_visible"';
-            $link .= '';
-        } else {
-            $class_vis = '';
-        }
-    }
-    
+
     return "
-    <tr$class_vis>
+    <tr>
     <td width='1'>" . icon($image, '') . "</td>
     <td class='text-left' style='font-size:12px'>$link</td></tr>";
 }
 
 function show_video($table, $title, $resource_id, $video_id) {
-    global $is_editor, $course_id, $langInactiveModule, $langWallHiddenResource;
-    
-    $class_vis = $imagelink = $link = '';
-    
-    $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
+    global $is_editor, $course_id, $course_code, $urlServer;
 
     $row = Database::get()->querySingle("SELECT * FROM `$table` WHERE course_id = ?d AND id = ?d", $course_id, $video_id);
     if ($row) {
@@ -507,44 +484,51 @@ function show_video($table, $title, $resource_id, $video_id) {
             return '';
         }
         $row->title = $title;
-        $status = $row->public;
-        $visibility = $row->visible;
-        if ($visibility == 0) {
-            $class_vis = ' class="not_visible"';
-        }
         if ($table == 'video') {
+            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id";
             $vObj = MediaResourceFactory::initFromVideo($row);
+            $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMediaAhref($vObj);
         } else {
+            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id";
             $vObj = MediaResourceFactory::initFromVideoLink($row);
+            $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
         }
-        if (!$module_visible) {
-            $class_vis = ' class="not_visible"';
-            if ($is_editor) {
-                $videolink .= " <i>($langInactiveModule)</i>";
-            } else {
-                $videolink = "<i>$title ($langInactiveModule)</i>";
-            }
-        } elseif ($visibility == 0) {
-            $class_vis = ' class="not_visible"';
-            if ($is_editor) {
-                $videolink .= " <i>($langWallHiddenResource)</i>";
-            } else {
-                $videolink = "<i>$title ($langWallHiddenResource)</i>";
-            }
-        }
         $imagelink = "fa-film";
-    } else {
+    } else { // resource was deleted
+        if (!$is_editor) {
+            return '';
+        }
         $videolink = $title;
         $imagelink = "fa-times";
-        $visibility = 'del';
     }
 
-    $class_vis = ($visibility == 0 or !$module_visible or $status == 'del') ? ' class="not_visible"' : ' ';
-    $ret_str = "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>$videolink</td></tr>";
-    
-    return $ret_str;
+    return "<tr><td width='1'>".icon($imagelink)."</td><td>$videolink</td></tr>";
+}
+
+function show_link($title, $resource_id, $link_id) {
+    global $course_id, $is_editor;
+    $row = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
+    if ($row) {
+        $visibility = 1;
+        if ($row->title == '') {
+            $title = q($row->url);
+        } else {
+            $title = q($title);
+        }
+        $linktitle = "<a href='" . q($row->url) . "' target='_blank'>$title</a>";
+        $imagelink = 'fa-link';
+    } else {
+        if (!$is_editor) {
+            return '';
+        }
+        $linktitle = q($title);
+        $imagelink = "fa-times";
+        $visibility = 0;
+    }
+    $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
+    return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$linktitle."</td></tr>";
 }
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {

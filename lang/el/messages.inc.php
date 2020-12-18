@@ -356,6 +356,7 @@ $langBackCourse = "Επιστροφή στην αρχική σελίδα του 
 $langCourseFormat = "Mορφή $langsOfCourse";
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
 $langCourseActivityFormat = 'Μορφή δραστηριότητας';
+$langCourseWallFormat = 'Μορφή τοίχου';
 $langWithCourseUnits = "$langCourse με ενότητες (εβδομαδιαίες, θεματικές)";
 $langCourseSimpleFormat = 'Απλή μορφή';
 $langAddWeek = 'Προσθήκη εβδομάδας';

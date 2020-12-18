@@ -46,6 +46,7 @@ require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'modules/progress/process_functions.php';
+require_once 'modules/wall/wall_wrapper.php';
 
 doc_init();
 $tree = new Hierarchy();
@@ -804,6 +805,9 @@ $displayCalendar = Database::get()->querySingle('SELECT MAX(visible) AS vis FROM
 $displayAnnouncements = Database::get()->querySingle('SELECT visible FROM course_module
                             WHERE course_id = ?d AND module_id = ' . MODULE_ID_ANNOUNCE,
                             $course_id)->visible;
+$displayWall = $course_info->view_type == 'wall' && Database::get()->querySingle('SELECT visible FROM course_module
+                            WHERE course_id = ?d AND module_id = ' . MODULE_ID_WALL,
+                            $course_id)->visible;
 
 if (($total_cunits > 0 or $is_editor) and $course_info->view_type == 'units') {
     $alter_layout = FALSE;
@@ -946,7 +950,12 @@ if (isset($level) && !empty($level)) {
             </div>";
 }
 
-if ($displayCalendar) {
+if ($displayWall) {
+    show_post_form();
+    show_wall_posts();
+}
+
+if (!$displayWall && $displayCalendar) {
     //BEGIN - Get user personal calendar
     $today = getdate();
     $day = $today['mday'];
@@ -988,7 +997,7 @@ if ($displayCalendar) {
             </div>";
 }
 
-if ($displayAnnouncements) {
+if (!$displayWall && $displayAnnouncements) {
     $tool_content .= "
             <div class='col-md-$cunits_sidebar_subcolumns'>
                 <h3 class='content-title'>$langAnnouncements</h3>
