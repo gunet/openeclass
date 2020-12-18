@@ -344,6 +344,7 @@ tinymce.PluginManager.add('eclmedia', function(editor, url) {
     }
 
     editor.addButton('eclmedia', {
+        context: 'insert',
         image: url + '/img/video.gif',
         tooltip: 'Insert/Edit Pop-Up Media',
         onclick: createLinkList(showDialog),

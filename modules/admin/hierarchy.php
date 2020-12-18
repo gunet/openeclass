@@ -279,13 +279,13 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         <div class='form-group'>
             <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
             <div class='col-sm-9'>
-                  <input class='form-control' type='checkbox' name='allow_course' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowCourse2</small></span>
+                  <input type='checkbox' name='allow_course' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowCourse2</small></span>
           </div>
         </div>
         <div class='form-group'>
             <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
             <div class='col-sm-9'>
-                <input class='form-control' type='checkbox' name='allow_user' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowUser2</small></span>
+                <input type='checkbox' name='allow_user' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowUser2</small></span>
             </div>
         </div>
         <div class='form-group'>

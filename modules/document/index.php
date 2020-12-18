@@ -552,7 +552,11 @@ if ($can_upload or $user_upload) {
                         "<!DOCTYPE html>\n" .
                         "<head>\n" .
                         "  <meta charset='utf-8'>\n" .
-                        '  <title>' . q($title) . "</title>\n</head>\n<body>\n" .
+                        '  <title>' . q($title) . "</title>\n" .
+                        "<link rel='stylesheet' href='{$urlServer}template/default/CSS/bootstrap-custom.css'>" .
+                        "<link rel='stylesheet' href='{$urlServer}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css'>" .
+                        "<style>body { margin: 8px; background: none !important; }</style>" .
+                        "</head>\n<body>\n" .
                         purify($_POST['file_content']) .
                         "\n</body>\n</html>\n");
                     $session->setDocumentTimestamp($course_id);

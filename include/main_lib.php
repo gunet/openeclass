@@ -2052,10 +2052,20 @@ function openDocsPicker(field_name, url, type, win) {
 tinymce.init({
     // General options
     selector: 'textarea.mceEditor',
+    content_css: [
+        '{$urlAppend}template/default/CSS/bootstrap-custom.css',
+        '{$urlAppend}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css',
+    ],
+    content_style: 'body { margin: 8px; background: none !important; }',
+    extended_valid_elements: 'span[*]',
+    noneditable_noneditable_class: 'fa',
     language: '$language',
     cache_suffix: '?v=" . CACHE_SUFFIX . "',
     theme: 'modern',
     skin: 'light',
+    branding: false,
+    font_formats:
+    'Open Sans=open sans; Roboto=roboto; Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
     image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
@@ -2072,7 +2082,7 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking template wordcount advlist emoticons preview searchreplace table insertdatetime code textcolor colorpicker lists advlist',
+    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome',
     entity_encoding: 'raw',
     relative_urls: false,
     link_class_list: [
@@ -2081,19 +2091,10 @@ tinymce.init({
         {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'}
     ],
     $filebrowser
-    // Menubar options
-    menu : 'false',
+    menu: true,
     // Toolbar options
     toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview',
-    toolbar2: 'outdent indent | emoticons strikethrough superscript subscript table | pastetext cut copy paste | removeformat | formatselect | fontsizeselect | searchreplace undo redo | code',
-    // Replace values for the template plugin
-    // Toolbar options
-    //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
-    // Replace values for the template plugin
-    template_replace_values: {
-            username : 'Open eClass',
-            staffid : '991234'
-    }
+    toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome strikethrough superscript subscript table | pastetext cut copy paste | removeformat | searchreplace undo redo | code'
     $focus_init
 });
 </script>";

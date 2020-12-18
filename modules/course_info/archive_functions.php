@@ -174,7 +174,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
  * @param string $course_code
  */
 function doArchive($course_id, $course_code) {
-    global $webDir, $tool_content;
+    global $webDir, $tool_content, $langGeneralError;
 
     $basedir = "$webDir/courses/archive/$course_code";
     file_exists($basedir) or make_dir($basedir);

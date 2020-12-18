@@ -39,7 +39,7 @@ function visibility_select($current) {
 
 // Unzip backup file
 function unpack_zip_inner($zipfile, $clone) {
-    global $webDir, $uid;
+    global $webDir, $uid, $langGeneralError;
     require_once 'include/lib/fileUploadLib.inc.php';
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;

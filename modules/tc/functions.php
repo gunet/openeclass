@@ -1571,7 +1571,7 @@ function is_bbb_server_available($server_id, $participants)
 }
 
 /**
- * @brief get load of all active BBB servers
+ * @brief get load of all enabled BBB servers
  * @return array
  */
 function get_bbb_servers_load()
@@ -1592,9 +1592,6 @@ function get_bbb_servers_load()
 
     if ($server_count <= 0 ) {
         return false;
-    } else if ($server_count == 1) {
-        $server[0]['id'] = $q[0]->id;
-        return $server;
     }
 
     foreach ($q as $server) {
@@ -1607,7 +1604,7 @@ function get_bbb_servers_load()
         $meetings = $bbb->getMeetingsWithXmlResponseArray();
         // no active meetings
         if (empty($meetings)) {
-            $continue;
+            continue;
         }
         foreach ($meetings as $meeting) {
             if (!isset($meeting['meetingId'])) {
@@ -1650,6 +1647,24 @@ function get_bbb_servers_load()
 
     }
     return $servers;
+}
+
+/**
+ * @brief get load of all enabled BBB servers
+ * @return array indexed by server id in DB
+ */
+function get_bbb_servers_load_by_id()
+{
+    $servers = get_bbb_servers_load();
+
+    foreach ($servers as $server) {
+        $array[$server['id']]['weight'] = $server['weight'];
+        $array[$server['id']]['rooms'] = $server['rooms'];
+        $array[$server['id']]['participants'] = $server['participants'];
+        $array[$server['id']]['load'] = $server['load'];
+        $array[$server['id']]['enable_recordings'] = $server['enable_recordings'];
+    }
+    return $array;
 }
 
 /**
