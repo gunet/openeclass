@@ -355,7 +355,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     } else {
         // selects the list of question ID
-        if ($shuffleQuestions) {
+        if ($shuffleQuestions or (intval($randomQuestions) > 0)) {
             $qList = $objExercise->selectShuffleQuestions();
         } else {
             $qList = $objExercise->selectQuestions();
