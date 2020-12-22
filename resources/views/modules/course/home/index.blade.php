@@ -6,7 +6,7 @@
         background-color: #f5f5f5;
     }
     #collapseDescription > div {
-        padding: 20px;
+        padding: 5px 20px;
     }
 
     .course_completion_panel_percentage
@@ -109,9 +109,10 @@
                                 @if ($course_info->course_license)
                                     <span class="pull-right">{!! copyright_info($course_id) !!}</span>
                                 @endif
-                                <div class='collapse' id='collapseDescription' style='margin-left: 30px; margin-right: 30px;'>
+                                <div class='collapse' id='collapseDescription' style='margin-top: 20px; padding-top: 20px;'>
                                     @foreach ($course_descriptions as $row)
-                                        <h3 class='panel-title' style='margin: 1em 0 .5em;'>{{ q($row->title) }}</h3> {!! standard_text_escape($row->comments) !!}
+                                        <div style='margin-top: 1px;'><strong>{{ q($row->title) }}</strong></div>
+                                        <div>{!! standard_text_escape($row->comments) !!}</div>
                                     @endforeach
                                 </div>
                             </div>
