@@ -413,6 +413,18 @@ function insert_links($post_id) {
     }
 }
 
+function insert_exercises($post_id) {
+    global $course_id;
+
+    if (isset($_POST['exercise']) and count($_POST['exercise'] > 0)) {
+        foreach ($_POST['exercise'] as $exercise_id) {
+            $row = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
+            Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                $post_id, 'exercise', $row->title, $exercise_id);
+        }
+    }
+}
+
 function show_resources($post_id) {
     global $langWallAttachedResources;
     
@@ -444,6 +456,9 @@ function show_resource($info) {
             break;
         case 'link' :
             $ret_str = show_link($info->title, $info->id, $info->res_id);
+            break;
+        case 'exercise' :
+            $ret_str = show_exercise($info->title, $info->id, $info->res_id);
             break;
     }
     return $ret_str;
@@ -529,6 +544,38 @@ function show_link($title, $resource_id, $link_id) {
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
     return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$linktitle."</td></tr>";
+}
+
+function show_exercise($title, $resource_id, $exercise_id) {
+    global $course_id, $course_code, $urlServer, $is_editor, $uid;
+    $row = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
+    if ($row) {
+        if (!$is_editor and ( !resource_access($row->active, $row->public))) {
+            return '';
+        }
+        $visibility = 1;
+        // check if exercise is in `paused` state
+        $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
+            . "FROM exercise_user_record "
+            . "WHERE eid = ?d AND uid = ?d "
+            . "AND attempt_status = ?d", $exercise_id, $uid, ATTEMPT_PAUSED);
+        if ($paused_exercises) {
+            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$paused_exercises->eurid'>";
+        } else {
+            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id'>";
+        }
+        $exlink = $link . "$title</a>";
+        $imagelink = 'fa-pencil-square-o';
+    } else {
+        if (!$is_editor) {
+            return '';
+        }
+        $exlink = q($title);
+        $imagelink = "fa-times";
+        $visibility = 0;
+    }
+    $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
+    return "<tr$class_vis><td width='3'>".icon($imagelink)."</td><td>".$exlink."</td></tr>";
 }
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {

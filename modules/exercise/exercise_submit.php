@@ -587,6 +587,8 @@ $tool_content .= "</div>";
 
 if (isset($_REQUEST['unit'])) {
     $form_action_link = "{$urlServer}modules/units/view.php?res_type=exercise&amp;unit=$_REQUEST[unit]&amp;course=$course_code&amp;exerciseId=$exerciseId";
+} else if (isset($_REQUEST['res_type'])) {
+    $form_action_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exerciseId";
 } else {
     $form_action_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId";
 }
