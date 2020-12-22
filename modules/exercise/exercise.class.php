@@ -414,10 +414,6 @@ if (!class_exists('Exercise')) {
          */
         function selectShuffleQuestions() {
 
-            if (!$this->shuffle || $this->selectNbrQuestions() < 2) { // randomization is invalid
-                return $this->questionList;
-            }
-
             $questions = $this->questionList;
             shuffle($questions); // shuffle all questions
             if ($this->random > 0) {

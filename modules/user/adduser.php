@@ -31,6 +31,11 @@ $helpTopic = 'course_users';
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+
+$tree = new Hierarchy();
+$user = new User();
 
 $toolName = $langUsers;
 $pageName = $langAddUser;
@@ -154,14 +159,22 @@ if (isset($_GET['add'])) {
                                   <th>$langName</th>
                                   <th>$langSurname</th>
                                   <th>$langUsername</th>
-                                  <th>$langAm</th>
+                                  <th>$langFaculty</th>
                                   <th>$langActions</th>
                                 </tr>";
             $i = 1;
             foreach ($result as $myrow) {
+                $departments = $user->getDepartmentIds($myrow->id);
+                $dep_content = '';
+                $j = 1;
+                foreach ($departments as $dep) {
+                    $br = ($j < count($departments)) ? '<br>' : '';
+                    $dep_content .= $tree->getPath($dep) . $br;
+                    $j++;
+                }
                 $tool_content .= "<td class='text-right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
-                        q($myrow->am) . "</td><td class='text-center'>" .
+                        $dep_content . "</td><td class='text-center'>" .
                         icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id)). "</td></tr>";
                 $i++;
             }

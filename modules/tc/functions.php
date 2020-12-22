@@ -1656,15 +1656,18 @@ function get_bbb_servers_load()
 function get_bbb_servers_load_by_id()
 {
     $servers = get_bbb_servers_load();
+    if (empty($servers)) {
+        return false;
+    }
 
     foreach ($servers as $server) {
-        $array[$server['id']]['weight'] = $server['weight'];
-        $array[$server['id']]['rooms'] = $server['rooms'];
-        $array[$server['id']]['participants'] = $server['participants'];
-        $array[$server['id']]['load'] = $server['load'];
-        $array[$server['id']]['enable_recordings'] = $server['enable_recordings'];
+        $arr[$server['id']]['weight'] = $server['weight'];
+        $arr[$server['id']]['rooms'] = $server['rooms'];
+        $arr[$server['id']]['participants'] = $server['participants'];
+        $arr[$server['id']]['load'] = $server['load'];
+        $arr[$server['id']]['enable_recordings'] = $server['enable_recordings'];
     }
-    return $array;
+    return $arr;
 }
 
 /**

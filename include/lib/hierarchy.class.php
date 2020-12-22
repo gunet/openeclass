@@ -890,6 +890,26 @@ jContent;
     }
 
     /**
+     * @brief Get a node's path (only the last component)
+     * @param $id
+     * @return string
+     */
+    public function getPath($id) {
+        $ret = "";
+
+        if ($id === null || intval($id) <= 0) {
+            return $ret;
+        }
+
+        $node = Database::get()->querySingle("SELECT name, lft, rgt FROM hierarchy WHERE `id` = ?d", $id);
+        if (!$node) {
+            return $ret;
+        }
+        return self::unserializeLangField($node->name) . ' ';
+
+    }
+
+    /**
      * Unserialize the given value and detect the proper localized string to returned.
      * Nodes' name field is stored as a serialized arraymap of the form <lang_code, value>, this method
      * fetches the proper value from such a serialized/localized string.
