@@ -194,7 +194,7 @@ if (isset($_GET['store']) && $is_editor) {
                       </div>\n";
             } else {
                 $user_id = intval(trim($str_1[1]));
-                $str_2 = explode(' - ', $str_1[0]);
+                $str_2 = explode(' - ', $str_1[0], 2);
                 $datetime = $str_2[0];
                 $str_3 = explode(' : ', $str_2[1]);
                 $username = $str_3[0];
