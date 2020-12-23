@@ -76,6 +76,10 @@ if (isset($_POST['submit'])) {
                 if ($is_editor || visible_module(MODULE_ID_LINKS)) {
                     insert_links($id);
                 }
+                //save exercises
+                if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
+                    insert_exercises($id);
+                }
             }
         } else {
             Session::Messages($langWallMessageEmpty);
@@ -178,6 +182,11 @@ if (isset($_POST['submit'])) {
             if ($is_editor || visible_module(MODULE_ID_LINKS)) {
                 insert_links($id);
             }
+
+            //save exercises
+            if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
+                insert_exercises($id);
+            }
             
             Session::Messages($langWallPostSaved, 'alert-success');
             decide_wall_redirect();
@@ -269,6 +278,16 @@ if (isset($_GET['showPost'])) { //show comments case
             $links_div = '';
             $links_li = '';
         }
+
+        if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
+            $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" style="padding:10px">
+                              '.list_exercises($id).'
+                          </div>';
+            $exercises_li = '<li><a data-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+        } else {
+            $exercises_div = '';
+            $exercises_li = '';
+        }
         
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
@@ -287,6 +306,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$docs_li.'
                                         '.$mydocs_li.'
                                         '.$links_li.'
+                                        '.$exercises_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -297,6 +317,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$docs_div.'
                                         '.$mydocs_div.'
                                         '.$links_div.'
+                                        '.$exercises_div.'
                                     </div>
                                 </div>
                             </div>

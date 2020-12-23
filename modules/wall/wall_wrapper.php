@@ -25,12 +25,13 @@ require_once 'modules/wall/ExtVideoUrlParser.class.php';
 require_once 'modules/wall/insert_video.php';
 require_once 'modules/wall/insert_doc.php';
 require_once 'modules/wall/insert_link.php';
+require_once 'modules/wall/insert_exercise.php';
 require_once 'include/log.class.php';
 
 function show_post_form() {
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
            $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink,
-           $langLinks, $langSubmit;
+           $langLinks, $langExercises, $langSubmit;
 
     if (allow_to_post($course_id, $uid, $is_editor)) {
 
@@ -81,6 +82,16 @@ function show_post_form() {
             $links_li = '';
         }
 
+        if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
+            $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" style="padding:10px">
+                              '.list_exercises().'
+                          </div>';
+            $exercises_li = '<li><a data-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+        } else {
+            $exercises_div = '';
+            $exercises_li = '';
+        }
+
         $head_content .= '<script>
                               function expand_form() {
                                   $("#resources_panel").collapse(\'show\');
@@ -104,6 +115,7 @@ function show_post_form() {
                                         '.$docs_li.'
                                         '.$mydocs_li.'
                                         '.$links_li.'
+                                        '.$exercises_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -114,6 +126,7 @@ function show_post_form() {
                                         '.$docs_div.'
                                         '.$mydocs_div.'
                                         '.$links_div.'
+                                        '.$exercises_div.'
                                     </div>
                                 </div>
                             </div>

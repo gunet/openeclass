@@ -22,8 +22,7 @@
 require_once 'include/course_settings.php';
 
 function list_links($id = NULL) {
-    global $course_id, $langNoCategory, $langDescription, $langAddModulesButton,
-           $langChoice, $langNoLinksExist, $langLinks, $course_code, $langSocialCategory;
+    global $course_id, $langNoCategory, $langDescription, $langChoice, $langNoLinksExist, $langLinks, $langSocialCategory;
 
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
