@@ -425,6 +425,18 @@ function insert_exercises($post_id) {
     }
 }
 
+function insert_assignments($post_id) {
+    global $course_id;
+
+    if (isset($_POST['assignment']) and count($_POST['assignment'] > 0)) {
+        foreach ($_POST['assignment'] as $assignment_id) {
+            $row = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $assignment_id);
+            Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                $post_id, 'assignment', $row->title, $assignment_id);
+        }
+    }
+}
+
 function show_resources($post_id) {
     global $langWallAttachedResources;
     
@@ -459,6 +471,9 @@ function show_resource($info) {
             break;
         case 'exercise' :
             $ret_str = show_exercise($info->title, $info->id, $info->res_id);
+            break;
+        case 'assignment' :
+            $ret_str = show_assignment($info->title, $info->id, $info->res_id);
             break;
     }
     return $ret_str;
@@ -576,6 +591,26 @@ function show_exercise($title, $resource_id, $exercise_id) {
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
     return "<tr$class_vis><td width='3'>".icon($imagelink)."</td><td>".$exlink."</td></tr>";
+}
+
+function show_assignment($title, $resource_id, $assignment_id) {
+    global $course_id, $course_code, $urlServer, $is_editor;
+    $row = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $assignment_id);
+    if ($row) {
+        $visibility = 1;
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$assignment_id'>";
+        $exlink = $link . "$title</a>";
+        $imagelink = 'fa-flask';
+    } else {
+        if (!$is_editor) {
+            return '';
+        }
+        $exlink = q($title);
+        $imagelink = "fa-times";
+        $visibility = 0;
+    }
+    $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
+    return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$exlink."</td></tr>";
 }
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {

@@ -26,12 +26,13 @@ require_once 'modules/wall/insert_video.php';
 require_once 'modules/wall/insert_doc.php';
 require_once 'modules/wall/insert_link.php';
 require_once 'modules/wall/insert_exercise.php';
+require_once 'modules/wall/insert_work.php';
 require_once 'include/log.class.php';
 
 function show_post_form() {
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
            $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink,
-           $langLinks, $langExercises, $langSubmit;
+           $langLinks, $langExercises, $langWorks, $langSubmit;
 
     if (allow_to_post($course_id, $uid, $is_editor)) {
 
@@ -92,6 +93,16 @@ function show_post_form() {
             $exercises_li = '';
         }
 
+        if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
+            $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" style="padding:10px">
+                              '.list_assignments().'
+                          </div>';
+            $assignments_li = '<li><a data-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+        } else {
+            $assignments_div = '';
+            $assignments_li = '';
+        }
+
         $head_content .= '<script>
                               function expand_form() {
                                   $("#resources_panel").collapse(\'show\');
@@ -116,6 +127,7 @@ function show_post_form() {
                                         '.$mydocs_li.'
                                         '.$links_li.'
                                         '.$exercises_li.'
+                                        '.$assignments_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -127,6 +139,7 @@ function show_post_form() {
                                         '.$mydocs_div.'
                                         '.$links_div.'
                                         '.$exercises_div.'
+                                        '.$assignments_div.'
                                     </div>
                                 </div>
                             </div>
