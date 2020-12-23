@@ -80,6 +80,10 @@ if (isset($_POST['submit'])) {
                 if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
                     insert_exercises($id);
                 }
+                //save assignments
+                if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
+                    insert_assignments($id);
+                }
             }
         } else {
             Session::Messages($langWallMessageEmpty);
@@ -187,6 +191,11 @@ if (isset($_POST['submit'])) {
             if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
                 insert_exercises($id);
             }
+
+            //save assignments
+            if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
+                insert_assignments($id);
+            }
             
             Session::Messages($langWallPostSaved, 'alert-success');
             decide_wall_redirect();
@@ -288,6 +297,16 @@ if (isset($_GET['showPost'])) { //show comments case
             $exercises_div = '';
             $exercises_li = '';
         }
+
+        if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
+            $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" style="padding:10px">
+                              '.list_assignments($id).'
+                          </div>';
+            $assignments_li = '<li><a data-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+        } else {
+            $assignments_div = '';
+            $assignments_li = '';
+        }
         
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
@@ -307,6 +326,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$mydocs_li.'
                                         '.$links_li.'
                                         '.$exercises_li.'
+                                        '.$assignments_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -318,6 +338,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$mydocs_div.'
                                         '.$links_div.'
                                         '.$exercises_div.'
+                                        '.$assignments_div.'
                                     </div>
                                 </div>
                             </div>
