@@ -26,6 +26,7 @@ class FileCache {
 
     private $resource;
     private $cachefile;
+    private $prefix;
     private $ttl;
 
     /*
@@ -36,7 +37,9 @@ class FileCache {
      */
     public function __construct($resource, $ttl) {
         $this->resource = $resource;
-        $this->cachefile = (defined('CACHE_DIR')? CACHE_DIR: '/tmp') . '/' . $resource . '.cache';
+        $webDir = isset($GLOBALS['webDir'])? $GLOBALS['webDir']: getcwd();
+        $this->prefix = substr(md5($webDir), 0, 8);
+        $this->cachefile = (defined('CACHE_DIR')? CACHE_DIR: '/tmp') . '/' . $this->prefix . '_' . $resource . '.cache';
         $this->ttl = $ttl;
     }
 
@@ -48,9 +51,9 @@ class FileCache {
     public function get() {
         $ret = false;
         if (file_exists($this->cachefile) && time() - $this->ttl < filemtime($this->cachefile)) {
-                $data = file_get_contents($this->cachefile);
-                if($data === false) return false;
-                $ret =  unserialize($data);
+            $data = file_get_contents($this->cachefile);
+            if ($data === false) return false;
+            $ret = unserialize($data);
         }
         return $ret;
     }
@@ -64,12 +67,12 @@ class FileCache {
     public function store($data) {
         $tmpname = tempnam('/tmp', $this->resource);
         $fp = fopen($tmpname, 'w');
-        if($fp === false) return false;
+        if ($fp === false) return false;
         $r = fwrite($fp,serialize($data));
         fclose($fp);
-        if($r === false) {
-                unlink($tmpname);
-                return false;
+        if ($r === false) {
+            unlink($tmpname);
+            return false;
         }
         return rename($tmpname, $this->cachefile);
     }
@@ -80,8 +83,8 @@ class FileCache {
      * @return bool        - true on success false on failure
      */
     public function clear() {
-        if (file_exists($this->cachefile) )
-                return unlink($this->cachefile);
+        if (file_exists($this->cachefile))
+            return unlink($this->cachefile);
         return true;
     }
 
