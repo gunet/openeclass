@@ -44,10 +44,10 @@ $tmpArchiveFile = $coursePath . $course_code . '/' . $conference_id. '_tmpChatAr
 $nick = uid_to_name($uid);
 
 // How many lines to show on screen
-define('MESSAGE_LINE_NB', 100);
+define('MESSAGE_LINE_NB', 300);
 // How many lines to keep in temporary archive
 // (the rest are in the current chat file)
-define('MAX_LINE_IN_FILE', 100);
+define('MAX_LINE_IN_FILE', 300);
 
 if ($GLOBALS['language'] == 'el') {
     $timeNow = date("d-m-Y / H:i", time());
