@@ -2002,7 +2002,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '3.10', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.10'));
 
-        Database::get()->query("ALTER TABLE exercise_with_questions CHANGE question_id question_id INT DEFAULT 0");
+        Database::get()->query("ALTER TABLE exercise_with_questions CHANGE question_id question_id INT NULL DEFAULT 0");
         if (!DBHelper::fieldExists('exercise_with_questions', 'random_criteria')) {
             Database::get()->query("ALTER TABLE exercise_with_questions ADD `random_criteria` TEXT");
             Database::get()->query("ALTER TABLE exercise_with_questions DROP PRIMARY KEY");
