@@ -28,42 +28,37 @@
 
 require_once 'template/template.inc.php';
 
-$t = new Template('template/default');
+function installation_error($eng_msg, $el_msg) {
+    $t = new Template('template/default');
 
-$t->set_file('fh', 'theme.html');
-$t->set_block('fh', 'mainBlock', 'main');
-$t->set_block('mainBlock', 'leftNavBlock', 'delete');
-$t->set_block('mainBlock', 'sideBarBlock', 'delete');
-$t->set_block('mainBlock', 'LoggedInBlock', 'delete');
-$t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
-$t->set_block('mainBlock', 'toolTitleBlock', 'delete');
-$t->set_block('mainBlock', 'pageTitleBlock', 'delete');
-$t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
-$t->set_block('mainBlock', 'breadCrumbs', 'delete');
-$t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
-$t->set_var('template_base', 'template/default');
-$t->set_var('PAGE_TITLE', 'Open eClass eLearning Platform / Πλατφόρμα Τηλεκπαίδευσης Open eClass');
-$t->set_var('TOOL_CONTENT', "
-<div class='row'>
-    <div class='col-md-12'>
-        <div class='alert alert-warning'>
-            <p>The <strong>Open eClass</strong> asynchronous elearning platform is not functional.</p>
-            <p>There might be a problem with the database or the platform config file.</p>
-            <p>If you are accessing the platform <strong>for the first time</strong>, please use the <a href='install/?lang=en'><b>Installation Wizard</b></a> to begin installation.</p>
+    $t->set_file('fh', 'theme.html');
+    $t->set_block('fh', 'mainBlock', 'main');
+    $t->set_block('mainBlock', 'leftNavBlock', 'delete');
+    $t->set_block('mainBlock', 'sideBarBlock', 'delete');
+    $t->set_block('mainBlock', 'LoggedInBlock', 'delete');
+    $t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
+    $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
+    $t->set_block('mainBlock', 'pageTitleBlock', 'delete');
+    $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
+    $t->set_block('mainBlock', 'breadCrumbs', 'delete');
+    $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
+    $t->set_var('template_base', 'template/default');
+    $t->set_var('PAGE_TITLE', 'Open eClass eLearning Platform / Πλατφόρμα Τηλεκπαίδευσης Open eClass');
+    $t->set_var('TOOL_CONTENT', "
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='alert alert-warning'><p>The <strong>Open eClass</strong> asynchronous elearning platform is not functional.</p>$eng_msg</div>
+            </div>
         </div>
-    </div>
-</div>
-<div class='row'>
-    <div class='col-md-12'>
-        <div class='alert alert-warning'>
-            <p>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης <strong>Open eClass</strong> δεν λειτουργεί.</p>
-            <p>Πιθανό πρόβλημα με την βάση δεδομένων ή με το αρχείο ρυθμίσεων της πλατφόρμας.</p>
-            <p>Σε περίπτωση που χρησιμοποιείτε την πλατφόρμα <strong>για πρώτη</strong> φορά, επιλέξτε τον <a href='install/'><b>Οδηγό Εγκατάστασης</b></a> για να ξεκινήσετε το πρόγραμμα εγκατάστασης.</p>
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='alert alert-warning'><p>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης <strong>Open eClass</strong> δεν λειτουργεί.</p>                                
+                $el_msg</div>
+            </div>
         </div>
-    </div>
-</div>
-");
+    ");
 
-$t->parse('main', 'mainBlock', false);
-$t->pparse('Output', 'fh');
-exit;
+    $t->parse('main', 'mainBlock', false);
+    $t->pparse('Output', 'fh');
+    exit;
+}
