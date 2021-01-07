@@ -269,13 +269,11 @@ foreach ($questionList as $questionId) {
     }
 
     // shows the question and its answers
-    echo ("<div class='panel panel-success'>
-            <div class='panel-heading'>" . $langQuestion . ": " . $i . "</div>");
-
-    if ($exerciseType == 2) {
-        echo ("/" . $nbrQuestions);
-    }
-    echo ("<div class='panel-body'>");
+    echo "<div class='panel panel-success'>
+            <div class='panel-heading'>" . $langQuestion . ": " . $i .
+               ($exerciseType == 2 ?  " / $nbrQuestions" : '') .
+            "</div>" .
+         "<div class='panel-body'>";
     showQuestion($questionId);
     echo "</div></div>";
     // for sequential exercises
