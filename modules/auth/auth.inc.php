@@ -755,7 +755,8 @@ function hybridauth_login() {
     global $surname, $givenname, $email, $status, $is_admin, $language,
         $langInvalidId, $langAccountInactive1, $langAccountInactive2,
         $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
-        $inactive_uid, $langTooManyFails, $warning, $langGeneralError;
+        $inactive_uid, $langTooManyFails, $warning, $langGeneralError,
+        $session;
 
     require_once 'modules/auth/methods/hybridauth/config.php';
 
@@ -988,6 +989,8 @@ function hybridauth_login() {
         } else {
             $next = '';
         }
+        $session->setLoginTimestamp();
+        $session->setLoginMethod($provider);
         resetLoginFailure();
         redirect_to_home_page($next);
     }
@@ -1096,6 +1099,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
             $auth_allow = 1;
             user_hook($user_info_object->id);
             $session->setLoginTimestamp();
+            $session->setLoginMethod('eclass');
         } else {
             $auth_allow = 3;
             $GLOBALS['inactive_uid'] = $user_info_object->id;
@@ -1114,7 +1118,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
  * ************************************************************** */
 
 function alt_login($user_info_object, $uname, $pass, $mobile = false) {
-    global $warning, $auth_ids, $langInvalidAuth;
+    global $warning, $auth_ids, $langInvalidAuth, $session;
 
     $_SESSION['canChangePassword'] = false;
     $auth = array_search($user_info_object->password, $auth_ids);
@@ -1228,6 +1232,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
             $_SESSION['status'] = $user_info_object->status;
             $_SESSION['email'] = $user_info_object->email;
             $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_object->lang;
+            $session->setLoginMethod($auth_ids[$auth]);
         }
     } else {
         $warning .= "<br>$langInvalidAuth<br>";
@@ -1428,14 +1433,14 @@ function shib_cas_login($type) {
     $_SESSION['givenname'] = $givenname;
     $_SESSION['email'] = $email;
     $_SESSION['status'] = $status;
-    //$_SESSION['is_admin'] = $is_admin;
-    $_SESSION['shib_user'] = 1; // now we are shibboleth user
+
     unset_shib_cas_session();
 
     Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')",
                     $_SESSION['uid'], Log::get_client_ip());
     $session->setLoginTimestamp();
+    $session->setLoginMethod($type);
     //triggerGame($_SESSION['uid'], $is_admin);
     if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {

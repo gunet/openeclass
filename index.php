@@ -72,17 +72,15 @@ if (isset($_SESSION['uid'])) {
 }
 
 if (isset($_GET['logout']) and $uid) {
+    $cas = ($session->getLoginMethod() == 'cas')? get_auth_settings(7): false;
     Database::get()->query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
                 VALUES (?d, ?s, NOW(), 'LOGOUT')", $uid, $_SERVER['REMOTE_ADDR']);
-    if (isset($_SESSION['cas_uname'])) { // if we are CAS user
-        define('CAS', true);
-    }
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
 
-    // include HubridAuth libraries
+    // include HybridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
@@ -91,17 +89,15 @@ if (isset($_GET['logout']) and $uid) {
 
     session_destroy();
     $uid = 0;
-    if (defined('CAS')) {
-        $cas = get_auth_settings(7);
-        if (isset($cas['cas_ssout']) and intval($cas['cas_ssout']) === 1) {
-            phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
-            phpCAS::logoutWithRedirectService($urlServer);
-        }
+    if ($cas and isset($cas['cas_ssout']) and intval($cas['cas_ssout']) === 1) {
+        phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
+        phpCAS::logoutWithRedirectService($urlServer);
     }
 }
 
 // if we try to login... then authenticate user.
 $warning = '';
+
 if (isset($_SESSION['shib_uname'])) {
     // authenticate via shibboleth
     shib_cas_login('shibboleth');
