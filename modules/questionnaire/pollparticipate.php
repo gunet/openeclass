@@ -30,6 +30,7 @@ $helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'modules/group/group_functions.php';
 require_once 'modules/progress/ViewingEvent.php';
 
 load_js('bootstrap-slider');
@@ -50,8 +51,25 @@ if (!isset($_REQUEST['pid'])) {
     die();
 }
 
-$p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $_REQUEST['pid']);
-if (!$p) {
+$query = "SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d";
+$query_params[] = $course_id;
+$query_params[] = $_REQUEST['pid'];
+if (!$is_editor) {
+    $gids = user_group_info($uid, $course_id);
+    if (!empty($gids)) {
+        $gids_sql_ready = implode(',',array_keys($gids));
+    } else {
+        $gids_sql_ready = "''";
+    }
+    $query .= " AND
+                    (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d UNION SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                    )";
+    $query_params[] = $uid;
+}
+$p = Database::get()->querySingle($query, $query_params);
+
+if (!$p) { // check poll access
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 // check poll validity
