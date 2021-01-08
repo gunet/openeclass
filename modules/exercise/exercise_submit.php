@@ -368,7 +368,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     }
     // saves the question list into the session if there are questions
-    if (count($questionList)) {
+    if (count($questionList) > 0) {
         $_SESSION['questionList'][$exerciseId][$attempt_value] = $questionList;
     } else {
         unset_exercise_var($exerciseId);
