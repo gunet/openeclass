@@ -3596,6 +3596,7 @@ $langEventTitle = "Title";
 $langEvery = "every";
 $langiCalExport = "Export iCal";
 $langiCalFeed = "iCal Feed";
+$langiCalExplanation = "URL below can be imported in any application supporting iCal data, so personal events can be synchronized.";
 $langLanguageCode = "";
 $langModifEvent = "Modify event";
 $langMonthsAbstract = "months";

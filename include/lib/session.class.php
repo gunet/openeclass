@@ -93,6 +93,18 @@ class Session {
         $_SESSION['login_timestamp'] = $this->login_timestamp = date('Y-m-d H:i:s', time());
     }
 
+    public function setLoginMethod($type) {
+        $_SESSION['login_method'] = $type;
+    }
+
+    public function getLoginMethod() {
+        if (isset($_SESSION['login_method'])) {
+            return $_SESSION['login_method'];
+        } else {
+            return null;
+        }
+    }
+
     public function setDocumentTimestamp($course_id, $timestamp=null) {
         if ($this->user_id and $this->status != USER_GUEST) {
             if ($timestamp) {

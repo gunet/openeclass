@@ -294,10 +294,10 @@ class MultimediaHelper {
 
         return $ret;
     }
-    
+
     /**
      * Serve HTML5 Flowplayer.
-     * 
+     *
      * @global string $urlAppend
      * @param  string $mime
      * @param  string $mediaPlay
@@ -313,7 +313,7 @@ class MultimediaHelper {
         $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/html5/flowplayer.min.js'></script>";
         $ret .= $startdiv;
         $ret .= '<div class="flowplayer"
-                      data-swf="' . $urlAppend . 'js/flowplayer/html5/flowplayer.swf" 
+                      data-swf="' . $urlAppend . 'js/flowplayer/html5/flowplayer.swf"
                       data-fullscreen="true"
                       data-embed="false"
                       data-share="false"
@@ -322,10 +322,10 @@ class MultimediaHelper {
         $ret .= $enddiv;
         return $ret;
     }
-    
+
     /**
      * Server Flowplayer Flash.
-     * 
+     *
      * @global string $urlAppend
      * @param  string $mediaPlay
      * @param  string $startdiv
@@ -401,11 +401,11 @@ class MultimediaHelper {
 
         if (!$gotEmbed) {
             $ret .='<iframe width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '"
-                        src="' . $mediaURL . '" 
-                        frameborder="0" 
+                        src="' . $mediaURL . '"
+                        frameborder="0"
                         scrolling="no"
-                        webkitallowfullscreen="true" 
-                        mozallowfullscreen="true" 
+                        webkitallowfullscreen="true"
+                        mozallowfullscreen="true"
                         allowfullscreen="true"></iframe>';
         }
 
@@ -423,10 +423,10 @@ class MultimediaHelper {
         $u_agent = $_SERVER['HTTP_USER_AGENT'];
         return (preg_match('/MSIE/i', $u_agent)) ? true : false;
     }
-    
+
     /**
      * Whether the client uses Firefox or not
-     * 
+     *
      * @return boolean
      */
     public static function isUsingFirefox() {
@@ -436,7 +436,7 @@ class MultimediaHelper {
 
     /**
      * Whether the client uses an iOS device or not
-     * 
+     *
      * @return boolean
      */
     public static function isUsingIOS() {
@@ -465,7 +465,7 @@ class MultimediaHelper {
     public static function isSupportedModalFile($filename) {
         return in_array(get_file_extension($filename), self::getSupportedModalFiles());
     }
-    
+
     /**
      * Whether the media (video or audio) is supported or not
      *
@@ -478,7 +478,7 @@ class MultimediaHelper {
 
     /**
      * Whether the file (video or audio or image) is supported or not
-     * 
+     *
      * @param  string  $filename
      * @return boolean
      */
@@ -493,7 +493,7 @@ class MultimediaHelper {
      * @return boolean
      */
     public static function isEmbeddableMedialink($medialink) {
-        $supported = array_merge(self::getYoutubePatterns(), self::getVimeoPatterns(), self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns(), self::getDailymotionPatterns(), self::getNineSlidesPatterns());
+        $supported = array_merge(self::getYoutubePatterns(), self::getVimeoPatterns(), self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns(), self::getDailymotionPatterns(), self::getNineSlidesPatterns(), self::getVokiPatterns());
         $ret = false;
 
         foreach ($supported as $pattern) {
@@ -563,11 +563,19 @@ class MultimediaHelper {
                 $medialink = 'https://www.dailymotion.com/embed/video/' . $sanitized . '?autoPlay=1';
             }
         }
-        
+
         foreach (self::getNineSlidesPatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
                 $medialink = 'https://www.9slides.com/embed/' . $sanitized;
+            }
+        }
+
+        foreach (self::getVokiPatterns() as $pattern) {
+            if (preg_match($pattern, $medialink, $matches)) {
+                $matches[1] = strip_tags($matches[1]);
+                $matches[2] = strip_tags($matches[2]);
+                $medialink = "https://www.voki.com/site/pickup?scid={$matches[1]}&chsm={$matches[2]}&allowshare=0";
             }
         }
 
@@ -595,11 +603,11 @@ class MultimediaHelper {
     public static function getSupportedImages() {
         return array("jpg", "jpeg", "png", "gif", "bmp");
     }
-    
+
     public static function getSupportedModalFiles() {
         return array("htm", "html", "txt", "glo", "pdf");
     }
-    
+
     public static function getYoutubePatterns() {
         return array('/youtube\.com\/v\/([^&^\?]+)/i',
             '/youtube\.com\/watch\?v=([^&]+)/i',
@@ -631,9 +639,13 @@ class MultimediaHelper {
     public static function getDailymotionPatterns() {
         return array('/dailymotion\.com.*\/video\/(([^&^\?^_]+))/i');
     }
-    
+
     public static function getNineSlidesPatterns() {
         return array('/9slides\.com\/talks\/([^&^\?]+)/i');
+    }
+
+    public static function getVokiPatterns() {
+        return array('/voki\.com\/.*pickup?.*scid=([0-9]+).*chsm=([0-9a-fA-F]+)/i');
     }
 
     public static function getStartPattern() {

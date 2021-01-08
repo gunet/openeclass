@@ -685,7 +685,7 @@ function lti_verify_extract_sourcedid($sourcedid, $ts_valid_time) {
     // extract sourcedid info
     $sourcediddata = explode("-", $sourcedid);
     if (count($sourcediddata) != 4) {
-        error_log("invalid lis_result_sourcedid, exiting ...");
+        error_log("invalid lis_result_sourcedid, exiting ($sourcedid)...");
         die();
     }
     $token = $sourcediddata[0] . "-" . $sourcediddata[1];
@@ -695,11 +695,11 @@ function lti_verify_extract_sourcedid($sourcedid, $ts_valid_time) {
     // locate/validate assignment, lti, user and token
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $assignment_id);
     if (!$assignment) {
-        error_log("no assignment found, exiting...");
+        error_log("no assignment found, exiting ($sourcedid)...");
         die();
     }
     if (!token_validate($assignment->secret_directory, $token, $ts_valid_time )) {
-        error_log("invalid token, exiting...");
+        error_log("invalid token, exiting ($sourcedid)...");
         die();
     }
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $assignment->lti_template);

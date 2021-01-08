@@ -179,15 +179,23 @@ if (isset($_SESSION['questionList'][$exerciseId])) {
 }
 
 if (!isset($_SESSION['questionList'][$exerciseId])) {
-    // selects the list of question ID
-    if ($shuffleQuestions) {
-        $objExercise->selectShuffleQuestions();
+    if ($shuffleQuestions or (intval($randomQuestions) > 0)) {
+        $qList = $objExercise->selectShuffleQuestions();
     } else {
-        $questionList = $objExercise->selectQuestions();
+        $qList = $objExercise->selectQuestions();
     }
-    //$questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
+    $qList = array_unique($qList); // avoid duplicates (if any)
+    $i = 1;
+    foreach ($qList as $data) { // just make sure that array key / values are ok
+        $questionList[$i] = $data;
+        $i++;
+    }
     // saves the question list into the session
-    $_SESSION['questionList'][$exerciseId] = $questionList;
+    if (count($questionList)) {
+        $_SESSION['questionList'][$exerciseId] = $questionList;
+    } else {
+        unset_exercise_var($exerciseId);
+    }
 }
 
 $nbrQuestions = sizeof($questionList);
@@ -257,7 +265,7 @@ foreach ($questionList as $questionId) {
             if (isset($exerciseResult[$questionId])) {
                 // construction of the Question object
                 $objQuestionTmp = new Question();
-                // reads question informations
+                // reads question information
                 $objQuestionTmp->read($questionId);
                 $questionName = $objQuestionTmp->selectTitle();
                 // destruction of the Question object
@@ -269,13 +277,11 @@ foreach ($questionList as $questionId) {
     }
 
     // shows the question and its answers
-    echo ("<div class='panel panel-success'>
-            <div class='panel-heading'>" . $langQuestion . ": " . $i . "</div>");
-
-    if ($exerciseType == 2) {
-        echo ("/" . $nbrQuestions);
-    }
-    echo ("<div class='panel-body'>");
+    echo "<div class='panel panel-success'>
+            <div class='panel-heading'>" . $langQuestion . ": " . $i .
+               ($exerciseType == 2 ?  " / $nbrQuestions" : '') .
+            "</div>" .
+         "<div class='panel-body'>";
     showQuestion($questionId);
     echo "</div></div>";
     // for sequential exercises
@@ -292,7 +298,7 @@ if (!$questionList) {
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         echo "$langContinue\" />&nbsp;";
     } else {
-        echo $langNext . " &gt;" . "\" />";
+        echo $langNext . " &gt;&nbsp;" . "\" />";
     }
     echo "<input class='btn btn-primary' type='submit' name='buttonCancel' value='$langCancel' /></div></div>";
 }

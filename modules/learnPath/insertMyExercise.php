@@ -85,12 +85,14 @@ foreach ($resultex as $listex) {
         $objExercise = new Exercise();
         $objExercise->read($insertedExercise);
         $questionList = $objExercise->selectQuestionList();
+        $objQuestion = new Question();
         foreach ($questionList as $questionId) {
-            $objQuestion = new Question();
-            $objQuestion->read($questionId);
-            if ($objQuestion->selectType() == 6) {
-                $incompatible = true;
-                break;
+            if (!is_array($questionId)) {
+                $objQuestion->read($questionId);
+                if ($objQuestion->selectType() == FREE_TEXT) {
+                    $incompatible = true;
+                    break;
+                }
             }
         }
         if ($incompatible) {
@@ -133,7 +135,6 @@ foreach ($resultex as $listex) {
 
             insertInLearningPath($insertedExercice_id, $order);
             Session::Messages($langInsertedAsModule, 'alert-info');
-            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
             // check if this is this LP that used this exercise as a module
@@ -151,10 +152,8 @@ foreach ($resultex as $listex) {
                 // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 insertInLearningPath($thisExerciseModule->module_id, $order);
                 Session::Messages($langInsertedAsModule, 'alert-info');
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
                 Session::Messages($langAlreadyUsed, 'alert-warning');
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         }
     } // end if request

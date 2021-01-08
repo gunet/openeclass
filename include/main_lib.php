@@ -2,7 +2,7 @@
 
 /*
  * ========================================================================
- * Open eClass 3.9 - E-learning and Course Management System
+ * Open eClass 3.10 - E-learning and Course Management System
  * ========================================================================
   Copyright(c) 2003-2020  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.10-dev');
+define('ECLASS_VERSION', '3.10-pre1');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -30,6 +30,7 @@ if (isset($webDir)) { // needed for avoiding 'notices' in some files
 }
 require_once 'constants.php';
 require_once 'lib/session.class.php';
+require_once 'include/lib/file_cache.class.php';
 
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below
@@ -1852,11 +1853,18 @@ function deleteUser($id, $log) {
  * @return type
  */
 function get_config($key, $default = null) {
-
-    $r = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", $key);
-    if ($r) {
-        $row = $r->value;
-        return $row;
+    $cache = new FileCache('config', 300);
+    $config = $cache->get();
+    if ($config === false) {
+        $config = [];
+        $q = Database::get()->queryArray('SELECT `key`, `value` FROM config ORDER BY `key`');
+        foreach ($q as $item) {
+            $config[$item->key] = $item->value;
+        }
+        $cache->store($config);
+    }
+    if (isset($config[$key])) {
+        return $config[$key];
     } else {
         return $default;
     }
@@ -1868,8 +1876,9 @@ function get_config($key, $default = null) {
  * @param type $value
  */
 function set_config($key, $value) {
-
     Database::get()->query("REPLACE INTO config (`key`, `value`) VALUES (?s, ?s)", $key, $value);
+    $cache = new FileCache('config', 300);
+    $cache->clear();
 }
 
 // Copy variables from $_POST[] to $GLOBALS[], trimming and canonicalizing whitespace
