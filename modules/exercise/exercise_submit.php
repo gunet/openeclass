@@ -71,13 +71,13 @@ if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
         WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, 0, $eurid);
     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
-        array('title' => $objExercise->selectTitle(),
+        array('title' => $_SESSION['objExercise'][$exerciseId]->selectTitle(),
             'legend' => $langCancel)
     );
     unset_exercise_var($exerciseId);
     exit();
 }
-
+//$_SESSION['objExercise'][$exerciseId]->selectTitle()
 // setting a cookie in onBeforeUnload event in order to redirect user to the exercises page in case of refresh
 // as the synchronous ajax call in onUnload event doen't work the same in all browsers in case of refresh
 // (It is executed after page load in Chrome and Mozilla and before page load in IE).
