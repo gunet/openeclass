@@ -437,6 +437,18 @@ function insert_assignments($post_id) {
     }
 }
 
+function insert_chats($post_id) {
+    global $course_id;
+
+    if (isset($_POST['chat']) and count($_POST['chat'] > 0)) {
+        foreach ($_POST['chat'] as $chat_id) {
+            $row = Database::get()->querySingle("SELECT * FROM conference WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
+            Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                $post_id, 'chat', $row->conf_title, $chat_id);
+        }
+    }
+}
+
 function show_resources($post_id) {
     global $langWallAttachedResources;
     
@@ -474,6 +486,9 @@ function show_resource($info) {
             break;
         case 'assignment' :
             $ret_str = show_assignment($info->title, $info->id, $info->res_id);
+            break;
+        case 'chat' :
+            $ret_str = show_chat($info->title, $info->id, $info->res_id);
             break;
     }
     return $ret_str;
@@ -611,6 +626,26 @@ function show_assignment($title, $resource_id, $assignment_id) {
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
     return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$exlink."</td></tr>";
+}
+
+function show_chat($title, $resource_id, $chat_id) {
+    global $course_id, $course_code, $urlServer, $is_editor;
+    $row = Database::get()->querySingle("SELECT * FROM conference WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
+    if ($row) {
+        $visibility = 1;
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id'>";
+        $chatlink = $link . "$title</a>";
+        $imagelink = 'fa-exchange';
+    } else {
+        if (!$is_editor) {
+            return '';
+        }
+        $chatlink = q($title);
+        $imagelink = "fa-times";
+        $visibility = 0;
+    }
+    $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
+    return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$chatlink."</td></tr>";
 }
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {

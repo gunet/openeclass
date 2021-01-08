@@ -84,6 +84,10 @@ if (isset($_POST['submit'])) {
                 if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
                     insert_assignments($id);
                 }
+                //save chats
+                if ($is_editor || visible_module(MODULE_ID_CHAT)) {
+                    insert_chats($id);
+                }
             }
         } else {
             Session::Messages($langWallMessageEmpty);
@@ -196,6 +200,11 @@ if (isset($_POST['submit'])) {
             if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
                 insert_assignments($id);
             }
+
+            //save chats
+            if ($is_editor || visible_module(MODULE_ID_CHAT)) {
+                insert_chats($id);
+            }
             
             Session::Messages($langWallPostSaved, 'alert-success');
             decide_wall_redirect();
@@ -307,6 +316,16 @@ if (isset($_GET['showPost'])) { //show comments case
             $assignments_div = '';
             $assignments_li = '';
         }
+
+        if ($is_editor || visible_module(MODULE_ID_CHAT)) {
+            $chats_div = '<div class="form-group tab-pane fade" id="chats_div" style="padding:10px">
+                              '.list_chats($id).'
+                          </div>';
+            $chats_li = '<li><a data-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
+        } else {
+            $chats_div = '';
+            $chats_li = '';
+        }
         
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
@@ -327,6 +346,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$links_li.'
                                         '.$exercises_li.'
                                         '.$assignments_li.'
+                                        '.$chats_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -339,6 +359,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$links_div.'
                                         '.$exercises_div.'
                                         '.$assignments_div.'
+                                        '.$chats_div.'
                                     </div>
                                 </div>
                             </div>
