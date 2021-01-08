@@ -74,12 +74,10 @@ if (isset($_SESSION['uid'])) {
 }
 
 if (isset($_GET['logout']) and $uid) {
+    $cas = ($session->getLoginMethod() == 'cas')? get_auth_settings(7): false;
     Database::get()->query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
                 VALUES (?d, ?s, " .DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
-    if (isset($_SESSION['cas_uname'])) { // if we are CAS user
-        define('CAS', true);
-    }
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
@@ -93,12 +91,9 @@ if (isset($_GET['logout']) and $uid) {
 
     session_destroy();
     $uid = 0;
-    if (defined('CAS')) {
-        $cas = get_auth_settings(7);
-        if (isset($cas['cas_ssout']) and intval($cas['cas_ssout']) === 1) {
-            phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
-            phpCAS::logoutWithRedirectService($urlServer);
-        }
+    if ($cas and isset($cas['cas_ssout']) and intval($cas['cas_ssout']) === 1) {
+        phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
+        phpCAS::logoutWithRedirectService($urlServer);
     }
 }
 
