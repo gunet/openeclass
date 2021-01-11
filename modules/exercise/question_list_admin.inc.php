@@ -23,7 +23,6 @@
  */
 $exerciseId = $_GET['exerciseId'];
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
     if (isset($_POST['toReorder'])) {
         reorder_table('exercise_with_questions', 'exercise_id', $exerciseId, $_POST['toReorder'],
             isset($_POST['prevReorder'])? $_POST['prevReorder']: null,'id','q_position');
@@ -456,7 +455,10 @@ if ($nbrQuestions) {
         $objQuestionTmp = new Question();
         if (!is_array($id)) {
             $objQuestionTmp->read($id);
-            $ewq_id = $id;
+            $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions 
+                                        WHERE exercise_id = ?d 
+                                      AND question_id = ?d", $exerciseId, $id);
+            $ewq_id = $q->id;
         } else {
             $next_limit = $limit+1;
             $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions 
