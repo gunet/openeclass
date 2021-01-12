@@ -245,7 +245,7 @@ function display_exercise($exercise_id) {
 
     global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore, $langQuestionsManagement,
-           $langScore, $course_code, $langBack, $langModify, $langExerciseExecute,
+           $langScore, $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2,
            $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions;
 
 
@@ -328,6 +328,15 @@ function display_exercise($exercise_id) {
                 $category = $qid[$number];
                 $tool_content .= "<tr><td>";
                 $tool_content .= "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomCategoryQuestions '" . $question->selectCategoryName($category) . "'</em>";
+                $tool_content .= "</td></tr>";
+            }  else if ($qid['criteria'] == 'difficultycategory') {
+                next($qid);
+                $number = key($qid);
+                $difficulty = $qid[$number][0];
+                $category = $qid[$number][1];
+                $tool_content .= "<tr><td>";
+                $tool_content .= "<span class='fa fa-random' style='margin-right:10px; color: grey'></span>
+                    <em>$number $langFromRandomDifficultyQuestions '" . $question->selectDifficultyLegend($difficulty) . "' $langFrom2 '" . $question->selectCategoryName($category) . "'</em>";
                 $tool_content .= "</td></tr>";
             }
         } else {
