@@ -81,8 +81,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
             Session::Messages($langQuestionNotFound);
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
         }
-
-        if (isset($_GET['modifyAnswers'])) {           
+        if (isset($_GET['modifyAnswers'])) {
             //clone and redirect to edit
             if (isset($_GET['clone'])) {
                 // if user comes from an exercise page
@@ -100,7 +99,9 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
                     $objQuestion->read($new_question_id);
                     // copies answers from the old question to the new
                     $objAnswer = new Answer($question_id);
-                    $objAnswer->duplicate($new_question_id);                
+                    $objAnswer->duplicate($new_question_id);
+                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyQuestion=$new_question_id&exerciseId=$exerciseId");
+                    exit();
                 // if user comes from question pool
                 } else {
                     $new_question_id = $objQuestion->duplicate();
