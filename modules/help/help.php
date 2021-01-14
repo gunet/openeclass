@@ -28,14 +28,14 @@ if (isset($_GET['language']) and $_GET['language'] == 'el') {
 
 $siteName = '';
 include "../../lang/$language/common.inc.php";
-include '../../include/main_lib.php';
+include '../../include/constants.php';
 
 $topic = $subtopic = '';
 if (isset($_GET['topic'])) {
-    $topic = q($_GET['topic']);
+    $topic = htmlspecialchars($_GET['topic'], ENT_QUOTES);
 }
 if (isset($_GET['subtopic'])) {
-    $subtopic = '/' . q($_GET['subtopic']);
+    $subtopic = '/' . htmlspecialchars($_GET['subtopic'], ENT_QUOTES);
 }
 $user_status = (isset($_SESSION['status']) and  $_SESSION['status'] == USER_TEACHER)? 'teacher' : 'student';
 $link = "https://docs.openeclass.org/$language/$user_status/$topic$subtopic?do=export_xhtml";
