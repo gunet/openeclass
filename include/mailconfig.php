@@ -118,7 +118,7 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $langPreviousStep, $langNextStep, $tool_content, $langEmailBounces, $langSave;
+        $tool_content, $langEmailBounces, $langSave;
 
     // True if running initial install
     $install = isset($GLOBALS['input_fields']);
@@ -230,12 +230,15 @@ function mail_settings_form() {
                                 <input type='text' class='form-control' name='sendmail_command' id='formSendmailCommand' value='".q(get_var('sendmail_command', ini_get('sendmail_path')))."'>
                            </div>
                         </div>
-                        <hr>
-                        <div class='form-group'>
-                            <div class='col-sm-12'>
-                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
-                            </div>
-                        </div>";
+                        <hr>";
+                        if (!$install) { // not to be displayed in install screen
+                            $tool_content .= "
+                            <div class='form-group'>
+                                <div class='col-sm-12'>
+                                    <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                                </div>
+                            </div>";
+                        }
     if (!$install) {
         $tool_content .= "
                     </fieldset>

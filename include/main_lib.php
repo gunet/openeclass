@@ -30,7 +30,7 @@ if (isset($webDir)) { // needed for avoiding 'notices' in some files
 }
 require_once 'constants.php';
 require_once 'lib/session.class.php';
-require_once 'include/lib/file_cache.class.php';
+require_once 'lib/file_cache.class.php';
 
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below
