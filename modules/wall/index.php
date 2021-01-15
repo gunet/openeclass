@@ -92,6 +92,10 @@ if (isset($_POST['submit'])) {
                 if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE)) {
                     insert_polls($id);
                 }
+                //save forums
+                if ($is_editor || visible_module(MODULE_ID_FORUM)) {
+                    insert_forum($id);
+                }
             }
         } else {
             Session::Messages($langWallMessageEmpty);
@@ -213,6 +217,11 @@ if (isset($_POST['submit'])) {
             //save polls
             if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE)) {
                 insert_polls($id);
+            }
+
+            //save forums
+            if ($is_editor || visible_module(MODULE_ID_FORUM)) {
+                insert_forum($id);
             }
             
             Session::Messages($langWallPostSaved, 'alert-success');
@@ -345,6 +354,16 @@ if (isset($_GET['showPost'])) { //show comments case
             $polls_div = '';
             $polls_li = '';
         }
+
+        if ($is_editor || visible_module(MODULE_ID_FORUM)) {
+            $forums_div = '<div class="form-group tab-pane fade" id="forums_div" style="padding:10px">
+                              '.list_forums($id).'
+                          </div>';
+            $forums_li = '<li><a data-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+        } else {
+            $forums_div = '';
+            $forums_li = '';
+        }
         
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
@@ -367,6 +386,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$assignments_li.'
                                         '.$chats_li.'
                                         '.$polls_li.'
+                                        '.$forums_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -381,6 +401,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$assignments_div.'
                                         '.$chats_div.'
                                         '.$polls_div.'
+                                        '.$forums_div.'
                                     </div>
                                 </div>
                             </div>
