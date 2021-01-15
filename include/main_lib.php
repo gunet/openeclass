@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.10-pre1');
+define('ECLASS_VERSION', '3.10');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -30,7 +30,7 @@ if (isset($webDir)) { // needed for avoiding 'notices' in some files
 }
 require_once 'constants.php';
 require_once 'lib/session.class.php';
-require_once 'include/lib/file_cache.class.php';
+require_once 'lib/file_cache.class.php';
 
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below

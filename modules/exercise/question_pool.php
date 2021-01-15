@@ -304,16 +304,16 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
     }
     //When user selected orphan questions
     if (isset($exerciseId) && $exerciseId == -1) {
-        $result_query = "SELECT exercise_question.id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+        $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                         ON question_id = exercise_question.id WHERE course_id = ?d AND exercise_id IS NULL$extraSql ORDER BY question";
     } else { // if user selected all questions
         if (isset($fromExercise)) { // if is coming to question pool from an exercise
-            $result_query = "SELECT exercise_question.id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+            $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = exercise_question.id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            GROUP BY exercise_question.id, question, type ORDER BY question";
+                            GROUP BY exercise_question.id, question, `type` ORDER BY question";
         } else {
-            $result_query = "SELECT exercise_question.id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+            $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = exercise_question.id WHERE course_id = ?d$extraSql
                             GROUP BY exercise_question.id, question, type ORDER BY question";
         }

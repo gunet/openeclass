@@ -91,8 +91,8 @@ foreach ($result as $row) {
 
     $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
         record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
-        total_score, total_weighting, eurid
-        FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d AND attempt_status = " . ATTEMPT_COMPLETED . " 
+        total_score, total_weighting, eurid, attempt_status
+        FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d  
         ORDER BY record_start_date DESC", $sid, $exerciseId);
 
     foreach ($result2 as $row2) {
@@ -102,11 +102,16 @@ foreach ($result as $row) {
             $duration = format_time_duration($row2->time_duration);
         }
         $exerciseRange = $objExercise->selectRange();
+        $total_score = '';
         if ($exerciseRange > 0) {
-            $total_score = $objExercise->canonicalize_exercise_score($row2->total_score, $row2->total_weighting);
+            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
+                $total_score = $objExercise->canonicalize_exercise_score($row2->total_score, $row2->total_weighting);
+            }
             $total_weighting = $exerciseRange;
         } else {
-            $total_score = $row2->total_score;
+            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
+                $total_score = $row2->total_score;
+            }
             $total_weighting = $row2->total_weighting;
         }
 

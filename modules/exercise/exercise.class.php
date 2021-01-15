@@ -302,10 +302,8 @@ if (!class_exists('Exercise')) {
 
 
         /**
-         * returns the array with the question ID list
-         *
-         * @author - Olivier Brouckaert
-         * @return - array - question ID list
+         * @brief get questions (with dynamic criteria or not)
+         * @return - array with question is
          */
         function selectQuestions() {
 
@@ -328,6 +326,15 @@ if (!class_exists('Exercise')) {
                         if (count($random_questions) > 0) { // found?
                             $q = array_merge($q, $random_questions);
                         }
+                    } else if ($qid['criteria'] == 'difficultycategory') {
+                        next($qid);
+                        $number = key($qid);
+                        $difficulty = $qid[$number][0];
+                        $category = $qid[$number][1];
+                        $random_questions = $this->selectQuestionListWithDifficultyAndCategory($number, $difficulty, $category);
+                        if (count($random_questions) > 0) { // found?
+                            $q = array_merge($q, $random_questions);
+                        }
                     }
                 } else { // `normal` questions
                     $q[] = $this->questionList[$id];
@@ -343,7 +350,7 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * @brief get questions with difficulty
+         * @brief get random questions with difficulty
          * $param $number
          * @param $difficulty
          * @return array
@@ -370,7 +377,7 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * @brief get questions with category
+         * @brief get random questions with category
          * @param $number
          * @param $category
          * @return array
@@ -396,6 +403,35 @@ if (!class_exists('Exercise')) {
             return $questions;
         }
 
+
+        /**
+         * $brieg get random questions with difficulty and category
+         * @param $number
+         * @param $difficulty
+         * @param $category
+         * @return array
+         */
+        function selectQuestionListWithDifficultyAndCategory($number, $difficulty, $category) {
+
+            global $course_id;
+            $questions = array();
+
+            $result = Database::get()->queryArray("SELECT id
+                            FROM `exercise_question`
+                                WHERE category = ?d
+                                AND difficulty = ?d 
+                                AND course_id = ?d",
+                $category, $difficulty, $course_id);
+
+            if (count($result) > 0) { // if questions found
+                foreach ($result as $row) {
+                    $questions[] = $row->id;
+                }
+                shuffle($questions);
+                $questions = array_slice($questions, 0, $number);
+            }
+            return $questions;
+        }
 
 
         /**
