@@ -28,12 +28,13 @@ require_once 'modules/wall/insert_link.php';
 require_once 'modules/wall/insert_exercise.php';
 require_once 'modules/wall/insert_work.php';
 require_once 'modules/wall/insert_chat.php';
+require_once 'modules/wall/insert_poll.php';
 require_once 'include/log.class.php';
 
 function show_post_form() {
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
            $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink,
-           $langLinks, $langExercises, $langWorks, $langChat, $langSubmit;
+           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langSubmit;
 
     if (allow_to_post($course_id, $uid, $is_editor)) {
 
@@ -114,6 +115,16 @@ function show_post_form() {
             $chats_li = '';
         }
 
+        if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE)) {
+            $polls_div = '<div class="form-group tab-pane fade" id="polls_div" style="padding:10px">
+                              '.list_polls().'
+                          </div>';
+            $polls_li = '<li><a data-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
+        } else {
+            $polls_div = '';
+            $polls_li = '';
+        }
+
         $head_content .= '<script>
                               function expand_form() {
                                   $("#resources_panel").collapse(\'show\');
@@ -140,6 +151,7 @@ function show_post_form() {
                                         '.$exercises_li.'
                                         '.$assignments_li.'
                                         '.$chats_li.'
+                                        '.$polls_li.'
                                     </ul>
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
@@ -153,6 +165,7 @@ function show_post_form() {
                                         '.$exercises_div.'
                                         '.$assignments_div.'
                                         '.$chats_div.'
+                                        '.$polls_div.'
                                     </div>
                                 </div>
                             </div>

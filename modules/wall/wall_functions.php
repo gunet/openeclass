@@ -449,6 +449,18 @@ function insert_chats($post_id) {
     }
 }
 
+function insert_polls($post_id) {
+    global $course_id;
+
+    if (isset($_POST['poll']) and count($_POST['poll'] > 0)) {
+        foreach ($_POST['poll'] as $poll_id) {
+            $row = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
+            Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                $post_id, 'poll', $row->name, $poll_id);
+        }
+    }
+}
+
 function show_resources($post_id) {
     global $langWallAttachedResources;
     
@@ -489,6 +501,9 @@ function show_resource($info) {
             break;
         case 'chat' :
             $ret_str = show_chat($info->title, $info->id, $info->res_id);
+            break;
+        case 'poll' :
+            $ret_str = show_poll($info->title, $info->id, $info->res_id);
             break;
     }
     return $ret_str;
@@ -646,6 +661,26 @@ function show_chat($title, $resource_id, $chat_id) {
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
     return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$chatlink."</td></tr>";
+}
+
+function show_poll($title, $resource_id, $poll_id) {
+    global $course_id, $course_code, $urlServer, $is_editor;
+    $row = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
+    if ($row) {
+        $visibility = 1;
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1'>";
+        $polllink = $link . "$title</a>";
+        $imagelink = 'fa-question-circle';
+    } else {
+        if (!$is_editor) {
+            return '';
+        }
+        $polllink = q($title);
+        $imagelink = "fa-times";
+        $visibility = 0;
+    }
+    $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
+    return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$polllink."</td></tr>";
 }
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {
