@@ -49,20 +49,30 @@ if (isset($_GET['topic'])) {
 }
 
 $unit = isset($_GET['unit'])? intval($_GET['unit']): null;
+$res_type = isset($_GET['res_type']);
 
 $myrow = Database::get()->querySingle("SELECT id, name FROM forum WHERE id = ?d AND course_id = ?d", $forum, $course_id);
 
 $forum_name = $myrow->name;
 $forum_id = $myrow->id;
-$forumUrl = $unit?
-    "view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum_id&amp;unit=$unit":
-    "viewforum.php?course=$course_code&amp;forum=$forum_id";
+$forumUrl = "viewforum.php?course=$course_code&amp;forum=$forum_id";
+if ($unit) {
+    $forumUrl = "view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum_id&amp;unit=$unit";
+} else if ($res_type) {
+    $forumUrl = "view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum_id";
+}
 
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
 $pageName = $langNewTopic;
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
+if (!add_units_navigation(TRUE)) {
+    if (!$res_type) {
+        $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
+    } else {
+        $navigation[] = array('url' => "../wall/index.php?course=$course_code", 'name' => $langWall);
+    }
+}
 $navigation[] = array('url' => $forumUrl, 'name' => q($forum_name));
 
 if (!does_exists($forum_id, "forum")) {
@@ -74,9 +84,7 @@ if (!does_exists($forum_id, "forum")) {
 if (!isset($_POST['submit'])) {
     $dynbar = array(
         array('title' => $langBack,
-            'url' => $unit?
-                "view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum_id&amp;unit=$unit":
-                "viewforum.php?course=$course_code&forum=$forum_id",
+            'url' => $forumUrl,
             'icon' => 'fa-reply',
             'level' => 'primary-label'
              )
@@ -153,13 +161,20 @@ if (isset($_POST['submit'])) {
     notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $time);
 
     Session::Messages($langTopicStored, 'alert-success');
-    $redirectUrl = $unit?
-        "modules/units/view.php?course=$course_code&res_type=forum&forum=$forum_id&unit=$unit":
-        "modules/forum/viewforum.php?course=$course_code&forum=$forum_id";
+    $redirectUrl = "modules/forum/viewforum.php?course=$course_code&forum=$forum_id";
+    if ($unit) {
+        $redirectUrl = "modules/units/view.php?course=$course_code&res_type=forum&forum=$forum_id&unit=$unit";
+    } else if ($res_type) {
+        $redirectUrl = "modules/units/view.php?course=$course_code&res_type=forum&forum=$forum_id";
+    }
     redirect_to_home_page($redirectUrl);
 } else {
-    $action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id" .
-        ($unit? "&amp;unit=$unit&amp;res_type=forum_new_topic": '');
+    $action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id";
+    if ($unit) {
+        $action .= "&amp;unit=$unit&amp;res_type=forum_new_topic";
+    } else if ($res_type) {
+        $action .= "&amp;res_type=forum_new_topic";
+    }
     $tool_content .= "
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>

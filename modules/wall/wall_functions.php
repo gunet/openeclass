@@ -461,6 +461,27 @@ function insert_polls($post_id) {
     }
 }
 
+function insert_forum($post_id) {
+    global $course_id;
+
+    if (isset($_POST['forum']) and count($_POST['forum'] > 0)) {
+        foreach ($_POST['forum'] as $for_id) {
+            $ids = explode(':', $for_id);
+            if (count($ids) == 2) {
+                list($forum_id, $topic_id) = $ids;
+                $topic = Database::get()->querySingle("SELECT * FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic_id, $forum_id);
+                Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                    $post_id, 'topic', $topic->title, $topic->id);
+            } else {
+                $forum_id = $ids[0];
+                $forum = Database::get()->querySingle("SELECT * FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
+                Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                    $post_id, 'forum', $forum->name, $forum->id);
+            }
+        }
+    }
+}
+
 function show_resources($post_id) {
     global $langWallAttachedResources;
     
@@ -504,6 +525,10 @@ function show_resource($info) {
             break;
         case 'poll' :
             $ret_str = show_poll($info->title, $info->id, $info->res_id);
+            break;
+        case 'forum':
+        case 'topic':
+            $ret_str = show_forum($info->type, $info->title, $info->id, $info->res_id);
             break;
     }
     return $ret_str;
@@ -560,7 +585,7 @@ function show_video($table, $title, $resource_id, $video_id) {
         if (!$is_editor) {
             return '';
         }
-        $videolink = $title;
+        $videolink = q($title);
         $imagelink = "fa-times";
     }
 
@@ -609,7 +634,7 @@ function show_exercise($title, $resource_id, $exercise_id) {
         } else {
             $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id'>";
         }
-        $exlink = $link . "$title</a>";
+        $exlink = $link.q($title)."</a>";
         $imagelink = 'fa-pencil-square-o';
     } else {
         if (!$is_editor) {
@@ -629,7 +654,7 @@ function show_assignment($title, $resource_id, $assignment_id) {
     if ($row) {
         $visibility = 1;
         $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$assignment_id'>";
-        $exlink = $link . "$title</a>";
+        $exlink = $link.q($title)."</a>";
         $imagelink = 'fa-flask';
     } else {
         if (!$is_editor) {
@@ -649,7 +674,7 @@ function show_chat($title, $resource_id, $chat_id) {
     if ($row) {
         $visibility = 1;
         $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id'>";
-        $chatlink = $link . "$title</a>";
+        $chatlink = $link.q($title)."</a>";
         $imagelink = 'fa-exchange';
     } else {
         if (!$is_editor) {
@@ -669,7 +694,7 @@ function show_poll($title, $resource_id, $poll_id) {
     if ($row) {
         $visibility = 1;
         $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1'>";
-        $polllink = $link . "$title</a>";
+        $polllink = $link.q($title)."</a>";
         $imagelink = 'fa-question-circle';
     } else {
         if (!$is_editor) {
@@ -681,6 +706,35 @@ function show_poll($title, $resource_id, $poll_id) {
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
     return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$polllink."</td></tr>";
+}
+
+function show_forum($type, $title, $resource_id, $ft_id) {
+    global $is_editor, $course_id, $course_code, $urlServer;
+    $title = q($title);
+    if ($type == 'forum') {
+        $visibility = 1;
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id'>";
+        $forumlink = $link.q($title)."</a>";
+        $imagelink = 'fa-comments';
+    } else {
+        $row = Database::get()->querySingle("SELECT forum_id FROM forum_topic WHERE id = ?d", $ft_id);
+        if ($row) {
+            $visibility = 1;
+            $forum_id = $row->forum_id;
+            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id'>";
+            $forumlink = $link.q($title)."</a>";
+            $imagelink = 'fa-comments';
+        } else {
+            if (!$is_editor) {
+                return '';
+            }
+            $forumlink = q($title);
+            $imagelink = "fa-times";
+            $visibility = 0;
+        }
+    }
+    $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
+    return "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>".$forumlink."</td></tr>";
 }
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {

@@ -370,11 +370,11 @@ function triggerForumAnalytics ($course_id, $uid, $eventName) {
  * @param $file_id
  */
 function send_forum_post_file($file_id) {
-    global $webDir, $course_code, $unit, $is_editor;
+    global $webDir, $course_code, $unit, $res_type, $is_editor;
 
     $info = Database::get()->querySingle("SELECT topic_filepath, topic_filename FROM forum_post WHERE id = ?d", $file_id);
     // security check
-    if (!$info or !(visible_module(MODULE_ID_FORUM) or $unit or $is_editor)) {
+    if (!$info or !(visible_module(MODULE_ID_FORUM) or $unit or $res_type or $is_editor)) {
         return false;
     }
     $actual_filename = $webDir . "/courses/" . $course_code . "/forum/" . $info->topic_filepath;
