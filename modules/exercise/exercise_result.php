@@ -118,7 +118,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
     $head_content .= "<script type='text/javascript'>
             $(document).ready(function(){
                     function save_grade(elem){
-                        var grade = parseFloat($(elem).val());
+                        var grade = parseFloat($(elem).val().replace(',', '.'));
                         var element_name = $(elem).attr('name');
                         var questionId = parseInt(element_name.substring(14,element_name.length - 1));
                         var questionMaxGrade = parseFloat($(elem).next().val());
