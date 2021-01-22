@@ -989,6 +989,17 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array('question_id' => $question_map,
                 'eurid' => $eurid_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
+        // rename question images
+        foreach (glob("$courseDir/image/quiz-*") as $imagefile) {
+            if (preg_match('/quiz-(\d+)$/', $imagefile, $matches)) {
+                $oldid = $matches[1];
+                if (isset($question_map[$oldid])) {
+                    $newid = $question_map[$oldid];
+                    $newimagefile = str_replace("quiz-$oldid", "quiz-$newid", $imagefile);
+                    rename($imagefile, $newimagefile);
+                }
+            }
+        }
 
         $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
                         WHERE module.startAsset_id = asset.asset_id
