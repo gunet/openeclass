@@ -192,8 +192,6 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
                 if (!is_null($data[$newField])) {
                     if (isset($data[$newField]) && isset($map[$data[$newField]])) { // map needs reverse resolution
                         $data[$newField] = $map[$data[$newField]];
-                    } else {
-                        continue 2;
                     }
                 }
             }
@@ -973,6 +971,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'return_mapping' => 'id'
         ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'exercise_with_questions', array(
+            'delete' => array('id'),
             'map' => array('question_id' => $question_map, 'exercise_id' => $exercise_map),
             'insert_field' => 'q_position',
             'insert_field_key' => 'question_id',
