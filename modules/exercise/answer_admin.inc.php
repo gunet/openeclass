@@ -158,19 +158,29 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
 
-        // merge arrays $_POST['options'] + $_POST['match'] and
-        // create corresponding selection and weighting arrays
-        $data = $data_sel = $data_weighting = [];
-        $questionWeighting = 0;
         for ($i = 1; $i <= $_POST['nbrOptions']; $i++) {
-            $data[$i] = trim($_POST['option'][$i]);
-            $data_sel[$i] = '';
-            $data_weighting[$i] = '';
+            $option[$i] = trim($_POST['option'][$i]);
         }
-        for ($j = $i; $j < $i + $_POST['nbrMatches']; $j++) {
-            $data[$j] = trim($_POST['match'][$j]);
-            $data_sel[$j] = $_POST['sel'][$j];
-            $questionWeighting += $data_weighting[$j] = $_POST['weighting'][$i];
+
+        $data_sel = $data_weighting = array();
+        $questionWeighting = 0;
+        // merge arrays $_POST['options'] + $_POST['match']
+        $temp_data = array_merge($option, $_POST['match']);
+
+        for ($k = 0; $k < count($temp_data); $k++) {
+            // start keys of previous array from index 1
+            $data[$k+1] = $temp_data[$k];
+            if (in_array($temp_data[$k], $_POST['match'])) {
+                $index = key($_POST['match']);
+                // update keys of array $_POST['sel']
+                $data_sel[$k+1] = $_POST['sel'][$index];
+                // update keys of array $_POST['weighting']
+                $data_weighting[$k+1] = abs(fix_float($_POST['weighting'][$index]));
+                next($_POST['match']);
+                $questionWeighting += $data_weighting[$k+1];
+            } else {
+                $data_sel[$k+1] = $data_weighting[$k+1] = '';
+            }
         }
 
         // update object Answer with new data
