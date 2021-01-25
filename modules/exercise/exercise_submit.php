@@ -487,13 +487,12 @@ if (isset($_POST['formSent'])) {
             $totalScore = 0.00;
         }
 
-        if ($objExercise->isRandom()) {
+        if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
                                           SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
         } else {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }
-
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
         // record results of exercise
