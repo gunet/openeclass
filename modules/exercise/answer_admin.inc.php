@@ -170,7 +170,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         for ($j = $i; $j < $i + $_POST['nbrMatches']; $j++) {
             $data[$j] = trim($_POST['match'][$j]);
             $data_sel[$j] = $_POST['sel'][$j];
-            $questionWeighting += $data_weighting[$j] = $_POST['weighting'][$j];
+            $questionWeighting += $data_weighting[$j] = abs(fix_float($_POST['weighting'][$j]));
         }
 
         // update object Answer with new data
