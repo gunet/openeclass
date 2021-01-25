@@ -157,17 +157,47 @@ $tool_content .= "
 
 foreach($questionList as $id) {
     $objQuestionTmp = new Question();
-    $objQuestionTmp->read($id);    
-    $tool_content .= "
-                <tr>
-                    <td>".q_math($objQuestionTmp->selectTitle())."</th>
-                    <td>
-                        <div class='progress'>
-                            <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='width: ".$objQuestionTmp->successRate($exerciseId)."%;'>
-                              ".$objQuestionTmp->successRate($exerciseId)."%
-                            </div>
-                        </div></td>                   
-                </tr>";         
+    if (!is_array($id)) {
+        $objQuestionTmp->read($id);
+    }
+    if (is_array($id)) { // placeholder for random questions (if any)
+        if ($id['criteria'] == 'difficulty') {
+            next($id);
+            $number = key($id);
+            $difficulty = $id[$number];
+            $tool_content .= "<tr><td>";
+            $tool_content .= "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) . "'</em>";
+            $tool_content .= "</td></tr>";
+        } else if ($id['criteria'] == 'category') {
+            next($id);
+            $number = key($id);
+            $category = $id[$number];
+            $tool_content .= "<tr><td>";
+            $tool_content .= "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomCategoryQuestions '" . $objQuestionTmp->selectCategoryName($category) . "'</em>";
+            $tool_content .= "</td></tr>";
+        }  else if ($id['criteria'] == 'difficultycategory') {
+            next($id);
+            $number = key($id);
+            $difficulty = $id[$number][0];
+            $category = $id[$number][1];
+            $tool_content .= "<tr><td>";
+            $tool_content .= "<span class='fa fa-random' style='margin-right:10px; color: grey'></span>
+                    <em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) . "' $langFrom2 '" . $objQuestionTmp->selectCategoryName($category) . "'</em>";
+            $tool_content .= "</td></tr>";
+        }
+    } else {
+        $tool_content .= "
+            <tr>
+                <td>".q_math($objQuestionTmp->selectTitle())."</td>
+                <td>
+                    <div class='progress'>
+                        <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='width: ".$objQuestionTmp->successRate($exerciseId)."%;'>
+                          ".$objQuestionTmp->successRate($exerciseId)."%
+                        </div>
+                    </div>
+                </td>                   
+            </tr>";
+    }
 }
                
 $tool_content .= "
