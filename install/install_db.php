@@ -2069,6 +2069,8 @@ $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();
 
+set_config('theme_options_id', $db->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
+
 // create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
 $db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
