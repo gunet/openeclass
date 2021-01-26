@@ -44,7 +44,7 @@ function bbb_session_form($session_id = 0) {
     global $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat;
     global $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote;
     global $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator;
-    global $langBBBMaxPartPerRoom;
+    global $langBBBMaxPartPerRoom, $langBBBHideParticipants;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -126,6 +126,7 @@ function bbb_session_form($session_id = 0) {
     $checked_lockSettingsDisablePublicChat = isset($options['lockSettingsDisablePublicChat']) ? 'checked' : '';
     $checked_lockSettingsDisableNote = isset($options['lockSettingsDisableNote']) ? 'checked' : '';
     $checked_lockSettingsHideUserList = isset($options['lockSettingsHideUserList']) ? 'checked' : '';
+    $checked_hideParticipants = isset($options['hideParticipants']) ? 'checked' : '';
 
     $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
@@ -384,7 +385,16 @@ function bbb_session_form($session_id = 0) {
                       </label>
                     </div>
             </div>
-        </div>";
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'>$langBBBHideParticipants
+                      </label>
+                    </div>
+            </div>
+        </div> ";
 
         $tool_content .= "</div>
         $submit_id
@@ -663,9 +673,10 @@ function bbb_session_details() {
         $langNewBBBSessionStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
-        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd, $langBBBNotServerAvailableTeacherCovid,
-        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langDate, $langBBBNoServerForRecording;
-
+        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
+        $langBBBNotServerAvailableTeacherCovid, $langBBBNotServerAvailableTeacher,
+        $langBBBImportRecordings, $langAllUsers, $langDate, $langBBBNoServerForRecording,
+        $langBBBHideParticipants;
 
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
         if ($is_editor) {
@@ -700,25 +711,30 @@ function bbb_session_details() {
         $i = 0;
 
         foreach ($result as $row) {
-            $participants = '';
-            // Get participants
-            $r_group = explode(",",$row->participants);
-            foreach ($r_group as $participant_uid) {
-                if ($participants) {
-                    $participants .= ', ';
-                }
-                $participant_uid = str_replace("'", '', $participant_uid);
-                if (preg_match('/^_/', $participant_uid)) {
-                    $participants .= gid_to_name(str_replace("_", '', $participant_uid));
-                } else {
-                    if ($participant_uid == 0) {
-                        $participants .= $langAllUsers;
+            $options = unserialize($row->options);
+            if ($is_editor or empty($options['hideParticipants'])) {
+                $participants = '';
+                // Get participants
+                $r_group = explode(",",$row->participants);
+                foreach ($r_group as $participant_uid) {
+                    if ($participants) {
+                        $participants .= ', ';
+                    }
+                    $participant_uid = str_replace("'", '', $participant_uid);
+                    if (preg_match('/^_/', $participant_uid)) {
+                        $participants .= gid_to_name(str_replace("_", '', $participant_uid));
                     } else {
-                        $participants .= uid_to_name($participant_uid, 'fullname');
+                        if ($participant_uid == 0) {
+                            $participants .= $langAllUsers;
+                        } else {
+                            $participants .= uid_to_name($participant_uid, 'fullname');
+                        }
                     }
                 }
+                $participants = "<span class='trunk8'>$participants</span>";
+            } else {
+                $participants = "<span class='trunk8'>$langBBBHideParticipants</span>";
             }
-            $participants = "<span class='trunk8'>$participants</span>";
             $id = $row->id;
             $title = $row->title;
             $start_date = $row->start_date;

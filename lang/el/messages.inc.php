@@ -5011,7 +5011,8 @@ $langBBBlockSettingsDisableMic = "Να μην επιτρέπεται η χρήσ
 $langBBBlockSettingsDisablePrivateChat = "Απενεργοποίηση ιδιωτικών συνομιλιών μεταξύ φοιτητών";
 $langBBBlockSettingsDisablePublicChat = "Απενεργοποίηση δημόσιων συνομιλιών από τους φοιτητές";
 $langBBBlockSettingsDisableNote = "Απενεργοποίηση κοινόχρηστων σημειώσεων από τους φοιτητές";
-$langBBBlockSettingsHideUserList = "Απόκρυψη λίστας χρηστών στους φοιτητές";
+$langBBBlockSettingsHideUserList = "Απόκρυψη λίστας χρηστών στους φοιτητές (μέσα στο BBB)";
+$langBBBHideParticipants = "Απόκρυψη συμμετεχόντων";
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
 $langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";
