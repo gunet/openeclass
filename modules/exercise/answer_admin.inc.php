@@ -98,7 +98,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $objAnswer->save();
                 // set the total weighting of the question
                 $objQuestion->updateWeighting($questionWeighting);
-                $objQuestion->save($exerciseId);
+                if (isset($exerciseId)) {
+                    $objQuestion->save($exerciseId);
+                } else {
+                    $objQuestion->save();
+                }
             }
         }
 
@@ -116,6 +120,8 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $objQuestion->updateWeighting($questionWeighting);
             if (isset($exerciseId)) {
                 $objQuestion->save($exerciseId);
+            } else {
+                $objQuestion->save();
             }
             $blanksDefined = true;
         }
@@ -192,7 +198,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         $objAnswer->save();
         // update object question
         $objQuestion->updateWeighting($questionWeighting);
-        $objQuestion->save($exerciseId);
+        if (isset($exerciseId)) {
+            $objQuestion->save($exerciseId);
+        } else {
+            $objQuestion->save();
+        }
 
     } elseif ($answerType == TRUE_FALSE) {
         $questionWeighting = $nbrGoodAnswers = 0;
@@ -230,7 +240,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $objAnswer->save();
                 // sets the total weighting of the question
                 $objQuestion->updateWeighting($questionWeighting);
-                $objQuestion->save($exerciseId);
+                if (isset($exerciseId)) {
+                    $objQuestion->save($exerciseId);
+                } else {
+                    $objQuestion->save();
+                }
             }
         }
     }
