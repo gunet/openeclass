@@ -85,13 +85,13 @@ if ($data['userdata']) {
         $data['action_bar_blog_portfolio'] =
             action_bar(array(
                 array('title' => $langUserBlog,
-                    'url' => "../../modules/blog/index.php?user_id=$uid&token=" . token_generate("personal_blog" . $uid) . "",
+                    'url' => "../../modules/blog/index.php?user_id=$uid&token=" . token_generate("personal_blog" . $id) . "",
                     'icon' => 'fa-columns',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success',
                     'show' => get_config('personal_blog')),
                 array('title' => $langMyePortfolio,
-                    'url' => "../eportfolio/index.php?id=$uid&token=" . token_generate("eportfolio" . $uid) . "",
+                    'url' => "../eportfolio/index.php?id=$uid&token=" . token_generate("eportfolio" . $id) . "",
                     'icon' => 'fa-briefcase',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success',
