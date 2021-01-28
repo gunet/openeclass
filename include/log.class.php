@@ -90,7 +90,7 @@ class Log {
         global $tool_content, $modules,
             $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, $langConfig,
             $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
-            $langModifyInfo, $langAbuseReport;
+            $langModifyInfo, $langAbuseReport, $langIpAddress;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -122,7 +122,7 @@ class Log {
         // count logs
         $num_of_logs = Database::get()->querySingle("SELECT COUNT(*) AS count FROM log WHERE ts BETWEEN '$date_from' AND '$date_now' $q1 $q2 $q3 $q4")->count;
         // fetch logs
-        $sql = Database::get()->queryArray("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
+        $sql = Database::get()->queryArray("SELECT user_id, course_id, module_id, details, action_type, ts, ip FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
                                 ORDER BY ts DESC");
@@ -146,7 +146,11 @@ class Log {
             $tool_content .= "<table id = 'log_results_table' class='table-default'>";
             $tool_content .= "<thead>";
             // log header
-            $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
+            $tool_content .= "<tr class='list-header'>
+                            <th>$langDate</th>
+                            <th>$langUser</th>
+                            <th>$langIpAddress</th>
+                            ";
             if ($course_id == -1) {
                 $tool_content .= "<th>$langCourse</th>";
             }
@@ -166,6 +170,7 @@ class Log {
                 } else {
                     $tool_content .= "<td>" . display_user($r->user_id, false, false) . "</td>";
                 }
+                $tool_content .= "<td>" . $r->ip ."</td>";
                 if ($course_id == -1) { // all courses
                     $tool_content .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
                 }
