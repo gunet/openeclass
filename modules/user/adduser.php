@@ -83,7 +83,7 @@ if (isset($_GET['add'])) {
 
             $plainemailbody = html2text($emailbody);
 
-            send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody);
+            send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}",  $_SESSION['email'], '', $email, $emailsubject, $plainemailbody, $emailbody);
         }
     } else {
         Session::Messages($langAddError, "alert alert-warning");
