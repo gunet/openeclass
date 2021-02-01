@@ -461,10 +461,11 @@ function show_submission_details($id) {
         $links = implode('<br>',
             array_map(function ($item) {
                 global $course_code, $urlAppend;
+                $item_indirect = getIndirectReference($item->id);
                 if (isset($_GET['unit'])) {
-                    $url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$item->id";
+                    $url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$item_indirect";
                 } else {
-                    $url = $urlAppend . "modules/work/?course=$course_code&amp;get=$item->id";
+                    $url = $urlAppend . "modules/work/?course=$course_code&amp;get=$item_indirect";
                 }
                 return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $item->file_name, $item->file_name);
             }, Database::get()->queryArray('SELECT id, file_name FROM assignment_submit
