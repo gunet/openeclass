@@ -5886,9 +5886,13 @@ function send_file($id, $file_type) {
     if (isset($file_type)) {
         if ($file_type == 1) {
             $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-            // don't show file if assignment nonexistent or not active and user is student
-            if (!$info or !($is_editor or $info->active)) {
+            if (!$info) { // invalid (not found) assignment
                 return false;
+            }
+            if (!$is_editor) { // don't show file to users if not active and before submission date
+                if ((!$info->active) or (date("Y-m-d h:i:s") < $info->submission_date)) {
+                    return false;
+                }
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, $disposition, true);
         } elseif ($file_type == 2) { // download comments file

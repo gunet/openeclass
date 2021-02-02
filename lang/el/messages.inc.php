@@ -2887,6 +2887,7 @@ $langNoForums = "Δεν υπάρχουν διαθέσιμες περιοχές �
 $langNoForumsCat = "Δεν υπάρχουν περιοχές συζητήσεων σε αυτή την κατηγορία.";
 $langNewTopic = "Νέο θέμα";
 $langTopicStored = "Το θέμα δημιουργήθηκε";
+$langTopicDeleted = "Το θέμα διαγράφηκε";
 $langTopicData = "Στοιχεία θέματος";
 $langTopicAnswer = "Απάντηση στο θέμα συζήτησης";
 $langGroupDocumentsLink = "Έγγραφα ομάδας ";
@@ -5010,7 +5011,8 @@ $langBBBlockSettingsDisableMic = "Να μην επιτρέπεται η χρήσ
 $langBBBlockSettingsDisablePrivateChat = "Απενεργοποίηση ιδιωτικών συνομιλιών μεταξύ φοιτητών";
 $langBBBlockSettingsDisablePublicChat = "Απενεργοποίηση δημόσιων συνομιλιών από τους φοιτητές";
 $langBBBlockSettingsDisableNote = "Απενεργοποίηση κοινόχρηστων σημειώσεων από τους φοιτητές";
-$langBBBlockSettingsHideUserList = "Απόκρυψη λίστας χρηστών στους φοιτητές";
+$langBBBlockSettingsHideUserList = "Απόκρυψη λίστας χρηστών στους φοιτητές (μέσα στο BBB)";
+$langBBBHideParticipants = "Απόκρυψη συμμετεχόντων";
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
 $langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";

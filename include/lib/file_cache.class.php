@@ -26,6 +26,7 @@ class FileCache {
 
     private $resource;
     private $cachefile;
+    private $tempdir;
     private $prefix;
     private $ttl;
 
@@ -39,8 +40,12 @@ class FileCache {
         $this->resource = $resource;
         $webDir = isset($GLOBALS['webDir'])? $GLOBALS['webDir']: getcwd();
         $this->prefix = substr(md5($webDir), 0, 8);
-        $this->cachefile = (defined('CACHE_DIR')? CACHE_DIR: '/tmp') . '/' . $this->prefix . '_' . $resource . '.cache';
+        $this->tempdir = defined('CACHE_DIR')? CACHE_DIR: sys_get_temp_dir();
+        $this->cachefile = $this->tempdir . '/' . $this->prefix . '_' . $resource . '.cache';
         $this->ttl = $ttl;
+        if (php_sapi_name() == 'cli') {
+            $this->cachefile = null;
+        }
     }
 
     /**
@@ -65,7 +70,10 @@ class FileCache {
      * @return bool        - true on success false on failure
      */
     public function store($data) {
-        $tmpname = tempnam('/tmp', $this->resource);
+        if (!$this->cachefile) {
+            return false;
+        }
+        $tmpname = tempnam($this->tempdir, $this->resource);
         $fp = fopen($tmpname, 'w');
         if ($fp === false) return false;
         $r = fwrite($fp,serialize($data));

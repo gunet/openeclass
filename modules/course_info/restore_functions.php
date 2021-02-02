@@ -214,8 +214,6 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
                 if (!is_null($data[$newField])) {
                     if (isset($data[$newField]) && isset($map[$data[$newField]])) { // map needs reverse resolution
                         $data[$newField] = $map[$data[$newField]];
-                    } else {
-                        continue 2;
                     }
                 }
             }
@@ -995,6 +993,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'return_mapping' => 'id'
         ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'exercise_with_questions', array(
+            'delete' => array('id'),
             'map' => array('question_id' => $question_map, 'exercise_id' => $exercise_map),
             'insert_field' => 'q_position',
             'insert_field_key' => 'question_id',
@@ -1012,6 +1011,17 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array('question_id' => $question_map,
                 'eurid' => $eurid_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
+        // rename question images
+        foreach (glob("$courseDir/image/quiz-*") as $imagefile) {
+            if (preg_match('/quiz-(\d+)$/', $imagefile, $matches)) {
+                $oldid = $matches[1];
+                if (isset($question_map[$oldid])) {
+                    $newid = $question_map[$oldid];
+                    $newimagefile = str_replace("quiz-$oldid", "quiz-$newid", $imagefile);
+                    rename($imagefile, $newimagefile);
+                }
+            }
+        }
 
         $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
                         WHERE module.startAsset_id = asset.asset_id

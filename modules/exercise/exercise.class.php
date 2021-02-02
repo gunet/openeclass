@@ -1117,10 +1117,11 @@ if (!class_exists('Exercise')) {
             $ip_lock = $this->ip_lock;
             $password_lock = $this->password_lock;
             $assign_to_specific = $this->assign_to_specific;
-            $clone_id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, type, start_date,
+            $range = $this->range;
+            $clone_id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, `type`, `range`, start_date,
                                     end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock, assign_to_specific)
-                                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d)",
-                                    $clone_course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave,
+                                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d)",
+                                    $clone_course_id, $exercise, $description, $type, $range, $startDate, $endDate, $tempSave,
                                     $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock, $assign_to_specific)->lastInsertID;
             if ($assign_to_specific) {
                 Database::get()->query("INSERT INTO `exercise_to_specific` (user_id, group_id, exercise_id)
@@ -1131,20 +1132,25 @@ if (!class_exists('Exercise')) {
                 // copy questions and answers to new course question pool
                 $old_path = "courses/$course_code/image/quiz-";
                 $new_path = 'courses/' . course_id_to_code($clone_course_id) . '/image/quiz-';
-                Database::get()->queryFunc("SELECT question_id AS id, q_position FROM exercise_with_questions
+                Database::get()->queryFunc("SELECT question_id AS id, q_position, random_criteria FROM exercise_with_questions
                         WHERE exercise_id = ?d",
                     function ($question) use ($clone_id, $clone_course_id, $old_path, $new_path) {
-                        $question_clone_id = Database::get()->query("INSERT INTO exercise_question
-                            (course_id, question, description, weight, type, difficulty, category)
-                            SELECT ?d, question, description, weight, type, difficulty, 0
-                                FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
-                        Database::get()->query("INSERT INTO exercise_with_questions
-                            (question_id, exercise_id, q_position) VALUES (?d, ?d, ?d)", $question_clone_id, $clone_id, $question->q_position);
-                        Database::get()->query("INSERT INTO exercise_answer
-                            (question_id, answer, correct, comment, weight, r_position)
-                            SELECT ?d, answer, correct, comment, weight, r_position FROM exercise_answer
-                                WHERE question_id = ?d",
-                            $question_clone_id, $question->id);
+                        if (is_null($question->random_criteria)) {
+                            $question_clone_id = Database::get()->query("INSERT INTO exercise_question
+                                (course_id, question, description, weight, type, difficulty, category)
+                                SELECT ?d, question, description, weight, type, difficulty, 0
+                                    FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
+                            Database::get()->query("INSERT INTO exercise_with_questions
+                                (question_id, exercise_id, q_position, random_criteria) VALUES (?d, ?d, ?d, NULL)", $question_clone_id, $clone_id, $question->q_position);
+                            Database::get()->query("INSERT INTO exercise_answer
+                                (question_id, answer, correct, comment, weight, r_position)
+                                SELECT ?d, answer, correct, comment, weight, r_position FROM exercise_answer
+                                    WHERE question_id = ?d",
+                                $question_clone_id, $question->id);
+                        } else {
+                            Database::get()->query("INSERT INTO exercise_with_questions
+                                (question_id, exercise_id, q_position, random_criteria) VALUES (NULL, ?d, ?d, ?s)", $clone_id, $question->q_position, $question->random_criteria);
+                        }
                         $old_image_path = $old_path . $question->id;
                         if (file_exists($old_image_path)) {
                             copy($old_image_path, $new_path . $question_clone_id);
@@ -1154,8 +1160,8 @@ if (!class_exists('Exercise')) {
             } else {
                 // add question to new exercise
                 Database::get()->query("INSERT INTO `exercise_with_questions`
-                        (question_id, exercise_id, q_position)
-                        SELECT question_id, ?d, q_position FROM `exercise_with_questions`
+                        (question_id, exercise_id, q_position, random_criteria)
+                        SELECT question_id, ?d, q_position, random_criteria FROM `exercise_with_questions`
                             WHERE exercise_id = ?d", $clone_id, $id);
             }
         }

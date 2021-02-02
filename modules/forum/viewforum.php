@@ -118,6 +118,9 @@ if (isset($_GET['start'])) {
 
 if ($total_topics > TOPICS_PER_PAGE) { // navigation
     $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
+    if ($unit) {
+        $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;res_type=forum&amp;unit=$unit&amp;forum=$forum_id&amp;start=";
+    }
     $paging = array();
 
     $current_page = $first_topic / TOPICS_PER_PAGE + 1; // current page
@@ -229,7 +232,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
                             WHERE id = ?d
                                 AND course_id = ?d", $num_topics, $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE topic_id = ?d AND course_id = ?d", $topic_id, $course_id);
-    Session::Messages($langDeletedMessage, 'alert-success');
+    Session::Messages($langTopicDeleted, 'alert-success');
     redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
 }
 
@@ -334,35 +337,63 @@ if (count($result) > 0) { // topics found
             $topic_icon = toggle_icon($topic_action_notify);
         }
         $tool_content .= "<td class='text-center option-btn-cell'>";
+        if ($unit) {
+            $modify_link = "../forum/forum_admin.php?course=$course_code&amp;forumtopicedit=yes&amp;topic_id=$myrow->id";
+            $del_link = "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes";
+        } else {
+            $modify_link = "forum_admin.php?course=$course_code&amp;forumtopicedit=yes&amp;topic_id=$myrow->id";
+            $del_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes";
+        }
 
         $dyntools = (!$is_editor) ? array() : array(
             array('title' => $langModify,
-                'url' => "forum_admin.php?course=$course_code&amp;forumtopicedit=yes&amp;topic_id=$myrow->id",
+                'url' => $modify_link,
                 'icon' => 'fa-edit'
             ),
             array('title' => $langDelete,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes",
+                'url' => $del_link,
                 'icon' => 'fa-times',
                 'class' => 'delete',
                 'confirm' => $langConfirmDelete)
         );
 
         if ($is_editor) {
+            if ($unit) {
+                $lock_link = "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topiclock=yes";
+                $unlock_link = "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topiclock=yes";
+            } else {
+                $lock_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topiclock=yes";
+                $unlock_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topiclock=yes";
+            }
+
             if ($topic_locked == 0) {
                 $dyntools[] = array('title' => $langLockTopic,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topiclock=yes",
+                    'url' => $lock_link,
                     'icon' => 'fa-lock'
                     );
             } else {
                 $dyntools[] = array('title' => $langUnlockTopic,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topiclock=yes",
+                    'url' => $unlock_link,
                     'icon' => 'fa-unlock'
                     );
             }
         }
 
+        if ($unit) {
+            $link_notify = "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id";
+            if (isset($_GET['start']) and $_GET['start'] > 0) {
+                $link_notify = "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id";
+            }
+        } else {
+            $link_notify = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id";
+            if (isset($_GET['start']) and $_GET['start'] > 0) {
+                $link_notify = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id";
+            }
+        }
+
+
         $dyntools[] = array('title' => $langNotify,
-                            'url' => (isset($_GET['start']) and $_GET['start'] > 0) ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
+                            'url' => $link_notify,
                             'icon' => 'fa-envelope',
                             'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)));
         $tool_content .= action_button($dyntools);

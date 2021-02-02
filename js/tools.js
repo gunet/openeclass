@@ -667,7 +667,13 @@ function initialize_multifile_submission(max) {
     });
 }
 
+var filemodal_initialized = false;
 function initialize_filemodal(lang) {
+  if (filemodal_initialized) {
+    return;
+  } else {
+    filemodal_initialized = true;
+  }
   $('.fileModal').click(function (e) {
     e.preventDefault();
     var fileURL = $(this).attr('href');

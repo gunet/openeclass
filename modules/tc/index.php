@@ -260,6 +260,9 @@ elseif(isset($_POST['update_bbb_session'])) { // update existing BBB session
     if (isset($_POST['lockSettingsHideUserList']) and $_POST['lockSettingsHideUserList']) {
         $options_arr['lockSettingsHideUserList'] = 1;
     }
+    if (isset($_POST['hideParticipants']) and $_POST['hideParticipants']) {
+        $options_arr['hideParticipants'] = 1;
+    }
     if (count($options_arr) > 0) {
         $options = serialize($options_arr);
     } else {
@@ -398,6 +401,9 @@ elseif(isset($_GET['choice']))
     }
     if (isset($_POST['lockSettingsHideUserList']) and $_POST['lockSettingsHideUserList']) {
         $options_arr['lockSettingsHideUserList'] = 1;
+    }
+    if (isset($_POST['hideParticipants']) and $_POST['hideParticipants']) {
+        $options_arr['hideParticipants'] = 1;
     }
     if (count($options_arr) > 0) {
         $options = serialize($options_arr);

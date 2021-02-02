@@ -2028,8 +2028,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     create_indexes();
 
-    // Importing new themes
+    // Import new themes
     importThemes();
+    if (!get_config('theme_options_id')) {
+        set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
+    }
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);

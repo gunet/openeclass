@@ -58,7 +58,7 @@ if (isset($_GET['export'])) {
         if (!$theme_id) redirect_to_home_page('modules/admin/theme_options.php'); // if default theme
         require_once 'include/lib/fileUploadLib.inc.php';
         if (!is_dir("courses/theme_data")) make_dir('courses/theme_data');
-        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);        
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_name = $theme_options->name;
 
         $styles = unserialize($theme_options->styles);
@@ -100,7 +100,7 @@ if (isset($_POST['import'])) {
     }
     validateUploadedFile($_FILES['themeFile']['name'], 2);
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
-        $file_name = $_FILES['themeFile']['name'];        
+        $file_name = $_FILES['themeFile']['name'];
         if (!is_dir('courses/theme_data')) {
             make_dir('courses/theme_data');
         }
@@ -177,10 +177,10 @@ if (isset($_POST['optionsSave'])) {
             $_SESSION['theme_options_id'] = $_POST['active_theme_options'];
         }
     } else {
-        Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $_POST['active_theme_options'], 'theme_options_id');
+        set_config('theme_options_id', $_POST['active_theme_options']);
         unset($_SESSION['theme_options_id']);
     }
-    redirect_to_home_page('modules/admin/theme_options.php');     
+    redirect_to_home_page('modules/admin/theme_options.php');
 } else {
     $pageName = $langThemeSettings;
     $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -222,7 +222,7 @@ if (isset($_POST['optionsSave'])) {
                                         '</div>". addslashes(generate_csrf_token_form_field()) ."'+
                                     '</form>'+
                                 '</div>'+
-                            '</div>',                          
+                            '</div>',
                     buttons: {
                         success: {
                             label: '$langUpload',
@@ -241,7 +241,7 @@ if (isset($_POST['optionsSave'])) {
                         cancel: {
                             label: '$langCancel',
                             className: 'btn-default'
-                        }                        
+                        }
                     }
                 });
             });
@@ -273,7 +273,7 @@ if (isset($_POST['optionsSave'])) {
                                         '</div>". addslashes(generate_csrf_token_form_field()) ."'+
                                     '</form>'+
                                 '</div>'+
-                            '</div>',                          
+                            '</div>',
                     buttons: {
                         success: {
                             label: '$langSave',
@@ -283,7 +283,7 @@ if (isset($_POST['optionsSave'])) {
                         cancel: {
                             label: '$langCancel',
                             className: 'btn-default'
-                        }                        
+                        }
                     }
                 });
                 $('#themeOptionsName').keypress(function (e) {
@@ -314,8 +314,8 @@ if (isset($_POST['optionsSave'])) {
                     var newValue = $('select#theme_selection').val();
                     var newAction = formAction.replace(/(delThemeId=).*/, '$1'+newValue);
                     $('a#theme_delete').closest('form').attr('action', newAction);
-                }                
-            });            
+                }
+            });
             $('a.theme_enable').click(function (e)
             {
                 e.preventDefault();
@@ -334,14 +334,14 @@ if (isset($_POST['optionsSave'])) {
                 showInput: true,
                  cancelText: '$langCancel',
                 chooseText: '$langSubmit'
-                    
+
             });
             $('#btnEnterAColor').click(function() {
                 $(this).closest('.colorpicker').spectrum('set', $('#enterAColor').val());
-            });            
+            });
         });
     </script>";
-    $all_themes = Database::get()->queryArray("SELECT * FROM theme_options");
+    $all_themes = Database::get()->queryArray("SELECT * FROM theme_options ORDER BY name, id");
     $themes_arr[0] = "---- $langDefaultThemeSettings ----";
     foreach ($all_themes as $row) {
         $themes_arr[$row->id] = $row->name;
@@ -366,9 +366,9 @@ if (isset($_POST['optionsSave'])) {
         $logo_field = "
             <img src='$urlThemeData/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
             <input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>
-        ";    
+        ";
     } else {
-       $logo_field = "<input type='file' name='imageUpload' id='imageUpload'>"; 
+       $logo_field = "<input type='file' name='imageUpload' id='imageUpload'>";
     }
     if (isset($theme_options_styles['imageUploadSmall'])) {
         $small_logo_field = "
@@ -376,7 +376,7 @@ if (isset($_POST['optionsSave'])) {
             <input type='hidden' name='imageUploadSmall' value='$theme_options_styles[imageUploadSmall]'>
         ";
     } else {
-       $small_logo_field = "<input type='file' name='imageUploadSmall' id='imageUploadSmall'>"; 
+       $small_logo_field = "<input type='file' name='imageUploadSmall' id='imageUploadSmall'>";
     }
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "
@@ -384,7 +384,7 @@ if (isset($_POST['optionsSave'])) {
             <input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>
         ";
     } else {
-       $bg_field = "<input type='file' name='bgImage' id='bgImage'>"; 
+       $bg_field = "<input type='file' name='bgImage' id='bgImage'>";
     }
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
@@ -392,16 +392,16 @@ if (isset($_POST['optionsSave'])) {
             <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
         ";
     } else {
-       $login_image_field = "<input type='file' name='loginImg' id='loginImg'>"; 
+       $login_image_field = "<input type='file' name='loginImg' id='loginImg'>";
     }
 
-    
+
     $tool_content .= action_bar(array(
         array('title' => $langImport,
             'url' => "#",
             'icon' => 'fa-upload',
             'class' => 'uploadTheme',
-            'level' => 'primary-label'),        
+            'level' => 'primary-label'),
         array('title' => $langBack,
             'url' => "{$urlAppend}modules/admin/index.php",
             'icon' => 'fa-reply',
@@ -418,9 +418,9 @@ if (isset($_POST['optionsSave'])) {
                             <a href='#' class='theme_enable btn btn-success btn-xs'>$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-xs'>$langLeave</a>
                         </div>
                     </div>
-                </div>    
+                </div>
                 ";
-    }    
+    }
     @$tool_content .= "
     <div class='form-wrapper'>
         <div class='row margin-bottom-fat'>
@@ -443,12 +443,12 @@ if (isset($_POST['optionsSave'])) {
         <div class='form-group margin-bottom-fat'>
             <div class='col-sm-9 col-sm-offset-3'>
                 $activate_btn
-                $preview_btn  
+                $preview_btn
                 $delete_btn
             </div>
         </div>
     </div>";
-$tool_content .= "     
+$tool_content .= "
 <div role='tabpanel'>
 
   <!-- Nav tabs -->
@@ -469,7 +469,7 @@ $tool_content .= "
                       <div class='radio'>
                         <label>
                           <input type='radio' name='containerType' value='boxed' ".(($theme_options_styles['containerType'] == 'boxed')? 'checked' : '').">
-                          $langBoxed &nbsp; 
+                          $langBoxed &nbsp;
                         </label>
                       </div>
                       <div class='radio'>
@@ -477,9 +477,9 @@ $tool_content .= "
                           <input type='radio' name='containerType' value='fluid' ".(($theme_options_styles['containerType'] == 'fluid')? 'checked' : '').">
                           $langFluid &nbsp;
                         </label>
-                      </div>                                
-                </div>                
-            </div>        
+                      </div>
+                </div>
+            </div>
             <div class='form-group".(($theme_options_styles['containerType'] == 'boxed')? ' hidden' : '')."'>
                 <label for='fluidContainerWidth' class='col-sm-3 control-label'>$langFluidContainerWidth:</label>
                 <div class='col-sm-9'>
@@ -516,7 +516,7 @@ $tool_content .= "
                       <div class='radio'>
                         <label>
                           <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
-                          $langRepeatedImg &nbsp; 
+                          $langRepeatedImg &nbsp;
                         </label>
                       </div>
                       <div class='radio'>
@@ -524,14 +524,14 @@ $tool_content .= "
                           <input type='radio' name='bgType' value='fix' ".(($theme_options_styles['bgType'] == 'fix')? 'checked' : '').">
                           $langFixedImg &nbsp;
                         </label>
-                      </div>                        
+                      </div>
                       <div class='radio'>
                         <label>
                           <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
                           $langStretchedImg &nbsp;
                         </label>
-                      </div>              
-                </div>                
+                      </div>
+                </div>
             </div>
             <legend class='theme_options_legend'>$langLinksCongiguration</legend>
             <div class='form-group'>
@@ -539,7 +539,7 @@ $tool_content .= "
               <div class='col-sm-9'>
                 <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
               </div>
-            </div> 
+            </div>
             <div class='form-group'>
               <label for='linkHoverColor' class='col-sm-3 control-label'>$langLinkHoverColor:</label>
               <div class='col-sm-9'>
@@ -557,7 +557,7 @@ $tool_content .= "
               </div>
               <div class='col-xs-4 col-sm-1'>
                 <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
-              </div>              
+              </div>
             </div>
             <div class='form-group'>
                 <label for='loginImg' class='col-sm-3 control-label'>$langLoginImg:</label>
@@ -570,7 +570,7 @@ $tool_content .= "
                       <div class='radio'>
                         <label>
                           <input type='radio' name='loginImgPlacement' value='small-right' ".(($theme_options_styles['loginImgPlacement'] == 'small-right')? 'checked' : '').">
-                          $langLoginImgPlacementSmall &nbsp; 
+                          $langLoginImgPlacementSmall &nbsp;
                         </label>
                       </div>
                       <div class='radio'>
@@ -578,8 +578,8 @@ $tool_content .= "
                           <input type='radio' name='loginImgPlacement' value='full-width' ".(($theme_options_styles['loginImgPlacement'] == 'full-width')? 'checked' : '').">
                           $langLoginImgPlacementFull &nbsp;
                         </label>
-                      </div>                                    
-                </div> 
+                      </div>
+                </div>
             </div>
             <div class='form-group'>
                 <label for='loginImg' class='col-sm-3 control-label'>$langLoginBanner:</label>
@@ -589,7 +589,7 @@ $tool_content .= "
                           <input type='checkbox' name='openeclassBanner' value='1' ".((isset($theme_options_styles['openeclassBanner']))? 'checked' : '').">
                           $langDeactivate
                         </label>
-                      </div>                   
+                      </div>
                 </div>
             </div>
         </div>
@@ -609,7 +609,7 @@ $tool_content .= "
               <div class='col-sm-9'>
                 <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
               </div>
-            </div>             
+            </div>
             <div class='form-group'>
               <label for='leftMenuFontColor' class='col-sm-3 control-label'>$langMainMenuLinkColor:</label>
               <div class='col-sm-9'>
@@ -640,13 +640,13 @@ $tool_content .= "
               <div class='col-sm-9'>
                 <input name='leftSubMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverFontColor' value='$theme_options_styles[leftSubMenuHoverFontColor]'>
               </div>
-            </div>                
+            </div>
             <div class='form-group'>
               <label for='leftSubMenuHoverBgColor' class='col-sm-3 control-label'>$langSubMenuLinkBgHoverColor:</label>
               <div class='col-sm-9'>
                 <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
               </div>
-            </div>                                       
+            </div>
         </div>
     </div>
     <div role='tabpanel' class='tab-pane' id='messages'>...</div>
@@ -658,10 +658,10 @@ $tool_content .= "
             <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
             ".($theme_id ? "<a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>" : "")."
         </div>
-    </div> 
-    ". generate_csrf_token_form_field() ."    
+    </div>
+    ". generate_csrf_token_form_field() ."
 </form>
-</div>";    
+</div>";
 }
 
 function clear_default_settings() {
@@ -681,20 +681,20 @@ function initialize_settings() {
         foreach ($option_array as $option){
             if(!isset($theme_options_styles[$option])) $theme_options_styles[$option] = $setting;
         }
-    }    
+    }
 }
 function clone_images($new_theme_id = null) {
     global $webDir, $theme, $theme_id;
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
-    }     
+    }
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
             if(copy("$webDir/courses/theme_data/".intval($theme_id)."/$image_name", "$webDir/courses/theme_data/$new_theme_id/$image_name")){
                 $_POST[$image] = $image_name;
-            }                
+            }
         }
     }
 }
@@ -715,7 +715,7 @@ function upload_images($new_theme_id = null) {
                 $name = pathinfo($file_name, PATHINFO_FILENAME);
                 $ext =  get_file_extension($file_name);
                 $file_name = "$name-$i.$ext";
-            }            
+            }
             move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/courses/theme_data/$theme_id/$file_name");
             require_once 'modules/admin/extconfig/externals.php';
             $connector = AntivirusApp::getAntivirus();
