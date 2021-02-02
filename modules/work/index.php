@@ -115,7 +115,6 @@ if (isset($_GET['get']) or isset($_GET['getcomment'])) {
         }
         $get = $_GET['get'];
     }
-    $get = getDirectReference($get);
     if (!send_file(intval($get), $file_type)) {
         Session::Messages($langFileNotFound, 'alert-danger');
     }
@@ -1036,7 +1035,7 @@ function edit_assignment($id) {
             $file_name = $row->file_name;
         } else {
             validateUploadedFile($_FILES['userfile']['name'], 2);
-            $student_name = trim(uid_to_name($uid));
+            $student_name = trim(uid_to_name($user_id));
             $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
             $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
             if (!empty($am)) {
@@ -1047,7 +1046,6 @@ function edit_assignment($id) {
             $secret = $row->secret_directory;
             $ext = get_file_extension($_FILES['userfile']['name']);
             $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
-            make_dir("$workPath/admin_files/$secret");
             if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
                 @chmod("$workPath/admin_files/$filename", 0644);
                 $file_name = $_FILES['userfile']['name'];
@@ -3036,7 +3034,7 @@ function show_edit_assignment($id) {
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
                     <div class='col-sm-10'>
-                      ".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=".getIndirectReference($row->id)."&amp;file_type=1'>".q($row->file_name)."</a>"
+                      ".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
                 . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
                                      <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
@@ -3212,7 +3210,7 @@ function show_edit_assignment($id) {
                         }
                         $tool_content .= "<div class='radio $class_not_visible'>
                           <label $label>
-                            <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==ASSIGNMENT_RUBRIC_GRADE ? " checked" : "") ." $lti_group_disabled $addon>
+                            <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==ASSIGNMENT_RUBRIC_GRADE ? " checked" : "") ." $lti_group_disabled $addon>                
                             $langGradeRubrics
                           </label>
                         </div>
@@ -4544,12 +4542,11 @@ function assignment_details($id, $row, $x =false) {
                 </div>
             </div>";
         }
-        $file_indirect = getIndirectReference($row->id);
         if (isset($_GET['unit'])) {
             $unit = intval($_GET['unit']);
-            $fileUrl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$file_indirect&amp;file_type=1&amp;id=$unit";
+            $fileUrl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
         } else {
-            $fileUrl = "{$urlServer}modules/work/?course=$course_code&amp;get=$file_indirect&amp;file_type=1";
+            $fileUrl = "{$urlServer}modules/work/?course=$course_code&amp;get=$row->id&amp;file_type=1";
         }
         if (!empty($row->file_name)) {
             $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->file_name, $row->file_name);
@@ -4888,7 +4885,7 @@ function show_assignment($id, $display_graph_results = false) {
                             } else {
                                 $filename = $item->file_name;
                             }
-                            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=" . getIndirectReference($item->id);
+                            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$item->id";
                             return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $item->file_name, $filename);
                         }, $allFiles));
                     }
@@ -4979,10 +4976,10 @@ function show_assignment($id, $display_graph_results = false) {
                     } else {
                         $grade_comments = "&nbsp;<span>" . nl2br($grade_comments) . "</span>&nbsp;&nbsp;";
                     }
-                    $comment_file_indirect = getIndirectReference($row->id);
-                    $fileUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$comment_file_indirect";
-                    $fileLink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->grade_comments_filename, $row->grade_comments_filename);
-                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "<span class='small'>$fileLink</span>";
+                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "
+                            <span class='small'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
+                            </span>";
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
                 if($autojudge->isEnabled() and $auto_judge_enabled_assign) {
@@ -5889,9 +5886,13 @@ function send_file($id, $file_type) {
     if (isset($file_type)) {
         if ($file_type == 1) {
             $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-            // don't show file if assignment nonexistent or not active and user is student
-            if (!$info or !($is_editor or $info->active)) {
+            if (!$info) { // invalid (not found) assignment
                 return false;
+            }
+            if (!$is_editor) { // don't show file to users if not active and before submission date
+                if ((!$info->active) or (date("Y-m-d h:i:s") < $info->submission_date)) {
+                    return false;
+                }
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, $disposition, true);
         } elseif ($file_type == 2) { // download comments file

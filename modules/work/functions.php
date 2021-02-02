@@ -431,21 +431,19 @@ function show_submission_details($id) {
     } else {
         $tool_content .= $sub->grade;
     }
-    $comment_indirect = getIndirectReference($sub->id);
     if (isset($_GET['unit'])) {
         $unit = intval($_GET['unit']);
-        $file_comments_url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$comment_indirect&amp;id=$unit";
+        $file_comments_link = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
     } else {
-        $file_comments_url = "{$urlAppend}modules/work/?course=$course_code&amp;getcomment=$comment_indirect";
+        $file_comments_link = "{$urlAppend}modules/work/?course=$course_code&amp;getcomment=$sub->id";
     }
-    $file_comments_link = MultimediaHelper::chooseMediaAhrefRaw($file_comments_url, $file_comments_url, $sub->grade_comments_filename, $sub->grade_comments_filename);
     $tool_content .= "</div>
                 </div>
                 <div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong>" . $m['gradecomments'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>$file_comments_link</a>
+                    <div class='col-sm-9'>" . $sub->grade_comments . "&nbsp;&nbsp;<a href='$file_comments_link'>" . $sub->grade_comments_filename . "</a>
                     </div>
                 </div>
                 <div class='row margin-bottom-fat'>
@@ -461,11 +459,10 @@ function show_submission_details($id) {
         $links = implode('<br>',
             array_map(function ($item) {
                 global $course_code, $urlAppend;
-                $item_indirect = getIndirectReference($item->id);
                 if (isset($_GET['unit'])) {
-                    $url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$item_indirect";
+                    $url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$item->id";
                 } else {
-                    $url = $urlAppend . "modules/work/?course=$course_code&amp;get=$item_indirect";
+                    $url = $urlAppend . "modules/work/?course=$course_code&amp;get=$item->id";
                 }
                 return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $item->file_name, $item->file_name);
             }, Database::get()->queryArray('SELECT id, file_name FROM assignment_submit
@@ -478,11 +475,10 @@ function show_submission_details($id) {
                 <div class='col-sm-9'>$links</div>";
     } elseif ($assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) {
         // single file
-        $submission_indirect = getIndirectReference($sub->id);
         if (isset($_GET['unit'])) {
-            $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$submission_indirect";
+            $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
         } else {
-            $url = "{$urlAppend}modules/work/?course=$course_code&amp;get=$submission_indirect";
+            $url = "{$urlAppend}modules/work/?course=$course_code&amp;get=$sub->id";
         }
         $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
         $tool_content .= "<div class='row margin-bottom-fat'>
