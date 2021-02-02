@@ -64,6 +64,14 @@ if ($is_editor && isset($_GET['purgeAttempID'])) {
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
 
+if ($is_editor && isset($_GET['modifyAttempID'])) {
+    $eurid = $_GET['modifyAttempID'];
+    $status = $_GET['status'];
+    $objExercise->modifyAttempt($eurid, $status);
+    Session::Messages($langChangeAttemptStatus);
+    redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
+}
+
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
@@ -256,13 +264,31 @@ foreach ($result as $row) {
                               <td class='text-center'>$status</td>";
             if ($is_editor) {
                 $tool_content .= "
-                <td class='option-btn-cell'>" . action_button(array(
+                    <td class='option-btn-cell'>" . action_button(array(
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
                             'icon' => "fa-times",
                             'confirm' => $langConfirmPurgeExercises,
                             'class' => 'delete'
+                        ),
+                        array(
+                            'title' => "$langAuthChangeto $langAttemptCompleted",
+                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_COMPLETED . "",
+                            'icon' => "fa-toggle-on",
+                            'show' => ($row2->attempt_status == ATTEMPT_ACTIVE),
+                            'confirm' => $langConfirmModifyAttemptText,
+                            'confirm_title' => $langConfirmModifyAttemptTitle,
+                            'confirm_button' => $langModify
+                        ),
+                        array(
+                            'title' => "$langAuthChangeto $langAttemptPaused",
+                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_PAUSED . "",
+                            'icon' => "fa-toggle-on",
+                            'show' => ($row2->attempt_status == ATTEMPT_ACTIVE),
+                            'confirm' => $langConfirmModifyAttemptText,
+                            'confirm_title' => $langConfirmModifyAttemptTitle,
+                            'confirm_button' => $langModify
                         )
                     )) . "</td>";
             }
