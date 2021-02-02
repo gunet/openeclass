@@ -363,14 +363,14 @@ function generate_infinite_container_html($posts, $next_page) {
 }
 
 function insert_video($post_id) {
-    global $course_code, $course_id;
+    global $course_id;
 
-    if (isset($_POST['video']) and count($_POST['video'] > 0)) {
+    if (isset($_POST['video']) and count($_POST['video']) > 0) {
         foreach ($_POST['video'] as $video_id) {
             list($table, $res_id) = explode(':', $video_id);
             $table = ($table == 'video') ? 'video' : 'videolink';
             $row = Database::get()->querySingle("SELECT * FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $res_id);
-            $q = Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+            Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
                 $post_id, $table, $row->title, $res_id);
         }
     }
@@ -404,7 +404,7 @@ function insert_docs($post_id, $subsystem = NULL) {
 function insert_links($post_id) {
     global $course_id;
 
-    if (isset($_POST['link']) and count($_POST['link'] > 0)) {
+    if (isset($_POST['link']) and count($_POST['link']) > 0) {
         foreach ($_POST['link'] as $link_id) {
             $row = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
             Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
@@ -416,7 +416,7 @@ function insert_links($post_id) {
 function insert_exercises($post_id) {
     global $course_id;
 
-    if (isset($_POST['exercise']) and count($_POST['exercise'] > 0)) {
+    if (isset($_POST['exercise']) and count($_POST['exercise']) > 0) {
         foreach ($_POST['exercise'] as $exercise_id) {
             $row = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
             Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
@@ -428,7 +428,7 @@ function insert_exercises($post_id) {
 function insert_assignments($post_id) {
     global $course_id;
 
-    if (isset($_POST['assignment']) and count($_POST['assignment'] > 0)) {
+    if (isset($_POST['assignment']) and count($_POST['assignment']) > 0) {
         foreach ($_POST['assignment'] as $assignment_id) {
             $row = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $assignment_id);
             Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
@@ -440,7 +440,7 @@ function insert_assignments($post_id) {
 function insert_chats($post_id) {
     global $course_id;
 
-    if (isset($_POST['chat']) and count($_POST['chat'] > 0)) {
+    if (isset($_POST['chat']) and count($_POST['chat']) > 0) {
         foreach ($_POST['chat'] as $chat_id) {
             $row = Database::get()->querySingle("SELECT * FROM conference WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
             Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
@@ -452,7 +452,7 @@ function insert_chats($post_id) {
 function insert_polls($post_id) {
     global $course_id;
 
-    if (isset($_POST['poll']) and count($_POST['poll'] > 0)) {
+    if (isset($_POST['poll']) and count($_POST['poll']) > 0) {
         foreach ($_POST['poll'] as $poll_id) {
             $row = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
             Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
@@ -464,7 +464,7 @@ function insert_polls($post_id) {
 function insert_forum($post_id) {
     global $course_id;
 
-    if (isset($_POST['forum']) and count($_POST['forum'] > 0)) {
+    if (isset($_POST['forum']) and count($_POST['forum']) > 0) {
         foreach ($_POST['forum'] as $for_id) {
             $ids = explode(':', $for_id);
             if (count($ids) == 2) {
