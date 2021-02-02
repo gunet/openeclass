@@ -5890,7 +5890,7 @@ function send_file($id, $file_type) {
                 return false;
             }
             if (!$is_editor) { // don't show file to users if not active and before submission date
-                if ((!$info->active) or (date("Y-m-d h:i:s") < $info->submission_date)) {
+                if ((!$info->active) or (date("Y-m-d H:i:s") < $info->submission_date)) {
                     return false;
                 }
             }
