@@ -3969,22 +3969,22 @@ function show_assignment_review($id, $display_graph_results = false) {
                 if (empty($row->file_name)) {
                     $filelink = '&nbsp;';
                 } else {
-                    $namelen = mb_strlen($row->file_name);
-                    if ($namelen > 30) {
-                        $extlen = mb_strlen(get_file_extension($row->file_name));
-                        $basename = mb_substr($row->file_name, 0, $namelen - $extlen - 3);
-                         $ext = mb_substr($row->file_name, $namelen - $extlen - 3);
-                         $filename = ellipsize($basename, 30, '...' . $ext);
-                    } else {
-                        $filename = $row->file_name;
-                    }
                     if (isset($_GET['unit'])) {
                         $unit = intval($_GET['unit']);
                         $fileUrl = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$unit&amp;get=$row->user_submit_id";
                     } else {
                         $fileUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->user_submit_id";
                     }
-                    $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $filename, $filename);
+                    $namelen = mb_strlen($row->file_name);
+                    if ($namelen > 30) {
+                        $extlen = mb_strlen(get_file_extension($row->file_name));
+                        $basename = mb_substr($row->file_name, 0, $namelen - $extlen - 3);
+                        $ext = mb_substr($row->file_name, $namelen - $extlen - 3);
+                        $filename = ellipsize($basename, 27, '...' . $ext);
+                    } else {
+                        $filename = $row->file_name;
+                    }
+                    $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $filename, $row->file_name);
 
                 }
             }
@@ -4883,17 +4883,17 @@ function show_assignment($id, $display_graph_results = false) {
                         }
                         $filelink = implode('<br>', array_map(function ($item) {
                             global $urlAppend, $course_code;
+                            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$item->id";
                             $namelen = mb_strlen($item->file_name);
                             if ($namelen > 30) {
                                 $extlen = mb_strlen(get_file_extension($item->file_name));
                                 $basename = mb_substr($item->file_name, 0, $namelen - $extlen - 3);
                                 $ext = mb_substr($item->file_name, $namelen - $extlen - 3);
-                                $filename = ellipsize($basename, 30, '...' . $ext);
+                                $filename = ellipsize($basename, 27, '...' . $ext);
                             } else {
                                 $filename = $item->file_name;
                             }
-                            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$item->id";
-                            return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $item->file_name, $filename);
+                            return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $filename, $item->file_name);
                         }, $allFiles));
                     }
                 }
