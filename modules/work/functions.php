@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -431,11 +431,16 @@ function show_submission_details($id) {
     } else {
         $tool_content .= $sub->grade;
     }
-    if (isset($_GET['unit'])) {
-        $unit = intval($_GET['unit']);
-        $file_comments_link = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
+    if ($sub->grade_comments_filename) {
+        if (isset($_GET['unit'])) {
+            $unit = intval($_GET['unit']);
+            $file_comments_url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
+        } else {
+            $file_comments_url = "{$urlAppend}modules/work/?course=$course_code&amp;getcomment=$sub->id";
+        }
+        $file_comments_link = MultimediaHelper::chooseMediaAhrefRaw($file_comments_url, $file_comments_url, $sub->grade_comments_filename, $sub->grade_comments_filename);
     } else {
-        $file_comments_link = "{$urlAppend}modules/work/?course=$course_code&amp;getcomment=$sub->id";
+        $file_comments_link = '';
     }
     $tool_content .= "</div>
                 </div>
@@ -443,7 +448,7 @@ function show_submission_details($id) {
                     <div class='col-sm-3'>
                         <strong>" . $m['gradecomments'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . $sub->grade_comments . "&nbsp;&nbsp;<a href='$file_comments_link'>" . $sub->grade_comments_filename . "</a>
+                    <div class='col-sm-9'>" . nl2br(q($sub->grade_comments)) . "&nbsp;&nbsp;$file_comments_link
                     </div>
                 </div>
                 <div class='row margin-bottom-fat'>

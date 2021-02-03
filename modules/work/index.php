@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.9
+ * Open eClass 3.10
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2020  Greek Universities Network - GUnet
@@ -1035,7 +1035,7 @@ function edit_assignment($id) {
             $file_name = $row->file_name;
         } else {
             validateUploadedFile($_FILES['userfile']['name'], 2);
-            $student_name = trim(uid_to_name($user_id));
+            $student_name = trim(uid_to_name($uid));
             $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
             $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
             if (!empty($am)) {
@@ -1046,6 +1046,7 @@ function edit_assignment($id) {
             $secret = $row->secret_directory;
             $ext = get_file_extension($_FILES['userfile']['name']);
             $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
+            make_dir("$workPath/admin_files/$secret");
             if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
                 @chmod("$workPath/admin_files/$filename", 0644);
                 $file_name = $_FILES['userfile']['name'];
@@ -3210,7 +3211,7 @@ function show_edit_assignment($id) {
                         }
                         $tool_content .= "<div class='radio $class_not_visible'>
                           <label $label>
-                            <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==ASSIGNMENT_RUBRIC_GRADE ? " checked" : "") ." $lti_group_disabled $addon>                
+                            <input type='radio' id='rubrics_button' name='grading_type' value='2'". ($grading_type==ASSIGNMENT_RUBRIC_GRADE ? " checked" : "") ." $lti_group_disabled $addon>
                             $langGradeRubrics
                           </label>
                         </div>
@@ -3699,9 +3700,15 @@ function delete_user_assignment($id) {
     $return = true;
     $info = Database::get()->querySingle('SELECT uid, group_id, assignment_id
         FROM assignment_submit WHERE id = ?d', $id);
-    $records = Database::get()->queryArray('SELECT id, file_path FROM assignment_submit
-        WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d',
-        $info->assignment_id, $info->uid, $info->group_id);
+    if (is_null($info->group_id)) {
+        $records = Database::get()->queryArray('SELECT id, file_path FROM assignment_submit
+            WHERE assignment_id = ?d AND uid = ?d AND group_id IS NULL',
+            $info->assignment_id, $info->uid);
+    } else {
+        $records = Database::get()->queryArray('SELECT id, file_path FROM assignment_submit
+            WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d',
+            $info->assignment_id, $info->uid, $info->group_id);
+    }
     foreach ($records as $record) {
         if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $record->id)->affectedRows > 0) {
             if ($record->file_path) {
@@ -4976,10 +4983,9 @@ function show_assignment($id, $display_graph_results = false) {
                     } else {
                         $grade_comments = "&nbsp;<span>" . nl2br($grade_comments) . "</span>&nbsp;&nbsp;";
                     }
-                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "
-                            <span class='small'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
-                            </span>";
+                    $fileUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=" . $row->id;
+                    $fileLink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->grade_comments_filename, $row->grade_comments_filename);
+                    $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "<span class='small'>$fileLink</span>";
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
                 if($autojudge->isEnabled() and $auto_judge_enabled_assign) {
