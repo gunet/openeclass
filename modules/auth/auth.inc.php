@@ -346,6 +346,20 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                         if (@ldap_bind($ldap, $user_dn, $test_password)) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
+                            foreach ($userinfo[0] as $key => $value) {
+                                if (!is_numeric($key)) {
+                                    if (is_array($value)) {
+                                        if ($value['count'] == 1) {
+                                            $GLOBALS['auth_userinfo'][strtolower($key)] = $value[0];
+                                        } else {
+                                            unset($value['count']);
+                                            $GLOBALS['auth_userinfo'][strtolower($key)] = $value;
+                                        }
+                                    } else {
+                                        $GLOBALS['auth_userinfo'][strtolower($key)] = $value;
+                                    }
+                                }
+                            }
                             if ($userinfo['count'] == 1) {
                                 $surname = $givenname = '';
                                 if (isset($settings['ldap_surname_attr']) and !empty($settings['ldap_surname_attr'])) {
@@ -1148,6 +1162,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
         return 6; // Redirect to Shibboleth login
     }
 
+    $GLOBALS['auth_userinfo'] = [];
     if ($user_info_object->password == $auth_method_settings['auth_name']) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
@@ -1180,7 +1195,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 
             $options = login_hook(array(
                 'user_id' => $user_info_object->id,
-                'attributes' => array(),
+                'attributes' => $GLOBALS['auth_userinfo'],
                 'status' => $user_info_object->status,
                 'departments' => $userObj->getDepartmentIds($user_info_object->id),
                 'am' => $user_info_object->am));
