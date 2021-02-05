@@ -1091,6 +1091,15 @@ if (!class_exists('Exercise')) {
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid);
         }
+
+        /**
+         * @brief modify attempt status
+         * @param $eurid
+         */
+        function modifyAttempt($eurid, $status) {
+            Database::get()->query("UPDATE exercise_user_record SET attempt_status = ?d WHERE eurid = ?d", $status, $eurid);
+        }
+
         /**
          * Clone an Exercise
          */

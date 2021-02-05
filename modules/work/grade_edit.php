@@ -27,26 +27,38 @@ $helpSubTopic = 'grades';
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
+require_once 'include/lib/modalboxhelper.class.php';
+require_once 'include/lib/multimediahelper.class.php';
 
 $toolName = $langScore;
 
 load_js('tools.js');
+
 // delete confirmation student review
-$head_content .= "<script type='text/javascript'>";
-$head_content .= '
-        $(function () {
-            $(document).on("click", ".linkdelete", function(e) {
-                var link = $(this).attr("href");
-                e.preventDefault();
-                bootbox.confirm("'.$langConfirmDeleteStudentReview.'", function(result) {
-                    if (result) {
-                        document.location.href = link;
-                    }
-                });
+$head_content .= "
+<script type='text/javascript'>
+    $(function () {
+        $(document).on('click', '.linkdelete', function(e) {
+            var link = $(this).attr('href');
+            e.preventDefault();
+            bootbox.confirm('" . js_escape($langConfirmDeleteStudentReview) . "', function(result) {
+                if (result) {
+                    document.location.href = link;
+                }
             });
         });
-    ';
-$head_content .= "</script>";
+
+        initialize_filemodal({
+            download: '" . js_escape($langDownload) . "',
+            print: '" . js_escape($langPrint) . "',
+            fullScreen: '" . js_escape($langFullScreen) . "',
+            newTab: '" . js_escape($langNewTab) . "',
+            cancel: '" . js_escape($langCancel) . "'
+        });
+
+    });
+</script>";
+ModalBoxHelper::loadModalBox();
 
 if (isset($_GET['ass_id']) ) { // delete student review
     $ass_id = intval($_GET['ass_id']);
@@ -130,21 +142,21 @@ function show_edit_form($id, $sid, $assign) {
     ///$reviews_per_ass = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d",$id)->reviews_per_assignment;
     $reviews_per_ass = Database::get()->querySingle('SELECT reviews_per_assignment FROM assignment WHERE id = ?d ', $id)->reviews_per_assignment;
     if ($sub) {
-        if ($grading_type == 3 ) {
+        if ($grading_type == 3) {
             $cdate = date('Y-m-d H:i:s');
-            if($cdate < $assign->start_date_review){
+            if ($cdate < $assign->start_date_review) {
                 $tool_content .= "
                     <p class='sub_title1'></p>
                     <div class='alert alert-warning'>$langPeerReviewNoAssignments</div>";
-			}
-			/*if ($cdate > $ass->deadline && $cdate > $ass->start_date_review){
-				$tool_content .= "<div class='form-group'>
-						<div class='col-sm-9 col-sm-offset-3'>
-							<input class='btn btn-primary' type='submit' name='ass_review' value='Ανάθεση'>
+            }
+            /*if ($cdate > $ass->deadline && $cdate > $ass->start_date_review){
+                $tool_content .= "<div class='form-group'>
+                        <div class='col-sm-9 col-sm-offset-3'>
+                            <input class='btn btn-primary' type='submit' name='ass_review' value='Ανάθεση'>
 
-						</div>
-					</div>";
-			}*/
+                        </div>
+                    </div>";
+            }*/
             if ($cdate > $assign->start_date_review){
                 //tha emfanistoun oi ergasies
                 //$tool_content .= "<input type='' name='assign' value='$id'>";
@@ -306,8 +318,8 @@ function show_edit_form($id, $sid, $assign) {
                     ORDER BY id', $sub->assignment_id, $sub->uid, $sub->group_id);
                 $links = implode('<br>', array_map(function ($file) {
                     global $urlAppend, $course_code;
-                    return "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$file->id'>" .
-                        q($file->file_name) . "</a>";
+                    $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$file->id";
+                    return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $file->file_name, $file->file_name);
                 }, $files));
                 $submission = "
                         <div class='form-group'>
@@ -316,12 +328,13 @@ function show_edit_form($id, $sid, $assign) {
 						</div>";
             } else {
                 // single file
+                $url = "index.php?course=$course_code&amp;get=$sub->id";
                 $submission = "
                         <div class='form-group'>
 							<label class='col-sm-3 control-label'>$m[filename]:</label>
 							<div class='col-sm-9'>
-                                <p class='form-control-static'>
-                                    <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
+                                <p class='form-control-static'>" .
+                                    MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name) . "
                                 </p>
 							</div>
 						</div>";
@@ -342,11 +355,11 @@ function show_edit_form($id, $sid, $assign) {
 				} elseif ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
 					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 					$criteria = unserialize($rubric->scales);
-					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a 
-                                                                                JOIN assignment as b 
-                                                                              WHERE course_id = ?d 
-                                                                              AND a.assignment_id = b.id 
-                                                                              AND b.id = ?d 
+					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a
+                                                                                JOIN assignment as b
+                                                                              WHERE course_id = ?d
+                                                                              AND a.assignment_id = b.id
+                                                                              AND b.id = ?d
                                                                               AND a.id = ?d", $course_id, $id, $sid);
 					if (!empty($submitted_grade->grade_rubric)) {
                         $sel_criteria = unserialize($submitted_grade->grade_rubric);
