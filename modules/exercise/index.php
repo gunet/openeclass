@@ -65,6 +65,7 @@ $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#ex').DataTable ({
                 'columns': [ $columns ],
+                'fnDrawCallback': function (settings) { MathJax && MathJax.typeset(); },
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -182,7 +183,7 @@ if ($is_editor) {
               (assign_to_specific = '0' OR
                (assign_to_specific != '0' AND id IN (
                   SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d
-                    UNION 
+                    UNION
                    SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ('$gids_sql_ready'))))
         ORDER BY start_date DESC", $course_id, $uid);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;

@@ -35,6 +35,7 @@ load_js('datatables');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#questions').DataTable ({
+                'fnDrawCallback': function (settings) { MathJax && MathJax.typeset(); },
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -75,10 +76,10 @@ $head_content .= "
         });
     </script>";
 
-$my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b 
-                              WHERE a.course_id = b.id 
-                                  AND a.course_id != ?d 
-                                  AND a.user_id = ?d 
+$my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b
+                              WHERE a.course_id = b.id
+                                  AND a.course_id != ?d
+                                  AND a.user_id = ?d
                                   AND a.status = " .USER_TEACHER . "", $course_id, $uid);
 $courses_options = "";
 foreach ($my_courses as $row) {
@@ -86,13 +87,13 @@ foreach ($my_courses as $row) {
 }
 
 $head_content .= "<script>
-            $(function() {                    
+            $(function() {
                 $('.warnDup').on('click', function(e) {
-                    e.preventDefault();                                        
+                    e.preventDefault();
                     bootbox.dialog({
                         title: '" . js_escape($langCreateDuplicateIn) . "',
                         message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_pool_form\">'+
-                                    '<select class=\"form-control\" id=\"course_id\" name=\"clone_pool_to_course_id\">'+                                        
+                                    '<select class=\"form-control\" id=\"course_id\" name=\"clone_pool_to_course_id\">'+
                                         $courses_options
                                     '</select>'+
                                   '</form>',
@@ -352,14 +353,14 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
             $tool_content .= "<tr>";
             if (!isset($fromExercise)) {
-                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")." href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . $question_title . "</a>                         
+                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")." href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=\">" . $question_title . "</a>
                     <br>
                     <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend  . " " . $exercises_used_in . "</small>
                     </td>";
             } else {
                 $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;modifyAnswers=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . $question_title . "</a>
                     <br>
-                    <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend . $exercises_used_in ."</small> 
+                    <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend . $exercises_used_in ."</small>
                     </td>";
             }
 
@@ -452,9 +453,9 @@ function clone_question_pool($clone_course_id)
  */
 function purge_question_pool($course_id) {
 
-    Database::get()->query("DELETE FROM exercise_question 
+    Database::get()->query("DELETE FROM exercise_question
             WHERE exercise_question.course_id = ?d
-            AND exercise_question.id NOT IN 
+            AND exercise_question.id NOT IN
               (SELECT question_id FROM exercise_with_questions)", $course_id);
 
 }
