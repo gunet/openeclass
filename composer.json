@@ -10,14 +10,17 @@
         "vlucas/phpdotenv": "^2.3",
         "sabre/dav": "~3.2.0",
         "google/apiclient": "1.0.*@beta",
-        "hybridauth/hybridauth": "^2.9",
+        "guzzlehttp/guzzle": "^6.2",
+        "guzzlehttp/oauth-subscriber": "^0.3.0",
+        "hybridauth/hybridauth": "^2.15",
         "mpdf/mpdf": "^8.0",
         "philo/laravel-blade": "3.*",
         "hoa/ruler": "~2.0",
         "egulias/email-validator": "^2.1",
         "bacon/bacon-qr-code": "^2.0",
         "phpoffice/phpspreadsheet": "^1.9",
-        "sabre/event": "~2.0.0"
+        "sabre/event": "~2.0.0",
+        "dapphp/securimage": "^4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.8.0"

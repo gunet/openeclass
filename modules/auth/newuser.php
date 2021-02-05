@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -35,7 +35,13 @@ require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
 $data['display_captcha'] = $display_captcha;
-$data['captcha'] = "{$urlAppend}include/securimage/securimage_show.php";
+if ($display_captcha) {
+    $securimage = new Securimage();
+    $data['captcha'] = $securimage->getCaptchaHtml([
+        'securimage_path' => $urlAppend . 'vendor/dapphp/securimage',
+        'input_text' => '',
+    ]);
+}
 
 $tree = new Hierarchy();
 $userObj = new User();
@@ -210,7 +216,7 @@ if (!isset($_POST['submit'])) {
     } else {
         $am_arr_value = false;
     }
-    
+
     $var_arr = array('uname' => true,
                     'surname_form' => true,
                     'givenname_form' => true,
@@ -259,9 +265,7 @@ if (!isset($_POST['submit'])) {
         }
         if ($display_captcha) {
             // captcha check
-            require_once 'include/securimage/securimage.php';
-            $securimage = new Securimage();
-            if ($securimage->check($_POST['captcha_code']) == false) {
+            if ($securimage->check($_POST['captcha_code'])) {
                 $registration_errors[] = $langCaptchaWrong;
             }
         }

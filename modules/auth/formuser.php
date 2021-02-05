@@ -61,6 +61,7 @@ if (!$prof and $eclass_stud_reg != 1) {
 
 $am_required = !$prof && get_config('am_required');
 $errors = array();
+$registration_errors = [];
 
 $var_arr = array('usercomment' => true,
                 'givenname' => true,
@@ -104,11 +105,10 @@ if (user_app_exists($username)) {
     $all_set = false;
 }
 
-if ($display_captcha) {
+if ($display_captcha and isset($_POST['captcha_code'])) {
     // captcha check
-    include 'include/securimage/securimage.php';
     $securimage = new Securimage();
-    if ($securimage->check($captcha_code) == false) {
+    if (!$securimage->check($captcha_code)) {
         $errors[] = $langCaptchaWrong;
         $all_set = false;
     }
@@ -196,7 +196,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
     }
 }
 
-if (@count($registration_errors) != 0) {
+if (count($registration_errors)) {
         // errors exist (from hybridauth) - show message
         $tool_content .= "<div class='alert alert-danger'>";
         foreach ($registration_errors as $error) {
@@ -413,10 +413,14 @@ if ($all_set) {
     $tool_content .= lang_select_options('localize', "class='form-control'");
     $tool_content .= "</div></div>";
     if ($display_captcha) {
+        $securimage = new Securimage();
+        $captchaHtml = $securimage->getCaptchaHtml([
+            'securimage_path' => $urlAppend . 'vendor/dapphp/securimage',
+            'input_text' => '',
+        ]);
         $tool_content .= "<div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
-                <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
-                <div class='col-sm-10'><input class='form-control' type='text' name='captcha_code' maxlength='6'/></div>
+                   <label for='captcha_code' class='col-sm-2 control-label'>$langCaptcha:</label>
+                   <div class='col-sm-10'>$captchaHtml</div>
               </div>";
     }
 
