@@ -237,10 +237,10 @@ function generate_single_post_html($post) {
     return $ret;
 }
 
-function generate_infinite_container_html($posts, $next_page) {
-    global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments, 
-    $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
-    $langWallPinPost, $langWallUnPinPost;
+function generate_infinite_container_html($posts, $posts_per_page, $next_page) {
+    global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
+           $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
+           $langWallPinPost, $langWallUnPinPost;
     
     $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
@@ -356,7 +356,7 @@ function generate_infinite_container_html($posts, $next_page) {
     }
     $ret .= '</div>';
     if (count($posts) == $posts_per_page) {
-        $ret .= '<a class="infinite-more-link" href="loadMore.php?course='.$course_code.'&amp;page='.$next_page.'"></a>';
+        $ret .= '<a class="infinite-more-link" href="'.$urlServer.'modules/wall/loadMore.php?course='.$course_code.'&amp;page='.$next_page.'"></a>';
     }
 
     return $ret;

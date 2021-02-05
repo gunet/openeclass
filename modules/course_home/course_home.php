@@ -85,6 +85,8 @@ $head_content .= "<style>
         padding: 5px 20px;        
     }
 </style>";
+$head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/wall/css/wall.css">';
+load_js('waypoints-infinite');
 
 
 /*

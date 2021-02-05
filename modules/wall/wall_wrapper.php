@@ -212,7 +212,7 @@ function show_wall_posts() {
     if (count($posts) == 0) {
         $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
     } else {
-        $tool_content .= generate_infinite_container_html($posts, 2);
+        $tool_content .= generate_infinite_container_html($posts, $posts_per_page, 2);
 
         $tool_content .= '<script>
                               var infinite = new Waypoint.Infinite({
