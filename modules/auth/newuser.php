@@ -92,6 +92,7 @@ if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and
 
 // authenticate user via hybridauth if requested by URL
 $user_data = null;
+$registration_errors = [];
 if (!empty($provider_name)) {
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
@@ -154,7 +155,7 @@ if (!isset($_POST['submit'])) {
         $am_message = $langOptional;
     }
 
-    if (@count($registration_errors) != 0) {
+    if (count($registration_errors) != 0) {
         // errors exist (from hybridauth) - show message
         $tool_content .= "<div class='alert alert-danger'>";
         foreach ($registration_errors as $error) {
@@ -242,10 +243,14 @@ if (!isset($_POST['submit'])) {
             $tool_content .= "</div>
             </div>";
             if ($display_captcha) {
+                $securimage = new Securimage();
+                $captchaHtml = $securimage->getCaptchaHtml([
+                    'securimage_path' => $urlAppend . 'vendor/dapphp/securimage',
+                    'input_text' => '',
+                ]);
                 $tool_content .= "<div class='form-group'>
-                      <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
-                      <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
-                      <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
+                      <label for='captcha_code' class='col-sm-2 control-label'>$langCaptcha:</label>
+                      <div class='col-sm-10'>$captchaHtml</div>
                     </div>";
             }
         //add custom profile fields
@@ -308,7 +313,6 @@ if (!isset($_POST['submit'])) {
         $departments = $_POST['department'];
     }
 
-    $registration_errors = array();
     // check if there are empty fields
     if (!$missing) {
         $registration_errors[] = $langFieldsMissing;
@@ -333,9 +337,8 @@ if (!isset($_POST['submit'])) {
         }
         if ($display_captcha) {
             // captcha check
-            require_once 'include/securimage/securimage.php';
             $securimage = new Securimage();
-            if ($securimage->check($_POST['captcha_code']) == false) {
+            if (!$securimage->check($_POST['captcha_code'])) {
                 $registration_errors[] = $langCaptchaWrong;
             }
         }
