@@ -98,7 +98,7 @@ if(!empty($_GET['provider_id'])) {
 } else {
     $provider_id = '';
 }
-        
+
 // check if it's valid and the provider enabled in the db
 if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and $_GET['auth'] < 14) {
     $auth = $_GET['auth'];
@@ -194,7 +194,7 @@ if (!isset($_POST['submit'])) {
     }
     if (isset($_GET['phone'])) {
         $data['user_data_phone'] = $_GET['phone'];
-    }                
+    }
     if ($user_data) {
         $data['user_data_firstname'] = $user_data->firstName;
         $data['user_data_lastname'] = $user_data->lastName;
@@ -265,7 +265,7 @@ if (!isset($_POST['submit'])) {
         }
         if ($display_captcha) {
             // captcha check
-            if ($securimage->check($_POST['captcha_code'])) {
+            if (!$securimage->check($_POST['captcha_code'])) {
                 $registration_errors[] = $langCaptchaWrong;
             }
         }
@@ -436,7 +436,7 @@ if (!isset($_POST['submit'])) {
             $user_msg = $langPersonalSettingsLess;
         }
         // login user if not verification needed
-        if (!$vmail) {            
+        if (!$vmail) {
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
             $uid = $myrow->id;
             $surname = $myrow->surname;
@@ -449,10 +449,10 @@ if (!isset($_POST['submit'])) {
             $_SESSION['givenname'] = $givenname_form;
             $_SESSION['surname'] = $surname_form;
             $_SESSION['uname'] = $uname;
-            $session->setLoginTimestamp();            
+            $session->setLoginTimestamp();
         }
         $data['user_msg'] = $user_msg;
-        $data['vmail'] = $vmail;        
+        $data['vmail'] = $vmail;
         $data['menuTypeID'] = 0;
         view('modules.auth.newuser', $data);
     } else { // errors exist
@@ -461,7 +461,7 @@ if (!isset($_POST['submit'])) {
         foreach ($registration_errors as $error) {
             Session::Messages("$error", 'alert-danger');
         }
-        redirect_to_home_page("modules/auth/newuser.php?givenname_form=" . urlencode($givenname_form) . "&surname_form=" . urlencode($surname_form) . "&uname=" . urlencode($uname) . "&email=" . urlencode($email) . "&am=" . urlencode($am) . "&phone=" . urlencode($phone) . "" . augment_url_refill_custom_profile_fields_registr() . "");        
+        redirect_to_home_page("modules/auth/newuser.php?givenname_form=" . urlencode($givenname_form) . "&surname_form=" . urlencode($surname_form) . "&uname=" . urlencode($uname) . "&email=" . urlencode($email) . "&am=" . urlencode($am) . "&phone=" . urlencode($phone) . "" . augment_url_refill_custom_profile_fields_registr() . "");
     }
 } // end of registration
 

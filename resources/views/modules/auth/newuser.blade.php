@@ -7,12 +7,12 @@
     @if (!$user_registration or $eclass_stud_reg != 2)
         <div class='alert alert-info'>
             {{ trans('langStudentCannotRegister') }}
-        </div>    
-    @else 
-        @if (isset($_POST['submit']))          
+        </div>
+    @else
+        @if (isset($_POST['submit']))
             @if ($vmail)
                 <div class='alert alert-info'> {{ trans('langMailVerificationSuccess') }} {{ trans('langMailVerificationSuccess2') }} <br><br><small> {{ trans('langMailVerificationNote') }} </small> <br><br>{{ trans('langClick') }} <a href='{{ $urlServer }}' class='mainpage'>{{ trans('langHere') }}</a> {{ trans('langBackPage') }}</div>
-            @else              
+            @else
                 <div class='alert alert-success'>
                     <p>{{ $user_msg }}</p>
                     <p>{{ trans('langClick') }} <a href='../../'>{{ trans('langHere') }}</a> {{ trans('langPersonalSettingsMore') }}
@@ -87,18 +87,17 @@
                     {!! $lang_select_options !!}
                 </div>
             </div>
-            @if ($display_captcha) 
+            @if ($display_captcha)
                 <div class='form-group'>
-                    <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{{ $captcha }}' alt='CAPTCHA Image' /></div><br>
-                        <label for='Captcha' class='col-sm-2 control-label'>{{ trans('langCaptcha') }}:</label>
-                    <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
+                    <label for='Captcha' class='col-sm-2 control-label'>{{ trans('langCaptcha') }}:</label>
+                    <div class='col-sm-10'>{!! $captcha !!}</div>
                 </div>
             @endif
             <!-- add custom profile fields -->
             {!! $render_profile_fields_form !!}
 
             <!-- check if provider_id from an authenticated user and a valid provider name are set so as to show the relevant form -->
-            @if(!empty($provider_name) && !empty($provider_id)) 
+            @if(!empty($provider_name) && !empty($provider_id))
                 <div class='form-group'>
                   <label for='UserLang' class='col-sm-2 control-label'>{{ trans('langProviderConnectWith') }}:</label>
                   <div class='col-sm-10'><p class='form-control-static'>
