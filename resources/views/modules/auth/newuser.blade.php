@@ -89,7 +89,7 @@
             </div>
             @if ($display_captcha)
                 <div class='form-group'>
-                    <label for='Captcha' class='col-sm-2 control-label'>{{ trans('langCaptcha') }}:</label>
+                    <label for='captcha_code' class='col-sm-2 control-label'>{{ trans('langCaptcha') }}:</label>
                     <div class='col-sm-10'>{!! $captcha !!}</div>
                 </div>
             @endif
