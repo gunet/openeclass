@@ -65,7 +65,7 @@ $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#ex').DataTable ({
                 'columns': [ $columns ],
-                'fnDrawCallback': function (settings) { MathJax && MathJax.typeset(); },
+                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
