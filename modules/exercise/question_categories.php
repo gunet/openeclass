@@ -83,7 +83,7 @@ if (isset($_POST['submitCat'])) {
                 <div class='form-group ".(Session::getError('questionCatName') ? "has-error" : "")."'>
                     <label for='questionCatName' class='col-sm-2 control-label'>$langTitle:</label>
                     <div class='col-sm-10'>
-                      <input name='questionCatName' type='text' class='form-control' id='questionCatName' placeholder='$langTitle' value='$questionCatName'>
+                      <input name='questionCatName' type='text' class='form-control' id='questionCatName' placeholder='$langTitle' value='" . q($questionCatName) . "'>
                       <span class='help-block'>".Session::getError('questionCatName')."</span>
                     </div>
                 </div>

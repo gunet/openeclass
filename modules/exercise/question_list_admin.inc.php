@@ -147,20 +147,20 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
 }
 
 $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
-$cat_options = "<option value=\"-1\">-- $langQuestionAllCats --</option><option value=\"0\">-- $langQuestionWithoutCat --</option>";
+$cat_options = "<option value=\"-1\">-- " . js_escape($langQuestionAllCats) . " --</option><option value=\"0\">-- $langQuestionWithoutCat --</option>";
 $cat_options_2 = "<option value=\"0\"> ---- </option>";
 foreach ($q_cats as $qcat) {
-    $cat_options .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
-    $cat_options_2 .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
+    $cat_options .= "<option value=\"$qcat->question_cat_id\">" . js_escape($qcat->question_cat_name) . "</option>";
+    $cat_options_2 .= "<option value=\"$qcat->question_cat_id\">" . js_escape($qcat->question_cat_name) . "</option>";
 }
 
-$diff_options = "<option value=\"-1\">-- $langQuestionAllDiffs --</option>"
-    . "<option value=\"0\">-- $langQuestionNotDefined --</option>"
-    . "<option value=\"1\">$langQuestionVeryEasy</option>"
-    . "<option value=\"2\">$langQuestionEasy</option>"
-    . "<option value=\"3\">$langQuestionModerate</option>"
-    . "<option value=\"4\">$langQuestionDifficult</option>"
-    . "<option value=\"5\">$langQuestionVeryDifficult</option>";
+$diff_options = "<option value=\"-1\">-- " . js_escape($langQuestionAllDiffs) . " --</option>"
+    . "<option value=\"0\">-- " . js_escape($langQuestionNotDefined) . " --</option>"
+    . "<option value=\"1\">" . js_escape($langQuestionVeryEasy) . "</option>"
+    . "<option value=\"2\">" . js_escape($langQuestionEasy) . "</option>"
+    . "<option value=\"3\">" . js_escape($langQuestionModerate) . "</option>"
+    . "<option value=\"4\">" . js_escape($langQuestionDifficult) . "</option>"
+    . "<option value=\"5\">" . js_escape($langQuestionVeryDifficult) . "</option>";
 
 // for sorting
 $head_content .= "
@@ -225,7 +225,7 @@ $head_content .= "
     $('.questionSelection').click( function(e){
         e.preventDefault();
         bootbox.dialog({
-            title: '$langSelection $langFrom2 $langQuestionPool ($langWithCriteria)',
+            title: '".js_escape("$langSelection $langFrom2 $langQuestionPool ($langWithCriteria)")."',
             message: '<div class=\"row\">' +
                         '<div class=\"col-md-12\">' +
                             '<form class=\"form-horizontal\"> ' +
@@ -238,7 +238,7 @@ $head_content .= "
                                             '<select name=\"difficulty\" class=\"form-control\" id=\"diff\">$diff_options</select>' +
                                         '</div>' +
                                         '<div class=\"col-sm-2\">' +
-                                            '<input class=\"form-control\" type=\"text\" id=\"q_num\" name=\"q_num\" value=\"\"> $langQuestions' +
+                                            '<input class=\"form-control\" type=\"text\" id=\"q_num\" name=\"q_num\" value=\"\">".js_escape($langQuestions)."' +
                                         '</div>' +
                                     '</div>' +
                             '</form>' +
@@ -246,7 +246,7 @@ $head_content .= "
                     '</div>',
                         buttons: {
                             success: {
-                                label: '$langSelection',
+                                label: '".js_escape($langSelection)."',
                                 className: 'btn-success',
                                 callback: function () {
                                     var catValue = $('select#cat').val();
@@ -280,24 +280,24 @@ $head_content .= "
     $('.randomWithCriteria').click(function(e) {        
         e.preventDefault();
         bootbox.dialog({
-            title: '<span class=\"fa fa-random\" style=\"margin-right: 10px; color:grey\"></span>$langRandomQuestionsWithCriteria',
+            title: '<span class=\"fa fa-random\" style=\"margin-right: 10px; color:grey\"></span>".js_escape($langRandomQuestionsWithCriteria)."',
             message: '<div class=\"row\">' +
                         '<div class=\"col-md-12\">' +
                             '<form class=\"form-horizontal\">' +                                
                                 '<div class=\"row\" style=\"margin-bottom: 10px;\">' +
-                                '<span class=\"col-sm-5\">$langQuestionDiffGrade</span>' +
-                                '<span class=\"col-sm-5\">$langQuestionCats</span>' +
-                                '<span class=\"col-sm-2\">$langNumQuestions</span>' +
+                                '<span class=\"col-sm-5\">".js_escape($langQuestionDiffGrade)."</span>' +
+                                '<span class=\"col-sm-5\">".js_escape($langQuestionCats)."</span>' +
+                                '<span class=\"col-sm-2\">".js_escape($langNumQuestions)."</span>' +
                                 '</div>'+
                                 '<div class=\"form-group\">' +
                                     '<div class=\"col-sm-5\">' +
                                         '<select id=\"difficultyId\" class=\"form-control\">' +
                                             '<option value=\"0\">  ----  </option>' +
-                                            '<option value=\"1\">$langQuestionVeryEasy</option>' +
-                                            '<option value=\"2\">$langQuestionEasy</option>' +
-                                            '<option value=\"3\">$langQuestionModerate</option>' +
-                                            '<option value=\"4\">$langQuestionDifficult</option>' +
-                                            '<option value=\"5\">$langQuestionVeryDifficult</option>' +
+                                            '<option value=\"1\">".js_escape($langQuestionVeryEasy)."</option>' +
+                                            '<option value=\"2\">".js_escape($langQuestionEasy)."</option>' +
+                                            '<option value=\"3\">".js_escape($langQuestionModerate)."</option>' +
+                                            '<option value=\"4\">".js_escape($langQuestionDifficult)."</option>' +
+                                            '<option value=\"5\">".js_escape($langQuestionVeryDifficult)."</option>' +
                                         '</select>' +
                                     '</div>' +                                
                                     '<div class=\"col-sm-5\">' +
