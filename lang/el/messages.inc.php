@@ -1952,8 +1952,8 @@ $langMoreLessChoices = "Προσθήκη/Αφαίρεση επιλογών";
 // question_list_admin.php
 $langQuestionList = "Ερωτήσεις της άσκησης";
 $langGetExistingQuestion = "Ερώτηση από άλλη άσκηση";
-$langWithCriteria = 'με κριτήρια';
-$langWithoutCriteria = 'χωρίς κριτήρια';
+$langWithCriteria = 'Εισαγωγή με κριτήρια από τράπεζα ερωτήσεων';
+$langWithoutCriteria = 'Εισαγωγή από τράπεζα ερωτήσεων';
 $langSelectionRule = 'Κανόνας Επιλογής';
 
 // question_pool.php
