@@ -36,13 +36,11 @@ require_once 'game.php';
 require_once 'analytics.php';
 require_once 'include/log.class.php';
 
-$pageName = $langExercicesView;
 $picturePath = "courses/$course_code/image";
 
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
-
 
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
@@ -71,13 +69,13 @@ if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
         WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, 0, $eurid);
     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
-        array('title' => $objExercise->selectTitle(),
+        array('title' => $_SESSION['objExercise'][$exerciseId]->selectTitle(),
             'legend' => $langCancel)
     );
     unset_exercise_var($exerciseId);
     exit();
 }
-
+//$_SESSION['objExercise'][$exerciseId]->selectTitle()
 // setting a cookie in onBeforeUnload event in order to redirect user to the exercises page in case of refresh
 // as the synchronous ajax call in onUnload event doen't work the same in all browsers in case of refresh
 // (It is executed after page load in Chrome and Mozilla and before page load in IE).
@@ -122,6 +120,7 @@ if (isset($_REQUEST['exerciseId'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
+$pageName = $objExercise->selectTitle();
 // If the exercise is assigned to specific users / groups
 if ($objExercise->selectAssignToSpecific() and !$is_editor) {
     $assignees = Database::get()->queryArray('SELECT user_id, group_id
@@ -355,6 +354,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     } else {
         // selects the list of question ID
+        $questionList = [];
         if ($shuffleQuestions or (intval($randomQuestions) > 0)) {
             $qList = $objExercise->selectShuffleQuestions();
         } else {
@@ -368,7 +368,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }
     }
     // saves the question list into the session if there are questions
-    if (count($questionList)) {
+    if (count($questionList) > 0) {
         $_SESSION['questionList'][$exerciseId][$attempt_value] = $questionList;
     } else {
         unset_exercise_var($exerciseId);
@@ -487,13 +487,12 @@ if (isset($_POST['formSent'])) {
             $totalScore = 0.00;
         }
 
-        if ($objExercise->isRandom()) {
+        if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
                                           SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
         } else {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }
-
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
         // record results of exercise
@@ -570,23 +569,23 @@ if (isset($timeleft)) {
         $timeleft = 1;
     }
 }
-$exerciseDescription_temp = standard_text_escape($exerciseDescription);
-$tool_content .= "<div class='panel panel-primary'>
-  <div class='panel-heading'>
-    <h3 class='panel-title'>" .
-    (isset($timeleft)?
-        "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>$timeleft</span></div>" : '') .
-      q_math($exerciseTitle) . "</h3>
-  </div>";
-if (!empty($exerciseDescription_temp)) {
-    $tool_content .= "<div class='panel-body'>
-        $exerciseDescription_temp
-      </div>";
+
+if (isset($timeleft)) { // time remaining
+    $tool_content .= "<div class='row alert alert-danger' style='margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
+    $tool_content .= "<div class='col-sm-12'><h4 class='text-center'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
+    $tool_content .= "</div>";
 }
-$tool_content .= "</div>";
+
+if (!empty($exerciseDescription)) { // description
+    $tool_content .= "<div class='row margin-bottom-fat form-wrapper' style='margin-top: 10px; margin-bottom: 30px; margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
+    $tool_content .= "<div class='col-sm-12'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
+    $tool_content .= "</div>";
+}
 
 if (isset($_REQUEST['unit'])) {
     $form_action_link = "{$urlServer}modules/units/view.php?res_type=exercise&amp;unit=$_REQUEST[unit]&amp;course=$course_code&amp;exerciseId=$exerciseId";
+} else if (isset($_REQUEST['res_type'])) {
+    $form_action_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exerciseId";
 } else {
     $form_action_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId";
 }
@@ -867,7 +866,7 @@ if (!$questionList) {
     $tool_content .= "<input class='btn btn-danger' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
 
     // "Submit" button
-    $tool_content .= "<input class='btn btn-success blockUI' type='submit' name='buttonFinish' value='$langSubmit'>";
+    $tool_content .= "<input class='btn btn-success blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
     if ($exerciseType == MULTIPLE_PAGE_TYPE) {
         $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
     }
@@ -908,7 +907,7 @@ if ($questionList) {
                 finalSubmit: '". js_escape($langExerciseFinalSubmit) ."',
                 finalSubmitWarn: '". js_escape($langExerciseFinalSubmitWarn) ."',
                 question: '". js_escape($langUnansweredQuestionsQuestion) ."',
-                submit: '". js_escape($langSubmit) ."',
+                submit: '". js_escape($langExerciseFinalSubmit) ."',
                 goBack: '". js_escape($langGoBackToEx) ."',
                 cancelMessage: '". js_escape($langCancelExConfirmation) ."',
                 cancelAttempt: '". js_escape($langCancelAttempt) ."',
