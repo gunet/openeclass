@@ -306,21 +306,23 @@ function exercise_init_countdown(params) {
         });
     });
 
-    var timer = $('#progresstime');
-    timer.time = timer.text();
-    timer.text(secondsToHms(timer.time--));
-    var hidden_timer = $('#secsRemaining');
-    hidden_timer.time = timer.time;
-    setInterval(function() {
-        hidden_timer.val(hidden_timer.time--);
-        if (hidden_timer.time + 1 == 0) {
-            clearInterval();
-        }
-    }, 1000);
-    countdown(timer, function() {
-        $('<input type="hidden" name="autoSubmit" value="true">').appendTo('.exercise');
-        continueSubmit();
-    });
+    if ($('#secsRemaining').length) {
+        var timer = $('#progresstime');
+        timer.remaining = $('#secsRemaining').val() - 1;
+        timer.text(secondsToHms(timer.remaining));
+        timer.start = performance.now();
+        timer.interval = setInterval(function() {
+            var elapsed = (performance.now() - timer.start) / 1000.0;
+            if (elapsed > timer.remaining) {
+                clearInterval(timer.interval);
+                $('<input type="hidden" name="autoSubmit" value="true">').appendTo('.exercise');
+                continueSubmit();
+            } else {
+                timer.text(secondsToHms(timer.remaining - elapsed));
+            }
+        }, 1000);
+    }
+
     setInterval(function() {
         $.ajax({
           type: 'POST',
@@ -537,18 +539,6 @@ function updateQuestionNavButton(question_number) {
             }
         });
     });
-}
-
-
-function countdown(timer, callback) {
-    int = setInterval(function() {
-      timer.text(secondsToHms(timer.time--));
-      if (timer.time + 1 == 0) {
-        clearInterval(int);
-        // 600ms - width animation time
-        callback && setTimeout(callback, 600);
-      }
-    }, 1000);
 }
 
 function secondsToHms(d) {

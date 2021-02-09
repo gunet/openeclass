@@ -571,7 +571,7 @@ if (isset($timeleft)) {
     
 if (isset($timeleft)) { // time remaining
     $tool_content .= "<div class='row alert alert-danger' style='margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
-    $tool_content .= "<div class='col-sm-12'><h4 class='text-center'>$langRemainingTime: <span id='progresstime''>$timeleft</span></h4></div>";
+    $tool_content .= "<div class='col-sm-12'><h4 class='text-center'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
     $tool_content .= "</div>";
 }
 
