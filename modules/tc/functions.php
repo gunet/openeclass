@@ -219,7 +219,7 @@ function bbb_session_form($session_id = 0) {
         <div class='form-group'>
             <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type='text' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
+                <input class='form-control' type='number' min='1' step='5' pattern='\d+' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
         if (isset($bbb_max_part_per_room_limit)) {
             $tool_content .= " $langBBBMaxPartPerRoom: <strong>$bbb_max_part_per_room</strong>";
         } else {
@@ -588,7 +588,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
                 // Notify course users for new bbb session
-                send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}", $_SESSION['email'], '', $recipients, $emailsubject, $emailbody, $emailcontent);
+                send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -619,7 +619,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 ";
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
-                send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}", $_SESSION['email'], '', $row, $emailsubject, $emailbody, $emailcontent);
+                send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -1592,16 +1592,6 @@ function is_bbb_server_available($server_id, $participants)
  */
 function get_bbb_servers_load()
 {
-    $servers = array();
-    // weight of all participants: they get the presentation
-    $participant_weight = 1;
-    // weight of audio: audio is sent to listeners. double weight due to free switch mixing in cpu
-    $audio_weight = 2;
-    // weight of video: video is sent to participants. double weight due to higher bandwidth and cpu of SFU
-    $video_weight = 2;
-    // each room allocates resources. take that into account
-    $room_load = 50;
-
     $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' AND `enabled` = 'true' ORDER BY weight ASC");
 
     $server_count = count($q);
@@ -1610,10 +1600,23 @@ function get_bbb_servers_load()
         return false;
     }
 
+    // weight of all participants: they get the presentation
+    $participant_weight = get_config('bbb_lb_weight_part', 1);
+    // weight of audio: audio is sent to listeners. double weight due to mixing in cpu
+    // Notice: listeners get audio from Kurento. Microphone/voice users get audio from Freeswitch
+    // We handle it the same way (for now)
+    $audio_weight = get_config('bbb_lb_weight_mic', 2);
+    // weight of video: video is sent to participants. double weight due to higher bandwidth and cpu of SFU/Kurento
+    $video_weight = get_config('bbb_lb_weight_camera', 2);
+    // each room allocates resources. take that into account
+    $room_load = get_config('bbb_lb_weight_room', 50);
+
+    $servers = array();
     foreach ($q as $server) {
-        $rooms = $participants = $load = 0;
+        $rooms = $tparticipants = $tlisten = $tvoice = $tvideo = $load = 0;
         $bbb_url = $server->api_url;
         $salt = $server->server_key;
+        $server_id = $server->id;
         // instantiate the BBB class
         $bbb = new BigBlueButton($salt, $bbb_url);
 
@@ -1634,15 +1637,31 @@ function get_bbb_servers_load()
             $listenerCount = $meeting['listenerCount'];
             $voiceParticipantCount = $meeting['voiceParticipantCount'];
             $videoCount = $meeting['videoCount'];
+            $moderatorCount = $meeting['moderatorCount'];
 
             // presentation is going to all participants
             $presentation_load = $participantCount * $participant_weight;
+
             // voice is mixed. streams_in: voicePart / streams_out: listenPart
             $audio_load = ($voiceParticipantCount + $listenerCount) * $audio_weight;
-            // video creates many streams
-            $video_load = ($videoCount + $participantCount - 1) * $video_weight;
 
-            $participants += $participantCount;
+            // each camera by default generates a stream to all participants
+            $video_load = $videoCount * $participantCount * $video_weight;
+
+            // unless cameras are locked to be shown only to moderators/professors
+            // first check if meeting is local to us
+            $res = Database::get()->querySingle("SELECT tc_session.options FROM tc_session WHERE meeting_id='${meeting['meetingId']}' AND running_at=$server_id");
+            if (!empty($res->options)) {
+                $options = unserialize($res->options);
+                if (isset($options['lockSettingsDisableCam'])) {
+                    $video_load = $videoCount * $moderatorCount * $video_weight;
+                }
+            }
+
+            $tparticipants += $participantCount;
+            $tlisten += $listenerCount;
+            $tvoice += $voiceParticipantCount;
+            $tvideo += $videoCount;
             $load += $presentation_load + $audio_load + $video_load + $room_load;
         }
 
@@ -1656,7 +1675,10 @@ function get_bbb_servers_load()
             'id' => $server->id,
             'weight' => $server->weight,
             'rooms' => $rooms,
-            'participants' => $participants,
+            'participants' => $tparticipants,
+            'listeners' => $tlisten,
+            'voice' => $tvoice,
+            'video' => $tvideo,
             'load' => $load,
             'enable_recordings' => $enable_recordings,
         );
@@ -1680,6 +1702,9 @@ function get_bbb_servers_load_by_id()
         $arr[$server['id']]['weight'] = $server['weight'];
         $arr[$server['id']]['rooms'] = $server['rooms'];
         $arr[$server['id']]['participants'] = $server['participants'];
+        $arr[$server['id']]['listeners'] = $server['listeners'];
+        $arr[$server['id']]['voice'] = $server['voice'];
+        $arr[$server['id']]['video'] = $server['video'];
         $arr[$server['id']]['load'] = $server['load'];
         $arr[$server['id']]['enable_recordings'] = $server['enable_recordings'];
     }
@@ -1707,6 +1732,9 @@ function get_bbb_servers($record = 'false')
     $load = array_column($servers, 'load');
     $rooms = array_column($servers, 'rooms');
     $participants = array_column($servers, 'participants');
+    $listeners = array_column($servers, 'listeners');
+    $microphones = array_column($servers, 'voice');
+    $cameras = array_column($servers, 'video');
     $enable_recordings = array_column($servers, 'enable_recordings');
 
     $record_sort = ($record=='true') ? SORT_DESC : SORT_ASC;
@@ -1725,6 +1753,14 @@ function get_bbb_servers($record = 'false')
         // weighted least connections. Sort first by recording, then by weight and last by #participants
         case 'wlc':
             array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $participants, SORT_ASC, SORT_NUMERIC, $servers);
+            break;
+        // weighted least microphones. Sort first by recording, then by weight and last by #microphones
+        case 'wlm':
+            array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $microphones, SORT_ASC, SORT_NUMERIC, $servers);
+            break;
+        // weighted least cameras. Sort first by recording, then by weight and last by #cameras
+        case 'wlv':
+            array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $cameras, SORT_ASC, SORT_NUMERIC, $servers);
             break;
         // Default. Sort by recording and then by weight only. No distribution of load. Each server fills based
         // max number of rooms and max number of participants. Then we move to next server

@@ -343,9 +343,17 @@ else if (isset($_POST['submit'])) {
 else if (isset($_POST['submit_config'])) {
     $bbb_max_duration = isset($_POST['bbb_max_duration']) ? intval($_POST['bbb_max_duration']) : '';
     $bbb_max_part_per_room = isset($_POST['bbb_max_part_per_room']) ? intval($_POST['bbb_max_part_per_room']) : '';
+    $bbb_lb_weight_part = isset($_POST['bbb_lb_weight_part']) ? intval($_POST['bbb_lb_weight_part']) : '';
+    $bbb_lb_weight_mic = isset($_POST['bbb_lb_weight_mic']) ? intval($_POST['bbb_lb_weight_mic']) : '';
+    $bbb_lb_weight_camera = isset($_POST['bbb_lb_weight_camera']) ? intval($_POST['bbb_lb_weight_camera']) : '';
+    $bbb_lb_weight_room = isset($_POST['bbb_lb_weight_room']) ? intval($_POST['bbb_lb_weight_room']) : '';
 
     set_config('bbb_max_duration', $bbb_max_duration);
     set_config('bbb_max_part_per_room', $bbb_max_part_per_room);
+    set_config('bbb_lb_weight_part', $bbb_lb_weight_part);
+    set_config('bbb_lb_weight_mic', $bbb_lb_weight_mic);
+    set_config('bbb_lb_weight_camera', $bbb_lb_weight_camera);
+    set_config('bbb_lb_weight_room', $bbb_lb_weight_room);
     set_config('bbb_lb_algo', $_POST['bbb_lb_algo']);
 
     // Display result message
@@ -358,8 +366,13 @@ else if (isset($_GET['edit_config'])) {
     $pageName = $langBBBConfig;
     $bbb_max_duration = get_config('bbb_max_duration', 0);
     $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+    $bbb_lb_weight_part = get_config('bbb_lb_weight_part', 1);
+    $bbb_lb_weight_mic = get_config('bbb_lb_weight_mic', 2);
+    $bbb_lb_weight_camera = get_config('bbb_lb_weight_camera', 2);
+    $bbb_lb_weight_room = get_config('bbb_lb_weight_room', 50);
     $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
-    $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked = '';
+    $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked = 
+    $bbb_lb_wlm_checked = $bbb_lb_wlv_checked = '';
 
     if ($bbb_lb_algo == 'wll') {
         $bbb_lb_wll_checked = "checked='true'";
@@ -367,6 +380,10 @@ else if (isset($_GET['edit_config'])) {
         $bbb_lb_wlr_checked = "checked='true'";
     } else if ($bbb_lb_algo == 'wlc') {
         $bbb_lb_wlc_checked = "checked='true'";
+    } else if ($bbb_lb_algo == 'wlm') {
+        $bbb_lb_wlm_checked = "checked='true'";
+    } else if ($bbb_lb_algo == 'wlv') {
+        $bbb_lb_wlv_checked = "checked='true'";
     } else {
         $bbb_lb_wo_checked = "checked='true'"; // default
     }
@@ -379,15 +396,14 @@ else if (isset($_GET['edit_config'])) {
 
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-3 control-label'>$langBBBLBMethod:</label>";
     $tool_content .= "</div>";
-
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wo' $bbb_lb_wo_checked>$langBBBLBMethodWO</label></span>";
     $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWOInfo'></span></label>";
     $tool_content .= "</div>";
-
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wll' $bbb_lb_wll_checked>$langBBBLBMethodWLL</label></span>";
     $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLLInfo'></span></label>";
@@ -400,15 +416,50 @@ else if (isset($_GET['edit_config'])) {
     $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlc' $bbb_lb_wlc_checked>$langBBBLBMethodWLC</label></span>";
     $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLCInfo'></span></label>";
     $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlm' $bbb_lb_wlm_checked>$langBBBLBMethodWLM</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLMInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wlv' $bbb_lb_wlv_checked>$langBBBLBMethodWLV</label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBMethodWLVInfo'></span></label>";
+    $tool_content .= "</div>";
 
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBMaxDuration:</label>";
-    $tool_content .= "<span class='col-sm-1'><label><input class='form-control' type='text' id='bbb_max_duration' name='bbb_max_duration' value='$bbb_max_duration'></label></span>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBLBWeights:</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 control-label'>$langBBBLBWeightParticipant:</span>";
+    $tool_content .= "<span class='col-sm-2'><label><input class='form-control' type='number' min='1' max='1000' step='1' pattern='\d+' id='bbb_lb_weight_part' name='bbb_lb_weight_part' value='$bbb_lb_weight_part'></label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBWeightParticipantInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 control-label'>$langBBBLBWeightMic:</span>";
+    $tool_content .= "<span class='col-sm-2'><label><input class='form-control' type='number' min='1' max='1000' step='1' pattern='\d+' id='bbb_lb_weight_mic' name='bbb_lb_weight_mic' value='$bbb_lb_weight_mic'></label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBWeightMicInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 control-label'>$langBBBLBWeightCamera:</span>";
+    $tool_content .= "<span class='col-sm-2'><label><input class='form-control' type='number' min='1' max='1000' step='1' pattern='\d+' id='bbb_lb_weight_camera' name='bbb_lb_weight_camera' value='$bbb_lb_weight_camera'></label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBWeightCameraInfo'></span></label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 control-label'>$langBBBLBWeightRoom:</span>";
+    $tool_content .= "<span class='col-sm-2'><label><input class='form-control' type='number' min='1' max='1000' step='1' pattern='\d+' id='bbb_lb_weight_room' name='bbb_lb_weight_room' value='$bbb_lb_weight_room'></label></span>";
+    $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBLBWeightRoomInfo'></span></label>";
+    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langOtherOptions:</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<span class='col-sm-3 control-label'>$langBBBMaxDuration:</span>";
+    $tool_content .= "<span class='col-sm-2'><label><input class='form-control' type='number' min='0' max='10000' step='10' pattern='\d+' id='bbb_max_duration' name='bbb_max_duration' value='$bbb_max_duration'></label></span>";
     $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langInMinutes'></span></label>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBMaxPartPerRoom:</label>";
-    $tool_content .= "<span class='col-sm-1'><label><input class='form-control' type='text' id='bbb_max_part_per_room' name='bbb_max_part_per_room' value='$bbb_max_part_per_room'></label></span>";
+    $tool_content .= "<span class='col-sm-3 control-label'>$langBBBMaxPartPerRoom:</span>";
+    $tool_content .= "<span class='col-sm-2'><label><input class='form-control' type='number' min='0' max='1000' step='10' pattern='\d+' id='bbb_max_part_per_room' name='bbb_max_part_per_room' value='$bbb_max_part_per_room'></label></span>";
     $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBMaxPartPerRoomInfo'></span></label>";
     $tool_content .= "</div>";
 
@@ -563,12 +614,13 @@ else {
                 <thead>
                 <tr><th class = 'text-center'>$langName</th>
                     <th class = 'text-center'>$langBBBEnabled</th>
-                    <th class = 'text-center'>$langOnlineUsers</th>
+                    <th class = 'text-center'>$langUsers</th>
                     <th class = 'text-center'>$langActiveRooms</th>
+                    <th class = 'text-center'>$langBBBMics / $langBBBCameras</th>
                     <th class = 'text-center'>$langBBBServerOrderP / $langBBBServerLoad</th>
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";
-            $t_connected_users = 0;
+            $t_connected_users = $t_listeners = $t_mics = $t_cameras = 0;
             $t_active_rooms = 0;
             $t_max_users = 0;
             $t_max_rooms = 0;
@@ -582,8 +634,14 @@ else {
                 if ($srv->enabled == "true") {
                     $server_load = $servers[$srv->id]['load'];
                     $connected_users = $servers[$srv->id]['participants'];
+                    $listeners = $servers[$srv->id]['listeners'];
+                    $mics = $servers[$srv->id]['voice'];
+                    $cameras = $servers[$srv->id]['video'];
                     $active_rooms = $servers[$srv->id]['rooms'];
                     $t_connected_users += $connected_users;
+                    $t_listeners += $listeners;
+                    $t_mics += $mics;
+                    $t_cameras += $cameras;
                     $t_active_rooms += $active_rooms;
                     $t_max_users += $srv->max_users;
                     $t_max_rooms += $srv->max_rooms;
@@ -604,6 +662,7 @@ else {
                     "<td class = 'text-center'>$enabled_bbb_server $mess</td>" .
                     "<td class = 'text-center'>$connected_users / $srv->max_users</td>" .
                     "<td class = 'text-center'>$active_rooms / $srv->max_rooms</td>" .
+                    "<td class = 'text-center'>$mics / $cameras</td>" .
                     "<td class = 'text-center'>$srv->weight / $server_load</td>" .
                     "<td class='option-btn-cell'>" .
                     action_button(array(
@@ -627,6 +686,10 @@ else {
                 $bbb_lb_algo_info = $langBBBLBMethodWLR;
             } else if ($bbb_lb_algo == 'wlc') {
                 $bbb_lb_algo_info = $langBBBLBMethodWLC;
+            } else if ($bbb_lb_algo == 'wlm') {
+                $bbb_lb_algo_info = $langBBBLBMethodWLM;
+            } else if ($bbb_lb_algo == 'wlv') {
+                $bbb_lb_algo_info = $langBBBLBMethodWLV;
             } else {
                 $bbb_lb_algo_info = $langBBBLBMethodWO;
             }
@@ -635,6 +698,7 @@ else {
                     "<td class = 'text-right' colspan='2'>$langTotal:</td>" .
                     "<td class = 'text-center'>$t_connected_users / $t_max_users ($users_p)</td>" .
                     "<td class = 'text-center'>$t_active_rooms / $t_max_rooms ($rooms_p)</td>" .
+                    "<td class = 'text-center'>$t_mics / $t_cameras</td>" .
                     "<td class = 'text-center'>$bbb_lb_algo_info</td>" .
                     "</tr>";
             $tool_content .= "</table></div>";
@@ -651,7 +715,8 @@ else {
                 <tr><th class = 'text-center'>$langServer</th>
                     <th class = 'text-center'>$langCourse</th>
                     <th class = 'text-center'>$langTitle</th>
-                    <th class = 'text-center'>$langOnlineUsers</th>
+                    <th class = 'text-center'>$langUsers</th>
+                    <th class = 'text-center'>$langBBBMics / $langBBBCameras</th>
                     <th class = 'text-center'>$langNewBBBSessionStart</th>
                 </thead>";
            foreach ($q as $srv) {
@@ -670,6 +735,8 @@ else {
                         $mod_pw = $meeting['moderatorPw'];
                         $att_pw = $meeting['attendeePw'];
                         $mparticipants = $meeting['participantCount'];
+                        $mvoicecount = $meeting['voiceParticipantCount'];
+                        $mvideocount = $meeting['videoCount'];
                         $course_code = $course->code;
                         $course_title = $course->title;
                         // meeting name without course code
@@ -684,6 +751,7 @@ else {
                             "<td>$courseLink ($course_code)</td>" .
                             "<td>$joinLink</td>" .
                             "<td class = 'text-center'>$mparticipants</td>" .
+                            "<td class = 'text-center'>$mvoicecount / $mvideocount</td>" .
                             "<td class = 'text-center'>$createDate</td>" .
                             "</tr>";
                     }
