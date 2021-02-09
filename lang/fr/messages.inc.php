@@ -3796,6 +3796,7 @@ $langBBBImportRecordings = "Import recorded teleconferences to multimedia";
 $langBBBImportRecordingsOK = "Recording successfully imported to multimedia!";
 $langMaxUsers = "Max number of users";
 $langMaxRooms = "Max number of rooms";
+$langBBBDefaultNewRoom = "Defaults for new teleconferences";
 $langPresharedKey = "Pre-shared key";
 $langBBBSessionMaxUsers = "Max number of participants";
 $langBBBSessionSuggestedUsers = 'Suggested number of participants';

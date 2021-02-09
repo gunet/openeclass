@@ -5081,6 +5081,7 @@ $langBBBImportRecordingsNo = "Η εισαγωγή στα πολυμέσα δεν
 $langBBBImportRecordingsNoNew = "Δε βρέθηκαν νεότερες καταγραφές για τη συγκεκριμένη συνεδρία.";
 $langMaxUsers = "Μέγ. αριθμός χρηστών";
 $langMaxRooms = "Μέγ. αριθμός δωματίων";
+$langBBBDefaultNewRoom = "Προεπιλεγμένες τιμές για νέες τηλεσυνεργασίες";
 $langBBBMaxDuration = "Μέγ. διάρκεια τηλεσυνεργασίας";
 $langInMinutes = "σε λεπτά. 0 για κανένα περιορισμό";
 $langBBBMaxPartPerRoom = 'Μέγ. αριθμός συμμετεχόντων ανά τηλεσυνεργασία';

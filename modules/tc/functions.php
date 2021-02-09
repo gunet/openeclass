@@ -96,6 +96,16 @@ function bbb_session_form($session_id = 0) {
             $options = NULL;
             $options_show = "";
         }
+        $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
+        $checked_lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? 'checked' : '';
+        $checked_lockSettingsDisableCam = isset($options['lockSettingsDisableCam']) ? 'checked' : '';
+        $checked_webcamsOnlyForModerator = isset($options['webcamsOnlyForModerator']) ? 'checked' : '';
+        $checked_lockSettingsDisablePrivateChat = isset($options['lockSettingsDisablePrivateChat']) ? 'checked' : '';
+        $checked_lockSettingsDisablePublicChat = isset($options['lockSettingsDisablePublicChat']) ? 'checked' : '';
+        $checked_lockSettingsDisableNote = isset($options['lockSettingsDisableNote']) ? 'checked' : '';
+        $checked_lockSettingsHideUserList = isset($options['lockSettingsHideUserList']) ? 'checked' : '';
+        $checked_hideParticipants = isset($options['hideParticipants']) ? 'checked' : '';
+
         $submit_name = 'update_bbb_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
@@ -116,17 +126,25 @@ function bbb_session_form($session_id = 0) {
         $submit_id = '';
         $value_message = $langAdd;
         $options = NULL;
-        $options_show = "";
+        $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
+        $checked_lockSettingsDisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
+        $checked_lockSettingsDisableCam = get_config('bbb_DisableCam', 0) ? 'checked' : '';
+        $checked_webcamsOnlyForModerator = get_config('bbb_webcamsOnlyForModerator', 0) ? 'checked' : '';
+        $checked_lockSettingsDisablePrivateChat = get_config('bbb_DisablePrivateChat', 0) ? 'checked' : '';
+        $checked_lockSettingsDisablePublicChat = get_config('bbb_DisablePublicChat', 0) ? 'checked' : '';
+        $checked_lockSettingsDisableNote = get_config('bbb_DisableNote', 0) ? 'checked' : '';
+        $checked_lockSettingsHideUserList = get_config('bbb_HideUserList', 0) ? 'checked' : '';
+        $checked_hideParticipants = get_config('bbb_hideParticipants', 0) ? 'checked' : '';
+        if (!empty($checked_muteOnStart) or !empty($checked_lockSettingsDisableMic) or 
+           !empty($checked_lockSettingsDisableCam) or !empty($checked_webcamsOnlyForModerator) or
+           !empty($checked_lockSettingsDisablePrivateChat) or !empty($checked_lockSettingsDisablePublicChat) or
+           !empty($checked_lockSettingsDisableNote) or !empty($checked_lockSettingsHideUserList) or
+           !empty($checked_hideParticipants)) {
+            $options_show = "show";
+        } else {
+            $options_show = "";
+        }
     }
-    $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
-    $checked_lockSettingsDisableCam = isset($options['lockSettingsDisableCam']) ? 'checked' : '';
-    $checked_webcamsOnlyForModerator = isset($options['webcamsOnlyForModerator']) ? 'checked' : '';
-    $checked_lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? 'checked' : '';
-    $checked_lockSettingsDisablePrivateChat = isset($options['lockSettingsDisablePrivateChat']) ? 'checked' : '';
-    $checked_lockSettingsDisablePublicChat = isset($options['lockSettingsDisablePublicChat']) ? 'checked' : '';
-    $checked_lockSettingsDisableNote = isset($options['lockSettingsDisableNote']) ? 'checked' : '';
-    $checked_lockSettingsHideUserList = isset($options['lockSettingsHideUserList']) ? 'checked' : '';
-    $checked_hideParticipants = isset($options['hideParticipants']) ? 'checked' : '';
 
     $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
@@ -219,7 +237,7 @@ function bbb_session_form($session_id = 0) {
         <div class='form-group'>
             <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type='number' min='1' step='5' pattern='\d+' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
+                <input class='form-control' type='number' min='1' pattern='\d+' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
         if (isset($bbb_max_part_per_room_limit)) {
             $tool_content .= " $langBBBMaxPartPerRoom: <strong>$bbb_max_part_per_room</strong>";
         } else {

@@ -347,6 +347,15 @@ else if (isset($_POST['submit_config'])) {
     $bbb_lb_weight_mic = isset($_POST['bbb_lb_weight_mic']) ? intval($_POST['bbb_lb_weight_mic']) : '';
     $bbb_lb_weight_camera = isset($_POST['bbb_lb_weight_camera']) ? intval($_POST['bbb_lb_weight_camera']) : '';
     $bbb_lb_weight_room = isset($_POST['bbb_lb_weight_room']) ? intval($_POST['bbb_lb_weight_room']) : '';
+    $bbb_muteOnStart = isset($_POST['bbb_muteOnStart']) ? 1 : 0;
+    $bbb_DisableCam = isset($_POST['bbb_DisableCam']) ? 1 : 0;
+    $bbb_webcamsOnlyForModerator = isset($_POST['bbb_webcamsOnlyForModerator']) ? 1 : 0;
+    $bbb_DisableMic = isset($_POST['bbb_DisableMic']) ? 1 : 0;
+    $bbb_DisablePrivateChat = isset($_POST['bbb_DisablePrivateChat']) ? 1 : 0;
+    $bbb_DisablePublicChat = isset($_POST['bbb_DisablePublicChat']) ? 1 : 0;
+    $bbb_DisableNote = isset($_POST['bbb_DisableNote']) ? 1 : 0;
+    $bbb_HideUserList = isset($_POST['bbb_HideUserList']) ? 1 : 0;
+    $bbb_hideParticipants = isset($_POST['bbb_hideParticipants']) ? 1 : 0;
 
     set_config('bbb_max_duration', $bbb_max_duration);
     set_config('bbb_max_part_per_room', $bbb_max_part_per_room);
@@ -355,6 +364,15 @@ else if (isset($_POST['submit_config'])) {
     set_config('bbb_lb_weight_camera', $bbb_lb_weight_camera);
     set_config('bbb_lb_weight_room', $bbb_lb_weight_room);
     set_config('bbb_lb_algo', $_POST['bbb_lb_algo']);
+    set_config('bbb_muteOnStart', $bbb_muteOnStart);
+    set_config('bbb_DisableMic', $bbb_DisableMic);
+    set_config('bbb_DisableCam', $bbb_DisableCam);
+    set_config('bbb_webcamsOnlyForModerator', $bbb_webcamsOnlyForModerator);
+    set_config('bbb_DisablePrivateChat', $bbb_DisablePrivateChat);
+    set_config('bbb_DisablePublicChat', $bbb_DisablePublicChat);
+    set_config('bbb_DisableNote', $bbb_DisableNote);
+    set_config('bbb_HideUserList', $bbb_HideUserList);
+    set_config('bbb_hideParticipants', $bbb_hideParticipants);
 
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
@@ -373,6 +391,15 @@ else if (isset($_GET['edit_config'])) {
     $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
     $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked = 
     $bbb_lb_wlm_checked = $bbb_lb_wlv_checked = '';
+    $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
+    $checked_DisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
+    $checked_DisableCam = get_config('bbb_DisableCam', 0) ? 'checked' : '';
+    $checked_webcamsOnlyForModerator = get_config('bbb_webcamsOnlyForModerator', 0) ? 'checked' : '';
+    $checked_DisablePrivateChat = get_config('bbb_DisablePrivateChat', 0) ? 'checked' : '';
+    $checked_DisablePublicChat = get_config('bbb_DisablePublicChat', 0) ? 'checked' : '';
+    $checked_DisableNote = get_config('bbb_DisableNote', 0) ? 'checked' : '';
+    $checked_HideUserList = get_config('bbb_HideUserList', 0) ? 'checked' : '';
+    $checked_hideParticipants = get_config('bbb_hideParticipants', 0) ? 'checked' : '';
 
     if ($bbb_lb_algo == 'wll') {
         $bbb_lb_wll_checked = "checked='true'";
@@ -398,7 +425,7 @@ else if (isset($_GET['edit_config'])) {
     $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBLBMethod:</label>";
+    $tool_content .= "<label class='col-sm-3'>$langBBBLBMethod:</label>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<span class='col-sm-3 radio'><label><input type='radio' name='bbb_lb_algo' value='wo' $bbb_lb_wo_checked>$langBBBLBMethodWO</label></span>";
@@ -426,7 +453,7 @@ else if (isset($_GET['edit_config'])) {
     $tool_content .= "</div>";
 
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBLBWeights:</label>";
+    $tool_content .= "<label class='col-sm-3'>$langBBBLBWeights:</label>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<span class='col-sm-3 control-label'>$langBBBLBWeightParticipant:</span>";
@@ -450,7 +477,56 @@ else if (isset($_GET['edit_config'])) {
     $tool_content .= "</div>";
 
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langOtherOptions:</label>";
+    $tool_content .= "<label class='col-sm-5'>$langBBBDefaultNewRoom:</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_muteOnStart' $checked_muteOnStart value='1'>$langBBBmuteOnStart</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_DisableMic' $checked_DisableMic value='1'>$langBBBlockSettingsDisableMic</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_DisableCam' $checked_DisableCam value='1'>$langBBBlockSettingsDisableCam</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_webcamsOnlyForModerator' $checked_webcamsOnlyForModerator value='1'>$langBBBwebcamsOnlyForModerator</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_DisablePrivateChat' $checked_DisablePrivateChat value='1'>$langBBBlockSettingsDisablePrivateChat</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_DisablePublicChat' $checked_DisablePublicChat value='1'>$langBBBlockSettingsDisablePublicChat</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_DisableNote' $checked_DisableNote value='1'>$langBBBlockSettingsDisableNote</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_HideUserList' $checked_HideUserList value='1'>$langBBBlockSettingsHideUserList</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_hideParticipants' $checked_hideParticipants value='1'>$langBBBHideParticipants</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3'>$langOtherOptions:</label>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<span class='col-sm-3 control-label'>$langBBBMaxDuration:</span>";
