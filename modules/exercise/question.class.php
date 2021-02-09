@@ -205,8 +205,8 @@ if (!class_exists('Question')) {
 
             global $course_id;
 
-            $q = Database::get()->querySingle("SELECT question_cat_name FROM exercise_question_cats 
-                                  WHERE question_cat_id = ?d 
+            $q = Database::get()->querySingle("SELECT question_cat_name FROM exercise_question_cats
+                                  WHERE question_cat_id = ?d
                                   AND course_id = ?d", $cat_id, $course_id);
             if ($q) {
                 return $q->question_cat_name;
@@ -702,7 +702,7 @@ if (!class_exists('Question')) {
             $blanks = Array();
 
             // remove math tags [m]...[/m]
-            $temp = preg_replace('/\[m\].*?\[\\m\]/', '', $string);
+            $temp = preg_replace('/\[m\].*?\[\/m\]/', '', $string);
 
             // the loop will stop at the end of the string
             while (1) {
