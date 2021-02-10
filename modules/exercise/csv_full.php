@@ -99,8 +99,6 @@ for ($i=1; $i<=count($qids_answered); $i++) {
     }
 }
 
-//print_a($results);
-
 // exercise details
 $exercise_details[] = $objExercise->selectTitle();
 $exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
