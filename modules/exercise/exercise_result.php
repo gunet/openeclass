@@ -90,6 +90,7 @@ ModalBoxHelper::loadModalBox();
 
 load_js('tools.js');
 
+$user = null;
 if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
     $exercise_user_record = Database::get()->querySingle("SELECT *, DATE_FORMAT(record_start_date, '%Y-%m-%d %H:%i') AS record_start_date,
@@ -97,12 +98,12 @@ if (isset($_GET['eurId'])) {
                                                                     FROM exercise_user_record WHERE eurid = ?d", $eurid);
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id
                                                         FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
         // No record matches with this exercise user record id
         Session::Messages($langExerciseNotFound);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
+    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
        // student is not allowed to view other people's exercise results
        // Nobody can see results of a paused exercise
@@ -110,6 +111,7 @@ if (isset($_GET['eurId'])) {
     }
     $objExercise = new Exercise();
     $objExercise->read($exercise_user_record->eid);
+    $navigation[] = array('url' => "results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
 } else {
     // exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);

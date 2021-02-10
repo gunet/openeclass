@@ -68,10 +68,10 @@ if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
     Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d, secs_remaining = ?d
         WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, 0, $eurid);
     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
-        array('title' => $_SESSION['objExercise'][$exerciseId]->selectTitle(),
-            'legend' => $langCancel)
-    );
+    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
+        'title' => $_SESSION['objExercise'][$exerciseId]->selectTitle(),
+        'legend' => $langCancel,
+        'eurid' => $eurid ]);
     unset_exercise_var($exerciseId);
     exit();
 }
@@ -112,10 +112,6 @@ if (isset($_REQUEST['exerciseId'])) {
         // saves the object into the session
         $_SESSION['objExercise'][$exerciseId] = $objExercise;
     }
-    Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT,
-                array('title' => $objExercise->selectTitle(),
-                      'legend' => $langStart)
-                );
 } else {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
@@ -196,10 +192,10 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
             redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
         }
     }
-    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
-                array('title' => $objExercise->selectTitle(),
-                      'legend' => $langContinueAttempt)
-                );
+    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
+        'title' => $objExercise->selectTitle(),
+        'legend' => $langContinueAttempt,
+        'eurid' => $eurid ]);
 } else {
     $objDateTime = new DateTime('NOW');
     $attempt_value = $objDateTime->getTimestamp();
@@ -247,10 +243,10 @@ if (isset($_POST['buttonCancel'])) {
         WHERE eurid = ?d", ATTEMPT_CANCELED, $eurid);
     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
 
-    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
-                array('title' => $objExercise->selectTitle(),
-                      'legend' => $langCancel)
-                );
+    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
+        'title' => $objExercise->selectTitle(),
+        'legend' => $langCancel,
+        'eurid' => $eurid ]);
     unset_exercise_var($exerciseId);
     Session::Messages($langAttemptWasCanceled);
     if (isset($_REQUEST['unit'])) {
@@ -317,10 +313,10 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()
         // update user progress
         triggerGame($course_id, $uid, $objExercise->selectId());
         triggerExerciseAnalytics($course_id, $uid, $objExercise->selectId());
-        Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
-                    array('title' => $objExercise->selectTitle(),
-                          'legend' => $langSubmit)
-        );
+        Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
+            'title' => $objExercise->selectTitle(),
+            'legend' => $langSubmit,
+            'eurid' => $eurid ]);
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpiredTime);
         if (isset($_REQUEST['unit'])) {
@@ -436,6 +432,10 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
         VALUES (?d, ?d, ?t, 0, 0, ?d, 0, ?d)",
             $exerciseId, $uid, $start, $attempt + 1, isset($timeleft) ? $timeleft : 0)->lastInsertID;
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
+        Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, [
+            'title' => $objExercise->selectTitle(),
+            'legend' => $langStart,
+            'eurid' => $eurid ]);
     }
 }
 
@@ -507,10 +507,10 @@ if (isset($_POST['formSent'])) {
             // update user progress
             triggerGame($course_id, $uid, $exerciseId);
             triggerExerciseAnalytics($course_id, $uid, $exerciseId);
-            Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
-                        array('title' => $objExercise->selectTitle(),
-                              'legend' => $langSubmit)
-            );
+            Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
+                'title' => $objExercise->selectTitle(),
+                'legend' => $langSubmit,
+                'eurid' => $eurid ]);
         }
         unset($objExercise);
         unset_exercise_var($exerciseId);

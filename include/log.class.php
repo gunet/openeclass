@@ -792,7 +792,7 @@ class Log {
      */
     private function exercise_action_details($details) {
 
-        global $langTitle, $langDescription;
+        global $langTitle, $langDescription, $langAttempt, $urlAppend, $course_code;
 
         $details = unserialize($details);
         if (is_object($details['title'])) {
@@ -804,6 +804,9 @@ class Log {
         }
         if (!empty($details['legend'])) {
             $content .= "&nbsp;&mdash;&nbsp;" . q($details['legend']) ;
+        }
+        if (isset($details['eurid']) and isset($course_code) and $course_code) {
+            $content .= "<br><a href='{$urlAppend}modules/exercise/exercise_result.php?course=$course_code&amp;eurId=$details[eurid]'>$langAttempt</a>";
         }
         return $content;
     }
