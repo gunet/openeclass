@@ -102,7 +102,15 @@ for ($i=1; $i<=count($qids_answered); $i++) {
 //print_a($results);
 
 // exercise details
-$exercise_details[] = $objExercise->selectTitle() . " " . $objExercise->selectStartDate() . " " . $objExercise->selectEndDate() . " " . $objExercise->selectRange();
+$exercise_details[] = $objExercise->selectTitle();
+$exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
+if (!empty($objExercise->selectStartDate())) {
+    $exercise_details[] = "$langPollStart: " . greek_format($objExercise->selectStartDate(), true);
+}
+if (!empty($objExercise->selectEndDate())) {
+    $exercise_details[] = "$langPollEnd: " . greek_format($objExercise->selectEndDate(), true);
+}
+
 $csv->outputRecord($exercise_details);
 
 // ------------------------------
@@ -119,7 +127,7 @@ for ($j = 1; $j<count($results[0]); $j++) {
     $question->read($qid);
     $question_id = $question->selectId();
     $headers[] = $question->selectTitle();
-    $headers[] = $langGradebookGrade;
+    $headers[] = "$langGradebookGrade ($langMax: ". $question->selectWeighting() . ")";
 }
 $headers[] = $langTotalScore;
 $csv->outputRecord($headers);
@@ -142,7 +150,7 @@ for ($i = 1; $i<count($results); $i++) {
             $output[] = user_question_score($user, $question, $exerciseId); // question score
         }
     }
-    $output[] = user_total_score($user, $question_id, $exerciseId); // user total score
+    $output[] = user_total_score($user, $exerciseId); // user total score
     $csv->outputRecord($output);
     $output = array();
 }
@@ -191,26 +199,43 @@ function question_answer_details($uid, $eurid, $qid, $eid) {
                             JOIN exercise_question
                         ON exercise_question.id = exercise_answer_record.question_id
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
+
     foreach ($q as $data) {
             switch ($data->type) {
                 case UNIQUE_ANSWER:
                 case TRUE_FALSE:
-                    $content .= "$langChoice: " . $data->answer_id;
+                    $a = Database::get()->querySingle("SELECT answer FROM exercise_answer 
+                                        WHERE question_id = ?d 
+                                        AND r_position = ?d",
+                                    $data->question_id, $data->answer_id);
+                    $content .= html2text($a->answer);
                 break;
                 case MULTIPLE_ANSWER:
-                    $temp_content .= $data->answer_id . ", ";
-                    $content = "$langOptions: " . rtrim(trim($temp_content), ','); // remove last `comma`
+                    $a = Database::get()->querySingle("SELECT answer FROM exercise_answer 
+                                        WHERE question_id = ?d 
+                                        AND r_position = ?d",
+                        $data->question_id, $data->answer_id);
+                    $temp_content .= html2text($a->answer) . " -- ";
+                    $content = rtrim(trim($temp_content), '-- '); // remove last `--`
                     break;
                 case FILL_IN_BLANKS_TOLERANT:
                 case FILL_IN_BLANKS:
                     $content .= "[" . $data->answer . "] ";
                 break;
                 case MATCHING:
-                    $temp_content .= "$langCorrespondsTo: " . $data->answer_id . ", ";
+                    $col_a = Database::get()->querySingle("SELECT answer FROM exercise_answer 
+                                        WHERE question_id = ?d 
+                                        AND r_position = ?d",
+                                    $data->question_id, $data->answer_id);
+                    $col_b = Database::get()->querySingle("SELECT answer FROM exercise_answer 
+                                        WHERE question_id = ?d 
+                                        AND r_position = ?d",
+                                    $data->question_id, $data->answer);
+                    $temp_content .= html2text($col_b->answer) . " ---> " . html2text($col_a->answer) . ", ";
                     $content = rtrim(trim($temp_content), ','); // remove last `comma`
-                    break;
+                break;
                 case FREE_TEXT:
-                    $content .= "$langText: " . $data->answer;
+                    $content .= html2text($data->answer);
                 break;
             }
     }
@@ -243,135 +268,18 @@ function user_question_score($uid, $qid, $eid) {
 }
 
 
-
 /**
  * @brief user question total score
  * @param $uid
  * @param $qid
  * @param $eid
  */
-function user_total_score($uid, $qid, $eid) {
+function user_total_score($uid, $eid) {
 
     global $objExercise;
 
-    $content = '';
-    $sql = Database::get()->queryArray("SELECT eurid, total_score, total_weighting FROM exercise_user_record 
+    $data = Database::get()->querySingle("SELECT eurid, total_score, total_weighting FROM exercise_user_record 
             WHERE uid = ?d AND eid = ?d", $uid, $eid);
-    foreach ($sql as $data) {
-        $user_total_score = $objExercise->canonicalize_exercise_score($data->total_score, $data->total_weighting);
-    }
-    $content .= $user_total_score;
-
-    return $content;
+    $user_total_score = $objExercise->canonicalize_exercise_score($data->total_score, $data->total_weighting);
+    return $user_total_score;
 }
-
-
-exit;
-
-/*
-$csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langStart,
-    $langExerciseDuration, $langStudentTotalScore, $langTotalScore,
-    $headings);
-
-$result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);
-
-foreach ($result as $row) {
-    $sid = $row->uid;
-    $surname = uid_to_name($sid, 'surname');
-    $name = uid_to_name($sid, 'givenname');
-    $am = uid_to_am($sid);
-    $ug = user_groups($course_id, $sid, 'txt');
-
-    $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
-        record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
-        total_score, total_weighting, eurid, attempt_status
-        FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d  
-        ORDER BY record_start_date DESC", $sid, $exerciseId);
-
-    foreach ($result2 as $row2) {
-        if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
-            $duration = $langNotRecorded;
-        } else {
-            $duration = format_time_duration($row2->time_duration);
-        }
-        $exerciseRange = $objExercise->selectRange();
-        $total_score = '';
-        if ($exerciseRange > 0) {
-            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
-                $total_score = $objExercise->canonicalize_exercise_score($row2->total_score, $row2->total_weighting);
-            }
-            $total_weighting = $exerciseRange;
-        } else {
-            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
-                $total_score = $row2->total_score;
-            }
-            $total_weighting = $row2->total_weighting;
-        }
-
-        if ($full) {
-            // how many answers for each question have we encountered so far for this row
-            // needed to track fill-in-blanks multiple answers per question_id
-            $questionOffsetCount = array();
-            foreach (array_keys($questionOffset) as $qid) {
-                $questionOffsetCount[$qid] = 0;
-            }
-
-            // blank row template
-            //$values = array_fill(0, count($headings), '');
-
-            Database::get()->queryFunc('SELECT question_id, answer, answer_id, type
-                FROM exercise_answer_record
-                    JOIN exercise_question
-                        ON exercise_question.id = exercise_answer_record.question_id
-                WHERE eurid = ?d ORDER BY question_id, answer_record_id',
-                function ($item) use (&$values, &$answerCache, &$questionOffsetCount, $questionOffset) {
-                    $qid = $item->question_id;
-                    $index = $questionOffset[$qid] + $questionOffsetCount[$qid];
-                    if ($item->type == FREE_TEXT) {
-                        $values[$index] = canonicalize_whitespace(html_entity_decode(strip_tags($item->answer)));
-                    } elseif ($item->type == FILL_IN_BLANKS or $item->type == FILL_IN_BLANKS_TOLERANT) {
-                        $values[$index] = $item->answer;
-                    } else {
-                        if (!isset($answerCache[$qid])) {
-                            $answerObj = new Answer($qid);
-                            for ($i = 1; $i <= $answerObj->selectNbrAnswers(); $i++) {
-                                $answerCache[$qid][$i] = canonicalize_whitespace(
-                                    html_entity_decode(strip_tags(
-                                        $answerObj->selectAnswer($i))));
-                            }
-                        }
-                        $answer_id = $item->answer_id;
-                        if ($answer_id > 0) {
-                            if (isset($answerCache[$qid][$answer_id])) {
-                                $values[$index] = $answerCache[$qid][$answer_id];
-                            } else {
-                                // Unknown value - exercise changed?
-                                $values[$index] = '## ? ##';
-                            }
-                        }
-                    }
-                    if (in_array($item->type,
-                            array(MATCHING, FILL_IN_BLANKS, FILL_IN_BLANKS_TOLERANT))) {
-                        $questionOffsetCount[$qid]++;
-                    }
-                }, $row2->eurid);
-        } else {
-            $values = array();
-        }
-
-        $sql = Database::get()->queryArray("SELECT exercise_answer.answer AS answer
-                FROM exercise_answer_record, exercise_answer
-                    WHERE eurid = ?d                             
-                    AND exercise_answer_record.answer = exercise_answer.id  
-                    ORDER BY exercise_answer.question_id, answer_record_id", $row2->eurid);
-            print_a($sql);
-            foreach ($sql as $data) {
-                $values[] = $data->answer;
-            }
-        }
-
-        $csv->outputRecord($surname, $name, $am, $ug, $row2->record_start_date,
-            $duration, $total_score, $total_weighting,
-            $values);
-    }
-}*/
