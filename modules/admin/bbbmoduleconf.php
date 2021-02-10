@@ -89,8 +89,8 @@ $head_content .= "<script type='text/javascript'>
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
 if (isset($_GET['delete_tc_course']) and $_GET['list']) {
-    Database::get()->querySingle("DELETE FROM course_external_server 
-                                          WHERE course_id = ?d 
+    Database::get()->querySingle("DELETE FROM course_external_server
+                                          WHERE course_id = ?d
                                           AND external_server = ?d", $_GET['delete_tc_course'], $_GET['list']);
     Session::Messages($langBBBDeleteCourseSuccess, 'alert-success');
 }
@@ -113,7 +113,7 @@ if (isset($_POST['code_to_assign'])) {
 if (isset($_GET['add_course_to_tc'])) {
     $tc_server = $_GET['tc_server'];
     $tool_content .= "<div class='form-wrapper'>";
-        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?list=$tc_server' method='post' class='form-horizontal' role='form'>                        
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?list=$tc_server' method='post' class='form-horizontal' role='form'>
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langCourseCode :</label>
                             <div class='col-xs-3'>
@@ -389,7 +389,7 @@ else if (isset($_GET['edit_config'])) {
     $bbb_lb_weight_camera = get_config('bbb_lb_weight_camera', 2);
     $bbb_lb_weight_room = get_config('bbb_lb_weight_room', 50);
     $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
-    $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked = 
+    $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked =
     $bbb_lb_wlm_checked = $bbb_lb_wlv_checked = '';
     $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
     $checked_DisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
@@ -752,8 +752,8 @@ else {
                               'confirm' => $langConfirmDelete))) . "</td>" .
                     "</tr>";
             }
-            $users_p = number_format($t_connected_users*100/$t_max_users, 0) . '%';
-            $rooms_p = number_format($t_active_rooms*100/$t_max_rooms, 0) . '%';
+            $users_p = $t_max_users? (' (' . number_format($t_connected_users*100/$t_max_users, 0) . '%)'): '';
+            $rooms_p = $t_max_rooms? (' (' . number_format($t_active_rooms*100/$t_max_rooms, 0) . '%)'): '';
             $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
 
             if ($bbb_lb_algo == 'wll') {
@@ -772,8 +772,8 @@ else {
 
             $tool_content .= "<tr>" .
                     "<td class = 'text-right' colspan='2'>$langTotal:</td>" .
-                    "<td class = 'text-center'>$t_connected_users / $t_max_users ($users_p)</td>" .
-                    "<td class = 'text-center'>$t_active_rooms / $t_max_rooms ($rooms_p)</td>" .
+                    "<td class = 'text-center'>$t_connected_users / $t_max_users</td>" .
+                    "<td class = 'text-center'>$t_active_rooms / $t_max_rooms</td>" .
                     "<td class = 'text-center'>$t_mics / $t_cameras</td>" .
                     "<td class = 'text-center'>$bbb_lb_algo_info</td>" .
                     "</tr>";
@@ -781,7 +781,7 @@ else {
         } else {
              $tool_content .= "<div class='alert alert-warning'>$langNoAvailableBBBServers</div>";
         }
-        
+
        $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE enabled = 'true' AND `type` = 'bbb' ORDER BY weight");
         if (count($q)>0) {
             $tool_content .= "<div class='inner-heading'>$langActiveRooms</div>";
