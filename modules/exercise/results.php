@@ -93,19 +93,18 @@ if ($is_editor) {
         [ 'title' => $langCheckGrades,
           'icon' => 'fa-bar-chart',
           'class' => 'check-grades',
-          'level' => 'primary-label'
+          'level' => 'primary-label',
+          'button-class' => 'btn-success'
         ],
-        [ 'title' => $langExport,
+        [ 'title' => "$langResults ($langDumpUser)",
           'url' => "csv.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
-          'icon' => 'fa-area-chart',
+          'icon' => 'fa-sort-numeric-desc',
           'button-class' => 'btn-success',
-          'level' => 'primary-label'
         ],
-        [ 'title' => "$langExport $langExportWithAnswers",
-          'url' => "csv.php?course=$course_code&amp;full=true&amp;exerciseId=$exerciseIdIndirect",
-          'icon' => 'fa-area-chart',
+        [ 'title' => "$langPollFullResults ($langDumpUser)",
+          'url' => "csv_full.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
+          'icon' => 'fa-sort-numeric-desc',
           'button-class' => 'btn-success',
-          'level' => 'primary-label'
         ]
     ]);
 }

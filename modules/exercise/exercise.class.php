@@ -1219,12 +1219,15 @@ if (!class_exists('Exercise')) {
          */
         function canonicalize_exercise_score($user_score, $total_score) {
 
-            $canonical_score = round(($user_score / $total_score) * $this->range, 2);
-
-            return $canonical_score;
+            if ($total_score == 0) {
+                $score = 0;
+            } else if ($this->range > 0) {
+                $score = round(($user_score / $total_score) * $this->range, 2);
+            } else {
+                $score = round($user_score, 2);
+            }
+            return $score;
         }
-
-
     }
 
 }
