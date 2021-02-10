@@ -34,7 +34,7 @@ $exerciseId = getDirectReference($_GET['exerciseId']);
 $objExercise = new Exercise();
 $objExercise->read($exerciseId);
 $csv = new CSV();
-$csv->debug = true;
+//$csv->debug = true;
 $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
 
 $possible_qids = array(); // possible questions
