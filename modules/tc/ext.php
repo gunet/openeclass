@@ -57,14 +57,21 @@ if ($q) {
     exit;
 }
 
+$now = date('Y-m-d H:i:s');
 $server_type = Database::get()->querySingle("SELECT `type` FROM tc_servers WHERE id = ?d", $server_id)->type;
 
 if ($active <> '1'
-    or date_diff_in_minutes($start_date,date('Y-m-d H:i:s')) > $unlock_interval
+    or date_diff_in_minutes($start_date, $now) > $unlock_interval
     or !in_array($_GET['username'],$r_group)) {
         $msg = "Η τηλεδιάσκεψη δεν έχει ξεκινήσει ακόμα. Παρακαλώ δοκιμάστε να συνδεθείτε αργότερα ή επικοινωνήστε με τους διαχειριστές.";
         display_message($msg);
         exit;
+}
+// meeting is expired
+if (!empty($end_date) and date_diff_in_minutes($now, $end_date) > 0) {
+    $msg = "Η τηλεδιάσκεψη έχει ολοκληρωθεί";
+    display_message($msg);
+    exit;
 }
 
 if ($server_type == 'bbb') { // bbb server

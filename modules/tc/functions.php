@@ -606,7 +606,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
                 // Notify course users for new bbb session
-                send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
+                send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}", $_SESSION['email'], '', $recipients, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -637,7 +637,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 ";
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
-                send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent);
+                send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}", $_SESSION['email'], '', $row, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }

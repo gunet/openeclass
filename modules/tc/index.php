@@ -314,7 +314,16 @@ elseif(isset($_GET['choice']))
                     } else {
                         $options = NULL;
                     }
-                    create_bbb_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record, $options);
+                   $now = date('Y-m-d H:i:s');
+                   if (date_diff_in_minutes($sess->start_date, $now) > $sess->unlock_interval) {
+                        Session::Messages($langBBBNotStarted, 'alert-danger');
+                        redirect("index.php?course=$course_code");
+                   } else if (!empty($sess->end_date) and date_diff_in_minutes($now, $sess->end_date) > 0) {
+                        Session::Messages($langBBBHasEnded, 'alert-danger');
+                        redirect("index.php?course=$course_code");
+                   } else {
+                        create_bbb_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record, $options);
+                   }
                 }
                 if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
