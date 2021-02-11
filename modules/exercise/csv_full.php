@@ -58,7 +58,7 @@ foreach ($item as $data) { // check for random questions with criteria
             foreach ($result as $d1) {
                 $possible_qids[] = $d1->id;
             }
-        } else if ($random_criteria['criteria'] == 'difficulty') {
+        } else if ($random_criteria['criteria'] == 'category') {
             $result = Database::get()->queryArray("SELECT id FROM `exercise_question` 
                             WHERE category = ?d AND course_id = ?d", $c, $course_id);
             foreach ($result as $d2) {
