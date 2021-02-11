@@ -188,9 +188,7 @@ function details($uid, $qid, $eid) {
  * @return string
  */
 function question_answer_details($uid, $eurid, $qid, $eid) {
-
-    global $langChoice, $langText, $langAnswer, $langOptions, $langCorrespondsTo;
-
+    
     $content = $temp_content = '';
     $q = Database::get()->queryArray("SELECT question_id, answer, answer_id, `type`
                        FROM exercise_answer_record
@@ -206,14 +204,22 @@ function question_answer_details($uid, $eurid, $qid, $eid) {
                                         WHERE question_id = ?d 
                                         AND r_position = ?d",
                                     $data->question_id, $data->answer_id);
-                    $content .= html2text($a->answer);
+                    if ($a) {
+                        $content .= html2text($a->answer);
+                    } else {
+                        $content .= '';
+                    }
                 break;
                 case MULTIPLE_ANSWER:
                     $a = Database::get()->querySingle("SELECT answer FROM exercise_answer 
                                         WHERE question_id = ?d 
                                         AND r_position = ?d",
                         $data->question_id, $data->answer_id);
-                    $temp_content .= html2text($a->answer) . " -- ";
+                    if ($a) {
+                        $temp_content .= html2text($a->answer) . " -- ";
+                    } else {
+                        $temp_content .= '';
+                    }
                     $content = rtrim(trim($temp_content), '-- '); // remove last `--`
                     break;
                 case FILL_IN_BLANKS_TOLERANT:
@@ -229,7 +235,17 @@ function question_answer_details($uid, $eurid, $qid, $eid) {
                                         WHERE question_id = ?d 
                                         AND r_position = ?d",
                                     $data->question_id, $data->answer);
-                    $temp_content .= html2text($col_b->answer) . " ---> " . html2text($col_a->answer) . ", ";
+                    if ($col_a) {
+                        $col_a_answer = $col_a->answer;
+                    } else {
+                        $col_a_answer = '';
+                    }
+                    if ($col_b) {
+                        $col_b_answer = $col_b->answer;
+                    } else {
+                        $col_b_answer = '';
+                    }
+                    $temp_content .= html2text($col_b_answer) . " ---> " . html2text($col_a_answer) . ", ";
                     $content = rtrim(trim($temp_content), ','); // remove last `comma`
                 break;
                 case FREE_TEXT:
