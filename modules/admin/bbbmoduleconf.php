@@ -347,6 +347,7 @@ else if (isset($_POST['submit_config'])) {
     $bbb_lb_weight_mic = isset($_POST['bbb_lb_weight_mic']) ? intval($_POST['bbb_lb_weight_mic']) : '';
     $bbb_lb_weight_camera = isset($_POST['bbb_lb_weight_camera']) ? intval($_POST['bbb_lb_weight_camera']) : '';
     $bbb_lb_weight_room = isset($_POST['bbb_lb_weight_room']) ? intval($_POST['bbb_lb_weight_room']) : '';
+    $bbb_recording = isset($_POST['bbb_recording']) ? 1 : 0;
     $bbb_muteOnStart = isset($_POST['bbb_muteOnStart']) ? 1 : 0;
     $bbb_DisableCam = isset($_POST['bbb_DisableCam']) ? 1 : 0;
     $bbb_webcamsOnlyForModerator = isset($_POST['bbb_webcamsOnlyForModerator']) ? 1 : 0;
@@ -364,6 +365,7 @@ else if (isset($_POST['submit_config'])) {
     set_config('bbb_lb_weight_camera', $bbb_lb_weight_camera);
     set_config('bbb_lb_weight_room', $bbb_lb_weight_room);
     set_config('bbb_lb_algo', $_POST['bbb_lb_algo']);
+    set_config('bbb_recording', $bbb_recording);
     set_config('bbb_muteOnStart', $bbb_muteOnStart);
     set_config('bbb_DisableMic', $bbb_DisableMic);
     set_config('bbb_DisableCam', $bbb_DisableCam);
@@ -391,6 +393,7 @@ else if (isset($_GET['edit_config'])) {
     $bbb_lb_algo = get_config('bbb_lb_algo', 'wo');
     $bbb_lb_wo_checked = $bbb_lb_wll_checked = $bbb_lb_wlr_checked = $bbb_lb_wlc_checked =
     $bbb_lb_wlm_checked = $bbb_lb_wlv_checked = '';
+    $checked_recording = get_config('bbb_recording', 1) ? 'checked' : '';
     $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
     $checked_DisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
     $checked_DisableCam = get_config('bbb_DisableCam', 0) ? 'checked' : '';
@@ -478,6 +481,11 @@ else if (isset($_GET['edit_config'])) {
 
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-5'>$langBBBDefaultNewRoom:</label>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<div class='col-sm-10 checkbox'>";
+    $tool_content .= "<label><input type='checkbox' name='bbb_recording' $checked_recording value='1'>$langBBBRecord</label>";
+    $tool_content .= "</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<div class='col-sm-10 checkbox'>";
@@ -703,10 +711,9 @@ else {
 
             // get load and metrics of enabled servers
             $servers = get_bbb_servers_load_by_id();
-
             foreach ($q as $srv) {
                 $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
-                $mess = $connected_users = $active_rooms = $server_load = '';
+                $mess = $connected_users = $active_rooms = $server_load = $mics = $cameras = '';
                 if ($srv->enabled == "true") {
                     $server_load = $servers[$srv->id]['load'];
                     $connected_users = $servers[$srv->id]['participants'];
@@ -732,15 +739,23 @@ else {
                             $mess = "<small>($langToNoCourses)</small>";
                         }
                     }
+                    $tool_content .= "<tr>" .
+                        "<td class = 'text-center'>$srv->hostname</td>" .
+                        "<td class = 'text-center'>$enabled_bbb_server $mess</td>" .
+                        "<td class = 'text-center'>$connected_users / $srv->max_users</td>" .
+                        "<td class = 'text-center'>$active_rooms / $srv->max_rooms</td>" .
+                        "<td class = 'text-center'>$mics / $cameras</td>" .
+                        "<td class = 'text-center'>$srv->weight / $server_load</td>";
+                } else {
+                    $tool_content .= "<tr>" .
+                        "<td class = 'text-center'>$srv->hostname</td>" .
+                        "<td class = 'text-center'>$enabled_bbb_server $mess</td>" .
+                        "<td class = 'text-center'>&mdash;</td>" .
+                        "<td class = 'text-center'>&mdash;</td>" .
+                        "<td class = 'text-center'>&mdash;</td>" .
+                        "<td class = 'text-center'>&mdash;</td>";
                 }
-                $tool_content .= "<tr>" .
-                    "<td class = 'text-center'>$srv->hostname</td>" .
-                    "<td class = 'text-center'>$enabled_bbb_server $mess</td>" .
-                    "<td class = 'text-center'>$connected_users / $srv->max_users</td>" .
-                    "<td class = 'text-center'>$active_rooms / $srv->max_rooms</td>" .
-                    "<td class = 'text-center'>$mics / $cameras</td>" .
-                    "<td class = 'text-center'>$srv->weight / $server_load</td>" .
-                    "<td class='option-btn-cell'>" .
+                $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                               'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",

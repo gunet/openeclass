@@ -110,7 +110,6 @@ function bbb_session_form($session_id = 0) {
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
     } else { // new BBB meeting
-        $record = true;
         $status = 1;
         $unlock_interval = '10';
         $r_group = array();
@@ -126,6 +125,7 @@ function bbb_session_form($session_id = 0) {
         $submit_id = '';
         $value_message = $langAdd;
         $options = NULL;
+        $record = get_config('bbb_recording', 1);
         $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
         $checked_lockSettingsDisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
         $checked_lockSettingsDisableCam = get_config('bbb_DisableCam', 0) ? 'checked' : '';
