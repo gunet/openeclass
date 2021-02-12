@@ -57,10 +57,10 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     $questionName = $objQuestionTmp->selectTitle();
     $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
     $questionTypeWord = $objQuestionTmp->selectTypeLegend($answerType);
-    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-        $qNumber = "$question_number / $nbrQuestions";
-    } else {
+    if ($exerciseType == SINGLE_PAGE_TYPE) {
         $qNumber = $question_number;
+    } else {
+        $qNumber = "$question_number / $nbrQuestions";
     }
     $tool_content .= "
             <div class='panel panel-default qPanel' id='qPanel$questionId'>
