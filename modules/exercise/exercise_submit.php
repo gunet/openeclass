@@ -342,11 +342,13 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
 } else {
     if (isset($paused_attempt)) {
-        $record_question_ids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id, q_position ORDER BY q_position", $paused_attempt->eurid);
-        $i = 1;
+        $record_question_ids = Database::get()->queryArray("SELECT question_id, q_position, is_answered
+            FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id, q_position ORDER BY q_position", $paused_attempt->eurid);
         foreach ($record_question_ids as $row) {
-            $questionList[$i] = $row->question_id;
-            $i++;
+            $questionList[$row->q_position] = $row->question_id;
+            if ($row->is_answered == 2 or !isset($pausedQuestionNumber)) {
+                $pausedQuestionNumber = $row->q_position;
+            }
         }
     } else {
         // selects the list of question ID
@@ -474,7 +476,7 @@ if (isset($_POST['formSent'])) {
     // if it is a non-sequential exercise
     // OR the time has expired
     if ($exerciseType == SINGLE_PAGE_TYPE && !isset($_POST['buttonSave']) ||
-        $exerciseType == MULTIPLE_PAGE_TYPE && (isset($_POST['buttonFinish']) || $time_expired)) {
+        ($exerciseType == MULTIPLE_PAGE_TYPE || $exerciseType == ONE_WAY_TYPE) && (isset($_POST['buttonFinish']) || $time_expired)) {
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -547,7 +549,7 @@ if (isset($_POST['formSent'])) {
 
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?f, total_weighting = ?f, attempt_status = ?d, secs_remaining = ?d
                 WHERE eurid = ?d", floatval($totalScore), floatval($totalWeighting), ATTEMPT_PAUSED, $secs_remaining, $eurid);
-        if ($exerciseType == MULTIPLE_PAGE_TYPE and isset($_POST['choice']) and is_array($_POST['choice'])) {
+        if (($exerciseType == MULTIPLE_PAGE_TYPE or $exerciseType == ONE_WAY_TYPE) and isset($_POST['choice']) and is_array($_POST['choice'])) {
             // for sequential exercises, return to current question
             // by setting is_answered to a special value
             $qid = array_keys($_POST['choice']);
@@ -601,229 +603,124 @@ if (isset($timeleft) && $timeleft > 0) {
 }
 
 $unansweredIds = $answeredIds = array();
-$savedQuestion = null;
 
-if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+if ($exerciseType == MULTIPLE_PAGE_TYPE or $exerciseType == ONE_WAY_TYPE) {
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-    $r = Database::get()->querySingle('SELECT question_id FROM exercise_answer_record
-        WHERE eurid = ?d AND is_answered = 2 LIMIT 1', $eurid);
-    if ($r) {
-        $savedQuestion = $r->question_id;
-        Database::get()->query('UPDATE exercise_answer_record SET is_answered = 1
-            WHERE eurid = ?d AND is_answered = 2', $eurid);
+}
+
+$questions = [];
+// check for ununswered questions
+foreach ($questionList as $k => $q_id) {
+    $answered = false;
+    $q_id = $questionList[$k];
+    $t_question = new Question();
+    $t_question->read($q_id);
+    $questions[$q_id] = $t_question;
+    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE)
+        and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) {
+        $answered = true;
+    } elseif (($t_question->selectType() == FILL_IN_BLANKS or $t_question->selectType() == FILL_IN_BLANKS_TOLERANT)
+        and array_key_exists($q_id, $exerciseResult)) {
+        if (is_array($exerciseResult[$q_id])) {
+            $answered = true;
+            foreach ($exerciseResult[$q_id] as $key => $value) {
+                if (trim($value) == '') {  // check if we have filled all blanks
+                    $answered = false;
+                    break;
+                }
+            }
+        }
+    } elseif ($t_question->selectType() == FREE_TEXT
+        and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
+        $answered = true;
+    } elseif ($t_question->selectType() == MATCHING and array_key_exists($q_id, $exerciseResult)) {
+        if (is_array($exerciseResult[$q_id])) {
+            $answered = true;
+            foreach ($exerciseResult[$q_id] as $key => $value) {
+                if ($value == 0) {  // check if we have done all matches
+                    $answered = false;
+                    break;
+                }
+            }
+        }
+    }
+    if ($answered) {
+        $answeredIds[] = $q_id;
+    } else {
+        $unansweredIds[] = $q_id;
     }
 }
 
-if ($exerciseType == SINGLE_PAGE_TYPE) { // // display question numbering buttons
-    $tool_content .= "<div style='margin-bottom: 20px;'>";
-    $q_num = 0;
-    foreach ($questionList as $q_id) {
-        $q_num++;
-        $q_temp = new Question();
-        if (!$q_temp->read($q_id)) { // if question is invalid skip it
-            continue;
+if ($questionList) {
+    if ($exerciseType == SINGLE_PAGE_TYPE) {
+        foreach ($questionList as $questionNumber => $questionId) {
+            // show the question and its answers
+            showQuestion($questions[$questionId], $exerciseResult, $questionNumber);
         }
-        if (($q_temp->selectType() == UNIQUE_ANSWER or $q_temp->selectType() == MULTIPLE_ANSWER or $q_temp->selectType() == TRUE_FALSE)
-            and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) { // if question has answered button color is `blue``
-            $class = 'btn btn-info';
-            $label = $langHasAnswered;
-        } elseif (($q_temp->selectType() == FILL_IN_BLANKS or $q_temp->selectType() == FILL_IN_BLANKS_TOLERANT)
-            and array_key_exists($q_id, $exerciseResult)) {
-            if (is_array($exerciseResult[$q_id])) {
-                $class = 'btn btn-info';
-                $label = $langHasAnswered;
-                foreach ($exerciseResult[$q_id] as $key => $value) {
-                    if (trim($value) == '') {  // check if we have filled all blanks
-                        $class = 'btn btn-default';
-                        $label = $langPendingAnswered;
-                        break;
-                    }
-                }
+    } else {
+        if (isset($pausedQuestionNumber)) { // restarting paused attempt
+            $questionNumber = $pausedQuestionNumber;
+            Database::get()->query('UPDATE exercise_answer_record SET is_answered = 1
+                WHERE eurid = ?d AND is_answered = 2', $eurid);
+        } elseif ($exerciseType == MULTIPLE_PAGE_TYPE and isset($_REQUEST['q_id'])) { // we come from pagination buttons
+            $questionNumber = $_REQUEST['q_id']; // only number
+        } elseif (isset($_REQUEST['questionId'])) { // we come from prev / next buttons
+            if ($exerciseType == MULTIPLE_PAGE_TYPE and isset($_REQUEST['prev'])) { // previous
+                $questionNumber = array_search($_REQUEST['questionId'], $questionList) - 1;
+            } else { // next
+                $questionNumber = array_search($_REQUEST['questionId'], $questionList) + 1;
             }
-        } elseif ($q_temp->selectType() == FREE_TEXT
-            and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
-            $class = 'btn btn-info';
-            $label = $langHasAnswered;
-        } elseif ($q_temp->selectType() == MATCHING and array_key_exists($q_id, $exerciseResult)) {
-            if (is_array($exerciseResult[$q_id])) {
-                $class = 'btn btn-info';
-                $label = $langHasAnswered;
-                foreach ($exerciseResult[$q_id] as $key => $value) {
-                    if ($value == 0) {  // check if we have done all matches
-                        $class = 'btn btn-default';
-                        $label = $langPendingAnswered;
-                        break;
-                    }
-                }
-            }
-        } else {
-            $class = 'btn btn-default';
-            $label = $langPendingAnswered;
+        } else { // starting multi-page exercise from first question
+            $questionNumber = 1;
         }
-        $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;' data-toggle='tooltip' data-placement='top' title='$label'>" .
-                             "<a href='#qPanel$q_id' class='$class qNavButton' id='q_num$q_num'>$q_num</a>" .
-                         "</span>";
-    }
-    $tool_content .= "</div>";
-}
+        $questionId = $questionList[$questionNumber];
 
-
-$i = 0;
-
-foreach ($questionList as $questionId) {
-    $i++;
-
-    if (isset($_REQUEST['q_id'])) { // we come from pagination buttons
-        $current_question_number = $_REQUEST['q_id']; // only number
-        $questionId = $questionList[$current_question_number];
-    } else if (isset($_REQUEST['questionId'])) { // we come from prev / next buttons
-        if (isset($_REQUEST['prev'])) { // previous
-            $current_question_number = array_search($_REQUEST['questionId'], $questionList)-1;
-            $questionId = $questionList[$current_question_number];
-        } else { // next
-            $current_question_number = array_search($_REQUEST['questionId'], $questionList)+1;
-            $questionId = $questionList[$current_question_number];
+        if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+            // display question numbering buttons
+            $tool_content .= "<div style='margin-bottom: 20px;'>";
+            foreach ($questionList as $k => $q_id) {
+                $answered = in_array($q_id, $answeredIds);
+                $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>";
+                if ($questionNumber == $k) { // we are in the current question
+                    $round_border = "border-radius: 70%;";
+                } else {
+                    $round_border = '';
+                }
+                if ($answered) {
+                    $tool_content .= "<input class='btn btn-info' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
+                } else {
+                    $tool_content .= "<input class='btn btn-default' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langPendingAnswered'>";
+                }
+                $tool_content .= "</span>";
+            }
+            $tool_content .= "</div>";
         }
-    } else { // first time (default)
-        $current_question_number = array_search($questionId, $questionList);
+
+        $question = $questions[$questionList[$questionNumber]];
+        showQuestion($question, $exerciseResult, $questionNumber);
     }
-
-    // check if question is actually answered
-    $question = new Question();
-    if (!$question->read($questionId)) {  // if question is invalid skip it
-        continue;
-    }
-
-    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-        // display question numbering buttons
-        $tool_content .= "<div style='margin-bottom: 20px;'>";
-        foreach ($questionList as $k => $q_id) {
-            $answered = false;
-            $q_id = $questionList[$k];
-            $t_question = new Question();
-            $t_question->read($q_id);
-            $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>";
-            if ($current_question_number == $k) { // we are in the current question
-                $round_border = "border-radius: 70%;";
-            } else {
-                $round_border = '';
-            }
-            if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE)
-                and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) { // if question has answered button color is `blue``
-                $tool_content .= "<input class='btn btn-info' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
-                $answered = true;
-            } elseif (($t_question->selectType() == FILL_IN_BLANKS or $t_question->selectType() == FILL_IN_BLANKS_TOLERANT)
-                and array_key_exists($q_id, $exerciseResult)) {
-                if (is_array($exerciseResult[$q_id])) {
-                    $class = 'btn btn-info';
-                    $label = $langHasAnswered;
-                    $answered = true;
-                    foreach ($exerciseResult[$q_id] as $key => $value) {
-                        if (trim($value) == '') {  // check if we have filled all blanks
-                            $class = 'btn btn-default';
-                            $label = $langPendingAnswered;
-                            $answered = false;
-                            break;
-                        }
-                    }
-                    $tool_content .= "<input class='$class' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
-                }
-            } elseif ($t_question->selectType() == FREE_TEXT
-                and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
-                $tool_content .= "<input class='btn btn-info' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
-                $answered = true;
-            } elseif ($t_question->selectType() == MATCHING and array_key_exists($q_id, $exerciseResult)) {
-                if (is_array($exerciseResult[$q_id])) {
-                    $class = 'btn btn-info';
-                    $label = $langHasAnswered;
-                    $answered = true;
-                    foreach ($exerciseResult[$q_id] as $key => $value) {
-                        if ($value == 0) {  // check if we have done all matches
-                            $class = 'btn btn-default';
-                            $label = $langPendingAnswered;
-                            $answered = false;
-                            break;
-                        }
-                    }
-                    $tool_content .= "<input class='$class' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$label'>";
-                }
-            } else {
-                $tool_content .= "<input class='btn btn-default' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langPendingAnswered'>"; // button color is `gray`
-            }
-            $tool_content .= "</span>";
-            $k++;
-            if (!$answered) {
-                $unansweredIds[] = $q_id;
-            }
-        }
-        $tool_content .= "</div>";
-    }
-
-    if (isset($exerciseResult[$questionId])) {
-        $type = $question->selectType();
-        $answer = $exerciseResult[$questionId];
-        if ($type == FREE_TEXT) {
-            if (trim($answer) !== '') {
-                $answeredIds[] = $questionId;;
-            }
-        } elseif ($type == TRUE_FALSE or $type == UNIQUE_ANSWER) {
-            if ($answer) {
-                $answeredIds[] = $questionId;
-            }
-        } elseif ($type == FILL_IN_BLANKS or $type == FILL_IN_BLANKS_TOLERANT) {
-            if (is_array($answer)) {
-                foreach ($answer as $id => $blank) {
-                    if (trim($blank) !== '') {
-                        $answeredIds[] = $questionId;
-                        break;
-                    }
-                }
-            }
-        } elseif ($type == MULTIPLE_ANSWER) {
-            if (is_array($answer)) {
-                unset($answer[0]);
-                if (count($answer)) {
-                    $answeredIds[] = $questionId;
-                }
-            }
-        } elseif ($type == MATCHING) {
-            if (array_filter($answer)) {
-                $answeredIds[] = $questionId;
-            }
-        }
-    }
-
-    // show the question and its answers
-    showQuestion($question, $exerciseResult, $current_question_number);
-
-    // for sequential exercises quits the loop
-    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-        break;
-    }
-} // end foreach()
-
-if (!$questionList) {
+} else {
     $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
     if (isset($_REQUEST['unit'])) {
-        $backlink = "index.php?course=$course_code&id=$_REQUEST[unit]";
+        $backlink = "index.php?course=$course_code&amp;id=$_REQUEST[unit]";
     } else {
         $backlink = "index.php?course=$course_code";
     }
-
     $tool_content .= "<div class='pull-right'><a href='$backlink' class='btn btn-default'>$langBack</a></div>";
-} else {
-    // "Temporary save" button
-    if ($exerciseTempSave && !($exerciseType == MULTIPLE_PAGE_TYPE && ($i == $nbrQuestions))) {
-        $tempSaveButton = "<div class='exercise-action-buttons'>
-            <input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>
-        </div>";
-    } else {
-        $tempSaveButton = '';
-    }
+}
 
-    // Navigation buttons (previous / next)
-    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-        $head_content .= "<style>
+// "Temporary save" button
+if ($uid and $exerciseTempSave) {
+    $tempSaveButton = "<div class='exercise-action-buttons'>
+        <input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>
+        </div>";
+} else {
+    $tempSaveButton = '';
+}
+
+// Navigation buttons (previous / next)
+if ($exerciseType != SINGLE_PAGE_TYPE) {
+    $head_content .= "<style>
             @media only screen and (max-width: 680px) {
                 .exercise-nav-buttons { width: 100%; }
                 .exercise-action-buttons { text-align: center; }
@@ -838,19 +735,19 @@ if (!$questionList) {
             .exercise-action-buttons { float: left; }
         </style>";
 
-        $tool_content .= '<div class="exercise-nav-buttons">';
-        $prevLabel = '&lt; ' . $langPrevious;
-        $nextLabel = $langNext . ' &gt';
-        if ($questionId != $questionList[1]) { // `prev` button
-            $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
-        }
-        if ($questionId != $questionList[sizeof($questionList)]) { // `next` button
-            $tool_content .= "<input class='btn btn-primary blockUI navbutton' type='submit' value='$nextLabel'>";
-        }
-        $tool_content .= '</div>' . $tempSaveButton;
-        $tempSaveButton = '';
-    } else {
-        $head_content .= "<style>
+    $tool_content .= '<div class="exercise-nav-buttons">';
+    $prevLabel = '&lt; ' . $langPrevious;
+    $nextLabel = $langNext . ' &gt';
+    if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // `prev` button
+        $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
+    }
+    if ($questionId != $questionList[sizeof($questionList)]) { // `next` button
+        $tool_content .= "<input class='btn btn-primary blockUI navbutton' type='submit' value='$nextLabel'>";
+    }
+    $tool_content .= '</div>' . $tempSaveButton;
+    $tempSaveButton = '';
+} else {
+    $head_content .= "<style>
             @media only screen and (max-width: 460px) {
                 .exercise-action-buttons { text-align: center; width: 100%; }
             }
@@ -858,29 +755,29 @@ if (!$questionList) {
             .exercise-action-buttons .btn { margin: 0 5px; }
             .exercise-action-buttons { float: right; }
         </style>";
-    }
-
-    $tool_content .= "<div class='exercise-action-buttons'>";
-
-    // "Cancel" button
-    $tool_content .= "<input class='btn btn-danger' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
-
-    // "Submit" button
-    $tool_content .= "<input class='btn btn-success blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
-    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-        $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
-    }
-
-    $tool_content .= "</div>" . $tempSaveButton;
-
-    // In sequential exercise we save all questions in the DB
-    // to avoid mixing up their order if user navigates non-sequentially
-    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-        $_POST['attempt_value'] = $attempt_value;
-        $objExercise->save_unanswered();
-    }
 }
+
+$tool_content .= "<div class='exercise-action-buttons'>";
+
+// "Cancel" button
+$tool_content .= "<input class='btn btn-danger' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+
+// "Submit" button
+$tool_content .= "<input class='btn btn-success blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
+if ($exerciseType != SINGLE_PAGE_TYPE) {
+    $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
+}
+
+$tool_content .= "</div>" . $tempSaveButton;
+
 $tool_content .= "</form>";
+
+// In sequential exercise we save all questions in the DB
+// to avoid mixing up their order if user navigates non-sequentially
+if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+    $_POST['attempt_value'] = $attempt_value;
+    $objExercise->save_unanswered();
+}
 
 // If the attempt has disappeared or isn't in a valid state in the DB, redirect user to exercise home
 $attempt = Database::get()->querySingle('SELECT eurid FROM exercise_user_record

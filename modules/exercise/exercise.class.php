@@ -19,7 +19,7 @@
  * ======================================================================== */
 /*
  * @brief class Exercise
- * 
+ *
  */
 
 require_once 'question.class.php';
@@ -71,7 +71,7 @@ if (!class_exists('Exercise')) {
             $this->id = 0;
             $this->exercise = '';
             $this->description = '';
-            $this->type = 1;
+            $this->type = MULTIPLE_PAGE_TYPE;
             $this->range = 0;
             $this->startDate = date("Y-m-d H:i:s");
             $this->endDate = null;
@@ -270,11 +270,11 @@ if (!class_exists('Exercise')) {
         function continueTimeLimit() {
             return $this->continueTimeLimit;
         }
-        
+
         function isRandom() {
             return $this->random;
         }
-        
+
         function selectShuffle() {
             return $this->shuffle;
         }
@@ -419,7 +419,7 @@ if (!class_exists('Exercise')) {
             $result = Database::get()->queryArray("SELECT id
                             FROM `exercise_question`
                                 WHERE category = ?d
-                                AND difficulty = ?d 
+                                AND difficulty = ?d
                                 AND course_id = ?d",
                 $category, $difficulty, $course_id);
 
@@ -587,7 +587,7 @@ if (!class_exists('Exercise')) {
         function setRandom($random) {
             $this->random = $random;
         }
-        
+
         function setShuffle($shuffle) {
             $this->shuffle = $shuffle;
         }
@@ -678,7 +678,7 @@ if (!class_exists('Exercise')) {
                     (course_id, title, description, type, `range`, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, shuffle, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit)                    
+                     assign_to_specific, continue_time_limit)
                     VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
                         $course_id, $exercise, $description, $type, $range, $startDate, $endDate,
                         $tempSave, $timeConstraint, $attemptsAllowed,

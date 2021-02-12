@@ -128,6 +128,7 @@ define('FILL_IN_BLANKS_TOLERANT', 7);
 // exercise view type
 define('SINGLE_PAGE_TYPE', 1);
 define('MULTIPLE_PAGE_TYPE', 2);
+define('ONE_WAY_TYPE', 3);
 
 // exercise attempt types
 define('ATTEMPT_ACTIVE', 0);
@@ -176,4 +177,3 @@ define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
 define('MAX_IDLE_TIME', 10);
 
 define('JQUERY_VERSION', '2.1.1');
-
