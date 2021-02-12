@@ -676,7 +676,7 @@ if ($is_editor) {
             <div class='margin-bottom-thin' style='font-weight: bold;'>";
         if ($aantalcategories > 0) {
             $tool_content .= "$langCategorisedGroups&nbsp;";
-            if (isset($urlview) and abs($urlview) == 0) {
+            if (isset($urlview) and abs(intval($urlview)) == 0) {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
             } else {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
