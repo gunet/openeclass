@@ -343,7 +343,7 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
 } else {
     if (isset($paused_attempt)) {
         $record_question_ids = Database::get()->queryArray("SELECT question_id, q_position, is_answered
-            FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id, q_position ORDER BY q_position", $paused_attempt->eurid);
+            FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id, q_position, is_answered ORDER BY q_position", $paused_attempt->eurid);
         foreach ($record_question_ids as $row) {
             $questionList[$row->q_position] = $row->question_id;
             if ($row->is_answered == 2 or !isset($pausedQuestionNumber)) {
@@ -609,7 +609,7 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE or $exerciseType == ONE_WAY_TYPE) {
 }
 
 $questions = [];
-// check for ununswered questions
+// check for unanswered questions
 foreach ($questionList as $k => $q_id) {
     $answered = false;
     $q_id = $questionList[$k];
