@@ -315,7 +315,10 @@ elseif(isset($_GET['choice']))
                         $options = NULL;
                     }
                    $now = date('Y-m-d H:i:s');
-                   if (date_diff_in_minutes($sess->start_date, $now) > $sess->unlock_interval) {
+                   if ($sess->active <> '1') {
+                        Session::Messages($langBBBDisabled, 'alert-danger');
+                        redirect("index.php?course=$course_code");
+                   } else if (date_diff_in_minutes($sess->start_date, $now) > $sess->unlock_interval) {
                         Session::Messages($langBBBNotStarted, 'alert-danger');
                         redirect("index.php?course=$course_code");
                    } else if (!empty($sess->end_date) and date_diff_in_minutes($now, $sess->end_date) > 0) {

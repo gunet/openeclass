@@ -5034,6 +5034,8 @@ $langBBBlockSettingsHideUserList = "Απόκρυψη λίστας χρηστών
 $langBBBHideParticipants = "Απόκρυψη συμμετεχόντων";
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
+$langBBBNotStarted = "Η τηλεσυνεργασία δεν έχει ξεκινήσει ακόμα";
+$langBBBHasEnded = "Η τηλεσυνεργασία έχει ολοκληρωθεί";
 $langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";
 $langBBB = "Τηλεσυνεργασία";
 $langNewBBBSession = "Νέα Τηλεσυνεργασία";
