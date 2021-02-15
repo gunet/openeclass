@@ -334,7 +334,7 @@ if ($can_upload or $user_upload) {
                     $extracted_file_name = process_extracted_file($stat);
                     if (!is_null($extracted_file_name)) {
                         $zipFile->renameIndex($i, $extracted_file_name);
-                        $zipFile->extractTo("$webDir/courses/$course_code/document/", $extracted_file_name);
+                        $zipFile->extractTo($basedir, $extracted_file_name);
                     }
                 }
                 $zipFile->close();
@@ -1602,7 +1602,7 @@ if ($doc_count == 0) {
                                     array('title' => $entry['public'] ? $langResourceAccessLock : $langResourceAccessUnlock,
                                           'url' => $entry['public'] ? "{$base_url}limited=$cmdDirName" : "{$base_url}public=$cmdDirName",
                                           'icon' => $entry['public'] ? 'fa-lock' : 'fa-unlock',
-                                          'show' => !$uploading_as_user and (course_status($course_id) == COURSE_OPEN)),
+                                          'show' => !$uploading_as_user and $course_id > 0 and course_status($course_id) == COURSE_OPEN),
                                     array('title' => $langDownload,
                                           'url' => $download_url,
                                           'icon' => 'fa-download'),
