@@ -37,11 +37,23 @@ $csv = new CSV();
 //$csv->debug = true;
 $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
 
+// exercise details
+$exercise_details[] = $objExercise->selectTitle();
+$exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
+if (!empty($objExercise->selectStartDate())) {
+    $exercise_details[] = "$langPollStart: " . greek_format($objExercise->selectStartDate(), true);
+}
+if (!empty($objExercise->selectEndDate())) {
+    $exercise_details[] = "$langPollEnd: " . greek_format($objExercise->selectEndDate(), true);
+}
+
+$csv->outputRecord($exercise_details);
+
 $possible_qids = array(); // possible questions
-$qids_answered = array(); // answered questions
-$results = array(); // `grid`. Holds final results
+$results = array(); // output `grid`. Holds final results.
 $headers = $output = array();
 
+// get possible questions
 $item = Database::get()->queryArray('SELECT question_id, exercise_id, random_criteria
             FROM exercise_with_questions
                 WHERE exercise_id = ?d
@@ -76,47 +88,6 @@ foreach ($item as $data) { // check for random questions with criteria
     }
 }
 
-// get user questions
-$s = Database::get()->queryArray("SELECT DISTINCT question_id, uid 
-                FROM exercise_answer_record, exercise_user_record 
-                 WHERE exercise_answer_record.eurid = exercise_user_record.eurid
-                AND exercise_user_record.eid = ?d", $exerciseId);
-foreach ($s as $data) {
-    $qids_answered[$data->uid][] = $data->question_id;
-}
-
-$results[0][0] = '';
-foreach ($possible_qids as $qid) { // for each possible question
-    $results[0][] = $qid; // first `results` row holds question ids
-}
-
-$users = array_keys($qids_answered); // array of user ids
-for ($i=1; $i<=count($qids_answered); $i++) {
-    $results[$i][0] = $users[$i-1]; // first `results` column holds user ids
-    $u = $results[$i][0]; // user id
-    for ($j=1; $j<=count($possible_qids); $j++) {
-        $results[$i][$j] = ''; // initialisation
-    }
-    foreach ($qids_answered[$u] as $answered_qid) {
-        $found = array_search($answered_qid, $possible_qids, true);
-        if ($found !== NULL) { // if question has been answered
-            $results[$i][$found+1] = $possible_qids[$found]; // get qid
-        }
-    }
-}
-
-// exercise details
-$exercise_details[] = $objExercise->selectTitle();
-$exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
-if (!empty($objExercise->selectStartDate())) {
-    $exercise_details[] = "$langPollStart: " . greek_format($objExercise->selectStartDate(), true);
-}
-if (!empty($objExercise->selectEndDate())) {
-    $exercise_details[] = "$langPollEnd: " . greek_format($objExercise->selectEndDate(), true);
-}
-
-$csv->outputRecord($exercise_details);
-
 // ------------------------------
 // headers and question titles
 // ------------------------------
@@ -125,8 +96,7 @@ $headers[] = $langName;
 $headers[] = $langAm;
 $headers[] = $langGroup;
 
-for ($j = 1; $j<count($results[0]); $j++) {
-    $qid = $results[0][$j];
+foreach ($possible_qids as $qid) {
     $question = new Question();
     $question->read($qid);
     $question_id = $question->selectId();
@@ -136,50 +106,85 @@ for ($j = 1; $j<count($results[0]); $j++) {
 $headers[] = $langTotalScore;
 $csv->outputRecord($headers);
 
-// -----------------------------
-// question answers data
-// -----------------------------
-for ($i = 1; $i<count($results); $i++) {
-    for ($j = 0; $j<count($results[$i]); $j++) {
-        if ($j == 0) {
-            $user = $results[$i][$j]; // user id
-            // user details
-            $output[] = uid_to_name($user, 'surname');
-            $output[] = uid_to_name($user, 'givenname');
-            $output[] = uid_to_am($user);
-            $output[] = user_groups($course_id, $user, 'txt');
-        } else {
-            $question = $results[$i][$j]; // question id
-            $output[] = details($user, $question, $exerciseId); // question answer details
-            $output[] = user_question_score($user, $question, $exerciseId); // question score
+// get exercise attempts (except `canceled` attempts)
+$q = Database::get()->queryArray("SELECT uid, eurid
+                                            FROM exercise_user_record
+                                            JOIN user ON uid = id
+                                        WHERE eid = ?d 
+                                            AND attempt_status != " . ATTEMPT_CANCELED . " 
+                                        ORDER BY surname, givenname", $exerciseId);
+
+foreach ($q as $d) { // for each attempt
+    $eurid = $d->eurid; // exercise user record id
+    $qids_answered = array(); // answered questions;
+    // get user questions
+    $s = Database::get()->queryArray("SELECT DISTINCT question_id, uid 
+                FROM exercise_answer_record, exercise_user_record 
+                 WHERE exercise_answer_record.eurid = exercise_user_record.eurid
+                AND exercise_user_record.eid = ?d
+                AND exercise_user_record.eurid = ?d", $exerciseId, $eurid);
+    foreach ($s as $data) {
+        $qids_answered[$data->uid][] = $data->question_id;
+    }
+
+    $results[0][0] = '';
+    foreach ($possible_qids as $qid) { // for each possible question
+        $results[0][] = $qid; // first `results` row holds question ids
+    }
+
+    $user = array_keys($qids_answered); // user id
+    for ($i = 1; $i <= count($qids_answered); $i++) {
+        $results[$i][0] = $user[$i - 1]; // first `results` column holds user id
+        $u = $results[$i][0]; // user id
+        for ($j = 1; $j <= count($possible_qids); $j++) {
+            $results[$i][$j] = ''; // initialisation
+        }
+        foreach ($qids_answered[$u] as $answered_qid) {
+            $found = array_search($answered_qid, $possible_qids, true);
+            if ($found !== NULL) { // if question has been answered
+                $results[$i][$found + 1] = $possible_qids[$found]; // get qid
+            }
         }
     }
-    $output[] = user_total_score($user, $exerciseId); // user total score
-    $csv->outputRecord($output);
-    $output = array();
+
+    // -----------------------------
+    // question answers data
+    // -----------------------------
+    for ($i = 1; $i < count($results); $i++) {
+        for ($j = 0; $j < count($results[$i]); $j++) {
+            if ($j == 0) {
+                $user = $results[$i][$j]; // user id
+                // user details
+                $output[] = uid_to_name($user, 'surname');
+                $output[] = uid_to_name($user, 'givenname');
+                $output[] = uid_to_am($user);
+                $output[] = user_groups($course_id, $user, 'txt');
+            } else {
+                $question = $results[$i][$j]; // question id
+                $output[] = details($question, $eurid); // question answer details
+                $output[] = user_question_score($question, $eurid); // question score
+            }
+        }
+        $output[] = user_total_score($user, $eurid, $exerciseId); // user total score
+        $csv->outputRecord($output);
+        $output = array();
+    }
 }
 
 /**
  * @brief question details
- * @param $uid
  * @param $qid
- * @param $eid
+ * @param $eurid
  * @return string
  */
-function details($uid, $qid, $eid) {
-
-    global $objExercise, $output;
+function details($qid, $eurid) {
 
     $content = '';
     if ($qid) {
-        $sql = Database::get()->queryArray("SELECT eurid FROM exercise_user_record 
-            WHERE uid = ?d AND eid = ?d", $uid, $eid);
-        foreach ($sql as $data) {
-            $sql2 = Database::get()->queryArray("SELECT question_id, SUM(weight) AS weight FROM exercise_answer_record 
-                                    WHERE eurid = ?d AND question_id = ?d", $data->eurid, $qid);
-            foreach ($sql2 as $user_question) {
-                $content = question_answer_details($uid, $data->eurid, $user_question->question_id, $eid); // question answer
-            }
+        $sql2 = Database::get()->queryArray("SELECT question_id, SUM(weight) AS weight FROM exercise_answer_record 
+                                WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
+        foreach ($sql2 as $user_question) {
+            $content = question_answer_details($eurid, $user_question->question_id); // question answer
         }
     }
     return $content;
@@ -187,13 +192,11 @@ function details($uid, $qid, $eid) {
 
 /**
  * @brief user answers
- * @param $uid
  * @param $eurid
  * @param $qid
- * @param $eid
  * @return string
  */
-function question_answer_details($uid, $eurid, $qid, $eid) {
+function question_answer_details($eurid, $qid) {
     
     $content = $temp_content = '';
     $q = Database::get()->queryArray("SELECT question_id, answer, answer_id, `type`
@@ -264,25 +267,17 @@ function question_answer_details($uid, $eurid, $qid, $eid) {
 
 /**
  * @brief user question score
- * @param $uid
  * @param $qid
- * @param $eid
+ * @param $eurid
  * @return string
  */
-function user_question_score($uid, $qid, $eid) {
+function user_question_score($qid, $eurid) {
 
-    global $objExercise, $output;
     $content = '';
     if ($qid) {
-        $sql = Database::get()->queryArray("SELECT eurid FROM exercise_user_record 
-            WHERE uid = ?d AND eid = ?d", $uid, $eid);
-        foreach ($sql as $data) {
-            $sql2 = Database::get()->queryArray("SELECT question_id, SUM(weight) AS weight FROM exercise_answer_record 
-                                    WHERE eurid = ?d AND question_id = ?d", $data->eurid, $qid);
-            foreach ($sql2 as $user_question) {
-                $content = $user_question->weight; // /question weight
-            }
-        }
+        $uq = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record 
+                                WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
+        $content = $uq->weight; // /question weight
     }
     return $content;
 }
@@ -291,15 +286,17 @@ function user_question_score($uid, $qid, $eid) {
 /**
  * @brief user question total score
  * @param $uid
- * @param $qid
+ * @param $eurid
  * @param $eid
  */
-function user_total_score($uid, $eid) {
+function user_total_score($uid, $eurid, $eid) {
 
     global $objExercise;
 
-    $data = Database::get()->querySingle("SELECT eurid, total_score, total_weighting FROM exercise_user_record 
-            WHERE uid = ?d AND eid = ?d", $uid, $eid);
-    $user_total_score = $objExercise->canonicalize_exercise_score($data->total_score, $data->total_weighting);
-    return $user_total_score;
+    $data = Database::get()->querySingle("SELECT total_score, total_weighting FROM exercise_user_record 
+                                                    WHERE uid = ?d 
+                                                    AND eurid = ?d 
+                                                    AND eid = ?d", $uid, $eurid, $eid);
+
+    return $objExercise->canonicalize_exercise_score($data->total_score, $data->total_weighting);
 }
