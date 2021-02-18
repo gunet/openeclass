@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.7
+ * Open eClass 3.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -538,10 +538,12 @@ if (count($exercise_question_ids) > 0) {
             }
         }
 
-        if ($showScore and $question_weight != $questionScore) {
+        $rounded_weight = round($question_weight, 2);
+        $rounded_score = round($questionScore, 2);
+        if ($showScore and $rounded_weight != $rounded_score) {
             $tool_content .= "<tr class='warning'>
                                 <th colspan='2' class='text-right'>
-                                    $langQuestionStoredScore: " . round($question_weight, 2) . " / $questionWeighting
+                                    $langQuestionStoredScore: $rounded_weight / $questionWeighting
                                 </th>
                               </tr>";
 
