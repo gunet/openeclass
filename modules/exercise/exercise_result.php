@@ -32,7 +32,15 @@ require_once 'game.php';
 require_once 'analytics.php';
 
 $pageName = $langExercicesResult;
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
+
+if (isset($_GET['unit'])) {
+    $unit_name = Database::get()->querySingle('SELECT title FROM course_units WHERE course_id = ?d AND id = ?d',
+        $course_id, $_GET['unit'])->title;
+    $navigation[] = ['url' => "index.php?course=$course_code&amp;id=" . intval($_GET['unit']),
+        'name' => q($unit_name)];
+} else {
+    $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langExercices];
+}
 
 # is this an AJAX request to check grades?
 $checking = false;
@@ -111,7 +119,9 @@ if (isset($_GET['eurId'])) {
     }
     $objExercise = new Exercise();
     $objExercise->read($exercise_user_record->eid);
-    $navigation[] = array('url' => "results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
+    if (!isset($_GET['unit'])) {
+        $navigation[] = array('url' => "results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
+    }
 } else {
     // exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
