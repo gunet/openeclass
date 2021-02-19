@@ -275,7 +275,7 @@ foreach ($result as $row) {
                             'title' => "$langAuthChangeto $langAttemptCompleted",
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_COMPLETED . "",
                             'icon' => "fa-toggle-on",
-                            'show' => ($row2->attempt_status == ATTEMPT_ACTIVE),
+                            'show' => ($row2->attempt_status == ATTEMPT_ACTIVE) or ($row2->attempt_status == ATTEMPT_PAUSED),
                             'confirm' => $langConfirmModifyAttemptText,
                             'confirm_title' => $langConfirmModifyAttemptTitle,
                             'confirm_button' => $langModify
