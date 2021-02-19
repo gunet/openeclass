@@ -43,12 +43,14 @@ require_once 'modules/tc/functions.php';
 
 doc_init();
 
-$action = new action();
-$action->record(MODULE_ID_UNITS);
-
 if (isset($_REQUEST['id'])) {
     $id = intval($_REQUEST['id']);
+} else {
+    redirect_to_home_page("courses/$course_code/");
 }
+
+$action = new action();
+$action->record(MODULE_ID_UNITS);
 
 $pageName = ''; // delete $pageName set in doc_init.php
 $toolName = $langCourseUnits;
