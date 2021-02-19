@@ -52,12 +52,18 @@ $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langStart,
                     $langExerciseDuration, $langTotalScore,
                     $headings);
 
-$result = Database::get()->queryArray("SELECT DISTINCT uid, surname, givenname, am 
-                                                FROM `exercise_user_record` 
-                                                JOIN user ON uid = id
-                                                WHERE eid = ?d
-                                                AND attempt_status != " . ATTEMPT_CANCELED . " 
-                                                ORDER BY surname, givenname", $exerciseId);
+$result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname, am 
+                                                    FROM `exercise_user_record` 
+                                                    JOIN user ON uid = id
+                                                    WHERE eid = ?d
+                                                    AND attempt_status != " . ATTEMPT_CANCELED . ")                                                  
+                                                UNION 
+                                                    (SELECT 0 as uid, '$langAnonymous' AS surname, '$langUser' AS givenname, '' as am 
+                                                    FROM `exercise_user_record` WHERE eid = ?d 
+                                                    AND attempt_status != " . ATTEMPT_CANCELED . "
+                                                    AND uid = 0)
+                                                ORDER BY surname, givenname"
+                                                , $exerciseId, $exerciseId);
 
 foreach ($result as $row) {
     $sid = $row->uid;

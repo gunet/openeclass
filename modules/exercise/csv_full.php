@@ -34,7 +34,6 @@ $exerciseId = getDirectReference($_GET['exerciseId']);
 $objExercise = new Exercise();
 $objExercise->read($exerciseId);
 $csv = new CSV();
-//$csv->debug = true;
 $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
 
 // exercise details
@@ -49,9 +48,9 @@ if (!empty($objExercise->selectEndDate())) {
 
 $csv->outputRecord($exercise_details);
 
-$possible_qids = array(); // possible questions
-$results = array(); // output `grid`. Holds final results.
-$headers = $output = array();
+$possible_qids = []; // possible questions
+$results = []; // output `grid`. Holds final results.
+$headers = $output = [];
 
 // get possible questions
 $item = Database::get()->queryArray('SELECT question_id, exercise_id, random_criteria
@@ -107,16 +106,23 @@ $headers[] = $langTotalScore;
 $csv->outputRecord($headers);
 
 // get exercise attempts (except `canceled` attempts)
-$q = Database::get()->queryArray("SELECT uid, eurid
+$q = Database::get()->queryArray("(SELECT uid, eurid, surname, givenname, am
                                             FROM exercise_user_record
                                             JOIN user ON uid = id
-                                        WHERE eid = ?d 
+                                            WHERE eid = ?d 
                                             AND attempt_status != " . ATTEMPT_CANCELED . " 
-                                        ORDER BY surname, givenname", $exerciseId);
+                                            ) 
+                                        UNION
+                                            (SELECT 0 as uid, eurid, '$langAnonymous' AS surname, '$langUser' AS givenname, '' as am
+                                                FROM `exercise_user_record` WHERE eid = ?d 
+                                                AND attempt_status != " . ATTEMPT_CANCELED . "
+                                                AND uid = 0)
+                                            ORDER BY surname, givenname"
+                                        , $exerciseId, $exerciseId);
 
 foreach ($q as $d) { // for each attempt
     $eurid = $d->eurid; // exercise user record id
-    $qids_answered = array(); // answered questions;
+    $qids_answered = []; // answered questions;
     // get user questions
     $s = Database::get()->queryArray("SELECT DISTINCT question_id, uid 
                 FROM exercise_answer_record, exercise_user_record 
