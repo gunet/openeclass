@@ -35,18 +35,35 @@ $objExercise->read($exerciseId);
 $csv = new CSV();
 $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
 
-$headings = array();
-$csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langStart,
-    $langExerciseDuration, $langStudentTotalScore, $langTotalScore,
-    $headings);
+// exercise details
+$exercise_details[] = $objExercise->selectTitle();
+$exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
+if (!empty($objExercise->selectStartDate())) {
+    $exercise_details[] = "$langPollStart: " . greek_format($objExercise->selectStartDate(), true);
+}
+if (!empty($objExercise->selectEndDate())) {
+    $exercise_details[] = "$langPollEnd: " . greek_format($objExercise->selectEndDate(), true);
+}
 
-$result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);
+$csv->outputRecord($exercise_details);
+
+$headings = [];
+$csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langStart,
+                    $langExerciseDuration, $langTotalScore,
+                    $headings);
+
+$result = Database::get()->queryArray("SELECT DISTINCT uid, surname, givenname, am 
+                                                FROM `exercise_user_record` 
+                                                JOIN user ON uid = id
+                                                WHERE eid = ?d
+                                                AND attempt_status != " . ATTEMPT_CANCELED . " 
+                                                ORDER BY surname, givenname", $exerciseId);
 
 foreach ($result as $row) {
     $sid = $row->uid;
-    $surname = uid_to_name($sid, 'surname');
-    $name = uid_to_name($sid, 'givenname');
-    $am = uid_to_am($sid);
+    $surname = $row->surname;
+    $name = $row->givenname;
+    $am = $row->am;
     $ug = user_groups($course_id, $sid, 'txt');
 
     $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
@@ -67,15 +84,11 @@ foreach ($result as $row) {
             if ($row2->attempt_status == ATTEMPT_COMPLETED) {
                 $total_score = $objExercise->canonicalize_exercise_score($row2->total_score, $row2->total_weighting);
             }
-            $total_weighting = $exerciseRange;
         } else {
             if ($row2->attempt_status == ATTEMPT_COMPLETED) {
                 $total_score = $row2->total_score;
             }
-            $total_weighting = $row2->total_weighting;
         }
-
-        $csv->outputRecord($surname, $name, $am, $ug, $row2->record_start_date,
-            $duration, $total_score, $total_weighting);
+        $csv->outputRecord($surname, $name, $am, $ug, $row2->record_start_date, $duration, $total_score);
     }
 }
