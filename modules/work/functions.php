@@ -593,7 +593,7 @@ function triggerAssignmentAnalytics($courseId, $uid, $assignmentId, $eventname) 
  */
 function export_grades_to_csv($id) {
 
-    global $course_code, $course_id,
+    global $course_code, $course_id, $m,
            $langSurname, $langName, $langAm, $langGroup,
            $langUsername, $langEmail, $langGradebookGrade;
 
@@ -601,25 +601,34 @@ function export_grades_to_csv($id) {
     $csv->filename = $course_code . "_" . $id . "_grades_list.csv";
     $csv->outputHeaders();
     // additional security
-    $q = Database::get()->querySingle("SELECT id, title FROM assignment
+    $q = Database::get()->querySingle("SELECT id, title, submission_date, deadline FROM assignment
                             WHERE id = ?d AND course_id = ?d", $id, $course_id);
     if ($q) {
         $assignment_id = $q->id;
-        $title = $q->title;
-        $csv->outputRecord($title);
-        $csv->outputRecord();
-        $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langUsername, $langEmail, $langGradebookGrade);
-        $sql = Database::get()->queryArray("SELECT uid, grade FROM assignment_submit
-                        WHERE assignment_id = ?d", $assignment_id);
+        if (!is_null($q->deadline)) {
+            $deadline_message = "$m[with_deadline]: ". nice_format($q->deadline, true);
+        } else {
+            $deadline_message = $m['no_deadline'];
+        }
+        $csv->outputRecord($q->title);
+        $csv->outputRecord("$m[start_date]: $q->submission_date $deadline_message");
+        $csv->outputRecord($langSurname, $langName, $m['sub_date'], $langAm, $langGroup, $langUsername, $langEmail, $langGradebookGrade);
+            $sql = Database::get()->queryArray("SELECT ANY_VALUE(uid) AS uid, 
+                                                            CAST(ANY_VALUE(grade) AS DECIMAL(10,2)) AS grade, 
+                                                            ANY_VALUE(submission_date) AS submission_date, 
+                                                            ANY_VALUE(surname) AS surname, 
+                                                            ANY_VALUE(givenname) AS givenname, 
+                                                            username, 
+                                                            ANY_VALUE(am) AS am, 
+                                                            ANY_VALUE(email) AS email
+                                                           FROM assignment_submit JOIN user 
+                                                               ON uid = user.id
+                                                           WHERE assignment_id = ?d 
+                                                            GROUP BY username
+                                                            ORDER BY surname, givenname", $assignment_id);
         foreach ($sql as $data) {
-            $entries = Database::get()->querySingle('SELECT surname, givenname, username, am, email
-                        FROM user
-                        WHERE id = ?d',
-                        $data->uid);
             $ug = user_groups($course_id, $data->uid, 'txt');
-            $csv->outputRecord($entries->surname, $entries->givenname, $entries->am, $ug,
-                    $entries->username, $entries->email, $data->grade);
-            $csv->outputRecord();
+            $csv->outputRecord($data->surname, $data->givenname, greek_format($data->submission_date, true), $data->am, $ug, $data->username, $data->email, $data->grade);
         }
     }
     exit;
