@@ -608,14 +608,14 @@ function export_grades_to_csv($id) {
         $csv->outputRecord($q->title);
         $csv->outputRecord("$m[start_date]: $q->submission_date $deadline_message");
         $csv->outputRecord($langSurname, $langName, $m['sub_date'], $langAm, $langGroup, $langUsername, $langEmail, $langGradebookGrade);
-            $sql = Database::get()->queryArray("SELECT ANY_VALUE(uid) AS uid, 
-                                                            CAST(ANY_VALUE(grade) AS DECIMAL(10,2)) AS grade, 
-                                                            ANY_VALUE(submission_date) AS submission_date, 
-                                                            ANY_VALUE(surname) AS surname, 
-                                                            ANY_VALUE(givenname) AS givenname, 
+            $sql = Database::get()->queryArray("SELECT MAX(uid) AS uid, 
+                                                            CAST(MAX(grade) AS DECIMAL(10,2)) AS grade, 
+                                                            MAX(submission_date) AS submission_date, 
+                                                            MAX(surname) AS surname, 
+                                                            MAX(givenname) AS givenname, 
                                                             username, 
-                                                            ANY_VALUE(am) AS am, 
-                                                            ANY_VALUE(email) AS email
+                                                            MAX(am) AS am, 
+                                                            MAX(email) AS email
                                                            FROM assignment_submit JOIN user 
                                                                ON uid = user.id
                                                            WHERE assignment_id = ?d 
