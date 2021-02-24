@@ -31,7 +31,7 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {    
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     $tree = new Hierarchy();
     $course = new Course();
     $user = new User();
@@ -43,6 +43,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $searchcode = isset($_GET['formsearchcode']) ? $_GET['formsearchcode'] : '';
     $searchtype = isset($_GET['formsearchtype']) ? intval($_GET['formsearchtype']) : '-1';
     $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
+    $searchprof = isset($_GET['formsearchprof']) ? $_GET['formsearchprof'] : '';
     // pagination
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
@@ -61,6 +62,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     if ($searchtype != "-1") {
         $query .= ' AND course.visible = ?d';
         $terms[] = $searchtype;
+    }
+    if ($searchprof !== '') {
+        $query .= ' AND course.prof_names LIKE ?s';
+        $terms[] = '%' . $searchprof . '%';
     }
     if ($searchfaculte) {
         $subs = $tree->buildSubtrees(array($searchfaculte));
@@ -132,8 +137,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalDisplayRecords'] = $filtered_results;
 
     $data['aaData'] = array();
-        
-    foreach ($sql as $logs) {        
+
+    foreach ($sql as $logs) {
         $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
                         </a> (" . q($logs->code) . ")<br /><i>" . q($logs->prof_names) . "";
 
@@ -144,7 +149,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $br = ($i < count($departments)) ? '<br/>' : '';
             $dep .= $tree->getFullPath($department) . $br;
             $i++;
-        }               
+        }
         // Add links to course users, delete course and course edit
         $icon_content = action_button(array(
             array(
@@ -162,12 +167,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'icon' => 'fa-list',
                 'url' => "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE",
                 'show' => !isDepartmentAdmin()
-            ),            
+            ),
             array(
                 'title' => $langDelete,
                 'icon' => 'fa-times',
                 'url' => "delcours.php?c=$logs->id"
-            )            
+            )
         ));
         $data['aaData'][] = array(
             '0' => $course_title,
@@ -185,7 +190,7 @@ load_js('datatables');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#course_results_table').DataTable ({
-                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."            
+                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
@@ -236,11 +241,11 @@ $tool_content .= action_bar(array(
             array('title' => $langAllCourses,
                 'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=0&amp;search_submit=$langSearch",
                 'icon' => 'fa-search',
-                'level' => 'primary-label'),            
+                'level' => 'primary-label'),
             array('title' => $langReturnSearch,
                 'url' => "searchcours.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary')));                    
+                'level' => 'primary')));
 
 $width = (!isDepartmentAdmin()) ? 100 : 80;
 // Construct course list table
