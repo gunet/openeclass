@@ -40,10 +40,10 @@ load_js('bootstrap-datetimepicker');
 $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#id_date').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', 
+                format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
                 language: '" . $language . "',
-                autoclose: true    
+                autoclose: true
             });
         });
     </script>";
@@ -66,7 +66,7 @@ $date = '';
 // search form
 $tool_content .= "<div class='form-wrapper'>
     <form role='form' class='form-horizontal' action='listcours.php?search=yes' method='get'>
-    <fieldset>      
+    <fieldset>
       <div class='form-group'>
       <label for='formsearchtitle' class='col-sm-2 control-label'>$langTitle:</label>
         <div class='col-sm-10'><input type='text' class='form-control' id='formsearchtitle' name='formsearchtitle' value='" . @$searchtitle . "'></div>
@@ -74,7 +74,7 @@ $tool_content .= "<div class='form-wrapper'>
       <div class='form-group'>
         <label for='formsearchcode' class='col-sm-2 control-label'>$langCourseCode:</label>
         <div class='col-sm-10'>
-            <input type='text' class='form-control' name='formsearchcode' value='" . @$searchcode . "'>           
+            <input type='text' class='form-control' name='formsearchcode' value='" . @$searchcode . "'>
         </div>
       </div>";
 
@@ -109,15 +109,21 @@ $tool_content .= "<div class='form-group'>
            <option value='3' " . @$typeSel[3] . ">$langCourseInactiveShort</option>
           </select>
         </div>
+      </div>
+      <div class='form-group'>
+        <label for='formprof' class='col-sm-2 control-label'>$langTeachers:</label>
+        <div class='col-sm-10'>
+          <input type='text' class='form-control' id='formprof' name='formsearchprof' value='" . @$searchprof . "'>
+        </div>
       </div>";
 
 $reg_flag_data = array();
 $reg_flag_data[1] = $langAfter;
 $reg_flag_data[2] = $langBefore;
-$tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langCreationDate:</label>";        
+$tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langCreationDate:</label>";
 $tool_content .= "<div class='col-sm-5'>".selection($reg_flag_data, 'reg_flag', $reg_flag, 'class="form-control"')."</div>";
 $tool_content .= "<div class='col-sm-5'>";
-$tool_content .= "<input class='form-control' id='id_date' name='date' type='text' value='$date' data-date-format='dd-mm-yyyy' placeholder='$langCreationDate'>                    
+$tool_content .= "<input class='form-control' id='id_date' name='date' type='text' value='$date' data-date-format='dd-mm-yyyy' placeholder='$langCreationDate'>
                 </div>";
 $tool_content .= "</div>";
 $tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langFaculty:</label>";
@@ -134,7 +140,7 @@ $tool_content .= "</div></div>";
 $tool_content .= "<div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='search_submit' value='$langSearch'>
-                        <a href='index.php' class='btn btn-default'>$langCancel</a>        
+                        <a href='index.php' class='btn btn-default'>$langCancel</a>
                     </div>
       </div>";
 $tool_content .= "</fieldset></form></div>";

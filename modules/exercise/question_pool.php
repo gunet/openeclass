@@ -32,6 +32,8 @@ require_once 'imsqtilib.php';
 
 load_js('datatables');
 
+$picturePath = "courses/$course_code/image";
+
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#questions').DataTable ({
