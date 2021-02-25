@@ -276,7 +276,7 @@ hContent;
                             creator = ?s,
                             publisher = ?s,
                             category = ?d
-                        WHERE id = ?d", canonicalize_url($_POST['url']), $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['selectcategory'], $id);
+                        WHERE id = ?d", canonicalize_url(trim($_POST['url'])), $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['selectcategory'], $id);
             }
             if ($table == 'video') {
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEO, $id);
@@ -294,7 +294,7 @@ hContent;
     if (isset($_POST['add_submit'])) {  // add
         $uploaded = false;
         if (isset($_POST['URL'])) { // add videolink
-            $url = $_POST['URL'];
+            $url = trim($_POST['URL']);
             if ($_POST['title'] == '') {
                 $title = $url;
             } else {
