@@ -45,8 +45,6 @@ doc_init();
 
 if (isset($_REQUEST['id'])) {
     $id = intval($_REQUEST['id']);
-} else {
-    redirect_to_home_page("courses/$course_code/");
 }
 
 $action = new action();
@@ -182,10 +180,12 @@ if (isset($id) and $id !== false) {
         if (!(is_null($info->finish_week))) {
             $course_finish_week = " $langTill " . nice_format($info->finish_week);
         }
-    } else {
-        Session::Messages($langUnknownResType);
-        redirect_to_home_page("courses/$course_code/");
     }
+}
+
+if (!isset($info) or !$info) {
+    Session::Messages($langUnknownResType);
+    redirect_to_home_page("courses/$course_code/");
 }
 
 // Links for next/previous unit
