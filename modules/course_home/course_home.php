@@ -82,7 +82,7 @@ $head_content .= "<style>
         background-color: #f5f5f5;
     }
     #collapseDescription > div {
-        padding: 5px 20px;        
+        padding: 5px 20px;
     }
 </style>";
 $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/wall/css/wall.css">';
@@ -406,9 +406,15 @@ if ($is_editor) {
     if (isset($_REQUEST['del'])) { // delete course unit
         $id = intval(getDirectReference($_REQUEST['del']));
         if ($course_info->view_type == 'units') {
-            Database::get()->query("UPDATE `course_units` SET `order`=`order` - 1 WHERE `order`>?d", $_REQUEST['order']);
-            Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
             Database::get()->query('DELETE FROM unit_resources WHERE unit_id = ?d', $id);
+            Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
+            $units = Database::get()->queryArray('SELECT id, `order` FROM course_units
+                WHERE course_id = ?d', $course_id);
+            foreach ($units as $i => $unit) {
+                Database::get()->query('UPDATE course_units
+                    SET `order` = ?d WHERE id = ?d',
+                    $i, $unit->id);
+            }
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNIT, $id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUNIT, Indexer::RESOURCE_UNITRESOURCE, $id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
