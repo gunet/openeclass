@@ -251,7 +251,7 @@ hContent;
     if (isset($_POST['submitCategory'])) {
         submit_video_category();
         Session::Messages($langCatVideoDirectoryCreated, "alert-success");
-        redirect_to_home_page("modules/video/index.php");
+        redirect_to_home_page("modules/video/index.php?course=$course_code");
     }
 
     if (isset($_POST['edit_submit'])) { // edit
@@ -370,7 +370,7 @@ hContent;
             }
         }
         Session::Messages($langFAdd, "alert-success");
-        redirect_to_home_page("modules/video/index.php");
+        redirect_to_home_page("modules/video/index.php?course=$course_code");
     } // end of add_submit
     if (isset($_POST['add_submit_delos'])) {
         if (isset($_POST['delosResources'])) {
