@@ -1146,6 +1146,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $ebook_subsection_map,
                     $video_map,
                     $videolink_map,
+                    $videocat_map,
                     $lp_learnPath_map,
                     $wiki_map,
                     $assignments_map,
@@ -1186,6 +1187,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $ebook_subsection_map,
                     $video_map,
                     $videolink_map,
+                    $videocat_map,
                     $lp_learnPath_map,
                     $wiki_map,
                     $assignments_map,
@@ -1618,7 +1620,7 @@ function unit_map_function(&$data, $maps) {
     // opoy yparxei if isset, isxyei h:
     // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
     // des to ekei comment gia ta spasmena FKs
-    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map) = $maps;
+    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $video_category_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map) = $maps;
     if ($data['type'] == 'videolinks') {
         $data['type'] == 'videolink';
     }
@@ -1645,6 +1647,8 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = @$video_map[$data['res_id']];
     } elseif ($type == 'videolink') {
         $data['res_id'] = @$videolink_map[$data['res_id']];
+    } elseif ($type == 'videolinkcategory') {
+        $data['res_id'] = @$video_category_map[$data['res_id']];
     } elseif ($type == 'lp') {
         $data['res_id'] = @$lp_learnPath_map[$data['res_id']];
     } elseif ($type == 'wiki') {

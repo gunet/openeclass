@@ -254,8 +254,8 @@ function delete_users() {
         FROM course_user, user ' . $sql_department . '
         WHERE course_user.user_id = user.id
           AND course_user.status <> ' . USER_TEACHER . '
-          AND course_user.editor = 0
-          AND course_user.reviewer = 0
+          AND (course_user.editor = 0 OR course_user.editor IS NULL)
+          AND (course_user.reviewer = 0 OR course_user.reviewer IS NULL)
           AND course_id = ?d';
     $args = array($course_id);
 
@@ -421,9 +421,9 @@ function del_work_subs()  {
 function purge_exercises() {
     global $langPurgeExercisesResults, $course_id;
 
-    Database::get()->query("DELETE d FROM exercise_answer_record d,exercise_question s 
+    Database::get()->query("DELETE d FROM exercise_answer_record d,exercise_question s
                     WHERE d.question_id =s.id AND s.course_id = ?d", $course_id);
-    Database::get()->query("DELETE d FROM exercise_user_record d,exercise s 
+    Database::get()->query("DELETE d FROM exercise_user_record d,exercise s
                     WHERE d.eid=s.id AND s.course_id = ?d", $course_id);
 
     return "<p>$langPurgeExercisesResults</p>";
@@ -484,4 +484,3 @@ function del_blog_posts() {
 
     return "<p>$langBlogPostsDeleted</p>";
 }
-
