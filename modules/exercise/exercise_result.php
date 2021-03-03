@@ -104,8 +104,8 @@ if (isset($_GET['eurId'])) {
     $exercise_user_record = Database::get()->querySingle("SELECT *, DATE_FORMAT(record_start_date, '%Y-%m-%d %H:%i') AS record_start_date,
                                                                       TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration
                                                                     FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id
-                                                        FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record
+        WHERE eurid = ?d ORDER BY q_position", $eurid);
     if (!$exercise_user_record) {
         // No record matches with this exercise user record id
         Session::Messages($langExerciseNotFound);
