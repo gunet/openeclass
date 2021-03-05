@@ -204,11 +204,13 @@ if (isset($fromExercise)) {
         array('title' => $langImportQTI,
               'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
               'icon' => 'fa-download',
-              'button-class' => 'btn-success'),
+              'button-class' => 'btn-success',
+              'show' => false),
         array('title' => $langExportQTI,
               'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
               'icon' => 'fa-upload',
-              'button-class' => 'btn-success')
+              'button-class' => 'btn-success',
+              'show' => false)
      );
 }
 
