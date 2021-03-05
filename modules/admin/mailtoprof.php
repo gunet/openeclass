@@ -209,10 +209,12 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
                     </div>                    
                 </div>
             </div>
-        <div class='col-sm-offset-2 col-sm-10'>
-          <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
-            </div>    
-        ". generate_csrf_token_form_field() ."
+            <div class='form-group'>
+                <div class='col-sm-offset-2 col-sm-10'>
+                  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
+                    </div>    
+                ". generate_csrf_token_form_field() ."
+            </div>
     </form>
     </div>";
 }
