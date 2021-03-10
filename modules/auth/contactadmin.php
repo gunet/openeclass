@@ -72,7 +72,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
                     <li><span><b>$langName:</b></span> <span>$firstname</span></li>
                     <li><span><b>$langSurname:</b></span> <span>$lastname</span></li>
                     <li><span><b>e-mail:</b></span> <span>$email</a></span></li>
-                    <li><span><b>$m[comments]:</b></span> <span>$body</span></li>
+                    <li><span><b>$langComments:</b></span> <span>$body</span></li>
                 </ul>
                 <div>
                     <p><a href='{$urlServer}modules/admin/edituser.php?u=$userid'>{$urlServer}modules/admin/edituser.php?u=$userid</a></p>
@@ -83,7 +83,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
         $emailbody = $header_html_topic_notify.$body_html_topic_notify;
 
         $plainEmailBody = html2text($emailbody);
-        if (!send_mail_multipart('', '', '', $to, $emailsubject, $plainEmailBody, $emailbody)) {
+        if (!send_mail_multipart("$lastname $firstname", $email, '', $to, $emailsubject, $plainEmailBody, $emailbody)) {
             $tool_content .= "<div class='alert alert-danger'>$langEmailNotSend " . q($to) . "!</div><br />";
         } else {
             $tool_content .= "<div class='alert alert-success'>$emailsuccess</div><br />";
@@ -120,7 +120,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
                 <div class='form-group'>
                     <label for='$langComments' class='col-sm-2 control-label'>$langComments:</label>
                     <div class='col-sm-10'>
-                        <textarea class='form-control' rows='6' name='$langComments'>$langActivateAccount</textarea>
+                        <textarea class='form-control' rows='6' name='body'>$langActivateAccount</textarea>
                     </div>
                 </div>
                 <div class='form-group'>
