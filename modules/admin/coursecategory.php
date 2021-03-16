@@ -258,21 +258,21 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     <div class='form-group'>
         <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryMultiple'] . ":</label>
         <div class='col-sm-9'>
-            <input class='form-control' type='checkbox' name='multiple' value='1' " . $check_multiple . ">
+            <input type='checkbox' name='multiple' value='1' " . $check_multiple . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategoryMultiple2'] . "</small></span>
         </div>
     </div>
     <div class='form-group'>
         <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategorySearchable'] . ":</label>
         <div class='col-sm-9'>
-            <input class='form-control' type='checkbox' name='searchable' value='1' " . $check_searchable . ">
+            <input type='checkbox' name='searchable' value='1' " . $check_searchable . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategorySearchable2'] . "</small></span>
         </div>
     </div>
     <div class='form-group'>
         <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryActive'] . ":</label>
         <div class='col-sm-9'>
-            <input class='form-control' type='checkbox' name='active' value='1' " . $check_active . ">
+            <input type='checkbox' name='active' value='1' " . $check_active . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategoryActive2'] . "</small></span>
         </div>
     </div>";
