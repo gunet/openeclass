@@ -934,6 +934,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $files = [];
         $baseDir = "$webDir/courses/$new_course_code/work";
         foreach ($assignments_map as $old_id => $new_id) {
+            Database::get()->queryFunc('SELECT file_path FROM assignment
+                WHERE id = ?d',
+                function ($item) use (&$files, $baseDir) {
+                    if ($item->file_path) {
+                        $files[] = $baseDir . '/admin_files/' . $item->file_path;
+                    }
+                }, $new_id);
             Database::get()->queryFunc('SELECT file_path, grade_comments_filepath
                 FROM assignment_submit WHERE assignment_id = ?d',
                 function ($item) use (&$files, $baseDir) {
