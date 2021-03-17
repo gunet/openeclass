@@ -195,6 +195,7 @@ if (isset($fromExercise)) {
               'icon' => 'fa-copy',
               'level' => 'primary-label',
               'class' => 'warnDup',
+              'class' => 'warnDup',
               'button-class' => 'btn-success'),
         array('title' => $langQuestionPoolPurge,
               'url' => "question_pool.php?course=$course_code&amp;purge=yes",
@@ -428,15 +429,34 @@ draw($tool_content, 2, null, $head_content);
 function clone_question_pool($clone_course_id)
 {
     global $course_code, $course_id;
+    $cat = [];
+
+    $q = Database::get()->queryArray("SELECT question_cat_id, question_cat_name FROM exercise_question_cats 
+                                                WHERE course_id = ?d", $course_id);
+    if (count($q) > 0) {
+        foreach ($q as $data) {
+            $new_cat_id = Database::get()->query("INSERT INTO exercise_question_cats (question_cat_name, course_id) 
+                                                                VALUES (?s, ?d)",
+                                                $data->question_cat_name, $clone_course_id)->lastInsertID;
+            $cat[$data->question_cat_id] = $new_cat_id;
+        }
+    }
 
     $old_path = "courses/$course_code/image/quiz-";
     $new_path = 'courses/' . course_id_to_code($clone_course_id) . '/image/quiz-';
-    Database::get()->queryFunc("SELECT id FROM exercise_question WHERE course_id = ?d",
-        function ($question) use ($clone_course_id, $old_path, $new_path) {
-            $question_clone_id = Database::get()->query("INSERT INTO exercise_question
+    Database::get()->queryFunc("SELECT id, category FROM exercise_question WHERE course_id = ?d",
+        function ($question) use ($clone_course_id, $old_path, $new_path, $cat) {
+          if ($question->category == 0) {
+                $question_clone_id = Database::get()->query("INSERT INTO exercise_question
                     (course_id, question, description, weight, type, difficulty, category)
                     SELECT ?d, question, description, weight, type, difficulty, 0
                         FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
+            } else {
+                $question_clone_id = Database::get()->query("INSERT INTO exercise_question
+                    (course_id, question, description, weight, type, difficulty, category)
+                    SELECT ?d, question, description, weight, type, difficulty, ?d
+                        FROM `exercise_question` WHERE id = ?d", $clone_course_id, $cat[$question->category], $question->id)->lastInsertID;
+            }
             Database::get()->query("INSERT INTO exercise_answer
                     (question_id, answer, correct, comment, weight, r_position)
                     SELECT ?d, answer, correct, comment, weight, r_position FROM exercise_answer
