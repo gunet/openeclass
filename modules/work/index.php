@@ -508,10 +508,6 @@ if ($is_editor) {
         $navigation[] = $works_url;
         submit_grade_comments($_POST);
     } elseif (isset($_POST['ass_review'])) {
-        // $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assign']))->title;
-        // $pageName = $work_title;
-        // $navigation[] = $works_url;
-        // $id_sub = Database::get()->querySingle("SELECT id FROM assignment WHERE id = ?d", $id)->id;
         $id = intval($_POST['assign']);
         submit_review_per_ass($id);
     } elseif (isset($_GET['add'])) {
@@ -4682,15 +4678,15 @@ function assignment_details($id, $row, $x =false) {
  */
 function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $head_content, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
-    $langWorkOnlineText, $langGradeOk, $langPlagiarismResult, $langHasAssignmentPublished,
+    $langWorkOnlineText, $langGradeOk, $langPlagiarismResult, $langHasAssignmentPublished, $langMailToUsers,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
-    $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress,
+    $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress, $langFileName,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
     $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
 
-    $head_content .= '<style>
-        .table-default { table-layout: fixed; }
+    $head_content .= '
+    <style>        
         .count-col { width: 3em; }
         .user-col { width: 40%; }
         .tools-col { width: 5em; }
@@ -4775,40 +4771,43 @@ function show_assignment($id, $display_graph_results = false) {
                 <br>
                 <div class='margin-bottom-thin'>
                     <b>$langSubmissions:</b>&nbsp; $count_of_assignments
-                </div>
-                <table class='table-default'>
+                </div>";
+            $tool_content .= "
+                <div class='table-responsive'>   
+                <table class='table'>
                 <tbody>
                 <tr class='list-header'>
                 <th class='count-col'>&nbsp;</th>";
-            sort_link($langSurnameName, 'username', 'class="user-col"');
-            $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename', 'class="filename-col"');
-            sort_link($m['sub_date'], 'date', 'class="date-col"');
-			if ($assign->grading_type == 3){
-				//neo pedio vathmos aksiologhshs mono gia peer review
-				sort_link($langPeerReviewGrade, '');
-			}
-            sort_link($langGradebookGrade, 'grade', 'class="grade-col"');
-            $tool_content .= "<th class='text-center tools-col'><i class='fa fa-cogs'></i></th></tr>";
-            $i = 1;
-            $plagiarismlink = '';
-            $count_ass = 0;
-            $seen = [];
-            foreach ($result as $row) {
-                // is it a group assignment?
-                if (!empty($row->group_id)) {
-                    if (isset($seen[$row->group_id])) {
-                        continue;
-                    }
-                    $subContentGroup = "$m[groupsubmit] " .
-                            "<a href='{$urlServer}/modules/group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
-                            "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
+                sort_link($langSurnameName, 'username', 'class="user-col"');
+                if ($assign->submission_type)  {
+                    $tool_content .= "<th class='text-center'>$langWorkOnlineText</th>";
                 } else {
-                    if (isset($seen[$row->uid])) {
-                        continue;
-                    }
-                    $subContentGroup = '';
+                    $tool_content .= "<th class='text-center'>$langFileName</th>";
                 }
-
+                sort_link($m['sub_date'], 'date', 'class="date-col"');
+                if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) { //neo pedio vathmos aksiologhshs mono gia peer review
+                    sort_link($langPeerReviewGrade, '');
+                }
+                sort_link($langGradebookGrade, 'grade', 'class="grade-col"');
+                $tool_content .= "<th class='text-center tools-col'><i class='fa fa-cogs'></i></th></tr>";
+                $i = 1;
+                $plagiarismlink = '';
+                $seen = [];
+                foreach ($result as $row) {
+                    // is it a group assignment?
+                    if (!empty($row->group_id)) {
+                        if (isset($seen[$row->group_id])) {
+                            continue;
+                        }
+                        $subContentGroup = "$m[groupsubmit] " .
+                                "<a href='{$urlServer}/modules/group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
+                                "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
+                    } else {
+                        if (isset($seen[$row->uid])) {
+                            continue;
+                        }
+                        $subContentGroup = '';
+                    }
                 $mess = '';
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
                     $grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
@@ -4904,10 +4903,6 @@ function show_assignment($id, $display_graph_results = false) {
                     $grade = $row->grade;
                 }
 
-                /* if ($assign->grading_type == 3 && $count_of_assignments > $assign->reviews_per_assignment && $cdate > $assign->due_date_review && empty($row->grade) ){
-                   $grade = $grade_review;
-                   $count_ass++;
-                }*/
                 if (isset($_GET['unit'])) {
                     $grade_edit_link = "../work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 } else {
@@ -4915,7 +4910,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
 
                 $icon_field = "<a class='link' href='$grade_edit_link'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
-                if ($row->grading_scale_id && $row->grading_type == 1) {
+                if ($row->grading_scale_id && $row->grading_type == ASSIGNMENT_SCALING_GRADE) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
                     $scale_options = "<option value> - </option>";
@@ -4928,7 +4923,7 @@ function show_assignment($id, $display_graph_results = false) {
                     }
                     $grade_field = "<select name='grades[$row->id][grade]' class='form-control' id='scales'>$scale_options</select>";
                 }
-                else if ($row->grading_scale_id && $row->grading_type == 2) {
+                else if ($row->grading_scale_id && $row->grading_type == ASSIGNMENT_RUBRIC_GRADE) {
                     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $row->grading_scale_id);
 
                     $criteria = unserialize($rubric->scales);
@@ -4948,7 +4943,8 @@ function show_assignment($id, $display_graph_results = false) {
                         $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' disabled>";
                     } else {
                         $icon_field = '';
-                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'><span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span></a>";
+                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                                        <span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span></a>";
                     }
                 } else {
                     // disabled grade field if turnitin
@@ -4993,6 +4989,8 @@ function show_assignment($id, $display_graph_results = false) {
                     $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
                 }
 
+                $tool_content .= "</td>";
+
                 // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
                 if (get_config('ext_unicheck_enabled') and valid_plagiarism_file_type($row->id)) {
                     $results = Plagiarism::get()->getResults($row->id);
@@ -5006,113 +5004,102 @@ function show_assignment($id, $display_graph_results = false) {
                         $plagiarismlink = "<span class='small'><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
                     }
                 }
-                // ---------------------------------
-				//$tool_content .= "$grade_review_field";<span class='fa fa-fw fa-check text-success' data-toggle='tooltip' data-placement='top' title='Κείμενο'></span>
-                $tool_content .= "</td>
-                            <td class='text-center filename-col' width='180'>
-                                    $filelink <br> $plagiarismlink
-                            </td>
-                            <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>";
-				if ($assign->grading_type == 3 ){
-					$tool_content .="<td width='5' class='text-center'>
+                $tool_content .= "<td class='text-center filename-col' class='col-md-2'>$filelink <br> $plagiarismlink</td>";
+
+                $tool_content .= "<td class='col-md-2'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>";
+
+				if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
+					$tool_content .="<td class='col-md-1' class='text-center'>
 										<div class='form-group'>
                                             $grade_review_field
 											$condition
 										</div>
 									</td>";
 				}
-                $tool_content.="<td width='5' class='text-center'>
+                $tool_content.="<td class='col-md-1' class='text-center'>
 									<div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
 										$grade_field
 										<span class='help-block'>".Session::getError("grade.$row->id")."</span>
 									</div>
 								</td>
 								<td class='text-center'>
-									$icon_field
-								<a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
-									<span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteSubmission' title='' data-toggle='tooltip'></span>
-								</a>
-							</td></tr>";
+                                        $icon_field
+                                    <a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
+                                        <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteSubmission' title='' data-toggle='tooltip'></span>
+                                    </a>
+							    </td>
+							</tr>";
                 $i++;
 
                 $seen[$row->group_id] = $seen[$row->uid] = true;
             } //END of Foreach
 
-			/*if ($assign->grading_type == 3 && $count_of_assignments > $assign->reviews_per_assignment && $cdate > $assign->due_date_review ){
-				if ($count_ass == $count_of_assignments){
-					$tool_content .= "<div class='alert alert-warning'>Για την καταχώριση της τελικής βαθμολογίας πρέπει να γίνει καταχώρηση αλλαγών</div>";
-				}
-			}*/
             // disabled grades submit if turnitin
             $disabled_submit = ($assign->assignment_type == 1) ? ' disabled': '';
 
+            $tool_content .= "</tbody></table></div>";
             $tool_content .= "
-                </tbody>
-            </table>
-            <div class='form-group'>
-                <div class='col-xs-12'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' value='1' name='email' checked> $m[email_users]
-                      </label>
+                <div class='form-group'>
+                    <div class='col-xs-12'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' value='1' name='email' checked> $langMailToUsers
+                          </label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class='pull-right'>
-                <button class='btn btn-primary' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
-            </div>
-            </form>";
-        } else {
-
-            $result1 = Database::get()->queryArray("SELECT grade FROM assignment_submit WHERE assignment_id = ?d ORDER BY grade ASC", $id);
-            $gradeOccurances = array(); // Named array to hold grade occurances/stats
-            $gradesExists = 0;
-            foreach ($result1 as $row) {
-                $theGrade = $row->grade;
-                if ($theGrade) {
-                    $gradesExists = 1;
-                    if (!isset($gradeOccurances[$theGrade])) {
-                        $gradeOccurances[$theGrade] = 1;
-                    } else {
-                        if ($gradesExists) {
-                            ++$gradeOccurances[$theGrade];
+                <div class='pull-right'>
+                    <button class='btn btn-primary' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
+                </div>
+                </form>";
+            } else {
+                $result1 = Database::get()->queryArray("SELECT grade FROM assignment_submit WHERE assignment_id = ?d ORDER BY grade ASC", $id);
+                $gradeOccurances = array(); // Named array to hold grade occurances/stats
+                $gradesExists = 0;
+                foreach ($result1 as $row) {
+                    $theGrade = $row->grade;
+                    if ($theGrade) {
+                        $gradesExists = 1;
+                        if (!isset($gradeOccurances[$theGrade])) {
+                            $gradeOccurances[$theGrade] = 1;
+                        } else {
+                            if ($gradesExists) {
+                                ++$gradeOccurances[$theGrade];
+                            }
                         }
                     }
                 }
-            }
-            // display pie chart with grades results
-            if ($gradesExists) {
-                // Used to display grades distribution chart
-                $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign
-                                                             WHERE assign.assignment_id = ?d AND
-                                                             assign.grade <> ''", $id)->count;
+                // display pie chart with grades results
+                if ($gradesExists) {
+                    // Used to display grades distribution chart
+                    $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign
+                                                                 WHERE assign.assignment_id = ?d AND
+                                                                 assign.grade <> ''", $id)->count;
 
-                if ($assign->grading_scale_id and $assign->grading_type == 1) {
-                    $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
-                    $scales = unserialize($serialized_scale_data);
-                    $scale_values = array_value_recursive('scale_item_value', $scales);
-                }
-                foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
-                    $percentage = round((100.0 * $gradeOccurance / $graded_submissions_count),2);
                     if ($assign->grading_scale_id and $assign->grading_type == 1) {
-                        $key = closest($gradeValue, $scale_values, true)['key'];
-                        $gradeValue = $scales[$key]['scale_item_name'];
+                        $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
+                        $scales = unserialize($serialized_scale_data);
+                        $scale_values = array_value_recursive('scale_item_value', $scales);
                     }
-                    $this_chart_data['grade'][] = "$gradeValue";
-                    $this_chart_data['percentage'][] = $percentage;
+                    foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
+                        $percentage = round((100.0 * $gradeOccurance / $graded_submissions_count),2);
+                        if ($assign->grading_scale_id and $assign->grading_type == 1) {
+                            $key = closest($gradeValue, $scale_values, true)['key'];
+                            $gradeValue = $scales[$key]['scale_item_name'];
+                        }
+                        $this_chart_data['grade'][] = "$gradeValue";
+                        $this_chart_data['percentage'][] = $percentage;
+                    }
+                    $tool_content .= "<script type = 'text/javascript'>gradesChartData = ".json_encode($this_chart_data).";</script>";
+                    /****   C3 plot   ****/
+                    $tool_content .= "<div class='row plotscontainer'>";
+                    $tool_content .= "<div class='col-lg-12'>";
+                    $tool_content .= plot_placeholder("grades_chart", $langGraphResults);
+                    $tool_content .= "</div></div>";
                 }
-                $tool_content .= "<script type = 'text/javascript'>gradesChartData = ".json_encode($this_chart_data).";</script>";
-                /****   C3 plot   ****/
-                $tool_content .= "<div class='row plotscontainer'>";
-                $tool_content .= "<div class='col-lg-12'>";
-                $tool_content .= plot_placeholder("grades_chart", $langGraphResults);
-                $tool_content .= "</div></div>";
             }
-        }
     } else { // no submissions
-        $tool_content .= "
-                      <p class='sub_title1'>$langSubmissions:</p>
-                      <div class='alert alert-warning'>$langNoSubmissions</div>";
+        $tool_content .= "<p class='sub_title1'>$langSubmissions:</p><div class='alert alert-warning'>$langNoSubmissions</div>";
     }
 }
 
@@ -5558,20 +5545,10 @@ function submit_grade_comments($args) {
     global $langGrades, $course_id, $langTheField, $course_code,
             $langFormErrors, $workPath, $langGradebookGrade;
 
-    $id = $args['assignment'];//assignment=id_ergasias hidden pedio sto grade_edit arxeio
-    $grading_type = 0;
-    $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
-    if ($rubric) {
-        $grading_type = 2;
-    }
-    //eean rubric kai review_user true tote grading_type=3
-	$reviews_user = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d", $id)->reviews_per_assignment;
-    if ($reviews_user)
-    {
-        $grading_type = 3;
-    }
+    $id = $args['assignment']; // assignment=id_ergasias hidden pedio sto grade_edit arxeio
     $sid = $args['submission'];
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+    $grading_type = $assignment->grading_type;
 
     $v = new Valitron\Validator($args);
     $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
@@ -5585,17 +5562,20 @@ function submit_grade_comments($args) {
         'grade' => "$langTheField $langGradebookGrade"
     ));
     if($v->validate()) {
-        if ($grading_type == 2) {
+        $grade_rubric = '';
+        if ($grading_type == ASSIGNMENT_SCALING_GRADE) {
+            $grade = $args['grade'];
+        } else if ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
             $grade_rubric = serialize($args['grade_rubric']);
             $criteria = unserialize($rubric->scales);
             $r_grade = 0;
             foreach ($criteria as $ci => $criterio) {
-                    if(is_array($criterio['crit_scales']))
-                            $r_grade += $criterio['crit_scales'][$args['grade_rubric'][$ci]]['scale_item_value'] * $criterio['crit_weight'];
+                if (is_array($criterio['crit_scales'])) {
+                    $r_grade += $criterio['crit_scales'][$args['grade_rubric'][$ci]]['scale_item_value'] * $criterio['crit_weight'];
+                }
             }
             $grade = $r_grade/100;
-        }
-        elseif ($grading_type == 3) {
+        } else if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
            // edw tha kahoristei o telikos bathmos pou tha valei o kathghths
 		    $sum = 0;
 			$count = 0;
@@ -5608,11 +5588,8 @@ function submit_grade_comments($args) {
 			}
 			$grad = $sum / $count;
 			$grade = number_format($grad,1);
-			//$grade = round($grad);
-			$grade_rubric = '';
-        }else {
+        } else {
             $grade = $args['grade'];
-            $grade_rubric = '';
         }
         $comment = $args['comments'];
         if (isset($_FILES['comments_file']) and is_uploaded_file($_FILES['comments_file']['tmp_name'])) { // upload comments file
@@ -5647,9 +5624,9 @@ function submit_grade_comments($args) {
             triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
             triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
-                    'title' => $assignment->title,
-                    'grade' => $grade,
-                    'comments' => $comment));
+                        'title' => $assignment->title,
+                        'grade' => $grade,
+                        'comments' => $comment));
             if ($assignment->group_submissions) {
                 $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
                 $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
@@ -5701,7 +5678,6 @@ function submit_grade_reviews($args) {
     $v->rule('numeric', array('assignment', 'submission'));
 
     if($v->validate()) {
-
         $grade_rubric = serialize($args['grade_rubric']);
         $criteria = unserialize($rubric->scales);
         $r_grade = 0;
