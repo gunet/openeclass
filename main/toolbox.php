@@ -295,6 +295,22 @@ foreach ($session->active_ui_languages as $langCode) {
 }
 $t->parse('selectField', 'selectFieldBlock', true);
 
+// Free text search in index
+$course_ids = array();
+if (get_config('enable_search')) {
+    if ($search_terms) {
+        // search in the index
+        $idx = new Indexer();
+        $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_GET));
+        $course_ids = array_map(function ($hit) {
+            return $hit->pkid;
+        }, $hits);
+        $t->set_var('search_terms', q($search_terms));
+    }
+} else {
+    $t->set_block('main', 'searchBlock', 'delete');
+}
+
 if ($searching) {
     if (isset($_GET['department'])) {
         $sql_department = 'course_department,';
@@ -315,22 +331,6 @@ if ($searching) {
     }
 
     $query .= ' FROM course c ';
-
-    // Free text search in index
-    $course_ids = array();
-    if (get_config('enable_search')) {
-        if ($search_terms) {
-            // search in the index
-            $idx = new Indexer();
-            $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_GET));
-            $course_ids = array_map(function ($hit) {
-                return $hit->pkid;
-            }, $hits);
-            $t->set_var('search_terms', q($search_terms));
-        }
-    } else {
-        $t->set_block('main', 'searchBlock', 'delete');
-    }
 
     if (count($course_ids)) {
         $where[] = 'course_id IN ' . placeholders($course_ids);
