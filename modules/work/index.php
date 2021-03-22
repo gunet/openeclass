@@ -5560,6 +5560,10 @@ function submit_grade_comments($args) {
         if ($grading_type == ASSIGNMENT_SCALING_GRADE) {
             $grade = $args['grade'];
         } else if ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
+            $rubric = Database::get()->querySingle("SELECT * FROM rubric AS a  JOIN assignment AS b 
+                                                            WHERE b.course_id = ?d 
+                                                                AND a.id = b.grading_scale_id 
+                                                                AND b.id = ?d", $course_id, $id);
             $grade_rubric = serialize($args['grade_rubric']);
             $criteria = unserialize($rubric->scales);
             $r_grade = 0;
