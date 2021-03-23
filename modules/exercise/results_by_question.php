@@ -89,7 +89,7 @@ $tool_content .= "
 foreach($questionList as $id) {
     $objQuestionTmp = new Question();
     $objQuestionTmp->read($id);
-    if ($objQuestionTmp->type == FREE_TEXT) {
+    if ($objQuestionTmp->selectType() == FREE_TEXT) {
         $tool_content .= "
         <tr>
             <td>".q_math($objQuestionTmp->selectTitle())."</th>
