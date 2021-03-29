@@ -107,9 +107,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
             Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
 				VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
-
             Session::Messages($langInsertedAsModule, 'alert-info');
-            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         } else {
             // check if this is this LP that used this document as a module
             $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
@@ -134,14 +132,16 @@ while ($iterator <= $_POST['maxLinkForm']) {
 					VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $thisLinkModule->module_id, $order);
                 
                 Session::Messages($langInsertedAsModule, 'alert-info');
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
                 Session::Messages($langAlreadyUsed, 'alert-warning');
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         }
     }
     $iterator++;
+}
+
+if ($iterator > 1) {
+    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
 }
 
 
@@ -156,13 +156,7 @@ $tool_content .= showlinks();
 draw($tool_content, 2, null, $head_content);
 
 /**
- * @brief display links
- * @global type $langName
- * @global type $langSelection
- * @global type $langAddModulesButton
- * @global type $course_id
- * @global type $course_code
- * @global type $themeimg
+ * @brief display links 
  * @return string
  */
 function showlinks() {
@@ -181,28 +175,20 @@ function showlinks() {
 
     $i = 1;
 
-    if ( empty($result) ){
-
-        $output .= "
-            <tr>
-                <td class='text-grey' align='center'>$langNoLinksExist</td>
-                <td></td>
-            </tr>
-        ";
-
+    if (empty($result)) {
+        $output .= "<tr><td class='text-grey text-center'>$langNoLinksExist</td><td></td></tr>";
     } else {
-
         foreach ($result as $myrow) {
             $output .= "
             <tr>                
-            <td align='left' valign='top'>";
+            <td class='text-left'>";
             if (empty($myrow->title)) {
                 $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->url) . "</a>";
             } else {
                 $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>";
             }
             $output .= "<br><small class='comments'>" . $myrow->description . "</small></td>";
-            $output .= "<td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
+            $output .= "<td><div class='text-center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
             </tr>";
             $i++;
         }
@@ -211,14 +197,13 @@ function showlinks() {
         <tfooter>
         <tr>
             <th colspan='2'>
-                <div align='right'>
+                <div class='pull-right'>
                 <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
                 <input class='btn btn-primary' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
                 </div>
             </th>
         </tr>
-        </tfooter>
-        
+        </tfooter>        
         </table></div>
         </form>";
     return $output;
