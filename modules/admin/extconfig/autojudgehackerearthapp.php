@@ -26,13 +26,15 @@ require_once 'include/simplehtmldom/simple_html_dom.php';
 class AutojudgeHackerearthApp extends AutojudgeApp implements AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input) {
         //set POST variables
-        $url           = 'https://api.hackerearth.com/code/run/';
+        //$url           = 'https://api.hackerearth.com/code/run/';
+        $url = 'https://api.hackerearth.com/v4/partner/code-evaluation/submissions/';
         $fields_string = null;
         $fields        = array(
             'client_secret' => q(get_config('autojudge_hackerEarthKey')),
             'input'         => $input->input,
             'source'        => urlencode($input->code),
             'lang'          => $input->lang,
+            'content_type'  => 'application/json'
         );
 
         // url-ify the data for the POST
@@ -50,7 +52,6 @@ class AutojudgeHackerearthApp extends AutojudgeApp implements AutoJudgeConnector
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
         // Execute post
-        $result = json_decode(curl_exec($ch), true);
         $origResult = curl_exec($ch);
         $result = json_decode($origResult, true);
         if(!$result) {
@@ -60,6 +61,7 @@ class AutojudgeHackerearthApp extends AutojudgeApp implements AutoJudgeConnector
             curl_close($ch);
             return $output;
         }
+
         // Close curl connection
         curl_close($ch);
 
