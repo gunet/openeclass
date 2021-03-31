@@ -406,21 +406,22 @@ if (!$nbrExercises) {
 
             if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
 
-                $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt
-                                FROM exercise_user_record
-                                WHERE eid = ?d AND uid = ?d AND
-                                      attempt_status = ?d",
-                                $row->id, $uid, ATTEMPT_PAUSED);
-                if ($row->continue_time_limit) {
-                    $incomplete_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                $incomplete_attempt = $paused_exercises = null;
+                if ($uid) {
+                    $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt
                                     FROM exercise_user_record
                                     WHERE eid = ?d AND uid = ?d AND
-                                          attempt_status = ?d AND
-                                          TIME_TO_SEC(TIMEDIFF(NOW(), record_end_date)) < ?d
-                                    ORDER BY eurid DESC LIMIT 1",
-                        $row->id, $uid, ATTEMPT_ACTIVE, 60 * $row->continue_time_limit);
-                } else {
-                    $incomplete_attempt = null;
+                                          attempt_status = ?d",
+                                    $row->id, $uid, ATTEMPT_PAUSED);
+                    if ($row->continue_time_limit) {
+                        $incomplete_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                                        FROM exercise_user_record
+                                        WHERE eid = ?d AND uid = ?d AND
+                                              attempt_status = ?d AND
+                                              TIME_TO_SEC(TIMEDIFF(NOW(), record_end_date)) < ?d
+                                        ORDER BY eurid DESC LIMIT 1",
+                            $row->id, $uid, ATTEMPT_ACTIVE, 60 * $row->continue_time_limit);
+                    }
                 }
                 if ($incomplete_attempt) {
                     $tool_content .= "<td><a class='ex_settings active_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$incomplete_attempt->eurid'>" . q($row->title) . "</a>"
