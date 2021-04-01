@@ -327,13 +327,20 @@ if (!$nbrExercises) {
             }
             $tool_content .= "</small></td>";
 
-
             $eid = getIndirectReference($row->id);
+            // logged in users
             $NumOfResults = Database::get()->queryArray("SELECT DISTINCT(uid) AS count
-                FROM exercise_user_record WHERE eid = ?d", $row->id);
-            $countNumOfResults = count($NumOfResults);
-            $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status=2", $row->id);
-            $counter1 = count($TotalExercises);
+                                                            FROM exercise_user_record 
+                                                            WHERE eid = ?d 
+                                                            AND uid > 0", $row->id);
+
+            // anonymous users
+            $NumOfResultsAnonymous = Database::get()->querySingle("SELECT COUNT(uid) AS cnt1 
+                                                    FROM exercise_user_record 
+                                                    WHERE eid = ?d 
+                                                    AND uid = 0", $row->id);
+
+            $countNumOfResults = count($NumOfResults) + $NumOfResultsAnonymous->cnt1;
 
             if ($countNumOfResults > 0) {
                 $submissionCount = ($countNumOfResults == 1 ?
@@ -348,6 +355,8 @@ if (!$nbrExercises) {
             } else {
                 $tool_content .= "<td class='text-center'>  &mdash; </td>";
             }
+            $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status=2", $row->id);
+            $counter1 = count($TotalExercises);
             $langModify_temp = htmlspecialchars($langModify);
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
             $langDelete_temp = htmlspecialchars($langDelete);
