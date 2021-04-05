@@ -355,7 +355,7 @@ if (!$nbrExercises) {
             } else {
                 $tool_content .= "<td class='text-center'>  &mdash; </td>";
             }
-            $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status=2", $row->id);
+            $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status= " . ATTEMPT_PENDING . "", $row->id);
             $counter1 = count($TotalExercises);
             $langModify_temp = htmlspecialchars($langModify);
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
@@ -612,72 +612,73 @@ if ($is_editor) {
 
         $questions_table .= "</tbody></table>";
 
-        // @brief distribute exercise grading
-        $head_content .= "
-        $(document).on('click', '.distribution', function() {
-            var exerciseid = $(this).data('exerciseid');
-
-            var results = {
-                'list': JSON.parse('$countResJs'),
-                'get': function(id) {
-                    return $.grep(results.list, function(element) { return element.eid == id; })
-                            [0].answers_number; // return from the first array element
-                }
-            };
-            results.current = results.get(exerciseid[1]);
-            bootbox.dialog({
-                title: '<strong>" . js_escape($langDistributeExercise) . "</strong>',
-                message: '<h2 class=\"page-subtitle\">" . js_escape($langResults) . " : <strong>'+results.current+'</strong></h2><form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"correction_form\"> $courses_options1 </form>',
-                    buttons: {
-                        first: {
-                            label : '" . js_escape($langDistribute) . "',
-                            className : 'btn btn-success',
-                            callback: function(d) {
-                                var row = $('#my-grade-table tbody').find('tr');
-                                var output = [];
-                                var temp = 0;
-                                $.each(row,function(){
-                                            //in this scenario, this will be the reference of the row. If we have 5 rows in the table, each $(this) will point at one.
-                                            var obj = {};
-                                            //this way you get the value of the attribute data-id
-                                            obj.teacher = $(this).find('.teacher-name').data('id');
-                                            //this way you get the actual value
-                                            obj.grade = $(this).find('.grade-number').val();
-                                            if (obj.grade != '' ) {
-                                                temp = temp + parseInt(obj.grade);
-                                            }
-                                            output.push(obj);
-                                        }
-                                    );
-                                    if (temp > results.current)
-                                    {
-                                        // Do not close modal
-                                         alert('" . js_escape($langDistributeError) . "');
-                                         return false;
-                                    }
-                                    else {
-                                        $('#correction_form').attr('action', 'index.php?course=$course_code&choice=distribution&exerciseId=' + exerciseid[1]  + '&correction_output='+JSON.stringify(output));
-                                        $('#correction_form').submit();
-                                    }
-                                }
-                            },
-                        second: {
-                                label : '" . js_escape($langCancelDistribute) . "',
-                                className : 'btn btn-danger',
+        if ($counter1 > 0) {
+            // @brief distribute exercise grading
+            $head_content .= "
+            $(document).on('click', '.distribution', function() {
+                var exerciseid = $(this).data('exerciseid');
+    
+                var results = {
+                    'list': JSON.parse('$countResJs'),
+                    'get': function(id) {
+                        return $.grep(results.list, function(element) { return element.eid == id; })
+                                [0].answers_number; // return from the first array element
+                    }
+                };
+                results.current = results.get(exerciseid[1]);
+                bootbox.dialog({
+                    title: '<strong>" . js_escape($langDistributeExercise) . "</strong>',
+                    message: '<h2 class=\"page-subtitle\">" . js_escape($langResults) . " : <strong>'+results.current+'</strong></h2><form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"correction_form\"> $courses_options1 </form>',
+                        buttons: {
+                            first: {
+                                label : '" . js_escape($langDistribute) . "',
+                                className : 'btn btn-success',
                                 callback: function(d) {
-                                        $('#correction_form').attr('action', 'index.php?course=$course_code&choice=cancelDistribution&exerciseId=' + exerciseid[1]);
-                                        $('#correction_form').submit();
+                                    var row = $('#my-grade-table tbody').find('tr');
+                                    var output = [];
+                                    var temp = 0;
+                                    $.each(row,function(){
+                                                //in this scenario, this will be the reference of the row. If we have 5 rows in the table, each $(this) will point at one.
+                                                var obj = {};
+                                                //this way you get the value of the attribute data-id
+                                                obj.teacher = $(this).find('.teacher-name').data('id');
+                                                //this way you get the actual value
+                                                obj.grade = $(this).find('.grade-number').val();
+                                                if (obj.grade != '' ) {
+                                                    temp = temp + parseInt(obj.grade);
+                                                }
+                                                output.push(obj);
+                                            }
+                                        );
+                                        if (temp > results.current)
+                                        {
+                                            // Do not close modal
+                                             alert('" . js_escape($langDistributeError) . "');
+                                             return false;
+                                        }
+                                        else {
+                                            $('#correction_form').attr('action', 'index.php?course=$course_code&choice=distribution&exerciseId=' + exerciseid[1]  + '&correction_output='+JSON.stringify(output));
+                                            $('#correction_form').submit();
+                                        }
                                     }
                                 },
-                        third: {
-                            label : '" . js_escape($langCancel) . "',
-                            className : 'btn-default'
+                            second: {
+                                    label : '" . js_escape($langCancelDistribute) . "',
+                                    className : 'btn btn-danger',
+                                    callback: function(d) {
+                                            $('#correction_form').attr('action', 'index.php?course=$course_code&choice=cancelDistribution&exerciseId=' + exerciseid[1]);
+                                            $('#correction_form').submit();
+                                        }
+                                    },
+                            third: {
+                                label : '" . js_escape($langCancel) . "',
+                                className : 'btn-default'
+                            }
                         }
                     }
-                }
-            );
-        });";
-        $head_content .= "
+                );
+            });";
+            $head_content .= "
             $(document).on('click', '.by_question', function() {
                 var exerciseid = $(this).data('exerciseid');
                 var results = {
@@ -689,7 +690,7 @@ if ($is_editor) {
                 };
             var res = results.get(exerciseid[1]);
                 bootbox.dialog({
-                    title: '" . js_escape($landQuestionsInExercise) ."',
+                    title: '" . js_escape($landQuestionsInExercise) . "',
                     message: '" . js_escape($langCorrectionMessage) . "',
                         buttons: {
                             cancel: {
@@ -697,7 +698,7 @@ if ($is_editor) {
                                 className: 'btn-default'
                             },
                             success: {
-                                label: '" .js_escape($langGradeCorrect) . "',
+                                label: '" . js_escape($langGradeCorrect) . "',
                                 className: 'btn-success',
                                 callback: function (a) {
                                     window.location.href = 'results_by_question.php?course=$course_code&exerciseId='+ exerciseid[0];
@@ -706,6 +707,7 @@ if ($is_editor) {
                         }
                     });
             });";
+        }
     }
 
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
