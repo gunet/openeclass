@@ -4686,7 +4686,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
 
     $head_content .= '
-    <style>        
+    <style>
         .count-col { width: 3em; }
         .user-col { width: 40%; }
         .tools-col { width: 5em; }
@@ -4773,7 +4773,7 @@ function show_assignment($id, $display_graph_results = false) {
                     <b>$langSubmissions:</b>&nbsp; $count_of_assignments
                 </div>";
             $tool_content .= "
-                <div class='table-responsive'>   
+                <div class='table-responsive'>
                 <table class='table'>
                 <tbody>
                 <tr class='list-header'>
@@ -5209,6 +5209,7 @@ function assignment_password_bootbox() {
     if ($enabled) {
         return;
     } else {
+        $enabled = true;
         $head_content .= "
 <script>
     function password_bootbox(link) {
@@ -5244,7 +5245,7 @@ function assignment_password_bootbox() {
         });
     }
     $(function () {
-        $('.password_protected').click(function (e) {
+        $('.password_protected').on('click', function (e) {
             e.preventDefault();
             var link = $(this).attr('href');
             password_bootbox(link);
@@ -5566,9 +5567,9 @@ function submit_grade_comments($args) {
         if ($grading_type == ASSIGNMENT_SCALING_GRADE) {
             $grade = $args['grade'];
         } else if ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
-            $rubric = Database::get()->querySingle("SELECT * FROM rubric AS a  JOIN assignment AS b 
-                                                            WHERE b.course_id = ?d 
-                                                                AND a.id = b.grading_scale_id 
+            $rubric = Database::get()->querySingle("SELECT * FROM rubric AS a  JOIN assignment AS b
+                                                            WHERE b.course_id = ?d
+                                                                AND a.id = b.grading_scale_id
                                                                 AND b.id = ?d", $course_id, $id);
             $grade_rubric = serialize($args['grade_rubric']);
             $criteria = unserialize($rubric->scales);
@@ -5581,17 +5582,17 @@ function submit_grade_comments($args) {
             $grade = $r_grade/100;
         } else if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
            // edw tha kahoristei o telikos bathmos pou tha valei o kathghths
-		    $sum = 0;
-			$count = 0;
-			$users= Database::get()->queryArray("SELECT grade FROM assignment_grading_review WHERE user_submit_id = ?d", $sid);
-			foreach ($users as $row){
-				if ($row->grade){
-					$count = $count + 1;
-				}
-				$sum = $sum + $row->grade;
-			}
-			$grad = $sum / $count;
-			$grade = number_format($grad,1);
+            $sum = 0;
+            $count = 0;
+            $users= Database::get()->queryArray("SELECT grade FROM assignment_grading_review WHERE user_submit_id = ?d", $sid);
+            foreach ($users as $row){
+                if ($row->grade){
+                    $count = $count + 1;
+                }
+                $sum = $sum + $row->grade;
+            }
+            $grad = $sum / $count;
+            $grade = number_format($grad,1);
         } else {
             $grade = $args['grade'];
         }
