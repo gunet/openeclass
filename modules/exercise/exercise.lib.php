@@ -19,28 +19,17 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+
+
 /**
  * @brief display question
- * @global type $tool_content
- * @global type $picturePath
- * @global type $langNoAnswer
- * @global type $langQuestion
- * @global type $langColumnA
- * @global type $langColumnB
- * @global type $langMakeCorrespond
- * @global type $langInfoGrades
- * @global type $exerciseType
- * @global type $nbrQuestions
- * @global type $langInfoGrade
- * @param type $objQuestionTmp
- * @param type $exerciseResult
- * @param type $question_number
  * @return type
  */
 function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_number) {
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
-    $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
-    $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
+            $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
+            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
+
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -243,37 +232,69 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
  */
 function display_exercise($exercise_id) {
 
-    global $tool_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
+    global $tool_content, $head_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore, $langQuestionsManagement,
            $langScore, $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2,
-           $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions;
+           $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions,
+           $langUsedInSeveralExercises, $langModifyInAllExercises, $langModifyInThisExercise;
 
+    $head_content .= "
+        <script>
+            $(function() {
+                $(document).on('click', '.warnLink', function(e){
+                    var modifyAllLink = $(this).attr('href');
+                    var modifyOneLink = modifyAllLink.concat('&clone=true');
+                    $('a#modifyAll').attr('href', modifyAllLink);
+                    $('a#modifyOne').attr('href', modifyOneLink);
+                });
+            });
+        </script>";
+
+    // Modal
+    $tool_content .= "
+        <div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
+          <div class='modal-dialog'>
+            <div class='modal-content'>
+              <div class='modal-header'>
+                <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+              </div>
+              <div class='modal-body'>
+                $langUsedInSeveralExercises
+              </div>
+              <div class='modal-footer'>
+                <a href='#' id='modifyAll' class='btn btn-primary'>$langModifyInAllExercises</a>
+                <a href='#' id='modifyOne' class='btn btn-success'>$langModifyInThisExercise</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        ";
 
     $exercise = new Exercise();
     $exercise->read($exercise_id);
     $question_list = $exercise->selectQuestionList();
     $totalWeighting = $exercise->selectTotalWeighting();
 
-    $tool_content .= action_bar(array(
-        array('title' => $langExerciseExecute,
+    $tool_content .= action_bar([
+        ['title' => $langExerciseExecute,
             'url' => "exercise_submit.php?course=$course_code&exerciseId=$exercise_id",
             'icon' => 'fa-play-circle',
             'level' => 'primary-label',
             'button-class' => 'btn-danger',
             'show' => (!empty($question_list))
-        ),
-        array('title' => $langQuestionsManagement,
+        ],
+        ['title' => $langQuestionsManagement,
             'url' => "admin.php?course=$course_code&exerciseId=$exercise_id",
             'icon' => 'fa-cogs',
             'level' => 'primary-label',
             'button-class' => 'btn-success'
-        ),
-        array('title' => $langBack,
+        ],
+        ['title' => $langBack,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label'
-        )
-    ));
+        ]
+    ]);
 
 
     $tool_content .= "<div class='panel panel-primary'>
@@ -340,11 +361,16 @@ function display_exercise($exercise_id) {
                 $tool_content .= "</td></tr>";
             }
         } else {
+            if ($question->selectNbrExercises() > 1) {
+                $modal_params = "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'";
+            } else {
+                $modal_params = '';
+            }
             $tool_content .= "
             <tr class='active'>
               <td colspan='$colspan'>
                 <strong><u>$langQuestion</u>: $i</strong>
-                <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
+                <a $modal_params href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
                   <span class='fa fa-edit' data-toggle='tooltip' data-original-title='$langModify'></span>
                 </a>
                 </td>
