@@ -282,11 +282,16 @@ else if (isset($_GET['add_server'])) {
 
 // Save new config: edit/add tc server, course add/delete into tc server
 else if (isset($_POST['submit'])) {
-    $key = $_POST['key_form'];
-    $hostname = $_POST['hostname_form'];
     $api_url = $_POST['api_url_form'];
     if (!preg_match('/\/$/', $api_url)) { // append '/' if doesn't exist
         $api_url = $api_url . '/';
+    }
+    $key = $_POST['key_form'];
+    if (isset($_POST['hostname_form'])) {
+        $hostname = $_POST['hostname_form'];
+    }
+    if (!isset($hostname) or !($hostname = trim($hostname))) {
+        $hostname = parse_url($api_url, PHP_URL_HOST);
     }
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
