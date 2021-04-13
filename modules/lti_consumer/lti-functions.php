@@ -573,6 +573,18 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         $extraobj
     );
 
+    // re-organize launch url and data if query get params are present
+    $launch_url_parts = parse_url($launch_url);
+    if (array_key_exists('query', $launch_url_parts)) {
+        $launch_query_args = [];
+        parse_str($launch_url_parts['query'], $launch_query_args);
+        $launch_data = array_merge($launch_data, $launch_query_args);
+        $launch_url = $launch_url_parts['scheme'].'://'.$launch_url_parts['host'];
+        if (array_key_exists('path', $launch_url_parts)) {
+            $launch_url .= $launch_url_parts['path'];
+        }
+    }
+
     $signature = lti_build_signature($launch_url, $secret, $launch_data);
 
     $formtarget = ($launchcontainer == LTI_LAUNCHCONTAINER_NEWWINDOW) ? 'target="_blank"' : '';
