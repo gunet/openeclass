@@ -450,9 +450,7 @@ function lti_build_signature($launch_url, $secret, $launch_data) {
 
     $base_string = "POST&" . urlencode($launch_url) . "&" . rawurlencode(implode("&", $launch_params));
     $secret = urlencode($secret) . "&";
-    $signature = base64_encode(hash_hmac("sha1", $base_string, $secret, true));
-
-    return $signature;
+    return base64_encode(hash_hmac("sha1", $base_string, $secret, true));
 }
 
 function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oauth_consumer_key, $resource_link_id, $resource_link_type, $resource_link_title, $resource_link_description, $launchcontainer, $extraobj = null) {
@@ -572,20 +570,21 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         $launchcontainer,
         $extraobj
     );
+    $signature_url = $launch_url;
 
-    // re-organize launch url and data if query get params are present
+    // re-organize signature url and data if launch url contains query get parameters
     $launch_url_parts = parse_url($launch_url);
     if (array_key_exists('query', $launch_url_parts)) {
         $launch_query_args = [];
         parse_str($launch_url_parts['query'], $launch_query_args);
         $launch_data = array_merge($launch_data, $launch_query_args);
-        $launch_url = $launch_url_parts['scheme'].'://'.$launch_url_parts['host'];
+        $signature_url = $launch_url_parts['scheme'].'://'.$launch_url_parts['host'];
         if (array_key_exists('path', $launch_url_parts)) {
-            $launch_url .= $launch_url_parts['path'];
+            $signature_url .= $launch_url_parts['path'];
         }
     }
 
-    $signature = lti_build_signature($launch_url, $secret, $launch_data);
+    $signature = lti_build_signature($signature_url, $secret, $launch_data);
 
     $formtarget = ($launchcontainer == LTI_LAUNCHCONTAINER_NEWWINDOW) ? 'target="_blank"' : '';
     $button ='<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" ' . $formtarget . ' action="' . $launch_url . '">';
