@@ -2023,7 +2023,6 @@ $wiki_toolbar['Link'] = "Link";
 $langBackAssignment = "Zurück zur aktuellen Arbeitsseite";
 $m['activate'] = "Aktivierung";
 $m['deactivate'] = "Deaktivierung";
-$m['deadline'] = "Abgabefrist";
 $m['username'] = "Benutzername";
 $m['filename'] = "Dateiname";
 $m['sub_date'] = "Absendedatum";

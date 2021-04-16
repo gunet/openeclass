@@ -2114,7 +2114,6 @@ $wiki_toolbar['Link'] = "Link";
 $langBackAssignment = "Back to work";
 $m['activate'] = "Activate";
 $m['deactivate'] = "Deactivate";
-$m['deadline'] = "Deadline";
 $m['username'] = "Username ".$langsOfStudent." ";
 $m['filename'] = "Filename";
 $m['sub_date'] = "Submission date";

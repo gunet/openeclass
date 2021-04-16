@@ -2230,9 +2230,7 @@ $wiki_toolbar['Link'] = "Lien";
 $langBackAssignment = "Retour à la page de travail";
 $m['activate'] = "Activation";
 $m['deactivate'] = "Désactiver";
-$m['deadline'] = "Date limite de soumission";
-$m['username'] = "Identifiant $langsOfStudent"
-;
+$m['username'] = "Identifiant $langsOfStudent";
 $m['filename'] = "Nom du fichier";
 $m['sub_date'] = "Date de soumission";
 $m['comments'] = "Commentaires";
