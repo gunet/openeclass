@@ -121,7 +121,7 @@ if (isset($_GET['group_as'])) {
                   <th style='width:45%;'>$langTitle</th>
                   <th class='text-center'>$m[subm]</th>
                   <th class='text-center'>$m[nogr]</th>
-                  <th class='text-center'>$m[deadline]</th>
+                  <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>
                 </tr>";
         foreach ($result as $row) {
             // Check if assignment contains submissions

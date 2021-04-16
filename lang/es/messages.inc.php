@@ -2080,7 +2080,6 @@ $wiki_toolbar['Link'] = "Enlace";
 $langBackAssignment = "Retornar al trabajo";
 $m['activate'] = "Activado";
 $m['deactivate'] = "Desactivado";
-$m['deadline'] = "Fecha límite";
 $m['username'] = "Usuario";
 $m['filename'] = "Nombre archivo";
 $m['sub_date'] = "Fecha de sumisión";

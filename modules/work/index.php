@@ -59,6 +59,8 @@ $action = new action();
 $action->record(MODULE_ID_ASSIGN);
 /* * *********************************** */
 
+load_js('datatables');
+
 require_once 'modules/usage/usage.lib.php';
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
@@ -100,6 +102,51 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     echo json_encode($data);
     exit;
 }
+
+// Data Tables
+if ($is_editor) {
+    // disable ordering for action button column
+    $columns = 'null, null, null, null, { orderable: false }';
+} else {
+    if (get_config('eportfolio_enable')) {
+        $columns = 'null, null, null, null, { orderable: false }';
+    } else {
+        $columns = 'null, null, null, null';
+    }
+}
+
+$head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+            $('#assignment_table').DataTable ({
+                'columns': [ $columns ],
+                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
+                'sPaginationType': 'full_numbers',
+                'bAutoWidth': true,
+                'searchDelay': 1000,
+                'order' : [[1, 'desc']],
+                'oLanguage': {
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '" . $langNoResult . "',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
+                   }
+               }
+            });
+            $('.dataTables_filter input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
+        });
+        </script>";
 
 //Gets the student's assignment file ($file_type=NULL)
 //or the teacher's assignment ($file_type=1)
@@ -484,22 +531,6 @@ if ($is_editor) {
             c3.generate(options);
     }
     </script>";
-
-     /* $head_content .= "<script type='text/javascript'>
-         $(function() {
-            // $('input[name=grading_type]').click( function(e){
-            $('input[name=grading_type]').on('change', function(e){
-                var choice = $(this).val();
-                if (choice == 0) {
-                     $('#reviews')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                }
-             }
-
-         }
-      </script>";*/
 
     $email_notify = (isset($_POST['email']) && $_POST['email']);
     if (isset($_POST['grade_comments'])) {
@@ -1545,7 +1576,7 @@ function new_assignment() {
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
            $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
            $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock,
-           $langNoGradeRubrics, $langNoGradeScales;
+           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2284,7 +2315,7 @@ function new_assignment() {
                 </div>
             </div>
             <div class='input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
-                <label for='exerciseEndDate' class='col-sm-2 control-label'>$m[deadline]:</label>
+                <label for='exerciseEndDate' class='col-sm-2 control-label'>$langGroupWorkDeadline_of_Submission:</label>
                 <div class='col-sm-10'>
                    <div class='input-group'>
                        <span class='input-group-addon'>
@@ -2519,7 +2550,7 @@ function show_edit_assignment($id) {
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langWorkOnlineText, $langWorkSubType, $langGradeRubrics, $langWorkMultipleFiles,
         $langGradeType, $langGradeNumbers, $langGradeScales, $langNoGradeScales, $langNoGradeRubrics,
-        $langAutoJudgeInputNotSupported, $langTitle, $autojudge,
+        $langAutoJudgeInputNotSupported, $langTitle, $autojudge, $langGroupWorkDeadline_of_Submission,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions,
@@ -3329,7 +3360,7 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
-                    <label for='WorkEnd' class='col-sm-2 control-label'>$m[deadline]:</label>
+                    <label for='WorkEnd' class='col-sm-2 control-label'>$langGroupWorkDeadline_of_Submission:</label>
                     <div class='col-sm-10'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
@@ -4360,7 +4391,7 @@ function assignment_details($id, $row, $x =false) {
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail, $urlServer,
            $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine,
-           $langReviewStart, $langReviewEnd, $langGradeReviews, $langImportGrades;
+           $langReviewStart, $langReviewEnd, $langGradeReviews, $langImportGrades, $langGroupWorkDeadline_of_Submission;
 
     load_js('screenfull/screenfull.min.js');
     $head_content .= "<script>$(function () {
@@ -4613,7 +4644,7 @@ function assignment_details($id, $row, $x =false) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$m[deadline]:</strong>
+                    <strong>$langGroupWorkDeadline_of_Submission:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."
@@ -5275,7 +5306,7 @@ function assignment_password_bootbox() {
  * @global type $langIPUnlock
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $urlServer,
+    global $tool_content, $m, $uid, $course_id, $urlServer, $langGroupWorkDeadline_of_Submission,
         $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code,
         $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio,
         $langGradebookGrade, $langPassCode, $langIPUnlock;
@@ -5315,14 +5346,18 @@ function show_student_assignments() {
 
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
-            <div class='table-responsive'><table class='table-default'>
-                                  <tr class='list-header'>
-                                      <th style='width:45%'>$langTitle</th>
-                                      <th class='text-center' style='width:25%'>$m[deadline]</th>
-                                      <th class='text-center'>$m[submitted]</th>
-                                      <th class='text-center'>$langGradebookGrade</th>
-                                      $add_eportfolio_res_th
-                                  </tr>";
+            <div class='table-responsive'>
+                <table id='assignment_table' class='table-default'>
+                  <thead>
+                      <tr class='list-header'>
+                          <th style='width:45%'>$langTitle</th>
+                          <th class='text-center' style='width:25%'>$langGroupWorkDeadline_of_Submission</th>
+                          <th class='text-center'>$m[submitted]</th>
+                          <th class='text-center'>$langGradebookGrade</th>
+                          $add_eportfolio_res_th
+                      </tr>
+                  </thead>
+                  <tbody>";
         foreach ($result as $row) {
             $exclamation_icon = '';
             $class = '';
@@ -5393,7 +5428,7 @@ function show_student_assignments() {
             }
             $tool_content .= "</td>$add_eportfolio_res_td</tr>";
         }
-        $tool_content .= '</table></div></div></div>';
+        $tool_content .= "</tbody></table></div></div></div>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }
@@ -5401,29 +5436,13 @@ function show_student_assignments() {
 
 /**
  * @brief display all assignments
- * @global type $tool_content
- * @global type $m
- * @global type $langEditChange
- * @global type $langDelete
- * @global type $langNoAssign
- * @global type $langNewAssign
- * @global type $course_code
- * @global type $course_id
- * @global type $langWorksDelConfirm
- * @global type $langDaysLeft
- * @global type $m
- * @global type $langHasExpiredS
- * @global type $langWarnForSubmissions
- * @global type $langDelSure
- * @global type $langGradeScales
- * @global type $langTitle
  */
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign,
         $langNewAssign, $course_code, $course_id, $langWorksDelConfirm,
         $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions,
         $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics,
-        $langPassCode, $langIPUnlock;
+        $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission;
 
         // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
@@ -5447,18 +5466,21 @@ function show_assignments() {
                   'url' => "rubrics.php?course=$course_code",
                   'level' => 'primary-label'),
             ),false);
-    if (count($result)>0) {
+    if (count($result) > 0) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
                     <div class='table-responsive'>
-                    <table class='table-default'>
+                    <table id='assignment_table' class='table-default'>
+                    <thead>
                     <tr class='list-header'>
                       <th style='width:45%;'>$langTitle</th>
                       <th class='text-center'>$m[subm]</th>
                       <th class='text-center'>$m[nogr]</th>
-                      <th class='text-center'>$m[deadline]</th>
+                      <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>
                       <th class='text-center'>".icon('fa-gears')."</th>
-                    </tr>";
+                    </tr>
+                    </thead>
+                    <tbody>";
         $index = 0;
         foreach ($result as $row) {
             $exclamation_icon = '';
@@ -5525,7 +5547,7 @@ function show_assignments() {
                    "</td></tr>";
             $index++;
         }
-        $tool_content .= '</table></div></div></div>';
+        $tool_content .= '</tbody></table></div></div></div>';
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }

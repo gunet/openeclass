@@ -79,7 +79,7 @@ if (isset($_GET['submit'])) {
  */
 function show_assignments() {
     global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content,
-            $langYes, $langNo, $langWorks, $course_id, $course_code, 
+            $langYes, $langNo, $langWorks, $course_id, $course_code, $langGroupWorkDeadline_of_Submission,
             $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS;
     
     $gids = user_group_info($uid, $course_id);
@@ -145,7 +145,7 @@ function show_assignments() {
                             <table class='table-default'>
                                 <tr>
                                     <th class='left' colspan='2'>$langTitle</th>
-                                    <th align='center' width='30%'>$m[deadline]</th>
+                                    <th align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
                                     <th align='center' width='10%'>$m[submitted]</th>
                                     <th align='center' width='10%'>$m[select]</th>
                                 </tr>

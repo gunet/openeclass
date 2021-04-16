@@ -1141,8 +1141,8 @@ function display_available_exercises($gradebook_id) {
 function display_available_assignments($gradebook_id) {
 
     global $course_id, $course_code, $tool_content, $dateFormatLong,
-           $langWorks, $m, $langDescription, $langAttendanceNoActMessageAss4,
-           $langAdd, $langTitle, $langHour;
+           $m, $langDescription, $langAttendanceNoActMessageAss4,
+           $langAdd, $langTitle, $langHour, $langGroupWorkDeadline_of_Submission;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1 AND gradebook_id = ?d)", $course_id, $gradebook_id);
 
@@ -1152,7 +1152,7 @@ function display_available_assignments($gradebook_id) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                           <table class='table-default'";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>".q($m['deadline'])."</th><th>$langDescription</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>".q($langGroupWorkDeadline_of_Submission)."</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
