@@ -600,7 +600,7 @@ if ($is_editor) {
                 . "WHERE eur.eid IN (".implode(',', $ids_array).") AND ear.weight IS NULL "
                 . "AND exq.type = " . FREE_TEXT . " "
                 . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position");
-        $questionsEid = json_encode($question_types);
+        $questionsEid = json_encode($question_types, JSON_UNESCAPED_UNICODE);
 
         $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th>$langTitle</th><th>$langChoice</th></tr></thead><tbody> " ;
         foreach ($question_types as $row){
@@ -620,7 +620,7 @@ if ($is_editor) {
                 var exerciseid = $(this).data('exerciseid');
     
                 var results = {
-                    'list': JSON.parse('$countResJs'),
+                    'list': $countResJs,
                     'get': function(id) {
                         return $.grep(results.list, function(element) { return element.eid == id; })
                                 [0].answers_number; // return from the first array element
@@ -683,7 +683,7 @@ if ($is_editor) {
             $(document).on('click', '.by_question', function() {
                 var exerciseid = $(this).data('exerciseid');
                 var results = {
-                'list': JSON.parse('$questionsEid '),
+                'list': $questionsEid,
                 'get': function(id) {
                     return $.grep(results.list, function(element) { return element.eid == id; })
                             [0].eurid; // return from the first array element
