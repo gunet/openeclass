@@ -149,18 +149,20 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
  * @param bool $is_template
  * @param bool $update
  * @param string $session_id
+ * @param string $type
  * @brief add / update lti app settings
  */
-function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null, $is_template = false, $update = false, $session_id = '')  {
+function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null,
+                            $is_template = false, $update = false, $session_id = null, $type)  {
     if (in_array(0, $lti_courses)) {
         $all_courses = 1; // lti app is assigned to all courses
     } else {
         $all_courses = 0; // lti app is assigned to specific courses
     }
     if ($update == true) {
-        Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s,
-                                        lti_provider_key = ?s, lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s, all_courses = ?d WHERE id = ?d",
-                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $session_id);
+        Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s, lti_provider_key = ?s,
+                                        lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s, all_courses = ?d, type = ?s WHERE id = ?d",
+                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $type, $session_id);
         Database::get()->query("DELETE FROM course_lti_app WHERE lti_app = ?d", $session_id);
         if ($all_courses == 0) {
             foreach ($lti_courses as $data) {
@@ -173,9 +175,9 @@ function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer
 
         $q = Database::get()->query("INSERT INTO lti_apps (" . $firstparam . ", title, description,
                                                             lti_provider_url, lti_provider_key, lti_provider_secret,
-                                                            launchcontainer, enabled, all_courses)
-                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s,?d)",
-                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses);
+                                                            launchcontainer, enabled, all_courses, type)
+                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s,?d,?s)",
+                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $type);
         $lti_app_id = $q->lastInsertID;
         if ($all_courses == 0) {
             foreach ($lti_courses as $data) {
