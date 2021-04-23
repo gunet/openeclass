@@ -5371,13 +5371,16 @@ function show_student_assignments() {
             $title_temp = q($row->title);
             if ($row->deadline) {
                 $deadline = nice_format($row->deadline, true);
+                $sort_date = $row->deadline;
             } else {
                 $deadline = $m['no_deadline'];
+                $sort_date = '';
             }
+
             $tool_content .= "<tr>
                                 <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>
                                     $exclamation_icon</td>
-                                <td class='text-center'>" . $deadline ;
+                                <td class='text-center' data-sort='$sort_date'>" . $deadline ;
             if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
             } else if($row->deadline) {
@@ -5504,14 +5507,20 @@ function show_assignments() {
 
             $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
             $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
+            if (isset($row->deadline)) {
+                $sort_date = $row->deadline;
+            } else {
+                $sort_date = '';
+            }
             $tool_content .= "<td>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 $exclamation_icon
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             </td>
                             <td class='text-center'>$num_submitted</td>
-                            <td class='text-center'>$num_ungraded</td>
-                            <td class='text-center'>$deadline";
+                            <td class='text-center'>$num_ungraded</td>                            
+                            <td class='text-center' data-sort='$sort_date'>$deadline";
+
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
             } else if (intval($row->deadline)) {
