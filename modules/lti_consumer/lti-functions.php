@@ -25,6 +25,9 @@ define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
 define('LTI_DESCRIPTION_MAX_LENGTH', 999);
 
+const TURNITIN_LTI_TYPE = 'turnitin';
+const LIMESURVEY_LTI_TYPE = 'limesurvey';
+
 /**
  * @brief new lti app (display form)
  * @param bool $is_template
@@ -769,27 +772,22 @@ function getLTILinksForTools() {
     }
 }
 
-
-function is_active_lti_app($turnitinapp, $course_id) {
-
-    if ($turnitinapp->isEnabled()) {
-        $q = Database::get()->querySingle("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = 'turnitin'");
+function is_active_external_lti_app($externalapp, $lti_type, $course_id) {
+    if ($externalapp->isEnabled()) {
+        $q = Database::get()->querySingle("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = ?s", $lti_type);
         if (!is_null($q->course_id)) {
             return true;
         } else {
-            if ($q->all_courses == 1) { // turnitin is enabled for all courses
+            if ($q->all_courses == 1) { // external app is enabled for all courses
                 return true;
-            } else { // otherwise check if turnitin is enabled for specific course
-                $s = Database::get()->querySingle("SELECT * FROM course_lti_app
-                            WHERE course_id = ?d AND lti_app = $q->id", $course_id);
+            } else { // otherwise check if external app is enabled for specific course
+                $s = Database::get()->querySingle("SELECT * FROM course_lti_app WHERE course_id = ?d AND lti_app = $q->id", $course_id);
                 if ($s) {
                     return true;
                 }
             }
         }
-
     } else {
         return false;
     }
-
 }

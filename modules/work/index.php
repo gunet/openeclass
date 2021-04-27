@@ -1591,7 +1591,7 @@ function new_assignment() {
     foreach ($rubrics as $rubric) {
         $rubric_options .= "<option value='$rubric->id'>$rubric->name</option>";
     }
-    $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true');
+    $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true AND type = ?s', TURNITIN_LTI_TYPE);
     $lti_template_options = "";
     foreach ($lti_templates as $lti) {
         $lti_template_options .= "<option value='$lti->id'>$lti->title</option>";
@@ -2022,7 +2022,7 @@ function new_assignment() {
                   <input type='file' id='userfile' name='userfile'>
                 </div>
             </div>";
-    if (is_active_lti_app($turnitinapp, $course_id)) { // lti options
+    if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) { // lti options
         $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langAssignmentType:</label>
@@ -2326,7 +2326,7 @@ function new_assignment() {
                    <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                 </div>
             </div>";
-    if (is_active_lti_app($turnitinapp, $course_id)) {
+    if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {
         $tool_content .= "
             <div class='input-append date form-group hidden".(Session::getError('WorkFeedbackRelease') ? " has-error" : "")."' id='feedbackreleasedatepicker' data-date='$WorkFeedbackRelease' data-date-format='dd-mm-yyyy'>
                 <label for='tii_feedbackreleasedate' class='col-sm-2 control-label'>$langTiiFeedbackReleaseDate:</label>
@@ -2945,7 +2945,7 @@ function show_edit_assignment($id) {
     foreach ($rubrics as $rub) {
         $rubric_option_review .= "<option value='$rub->id'".(($row->grading_scale_id == $rub->id && $grading_type==3) ? " selected" : "").">$rub->name</option>";
     }
-    $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true');
+    $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true AND type = ?s', TURNITIN_LTI_TYPE);
     $lti_template_options = "";
     foreach ($lti_templates as $lti) {
         $lti_template_options .= "<option value='$lti->id'" . (($row->lti_template == $lti->id && $assignment_type == 1) ? " selected" : "") . ">$lti->title</option>";
@@ -3067,7 +3067,7 @@ function show_edit_assignment($id) {
                                      <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
                 </div>";
-    if (is_active_lti_app($turnitinapp, $course_id)) {
+    if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {
         $tool_content .= "
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langAssignmentType:</label>
@@ -3371,7 +3371,7 @@ function show_edit_assignment($id) {
                        <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                     </div>
                 </div>";
-    if (is_active_lti_app($turnitinapp, $course_id)) {
+    if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {
         $tool_content .= "
                 <div class='input-append date form-group $lti_hidden".(Session::getError('WorkFeedbackRelease') ? " has-error" : "")."' id='feedbackreleasedatepicker' data-date='$WorkFeedbackRelease' data-date-format='dd-mm-yyyy'>
                     <label for='tii_feedbackreleasedate' class='col-sm-2 control-label'>$langTiiFeedbackReleaseDate:</label>

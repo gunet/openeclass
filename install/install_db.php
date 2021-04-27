@@ -891,7 +891,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `anonymized` INT(1) NOT NULL DEFAULT 0,
     `show_results` INT(1) NOT NULL DEFAULT 0,
     `type` TINYINT(1) NOT NULL DEFAULT 0,
-    `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $tbl_options");
+    `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
+     `lti_template` INT(11) DEFAULT NULL,
+    `launchcontainer` TINYINT DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

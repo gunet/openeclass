@@ -3042,6 +3042,7 @@ $langCopySuccess = "Το αντίγραφο δημιουργήθηκε με επ
 $langGeneralSurvey = "Γενικό ερωτηματολόγιο";
 $langCollesSurvey = "COLLES";
 $langATTLSSurvey = "A.T.T.L.S.";
+$langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 
 //COLLES survey
@@ -5797,6 +5798,8 @@ $langLimesurveyAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκ
 $langLimesurveyEnabled = "Ενεργοποιημένο";
 $langNewLimesurveyTool = "Προσθήκη νέας εφαρμογής LimeSurvey (LTI)";
 $langNoAvailableLimesurveyTemplates = "Δεν υπάρχουν διαθέσιμες εφαρμογές LTI.";
+$langLimesurveyApp = "Εφαρμογή LimeSurvey";
+$langLimesurveyLTIOptions = "Επιλογές LimeSurvey";
 
 
 // Messages for colmooc

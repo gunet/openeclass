@@ -27,6 +27,8 @@ $helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'modules/lti_consumer/lti-functions.php';
+require_once 'modules/admin/extconfig/limesurveyapp.php';
 
 load_js('tools.js');
 
@@ -83,26 +85,28 @@ if (isset($_POST['submitPoll'])) {
         $PollAssignToSpecific = $_POST['assign_to_specific'];
         $PollAssignees = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $PollSurveyType = $_POST['survey_type'];
+        $lti_template = isset($_POST['lti_template']) ? $_POST['lti_template'] : NULL;
+        $launchcontainer = isset($_POST['lti_launchcontainer']) ? $_POST['lti_launchcontainer'] : NULL;
         if (isset($pid)) {
             $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM poll_user_record WHERE pid = ?d", $pid)->count;
             if ($attempt_counter > 0) {
                 Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
-                        end_message = ?s, show_results = ?d, type = ?d, assign_to_specific = ?d
+                        end_message = ?s, show_results = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d
                         WHERE course_id = ?d AND pid = ?d",
-                        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $PollSurveyType, $PollAssignToSpecific, $course_id, $pid);
+                        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $course_id, $pid);
             } else {
                 Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
-                        end_message = ?s, anonymized = ?d, show_results = ?d, type = ?d, assign_to_specific = ?d
+                        end_message = ?s, anonymized = ?d, show_results = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d
                         WHERE course_id = ?d AND pid = ?d",
-                        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific, $course_id, $pid);
+                        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $course_id, $pid);
             }
             Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d", $pid);
             Session::Messages($langPollEdited, 'alert-success');
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
-                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results,type, assign_to_specific)
-                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific)->lastInsertID;
+                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results,type, assign_to_specific, lti_template, launchcontainer)
+                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer)->lastInsertID;
 
             if ($PollSurveyType == POLL_COLLES) {
                 createcolles($pid);
@@ -491,12 +495,82 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                       <label>
                         <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
                         <span>$langATTLSSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$rate_scale'></span>
-                      </label>
-                      <span class='help-block'>".Session::getError('survey_type')."</span>
+                      </label>";
+    $limesurveyapp = ExtAppManager::getApp(strtolower(LimesurveyApp::NAME));
+    if (is_active_external_lti_app($limesurveyapp, LIMESURVEY_LTI_TYPE, $course_id)) { // lti options
+        $tool_content .= "</div><div class='radio'>
+                      <label>
+                        <input type='radio' id='limesurvey_type' name='survey_type' value='".POLL_LIMESURVEY."'".($PollSurveyType == POLL_LIMESURVEY ? " checked" : "").">
+                        <span>$langLimeSurvey</span>
+                      </label>";
+    }
+    $tool_content .= "<span class='help-block'>".Session::getError('survey_type')."</span>
                     </div>
                 </div>
+            </div>";
+    if (is_active_external_lti_app($limesurveyapp, LIMESURVEY_LTI_TYPE, $course_id)) { // lti options
+        $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true AND type = ?s', LIMESURVEY_LTI_TYPE);
+        $lti_template_options = "";
+        foreach ($lti_templates as $lti) {
+            $lti_template_options .= "<option value='$lti->id'". ((isset($poll) && $poll->lti_template == $lti->id) ? " selected": "") .">$lti->title</option>";
+        }
+        $lti_hidden = ($PollSurveyType == POLL_LIMESURVEY) ? '' : ' hidden';
+        $lti_disabled = ($PollSurveyType == POLL_LIMESURVEY) ? '' : ' disabled';
+        $lti_launchcontainer = (isset($poll)) ? $poll->launchcontainer : LTI_LAUNCHCONTAINER_EMBED;
+        $tool_content .= "<div class='container-fluid form-group $lti_hidden' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
+                <h4 class='col-sm-offset-1'>$langLimesurveyLTIOptions</h4>
+                <div class='form-group $lti_hidden' style='margin-top: 30px;'>
+                    <label for='title' class='col-sm-2 control-label'>$langLimesurveyApp:</label>
+                    <div class='col-sm-10'>
+                      <select name='lti_template' class='form-control' id='lti_templates' $lti_disabled>
+                            $lti_template_options
+                      </select>
+                    </div>
+                </div>
+            <div class='form-group $lti_hidden'>
+                <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
+                <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', $lti_launchcontainer, 'id="lti_launchcontainer" '.$lti_disabled) . "</div>
             </div>
-            <div class='form-group'>
+        </div>";
+
+        $head_content .= "<script type='text/javascript'>
+            $(function() {
+                $('input[name=survey_type]').on('change', function(e) {
+                    let choice = $(this).val();
+                    if (choice == ".POLL_LIMESURVEY.") {
+                        // lti fields
+                        $('#lti_label')
+                            .prop('disabled', false)
+                            .closest('div.form-group')
+                            .removeClass('hidden');
+                        $('#lti_templates')
+                            .prop('disabled', false)
+                            .closest('div.form-group')
+                            .removeClass('hidden');
+                        $('#lti_launchcontainer')
+                            .prop('disabled', false)
+                            .closest('div.form-group')
+                            .removeClass('hidden');
+                    } else {
+                        // lti fields
+                        $('#lti_label')
+                            .prop('disabled', true)
+                            .closest('div.form-group')
+                            .addClass('hidden');
+                        $('#lti_templates')
+                            .prop('disabled', true)
+                            .closest('div.form-group')
+                            .addClass('hidden');
+                        $('#lti_launchcontainer')
+                            .prop('disabled', true)
+                            .closest('div.form-group')
+                            .addClass('hidden');
+                    }
+                });
+            });
+        </script>";
+    }
+    $tool_content .= "<div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10'>".
             form_buttons(array(
                 array(
@@ -735,6 +809,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $poll_type = $langCollesSurvey." $langSurvey";
     } else if($poll->type == 2) {
         $poll_type = $langATTLSSurvey." $langSurvey";
+    } else if ($poll->type == POLL_LIMESURVEY) {
+        $poll_type = $langLimeSurvey." $langSurvey";
     }
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= action_bar(array(
