@@ -193,13 +193,15 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
         }
     }
     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
-        'title' => $objExercise->selectTitle(),
-        'legend' => $langContinueAttempt,
-        'eurid' => $eurid ]);
+                            'title' => $objExercise->selectTitle(),
+                            'legend' => $langContinueAttempt,
+                            'eurid' => $eurid ]);
 } else {
     $objDateTime = new DateTime('NOW');
     $attempt_value = $objDateTime->getTimestamp();
 }
+
+
 
 if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
     // If the exercise is password protected
@@ -209,16 +211,17 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
             if (isset($_POST['password']) && $password === $_POST['password']) {
                 $_SESSION['password'][$exerciseId][$attempt_value] = 1;
             } else {
-                Session::Messages($langCaptchaWrong);
-                if (isset($_REQUEST['unit'])) {
-                    redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+                Session::Messages($langWrongPassword);
+                if (!isset($_REQUEST['unit'])) {
+                    redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                 } else {
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                    redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
                 }
             }
         }
     }
 }
+
 
 // If the exercise is IP protected
 $ips = $objExercise->selectIPLock();

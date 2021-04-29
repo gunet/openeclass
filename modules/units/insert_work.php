@@ -22,23 +22,10 @@
 
 /**
  * @brief display list of available assignments (if any)
- * @global type $id
- * @global type $tool_content
- * @global type $langTitle
- * @global type $langChoice
- * @global type $langGroupWorkDeadline_of_Submission
- * @global type $langAddModulesButton
- * @global type $langNoAssign
- * @global type $langActive
- * @global type $langInactive
- * @global type $langVisibility
- * @global type $course_id
- * @global type $course_code
  */
 function list_assignments() {
     global $id, $tool_content, $langTitle, $langChoice, $langGroupWorkDeadline_of_Submission,
-    $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
-    $course_id, $course_code;
+    $langAddModulesButton, $langNoAssign, $langPassCode, $course_id, $course_code;
 
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
     if (count($result) == 0) {
@@ -53,22 +40,26 @@ function list_assignments() {
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($result as $row) {
-            
-            if ($row->active) {
-                $visible = icon('fa-eye', $langActive);
+            if ($row->password_lock) {
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
             } else {
-                $visible = icon('fa-eye-slash', $langInactive);
-            }            
+                $exclamation_icon = '';
+            }
+            if (!$row->active) {
+                $vis = 'not_visible';
+            } else {
+                $vis = '';
+            }
             $description = empty($row->description) ? '' :
                     "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
-            $tool_content .= "<tr>" .
-                    "<td> " . q($row->title) . "<br><br><div class='text-muted'>$description</div></td>" .
+            $tool_content .= "<tr class='$vis'>" .
+                    "<td> " . q($row->title) . "$exclamation_icon<br><br><div class='text-muted'>$description</div></td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
                     "<td class='text-center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
                     "</tr>";            
         }
         $tool_content .= 
                 "</table>" .
-                "<div align='right'><input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
+                "<div style='text-align: right;'><input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
     }
 }

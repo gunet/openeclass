@@ -2169,6 +2169,7 @@ $langGroupWorkIntro = '
 	add any comments you want to be read by the course teacher. Please note that, when a submission has already been made by you or another member of your group, and you submit a new file for the same assignment, this file will replace the old file in the system (the old file will be deleted).
 	Furthermore, no new submissions are allowed when the assignment has
 	been graded.';
+$langAssignmentPasswordModalTitle = "Please enter assignment password";
 $langGroupWorkSubmitted = "Has been Submitted";
 $langGroupWorkDeadline_of_Submission = "Submission deadline";
 $langEmptyAsTitle = "You didn't fill assignment title";
@@ -2421,7 +2422,8 @@ $langEmptyNewTopic = "You didn't type topic title or / and message";
 $langNewForumCat = "New forum category";
 $langNewForum = "New Forum";
 $langEditedBy = "Edited by";
-$langCaptchaWrong = "Wrong Captcha.";
+$langCaptchaWrong = "Wrong Captcha";
+$langWrongPassword = "Wrong Password";
 $langUserAccountInfo4 = 'Login as a different user';
 $langMultiRegUserData = "Usernames";
 $langRegistrationDateShort = "Registration <br />date";
@@ -4036,7 +4038,7 @@ $langAnswersDispEndDate = "Display correct answers after the exercisei end date"
 $langAttempt = "Attempt";
 $langIPUnlock = "Unlock specific IP(s) or IP CIDR(s)";
 $langPasswordUnlock = "Unlock with password";
-$langPasswordModalTitle = "Enter the exercise password";
+$langExercisePasswordModalTitle = "Please enter exercise password";
 $langIPHasNoAccess = "Your IP address has no access to the specific exercise.";
 $langIPInvalid = "contains an invalid IP or IP CIDR";
 $langAdminMessage = "Message by Administrator of $siteName";
