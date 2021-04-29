@@ -377,7 +377,8 @@ function exercise_init_countdown(params) {
             continueSubmit();
         });
         $('.exercise').submit(function (e) {
-            var unansweredCount = 0, firstUnanswered;
+            var unansweredCount = 0;
+            var firstUnanswered;
             if ('tinymce' in window) {
                 // Check for empty tinyMCE instances
                 tinymce.get().forEach(function (e) {
@@ -443,7 +444,7 @@ function exercise_init_countdown(params) {
             });
         });
     }
-    var checkUnanswered = $('.qPanel').length >= 1;
+    var checkUnanswered = params.checkSinglePage || $('.qPanel').length >= 1;
     $('.btn[name=buttonSave]').click(continueSubmit);
     $('#cancelButton').click(function (e) {
       e.preventDefault();
@@ -484,41 +485,35 @@ function exercise_init_countdown(params) {
  * @param question_id
  */
 function questionUpdateListener(question_number, question_id) {
+    var button_id = "#q_num" + question_number;
+    var qpanel_id = "#qPanel" + question_id;
+    var check_id = "#qCheck" + question_number; // `check` icon
+    var el = $(qpanel_id + " :input");
+    var answered = true; // by default we assume that an interaction has answered the question
 
-    var button_id = "q_num" + question_number;
-    var qpanel_id = "qPanel" + question_id;
-    var check_id = "qCheck" + question_number; // `check` icon
-
-    $(function() {
-        $.ajax({
-            url: 'exercise_submit.php',
-            success: function() {
-                var el = $("#"+qpanel_id+" :input");
-                answered = true;
-                if (el.attr('type') == 'text') {
-                    // Text inputs are fill-in-blanks questions:
-                    // if any remain empty, question remains unanswered
-                    el.siblings('input').each(function () {
-                        if (this.value == '') {
-                            answered = false;
-                        }
-                    });
-                } else if (el.is('select')) {
-                    // Selects are matching questions:
-                    // if any remain unset, question remains unanswered
-                    el.closest('.qPanel').find('select').each(function () {
-                        if (this.value == '0') {
-                            answered = false;
-                        }
-                    });
-                }
-                if (answered === true) {
-                    $("#"+button_id).removeClass('btn-default').addClass('btn-info');
-                    $("#"+check_id).addClass('fa fa-check');
-                }
+    if (el.attr('type') == 'text') {
+        // Text inputs are fill-in-blanks questions:
+        // if any remain empty, question remains unanswered
+        el.siblings('input').each(function () {
+            if (this.value == '') {
+                answered = false;
             }
         });
-   });
+    } else if (el.is('select')) {
+        // Selects are matching questions:
+        // if any remain unset, question remains unanswered
+        el.closest('.qPanel').find('select').each(function () {
+            if (this.value == '0') {
+                answered = false;
+            }
+        });
+    }
+
+    if (answered) {
+        $(button_id).removeClass('btn-default').addClass('btn-info')
+            .attr('data-original-title', langHasAnswered).tooltip('setContent');
+        $(check_id).addClass('fa fa-check');
+    }
 }
 
 
@@ -527,18 +522,12 @@ function questionUpdateListener(question_number, question_id) {
  * @param question_number
  */
 function updateQuestionNavButton(question_number) {
+    var button_id = "#q_num" + question_number; // button
+    var check_id = "#qCheck" + question_number; // `check` icon
 
-    var button_id = "q_num" + question_number; // button
-    var check_id = "qCheck" + question_number; // `check` icon
-    $(function() {
-        $.ajax({
-            url: 'exercise_submit.php',
-            success: function() {
-                $("#"+button_id).removeClass('btn-default').addClass('btn-info');
-                $("#"+check_id).addClass('fa fa-check');
-            }
-        });
-    });
+    $(button_id).removeClass('btn-default').addClass('btn-info')
+        .attr('data-original-title', langHasAnswered).tooltip('setContent');
+    $(check_id).addClass('fa fa-check');
 }
 
 function secondsToHms(d) {
@@ -689,5 +678,76 @@ function initialize_filemodal(lang) {
         '</div>',
       buttons: buttons
     });
+  });
+}
+
+function unit_password_bootbox(e) {
+  var el = $(this),
+      link = el.attr('href'),
+      passwordForm = '',
+      passwordCallback = null,
+      notice = '',
+      title;
+
+  if (el.hasClass('paused_exercise')) {
+    title = lang.continueAttempt;
+    notice = '<p>' + lang.temporarySaveNotice + '</p>';
+  } else if (el.hasClass('active_exercise')) {
+    title = lang.continueAttempt;
+    notice = '<p>' + lang.continueAttemptNotice + '</p>';
+  }
+  if (el.hasClass('password_protected')) {
+    passwordForm = (notice? ('<p>' + lang.exercisePasswordModalTitle + '</p>'): '')+
+      '<form class="form-horizontal" role="form" action="'+link+'" method="post" id="password_form">'+
+        '<div class="form-group">'+
+          '<div class="col-sm-12">'+
+            '<input type="text" class="form-control" id="password" name="password">'+
+          '</div>'+
+        '</div>'+
+      '</form>';
+    passwordCallback = function () {
+      var password = $('#password').val();
+      if (password != '') {
+        $('#password_form').submit();
+      } else {
+        if (!$('#password').siblings('.help-block').length) {
+          $('#password').after('<p class="help-block">'+lang.theFieldIsRequired+'</p>');
+        }
+        $('#password').closest('.form-group').addClass('has-error');
+        return false;
+      }
+    };
+    if (!title) {
+      title = el.hasClass('ex_settings')?
+        lang.exercisePasswordModalTitle:
+        lang.assignmentPasswordModalTitle;
+    }
+  }
+
+  if (!title) {
+    return;
+  }
+
+  if (!passwordCallback) {
+    passwordCallback = function () {
+      window.location = link;
+    };
+  }
+
+  e.preventDefault();
+  bootbox.dialog({
+    title: title,
+    message: notice + passwordForm,
+    buttons: {
+      cancel: {
+        label: lang.cancel,
+        className: 'btn-default'
+      },
+      success: {
+        label: lang.submit,
+        className: 'btn-success',
+        callback: passwordCallback,
+      }
+    }
   });
 }

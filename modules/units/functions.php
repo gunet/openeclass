@@ -639,7 +639,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
         if ($work->password_lock) {
             $lock_description = "<ul>";
             $lock_description .= "<li>$langPassCode</li>";
-            assignment_password_bootbox();
+            enable_password_bootbox();
             $class = 'class="password_protected"';
             $lock_description .= "</ul>";
             $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
@@ -681,7 +681,8 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
  * @return string
  */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility) {
-    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid;
+    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
+        $langAttemptActive, $langAttemptPausedS;
 
     $title = q($title);
     $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
@@ -695,27 +696,50 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         }
     } else {
         $status = $exercise->active;
-        if (!$is_editor and ( !resource_access($exercise->active, $exercise->public))) {
+        if (!$is_editor and (!resource_access($exercise->active, $exercise->public))) {
             return '';
         }
         $link_class = $exclamation_icon = '';
         if ($exercise->password_lock) {
-            exercise_password_bootbox();
-            $link_class = ' password_protected';
+            enable_password_bootbox();
+            $link_class = 'password_protected';
             $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
         }
 
-        // check if exercise is in `paused` state
-        $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
-                                                            . "FROM exercise_user_record "
-                                                            . "WHERE eid = ?d AND uid = ?d "
-                                                            . "AND attempt_status = ?d", $exercise_id, $uid, ATTEMPT_PAUSED);
-        if ($paused_exercises) {
-            $link = "<a  class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$paused_exercises->eurid&amp;unit=$id'>";
-        } else {
-            $link = "<a  class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+        // check if exercise is in "paused" or "running" state
+        $pending_label = $pending_class = '';
+        if ($uid) {
+            $paused_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                FROM exercise_user_record
+                WHERE eid = ?d AND uid = ?d AND
+                attempt_status = ?d",
+                $exercise_id, $uid, ATTEMPT_PAUSED);
+            if ($paused_attempt) {
+                $eurid = $paused_attempt->eurid;
+                $pending_class = 'paused_exercise';
+                $pending_label = "<span class='not_visible'>($langAttemptPausedS)</span>";
+            } elseif ($exercise->continue_time_limit) {
+                $incomplete_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                    FROM exercise_user_record
+                    WHERE eid = ?d AND uid = ?d AND
+                    attempt_status = ?d AND
+                    TIME_TO_SEC(TIMEDIFF(NOW(), record_end_date)) < ?d
+                    ORDER BY eurid DESC LIMIT 1",
+                    $exercise_id, $uid, ATTEMPT_ACTIVE, 60 * $exercise->continue_time_limit);
+                if ($incomplete_attempt) {
+                    $eurid = $incomplete_attempt->eurid;
+                    $pending_class = 'active_exercise';
+                    $pending_label = "<span class='not_visible'>($langAttemptActive)</span>";
+                }
+            }
         }
-        $exlink = $link . "$title</a> $exclamation_icon";
+        if ($pending_class) {
+            enable_password_bootbox();
+            $link = "<a class='ex_settings $pending_class $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+        } else {
+            $link = "<a class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+        }
+        $exlink = $link . "$title</a> $exclamation_icon $pending_label";
         $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
@@ -1378,133 +1402,9 @@ function edit_res($resource_id) {
                 </div>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
-                </div>                
+                </div>
             </form>
         </div>";
     return $content;
 }
 
-
-/**
- * @brief display bootbox password dialog in assignments
- */
-function assignment_password_bootbox() {
-    global $head_content, $langAssignmentPasswordModalTitle, $langCancel, $langSubmit, $langTheFieldIsRequired;
-    static $enabled = false;
-
-    if ($enabled) {
-        return;
-    } else {
-        $enabled = true;
-        $head_content .= "
-        <script>
-            function password_bootbox(link) {
-                bootbox.dialog({
-                    title: '".js_escape($langAssignmentPasswordModalTitle)."',
-                    message: '<form class=\"form-horizontal\" role=\"form\" action=\"'+link+'\" method=\"POST\" id=\"password_form\">'+
-                                '<div class=\"form-group\">'+
-                                    '<div class=\"col-sm-12\">'+
-                                        '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
-                                    '</div>'+
-                                '</div>'+
-                              '</form>',
-                    buttons: {
-                        cancel: {
-                            label: '".js_escape($langCancel)."',
-                            className: 'btn-default'
-                        },
-                        success: {
-                            label: '".js_escape($langSubmit)."',
-                            className: 'btn-success',
-                            callback: function (d) {
-                                var password = $('#password').val();
-                                if(password != '') {
-                                    $('#password_form').submit();
-                                } else {
-                                    $('#password').closest('.form-group').addClass('has-error');
-                                    $('#password').after('<span class=\"help-block\">".js_escape($langTheFieldIsRequired)."</span>');
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-            $(function () {
-                $('.password_protected').on('click', function (e) {
-                    e.preventDefault();
-                    var link = $(this).attr('href');
-                    password_bootbox(link);
-                })
-            })
-        </script>";
-    }
-}
-
-
-/**
- * @brief display bootbox password dialog in exercises
- */
-function exercise_password_bootbox() {
-    global $head_content, $langExercisePasswordModalTitle, $langCancel, $langSubmit,
-            $langTheFieldIsRequired, $langTemporarySaveNotice2, $langContinueAttemptNotice;
-
-    $head_content .= "<script type='text/javascript'>
-    function password_bootbox(link) {
-        bootbox.dialog({
-            title: '" .js_escape($langExercisePasswordModalTitle) . "',
-            message: '<form class=\"form-horizontal\" role=\"form\" action=\"'+link+'\" method=\"POST\" id=\"password_form\">'+
-                        '<div class=\"form-group\">'+
-                            '<div class=\"col-sm-12\">'+
-                                '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
-                            '</div>'+
-                        '</div>'+
-                      '</form>',
-            buttons: {
-                cancel: {
-                    label: '" . js_escape($langCancel) . "',
-                    className: 'btn-default'
-                },
-                success: {
-                    label: '" . js_escape($langSubmit) . "',
-                    className: 'btn-success',
-                    callback: function (d) {
-                        var password = $('#password').val();
-                        if(password != '') {
-                            $('#password_form').submit();
-                        } else {
-                            $('#password').closest('.form-group').addClass('has-error');
-                            $('#password').after('<span class=\"help-block\">" . js_escape($langTheFieldIsRequired) . "</span>');
-                            return false;
-                        }
-                    }
-                }
-            }
-        });
-    }
-    $(document).ready(function() {
-        $(document).on('click', '.ex_settings', function(e) {
-            var exercise = $(this);
-            var link = $(this).attr('href');
-            if (exercise.hasClass('paused_exercise') || exercise.hasClass('active_exercise')) {
-               var message = exercise.hasClass('paused_exercise')?
-                   '" . js_escape($langTemporarySaveNotice2) . "':
-                   '" . js_escape($langContinueAttemptNotice) . "';
-               e.preventDefault();
-               bootbox.confirm(message, function(result) {
-                    if (result) {
-                        if (exercise.hasClass('password_protected')) {
-                            password_bootbox(link);
-                        } else {
-                            window.location = link;
-                        }
-                    }
-                });
-            } else if (exercise.hasClass('password_protected')) {
-                e.preventDefault();
-                password_bootbox(link);
-            }
-        });
-    });
-    </script>";
-}

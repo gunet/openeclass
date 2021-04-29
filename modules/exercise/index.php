@@ -242,6 +242,8 @@ if (!$nbrExercises) {
                 <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
+        load_js('tools');
+        enable_password_bootbox();
         $previousResultsAllowed = !(course_status($course_id) == COURSE_OPEN && $uid ==0);
         $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
         $tool_content .= "
@@ -259,7 +261,7 @@ if (!$nbrExercises) {
         $row->description = standard_text_escape($row->description);
         $exclamation_icon = '';
         $lock_icon = '';
-        $link_class = '';
+        $tr_class = $link_class = '';
         $answer_exists = Database::get()->querySingle('SELECT question_id
             FROM exercise_with_questions WHERE exercise_id = ?d LIMIT 1',
             $row->id);
@@ -277,7 +279,7 @@ if (!$nbrExercises) {
             }
             if (!$answer_exists) {
                 $lock_description .= "<li>$langNoQuestion</li>";
-                $link_class = 'not_visible';
+                $tr_class = 'not_visible';
             }
             $lock_description .= "</ul>";
             $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
@@ -286,10 +288,10 @@ if (!$nbrExercises) {
             $lock_icon = "&nbsp;" . icon('fa-lock', $langNonPublicFile);
         }
         if (!$row->active) {
-            $link_class = 'not_visible';
+            $tr_class = 'not_visible';
         }
-        if ($link_class) {
-            $tool_content .= "<tr class='$link_class'>";
+        if ($tr_class) {
+            $tool_content .= "<tr class='$tr_class'>";
         } else {
             $tool_content .= '<tr>';
         }
@@ -330,14 +332,14 @@ if (!$nbrExercises) {
             $eid = getIndirectReference($row->id);
             // logged in users
             $NumOfResults = Database::get()->queryArray("SELECT DISTINCT(uid) AS count
-                                                            FROM exercise_user_record 
-                                                            WHERE eid = ?d 
+                                                            FROM exercise_user_record
+                                                            WHERE eid = ?d
                                                             AND uid > 0", $row->id);
 
             // anonymous users
-            $NumOfResultsAnonymous = Database::get()->querySingle("SELECT COUNT(uid) AS cnt1 
-                                                    FROM exercise_user_record 
-                                                    WHERE eid = ?d 
+            $NumOfResultsAnonymous = Database::get()->querySingle("SELECT COUNT(uid) AS cnt1
+                                                    FROM exercise_user_record
+                                                    WHERE eid = ?d
                                                     AND uid = 0", $row->id);
 
             $countNumOfResults = count($NumOfResults) + $NumOfResultsAnonymous->cnt1;
@@ -496,63 +498,6 @@ if (!$nbrExercises) {
     $tool_content .= "</tbody></table></div>";
 }
 add_units_navigation(TRUE);
-$head_content .= "<script type='text/javascript'>
-    function password_bootbox(link) {
-        bootbox.dialog({
-            title: '" .js_escape($langExercisePasswordModalTitle) . "',
-            message: '<form class=\"form-horizontal\" role=\"form\" action=\"'+link+'\" method=\"POST\" id=\"password_form\">'+
-                        '<div class=\"form-group\">'+
-                            '<div class=\"col-sm-12\">'+
-                                '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
-                            '</div>'+
-                        '</div>'+
-                      '</form>',
-            buttons: {
-                cancel: {
-                    label: '" . js_escape($langCancel) . "',
-                    className: 'btn-default'
-                },
-                success: {
-                    label: '" . js_escape($langSubmit) . "',
-                    className: 'btn-success',
-                    callback: function (d) {
-                        var password = $('#password').val();
-                        if(password != '') {
-                            $('#password_form').submit();
-                        } else {
-                            $('#password').closest('.form-group').addClass('has-error');
-                            $('#password').after('<span class=\"help-block\">" . js_escape($langTheFieldIsRequired) . "</span>');
-                            return false;
-                        }
-                    }
-                }
-            }
-        });
-    }
-    $(document).ready(function() {
-        $(document).on('click', '.ex_settings', function(e) {
-            var exercise = $(this);
-            var link = $(this).attr('href');
-            if (exercise.hasClass('paused_exercise') || exercise.hasClass('active_exercise')) {
-               var message = exercise.hasClass('paused_exercise')?
-                   '" . js_escape($langTemporarySaveNotice2) . "':
-                   '" . js_escape($langContinueAttemptNotice) . "';
-               e.preventDefault();
-               bootbox.confirm(message, function(result) {
-                    if (result) {
-                        if (exercise.hasClass('password_protected')) {
-                            password_bootbox(link);
-                        } else {
-                            window.location = link;
-                        }
-                    }
-                });
-            } else if (exercise.hasClass('password_protected')) {
-                e.preventDefault();
-                password_bootbox(link);
-            }
-        });
-    });";
 
 if ($is_editor) {
     $my_courses1 = Database::get()->queryArray("SELECT givenname, id FROM user u "
@@ -618,7 +563,7 @@ if ($is_editor) {
             $head_content .= "
             $(document).on('click', '.distribution', function() {
                 var exerciseid = $(this).data('exerciseid');
-    
+
                 var results = {
                     'list': $countResJs,
                     'get': function(id) {

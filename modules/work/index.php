@@ -5234,61 +5234,6 @@ function show_non_submitted($id) {
     }
 }
 
-/**
- * @brief display bootbox password dialog
-*/
-function assignment_password_bootbox() {
-    global $head_content, $langAssignmentPasswordModalTitle, $langCancel, $langSubmit, $langTheFieldIsRequired;
-    static $enabled = false;
-
-    if ($enabled) {
-        return;
-    } else {
-        $enabled = true;
-        $head_content .= "
-<script>
-    function password_bootbox(link) {
-        bootbox.dialog({
-            title: '".js_escape($langAssignmentPasswordModalTitle)."',
-            message: '<form class=\"form-horizontal\" role=\"form\" action=\"'+link+'\" method=\"POST\" id=\"password_form\">'+
-                        '<div class=\"form-group\">'+
-                            '<div class=\"col-sm-12\">'+
-                                '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
-                            '</div>'+
-                        '</div>'+
-                      '</form>',
-            buttons: {
-                cancel: {
-                    label: '".js_escape($langCancel)."',
-                    className: 'btn-default'
-                },
-                success: {
-                    label: '".js_escape($langSubmit)."',
-                    className: 'btn-success',
-                    callback: function (d) {
-                        var password = $('#password').val();
-                        if(password != '') {
-                            $('#password_form').submit();
-                        } else {
-                            $('#password').closest('.form-group').addClass('has-error');
-                            $('#password').after('<span class=\"help-block\">".js_escape($langTheFieldIsRequired)."</span>');
-                            return false;
-                        }
-                    }
-                }
-            }
-        });
-    }
-    $(function () {
-        $('.password_protected').on('click', function (e) {
-            e.preventDefault();
-            var link = $(this).attr('href');
-            password_bootbox(link);
-        })
-    })
-</script>";
-    }
-}
 
 /**
  * @brief display all assignments - student view only
@@ -5371,7 +5316,7 @@ function show_student_assignments() {
                     $lock_description = "<ul>";
                     if ($row->password_lock) {
                         $lock_description .= "<li>$langPassCode</li>";
-                        assignment_password_bootbox();
+                        enable_password_bootbox();
                         $class = ' class="password_protected"';
                     }
                     if ($row->ip_lock) {
@@ -5532,7 +5477,7 @@ function show_assignments() {
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             </td>
                             <td class='text-center'>$num_submitted</td>
-                            <td class='text-center'>$num_ungraded</td>                            
+                            <td class='text-center'>$num_ungraded</td>
                             <td class='text-center' data-sort='$sort_date'>$deadline";
 
             if ($row->time > 0) {
