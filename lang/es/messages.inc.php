@@ -2137,6 +2137,7 @@ $langGroupWorkIntro = '<br>
 	de tu equipo, el archivo antiguo se borrará y será reemplazado por este nuevo.<br>
 	Además, no se admiten nuevas sumisiones cuando un trabajo ha <br>
 	sido puntuado.';
+$langAssignmentPasswordModalTitle = "Please enter assignment password";
 $langGroupWorkSubmitted = "Ha sido sometido";
 $langGroupWorkDeadline_of_Submission = "Último día para la sumisión";
 $langEmptyAsTitle = "No has rellenado el campo del título";
@@ -2387,6 +2388,7 @@ $langNewForumCat = "New forum category";
 $langNewForum = "New Forum";
 $langEditedBy = "Edited by";
 $langCaptchaWrong = "Wrong Captcha.";
+$langWrongPassword = "Wrong Password";
 $langUserAccountInfo4 = 'Login as a different user';
 $langMultiRegUserData = "Usernames";
 $langRegistrationDateShort = "Fecha de registro";
@@ -3966,7 +3968,7 @@ $langAnswersDispEndDate = "Display correct answers after the exercisei end date"
 $langAttempt = "Attempt";
 $langIPUnlock = "Unlock specific IP(s) or IP CIDR(s)";
 $langPasswordUnlock = "Unlock with password";
-$langPasswordModalTitle = "Enter the exercise password";
+$langExercisePasswordModalTitle = "Enter the exercise password";
 $langIPHasNoAccess = "Your IP address has no access to the specific exercise.";
 $langIPInvalid = "contains an invalid IP or IP CIDR";
 $langAdminMessage = "Message by Administrator of $siteName";

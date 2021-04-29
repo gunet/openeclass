@@ -1987,7 +1987,7 @@ $langCorrectS = "σωστό";
 $langIncorrectS = "λάθος";
 $langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
 $langIPUnlock = "Πρόσβαση από διευθ. δικτύου (IP(s) ή CIDR(s))";
-$langPasswordModalTitle = "Πληκτρολογήστε τον κωδικό της άσκησης";
+$langExercisePasswordModalTitle = "Παρακαλώ πληκτρολογήστε τον κωδικό της άσκησης";
 $langIPHasNoAccess = "Η IP διεύθυνση σας δεν έχει πρόσβαση στην συγκεκριμένη άσκηση.";
 $langIPInvalid = "περιέχει άκυρη διεύθυνση IP ή IP CIDR";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
@@ -3241,6 +3241,7 @@ $langChoice = "Επιλογή";
 $langLessonName = "Όνομα $langsOfCourse";
 $langCaptchaWrong = "Ο κωδικός ασφαλείας που έχετε εισαγάγει είναι λάθος.";
 $langCaptcha = "Κωδικός ασφάλειας";
+$langWrongPassword = "Λάθος κωδικός";
 $langUserAltAuth = "Το όνομα χρήστη με το οποίο προσπαθήσατε να συνδεθείτε χρησιμοποιεί διαφορετικό τρόπο πιστοποίησης. Παρακαλώ επικοινωνήστε με τους διαχειριστές της πλατφόρμας";
 
 // profile.php
@@ -4286,6 +4287,7 @@ $langGroupWorkIntro = "
 	αρχείο αυτό θα διαγραφεί και θα αντικατασταθεί από το νέο. Τέλος,
 	δεν μπορείτε να στείλετε αρχείο σε εργασία που έχει ήδη βαθμολογηθεί
 	από τον διδάσκοντα.";
+$langAssignmentPasswordModalTitle = "Παρακαλώ πληκτρολογήστε τον κωδικό της εργασίας";
 $langGroupWorkSubmitted = "Έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία υποβολής";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";

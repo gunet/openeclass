@@ -3785,7 +3785,7 @@ function show_student_assignment($id) {
 
     global $tool_content, $m, $uid, $langUserOnly, $langBack,
         $course_id, $course_code, $langAssignmentWillBeActive,
-        $langCaptchaWrong, $langIPHasNoAccess, $langNoPeerReview,
+        $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
         $langPendingPeerSubmissions;
 
     $cdate = date('Y-m-d H:i:s');
@@ -3813,11 +3813,13 @@ function show_student_assignment($id) {
 
     $count_of_assign = countSubmissions($id);
     if ($row) {
-        if ($row->password_lock !== '' and
-            (!isset($_POST['password']) or
-             $_POST['password'] !== $row->password_lock)) {
-            Session::Messages($langCaptchaWrong, 'alert-warning');
-            redirect_to_home_page('modules/work/?course=' . $course_code);
+        if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
+            Session::Messages($langWrongPassword, 'alert-warning');
+            if (isset($_REQUEST['unit'])) {
+                redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+            } else {
+                redirect_to_home_page("modules/work/?course=" . $course_code);
+            }
         }
 
         if ($row->ip_lock) {
@@ -3832,7 +3834,6 @@ function show_student_assignment($id) {
         $current_date = new DateTime('NOW');
         $interval = $WorkStart->diff($current_date);
         if ($WorkStart > $current_date) {
-            //emfanizei mnm energopoihshs ths ergasias an den exei ftasei h mera ths, dhladh oti the energopoihthei stis tade tou mhna kai se petaei sto homepage
             Session::Messages($langAssignmentWillBeActive . ' ' . $WorkStart->format('d-m-Y H:i'));
             redirect_to_home_page("modules/work/index.php?course=$course_code");
         }
@@ -5227,8 +5228,11 @@ function show_non_submitted($id) {
     }
 }
 
+/**
+ * @brief display bootbox password dialog
+*/
 function assignment_password_bootbox() {
-    global $head_content, $langPasswordModalTitle, $langCancel, $langSubmit, $langTheFieldIsRequired;
+    global $head_content, $langAssignmentPasswordModalTitle, $langCancel, $langSubmit, $langTheFieldIsRequired;
     static $enabled = false;
 
     if ($enabled) {
@@ -5238,7 +5242,7 @@ function assignment_password_bootbox() {
 <script>
     function password_bootbox(link) {
         bootbox.dialog({
-            title: '".js_escape($langPasswordModalTitle)."',
+            title: '".js_escape($langAssignmentPasswordModalTitle)."',
             message: '<form class=\"form-horizontal\" role=\"form\" action=\"'+link+'\" method=\"POST\" id=\"password_form\">'+
                         '<div class=\"form-group\">'+
                             '<div class=\"col-sm-12\">'+
@@ -5354,18 +5358,21 @@ function show_student_assignments() {
         foreach ($result as $row) {
             $exclamation_icon = '';
             $class = '';
-            if ($row->password_lock or $row->ip_lock) {
-                $lock_description = "<ul>";
-                if ($row->password_lock) {
-                    $lock_description .= "<li>$langPassCode</li>";
-                    assignment_password_bootbox();
-                    $class = ' class="password_protected"';
+
+            if (!isset($_REQUEST['unit'])) {
+                if ($row->password_lock or $row->ip_lock) {
+                    $lock_description = "<ul>";
+                    if ($row->password_lock) {
+                        $lock_description .= "<li>$langPassCode</li>";
+                        assignment_password_bootbox();
+                        $class = ' class="password_protected"';
+                    }
+                    if ($row->ip_lock) {
+                        $lock_description .= "<li>$langIPUnlock</li>";
+                    }
+                    $lock_description .= "</ul>";
+                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
                 }
-                if ($row->ip_lock) {
-                    $lock_description .= "<li>$langIPUnlock</li>";
-                }
-                $lock_description .= "</ul>";
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
             }
 
             $title_temp = q($row->title);
