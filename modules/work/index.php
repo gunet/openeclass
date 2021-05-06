@@ -60,12 +60,15 @@ $action->record(MODULE_ID_ASSIGN);
 /* * *********************************** */
 
 load_js('datatables');
+load_js('tools.js');
 
-require_once 'modules/usage/usage.lib.php';
-$head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
-load_js('d3/d3.min.js');
-load_js('c3-0.4.10/c3.min.js');
+// D3 / C3 used to display assignment grade graph
+if ($is_editor and isset($_GET['id']) and isset($_GET['disp_results'])) {
+    require_once 'modules/usage/usage.lib.php';
+    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+    load_js('d3/d3.min.js');
+    load_js('c3-0.4.10/c3.min.js');
+}
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "{$urlServer}modules/work/?course=$course_code", 'name' => $langWorks);
@@ -199,7 +202,6 @@ if ($is_editor) {
 $need_autojudge_js = isset($_GET['add']) || (isset($_GET['choice']) && $_GET['choice'] == 'edit');
 
 if ($is_editor) {
-    load_js('tools.js');
     $head_content .= "<script type='text/javascript'>
         $(function () {
             initialize_filemodal({
@@ -4245,7 +4247,6 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                                    <span class='fa fa-plus'></span>
                                  </button>
                                </div>";
-                load_js('tools.js');
                 $GLOBALS['head_content'] .=
                     "<script>$(function () { initialize_multifile_submission($maxFiles) });</script>";
             } else {
