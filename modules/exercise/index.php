@@ -239,7 +239,7 @@ if (!$nbrExercises) {
                 <th>$langExerciseName</th>
                 <th class='text-center' width='20%'>$langInfoExercise</th>
                 <th class='text-center' width='15%'>$langResults</th>
-                <th class='text-center'>".icon('fa-gears')."</th>
+                <th class='text-center' width='42'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
         load_js('tools.js');
@@ -363,7 +363,7 @@ if (!$nbrExercises) {
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
             $langDelete_temp = htmlspecialchars($langDelete);
 
-            $tool_content .= "<td class='option-btn-cell'>".action_button(array(
+            $tool_content .= "<td class='text-center'>".action_button(array(
                     array('title' => $langEditChange,
                           'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-edit'),
@@ -574,7 +574,7 @@ if ($is_editor) {
                 results.current = results.get(exerciseid[1]);
                 bootbox.dialog({
                     title: '<strong>" . js_escape($langDistributeExercise) . "</strong>',
-                    message: '<h2 class=\"page-subtitle\">" . js_escape($langResults) . " : <strong>'+results.current+'</strong></h2><form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"correction_form\"> $courses_options1 </form>',                    
+                    message: '<h2 class=\"page-subtitle\">" . js_escape($langResults) . " : <strong>'+results.current+'</strong></h2><form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"correction_form\"> $courses_options1 </form>',
                         buttons: {
                             first: {
                                 label : '" . js_escape($langDistribute) . "',
