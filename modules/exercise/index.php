@@ -242,7 +242,7 @@ if (!$nbrExercises) {
                 <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
-        load_js('tools');
+        load_js('tools.js');
         enable_password_bootbox();
         $previousResultsAllowed = !(course_status($course_id) == COURSE_OPEN && $uid ==0);
         $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
@@ -559,8 +559,8 @@ if ($is_editor) {
         $questions_table .= "</tbody></table>";
 
         if ($counter1 > 0) {
-            // @brief distribute exercise grading
-            $head_content .= "
+            //  distribute exercise grading
+            $head_content .= "<script type='text/javascript'>
             $(document).on('click', '.distribution', function() {
                 var exerciseid = $(this).data('exerciseid');
 
@@ -574,7 +574,7 @@ if ($is_editor) {
                 results.current = results.get(exerciseid[1]);
                 bootbox.dialog({
                     title: '<strong>" . js_escape($langDistributeExercise) . "</strong>',
-                    message: '<h2 class=\"page-subtitle\">" . js_escape($langResults) . " : <strong>'+results.current+'</strong></h2><form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"correction_form\"> $courses_options1 </form>',
+                    message: '<h2 class=\"page-subtitle\">" . js_escape($langResults) . " : <strong>'+results.current+'</strong></h2><form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"correction_form\"> $courses_options1 </form>',                    
                         buttons: {
                             first: {
                                 label : '" . js_escape($langDistribute) . "',
@@ -621,9 +621,8 @@ if ($is_editor) {
                                 className : 'btn-default'
                             }
                         }
-                    }
-                );
-            });";
+                    });
+                });";
             $head_content .= "
             $(document).on('click', '.by_question', function() {
                 var exerciseid = $(this).data('exerciseid');
@@ -652,7 +651,8 @@ if ($is_editor) {
                             }
                         }
                     });
-            });";
+            });
+            </script>";
         }
     }
 
@@ -661,7 +661,7 @@ if ($is_editor) {
     foreach ($my_courses as $row) {
         $courses_options .= "'<option value=\"$row->Course_id\">".q($row->Title)."</option>'+";
     }
-    $head_content .= "
+    $head_content .= "<script type='text/javascript'>
         $(document).on('click', '.warnLink', function() {
             var exerciseid = $(this).data('exerciseid');
             bootbox.dialog({
@@ -687,9 +687,7 @@ if ($is_editor) {
                         }
                     }
             });
-        });";
+        });
+        </script>";
 }
-
-$head_content .= "</script>";
-
 draw($tool_content, 2, null, $head_content);
