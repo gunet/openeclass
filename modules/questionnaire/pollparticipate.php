@@ -32,6 +32,7 @@ require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/progress/ViewingEvent.php';
+require_once 'modules/lti_consumer/lti-functions.php';
 
 load_js('bootstrap-slider');
 
@@ -72,9 +73,15 @@ $p = Database::get()->querySingle($query, $query_params);
 if (!$p) { // check poll access
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
+// check poll type (for limesurvey)
+$pollObj = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $_REQUEST['pid']);
+$pollIsLime = false;
+if ($pollObj && $pollObj->type == POLL_LIMESURVEY) {
+    $pollIsLime = true;
+}
 // check poll validity
 $pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $_REQUEST['pid']);
-if(!$pq) {
+if(!$pq && !$pollIsLime) {
     Session::messages($langPollNoQuestions);
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
@@ -177,6 +184,7 @@ function printPollForm() {
     $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
     $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
+    $temp_IsLime = ($thePoll->type == POLL_LIMESURVEY) ? true : false;
 
     if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 
@@ -212,12 +220,14 @@ function printPollForm() {
         } else {
             $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         }
-        $tool_content .= "
-            <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
-            <input type='hidden' value='2' name='UseCase'>
-            <input type='hidden' value='$pid' name='pid'>";
-        if (isset($_REQUEST['unit_id'])) {
-            $tool_content .= "<input type='hidden' value='$_REQUEST[unit_id]' name='unit_id'>";
+        if (!$temp_IsLime) {
+            $tool_content .= "
+                <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
+                <input type='hidden' value='2' name='UseCase'>
+                <input type='hidden' value='$pid' name='pid'>";
+            if (isset($_REQUEST['unit_id'])) {
+                $tool_content .= "<input type='hidden' value='$_REQUEST[unit_id]' name='unit_id'>";
+            }
         }
 
         //*****************************************************************************
@@ -247,6 +257,9 @@ function printPollForm() {
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
         $i=1;
         foreach ($questions as $theQuestion) {
+            if ($temp_IsLime) {
+                break;
+            }
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             if($qtype==QTYPE_LABEL) {
@@ -318,21 +331,60 @@ function printPollForm() {
                 $i++;
             }
         }
+        if ($temp_IsLime) {
+            show_limesurvey_integration($thePoll);
+        }
         $tool_content .= "<div class='text-center'>";
         if ($is_editor) {
             $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langBack). "</a>";
         } else {
-            $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'>";
+            if (!$temp_IsLime) {
+                $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+            }
             if (isset($_REQUEST['unit_id'])) {
                 $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
             } else {
                 $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
             }
         }
-        $tool_content .= "</div></form>";
+        $tool_content .= "</div>";
+        if (!$temp_IsLime) {
+            $tool_content .= "</form>";
+        }
     } else {
         Session::Messages($langPollInactive);
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
+}
+
+function show_limesurvey_integration($thePoll) {
+    global $tool_content, $course_code, $langLimesurveyIntegration, $urlAppend;
+
+    $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $thePoll->lti_template);
+
+    if ($thePoll->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
+        $tool_content .= '<iframe id="contentframe"
+            src="' . $urlAppend . "modules/questionnaire/post_launch.php?course=" . $course_code . "&amp;pid=" . $thePoll->pid . '"
+            webkitallowfullscreen=""
+            mozallowfullscreen=""
+            allowfullscreen=""
+            width="100%"
+            height="800px"
+            style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
+    } else {
+        $joinLink = create_join_button(
+            $lti->lti_provider_url,
+            $lti->lti_provider_key,
+            $lti->lti_provider_secret,
+            $thePoll->pid,
+            RESOURCE_LINK_TYPE_POLL,
+            $thePoll->name,
+            $thePoll->description,
+            $thePoll->launchcontainer,
+            $langLimesurveyIntegration . ":&nbsp;&nbsp;"
+        );
+
+        $tool_content .= "<div class='form-wrapper'>" . $joinLink . "</div>";
     }
 }
 

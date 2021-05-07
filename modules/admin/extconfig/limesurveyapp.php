@@ -20,17 +20,11 @@
  * ======================================================================== 
  */
 
-
-/** 
- * 
- * @author jexi
- */
-
 require_once 'genericparam.php';
 
-class TurnitinApp extends ExtApp {
+class LimesurveyApp extends ExtApp {
 
-    const NAME = "Turnitin";
+    const NAME = "Limesurvey";
 
     public function __construct() {
         parent::__construct();
@@ -41,23 +35,23 @@ class TurnitinApp extends ExtApp {
     }
 
     public function getShortDescription() {
-        return $GLOBALS['langTurnitinShortDescription'];
+        return $GLOBALS['langLimesurveyShortDescription'];
     }
 
     public function getLongDescription() {
-        return $GLOBALS['langUnplagLongDescription'];
+        return $GLOBALS['langLimesurveyLongDescription'];
     }
 
     public function getConfigUrl() {
-        return 'modules/admin/turnitinmoduleconf.php';
+        return 'modules/admin/limesurveymoduleconf.php';
     }
 
     /**
-     * Return true if any TII servers are enabled, else false
+     * Return true if any Limesurvey servers are enabled, else false
      *
      * @return boolean
      */
     public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM lti_apps WHERE enabled = true AND is_template = true AND type = 'turnitin' AND course_id is null")->count > 0;
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM lti_apps WHERE enabled = true AND is_template = true AND type = 'limesurvey' AND course_id is null")->count > 0;
     }
 }

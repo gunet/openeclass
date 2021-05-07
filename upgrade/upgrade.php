@@ -2021,6 +2021,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('tc_session', 'options')) {
             Database::get()->query("ALTER TABLE `tc_session` ADD `options` TEXT DEFAULT NULL");
         }
+
+        if (!DBHelper::fieldExists('poll', 'lti_template')) {
+            Database::get()->query("ALTER TABLE poll ADD lti_template INT(11) DEFAULT NULL AFTER assign_to_specific");
+        }
+        if (!DBHelper::fieldExists('poll', 'launchcontainer')) {
+            Database::get()->query("ALTER TABLE poll ADD launchcontainer TINYINT DEFAULT NULL AFTER lti_template");
+        }
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!
