@@ -314,7 +314,7 @@ $tool_content .= "<div class='form-group'>
             </div>
             <div class='row'>
                 <div class='col-sm-10 col-sm-offset-2 '>
-                    <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langOk'>
+                    <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langCreate'>
                     <a href='$link_back' class='btn btn-default'>$langCancel</a>
                 </div>
             </div>

@@ -187,7 +187,7 @@ switch ($cmd) {
                         . "</td></tr></table>\n"
                         . "<input type='hidden' name='cmd' value='exComment'>\n"
                         . "<input type='hidden' name='module_id' value='$module_id'>\n"
-                        . "<input class='btn btn-primary' type='submit' value='$langOk'>\n"
+                        . "<input class='btn btn-primary' type='submit' value='$langSubmit'>\n"
                         . "<br /><br />"
                         . "</form>";
             }
