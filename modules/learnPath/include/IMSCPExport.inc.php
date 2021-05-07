@@ -71,24 +71,23 @@ if (!class_exists('IMSCPExport')) {
      */
     class IMSCPExport
     {
-        var $id;
-        var $name;
-        var $comment;
-        var $language;
-        var $resourceMap;
-        var $itemTree;
-        var $fromScorm;
-        var $destDir;
-        var $srcDirScorm;
-        var $srcDirDocument;
-        var $srcDirExercise;
-        var $srcDirVideo;
+        private $id;
+        private $name;
+        private $comment;
+        private $language;
+        private $resourceMap;
+        private $itemTree;
+        private $fromScorm;
+        private $destDir;
+        private $srcDirScorm;
+        private $srcDirDocument;
+        private $srcDirExercise;
+        private $srcDirVideo;
+        private $manifest_itemTree;
+        private $scormURL;
+        private $mp3Found;
 
-        var $manifest_itemTree;
-        var $scormURL;
-        var $mp3Found;
-
-        var $error;
+        private $error;
 
         /**
          * Constructor
@@ -102,9 +101,9 @@ if (!class_exists('IMSCPExport')) {
             $this->id = (int)$learnPathId;
             $this->fromScorm = false;
             $this->mp3Found = false;
-            $this->resourceMap = array();
-            $this->itemTree = array();
-            $this->error = array();
+            $this->resourceMap = [];
+            $this->itemTree = [];
+            $this->error = [];
             $this->language = $language;
 
         }
@@ -170,7 +169,7 @@ if (!class_exists('IMSCPExport')) {
                 return false;
             }
 
-            $module = array();
+            $module = [];
             foreach ($result as $modobj) {
                 $module['ID'] = $modobj->ID;
                 $module['lock'] = $modobj->lock;
@@ -238,7 +237,7 @@ if (!class_exists('IMSCPExport')) {
         */
         function prepareQuiz($quizId, $raw_to_pass=50)
         {
-            global $langQuestion, $langOk, $langScore, $claro_stylesheet, $clarolineRepositorySys;
+            global $langQuestion, $langOk, $langScore, $langError, $claro_stylesheet, $clarolineRepositorySys;
             global $charset, $langExerciseDone;
             // those two variables are needed by display_attached_file()
             global $attachedFilePathWeb;
@@ -294,11 +293,14 @@ if (!class_exists('IMSCPExport')) {
 
                 // read the question, abort on error
                 $question = new Question();
-                if (!$question->read($questionId))
-                {
-                    $this->error[] = $GLOBALS['langErrorLoadingQuestion'];
-                    return false;
+                if (is_array($questionId)) { // ignore `questions with criteria`
+                    continue;
                 }
+                if (!$question->read($questionId)) {
+                    $this->error[] = $langError;
+                    continue;
+                }
+
                 $qtype        = $question->selectType();
                 $qtitle       = $question->selectTitle();
                 $qdescription = $question->selectDescription();

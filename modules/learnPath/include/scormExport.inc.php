@@ -71,21 +71,21 @@ if (!class_exists('ScormExport')) {
      */
     class ScormExport {
 
-        var $id;
-        var $name;
-        var $comment;
-        var $resourceMap;
-        var $itemTree;
-        var $fromScorm;
-        var $destDir;
-        var $srcDirScorm;
-        var $srcDirDocument;
-        var $srcDirExercise;
-        var $srcDirVideo;
-        var $manifest_itemTree;
-        var $scormURL;
-        var $mp3Found;
-        var $error;
+        private $id;
+        private $name;
+        private $comment;
+        private $resourceMap;
+        private $itemTree;
+        private $fromScorm;
+        private $destDir;
+        private $srcDirScorm;
+        private $srcDirDocument;
+        private $srcDirExercise;
+        private $srcDirVideo;
+        private $manifest_itemTree;
+        private $scormURL;
+        private $mp3Found;
+        private $error;
 
         /**
          * Constructor
@@ -225,8 +225,8 @@ if (!class_exists('ScormExport')) {
          * @author  Amand Tihon <amand@alrj.org>
          */
         function prepareQuiz($quizId, $raw_to_pass = 50) {
-            global $langQuestion, $langOk, $langScore, $claro_stylesheet, $clarolineRepositorySys;
-            global $charset, $langExerciseDone;
+            global $langQuestion, $langSubmit, $langScore, $claro_stylesheet, $langError,
+                    $clarolineRepositorySys, $charset, $langExerciseDone;
             // those two variables are needed by display_attached_file()
             global $attachedFilePathWeb;
             global $attachedFilePathSys;
@@ -254,7 +254,7 @@ if (!class_exists('ScormExport')) {
             // read the exercise
             $quiz = new Exercise();
             if (!$quiz->read($quizId)) {
-                $this->error[] = $GLOBALS['langErrorLoadingExercise'];
+                $this->error[] = $langError;
                 return false;
             }
 
@@ -263,10 +263,10 @@ if (!class_exists('ScormExport')) {
             $questionCount = $quiz->selectNbrQuestions();
 
             // Keep track of raw scores (ponderation) for each question
-            $questionPonderationList = array();
+            $questionPonderationList = [];
 
             // Keep track of correct texts for fill-in type questions
-            $fillAnswerList = array();
+            $fillAnswerList = [];
 
             // Counter used to generate the elements' id. Incremented after every <input> or <select>
             $idCounter = 0;
@@ -279,10 +279,14 @@ if (!class_exists('ScormExport')) {
 
                 // read the question, abort on error
                 $question = new Question();
-                if (!$question->read($questionId)) {
-                    $this->error[] = $GLOBALS['langErrorLoadingQuestion'];
-                    return false;
+                if (is_array($questionId)) { // ignore `questions with criteria`
+                    continue;
                 }
+                if (!$question->read($questionId)) {
+                    $this->error[] = $langError;
+                    continue;
+                }
+
                 $qtype = $question->selectType();
                 $qtitle = $question->selectTitle();
                 $qdescription = $question->selectDescription();
@@ -505,7 +509,7 @@ if (!class_exists('ScormExport')) {
             // No more questions, add the button.
             $pageEnd = '</td></tr>
             <tr>
-                <td align="center"><br><input class="btn btn-primary" type="button" value="' . $langOk . '" onClick="calcScore()"></td>
+                <td align="center"><br><input class="btn btn-primary" type="button" value="' . $langSubmit . '" onClick="calcScore()"></td>
             </tr>
             </table>
             </form>
