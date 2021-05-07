@@ -422,7 +422,7 @@ function attendance_display_available_exercises($attendance_id) {
 function attendance_display_available_assignments($attendance_id) {
 
     global $course_id, $course_code, $tool_content, $dateFormatLong,
-           $m, $langDescription, $langAttendanceNoActMessageAss4,
+           $m, $langDescription, $langAttendanceNoActMessageAss4, $langNoDeadline,
            $langAdd, $langTitle, $langHour, $langGroupWorkDeadline_of_Submission;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
@@ -455,7 +455,7 @@ function attendance_display_available_assignments($attendance_id) {
                 $date_str = ucfirst(claro_format_locale_date($dateFormatLong, $d));
                 $hour_str = "($langHour: " . ucfirst(date('H:i', $d)).")";
             } else {
-                $date_str = $m['no_deadline'];
+                $date_str = $langNoDeadline;
                 $hour_str = "";
             }
             $tool_content .= "<tr><td><b>";

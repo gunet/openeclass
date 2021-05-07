@@ -576,19 +576,11 @@ function triggerAssignmentAnalytics($courseId, $uid, $assignmentId, $eventname) 
 
 /**
  * @brief Export assignment's grades to CSV file
- * @global type $course_code
- * @global type $course_id
- * @global type $langSurname
- * @global type $langName
- * @global type $langAm
- * @global type $langUsername
- * @global type $langEmail
- * @global type $langGradebookGrade
  * @param type $id
  */
 function export_grades_to_csv($id) {
 
-    global $course_code, $course_id, $m,
+    global $course_code, $course_id, $m, $langNoDeadline,
            $langSurname, $langName, $langAm, $langGroup,
            $langUsername, $langEmail, $langGradebookGrade;
 
@@ -603,7 +595,7 @@ function export_grades_to_csv($id) {
         if (!is_null($q->deadline)) {
             $deadline_message = "$m[with_deadline]: ". nice_format($q->deadline, true);
         } else {
-            $deadline_message = $m['no_deadline'];
+            $deadline_message = $langNoDeadline;
         }
         $csv->outputRecord($q->title);
         $csv->outputRecord("$m[start_date]: $q->submission_date $deadline_message");

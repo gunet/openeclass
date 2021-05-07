@@ -2112,8 +2112,6 @@ $wiki_toolbar['Orderedlist'] = "Ordered List";
 $wiki_toolbar['Externalimage'] = "External Image";
 $wiki_toolbar['Link'] = "Link";
 $langBackAssignment = "Back to work";
-$m['activate'] = "Activate";
-$m['deactivate'] = "Deactivate";
 $m['username'] = "Username ".$langsOfStudent." ";
 $m['filename'] = "Filename";
 $m['sub_date'] = "Submission date";
@@ -2169,6 +2167,7 @@ $langGroupWorkIntro = '
 	Furthermore, no new submissions are allowed when the assignment has
 	been graded.';
 $langAssignmentPasswordModalTitle = "Please enter assignment password";
+$langWillStartAt = 'start at';
 $langGroupWorkSubmitted = "Has been Submitted";
 $langGroupWorkDeadline_of_Submission = "Submission deadline";
 $langEmptyAsTitle = "You didn't fill assignment title";
@@ -3222,7 +3221,6 @@ $wiki_toolbar['H2'] = "Header 2";
 $wiki_toolbar['H3'] = "Header 3";
 $wiki_toolbar['H4'] = "Header 4";
 $m['deadline_notif'] = "(Blank for assignments with no deadline)";
-$m['no_deadline'] = "No Deadline";
 $m['one_non_submission'] = 'One assignment has not been submitted';
 $m['more_non_submissions'] = '%d ssignments have not been submitted';
 $m['WorkSubsDelete'] = 'Assignment submissions delete';

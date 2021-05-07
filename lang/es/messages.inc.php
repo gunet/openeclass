@@ -2078,8 +2078,6 @@ $wiki_toolbar['Orderedlist'] = "Lista ordenada";
 $wiki_toolbar['Externalimage'] = "Imagen externa";
 $wiki_toolbar['Link'] = "Enlace";
 $langBackAssignment = "Retornar al trabajo";
-$m['activate'] = "Activado";
-$m['deactivate'] = "Desactivado";
 $m['username'] = "Usuario";
 $m['filename'] = "Nombre archivo";
 $m['sub_date'] = "Fecha de sumisión";
@@ -2138,6 +2136,7 @@ $langGroupWorkIntro = '<br>
 	Además, no se admiten nuevas sumisiones cuando un trabajo ha <br>
 	sido puntuado.';
 $langAssignmentPasswordModalTitle = "Please enter assignment password";
+$langWillStartAt = 'start at';
 $langGroupWorkSubmitted = "Ha sido sometido";
 $langGroupWorkDeadline_of_Submission = "Último día para la sumisión";
 $langEmptyAsTitle = "No has rellenado el campo del título";
@@ -3180,7 +3179,6 @@ $wiki_toolbar['H2'] = "Header 2";
 $wiki_toolbar['H3'] = "Header 3";
 $wiki_toolbar['H4'] = "Header 4";
 $m['deadline_notif'] = "(Blank for assignments with no deadline)";
-$m['no_deadline'] = "No Deadline";
 $m['one_non_submission'] = 'One assignment has not been submitted';
 $m['more_non_submissions'] = '%d ssignments have not been submitted';
 $m['WorkSubsDelete'] = 'Assignment submissions delete';

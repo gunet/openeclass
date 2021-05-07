@@ -4194,10 +4194,7 @@ $wiki_toolbar['H4'] = "Επικεφαλίδα 4";
  * work.php
  * ************************************************************ */
 $langBackAssignment = "Επιστροφή στη σελίδα της εργασίας";
-$m['activate'] = "Ενεργοποίηση";
-$m['deactivate'] = "Απενεργοποίηση";
 $m['deadline_notif'] = "(Kενό για εργασία χωρίς προθεσμία υποβολής)";
-$m['no_deadline'] = "Χωρίς Προθεσμία";
 $m['with_deadline'] = "Με Προθεσμία Υποβολής";
 $m['late_submission'] = "Εκπρόθεσμη Υποβολή";
 $m['late_submission_enable'] = "Ενεργοποίηση εκπρόθεσμης υποβολής";
@@ -4288,6 +4285,7 @@ $langGroupWorkIntro = "
 	δεν μπορείτε να στείλετε αρχείο σε εργασία που έχει ήδη βαθμολογηθεί
 	από τον διδάσκοντα.";
 $langAssignmentPasswordModalTitle = "Παρακαλώ πληκτρολογήστε τον κωδικό της εργασίας";
+$langWillStartAt = 'έναρξη στις';
 $langGroupWorkSubmitted = "Έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία υποβολής";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";

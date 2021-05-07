@@ -1125,23 +1125,12 @@ function display_available_exercises($gradebook_id) {
 
 /**
  * @brief display available assignments for adding them to gradebook
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $dateFormatLong
- * @global type $langWorks
- * @global type $m
- * @global type $langDescription
- * @global type $langAttendanceNoActMessageAss4
- * @global type $langAdd
- * @global type $langTitle
- * @global type $langHour
  * @param type $gradebook_id
  */
 function display_available_assignments($gradebook_id) {
 
     global $course_id, $course_code, $tool_content, $dateFormatLong,
-           $m, $langDescription, $langAttendanceNoActMessageAss4,
+           $m, $langDescription, $langAttendanceNoActMessageAss4, $langNoDeadline,
            $langAdd, $langTitle, $langHour, $langGroupWorkDeadline_of_Submission;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1 AND gradebook_id = ?d)", $course_id, $gradebook_id);
@@ -1169,7 +1158,7 @@ function display_available_assignments($gradebook_id) {
                 $date_str = ucfirst(claro_format_locale_date($dateFormatLong, $d));
                 $hour_str = "($langHour: " . ucfirst(date('H:i', $d)).")";
             } else {
-                $date_str = $m['no_deadline'];
+                $date_str = $langNoDeadline;
                 $hour_str = "";
             }
             $tool_content .= "<tr><td><b>";
