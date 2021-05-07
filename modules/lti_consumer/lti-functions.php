@@ -25,8 +25,12 @@ define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
 define('LTI_DESCRIPTION_MAX_LENGTH', 999);
 
-const TURNITIN_LTI_TYPE = 'turnitin';
-const LIMESURVEY_LTI_TYPE = 'limesurvey';
+const TURNITIN_LTI_TYPE = "turnitin";
+const LIMESURVEY_LTI_TYPE = "limesurvey";
+
+const RESOURCE_LINK_TYPE_ASSIGNMENT = "assignment";
+const RESOURCE_LINK_TYPE_LTI_TOOL = "lti_tool";
+const RESOURCE_LINK_TYPE_POLL = "poll";
 
 /**
  * @brief new lti app (display form)
@@ -537,7 +541,7 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
         //$launch_data['custom_institutioncheck'] = intval($extraobj->tii_institutioncheck);
         //$launch_data['custom_submit_papers_to'] = intval($extraobj->tii_submit_papers_to);
 
-        if ($resource_link_type == "assignment") {
+        if ($resource_link_type == RESOURCE_LINK_TYPE_ASSIGNMENT) {
             $assignment_secret = Database::get()->querySingle("SELECT secret_directory FROM assignment WHERE id = ?d", $resource_link_id)->secret_directory;
             $token = token_generate($assignment_secret, true);
             $launch_data['lis_result_sourcedid'] = $token . "-" . $resource_link_id . "-" . $uid;
@@ -545,6 +549,10 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
             $launch_data['lis_outcome_service_url'] = $urlServer . "modules/work/tii_outcome.php";
         }
     }
+
+    /*if ($resource_link_type == RESOURCE_LINK_TYPE_POLL) {
+        $launch_data['lis_outcome_service_url'] = $urlServer . "modules/questionnaire/poll_outcome.php";
+    }*/
 
     return $launch_data;
 }

@@ -5802,6 +5802,7 @@ $langNewLimesurveyTool = "Προσθήκη νέας εφαρμογής LimeSurve
 $langNoAvailableLimesurveyTemplates = "Δεν υπάρχουν διαθέσιμες εφαρμογές LTI.";
 $langLimesurveyApp = "Εφαρμογή LimeSurvey";
 $langLimesurveyLTIOptions = "Επιλογές LimeSurvey";
+$langLimesurveyIntegration = "Ενσωμάτωση με LimeSurvey";
 
 
 // Messages for colmooc

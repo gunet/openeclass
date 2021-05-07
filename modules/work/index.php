@@ -4368,7 +4368,7 @@ EOF;*/
             $lti->lti_provider_key,
             $lti->lti_provider_secret,
             $assignment->id,
-            "assignment",
+            RESOURCE_LINK_TYPE_ASSIGNMENT,
             $assignment->title,
             $assignment->description,
             $assignment->launchcontainer,

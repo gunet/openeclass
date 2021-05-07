@@ -5093,6 +5093,7 @@ $langTurnitinEnabled = "Enabled";
 $langNoAvailableTurnitinTemplates = "No LTI Tools available.";
 $langLTITemplate = "LTI Template";
 $langTurnitinIntegration = "TurnItIn Integration";
+$langLimesurveyIntegration = "LimeSurvey Integration";
 $langTurnitinNewAssignNotice = "Notice: after creating a TurnItIn assignment, you must visit the assignment's page to connect with TurnItIn and initialize your options.";
 $langTiiFeedbackReleaseDate = "Feedback Release Date";
 $langTiiSubmissionSettings = "Submission settings";
