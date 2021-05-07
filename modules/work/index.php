@@ -60,12 +60,15 @@ $action->record(MODULE_ID_ASSIGN);
 /* * *********************************** */
 
 load_js('datatables');
+load_js('tools.js');
 
-require_once 'modules/usage/usage.lib.php';
-$head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
-load_js('d3/d3.min.js');
-load_js('c3-0.4.10/c3.min.js');
+// D3 / C3 used to display assignment grade graph
+if ($is_editor and isset($_GET['id']) and isset($_GET['disp_results'])) {
+    require_once 'modules/usage/usage.lib.php';
+    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+    load_js('d3/d3.min.js');
+    load_js('c3-0.4.10/c3.min.js');
+}
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "{$urlServer}modules/work/?course=$course_code", 'name' => $langWorks);
@@ -199,7 +202,6 @@ if ($is_editor) {
 $need_autojudge_js = isset($_GET['add']) || (isset($_GET['choice']) && $_GET['choice'] == 'edit');
 
 if ($is_editor) {
-    load_js('tools.js');
     $head_content .= "<script type='text/javascript'>
         $(function () {
             initialize_filemodal({
@@ -3792,7 +3794,7 @@ function show_student_assignment($id) {
 
     global $tool_content, $m, $uid, $langUserOnly, $langBack,
         $course_id, $course_code, $langAssignmentWillBeActive,
-        $langCaptchaWrong, $langIPHasNoAccess, $langNoPeerReview,
+        $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
         $langPendingPeerSubmissions;
 
     $cdate = date('Y-m-d H:i:s');
@@ -3820,11 +3822,13 @@ function show_student_assignment($id) {
 
     $count_of_assign = countSubmissions($id);
     if ($row) {
-        if ($row->password_lock !== '' and
-            (!isset($_POST['password']) or
-             $_POST['password'] !== $row->password_lock)) {
-            Session::Messages($langCaptchaWrong, 'alert-warning');
-            redirect_to_home_page('modules/work/?course=' . $course_code);
+        if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
+            Session::Messages($langWrongPassword, 'alert-warning');
+            if (isset($_REQUEST['unit'])) {
+                redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+            } else {
+                redirect_to_home_page("modules/work/?course=" . $course_code);
+            }
         }
 
         if ($row->ip_lock) {
@@ -3839,7 +3843,6 @@ function show_student_assignment($id) {
         $current_date = new DateTime('NOW');
         $interval = $WorkStart->diff($current_date);
         if ($WorkStart > $current_date) {
-            //emfanizei mnm energopoihshs ths ergasias an den exei ftasei h mera ths, dhladh oti the energopoihthei stis tade tou mhna kai se petaei sto homepage
             Session::Messages($langAssignmentWillBeActive . ' ' . $WorkStart->format('d-m-Y H:i'));
             redirect_to_home_page("modules/work/index.php?course=$course_code");
         }
@@ -4244,7 +4247,6 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                                    <span class='fa fa-plus'></span>
                                  </button>
                                </div>";
-                load_js('tools.js');
                 $GLOBALS['head_content'] .=
                     "<script>$(function () { initialize_multifile_submission($maxFiles) });</script>";
             } else {
@@ -5233,58 +5235,6 @@ function show_non_submitted($id) {
     }
 }
 
-function assignment_password_bootbox() {
-    global $head_content, $langPasswordModalTitle, $langCancel, $langSubmit, $langTheFieldIsRequired;
-    static $enabled = false;
-
-    if ($enabled) {
-        return;
-    } else {
-        $enabled = true;
-        $head_content .= "
-<script>
-    function password_bootbox(link) {
-        bootbox.dialog({
-            title: '".js_escape($langPasswordModalTitle)."',
-            message: '<form class=\"form-horizontal\" role=\"form\" action=\"'+link+'\" method=\"POST\" id=\"password_form\">'+
-                        '<div class=\"form-group\">'+
-                            '<div class=\"col-sm-12\">'+
-                                '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
-                            '</div>'+
-                        '</div>'+
-                      '</form>',
-            buttons: {
-                cancel: {
-                    label: '".js_escape($langCancel)."',
-                    className: 'btn-default'
-                },
-                success: {
-                    label: '".js_escape($langSubmit)."',
-                    className: 'btn-success',
-                    callback: function (d) {
-                        var password = $('#password').val();
-                        if(password != '') {
-                            $('#password_form').submit();
-                        } else {
-                            $('#password').closest('.form-group').addClass('has-error');
-                            $('#password').after('<span class=\"help-block\">".js_escape($langTheFieldIsRequired)."</span>');
-                            return false;
-                        }
-                    }
-                }
-            }
-        });
-    }
-    $(function () {
-        $('.password_protected').on('click', function (e) {
-            e.preventDefault();
-            var link = $(this).attr('href');
-            password_bootbox(link);
-        })
-    })
-</script>";
-    }
-}
 
 /**
  * @brief display all assignments - student view only
@@ -5306,7 +5256,7 @@ function assignment_password_bootbox() {
  * @global type $langIPUnlock
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $urlServer, $langGroupWorkDeadline_of_Submission,
+    global $tool_content, $m, $uid, $course_id, $urlAppend, $langGroupWorkDeadline_of_Submission,
         $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code,
         $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio,
         $langGradebookGrade, $langPassCode, $langIPUnlock;
@@ -5361,18 +5311,21 @@ function show_student_assignments() {
         foreach ($result as $row) {
             $exclamation_icon = '';
             $class = '';
-            if ($row->password_lock or $row->ip_lock) {
-                $lock_description = "<ul>";
-                if ($row->password_lock) {
-                    $lock_description .= "<li>$langPassCode</li>";
-                    assignment_password_bootbox();
-                    $class = ' class="password_protected"';
+
+            if (!isset($_REQUEST['unit'])) {
+                if ($row->password_lock or $row->ip_lock) {
+                    $lock_description = "<ul>";
+                    if ($row->password_lock) {
+                        $lock_description .= "<li>$langPassCode</li>";
+                        enable_password_bootbox();
+                        $class = ' class="password_protected"';
+                    }
+                    if ($row->ip_lock) {
+                        $lock_description .= "<li>$langIPUnlock</li>";
+                    }
+                    $lock_description .= "</ul>";
+                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
                 }
-                if ($row->ip_lock) {
-                    $lock_description .= "<li>$langIPUnlock</li>";
-                }
-                $lock_description .= "</ul>";
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
             }
 
             $title_temp = q($row->title);
@@ -5395,22 +5348,25 @@ function show_student_assignments() {
             }
             $tool_content .= "</td><td class='text-center'>";
 
+            $eportfolio_action_array = [];
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
-                $eportfolio_action_array = array();
                 foreach ($submission as $sub) {
                     if (isset($sub->group_id)) { // if is a group assignment
-                        $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] " .
+                        $tool_content .= "<div style='padding: 5px 0; font-size:9px;'>($m[groupsubmit] " .
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
 
-                        $eportfolio_action_array[] = array('title' => sprintf($langAddGroupWorkSubePortfolio, gid_to_name($sub->group_id)),
-                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=work_submission&amp;rid=".$sub->id,
-                                'icon' => 'fa-star');
+                        $eportfolio_action_title = sprintf($langAddGroupWorkSubePortfolio, gid_to_name($sub->group_id));
                     } else {
-                        $eportfolio_action_array[] = array('title' => $langAddResePortfolio,
-                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=work_submission&amp;rid=".$sub->id,
-                                'icon' => 'fa-star');
+                        $eportfolio_action_title = $langAddResePortfolio;
                     }
+                    $eportfolio_action_array[] = [
+                        'title' => $eportfolio_action_title,
+                        'url' => $urlAppend . "main/eportfolio/resources.php?token=" .
+                            token_generate('eportfolio' . $uid) .
+                            "&amp;action=add&amp;type=work_submission&amp;rid=" . $sub->id,
+                            'icon' => 'fa-star'
+                    ];
                     $tool_content .= "<i class='fa fa-check-square-o'></i><br>";
                 }
             } else {
@@ -5419,17 +5375,20 @@ function show_student_assignments() {
             $tool_content .= "</td><td width='30' align='center'>";
             foreach ($submission as $sub) {
                 $grade = submission_grade($sub->id);
-                if (!$grade) {
-                    $grade = "<div style='padding-bottom: 5px;padding-top:5px;'> - </div>";
+                $tool_content .= '<div>' . ($grade? $grade: '-') . '</div>';
+            }
+            $tool_content .= '</td>';
+
+            if (get_config('eportfolio_enable')) {
+                if ($eportfolio_action_array) {
+                    $tool_content .= "<td class='text-center'>" .
+                        action_button($eportfolio_action_array) . "</td>";
+                } else {
+                    $tool_content .= '<td>&nbsp;</td>';
                 }
-                $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;'>$grade</div>";
             }
 
-            if(get_config('eportfolio_enable') && !empty($submission)) {
-                $add_eportfolio_res_td = "<td class='option-btn-cell'>".
-                        action_button($eportfolio_action_array)."</td>";
-            }
-            $tool_content .= "</td>$add_eportfolio_res_td</tr>";
+            $tool_content .= "</tr>";
         }
         $tool_content .= "</tbody></table></div></div></div>";
     } else {
@@ -5525,7 +5484,7 @@ function show_assignments() {
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             </td>
                             <td class='text-center'>$num_submitted</td>
-                            <td class='text-center'>$num_ungraded</td>                            
+                            <td class='text-center'>$num_ungraded</td>
                             <td class='text-center' data-sort='$sort_date'>$deadline";
 
             if ($row->time > 0) {
@@ -5534,7 +5493,7 @@ function show_assignments() {
                 $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
            $tool_content .= "</td>
-              <td class='option-btn-cell'>" .
+              <td class='text-center'>" .
               action_button(array(
                     array('title' => $langEditChange,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",

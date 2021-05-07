@@ -21,30 +21,21 @@
 
 /**
  * display list of exercises
- * @global type $id
- * @global type $course_id
- * @global type $tool_content
- * @global type $urlServer
- * @global type $langComments
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoExercises
- * @global type $langExercices
- * @global type $course_code
  */
 function list_exercises() {
-    global $id, $course_id, $tool_content, $urlServer,
-    $langDescription, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices, $course_code;
-
+    global $id, $course_id, $tool_content, $urlServer, $langPassCode,
+            $langDescription, $langAddModulesButton, $langChoice, $langNoExercises,
+            $langExercices, $course_code;
 
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
-    $quizinfo = array();
+    $quizinfo = [];
     foreach ($result as $row) {
-        $quizinfo[] = array(
+        $quizinfo[] = [
             'id' => $row->id,
             'name' => $row->title,
             'comment' => $row->description,
-            'visibility' => $row->active);
+            'visibility' => $row->active,
+            'password_lock' => $row->password_lock];
     }
     if (count($quizinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
@@ -55,15 +46,20 @@ function list_exercises() {
                 "<th width='50%' class='text-left'>$langExercices</th>" .
                 "<th class='text-left'>$langDescription</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "</tr>";        
+                "</tr>";
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
                 $vis = 'not_visible';
             } else {
                 $vis = '';
             }
+            if ($entry['password_lock']) {
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
+            } else {
+                $exclamation_icon = '';
+            }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a>$exclamation_icon</td>";
             $tool_content .= "<td class='text-left'>" . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";            

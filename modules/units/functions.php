@@ -624,7 +624,7 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
  */
 function show_work($title, $comments, $resource_id, $work_id, $visibility) {
     global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_id, $course_code;
+    $langWasDeleted, $course_id, $course_code, $langPassCode;
 
     $title = q($title);
     $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
@@ -636,8 +636,19 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id'>";
-        $exlink = $link . "$title</a>";
+        if ($work->password_lock) {
+            $lock_description = "<ul>";
+            $lock_description .= "<li>$langPassCode</li>";
+            enable_password_bootbox();
+            $class = 'class="password_protected"';
+            $lock_description .= "</ul>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+        } else {
+            $class = $exclamation_icon = '';
+        }
+
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
+        $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
 
@@ -670,7 +681,8 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
  * @return string
  */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility) {
-    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $uid;
+    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
+        $langAttemptActive, $langAttemptPausedS;
 
     $title = q($title);
     $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
@@ -684,20 +696,50 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         }
     } else {
         $status = $exercise->active;
-        if (!$is_editor and ( !resource_access($exercise->active, $exercise->public))) {
+        if (!$is_editor and (!resource_access($exercise->active, $exercise->public))) {
             return '';
         }
-        // check if exercise is in `paused` state
-        $paused_exercises = Database::get()->querySingle("SELECT eurid, attempt "
-            . "FROM exercise_user_record "
-            . "WHERE eid = ?d AND uid = ?d "
-            . "AND attempt_status = ?d", $exercise_id, $uid, ATTEMPT_PAUSED);
-        if ($paused_exercises) {
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$paused_exercises->eurid&amp;unit=$id'>";
-        } else {
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+        $link_class = $exclamation_icon = '';
+        if ($exercise->password_lock) {
+            enable_password_bootbox();
+            $link_class = 'password_protected';
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
         }
-        $exlink = $link . "$title</a>";
+
+        // check if exercise is in "paused" or "running" state
+        $pending_label = $pending_class = '';
+        if ($uid) {
+            $paused_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                FROM exercise_user_record
+                WHERE eid = ?d AND uid = ?d AND
+                attempt_status = ?d",
+                $exercise_id, $uid, ATTEMPT_PAUSED);
+            if ($paused_attempt) {
+                $eurid = $paused_attempt->eurid;
+                $pending_class = 'paused_exercise';
+                $pending_label = "<span class='not_visible'>($langAttemptPausedS)</span>";
+            } elseif ($exercise->continue_time_limit) {
+                $incomplete_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                    FROM exercise_user_record
+                    WHERE eid = ?d AND uid = ?d AND
+                    attempt_status = ?d AND
+                    TIME_TO_SEC(TIMEDIFF(NOW(), record_end_date)) < ?d
+                    ORDER BY eurid DESC LIMIT 1",
+                    $exercise_id, $uid, ATTEMPT_ACTIVE, 60 * $exercise->continue_time_limit);
+                if ($incomplete_attempt) {
+                    $eurid = $incomplete_attempt->eurid;
+                    $pending_class = 'active_exercise';
+                    $pending_label = "<span class='not_visible'>($langAttemptActive)</span>";
+                }
+            }
+        }
+        if ($pending_class) {
+            enable_password_bootbox();
+            $link = "<a class='ex_settings $pending_class $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+        } else {
+            $link = "<a class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+        }
+        $exlink = $link . "$title</a> $exclamation_icon $pending_label";
         $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
@@ -1360,8 +1402,9 @@ function edit_res($resource_id) {
                 </div>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
-                </div>                
+                </div>
             </form>
         </div>";
     return $content;
 }
+

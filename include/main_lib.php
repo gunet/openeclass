@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.10.3');
+define('ECLASS_VERSION', '3.10.3-pre1');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -4172,5 +4172,41 @@ function checkSecondFactorChallenge(){
         return secondfaApp::checkChallenge($_SESSION['uid']);
     } else {
         return "";
+    }
+}
+
+
+/**
+ * @brief Enable display of bootbox password dialog for assignments and
+ *        exercises and warn about paused exercises
+ */
+function enable_password_bootbox() {
+    global $head_content, $langCancel, $langSubmit,
+        $langAssignmentPasswordModalTitle, $langExercisePasswordModalTitle,
+        $langTheFieldIsRequired, $langTemporarySaveNotice2,
+        $langContinueAttemptNotice, $langContinueAttempt;
+
+    static $enabled = false;
+
+    if ($enabled) {
+        return;
+    } else {
+        $enabled = true;
+        $head_content .= "
+        <script>
+            var lang = {
+                assignmentPasswordModalTitle: '" . js_escape($langAssignmentPasswordModalTitle). "',
+                exercisePasswordModalTitle: '" . js_escape($langExercisePasswordModalTitle). "',
+                theFieldIsRequired: '" . js_escape($langTheFieldIsRequired). "',
+                temporarySaveNotice: '" . js_escape($langTemporarySaveNotice2). "',
+                continueAttemptNotice: '" . js_escape($langContinueAttemptNotice). "',
+                continueAttempt: '" . js_escape($langContinueAttempt). "',
+                cancel: '" . js_escape($langCancel). "',
+                submit: '" . js_escape($langSubmit). "',
+            };
+            $(function () {
+                $(document).on('click', '.ex_settings, .password_protected', unit_password_bootbox);
+            });
+        </script>";
     }
 }
