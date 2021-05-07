@@ -595,9 +595,18 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $head_content .= "
         <script>
         $(function() {
-            $('#help-btn').click(function(e) {
+            $('#help-btn').click(function(e) {                
                 e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
+                $.get($(this).attr(\"href\"), function(data) {
+                    bootbox.alert({
+                        message: data,
+                        buttons: {
+                            ok: {
+                                label: '". js_escape($GLOBALS['langClose']). "'
+                            }
+                        }
+                    });
+                });
             });
         });
         </script>
