@@ -742,8 +742,8 @@ else {
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langGuestLoginLabel:</label>
                             <div class='col-sm-9'>" .
-                                selection(array('off' => $m['deactivate'],
-                                                'on' => $m['activate'],
+                                selection(array('off' => $langDeactivate,
+                                                'on' => $langActivate,
                                                 'link' => $langGuestLoginLinks),
                                     'course_guest',
                                     get_config('course_guest', 'on'),

@@ -4389,7 +4389,7 @@ EOF;*/
  */
 function assignment_details($id, $row, $x =false) {
     global $tool_content, $head_content, $is_editor, $course_code, $m, $langDaysLeft, $course_id, $uid,
-           $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
+           $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags, $langNoDeadline,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
            $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail, $urlServer,
            $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine,
@@ -4530,7 +4530,7 @@ function assignment_details($id, $row, $x =false) {
             )
         ));
     }
-    $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
+    $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $langNoDeadline;
     if ($row->time > 0) {
         $deadline_notice = "<br><span>($langDaysLeft " . format_time_duration($row->time) . ")</span>";
     } elseif ((int)$row->deadline) {
@@ -5238,30 +5238,13 @@ function show_non_submitted($id) {
 
 /**
  * @brief display all assignments - student view only
- * @global type $tool_content
- * @global type $m
- * @global type $uid
- * @global type $course_id
- * @global type $course_code
- * @global type $urlServer
- * @global type $langDaysLeft
- * @global type $langNoAssign
- * @global type $course_code
- * @global type $langTitle
- * @global type $langHasExpiredS
- * @global type $langGradebookGrade
- * @global type $langAddResePortfolio
- * @global type $langAddGroupWorkSubePortfolio
- * @global type $langPasswordUnlock
- * @global type $langIPUnlock
  */
 function show_student_assignments() {
     global $tool_content, $m, $uid, $course_id, $urlAppend, $langGroupWorkDeadline_of_Submission,
-        $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code,
+        $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code, $langNoDeadline,
         $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio,
-        $langGradebookGrade, $langPassCode, $langIPUnlock;
+        $langGradebookGrade, $langPassCode, $langIPUnlock, $langWillStartAt;
 
-    $add_eportfolio_res_td = "";
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -5311,6 +5294,7 @@ function show_student_assignments() {
         foreach ($result as $row) {
             $exclamation_icon = '';
             $class = '';
+            $not_started = false;
 
             if (!isset($_REQUEST['unit'])) {
                 if ($row->password_lock or $row->ip_lock) {
@@ -5333,18 +5317,32 @@ function show_student_assignments() {
                 $deadline = nice_format($row->deadline, true);
                 $sort_date = $row->deadline;
             } else {
-                $deadline = $m['no_deadline'];
+                $deadline = $langNoDeadline;
                 $sort_date = '';
             }
+            if (strtotime(date("d-m-Y H:i:s")) < strtotime($row->submission_date)) { // assignment not starting yet
+                $not_started = true;
+            }
 
-            $tool_content .= "<tr>
-                                <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>
-                                    $exclamation_icon</td>
+            if ($not_started) {
+                $deadline = '';
+                $class_not_started = 'not_visible';
+                $link = "$title_temp";
+            } else {
+                $class_not_started = '';
+                $link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>$exclamation_icon";
+            }
+
+            $tool_content .= "<tr class='$class_not_started'>
+                                <td>$link</td>
                                 <td class='text-center' data-sort='$sort_date'>" . $deadline ;
-            if ($row->time > 0) {
+
+            if ($not_started) {
+                $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . nice_format($row->submission_date, true). "</span></small>";
+            } else if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
-            } else if($row->deadline) {
-                $tool_content .= "<br> (<small><span class='text-danger'>$langHasExpiredS</span></small>)";
+            }   else if($row->deadline) {
+                $tool_content .= "<br>(<small><span class='text-danger'>$langHasExpiredS</span></small>)";
             }
             $tool_content .= "</td><td class='text-center'>";
 
@@ -5402,9 +5400,10 @@ function show_student_assignments() {
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign,
         $langNewAssign, $course_code, $course_id, $langWorksDelConfirm,
-        $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions,
-        $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics,
-        $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission;
+        $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions, $langNoDeadline,
+        $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics, $langWillStartAt,
+        $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission,
+        $langActivate, $langDeactivate;
 
         // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
@@ -5445,6 +5444,7 @@ function show_assignments() {
                     <tbody>";
         $index = 0;
         foreach ($result as $row) {
+            $not_started = false;
             $exclamation_icon = '';
             if ($row->password_lock or $row->ip_lock) {
                 $lock_description = "<ul>";
@@ -5471,23 +5471,31 @@ function show_assignments() {
                 }
             }
 
-            $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
-            $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
             if (isset($row->deadline)) {
+                $deadline = nice_format($row->deadline, true);
                 $sort_date = $row->deadline;
             } else {
+                $deadline = $langNoDeadline;
                 $sort_date = '';
             }
-            $tool_content .= "<td>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+            if (strtotime(date("d-m-Y H:i:s")) < strtotime($row->submission_date)) { // assignment not starting yet
+                $not_started = true;
+            }
+            if ($not_started) {
+                $deadline = '';
+            }
+
+            $tool_content .= "<tr class='".((!$row->active or $not_started)? "not_visible":"")."'>";
+            $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 $exclamation_icon
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
-                            </td>
                             <td class='text-center'>$num_submitted</td>
                             <td class='text-center'>$num_ungraded</td>
                             <td class='text-center' data-sort='$sort_date'>$deadline";
 
-            if ($row->time > 0) {
+            if ($not_started) {
+                $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . nice_format($row->submission_date, true). "</span></small>";
+            } else if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
             } else if (intval($row->deadline)) {
                 $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
@@ -5499,7 +5507,7 @@ function show_assignments() {
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
 
-                    array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
+                    array('title' => $row->active == 1 ? $langDeactivate: $langActivate,
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
                           'icon' => $row->active == 1 ? 'fa-eye-slash': 'fa-eye'),
                     array('title' => $m['WorkSubsDelete'],
