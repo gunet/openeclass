@@ -31,25 +31,6 @@ if (!isset($_SESSION['uid'])) {
     exit;
 }
 
-if ($_SESSION['status'] == USER_TEACHER) {
-    $extra = 'AND (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')';
-} else {
-    $extra = '';
-}
-
-$result2 = Database::get()->queryArray("SELECT course.id cid, course.code code, course.public_code,
-                        course.title title, course.prof_names profs, course_user.status status
-                FROM course JOIN course_user ON course.id = course_user.course_id
-                WHERE course_user.user_id = ?d $extra ORDER BY status, course.title, course.id", $uid);
-
-$courses = array();
-if (count($result2) > 0) {
-    foreach ($result2 as $mycours) {
-        $courses[$mycours->code] = $mycours->status;
-    }
-}
-$_SESSION['courses'] = $courses;
-
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
 
@@ -79,4 +60,3 @@ $perso_tool_content = array(
     'lessons_content' => $user_lesson_info,
     'personal_calendar_content' => $user_personal_calendar
 );
-

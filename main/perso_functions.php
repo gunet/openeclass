@@ -44,41 +44,35 @@ require_once 'modules/message/class.msg.php';
  */
 function getUserLessonInfo($uid) {
     global $teacher_courses_count, $student_courses_count, $langCourse, $langActions;
-    global $session, $lesson_ids, $urlServer, $langUnregCourse, $langAdm;
+    global $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm;
     global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 
+    $ordering = ($session->status == USER_TEACHER)?
+        'course_user.status, course.visible, course.created DESC':
+        'course.title, course.prof_names';
     $lesson_content = '';
     $lesson_ids = array();
-    if ($session->status == USER_TEACHER) {
-        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.lang,
-                             course.visible,
-                             course_user.status status
-                       FROM course, course_user, user
-                       WHERE course.id = course_user.course_id AND
-                             course_user.user_id = ?d AND
-                             user.id = ?d
-                       ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
-    } else {
-        $myCourses = Database::get()->queryArray('SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.lang,
-                             course.visible,
-                             course_user.status status
-                       FROM course, course_user, user
-                       WHERE course.id = course_user.course_id AND
-                             course_user.user_id = ?d AND
-                             user.id = ?d AND
-                             (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
-                       ORDER BY course.title, course.prof_names', $uid, $uid);
+    $myCourses = Database::get()->queryArray('SELECT course.id course_id,
+                         course.code code,
+                         course.public_code,
+                         course.title title,
+                         course.prof_names professor,
+                         course.lang,
+                         course.visible,
+                         course_user.status status
+                   FROM course, course_user
+                   WHERE course.id = course_user.course_id AND
+                         course_user.user_id = ?d AND
+                         (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
+                   ORDER BY ' . $ordering, $uid, $uid);
+
+    $courses = [];
+    if ($myCourses) {
+        foreach ($myCourses as $myCourse) {
+            $courses[$myCourse->code] = $myCourse->status;
+        }
     }
+    $_SESSION['courses'] = $courses;
 
     //getting user's lesson info
     $teacher_courses_count = 0;
