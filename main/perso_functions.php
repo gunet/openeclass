@@ -64,7 +64,7 @@ function getUserLessonInfo($uid) {
                    WHERE course.id = course_user.course_id AND
                          course_user.user_id = ?d AND
                          (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
-                   ORDER BY ' . $ordering, $uid, $uid);
+                   ORDER BY ' . $ordering, $uid);
 
     $courses = [];
     if ($myCourses) {
