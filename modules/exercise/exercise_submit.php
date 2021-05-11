@@ -797,9 +797,18 @@ if (!$attempt && !$is_editor) {
 if ($questionList) {
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     // Enable check for unanswered questions when displaying more than one question
+    if ($exerciseType == ONE_WAY_TYPE) {
+        $checkSinglePage = 'true';
+        $answeredIds = [];
+        $unansweredIds = [$questionNumber];
+    } else {
+        $checkSinglePage = 'false';
+    }
     $head_content .= "<script type='text/javascript'>
+        var langHasAnswered = '". js_escape($langHasAnswered) ."';
         $(function () {
             exercise_init_countdown({
+                checkSinglePage: $checkSinglePage,
                 warning: '". js_escape($langLeaveExerciseWarning) ."',
                 unansweredQuestions: '". js_escape($langUnansweredQuestions) ."',
                 oneUnanswered: '". js_escape($langUnansweredQuestionsWarningOne) ."',
