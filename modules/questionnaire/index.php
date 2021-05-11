@@ -107,19 +107,23 @@ if ($is_editor) {
         //clone poll
         } elseif (isset($_POST['clone_to_course_id'])) {
             $clone_course_id = $_POST['clone_to_course_id'];
-            $my_courses = Database::get()->queryArray("SELECT course_id FROM course_user WHERE user_id = ?d AND status = 1", $uid);
-            $ok = false;
-            foreach ($my_courses as $row) {
-                if ($row->course_id == $clone_course_id) {
-                    $ok = true;
-                    continue;
-                }
+            if ($is_admin) {
+                $ok = true;
+            } else {
+                $ok = Database::get()->querySingle("SELECT course_id FROM course_user
+                    WHERE user_id = ?d AND course_id = ?d AND
+                          (status = ?d OR editor = 1)",
+                    $uid, $clone_course_id, USER_TEACHER);
             }
-            if ($ok || $is_course_admin) {
+            if ($ok) {
                 $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
                 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
 
-                if ($clone_course_id == $course_id) $poll->name .= " ($langCopy2)";
+                if ($clone_course_id == $course_id) {
+                    $poll->name .= " ($langCopy2)";
+                } else {
+                    $clone_course = Database::get()->querySingle('SELECT title, code FROM course WHERE id = ?d', $clone_course_id);
+                }
                 $poll_data = array(
                     $poll->creator_id,
                     $clone_course_id,
@@ -161,7 +165,14 @@ if ($is_editor) {
                                                     answer_text = ?s", $new_pqid, $answer->answer_text);
                     }
                 }
-                Session::Messages($langCopySuccess, 'alert-success');
+                $message = $langCopySuccess;
+                if (isset($clone_course)) {
+                    $clone_code = q($clone_course->code);
+                    $message .= "<br><a href='{$urlAppend}modules/questionnaire/?course=$clone_code'>$langShow</a>";
+                } else {
+                    $show_link = '';
+                }
+                Session::Messages($message, 'alert-success');
             }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }
@@ -221,7 +232,7 @@ draw($tool_content, 2, null, $head_content);
  * @global type $langdate
  */
 function printPolls() {
-    global $tool_content, $course_id, $course_code,
+    global $tool_content, $course_id, $course_code, $urlAppend,
         $langTitle, $langCancel, $langOpenParticipation,
         $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
         $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
@@ -230,42 +241,6 @@ function printPolls() {
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
         $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate;
-
-    $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
-    $courses_options = "";
-    foreach ($my_courses as $row) {
-        $courses_options .= "'<option value=\"$row->Course_id\">".q($row->Title)."</option>'+";
-    }
-    $head_content .= "
-    <script>
-        $(document).on('click', '.warnLink', function() {
-            var pid = $(this).data('pid');
-            bootbox.dialog({
-                title: '$langCreateDuplicateIn',
-                message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_form\">'+
-                            '<select class=\"form-control\" id=\"course_id\" name=\"clone_to_course_id\">'+
-                                '<option value=\"$course_id\">--- $langCurrentCourse ---</option>'+
-                                $courses_options
-                            '</select>'+
-                          '</form>',
-                    buttons: {
-                        success: {
-                            label: '$langCreateDuplicate',
-                            className: 'btn-success',
-                            callback: function (d) {
-                                $('#clone_form').attr('action', '$_SERVER[SCRIPT_NAME]?pid=' + pid);
-                                $('#clone_form').submit();
-                            }
-                        },
-                        cancel: {
-                            label: '$langCancel',
-                            className: 'btn-default'
-                        }
-                    }
-            });
-        });
-    </script>
-    ";
 
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
@@ -417,7 +392,6 @@ function printPolls() {
                             'icon' => 'fa-copy',
                             'icon-class' => 'warnLink',
                             'icon-extra' => "data-pid='$pid'",
-                            'url' => "#",
                             'show' => $thepoll->type == POLL_NORMAL
                         ),
                         array(
@@ -454,6 +428,61 @@ function printPolls() {
                 }
             }
         }
-        $tool_content .= "</table></div></div></div>";
+        $tool_content .= "</table></div></div></div>
+
+            <div class='modal fade' tabindex='-1' role='dialog' id='cloneModal'>
+              <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                  <form action='$_SERVER[SCRIPT_NAME]' method='POST' id='clone_form'>
+                    <div class='modal-header'>
+                      <button type='button' class='close' data-dismiss='modal' aria-label='$langCancel'><span aria-hidden='true'>&times;</span></button>
+                      <h4 class='modal-title'>$langCreateDuplicateIn</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <div class='form-group'>
+                          <select class='form-control' id='course_id' name='clone_to_course_id'>
+                            <option value='$course_id' selected>--- $langCurrentCourse ---</option>
+                          </select>
+                        </div>
+                    </div>
+                    <div class='modal-footer'>
+                      <button type='button' class='btn btn-default' data-dismiss='modal'>$langCancel</button>
+                      <button type='submit' class='btn btn-success'>$langCreateDuplicate</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <script>
+              $(function () {
+                $(document).on('click', '.warnLink', function(e) {
+                    var pid = $(this).data('pid');
+                    $('#clone_form').attr('action', '" . js_escape($_SERVER['SCRIPT_NAME']) . "?pid=' + pid);
+                    $('#cloneModal').modal('show').on('hide.bs.modal', function () {
+                      if ($('#course_id').hasClass('select2-hidden-accessible')) {
+                        $('#course_id').select2('destroy');
+                      }
+                    });
+                    $('#course_id').select2({
+                      width: '100%',
+                      selectOnClose: true,
+                      dropdownParent: $('#cloneModal'),
+                      ajax: {
+                        url: '" . js_escape($urlAppend . 'main/coursefeed.php') .  "',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                          return {
+                            term: params.term,
+                            page: params.page || 1
+                          };
+                        }
+                      }
+                    });
+                    e.preventDefault();
+                });
+              });
+            </script>";
+        load_js('select2');
     }
 }
