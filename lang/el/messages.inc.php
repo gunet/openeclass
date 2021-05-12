@@ -3030,8 +3030,8 @@ $langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχε�
 $langSurveyCharts = "Αποτελέσματα έρευνας";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
 $langOpenParticipation = "Οι συμμετοχές είναι ανοικτές";
-$langSurveyNotStarted = "Δεν έχει ανοίξει ακόμα";
-$langQQuestionNotGiven = "Δεν έχετε εισαγάγει την τελευταία ερώτηση.";
+$langSurveyNotStarted = "Δεν έχει ξεκινήσει";
+$langQQuestionNotGiven = "Δεν έχετε εισάγει την τελευταία ερώτηση.";
 $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
 $langCreateDuplicate = "Δημιουργία Αντιγράφου";
 $langCopy2 = "Αντίγραφο";
@@ -3183,7 +3183,7 @@ $langPollInactive = "Το Ερωτηματολόγιο έχει λήξει ή δ
 $langPollCharts = "Αποτελέσματα Ερωτηματολογίου";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
 $langPollAnonymize = "Ανωνυμοποίηση αποτελεσμάτων";
-$langPollShowResults = "Εμφάνιση αποτελεσμάτων στους συμμετέχοντες";
+$langPollShowResults = "Εμφάνιση αποτελεσμάτων στους $langsOfStudentss";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
@@ -3199,7 +3199,10 @@ $langPollParticipateConfirm = "Κάντε κλικ στον παρακάτω σ�
 $langPollEmailUsed = 'περιέχει ένα λογαριασμό που έχει χρησιμοποιηθεί για την απάντηση του ερωτηματολογίου';
 $langPollParticipateConfirmation = "Επιβεβαίωση Συμμετοχής σε Ερωτηματολόγιο";
 $langPollParticipationValid = "Οι απαντήσεις σας καταγράφηκαν με επιτυχία.";
+$langActivateMulSubmissions = "Ενεργοποίηση πολλαπλών υποβολών από τους $langsOfStudentss";
+$langActivateDefaultAnswer = "Ενεργοποίηση απάντησης 'δεν ξέρω / δεν απαντώ'";
 $langPollOutcomeClose = "Μπορείτε να κλείσετε αυτό το παράθυρο ή να επιστρέψετε στην προηγούμενη σελίδα.";
+
 
 /* * **********************************************************
  * registration.php

@@ -49,7 +49,7 @@ if (!isset($_REQUEST['UseCase'])) {
     $_REQUEST['UseCase'] = "";
 }
 if (!isset($_REQUEST['pid'])) {
-    die();
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
 $query = "SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d";
@@ -101,22 +101,6 @@ draw($tool_content, 2, null, $head_content);
 
 /**
  * @brief display poll form
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $langSubmit
- * @global type $langPollInactive
- * @global type $langPollUnknown
- * @global type $uid
- * @global type $langPollAlreadyParticipated
- * @global type $is_editor
- * @global type $langBack
- * @global type $langQuestion
- * @global type $langCancel
- * @global type $langCollesLegend
- * @global type $head_content
- * @global type $pageName
- * @global type $langPollParticipantInfo
  */
 function printPollForm() {
     global $course_id, $course_code, $tool_content,
@@ -160,9 +144,12 @@ function printPollForm() {
 
     $pid = $_REQUEST['pid'];
 
+    // Get poll data
+    $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+    $multiple_submissions = $thePoll->multiple_submissions;
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
-    if ($uid && $has_participated > 0 && !$is_editor){
+    if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
         Session::Messages($langPollAlreadyParticipated);
         if (isset($_REQUEST['unit_id'])) {
             redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $_REQUEST['unit_id']);
@@ -172,12 +159,7 @@ function printPollForm() {
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }
     }
-    // *****************************************************************************
-    //      Get poll data
-    //******************************************************************************/
 
-    $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d "
-            . "ORDER BY pid",$course_id, $pid);
     $temp_CurrentDate = date("Y-m-d H:i");
     $temp_StartDate = $thePoll->start_date;
     $temp_EndDate = $thePoll->end_date;
@@ -262,7 +244,7 @@ function printPollForm() {
             }
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
-            if($qtype==QTYPE_LABEL) {
+            if ($qtype == QTYPE_LABEL) {
                 $tool_content .= "
                     <div class='alert alert-info' role='alert'>
                         <strong>" . standard_text_escape($theQuestion->question_text) . "</strong>
@@ -277,18 +259,45 @@ function printPollForm() {
                             <h5>".q_math($theQuestion->question_text)."</h5>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
-                    $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
-                    $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+                    if ($multiple_submissions) { // get user answers (if any)
+                        $user_answers = Database::get()->queryArray("SELECT a.aid
+                                FROM poll_user_record b, poll_answer_record a 
+                                LEFT JOIN poll_question_answer c
+                                    ON a.aid = c.pqaid
+                                WHERE a.poll_user_record_id = b.id                                  
+                                    AND a.qid = ?d
+                                    AND b.uid = ?d", $pqid, $uid);
+                    }
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                                 WHERE pqid = ?d ORDER BY pqaid", $pqid);
-                    if ($qtype == QTYPE_MULTIPLE) $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
+                    $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
+                    $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+                    if ($qtype == QTYPE_MULTIPLE) {
+                        $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
+                    }
                     foreach ($answers as $theAnswer) {
+                            $checked = '';
+                        if ($multiple_submissions) {
+                            if (count($user_answers) > 1) { // multiple answers
+                                foreach ($user_answers as $ua) {
+                                    if ($ua->aid == $theAnswer->pqaid) {
+                                        $checked = 'checked';
+                                    }
+                                }
+                            } else {
+                                if (count($user_answers) == 1) { // single answer
+                                    if ($user_answers[0]->aid == $theAnswer->pqaid) {
+                                        $checked = 'checked';
+                                    }
+                                }
+                            }
+                        }
                         $tool_content .= "
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
                                     <label>
-                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid'>".q_math($theAnswer->answer_text)."
+                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>".q_math($theAnswer->answer_text)."
                                     </label>
                                 </div>
                             </div>
@@ -300,27 +309,49 @@ function printPollForm() {
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
                                     <label>
-                                        <input type='$type_attr' name='answer[$pqid]' value='-1' checked>$langPollUnknown
+                                        <input type='$type_attr' name='answer[$pqid]' value='-1'>$langPollUnknown
                                     </label>
                                 </div>
                             </div>
                         </div>";
-
                     }
                 } elseif ($qtype == QTYPE_SCALE) {
-                    if (($pollType == 1) or ($pollType == 2)) {
+                    $slider_value = 1;
+                    if ($multiple_submissions) { // get user answers (if any)
+                        $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                                            FROM poll_answer_record a, poll_user_record b
+                                        WHERE qid = ?d
+                                            AND a.poll_user_record_id = b.id
+                                            AND b.uid = ?d", $pqid, $uid);
+                        if ($user_answers) {
+                            $slider_value = $user_answers->answer_text;
+                        }
+                    }
+
+                    if (($pollType == POLL_COLLES) or ($pollType == POLL_ATTLS)) {
                         $tool_content .= "<div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>";
                     }
                     $tool_content .= "<div class='form-group'>
                         <div class='col-xs-offset-1 col-sm-10' style='padding: 15px;'>
-                            <input style='width: 80%' name='answer[$pqid]' class='grade_bar' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
+                            <input style='width: 80%' name='answer[$pqid]' class='grade_bar' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='$slider_value'>
                         </div>
                     </div>";
                 } elseif ($qtype == QTYPE_FILL) {
+                    $text = '';
+                    if ($multiple_submissions) { // get user answers (if any)
+                        $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                                            FROM poll_answer_record a, poll_user_record b
+                                        WHERE qid = ?d
+                                            AND a.poll_user_record_id = b.id
+                                            AND b.uid = ?d", $pqid, $uid);
+                        if ($user_answers) {
+                            $text = $user_answers->answer_text;
+                        }
+                    }
                     $tool_content .= "
                         <div class='form-group margin-bottom-fat'>
                             <div class='col-sm-12 margin-top-thin'>
-                                <textarea class='form-control' name='answer[$pqid]'></textarea>
+                                <textarea class='form-control' name='answer[$pqid]'>$text</textarea>
                             </div>
                         </div>";
                 }
@@ -334,6 +365,10 @@ function printPollForm() {
         if ($temp_IsLime) {
             show_limesurvey_integration($thePoll);
         }
+        if ($multiple_submissions) {
+            $tool_content .= "<input type='hidden' value='1' name='update'>";
+        }
+
         $tool_content .= "<div class='text-center'>";
         if ($is_editor) {
             $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langBack). "</a>";
@@ -357,6 +392,10 @@ function printPollForm() {
     }
 }
 
+/**
+ * @brief limesurvey integration
+ * @param $thePoll
+ */
 function show_limesurvey_integration($thePoll) {
     global $tool_content, $course_id, $course_code, $langLimesurveyIntegration, $urlAppend, $uid;
 
@@ -423,6 +462,10 @@ function submitPoll() {
             $eventData->resource = intval($pid);
             ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 
+            if (isset($_REQUEST['update'])) { // if poll has enabled multiple submissions first delete the previous answers
+                Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d)", $uid);
+                Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d", $uid);
+            }
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
             require_once 'include/sendMail.inc.php';
