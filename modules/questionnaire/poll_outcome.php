@@ -44,7 +44,7 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0 && $uid) {
 
     if ($launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
         echo "<p>".$langPollSubmitted."</p>";
-        echo "<p>".$langPollSubmitted."</p>";
+        echo "<p>".$langPollNoQuestions."</p>";
     } else {
         Session::Messages($langPollSubmitted);
         redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
