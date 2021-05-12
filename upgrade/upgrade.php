@@ -2245,6 +2245,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `created` int(11) NOT NULL,
                 `updated` int(11) NOT NULL) $tbl_options");
         }
+
+        if (!DBHelper::fieldExists('poll', 'multiple_submissions')) {
+            Database::get()->query("ALTER TABLE poll ADD multiple_submissions TINYINT NOT NULL DEFAULT '0'");
+        }
+
+        if (!DBHelper::fieldExists('poll', 'default_answer')) {
+            Database::get()->query("ALTER TABLE poll ADD default_answer TINYINT NOT NULL DEFAULT '0'");
+        }
+
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!

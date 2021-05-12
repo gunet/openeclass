@@ -4285,7 +4285,6 @@ $langGroupWorkIntro = "
 	δεν μπορείτε να στείλετε αρχείο σε εργασία που έχει ήδη βαθμολογηθεί
 	από τον διδάσκοντα.";
 $langAssignmentPasswordModalTitle = "Παρακαλώ πληκτρολογήστε τον κωδικό της εργασίας";
-$langWillStartAt = 'έναρξη στις';
 $langGroupWorkSubmitted = "Έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία υποβολής";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";

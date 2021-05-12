@@ -184,41 +184,6 @@ draw($tool_content, 2, null, $head_content);
 
 /**
  * @brief print polls
- * @global type $tool_content
- * @global type $course_id
- * @global type $course_code
- * @global type $langTitle
- * @global type $langCancel
- * @global type $langOpenParticipation
- * @global type $langHasExpired
- * @global type $langPollStart
- * @global type $langPollEnd
- * @global type $langPollNone
- * @global type $is_editor
- * @global type $langAnswers
- * @global type $langEditChange
- * @global type $langDelete
- * @global type $langSurveyNotStarted
- * @global type $langResourceAccessLock
- * @global type $langDeactivate
- * @global type $langHasExpired
- * @global type $langActivate
- * @global type $langResourceAccessUnlock
- * @global type $langParticipate
- * @global type $langHasParticipated
- * @global type $langSee
- * @global type $langHasNotParticipated
- * @global type $uid
- * @global type $langConfirmDelete
- * @global type $langPurgeExercises
- * @global type $langPurgeExercises
- * @global type $langConfirmPurgeExercises
- * @global type $langCreateDuplicate
- * @global type $head_content
- * @global type $langCreateDuplicateIn
- * @global type $langCurrentCourse
- * @global type $langUsage
- * @global type $langdate
  */
 function printPolls() {
     global $tool_content, $course_id, $course_code,
@@ -229,7 +194,8 @@ function printPolls() {
         $langParticipate,  $langHasParticipated, $langSee,
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
-        $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate;
+        $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate;
+
 
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -284,6 +250,7 @@ function printPolls() {
                     )";
         $query_params[] = $uid;
     }
+    $query .= " ORDER BY start_date DESC";
 
     $result = Database::get()->queryArray($query, $query_params);
 
@@ -319,17 +286,12 @@ function printPolls() {
             if (($visibility) or ($is_editor)) {
                 if ($visibility) {
                     $visibility_css = "";
-                    $visibility_gif = "fa-eye";
                     $visibility_func = "deactivate";
-                    $arrow_png = "arrow";
-                    $k++;
                 } else {
                     $visibility_css = " class=\"not_visible\"";
-                    $visibility_gif = "fa-eye-slash";
                     $visibility_func = "activate";
-                    $arrow_png = "arrow";
-                    $k++;
                 }
+                $k++;
                 $tool_content .= "<tr $visibility_css>";
 
                 $temp_CurrentDate = date("Y-m-d H:i");
@@ -338,15 +300,13 @@ function printPolls() {
                 $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
                 $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
                 $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
-                $creator_id = $thepoll->creator_id;
-                $theCreator = uid_to_name($creator_id);
                 $pid = $thepoll->pid;
                 $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
                 // check if user has participated
                 $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_user_record
                         WHERE uid = ?d AND pid = ?d", $uid, $pid)->counter;
 
-                // check if poll has ended OR not strarted yet
+                // check if poll has ended OR not started yet
                 $poll_ended = 0;
                 $poll_not_started = 0;
                 if($temp_CurrentDate < $temp_StartDate) {
@@ -361,13 +321,16 @@ function printPolls() {
                     if (!$thepoll->public) {
                         $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
                     }
-                    $tool_content .= "
-                        <a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon";
+                    $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon";
                 } else {
-                    if ($uid == 0 || $has_participated == 0 && $poll_ended == 0) {
-                        $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
-                    } else {
+                    if  ($poll_ended == 1 || $poll_not_started == 1) { // poll out of date
                         $tool_content .= q($thepoll->name);
+                    } else {
+                        if ($uid == 0 || $has_participated == 0 || $thepoll->multiple_submissions) {
+                            $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>" . q($thepoll->name) . "</a>";
+                        } else {
+                            $tool_content .= q($thepoll->name);
+                        }
                     }
                 }
 
