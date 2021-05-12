@@ -24,16 +24,34 @@
   ============================================================================
  */
 
-ini_set('log_errors_max_len', 0);
-set_time_limit(0);
+require_once '../../include/baseTheme.php';
+require_once 'modules/lti_consumer/lti-functions.php';
 
-error_log("=== received a poll outcome services request ===");
+$course_id = null;
+$course_code = null;
 
-// receive xml data
-$data = file_get_contents('php://input');
+if (isset($_GET['id']) && intval($_GET['id']) > 0 && $uid) {
+    $pid = intval($_GET['id']);
+    // check if already participated
+    $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->counter;
+    if ($has_participated == 0) {
+        Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid);
+    }
+    $launchcontainer = Database::get()->querySingle("SELECT launchcontainer FROM poll WHERE pid = ?d", $pid)->launchcontainer;
 
-echo "hello";
-var_dump($data);
-error_log("poll outcome data: " . print_r($data, true));
-echo "bye";
+    $course_id = $_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$pid.'_COURSE_ID'];
+    $course_code = $_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$pid.'_COURSE_CODE'];
+
+    if ($launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
+        echo "<p>".$langPollSubmitted."</p>";
+        echo "<p>".$langPollSubmitted."</p>";
+    } else {
+        Session::Messages($langPollSubmitted);
+        redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+    }
+
+    unset($_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$pid.'_COURSE_ID']);
+    unset($_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$pid.'_COURSE_CODE']);
+}
+
 die();

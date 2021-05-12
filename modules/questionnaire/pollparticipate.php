@@ -358,9 +358,11 @@ function printPollForm() {
 }
 
 function show_limesurvey_integration($thePoll) {
-    global $tool_content, $course_code, $langLimesurveyIntegration, $urlAppend;
+    global $tool_content, $course_id, $course_code, $langLimesurveyIntegration, $urlAppend, $uid;
 
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $thePoll->lti_template);
+    $_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$thePoll->pid.'_COURSE_ID'] = $course_id;
+    $_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$thePoll->pid.'_COURSE_CODE'] = $course_code;
 
     if ($thePoll->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
         $tool_content .= '<iframe id="contentframe"

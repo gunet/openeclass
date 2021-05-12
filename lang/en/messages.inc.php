@@ -1488,6 +1488,7 @@ $langPollDeleted = "Questionnaire deleted successfully.";
 $langPollDeactivated = "Questionnaire deactivated successfully.";
 $langPollActivated = "Questionnaire activated successfully!";
 $langPollSubmitted = "Thank you for your participation!";
+$langPollOutcomeClose = "You may close this window or return to the previous page.";
 $langPollTotalAnswers = "Total number of answers";
 $langPollNone = "There are no Questionnaires for the current course.";
 $langPollInactive = "<p class='caution'>The Questionnaire has expired or is not active yet.</p>";
