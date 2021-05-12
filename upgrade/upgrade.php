@@ -2021,7 +2021,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('tc_session', 'options')) {
             Database::get()->query("ALTER TABLE `tc_session` ADD `options` TEXT DEFAULT NULL");
         }
+    }
 
+    // upgrade queries for version 3.11
+    if (version_compare($oldversion, '3.11', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.11'));
         if (!DBHelper::fieldExists('poll', 'lti_template')) {
             Database::get()->query("ALTER TABLE poll ADD lti_template INT(11) DEFAULT NULL AFTER assign_to_specific");
         }
