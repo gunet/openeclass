@@ -35,13 +35,14 @@ function table_row($title, $content, $html = false) {
     } else {
         $content = htmlspecialchars($content);
     }
+    $extra = $html? '': ' style="white-space: pre-wrap"';
     if (strlen(trim($content))) {
         $tool_content .= "
                         <div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$title:</strong>
                             </div>
-                            <div class='col-sm-9'>$content
+                            <div class='col-sm-9'$extra>$content
                             </div>
                         </div>";
     }
@@ -438,7 +439,7 @@ function show_submission_details($id) {
         } else {
             $file_comments_url = "{$urlAppend}modules/work/?course=$course_code&amp;getcomment=$sub->id";
         }
-        $file_comments_link = MultimediaHelper::chooseMediaAhrefRaw($file_comments_url, $file_comments_url, $sub->grade_comments_filename, $sub->grade_comments_filename);
+        $file_comments_link = '<br>' . MultimediaHelper::chooseMediaAhrefRaw($file_comments_url, $file_comments_url, $sub->grade_comments_filename, $sub->grade_comments_filename);
     } else {
         $file_comments_link = '';
     }
@@ -448,7 +449,7 @@ function show_submission_details($id) {
                     <div class='col-sm-3'>
                         <strong>" . $m['gradecomments'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . nl2br(q($sub->grade_comments)) . "&nbsp;&nbsp;$file_comments_link
+                    <div class='col-sm-9' style='white-space: pre-wrap'>" . q($sub->grade_comments) . $file_comments_link . "
                     </div>
                 </div>
                 <div class='row margin-bottom-fat'>
@@ -515,7 +516,7 @@ function show_submission_details($id) {
                     </div>";
     }
 
-    table_row($m['comments'], $sub->comments, true);
+    table_row($m['comments'], $sub->comments);
 
     $tool_content .= "</div></div>";
 }
@@ -605,17 +606,17 @@ function export_grades_to_csv($id) {
         $csv->outputRecord($q->title);
         $csv->outputRecord("$m[start_date]: $q->submission_date $deadline_message");
         $csv->outputRecord($langSurname, $langName, $m['sub_date'], $langAm, $langGroup, $langUsername, $langEmail, $langGradebookGrade);
-            $sql = Database::get()->queryArray("SELECT MAX(uid) AS uid, 
-                                                            CAST(MAX(grade) AS DECIMAL(10,2)) AS grade, 
-                                                            MAX(submission_date) AS submission_date, 
-                                                            MAX(surname) AS surname, 
-                                                            MAX(givenname) AS givenname, 
-                                                            username, 
-                                                            MAX(am) AS am, 
+            $sql = Database::get()->queryArray("SELECT MAX(uid) AS uid,
+                                                            CAST(MAX(grade) AS DECIMAL(10,2)) AS grade,
+                                                            MAX(submission_date) AS submission_date,
+                                                            MAX(surname) AS surname,
+                                                            MAX(givenname) AS givenname,
+                                                            username,
+                                                            MAX(am) AS am,
                                                             MAX(email) AS email
-                                                           FROM assignment_submit JOIN user 
+                                                           FROM assignment_submit JOIN user
                                                                ON uid = user.id
-                                                           WHERE assignment_id = ?d 
+                                                           WHERE assignment_id = ?d
                                                             GROUP BY username
                                                             ORDER BY surname, givenname", $assignment_id);
         foreach ($sql as $data) {
