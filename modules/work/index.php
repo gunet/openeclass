@@ -4174,7 +4174,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         }
     } elseif ($on_behalf_of) {
             $users_with_no_submissions = users_with_no_submissions($id);
-            if (count($users_with_no_submissions)>0) {
+            if (count($users_with_no_submissions) > 0) {
                 $group_select_form = "
                         <div class='form-group'>
                             <label for='user_id' class='col-sm-2 control-label'>$langOnBehalfOf:</label>
@@ -6219,9 +6219,14 @@ function users_with_no_submissions($id) {
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id
                                 AND course_user.course_id = ?d
-                                AND course_user.status = " .USER_STUDENT . "
+                                AND course_user.status = " . USER_STUDENT . "
                                 AND user.id NOT IN (SELECT uid FROM assignment_submit WHERE assignment_id = ?d)
-                                AND user.id IN (SELECT user_id FROM assignment_to_specific WHERE assignment_id = ?d) ORDER BY surname, givenname", $course_id, $id, $id);
+                                AND user.id IN (
+                                    SELECT user_id FROM assignment_to_specific WHERE assignment_id = ?d
+                                    UNION
+                                    SELECT group_members.user_id FROM assignment_to_specific, group_members
+                                        WHERE assignment_to_specific.group_id = group_members.group_id AND assignment_id = ?d)
+                                ORDER BY surname, givenname", $course_id, $id, $id, $id);
     } else {
         $q = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
