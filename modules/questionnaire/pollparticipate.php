@@ -82,7 +82,7 @@ if ($pollObj && $pollObj->type == POLL_LIMESURVEY) {
 // check poll validity
 $pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $_REQUEST['pid']);
 if(!$pq && !$pollIsLime) {
-    Session::messages($langPollNoQuestions);
+    Session::Messages($langPollNoQuestions);
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
@@ -147,6 +147,7 @@ function printPollForm() {
     // Get poll data
     $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
     $multiple_submissions = $thePoll->multiple_submissions;
+    $default_answer = $thePoll->default_answer;
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
     if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
@@ -303,7 +304,7 @@ function printPollForm() {
                             </div>
                         </div>";
                     }
-                    if ($qtype == QTYPE_SINGLE) {
+                    if ($qtype == QTYPE_SINGLE && $default_answer) {
                         $tool_content .= "
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>

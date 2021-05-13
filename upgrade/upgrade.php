@@ -2032,20 +2032,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('poll', 'launchcontainer')) {
             Database::get()->query("ALTER TABLE poll ADD launchcontainer TINYINT DEFAULT NULL AFTER lti_template");
         }
-
         if (!DBHelper::fieldExists('poll', 'multiple_submissions')) {
             Database::get()->query("ALTER TABLE poll ADD multiple_submissions TINYINT NOT NULL DEFAULT '0'");
         }
-
         if (!DBHelper::fieldExists('poll', 'default_answer')) {
             Database::get()->query("ALTER TABLE poll ADD default_answer TINYINT NOT NULL DEFAULT '0'");
+            Database::get()->query("UPDATE poll SET default_answer = 1"); // set value for previous polls
         }
-
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
-
+    // create appropriate indices
     create_indexes();
 
     // Import new themes
