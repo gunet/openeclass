@@ -112,6 +112,7 @@ if (!$thePoll) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 $PollType = $thePoll->type;
+$default_answer = $thePoll->default_answer;
 if (!$is_editor && !$thePoll->show_results) {
     Session::Messages($langPollResultsAccess);
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
@@ -198,7 +199,7 @@ $export_box
 
 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
 $j=1;
-$chart_data = array();
+$chart_data = [];
 $chart_counter = 0;
 if ($PollType == POLL_NORMAL) {
     foreach ($questions as $theQuestion) {
@@ -217,13 +218,13 @@ if ($PollType == POLL_NORMAL) {
             $j++;
 
             if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
-                $names_array = array();
+                $names_array = [];
                 $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
                 foreach ($all_answers as $row) {
                     $this_chart_data['answer'][] = q($row->answer_text);
                     $this_chart_data['percentage'][] = 0;
                 }
-                if ($theQuestion->qtype == QTYPE_SINGLE) {
+                if ($theQuestion->qtype == QTYPE_SINGLE && $default_answer) {
                     $this_chart_data['answer'][] = $langPollUnknown;
                     $this_chart_data['percentage'][] = 0;
                 }
@@ -378,7 +379,7 @@ if ($PollType == POLL_NORMAL) {
                 $tool_content .= $answers_table;
                 $chart_counter++;
             } elseif ($theQuestion->qtype == QTYPE_FILL) {
-                $names_array = array();
+                $names_array = [];
                 $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text
                                             FROM poll_answer_record a, poll_user_record b
                                             WHERE a.qid = ?d
