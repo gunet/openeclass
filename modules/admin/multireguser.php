@@ -84,7 +84,7 @@ if (isset($_POST['submit'])) {
                     $info[$field] = array_shift($userl);
                 }
 
-                if (!isset($info['email']) or !valid_email($info['email'])) {
+                if (!isset($info['email']) or !valid_email(trim($info['email']))) {
                     $info['email'] = '';
                 }
 
@@ -256,11 +256,11 @@ if (isset($_POST['submit'])) {
 draw($tool_content, 3, null, $head_content);
 
 function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public) {
-    global $charset, $langAsProf, $langYourReg, $siteName, $langDestination,
+    global $langAsProf, $langYourReg, $siteName,
         $langYouAreReg, $langSettings, $langPass, $langAddress, $langIs,
         $urlServer, $langProblem, $langPassSameAuth, $langManager, $langTel,
         $langEmail, $profsuccess, $usersuccess, $langWithSuccess, $user,
-        $langUserCodename, $uname_form, $auth_ids, $auth_methods_form;
+        $langUserCodename, $auth_ids, $auth_methods_form;
 
     if ($status == 1) {
         $message = $profsuccess;
