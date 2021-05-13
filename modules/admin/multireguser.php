@@ -79,12 +79,13 @@ if (isset($_POST['submit'])) {
         if (!empty($line)) {
             $userl = preg_split('/[ \t]+/', $line);
             if (count($userl) >= $numfields) {
-                $info = array();
+                $info = ['email' => '', 'phone' => '', 'id' => ''];
                 foreach ($fields as $field) {
-                    $info[$field] = array_shift($userl);
+                    $info[$field] = trim(array_shift($userl));
                 }
 
-                if (!isset($info['email']) or !valid_email(trim($info['email']))) {
+                if ($info['email'] and !valid_email($info['email'])) {
+                    Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
                     $info['email'] = '';
                 }
 
@@ -103,7 +104,7 @@ if (isset($_POST['submit'])) {
                 if (!isset($info['password'])) {
                     $info['password'] = choose_password_strength();
                 }
-                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, @$info['email'], $departments, @$info['id'], @$info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public);
+                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $info['email'], $departments, $info['id'], $info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public);
                 if ($new === false) {
                     $unparsed_lines .= q($line . "\n" . $error . "\n");
                 } else {
