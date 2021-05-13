@@ -65,7 +65,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                         (SELECT id FROM certificate WHERE course_id = ?d))", $unregister_gid, $course_id);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND 
                                  certificate IN (SELECT id FROM certificate WHERE course_id = ?d)", $unregister_gid, $course_id);
-            
+
             if (check_guest($unregister_gid)) {
                 Database::get()->query("DELETE FROM user WHERE id = ?d", $unregister_gid);
             }
@@ -74,7 +74,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                           group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $unregister_gid, $course_id);
             Log::record($course_id, MODULE_ID_USERS, LOG_DELETE, array('uid' => $unregister_gid,
                                                                        'right' => '-5'));
-                        
+
         }
         exit();
     }
@@ -100,7 +100,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $search_sql .= ' AND course_user.editor <> 1 AND course_user.status = '.USER_STUDENT;
         } elseif ($filter == 'tutor') {
             $search_sql .= ' AND course_user.tutor = 1';
-        } elseif ($filter == 'reviewer') { 
+        } elseif ($filter == 'reviewer') {
             $search_sql .= ' AND course_user.reviewer = 1';
         }
     }
@@ -265,8 +265,8 @@ $head_content .= "
                 },
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+                   [10, 25, 50 , -1],
+                   [10, 25, 50, '$langAllOfThem'] // change per page values here
                ],
                 'sPaginationType': 'full_numbers',
                 'bSort': true,
