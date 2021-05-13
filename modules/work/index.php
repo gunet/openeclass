@@ -4577,7 +4577,7 @@ function assignment_details($id, $row, $x =false) {
                 <div class='col-sm-3'>
                     <strong>$m[comments]:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-9' style='white-space: pre-wrap'>
                     $row->comments
                 </div>
             </div>";
@@ -4999,7 +4999,7 @@ function show_assignment($id, $display_graph_results = false) {
 
                 // student comment
                 if (trim($row->comments != '')) {
-                    $tool_content .= "<div style='margin-top: .5em;'><small>" .
+                    $tool_content .= "<div style='margin-top: .5em; white-space: pre-wrap;'><small>" .
                             q($row->comments) . '</small></div>';
                 }
                 $label = '';
@@ -5012,7 +5012,7 @@ function show_assignment($id, $display_graph_results = false) {
                 if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
                     $grade_comments = q_math($row->grade_comments);
                     if (preg_match('/[\n\r] +\S/', $grade_comments)) {
-                        $grade_comments = "<pre style='overflow: auto'>$grade_comments</pre>";
+                        $grade_comments = "<div style='white-space: pre-wrap'>$grade_comments</div>";
                     } else {
                         $grade_comments = "&nbsp;<span>" . nl2br($grade_comments) . "</span>&nbsp;&nbsp;";
                     }
