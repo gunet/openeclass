@@ -120,6 +120,10 @@ $head_content .= "<script type='text/javascript'>
             $('#assignment_table').DataTable ({
                 'columns': [ $columns ],
                 'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
+                'aLengthMenu': [
+                   [10, 20, 30 , -1],
+                   [10, 20, 30, '$langAllOfThem'] // change per page values here
+                ],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,

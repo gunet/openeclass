@@ -65,7 +65,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                         (SELECT id FROM certificate WHERE course_id = ?d))", $unregister_gid, $course_id);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND 
                                  certificate IN (SELECT id FROM certificate WHERE course_id = ?d)", $unregister_gid, $course_id);
-            
+
             if (check_guest($unregister_gid)) {
                 Database::get()->query("DELETE FROM user WHERE id = ?d", $unregister_gid);
             }
@@ -74,7 +74,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                           group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $unregister_gid, $course_id);
             Log::record($course_id, MODULE_ID_USERS, LOG_DELETE, array('uid' => $unregister_gid,
                                                                        'right' => '-5'));
-                        
+
         }
         exit();
     }
@@ -212,7 +212,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $roleColumn = "<div class='text-muted'>$user_role_string</div>";
         // search for inactive users
         $inactive_user = is_inactive_user($myrow->id);
-        //setting data table column data
+        //setting datables column data
         $data['aaData'][] = array(
             'DT_RowId' => getIndirectReference($myrow->id),
             'DT_RowClass' => 'smaller',
