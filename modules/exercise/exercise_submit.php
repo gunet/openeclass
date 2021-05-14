@@ -294,13 +294,14 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()
     or (isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp()))
     or $autoSubmit)
     and !$is_editor) {
+
     // if that happens during an active attempt
     if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
         $objExercise->save_unanswered();
         $objExercise->record_answers($choice, $exerciseResult, 'update');
-        $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
+        $totalScore = $objExercise->calculate_total_score($eurid);
         $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
                                       SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
@@ -487,10 +488,8 @@ if (isset($_POST['formSent'])) {
         }
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
-        $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
-        if (empty($totalScore) or ($totalScore < 0)) {
-            $totalScore = 0.00;
-        }
+
+        $totalScore = $objExercise->calculate_total_score($eurid);
 
         if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
