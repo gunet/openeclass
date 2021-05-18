@@ -5377,3 +5377,4 @@ $langLimesurveyAppDeleteSuccessful = "LimeSurvey Tool removal was successful.";
 $langLimesurveyEnabled = "Enabled";
 $langNewLimesurveyTool = "Add new LimeSurvey (LTI) Tool";
 $langNoAvailableLimesurveyTemplates = "No LTI Tools available.";
+$langUserAlreadyRegisterd = 'already registered';

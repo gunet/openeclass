@@ -3345,6 +3345,7 @@ $langGUser = "χρήστη επισκέπτη";
 $langAddGUser = "Προσθήκη χρήστη επισκέπτη";
 $langNoUsersFound = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε ή ο χρήστης υπάρχει ήδη στο $langsCourse.";
 $langNoUsersFound2 = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε";
+$langUserAlreadyRegisterd = 'έχει ήδη εγγραφεί';
 $langRegister = "Εγγραφή";
 $langUnRegister = "Απεγγραφή";
 $langAdded = " προστέθηκε στο $langsCourse.";
