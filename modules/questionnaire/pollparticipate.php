@@ -262,10 +262,10 @@ function printPollForm() {
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                     if ($multiple_submissions) { // get user answers (if any)
                         $user_answers = Database::get()->queryArray("SELECT a.aid
-                                FROM poll_user_record b, poll_answer_record a 
+                                FROM poll_user_record b, poll_answer_record a
                                 LEFT JOIN poll_question_answer c
                                     ON a.aid = c.pqaid
-                                WHERE a.poll_user_record_id = b.id                                  
+                                WHERE a.poll_user_record_id = b.id
                                     AND a.qid = ?d
                                     AND b.uid = ?d", $pqid, $uid);
                     }
@@ -464,8 +464,8 @@ function submitPoll() {
             ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 
             if (isset($_REQUEST['update'])) { // if poll has enabled multiple submissions first delete the previous answers
-                Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d)", $uid);
-                Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d", $uid);
+                Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d)", $uid, $pid);
+                Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
             }
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
