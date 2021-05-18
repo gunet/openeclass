@@ -120,19 +120,23 @@ if ($is_editor) {
                     } else {
                         Session::Messages($langResourceBelongsToCert, "alert-warning");
                     }
+                    break;
                 case 'purge': // purge exercise results
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->purge();
+                        $objExerciseTmp->save();
                         Session::Messages($langPurgeExerciseResultsSuccess);
                         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     } else {
                         Session::Messages($langResourceBelongsToCert, "alert-warning");
                     }
+                    break;
                 case 'enable':  // enables an exercise
                     $objExerciseTmp->enable();
                     $objExerciseTmp->save();
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                    break;
                 case 'disable': // disables an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->disable();
@@ -142,29 +146,34 @@ if ($is_editor) {
                     } else {
                         Session::Messages($langResourceBelongsToCert, "alert-warning");
                     }
+                    break;
                 case 'public':  // make exercise public
                     $objExerciseTmp->makepublic();
                     $objExerciseTmp->save();
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                    break;
                 case 'limited':  // make exercise limited
                     $objExerciseTmp->makelimited();
                     $objExerciseTmp->save();
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                    break;
                 case 'clone':  // make exercise limited
                     $objExerciseTmp->duplicate();
                     Session::Messages($langCopySuccess, 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                    break;
                 case 'distribution': //distribute answers
                     $objExerciseTmp->distribution($_GET['correction_output']);
                     Session::Messages($langDistributionSuccess, 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                    break;
                 case 'cancelDistribution': //canceling distributed answers
                     $objExerciseTmp->cancelDistribution();
                     Session::Messages($langCancelDistributionSuccess, 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-
+                    break;
             }
         }
         // destruction of Exercise

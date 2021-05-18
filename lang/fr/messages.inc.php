@@ -5520,3 +5520,6 @@ $langBBBAddCourseFailExits = "Course already exists on server";
 $langInvalidEmail = 'Invalid address';
 $langExerciseScaleGrade = "Grading Scale";
 $langExerciseNoScaleGrade = "without scale";
+$langConvertedTo = "converted to";
+$langNegativeScoreLegend = "If you wish, you can grade wrong question answers with negative score.
+Note, that if $langsStudent has been graded with negative score in one question, then the final grade in this question will be converted to zero.";

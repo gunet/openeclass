@@ -1114,6 +1114,7 @@ $langUnansweredQuestionsQuestion = 'Θέλετε να προχωρήσετε σ�
 $langNoDeadline = "Χωρίς προθεσμία";
 $langExerciseFinalSubmit = 'Οριστική υποβολή';
 $langExerciseFinalSubmitWarn = 'Προσοχή! Η άσκηση θα υποβληθεί οριστικά. Θέλετε να προχωρήσετε;';
+$langConvertedTo = "μετατράπηκε σε";
 
 
 /* * ***************************************************
@@ -1888,6 +1889,8 @@ $langNoAnswer = "Δεν υπάρχει απάντηση αυτή την στιγ
 $langGoBackToQuestionPool = "Επιστροφή στις διαθέσιμες ερωτήσεις";
 $langGoBackToQuestionList = "Επιστροφή στη λίστα ερωτήσεων";
 $langQuestionAnswers = "Απαντήσεις στην ερώτηση";
+$langNegativeScoreLegend = "Μπορείτε, αν θέλετε, να ορίσετε αρνητική βαθμολογία στις λάθος απαντήσεις.
+Σημειώστε, ότι αν ο $langsStudent βαθμολογηθεί με αρνητική βαθμολογία σε μία ερώτηση, τότε αυτή θα μετατραπεί σε μηδέν.";
 $langUsedInSeveralExercises = "Προσοχή! H ερώτηση και οι απαντήσεις της χρησιμοποιούνται σε αρκετές ασκήσεις.
         Θέλετε σίγουρα να τις αλλάξετε;";
 $langModifyInAllExercises = "σε όλες τις ασκήσεις";

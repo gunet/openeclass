@@ -415,9 +415,12 @@ if (isset($_GET['modifyAnswers'])) {
    if ($answerType != FREE_TEXT) {
 
         $tool_content .= "<div class='panel panel-info'>
-                       <div class='panel-heading'>
-                         <h3 class='panel-title'>$langQuestionAnswers</h3>
-                       </div>
+                           <div class='panel-heading'>
+                             <h3 class='panel-title'>$langQuestionAnswers</h3>";
+                             if ($answerType == MULTIPLE_ANSWER) {
+                                 $tool_content .= "<h5>$langNegativeScoreLegend</h5>";
+                             }
+                             $tool_content .= "</div>
                        <div class='panel-body'>";
 
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
