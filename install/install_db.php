@@ -1065,7 +1065,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `assign_to_specific` TINYINT NOT NULL DEFAULT 0,
     `ip_lock` TEXT NULL DEFAULT NULL,
     `password_lock` VARCHAR(255) NULL DEFAULT NULL,
-    `continue_time_limit` INT(11) NOT NULL DEFAULT 0) $tbl_options");
+    `continue_time_limit` INT(11) NOT NULL DEFAULT 0,
+    `calc_grade_method` TINYINT DEFAULT 1
+    ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

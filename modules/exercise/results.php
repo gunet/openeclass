@@ -79,7 +79,7 @@ $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $displayScore = $objExercise->selectScore();
 $exerciseRange = $objExercise->selectRange();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
-$userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
+$userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $exerciseId, $uid)->count;
 $cur_date = new DateTime("now");
 $end_date = new DateTime($objExercise->selectEndDate());
 $showScore = $displayScore == 1
@@ -126,9 +126,17 @@ $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='st
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_CANCELED."' ".(($status === 4)? 'selected' : '').">$langAttemptCanceled</option>
         </select>";
-//This part of the code could be improved
+
 if ($is_editor) {
-    $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = ?d)", $course_id);
+    $result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname FROM `exercise_user_record`
+                                                            JOIN user ON exercise_user_record.uid = user.id
+                                                            WHERE eid = ?d) 
+                                                    UNION                                                    
+                                                        (SELECT 0 as uid, '$langAnonymous' AS surname, '$langUser' AS givenname
+                                                            FROM `exercise_user_record`  
+                                                            WHERE eid = ?d                                                             
+                                                            AND uid = 0)
+                                                        ORDER BY surname, givenname", $exerciseId, $exerciseId);
 } else {
     $result[] = (object) array('uid' => $uid);
 }
@@ -145,8 +153,7 @@ foreach ($result as $row) {
         if ($testTheStudent->assigned_to != $_SESSION['uid'] && isset($testTheStudent->assigned_to)) {
             continue;
         }
-    }    
-    $theStudent = Database::get()->querySingle("SELECT surname, givenname, am FROM user WHERE id = ?d", $sid);
+    }
 
     $result2 = Database::get()->queryArray("SELECT
                     DATE_FORMAT(a.record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
@@ -154,10 +161,11 @@ foreach ($result as $row) {
                     IF (attempt_status = 1 OR b.time_constraint = 0,
                         TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date)),
                         b.time_constraint*60-a.secs_remaining) AS time_duration,
-                    a.total_score, a.total_weighting, a.eurid, a.attempt_status, a.assigned_to 
+                    a.total_score, a.total_weighting, a.eurid, a.attempt_status, a.assigned_to                     
                 FROM `exercise_user_record` a, exercise b
-                WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id$extra_sql
-                ORDER BY a.record_start_date DESC", $sid, $exerciseId);
+                WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id$extra_sql                
+                ORDER BY a.record_start_date ASC", $sid, $exerciseId);
+
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<tr><td colspan='".($is_editor ? 5 : 4)."'>";
@@ -169,10 +177,10 @@ foreach ($result as $row) {
             if ($ug != '-') {
                 $user_group = "$langGroup: $ug";
             }
-            if ($theStudent->am != '') {
-                $studentam = "$langAmShort: $theStudent->am";
+            if (uid_to_am($sid) != '') {
+                $studentam = "$langAmShort: " . uid_to_am($sid);
             }
-            $tool_content .= "<strong>$langUser:</strong> " . q($theStudent->surname) . " " . q($theStudent->givenname) . "
+            $tool_content .= "<strong>$langUser:</strong> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
                             <div><small>$studentam<span style='padding-left: 10px;'>$user_group</span></small></div>";
         }
         $tool_content .= "</td>

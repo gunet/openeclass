@@ -2039,6 +2039,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE poll ADD default_answer TINYINT NOT NULL DEFAULT '0'");
             Database::get()->query("UPDATE poll SET default_answer = 1"); // set value for previous polls
         }
+        if (!DBHelper::fieldExists('exercise', 'calc_grade_method')) {
+            Database::get()->query("ALTER TABLE exercise ADD calc_grade_method TINYINT DEFAULT '1'");
+            Database::get()->query("UPDATE exercise SET calc_grade_method = 0");
+        }
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!

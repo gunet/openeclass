@@ -171,7 +171,7 @@ foreach ($q as $d) { // for each attempt
                 $output[] = user_question_score($question, $eurid); // question score
             }
         }
-        $output[] = user_total_score($user, $eurid, $exerciseId); // user total score
+        $output[] = user_total_score($eurid); // user total score
         $csv->outputRecord($output);
         $output = array();
     }
@@ -203,7 +203,7 @@ function details($qid, $eurid) {
  * @return string
  */
 function question_answer_details($eurid, $qid) {
-    
+
     $content = $temp_content = '';
     $q = Database::get()->queryArray("SELECT question_id, answer, answer_id, `type`
                        FROM exercise_answer_record
@@ -291,18 +291,14 @@ function user_question_score($qid, $eurid) {
 
 /**
  * @brief user question total score
- * @param $uid
  * @param $eurid
- * @param $eid
  */
-function user_total_score($uid, $eurid, $eid) {
+function user_total_score($eurid) {
 
     global $objExercise;
 
-    $data = Database::get()->querySingle("SELECT total_score, total_weighting FROM exercise_user_record 
-                                                    WHERE uid = ?d 
-                                                    AND eurid = ?d 
-                                                    AND eid = ?d", $uid, $eurid, $eid);
+    $total_score = $objExercise->calculate_total_score($eurid);
+    $total_weight = $objExercise->selectTotalWeighting();
 
-    return $objExercise->canonicalize_exercise_score($data->total_score, $data->total_weighting);
+    return $objExercise->canonicalize_exercise_score($total_score, $total_weight);
 }

@@ -5354,6 +5354,9 @@ $langNotice3Multiple = 'Warning: You can upload one or more new files. All
     with the new set of files.';
 $langExerciseFinalSubmit = 'Final Submission';
 $langExerciseFinalSubmitWarn = 'Warning! After submitting the exercise, your answers will be recorded as final. Proceed?';
+$langConvertedTo = "converted to";
+$langNegativeScoreLegend = "If you wish, you can grade wrong question answers with negative score.
+Note, that if $langsStudent has been graded with negative score in one question, then the final grade in this question will be converted to zero.";
 $langRefreshGrades = 'Refresh Grades from Activities';
 $langRefreshGrade = 'Refresh Grades from Activity';
 $langRefreshGradesDone = 'The gradebook activities with automatic grade registration have been refreshed.';

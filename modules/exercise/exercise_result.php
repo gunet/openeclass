@@ -201,6 +201,7 @@ $exerciseRange = $objExercise->selectRange();
 $canonical_score = $objExercise->canonicalize_exercise_score($exercise_user_record->total_score, $exercise_user_record->total_weighting);
 $displayScore = $objExercise->selectScore();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
+$calc_grade_method = $objExercise->getCalcGradeMethod();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
@@ -320,7 +321,14 @@ if (count($exercise_question_ids) > 0) {
             }
         } else {
              if (($showScore) and (!is_null($choice))) {
-                 $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight / $questionWeighting</strong></span>)</small>";
+                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $calc_grade_method == 1) {
+                     $qw_legend1 = "<span style='color: red;'>$question_weight</span>";
+                     $qw_legend2 = " $langConvertedTo <strong>0 / $questionWeighting</strong>";
+                 } else {
+                     $qw_legend1 = "$question_weight";
+                     $qw_legend2 = "";
+                 }
+                 $tool_content .= " <small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong></span>$qw_legend2)</small>";
              }
         }
         $tool_content .= "<small class='help-block'>($questionType)</small>"; // question type
@@ -370,6 +378,9 @@ if (count($exercise_question_ids) > 0) {
                     case MULTIPLE_ANSWER : $studentChoice = @$choice[$answerId];
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
+                            if ($questionScore < 0) {
+                                $questionScore = 0;
+                            }
                             $grade = $answerWeighting;
                         }
                         break;
@@ -548,6 +559,10 @@ if (count($exercise_question_ids) > 0) {
         }
 
         $rounded_weight = round($question_weight, 2);
+
+        if ($rounded_weight < 0 and $answerType == MULTIPLE_ANSWER) {
+            $rounded_weight = 0;
+        }
         $rounded_score = round($questionScore, 2);
         if ($showScore and $rounded_weight != $rounded_score) {
             $tool_content .= "<tr class='warning'>
@@ -605,10 +620,13 @@ if ($regrade) {
     }
 }
 
+
+
 $totalScore = round($totalScore, 2);
 $totalWeighting = round($totalWeighting, 2);
 $oldScore = round($exercise_user_record->total_score, 2);
 $oldWeighting = round($exercise_user_record->total_weighting, 2);
+
 if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting)) {
     if ($checking) {
         echo json_encode(['result' => 'regrade', 'eurid' => $eurid,

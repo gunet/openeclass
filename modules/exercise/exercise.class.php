@@ -61,6 +61,7 @@ if (!class_exists('Exercise')) {
         private $ip_lock;
         private $password_lock;
         private $assign_to_specific;
+        private $calc_grade_method;
         private $questionList;  // array with the list of this exercise's questions
 
         /**
@@ -91,6 +92,7 @@ if (!class_exists('Exercise')) {
             $this->password_lock = null;
             $this->questionList = array();
             $this->continueTimeLimit = 5; // minutes
+            $this->calc_grade_method = 1;
         }
 
         /**
@@ -105,7 +107,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, type, `range`, start_date, end_date, temp_save, time_constraint,
-            attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock, assign_to_specific, continue_time_limit
+            attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock, assign_to_specific, calc_grade_method, continue_time_limit
             FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -129,6 +131,7 @@ if (!class_exists('Exercise')) {
                 $this->ip_lock = $object->ip_lock;
                 $this->password_lock = $object->password_lock;
                 $this->assign_to_specific = $object->assign_to_specific;
+                $this->calc_grade_method = $object->calc_grade_method;
                 $this->continueTimeLimit = $object->continue_time_limit;
 
                 $result = Database::get()->queryArray("SELECT question_id, q_position, random_criteria
@@ -215,7 +218,7 @@ if (!class_exists('Exercise')) {
 
         /**
          *
-         * @return the total weighting of an exercise
+         * @return total weighting of an exercise
          */
         function selectTotalWeighting()
         {
@@ -288,6 +291,10 @@ if (!class_exists('Exercise')) {
             return $this->assign_to_specific;
         }
 
+        function getCalcGradeMethod()
+        {
+            return $this->calc_grade_method;
+        }
         function continueTimeLimit()
         {
             return $this->continueTimeLimit;
@@ -615,6 +622,11 @@ if (!class_exists('Exercise')) {
             $this->password_lock = (empty($password)) ? null : $password;
         }
 
+        function setCalcGradeMethod()
+        {
+            $this->calc_grade_method = 1;
+        }
+
         function updateAssignToSpecific($assign_to_specific)
         {
             $this->assign_to_specific = $assign_to_specific;
@@ -711,6 +723,7 @@ if (!class_exists('Exercise')) {
             $ip_lock = $this->ip_lock;
             $password_lock = $this->password_lock;
             $assign_to_specific = $this->assign_to_specific;
+            $calc_grade_method = $this->calc_grade_method;
             // exercise already exists
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
@@ -718,18 +731,19 @@ if (!class_exists('Exercise')) {
                         start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d,
                         attempts_allowed = ?d, random = ?d, shuffle = ?d, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
-                        assign_to_specific = ?d, continue_time_limit = ?d
+                        assign_to_specific = ?d, continue_time_limit = ?d, calc_grade_method = ?d 
                     WHERE course_id = ?d AND id = ?d",
                     $exercise, $description, $type, $range,
                     $startDate, $endDate, $tempSave, $timeConstraint,
                     $attemptsAllowed, $random, $shuffle, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
-                    $assign_to_specific, $this->continueTimeLimit,
+                    $assign_to_specific, $this->continueTimeLimit, $calc_grade_method,
                     $course_id, $id)->affectedRows;
                 if ($affected_rows > 0) {
-                    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
-                        'title' => $exercise,
-                        'description' => $description));
+                    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
+                        array('id' => $id,
+                              'title' => $exercise,
+                              'description' => $description));
                 }
             } // creates a new exercise
             else {
@@ -737,16 +751,16 @@ if (!class_exists('Exercise')) {
                     (course_id, title, description, type, `range`, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, shuffle, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit)
-                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
+                     assign_to_specific, continue_time_limit, calc_grade_method)
+                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d)",
                     $course_id, $exercise, $description, $type, $range, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
                     $random, $shuffle, $active, $results, $score, $ip_lock, $password_lock,
-                    $assign_to_specific, $this->continueTimeLimit)->lastInsertID;
+                    $assign_to_specific, $this->continueTimeLimit, $this->calc_grade_method)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
-                    'title' => $exercise,
-                    'description' => $description));
+                                                                                            'title' => $exercise,
+                                                                                            'description' => $description));
             }
 
             // updates question list
@@ -1152,6 +1166,7 @@ if (!class_exists('Exercise')) {
             Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s
                               WHERE d.eurid = s.eurid AND s.eid = ?d", $id);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d", $id);
+            $this->setCalcGradeMethod();
         }
 
         /**
@@ -1201,11 +1216,13 @@ if (!class_exists('Exercise')) {
             $password_lock = $this->password_lock;
             $assign_to_specific = $this->assign_to_specific;
             $range = $this->range;
+            $calc_grade_method = 1;
             $clone_id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, `type`, `range`, start_date,
-                                    end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock, assign_to_specific)
-                                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d)",
+                                    end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock, 
+                                    assign_to_specific, calc_grade_method)
+                                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
                 $clone_course_id, $exercise, $description, $type, $range, $startDate, $endDate, $tempSave,
-                $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock, $assign_to_specific)->lastInsertID;
+                $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock, $assign_to_specific, $calc_grade_method)->lastInsertID;
             if ($assign_to_specific) {
                 Database::get()->query("INSERT INTO `exercise_to_specific` (user_id, group_id, exercise_id)
                                         SELECT user_id, group_id, ?d FROM `exercise_to_specific`
@@ -1295,10 +1312,7 @@ if (!class_exists('Exercise')) {
          */
         function canonicalize_exercise_score($user_score, $total_score)
         {
-
-            if ($total_score == 0) {
-                $score = 0;
-            } else if ($this->range > 0) {
+            if ($this->range > 0 && $total_score > 0) {
                 $score = round(($user_score / $total_score) * $this->range, 2);
             } else {
                 $score = round($user_score, 2);
