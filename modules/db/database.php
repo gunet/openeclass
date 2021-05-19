@@ -391,7 +391,7 @@ final class Database {
                         $func_affected_rows++;
         }
         /* Close transaction, if required */
-        if ($isTransactional) {
+        if ($isTransactional and $this->dbh->inTransaction ()) {
             $this->dbh->commit();
         }
         Database::dbg("Succesfully performed query", $statement, $init_time, $backtrace_info, Debug::INFO);
