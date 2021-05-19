@@ -1885,6 +1885,7 @@ $langQuestionNotFound = "Δεν βρέθηκε η ερώτηση";
 $langAlertAdmin = "Παρακαλώ δηλώστε τουλάχιστον έναν διαχειριστή για το $langsCourse!";
 $langBackExerciseManagement = "Επιστροφή στη διαχείριση άσκησης";
 $langExerciseExecute = "Εκτέλεση";
+$langExercisePeriod = 'Περίοδος εκτέλεσης';
 
 // question_admin.php
 $langNoAnswer = "Δεν υπάρχει απάντηση αυτή την στιγμή!";

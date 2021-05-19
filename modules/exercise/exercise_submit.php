@@ -290,51 +290,56 @@ if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
 
 // exercise has ended or hasn't been enabled yet due to declared dates or was submitted automatically due to expiring time
 $autoSubmit = isset($_POST['autoSubmit']) && $_POST['autoSubmit'] == 'true';
-if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()
+if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
     or (isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp()))
-    or $autoSubmit)
-    and !$is_editor) {
-
-    // if that happens during an active attempt
-    if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
-        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-        $record_end_date = date('Y-m-d H:i:s', time());
-        $objExercise->save_unanswered();
-        $objExercise->record_answers($choice, $exerciseResult, 'update');
-        $totalScore = $objExercise->calculate_total_score($eurid);
-        $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
-                                      SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
-        $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
-        $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
-        $totalWeighting = is_null($totalWeighting)? 0: $totalWeighting;
-        $totalScore = is_null($totalScore)? 0: $totalScore;
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
-                        total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
-        // update attendance book
-        update_attendance_book($uid, $objExercise->selectId(), GRADEBOOK_ACTIVITY_EXERCISE);
-        // update gradebook
-        update_gradebook_book($uid, $objExercise->selectId(), $totalScore/$totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
-        // update user progress
-        triggerGame($course_id, $uid, $objExercise->selectId());
-        triggerExerciseAnalytics($course_id, $uid, $objExercise->selectId());
-        Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
-            'title' => $objExercise->selectTitle(),
-            'legend' => $langSubmit,
-            'eurid' => $eurid ]);
-        unset_exercise_var($exerciseId);
-        Session::Messages($langExerciseExpiredTime);
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);
-        } else {
-            redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+    or $autoSubmit) {
+    if ($is_editor) {
+        // Allow editors to test expired or not yet started exercises, but warn them
+        if (!isset($_POST['buttonFinish']) and !$autoSubmit) {
+            Session::Messages($langExerciseExpired, 'alert-info');
         }
     } else {
-        unset_exercise_var($exerciseId);
-        Session::Messages($langExerciseExpired);
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+        // if that happens during an active attempt
+        if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
+            $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
+            $record_end_date = date('Y-m-d H:i:s', time());
+            $objExercise->save_unanswered();
+            $objExercise->record_answers($choice, $exerciseResult, 'update');
+            $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
+            $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
+                                          SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
+            $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
+            $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
+            $totalWeighting = is_null($totalWeighting)? 0: $totalWeighting;
+            $totalScore = is_null($totalScore)? 0: $totalScore;
+            Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
+                            total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
+            // update attendance book
+            update_attendance_book($uid, $objExercise->selectId(), GRADEBOOK_ACTIVITY_EXERCISE);
+            // update gradebook
+            update_gradebook_book($uid, $objExercise->selectId(), $totalScore/$totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
+            // update user progress
+            triggerGame($course_id, $uid, $objExercise->selectId());
+            triggerExerciseAnalytics($course_id, $uid, $objExercise->selectId());
+            Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
+                'title' => $objExercise->selectTitle(),
+                'legend' => $langSubmit,
+                'eurid' => $eurid ]);
+            unset_exercise_var($exerciseId);
+            Session::Messages($langExerciseExpiredTime);
+            if (isset($_REQUEST['unit'])) {
+                redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);
+            } else {
+                redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+            }
         } else {
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+            unset_exercise_var($exerciseId);
+            Session::Messages($langExerciseExpired);
+            if (isset($_REQUEST['unit'])) {
+                redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
+            } else {
+                redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+            }
         }
     }
 }
@@ -447,14 +452,18 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
 
 if ($exercise_EndDate) {
     $exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
-    if ($exerciseTimeLeft < 3 * 3600) {
-            if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or !isset($timeleft)) {
+    if ($exerciseTimeLeft) {
+        if ($exerciseTimeLeft < 0 and $is_editor) {
+            // Give editors time to test expired exercises
+            $exerciseTimeLeft = 24 * 3600;
+        } elseif ($exerciseTimeLeft < 3 * 3600 and (!isset($timeleft) or $exerciseTimeLeft < $timeleft)) {
             // Display countdown of exercise remaining time if less than
             // user's remaining time or less than 3 hours away
             $timeleft = $exerciseTimeLeft;
         }
     }
 }
+
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {

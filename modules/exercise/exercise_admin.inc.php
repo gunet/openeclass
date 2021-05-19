@@ -131,13 +131,15 @@ if (isset($_POST['submitExercise'])) {
     if (is_null($exerciseStartDate) && !Session::has('exerciseStartDate')) {
         $exerciseStartDate = '';
     } else {
-        $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
+        $startDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $exerciseStartDate);
+        $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : $startDateTime->format('d-m-Y H:i');
     }
     $exerciseEndDate = $objExercise->selectEndDate();
     if (is_null($exerciseEndDate) && !Session::has('exerciseEndDate')) {
         $exerciseEndDate = '';
     } else {
-        $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
+        $endDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $exerciseEndDate);
+        $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : $endDateTime->format('d-m-Y H:i');
     }
     $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : ($exerciseStartDate ? 1 : 0);;
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($exerciseEndDate ? 1 : 0);
@@ -630,7 +632,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     } else {
         $exerciseType = $langSimpleExercise;
     }
-    $exerciseType = ($exerciseType == SINGLE_PAGE_TYPE) ? $langSimpleExercise : $langSequentialExercise;
     $moduleTag = new ModuleElement($exerciseId);
     $tool_content .= action_bar([
         [ 'title' => $langExerciseExecute,
@@ -649,57 +650,90 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
           'level' => 'primary-label' ],
     ]);
 
-    $tool_content .= "<div class='row margin-bottom-fat form-wrapper' style='margin-top: 10px; margin-bottom: 30px; margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
-    $tool_content .= "<div class='col-sm-12'><h4 style='font-weight: bold;'>$exerciseTitle</h4></div>";
-    if (!empty($exerciseDescription)) {
-        $tool_content .= "<div class='col-sm-12'>
-                            <em>" . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "</em>
-                          </div>";
+    $exerciseDescription = trim($exerciseDescription);
+    if ($exerciseDescription !== '') {
+        $exerciseDescription = "<div class='col-sm-12'>" .
+            standard_text_escape($exerciseDescription) . '</div>';
     }
-    $tool_content .= "<div class='course-info-title clearfix'>
-                        <a role='button' data-toggle='collapse' href='#MoreSettings' aria-expanded='false' aria-controls='MoreSettings'>
-                            <span class='fa fa-chevron-right fa-fw'></span> $langGroupProperties
-                        </a>
+
+    $startParts = explode(' ', $exerciseStartDate);
+    $endParts = explode(' ', $exerciseEndDate);
+    if ($exerciseStartDate and $exerciseEndDate) {
+        $startWeekDay = $langDay_of_weekNames['long'][$startDateTime->format('w')];
+        $periodLabel = "$langExercisePeriod:";
+        if ($startParts[0] == $endParts[0]) { // start and end on same date
+            $timeDuration = format_time_duration($endDateTime->getTimestamp() - $startDateTime->getTimestamp());
+            $periodInfo = "$startWeekDay, $startParts[0] $startParts[1] &ndash; $endParts[1] <small>($timeDuration)</small>";
+        } else {
+            $endWeekDay = $langDay_of_weekNames['long'][$endDateTime->format('w')];
+            $periodInfo = "$startWeekDay, $exerciseStartDate &ndash; $endWeekDay, $exerciseEndDate";
+        }
+    } elseif ($exerciseStartDate) {
+        $periodLabel = "<span style='color: green;'>$langStart:</span>";
+        $periodInfo = $langDay_of_weekNames['long'][$startDateTime->format('w')] . ', ' . $exerciseStartDate;
+    } elseif ($exerciseEndDate) {
+        $periodLabel = "<span style='color: red;'>$langFinish:</span>";
+        $periodInfo = $langDay_of_weekNames['long'][$endDateTime->format('w')] . ', ' . $exerciseEndDate;
+    } else {
+        $periodLabel = null;
+    }
+    if ($periodLabel) {
+        $period = "<div class='col-xs-12'>$periodLabel <b>$periodInfo</b></div>";
+    }
+
+    $tool_content .= "
+        <div class='panel panel-default'>
+            <div class='panel-heading' data-toggle='collapse' href='#exerciseInfoPanel' aria-expanded='false' aria-controls='#exerciseInfoPanel' style='cursor: pointer'>
+                <h4><span class='fa fa-chevron-right fa-fw' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "</h4>
+            </div>
+            <div class='panel-body collapse' id='exerciseInfoPanel'>
+                <div class='row'>
+                    $exerciseDescription
+                    $period
+                    <div class='col-sm-12'>
+                        $exerciseType
                     </div>";
 
-    $tool_content .= "<div id='MoreSettings' class='collapse'>";
-    if (isset($exerciseStartDate)) {
-        $tool_content .= "<div class='col-xs-12'><span style='color: green;'>$langStart:</span> <em>$exerciseStartDate</em></div>";
-    }
-    if (isset($exerciseEndDate) && !empty($exerciseEndDate)) {
-        $tool_content .= "<div class='col-xs-12'><span style='color: red;'>$langFinish:</span> <em>$exerciseEndDate</em></div>";
-    }
-
-    $tool_content .= "<div class='col-xs-12' style='margin-top: 15px;'>$langViewShow: <em><strong>$exerciseType</strong></em></div>";
-
     if ($exerciseTempSave == 1) {
-        $tool_content .= "<div class='col-xs-12'>$langTemporarySave: <em><strong>$langYes</strong></em></div>";
+        $tool_content .= "<div class='col-xs-12'><b>$langTemporarySave:</b> $langYes</div>";
     }
     if ($exerciseTimeConstraint > 0) {
-        $tool_content .= "<div class='col-xs-12'>$langDuration: <em><strong>$exerciseTimeConstraint</strong> $langExerciseConstrainUnit</em></div>";
+        if ($exerciseTimeConstraint == 1) {
+            $langExerciseConstrainUnit = $langminute;
+        }
+        $tool_content .= "<div class='col-xs-12'>$langExerciseConstrain: <b>$exerciseTimeConstraint $langExerciseConstrainUnit</b></div>";
     }
     if ($exerciseAttemptsAllowed > 0) {
-        $tool_content .= "<div class='col-xs-12'>$langExerciseAttemptsAllowed: <em><strong>$exerciseAttemptsAllowed</strong> $langExerciseAttemptsAllowedUnit</em></div>";
+        $tool_content .= "<div class='col-xs-12'>$langExerciseAttemptsAllowed: <b>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</b></div>";
     }
 
-    $tool_content .= "<div class='col-sm-12' style='margin-top: 15px;'>$langAnswers: <em><strong>$disp_results_message</strong></em></div>";
-    $tool_content .= "<div class='col-sm-12'>$langScore: <em><strong>$disp_score_message</strong></em></div>";
+    $tool_content .= "
+                    <div class='col-sm-12' style='margin-top: 10px;'>$disp_results_message</div>
+                    <div class='col-sm-12'>$disp_score_message</div>";
 
     if ($exerciseAssignToSpecific > 0) {
-        $tool_content .= "<div class='col-sm-12' style='margin-top: 15px;'>$m[WorkAssignTo]: <strong>$assign_to_users_message</strong></div>";
+        $tool_content .= "<div class='col-sm-12' style='margin-top: 10px;'>$m[WorkAssignTo]: <b>$assign_to_users_message</b></div>";
     }
 
     $tags_list = $moduleTag->showTags();
     if ($tags_list) {
-        $tool_content .= "<div class='col-sm-3'>
-                            <strong>$langTags:</strong>
-                         </div>
-                         <div class='col-sm-9'>
-                                $tags_list
-                         </div>";
+        $tool_content .= "
+                    <div class='col-sm-12'>
+                        $langTags: $tags_list
+                    </div>";
     }
-    $tool_content .= "</div>
+    $tool_content .= "
+                </div>
             </div>
-        <script>$(function () { $('.course-info-title > a').click(function() { $(this).find('.fa-chevron-right').toggleClass('fa-rotate-90'); })});</script>";
+        </div>
+        <script>$(function () {
+            $('#exerciseInfoPanel')
+                .on('show.bs.collapse', function () {
+                    $('#exerciseInfoPanelIndicator').addClass('fa-rotate-90');
+                })
+                .on('hidden.bs.collapse', function () {
+                    $('#exerciseInfoPanelIndicator').removeClass('fa-rotate-90');
+                });
+        });</script>";
 
 }

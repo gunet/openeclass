@@ -266,10 +266,14 @@ if (!$nbrExercises) {
               </tr>";
     }
     $tool_content .= "</thead><tbody>";
+
     // For correction Form script
     $cf_result_data = [];
     // display exercise list
+    $currentDate = new DateTime('NOW');
     foreach ($result as $row) {
+        $temp_StartDate = isset($row->start_date) ? new DateTime($row->start_date) : null;
+        $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
         $cf_result_data[] = ['id' => $row->id];
         $row->description = standard_text_escape($row->description);
         $exclamation_icon = '';
@@ -319,6 +323,9 @@ if (!$nbrExercises) {
                 $sort_date = date("Y-m-d H:i", strtotime($row->start_date));
             } else {
                 $sort_date = '';
+            }
+            if ($temp_EndDate and $temp_EndDate < $currentDate) { // exercise has expired
+                $exclamation_icon .= "&nbsp;&nbsp;<span class='text-danger'>($langHasExpiredS)</span>";
             }
             $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
             $tool_content .= "<td data-sort='$sort_date'><small>";
@@ -424,10 +431,6 @@ if (!$nbrExercises) {
                 continue;
             }
 
-            $currentDate = new DateTime('NOW');
-            $temp_StartDate = isset($row->start_date) ? new DateTime($row->start_date) : null;
-            $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
-
             if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
 
                 $incomplete_attempt = $paused_exercises = null;
@@ -457,7 +460,7 @@ if (!$nbrExercises) {
                     $tool_content .= "<td><a class='ex_settings $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon$exclamation_icon";
                 }
 
-             } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
+            } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
