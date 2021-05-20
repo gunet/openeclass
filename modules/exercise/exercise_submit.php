@@ -791,7 +791,7 @@ $tool_content .= "</form>";
 
 // In sequential exercise we save all questions in the DB
 // to avoid mixing up their order if user navigates non-sequentially
-if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+if ($exerciseType == MULTIPLE_PAGE_TYPE or $exerciseType == ONE_WAY_TYPE) {
     $_POST['attempt_value'] = $attempt_value;
     $objExercise->save_unanswered();
 }

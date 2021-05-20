@@ -454,15 +454,17 @@ function exercise_init_countdown(params) {
                         label: finishClicked? params.finalSubmit: params.submit,
                         className: (params.checkSinglePage && !params.isFinalQuestion && !finishClicked)? 'btn-primary': 'btn-warning',
                         callback: function () {
-                            if (!params.checkSinglePage || params.isFinalQuestion) {
+                            if (finishClicked || !params.checkSinglePage || params.isFinalQuestion) {
                                 $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
                             }
                             continueSubmit();
-                        }
+                        },
+                        onHide: function () {
+                            finishClicked = false;
+                        },
                     },
                 }
             });
-            finishClicked = false;
         });
     }
     var checkUnanswered = params.checkSinglePage || $('.qPanel').length >= 1;
