@@ -677,9 +677,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     } else {
         $periodLabel = null;
     }
-    if ($periodLabel) {
-        $period = "<div class='col-xs-12'>$periodLabel <b>$periodInfo</b></div>";
-    }
+    $period = $periodLabel? "<div class='col-xs-12'>$periodLabel <b>$periodInfo</b></div>": '';
 
     $tool_content .= "
         <div class='panel panel-default'>

@@ -373,9 +373,17 @@ function exercise_init_countdown(params) {
                 });
             }
         });
-        $('input[name=q_id], input.navbutton').click(function () {
-            continueSubmit();
-        });
+        if (!params.checkSinglePage) {
+            $('input[name=q_id], input.navbutton').click(function () {
+                continueSubmit();
+            });
+        }
+        var finishClicked = false;
+        if (params.checkSinglePage) {
+            $('.btn[name=buttonFinish]').click(function () {
+                finishClicked = true;
+            });
+        }
         $('.exercise').submit(function (e) {
             var unansweredCount = 0;
             var firstUnanswered;
@@ -399,9 +407,20 @@ function exercise_init_countdown(params) {
             e.preventDefault();
             var message, title;
 
-            if (unansweredCount === 0) {
+            if (finishClicked) {
                 title = params.finalSubmit;
-                message = params.finalSubmitWarn;
+                message = (params.isFinalQuestion?
+                            (unansweredCount === 0? '': params.oneUnanswered):
+                            params.unseenQuestions) + ' ' +
+                    params.finalSubmitWarn;
+            } else if (unansweredCount === 0) {
+                if (params.checkSinglePage && !params.isFinalQuestion) {
+                    continueSubmit();
+                    return;
+                } else {
+                    title = params.finalSubmit;
+                    message = params.finalSubmitWarn;
+                }
             } else {
                 title = params.unansweredQuestions;
                 message = ((unansweredCount === 1)?
@@ -415,7 +434,6 @@ function exercise_init_countdown(params) {
                 message:
                     '<div class="row">' +
                       '<div class="col-md-12">' +
-                        '<h4>' + title + '</h4>' +
                         '<p>' + message + '</p>' +
                       '</div>' +
                     '</div>',
@@ -433,15 +451,18 @@ function exercise_init_countdown(params) {
                         }
                     },
                     submit: {
-                        label: params.submit,
-                        className: 'btn-warning',
+                        label: finishClicked? params.finalSubmit: params.submit,
+                        className: (params.checkSinglePage && !params.isFinalQuestion && !finishClicked)? 'btn-primary': 'btn-warning',
                         callback: function () {
-                            $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
+                            if (!params.checkSinglePage || params.isFinalQuestion) {
+                                $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
+                            }
                             continueSubmit();
                         }
                     },
                 }
             });
+            finishClicked = false;
         });
     }
     var checkUnanswered = params.checkSinglePage || $('.qPanel').length >= 1;

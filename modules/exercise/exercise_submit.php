@@ -447,6 +447,9 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
             'title' => $objExercise->selectTitle(),
             'legend' => $langStart,
             'eurid' => $eurid ]);
+        if ($exerciseType == ONE_WAY_TYPE) {
+            Session::Messages($langWarnOneWayExercise, 'alert-warning');
+        }
     }
 }
 
@@ -730,6 +733,7 @@ if ($uid and $exerciseTempSave) {
 }
 
 // Navigation buttons (previous / next)
+$isFinalQuestion = 'false';
 if ($exerciseType != SINGLE_PAGE_TYPE) {
     $head_content .= "<style>
             @media only screen and (max-width: 680px) {
@@ -754,6 +758,8 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
     }
     if ($questionId != $questionList[sizeof($questionList)]) { // `next` button
         $tool_content .= "<input class='btn btn-primary blockUI navbutton' type='submit' value='$nextLabel'>";
+    } else {
+        $isFinalQuestion = 'true';
     }
     $tool_content .= '</div>' . $tempSaveButton;
     $tempSaveButton = '';
@@ -808,23 +814,31 @@ if ($questionList) {
     if ($exerciseType == ONE_WAY_TYPE) {
         $checkSinglePage = 'true';
         $answeredIds = [];
-        $unansweredIds = [$questionNumber];
+        $unansweredIds = [];
+        $oneUnanswered = js_escape($langUnansweredQuestionsWarningThisOne);
+        $questionPrompt = js_escape($langUnansweredQuestionsNoTurnBack);
+        $submitPrompt = js_escape(($isFinalQuestion == 'true')? $langExerciseFinalSubmit: $langNextQuestion);
     } else {
         $checkSinglePage = 'false';
+        $oneUnanswered = js_escape($langUnansweredQuestionsWarningOne);
+        $questionPrompt = js_escape($langUnansweredQuestionsQuestion);
+        $submitPrompt = js_escape($langExerciseFinalSubmit);
     }
     $head_content .= "<script type='text/javascript'>
         var langHasAnswered = '". js_escape($langHasAnswered) ."';
         $(function () {
             exercise_init_countdown({
                 checkSinglePage: $checkSinglePage,
+                isFinalQuestion: $isFinalQuestion,
                 warning: '". js_escape($langLeaveExerciseWarning) ."',
                 unansweredQuestions: '". js_escape($langUnansweredQuestions) ."',
-                oneUnanswered: '". js_escape($langUnansweredQuestionsWarningOne) ."',
+                unseenQuestions: '". js_escape($langUnansweredQuestionsWarningUnseen) ."',
+                oneUnanswered: '$oneUnanswered',
                 manyUnanswered: '". js_escape($langUnansweredQuestionsWarningMany) ."',
                 finalSubmit: '". js_escape($langExerciseFinalSubmit) ."',
                 finalSubmitWarn: '". js_escape($langExerciseFinalSubmitWarn) ."',
-                question: '". js_escape($langUnansweredQuestionsQuestion) ."',
-                submit: '". js_escape($langExerciseFinalSubmit) ."',
+                question: '$questionPrompt',
+                submit: '$submitPrompt',
                 goBack: '". js_escape($langGoBackToEx) ."',
                 cancelMessage: '". js_escape($langCancelExConfirmation) ."',
                 cancelAttempt: '". js_escape($langCancelAttempt) ."',

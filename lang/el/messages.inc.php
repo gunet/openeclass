@@ -1111,11 +1111,15 @@ $langWithUsernames = 'ονόματα χρήστών';
 $langUnansweredQuestions = 'Μη απαντηθείσες ερωτήσεις';
 $langUnansweredQuestionsWarningOne = 'Δεν έχετε απαντήσει σε μία ερώτηση.';
 $langUnansweredQuestionsWarningMany = 'Δεν έχετε απαντήσει σε _ ερωτήσεις.';
+$langUnansweredQuestionsWarningThisOne = 'Δεν έχετε απαντήσει στην ερώτηση αυτή.';
+$langUnansweredQuestionsWarningUnseen = 'Δεν έχετε δει ακόμα όλες τις ερωτήσεις.';
 $langUnansweredQuestionsQuestion = 'Θέλετε να προχωρήσετε στην υποβολή ή να επιστρέψετε στην πρώτη αναπάντητη ερώτηση;';
+$langUnansweredQuestionsNoTurnBack = 'Θέλετε σίγουρα να προχωρήσετε στην επόμενη ερώτηση; Δε θα μπορείτε να επιστρέψετε.';
 $langNoDeadline = "Χωρίς προθεσμία";
 $langExerciseFinalSubmit = 'Οριστική υποβολή';
 $langExerciseFinalSubmitWarn = 'Προσοχή! Η άσκηση θα υποβληθεί οριστικά. Θέλετε να προχωρήσετε;';
 $langConvertedTo = "μετατράπηκε σε";
+$langNextQuestion = 'Επόμενη ερώτηση';
 
 
 /* * ***************************************************
@@ -2011,6 +2015,7 @@ $langContinueAttemptExplanation = 'Ενεργοποίηση δυνατότητα
     διακόπηκαν απότομα, για περιορισμένο χρονικό διάστημα από την τελευταία ενέργεια
     του χρήστη.';
 $langContinueAttemptTime = 'Χρονικό περιθώριο: [] λεπτά.';
+$langWarnOneWayExercise = "Προσοχή: οι ερωτήσεις εμφανίζονται μία ανά σελίδα και δεν έχετε δυνατότητα επιστροφής σε προηγούμενες σελίδες.";
 
 // exercise result.php
 $langStart = "Έναρξη";
