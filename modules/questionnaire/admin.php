@@ -26,6 +26,7 @@ $require_help = TRUE;
 $helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/log.class.php';
 require_once 'functions.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'modules/admin/extconfig/limesurveyapp.php';
@@ -92,17 +93,25 @@ if (isset($_POST['submitPoll'])) {
         if (isset($pid)) {
             $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM poll_user_record WHERE pid = ?d", $pid)->count;
             if ($attempt_counter > 0) {
-                Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
+                $affected_rows = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
                         end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $MulSubmissions, $DefaultAnswer,
                             $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $course_id, $pid);
             } else {
-                Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
+                $affected_rows = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
                             end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
                             $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $course_id, $pid);
+            }
+
+            if ($affected_rows > 0) {
+                Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_MODIFY,
+                                array('id' => $pid,
+                                      'title' => $PollName,
+                                      'description' => $PollDescription)
+                            );
             }
             Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d", $pid);
             Session::Messages($langPollEdited, 'alert-success');
@@ -113,6 +122,12 @@ if (isset($_POST['submitPoll'])) {
                                 VALUES (?d, ?d, ?s, ". DBHelper::timeAfter() . ", ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
                                             $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults,
                                             $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer)->lastInsertID;
+
+            Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_INSERT,
+                            array('id' => $pid,
+                                  'title' => $PollName,
+                                  'description' => $PollDescription)
+                        );
 
             if ($PollSurveyType == POLL_COLLES) {
                 createcolles($pid);

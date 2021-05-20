@@ -274,6 +274,8 @@ class Log {
                 break;
             case MODULE_ID_EXERCISE: $content = $this->exercise_action_details($details);
                 break;
+            case MODULE_ID_QUESTIONNAIRE: $content = $this->questionnaire_action_details($details);
+                break;
             case MODULE_ID_WIKI: $content = $this->wiki_action_details($details);
                 break;
             case MODULE_ID_USERS: $content = $this->course_user_action_details($details, $type);
@@ -296,8 +298,8 @@ class Log {
                 break;
             case MODULE_ID_CHAT: $content = $this->chat_action_details($details);
                 break;
-            case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
-                break;
+            /*case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
+                break; */
             default: $content = $langUnknownModule;
                 break;
         }
@@ -305,12 +307,10 @@ class Log {
     }
 
     /**
-     *
-     * @global type $langUnknownAction
+     * @brief drive to appropriate subsystems for displaying results
      * @param type $logtype
      * @param type $details
      * @return \type
-     * drive to appropriate subsystems for displaying results
      */
     private function other_action_details($logtype, $details) {
 
@@ -371,24 +371,6 @@ class Log {
 
     /**
      * @brief display action details while modifying course info
-     * @global type $langCourseStatusChange
-     * @global type $langIn
-     * @global type $langClosedCourse
-     * @global type $langRegCourse
-     * @global type $langOpenCourse
-     * @global type $langInactiveCourse
-     * @global type $langActivate
-     * @global type $langDeactivate
-     * @global type $langBlogComment
-     * @global type $langBlogRatingLog
-     * @global type $langBlogSharingLog
-     * @global type $langsCourseSharing
-     * @global type $langCourseComment
-     * @global type $langCourseAnonymousRating
-     * @global type $langsCoursesRating
-     * @global type $langForumRating
-     * @global type $langCourseSocialBookmarks
-     * @global type $langCourseAbuseReport
      * @param type $details
      * @return string
      */
@@ -492,8 +474,6 @@ class Log {
 
     /**
      * display login failures details
-     * @global type $lang_username
-     * @global type $langPassword
      * @param type $details
      * @return type
      */
@@ -520,8 +500,6 @@ class Log {
 
     /**
      * display action details in video
-     * @global type $langTitle
-     * @global type $langDescription
      * @param type $details
      * @return string
      */
@@ -542,10 +520,6 @@ class Log {
 
     /**
      * display action details in assignments
-     * @global type $langTitle
-     * @global type $langDescription
-     * @global type $m
-     * @global type $langGradebookGrade
      * @param type $details
      * @return string
      */
@@ -572,8 +546,6 @@ class Log {
 
     /**
      * display action details in announcements
-     * @global type $langTitle
-     * @global type $langContent
      * @param type $details
      * @return string
      */
@@ -589,11 +561,6 @@ class Log {
 
     /**
      * display action details in agenda
-     * @global type $langTitle
-     * @global type $langContent
-     * @global type $langDuration
-     * @global type $langhours
-     * @global type $langDate
      * @param type $details
      * @return string
      */
@@ -610,9 +577,6 @@ class Log {
 
     /**
      * display action details in link
-     * @global type $langTitle
-     * @global type $langDescription
-     * @global type $langCategoryName
      * @param type $details
      * @return string
      */
@@ -639,13 +603,6 @@ class Log {
 
     /**
      * display action details in documents
-     * @global type $langFileName
-     * @global type $langComments
-     * @global type $langTitle
-     * @global type $langRename
-     * @global type $langMove
-     * @global type $langTo
-     * @global type $langIn
      * @param type $details
      * @return string
      */
@@ -694,9 +651,6 @@ class Log {
 
     /**
      * display action details in groups
-     * @global type $langGroup
-     * @global type $langNewUser
-     * @global type $langInGroup
      * @param type $details
      * @return string
      */
@@ -717,8 +671,6 @@ class Log {
 
     /**
      * display action details in course description
-     * @global type $langTitle
-     * @global type $langContent
      * @param type $details
      * @return string
      */
@@ -736,10 +688,6 @@ class Log {
 
     /**
      * display action details in glossary
-     * @global type $langGlossaryTerm
-     * @global type $langGlossaryDefinition
-     * @global type $langGlossaryURL
-     * @global type $langCategoryNotes
      * @param type $details
      * @return string
      */
@@ -812,6 +760,34 @@ class Log {
     }
 
     /**
+     * @brief action details in questionnaire
+     * @param $details
+     * @return string
+     */
+    private function questionnaire_action_details($details) {
+
+        global $langTitle, $langDescription, $langSubmit, $langPurgeExerciseResults;
+
+        $details = unserialize($details);
+        if (is_object($details['title'])) {
+            $details['title'] = $details['title']->title;
+        }
+        $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
+        if (!empty($details['description'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
+        }
+        if (!empty($details['legend'])) {
+            switch ($details['legend']) {
+                case 'submit_answers': $content .= "&nbsp;&mdash;&nbsp; $langSubmit";
+                    break;
+                case 'purge_results': $content .= "&nbsp;&mdash;&nbsp; $langPurgeExerciseResults";
+                    break;
+            }
+        }
+        return $content;
+    }
+
+    /**
      * display action details in wiki
      * @global type $langTitle
      * @global type $langDescription
@@ -833,17 +809,6 @@ class Log {
 
     /**
      * display action details in course users administration
-     * @global type $langUnCourse
-     * @global type $langOfUser
-     * @global type $langToUser
-     * @global type $langAddGUser,
-     * @global type $langsOfTeacher
-     * @global type $langsOfEditor
-     * @global type $langsOfGroupTutor
-     * @global type $langGiveRight
-     * @global type $langRemovedRight
-     * @global type $langUnCourse
-     * @global type $langTheU
      * @param type $details
      * @return string
      */
@@ -931,19 +896,6 @@ class Log {
 
     /**
      * display action details in abuse reports
-     * @global type $langcreator
-     * @global type $langAbuseReportCat
-     * @global type $langSpam
-     * @global type $langRudeness
-     * @global type $langOther
-     * @global type $langMessage
-     * @global type $langComment
-     * @global type $langForumPost
-     * @global type $langAbuseResourceType
-     * @global type $langContent
-     * @global type $langAbuseReportStatus
-     * @global type $langAbuseReportOpen
-     * @global type $langAbuseReportClosed
      * @param type $details
      * @return string
      */
@@ -1009,38 +961,6 @@ class Log {
     /**
      *
      * @brief display action details in gradebooks
-     * @global type $langTitle
-     * @global type $langType
-     * @global type $langDate
-     * @global type $langStart
-     * @global type $langEnd
-     * @global type $langDelete
-     * @global type $langGradebookWeight
-     * @global type $langVisibility
-     * @global type $langGradebookRange
-     * @global type $langOfGradebookActivity
-     * @global type $langOfGradebookUser
-     * @global type $langOfGradebookUsers
-     * @global type $langAdd
-     * @global type $langDelete
-     * @global type $langGroups
-     * @global type $langUsers
-     * @global type $langUser
-     * @global type $langGradebookDateOutOf
-     * @global type $langGradebookDateIn
-     * @global type $langModify
-     * @global type $langOfGradebookVisibility
-     * @global type $langOfUsers
-     * @global type $langAction
-     * @global type $langGradebookDateRange
-     * @global type $langGradebookRegistrationDateRange
-     * @global type $langGradebookLabs
-     * @global type $langGradebookOral
-     * @global type $langGradebookProgress
-     * @global type $langGradebookOtherType
-     * @global type $langGradebookExams
-     * @global type $langVisibleVals
-     * @global type $langRefreshList
      * @param type $details
      * @return string
      */
@@ -1147,29 +1067,6 @@ class Log {
 
    /**
     * @brief display action details in attendance module
-    * @global type $langTitle
-    * @global type $langDate
-    * @global type $langStart
-    * @global type $langEnd
-    * @global type $langAttendanceLimit
-    * @global type $langVisibility
-    * @global type $langOfGradebookActivity
-    * @global type $langOfGradebookUser
-    * @global type $langOfGradebookUsers
-    * @global type $langAdd
-    * @global type $langDelete
-    * @global type $langGroups
-    * @global type $langUsers
-    * @global type $langUser
-    * @global type $langGradebookDateOutOf
-    * @global type $langGradebookDateIn
-    * @global type $langOfGradebookVisibility
-    * @global type $langAction
-    * @global type $langGradebookDateRange
-    * @global type $langGradebookRegistrationDateRange
-    * @global type $langModify
-    * @global type $langVisibleVals
-    * @global type $langRefreshList
     * @param type $details
     * @return string
     */
@@ -1264,9 +1161,6 @@ class Log {
 
     /**
      * @display action details in tc module
-     * @global type $langTitle
-     * @global type $langDescription
-     * @global type $langType
      * @param type $details
      * @return string
      */
@@ -1311,15 +1205,8 @@ class Log {
 
     }
     /**
-     * @global type $langInsert
-     * @global type $langModify
-     * @global type $langDelete
-     * @global type $langModProfile
-     * @global type $langFinalize
-     * @global type $langCourseDel
-     * @global type $langUnknownAction
      * @param type $action_type
-     * @return type (real action names)
+     * @return string (real action names)
      */
     public function get_action_names($action_type) {
 

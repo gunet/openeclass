@@ -29,6 +29,7 @@ $require_help = TRUE;
 $helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/log.class.php';
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/progress/ViewingEvent.php';
@@ -443,7 +444,7 @@ function submitPoll() {
     $v = new Valitron\Validator($_POST);
     if (!$uid) {
         $v->addRule('unique', function($field, $value, array $params) use ($pid){
-            return !Database::get()->querySingle("SELECT count(*) AS count FROM poll_user_record WHERE email = ?s AND pid = ?d", $value, $pid)->count;
+            return !Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE email = ?s AND pid = ?d", $value, $pid)->count;
         }, $langPollEmailUsed);
         $v->rule('required', array('participantEmail'));
         $v->rule('email', array('participantEmail'));
@@ -524,8 +525,14 @@ function submitPoll() {
             Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
                             VALUES (?d, ?d, ?d, ?s, ?t)", $user_record_id, $pqid, $aid, $answer_text, $CreationDate);
         }
+
+        Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_INSERT,
+                array('legend' => 'submit_answers',
+                      'title' => $poll->name
+                     )
+        );
         $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
-        $tool_content .= "<div class='alert alert-success'>".$langPollSubmitted."</div>";
+        $tool_content .= "<div class='alert alert-success'>$langPollSubmitted</div>";
         if (!empty($end_message)) {
             $tool_content .=  $end_message;
         }

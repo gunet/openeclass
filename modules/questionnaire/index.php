@@ -88,12 +88,17 @@ if ($is_editor) {
         // delete polls
         if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
             if (!resource_belongs_to_progress_data(MODULE_ID_QUESTIONNAIRE, $pid)) {
+                $poll_title = Database::get()->querySingle("SELECT name FROM poll WHERE course_id = ?d", $course_id)->name;
                 Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
                             (SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
                 Database::get()->query("DELETE FROM `poll_to_specific` WHERE poll_id = ?d", $pid);
-                Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                $deleted_rows = Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
                 Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
                 Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
+                if ($deleted_rows > 0) {
+                    Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_DELETE, array('title' => $poll_title));
+                }
+
                 Session::Messages($langPollDeleted, 'alert-success');
                 redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
             } else {
@@ -102,6 +107,8 @@ if ($is_editor) {
         // delete poll results
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
             Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
+            $poll_title = Database::get()->querySingle("SELECT name FROM poll WHERE course_id = ?d", $course_id)->name;
+            Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_DELETE, array('title' => $poll_title, 'legend' => 'purge_results'));
             Session::Messages($langPollResultsDeleted, 'alert-success');
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         //clone poll
