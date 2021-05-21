@@ -32,7 +32,7 @@ $helpTopic = 'groups';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
-require_once 'group_functions.php';
+require_once 'modules/group/group_functions.php';
 
 if ((isset($_GET['selfReg']) or isset($_GET['selfUnReg'])) and isset($_GET['group_id'])) {
     $group_id = getDirectReference($_GET['group_id']);
@@ -192,7 +192,11 @@ if (isset($_GET['group_as'])) {
                       'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
                       'icon' => 'fa-envelope',
                       'show' => $is_editor or $is_tutor or $student_to_student_allow),
-                array('title' => "$langDumpUser",
+                array('title' => $langAddManyUsers,
+                      'url' => "muladduser.php?course=$course_code&amp;group_id=$group_id",
+                      'icon' => 'fa-plus-circle',
+                      'show' => $is_editor),
+                array('title' => $langDumpUser,
                       'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
                       'icon' => 'fa-file-archive-o',
                       'show' => $is_editor),

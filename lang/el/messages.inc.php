@@ -1491,6 +1491,13 @@ $langGroupDeleted = "Η ομάδα χρηστών διαγράφηκε";
 $langGroupTeam = "Γενικές Ομάδες Χρηστών";
 $langInvalidNumericValue = "άκυρη τιμή πεδίου";
 $langGroupFull = "η ομάδα είναι πλήρης";
+$langGroupManyUsers = "<strong>Σημείωση</strong>: Οι χρήστες θα πρέπει να είναι ήδη εγγεγραμμένοι στο $langsCourse.";
+$langUsersNotFound = 'Οι παρακάτω χρήστες δε βρέθηκαν στην πλατφόρμα';
+$langUsersNotRegistered = "Οι παρακάτω χρήστες δεν έχουν εγγραφεί στο $langsCourse";
+$langUsersNotAdded = 'Δεν προστέθηκε κανένας χρήστης. Παρακαλούμε διορθώστε τα παρακάτω προβλήματα και επανυποβάλλετε τη φόρμα.';
+$langUsersInOtherGroups = 'Οι παρακάτω χρήστες βρέθηκαν σε άλλες ομάδες του μαθήματος και δεν επιτρέπεται η εγγραφή τους σε αυτήν';
+$langUsersOverMaximum = 'Ο τελικός αριθμός (%d) υπερβαίνει το μέγιστο πλήθος μελών της ομάδας (%d).';
+$langUsersAddedToGroup = 'Οι χρήστες προστέθηκαν στην ομάδα.';
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη 'Διαχείριση $langOfCourse'";
