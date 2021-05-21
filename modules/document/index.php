@@ -1189,10 +1189,14 @@ if (!isset($curDirPath)) {
 }
 $curDirName = my_basename($curDirPath);
 $parentDir = my_dirname($curDirPath);
-if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
-    Session::Messages($langInvalidDir, 'alert-danger');
-    draw($tool_content, $menuTypeID);
-    exit;
+try {
+    if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
+        Session::Messages($langInvalidDir, 'alert-danger');
+        draw($tool_content, $menuTypeID);
+        exit;
+    }
+} catch (Throwable $t) {
+    not_found($curDirPath);
 }
 
 $order = 'ORDER BY sort_key COLLATE utf8_unicode_ci';
