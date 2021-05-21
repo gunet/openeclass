@@ -137,7 +137,10 @@ if ($is_editor) {
                     purify($poll->description),
                     purify($poll->end_message),
                     $poll->anonymized,
-                    $poll->assign_to_specific
+                    $poll->assign_to_specific,
+                    $poll->show_results,
+                    $poll->multiple_submissions,
+                    $poll->default_answer
                 );
                 $new_pid = Database::get()->query("INSERT INTO poll
                                     SET creator_id = ?d,
@@ -150,6 +153,9 @@ if ($is_editor) {
                                         end_message = ?s,
                                         anonymized = ?d,
                                         assign_to_specific = ?d,
+                                        show_results = ?d,
+                                        multiple_submissions = ?d,
+                                        default_answer = ?d,
                                         active = 1", $poll_data)->lastInsertID;
                 if ($poll->assign_to_specific) {
                     Database::get()->query("INSERT INTO `poll_to_specific` (user_id, group_id, poll_id)
