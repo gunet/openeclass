@@ -886,3 +886,35 @@ function refreshHierarchyProcedures() {
                                 END IF;
                             END");
 }
+
+
+/**
+ * @brief Create directory indexes to hinder directory traversal in misconfigured servers
+ */
+function addDirectoryIndexFiles() {
+    $dirs = ['courses/archive', 'courses/document', 'courses/garbage', 'courses/mathimg', 'courses/mydocs', 'courses/theme_data', 'courses/tmpUnzipping'];
+
+    foreach ($dirs as $dir) {
+        addDirectoryIndexFilesHelper($dir);
+    }
+    Database::get()->queryFunc('SELECT code FROM course ORDER BY id',
+        function ($course) {
+            $code = $course->code;
+            addDirectoryIndexFilesHelper("courses/$code/document");
+            addDirectoryIndexFilesHelper("courses/$code/dropbox");
+            addDirectoryIndexFilesHelper("courses/$code/group");
+            addDirectoryIndexFilesHelper("courses/$code/image");
+            addDirectoryIndexFilesHelper("courses/$code/page");
+            addDirectoryIndexFilesHelper("courses/$code/scormPackages");
+            addDirectoryIndexFilesHelper("courses/$code/temp");
+            addDirectoryIndexFilesHelper("courses/$code/work");
+            addDirectoryIndexFilesHelper("courses/$code/work/admin_files");
+            addDirectoryIndexFilesHelper("video/$code");
+        });
+}
+
+function addDirectoryIndexFilesHelper($dir) {
+    if (is_dir($dir) and !(file_exists("$dir/index.php") or file_exists("$dir/index.html"))) {
+        touch("$dir/index.html");
+    }
+}

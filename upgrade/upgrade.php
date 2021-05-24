@@ -2050,6 +2050,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // create appropriate indices
     create_indexes();
 
+    // create directory indexes to hinder directory traversal in misconfigured servers
+    updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.11'));
+    addDirectoryIndexFiles();
+
     // Import new themes
     importThemes();
     if (!get_config('theme_options_id')) {

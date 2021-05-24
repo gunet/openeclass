@@ -5392,3 +5392,4 @@ $langUsersInOtherGroups = 'The following users were already members of other gro
 $langUsersOverMaximum = 'The final count (%d) exceeds the maximum number of group members (%d).';
 $langUsersAddedToGroup = 'The users were added to the group.';
 $langClear = 'Clear';
+$langAddingDirectoryIndex = 'Adding index files to course subdirectories';
