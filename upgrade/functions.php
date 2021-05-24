@@ -318,11 +318,7 @@ function importThemes($themes = null) {
 function installTheme($themesDir, $file_name) {
     global $webDir, $logfile_path;
 
-    if (isset($logfile_path)) {
-        $tempdir = $logfile_path . '/theme_data_temp';
-    } else {
-        $tempdir = "$webDir/courses/theme_data/temp";
-    }
+    $tempdir = "$webDir/courses/theme_data/temp";
     $archive = new ZipArchive;
     if (!$archive->open("$themesDir/$file_name") or !$archive->extractTo($tempdir)) {
         die('Error: ' . $archive->getStatusString());
