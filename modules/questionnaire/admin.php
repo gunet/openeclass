@@ -221,22 +221,20 @@ if (isset($_POST['submitQuestion'])) {
 if (isset($_POST['submitAnswers'])) {
     $pqid = intval($_GET['modifyAnswers']);
     $question = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
-    if(!$question){
+    if (!$question) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
     $answers = $_POST['answers'];
-
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
         (SELECT pqid FROM poll_question WHERE pid = ?d AND pqid = ?d)", $pid, $pqid);
 
     foreach ($answers as $answer) {
-        if (!empty($answer)) {
+        if ($answer !== '') {
             Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text)
                             VALUES (?d, ?s)", $pqid, $answer);
         }
     }
     redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
-
 }
 if (isset($_GET['deleteQuestion'])) {
     $pqid = intval($_GET['deleteQuestion']);
