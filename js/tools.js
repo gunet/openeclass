@@ -273,6 +273,11 @@ function exercise_init_countdown(params) {
     var exerciseId = params.exerciseId,
         eurid = params.eurid;
 
+    $('.clearSelect').click(function (e) {
+        e.preventDefault();
+        $(this).closest('.panel-body').find('input[type=radio]').prop('checked', false);
+    });
+
     // Don't submit question on enter keypress in input field
     $('.exercise input').keydown(function(event) {
             if (event.which === 13) {
@@ -713,10 +718,10 @@ function unit_password_bootbox(e) {
       title;
 
   if (el.hasClass('paused_exercise')) {
-    title = lang.continueAttempt;
+    lang.submit = title = lang.continueAttempt;
     notice = '<p>' + lang.temporarySaveNotice + '</p>';
   } else if (el.hasClass('active_exercise')) {
-    title = lang.continueAttempt;
+    lang.submit = title = lang.continueAttempt;
     notice = '<p>' + lang.continueAttemptNotice + '</p>';
   }
   if (el.hasClass('password_protected')) {

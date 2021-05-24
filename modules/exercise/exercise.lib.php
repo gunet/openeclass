@@ -28,8 +28,7 @@
 function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_number) {
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
-            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
-
+            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered, $langClear;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -198,6 +197,9 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     }
     if (!$nbrAnswers && $answerType != FREE_TEXT) {
         $tool_content .= "<div class='alert alert-danger'>$langNoAnswer</div>";
+    }
+    if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
+        $tool_content .= "<button class='pull-right clearSelect btn btn-default btn-sm'><span class='fa fa-times'></span> $langClear</button>";
     }
     $tool_content .= "
                 </div>

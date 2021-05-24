@@ -1886,6 +1886,7 @@ $langConfirmQuestionPoolPurge = "Οι ερωτήσεις που δεν χρησ�
 $langQuestionPoolPurgeSuccess = "Η διαγραφή των αχρησιμοποίητων ερωτήσεων από την τράπεζα ερωτήσεων πραγματοποιήθηκε.";
 $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
 $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
+$langClear = 'Εκκαθάριση';
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";

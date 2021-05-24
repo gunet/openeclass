@@ -384,7 +384,6 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
 
 $nbrQuestions = count($questionList);
 
-
 // determine begin time:
 // either from a previews attempt meaning that user hasn't submitted his answers permanently
 // and exerciseTimeConstrain hasn't yet passed,
@@ -392,11 +391,18 @@ $nbrQuestions = count($questionList);
 
 if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || isset($paused_attempt)) {
     $eurid = isset($paused_attempt) ? $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $paused_attempt->eurid : $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-    $recordStartDate = Database::get()->querySingle("SELECT record_start_date FROM exercise_user_record WHERE eurid = ?d", $eurid)->record_start_date;
-    $recordStartDate = strtotime($recordStartDate);
-    // if exerciseTimeConstrain has not passed yet calculate the remaining time
-    if ($exerciseTimeConstraint > 0) {
-        $timeleft = isset($paused_attempt) ? $paused_attempt->secs_remaining : ($exerciseTimeConstraint * 60) - ($temp_CurrentDate - $recordStartDate);
+    $record = Database::get()->querySingle("SELECT record_start_date, record_end_date, secs_remaining FROM exercise_user_record WHERE eurid = ?d", $eurid);
+    $recordStartDate = strtotime($record->record_start_date);
+    if (isset($paused_attempt) and $paused_attempt->secs_remaining) {
+        // resume paused attempt with same time left
+        $timeleft = $paused_attempt->secs_remaining;
+    } elseif ($record->record_end_date and $record->secs_remaining) {
+        // navigation within exercise: subtract time from last submission timestamp
+        $recordEndDate = strtotime($record->record_end_date);
+        $timeleft = $record->secs_remaining - ($temp_CurrentDate - $recordEndDate);
+    } elseif ($exerciseTimeConstraint > 0) {
+        // if exerciseTimeConstrain has not passed yet calculate the remaining time
+        $timeleft = $exerciseTimeConstraint * 60 - ($temp_CurrentDate - $recordStartDate);
     }
 } elseif (!isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) && $nbrQuestions > 0) {
     $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
@@ -457,8 +463,8 @@ if ($exercise_EndDate) {
     $exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
     if ($exerciseTimeLeft) {
         if ($exerciseTimeLeft < 0 and $is_editor) {
-            // Give editors time to test expired exercises
-            $exerciseTimeLeft = 24 * 3600;
+            // Give editors unlimited time to test expired exercises
+            unset($timeleft);
         } elseif ($exerciseTimeLeft < 3 * 3600 and (!isset($timeleft) or $exerciseTimeLeft < $timeleft)) {
             // Display countdown of exercise remaining time if less than
             // user's remaining time or less than 3 hours away
@@ -471,12 +477,9 @@ $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
     $time_expired = false;
-    // checking if user's time expired
-    if (isset($timeleft)) {
-        $timeleft += 1; // Add 1 sec for leniency when submitting
-        if ($timeleft < 0) {
-            $time_expired = true;
-        }
+    // check if user's time expired
+    if (isset($timeleft) and $timeleft <= 0) {
+        $time_expired = true;
     }
 
     // insert answers in the database and add them in the $exerciseResult array which is returned
@@ -489,10 +492,8 @@ if (isset($_POST['formSent'])) {
 
     $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $exerciseResult;
 
-    // if it is a non-sequential exercise
-    // OR the time has expired
-    if ($exerciseType == SINGLE_PAGE_TYPE && !isset($_POST['buttonSave']) ||
-        ($exerciseType == MULTIPLE_PAGE_TYPE || $exerciseType == ONE_WAY_TYPE) && (isset($_POST['buttonFinish']) || $time_expired)) {
+    // if the user has made a final submission or the time has expired
+    if (isset($_POST['buttonFinish']) or $time_expired) {
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -500,7 +501,6 @@ if (isset($_POST['formSent'])) {
         }
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
-
         $totalScore = $objExercise->calculate_total_score($eurid);
 
         if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
@@ -580,13 +580,10 @@ if (isset($_POST['formSent'])) {
     }
 }
 
-if (isset($timeleft)) {
+if (isset($timeleft)) { // time remaining
     if ($timeleft <= 1) {
         $timeleft = 1;
     }
-}
-
-if (isset($timeleft)) { // time remaining
     $tool_content .= "<div class='row alert alert-danger' style='margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
     $tool_content .= "<div class='col-sm-12'><h4 class='text-center'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
     $tool_content .= "</div>";
@@ -612,8 +609,8 @@ $tool_content .= "
   <input type='hidden' name='attempt_value' value='$attempt_value'>
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions'>";
 
-if (isset($timeleft) && $timeleft > 0) {
-  $tool_content .= "<input type='hidden' name='secsRemaining' id='secsRemaining' value='$timeleft' />";
+if (isset($timeleft)) {
+    $tool_content .= "<input type='hidden' name='secsRemaining' id='secsRemaining' value='$timeleft'>";
 }
 
 $unansweredIds = $answeredIds = array();
@@ -694,18 +691,22 @@ if ($questionList) {
             $tool_content .= "<div style='margin-bottom: 20px;'>";
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
-                $tool_content .= "<span style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>";
-                if ($questionNumber == $k) { // we are in the current question
-                    $round_border = "border-radius: 70%;";
-                } else {
-                    $round_border = '';
-                }
                 if ($answered) {
-                    $tool_content .= "<input class='btn btn-info' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langHasAnswered'>";
+                    $class = 'btn-info';
+                    $title = q($langHasAnswered);
                 } else {
-                    $tool_content .= "<input class='btn btn-default' style='$round_border' type='submit' name='q_id' value='$k' data-toggle='tooltip' data-placement='top' title='$langPendingAnswered'>";
+                    $class = 'btn-default';
+                    $title = q($langPendingAnswered);
                 }
-                $tool_content .= "</span>";
+                if ($questionNumber == $k) { // we are in the current question
+                    $extra_style = "style='outline: 2px solid #3584e4; outline-offset: 2px;'";
+                } else {
+                    $extra_style = '';
+                }
+                $tool_content .= "
+                    <div style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>
+                        <input class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-toggle='tooltip' data-placement='top' title='$title'>
+                    </div>";
             }
             $tool_content .= "</div>";
         }
@@ -813,7 +814,6 @@ if ($questionList) {
     // Enable check for unanswered questions when displaying more than one question
     if ($exerciseType == ONE_WAY_TYPE) {
         $checkSinglePage = 'true';
-        $answeredIds = [];
         $unansweredIds = [];
         $oneUnanswered = js_escape($langUnansweredQuestionsWarningThisOne);
         $questionPrompt = js_escape($langUnansweredQuestionsNoTurnBack);

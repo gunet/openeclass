@@ -5391,3 +5391,4 @@ $langUsersNotAdded = 'No users were added. Please fix the following problems and
 $langUsersInOtherGroups = 'The following users were already members of other groups and cannot be added to this one';
 $langUsersOverMaximum = 'The final count (%d) exceeds the maximum number of group members (%d).';
 $langUsersAddedToGroup = 'The users were added to the group.';
+$langClear = 'Clear';
