@@ -318,17 +318,17 @@ if ($is_editor) {
         $display = FALSE;
     }
 } elseif (isset($_GET['u'])) { // student view
-        $tool_content .= action_bar(array(
-	        array('title' => $langPrint,
-	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
-	              'icon' => 'fa-print',
-	              'level' => 'primary-label',
-	              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate"),
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')
-                    ));
+    $tool_content .= action_bar(array(
+        array('title' => $langPrint,
+              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
+              'icon' => 'fa-print',
+              'level' => 'primary-label',
+              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate"),
+        array('title' => $langBack,
+              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')
+    ));
 }
 
 if (isset($display) and $display == TRUE) {

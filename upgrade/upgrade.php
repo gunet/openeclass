@@ -2043,6 +2043,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE exercise ADD calc_grade_method TINYINT DEFAULT '1'");
             Database::get()->query("UPDATE exercise SET calc_grade_method = 0");
         }
+        if (!DBHelper::fieldExists('certified_users', 'user_id')) {
+            Database::get()->query("ALTER TABLE certified_users
+                ADD user_id INT DEFAULT NULL,
+                ADD FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE SET NULL");
+            Database::get()->query("UPDATE certified_users JOIN user
+                ON certified_users.user_fullname = CONCAT(user.surname, ' ', user.givenname)
+                SET certified_users.user_id = user.id");
+        }
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!

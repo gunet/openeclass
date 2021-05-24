@@ -371,13 +371,13 @@ function add_blogcomment_to_certificate($element, $element_id) {
  * @param type $element_id
  */
 function add_course_completion_to_certificate($element_id) {
-    
+
     global $langQuotaSuccess, $course_code;
-    
+
     $badge_id = is_course_completion_active(); // get course completion id
-    
-    Database::get()->querySingle("INSERT INTO certificate_criterion (certificate, activity_type, module, resource, threshold, operator) 
-                                   SELECT ?d, activity_type, module, resource, threshold, operator 
+
+    Database::get()->querySingle("INSERT INTO certificate_criterion (certificate, activity_type, module, resource, threshold, operator)
+                                   SELECT ?d, activity_type, module, resource, threshold, operator
                                    FROM badge_criterion WHERE badge = ?d", $element_id, $badge_id);
     // mapping badge_criterion_ids --->  cert_criterion_ids
     $d1 = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d ORDER BY id", $element_id);
@@ -388,31 +388,31 @@ function add_course_completion_to_certificate($element_id) {
     foreach ($d2 as $badge_criterion_ids) {
         $b_ids[] = $badge_criterion_ids->id;
     }
-    $ids = array_combine($b_ids, $cc_ids);   
-    
+    $ids = array_combine($b_ids, $cc_ids);
+
     // get user progress (if exists)
-    Database::get()->querySingle("INSERT INTO user_certificate (user, certificate, completed, completed_criteria, total_criteria, updated, assigned) 
-                                    SELECT user, ?d, completed, completed_criteria, total_criteria, updated, assigned 
+    Database::get()->querySingle("INSERT INTO user_certificate (user, certificate, completed, completed_criteria, total_criteria, updated, assigned)
+                                    SELECT user, ?d, completed, completed_criteria, total_criteria, updated, assigned
                                     FROM user_badge WHERE badge = ?d", $element_id, $badge_id);
     $data = Database::get()->queryArray("SELECT user FROM user_certificate WHERE certificate = ?d", $element_id);
     foreach ($data as $u) {
-        $d = Database::get()->queryArray("SELECT badge_criterion, created 
-                                    FROM user_badge_criterion JOIN badge_criterion 
-                                    ON badge_criterion.id=user_badge_criterion.badge_criterion 
-                                    AND badge_criterion.badge = ?d 
+        $d = Database::get()->queryArray("SELECT badge_criterion, created
+                                    FROM user_badge_criterion JOIN badge_criterion
+                                    ON badge_criterion.id=user_badge_criterion.badge_criterion
+                                    AND badge_criterion.badge = ?d
                                     AND user = ?d", $badge_id, $u->user);
         foreach ($d as $to_add) {
             $index = $to_add->badge_criterion;
-            Database::get()->query("INSERT INTO user_certificate_criterion SET 
+            Database::get()->query("INSERT INTO user_certificate_criterion SET
                                         user = $u->user,
-                                        certificate_criterion = $ids[$index], 
+                                        certificate_criterion = $ids[$index],
                                         created = '$to_add->created'");
         }
     }
-    
+
     Session::Messages("$langQuotaSuccess", 'alert-success');
     redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$element_id");
-    
+
 }
 
 /**
@@ -779,7 +779,7 @@ function is_course_completion_active() {
 }
 
 /**
- * @brief check if we have created course completion badge 
+ * @brief check if we have created course completion badge
  * @global type $course_id
  * @return boolean
  */
@@ -1169,8 +1169,9 @@ function register_certified_user($table, $element_id, $element_title, $user_id) 
                                                                 . "assigned = " . DBHelper::timeAfter() . ","
                                                                 . "expires = ?s, "
                                                                 . "template_id = ?d, "
-                                                                . "identifier = '" . uniqid(rand()) . "'",
-                                                    $title, $element_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id);
+                                                                . "user_id = ?d, "
+                                                                . "identifier = ?s",
+                                                    $title, $element_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id, $user_id, uniqid(rand()));
 
 }
 
@@ -1183,11 +1184,8 @@ function register_certified_user($table, $element_id, $element_title, $user_id) 
  */
 function get_cert_identifier($certificate_id, $user_id) {
 
-    $user_fullname = uid_to_name($user_id);
-    $sql = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE "
-                                                        . "cert_id = ?d "
-                                                        . "AND user_fullname = ?s",
-                                                    $certificate_id, $user_fullname);
+    $sql = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE cert_id = ?d AND user_id = ?s",
+        $certificate_id, $user_id);
     if ($sql) {
         return $sql->identifier;
     } else {

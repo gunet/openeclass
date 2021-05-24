@@ -248,7 +248,7 @@ if ($userdata) {
         // get completed certificates with public url
         $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
                                             . "FROM certified_users "
-                                            . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
+                                            . "WHERE user_fullname = ?s OR user_id = ?d", uid_to_name($uid, 'fullname'), $uid);
 
         if (count($sql) > 0) {
             $tool_content .= "<div class='panel panel-default'>
