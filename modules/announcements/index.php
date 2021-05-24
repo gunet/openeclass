@@ -433,7 +433,6 @@ if ($is_editor) {
             } else {
                 $is_visible = 0;
             }
-
             $antitle = $_POST['antitle'];
             $newContent = purify($_POST['newContent']);
             $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
@@ -463,9 +462,8 @@ if ($is_editor) {
                     $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
                 $log_type = LOG_MODIFY;
                 $message = "<div class='alert alert-success'>$langAnnModify</div>";
-
                 if (isset($_POST['tags'])) {
-                    $tagsArray = explode(',', $_POST['tags']);
+                    $tagsArray = $_POST['tags'];
                     $moduleTag = new ModuleElement($id);
                     $moduleTag->syncTags($tagsArray);
                 }
@@ -689,8 +687,12 @@ if ($is_editor) {
                                                     WHERE cu.course_id = ?d
                                                     AND u.email<>''
                                                     AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
-
-        $tool_content .= "<option value='-1' selected><h2>$langAllUsers</h2></option>";
+        if (isset($_GET['addAnnounce'])) {
+            $selected = 'selected';
+        } else {
+            $selected = '';
+        }
+        $tool_content .= "<option value='-1' $selected><h2>$langAllUsers</h2></option>";
         foreach($course_users as $cu) {
             $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->email) . ")</option>";
         }
