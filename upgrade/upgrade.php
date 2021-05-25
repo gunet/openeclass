@@ -2058,18 +2058,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // create appropriate indices
     create_indexes();
 
-    // create directory indexes to hinder directory traversal in misconfigured servers
-    updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.11'));
-    addDirectoryIndexFiles();
-
     // Import new themes
     importThemes();
     if (!get_config('theme_options_id')) {
         set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
     }
-
-    // update eclass version
-    Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 
     // add new modules to courses by reinserting all modules
     Database::get()->queryFunc("SELECT id, code FROM course", function ($course) {
@@ -2088,8 +2081,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     Database::get()->query("DELETE FROM course_module WHERE module_id = " . MODULE_ID_DESCRIPTION);
     Database::get()->query("DELETE FROM course_module WHERE module_id = " . MODULE_ID_LTI_CONSUMER);
 
-
+    // update eclass version and unlock upgrade
+    set_config('version', ECLASS_VERSION);
     set_config('upgrade_begin', '');
+
+    // create directory indexes to hinder directory traversal in misconfigured servers
+    updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.11'));
+    addDirectoryIndexFiles();
+
     updateInfo(1, $langUpgradeSuccess);
 
     $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/$logfile\" target=\"_blank\">$langLogOutput</a></div><p/>";
