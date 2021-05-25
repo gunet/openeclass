@@ -159,7 +159,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
         WHERE eurid = ?d AND
               eid = ?d AND
               attempt_status = ?d OR
-                  (attempt_status = ?d AND TIME_TO_SEC(TIMEDIFF(NOW(), record_end_date)) < ?d) AND
+                  (attempt_status = ?d AND TIME_TO_SEC(TIMEDIFF(" . DBHelper::timeAfter() . ", record_end_date)) < ?d) AND
               uid = ?d", $eurid, $exerciseId, ATTEMPT_PAUSED, ATTEMPT_ACTIVE, 300, $uid);
     if ($paused_attempt) {
         $objDateTime = new DateTime($paused_attempt->record_start_date);
@@ -172,7 +172,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                 (eid, uid, record_start_date, record_end_date, total_score,
                  total_weighting, attempt, attempt_status, secs_remaining,
                  assigned_to)
-                SELECT eid, uid, record_start_date, record_end_date, total_score,
+                SELECT eid, uid, record_start_date, ' . DBHelper::timeAfter() . ', total_score,
                        total_weighting, attempt, ?d, secs_remaining,
                        assigned_to FROM exercise_user_record WHERE eurid = ?d',
                 ATTEMPT_ACTIVE, $eurid)->lastInsertID;
@@ -242,7 +242,7 @@ if ($ips && !$is_editor){
 if (isset($_POST['buttonCancel'])) {
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
-        SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = 0
+        SET record_end_date = " . DBHelper::timeAfter() . ", attempt_status = ?d, total_score = 0, total_weighting = 0
         WHERE eurid = ?d", ATTEMPT_CANCELED, $eurid);
     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
 
@@ -487,7 +487,7 @@ if (isset($_POST['formSent'])) {
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
     $questionNum = count($exerciseResult) + 1;
     Database::get()->query('UPDATE exercise_user_record
-        SET record_end_date = NOW(), secs_remaining = ?d
+        SET record_end_date = ' . DBHelper::timeAfter() . ', secs_remaining = ?d
         WHERE eurid = ?d', isset($timeleft)? $timeleft: 0, $eurid);
 
     $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $exerciseResult;
@@ -500,7 +500,6 @@ if (isset($_POST['formSent'])) {
             $secs_remaining = 0;
         }
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
-        $record_end_date = date('Y-m-d H:i:s', time());
         $totalScore = $objExercise->calculate_total_score($eurid);
 
         if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
@@ -512,8 +511,9 @@ if (isset($_POST['formSent'])) {
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
         // record results of exercise
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
-                                total_weighting = ?f, secs_remaining = ?d WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $secs_remaining, $eurid);
+        Database::get()->query("UPDATE exercise_user_record
+            SET total_score = ?f, attempt_status = ?d, total_weighting = ?f
+            WHERE eurid = ?d", $totalScore, $attempt_status, $totalWeighting, $eurid);
 
         if ($attempt_status == ATTEMPT_COMPLETED) {
             // update attendance book
@@ -561,7 +561,7 @@ if (isset($_POST['formSent'])) {
             $objExercise->save_unanswered();
         }
 
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?f, total_weighting = ?f, attempt_status = ?d, secs_remaining = ?d
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = " . DBHelper::timeAfter() . ", total_score = ?f, total_weighting = ?f, attempt_status = ?d, secs_remaining = ?d
                 WHERE eurid = ?d", floatval($totalScore), floatval($totalWeighting), ATTEMPT_PAUSED, $secs_remaining, $eurid);
         if (($exerciseType == MULTIPLE_PAGE_TYPE or $exerciseType == ONE_WAY_TYPE) and isset($_POST['choice']) and is_array($_POST['choice'])) {
             // for sequential exercises, return to current question
