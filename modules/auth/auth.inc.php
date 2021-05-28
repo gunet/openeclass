@@ -1098,6 +1098,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
                 $user_info_object->am = $options['am'];
                 Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
                     $options['am'], $user_info_object->id);
+                $_SESSION['auth_user_info']['studentid'] = $options['am'];
             }
             $userObj->refresh($user_info_object->id, $options['departments']);
             if (!array_search($user_info_object->password, $auth_ids)) {
@@ -1367,7 +1368,7 @@ function shib_cas_login($type) {
             }
 
             $status = $options['status'];
-            $am = $options['am'];
+            $_SESSION['auth_user_info']['studentid'] = $am = $options['am'];
 
             // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
@@ -1429,6 +1430,7 @@ function shib_cas_login($type) {
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);
+        $_SESSION['auth_user_info']['studentid'] = $options['am'];
         $userObj = new User();
         $userObj->refresh($_SESSION['uid'], $options['departments']);
         user_hook($_SESSION['uid']);

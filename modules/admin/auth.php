@@ -40,15 +40,15 @@ $tool_content .= action_bar(array(
 // sso transition
 if (isset($_GET['transition'])) {
     if ($_GET['transition'] == 'true') {
-        Session::Messages("ΠΡΟΣΟΧΗ! Θα ενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON). 
-                                Επιβεβαιώστε την ενέργειά σας. 
+        Session::Messages("ΠΡΟΣΟΧΗ! Θα ενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON).
+                                Επιβεβαιώστε την ενέργειά σας.
                                 <ul>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=true'><strong>Ναι</strong></a></li>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
                                 </ul>", 'alert-warning');
     } else {
-        Session::Messages("ΠΡΟΣΟΧΗ! Θα απενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON). 
-                                Επιβεβαιώστε την ενέργειά σας. 
+        Session::Messages("ΠΡΟΣΟΧΗ! Θα απενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON).
+                                Επιβεβαιώστε την ενέργειά σας.
                                 <ul>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=false'><strong>Ναι</strong></a></li>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
@@ -135,10 +135,6 @@ if (isset($_GET['auth'])) {
         $activation_icon = $active? 'fa-toggle-off': 'fa-toggle-on';
         $tool_content .= "<tr><td$visibility>" . strtoupper($auth_name) . "$primaryLabel</td><td class='option-btn-cell'>";
         $tool_content .= action_button(array(
-            array('title' => $activation_title,
-                  'url' => $activation_url,
-                  'icon' => $activation_icon,
-                  'show' => $auth_id == 1 || $info->auth_settings),
             array('title' => $langAuthSettings,
                   'url' => "auth_process.php?auth=$auth_id",
                   'icon' => 'fa-gear'),
@@ -154,18 +150,22 @@ if (isset($_GET['auth'])) {
                   'url' => "auth_test.php?auth=$auth_id",
                   'icon' => 'fa-plug',
                   'show' => $auth_id != 1 && $info->auth_settings),
-            array('title' => "Ενεργοποίηση μετάβασης",
+            array('title' => $activation_title,
+                  'url' => $activation_url,
+                  'icon' => $activation_icon,
+                  'show' => $auth_id == 1 || $info->auth_settings),
+            array('title' => $langTransitionEnable,
                 'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
                 'icon' => 'fa-bell',
                 'show' => ($auth_name == 'cas' && !get_config('sso_transition'))),
-            array('title' => "Απενεργοποίηση μετάβασης",
+            array('title' => $langTransitionDisable,
                 'url' => "$_SERVER[SCRIPT_NAME]?transition=false",
                 'icon' => 'fa-bell-slash',
                 'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))),
-            array('title' => "Αιτήματα εξαιρέσεων μετάβασης",
+            array('title' => $langTransitionExcludeReq,
                 'url' => "../auth/transition/admin_auth_transition.php",
                 'icon' => 'fa-exclamation',
-                'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition')))
+                'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))),
             ));
             $tool_content .= "</td><tr>";
     }
@@ -173,4 +173,3 @@ if (isset($_GET['auth'])) {
 }
 
 draw($tool_content, 3);
-

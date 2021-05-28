@@ -197,7 +197,7 @@ if (isset($_POST['submit'])) {
         Session::Messages($cpf_error_str);
         redirect_to_home_page("main/profile/profile.php");
     }
-    
+
     $need_email_verification = false;
     // TODO: Allow admin to configure allowed username format
     if (!empty($email_form) && ($email_form != $_SESSION['email']) && get_config('email_verification_required')) {
@@ -242,7 +242,7 @@ if (isset($_POST['submit'])) {
             redirect_to_home_page("modules/auth/mail_verify_change.php?from_profile=true");
         } else {
             Session::Messages($langProfileReg, 'alert-success');
-            redirect_to_home_page("main/profile/display_profile.php");    
+            redirect_to_home_page("main/profile/display_profile.php");
         }
     }
     if ($old_language != $language) {
@@ -445,10 +445,21 @@ $tool_content .= "</div></div>";
 $access_options = array(ACCESS_PROFS => $langProfileInfoProfs,
                         ACCESS_USERS => $langProfileInfoUsers);
 
+$email_field = "<input class='form-control' type='text' name='email_form' id='email_form' value='$email_form'>";
+$am_field = "<input type='text' class='form-control' name='am_form' id='am_form' value='$am_form'>";
+if (isset($_SESSION['auth_user_info'])) {
+    if (get_config('email_prevent_autoset_change') and isset($_SESSION['auth_user_info']['email']) and $_SESSION['auth_user_info']['email']) {
+        $email_field = "<p class='form-control-static'>$email_form</p>";
+    }
+    if (get_config('am_prevent_autoset_change') and isset($_SESSION['auth_user_info']['studentid']) and $_SESSION['auth_user_info']['studentid']) {
+        $am_field = "<p class='form-control-static'>$am_form</p>";
+    }
+}
+
 $tool_content .= "<div class='form-group'>
                     <label for='email_form' class='col-sm-2 control-label'>$langEmail:</label>
                     <div class='col-sm-5'>
-                        <input class='form-control' type='text' name='email_form' id='email_form' value='$email_form'>
+                        $email_field
                     </div>
                     <div class='col-sm-5'>
                         " . selection($access_options, 'email_public', $myrow->email_public, "class='form-control'") . "
@@ -457,7 +468,7 @@ $tool_content .= "<div class='form-group'>
                 <div class='form-group'>
                     <label for='am_form' class='col-sm-2 control-label'>$langAm:</label>
                     <div class='col-sm-5'>
-                        <input type='text' class='form-control' name='am_form' id='am_form' value='$am_form'>
+                        $am_field
                     </div>
                     <div class='col-sm-5'>
                         " . selection($access_options, 'am_public', $myrow->am_public, "class='form-control'") . "

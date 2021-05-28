@@ -385,6 +385,8 @@ if (isset($_POST['submit'])) {
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
+        'email_prevent_autoset_change' => true,
+        'am_prevent_autoset_change' => true,
         'am_required' => true,
         'dont_display_login_form' => true,
         'hide_login_link' => true,
@@ -1053,7 +1055,9 @@ else {
     $cbox_case_insensitive_usernames = get_config('case_insensitive_usernames') ? 'checked' : '';
     $cbox_email_required = get_config('email_required') ? 'checked' : '';
     $cbox_email_verification_required = get_config('email_verification_required') ? 'checked' : '';
+    $cbox_email_prevent_autoset_change = get_config('email_prevent_autoset_change') ? 'checked' : '';
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
+    $cbox_am_prevent_autoset_change = get_config('am_prevent_autoset_change') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
     $cbox_eportfolio_enable = get_config('eportfolio_enable') ? 'checked' : '';
@@ -1106,8 +1110,20 @@ else {
                                 </div>
                                 <div class='checkbox'>
                                     <label>
+                                        <input type='checkbox' name='email_prevent_autoset_change' value='1' $cbox_email_prevent_autoset_change>
+                                        $lang_email_prevent_autoset_change
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
                                         <input type='checkbox' name='am_required' value='1' $cbox_am_required>
                                         $lang_am_required
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='am_prevent_autoset_change' value='1' $cbox_am_prevent_autoset_change>
+                                        $lang_am_prevent_autoset_change
                                     </label>
                                 </div>
                                 <div class='checkbox'>
