@@ -93,20 +93,19 @@ if (isset($_POST['submitPoll'])) {
         if (isset($pid)) {
             $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM poll_user_record WHERE pid = ?d", $pid)->count;
             if ($attempt_counter > 0) {
-                $affected_rows = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
+                $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
                         end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $MulSubmissions, $DefaultAnswer,
                             $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $course_id, $pid);
             } else {
-                $affected_rows = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
+                $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
                             end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
                             $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $course_id, $pid);
             }
-
-            if ($affected_rows > 0) {
+            if ($q->affectedRows > 0) {
                 Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_MODIFY,
                                 array('id' => $pid,
                                       'title' => $PollName,

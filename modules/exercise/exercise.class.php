@@ -726,7 +726,7 @@ if (!class_exists('Exercise')) {
             $calc_grade_method = $this->calc_grade_method;
             // exercise already exists
             if ($id) {
-                $affected_rows = Database::get()->query("UPDATE `exercise`
+                $q = Database::get()->query("UPDATE `exercise`
                     SET title = ?s, description = ?s, type = ?d, `range` = ?d,
                         start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d,
                         attempts_allowed = ?d, random = ?d, shuffle = ?d, active = ?d, public = ?d,
@@ -739,7 +739,7 @@ if (!class_exists('Exercise')) {
                     $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit, $calc_grade_method,
                     $course_id, $id)->affectedRows;
-                if ($affected_rows > 0) {
+                if ($q->affectedRows > 0) {
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
                         array('id' => $id,
                               'title' => $exercise,
