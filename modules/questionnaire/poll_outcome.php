@@ -26,6 +26,7 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/lti_consumer/lti-functions.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 $course_id = null;
 $course_code = null;
@@ -41,6 +42,14 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0 && $uid) {
 
     $course_id = $_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$pid.'_COURSE_ID'];
     $course_code = $_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$pid.'_COURSE_CODE'];
+
+    $eventData = new stdClass();
+    $eventData->courseId = $course_id;
+    $eventData->uid = $uid;
+    $eventData->activityType = ViewingEvent::QUESTIONNAIRE_ACTIVITY;
+    $eventData->module = MODULE_ID_QUESTIONNAIRE;
+    $eventData->resource = intval($pid);
+    ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 
     if ($launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
         echo "<p>".$langPollSubmitted."</p>";
