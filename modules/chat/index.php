@@ -339,7 +339,7 @@ if ($display == TRUE) {
     if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langAdd,
-                'url' => "index.php?add_conference&amp;course_code=$course_code",
+                'url' => "index.php?add_conference&amp;course=$course_code",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success')));
