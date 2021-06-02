@@ -739,12 +739,10 @@ if (!class_exists('Exercise')) {
                     $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit, $calc_grade_method,
                     $course_id, $id)->affectedRows;
-                if ($q->affectedRows > 0) {
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
                         array('id' => $id,
                               'title' => $exercise,
                               'description' => $description));
-                }
             } // creates a new exercise
             else {
                 $this->id = Database::get()->query("INSERT INTO `exercise`
