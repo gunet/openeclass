@@ -628,11 +628,6 @@ function insert_activity($element, $element_id, $activity) {
 
 /**
  * @brief display editing form about resource
- * @global type $tool_content
- * @global type $course_code
- * @global type $langModify
- * @global type $langOperator
- * @global type $langUsedCertRes
  * @param type $element_id
  * @param type $element
  * @param type $activity_id
@@ -649,13 +644,12 @@ function display_modification_activity($element, $element_id, $activity_id) {
         $data = Database::get()->querySingle("SELECT threshold, operator FROM ${element}_criterion
                                             WHERE id = ?d AND $element = ?d", $activity_id, $element_id);
         $operators = get_operators();
-
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>";
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langOperator:</label>";
-        $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $operators[$data->operator]) . "</span>";
+        $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $data->operator) . "</span>";
         $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='col-sm-5 col-sm-offset-5'>";
@@ -1654,7 +1648,6 @@ function display_settings($element, $element_id) {
     $title = $data->title;
     $description = $data->description;
     $message = $data->message;
-    $icon_link = '';
     if ($bundle != -1) {
         if ($element == 'badge') {
             $badge_details = get_badge_icon($data->icon);
@@ -1931,8 +1924,8 @@ function student_view_progress() {
             </div>            
         ";
     }
-    
-    
+
+
     $iter = array('certificate', 'badge');
     foreach ($iter as $key) {
         ${'game_'.$key} = array();
