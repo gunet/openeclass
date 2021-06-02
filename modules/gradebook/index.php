@@ -25,8 +25,8 @@ $helpTopic = 'gradebook';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
-require_once 'functions.php';
 require_once 'modules/progress/GradebookEvent.php';
+require_once 'functions.php';
 require_once 'include/log.class.php';
 //Module name
 $toolName = $langGradebook;

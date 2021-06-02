@@ -18,6 +18,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once 'modules/progress/GradebookEvent.php';
+
 /**
  * @brief display user grades (teacher view)
  * @global type $course_code
@@ -33,7 +35,7 @@
  * @global type $langGradebookNoActMessage3
  * @global type $langGradebookActCour
  * @global type $langGradebookAutoGrade
- * @global type $langGradebookΝοAutoGrade
+ * @global type $langGradebookNoAutoGrade
  * @global type $langGradebookActAttend
  * @global type $langGradebookOutRange
  * @global type $langGradebookUpToDegree
@@ -47,7 +49,7 @@ function display_user_grades($gradebook_id) {
            $langTitle, $langGradebookActivityDate2, $langType, $langGradebookNewUser,
            $langGradebookWeight, $langGradebookBooking, $langGradebookNoActMessage1,
            $langGradebookNoActMessage2, $langGradebookNoActMessage3, $langGradebookActCour,
-           $langGradebookAutoGrade, $langGradebookΝοAutoGrade, $langGradebookActAttend,
+           $langGradebookAutoGrade, $langGradebookNoAutoGrade, $langGradebookActAttend,
            $langGradebookOutRange, $langGradebookUpToDegree, $langGradeNoBookAlert, $langGradebookGrade;
 
     $gradebook_range = get_gradebook_range($gradebook_id);
@@ -116,7 +118,7 @@ function display_user_grades($gradebook_id) {
                     if ($activity->auto) {
                         $tool_content .= "<br>($langGradebookAutoGrade)";
                     } else {
-                        $tool_content .= "<br>($langGradebookΝοAutoGrade)";
+                        $tool_content .= "<br>($langGradebookNoAutoGrade)";
                     }
                     $tool_content .= "</td>";
                 } else {
@@ -1691,9 +1693,6 @@ function add_gradebook_other_activity($gradebook_id) {
 
 /**
  * @brief insert grades for activity
- * @global string $tool_content
- * @global type $langGradebookEdit
- * @global type $langGradebookGrade
  * @param type $gradebook_id
  * @param type $actID
  */
@@ -1702,7 +1701,6 @@ function insert_grades($gradebook_id, $actID) {
     global $tool_content, $langGradebookEdit, $gradebook, $langTheField,
            $course_code, $langFormErrors, $langGradebookGrade, $course_id;
 
-    $errors = [];
     $v = new Valitron\Validator($_POST['usersgrade']);
     $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
         if(is_numeric($value) || empty($value)) return true;
@@ -1774,6 +1772,8 @@ function update_grades($gradebook_id, $actID) {
  */
 function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
 {
+    global $course_id;
+
     $params = [$activity, $id];
     $sql = "SELECT gradebook_activities.id, gradebook_activities.gradebook_id
                 FROM gradebook_activities, gradebook
@@ -1802,6 +1802,7 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
     $gradebookActivities = Database::get()->queryArray($sql, $params);
     if ($gradebookActivities) {
         foreach($gradebookActivities as $gradebookActivity){
+            $gradebook_id = $gradebookActivity->gradebook_id;
             $gradebook_book = Database::get()->querySingle("SELECT grade
                     FROM gradebook_book
                     WHERE gradebook_activity_id = ?d AND uid = ?d",
@@ -1823,9 +1824,9 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
                             SET gradebook_activity_id = ?d, uid = ?d, grade = ?f, comments = ''",
                     $gradebookActivity->id, $uid, $grade);
             }
+            triggerGameGradebook($course_id, $uid, $gradebook_id);
         }
     }
-    return;
 }
 
 /**
@@ -2047,6 +2048,12 @@ function get_gradebook_activity_title($gradebook_id, $activity_id) {
     return $act_title;
 }
 
+/**
+ * @brief gamification
+ * @param $courseId
+ * @param $uid
+ * @param $gradebookId
+ */
 function triggerGameGradebook($courseId, $uid, $gradebookId) {
     $eventData = new stdClass();
     $eventData->courseId = $courseId;
@@ -2054,5 +2061,5 @@ function triggerGameGradebook($courseId, $uid, $gradebookId) {
     $eventData->activityType = GradebookEvent::ACTIVITY;
     $eventData->module = MODULE_ID_GRADEBOOK;
     $eventData->resource = intval($gradebookId);
-    GradebookEvent::trigger(GradebookEvent::UPDGRADE, $eventData);
+    GradebookEvent::trigger(GradebookEvent::UPGRADE, $eventData);
 }
