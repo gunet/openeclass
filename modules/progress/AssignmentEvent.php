@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,22 +17,22 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 require_once 'BasicEvent.php';
 
 class AssignmentEvent extends BasicEvent {
-    
+
     const ACTIVITY = 'assignment';
-    const UPDGRADE = 'assignment-grade-changed';
-    
+    const UPGRADE = 'assignment-grade-changed';
+
     public function __construct() {
         parent::__construct();
-        
-        $this->on(self::UPDGRADE, function($data) {
+
+        $this->on(self::UPGRADE, function($data) {
             $threshold = 0;
-            
+
             // fetch grade from DB and use it as threshold
             $subm = Database::get()->querySingle("SELECT s.* "
                     . " FROM assignment_submit s "
@@ -43,11 +43,11 @@ class AssignmentEvent extends BasicEvent {
             if ($subm && floatval($subm->grade) > 0) {
                 $threshold = floatval($subm->grade);
             }
-            
+
             $this->setEventData($data);
             $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         });
     }
-    
+
 }

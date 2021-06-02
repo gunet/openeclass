@@ -556,7 +556,7 @@ function triggerGame($courseId, $uid, $assignId) {
     $eventData->activityType = AssignmentEvent::ACTIVITY;
     $eventData->module = MODULE_ID_ASSIGN;
     $eventData->resource = intval($assignId);
-    AssignmentEvent::trigger(AssignmentEvent::UPDGRADE, $eventData);
+    AssignmentEvent::trigger(AssignmentEvent::UPGRADE, $eventData);
 }
 
 
