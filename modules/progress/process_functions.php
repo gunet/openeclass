@@ -528,11 +528,11 @@ function get_cert_message($element, $id) {
 
 /**
  * @brief get certificate template filename
- * @param type $certificate_id
+ * @param type $template_id
  */
-function get_certificate_template($certificate_id) {
+function get_certificate_template($template_id) {
 
-    $r = Database::get()->querySingle("SELECT name, filename FROM certificate_template WHERE id = ?d", $certificate_id);
+    $r = Database::get()->querySingle("SELECT name, filename FROM certificate_template WHERE id = ?d", $template_id);
 
     return [$r->name => $r->filename];
 }
