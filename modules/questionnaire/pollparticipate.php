@@ -377,11 +377,11 @@ function printPollForm() {
         } else {
             if (!$temp_IsLime) {
                 $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
-            }
-            if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
-            } else {
-                $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+                if (isset($_REQUEST['unit_id'])) {
+                    $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
+                } else {
+                    $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+                }
             }
         }
         $tool_content .= "</div>";
