@@ -89,7 +89,6 @@ if (!isset($_REQUEST['course_code'])) {
     $course_code = course_id_to_code($course_id);
 }
 
-
 if (isset($_GET['from_other'])) {
     $toolName = $langSystemActions;
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
