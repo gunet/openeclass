@@ -379,7 +379,7 @@ class Log {
         global $langCourseStatusChange, $langIn, $langClosedCourse,
                $langRegCourse, $langOpenCourse, $langInactiveCourse,
                $langActivate, $langDeactivate, $langBlogComment,
-               $langBlogSharingLog, $langBlogRatingLog,
+               $langBlogSharingLog, $langBlogRatingLog, $langsCourseSharing,
                $langCourseComment, $langsCourseAnonymousRating, $langsCourseRating,
                $langForumRating, $langCourseSocialBookmarks, $langCourseAbuseReport;
 

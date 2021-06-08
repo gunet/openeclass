@@ -89,7 +89,6 @@ if (!isset($_REQUEST['course_code'])) {
     $course_code = course_id_to_code($course_id);
 }
 
-
 if (isset($_GET['from_other'])) {
     $toolName = $langSystemActions;
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
@@ -189,14 +188,14 @@ if (!isset($_GET['from_other'])) {
 }
 
 $tool_content .= '<div class="form-wrapper">';
-if (isset($_GET['from_other'])) { 
+if (isset($_GET['from_other'])) {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?from_other=TRUE">';
 } else {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 }
 
 // if we haven't choose 'system actions'
-if (!isset($_GET['from_other'])) { 
+if (!isset($_GET['from_other'])) {
     $tool_content .= '<div class="form-group">
             <label class="col-sm-2 control-label">' . $langLogModules . ':</label>
             <div class="col-sm-10"><select name="u_module_id" class="form-control">';
@@ -249,7 +248,7 @@ $tool_content .= "<div class='input-append date form-group' data-date = '" . q($
     <span class='add-on'><i class='fa fa-times'></i></span>
     <span class='add-on'><i class='fa fa-calendar'></i></span>
 </div>
-</div>";        
+</div>";
 $tool_content .= "<div class='input-append date form-group' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
         <label class='col-sm-2 control-label' for='user_date_end'>$langEndDate:</label>
             <div class='col-xs-10 col-sm-9'>

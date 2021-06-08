@@ -82,15 +82,20 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-
 $u = isset($_GET['u']) ? intval($_GET['u']) : '';
 
-$pageName = "$langUserLog: " . uid_to_name($u);
+$toolName = "$langUserLog: " . uid_to_name($u);
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "../admin/listusers.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')
+));
 
-if (isset($_POST['user_date_start'])) {
-    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
+if (isset($_GET['user_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_GET['user_date_start']);
     $u_date_start = $uds->format('Y-m-d H:i');
     $user_date_start = $uds->format('d-m-Y H:i');
 } else {
@@ -99,8 +104,8 @@ if (isset($_POST['user_date_start'])) {
     $u_date_start = $date_start->format('Y-m-d H:i');
     $user_date_start = $date_start->format('d-m-Y H:i');
 }
-if (isset($_POST['user_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);
+if (isset($_GET['user_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_GET['user_date_end']);
     $u_date_end = $ude->format('Y-m-d H:i');
     $user_date_end = $ude->format('d-m-Y H:i');
 } else {
@@ -119,12 +124,9 @@ if (isDepartmentAdmin()) {
 }
 
 $log = new Log();
+
 // display logs
-if (isset($_GET['submit'])) {  // display course modules logging
-    $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
-} else {
-    $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
-}
+$log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
 
 $terms = array();
 $qry = "SELECT id, title FROM course";
@@ -133,6 +135,7 @@ Database::get()->queryFunc($qry
         , function ($row) use(&$cours_opts) {
     $cours_opts[$row->id] = $row->title;
 }, $terms);
+
 
 // --------------------------------------
 // display form
@@ -191,13 +194,11 @@ $tool_content .= '<div class="form-group">
   </div>
   <input type="hidden" name="u" value="'. $u .'">
   <div class="form-group">
-        <div class="col-sm-10 col-sm-offset-9">
-            <input class="btn btn-primary" type="submit" name="submit" value="' . $langSubmit . '">
-            <a class="btn btn-default" href="listusers.php" data-placement="bottom" data-toggle="tooltip" title="" data-original-title='.$langBack.' ><span class="fa fa-reply space-after-icon"></span><span class="hidden-xs">'.$langBack.'</span></a>
+        <div class="col-sm-offset-2 col-sm-10">
+            <input class="btn btn-primary" type="submit" name="submit" value="' . $langSubmit . '">            
         </div>
     </div>
 
 </form></div>';
-
 
 draw($tool_content, 3, null, $head_content);
