@@ -4492,28 +4492,29 @@ function assignment_details($id, $row, $x =false) {
     if ($is_editor) {
         $tool_content .= action_bar(array(
             array(
-                'title' => $langAddGrade,
-                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=add",
-                'icon' => 'fa-plus-circle',
+                'title' => $langZipDownload,
+                'icon' => 'fa-file-archive-o',
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;download=$id",
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ),
             array(
-                'title' => $langZipDownload,
-                'icon' => 'fa-file-archive-o',
-                'url' => "{$urlServer}modules/work/?course=$course_code&amp;download=$id",
-                'level' => 'primary'
+                'title' => $langExportGrades,
+                'icon' => 'fa-file-excel-o',
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=export",
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'
+            ),
+            array(
+                'title' => $langAddGrade,
+                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=add",
+                'icon' => 'fa-plus-circle'
             ),
             array(
                 'title' => $langImportGrades,
                 'icon' => 'fa-upload',
                 'url' => "import.php?course=$course_code&amp;id=$id",
                 'show' => ($grade_type == 0)
-            ),
-            array(
-                'title' => $langExportGrades,
-                'icon' => 'fa-file-excel-o',
-                'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id&amp;choice=export"
             ),
             array(
                 'title' => $langGraphResults,
