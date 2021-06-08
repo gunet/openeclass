@@ -1,2 +1,2 @@
-*#test
-*#run.test.sh
+#test
+#run.test.sh
