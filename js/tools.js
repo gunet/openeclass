@@ -447,6 +447,7 @@ function exercise_init_countdown(params) {
                         label: params.goBack,
                         className: 'btn-success',
                         callback: function () {
+                            finishClicked = false;
                             var moveTo = $('#qPanel' + firstUnanswered);
                             if (moveTo.length) {
                                 $('html').animate({
