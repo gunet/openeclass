@@ -96,7 +96,6 @@ function create_course_dirs($code) {
     global $langDirectoryCreateError;
 
     $base = "courses/$code";
-    umask(0);
     $dirs = [$base, "$base/image", "$base/document", "$base/dropbox",
         "$base/page", "$base/work", "$base/group", "$base/temp",
         "$base/scormPackages", "video/$code"];
