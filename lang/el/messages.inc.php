@@ -3424,6 +3424,11 @@ $langNewProfAccountActivation = "Ενεργοποίηση Λογαριασμού
 $langNewAccountActivation1 = "την ενεργοποίηση λογαριασμού σας";
 $langUserExistingAccount = "Στοιχεία Εισόδου";
 $langMultiRegUserData = "Στοιχεία Λογαριασμών Χρηστών";
+$langHybridAuthSetup1 = "<br>Για οδηγίες σχετικά με τον ορισμό των πεδίων <strong>";
+$langHybridAuthSetup2 = " Id/Key</strong> και <strong>";
+$langHybridAuthSetup3 = " Secret</strong> πατήστε <a href=";
+$langHybridAuthSetup4 = " target='_blank'>εδώ</a>.";
+$langHybridAuthCallback = "<br>Ο σύνδεσμος <strong>callback</strong> της εφαρμογής είναι: ";
 
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";

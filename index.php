@@ -28,7 +28,6 @@ session_start();
  *
  */
 
-
 use Hybrid\Auth;
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
@@ -90,8 +89,8 @@ if (isset($_GET['logout']) and $uid) {
     require_once 'modules/auth/methods/hybridauth/config.php';
 
     $config = get_hybridauth_config();
-    $hybridauth = new Hybrid_Auth( $config );
-    $hybridauth->logoutAllProviders();
+    $hybridauth = new Hybridauth\Hybridauth( $config );
+    //$hybridauth->logoutAllProviders();
 
     session_destroy();
     $uid = 0;
@@ -106,6 +105,30 @@ if (isset($_GET['logout']) and $uid) {
 
 // if we try to login... then authenticate user.
 $warning = '';
+
+/*if(isset($_SESSION['callback']) && $_SESSION['callback'] == '1'){
+        header('Location: /modules/admin/auth_test.php?auth=8&'.$_SERVER['QUERY_STRING']);
+        exit;
+}*/
+
+
+if(isset($_SESSION['hybridauth_callback'])) {
+	switch($_SESSION['hybridauth_callback']) {
+		case 'login':
+			$_GET['provider'] = $_SESSION['hybridauth_provider'] ?? '';
+			break;
+		case 'profile':
+			$provider = $_SESSION['hybridauth_provider'] ?? '';
+			header('Location: /main/profile/profile.php?action=connect&provider='.$provider.'&'.$_SERVER['QUERY_STRING']);
+			exit;
+			break;
+		case 'auth_test':
+			$provider = $_SESSION['hybridauth_provider'] ?? '';
+			header('Location: /modules/admin/auth_test.php?auth='.$provider.'&'.$_SERVER['QUERY_STRING']);
+        		exit;
+			break;
+	}
+}
 
 if (isset($_SESSION['shib_uname'])) {
     // authenticate via shibboleth

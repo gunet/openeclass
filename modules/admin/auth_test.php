@@ -26,13 +26,18 @@
  */
 
 $require_admin = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-use Hybrid\Auth;
+
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+use Hybridauth\HttpClient;
 
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $auth = intval($_REQUEST['auth']);
@@ -68,9 +73,23 @@ if ($auth == 7) { // CAS
 } elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
     include_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
-    $provider = $auth_ids[$auth];
+    if($auth_ids[$auth] == 'linkedin'){
+    	$provider = 'LinkedIn';
+    } else if($auth_ids[$auth] == 'live') {
+	$provider = 'WindowsLive';
+    } else {
+    	$provider = $auth_ids[$auth];
+    }
+
     try {
-        $hybridauth = new Hybrid_Auth($config);
+	if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'auth_test'){
+		unset($_SESSION['hybridauth_callback']);
+		if(isset($_SESSION['hybridauth_provider'])) unset($_SESSION['hybridauth_provider']);
+	} else {
+		$_SESSION['hybridauth_callback'] = 'auth_test';
+		$_SESSION['hybridauth_provider'] = $auth;
+	}
+	$hybridauth = new Hybridauth( $config );
         $adapter = $hybridauth->authenticate($provider);
         $user_data = $adapter->getUserProfile();
         Session::Messages($langConnYes, 'alert-success');

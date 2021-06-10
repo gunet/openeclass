@@ -97,7 +97,7 @@ if (!empty($provider_name)) {
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
 
-    $hybridauth = new Hybrid_Auth( $config );
+    $hybridauth = new Hybridauth\Hybridauth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
 
@@ -105,7 +105,7 @@ if (!empty($provider_name)) {
     if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) {
         try {
             // create an instance for Hybridauth with the configuration file path as parameter
-            $hybridauth = new Hybrid_Auth($config);
+            $hybridauth = new Hybridauth\Hybridauth( $config );
 
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate(strtolower($provider_name));
@@ -365,7 +365,7 @@ if (!isset($_POST['submit'])) {
         require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
         $config = get_hybridauth_config();
 
-        $hybridauth = new Hybrid_Auth( $config );
+        $hybridauth = new Hybridauth\Hybridauth( $config );
         $allProviders = $hybridauth->getProviders();
         $provider = '';
         $warning = '';
@@ -378,7 +378,7 @@ if (!isset($_POST['submit'])) {
             // if !empty($provider), it means the provider is existent and valid - it's checked above
             try {
                 // create an instance for Hybridauth with the configuration file path as parameter
-                $hybridauth = new Hybrid_Auth($config);
+                $hybridauth = new Hybridauth\Hybridauth( $config );
 
                 // try to authenticate the selected $provider
                 $adapter = $hybridauth->authenticate($provider);

@@ -27,7 +27,7 @@
  */
 
 function hybridAuthForm($auth) {
-    global $tool_content, $langAuthenticateVia, $langInstructionsAuth;
+    global $tool_content, $langAuthenticateVia, $langInstructionsAuth, $langHybridAuthSetup1, $langHybridAuthSetup2, $langHybridAuthSetup3, $langHybridAuthSetup4, $langHybridAuthCallback;
 
     $r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_name FROM auth WHERE auth_id = ?d", $auth);
     if (!empty($r->auth_settings)) {
@@ -40,8 +40,21 @@ function hybridAuthForm($auth) {
     }
     $auth_instructions = $r->auth_instructions;
     $authName = q(ucfirst($r->auth_name));
+    if(isset($_SERVER['HTTPS'])){
+        $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+    }
+    else{
+        $protocol = 'http';
+    }
+    $callbackUri = "<strong>" . $protocol . "://" . $_SERVER['HTTP_HOST'] . "/</strong>";
 
-    $tool_content .= "<div class='alert alert-info'>" . ucfirst($langAuthenticateVia) . " $authName</div>
+    if(in_array($authName, ['Facebook','Twitter', 'Google', 'Linkedin', 'Live', 'Yahoo'], true )){
+	$authHelpUrl = 'https://docs.openeclass.org/el/admin/users_administration/'.strtolower($authName);
+	$authHelp = $langHybridAuthSetup1 . $authName . $langHybridAuthSetup2 . $authName . $langHybridAuthSetup3 . $authHelpUrl . $langHybridAuthSetup4 . $langHybridAuthCallback . $callbackUri;
+    } else {
+	$authHelp = "";
+    }
+    $tool_content .= "<div class='alert alert-info'>" . ucfirst($langAuthenticateVia) . " $authName $authHelp</div>
       <div class='form-group'>
           <label for='hybridauth_id_key' class='col-sm-2 control-label'>$authName Id/Key:</label>
           <div class='col-sm-10'>

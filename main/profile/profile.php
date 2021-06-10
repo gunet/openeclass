@@ -249,6 +249,9 @@ if (isset($_POST['submit'])) {
     }
 }
 
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+use Hybridauth\HttpClient;
 // HybridAuth actions
 if (isset($_GET['provider'])) {
     // user requests hybridauth provider uid deletion
@@ -264,24 +267,56 @@ if (isset($_GET['provider'])) {
         } elseif ($_GET['action'] == 'connect') {
             // HybridAuth checks, authentication and user profile info and finally store provider user id in the db
             require_once 'modules/auth/methods/hybridauth/config.php';
-            require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
-
+	    require_once 'vendor/hybridauth/hybridauth/src/Hybridauth.php';
             $config = get_hybridauth_config();
             $user_data = '';
-            $provider = q(trim(strtolower($_GET['provider'])));
-
-            $hybridauth = new Hybrid_Auth($config);
+	    $provider = @trim(strip_tags(strtolower($_GET['provider'])));
+	    if($_GET['provider'] == 'Live') {
+		$_GET['provider'] = 'WindowsLive';
+	    }
+	    $hybridauth = new Hybridauth($config);
             $allProviders = $hybridauth->getProviders();
 
-            if (count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
+	    if (count($allProviders) && in_array($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
                 try {
                     if (in_array($provider, $hybridAuthMethods)) {
-                        $hybridauth = new Hybrid_Auth($config);
-                        $adapter = $hybridauth->authenticate($provider);
-                        $providerAuthId = array_search(strtolower($provider), $auth_ids);
+			$providerAuthId = array_search(strtolower($provider), $auth_ids);
 
-                        // grab the user profile
-                        $user_data = $adapter->getUserProfile();
+    			if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'profile'){
+                		unset($_SESSION['hybridauth_callback']);
+        	        	if(isset($_SESSION['hybridauth_provider'])) unset($_SESSION['hybridauth_provider']);
+	            	} else {
+                		$_SESSION['hybridauth_callback'] = 'profile';
+				if($provider == 'linkedin') {
+					$_SESSION['hybridauth_provider'] = 'LinkedIn';
+				} else {
+	        	        	$_SESSION['hybridauth_provider'] = ucfirst($provider);
+				}
+		        }
+			if($provider == 'live') {
+                                $provider = 'WindowsLive';
+                        }
+
+			/**
+     			* Feed configuration array to Hybridauth.
+			*/
+			$hybridauth = new Hybridauth($config);
+			$hybridauth->authenticate($provider);
+			$adapters = $hybridauth->getConnectedAdapters();
+			foreach ($adapters as $name => $adapter) :
+				$user_data = $adapter->getUserProfile();
+			endforeach;
+
+			/**
+			* This will erase the current user authentication data from session, and any further
+     			* attempt to communicate with provider.
+     			*/
+			if (isset($_GET['logout'])) {
+        			$adapter = $hybridauth->getAdapter($_GET['logout']);
+        			$adapter->disconnect();
+    			}
+
+
 
                         // Fetch user profile id and check if there is another
                         // instance in the db (this would happen if a user tried to
@@ -563,11 +598,15 @@ Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d'
 // the homepage, or no mesage if no providers are enabled
 $config = get_hybridauth_config();
 
-$hybridauth = new Hybrid_Auth($config);
+$hybridauth = new Hybridauth( $config );
 $allProviders = $hybridauth->getProviders();
 $activeAuthMethods = get_auth_active_methods();
 foreach ($allProviders as $provider => $settings) {
-    $aid = array_search(strtolower($provider), $auth_ids);
+    if($settings === 'WindowsLive') {
+	$allProviders[$provider] = 'Live';
+	continue;
+    }
+    $aid = array_search(strtolower($settings), $auth_ids);
     if (array_search($aid, $activeAuthMethods) === false) {
         unset($allProviders[$provider]);
     }
@@ -579,16 +618,16 @@ if (count($allProviders)) {
         <div class='col-sm-10'>
           <div class='row'>";
     foreach ($allProviders as $provider => $settings) {
-        $lcProvider = strtolower($provider);
-        $tool_content .= "
+	$lcProvider = strtolower($settings);
+	$tool_content .= "
                 <div class='col-xs-2 text-center'>
-                  <img src='$themeimg/$lcProvider.png' alt='$langLoginVia'><br>$provider<br>";
+                  <img src='$themeimg/$lcProvider.png' alt='$langLoginVia'><br>$settings<br>";
         if ($userProviders[$lcProvider]) {
-            $tool_content .= "
-                  <img src='$themeimg/tick.png' alt='$langProviderConnectWith $provider'>
-                  <a href='$sec?action=delete&provider=$provider'>$langProviderDeleteConnection</a>";
+	    $tool_content .= "
+                  <img src='$themeimg/tick.png' alt='$langProviderConnectWith $settings'>
+                  <a href='$sec?action=delete&provider=$settings'>$langProviderDeleteConnection</a>";
         } else {
-            $tool_content .= "<a href='$sec?action=connect&provider=$provider'>$langProviderConnect</a>";
+	    $tool_content .= "<a href='$sec?action=connect&provider=$settings'>$langProviderConnect</a>";
         }
         $tool_content .= "</div>";
     }

@@ -51,7 +51,7 @@ if ($user_registration) {
         require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
         $config = get_hybridauth_config();
 
-        $hybridauth = new Hybrid_Auth( $config );
+        $hybridauth = new Hybridauth\Hybridauth( $config );
         $allProviders = $hybridauth->getProviders();
         $tool_content_providers = "";
 
@@ -60,7 +60,7 @@ if ($user_registration) {
         if(!empty($provider)) { //if(!empty($provider), it means the provider is existent and valid - it's checked above
             try {
                 // create an instance for Hybridauth with the configuration file path as parameter
-                $hybridauth = new Hybrid_Auth($config);
+                $hybridauth = new Hybridauth\Hybridauth( $config );
 
                 // try to authenticate the selected $provider
                 $adapter = $hybridauth->authenticate( @ trim( strip_tags($_GET["provider"])) );
