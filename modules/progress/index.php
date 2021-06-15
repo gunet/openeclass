@@ -161,6 +161,7 @@ if ($is_editor) {
         $v->labels(array(
             'title' => "$langTheField $langTitle",
         ));
+
         if($v->validate()) {
             $table = (isset($_POST['newCertificate'])) ? 'certificate' : 'badge';
             $icon  = $_POST['template'];
@@ -338,7 +339,7 @@ if (isset($display) and $display == TRUE) {
             // display certificate settings and resources
             display_activities($element, $element_id);
         } else { // display all certificate
-                display_course_completion();
+            display_course_completion();
 	        display_badges();
 	        display_certificates();
         }

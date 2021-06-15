@@ -268,6 +268,45 @@ $head_content .= "
             };
         </script>";
 
+if(count($course_descriptions) > 0) {
+    $course_info_extra = "";
+    foreach ($course_descriptions as $key => $course_description) {
+        $hidden_id = "hidden_" . $key;
+        $next_id = '';
+        $previous_id = '';
+        if ($key + 1 < count($course_descriptions)) $next_id = "hidden_" . ($key + 1);
+        if ($key > 0) $previous_id = "hidden_" . ($key - 1);
+
+        $course_descriptions_modals .= "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <div class='modal-title h4' id='myModalLabel'>" . q($course_description->title) . "</div>
+                                    </div>
+                                    <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
+                                      standard_text_escape($course_description->comments)
+                                    ."</div>
+                                    <div class='modal-footer'>";
+                                        if ($previous_id) {
+                                            $course_descriptions_modals .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
+                                        }
+                                        if ($next_id) {
+                                            $course_descriptions_modals .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
+                                        }
+        $course_descriptions_modals .=    "
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>";
+        $course_info_extra .= "<a class='list-group-item' data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($course_description->title) ."</a>";
+    }
+} else {
+    $course_info_extra = "<div class='text-muted'>$langNoInfoAvailable</div>";
+}
+$data['course_info_popover'] = "<div class='list-group'>$course_info_extra</div>";
+$data['course_descriptions_modals'] = $course_descriptions_modals;
+
 if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
 
@@ -314,6 +353,30 @@ $data['departments'] = $course->getDepartmentIds($course_id);
 $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = ?d", $course_id)->numUsers;
+
+//set the lang var for lessons visibility status
+switch ($visible) {
+    case COURSE_CLOSED: {
+        $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
+        break;
+    }
+    case COURSE_REGISTRATION: {
+        $data['lessonStatus'] = "   <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
+                                <span class='fa fa-pencil text-danger fa-custom-lock'></span>
+                            </span><span class='hidden'>.</span>";
+        break;
+    }
+    case COURSE_OPEN: {
+        $data['lessonStatus'] = "    <span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span><span class='hidden'>.</span>";
+        break;
+    }
+    case COURSE_INACTIVE: {
+        $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
+                                <span class='fa fa-times text-danger fa-custom-lock'></span>
+                             </span><span class='hidden'>.</span>";
+        break;
+    }
+}
 
 if ($uid and !$is_editor) {
     $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion enabled?

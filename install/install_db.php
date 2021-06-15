@@ -1899,6 +1899,7 @@ $db->query("CREATE TABLE `certificate` (
 $db->query("CREATE TABLE `badge` (
   `id` int(11) not null auto_increment primary key,
   `course_id` int(11) not null,
+  `unit_id` int(11) not null default 0,
   `issuer` varchar(255) not null default '',
   `icon` mediumint(8),
   `title` varchar(255) not null,
@@ -2001,6 +2002,13 @@ $db->query("CREATE TABLE `course_prerequisite` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `course_id` int(11) not null,
   `prerequisite_course` int(11) not null,
+  PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `unit_prerequisite` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) not null,
+  `unit_id` int(11) not null,
+  `prerequisite_unit` int(11) not null,
   PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `user_consent` (

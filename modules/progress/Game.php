@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,35 +17,35 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 require_once 'GameAbstract.php';
 
 class Game extends GameAbstract {
-    
+
     public function __construct() {
         $this->ruler = new Hoa\Ruler\Ruler();
     }
-    
+
     protected function buildRule() {
         $satisfiesAllCriteria = function($userCriterionIds) {
             $ret = true;
-            
+
             foreach($this->criterionIds as $crit) {
                 if (!in_array($crit, $userCriterionIds)) {
                     $ret = false;
                     break;
                 }
             }
-            
+
             return $ret;
         };
-        
+
         $asserter = new Hoa\Ruler\Visitor\Asserter();
         $asserter->setOperator('satisfiesallcriteria', $satisfiesAllCriteria);
         $this->ruler->setAsserter($asserter);
-        
+
         $this->rule = 'satisfiesallcriteria(userCriterionIds)';
     }
 
@@ -68,7 +68,7 @@ class Game extends GameAbstract {
             return false;
         }
     }
-    
+
     public function evaluate($context) {
         return $this->evaluateProper($context, false);
     }
@@ -77,15 +77,28 @@ class Game extends GameAbstract {
         return $this->evaluateProper($context, true);
     }
 
-    private static function checkCompletenessProper($uid, $course_id, $terminal = false) {
+    private static function checkCompletenessProper($uid, $course_id, $unit_id, $terminal = false) {
         $context = new Hoa\Ruler\Context();
         $context['uid'] = $uid;
         $context['courseId'] = $course_id;
+        $context['unit_id'] = $unit_id;
         $context['userCriterionIds'] = array();
 
-        $iter = array('certificate', 'badge');
+        $iter = array('badge', 'certificate');
+
         foreach ($iter as $key) {
-            $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t)";
+            if ($unit_id) {
+                if ($key == 'certificate') {
+                    continue;
+                }
+                $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t) and unit_id = ".$unit_id;
+            } else {
+                if ($key == 'badge') {
+                    $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t) and unit_id = ".$unit_id;
+                } else {
+                    $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t)";
+                }
+            }
             Database::get()->queryFunc($gameQ, function($game) use ($key, $uid, &$context, $terminal) {
                 // get game child-criterion ids
                 $criterionIds = array();
@@ -93,7 +106,6 @@ class Game extends GameAbstract {
                     $criterionIds[] = $crit->id;
                 }, $game->id);
                 $game->criterionIds = $criterionIds;
-
                 // get user satisfied criterion ids
                 $userCriterionIds = array();
                 $critQ = "select uc.{$key}_criterion as criterion from user_{$key}_criterion uc where user = ?d";
@@ -103,7 +115,6 @@ class Game extends GameAbstract {
                     }
                 }, $uid);
                 $context['userCriterionIds'] = $userCriterionIds;
-
                 $gameObj = Game::initWithProperties($game);
                 if ($terminal) {
                     $gameObj->evaluateTerminal($context);
@@ -113,12 +124,12 @@ class Game extends GameAbstract {
             }, $course_id, gmdate('Y-m-d H:i:s'));
         }
     }
-    
-    public static function checkCompleteness($uid, $course_id) {
-        self::checkCompletenessProper($uid, $course_id, false);
+
+    public static function checkCompleteness($uid, $course_id, $unit_id = 0) {
+        self::checkCompletenessProper($uid, $course_id, $unit_id, false);
     }
 
-    public static function checkCompletenessTerminal($uid, $course_id) {
-        self::checkCompletenessProper($uid, $course_id, true);
+    public static function checkCompletenessTerminal($uid, $course_id, $unit_id = 0) {
+        self::checkCompletenessProper($uid, $course_id, $unit_id, true);
     }
 }
