@@ -1497,6 +1497,46 @@ function add_units_navigation($entry_page = false) {
     }
 }
 
+/**
+ * @global type $course_id
+ * @param int $uid
+ * @param type $all_units
+ * @return array
+ */
+function findUserVisibleUnits($uid, $all_units) {
+    global $course_id;
+
+    $user_units = [];
+    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, ub.completed 
+                                                          FROM course_units cu 
+                                                          INNER JOIN badge b ON (b.unit_id = cu.id)
+                                                          INNER JOIN user_badge ub ON (b.id = ub.badge)
+                                                          WHERE ub.user = ?d
+                                                          AND cu.course_id = ?d
+                                                          AND cu.visible = 1
+                                                          AND cu.public = 1
+                                                          AND cu.order >= 0", $uid, $course_id);
+    if ( isset($userInBadges) and $userInBadges ) {
+        foreach ($userInBadges as $userInBadge) {
+            if ($userInBadge->completed == 0) {
+                $userIncompleteUnits[] = $userInBadge->id;
+            }
+        }
+    }
+    foreach ($all_units as $unit) {
+        $unitPrereq = Database::get()->querySingle("SELECT prerequisite_unit FROM unit_prerequisite 
+                                                                WHERE unit_id = ?d", $unit->id);
+
+        if ( $unitPrereq and isset($userIncompleteUnits) and in_array($unitPrereq->prerequisite_unit, $userIncompleteUnits) ) {
+            continue;
+        }
+        $user_units[] = $unit;
+    }
+    return $user_units;
+}
+
+
+
 // Cut a string to be no more than $maxlen characters long, appending
 // the $postfix (default: ellipsis "...") if so
 function ellipsize($string, $maxlen, $postfix = '...') {

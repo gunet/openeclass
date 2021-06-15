@@ -4558,6 +4558,30 @@ $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
 $langNoUnits = "Δεν υπάρχουν ενότητες";
 
 /* * ********************************************************************
+  units_prerequisites
+ * ********************************************************************* */
+$langUnitManage = 'Διαχείριση Ενότητας';
+$langUnitCompletion = "Ολοκλήρωση ενότητας";
+$langUnitCompletionMessage = "Η ενότητα ολοκληρώθηκε με επιτυχία";
+$langUnitExerciseAdd = "Η άσκηση προστέθηκε με επιτυχία";
+$langManage = "Διαχείριση ενοτήτων";
+$langUnitActivity = "δραστηριότητας";
+$langUnitCompletionActivate = "Ενεργοποίηση Ολοκλήρωσης";
+$langUnitCompletionDeactivate = "Απενεργοποίηση Ολοκλήρωσης";
+$langUnitCompletionActivated = "Η ολοκλήρωσης της ενότητας ενεργοποιήθηκε";
+$langUnitCompletionDeactivated = "Η ολοκλήρωσης της ενότητας απενεργοποιήθηκε";
+$langOfCourseCompletion = "Δραστηριοτήτων ολοκλήρωσης ενοτήτων";
+$langUnitPrerequisites = "Προαπαιτούμενη ενότητα";
+$langNewUnitPrerequisite = "Προσθήκη Προαπαιτουμένου";
+$langNoUnitPrerequisite = "Δεν έχει οριστεί προαπαιτούμενη ενότητα.";
+$langUnitHasNotCompletionEnabled = "Αδυναμία προσθήκης, η ενότητας που επιλέξατε δεν έχει ενεργοποιημένη την ολοκλήρωση ενότητας.";
+$langNewUnitPrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε μία έγκυρη ενότητα.";
+$langNewUnitPrerequisiteSuccess = "Το προαπαιτούμενο δημιουργήθηκε με επιτυχία!";
+$langDelUnitPrerequisiteSuccess = "Το προαπαιτούμενο διαγράφηκε με επιτυχία!";
+$langNewUnitPrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, η ενότητα που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
+$langsUnit = "ενότητα";
+
+/* * ********************************************************************
   mail_verify.php
  * ********************************************************************* */
 $langMailVerify = "Επιβεβαίωση email";

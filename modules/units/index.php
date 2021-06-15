@@ -84,15 +84,27 @@ if ($access) {
 
 if ($is_editor) {
     $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
+    $courseUrl = $urlAppend."courses/$course_code/";
+    $manageUrl = "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$id";
+
     $tool_content .= "
     <div class='row'>
         <div class='col-md-12'>" .
         action_bar(array(
             array('title' => $langEditUnitSection,
-                  'url' => "info.php?course=$course_code&amp;edit=$id&amp;next=1",
-                  'icon' => 'fa fa-edit',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
+                'url' => "info.php?course=$course_code&amp;edit=$id&amp;next=1",
+                'icon' => 'fa fa-edit',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
+            array('title' => $langUnitManage,
+                'url' => $manageUrl,
+                'icon' => 'fa fa-book',
+                'level' => 'primary-label',
+                'button-class' => 'btn-primary'),
+            array('title' => $langBack,
+                'url' => $courseUrl,
+                'icon' => 'fa fa-reply ',
+                'level' => 'primary-label'),
             array('title' => $langAdd.' '.$langInsertExercise,
                   'url' => $base_url . 'exercise',
                   'icon' => 'fa fa-pencil-square-o',
@@ -164,9 +176,14 @@ if ($is_editor) {
 
 if ($is_editor) {
     $visibility_check = $check_start_week = '';
+    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
+        . "WHERE course_id = ?d ";
 } else {
     $visibility_check = "AND visible=1";
     $check_start_week = " AND (start_week <= CURRENT_DATE() OR start_week IS NULL)";
+    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
+        . "WHERE course_id = ?d "
+        . "AND visible = 1 ";
 }
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
@@ -186,6 +203,18 @@ if (isset($id) and $id !== false) {
 if (!isset($info) or !$info) {
     Session::Messages($langUnknownResType);
     redirect_to_home_page("courses/$course_code/");
+}
+
+$all_units = Database::get()->queryArray($query, $course_id);
+
+if (!$is_editor) {
+    $user_units = findUserVisibleUnits($uid, $all_units);
+} else {
+    $user_units = $all_units;
+}
+
+foreach ($user_units as $user_unit) {
+    $userUnitsIds[] = $user_unit->id;
 }
 
 // Links for next/previous unit

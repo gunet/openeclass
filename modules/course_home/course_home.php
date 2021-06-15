@@ -729,7 +729,19 @@ if ($is_editor) {
     $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order` FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
 }
 
-$sql = Database::get()->queryArray($query, $course_id);
+
+$all_units = Database::get()->queryArray($query, $course_id);
+
+foreach ($all_units as $unit) {
+    check_unit_progress($unit->id);  // check unit completion - call to Game.php
+}
+if ( !$is_editor ) {
+    $user_units = findUserVisibleUnits($uid, $all_units);
+    $sql = $user_units;
+} else {
+    $sql = Database::get()->queryArray($query, $course_id);
+}
+
 $total_cunits = count($sql);
 if ($total_cunits > 0) {
     $cunits_content .= "";

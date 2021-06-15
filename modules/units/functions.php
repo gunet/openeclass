@@ -1408,3 +1408,79 @@ function edit_res($resource_id) {
     return $content;
 }
 
+/**
+ * @return string
+ */
+function localhostUrl() {
+    return sprintf(
+        "%s://%s",
+        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+        $_SERVER['SERVER_NAME']
+    );
+}
+
+/**
+ * @param int $unit_id
+ * @param int $prereq_unit_id
+ */
+function insert_prerequisite_unit ($unit_id, $prereq_unit_id) {
+
+    global $is_editor,
+           $course_id, $course_code,
+           $langResultsFailed, $langUnitHasNotCompletionEnabled, $langNewUnitPrerequisiteFailInvalid,
+           $langNewUnitPrerequisiteSuccess, $langNewUnitPrerequisiteFailAlreadyIn;
+
+    if ($is_editor) { // Auth check
+        if ($prereq_unit_id < 0) {
+            Session::Messages($langNewUnitPrerequisiteFailInvalid);
+            redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
+        }
+
+        $prereqHasCompletion = prereq_unit_has_completion_enabled($prereq_unit_id);
+
+        if ( !$prereqHasCompletion ) {
+            Session::Messages($langUnitHasNotCompletionEnabled);
+            redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
+        }
+
+        // check already exists
+        $result = Database::get()->queryArray("SELECT up.id
+                                 FROM unit_prerequisite up 
+                                 WHERE up.course_id = ?d
+                                 AND up.unit_id = ?d
+                                 AND up.prerequisite_unit = ?d", $course_id, $unit_id, $prereq_unit_id);
+
+        if (count($result) > 0) {
+            Session::Messages($langNewUnitPrerequisiteFailAlreadyIn, 'alert-danger');
+            redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
+        }
+
+        Session::Messages($langNewUnitPrerequisiteSuccess, 'alert-success');
+        Database::get()->query("INSERT INTO unit_prerequisite (course_id, unit_id, prerequisite_unit) 
+                                                VALUES (?d, ?d, ?d)", $course_id, $unit_id, $prereq_unit_id);
+    } else {
+        Session::Messages($langResultsFailed);
+        redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
+    }
+}
+
+/**
+ * @param int $prereq_unit_id
+ * @return bool
+ */
+function prereq_unit_has_completion_enabled($prereq_unit_id) {
+    $query = "SELECT bc.id FROM badge_criterion bc WHERE bc.badge IN (SELECT b.id FROM badge b WHERE b.unit_id = ?d)";
+    $exists = Database::get()->querySingle($query, $prereq_unit_id);
+    if ($exists) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @param int $unit_id
+ */
+function delete_unit_prerequisite($unit_id) {
+    $query = "DELETE FROM unit_prerequisite WHERE unit_id = ?d";
+    Database::get()->query($query, $unit_id);
+}

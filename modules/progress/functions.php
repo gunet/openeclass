@@ -49,7 +49,8 @@ function display_certificates() {
            $langDeactivate, $langSee, $langConfirmPurgeCert;
 
     // Fetch the certificate list
-    $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
+    $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template 
+                                                    FROM certificate WHERE course_id = ?d", $course_id);
 
         $tool_content .= "
             <div class='row'>
@@ -250,7 +251,8 @@ function display_course_completion() {
            $langActive, $langInactive, $langConfirmPurgeCourseCompletion;
 
     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge "
-                                    . "WHERE course_id = ?d AND bundle = -1", $course_id);
+                                    . "WHERE course_id = ?d AND bundle = -1 AND unit_id = 0", $course_id);
+
     if ($data) {
         $tool_content .= "
             <div class='row'>
@@ -346,7 +348,7 @@ function display_course_completion() {
  * @param type $element
  * @param type $certificate_id
  */
-function display_activities($element, $id) {
+function display_activities($element, $id, $unit_id = 0) {
 
     global $tool_content, $course_code,
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
@@ -356,55 +358,78 @@ function display_activities($element, $id) {
            $langOfLearningPath, $langDelete, $langEditChange,
            $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langExport, $langBack, $langUsers, $langOfGradebook,
-           $langValue, $langNumInForumTopic, $langOfCourseCompletion,
-           $course_id;
-    /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
+           $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
+           $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
+           $langNoUnitPrerequisite;
+    /* $langOfCourseComments, $langOfLikesForum, $langOfLikesSocial */
 
-    if ($element == 'certificate') {
-        $link_id = "course=$course_code&amp;certificate_id=$id";
+    if ($unit_id) {
+        $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
     } else {
-        $link_id = "course=$course_code&amp;badge_id=$id";
+        if ($element == 'certificate') {
+            $link_id = "course=$course_code&amp;certificate_id=$id";
+        } else {
+            $link_id = "course=$course_code&amp;badge_id=$id";
+        }
     }
 
     $tool_content .= action_bar(
             array(
                 array('title' => $langUsers,
-                      'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
-                      'icon' => 'fa-users',
-                      'level' => 'primary-label'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
+                    'icon' => 'fa-users',
+                    'level' => 'primary-label',
+                    'show'  =>  $unit_id ? false : true),
                 array('title' => "$langExport",
-                      'url' => "dumpcertificateresults.php?$link_id&amp;enc=UTF-8",
-                      'icon' => 'fa-file-excel-o',
-                      'level' => 'primary-label'),
+                    'url' => "dumpcertificateresults.php?$link_id&amp;enc=UTF-8",
+                    'icon' => 'fa-file-excel-o',
+                    'level' => 'primary-label',
+                    'show'  =>  $unit_id ? false : true),
                 array('title' => $langBack,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary-label',
+                    'show'  =>  $unit_id ? false : true)
             ),
             false
         );
 
-    // check if course completion is enabled
-    $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge WHERE course_id = ?d AND bundle = -1", $course_id)->active;
+    if ($unit_id) {
+        // check if unit completion is enabled
+        $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
+                                                            WHERE course_id = ?d AND unit_id = ?d 
+                                                            AND bundle = -1", $course_id, $unit_id)->active;
 
-    // check if current element is course completion badge
-    $cc_is_current = false;
-    if ($element == 'badge') {
-        $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
-        if ($bundle && $bundle == -1) {
-            $cc_is_current = true;
+        // check if current element is unit completion badge
+        $cc_is_current = false;
+        if ($element == 'badge') {
+            $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
+            if ($bundle && $bundle == -1) {
+                $cc_is_current = true;
+            }
+        }
+    } else {
+        // check if course completion is enabled
+        $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge 
+                                                            WHERE course_id = ?d AND bundle = -1 
+                                                            AND unit_id = ?d", $course_id, $unit_id)->active;
+
+        // check if current element is course completion badge
+        $cc_is_current = false;
+        if ($element == 'badge') {
+            $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
+            if ($bundle && $bundle == -1) {
+                $cc_is_current = true;
+            }
         }
     }
 
     // certificate details
-    $tool_content .= display_settings($element, $id);
-
-    //get available activities
-    $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
+    $tool_content .= display_settings($element, $id, $unit_id);
 
     $addActivityBtn = action_button(array(
-        array('title' => $langOfCourseCompletion,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecompletion",
+        array('title' => $unit_id ? $langOfUnitCompletion : $langOfCourseCompletion,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=". $unit_id ? "unitcompletion" : "coursecompletion",
             'icon' => 'fa fa-trophy',
             'show' => !$cc_enable),
         array('title' => $langOfAssignment,
@@ -485,8 +510,11 @@ function display_activities($element, $id) {
             'secondary_btn_class' => 'btn-success btn-sm'
         ));
 
+    //get available activities
+    $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
 
-    $tool_content .= "
+    if (!$unit_id) {
+        $tool_content .= "
             <div class='row'>
             <div class='col-xs-12'>
                 <div class='panel panel-default'>
@@ -516,10 +544,10 @@ function display_activities($element, $id) {
                                     <i class='fa fa-cogs'></i>
                                 </div>
                             </div>";
-    if (count($result) == 0) {
-        $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
-    } else {
-        foreach ($result as $details) {
+        if (count($result) == 0) {
+            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+        } else {
+            foreach ($result as $details) {
                 $resource_data = get_resource_details($element, $details->id);
                 $tool_content .= "
                 <div class='row res-table-row'>
@@ -547,15 +575,169 @@ function display_activities($element, $id) {
                             'class' => 'delete'))).
                     "</div></div>";
             }
-    }
-    $tool_content .= "</div>
+        }
+        $tool_content .= "</div>
                     </div>
                 </div>
             </div>
         </div>
         ";
+    } else {
+            $tool_content .= "<div class='main-content'>
+                                <div class='col-sm-12'>
+                                    <div class='row row-main'>
+                                        <div class='panel panel-default'>
+                                            <div class='panel-body'>
+                                                <div class='inner-heading'>
+                                                    <div class='row'>
+                                                        <div class='col-sm-7'>
+                                                            <strong>$langUnitCompletion</strong>
+                                                        </div>
+                                                        <div class='col-sm-5 text-right'>
+                                                            <div class='text-right'>
+                                                                $addActivityBtn
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class='res-table-wrapper'>
+                                                    <div class='row res-table-header'>
+                                                        <div class='col-sm-7'>
+                                                            $langTitle
+                                                        </div>
+                                                        <div class='col-sm-2'>
+                                                            $langType
+                                                        </div>
+                                                        <div class='col-sm-2'>
+                                                            $langValue
+                                                        </div>
+                                                        <div class='col-sm-1 text-center'>
+                                                            <i class='fa fa-cogs'></i>
+                                                        </div>
+                                                    </div>";
+
+        if (count($result) == 0) {
+            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+        } else {
+            foreach ($result as $details) {
+                $resource_data = get_resource_details($element, $details->id, $unit_id);
+                $tool_content .= "
+                <div class='row res-table-row'>
+                    <div class='col-sm-7'>".$resource_data['title']."</div>
+                    <div class='col-sm-2'>". $resource_data['type']."</div>
+                    <div class='col-sm-2'>";
+                if (!empty($details->operator)) {
+                    $op = get_operators();
+                    $tool_content .= $op[$details->operator];
+                } else {
+                    $tool_content .= "&mdash;";
+                }
+                $tool_content .= "&nbsp;$details->threshold</div>";
+                $tool_content .= "<div class='col-sm-1 text-center'>".
+                    action_button(array(
+                        array('title' => $langEditChange,
+                            'icon' => 'fa-edit',
+                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                            'show' => in_array($details->activity_type, criteria_with_operators())
+                        ),
+                        array('title' => $langDelete,
+                            'icon' => 'fa-times',
+                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                            'confirm' => $langConfirmDelete,
+                            'class' => 'delete'))).
+                    "</div></div>";
+            }
+        }
+
+        //************* UNIT PREREQUISITES *************//
+        $course_units = Database::get()->queryArray("SELECT * FROM course_units 
+                                                            WHERE course_id = ?d", $course_id);
+
+        $unit_prerequisite_id = Database::get()->querySingle("SELECT up.prerequisite_unit 
+                                                                    FROM unit_prerequisite up
+                                                                    JOIN course_units cu ON (cu.id = up.unit_id) 
+                                                                    WHERE cu.id = ".$unit_id);
+
+        $action_button_content = [];
+
+        foreach ($course_units as $prereq) {
+            if ($prereq->id == $unit_id) { // Don't include current unit on prerequisites list
+                continue;
+            }
+            $action_button_content[] = [
+                'title' =>  $prereq->title,
+                'icon'  =>  'fa fa-book fa-fw',
+                'url'   =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&prereq=$prereq->id&unit_id=$unit_id",
+                'class' =>  '',
+                'show'  =>  !is_unit_prereq_enabled($unit_id),
+            ];
+        }
+        $addPrereqBtn = action_button($action_button_content,
+            array(
+                'secondary_title' => $langNewUnitPrerequisite,
+                'secondary_icon' => '',
+                'secondary_btn_class' => 'btn-success btn-sm',
+            ));
+        $tool_content .= "  </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='row row-main'>
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                            <div class='inner-heading'>
+                                <div class='row'>
+                                    <div class='col-sm-7'>
+                                        <strong>$langUnitPrerequisites</strong>
+                                    </div>
+                                    <div class='col-sm-5 text-right'>
+                                    $addPrereqBtn
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='res-table-wrapper'>";
+
+
+        $delPrereqBtn = action_button(array(
+            array('title' => $langDelete,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&del_un_prereq=1&unit_id=$unit_id",
+                'icon' => 'fa-times',
+                'class' => 'delete',
+                'confirm' => $langConfirmDelete)));
+
+        if ( $unit_prerequisite_id ) {
+            $prereq_unit_title = Database::get()->querySingle("SELECT title FROM course_units 
+                                                                        WHERE id = ?d", $unit_prerequisite_id->prerequisite_unit)->title;
+
+            $tool_content .= "  <div class='col-sm-11'>
+                                    <p class='text-left'>$prereq_unit_title</p>
+                                </div>
+                                <div class='col-sm-1 pull-right'>$delPrereqBtn</div>";
+        } else {
+            $tool_content .= "<p class='text-center text-muted'>$langNoUnitPrerequisite</p>";
+        }
+
+        $tool_content .= " </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>";
+    }
 }
 
+/**
+ * @param int $unit_id
+ * @return bool
+ */
+function is_unit_prereq_enabled($unit_id) {
+    $prereq_id = Database::get()->queryArray("SELECT prerequisite_unit FROM unit_prerequisite 
+                                                        WHERE unit_id = ?d", $unit_id);
+    if (count($prereq_id) > 0) {
+        return true;
+    }
+    return false;
+}
 
 /**
  * @brief choose activity for inserting in certificate / badge
@@ -563,63 +745,66 @@ function display_activities($element, $id) {
  * @param type $element
  * @param type $activity
  */
-function insert_activity($element, $element_id, $activity) {
+function insert_activity($element, $element_id, $activity, $unit_id = 0) {
 
     switch ($activity) {
         case 'coursecompletion':
             add_course_completion_to_certificate($element_id);
             break;
+        case 'unitcompletion':
+            add_unit_completion_to_certificate($element_id, $unit_id);
+            break;
         case AssignmentEvent::ACTIVITY:
-            display_available_assignments($element, $element_id);
+            display_available_assignments($element, $element_id, $unit_id);
             break;
         case ExerciseEvent::ACTIVITY:
-            display_available_exercises($element, $element_id);
+            display_available_exercises($element, $element_id, $unit_id);
             break;
         case BlogEvent::ACTIVITY;
-            display_available_blogs($element, $element_id);
+            display_available_blogs($element, $element_id, $unit_id);
             break;
         case 'blogcomments':
-            display_available_blogcomments($element, $element_id);
+            display_available_blogcomments($element, $element_id, $unit_id);
             break;
         case 'coursecomments':
-            display_available_coursecomments($element, $element_id);
+            display_available_coursecomments($element, $element_id, $unit_id);
             break;
         case ForumEvent::ACTIVITY:
-            display_available_forums($element, $element_id);
+            display_available_forums($element, $element_id, $unit_id);
             break;
         case ForumTopicEvent::ACTIVITY:
-            display_available_forumtopics($element, $element_id);
+            display_available_forumtopics($element, $element_id, $unit_id);
             break;
         case 'lp':
-            display_available_lps($element, $element_id);
+            display_available_lps($element, $element_id, $unit_id);
             break;
         case 'likesocial';
             break;
         case 'likeforum';
             break;
         case 'document':
-            display_available_documents($element, $element_id);
+            display_available_documents($element, $element_id, $unit_id);
             break;
         case 'multimedia':
-            display_available_multimedia($element, $element_id);
+            display_available_multimedia($element, $element_id, $unit_id);
             break;
         case 'ebook':
-            display_available_ebooks($element, $element_id);
+            display_available_ebooks($element, $element_id, $unit_id);
             break;
         case 'poll':
-            display_available_polls($element, $element_id);
+            display_available_polls($element, $element_id, $unit_id);
             break;
         case 'wiki':
-            display_available_wiki($element, $element_id);
+            display_available_wiki($element, $element_id, $unit_id);
             break;
         case 'participation':
-            display_available_participation($element, $element_id);
+            display_available_participation($element, $element_id, $unit_id);
             break;
         case GradebookEvent::ACTIVITY:
-            display_available_gradebooks($element, $element_id);
+            display_available_gradebooks($element, $element_id, $unit_id);
             break;
         case CourseCompletionEvent::ACTIVITY:
-            display_available_coursecompletiongrade($element, $element_id);
+            display_available_coursecompletiongrade($element, $element_id, $unit_id);
             break;
         default: break;
         }
@@ -628,23 +813,41 @@ function insert_activity($element, $element_id, $activity) {
 
 /**
  * @brief display editing form about resource
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $langModify
+ * @global type $langOperator
+ * @global type $langUsedCertRes
  * @param type $element_id
  * @param type $element
  * @param type $activity_id
+ * @param int $unit_id
  */
-function display_modification_activity($element, $element_id, $activity_id) {
+function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0) {
 
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     if (resource_usage($element, $activity_id)) { // check if resource has been used by user
         Session::Messages("$langUsedCertRes", "alert-warning");
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;${element}_id=$element_id");
+
+        if ($unit_id) {
+            redirect(localhostUrl().$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
+        } else {
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;${element}_id=$element_id");
+        }
     } else { // otherwise editing is not allowed
         $data = Database::get()->querySingle("SELECT threshold, operator FROM ${element}_criterion
                                             WHERE id = ?d AND $element = ?d", $activity_id, $element_id);
+
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
         $operators = get_operators();
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>";
+
+        $tool_content .= "<form action=$action method='post'>";
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group'>";
@@ -664,7 +867,7 @@ function display_modification_activity($element, $element_id, $activity_id) {
  * @param type $element
  * @param type $element_id
  */
-function display_available_assignments($element, $element_id) {
+function display_available_assignments($element, $element_id, $unit_id = 0) {
 
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission,
@@ -672,6 +875,7 @@ function display_available_assignments($element, $element_id) {
            $langOperator, $langGradebookGrade, $urlServer;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d
                                     AND active = 1
                                     AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")
@@ -681,10 +885,17 @@ function display_available_assignments($element, $element_id) {
                                         AND activity_type = '" . AssignmentEvent::ACTIVITY . "'
                                         AND module = " . MODULE_ID_ASSIGN . ")
                                     ORDER BY title", $course_id, $element_id);
+
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name = '$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -716,13 +927,14 @@ function display_available_assignments($element, $element_id) {
  * @param type $element
  * @param type $element_id
  */
-function display_available_exercises($element, $element_id) {
+function display_available_exercises($element, $element_id, $unit_id = 0) {
 
     global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
             $langNoExercises, $langChoice, $langAddModulesButton,
             $langOperator, $langGradebookGrade;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
                                     AND exercise.active = 1
                                     AND (exercise.end_date IS NULL OR exercise.end_date >= ". DBHelper::timeAfter() . ")
@@ -731,6 +943,7 @@ function display_available_exercises($element, $element_id) {
                                             AND resource != ''
                                             AND activity_type = '" . ExerciseEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_EXERCISE . ") ORDER BY title", $course_id, $element_id);
+
     $quizinfo = array();
     foreach ($result as $row) {
         $quizinfo[] = array(
@@ -742,7 +955,9 @@ function display_available_exercises($element, $element_id) {
     if (count($quizinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        $action = $unit_id ? "manage.php?course=$course_code&manage=1&unit_id=$unit_id" : "index.php?course=$course_code";
+
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -771,8 +986,9 @@ function display_available_exercises($element, $element_id) {
  * @brief document display form
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_documents($element, $element_id) {
+function display_available_documents($element, $element_id, $unit_id = 0) {
 
     global $webDir, $course_code, $tool_content,
             $langDirectory, $langUp, $langName, $langSize,
@@ -795,6 +1011,7 @@ function display_available_documents($element, $element_id) {
     $dir_html = $dir_param ? "<input type='hidden' name='dir' value='$dir_param'>" : '';
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
                                      WHERE $group_sql AND visible = 1 AND
                                           path LIKE ?s AND
@@ -802,7 +1019,7 @@ function display_available_documents($element, $element_id) {
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                             AND resource!='' AND activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "' AND module = " . MODULE_ID_DOCS . ")
                                 ORDER BY sort_key COLLATE utf8_unicode_ci",
-                                "$path/%", "$path/%/%", $element_id);
+        "$path/%", "$path/%/%", $element_id);
 
     $fileinfo = array();
     $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;$element_name=$element_id&amp;add=true&amp;act=document$dir_setter&amp;type=doc&amp;path=";
@@ -828,6 +1045,7 @@ function display_available_documents($element, $element_id) {
             'date' => $row->date_modified,
             'object' => MediaResourceFactory::initFromDocument($row));
     }
+
     if (count($fileinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoDocuments</div>";
     } else {
@@ -840,7 +1058,12 @@ function display_available_documents($element, $element_id) {
                     icon('fa-level-up') . "</a></span>";
             $colspan = 4;
         }
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>";
         if( !empty($path)) {
@@ -927,22 +1150,31 @@ function display_available_documents($element, $element_id) {
  * @global type $langResourceAlreadyAdded
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_blogs($element, $element_id) {
+function display_available_blogs($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langNumOfBlogs,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
            $langChoice, $langOperator;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $res = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . BlogEvent::ACTIVITY . "'
-                                            AND module = " . MODULE_ID_BLOG . "", $element_id);
+                                            AND module = " . MODULE_ID_BLOG, $element_id);
+
     if (count($res) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -979,24 +1211,33 @@ function display_available_blogs($element, $element_id) {
  * @global type $langOperator
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_blogcomments($element, $element_id) {
+function display_available_blogcomments($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langBlogEmpty,
            $urlServer, $course_code, $langTitle, $langValue,
            $langChoice, $langDate, $course_id, $langOperator;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d AND id NOT IN
                                 (SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                     AND resource != ''
                                     AND activity_type = '" . CommentEvent::BLOG_ACTIVITY . "'
                                     AND module = " . MODULE_ID_COMMENTS . ")
                                 ORDER BY title", $course_id, $element_id);
+
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -1022,8 +1263,8 @@ function display_available_blogcomments($element, $element_id) {
 }
 
 
-function display_available_coursecomments($element, $element_id) {
-
+function display_available_coursecomments($element, $element_id, $unit_id = 0) {
+// TODO: implement for unit completion as well
     global $tool_content;
 
     $tool_content .= "<div class='alert alert-warning'>....Προς υλοποίηση....</div>";
@@ -1035,22 +1276,32 @@ function display_available_coursecomments($element, $element_id) {
  * @brief number of forums display form
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_forums($element, $element_id) {
+function display_available_forums($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langNumInForum,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
            $langChoice, $langOperator;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $res = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . ForumEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_FORUM . "", $element_id);
+
     if (count($res) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -1076,20 +1327,23 @@ function display_available_forums($element, $element_id) {
  * @brief forum topic display form
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_forumtopics($element, $element_id) {
+function display_available_forumtopics($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $urlServer, $course_id,
            $langAddModulesButton, $langChoice, $langNoForumTopic,
            $langTopics, $course_code, $langOperator, $langValue;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT ft.* FROM forum_topic ft JOIN forum f ON (f.id = ft.forum_id) WHERE f.course_id = ?d
                                         AND ft.id NOT IN
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                             AND resource != ''
                                             AND activity_type = '" . ForumTopicEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_FORUM . ")", $course_id, $element_id);
+
     $topicinfo = array();
     foreach ($result as $topicrow) {
         $topicinfo[] = array(
@@ -1102,7 +1356,13 @@ function display_available_forumtopics($element, $element_id) {
     if (count($topicinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoForumTopic</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -1133,14 +1393,16 @@ function display_available_forumtopics($element, $element_id) {
  * @brief learning paths display form
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_lps($element, $element_id) {
+function display_available_lps($element, $element_id, int $unit_id = 0) {
 
     global $course_id, $course_code, $urlServer, $tool_content,
            $langNoLearningPath, $langLearningPaths, $langPercentage,
            $langChoice, $langAddModulesButton, $langOperator;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
                                             AND lp_learnPath.visible = 1
                                             AND lp_learnPath.learnPath_id NOT IN
@@ -1148,6 +1410,7 @@ function display_available_lps($element, $element_id) {
                                                     AND resource!=''
                                                     AND activity_type = '" . LearningPathEvent::ACTIVITY . "'
                                                     AND module = " . MODULE_ID_LP . ")", $course_id, $element_id);
+
     $lpinfo = array();
     foreach ($result as $row) {
         $lpinfo[] = array(
@@ -1159,7 +1422,13 @@ function display_available_lps($element, $element_id) {
     if (count($lpinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -1201,8 +1470,9 @@ function display_available_ratings($element, $element_id) {
  * @brief multimedia display form
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_multimedia($element, $element_id) {
+function display_available_multimedia($element, $element_id, $unit_id = 0) {
 
     require_once 'include/lib/mediaresource.factory.php';
     require_once 'include/lib/multimediahelper.class.php';
@@ -1218,7 +1488,14 @@ function display_available_multimedia($element, $element_id) {
     $count = $cnt1 + $cnt2;
     if ($count > 0) {
         $video_found = TRUE;
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+
+        $tool_content .= "<form action=$action method='post'>" .
                          "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>" .
@@ -1226,6 +1503,7 @@ function display_available_multimedia($element, $element_id) {
                          "<th width='100'>$langDate</th>" .
                          "<th width='80'>$langChoice</th>" .
                          "</tr>";
+
         foreach (array('video', 'videolink') as $table) {
             $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0)
                                                         AND course_id = ?d
@@ -1245,12 +1523,13 @@ function display_available_multimedia($element, $element_id) {
                     $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                 }
                 $tool_content .= "<tr>".
-                                     "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
-                                     "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
-                                     "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
-                                 "</tr>";
+                    "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
+                    "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
+                    "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
+                    "</tr>";
             }
         }
+
         $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY name", $course_id);
         if ($sql) {
             foreach ($sql as $videocat) {
@@ -1294,23 +1573,31 @@ function display_available_multimedia($element, $element_id) {
  * @brief ebook display form
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_ebooks($element, $element_id) {
+function display_available_ebooks($element, $element_id, $unit_id = 0) {
 
   global $course_id, $course_code, $tool_content, $urlServer,
     $langAddModulesButton, $langChoice, $langNoEBook,
-    $langEBook, $course_code;
+    $langEBook;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
                                                 AND ebook.visible = 1
                                                 AND ebook.id NOT IN
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                         AND resource!='' AND activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $element_id);
+
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -1383,20 +1670,23 @@ function display_available_ebooks($element, $element_id) {
  * @brief poll display form
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_polls($element, $element_id) {
+function display_available_polls($element, $element_id, $unit_id = 0) {
 
     global $course_id, $course_code, $urlServer, $tool_content,
             $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
                                     AND poll.active = 1
                                     AND poll.end_date >= ". DBHelper::timeAfter() . "
                                     AND poll.pid NOT IN
                                 (SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                     AND resource != '' AND activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "' AND module = " . MODULE_ID_QUESTIONNAIRE . ")",
-                        $course_id, $element_id);
+        $course_id, $element_id);
+
 
     $pollinfo = array();
     foreach ($result as $row) {
@@ -1408,7 +1698,12 @@ function display_available_polls($element, $element_id) {
     if (count($pollinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langPollNone</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -1441,22 +1736,31 @@ function display_available_polls($element, $element_id) {
  * @global type $langResourceAlreadyAdded
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_wiki($element, $element_id) {
+function display_available_wiki($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langResourceAlreadyAdded,
     $langAddModulesButton, $langChoice, $langTitle, $langWikiPages,
     $course_code, $langOperator, $langValue;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . WikiEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_WIKI . "", $element_id);
+
     if (count($result) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -1485,21 +1789,30 @@ function display_available_wiki($element, $element_id) {
  * @brief display course participation form
  * @param type $element
  * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_participation($element, $element_id) {
+function display_available_participation($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $course_code, $langHours,
            $langTitle, $langChoice, $langAddModulesButton,
            $langOperator, $langCourseParticipation, $langResourceAlreadyAdded;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . CourseParticipationEvent::ACTIVITY . "'", $element_id);
+
     if (count($result) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+
+        $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
@@ -1527,15 +1840,16 @@ function display_available_participation($element, $element_id) {
 /**
  * @brief gradebooks display form
  * @param type $element
- * @param type $element_id
+ * @param int $unit_id
  */
-function display_available_gradebooks($element, $element_id) {
+function display_available_gradebooks($element, $element_id, $unit_id = 0) {
 
     global $course_id, $tool_content, $langNoGradeBooks, $course_code, $urlServer,
            $langAvailableGradebooks, $langStart, $langFinish, $langChoice,
            $langAddModulesButton, $langOperator, $langGradebookGrade;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d 
                                     AND active = 1
                                     AND end_date > " . DBHelper::timeAfter() . "
@@ -1549,7 +1863,13 @@ function display_available_gradebooks($element, $element_id) {
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGradeBooks</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
             "<input type='hidden' name = '$element_name' value='$element_id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
@@ -1584,22 +1904,30 @@ function display_available_gradebooks($element, $element_id) {
  * @brief Course Completion grade display form
  * @param $element
  * @param $element_id
+ * @param int $unit_id
  */
-function display_available_coursecompletiongrade($element, $element_id) {
+function display_available_coursecompletiongrade($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langCourseCompletion,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
            $langChoice, $langPercentage;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
     $res = Database::get()->queryArray("SELECT id FROM ${element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . CourseCompletionEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_PROGRESS, $element_id);
+
     if (count($res) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
             "<input type='hidden' name='$element_name' value='$element_id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
@@ -1634,20 +1962,24 @@ function display_available_coursecompletiongrade($element, $element_id) {
  * @param type $element
  * @param type $element_id
  */
-function display_settings($element, $element_id) {
+function display_settings($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $course_id, $course_code, $urlServer, $langTitle,
            $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
            $langpublisher, $langEditChange;
 
-    $field = ($element == 'certificate')? 'template' : 'icon';
+    $field = ($element == 'certificate') ? 'template' : 'icon';
+
     $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle
-                            FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+                            FROM $element WHERE id = ?d AND course_id = ?d AND unit_id = ?d", $element_id, $course_id, $unit_id);
+
     $bundle = $data->bundle;
     $issuer = $data->issuer;
     $title = $data->title;
     $description = $data->description;
     $message = $data->message;
+    $icon_link = '';
+
     if ($bundle != -1) {
         if ($element == 'badge') {
             $badge_details = get_badge_icon($data->icon);
@@ -1699,7 +2031,8 @@ function display_settings($element, $element_id) {
             </div>
         ";
     } else { // course completion
-        $tool_content .= "
+        if (!$unit_id) {
+            $tool_content .= "
         <div class='row'>
             <div class='col-xs-12'>
                 <div class='panel panel-default'>
@@ -1713,6 +2046,7 @@ function display_settings($element, $element_id) {
                 </div>
             </div>
         </div>";
+        }
     }
 }
 
@@ -1881,6 +2215,7 @@ function student_view_progress() {
             $langBadges, $course_code, $langCertificates, $langPrintVers, $langCourseCompletion;
 
     require_once 'Game.php';
+
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
     $found = false;
