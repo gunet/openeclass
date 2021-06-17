@@ -450,9 +450,11 @@ $am_field = "<input type='text' class='form-control' name='am_form' id='am_form'
 if (isset($_SESSION['auth_user_info'])) {
     if (get_config('email_prevent_autoset_change') and isset($_SESSION['auth_user_info']['email']) and $_SESSION['auth_user_info']['email']) {
         $email_field = "<p class='form-control-static'>$email_form</p>";
+        $tool_content .= "<input type='hidden' name='email_form' value='$email_form'>";
     }
     if (get_config('am_prevent_autoset_change') and isset($_SESSION['auth_user_info']['studentid']) and $_SESSION['auth_user_info']['studentid']) {
         $am_field = "<p class='form-control-static'>$am_form</p>";
+        $tool_content .= "<input type='hidden' name='surname_form' value='$am_form'>";
     }
 }
 
