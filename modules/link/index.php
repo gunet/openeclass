@@ -509,7 +509,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
        $tool_content .= "<tr class='list-header'><th>";
 
         $tool_content .= "$langCategorisedLinks&nbsp;";
-        if (isset($urlview) and abs($urlview) == 0) {
+        if (isset($urlview) and intval($urlview) == 0) {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>" . icon('fa-folder', $langViewShow)."</a>";
         } else {
             $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>" .icon('fa-folder-open', $langViewHide)."</a>";
