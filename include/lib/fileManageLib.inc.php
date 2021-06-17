@@ -128,7 +128,7 @@ function my_rename($filePath, $newFileName) {
         /** * check if the new name has an extension ***/
         if ((!preg_match('/[^.]+\.[[:alnum:]]+$/', $newFileName)) and preg_match('/\.([[:alnum:]]+)$/', $oldFileName, $extension)) {
             $newFileName .= '.' . $extension[1];
-        }        
+        }
         $newFileName = replace_dangerous_char($newFileName);
         chdir($path);
         rename($oldFileName, $newFileName);
@@ -346,7 +346,7 @@ function directory_selection($source_value, $command, $entryToExclude, $director
 function zip_documents_directory($zip_filename, $downloadDir, $include_invisible = false) {
     global $basedir, $group_sql, $map_filenames, $path_visibility;
 
-    create_map_to_real_filename($downloadDir, $include_invisible);    
+    create_map_to_real_filename($downloadDir, $include_invisible);
     $topdir = ($downloadDir == '/') ? $basedir : ($basedir . $downloadDir);
     $zipFile = new ZipArchive();
     $zipFile->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -363,11 +363,11 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
 
         // Skip directories (they will be added automatically)
         if (!$file->isDir()) {
-            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {            
+            if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
                 continue; // skip invisible files for student
             } else {
                 // Add current file to archive
-                $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));                
+                $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));
             }
         } else { // empty directory
             if (!isset($path_visibility[$relativePath]) or !$path_visibility[$relativePath] or !isset($map_filenames[$relativePath])) {
@@ -416,7 +416,7 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
         }
         $GLOBALS['path_visibility'][$files->path] = ($include_invisible or resource_access($files->visible, $files->public));
         array_push($encoded_filenames, $files->path);
-        array_push($filename, $files->filename);
+        array_push($filename, str_replace(['/', '\\'], '_', $files->filename));
         if (!$include_invisible and $files->format == '.dir' and !resource_access($files->visible, $files->public)) {
             $parentdir = preg_replace('|/[^/]+$|', '', $files->path);
             // Don't need to check lower-level hidden dir if parent is there
