@@ -1,22 +1,22 @@
 <?php
-// $require_current_course = true;
-
-// require_once '../../include/baseTheme.php';
-
 
 class H5PClass implements H5PFrameworkInterface {
 
     private $messages = array('error' => array(), 'info' => array());
+    private $handle_errormsg;
 
-    public function setErrorMessage($message, $code = NULL) {
-        if (true) {
-            $this->messages['error'][] = (object)array(
-                'code' => $code,
-                'message' => $message
-            );
-        }
+    public function __construct() {
+        $this->handle_errormsg = function ($errormsg) {
+            echo "An error has occured: " . $errormsg;
+        };
     }
 
+    public function setErrorMessage($message, $code = NULL) {
+        $this->messages['error'][] = (object) array(
+            'code' => $code,
+            'message' => $message
+        );
+    }
 
     public function getPlatformInfo() {
         $info = array();
@@ -26,7 +26,6 @@ class H5PClass implements H5PFrameworkInterface {
         return $info;
     }
 
-
     public function fetchExternalData($url, $data = NULL, $blocking = TRUE, $stream = NULL) {
     }
 
@@ -34,9 +33,7 @@ class H5PClass implements H5PFrameworkInterface {
     }
 
     public function setInfoMessage($message) {
-        if (true) {
-            $this->messages['info'][] = $message;
-        }
+        $this->messages['info'][] = $message;
     }
 
     public function getMessages($type) {
@@ -62,8 +59,7 @@ class H5PClass implements H5PFrameworkInterface {
     }
 
     public function getUploadedH5pPath() {
-        global $webDir;
-        global $course_code;
+        global $webDir, $course_code;
         $path = $webDir . '/courses/temp/h5p/' . $course_code . "/*.h5p";
         return implode("", glob($path));
     }
@@ -75,9 +71,7 @@ class H5PClass implements H5PFrameworkInterface {
         return defined('H5P_LIBRARY_CONFIG') ? H5P_LIBRARY_CONFIG : NULL;
     }
 
-
     public function loadLibraries() {
-
         $libraries = array();
         $sql = Database::get()->queryArray("SELECT * FROM h5p_library ORDER BY machine_name, major_version ASC, minor_version ASC");
         foreach ($sql as $lib) {
@@ -87,9 +81,7 @@ class H5PClass implements H5PFrameworkInterface {
     }
 
     public function getAdminUrl() {
-
     }
-
 
     public function getLibraryId($machineName, $majorVersion = NULL, $minorVersion = NULL) {
         if ($majorVersion !== NULL) {
@@ -110,7 +102,6 @@ class H5PClass implements H5PFrameworkInterface {
     }
 
     public function getWhitelist($isLibrary, $defaultContentWhitelist, $defaultLibraryWhitelist) {
-
         $whitelist = $defaultContentWhitelist;
         if ($isLibrary) {
             $whitelist .= ' ' . $defaultLibraryWhitelist;
@@ -119,8 +110,7 @@ class H5PClass implements H5PFrameworkInterface {
     }
 
     public function isPatchedLibrary($library) {
-
-        return TRUE;
+        return true;
     }
 
     public function isInDevMode() {
@@ -131,82 +121,44 @@ class H5PClass implements H5PFrameworkInterface {
         return true;
     }
 
-
     public function saveLibraryData(&$libraryData, $new = TRUE) {
-
         if ($new) {
-            if (isset($libraryData['title'])) {
-                $title = $libraryData['title'];
-            } else {
-                $title = NULL;
-            }
-            if (isset($libraryData['machineName'])) {
-                $machine_name = $libraryData['machineName'];
-            } else {
-                $machine_name = NULL;
-            }
-            if (isset($libraryData['majorVersion'])) {
-                $major_version = $libraryData['majorVersion'];
-            } else {
-                $major_version = NULL;
-            }
-            if (isset($libraryData['minorVersion'])) {
-                $minor_version = $libraryData['minorVersion'];
-            } else {
-                $minor_version = NULL;
-            }
-            if (isset($libraryData['patchVersion'])) {
-                $patch_version = $libraryData['patchVersion'];
-            } else {
-                $patch_version = NULL;
-            }
-            if (isset($libraryData['runnable'])) {
-                $runnable = $libraryData['runnable'];
-            } else {
-                $runnable = 0;
-            }
-            if (isset($libraryData['fullscreen'])) {
-                $fullscreen = $libraryData['fullscreen'];
-            } else {
-                $fullscreen = 0;
-            }
-            if (isset($libraryData['embedTypes'])) {
-                $embed_types = implode(",", $libraryData['embedTypes']);
-            } else {
-                $embed_types = "";
-            }
+            $title = $libraryData['title'] ?? NULL;
+            $machine_name = $libraryData['machineName'] ?? NULL;
+            $major_version = $libraryData['majorVersion'] ?? NULL;
+            $minor_version = $libraryData['minorVersion'] ?? NULL;
+            $patch_version = $libraryData['patchVersion'] ?? NULL;
+            $runnable = $libraryData['runnable'] ?? 0;
+            $fullscreen = $libraryData['fullscreen'] ?? 0;
+            $embed_types = (isset($libraryData['embedTypes'])) ? implode(",", $libraryData['embedTypes']) : "";
+
+            $preloaded_js = "";
             if (isset($libraryData['preloadedJs'])) {
                 $array = array();
                 foreach ($libraryData['preloadedJs'] as $libjs) {
                     $array[] = $libjs['path'];
                 }
-                $array = implode(",", $array);
-                $preloaded_js = $array;
-            } else {
-                $preloaded_js = "";
+                $preloaded_js = implode(",", $array);
             }
+
+            $preloaded_css = "";
             if (isset($libraryData['preloadedCss'])) {
                 $array = array();
                 foreach ($libraryData['preloadedCss'] as $libcss) {
                     $array[] = $libcss['path'];
                 }
-                $array = implode(",", $array);
-                $preloaded_css = $array;
-            } else {
-                $preloaded_css = "";
+                $preloaded_css = implode(",", $array);
             }
 
-            $libraryId = Database::get()->query("INSERT INTO h5p_library(machine_name, title, major_version, minor_version, patch_version, runnable, fullscreen, embed_types, preloaded_js, preloaded_css) VALUES (?s, ?s, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?s)", function ($errormsg) {
-                echo "An error has occured: " . $errormsg;
-            }, $machine_name, $title, $major_version, $minor_version, $patch_version, $runnable, $fullscreen, $embed_types, $preloaded_js, $preloaded_css)->lastInsertID;
+            $libraryId = Database::get()->query("INSERT INTO h5p_library(machine_name, title, major_version, minor_version, patch_version, runnable, fullscreen, embed_types, preloaded_js, preloaded_css) VALUES (?s, ?s, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?s)",
+                $this->handle_errormsg, $machine_name, $title, $major_version, $minor_version, $patch_version, $runnable, $fullscreen, $embed_types, $preloaded_js, $preloaded_css)->lastInsertID;
 
+            // fill in the libraryId in the libraryData object if the object is new
             $libraryData['libraryId'] = $libraryId;
         } else {
             echo "<br>Library already exists in database. Update function not ready";
         }
-
     }
-
 
     public function insertContent($content, $contentMainId = NULL) {
         return $this->updateContent($content);
@@ -227,12 +179,10 @@ class H5PClass implements H5PFrameworkInterface {
         $contentdata = $content['params'];
         $libraryId = $content['library']['libraryId'];
 
-        $sql = Database::get()->query("INSERT INTO h5p_content(id, main_library_id, params, course_id) VALUES (?d, ?d, ?s, ?d)", function ($errormsg) {
-            echo "An error has occured: " . $errormsg;
-        }, $id, $libraryId, $contentdata, $course_id);
+        Database::get()->query("INSERT INTO h5p_content(id, main_library_id, params, course_id) VALUES (?d, ?d, ?s, ?d)",
+            $this->handle_errormsg, $id, $libraryId, $contentdata, $course_id);
         return $id;
     }
-
 
     public function resetContentUserData($contentId) {
     }
@@ -242,56 +192,40 @@ class H5PClass implements H5PFrameworkInterface {
             $machine_name = $dependency['machineName'];
             $major_version = $dependency['majorVersion'];
             $minor_version = $dependency['minorVersion'];
-            $sqlselect = Database::get()->querySingle("SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?d AND minor_version = ?d LIMIT ?d", $machine_name, $major_version, $minor_version, 1);
-            $required_library_id = $sqlselect->id;
+            $required_library_id = Database::get()->querySingle("SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?d AND minor_version = ?d LIMIT ?d", $machine_name, $major_version, $minor_version, 1)->id;
 
-
-            Database::get()->query("INSERT INTO h5p_library_dependency (library_id, required_library_id, dependency_type) VALUES (?d, ?d, ?s)", function ($errormsg) {
-                echo "An error has occured: " . $errormsg;
-            }, $libraryId, $required_library_id, $dependency_type);
+            Database::get()->query("INSERT INTO h5p_library_dependency (library_id, required_library_id, dependency_type) VALUES (?d, ?d, ?s)",
+                $this->handle_errormsg, $libraryId, $required_library_id, $dependency_type);
         }
     }
 
-
     public function copyLibraryUsage($contentId, $copyFromId, $contentMainId = NULL) {
-
-        $sql = Database::get()->query("INSERT INTO h5p_content_dependency (content_id,library_id,dependency_type) SELECT ?d,library_id,dependency_type FROM h5p_content_dependency WHERE content_id = ?d", function ($errormsg) {
-            echo "An error has occured: " . $errormsg;
-        }, $contentId, $copyFromId);
+        Database::get()->query("INSERT INTO h5p_content_dependency (content_id,library_id,dependency_type) SELECT ?d ,library_id, dependency_type FROM h5p_content_dependency WHERE content_id = ?d",
+            $this->handle_errormsg, $contentId, $copyFromId);
     }
 
     public function deleteContentData($contentId) {
-        Database::get()->query("DELETE FROM h5p_content WHERE id = ?d", function ($errormsg) {
-            echo "An error has occured: " . $errormsg;
-        }, $contentId);
+        Database::get()->query("DELETE FROM h5p_content WHERE id = ?d", $this->handle_errormsg, $contentId);
     }
 
     public function deleteLibraryUsage($contentId) {
-
-        $sql = Database::get()->query("DELETE FROM h5p_content_dependency WHERE content_id = ?d", function ($errormsg) {
-            echo "An error has occured: " . $errormsg;
-        }, $contentId);
-
+        Database::get()->query("DELETE FROM h5p_content_dependency WHERE content_id = ?d", $this->handle_errormsg, $contentId);
     }
 
     public function saveLibraryUsage($contentId, $librariesInUse) {
-
         foreach ($librariesInUse as $library) {
             $libraryId = $library['library']['libraryId'];
             $dependencyType = $library['type'];
-            $sql = Database::get()->query("INSERT INTO h5p_content_dependency(content_id, library_id, dependency_type) VALUES (?d, ?d, ?s)", function ($errormsg) {
-                echo "An error has occured: " . $errormsg;
-            }, $contentId, $libraryId, $dependencyType);
-
+            Database::get()->query("INSERT INTO h5p_content_dependency(content_id, library_id, dependency_type) VALUES (?d, ?d, ?s)",
+                $this->handle_errormsg, $contentId, $libraryId, $dependencyType);
         }
     }
 
     public function getLibraryUsage($libraryId, $skipContent = FALSE) {
-
     }
 
     public function loadLibrary($machineName, $majorVersion, $minorVersion) {
-        $sql = Database::get()->querySinge("SELECT * FROM h5p_library WHERE machine_name = ?s && major_version = ?s && minor_version = ?s", $machineName, $majorVersion, $minorVersion);
+        $sql = Database::get()->querySinge("SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?s AND minor_version = ?s", $machineName, $majorVersion, $minorVersion);
 
         $libraryId = $sql->id;
         $library = array();
@@ -347,7 +281,6 @@ class H5PClass implements H5PFrameworkInterface {
             $$library['dropLibraryCss'] = $json['dropLibraryCss'];
         }
 
-
         //    - semantics(optional): Json describing the content structure for the library
         $semantics = $path . "/" . "semantics.json";
         if (file_exists($semantics)) {
@@ -379,27 +312,20 @@ class H5PClass implements H5PFrameworkInterface {
     }
 
     public function loadLibrarySemantics($machineName, $majorVersion, $minorVersion) {
-
         $path = 'libraries/' . $machineName . '-' . $majorVersion . '.' . $minorVersion;
         $semantics = $path . '/semantics.json';
-        $string = file_get_contents($semantics);
-        return $string;
+        return file_get_contents($semantics);
     }
 
     public function alterLibrarySemantics(&$semantics, $machineName, $majorVersion, $minorVersion) {
-        global $link;
     }
 
     public function deleteLibraryDependencies($libraryId) {
-        Database::get()->query("DELETE FROM h5p_library_dependency WHERE library_id = ?d", function ($errormsg) {
-            echo "An error has occured: " . $errormsg;
-        }, $libraryId);
+        Database::get()->query("DELETE FROM h5p_library_dependency WHERE library_id = ?d", $this->handle_errormsg, $libraryId);
     }
-
 
     public function lockDependencyStorage() {
     }
-
 
     public function unlockDependencyStorage() {
     }
@@ -412,7 +338,6 @@ class H5PClass implements H5PFrameworkInterface {
      *
      * Author : Dimitris Delis
      */
-
     function deleteDirectory($dir) {
         if (!file_exists($dir)) {
             return true;
@@ -430,17 +355,13 @@ class H5PClass implements H5PFrameworkInterface {
             if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
-
         }
 
         return rmdir($dir);
     }
 
-
     public function deleteLibrary($library) {
-        Database::get()->query("DELETE FROM h5p_library WHERE id = ?d", function ($errormsg) {
-            echo "An error has occured: " . $errormsg;
-        }, $library->id);
+        Database::get()->query("DELETE FROM h5p_library WHERE id = ?d", $this->handle_errormsg, $library->id);
         $dir = "libraries/" . $library->name . "-" . $library->major_version . "." . $library->minor_version;
         deleteDirectory($dir);
     }
@@ -469,12 +390,10 @@ class H5PClass implements H5PFrameworkInterface {
                 }
             }
         }
+
         $content['embedTypes'] = $embedTypes;
-
         $content['title'] = $json['title'];
-
         $content['language'] = $json['language'];
-
         $content['libraryName'] = $json['mainLibrary'];
 
         foreach ($json['preloadedDependencies'] as $jsondep) {
@@ -502,6 +421,7 @@ class H5PClass implements H5PFrameworkInterface {
                 }
             }
         }
+
         $content['libraryEmbedTypes'] = $libraryembedTypes;
 
         if (isset($libjson['fullscreen'])) {
@@ -509,6 +429,7 @@ class H5PClass implements H5PFrameworkInterface {
         } else {
             $content['libraryFullscreen'] = 0;
         }
+
         return $content;
     }
 
@@ -531,9 +452,7 @@ class H5PClass implements H5PFrameworkInterface {
             $minorVersion = $json['minorVersion'];
             $sqllib = Database::get()->querySingle("SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?d AND minor_version = ?d ORDER BY major_version DESC, minor_version DESC, patch_version DESC LIMIT ?d", $machinename, $majorVersion, $minorVersion, 1);
             $libraryid = $sqllib->id;
-            $sql = Database::get()->query("INSERT INTO h5p_content_dependency(content_id, library_id) VALUES(?d, ?d)", function ($errormsg) {
-                echo "An error has occured: " . $errormsg;
-            }, $id, $libraryid);
+            Database::get()->query("INSERT INTO h5p_content_dependency(content_id, library_id) VALUES(?d, ?d)", $this->handle_errormsg, $id, $libraryid);
         }
     }
 
@@ -572,13 +491,13 @@ class H5PClass implements H5PFrameworkInterface {
     public function updateContentFields($id, $fields) {
     }
 
-    public function clearFilteredParameters($library_id) {
+    public function clearFilteredParameters($library_ids) {
     }
 
     public function getNumNotFiltered() {
     }
 
-    public function getNumContent($library_id, $skip = NULL) {
+    public function getNumContent($libraryId, $skip = NULL) {
     }
 
     public function isContentSlugAvailable($slug) {
@@ -603,7 +522,7 @@ class H5PClass implements H5PFrameworkInterface {
     }
 
     public function hasPermission($permission, $id = NULL) {
-        return TRUE;
+        return true;
     }
 
     public function replaceContentTypeCache($contentTypeCache) {
