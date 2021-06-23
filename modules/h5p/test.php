@@ -6,11 +6,6 @@ $require_current_course = true;
 require_once '../../include/baseTheme.php';
 
 require_once 'H5Pclass.php';
-require_once 'h5p-php-library/h5p.classes.php';
-require_once "h5p-php-library/h5p-default-storage.class.php";
-require_once "h5p-php-library/h5p-file-storage.interface.php";
-require_once "h5p-php-library/h5p-development.class.php";
-require_once "h5p-php-library/h5p-metadata.class.php";
 
 function upload_content(){ // anebasma // na elen3w to database &  na balw to user_input
 

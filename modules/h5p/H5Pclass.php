@@ -2,7 +2,6 @@
 // $require_current_course = true;
 
 // require_once '../../include/baseTheme.php';
-require_once "h5p-php-library/h5p.classes.php";
 
 
 class H5PClass implements H5PFrameworkInterface {
