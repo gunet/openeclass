@@ -1976,6 +1976,7 @@ $db->query("CREATE TABLE h5p_library_translation (
 
 $db->query("CREATE TABLE h5p_content (
     id INT(10) NOT NULL AUTO_INCREMENT,
+    title varchar(255),
     main_library_id INT(10) NOT NULL,
     params TEXT,
     course_id INT(11) NOT NULL,

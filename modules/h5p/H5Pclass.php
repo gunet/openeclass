@@ -330,40 +330,10 @@ class H5PClass implements H5PFrameworkInterface {
     public function unlockDependencyStorage() {
     }
 
-    /**
-     * Custom : deletes a directory whether it's empty or not
-     *
-     * @param string $dir
-     *   path to directory
-     *
-     * Author : Dimitris Delis
-     */
-    function deleteDirectory($dir) {
-        if (!file_exists($dir)) {
-            return true;
-        }
-
-        if (!is_dir($dir)) {
-            return unlink($dir);
-        }
-
-        foreach (scandir($dir) as $item) {
-            if ($item == '.' || $item == '..') {
-                continue;
-            }
-
-            if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
-            }
-        }
-
-        return rmdir($dir);
-    }
-
     public function deleteLibrary($library) {
         Database::get()->query("DELETE FROM h5p_library WHERE id = ?d", $this->handle_errormsg, $library->id);
         $dir = "libraries/" . $library->name . "-" . $library->major_version . "." . $library->minor_version;
-        deleteDirectory($dir);
+        H5PCore::deleteFileTree($dir);
     }
 
     public function loadContent($id) {
