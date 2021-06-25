@@ -24,6 +24,7 @@
  * @brief user registration process
  */
 use Hautelook\Phpass\PasswordHash;
+use Hybrid\Auth;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -90,20 +91,19 @@ if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and
     $provider_name = '';
 }
 
+
 // authenticate user via hybridauth if requested by URL
 $user_data = null;
 $registration_errors = [];
 if (!empty($provider_name)) {
     require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
 
     $hybridauth = new Hybridauth\Hybridauth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
-
     // additional layer of checks to verify that the provider is valid via hybridauth middleware
-    if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) {
+    if (count($allProviders) && in_array(ucfirst($provider_name), $allProviders)) {
         try {
             // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new Hybridauth\Hybridauth( $config );
@@ -365,7 +365,6 @@ if (!isset($_POST['submit'])) {
     // check if there are any available alternative providers for authentication
     if (!empty($_POST['provider_id'])) {
         require_once 'modules/auth/methods/hybridauth/config.php';
-        require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
         $config = get_hybridauth_config();
 
         $hybridauth = new Hybridauth\Hybridauth( $config );
@@ -374,7 +373,7 @@ if (!isset($_POST['submit'])) {
         $warning = '';
 
         // check if $_POST['provider'] is valid and enabled
-        if (count($allProviders) && array_key_exists(ucfirst($_POST['provider']), $allProviders)) {
+        if (count($allProviders) && in_array(ucfirst($_POST['provider']), $allProviders)) {
             $provider = strtolower($_POST['provider']);
         }
         if (!empty($_POST['provider_id']) && !empty($provider)) {
