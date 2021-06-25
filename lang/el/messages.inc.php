@@ -3861,6 +3861,7 @@ $dateFormatMiddle = "%d %b %Y";
 $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ώρα: %R';
 $dateTimeFormatShort = '%d %b %Y %R';
+$dateTimeFormatLongFull = '%A, %d %B %Y / Ώρα: %R';
 $timeNoSecFormat = '%R';
 $langNoAdminAccess = '
         <strong>Η σελίδα που προσπαθείτε να μπείτε απαιτεί όνομα χρήστη και συνθηματικό.</strong>
