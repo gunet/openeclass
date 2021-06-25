@@ -26,13 +26,18 @@
  */
 
 $require_admin = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-use Hybrid\Auth;
+
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+use Hybridauth\HttpClient;
 
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $auth = intval($_REQUEST['auth']);
@@ -68,13 +73,27 @@ if ($auth == 7) { // CAS
 } elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
     include_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
-    $provider = $auth_ids[$auth];
+    if($auth_ids[$auth] == 'linkedin'){
+    	$provider = 'LinkedIn';
+    } else if($auth_ids[$auth] == 'live') {
+	$provider = 'WindowsLive';
+    } else {
+    	$provider = $auth_ids[$auth];
+    }
+
     try {
-        $hybridauth = new Hybrid_Auth($config);
-        $adapter = $hybridauth->authenticate($provider);
-        $user_data = $adapter->getUserProfile();
-        Session::Messages($langConnYes, 'alert-success');
-        Session::Messages("<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
+        if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'auth_test') {
+            unset($_SESSION['hybridauth_callback']);
+            if(isset($_SESSION['hybridauth_provider'])) unset($_SESSION['hybridauth_provider']);
+        } else {
+            $_SESSION['hybridauth_callback'] = 'auth_test';
+            $_SESSION['hybridauth_provider'] = $auth;
+        }
+        $hybridauth = new Hybridauth( $config );
+            $adapter = $hybridauth->authenticate($provider);
+            $user_data = $adapter->getUserProfile();
+            Session::Messages($langConnYes, 'alert-success');
+            Session::Messages("<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
     } catch (Exception $e) {
         Session::Messages($e->getMessage(), 'alert-danger');
         switch ($e->getCode()) {
@@ -135,9 +154,6 @@ if ($auth > 1 and $auth < 6) {
     $tool_content .= "<div class='form-wrapper'>
        <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <input type='hidden' name='auth' value='$auth'>
-        <fieldset>
-
-
             <div class='alert alert-info'>$langTestAccount ({$auth_ids[$auth]})</div>
             <div class='form-group'>
                 <label for='test_username' class='col-sm-2 control-label'>$langUsername:</label>
@@ -156,11 +172,9 @@ if ($auth > 1 and $auth < 6) {
                     <input class='btn btn-primary' type='submit' name='submit' value='$langConnTest'>
                     <a class='btn btn-default' href='auth.php'>$langCancel</a>
                 </div>
-            </div>
-        </fieldset>
+            </div>        
         ". generate_csrf_token_form_field() ."
     </form></div>";
 }
 
 draw($tool_content, 3);
-

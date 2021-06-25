@@ -146,7 +146,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
 
-    $hybridauth = new Hybrid_Auth( $config );
+    $hybridauth = new Hybridauth\Hybridauth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
 
@@ -154,8 +154,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
     if($provider_name == 'linkedin') $provider_name = 'LinkedIn'; //small fix required for LinkedIn
     if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) {
         try {
-            $hybridauth = new Hybrid_Auth($config);
-
+            $hybridauth = new Hybridauth\Hybridauth( $config );
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate(strtolower($provider_name));
 

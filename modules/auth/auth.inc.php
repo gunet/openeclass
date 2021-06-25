@@ -765,6 +765,10 @@ function process_login() {
  Yahoo, Live accounts)
 * ************************************************************** */
 
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+use Hybridauth\HttpClient;
+
 function hybridauth_login() {
     global $surname, $givenname, $email, $status, $is_admin, $language,
         $langInvalidId, $langAccountInactive1, $langAccountInactive2,
@@ -772,10 +776,10 @@ function hybridauth_login() {
         $inactive_uid, $langTooManyFails, $warning, $langGeneralError,
         $session;
 
+
     require_once 'modules/auth/methods/hybridauth/config.php';
 
     $config = get_hybridauth_config();
-
     $_SESSION['canChangePassword'] = false;
     $autoregister = get_config('alt_auth_stud_reg') == 2;
 
@@ -791,23 +795,38 @@ function hybridauth_login() {
     // if user select a provider to login with then include hybridauth config
     // and main class, try to authenticate, finally redirect to profile
     if (isset($_GET['provider'])) {
-        try {
-            $hybridauth = new Hybrid_Auth($config);
-
-            // set selected provider name
-            $provider = @trim(strip_tags($_GET['provider']));
-
-            // try to authenticate the selected $provider
-            $adapter = $hybridauth->authenticate($provider);
-
-            // grab the user profile
-            $user_data = $adapter->getUserProfile();
-
-            // user profile debug print
-            // echo '<pre>'; print_r($user_data); echo '</pre>';
-
-        } catch (Exception $e) {
-            // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
+	if($_GET['provider'] == 'live'){
+		$provider = 'WindowsLive';
+	} else {
+		$provider = @trim(strip_tags($_GET['provider']));
+	}
+	try {
+	    if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'login'){
+	    	unset($_SESSION['hybridauth_callback']);
+	    	if(isset($_SESSION['hybridauth_provider'])) unset($_SESSION['hybridauth_provider']);
+	    } else {
+	    	$_SESSION['hybridauth_callback'] = 'login';
+		$_SESSION['hybridauth_provider'] = $provider;
+	    }
+	    /**
+	     * Feed configuration array to Hybridauth.
+	     */
+	    $hybridauth = new Hybridauth($config);
+	    $hybridauth->authenticate($provider);
+	    $adapters = $hybridauth->getConnectedAdapters();
+	    foreach ($adapters as $name => $adapter) :
+	    	$user_data = $adapter->getUserProfile();
+	    endforeach;
+	    /**
+	     * This will erase the current user authentication data from session, and any further
+	     * attempt to communicate with provider.
+	     */
+	    if (isset($_GET['logout'])) {
+	        $adapter = $hybridauth->getAdapter($_GET['logout']);
+	        $adapter->disconnect();
+	    }
+	} catch (Exception $e) {
+	    // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
 
             // Display the recived error,
@@ -828,7 +847,7 @@ function hybridauth_login() {
             //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
 
             return false;
-        }
+	}
     } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
 
 
@@ -852,6 +871,9 @@ function hybridauth_login() {
     if (get_config('login_fail_check') && $r) {
         $auth_allow = 8;
     } else {
+	if($provider == 'WindowsLive') {
+		$provider = 'live';
+	}
         $auth_id = array_search(strtolower($provider), $auth_ids);
         $auth_methods = get_auth_active_methods();
         $myrow = Database::get()->querySingle("SELECT user.id, surname,
