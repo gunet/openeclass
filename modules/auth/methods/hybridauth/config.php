@@ -67,6 +67,17 @@ if (!function_exists('get_hybridauth_config')) {
                 }
 			}
         }
+	global $auth_ids;
+        $activeAuthMethods = get_auth_active_methods();
+        foreach ($providers as $provider => $settings) {
+            $aid = array_search(strtolower($provider), $auth_ids);
+            if($provider === 'WindowsLive') {
+                $aid = array_search(strtolower('live'), $auth_ids);
+            }
+            if (array_search($aid, $activeAuthMethods) === false) {
+               $providers[$provider]['enabled'] = false;
+            }
+        }
 
         // return configuration data as an array
         return array(

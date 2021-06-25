@@ -617,9 +617,9 @@ $hybridauth = new Hybridauth( $config );
 $allProviders = $hybridauth->getProviders();
 $activeAuthMethods = get_auth_active_methods();
 foreach ($allProviders as $provider => $settings) {
-    if($settings === 'WindowsLive') {
-	$allProviders[$provider] = 'Live';
-	continue;
+    if($settings === 'WindowsLive' && array_search(array_search(strtolower('live'), $auth_ids), $activeAuthMethods)) {
+        $allProviders[$provider] = 'Live';
+        continue;
     }
     $aid = array_search(strtolower($settings), $auth_ids);
     if (array_search($aid, $activeAuthMethods) === false) {
