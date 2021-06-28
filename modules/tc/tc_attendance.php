@@ -131,16 +131,14 @@ function xml2sql($room_xml, $bbb) {
                                                 SET totaltime = totaltime + 1,
                                                     `date` = NOW()
                                             WHERE bbbuserid = ?s AND meetingid = ?s AND
-                                                  TIMESTAMPDIFF(SECOND, `date`, NOW()) > 60 AND
+                                                  TIMESTAMPDIFF(SECOND, `date`, NOW()) >= 60 AND
                                                   TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
                                             $bbbuserid, $meetingid);
-                $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM tc_attendance")->id;
-                $nextid++;
             } else {
                 $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM tc_attendance")->id;
                 $nextid++;
-                Database::get()->query("INSERT INTO tc_attendance (`id`, `meetingid`, `bbbuserid`, `totaltime`)
-                        VALUES  (?d, ?s, ?s, 1)", $nextid, $meetingid, $bbbuserid);
+                Database::get()->query('INSERT INTO tc_attendance (`id`, `meetingid`, `bbbuserid`, `totaltime`)
+                    SELECT COALESCE(MAX(id) + 1, 1), ?s, ?s, 1 FROM tc_attendance', $meetingid, $bbbuserid);
             }
             $u = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $bbbuserid);
             if (!empty($u->id)) {
