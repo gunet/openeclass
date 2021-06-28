@@ -128,7 +128,8 @@ function xml2sql($room_xml, $bbb) {
                                             WHERE bbbuserid = ?s AND meetingid = ?s", $bbbuserid, $meetingid)->cnt;
             if ($cnt > 0) {
                 Database::get()->querySingle("UPDATE tc_attendance
-                                                SET totaltime = totaltime + 1
+                                                SET totaltime = totaltime + 1,
+                                                    `date` = NOW()
                                             WHERE bbbuserid = ?s AND meetingid = ?s AND
                                                   TIMESTAMPDIFF(SECOND, `date`, NOW()) > 60 AND
                                                   TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
