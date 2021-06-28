@@ -240,6 +240,7 @@ if ($PollType == POLL_NORMAL) {
                                                                         WHERE poll_user_record_id = id 
                                                                         AND (email_verification=1 OR email_verification IS NULL) 
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
+
                 $answers_table = "
                     <table class='table-default'>
                         <tr>
@@ -254,7 +255,11 @@ if ($PollType == POLL_NORMAL) {
                         $q_answer = $langPollUnknown;
                         $aid = -1;
                     }
-                    $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage;
+
+                    if (isset($this_chart_data['answer'])) { // skip answers that don't exist
+                        $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage;
+                    }
+
                     if ($thePoll->anonymized != 1) {
                         $names_str = $ellipsized_names_str = '';
                         $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname,
@@ -379,6 +384,9 @@ if ($PollType == POLL_NORMAL) {
                 $tool_content .= $answers_table;
                 $chart_counter++;
             } elseif ($theQuestion->qtype == QTYPE_FILL) {
+                $tool_content .= "<div class='panel-body'>";
+                $tool_content .= "<div class='inner-heading'>$theQuestion->question_text</div>";
+                $tool_content .= "</div>";
                 $names_array = [];
                 $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text
                                             FROM poll_answer_record a, poll_user_record b
