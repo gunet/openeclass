@@ -48,7 +48,6 @@ if ($user_registration) {
     if(!empty($_GET['provider'])) {
         //check if there are any available alternative providers for authentication
         require_once 'modules/auth/methods/hybridauth/config.php';
-        require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
         $config = get_hybridauth_config();
 
         $hybridauth = new Hybridauth\Hybridauth( $config );
@@ -68,6 +67,16 @@ if ($user_registration) {
                 // grab the user profile
                 $user_data = $adapter->getUserProfile();
 
+                /*if ($user_data->firstName) {
+                    $fullName = explode('', $user_data->firstName);
+                    $provider_user_data .= '&givenname_form=' . q($fullName[0]);
+                }
+                if (!empty($user_data->lastName)) {
+                    $provider_user_data .= '&surname_form=' . q($user_data->lastName);
+                } else {
+                    $fullName = explode('', $user_data->firstName);
+                    $provider_user_data .= '&surname_form=' . q($fullName[1]);
+                }*/
                 //user profile data
                 if($user_data->firstName) $provider_user_data .= '&givenname_form=' . q($user_data->firstName);
                 if($user_data->lastName) $provider_user_data .= '&surname_form=' . q($user_data->lastName);
@@ -75,7 +84,6 @@ if ($user_registration) {
                 if($user_data->email) $provider_user_data .= '&usermail=' . q($user_data->email) . '&email=' . q($user_data->email);
                 if($user_data->phone) $provider_user_data .= '&userphone=' . q($user_data->phone) . '&phone=' . q($user_data->phone);
                 if($user_data->identifier) $provider_user_data .= '&provider_id=' . q($user_data->identifier); //provider user identifier
-                //echo $user_data->photoURL;
 
             } catch(Exception $e) {
                 // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to

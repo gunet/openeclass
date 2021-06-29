@@ -185,22 +185,7 @@ if ($u) {
                         </div>";
 
         } else {    // means that it is external auth method, so the user cannot change this password
-            switch ($info->password) {
-                case "pop3": $auth = 2;
-                    break;
-                case "imap": $auth = 3;
-                    break;
-                case "ldap": $auth = 4;
-                    break;
-                case "db": $auth = 5;
-                    break;
-                case "shibboleth": $auth = 6;
-                    break;
-                case "cas": $auth = 7;
-                    break;
-                default: $auth = 1;
-                    break;
-            }
+            $auth = array_search($info->password, $auth_ids);
             $auth_text = get_auth_info($auth);
             $tool_content .= "<div class='col-sm-10'>
                                 <p class='form-control-static'><b>" . q($info->username) . "</b> [" . $auth_text . "] <input  class='form-control' type='hidden' name='username' value=" . q($info->username) . "></p>

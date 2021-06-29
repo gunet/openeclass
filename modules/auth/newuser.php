@@ -102,17 +102,17 @@ if (!empty($provider_name)) {
     $hybridauth = new Hybridauth\Hybridauth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
+
     // additional layer of checks to verify that the provider is valid via hybridauth middleware
     if (count($allProviders) && in_array(ucfirst($provider_name), $allProviders)) {
         try {
             // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new Hybridauth\Hybridauth( $config );
-
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate(strtolower($provider_name));
-
             // grab the user profile and check if the provider_uid
             $user_data = $adapter->getUserProfile();
+            $provider_id = $user_data->identifier;
             if ($user_data->identifier) {
                 $result = Database::get()->querySingle("SELECT uid FROM user_ext_uid
                     WHERE uid = ?s AND auth_id = ?d", $user_data->identifier, $auth);
@@ -126,7 +126,7 @@ if (!empty($provider_name)) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
 
-            // Display the recived error,
+            // Display the received error,
             // to know more please refer to Exceptions handling section on the userguide
             switch($e->getCode()) {
                 case 0 : $warning = "<p class='alert alert-info'>$langProviderError1</p>"; break;
@@ -195,20 +195,23 @@ if (!isset($_POST['submit'])) {
                       ($user_data? (" value='" . q(str_replace(' ', '', $user_data->displayName)) . "'"): '') .
                       " size='30' maxlength='100' autocomplete='off' placeholder='$langUserNotice'>
                 </div>
-            </div>
-            <div class='form-group'>
-                <label for='UserPass' class='col-sm-2 control-label'>$langPass:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='$langUserNotice'><span id='result'></span>
-                </div>
-            </div>
-            <div class='form-group'>
-              <label for='UserPass2' class='col-sm-2 control-label'>$langConfirmation:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
-                </div>
-            </div>
-            <div class='form-group'>
+            </div>";
+
+            if (empty($provider_name) && empty($provider_id)) {
+                $tool_content .= "<div class='form-group' >
+                        <label for='UserPass' class='col-sm-2 control-label' > $langPass:</label >
+                        <div class='col-sm-10' >
+                            <input class='form-control' type = 'password' name = 'password1' size = '30' maxlength = '30' autocomplete = 'off' id = 'password' placeholder = '$langUserNotice' ><span id = 'result' ></span >
+                        </div >
+                    </div >
+                    <div class='form-group' >
+                      <label for='UserPass2' class='col-sm-2 control-label' > $langConfirmation:</label >
+                        <div class='col-sm-10' >
+                            <input class='form-control' type = 'password' name = 'password' size = '30' maxlength = '30' autocomplete = 'off' />
+                        </div >
+                    </div >";
+                }
+            $tool_content .= "<div class='form-group'>
                 <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
                 <div class='col-sm-10'>
                     <input class='form-control' type='text' name='email' size='30' maxlength='100'" .
@@ -290,14 +293,24 @@ if (!isset($_POST['submit'])) {
         $am_arr_value = false;
     }
 
-    $var_arr = array('uname' => true,
-                    'surname_form' => true,
-                    'givenname_form' => true,
-                    'password' => true,
-                    'password1' => true,
-                    'email' => $email_arr_value,
-                    'phone' => false,
-                    'am' => $am_arr_value);
+    if (empty($provider) && empty($_POST['provider_id'])) {
+        $var_arr = array('uname' => true,
+            'surname_form' => true,
+            'givenname_form' => true,
+            'password' => true,
+            'password1' => true,
+            'email' => $email_arr_value,
+            'phone' => false,
+            'am' => $am_arr_value);
+    } else {
+        $var_arr = array(
+            'uname' => true,
+            'surname_form' => true,
+            'givenname_form' => true,
+            'email' => $email_arr_value,
+            'phone' => false,
+            'am' => $am_arr_value);
+    }
 
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
@@ -348,8 +361,11 @@ if (!isset($_POST['submit'])) {
     } else {
         $email = mb_strtolower(trim($email));
     }
-    if ($password != $_POST['password1']) { // check if the two passwords match
-        $registration_errors[] = $langPassTwice;
+
+    if (empty($provider) && empty($_POST['provider_id'])) {
+        if ($password != $_POST['password1']) { // check if the two passwords match
+            $registration_errors[] = $langPassTwice;
+        }
     }
     //check for validation errors in custom profile fields
     $cpf_check = cpf_validate_format();
@@ -424,9 +440,12 @@ if (!isset($_POST['submit'])) {
             $verified_mail = 2;
             $vmail = FALSE;
         }
-
-        $hasher = new PasswordHash(8, false);
-        $password_encrypted = $hasher->HashPassword($password);
+        if (empty($provider) && empty($_POST['provider_id'])) {
+            $hasher = new PasswordHash(8, false);
+            $password_encrypted = $hasher->HashPassword($password);
+        } else {
+            $password_encrypted = $provider;
+        }
 
         // check if hybridauth provider and provider user id is used (the
         // validity of both is checked on a previous step in this script)

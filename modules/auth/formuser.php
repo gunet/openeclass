@@ -143,7 +143,6 @@ if ($provider_name and isset($_GET['provider_id']) and !empty($_GET['provider_id
 // authenticate user via Hybrid Auth if requested by URL
 if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']))) {
     require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
 
     $hybridauth = new Hybridauth\Hybridauth( $config );
@@ -152,7 +151,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
 
     // additional layer of checks to verify that the provider is valid via hybridauth middleware
     if($provider_name == 'linkedin') $provider_name = 'LinkedIn'; //small fix required for LinkedIn
-    if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) {
+    if (count($allProviders) && in_array(ucfirst($provider_name), $allProviders)) {
         try {
             $hybridauth = new Hybridauth\Hybridauth( $config );
             // try to authenticate the selected $provider
