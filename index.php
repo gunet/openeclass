@@ -28,8 +28,6 @@ session_start();
  *
  */
 
-use Hybrid\Auth;
-
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
     $dbname = $matches[1];
@@ -98,12 +96,6 @@ if (isset($_GET['logout']) and $uid) {
 
 // if we try to login... then authenticate user.
 $warning = '';
-
-/*if(isset($_SESSION['callback']) && $_SESSION['callback'] == '1'){
-        header('Location: /modules/admin/auth_test.php?auth=8&'.$_SERVER['QUERY_STRING']);
-        exit;
-}*/
-
 
 if(isset($_SESSION['hybridauth_callback'])) {
 	switch($_SESSION['hybridauth_callback']) {

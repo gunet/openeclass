@@ -67,16 +67,6 @@ if ($user_registration) {
                 // grab the user profile
                 $user_data = $adapter->getUserProfile();
 
-                /*if ($user_data->firstName) {
-                    $fullName = explode('', $user_data->firstName);
-                    $provider_user_data .= '&givenname_form=' . q($fullName[0]);
-                }
-                if (!empty($user_data->lastName)) {
-                    $provider_user_data .= '&surname_form=' . q($user_data->lastName);
-                } else {
-                    $fullName = explode('', $user_data->firstName);
-                    $provider_user_data .= '&surname_form=' . q($fullName[1]);
-                }*/
                 //user profile data
                 if($user_data->firstName) $provider_user_data .= '&givenname_form=' . q($user_data->firstName);
                 if($user_data->lastName) $provider_user_data .= '&surname_form=' . q($user_data->lastName);
@@ -90,17 +80,16 @@ if ($user_registration) {
                 // let hybridauth forget all about the user so we can try to authenticate again.
 
                 // Display the received error,
-                // to know more please refer to Exceptions handling section on the userguide
+                // to know more please refer to Exceptions handling section on the user guide
                 switch($e->getCode()) {
-                    case 0 : $warning = "<p class='alert1'>Unspecified error.</p>"; break;
-                    case 1 : $warning = "<p class='alert1'>HybridAuth configuration error.</p>"; break;
-                    case 2 : $warning = "<p class='alert1'>Provider not properly configured.</p>"; break;
-                    case 3 : $warning = "<p class='alert1'>Unknown or disabled provider.</p>"; break;
-                    case 4 : $warning = "<p class='alert1'>Missing provider application credentials.</p>"; break;
-                    case 5 : $warning = "<p class='alert1'>Authentication failed. The user has canceled the authentication or the provider refused the connection.</p>"; break;
-                    case 6 : $warning = "<p class='alert1'>User profile request failed. Most likely the user is not connected to the provider and he should to authenticate again.</p>"; $adapter->logout();
-                    break;
-                    case 7 : $warning = "<p class='alert1'>User not connected to the provider.</p>"; $adapter->logout(); break;
+                    case 0: $warning = "<p class='alert1'>$langProviderError1</p>"; break;
+                    case 1: $warning = "<p class='alert1'>$langProviderError2</p>"; break;
+                    case 2: $warning = "<p class='alert1'>$langProviderError3</p>"; break;
+                    case 3: $warning = "<p class='alert1'>$langProviderError4</p>"; break;
+                    case 4: $warning = "<p class='alert1'>$langProviderError5</p>"; break;
+                    case 5: $warning = "<p class='alert1'>$langProviderError6</p>"; break;
+                    case 6: $warning = "<p class='alert1'>$langProviderError7</p>";$adapter->disconnect(); break;
+                    case 7: $warning = "<p class='alert1'>$langProviderError8</p>";$adapter->disconnect(); break;
                 }
 
                 // debug messages for hybridauth errors

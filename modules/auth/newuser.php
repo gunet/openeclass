@@ -24,7 +24,6 @@
  * @brief user registration process
  */
 use Hautelook\Phpass\PasswordHash;
-use Hybrid\Auth;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -82,7 +81,9 @@ if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $
 if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and $_GET['auth'] < 14) {
     $auth = $_GET['auth'];
     $provider_name = $auth_ids[$auth];
-    if($provider_name == "linkedin") $provider_name = "linkedIn";
+    if ($provider_name == "linkedin") {
+        $provider_name = "linkedIn";
+    }
     $result = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_id = ?d", $auth);
     if (!$result->auth_default) {
         $provider_name = $provider_id = '';
@@ -171,22 +172,30 @@ if (!isset($_POST['submit'])) {
                         'url' => "{$urlAppend}modules/auth/registration.php",
                         'icon' => 'fa-reply',
                         'level' => 'primary-label')), false);
-    $tool_content .= @"<div class='form-wrapper'>
+    $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' action='$_SERVER[REQUEST_URI]' method='post' onsubmit='return validateNodePickerForm();'>
             <fieldset>
             <div class='form-group'>
                 <label for='Name' class='col-sm-2 control-label'>$langName:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='givenname_form' size='30' maxlength='100'" .
-                      ($user_data? (" value='" . q($user_data->firstName) . "'"): '') . " placeholder='$langName'>
-                </div>
+                <div class='col-sm-10'>";
+                    if ($user_data) {
+                        $user_data_first_name = explode(' ', $user_data->firstName);
+                        $tool_content .= "<input class='form-control' type='text' name='givenname_form' size='30' maxlength='100' value = '" . q($user_data_first_name[0]) . "' placeholder='$langName'>";
+                    } else {
+                        $tool_content .= "<input class='form-control' type='text' name='givenname_form' size='30' maxlength='100' value = '' placeholder='$langName'>";
+                    }
+                $tool_content .= "</div>
             </div>
             <div class='form-group'>
                 <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='surname_form' size='30' maxlength='100'" .
-                      ($user_data? (" value='" . q($user_data->lastName) . "'"): '') . " placeholder='$langSurname'>
-                </div>
+                <div class='col-sm-10'>";
+                    if ($user_data) {
+                        $user_data_surname = explode(' ', $user_data->firstName);
+                        $tool_content .= "<input class='form-control' type='text' name='surname_form' size='30' maxlength='100' value = '" . q($user_data_surname[1]) . "' placeholder='$langSurname'>";
+                    } else {
+                        $tool_content .= "<input class='form-control' type='text' name='surname_form' size='30' maxlength='100' value = '' placeholder='$langSurname'>";
+                    }
+                $tool_content .= "</div>
             </div>
             <div class='form-group'>
                 <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>

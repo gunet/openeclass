@@ -19,7 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-use Hybrid\Auth;
 $require_login = true;
 $require_valid_uid = true;
 $require_help = true;
