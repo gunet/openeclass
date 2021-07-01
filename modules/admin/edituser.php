@@ -106,11 +106,9 @@ if ($u) {
         $current_auth = 1;
         $auth_names[1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {
-            if($auth < 8) {
-                $auth_names[$auth] = get_auth_info($auth);
-                if ($info->password == $auth_ids[$auth]) {
-                    $current_auth = $auth;
-                }
+            $auth_names[$auth] = get_auth_info($auth);
+            if ($info->password == $auth_ids[$auth]) {
+                $current_auth = $auth;
             }
         }
         $tool_content .= "
@@ -184,7 +182,7 @@ if ($u) {
                             <input  class='form-control' type='text' name='username' size='50' value='" . q($info->username) . "'>
                         </div>";
 
-        } else {    // means that it is external auth method, so the user cannot change this password
+        } else {    // means that it is external auth method
             $auth = array_search($info->password, $auth_ids);
             $auth_text = get_auth_info($auth);
             $tool_content .= "<div class='col-sm-10'>

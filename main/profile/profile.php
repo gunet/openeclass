@@ -252,7 +252,7 @@ if (isset($_POST['submit'])) {
 
 use Hybridauth\Exception\Exception;
 use Hybridauth\Hybridauth;
-use Hybridauth\HttpClient;
+
 // HybridAuth actions
 if (isset($_GET['provider'])) {
     // user requests hybridauth provider uid deletion
@@ -268,7 +268,7 @@ if (isset($_GET['provider'])) {
         } elseif ($_GET['action'] == 'connect') {
             // HybridAuth checks, authentication and user profile info and finally store provider user id in the db
             require_once 'modules/auth/methods/hybridauth/config.php';
-	    require_once 'vendor/hybridauth/hybridauth/src/Hybridauth.php';
+    	    require_once 'vendor/hybridauth/hybridauth/src/Hybridauth.php';
             $config = get_hybridauth_config();
             $user_data = '';
 	    $provider = @trim(strip_tags(strtolower($_GET['provider'])));
@@ -281,43 +281,43 @@ if (isset($_GET['provider'])) {
 	    if (count($allProviders) && in_array($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
                 try {
                     if (in_array($provider, $hybridAuthMethods)) {
-			$providerAuthId = array_search(strtolower($provider), $auth_ids);
+			            $providerAuthId = array_search(strtolower($provider), $auth_ids);
 
-    			if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'profile'){
-                		unset($_SESSION['hybridauth_callback']);
-        	        	if(isset($_SESSION['hybridauth_provider'])) unset($_SESSION['hybridauth_provider']);
-	            	} else {
-                		$_SESSION['hybridauth_callback'] = 'profile';
-				if($provider == 'linkedin') {
-					$_SESSION['hybridauth_provider'] = 'LinkedIn';
-				} else {
-	        	        	$_SESSION['hybridauth_provider'] = ucfirst($provider);
-				}
-		        }
-			if($provider == 'live') {
-                                $provider = 'WindowsLive';
+                        if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'profile') {
+                            unset($_SESSION['hybridauth_callback']);
+                            if(isset($_SESSION['hybridauth_provider'])) {
+                                unset($_SESSION['hybridauth_provider']);
+                            }
+                        } else {
+                            $_SESSION['hybridauth_callback'] = 'profile';
+                            if($provider == 'linkedin') {
+                                $_SESSION['hybridauth_provider'] = 'LinkedIn';
+                            } else {
+                                $_SESSION['hybridauth_provider'] = ucfirst($provider);
+                            }
+                        }
+                        if ($provider == 'live') {
+                            $provider = 'WindowsLive';
                         }
 
-			/**
-     			* Feed configuration array to Hybridauth.
-			*/
-			$hybridauth = new Hybridauth($config);
-			$hybridauth->authenticate($provider);
-			$adapters = $hybridauth->getConnectedAdapters();
-			foreach ($adapters as $name => $adapter) :
-				$user_data = $adapter->getUserProfile();
-			endforeach;
+                        /**
+                            * Feed configuration array to Hybridauth.
+                        */
+                        $hybridauth = new Hybridauth($config);
+                        $hybridauth->authenticate($provider);
+                        $adapters = $hybridauth->getConnectedAdapters();
+                        foreach ($adapters as $name => $adapter) :
+                            $user_data = $adapter->getUserProfile();
+                        endforeach;
 
-			/**
-			* This will erase the current user authentication data from session, and any further
-     			* attempt to communicate with provider.
-     			*/
-			if (isset($_GET['logout'])) {
-        			$adapter = $hybridauth->getAdapter($_GET['logout']);
-        			$adapter->disconnect();
-    			}
-
-
+                        /**
+                        * This will erase the current user authentication data from session, and any further
+                            * attempt to communicate with provider.
+                            */
+                        if (isset($_GET['logout'])) {
+                            $adapter = $hybridauth->getAdapter($_GET['logout']);
+                            $adapter->disconnect();
+                        }
 
                         // Fetch user profile id and check if there is another
                         // instance in the db (this would happen if a user tried to
@@ -369,11 +369,11 @@ if (isset($_GET['provider'])) {
                             break;
                         case 6:
                             Session::Messages($langProviderError7, 'alert-danger');
-                            $adapter->logout();
+                            $adapter->disconnect();
                             break;
                         case 7:
                             Session::Messages($langProviderError8, 'alert-danger');
-                            $adapter->logout();
+                            $adapter->disconnect();
                             break;
                     }
                     $_GET['msg'] = 11; // display generic error for now
@@ -468,11 +468,10 @@ $tool_content .= "</div></div>";
 $tool_content .= "<div class='form-group'><label for='username_form' class='col-sm-2 control-label'>$langUsername:</label>";
 $tool_content .= "<div class='col-sm-10'>";
 if ($allow_username_change) {
-    $tool_content .= "<input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='$username_form' />";
+    $tool_content .= "<input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='$username_form'>";
 } else {
-    // means that it is external auth method, so the user cannot change this password
-    $tool_content .= " [$auth_text]
-            <p class='form-control-static'>$username_form</p>";
+    // means that it is external auth method
+    $tool_content .= " <p class='form-control-static'><strong>$username_form</strong> [$auth_text]";
 }
 $tool_content .= "</div></div>";
 

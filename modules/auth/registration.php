@@ -46,6 +46,7 @@ if ($user_registration) {
     //HybridAuth checks, authentication and user profile info.
     $user_data = '';
     if(!empty($_GET['provider'])) {
+        $provider = $_GET['provider'];
         //check if there are any available alternative providers for authentication
         require_once 'modules/auth/methods/hybridauth/config.php';
         $config = get_hybridauth_config();
@@ -54,7 +55,9 @@ if ($user_registration) {
         $allProviders = $hybridauth->getProviders();
         $tool_content_providers = "";
 
-        if(count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) $provider = '?provider=' . $_GET['provider'];
+        if (count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) {
+            $provider = '?provider=' . $_GET['provider'];
+        }
 
         if(!empty($provider)) { //if(!empty($provider), it means the provider is existent and valid - it's checked above
             try {
@@ -91,7 +94,6 @@ if ($user_registration) {
                     case 6: $warning = "<p class='alert1'>$langProviderError7</p>";$adapter->disconnect(); break;
                     case 7: $warning = "<p class='alert1'>$langProviderError8</p>";$adapter->disconnect(); break;
                 }
-
                 // debug messages for hybridauth errors
                 //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
                 //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
@@ -110,9 +112,9 @@ if ($user_registration) {
             $tool_content .= "<table class='table-default table-responsive'>";
             $tool_content .= "<tr class='list-header'><th>$langOfStudent</th></tr>";
             if ($eclass_stud_reg == 2) { // allow student registration via eclass
-                $tool_content .= "<tr><td><a href='newuser.php$provider$provider_user_data'>$langUserAccountInfo2</a></td></tr>";
+                $tool_content .= "<tr><td><a href='newuser.php'>$langUserAccountInfo2</a></td></tr>";
             } elseif ($eclass_stud_reg == 1) { // allow student registration via request
-                $tool_content .= "<tr><td><a href='formuser.php$provider$provider_user_data'>$langUserAccountInfo1</a></td></tr>";
+                $tool_content .= "<tr><td><a href='formuser.php'>$langUserAccountInfo1</a></td></tr>";
             }
 
             if (count($auth) > 1 and $alt_auth_stud_reg != FALSE) { // allow user registration via alt auth methods
@@ -123,13 +125,12 @@ if ($user_registration) {
                 }
                 foreach ($auth as $k => $v) {
                     if ($v != 1) {  // bypass the eclass auth method
-                        //hybridauth registration is performed in newuser.php of formuser.php rather than altnewuser.php
                         if ($v < 8) {
                             $tool_content .= "<br><a href='altnewuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
                         } else {
                             if ($eclass_stud_reg == 1) {
                                 $tool_content .= "<br><a href='formuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
-                            } else {
+                            } else if (!empty($provider)) { //hybridauth registration
                                 $tool_content .= "<br><a href='newuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
                             }
                         }
@@ -143,28 +144,32 @@ if ($user_registration) {
         }
 
         // teacher registration
-        if ($eclass_prof_reg or $alt_auth_prof_reg)     { // allow teacher registration
+        if ($eclass_prof_reg or $alt_auth_prof_reg) { // allow teacher registration
             $tool_content .= "<table class='table-default'>";
             $tool_content .= "<tr class='list-header'><th>$langOfTeacher</th></tr>";
             if (count($auth) > 1 and $alt_auth_prof_reg) {
                 $tool_content .= "<td>$langUserAccountInfo1 $langwith:";
                 foreach ($auth as $k => $v) {
                     if ($v != 1) {  // bypass the eclass auth method
-                        //hybridauth registration is performed in newuser.php rather than altnewuser
                         if ($v < 8) {
-                            if ($alt_auth_prof_reg) $tool_content .= "<br /><a href='altnewuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
-                            else $tool_content .= "<br /><a href='altnewuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
-                        } else {
-                            if ($alt_auth_prof_reg) $tool_content .= "<br /><a href='formuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
-                                else $tool_content .= "<br /><a href='newuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
+                            if ($alt_auth_prof_reg) {
+                                $tool_content .= "<br /><a href='altnewuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
+                            } else {
+                                $tool_content .= "<br /><a href='altnewuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
+                            }
+                        } else if ($alt_auth_prof_reg and !empty($provider)) {
+                            $tool_content .= "<br /><a href='formuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
                         }
                     }
                 }
                 $tool_content .= "</td>";
             }
             if ($eclass_prof_reg) {
-                if(empty($provider)) $tool_content .= "<tr><td><a href='formuser.php?p=1'>$langUserAccountInfo1</a></td></tr>";
-                    else $tool_content .= "<tr><td><a href='formuser.php$provider$provider_user_data&p=1'>$langUserAccountInfo1</a></td></tr>";
+                if(empty($provider)) {
+                    $tool_content .= "<tr><td><a href='formuser.php?p=1'>$langUserAccountInfo1</a></td></tr>";
+                } else {
+                    $tool_content .= "<tr><td><a href='formuser.php?p=1'>$langUserAccountInfo1</a></td></tr>";
+                }
             }
             $tool_content .= "</table>";
         } else {

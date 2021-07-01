@@ -795,59 +795,59 @@ function hybridauth_login() {
     // if user select a provider to login with then include hybridauth config
     // and main class, try to authenticate, finally redirect to profile
     if (isset($_GET['provider'])) {
-	if($_GET['provider'] == 'live'){
-		$provider = 'WindowsLive';
-	} else {
-		$provider = @trim(strip_tags($_GET['provider']));
-	}
-	try {
-	    if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'login'){
-	    	unset($_SESSION['hybridauth_callback']);
-	    	if(isset($_SESSION['hybridauth_provider'])) unset($_SESSION['hybridauth_provider']);
-	    } else {
-	    	$_SESSION['hybridauth_callback'] = 'login';
-		    $_SESSION['hybridauth_provider'] = $provider;
-	    }
-	    /**
-	     * Feed configuration array to Hybridauth.
-	     */
-	    $hybridauth = new Hybridauth($config);
-	    $hybridauth->authenticate($provider);
-	    $adapters = $hybridauth->getConnectedAdapters();
-	    foreach ($adapters as $name => $adapter) :
-	    	$user_data = $adapter->getUserProfile();
-	    endforeach;
-	    /**
-	     * This will erase the current user authentication data from session, and any further
-	     * attempt to communicate with provider.
-	     */
-	    if (isset($_GET['logout'])) {
-	        $adapter = $hybridauth->getAdapter($_GET['logout']);
-	        $adapter->disconnect();
-	    }
-	} catch (Exception $e) {
-	    // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
-            // let hybridauth forget all about the user so we can try to authenticate again.
-
-            // Display the received error,
-            // to know more please refer to Exceptions handling section on the user guide
-            switch($e->getCode()) {
-                case 0: Session::Messages($langProviderError1); break;
-                case 1: Session::Messages($langProviderError2); break;
-                case 2: Session::Messages($langProviderError3); break;
-                case 3: Session::Messages($langProviderError4); break;
-                case 4: Session::Messages($langProviderError5); break;
-                case 5: Session::Messages($langProviderError6); break;
-                case 6: Session::Messages($langProviderError7); $adapter->disconnect(); break;
-                case 7: Session::Messages($langProviderError8); $adapter->disconnect();; break;
+        if($_GET['provider'] == 'live'){
+            $provider = 'WindowsLive';
+        } else {
+            $provider = @trim(strip_tags($_GET['provider']));
+        }
+        try {
+            if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'login'){
+                unset($_SESSION['hybridauth_callback']);
+                if(isset($_SESSION['hybridauth_provider'])) unset($_SESSION['hybridauth_provider']);
+            } else {
+                $_SESSION['hybridauth_callback'] = 'login';
+                $_SESSION['hybridauth_provider'] = $provider;
             }
+            /**
+             * Feed configuration array to Hybridauth.
+             */
+            $hybridauth = new Hybridauth($config);
+            $hybridauth->authenticate($provider);
+            $adapters = $hybridauth->getConnectedAdapters();
+            foreach ($adapters as $name => $adapter) :
+                $user_data = $adapter->getUserProfile();
+            endforeach;
+            /**
+             * This will erase the current user authentication data from session, and any further
+             * attempt to communicate with provider.
+             */
+            if (isset($_GET['logout'])) {
+                $adapter = $hybridauth->getAdapter($_GET['logout']);
+                $adapter->disconnect();
+            }
+        } catch (Exception $e) {
+            // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
+                // let hybridauth forget all about the user so we can try to authenticate again.
 
-            // debug messages for hybridauth errors
-            //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
-            //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
+                // Display the received error,
+                // to know more please refer to Exceptions handling section on the user guide
+                switch($e->getCode()) {
+                    case 0: Session::Messages($langProviderError1); break;
+                    case 1: Session::Messages($langProviderError2); break;
+                    case 2: Session::Messages($langProviderError3); break;
+                    case 3: Session::Messages($langProviderError4); break;
+                    case 4: Session::Messages($langProviderError5); break;
+                    case 5: Session::Messages($langProviderError6); break;
+                    case 6: Session::Messages($langProviderError7); $adapter->disconnect(); break;
+                    case 7: Session::Messages($langProviderError8); $adapter->disconnect();; break;
+                }
 
-            return false;
-	}
+                // debug messages for hybridauth errors
+                //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
+                //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
+
+                return false;
+        }
     } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
 
     // from here on an alternative version of process_login() runs where
