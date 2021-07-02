@@ -459,6 +459,10 @@ if (!$nbrExercises) {
             } else { // exercise has expired
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
             }
+            if (has_user_participate_in_exercise($row->id)) {
+                $tool_content .= "&nbsp; <span class='fa fa-check-square-o' data-toggle='tooltip' data-placement='right' data-title='$langHasParticipated'></span>";
+            }
+
             $tool_content .= $row->description . "</td>";
             if (isset($row->start_date)) {
                 $sort_date = date("Y-m-d H:i", strtotime($row->start_date));
@@ -760,3 +764,22 @@ if ($is_editor) {
 $head_content .= "</script>";
 
 draw($tool_content, 2, null, $head_content);
+
+
+
+/**
+ * @brief check if user has participate in exercise
+ * @return bool
+ */
+function has_user_participate_in_exercise($eid)
+{
+    global $uid;
+
+    $data = Database::get()->queryArray("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d", $uid, $eid);
+    if ($data) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
