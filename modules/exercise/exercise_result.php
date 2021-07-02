@@ -48,49 +48,6 @@ $ajax_regrade = false;
 
 // picture path
 $picturePath = "courses/$course_code/image";
-// Identifying ajax request
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
-    if (isset($_GET['check'])) {
-        $checking = true;
-        header('Content-Type: application/json');
-    } elseif (isset($_POST['regrade'])) {
-        $ajax_regrade = true;
-    } else {
-        $grade = $_POST['question_grade'];
-        $question_id = $_POST['question_id'];
-        $eurid = $_GET['eurId'];
-        Database::get()->query("UPDATE exercise_answer_record
-                    SET weight = ?f WHERE eurid = ?d AND question_id = ?d",
-            $grade, $eurid, $question_id);
-        $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
-            FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
-            $eurid)->count;
-        if ($ungraded == 0) {
-            // if no more ungraded questions, set attempt as complete and
-            // recalculate sum of grades
-            Database::get()->query("UPDATE exercise_user_record
-                SET attempt_status = ?d,
-                    total_score = GREATEST(0, (SELECT SUM(weight) FROM exercise_answer_record
-                                        WHERE eurid = ?d))
-                WHERE eurid = ?d",
-                ATTEMPT_COMPLETED, $eurid, $eurid);
-        } else {
-            // if ungraded questions still exist, just update the grade sum
-            Database::get()->query("UPDATE exercise_user_record
-                SET total_score = GREATEST(0, (SELECT SUM(weight) FROM exercise_answer_record
-                                        WHERE eurid = ?d AND weight IS NOT NULL))
-                WHERE eurid = ?d",
-                $eurid, $eurid);
-        }
-        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting
-                             FROM exercise_user_record WHERE eurid = ?d", $eurid);
-        // update gradebook
-        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
-        triggerGame($course_id, $uid, $data->eid);
-        triggerExerciseAnalytics($course_id, $uid, $data->eid);
-        exit();
-    }
-}
 
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
@@ -125,6 +82,43 @@ if (isset($_GET['eurId'])) {
     // exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
+
+// Handle AJAX requests for course editor
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' and $is_editor) {
+    if (isset($_GET['check'])) {
+        $checking = true;
+        header('Content-Type: application/json');
+    } elseif (isset($_POST['regrade'])) {
+        $ajax_regrade = true;
+    } else {
+        $grade = $_POST['question_grade'];
+        $question_id = $_POST['question_id'];
+        Database::get()->query("UPDATE exercise_answer_record
+                    SET weight = ?f WHERE eurid = ?d AND question_id = ?d",
+            $grade, $eurid, $question_id);
+        $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
+            FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
+            $eurid)->count;
+        $totalScore = $objExercise->calculate_total_score($eurid);
+        if ($ungraded == 0) {
+            // if no more ungraded questions, set attempt as complete
+            $attempt_status = ATTEMPT_COMPLETED;
+        } else {
+            $attempt_status = ATTEMPT_PENDING;
+        }
+        Database::get()->query('UPDATE exercise_user_record
+            SET attempt_status = ?d, total_score = ?f WHERE eurid = ?d',
+            $attempt_status, $totalScore, $eurid);
+        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting
+                             FROM exercise_user_record WHERE eurid = ?d", $eurid);
+        // update gradebook
+        update_gradebook_book($data->uid, $data->eid, $data->total_score / $data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+        triggerGame($course_id, $uid, $data->eid);
+        triggerExerciseAnalytics($course_id, $uid, $data->eid);
+        exit();
+    }
+}
+
 if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
     $head_content .= "<script type='text/javascript'>
             $(document).ready(function(){
