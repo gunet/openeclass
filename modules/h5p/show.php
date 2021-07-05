@@ -18,4 +18,5 @@ $data['action_bar'] = action_bar([
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5P];
 $data['workspaceUrl'] = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
+$data['workspaceLibs'] = $urlAppend . 'courses/h5p/libraries';
 view('modules.h5p.show', $data);
