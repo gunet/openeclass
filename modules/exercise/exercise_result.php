@@ -188,6 +188,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                 });
                 </script>";
 }
+
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = mathfilter(nl2br(make_clickable($objExercise->selectDescription())), 12, "../../courses/mathimg/");
 $displayResults = $objExercise->selectResults();
@@ -372,10 +373,10 @@ if (count($exercise_question_ids) > 0) {
                     case MULTIPLE_ANSWER : $studentChoice = @$choice[$answerId];
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
-                            if ($questionScore < 0) {
-                                $questionScore = 0;
-                            }
                             $grade = $answerWeighting;
+                        }
+                        if ($questionScore < 0) {
+                            $questionScore = 0;
                         }
                         break;
 
@@ -586,6 +587,8 @@ if ($totalScore < 0) {
 }
 
 if ($regrade) {
+    $totalScore = $objExercise->calculate_total_score($eurid);
+
     Database::get()->query('UPDATE exercise_user_record
         SET total_score = ?f, total_weighting = ?f
         WHERE eurid = ?d', $totalScore, $totalWeighting, $eurid);
