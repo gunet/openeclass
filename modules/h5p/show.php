@@ -1,4 +1,23 @@
 <?php
+/*
+ * ========================================================================
+ * Open eClass 3.11 - E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2021  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ *
+ * For a full list of contributors, see "credits.txt".
+ */
 
 $require_current_course = true;
 
@@ -9,12 +28,12 @@ $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => "H5P"];
 
-$tool_content .= action_bar([
-            [ 'title' => $langBack,
-              'url' => $backUrl,
-              'icon' => 'fa-reply',
-              'level' => 'primary-label' ]
-        ], false);
+$tool_content .= action_bar([[
+    'title' => $langBack,
+    'url' => $backUrl,
+    'icon' => 'fa-reply',
+    'level' => 'primary-label'
+]], false);
 
 $workspaceUrl = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
 $workspaceLibs = $urlAppend . 'courses/h5p/libraries';
@@ -25,7 +44,7 @@ $head_content .= "
 
 $tool_content .= "<div class='row'>
         <div class='col-xs-12'>
-			<div id='h5p-container'></div>
+            <div id='h5p-container'></div>
         </div>
     </div>";
 
