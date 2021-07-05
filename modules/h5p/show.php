@@ -17,36 +17,34 @@ $tool_content .= action_bar([
         ], false);
 
 $workspaceUrl = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
+$workspaceLibs = $urlAppend . 'courses/h5p/libraries';
 
 $head_content .= "
     <link type='text/css' rel='stylesheet' media='all' href='$urlServer/js/h5p-standalone/styles/h5p.css' />
-    <script type='text/javascript' src='$urlServer/js/h5p-standalone/js/h5p-standalone-main.min.js'></script>";
+    <script type='text/javascript' src='$urlServer/js/h5p-standalone/main.bundle.js'></script>";
 
 $tool_content .= "<div class='row'>
         <div class='col-xs-12'>
-			<div class='h5p-container'></div>
+			<div id='h5p-container'></div>
         </div>
     </div>";
 
 $head_content .= "
-  <script type='text/javascript'>
-    (function($) {
-        $(function() {
-            $('.h5p-container').h5p({
-          frameJs: '$urlServer/js/h5p-standalone/js/h5p-standalone-frame.min.js',
-          frameCss: '$urlServer/js/h5p-standalone/styles/h5p.css',
-          h5pContent: '$workspaceUrl',
-          displayOptions: {
-                frame: true,
-                copyright : true,
-                embed: false,
-                download: false,
-                icon: true,
-                export: false
-          }
+    <script type='text/javascript'>
+        $(document).ready(function() {
+            const el = document.getElementById('h5p-container');
+            const options = {
+              h5pJsonPath:  '$workspaceUrl',
+              librariesPath: '$workspaceLibs',
+              frameJs: '$urlServer/js/h5p-standalone/frame.bundle.js',
+              frameCss: '$urlServer/js/h5p-standalone/styles/h5p.css',
+              frame: true,
+              copyright: true,
+              icon: true,
+              fullScreen: true
+            };
+            new H5PStandalone.H5P(el, options);
         });
-      });
-    })(H5P.jQuery);
-  </script>";
+    </script>";
 
 draw($tool_content, 2, null, $head_content);
