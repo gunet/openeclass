@@ -248,7 +248,8 @@ foreach (array('previous', 'next') as $i) {
                              $check_start_week
                        ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
-    if ($q) {
+
+    if ($q and in_array($q->id, $userUnitsIds)) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);
         $link[$i] = "<a class='$page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
