@@ -84,7 +84,6 @@ if (isset($_GET['logout']) and $uid) {
 
     $config = get_hybridauth_config();
     $hybridauth = new Hybridauth\Hybridauth( $config );
-    //$hybridauth->logoutAllProviders();
 
     session_destroy();
     $uid = 0;
