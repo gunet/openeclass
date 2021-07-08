@@ -375,7 +375,6 @@ if (count($exercise_question_ids) > 0) {
                             $questionScore += $answerWeighting;
                             $grade = $answerWeighting;
                         }
-                        //echo "<pre>answerid; $answerId, studentchoice $studentChoice, answerweight:$answerWeighting -- $questionScore</pre>";
                         break;
 
                     case FILL_IN_BLANKS :
