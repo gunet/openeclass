@@ -375,9 +375,7 @@ if (count($exercise_question_ids) > 0) {
                             $questionScore += $answerWeighting;
                             $grade = $answerWeighting;
                         }
-                        if ($questionScore < 0) {
-                            $questionScore = 0;
-                        }
+                        //echo "<pre>answerid; $answerId, studentchoice $studentChoice, answerweight:$answerWeighting -- $questionScore</pre>";
                         break;
 
                     case FILL_IN_BLANKS :
@@ -553,6 +551,9 @@ if (count($exercise_question_ids) > 0) {
             }
         }
 
+        if ($answerType == MULTIPLE_ANSWER and $questionScore < 0) {
+            $questionScore = 0;
+        }
         $rounded_weight = round($question_weight, 2);
 
         if ($rounded_weight < 0 and $answerType == MULTIPLE_ANSWER) {
