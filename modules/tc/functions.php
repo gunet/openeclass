@@ -135,7 +135,7 @@ function bbb_session_form($session_id = 0) {
         $checked_lockSettingsDisableNote = get_config('bbb_DisableNote', 0) ? 'checked' : '';
         $checked_lockSettingsHideUserList = get_config('bbb_HideUserList', 0) ? 'checked' : '';
         $checked_hideParticipants = get_config('bbb_hideParticipants', 0) ? 'checked' : '';
-        if (!empty($checked_muteOnStart) or !empty($checked_lockSettingsDisableMic) or 
+        if (!empty($checked_muteOnStart) or !empty($checked_lockSettingsDisableMic) or
            !empty($checked_lockSettingsDisableCam) or !empty($checked_webcamsOnlyForModerator) or
            !empty($checked_lockSettingsDisablePrivateChat) or !empty($checked_lockSettingsDisablePublicChat) or
            !empty($checked_lockSettingsDisableNote) or !empty($checked_lockSettingsHideUserList) or
@@ -757,6 +757,14 @@ function bbb_session_details() {
             $title = $row->title;
             $start_date = $row->start_date;
             $end_date = $row->end_date;
+            $starttimeLabel = '';
+            if (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) > 0) {
+                $starttimeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
+                $starttimeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
+                    format_time_duration($starttimeLeft * 60) .
+                    "</small></span>";
+            }
+
             if($end_date) {
                 $timeLeft = date_diff_in_minutes($end_date, date('Y-m-d H:i:s'));
                 $timeLabel = nice_format($end_date, TRUE);
@@ -764,7 +772,7 @@ function bbb_session_details() {
                 $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
                 $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
-            if ($timeLeft > 0) {
+            if ($timeLeft > 0 and date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < 0) {
                 $timeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
@@ -820,7 +828,7 @@ function bbb_session_details() {
                     </td>
                     <td class='text-center'>
                         <div style='padding-top: 7px;'>
-                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
+                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
                         </div>
                         <div style='padding-top: 7px;'>
                             <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
