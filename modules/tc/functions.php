@@ -897,7 +897,7 @@ function bbb_session_details() {
                     </td>
                     <td class='text-center'>
                         <div style='padding-top: 7px;'>
-                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
+                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
                         </div>
                         <div style='padding-top: 7px;'>
                             <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
