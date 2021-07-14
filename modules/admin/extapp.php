@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // Check if user is administrator and if yes continue
@@ -38,7 +38,7 @@ if (isset($_POST['state'])) {
     $appName = $_POST['appName'];
     if(showSecondFactorChallenge()!=""){
         $parts = explode(",",$appName);
-        if(count($parts)>1){ 
+        if(count($parts)>1){
             $appName = $parts[0];
             $_POST['sfaanswer'] = $parts[count($parts)-1];
         }else{
@@ -46,9 +46,9 @@ if (isset($_POST['state'])) {
         }
         checkSecondFactorChallenge();
     }
-    $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;    
-    $appNameAjax = getDirectReference($appName);    
-    
+    $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
+    $appNameAjax = getDirectReference($appName);
+
     if (($appNameAjax == 'openmeetings') and $newState == 1) {
         $app_tc = ExtAppManager::getApp('bigbluebutton');
         $app_tc->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
@@ -56,7 +56,7 @@ if (isset($_POST['state'])) {
         $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
         $app_tc->update_tc_sessions('om'); // update tc sessions
     }
-    
+
     if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
         $app_tc = ExtAppManager::getApp('openmeetings');
         $app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
@@ -64,7 +64,7 @@ if (isset($_POST['state'])) {
         $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
         $app_tc->update_tc_sessions('bbb'); // update tc sessions
     }
-    
+
     if (($appNameAjax == 'webconf') and $newState == 1) {
         $app_tc = ExtAppManager::getApp('bigbluebutton');
         $app_tc->setEnabled(!$newState);  // disable bigbluebutton if bigbluebutton has been enabled
@@ -72,8 +72,8 @@ if (isset($_POST['state'])) {
         $app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
         $app_tc->update_tc_sessions('webconf'); // update tc sessions
     }
-    
-    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    
+
+    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
     echo $newState;
     exit;
 }
