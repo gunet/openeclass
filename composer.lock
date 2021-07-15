@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1496ab9c495da0188ba8f250b4ce7e5d",
+    "content-hash": "6705c54f60f03e11bfeb25fc1b4d4b78",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -888,6 +888,67 @@
                 "source": "https://github.com/h5p/h5p-php-library/tree/wp-1.15.3"
             },
             "time": "2021-04-22T09:30:45+00:00"
+        },
+        {
+            "name": "h5p/h5p-editor",
+            "version": "1.24.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/h5p/h5p-editor-php-library.git",
+                "reference": "338ae5bad572fe3d7c0a355d8ba8e24f360bb698"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/h5p/h5p-editor-php-library/zipball/338ae5bad572fe3d7c0a355d8ba8e24f360bb698",
+                "reference": "338ae5bad572fe3d7c0a355d8ba8e24f360bb698",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "h5peditor.class.php",
+                    "h5peditor-file.class.php",
+                    "h5peditor-ajax.class.php",
+                    "h5peditor-storage.interface.php",
+                    "h5peditor-ajax.interface.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Svein-Tore Griff With",
+                    "email": "with@joubel.com",
+                    "homepage": "http://joubel.com",
+                    "role": "CEO"
+                },
+                {
+                    "name": "Frode Petterson",
+                    "email": "frode.petterson@joubel.com",
+                    "homepage": "http://joubel.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "H5P Editor functionality in PHP",
+            "homepage": "https://h5p.org",
+            "keywords": [
+                "content",
+                "editor",
+                "h5p",
+                "hvp",
+                "interactive",
+                "quiz"
+            ],
+            "support": {
+                "issues": "https://github.com/h5p/h5p-editor-php-library/issues",
+                "source": "https://github.com/h5p/h5p-editor-php-library/tree/1.24.3"
+            },
+            "time": "2021-06-13T17:44:27+00:00"
         },
         {
             "name": "hautelook/phpass",
