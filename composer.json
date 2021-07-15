@@ -19,7 +19,8 @@
         "bacon/bacon-qr-code": "^2.0",
         "phpoffice/phpspreadsheet": "^1.9",
         "dapphp/securimage": "^4.0",
-        "h5p/h5p-core": "^1.24.3"
+        "h5p/h5p-core": "^1.24.3",
+        "h5p/h5p-editor": "^1.24.3"
     },
     "autoload": {
         "psr-0": {
