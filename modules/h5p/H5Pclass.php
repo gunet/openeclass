@@ -36,9 +36,15 @@ class H5PClass implements H5PFrameworkInterface {
         $this->messages['info'][] = $message;
     }
 
-    public function getMessages($type) {
-        if (empty($this->messages[$type])) {
-            return NULL;
+    /**
+     * Return messages
+     *
+     * @param string $type 'info' or 'error'
+     * @return string[]
+     */
+    public function getMessages($type): array {
+        if (!isset($this->messages[$type])) {
+            return array();
         }
         $messages = $this->messages[$type];
         $this->messages[$type] = array();
@@ -452,7 +458,27 @@ class H5PClass implements H5PFrameworkInterface {
         return $content;
     }
 
+    /**
+     * Get stored setting.
+     *
+     * @param string $name
+     *   Identifier for the setting
+     * @param string $default
+     *   Optional default value if settings is not set
+     * @return mixed
+     *   Whatever has been stored as the setting
+     */
     public function getOption($name, $default = NULL) {
+        if ($name == 'hub_is_enabled') {
+            return true;
+        }
+
+        // avoid updating the libraries cache when using the Hub selector
+        if ($name == 'content_type_cache_updated_at') {
+            return time();
+        }
+
+        return $default;
     }
 
     public function setOption($name, $value) {
@@ -491,7 +517,16 @@ class H5PClass implements H5PFrameworkInterface {
     public function afterExportCreated($content, $filename) {
     }
 
-    public function hasPermission($permission, $id = NULL) {
+    /**
+     * Check if user has permissions to an action
+     *
+     * @method hasPermission
+     * @param  [H5PPermission] $permission Permission type, ref H5PPermission
+     * @param  [int]           $id         Id need by platform to determine permission
+     * @return boolean
+     */
+    public function hasPermission($permission, $id = NULL): bool {
+        // H5P capabilities have not been introduced.
         return true;
     }
 
