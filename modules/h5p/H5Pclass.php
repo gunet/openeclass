@@ -230,97 +230,144 @@ class H5PClass implements H5PFrameworkInterface {
     public function getLibraryUsage($libraryId, $skipContent = FALSE) {
     }
 
+    /**
+     * Loads a library
+     *
+     * @param string $machineName
+     *   The library's machine name
+     * @param int $majorVersion
+     *   The library's major version
+     * @param int $minorVersion
+     *   The library's minor version
+     * @return array|FALSE
+     *   FALSE if the library does not exist.
+     *   Otherwise an associative array containing:
+     *   - libraryId: The id of the library if it is an existing library.
+     *   - title: The library's name
+     *   - machineName: The library machineName
+     *   - majorVersion: The library's majorVersion
+     *   - minorVersion: The library's minorVersion
+     *   - patchVersion: The library's patchVersion
+     *   - runnable: 1 if the library is a content type, 0 otherwise
+     *   - fullscreen(optional): 1 if the library supports fullscreen, 0 otherwise
+     *   - embedTypes(optional): list of supported embed types
+     *   - preloadedJs(optional): comma separated string with js file paths
+     *   - preloadedCss(optional): comma separated sting with css file paths
+     *   - dropLibraryCss(optional): list of associative arrays containing:
+     *     - machineName: machine name for the librarys that are to drop their css
+     *   - semantics(optional): Json describing the content structure for the library
+     *   - preloadedDependencies(optional): list of associative arrays containing:
+     *     - machineName: Machine name for a library this library is depending on
+     *     - majorVersion: Major version for a library this library is depending on
+     *     - minorVersion: Minor for a library this library is depending on
+     *   - dynamicDependencies(optional): list of associative arrays containing:
+     *     - machineName: Machine name for a library this library is depending on
+     *     - majorVersion: Major version for a library this library is depending on
+     *     - minorVersion: Minor for a library this library is depending on
+     *   - editorDependencies(optional): list of associative arrays containing:
+     *     - machineName: Machine name for a library this library is depending on
+     *     - majorVersion: Major version for a library this library is depending on
+     *     - minorVersion: Minor for a library this library is depending on
+     */
     public function loadLibrary($machineName, $majorVersion, $minorVersion) {
-        $sql = Database::get()->querySinge("SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?s AND minor_version = ?s", $machineName, $majorVersion, $minorVersion);
+        global $webDir;
 
-        $libraryId = $sql->id;
+        $sql = "SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?s AND minor_version = ?s";
+        $libRow = Database::get()->querySingle($sql, $machineName, $majorVersion, $minorVersion);
+
+        if (!$libRow) {
+            return false;
+        }
+
+        $libraryId = $libRow->id;
         $library = array();
         $library['libraryId'] = $libraryId;
 
-        $path = 'libraries/' . $machineName . '-' . $majorVersion . '.' . $minorVersion;
+        $path = $webDir . '/courses/h5p/libraries/' . $machineName . '-' . $majorVersion . '.' . $minorVersion;
         $json = $path . '/' . "library.json";
 
         $string = file_get_contents($json); // getting the library setings from the json file
         $json = json_decode($string, true);
-        //    - title: The library's name
         $library['title'] = $json['title'];
-        //    - machineName: The library machineName
         $library['machineName'] = $json['machineName'];
-        //    - majorVersion: The library's majorVersion
         $library['majorVersion'] = $json['majorVersion'];
-        //    - minorVersion: The library's minorVersion
         $library['minorVersion'] = $json['minorVersion'];
-        //    - patchVersion: The library's patchVersion
         $library['patchVersion'] = $json['patchVersion'];
-        //    - runnable: 1 if the library is a content type, 0 otherwise
         $library['runnable'] = $json['runnable'];
-        //    - fullscreen(optional): 1 if the library supports fullscreen, 0 otherwise
+
         if (isset($json['fullscreen'])) {
             $library['fullscreen'] = $json['fullscreen'];
         }
-        //    - embedTypes(optional): list of supported embed types
+
         if (isset($json['embedTypes'])) {
             $library['embedTypes'] = $json['embedTypes'];
         }
-        //    - preloadedJs(optional): comma separated string with js file paths
 
-        //    - preloadedCss(optional): comma separated sting with css file paths
+        if (isset($json['preloadedJs'])) {
+            $preloadedJs = '';
+            $count = count($json['preloadedJs']);
+            for ($i = 0; $i < $count; $i++) {
+                if ($i != 0) {
+                    $preloadedJs .= ", ";
+                }
+                $preloadedJs .= $json['preloadedJs'][$i]['path'];
+            }
+            $library['preloadedJs'] = $preloadedJs;
+        }
+
         if (isset($json['preloadedCss'])) {
             $preloadedCss = '';
             $count = count($json['preloadedCss']);
-            if ($count == 1) {
-                $preloadedCss = $preloadedCss . $path . $json['preloadedCss'][0]['path'];
-            } else {
-                for ($i = 0; $i < $count; $i++) {
-                    if (isset($json['preloadedCss'][$i + 1])) {
-                        $preloadedCss = $preloadedCss . $path . $json['preloadedCss'][$i]['path'] . ",";
-                    } else {
-                        $preloadedCss = $preloadedCss . $path . $json['preloadedCss'][$i]['path'];
-                    }
+            for ($i = 0; $i < $count; $i++) {
+                if ($i != 0) {
+                    $preloadedCss .= ", ";
                 }
+                $preloadedCss .= $json['preloadedCss'][$i]['path'];
             }
             $library['preloadedCss'] = $preloadedCss;
         }
-        //    - dropLibraryCss(optional): list of associative arrays containing:
-        //      - machineName: machine name for the librarys that are to drop their css
+
         if (isset($json['dropLibraryCss'])) {
-            $$library['dropLibraryCss'] = $json['dropLibraryCss'];
+            $library['dropLibraryCss'] = $json['dropLibraryCss'];
         }
 
-        //    - semantics(optional): Json describing the content structure for the library
         $semantics = $path . "/" . "semantics.json";
         if (file_exists($semantics)) {
             $decode = file_get_contents($semantics);
             $library['semantics'] = json_decode($decode, true);
         }
-        //    - preloadedDependencies(optional): list of associative arrays containing:
-        //      - machineName: Machine name for a library this library is depending on
-        //      - majorVersion: Major version for a library this library is depending on
-        //      - minorVersion: Minor for a library this library is depending on
+
         if (isset($json['preloadedDependencies'])) {
             $library['preloadedDependencies'] = $json['preloadedDependencies'];
         }
-        //    - dynamicDependencies(optional): list of associative arrays containing:
-        //      - machineName: Machine name for a library this library is depending on
-        //      - majorVersion: Major version for a library this library is depending on
-        //      - minorVersion: Minor for a library this library is depending on
+
         if (isset($json['dynamicDependencies'])) {
             $library['dynamicDependencies'] = $json['dynamicDependencies'];
         }
-        //    - editorDependencies(optional): list of associative arrays containing:
-        //      - machineName: Machine name for a library this library is depending on
-        //      - majorVersion: Major version for a library this library is depending on
-        //      - minorVersion: Minor for a library this library is depending on
+
         if (isset($json['editorDependencies'])) {
             $library['editorDependencies'] = $json['editorDependencies'];
         }
+
         return $library;
     }
 
-    public function loadLibrarySemantics($machineName, $majorVersion, $minorVersion) {
-        $path = 'libraries/' . $machineName . '-' . $majorVersion . '.' . $minorVersion;
-        $semantics = $path . '/semantics.json';
-        return file_get_contents($semantics);
+    /**
+     * Loads library semantics.
+     *
+     * @param string $machineName
+     *   Machine name for the library
+     * @param int $majorVersion
+     *   The library's major version
+     * @param int $minorVersion
+     *   The library's minor version
+     * @return string
+     *   The library's semantics as json
+     */
+    public function loadLibrarySemantics($machineName, $majorVersion, $minorVersion): ?string {
+        global $webDir;
+        $semantics = $webDir . '/courses/h5p/libraries/' . $machineName . '-' . $majorVersion . '.' . $minorVersion . '/semantics.json';
+        return (file_exists($semantics)) ? file_get_contents($semantics): null;
     }
 
     public function alterLibrarySemantics(&$semantics, $machineName, $majorVersion, $minorVersion) {

@@ -43,9 +43,18 @@ class EditorAjax implements H5PEditorAjaxInterface {
      * @return array|object|null Returns results from querying the database
      */
     public function getContentTypeCache($machineName = NULL): ?array  {
-        // TODO: Implement getContentTypeCache() method.
-        error_log("Unhandled EditorAjax->getContentTypeCache()");
-        return null;
+        // Added some extra fields to the result because they are expected by functions calling this. They have been
+        // taken from method getCachedLibsMap() in h5peditor.class.php.
+        // TODO: improve on h5p_major/minor, tutorial, example DB fields
+        $sql = "SELECT hl.id, hl.machine_name, hl.major_version, hl.minor_version, hl.patch_version, NULL AS h5p_major_version, NULL AS h5p_minor_version, hl.title, 
+                       NULL AS tutorial, NULL AS example, NULL AS summary, NULL AS description, NULL AS icon, 0 AS created_at, 0 AS updated_at, 0 AS is_recommended,
+                       0 AS popularity, NULL AS screenshots, NULL as license, NULL as owner
+                  FROM h5p_library hl";
+        if (!empty($machineName)) {
+            $sql .= " WHERE hl.machine_name = ?s";
+            return Database::get()->queryArray($sql, $machineName);
+        }
+        return Database::get()->queryArray($sql);
     }
 
     /**
