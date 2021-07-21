@@ -43,13 +43,13 @@ class H5PFactory {
      * @return H5PCore
      */
     public function getCore(): H5PCore {
-        global $webDir, $course_code;
+        global $webDir, $urlServer;
 
         if (null === $this->core) {
             $h5pFramework = new H5Pclass();
             $h5pPath = $webDir . '/courses/h5p';
-            $upload_dir = $webDir . '/courses/temp/h5p/' . $course_code;
-            $this->core = new H5PCore($h5pFramework, $h5pPath, $upload_dir, 'en', FALSE);
+            $url = $urlServer . 'courses/h5p';
+            $this->core = new H5PCore($h5pFramework, $h5pPath, $url, 'en', FALSE);
         }
 
         return $this->core;

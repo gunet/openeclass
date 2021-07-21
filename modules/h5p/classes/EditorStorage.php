@@ -31,10 +31,9 @@ class EditorStorage implements H5peditorStorage {
      * @param string $language Language code
      * @return string Translation in JSON format
      */
-    public function getLanguage($machineName, $majorVersion, $minorVersion, $language): string {
-        // TODO: Implement getLanguage() method.
-        error_log("Unhandled EditorStorage->getLanguage()");
-        return false;
+    public function getLanguage($machineName, $majorVersion, $minorVersion, $language): ?string {
+        // to be implemented
+        return null;
     }
 
     /**
@@ -46,9 +45,33 @@ class EditorStorage implements H5peditorStorage {
      * @return array List of possible language codes
      */
     public function getAvailableLanguages($machineName, $majorVersion, $minorVersion): array {
-        // TODO: Implement getAvailableLanguages() method.
-        error_log("Unhandled EditorStorage->getAvailableLanguages()");
-        return [];
+        global $webDir;
+
+        $langDir = $webDir . '/courses/h5p/libraries/' . $machineName . '-' . $majorVersion . '.' . $minorVersion . '/language';
+        if (!(file_exists($langDir) && is_dir($langDir))) {
+            return [];
+        }
+
+        $defaultcode = 'en';
+        $defaultext = '.json';
+        $languages = [];
+        $ldir = scandir($langDir);
+
+        foreach ($ldir as $idx => $lfile) {
+            if (!in_array($lfile,array(".", ".."))) {
+                if (substr($lfile, -strlen($defaultext)) === $defaultext) {
+                    $lfile = substr($lfile, 0, -strlen($defaultext));
+                }
+                array_push($languages, $lfile);
+            }
+        }
+
+        // Semantics is 'en' by default. It has to be added always.
+        if (!in_array($defaultcode, $languages)) {
+            array_unshift($languages, $defaultcode);
+        }
+
+        return $languages;
     }
 
     /**
@@ -91,8 +114,7 @@ class EditorStorage implements H5peditorStorage {
      *  have majorVersion and minorVersion as properties.
      */
     public function alterLibraryFiles(&$files, $libraries) {
-        // TODO: Implement alterLibraryFiles() method.
-        error_log("Unhandled EditorStorage->alterLibraryFiles()");
+        // to be implemented
     }
 
     /**
