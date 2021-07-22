@@ -99,9 +99,35 @@ class EditorStorage implements H5peditorStorage {
      * @return array List of all libraries loaded
      */
     public function getLibraries($libraries = NULL): array {
-        // TODO: Implement getLibraries() method.
-        error_log("Unhandled EditorStorage->getLibraries()");
-        return [];
+
+        if ($libraries !== null) {
+            // Get details for the specified libraries.
+            $librariesout = [];
+            // TODO: do we need metadatasettings, semantics, example and tutorial as DB fields?
+
+            foreach ($libraries as $library) {
+                $sql = "SELECT title, runnable
+                          FROM h5p_library
+                         WHERE machine_name = ?s
+                               AND major_version = ?s
+                               AND minor_version = ?s";
+                $details = Database::get()->querySingle($sql, $library->name, $library->majorVersion, $library->minorVersion);
+
+                if ($details) {
+                    $library->title = $details->title;
+                    $library->runnable = $details->runnable;
+                    $librariesout[] = $library;
+                }
+            }
+        } else {
+            $sql = "SELECT machine_name AS name, title, major_version AS majorVersion, minor_version AS minorVersion, runnable
+                      FROM h5p_library
+                     WHERE runnable = 1
+                  ORDER BY title, major_version DESC, minor_version DESC";
+            $librariesout = Database::get()->queryArray($sql);
+        }
+
+        return $librariesout;
     }
 
     /**
