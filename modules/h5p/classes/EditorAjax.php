@@ -89,8 +89,29 @@ class EditorAjax implements H5PEditorAjaxInterface {
      * @return array
      */
     public function getTranslations($libraries, $language_code): array {
-        // TODO: Implement getTranslations() method.
-        error_log("Unhandled EditorAjax->getTranslations()");
-        return [];
+        global $webDir;
+
+        if (empty($language_code)) {
+            return [];
+        }
+
+        $libsDir = $webDir . '/courses/h5p/libraries/';
+        $translations = [];
+
+        foreach ($libraries as $libstring) {
+            $librarydata = H5PCore::libraryFromString($libstring);
+            if (false === $librarydata) {
+                continue;
+            }
+
+            $libDir = $librarydata['machineName'] . '-' . $librarydata['majorVersion'] . '.' . $librarydata['minorVersion'];
+            $langFile = $libsDir . $libDir . '/language/' . $language_code . '.json';
+
+            if (file_exists($langFile)) {
+                $translations[$libstring] = file_get_contents($langFile);
+            }
+        }
+
+        return $translations;
     }
 }

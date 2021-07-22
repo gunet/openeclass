@@ -57,6 +57,12 @@ switch ($_GET['action']) {
         $editor->ajax->action(H5PEditorEndpoints::CONTENT_TYPE_CACHE);
         break;
 
+    // Get the $language libraries translations.
+    case H5PEditorEndpoints::TRANSLATIONS:
+        $language = (isset($_GET['language'])) ? $_GET['language'] : null;
+        $editor->ajax->action(H5PEditorEndpoints::TRANSLATIONS, $language);
+        break;
+
     // do nothing if AJAX action is not handled.
     default:
         throw new Exception("Unhandled AJAX");
