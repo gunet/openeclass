@@ -1956,8 +1956,16 @@ $db->query("CREATE TABLE h5p_library (
     runnable INT(1) NOT NULL DEFAULT '0',
     fullscreen INT(1) NOT NULL DEFAULT '0',
     embed_types VARCHAR(255),
-    preloaded_js TEXT,
-    preloaded_css TEXT,
+    preloaded_js LONGTEXT,
+    preloaded_css LONGTEXT,
+    droplibrary_css LONGTEXT,
+    semantics LONGTEXT,
+    add_to LONGTEXT,
+    core_major INT(4),
+    core_minor INT(4),
+    metadata_settings LONGTEXT,
+    tutorial LONGTEXT,
+    example LONGTEXT,
   PRIMARY KEY(id)) $tbl_options");
 
 $db->query("CREATE TABLE h5p_library_dependency (
@@ -1978,7 +1986,7 @@ $db->query("CREATE TABLE h5p_content (
     id INT(10) NOT NULL AUTO_INCREMENT,
     title varchar(255),
     main_library_id INT(10) NOT NULL,
-    params TEXT,
+    params LONGTEXT,
     course_id INT(11) NOT NULL,
     PRIMARY KEY(id)) $tbl_options");
 
