@@ -598,53 +598,6 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
     return $button;  
 }
 
-function tii_post_request($url, $post_data, $download_file = false, $local_filename = '') {
-    $response = null;
-    $http_code = null;
-    $headers = array();
-    if (!extension_loaded('curl')) {
-        return array($response, $http_code, $headers);
-    }
-
-    $ch = curl_init($url);
-
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
-        $len = strlen($header);
-        $header = explode(':', $header, 2);
-        if (count($header) < 2) { // ignore invalid headers
-            return $len;
-        }
-
-        $name = strtolower(trim($header[0]));
-        if (!array_key_exists($name, $headers)) {
-            $headers[$name] = [trim($header[1])];
-        } else {
-            $headers[$name][] = trim($header[1]);
-        }
-
-        return $len;
-    });
-    if ($download_file) {
-        $fp = fopen($local_filename, 'w');
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-    }
-
-    $response = curl_exec($ch);
-    if(!curl_errno($ch)) {
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    }
-    curl_close($ch);
-    if ($download_file) {
-        fclose($fp);
-    }
-
-    return array($response, $http_code, $headers);
-}
-
 function lti_prepare_oauth_only_data($url, $oauth_consumer_key, $secret) {
     $now = new DateTime();
     $launch_data = array(
