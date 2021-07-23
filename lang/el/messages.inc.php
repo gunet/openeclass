@@ -5896,3 +5896,6 @@ $langAnalyticsEndDescription = 'Ημερομηνία μέχρι την οποί�
 $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
+
+// h5p
+$langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε. Μπορείτε να επιστρέψετε στην κεντρική σελίδα και να επιλέγετε Δημιουργία.';
