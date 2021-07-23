@@ -25,6 +25,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'delos_functions.php';
+require_once 'include/lib/curlutil.class.php';
 
 
 //$authUrl = getDelosRLoginURL();
@@ -40,7 +41,7 @@ $headers = array(
 );
 
 
-$rlhtml = httpGetRequest($authUrl, $headers);
+$rlhtml = CurlUtil::httpGetRequest($authUrl, $headers);
 $tool_content = str_replace("/opendelos-default/", "http://delos-dev.gunet.gr/opendelos-default/", $rlhtml);
 
 //$head_content = "";

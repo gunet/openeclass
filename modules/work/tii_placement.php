@@ -35,6 +35,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid']) && isset($data['paperid']) && isset($data['outcomes_tool_placement_url']) ) {
 
     require_once '../../include/baseTheme.php';
+    require_once 'include/lib/curlutil.class.php';
     require_once 'modules/lti_consumer/lti-functions.php';
     require_once 'modules/work/functions.php';
     require_once 'include/lib/fileUploadLib.inc.php';
@@ -57,7 +58,7 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
 
     // POST to outcomes tool placement url
     $post_data = lti_prepare_oauth_only_data($launch_url, $lti->lti_provider_key, $lti->lti_provider_secret);
-    list($response, $http_code, $response_headers) = tii_post_request($launch_url, $post_data);
+    list($response, $http_code, $response_headers) = CurlUtil::httpPostRequest($launch_url, $post_data);
 
     if ($http_code != null && intval($http_code) == 200) {
         $data1 = json_decode($response, true);
@@ -94,7 +95,7 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
             $max_tries = 100;
             $i = 0;
             do {
-                list($file_response, $file_http_code, $file_response_headers) = tii_post_request($orig_launch_url, $lti_launch_data, true, $temp_file);
+                list($file_response, $file_http_code, $file_response_headers) = CurlUtil::httpPostRequest($orig_launch_url, $lti_launch_data, true, $temp_file);
                 $i++;
                 if ($i > $max_tries) {
                     error_log("error: max retries exhausted, giving up...");
