@@ -1,6 +1,6 @@
 <?php
 
-class H5PClass implements H5PFrameworkInterface {
+class H5PFramework implements H5PFrameworkInterface {
 
     private $messages = array('error' => array(), 'info' => array());
     private $handle_errormsg;

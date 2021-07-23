@@ -21,7 +21,7 @@
 
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
-require_once 'H5Pclass.php';
+require_once 'classes/H5PFactory.php';
 
 function upload_content() { // anebasma // na elen3w to database & na balw to user_input
     global $course_id, $course_code, $webDir;
@@ -35,11 +35,13 @@ function upload_content() { // anebasma // na elen3w to database & na balw to us
     $target_file = $upload_dir . "/" . basename($_FILES["userFile"]["name"]);
     move_uploaded_file($_FILES["userFile"]["tmp_name"], $target_file);
 
-    $classobj = new H5Pclass();
+    $factory = new H5PFactory();
+    $framework = $factory->getFramework();
+    
     $h5pPath = $webDir . '/courses/h5p';
-    $classCore = new H5PCore($classobj, $h5pPath, $upload_dir, 'en', FALSE);
-    $classVal = new H5PValidator($classobj, $classCore);
-    $classStor = new H5PStorage($classobj, $classCore);
+    $classCore = new H5PCore($framework, $h5pPath, $upload_dir, 'en', FALSE);
+    $classVal = new H5PValidator($framework, $classCore);
+    $classStor = new H5PStorage($framework, $classCore);
 
     if ($classVal->isValidPackage()) {
         $classStor->savePackage();
