@@ -19,11 +19,14 @@
  * For a full list of contributors, see "credits.txt".
  */
 
-require_once 'modules/h5p/H5Pclass.php';
+require_once 'H5PFramework.php';
 require_once 'EditorAjax.php';
 require_once 'EditorStorage.php';
 
 class H5PFactory {
+
+    /** @var H5PFramework The Open eClass H5PFramework implementation */
+    protected $framework;
 
     /** @var H5PCore The Open eClass H5PCore implementation */
     protected $core;
@@ -38,6 +41,19 @@ class H5PFactory {
     protected $editorAjax;
 
     /**
+     * Returns an instance of the H5PFramework class.
+     *
+     * @return H5PFramework
+     */
+    public function getFramework(): H5PFramework {
+        if (null === $this->framework) {
+            $this->framework = new H5PFramework();
+        }
+
+        return $this->framework;
+    }
+
+    /**
      * Returns an instance of the H5PCore class.
      *
      * @return H5PCore
@@ -46,10 +62,9 @@ class H5PFactory {
         global $webDir, $urlServer;
 
         if (null === $this->core) {
-            $h5pFramework = new H5Pclass();
             $h5pPath = $webDir . '/courses/h5p';
             $url = $urlServer . 'courses/h5p';
-            $this->core = new H5PCore($h5pFramework, $h5pPath, $url, 'en', FALSE);
+            $this->core = new H5PCore($this->getFramework(), $h5pPath, $url, 'en', FALSE);
         }
 
         return $this->core;
