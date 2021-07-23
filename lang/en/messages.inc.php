@@ -5334,3 +5334,4 @@ $langQuestionPoolPurge = "Delete unused questions";
 $langConfirmQuestionPoolPurge = "Unused exercise questions will be deleted.";
 $langQuestionPoolPurgeSuccess = "Unused questions were deleted from question pool.";
 $langInvalidEmail = 'Invalid address';
+$langH5pUpdateComplete = 'The update of packages and libriares was successfully complete. You may return to the previous page and select Create.';
