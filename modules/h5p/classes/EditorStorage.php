@@ -99,14 +99,12 @@ class EditorStorage implements H5peditorStorage {
      * @return array List of all libraries loaded
      */
     public function getLibraries($libraries = NULL): array {
+        $librariesout = [];
 
         if ($libraries !== null) {
             // Get details for the specified libraries.
-            $librariesout = [];
-            // TODO: do we need metadatasettings, semantics, example and tutorial as DB fields?
-
             foreach ($libraries as $library) {
-                $sql = "SELECT title, runnable
+                $sql = "SELECT title, runnable, metadata_settings, example, tutorial
                           FROM h5p_library
                          WHERE machine_name = ?s
                                AND major_version = ?s
@@ -116,15 +114,25 @@ class EditorStorage implements H5peditorStorage {
                 if ($details) {
                     $library->title = $details->title;
                     $library->runnable = $details->runnable;
+                    $library->metadataSettings = json_decode($details->metadata_settings);
+                    $library->example = $details->example;
+                    $library->tutorial = $details->tutorial;
                     $librariesout[] = $library;
                 }
             }
         } else {
-            $sql = "SELECT machine_name AS name, title, major_version AS majorVersion, minor_version AS minorVersion, runnable
+            $sql = "SELECT machine_name AS name, title, major_version AS majorVersion, minor_version AS minorVersion, runnable, metadata_settings, example, tutorial
                       FROM h5p_library
                      WHERE runnable = 1
                   ORDER BY title, major_version DESC, minor_version DESC";
-            $librariesout = Database::get()->queryArray($sql);
+            $records = Database::get()->queryArray($sql);
+
+            foreach ($records as $library) {
+                $library->metadataSettings = json_decode($library->metadata_settings);
+                unset($library->metadata_settings);
+
+                $librariesout[] = $library;
+            }
         }
 
         return $librariesout;

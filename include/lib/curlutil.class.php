@@ -26,9 +26,11 @@ class CurlUtil {
      *
      * @param string $url
      * @param array $headers
+     * @param bool $downloadFile
+     * @param string $localFilename
      * @return array
      */
-    public static function httpGetRequest(string $url, array $headers = array()): array {
+    public static function httpGetRequest(string $url, array $headers = array(), bool $downloadFile = false, string $localFilename = ''): array {
         $response = null;
         $http_code = null;
         if (!extension_loaded('curl')) {
@@ -40,11 +42,19 @@ class CurlUtil {
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        if ($downloadFile) {
+            $fp = fopen($localFilename, 'w');
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+        }
+
         $response = curl_exec($ch);
         if(!curl_errno($ch)) {
             $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         }
         curl_close($ch);
+        if ($downloadFile) {
+            fclose($fp);
+        }
 
         return array($response, $http_code);
     }

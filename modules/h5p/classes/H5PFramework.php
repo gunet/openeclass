@@ -32,8 +32,16 @@ class H5PFramework implements H5PFrameworkInterface {
     public function setLibraryTutorialUrl($machineName, $tutorialUrl) {
     }
 
+    /**
+     * Show the user an information message
+     *
+     * @param string $message
+     *  The error message
+     */
     public function setInfoMessage($message) {
-        $this->messages['info'][] = $message;
+        if ($message !== null) {
+            $this->messages['info'][] = $message;
+        }
     }
 
     /**
@@ -51,8 +59,24 @@ class H5PFramework implements H5PFrameworkInterface {
         return $messages;
     }
 
-    public function t($message, $replacements = array()) {
-        return ($message);
+    /**
+     * Translation function
+     *
+     * @param string $message
+     *  The english string to be translated.
+     * @param array $replacements
+     *   An associative array of replacements to make after translation. Incidences
+     *   of any key in this array are replaced with the corresponding value. Based
+     *   on the first character of the key, the value is escaped and/or themed:
+     *    - !variable: inserted as is
+     *    - @variable: escape plain text to HTML
+     *    - %variable: escape text and theme as a placeholder for user-submitted
+     *      content
+     * @return string Translated string
+     * Translated string
+     */
+    public function t($message, $replacements = array()): string {
+        return $message;
     }
 
     public function getLibraryFileUrl($libraryFolderName, $fileName) {
@@ -89,6 +113,19 @@ class H5PFramework implements H5PFrameworkInterface {
     public function getAdminUrl() {
     }
 
+    /**
+     * Get id to an existing library.
+     * If version number is not specified, the newest version will be returned.
+     *
+     * @param string $machineName
+     *   The librarys machine name
+     * @param ?int $majorVersion
+     *   Optional major version number for library
+     * @param ?int $minorVersion
+     *   Optional minor version number for library
+     * @return int
+     *   The id of the specified library or FALSE
+     */
     public function getLibraryId($machineName, $majorVersion = NULL, $minorVersion = NULL) {
         if ($majorVersion !== NULL) {
             if ($minorVersion !== NULL) {
@@ -100,11 +137,9 @@ class H5PFramework implements H5PFrameworkInterface {
             $sql = Database::get()->querySingle("SELECT * FROM h5p_library WHERE machine_name = ?s ORDER BY major_version DESC, minor_version DESC, patch_version DESC LIMIT ?d", $machineName, 1);
         }
         if ($sql) {
-            $id = $sql->id;
-        } else {
-            return false;
+            return $sql->id;
         }
-        return $id;
+        return false;
     }
 
     public function getWhitelist($isLibrary, $defaultContentWhitelist, $defaultLibraryWhitelist) {
@@ -115,8 +150,30 @@ class H5PFramework implements H5PFrameworkInterface {
         return $whitelist;
     }
 
-    public function isPatchedLibrary($library) {
-        return true;
+    /**
+     * Is the library a patched version of an existing library?
+     *
+     * @param object $library
+     *   An associative array containing:
+     *   - machineName: The library machineName
+     *   - majorVersion: The librarys majorVersion
+     *   - minorVersion: The librarys minorVersion
+     *   - patchVersion: The librarys patchVersion
+     * @return boolean
+     *   TRUE if the library is a patched version of an existing library
+     *   FALSE otherwise
+     */
+    public function isPatchedLibrary($library): bool {
+        $sql = "SELECT id
+                  FROM h5p_library
+                 WHERE machine_name = ?s
+                   AND major_version = ?d
+                   AND minor_version = ?d
+                   AND patch_version < ?d";
+
+        $library = Database::get()->querySingle($sql, $library['machineName'], $library['majorVersion'], $library['minorVersion'], $library['patchVersion']);
+
+        return !empty($library);
     }
 
     public function isInDevMode() {
@@ -127,42 +184,81 @@ class H5PFramework implements H5PFrameworkInterface {
         return true;
     }
 
+    /**
+     * Store data about a library
+     *
+     * Also fills in the libraryId in the libraryData object if the object is new
+     *
+     * @param object $libraryData
+     *   Associative array containing:
+     *   - libraryId: The id of the library if it is an existing library.
+     *   - title: The library's name
+     *   - machineName: The library machineName
+     *   - majorVersion: The library's majorVersion
+     *   - minorVersion: The library's minorVersion
+     *   - patchVersion: The library's patchVersion
+     *   - runnable: 1 if the library is a content type, 0 otherwise
+     *   - metadataSettings: Associative array containing:
+     *      - disable: 1 if the library should not support setting metadata (copyright etc)
+     *      - disableExtraTitleField: 1 if the library don't need the extra title field
+     *   - fullscreen(optional): 1 if the library supports fullscreen, 0 otherwise
+     *   - embedTypes(optional): list of supported embed types
+     *   - preloadedJs(optional): list of associative arrays containing:
+     *     - path: path to a js file relative to the library root folder
+     *   - preloadedCss(optional): list of associative arrays containing:
+     *     - path: path to css file relative to the library root folder
+     *   - dropLibraryCss(optional): list of associative arrays containing:
+     *     - machineName: machine name for the librarys that are to drop their css
+     *   - semantics(optional): Json describing the content structure for the library
+     *   - language(optional): associative array containing:
+     *     - languageCode: Translation in json format
+     * @param bool $new
+     * @return
+     */
     public function saveLibraryData(&$libraryData, $new = TRUE) {
+        $machine_name = $libraryData['machineName'];
+        $title = $libraryData['title'];
+        $major_version = $libraryData['majorVersion'];
+        $minor_version = $libraryData['minorVersion'];
+        $patch_version = $libraryData['patchVersion'];
+        $runnable = $libraryData['runnable'];
+        $fullscreen = $libraryData['fullscreen'] ?? 0;
+        $embed_types = '';
+        if (isset($libraryData['embedTypes'])) {
+            $embed_types = implode(', ', $libraryData['embedTypes']);
+        }
+        $preloaded_js = $this->libraryParameterValuesToCsv($libraryData, 'preloadedJs', 'path');
+        $preloaded_css = $this->libraryParameterValuesToCsv($libraryData, 'preloadedCss', 'path');
+        $droplibrary_css = $this->libraryParameterValuesToCsv($libraryData, 'dropLibraryCss', 'machineName');
+        $semantics = $libraryData['semantics'] ?? null;
+        $add_to = isset($libraryData['addTo']) ? json_encode($libraryData['addTo']) : null;
+        $core_major = $libraryData['coreApi']['majorVersion'] ?? null;
+        $core_minor = $libraryData['coreApi']['minorVersion'] ?? null;
+        $metadata_settings = $libraryData['metadataSettings'] ?? null;
+
         if ($new) {
-            $title = $libraryData['title'] ?? NULL;
-            $machine_name = $libraryData['machineName'] ?? NULL;
-            $major_version = $libraryData['majorVersion'] ?? NULL;
-            $minor_version = $libraryData['minorVersion'] ?? NULL;
-            $patch_version = $libraryData['patchVersion'] ?? NULL;
-            $runnable = $libraryData['runnable'] ?? 0;
-            $fullscreen = $libraryData['fullscreen'] ?? 0;
-            $embed_types = (isset($libraryData['embedTypes'])) ? implode(",", $libraryData['embedTypes']) : "";
+            // Create new library and keep track of id.
+            $sql = "INSERT INTO h5p_library 
+                                (machine_name, title, major_version, minor_version, patch_version, runnable, fullscreen, embed_types, preloaded_js, preloaded_css, droplibrary_css,
+                                 semantics, add_to, core_major, core_minor, metadata_settings) 
+                         VALUES (?s, ?s, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d, ?s)";
+            $libraryId = Database::get()->query($sql, $this->handle_errormsg,
+                $machine_name, $title, $major_version, $minor_version, $patch_version, $runnable, $fullscreen, $embed_types, $preloaded_js, $preloaded_css, $droplibrary_css,
+                $semantics, $add_to, $core_major, $core_minor, $metadata_settings)->lastInsertID;
 
-            $preloaded_js = "";
-            if (isset($libraryData['preloadedJs'])) {
-                $array = array();
-                foreach ($libraryData['preloadedJs'] as $libjs) {
-                    $array[] = $libjs['path'];
-                }
-                $preloaded_js = implode(",", $array);
-            }
-
-            $preloaded_css = "";
-            if (isset($libraryData['preloadedCss'])) {
-                $array = array();
-                foreach ($libraryData['preloadedCss'] as $libcss) {
-                    $array[] = $libcss['path'];
-                }
-                $preloaded_css = implode(",", $array);
-            }
-
-            $libraryId = Database::get()->query("INSERT INTO h5p_library(machine_name, title, major_version, minor_version, patch_version, runnable, fullscreen, embed_types, preloaded_js, preloaded_css) VALUES (?s, ?s, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?s)",
-                $this->handle_errormsg, $machine_name, $title, $major_version, $minor_version, $patch_version, $runnable, $fullscreen, $embed_types, $preloaded_js, $preloaded_css)->lastInsertID;
-
-            // fill in the libraryId in the libraryData object if the object is new
             $libraryData['libraryId'] = $libraryId;
         } else {
-            echo "<br>Library already exists in database. Update function not ready";
+            $libraryId = $libraryData['libraryId'];
+            $sql = "UPDATE h5p_library 
+                       SET machine_name = ?s, title = ?s, major_version = ?d, minor_version = ?d, patch_version = ?d, 
+                           runnable = ?d, fullscreen = ?d, embed_types = ?s, preloaded_js = ?s, preloaded_css = ?s, 
+                           droplibrary_css = ?s, semantics = ?s, add_to = ?s, core_major = ?d, core_minor = ?d, metadata_settings = ?s
+                     WHERE id = ?d";
+            Database::get()->query($sql, $this->handle_errormsg,
+                $machine_name, $title, $major_version, $minor_version, $patch_version, $runnable, $fullscreen, $embed_types, $preloaded_js, $preloaded_css, $droplibrary_css,
+                $semantics, $add_to, $core_major, $core_minor, $metadata_settings, $libraryId);
+            // Remove old dependencies.
+            $this->deleteLibraryDependencies($libraryData['libraryId']);
         }
     }
 
@@ -193,15 +289,34 @@ class H5PFramework implements H5PFrameworkInterface {
     public function resetContentUserData($contentId) {
     }
 
+    /**
+     * Save what libraries a library is depending on
+     *
+     * @param int $libraryId
+     *   Library Id for the library we're saving dependencies for
+     * @param array $dependencies
+     *   List of dependencies as associative arrays containing:
+     *   - machineName: The library machineName
+     *   - majorVersion: The library's majorVersion
+     *   - minorVersion: The library's minorVersion
+     * @param string $dependency_type
+     *   What type of dependency this is, the following values are allowed:
+     *   - editor
+     *   - preloaded
+     *   - dynamic
+     */
     public function saveLibraryDependencies($libraryId, $dependencies, $dependency_type) {
         foreach ($dependencies as $dependency) {
-            $machine_name = $dependency['machineName'];
-            $major_version = $dependency['majorVersion'];
-            $minor_version = $dependency['minorVersion'];
-            $required_library_id = Database::get()->querySingle("SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?d AND minor_version = ?d LIMIT ?d", $machine_name, $major_version, $minor_version, 1)->id;
+            $sql = "SELECT *
+                      FROM h5p_library
+                     WHERE machine_name = ?s
+                           AND major_version = ?d
+                           AND minor_version = ?d
+                     LIMIT 1";
+            $dependencylibrary = Database::get()->querySingle($sql, $dependency['machineName'], $dependency['majorVersion'], $dependency['minorVersion']);
 
-            Database::get()->query("INSERT INTO h5p_library_dependency (library_id, required_library_id, dependency_type) VALUES (?d, ?d, ?s)",
-                $this->handle_errormsg, $libraryId, $required_library_id, $dependency_type);
+            $sql = "INSERT INTO h5p_library_dependency (library_id, required_library_id, dependency_type) VALUES (?d, ?d, ?s)";
+            Database::get()->query($sql, $this->handle_errormsg, $libraryId, $dependencylibrary->id, $dependency_type);
         }
     }
 
@@ -373,6 +488,12 @@ class H5PFramework implements H5PFrameworkInterface {
     public function alterLibrarySemantics(&$semantics, $machineName, $majorVersion, $minorVersion) {
     }
 
+    /**
+     * Delete all dependencies belonging to given library
+     *
+     * @param int $libraryId
+     *   Library identifier
+     */
     public function deleteLibraryDependencies($libraryId) {
         Database::get()->query("DELETE FROM h5p_library_dependency WHERE library_id = ?d", $this->handle_errormsg, $libraryId);
     }
@@ -534,7 +655,15 @@ class H5PFramework implements H5PFrameworkInterface {
     public function updateContentFields($id, $fields) {
     }
 
+    /**
+     * Will clear filtered params for all the content that uses the specified
+     * libraries. This means that the content dependencies will have to be rebuilt,
+     * and the parameters re-filtered.
+     *
+     * @param array $library_ids
+     */
     public function clearFilteredParameters($library_ids) {
+        // currently no need for implementing
     }
 
     public function getNumNotFiltered() {
@@ -555,7 +684,18 @@ class H5PFramework implements H5PFrameworkInterface {
     public function saveCachedAssets($key, $libraries) {
     }
 
-    public function deleteCachedAssets($library_id) {
+    /**
+     * Locate hash keys for given library and delete them.
+     * Used when cache file are deleted.
+     *
+     * @param int $library_id
+     *  Library identifier
+     * @return array
+     *  List of hash keys removed
+     */
+    public function deleteCachedAssets($library_id): array {
+        // currently no need for implementing
+        return [];
     }
 
     public function getLibraryContentCount() {
@@ -582,6 +722,29 @@ class H5PFramework implements H5PFrameworkInterface {
 
     public function libraryHasUpgrade($library) {
         return false;
+    }
+
+    /**
+     * Convert list of library parameter values to csv.
+     *
+     * @param array $librarydata Library data as found in library.json files
+     * @param string $key Key that should be found in $librarydata
+     * @param string $searchparam The library parameter (Default: 'path')
+     * @return string Library parameter values separated by ', '
+     */
+    private function libraryParameterValuesToCsv(array $librarydata, string $key, string $searchparam = 'path'): string {
+        if (isset($librarydata[$key])) {
+            $parametervalues = array();
+            foreach ($librarydata[$key] as $file) {
+                foreach ($file as $index => $value) {
+                    if ($index === $searchparam) {
+                        $parametervalues[] = $value;
+                    }
+                }
+            }
+            return implode(', ', $parametervalues);
+        }
+        return '';
     }
 
 }
