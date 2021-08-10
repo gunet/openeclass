@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -161,6 +161,43 @@ function loggedInMenu($rich=true) {
     $is_departmentmanage_user, $urlServer, $course_code, $session;
 
     $sideMenuGroup = array();
+    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
+
+    if ((isset($is_admin) and $is_admin) or
+            (isset($is_power_user) and $is_power_user) or
+            (isset($is_usermanage_user) and ($is_usermanage_user)) or
+            (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+
+        $arrMenuType = array();
+        $arrMenuType['type'] = 'text';
+        $arrMenuType['text'] = $GLOBALS['langAdminOptions'];
+        $arrMenuType['class'] = '';
+        if ($current_module_dir == 'main/portfolio.php') {
+            $arrMenuType['class'] = ' in';
+        } else {
+            $arrMenuType['class'] = '';
+        }
+        array_push($sideMenuSubGroup, $arrMenuType);
+
+        if ((isset($is_admin) and $is_admin) or
+                (isset($is_power_user) and $is_power_user) or
+                (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+            array_push($sideMenuText, "$GLOBALS[langAdminTool]");
+            array_push($sideMenuLink, $urlServer . 'modules/admin/');
+        }
+
+        array_push($sideMenuImg, "fa-caret-right");
+
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }
 
     $sideMenuSubGroup = array();
     $sideMenuText = array();
@@ -195,6 +232,11 @@ function loggedInMenu($rich=true) {
     array_push($sideMenuLink, $urlServer . "info/contact.php");
     array_push($sideMenuImg, "fa-phone");
 
+    foreach ($sideMenuLink as $module_link) {
+        if ($current_module_dir == module_path($module_link)) {
+            $sideMenuSubGroup[0]['class'] = ' in';
+        }
+    }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
     array_push($sideMenuSubGroup, $sideMenuImg);
@@ -278,17 +320,26 @@ function loggedInMenu($rich=true) {
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
         array_push($sideMenuText, q($GLOBALS['langMyDocs']));
         array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php'));
-        array_push($sideMenuImg, 'docs.png');
+        array_push($sideMenuImg, 'fa-folder-open-o');
     }
 
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
     array_push($sideMenuImg, "fa-user");
 
+    array_push($sideMenuText, $GLOBALS['langMyWidgets']);
+    array_push($sideMenuLink, $urlServer . "main/my_widgets.php");
+    array_push($sideMenuImg, "fa-magic");
+
     array_push($sideMenuText, $GLOBALS['langMyStats']);
     array_push($sideMenuLink, $urlServer . "modules/usage/?t=u");
     array_push($sideMenuImg, "fa-area-chart");
 
+    foreach ($sideMenuLink as $module_link) {
+        if ($current_module_dir == module_path($module_link)) {
+            $sideMenuSubGroup[0]['class'] = ' in';
+        }
+    }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
     array_push($sideMenuSubGroup, $sideMenuImg);
@@ -387,6 +438,7 @@ function adminMenu() {
     $sideMenuText = array();
     $sideMenuLink = array();
     $sideMenuImg = array();
+    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
     // user administration
     array_push($sideMenuSubGroup, array(
@@ -463,7 +515,11 @@ function adminMenu() {
         array_push($sideMenuLink, '../admin/addadmin.php');
         array_push($sideMenuImg, 'fa-caret-right');
     }
-
+    foreach ($sideMenuLink as $module_link) {
+        if ($current_module_dir == module_path($module_link)) {
+            $sideMenuSubGroup[0]['class'] = ' in';
+        }
+    }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
     array_push($sideMenuSubGroup, $sideMenuImg);
@@ -521,6 +577,12 @@ function adminMenu() {
             array_push($sideMenuImg, 'arrow.png');
         }
 
+        foreach ($sideMenuLink as $module_link) {
+            if ($current_module_dir == module_path($module_link)) {
+                $sideMenuSubGroup[0]['class'] = ' in';
+            }
+        }
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
@@ -552,7 +614,11 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
         array_push($sideMenuImg, "fa-caret-right");
-
+        
+        array_push($sideMenuText, $GLOBALS['langWidgets']);
+        array_push($sideMenuLink, "../admin/widgets.php");
+        array_push($sideMenuImg, "fa-caret-right");
+        
         if (get_config('phpMyAdminURL')) {
             array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
             array_push($sideMenuLink, get_config('phpMyAdminURL'));
@@ -603,6 +669,12 @@ function adminMenu() {
         $manual_language = ($language == 'el')? $language: 'en';
         array_push($sideMenuLink, "http://docs.openeclass.org/$manual_language/admin");
         array_push($sideMenuImg, "fa-caret-right");
+
+        foreach ($sideMenuLink as $module_link) {
+            if ($current_module_dir == module_path($module_link)) {
+                $sideMenuSubGroup[0]['class'] = ' in';
+            }
+        }
 
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
@@ -664,6 +736,10 @@ function lessonToolsMenu($rich=true) {
         $arrMenuType = array('type' => 'text',
                              'text' => $section['title'],
                              'class' => $section['class']);
+        if ($current_module_dir == 'course_home' && $section['class'] == 'active') {
+            $arrMenuType['class'] = ' in';
+        }
+
         array_push($sideMenuSubGroup, $arrMenuType);
 
         setlocale(LC_COLLATE, $GLOBALS['langLocale']);
@@ -710,11 +786,13 @@ function lessonToolsMenu($rich=true) {
             } else {
                 array_push($sideMenuText, q($modules[$mid]['title']));
             }
-
-            array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
-                            '/?course=' . $course_code));
+            $module_link = $urlAppend . 'modules/' . $modules[$mid]['link'] .
+                            '/?course=' . $course_code;
+            if (module_path($module_link) == $current_module_dir) {
+                $sideMenuSubGroup[0]['class'] = ' in';
+            }
+            array_push($sideMenuLink, q($module_link));
             array_push($sideMenuImg, $modules[$mid]['image']);
-
             array_push($sideMenuID, $mid);
         }
 
@@ -761,9 +839,13 @@ function lessonToolsMenu($rich=true) {
         array_push($sideMenuSubGroup, $arrMenuType);
 
         foreach ($admin_modules as $adm_mod) {
+            $module_link = $urlAppend . 'modules/' . $adm_mod['link'] .
+                            '/?course=' . $course_code;
+            if (module_path($module_link) == $current_module_dir) {
+                $sideMenuSubGroup[0]['class'] = ' in';
+            }
             array_push($sideMenuText, $adm_mod['title']);
-            array_push($sideMenuLink, q($urlAppend . 'modules/' . $adm_mod['link'] .
-                            '/?course=' . $course_code));
+            array_push($sideMenuLink, q($module_link));
             array_push($sideMenuImg, $adm_mod['image']);
         }
 
@@ -829,7 +911,7 @@ function pickerMenu() {
     if (get_config('enable_common_docs')) {
         array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
         array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php' . $params));
-        array_push($sideMenuImg, 'docs.png');
+        array_push($sideMenuImg, 'fa-folder-open-o');
     }
 
     // link for my documents
@@ -837,7 +919,7 @@ function pickerMenu() {
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
         array_push($sideMenuText, q($GLOBALS['langMyDocs']));
         array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php' . $params));
-        array_push($sideMenuImg, 'docs.png');
+        array_push($sideMenuImg, 'fa-folder-open-o');
     }
 
     // link for group documents
