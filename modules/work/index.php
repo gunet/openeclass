@@ -538,7 +538,7 @@ if ($is_editor) {
     }
     </script>";
 
-    $email_notify = (isset($_POST['email']) && $_POST['email']);
+    $email_notify = (isset($_POST['send_email']) && $_POST['send_email']);
     if (isset($_POST['grade_comments'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
         $pageName = $work_title;
@@ -1454,7 +1454,7 @@ function submit_work($id, $on_behalf_of = null) {
                 $book_grade = is_null($grade)? null: $grade / $row->max_grade;
                 update_gradebook_book($quserid, $id, $book_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             }
-            if ($on_behalf_of and isset($_POST['email'])) {
+            if ($on_behalf_of and isset($_POST['send_email'])) {
                 $email_grade = $_POST['grade'];
                 $email_comments = $_POST['stud_comments'];
                 grade_email_notify($row->id, $sid, $email_grade, $email_comments);
@@ -1532,7 +1532,7 @@ function submit_work($id, $on_behalf_of = null) {
                         'submission' => $sid,
                         'grade' => $grade,
                         'comments' => $comment,
-                        'email' => false,
+                        'send_email' => false,
                         'auto_judge_scenarios_output' => $auto_judge_scenarios_output,
                         'preventUiAlterations' => true,
                     ));
@@ -4080,7 +4080,7 @@ function show_assignment_review($id, $display_graph_results = false) {
               <div class='col-xs-12'>
                  <div class='checkbox'>
                    <label>
-                     <input type='checkbox' value='1' name='email' checked> $m[email_users]
+                     <input type='checkbox' value='1' name='send_email' checked> $m[email_users]
                    </label>
                  </div>
               </div>
@@ -4219,7 +4219,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                   <label>
-                                    <input type='checkbox' name='email' id='email_button' value='1' checked>
+                                    <input type='checkbox' name='send_email' id='email_button' value='1' checked>
                                     $m[email_users]
                                   </label>
                                 </div>
@@ -5081,7 +5081,7 @@ function show_assignment($id, $display_graph_results = false) {
                     <div class='col-xs-12'>
                         <div class='checkbox'>
                           <label>
-                            <input type='checkbox' value='1' name='email' checked> $langMailToUsers
+                            <input type='checkbox' value='1' name='send_email' checked> $langMailToUsers
                           </label>
                         </div>
                     </div>
@@ -5647,7 +5647,7 @@ function submit_grade_comments($args) {
                 update_gradebook_book($quserid, $id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             }
         }
-        if (isset($args['email'])) {
+        if (isset($args['send_email'])) {
             grade_email_notify($id, $sid, $grade, $comment);
         }
         Session::Messages($langGrades, 'alert-success');
