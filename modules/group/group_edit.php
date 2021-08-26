@@ -133,7 +133,7 @@ if (isset($_POST['modify'])) {
         }
 
         // Count number of members
-        $numberMembers = @count($_POST['ingroup']);
+        $numberMembers = isset($_POST['ingroup'])? count($_POST['ingroup']): 0;
 
         // Insert new list of members
         if ($maxStudent < $numberMembers and $maxStudent != 0) {
