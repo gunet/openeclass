@@ -112,7 +112,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_RE
         $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting
                              FROM exercise_user_record WHERE eurid = ?d", $eurid);
         // update gradebook
-        update_gradebook_book($data->uid, $data->eid, $data->total_score / $data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+        if (is_null($data->total_weighting) or $data->total_weighting == 0) {
+            update_gradebook_book($data->uid, $data->eid, 0, GRADEBOOK_ACTIVITY_EXERCISE);
+        } else {
+            update_gradebook_book($data->uid, $data->eid, $data->total_score / $data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+        }
         triggerGame($course_id, $uid, $data->eid);
         triggerExerciseAnalytics($course_id, $uid, $data->eid);
         exit();

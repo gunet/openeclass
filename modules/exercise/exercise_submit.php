@@ -317,7 +317,11 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
             // update attendance book
             update_attendance_book($uid, $objExercise->selectId(), GRADEBOOK_ACTIVITY_EXERCISE);
             // update gradebook
-            update_gradebook_book($uid, $objExercise->selectId(), $totalScore/$totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
+            if (is_null($totalWeighting) or $totalWeighting == 0) {
+                update_gradebook_book($uid, $objExercise->selectId(), 0, GRADEBOOK_ACTIVITY_EXERCISE);
+            } else {
+                update_gradebook_book($uid, $objExercise->selectId(), $totalScore/$totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
+            }
             // update user progress
             triggerGame($course_id, $uid, $objExercise->selectId());
             triggerExerciseAnalytics($course_id, $uid, $objExercise->selectId());
@@ -519,7 +523,11 @@ if (isset($_POST['formSent'])) {
             // update attendance book
             update_attendance_book($uid, $exerciseId, GRADEBOOK_ACTIVITY_EXERCISE);
             // update gradebook
-            update_gradebook_book($uid, $exerciseId, $totalScore/$totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
+            if (is_null($totalWeighting) or $totalWeighting == 0) {
+                update_gradebook_book($uid, $objExercise->selectId(), 0, GRADEBOOK_ACTIVITY_EXERCISE);
+            } else {
+                update_gradebook_book($uid, $exerciseId, $totalScore/$totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
+            }
             // update user progress
             triggerGame($course_id, $uid, $exerciseId);
             triggerExerciseAnalytics($course_id, $uid, $exerciseId);
