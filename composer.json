@@ -22,7 +22,8 @@
         "sabre/event": "~2.0.0",
         "dapphp/securimage": "^4.0",
         "h5p/h5p-core": "^1.24.3",
-        "h5p/h5p-editor": "^1.24.3"
+        "h5p/h5p-editor": "^1.24.3",
+        "snapappointments/bootstrap-select": "^1.13.18"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.8.0"
