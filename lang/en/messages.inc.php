@@ -5406,3 +5406,5 @@ $langTransitionEnable = "Enable Transition";
 $langTransitionDisable = "Disable Transition";
 $langTransitionExcludeReq = "Transition Exclusion Requests";
 $langH5pUpdateComplete = 'The update of packages and libriares was successfully complete. You may return to the previous page and select Create.';
+$langH5pInteractiveContent = 'H5P interactive content';
+$langH5pNoContent = 'There is no H5P content';

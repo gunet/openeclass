@@ -27,10 +27,17 @@ class EditorAjax implements H5PEditorAjaxInterface {
      * @return array Latest version of all local libraries
      */
     public function getLatestLibraryVersions(): array {
-        $sql = "SELECT hl.id, hl.machine_name, hl.title, hl.major_version, hl.minor_version, hl.patch_version, '' as has_icon, 0 as restricted, 1 as enabled
-                  FROM h5p_library hl
-                 WHERE hl.runnable = 1
-              ORDER BY hl.title";
+        $sql = "SELECT hl2.id, hl2.machine_name, hl2.title, hl2.major_version, hl2.minor_version, hl2.patch_version, '' as has_icon, 0 as restricted, 1 as enabled
+                  FROM h5p_library hl2
+             LEFT JOIN h5p_library hl1
+                    ON (hl1.machine_name = hl2.machine_name 
+                        AND (hl2.major_version < hl1.major_version 
+                             OR (hl2.major_version = hl1.major_version AND hl2.minor_version < hl1.minor_version)
+                            )
+                        )
+                 WHERE hl2.runnable = 1
+                   AND hl1.major_version is null
+              ORDER BY hl2.title";
         return Database::get()->queryArray($sql);
     }
 

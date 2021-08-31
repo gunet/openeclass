@@ -92,4 +92,17 @@ class H5PFactory {
 
         return $this->editor;
     }
+
+    /**
+     * Returns an instance of EditorAjax class.
+     *
+     * @return EditorAjax
+     */
+    public function getH5PEditorAjax(): EditorAjax {
+        if (empty($this->editorAjax)) {
+            $this->editorAjax = new EditorAjax();
+        }
+
+        return $this->editorAjax;
+    }
 }
