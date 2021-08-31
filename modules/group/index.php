@@ -53,6 +53,7 @@ unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
 $user_groups = user_group_info($uid, $course_id);
+$user_visible_groups = user_visible_groups($uid, $course_id);
 
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 $student_desc = setting_get(SETTING_GROUP_STUDENT_DESCRIPTION, $course_id);
@@ -647,9 +648,10 @@ if ($is_editor) {
             $tool_content .= "<td class='text-center'>";
             $group_id_indirect = getIndirectReference($group_id);
             $control = '';
+
             if ($uid) {
                 if (!$is_member) {
-                    if (($multi_reg == 0) and (!$user_groups)) {
+                    if (($multi_reg == 0) and (!$user_visible_groups)) {
                         $user_can_register_to_group = true;
                     } else if ($multi_reg == 1) {
                         $user_can_register_to_group = true;
