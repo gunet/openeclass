@@ -201,33 +201,6 @@ function showgroupcategoryadmintools($categoryid) {
 
 /**
  * @brief display groups of specified category
- * @global type $is_editor
- * @global type $course_id
- * @global type $tool_content
- * @global type $langUnRegister
- * @global type $course_code
- * @global type $langGroupDelconfirm
- * @global type $langDelete
- * @global type $langRegister
- * @global type $member_count
- * @global type $langModify
- * @global type $is_member
- * @global type $multi_reg
- * @global type $langMyGroup
- * @global type $langAddDescription
- * @global type $langEditChange
- * @global type $uid
- * @global type $totalRegistered
- * @global type $student_desc
- * @global type $allow_unreg
- * @global type $tutors
- * @global type $group_name
- * @global type $self_reg
- * @global type $user_group_description
- * @global type $user_groups
- * @global type $max_members
- * @global type $group_description
- * @global type $langCommentsUser
  * @param type $catid
  */
 function showgroupsofcategory($catid) {
@@ -457,9 +430,10 @@ function delete_group_category($id) {
  * @brief check whether user can register to another group in a course
  * @param type $uid
  * @param type $course_id
- * @return type
+ * @return bool
  */
-function user_can_register_to_group($uid, $course_id) {
+function user_can_register_to_group($uid, $course_id)
+{
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
     if ($multi_reg) {
         return true; // user can register to unlimited groups
@@ -538,4 +512,27 @@ function is_user_register_to_group_category_course($uid, $category_id, $course_i
     } else {
         return false;
     }
+}
+
+/**
+ * @brief returns user visible groups
+ * @param $uid
+ * @param $course_id
+ * @return array
+ */
+function user_visible_groups($uid, $course_id)
+{
+
+    $group_ids = array();
+
+    $q = Database::get()->queryArray("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
+            WHERE group_members.group_id = `group`.id
+            AND `group`.course_id = ?d
+            AND `group`.visible = 1
+            AND group_members.user_id = ?d", $course_id, $uid);
+
+    foreach ($q as $r) {
+        $group_ids[$r->grp_id] = $r->grp_name;
+    }
+    return $group_ids;
 }
