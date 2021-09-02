@@ -40,6 +40,9 @@ class H5PFactory {
     /** @var EditorAjax The Open eClass H5PEditorAjaxInterface implementation */
     protected $editorAjax;
 
+    /** @var H5PContentValidator The Open eClass H5PContentValidator implementation */
+    protected $contentValidator;
+
     /**
      * Returns an instance of the H5PFramework class.
      *
@@ -71,7 +74,7 @@ class H5PFactory {
     }
 
     /**
-     * Returns an instance of H5Peditor class.
+     * Returns an instance of the H5Peditor class.
      *
      * @return H5peditor
      */
@@ -94,7 +97,7 @@ class H5PFactory {
     }
 
     /**
-     * Returns an instance of EditorAjax class.
+     * Returns an instance of the EditorAjax class.
      *
      * @return EditorAjax
      */
@@ -104,5 +107,18 @@ class H5PFactory {
         }
 
         return $this->editorAjax;
+    }
+
+    /**
+     * Returns an instance of the H5PContentValidator class.
+     *
+     * @return H5PContentValidator
+     */
+    public function getContentValidator(): H5PContentValidator {
+        if (empty($this->contentValidator)) {
+            $this->contentValidator = new H5PContentValidator($this->getFramework(), $this->getCore());
+        }
+
+        return $this->contentValidator;
     }
 }
