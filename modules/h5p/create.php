@@ -74,7 +74,7 @@ $tool_content .= "
 
 $head_content .= "
     <script type='text/javascript'>
-        var H5PIntegration = " . json_encode(getH5IntegrationObject(), JSON_PRETTY_PRINT) . ";
+        var H5PIntegration = " . json_encode(getH5pIntegrationObject(), JSON_PRETTY_PRINT) . ";
     
         $(document).ready(function() {
             const editorwrapper = $('#h5p-editor-region');
@@ -154,7 +154,7 @@ function addActionButtons(): string {
     ";
 }
 
-function getH5IntegrationObject(): array {
+function getH5pIntegrationObject(): array {
     global $head_content, $urlServer, $urlAppend, $webDir, $jsCacheBuster, $language, $contentValidator;
 
     $settings = getCoreAssets();
