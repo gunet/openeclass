@@ -29,7 +29,7 @@ require_once 'classes/H5PHubUpdater.php';
 $data = [];
 $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 
-$data['action_bar'] .= action_bar(array(
+$data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => $backUrl,
         'icon' => 'fa-reply',
