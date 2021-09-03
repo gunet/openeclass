@@ -698,6 +698,8 @@ function lessonToolsMenu($rich=true) {
            $course_code, $langAdministrationTools,
            $modules, $admin_modules, $urlAppend, $status, $course_id;
 
+    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
+
     $sideMenuGroup = array();
     $sideMenuSubGroup = array();
     $sideMenuText = array();
