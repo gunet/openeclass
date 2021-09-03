@@ -94,7 +94,36 @@ class H5PFramework implements H5PFrameworkInterface {
         return implode("", glob($path));
     }
 
-    public function loadAddons() {
+    /**
+     * Load addon libraries
+     *
+     * @return array
+     */
+    public function loadAddons(): array {
+        $addons = array();
+
+        $sql = "SELECT l1.id as library_id, l1.machine_name, l1.major_version, l1.minor_version, l1.patch_version, l1.add_to, l1.preloaded_js, l1.preloaded_css
+                  FROM h5p_library l1
+             LEFT JOIN h5p_library l2
+                    ON (l1.machine_name = l2.machine_name
+                        AND (l1.major_version < l2.major_version
+                             OR (l1.major_version = l2.major_version AND l1.minor_version < l2.minor_version)
+                            )
+                       )
+                 WHERE l1.add_to IS NOT NULL
+                   AND l2.machine_name IS NULL";
+
+        $records = Database::get()->queryArray($sql);
+
+        // NOTE: These are treated as library objects but are missing the following properties:
+        // title, droplibrarycss, fullscreen, runnable, semantics.
+
+        // Extract num from records
+        foreach ($records as $addon) {
+            $addons[] = H5PCore::snakeToCamel($addon);
+        }
+
+        return $addons;
     }
 
     public function getLibraryConfig($libraries = NULL) {
@@ -384,7 +413,7 @@ class H5PFramework implements H5PFrameworkInterface {
      *     - majorVersion: Major version for a library this library is depending on
      *     - minorVersion: Minor for a library this library is depending on
      */
-    public function loadLibrary($machineName, $majorVersion, $minorVersion) {
+    public function loadLibrary($machineName, $majorVersion, $minorVersion): array {
         global $webDir;
 
         $sql = "SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?s AND minor_version = ?s";
@@ -418,6 +447,7 @@ class H5PFramework implements H5PFrameworkInterface {
             $library['embedTypes'] = $json['embedTypes'];
         }
 
+        $library['preloadedJs'] = '';
         if (isset($json['preloadedJs'])) {
             $preloadedJs = '';
             $count = count($json['preloadedJs']);
@@ -430,6 +460,7 @@ class H5PFramework implements H5PFrameworkInterface {
             $library['preloadedJs'] = $preloadedJs;
         }
 
+        $library['preloadedCss'] = '';
         if (isset($json['preloadedCss'])) {
             $preloadedCss = '';
             $count = count($json['preloadedCss']);
