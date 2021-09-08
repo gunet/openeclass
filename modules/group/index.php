@@ -175,10 +175,10 @@ if ($is_editor) {
                 touch("courses/$course_code/group/$secretDirectory/index.php");
 
                 // group forum creation
-                $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
+                $q = Database::get()->query("INSERT INTO forum SET name = ?s,
                                                     `desc` = ' ', num_topics = 0,
                                                     num_posts = 0, last_post_id = 1,
-                                                    cat_id = ?d, course_id = ?d", $cat_id, $course_id);
+                                                    cat_id = ?d, course_id = ?d", $forumname, $cat_id, $course_id);
                 $forum_id = $q->lastInsertID;
 
                 $id = Database::get()->query("INSERT INTO `group` SET
