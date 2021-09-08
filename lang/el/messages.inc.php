@@ -1842,6 +1842,7 @@ $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμο
 $langExerciseStats = 'Στατιστικά';
 $langAttempts = "Προσπάθειες";
 $langAttempt = "Προσπάθεια";
+$langOfAttempt = "προσπάθειας";
 $langAttemptActive = "Μη ολοκληρωμένη";
 $langAttemptActiveButDeadMsg = "Ο χρόνος ολοκλήρωσης της συγκεκριμένης προσπάθειας έχει παρέλθει. Μπορεί να διαγραφεί με ασφάλεια.";
 $langAttemptActiveMsg = "Η προσπάθεια δεν έχει ακόμα ολοκληρωθεί.";
