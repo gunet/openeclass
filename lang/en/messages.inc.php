@@ -5338,3 +5338,5 @@ $langH5P = 'Interactive content';
 $langNoH5PContent = 'There is no interactive content';
 $langH5pUpdateComplete = 'The update of packages and libriares was successfully complete. You may return to the previous page and select Create.';
 $langH5pInteractiveContent = 'H5P interactive content';
+$langH5pSaveSuccess = "The H5P interactive content was successfully saved";
+$langH5pDeleteSuccess = "The H5P interactive content was successfully deleted";
