@@ -2513,17 +2513,6 @@ function redirect_to_home_page($path='', $absolute=false) {
     exit;
 }
 
-function odd_even($k, $extra = '') {
-    if (!empty($extra)) {
-        $extra = ' ' . $extra;
-    }
-    if ($k % 2 == 0) {
-        return " class='even$extra'";
-    } else {
-        return " class='odd$extra'";
-    }
-}
-
 // Translate Greek characters to Latin
 function greek_to_latin($string) {
     return str_replace(
@@ -4265,5 +4254,27 @@ function trans($var_name, $var_array = []) {
         } else {
             return ${$var_name};
         }
+    }
+}
+
+
+/*
+ * @brief return exercise user attempt status legend
+ */
+function get_exercise_attempt_status_legend($status) {
+
+    global $langAttemptActive, $langAttemptCompleted, $langAttemptPending, $langAttemptPaused, $langAttemptCanceled;
+
+    switch ($status) {
+        case ATTEMPT_ACTIVE:
+            return $langAttemptActive;
+        case ATTEMPT_COMPLETED:
+            return $langAttemptCompleted;
+        case ATTEMPT_PENDING:
+            return $langAttemptPending;
+        case ATTEMPT_PAUSED:
+            return $langAttemptPaused;
+        case ATTEMPT_CANCELED:
+            return $langAttemptCanceled;
     }
 }

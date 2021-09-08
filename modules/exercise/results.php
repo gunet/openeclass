@@ -57,6 +57,7 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
     $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
+
 if ($is_editor && isset($_GET['purgeAttempID'])) {
     $eurid = $_GET['purgeAttempID'];
     $objExercise->purgeAttempt($exerciseIdIndirect, $eurid);
@@ -120,11 +121,11 @@ $tool_content .= "</div>";
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect'>--- $langCurrentStatus ---</option>
-        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>
-        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_COMPLETED."' ".(($status === 1)? 'selected' : '').">$langAttemptCompleted</option>
-        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PENDING."' ".(($status === 2)? 'selected' : '').">$langAttemptPending</option>
-        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
-        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_CANCELED."' ".(($status === 4)? 'selected' : '').">$langAttemptCanceled</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_ACTIVE."' ".(($status === ATTEMPT_ACTIVE)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_ACTIVE) . "</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_COMPLETED."' ".(($status === ATTEMPT_COMPLETED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_COMPLETED) . "</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PENDING."' ".(($status === ATTEMPT_PENDING)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_PENDING) . "</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PAUSED."' ".(($status === ATTEMPT_PAUSED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_PAUSED) . "</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_CANCELED."' ".(($status === ATTEMPT_CANCELED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_CANCELED) . "</option>
         </select>";
 
 if ($is_editor) {
@@ -239,7 +240,7 @@ foreach ($result as $row) {
                 $status = $langAttemptActive;
                 $now = new DateTime('NOW');
                 $estimatedEndTime = DateTime::createFromFormat('Y-m-d / H:i', $row2->record_start_date);
-                // in an active exercise if a time constaint passes the exercise can safely be deleted
+                // in an active exercise if a time constrain passes the exercise can safely be deleted
                 // if not it can be deleted after a day
                 if ($exerciseTimeConstraint) {
                     $estimatedEndTime->add(new DateInterval('PT' . $exerciseTimeConstraint . 'M'));
