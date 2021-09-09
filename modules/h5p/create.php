@@ -44,6 +44,14 @@ $contentValidator = $factory->getContentValidator();
 $jsCacheBuster = "?ver=" . time();
 $maincontentdata = ['params' => (object)[]]; // {&quot;params&quot;:{}}
 
+if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
+    // save h5p data
+    $id = saveContent((object)$_POST);
+
+    Session::Messages($langH5pSaveSuccess, 'alert-success');
+    redirect($backUrl);
+}
+
 // h5p editor form
 $tool_content .= "
     <div class='row'>
@@ -112,7 +120,7 @@ $head_content .= "
 draw($tool_content, 2, null, $head_content);
 
 function addActionButtons(): string {
-    global $langSave, $langCancel;
+    global $langSave, $langCancel, $backUrl;
 
     return "
         <div id='fgroup_id_buttonar' class='form-group row fitem femptylabel' data-groupname='buttonar'>
@@ -142,7 +150,7 @@ function addActionButtons(): string {
                                        name='cancel'
                                        id='id_cancel'
                                        value='$langCancel'
-                                       data-skip-validation='1' data-cancel='1' onclick='skipClientValidation = true; return true;' >
+                                       onclick='window.location.href=\"$backUrl\"; return true;' >
                             </span>
                             <div class='form-control-feedback invalid-feedback' id='id_error_cancel'></div>
                         </div>
@@ -273,4 +281,98 @@ function getCoreSettings(): array {
         'pluginCacheBuster' => $jsCacheBuster,
         'libraryUrl' => $urlServer . "js/h5p-core/js",
     );
+}
+
+/**
+ * Create or Update H5P content from the submitted form data.
+ *
+ * @param stdClass $data Form data to create or update H5P content.
+ *
+ * @return int The id of the created or updated content.
+ * @throws Exception
+ */
+function saveContent(stdClass $data): int {
+    global $factory, $core, $webDir, $course_code, $course_id;
+
+    $framework = $factory->getFramework();
+    $editor = $factory->getH5PEditor();
+
+    // The H5P libraries expect data->id as the H5P content id
+    // The method H5PCore::saveContent throws an error if id is set but empty
+    if (empty($data->id)) {
+        unset($data->id);
+    }
+
+    if (empty($data->h5pparams)) {
+        throw new Exception("Missing H5P params");
+    }
+
+    if (!isset($data->h5plibrary)) {
+        throw new Exception("Missing H5P library");
+    }
+
+    // Prepare library data to be saved and current parameters
+    $data->params = $data->h5pparams;
+    $data->library = H5PCore::libraryFromString($data->h5plibrary);
+    $data->library['libraryId'] = $framework->getLibraryId($data->library['machineName'], $data->library['majorVersion'], $data->library['minorVersion']);
+    $params = json_decode($data->params);
+
+    $modified = false;
+    if (empty($params->metadata)) {
+        $params->metadata = new stdClass();
+        $modified = true;
+    }
+    if (empty($params->metadata->title)) {
+        // Use a default string if not available.
+        $params->metadata->title = 'Untitled';
+        $modified = true;
+    }
+    if (!isset($data->title)) {
+        $data->title = $params->metadata->title;
+    }
+    if ($modified) {
+        $data->params = json_encode($params);
+    }
+
+    // Save content
+    $data->id = $core->saveContent((array)$data);
+
+    // Move any uploaded images or files. Determine content dependencies.
+    $editor->processParameters($data, $data->library, $params->params);
+
+    // create proper content.json file on disk with params
+    $workspacePath = $webDir . "/courses/" . $course_code . "/h5p/content/" . $data->id . "/workspace";
+    $contentJsonPath = $workspacePath . "/content";
+    mkdir($contentJsonPath, 0775, true);
+    file_put_contents($contentJsonPath . "/content.json", json_encode($params->params));
+
+    // Calculate dependencies by validating and filtering against main library semantics
+    $vdeps = array();
+    $validator = new H5PContentValidator($framework, $core);
+    $vparams = (object) array(
+        'library' => H5PCore::libraryToString($data->library),
+        'params' => $params->params
+    );
+    if (!empty($vparams->params)) {
+        $validator->validateLibrary($vparams, (object) array('options' => array($vparams->library)));
+        $vdeps = $validator->getDependencies();
+    }
+
+    // create proper h5p.json file on disk
+    $h5p = new stdClass();
+    $h5p->mainLibrary = $data->library['machineName'];
+    $h5p->preloadedDependencies = array();
+    foreach ($vdeps as $dependency) {
+        $h5p->preloadedDependencies[] = (object) array(
+            'machineName' => $dependency['library']['machineName'],
+            'majorVersion' => $dependency['library']['majorVersion'],
+            'minorVersion' => $dependency['library']['minorVersion']
+        );
+    }
+    file_put_contents($workspacePath . "/h5p.json", json_encode($h5p));
+
+    // handle package title
+    Database::get()->query("UPDATE h5p_content SET title = ?s WHERE id = ?d AND course_id = ?d", $data->title, $data->id, $course_id);
+
+    return $data->id;
 }
