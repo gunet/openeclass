@@ -765,7 +765,7 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
     if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // `prev` button
         $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
     }
-    if ($questionId != $questionList[sizeof($questionList)]) { // `next` button
+    if ($questionId != end($questionList)) { // `next` button
         $tool_content .= "<input class='btn btn-primary blockUI navbutton' type='submit' value='$nextLabel'>";
     } else {
         $isFinalQuestion = 'true';
