@@ -415,9 +415,8 @@ if ($is_editor) {
 
         // NOW we have $userOfGroups containing new affectation. We must write this in database
         if (isset($userOfGroups) and is_array($userOfGroups)) {
-            reset($userOfGroups);
-            while (list($idGroup, $users) = each($userOfGroups)) {
-                while (list(, $idUser) = each($users)) {
+            foreach ($userOfGroups as $idGroup => $users) {
+                foreach ($users as $idUser) {
                     Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d", $idUser, $idGroup);
                 }
             }
