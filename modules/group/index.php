@@ -376,6 +376,7 @@ if ($is_editor) {
                                    (SELECT id FROM `group` WHERE course_id = ?d)", $course_id);
         $message = $langGroupsEmptied;
     } elseif (isset($_REQUEST['fill'])) {
+        $placeAvailableInGroups = [];
         $resGroups = Database::get()->queryArray("SELECT id, max_members -
                                                       (SELECT COUNT(*) FROM group_members WHERE group_members.group_id = id)
                                                   AS remaining
@@ -400,16 +401,18 @@ if ($is_editor) {
                                 GROUP BY u.id
                                 ORDER BY u.surname, u.givenname", $course_id, $course_id);
 
-        // gets first group with highest value and adds user id
-        foreach ($resUserSansGroupe as $idUser) {
+        if (count($placeAvailableInGroups) > 0) {
+            // gets first group with the highest value and adds user id
+            foreach ($resUserSansGroupe as $idUser) {
 
-            $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
-            $idGroupChoisi = $idGroupChoisi[0];
-            if ($placeAvailableInGroups[$idGroupChoisi] > 0){
-                $userOfGroups[$idGroupChoisi][] = $idUser->id;
-                $placeAvailableInGroups[$idGroupChoisi] --;
-            } else {
-                continue;
+                $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
+                $idGroupChoisi = $idGroupChoisi[0];
+                if ($placeAvailableInGroups[$idGroupChoisi] > 0) {
+                    $userOfGroups[$idGroupChoisi][] = $idUser->id;
+                    $placeAvailableInGroups[$idGroupChoisi]--;
+                } else {
+                    continue;
+                }
             }
         }
 
