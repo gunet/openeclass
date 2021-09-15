@@ -32,8 +32,18 @@ class EditorStorage implements H5peditorStorage {
      * @return string Translation in JSON format
      */
     public function getLanguage($machineName, $majorVersion, $minorVersion, $language): ?string {
-        // to be implemented
-        return null;
+        global $webDir;
+
+        if (empty($language)) {
+            return null;
+        }
+
+        $languagescript = $webDir . "/courses/h5p/libraries/" . $machineName . "-" . $majorVersion . "." . $minorVersion . "/language/" . $language . ".json";
+        if (!file_exists($languagescript)) {
+            return null;
+        }
+
+        return file_get_contents($languagescript);
     }
 
     /**
