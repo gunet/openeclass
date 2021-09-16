@@ -1877,7 +1877,10 @@ $db->query("CREATE TABLE `certified_users` (
   `identifier` varchar(255) NOT NULL DEFAULT '',
   `expires` datetime DEFAULT NULL,
   `template_id` INT(11),
-  PRIMARY KEY (`id`)) $tbl_options");
+  `user_id` INT DEFAULT NULL,
+   PRIMARY KEY (`id`),
+   FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE SET NULL
+  ) $tbl_options");
 
 $db->query("CREATE TABLE `course_prerequisite` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

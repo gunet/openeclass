@@ -47,6 +47,7 @@ if (!is_group_visible($group_id, $course_id) and !$is_editor) {
 
 initialize_group_info($group_id);
 $user_groups = user_group_info($uid, $course_id);
+$user_visible_groups = user_visible_groups($uid, $course_id);
 
 $toolName = $langGroups;
 $pageName = $group_name;
@@ -61,7 +62,7 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
     }
     if (isset($_GET['selfReg']) and $_GET['selfReg'] == 1) {
 
-        if (($multi_reg == 0) and (!$user_groups)) {
+        if (($multi_reg == 0) and (!$user_visible_groups)) {
             $user_can_register_to_group = true;
         } else if ($multi_reg == 1) {
             $user_can_register_to_group = true;

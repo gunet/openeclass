@@ -733,14 +733,12 @@ class Log {
 
     /**
      * display action details in exercises
-     * @global type $langTitle
-     * @global type $langDescription
-     * @param type $details
      * @return string
      */
     private function exercise_action_details($details) {
 
-        global $langTitle, $langDescription, $langAttempt, $urlAppend, $course_code;
+        global $langTitle, $langDescription, $langAttempt, $urlAppend, $course_code,
+               $langDelete, $langOfAttempt, $langOfUser, $langModify, $langIn, $langPurgeExercises;
 
         $details = unserialize($details);
         if (is_object($details['title'])) {
@@ -756,6 +754,16 @@ class Log {
         if (isset($details['eurid']) and isset($course_code) and $course_code) {
             $content .= "<br><a href='{$urlAppend}modules/exercise/exercise_result.php?course=$course_code&amp;eurId=$details[eurid]'>$langAttempt</a>";
         }
+        if (isset($details['del_eurid_uid'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langDelete $langOfAttempt $langOfUser &laquo;" . uid_to_name($details['del_eurid_uid']) . "&raquo;";
+        }
+        if (isset($details['mod_eurid_uid'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langModify $langOfAttempt $langOfUser &laquo;" . uid_to_name($details['mod_eurid_uid']) . "&raquo;&nbsp;$langIn&nbsp;&laquo;" . get_exercise_attempt_status_legend($details['new_eurid_status']) . "&raquo";
+        }
+        if (isset($details['purge_results'])) {
+            $content .= "&nbsp;&mdash;&nbsp;$langPurgeExercises";
+        }
+
         return $content;
     }
 

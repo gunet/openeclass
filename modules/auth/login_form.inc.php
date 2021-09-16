@@ -74,7 +74,7 @@ function login_form($format='main') {
                 }
             } else {
                 $authLink[] = "<a class='btn btn-block btn-social btn-$class' href='{$urlServer}index.php?provider={$l->auth_name}'><span class='fa fa-$font'></span>" . ucfirst($l->auth_name) . "</a>";
-            }
+	    }
         } elseif (!$loginFormEnabled) {
             $autofocus = count($authLink)? '' : 'autofocus' ;
             $loginFormEnabled = true;
@@ -114,7 +114,7 @@ function login_form($format='main') {
                 }
                 list($providerClass, $providerFont) = $providerIcon[$provider];
                 $authLink[$hybridLinkId]['html'] .=
-                    "<a class='btn btn-block btn-social btn-$providerClass' href='{$urlServer}index.php?provider=$provider'><span class='fa fa-$providerFont'></span>" . ucfirst($provider) . "</a>";
+		    "<a class='btn btn-block btn-social btn-$providerClass' href='{$urlServer}?provider=$provider'><span class='fa fa-$providerFont'></span>" . ucfirst($provider) . "</a>";
             }
             $authLink[$hybridLinkId]['html'] .= '</div>';
         }

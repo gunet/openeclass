@@ -53,6 +53,7 @@ unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
 $user_groups = user_group_info($uid, $course_id);
+$user_visible_groups = user_visible_groups($uid, $course_id);
 
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 $student_desc = setting_get(SETTING_GROUP_STUDENT_DESCRIPTION, $course_id);
@@ -174,10 +175,10 @@ if ($is_editor) {
                 touch("courses/$course_code/group/$secretDirectory/index.php");
 
                 // group forum creation
-                $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
+                $q = Database::get()->query("INSERT INTO forum SET name = ?s,
                                                     `desc` = ' ', num_topics = 0,
                                                     num_posts = 0, last_post_id = 1,
-                                                    cat_id = ?d, course_id = ?d", $cat_id, $course_id);
+                                                    cat_id = ?d, course_id = ?d", $forumname, $cat_id, $course_id);
                 $forum_id = $q->lastInsertID;
 
                 $id = Database::get()->query("INSERT INTO `group` SET
@@ -375,6 +376,7 @@ if ($is_editor) {
                                    (SELECT id FROM `group` WHERE course_id = ?d)", $course_id);
         $message = $langGroupsEmptied;
     } elseif (isset($_REQUEST['fill'])) {
+        $placeAvailableInGroups = [];
         $resGroups = Database::get()->queryArray("SELECT id, max_members -
                                                       (SELECT COUNT(*) FROM group_members WHERE group_members.group_id = id)
                                                   AS remaining
@@ -399,24 +401,25 @@ if ($is_editor) {
                                 GROUP BY u.id
                                 ORDER BY u.surname, u.givenname", $course_id, $course_id);
 
-        // gets first group with highest value and adds user id
-        foreach ($resUserSansGroupe as $idUser) {
+        if (count($placeAvailableInGroups) > 0) {
+            // gets first group with the highest value and adds user id
+            foreach ($resUserSansGroupe as $idUser) {
 
-            $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
-            $idGroupChoisi = $idGroupChoisi[0];
-            if ($placeAvailableInGroups[$idGroupChoisi] > 0){
-                $userOfGroups[$idGroupChoisi][] = $idUser->id;
-                $placeAvailableInGroups[$idGroupChoisi] --;
-            } else {
-                continue;
+                $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
+                $idGroupChoisi = $idGroupChoisi[0];
+                if ($placeAvailableInGroups[$idGroupChoisi] > 0) {
+                    $userOfGroups[$idGroupChoisi][] = $idUser->id;
+                    $placeAvailableInGroups[$idGroupChoisi]--;
+                } else {
+                    continue;
+                }
             }
         }
 
         // NOW we have $userOfGroups containing new affectation. We must write this in database
         if (isset($userOfGroups) and is_array($userOfGroups)) {
-            reset($userOfGroups);
-            while (list($idGroup, $users) = each($userOfGroups)) {
-                while (list(, $idUser) = each($users)) {
+            foreach ($userOfGroups as $idGroup => $users) {
+                foreach ($users as $idUser) {
                     Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d", $idUser, $idGroup);
                 }
             }
@@ -647,9 +650,10 @@ if ($is_editor) {
             $tool_content .= "<td class='text-center'>";
             $group_id_indirect = getIndirectReference($group_id);
             $control = '';
+
             if ($uid) {
                 if (!$is_member) {
-                    if (($multi_reg == 0) and (!$user_groups)) {
+                    if (($multi_reg == 0) and (!$user_visible_groups)) {
                         $user_can_register_to_group = true;
                     } else if ($multi_reg == 1) {
                         $user_can_register_to_group = true;

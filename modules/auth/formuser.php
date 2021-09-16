@@ -71,10 +71,10 @@ $var_arr = array('usercomment' => true,
                 'usermail' => true,
                 'am' => $am_required,
                 'department' => true,
-    'captcha_code' => false,
-    'provider' => false,
-    'provider_name' => false,
-    'provider_id' => false);
+                'captcha_code' => false,
+                'provider' => false,
+                'provider_name' => false,
+                'provider_id' => false);
 
 //add custom profile fields required variables
 augment_registered_posted_variables_arr($var_arr);
@@ -143,19 +143,19 @@ if ($provider_name and isset($_GET['provider_id']) and !empty($_GET['provider_id
 // authenticate user via Hybrid Auth if requested by URL
 if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']))) {
     require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
 
-    $hybridauth = new Hybrid_Auth( $config );
+    $hybridauth = new Hybridauth\Hybridauth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
 
     // additional layer of checks to verify that the provider is valid via hybridauth middleware
-    if($provider_name == 'linkedin') $provider_name = 'LinkedIn'; //small fix required for LinkedIn
-    if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) {
+    if ($provider_name == 'linkedin') {
+        $provider_name = 'LinkedIn'; //small fix required for LinkedIn
+    }
+    if (count($allProviders) && in_array(ucfirst($provider_name), $allProviders)) {
         try {
-            $hybridauth = new Hybrid_Auth($config);
-
+            $hybridauth = new Hybridauth\Hybridauth( $config );
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate(strtolower($provider_name));
 
@@ -169,19 +169,14 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
                     $registration_errors[] = $langProviderError9;
                 } else {
                     $provider_id = $user_data->identifier;
-                    if (empty($givenname)) $givenname = $user_data->firstName;
-                    if (empty($surname)) $surname = $user_data->lastName;
-                    if (empty($username)) $username = q(str_replace(' ', '', $user_data->displayName));
-                    if (empty($usermail)) $usermail = $user_data->email;
-                    if (empty($userphone)) $userphone = $user_data->phone;
                 }
             }
         } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
 
-            // Display the recived error,
-            // to know more please refer to Exceptions handling section on the userguide
+            // Display the received error,
+            // to know more please refer to Exceptions handling section on the user guide
             switch($e->getCode()) {
                 case 0 : $warning = "<p class='alert alert-info'>$langProviderError1</p>"; break;
                 case 1 : $warning = "<p class='alert alert-info'>$langProviderError2</p>"; break;
@@ -189,8 +184,8 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
                 case 3 : $warning = "<p class='alert alert-info'>$langProviderError4</p>"; break;
                 case 4 : $warning = "<p class='alert alert-info'>$langProviderError5</p>"; break;
                 case 5 : $warning = "<p class='alert alert-info'>$langProviderError6</p>"; break;
-                case 6 : $warning = "<p class='alert alert-info'>$langProviderError7</p>"; $adapter->logout(); break;
-                case 7 : $warning = "<p class='alert alert-info'>$langProviderError8</p>"; $adapter->logout(); break;
+                case 6 : $warning = "<p class='alert alert-info'>$langProviderError7</p>"; $adapter->disconnect(); break;
+                case 7 : $warning = "<p class='alert alert-info'>$langProviderError8</p>"; $adapter->disconnect(); break;
             }
         }
     }
@@ -351,39 +346,72 @@ if ($all_set) {
                         'url' => "{$urlAppend}modules/auth/registration.php",
                         'icon' => 'fa-reply',
                         'level' => 'primary-label')), false);
+
     $tool_content .= "<div class='alert alert-info'>$langUserData</div>";
     $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=". @$_GET['auth'] ."' method='post'>
-        <input type='hidden' name='p' value='$prof'>
-        <fieldset>
+        <input type='hidden' name='p' value='$prof'>        
         <div class='form-group'>
             <label for='Name' class='col-sm-2 control-label'>$langName:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type='text' name='givenname' value='" . q($givenname) . "' size='30' maxlength='60' placeholder='$langName'></td>
-            </div>
+            <div class='col-sm-10'>";
+
+        if ($user_data) {
+            $user_data_first_name = explode(' ', $user_data->firstName);
+            $givenname = $user_data_first_name[0];
+            $tool_content .= "<p class='form-control-static'>" . q($givenname) . "</p>";
+            $tool_content .= "<input type='hidden' name='givenname' value = '" . $givenname . "'>";
+        } else {
+            $tool_content .= "<input class='form-control' type='text' name='givenname' value='' size='30' maxlength='60' placeholder='$langName'></td>";
+        }
+        $tool_content .= "</div>
         </div>
         <div class='form-group'>
             <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='60' placeholder='$langSurname'>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type='text' name='userphone' value='" . q($userphone) . "' size='20' maxlength='20' placeholder='$phone_star'>
-            </div>
-        </div>
+            <div class='col-sm-10'>";
+        if ($user_data) {
+            $user_data_first_name = explode(' ', $user_data->firstName);
+            $surname = $user_data_first_name[1];
+            $tool_content .= "<p class='form-control-static'>" . q($surname) . "</p>";
+            $tool_content .= "<input type='hidden' name='surname' value='$surname'>";
+        } else {
+            $tool_content .= "<input class='form-control' type='text' name='surname' value='' size='30' maxlength='60' placeholder='$langSurname'>";
+        }
+
+        $tool_content .= "</div>
+        </div>        
         <div class='form-group'>
             <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type='text' name='username' size='30' maxlength='50' value='" . q($username) . "' placeholder='$langUserNotice'>
-            </div>
+            <div class='col-sm-10'>";
+        if ($user_data) {
+            $username = str_replace(' ', '', $user_data->displayName);
+            $tool_content .= "<p class='form-control-static'>" . q($username) . "</p>";
+            $tool_content .= "<input type='hidden' name='username' value='$username'>";
+        } else {
+            $tool_content .= "<input class='form-control' type='text' name='username' size='30' maxlength='50' value=''>";
+        }
+
+        $tool_content .= "</div>
         </div>
         <div class='form-group'>
             <label for='ProfEmail' class='col-sm-2 control-label'>$langProfEmail:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100' placeholder='$langCompulsory'>
+            <div class='col-sm-10'>";
+            if ($user_data) {
+                $usermail = q($user_data->email);
+            } else {
+                $usermail = '';
+            }
+            $tool_content .= "<input class='form-control' type='text' name='usermail' value='$usermail' size='30' maxlength='100' placeholder='$langCompulsory'>";
+            $tool_content .= "</div>
+        </div>
+        <div class='form-group'>
+            <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
+            <div class='col-sm-10'>";
+            if ($user_data) {
+                $userphone = q($user_data->phone);
+            } else {
+                $userphone = '';
+            }
+            $tool_content .= "<input class='form-control' type='text' name='userphone' value='$userphone' size='20' maxlength='20' placeholder='$phone_star'>
             </div>
         </div>";
     if (!$prof) {
@@ -427,7 +455,7 @@ if ($all_set) {
     // check if provider_id from an authenticated user and
     // a valid provider name are set so as to show the relevant form
     if ($provider_name and $provider_id) {
-    $tool_content .= "<div class='form-group'>
+        $tool_content .= "<div class='form-group'>
           <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
           <div class='col-sm-10'><p class='form-control-static'>
             <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q($authFullName[$auth_id]) . "<br /><small>$langProviderConnectWithTooltip</small></p>
@@ -442,8 +470,7 @@ if ($all_set) {
     $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
-                    </div></div>
-        </fieldset>
+                    </div></div>       
       </form>
       </div>";
 }

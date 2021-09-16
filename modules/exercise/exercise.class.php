@@ -1159,12 +1159,18 @@ if (!class_exists('Exercise')) {
          */
         function purge()
         {
+            global $course_id;
             $id = $this->id;
 
             Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s
                               WHERE d.eurid = s.eurid AND s.eid = ?d", $id);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d", $id);
             $this->setCalcGradeMethod();
+
+            $exercise_title = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $id)->title;
+
+            Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $exercise_title,
+                                                                                              'purge_results' => 1));
         }
 
         /**
@@ -1172,9 +1178,16 @@ if (!class_exists('Exercise')) {
          */
         function purgeAttempt($id, $eurid)
         {
+            global $course_id;
+
+            $exercise_title = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $id)->title;
+            $eurid_uid = Database::get()->querySingle("SELECT uid FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid)->uid;
 
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid);
+
+            Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $exercise_title,
+                                                                                              'del_eurid_uid' => $eurid_uid));
         }
 
         /**
@@ -1183,7 +1196,17 @@ if (!class_exists('Exercise')) {
          */
         function modifyAttempt($eurid, $status)
         {
+            global $course_id;
+
             Database::get()->query("UPDATE exercise_user_record SET attempt_status = ?d WHERE eurid = ?d", $status, $eurid);
+
+            $q = Database::get()->querySingle("SELECT title, uid, eid FROM exercise_user_record, exercise WHERE eurid = ?d AND exercise_user_record.eid = exercise.id", $eurid);
+            $eurid_uid = $q->uid;
+            $exercise_title = $q->title;
+
+            Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('title' => $exercise_title,
+                                                                                               'mod_eurid_uid' => $eurid_uid,
+                                                                                               'new_eurid_status' => $status));
         }
 
         /**

@@ -31,6 +31,16 @@ require_once 'modules/progress/ViewingEvent.php';
 $course_id = null;
 $course_code = null;
 
+// Handle return from LimeSurvey when questionnaire id is not passed in URL
+// Will not work correctly if user opens two questionnaires simultaneously
+if ($uid and !isset($_GET['id'])) {
+    array_map(function ($key) use ($uid) {
+        if (preg_match("/POLL_POST_LAUNCH_{$uid}_(\d+)_COURSE_ID/", $key, $m)) {
+            $_GET['id'] = $m[1];
+        }
+    }, array_keys($_SESSION));
+}
+
 if (isset($_GET['id']) && intval($_GET['id']) > 0 && $uid) {
     $pid = intval($_GET['id']);
     // check if already participated

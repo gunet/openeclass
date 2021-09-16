@@ -2,10 +2,10 @@
 
 session_start();
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.11
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -27,9 +27,6 @@ session_start();
  * is not logged in.
  *
  */
-
-
-use Hybrid\Auth;
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
@@ -86,8 +83,7 @@ if (isset($_GET['logout']) and $uid) {
     require_once 'modules/auth/methods/hybridauth/config.php';
 
     $config = get_hybridauth_config();
-    $hybridauth = new Hybrid_Auth( $config );
-    $hybridauth->logoutAllProviders();
+    $hybridauth = new Hybridauth\Hybridauth( $config );
 
     session_destroy();
     $uid = 0;
@@ -99,6 +95,22 @@ if (isset($_GET['logout']) and $uid) {
 
 // if we try to login... then authenticate user.
 $warning = '';
+
+if(isset($_SESSION['hybridauth_callback'])) {
+	switch($_SESSION['hybridauth_callback']) {
+		case 'login':
+			$_GET['provider'] = $_SESSION['hybridauth_provider'] ?? '';
+			break;
+		case 'profile':
+			$provider = $_SESSION['hybridauth_provider'] ?? '';
+			header('Location: /main/profile/profile.php?action=connect&provider='.$provider.'&'.$_SERVER['QUERY_STRING']);
+			exit;
+        case 'auth_test':
+			$provider = $_SESSION['hybridauth_provider'] ?? '';
+			header('Location: /modules/admin/auth_test.php?auth='.$provider.'&'.$_SERVER['QUERY_STRING']);
+            exit;
+    }
+}
 
 if (isset($_SESSION['shib_uname'])) {
     // authenticate via shibboleth

@@ -61,9 +61,13 @@ foreach ($activities as $act) {
                     null, GRADEBOOK_ACTIVITY_EXERCISE, $gid);
                 $seen_users[$attempt->uid] = true;
             }
-            update_gradebook_book($attempt->uid, $act->module_auto_id,
-                $attempt->total_score / $attempt->total_weighting,
-                GRADEBOOK_ACTIVITY_EXERCISE, $gid);
+            if (is_null($attempt->total_weighting) or $attempt->total_weighting == 0) {
+                update_gradebook_book($attempt->uid, $act->module_auto_id,0,GRADEBOOK_ACTIVITY_EXERCISE, $gid);
+            } else {
+                update_gradebook_book($attempt->uid, $act->module_auto_id,
+                    $attempt->total_score / $attempt->total_weighting,
+                    GRADEBOOK_ACTIVITY_EXERCISE, $gid);
+            }
         }
     } elseif ($act->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
         $max_grade = Database::get()->querySingle('SELECT max_grade FROM assignment

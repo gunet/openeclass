@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 foreach (ExtAppManager::$AppNames as $appName) {
@@ -49,7 +49,7 @@ class ExtAppManager {
     }
 
     /**
-     * 
+     *
      * @param string $appname
      * @return ExtApp
      */
@@ -75,7 +75,7 @@ abstract class ExtApp {
     }
 
     /**
-     * 
+     *
      * @param boolean $status
      */
     function setEnabled($status) {
@@ -101,7 +101,7 @@ abstract class ExtApp {
     }
 
     /**
-     * 
+     *
      * @param string $paramName
      * @return ExtParam
      */
@@ -110,7 +110,7 @@ abstract class ExtApp {
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getName() {
@@ -118,7 +118,7 @@ abstract class ExtApp {
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getConfigUrl() {
@@ -127,7 +127,7 @@ abstract class ExtApp {
 
     /**
      * Return true if the external app is configured (all params are set)
-     * 
+     *
      * @return boolean true if the app is configured, else false
      */
     public function isConfigured() {
@@ -143,7 +143,7 @@ abstract class ExtApp {
         $response = null;
         foreach ($this->getParams() as $param) {
             $name = $param->name();
-            $val = isset($_POST[$name]) ? $_POST[$name] : "";
+            $val = isset($_POST[$name]) ? trim($_POST[$name]) : "";
             $param->setValue($val);
         }
         if (($response = $this->validateApp()))

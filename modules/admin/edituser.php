@@ -106,11 +106,9 @@ if ($u) {
         $current_auth = 1;
         $auth_names[1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {
-            if($auth < 8) {
-                $auth_names[$auth] = get_auth_info($auth);
-                if ($info->password == $auth_ids[$auth]) {
-                    $current_auth = $auth;
-                }
+            $auth_names[$auth] = get_auth_info($auth);
+            if ($info->password == $auth_ids[$auth]) {
+                $current_auth = $auth;
             }
         }
         $tool_content .= "
@@ -184,23 +182,8 @@ if ($u) {
                             <input  class='form-control' type='text' name='username' size='50' value='" . q($info->username) . "'>
                         </div>";
 
-        } else {    // means that it is external auth method, so the user cannot change this password
-            switch ($info->password) {
-                case "pop3": $auth = 2;
-                    break;
-                case "imap": $auth = 3;
-                    break;
-                case "ldap": $auth = 4;
-                    break;
-                case "db": $auth = 5;
-                    break;
-                case "shibboleth": $auth = 6;
-                    break;
-                case "cas": $auth = 7;
-                    break;
-                default: $auth = 1;
-                    break;
-            }
+        } else {    // means that it is external auth method
+            $auth = array_search($info->password, $auth_ids);
             $auth_text = get_auth_info($auth);
             $tool_content .= "<div class='col-sm-10'>
                                 <p class='form-control-static'><b>" . q($info->username) . "</b> [" . $auth_text . "] <input  class='form-control' type='hidden' name='username' value=" . q($info->username) . "></p>

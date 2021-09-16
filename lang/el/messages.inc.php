@@ -1842,6 +1842,7 @@ $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμο
 $langExerciseStats = 'Στατιστικά';
 $langAttempts = "Προσπάθειες";
 $langAttempt = "Προσπάθεια";
+$langOfAttempt = "προσπάθειας";
 $langAttemptActive = "Μη ολοκληρωμένη";
 $langAttemptActiveButDeadMsg = "Ο χρόνος ολοκλήρωσης της συγκεκριμένης προσπάθειας έχει παρέλθει. Μπορεί να διαγραφεί με ασφάλεια.";
 $langAttemptActiveMsg = "Η προσπάθεια δεν έχει ακόμα ολοκληρωθεί.";
@@ -3310,16 +3311,16 @@ $langProviderIdAlreadyExists = 'Η ρύθμιση δεν είναι αποθηκ
 $langAuthSettingsSaved = "Οι ρυθμίσεις σας έχουν αποθηκευτεί";
 $langProviderConnectWithAlternativeProviders = 'Σύνδεση ή εγγραφή με εναλλακτικούς παρόχους';
 $langProviderConnect = 'Σύνδεση';
-$langProviderConnectWith = 'Σύνδεση με προφίλ';
+$langProviderConnectWith = 'Σύνδεση με λογαριασμό';
 $langProviderConnectWithTooltip = 'Ο λογαριασμός σας θα συνδεθεί με το αντίστοιχο προφίλ σας ώστε να μπορείτε να εισέρχεστε στην πλατφόρμα με αυτό';
 $langProviderConnected = 'Έχετε δυνατότητα σύνδεσης με το ';
 $langProviderDeleteConnection = 'Διαγραφή';
 $langProviderError = 'Οι ρυθμίσεις σχετικά με τον πάροχο αυθεντικοποίησης δεν είναι ορθές';
 $langProviderError1 = 'Άγνωστο σφάλμα αυθεντικοποίησης';
-$langProviderError2 = 'Σφάλμα ρύθμισης του HybridAuth';
-$langProviderError3 = 'Οι ρυθμίσεις για τον συγκεκριμένο πάροχο δεν είναι ορθές';
+$langProviderError2 = 'Σφάλμα ρύθμισης της βιβλιοθήκης HybridAuth';
+$langProviderError3 = 'Οι ρυθμίσεις για τον συγκεκριμένο πάροχο δεν είναι σωστές';
 $langProviderError4 = 'Άγνωστος ή απενεργοποιημένος πάροχος';
-$langProviderError5 = 'Τα στοιχεία σύνδεσης για την εφαρμογή στον πάροχο δεν είναι ορθά';
+$langProviderError5 = 'Τα στοιχεία σύνδεσης για την εφαρμογή στον πάροχο δεν είναι σωστά';
 $langProviderError6 = 'Η αυθεντικοποίηση απέτυχε λόγω αναφοράς σφάλματος από τον πάροχο';
 $langProviderError7 = 'Η λήψη του προφίλ απέτυχε διότι δεν είστε συνδεδεμένοι με τον πάροχο. Δοκιμάστε να επανασυνδεθείτε';
 $langProviderError8 = 'Ο χρήστης δεν είναι συνδεδεμένος με τον πάροχο';
@@ -3514,6 +3515,11 @@ $langNewProfAccountActivation = "Ενεργοποίηση Λογαριασμού
 $langNewAccountActivation1 = "την ενεργοποίηση λογαριασμού σας";
 $langUserExistingAccount = "Στοιχεία Εισόδου";
 $langMultiRegUserData = "Στοιχεία Λογαριασμών Χρηστών";
+$langHybridAuthSetup1 = "<br>Για οδηγίες σχετικά με τον ορισμό των πεδίων <strong>";
+$langHybridAuthSetup2 = " Id/Key</strong> και <strong>";
+$langHybridAuthSetup3 = " Secret</strong> πατήστε <a href=";
+$langHybridAuthSetup4 = " target='_blank'>εδώ</a>.";
+$langHybridAuthCallback = "<br>Ο σύνδεσμος <strong>callback</strong> της εφαρμογής είναι: ";
 
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";
@@ -3856,6 +3862,7 @@ $dateFormatMiddle = "%d %b %Y";
 $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ώρα: %R';
 $dateTimeFormatShort = '%d %b %Y %R';
+$dateTimeFormatLongFull = '%A, %d %B %Y / Ώρα: %R';
 $timeNoSecFormat = '%R';
 $langNoAdminAccess = '
         <strong>Η σελίδα που προσπαθείτε να μπείτε απαιτεί όνομα χρήστη και συνθηματικό.</strong>

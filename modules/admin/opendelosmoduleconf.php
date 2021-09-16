@@ -35,6 +35,7 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 $app = ExtAppManager::getApp('opendelos');
 
+
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if ($_POST['submit'] == 'clear') {
@@ -77,15 +78,14 @@ $boolean_field = "";
 $tool_content .= "
     <div class='row extapp'><div class='col-xs-12'>
       <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-          <fieldset>";
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
 foreach ($app->getParams() as $param) {
 
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
-        $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
+        $checked = $param->value() == 1 ? "checked" : "";
         $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
+        $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
         $tool_content .= "<div class='form-group'>";
@@ -109,8 +109,7 @@ $tool_content .= "
                 <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>
                 <a href='extapp.php' class='btn btn-default'>$langCancel</a>
               </div>
-            </div>
-          </fieldset>" .
+            </div>" .
           generate_csrf_token_form_field() . "
         </form>
       </div>
