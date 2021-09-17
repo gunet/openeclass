@@ -142,6 +142,7 @@ function getH5pIntegrationObject(): array {
     $head_content .= "<script type='text/javascript' src='" . $urlAppend . $jsH5pEditor . 'language/' . $lfile . '.js' . $jsCacheBuster ."'></script>\n";
 
     // Editor settings
+    $editorajaxtoken = H5PCore::createToken(EditorAjax::EDITOR_AJAX_TOKEN);
     $settings['editor'] = [
         'filesPath' => $urlServer . "courses/h5p", // TODO: check
         'fileIcon' => [
@@ -149,7 +150,7 @@ function getH5pIntegrationObject(): array {
             'width' => 50,
             'height' => 50,
         ],
-        'ajaxPath' =>  $urlServer . "modules/h5p/ajax.php?action=",
+        'ajaxPath' =>  $urlServer . "modules/h5p/ajax.php?token={$editorajaxtoken}&action=",
         'libraryUrl' => $urlServer . $jsH5pEditor,
         'copyrightSemantics' => $contentValidator->getCopyrightSemantics(),
         'metadataSemantics' => $contentValidator->getMetadataSemantics(),

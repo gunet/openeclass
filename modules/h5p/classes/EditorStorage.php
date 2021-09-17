@@ -90,7 +90,7 @@ class EditorStorage implements H5peditorStorage {
      *
      * @param int $fileId
      */
-    public function keepFile($fileId) {
+    public function keepFile($fileId): void {
         // TODO: Implement keepFile() method.
         error_log("Unhandled EditorStorage->keepFile()");
     }
@@ -183,10 +183,10 @@ class EditorStorage implements H5peditorStorage {
      *
      * @param H5peditorFile
      * @param $content_id
+     * @return int|null
      */
-    public static function markFileForCleanup($file, $content_id) {
-        // TODO: Implement markFileForCleanup() method.
-        error_log("Unhandled EditorStorage->markFileForCleanup()");
+    public static function markFileForCleanup($file, $content_id): ?int {
+        return null;
     }
 
     /**
@@ -194,7 +194,7 @@ class EditorStorage implements H5peditorStorage {
      *
      * @param string $filePath Path to file or directory
      */
-    public static function removeTemporarilySavedFiles($filePath) {
+    public static function removeTemporarilySavedFiles($filePath): void {
         // TODO: Implement removeTemporarilySavedFiles() method.
         error_log("Unhandled EditorStorage->removeTemporarilySavedFiles()");
     }
