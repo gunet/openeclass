@@ -21,6 +21,9 @@
 
 class EditorAjax implements H5PEditorAjaxInterface {
 
+    /** The component for H5P. */
+    public const EDITOR_AJAX_TOKEN = 'editorajax';
+
     /**
      * Gets latest library versions that exists locally
      *
@@ -84,9 +87,7 @@ class EditorAjax implements H5PEditorAjaxInterface {
      * @return bool True if successful validation
      */
     public function validateEditorToken($token): bool {
-        // TODO: Implement validateEditorToken() method.
-        error_log("Unhandled EditorAjax->validateEditorToken()");
-        return true;
+        return H5PCore::validToken(self::EDITOR_AJAX_TOKEN, $token);
     }
 
     /**
