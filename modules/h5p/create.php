@@ -280,12 +280,28 @@ function saveContent(stdClass $data): int {
     $data->id = $core->saveContent((array)$data);
 
     // Move any uploaded images or files. Determine content dependencies.
-    $editor->processParameters($data, $data->library, $params->params);
-
-    // create proper content.json file on disk with params
+    $editor->processParameters($data->id, $data->library, $params->params);
     $workspacePath = $webDir . "/courses/" . $course_code . "/h5p/content/" . $data->id . "/workspace";
     $contentJsonPath = $workspacePath . "/content";
     mkdir($contentJsonPath, 0775, true);
+    $editorTmpPath = $webDir . "/courses/h5p/editor/";
+    $contentTmpPath = $webDir . "/courses/h5p/content/" . $data->id . "/";
+    if (isset($params->params->files)) {
+        foreach ($params->params->files as $file) {
+            if (file_exists($contentTmpPath . $file->path)) {
+                $targetDir = dirname($contentJsonPath . "/" . $file->path);
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0775, true);
+                }
+                rename($contentTmpPath . $file->path, $contentJsonPath . "/" . $file->path);
+            }
+            if (file_exists($editorTmpPath . $file->path)) {
+                unlink($editorTmpPath . $file->path);
+            }
+        }
+    }
+
+    // create proper content.json file on disk with params
     file_put_contents($contentJsonPath . "/content.json", json_encode($params->params));
 
     // Calculate dependencies by validating and filtering against main library semantics
