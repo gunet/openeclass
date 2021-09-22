@@ -45,6 +45,9 @@ $contentValidator = $factory->getContentValidator();
 $jsCacheBuster = "?ver=" . time();
 
 if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
+    if (isset($_POST['cancel'])) {
+        redirect($backUrl);
+    }
     // save h5p data
     $id = saveContent((object)$_POST);
 
