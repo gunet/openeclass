@@ -48,6 +48,7 @@
                     <input name='h5plibrary' type='hidden' value='{{ $library }}' />
                     <input name='h5pparams' type='hidden' value='{{ $h5pparams }}' />
                     <input name='h5paction' type='hidden' value='' />
+                    <input name='id' type='hidden' value='{{ $id }}' />
                 </div>
 
                 {!! $formActionButtons !!}

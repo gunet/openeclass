@@ -108,6 +108,10 @@
                     <td class='text-center'>
                         @if ($is_editor)
                             {!! action_button([
+                                [ 'icon' => 'fa-edit',
+                                  'title' => trans('langEditChange'),
+                                  'url' => "create.php?course=$course_code&amp;id=$item->id"
+                                ],
                                 [ 'icon' => 'fa-times',
                                   'title' => trans('langDelete'),
                                   'url' => "delete.php?course=$course_code&amp;id=$item->id",

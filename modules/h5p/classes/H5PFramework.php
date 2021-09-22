@@ -291,31 +291,63 @@ class H5PFramework implements H5PFrameworkInterface {
         }
     }
 
+    /**
+     * Insert new content.
+     *
+     * @param array $content
+     *   An associative array containing:
+     *   - id: The content id
+     *   - params: The content in json format
+     *   - library: An associative array containing:
+     *     - libraryId: The id of the main library for this content
+     * @param int $contentMainId
+     *   Main id for the content if this is a system that supports versions
+     */
     public function insertContent($content, $contentMainId = NULL) {
         return $this->updateContent($content);
     }
 
+    /**
+     * Update old content.
+     *
+     * @param array $content
+     *   An associative array containing:
+     *   - id: The content id
+     *   - params: The content in json format
+     *   - library: An associative array containing:
+     *     - libraryId: The id of the main library for this content
+     * @param int $contentMainId
+     *   Main id for the content if this is a system that supports versions
+     */
     public function updateContent($content, $contentMainId = NULL) {
         global $course_id;
-        if (isset($content['id'])) {
-            $id = $content['id'];
-        } else {
-            $sql = Database::get()->querySingle("SELECT * FROM h5p_content ORDER BY id DESC LIMIT ?d", 1);
-            if (isset($sql->id)) {
-                $id = $sql->id + 1;
-            } else {
-                $id = 1;
-            }
-        }
-        $contentdata = $content['params'];
-        $libraryId = $content['library']['libraryId'];
 
-        Database::get()->query("INSERT INTO h5p_content(id, main_library_id, params, course_id) VALUES (?d, ?d, ?s, ?d)",
-            $this->handle_errormsg, $id, $libraryId, $contentdata, $course_id);
+        // Add title to 'params' to use in the editor.
+        if (!empty($content['title'])) {
+            $params = json_decode($content['params']);
+            $params->title = $content['title'];
+            $content['params'] = json_encode($params);
+        }
+
+        if (!isset($content['id'])) {
+            $id = Database::get()->query("INSERT INTO h5p_content (main_library_id, params, course_id) VALUES (?d, ?s, ?d)",
+                $content['library']['libraryId'], $content['params'], $course_id)->lastInsertID;
+        } else {
+            Database::get()->query("UPDATE h5p_content SET main_library_id = ?d, params = ?s WHERE id = ?d",
+                $content['library']['libraryId'], $content['params'], $content['id']);
+            $id = $content['id'];
+        }
+
         return $id;
     }
 
+    /**
+     * Resets marked user data for the given content.
+     *
+     * @param int $contentId
+     */
     public function resetContentUserData($contentId) {
+        // Currently, we do not store user data for a content.
     }
 
     /**
@@ -541,69 +573,66 @@ class H5PFramework implements H5PFrameworkInterface {
         H5PCore::deleteFileTree($dir);
     }
 
-    public function loadContent($id) {
-        $content = array();
-        $sql = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d", $id);
-        $content['id'] = $sql->id;
-        $content['params'] = $sql->params;
-        $content['libraryId'] = $sql->main_library_id;
+    /**
+     * Load content.
+     *
+     * @param int $id
+     *   Content identifier
+     * @return array
+     *   Associative array containing:
+     *   - contentId: Identifier for the content
+     *   - params: json content as string
+     *   - embedType: csv of embed types
+     *   - title: The contents title
+     *   - language: Language code for the content
+     *   - libraryId: Id for the main library
+     *   - libraryName: The library machine name
+     *   - libraryMajorVersion: The library's majorVersion
+     *   - libraryMinorVersion: The library's minorVersion
+     *   - libraryEmbedTypes: CSV of the main library's embed types
+     *   - libraryFullscreen: 1 if fullscreen is supported. 0 otherwise.
+     */
+    public function loadContent($id): ?array {
+        $sql = "SELECT hc.id, hc.main_library_id, hc.params, hc.course_id, hc.title, 
+                       hl.id as libraryid, hl.machine_name, hl.title as librarytitle, 
+                       hl.major_version, hl.minor_version, hl.fullscreen, hl.embed_types, 
+                       hl.semantics
+                  FROM h5p_content hc
+                  JOIN h5p_library hl ON hl.id = hc.main_library_id
+                 WHERE hc.id = ?d";
 
-        $path = 'h5p/content/' . $content['id'] . '/h5p.json';
-        $json = file_get_contents($path);
-        $json = json_decode($json, true);
+        $data = Database::get()->querySingle($sql, $id);
 
-        $embedTypes = '';
-        $count = count($json['embedTypes']);
-        if ($count == 1) {
-            $embedTypes = $json['embedTypes'][0];
-        } else {
-            for ($i = 0; $i < $count; $i++) {
-                if (isset($json['embedTypes'][$i + 1])) {
-                    $embedTypes = $embedTypes . $json['embedTypes'][$i] . ",";
-                } else {
-                    $embedTypes = $embedTypes . $json['embedTypes'][$i];
-                }
-            }
+        if (!$data) {
+            return null;
         }
 
-        $content['embedTypes'] = $embedTypes;
-        $content['title'] = $json['title'];
-        $content['language'] = $json['language'];
-        $content['libraryName'] = $json['mainLibrary'];
+        $content = array(
+            'id' => $data->id,
+            'params' => $data->params,
+            'embedType' => 'iframe',
+            'title' => $data->title,
+            'slug' => H5PCore::slugify($data->librarytitle) . '-' . $data->id,
+            'libraryId' => $data->libraryid,
+            'libraryName' => $data->machine_name,
+            'libraryMajorVersion' => $data->major_version,
+            'libraryMinorVersion' => $data->minor_version,
+            'libraryEmbedTypes' => $data->embed_types,
+            'libraryFullscreen' => $data->fullscreen,
+            'metadata' => ''
+        );
 
-        foreach ($json['preloadedDependencies'] as $jsondep) {
-            if (strcmp($content['libraryName'], $jsondep['machineName']) == 0) {
-                $content['libraryName'] = $jsondep['machineName'];
-                $content['libraryMajorVersion'] = $jsondep['majorVersion'];
-                $content['libraryMinorVersion'] = $jsondep['minorVersion'];
-            }
+        $params = json_decode($data->params);
+        if (empty($params->metadata)) {
+            $params->metadata = new stdClass();
         }
 
-        $librarypath = 'h5p/libraries/' . $content['libraryName'] . '-' . $content['libraryMajorVersion'] . '.' . $content['libraryMinorVersion'] . '/library.json';
-        $libjson = file_get_contents($librarypath);
-        $libjson = json_decode($libjson, true);
-
-        $libraryembedTypes = '';
-        $libcount = count($libjson['embedTypes']);
-        if ($libcount == 1) {
-            $libraryembedTypes = $libjson['embedTypes'][0];
-        } else {
-            for ($i = 0; $i < $libcount; $i++) {
-                if (isset($libjson['embedTypes'][$i + 1])) {
-                    $libraryembedTypes = $libraryembedTypes . $libjson['embedTypes'][$i] . ",";
-                } else {
-                    $libraryembedTypes = $libraryembedTypes . $libjson['embedTypes'][$i];
-                }
-            }
+        // Add title to metadata.
+        if (!empty($params->title) && empty($params->metadata->title)) {
+            $params->metadata->title = $params->title;
         }
-
-        $content['libraryEmbedTypes'] = $libraryembedTypes;
-
-        if (isset($libjson['fullscreen'])) {
-            $content['libraryFullscreen'] = $libjson['fullscreen'];
-        } else {
-            $content['libraryFullscreen'] = 0;
-        }
+        $content['metadata'] = $params->metadata;
+        $content['params'] = json_encode($params->params ?? $params);
 
         return $content;
     }

@@ -43,7 +43,6 @@ $factory = new H5PFactory();
 $core = $factory->getCore();
 $contentValidator = $factory->getContentValidator();
 $jsCacheBuster = "?ver=" . time();
-$maincontentdata = ['params' => (object)[]]; // {&quot;params&quot;:{}}
 
 if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
     // save h5p data
@@ -53,9 +52,29 @@ if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
     redirect($backUrl);
 }
 
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+    $oldcontent = $core->loadContent($id);
+    if ($oldcontent === null) {
+        redirect($backUrl);
+    }
+    $library = H5PCore::libraryToString($oldcontent['library']);
+
+    $params = $core->filterParameters($oldcontent);
+    $maincontentdata = ['params' => json_decode($params)];
+    if (isset($oldcontent['metadata'])) {
+        $maincontentdata['metadata'] = $oldcontent['metadata'];
+    }
+} else {
+    $id = "";
+    $library = $_GET['library'];
+    $maincontentdata = ['params' => (object)[]]; // {&quot;params&quot;:{}}
+}
+
 $data['h5pIntegrationObject'] = json_encode(getH5pIntegrationObject(), JSON_PRETTY_PRINT);
 $data['formActionButtons'] = addActionButtons();
-$data['library'] = $_GET['library'];
+$data['id'] = $id;
+$data['library'] = $library;
 $data['h5pparams'] = q(json_encode($maincontentdata, true));
 
 view('modules.h5p.create', $data);
@@ -283,7 +302,9 @@ function saveContent(stdClass $data): int {
     $editor->processParameters($data->id, $data->library, $params->params);
     $workspacePath = $webDir . "/courses/" . $course_code . "/h5p/content/" . $data->id . "/workspace";
     $contentJsonPath = $workspacePath . "/content";
-    mkdir($contentJsonPath, 0775, true);
+    if (!file_exists($contentJsonPath)) {
+        mkdir($contentJsonPath, 0775, true);
+    }
     $editorTmpPath = $webDir . "/courses/h5p/editor/";
     $contentTmpPath = $webDir . "/courses/h5p/content/" . $data->id . "/";
     if (isset($params->params->files)) {
