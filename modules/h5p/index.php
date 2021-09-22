@@ -111,6 +111,10 @@ if ($content) {
 
         if ($is_editor) {
             $tool_content .= action_button([[
+                'icon' => 'fa-edit',
+                'title' => $langEditChange,
+                'url' => "create.php?course=$course_code&amp;id=$item->id"
+            ], [
                 'icon' => 'fa-times',
                 'title' => $langDelete,
                 'url' => "delete.php?course=$course_code&amp;id=$item->id",
