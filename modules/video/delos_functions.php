@@ -23,6 +23,7 @@
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'include/log.class.php';
+require_once 'include/lib/curlutil.class.php';
 
 define('DELOSTOKEN', 'DELOSTOKEN');
 define('DELOSTOKENTIMESTAMP', 'DELOSTOKENTIMESTAMP');
@@ -256,7 +257,7 @@ function requestDelosJSON() {
         );
 
         // request public json from opendelos
-        list($jsonpublic, $codepublic) = httpGetRequest($jsonpublicurl, $headers);
+        list($jsonpublic, $codepublic) = CurlUtil::httpGetRequest($jsonpublicurl, $headers);
         $jsonPublicObj = ($jsonpublic && $codepublic == 200) ? json_decode($jsonpublic) : null;
 
         // private resources
@@ -266,7 +267,7 @@ function requestDelosJSON() {
         $jsonprivateurl = $delosprivateurl . $course_code;
 
         // request private json from opendelos
-        list($jsonprivate, $codeprivate) = httpGetRequest($jsonprivateurl, $headers);
+        list($jsonprivate, $codeprivate) = CurlUtil::httpGetRequest($jsonprivateurl, $headers);
         if ($codeprivate == 200) {
             $checkAuth = true;
             $jsonPrivateObj = json_decode($jsonprivate);
@@ -274,27 +275,6 @@ function requestDelosJSON() {
     }
 
     return array($jsonPublicObj, $jsonPrivateObj, $checkAuth);
-}
-
-function httpGetRequest($url, $headers = array()) {
-    $response = null;
-    $http_code = null;
-    if (!extension_loaded('curl')) {
-        return array($response, $http_code);
-    }
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    $response = curl_exec($ch);
-    if(!curl_errno($ch)) {
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    }
-    curl_close($ch);
-
-    return array($response, $http_code);
 }
 
 function displayDelosForm($jsonPublicObj, $jsonPrivateObj, $checkAuth, $currentVideoLinks) {
