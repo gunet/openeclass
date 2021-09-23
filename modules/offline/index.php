@@ -141,7 +141,7 @@ foreach ($departments as $dep) {
 
 $section_title = $currentCourseName;
 $toolArr = lessonToolsMenu_offline(true, $data['urlAppend']);
-$global_data = compact('is_editor', 'course_code', 'course_id', 'language',
+$global_data = @compact('is_editor', 'course_code', 'course_id', 'language',
     'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
     'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam',
     'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
@@ -155,7 +155,7 @@ $bladeData['pageTitle'] = $course_info->title;
 $bladeData['professor'] = $course_info->prof_names;
 $bladeData['course_date'] = claro_format_locale_date($dateTimeFormatLong, strtotime('now'));
 
-use Philo\Blade\Blade;
+use Jenssegers\Blade\Blade;
 $blade = new Blade($viewsDir, $cacheDir);
 
 // course units
@@ -163,7 +163,7 @@ $bladeData['course_units'] = $course_units = offline_course_units();
 /////////////////
 // course home //
 /////////////////
-$homeout = $blade->view()->make('modules.course.home.index', $bladeData)->render();
+$homeout = $blade->make('modules.course.home.index', $bladeData)->render();
 $fp = fopen($downloadDir . '/index.html', 'w');
 fwrite($fp, $homeout);
 fclose($fp);

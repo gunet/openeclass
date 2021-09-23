@@ -12,7 +12,6 @@
         "guzzlehttp/oauth-subscriber": "^0.3.0",
         "hybridauth/hybridauth": "~3.0",
         "mpdf/mpdf": "^8.0",
-        "philo/laravel-blade": "3.*",
         "hoa/ruler": "~2.0",
         "egulias/email-validator": "^2.1",
         "bacon/bacon-qr-code": "^2.0",
@@ -20,7 +19,8 @@
         "dapphp/securimage": "^4.0",
         "h5p/h5p-core": "^1.24.3",
         "h5p/h5p-editor": "^1.24.3",
-        "snapappointments/bootstrap-select": "^1.13.18"
+        "snapappointments/bootstrap-select": "^1.13.18",
+        "jenssegers/blade": "^1.4"
     },
     "autoload": {
         "psr-0": {
