@@ -24,7 +24,7 @@ $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'classes/H5PFactory.php';
 
-$toolName = "H5P";
+$toolName = $langH5p;
 
 $content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d ORDER BY id ASC", $course_id);
 

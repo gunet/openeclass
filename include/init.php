@@ -442,7 +442,8 @@ $modules = array(
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
     MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'conference'),
     MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-trophy'),
-    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap')
+    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap'),
+    MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-tablet')
 );
 // ----------------------------------------
 // course admin modules

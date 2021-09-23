@@ -85,6 +85,7 @@ define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_COURSEPREREQUISITE', 49);
 define('MODULE_ID_LTI_CONSUMER', 50);  /* deprecated. used only for compatibility in statistics*/
 define('MODULE_ID_ANALYTICS', 51);
+define('MODULE_ID_H5P', 52);
 
 // user modules
 
