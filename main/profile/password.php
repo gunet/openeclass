@@ -25,9 +25,9 @@
  * @abstract Password change component
  *
  */
-use Hautelook\Phpass\PasswordHash;
+
 $require_login = true;
-$require_valid_uid = TRUE;
+$require_valid_uid = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
@@ -80,30 +80,27 @@ if (isset($_POST['submit'])) {
         'password_form' => "$langTheField $langNewPass1",
         'password_form1' => "$langTheField $langNewPass2"
     ));
-    if($v->validate()) {
+    if ($v->validate()) {
         // all checks ok. Change password!
-       $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);
+        $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);
 
-       $hasher = new PasswordHash(8, false);
-       $new_pass = $hasher->HashPassword($_REQUEST['password_form']);
+        $new_pass = password_hash($_REQUEST['password_form'], PASSWORD_DEFAULT);
 
-       if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow->password)) {
-           Database::get()->query("UPDATE user SET password = ?s
-                                    WHERE id = ?d", $new_pass, $_SESSION['uid']);
-           Log::record(0, 0, LOG_PROFILE,
-               array('uid' => $_SESSION['uid'], 'pass_change' => 1));
-           Session::Messages($langPassChanged, 'alert-success');
-           redirect_to_home_page('main/profile/display_profile.php');
-           exit;
-       } else {
-           Session::Messages($langPassOldWrong);
-           redirect_to_home_page('main/profile/password.php');
-       }
+        if (password_verify($_REQUEST['old_pass'], $myrow->password)) {
+            Database::get()->query("UPDATE user SET password = ?s
+                WHERE id = ?d", $new_pass, $_SESSION['uid']);
+            Log::record(0, 0, LOG_PROFILE,
+                array('uid' => $_SESSION['uid'], 'pass_change' => 1));
+            Session::Messages($langPassChanged, 'alert-success');
+            redirect_to_home_page('main/profile/display_profile.php');
+        } else {
+            Session::Messages($langPassOldWrong);
+            redirect_to_home_page('main/profile/password.php');
+        }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page('main/profile/password.php');
     }
-
 }
 
 $tool_content .= action_bar(array(

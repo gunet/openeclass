@@ -23,7 +23,6 @@
  * @file newuser.php
  * @brief user registration process
  */
-use Hautelook\Phpass\PasswordHash;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -174,7 +173,7 @@ if (!isset($_POST['submit'])) {
                         'level' => 'primary-label')), false);
 
     $tool_content .= "<div class='form-wrapper'>
-            <form class='form-horizontal' role='form' action='$_SERVER[REQUEST_URI]' method='post' onsubmit='return validateNodePickerForm();'>            
+            <form class='form-horizontal' role='form' action='$_SERVER[REQUEST_URI]' method='post' onsubmit='return validateNodePickerForm();'>
                 <div class='form-group'>
                     <label for='Name' class='col-sm-2 control-label'>$langName:</label>
                     <div class='col-sm-10'>";
@@ -479,8 +478,7 @@ if (!isset($_POST['submit'])) {
             $vmail = FALSE;
         }
         if (empty($provider) && empty($_POST['provider_id'])) {
-            $hasher = new PasswordHash(8, false);
-            $password_encrypted = $hasher->HashPassword($password);
+            $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
         } else {
             $password_encrypted = $provider;
         }

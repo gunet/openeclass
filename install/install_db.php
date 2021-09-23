@@ -23,7 +23,7 @@ f<?php
  * @file install_db.php
  * @brief installation data base queries
  */
-use Hautelook\Phpass\PasswordHash;
+
 require_once '../modules/db/foreignkeys.php';
 
 if (!defined('ECLASS_VERSION')) {
@@ -893,7 +893,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `multiple_submissions` TINYINT NOT NULL DEFAULT '0',
     `default_answer` TINYINT NOT NULL DEFAULT '0',
     `type` TINYINT NOT NULL DEFAULT 0,
-    `assign_to_specific` TINYINT NOT NULL DEFAULT '0',    
+    `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
      `lti_template` INT(11) DEFAULT NULL,
     `launchcontainer` TINYINT DEFAULT NULL) $tbl_options");
 
@@ -1205,8 +1205,7 @@ $db->query("CREATE TABLE `user_department` (
 refreshHierarchyProcedures();
 
 // encrypt the admin password into DB
-$hasher = new PasswordHash(8, false);
-$password_encrypted = $hasher->HashPassword($passForm);
+$password_encrypted = password_hash($passForm, PASSWORD_DEFAULT);
 $admin_uid = $db->query("INSERT INTO `user`
     (`givenname`, `surname`, `username`, `password`, `email`, `status`, `lang`,
      `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)

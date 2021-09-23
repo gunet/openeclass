@@ -18,7 +18,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-use Hautelook\Phpass\PasswordHash;
 
 $require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
@@ -139,7 +138,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     enableCheckFileSize();
     $tool_content .= "<div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div>
         <div class='form-wrapper'>
-            <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
+            <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>
             <div class='form-group'>
                 <div class='col-sm-4'>" .
                     fileSizeHidenInput() . "
@@ -150,11 +149,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
                 </div>
             </div>
-            ". generate_csrf_token_form_field() ."  
+            ". generate_csrf_token_form_field() ."
             </form>
-        </div> 
+        </div>
     <div class='alert alert-info'>
-        <label>$langSecondMethod</label> $langRequest2</div>        
+        <label>$langSecondMethod</label> $langRequest2</div>
         <div class='form-wrapper'>
           <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
             <div class='form-group'>
@@ -163,7 +162,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             <div class='form-group'>
                 <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "'>
             </div>
-          ". generate_csrf_token_form_field() ."  
+          ". generate_csrf_token_form_field() ."
           </form>
         </div>";
 }

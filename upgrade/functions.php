@@ -22,7 +22,6 @@
 /*
  * @brief helper functions for upgrade
  */
-use Hautelook\Phpass\PasswordHash;
 
 
 /**
@@ -204,8 +203,7 @@ function is_admin($username, $password) {
         if (isset($user->privilege) and $user->privilege !== '0')
             return false;
 
-        $hasher = new PasswordHash(8, false);
-        if (!$hasher->CheckPassword($password, $user->password)) {
+        if (!password_verify($password, $user->password)) {
             if (strlen($user->password) < 60 and md5($password) == $user->password) {
                 return true;
             }

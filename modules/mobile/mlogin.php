@@ -20,8 +20,8 @@
  * ======================================================================== */
 
 header('Content-Type: application/xml; charset=utf-8');
-use Hautelook\Phpass\PasswordHash;
 require_once '../../include/log.class.php';
+
 if (isset($_POST['token'])) {
     $require_mlogin = true;
     $require_noerrors = true;
@@ -73,12 +73,12 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
 
     $uname = canonicalize_whitespace($_POST['uname']);
     $pass = $_POST['pass'];
-    
+
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
 
-    $sqlLogin = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = ?s" : "COLLATE utf8_bin = ?s";
+    $sqlLogin = get_config('case_insensitive_usernames') ? "COLLATE utf8_general_ci = ?s" : "COLLATE utf8_bin = ?s";
     $myrow = Database::get()->querySingle("SELECT * FROM user WHERE username $sqlLogin", $uname);
 
     if (get_config('login_fail_check')) {

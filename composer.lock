@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe3c81eeb24dd60b053dbbfdf4ae108f",
+    "content-hash": "1cfb7496be7873c401acb66749cac6ec",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -889,54 +889,6 @@
             "time": "2021-06-13T17:44:27+00:00"
         },
         {
-            "name": "hautelook/phpass",
-            "version": "0.3.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hautelook/phpass.git",
-                "reference": "b4cbd9b67ed3ef5672ec79d8e0c46d24bd844abd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hautelook/phpass/zipball/b4cbd9b67ed3ef5672ec79d8e0c46d24bd844abd",
-                "reference": "b4cbd9b67ed3ef5672ec79d8e0c46d24bd844abd",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Hautelook": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Public Domain"
-            ],
-            "authors": [
-                {
-                    "name": "Solar Designer",
-                    "email": "solar@openwall.com",
-                    "homepage": "http://openwall.com/phpass/"
-                }
-            ],
-            "description": "Portable PHP password hashing framework",
-            "homepage": "http://github.com/hautelook/phpass/",
-            "keywords": [
-                "blowfish",
-                "crypt",
-                "password",
-                "security"
-            ],
-            "support": {
-                "issues": "https://github.com/hautelook/phpass/issues",
-                "source": "https://github.com/hautelook/phpass/tree/0.3.x"
-            },
-            "time": "2012-08-31T00:00:00+00:00"
-        },
-        {
             "name": "hoa/compiler",
             "version": "3.17.08.08",
             "source": {
@@ -1024,6 +976,7 @@
                 "issues": "https://github.com/hoaproject/Compiler/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Compiler"
             },
+            "abandoned": true,
             "time": "2017-08-08T07:44:07+00:00"
         },
         {
@@ -1095,6 +1048,7 @@
                 "issues": "https://github.com/hoaproject/Consistency/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Consistency"
             },
+            "abandoned": true,
             "time": "2017-05-02T12:18:12+00:00"
         },
         {
@@ -1159,6 +1113,7 @@
                 "issues": "https://github.com/hoaproject/Event/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Event"
             },
+            "abandoned": true,
             "time": "2017-01-13T15:30:50+00:00"
         },
         {
@@ -1221,6 +1176,7 @@
                 "issues": "https://github.com/hoaproject/Exception/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Exception"
             },
+            "abandoned": true,
             "time": "2017-01-16T07:53:27+00:00"
         },
         {
@@ -1291,6 +1247,7 @@
                 "issues": "https://github.com/hoaproject/File/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/File"
             },
+            "abandoned": true,
             "time": "2017-07-11T07:42:15+00:00"
         },
         {
@@ -1353,6 +1310,7 @@
                 "issues": "https://github.com/hoaproject/Iterator/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Iterator"
             },
+            "abandoned": true,
             "time": "2017-01-10T10:34:47+00:00"
         },
         {
@@ -1426,6 +1384,7 @@
                 "issues": "https://github.com/hoaproject/Math/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Math"
             },
+            "abandoned": true,
             "time": "2017-05-16T08:02:17+00:00"
         },
         {
@@ -1494,6 +1453,7 @@
                 "issues": "https://github.com/hoaproject/Protocol/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Protocol"
             },
+            "abandoned": true,
             "time": "2017-01-14T12:26:10+00:00"
         },
         {
@@ -1558,6 +1518,7 @@
                 "issues": "https://github.com/hoaproject/Regex/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Regex"
             },
+            "abandoned": true,
             "time": "2017-01-13T16:10:24+00:00"
         },
         {
@@ -1624,6 +1585,7 @@
                 "issues": "https://github.com/hoaproject/Ruler/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Ruler"
             },
+            "abandoned": true,
             "time": "2017-05-16T07:52:21+00:00"
         },
         {
@@ -1696,6 +1658,7 @@
                 "issues": "https://github.com/hoaproject/Stream/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Stream"
             },
+            "abandoned": true,
             "time": "2017-02-21T16:01:06+00:00"
         },
         {
@@ -1764,6 +1727,7 @@
                 "issues": "https://github.com/hoaproject/Ustring/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Ustring"
             },
+            "abandoned": true,
             "time": "2017-01-16T07:08:25+00:00"
         },
         {
@@ -1827,6 +1791,7 @@
                 "issues": "https://github.com/hoaproject/Visitor/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Visitor"
             },
+            "abandoned": true,
             "time": "2017-01-16T07:02:03+00:00"
         },
         {
@@ -1887,6 +1852,7 @@
                 "issues": "https://github.com/hoaproject/Zformat/issues",
                 "source": "https://central.hoa-project.net/Resource/Library/Zformat"
             },
+            "abandoned": true,
             "time": "2017-01-10T10:39:54+00:00"
         },
         {

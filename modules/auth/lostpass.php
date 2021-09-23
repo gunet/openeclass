@@ -29,10 +29,9 @@
  * his/hers  information through a challenge/response system.
  *
  */
-use Hautelook\Phpass\PasswordHash;
 
 include '../../include/baseTheme.php';
-include 'auth.inc.php';
+include 'modules/auth/auth.inc.php';
 include 'include/sendMail.inc.php';
 $pageName = $lang_remind_pass;
 
@@ -94,14 +93,11 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
 
         if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                 count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
-            $hasher = new PasswordHash(8, false);
-            $q1 = Database::get()->query("UPDATE user SET password = ?s
-                                                      WHERE id = ?d",
-                    $hasher->HashPassword($_POST['newpass']), $userUID);
+            $q1 = Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d",
+                password_hash($_POST['newpass'], PASSWORD_DEFAULT), $userUID);
             if ($q1->affectedRows > 0) {
-
-                $tool_content = "<div class='alert alert-success'><p>$langAccountResetSuccess1</p></div>
-                                                       $homelink";
+                $tool_content = "<div class='alert alert-success'><p>$langAccountResetSuccess1</p></div>" .
+                    $homelink;
                 $change_ok = true;
             }
         } elseif (count($error_messages)) {

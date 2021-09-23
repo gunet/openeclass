@@ -18,7 +18,7 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-use Hautelook\Phpass\PasswordHash;
+
 define('SUFFIX_LEN', 4);
 
 $require_usermanage_user = true;
@@ -287,8 +287,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $password = get_auth_info($auth_methods_form);
         $mail_message = $langPassSameAuth;
     } else {
-        $hasher = new PasswordHash(8, false);
-        $password_encrypted = $hasher->HashPassword($password);
+        $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
         $mail_message = $password;
     }
 

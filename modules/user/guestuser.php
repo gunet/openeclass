@@ -18,11 +18,10 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-use Hautelook\Phpass\PasswordHash;
 
 $require_current_course = true;
 $require_course_admin = true;
-$require_help = TRUE;
+$require_help = true;
 $helpTopic = 'Guest';
 
 require_once '../../include/baseTheme.php';
@@ -128,7 +127,7 @@ if (isset($_POST['submit'])) {
           <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
         </div>
         </fieldset>
-        ". generate_csrf_token_form_field() ."  
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
 }
@@ -146,9 +145,8 @@ draw($tool_content, 2, null, $head_content);
 function createguest($username, $course_id, $password) {
     global $langGuestName, $langGuestSurname;
 
-    $hasher = new PasswordHash(8, false);
     if ($password !== '') {
-        $password = $hasher->HashPassword($password);
+        $password = password_hash($password, PASSWORD_DEFAULT);
     }
 
     $q = Database::get()->querySingle("SELECT user_id from course_user WHERE status=" . USER_GUEST . " AND course_id = $course_id");

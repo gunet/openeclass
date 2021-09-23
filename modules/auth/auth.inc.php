@@ -32,7 +32,6 @@
 
   ==============================================================================
  */
-use Hautelook\Phpass\PasswordHash;
 
 require_once 'include/log.class.php';
 require_once 'include/lib/user.class.php';
@@ -272,13 +271,12 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = " : "COLLATE utf8_bin = ";
             $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
             if ($result) {
-                $hasher = new PasswordHash(8, false);
-                if ($hasher->CheckPassword($test_password, $result->password)) {
+                if (password_verify($test_password, $result->password)) {
                     $testauth = true;
                 } else if (strlen($myrow->password) < 60 && md5($test_password) == $result->password) {
                     $testauth = true;
                     // password is in old md5 format, update transparently
-                    $password_encrypted = $hasher->HashPassword($test_password);
+                    $password_encrypted = password_hash($test_password, PASSWORD_DEFAULT);
                     Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $result->id);
                 }
             }
@@ -1045,16 +1043,15 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
 
     $_SESSION['canChangePassword'] = false;
     $pass_match = false;
-    $hasher = new PasswordHash(8, false);
 
     if (is_null($provider)) {
         if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
-            if ($hasher->CheckPassword($pass, $user_info_object->password)) {
+            if (password_verify($pass, $user_info_object->password)) {
                 $pass_match = true;
             } elseif (strlen($user_info_object->password) < 60 and md5($pass) == $user_info_object->password) {
                 $pass_match = true;
                 // password is in old md5 format, update transparently
-                $password_encrypted = $hasher->HashPassword($pass);
+                $password_encrypted = password_hash($pass, PASSWORD_DEFAULT);
                 $user_info_object->password = $password_encrypted;
                 Database::core()->query("SET sql_mode = TRADITIONAL");
                 Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
@@ -1558,8 +1555,7 @@ function external_DB_Check_Pass($test_password, $hash, $encryption) {
         case 'md5':
             return (md5($test_password) == $hash);
         case 'ehasher':
-            $hasher = new PasswordHash(8, false);
-            return $hasher->CheckPassword($test_password, $hash);
+            return password_verify($test_password, $hash);
         default:
             /* Maybe append an error message to tool_content, telling not supported encryption */
     }

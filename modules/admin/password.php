@@ -23,11 +23,10 @@
  * @file password.php
  * @brief change user password
  */
-use Hautelook\Phpass\PasswordHash;
 
 $require_login = true;
-$require_admin = TRUE;
-$require_valid_uid = TRUE;
+$require_admin = true;
+$require_valid_uid = true;
 
 include '../../include/baseTheme.php';
 
@@ -113,8 +112,7 @@ if (!isset($_POST['changePass'])) {
         redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));
     }
     // All checks ok. Change password!
-    $hasher = new PasswordHash(8, false);
-    $new_pass = $hasher->HashPassword($_POST['password_form']);
+    $new_pass = password_hash($_POST['password_form'], PASSWORD_DEFAULT);
     Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
     Session::Messages($langPassChanged);
     redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));

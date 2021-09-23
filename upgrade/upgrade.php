@@ -1893,68 +1893,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
               FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) $tbl_options");
         }
 
-        // h5p
-        if (!DBHelper::tableExists('h5p_library')) {
-            Database::get()->query("CREATE TABLE h5p_library (
-                id INT(10) NOT NULL AUTO_INCREMENT,
-                machine_name VARCHAR(255) NOT NULL,
-                title VARCHAR(255) NOT NULL,
-                major_version INT(4) NOT NULL,
-                minor_version INT(4) NOT NULL,
-                patch_version INT(4) NOT NULL,
-                runnable INT(1) NOT NULL DEFAULT '0',
-                fullscreen INT(1) NOT NULL DEFAULT '0',
-                embed_types VARCHAR(255),
-                preloaded_js LONGTEXT,
-                preloaded_css LONGTEXT,
-                droplibrary_css LONGTEXT,
-                semantics LONGTEXT,
-                add_to LONGTEXT,
-                core_major INT(4),
-                core_minor INT(4),
-                metadata_settings LONGTEXT,
-                tutorial LONGTEXT,
-                example LONGTEXT,
-              PRIMARY KEY(id)) $tbl_options");
-        }
-
-        if (!DBHelper::tableExists('h5p_library_dependency')) {
-            Database::get()->query("CREATE TABLE h5p_library_dependency (
-                id INT(10) NOT NULL AUTO_INCREMENT,
-                library_id INT(10) NOT NULL,
-                required_library_id INT(10) NOT NULL,
-                dependency_type VARCHAR(255) NOT NULL,
-              PRIMARY KEY(id)) $tbl_options");
-        }
-
-        if (!DBHelper::tableExists('h5p_library_translation')) {
-            Database::get()->query("CREATE TABLE h5p_library_translation (
-                id INT(10) NOT NULL,
-                library_id INT(10) NOT NULL,
-                language_code VARCHAR(255) NOT NULL,
-                language_json TEXT NOT NULL,
-              PRIMARY KEY(id)) $tbl_options");
-        }
-
-        if (!DBHelper::tableExists('h5p_content')) {
-            Database::get()->query("CREATE TABLE h5p_content (
-                id INT(10) NOT NULL AUTO_INCREMENT,
-                title varchar(255),
-                main_library_id INT(10) NOT NULL,
-                params LONGTEXT,
-                course_id INT(11) NOT NULL,
-              PRIMARY KEY(id)) $tbl_options");
-        }
-
-        if (!DBHelper::tableExists('h5p_content_dependency')) {
-            Database::get()->query("CREATE TABLE h5p_content_dependency (
-                id INT(10) NOT NULL AUTO_INCREMENT,
-                content_id INT(10) NOT NULL,
-                library_id INT(10) NOT NULL,
-                dependency_type VARCHAR(10) NOT NULL,
-          PRIMARY KEY(id)) $tbl_options");
-        }
-
         // fix wrong entries in exercises answers regarding negative weight (if any)
         Database::get()->query("UPDATE exercise_answer SET weight=-ABS(weight) WHERE correct=0 AND weight>0");
 
@@ -2061,6 +1999,91 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 SET certified_users.user_id = user.id");
         }
     }
+
+    // upgrade queries for version 3.12
+    if (version_compare($oldversion, '3.12', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.12'));
+        Database::get()->query("ALTER TABLE user MODIFY `password` VARCHAR(255) NOT NULL DEFAULT 'empty'");
+
+        // h5p
+        if (!DBHelper::tableExists('h5p_library')) {
+            Database::get()->query("CREATE TABLE h5p_library (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                machine_name VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                major_version INT(4) NOT NULL,
+                minor_version INT(4) NOT NULL,
+                patch_version INT(4) NOT NULL,
+                runnable INT(1) NOT NULL DEFAULT '0',
+                fullscreen INT(1) NOT NULL DEFAULT '0',
+                embed_types VARCHAR(255),
+                preloaded_js LONGTEXT,
+                preloaded_css LONGTEXT,
+                droplibrary_css LONGTEXT,
+                semantics LONGTEXT,
+                add_to LONGTEXT,
+                core_major INT(4),
+                core_minor INT(4),
+                metadata_settings LONGTEXT,
+                tutorial LONGTEXT,
+                example LONGTEXT,
+              PRIMARY KEY(id)) $tbl_options");
+        } elseif (!DBHelper::fieldExists('h5p_library', 'example')) {
+            Database::get()->query("ALTER TABLE h5p_library
+                MODIFY preloaded_js LONGTEXT,
+                MODIFY preloaded_css LONGTEXT,
+                ADD droplibrary_css LONGTEXT,
+                ADD semantics LONGTEXT,
+                ADD add_to LONGTEXT,
+                ADD core_major INT(4),
+                ADD core_minor INT(4),
+                ADD metadata_settings LONGTEXT,
+                ADD tutorial LONGTEXT,
+                ADD example LONGTEXT");
+        }
+
+        if (!DBHelper::tableExists('h5p_library_dependency')) {
+            Database::get()->query("CREATE TABLE h5p_library_dependency (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                library_id INT(10) NOT NULL,
+                required_library_id INT(10) NOT NULL,
+                dependency_type VARCHAR(255) NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('h5p_library_translation')) {
+            Database::get()->query("CREATE TABLE h5p_library_translation (
+                id INT(10) NOT NULL,
+                library_id INT(10) NOT NULL,
+                language_code VARCHAR(255) NOT NULL,
+                language_json TEXT NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('h5p_content')) {
+            Database::get()->query("CREATE TABLE h5p_content (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                title varchar(255),
+                main_library_id INT(10) NOT NULL,
+                params LONGTEXT,
+                course_id INT(11) NOT NULL,
+              PRIMARY KEY(id)) $tbl_options");
+        } else {
+            Database::get()->query("ALTER TABLE h5p_content
+                MODIFY params LONGTEXT");
+        }
+
+        if (!DBHelper::tableExists('h5p_content_dependency')) {
+            Database::get()->query("CREATE TABLE h5p_content_dependency (
+                id INT(10) NOT NULL AUTO_INCREMENT,
+                content_id INT(10) NOT NULL,
+                library_id INT(10) NOT NULL,
+                dependency_type VARCHAR(10) NOT NULL,
+          PRIMARY KEY(id)) $tbl_options");
+        }
+
+    }
+
 
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
