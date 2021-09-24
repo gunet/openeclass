@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_admin = true;
@@ -106,7 +106,7 @@ if (!isset($_GET['action'])) {
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
-        
+
         list($names, $name, $ordering, $multiple, $searchable, $active) = prepareDataFromPost();
 
         if (empty($names)) {
@@ -178,7 +178,7 @@ draw($tool_content, 3, null, $head_content);
 
 function prepareDataFromPost() {
     global $session;
-    
+
     $names = array();
     foreach ($session->active_ui_languages as $key => $langcode) {
         $n = (isset($_POST['name-' . $langcode])) ? $_POST['name-' . $langcode] : null;
@@ -270,7 +270,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
         </div>
     </div>
     <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryActive'] . ":</label>
+        <label class='col-sm-3 control-label'>" . $GLOBALS['langChatActive'] . ":</label>
         <div class='col-sm-9'>
             <input type='checkbox' name='active' value='1' " . $check_active . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategoryActive2'] . "</small></span>

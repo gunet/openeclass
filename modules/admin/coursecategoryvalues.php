@@ -244,7 +244,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
 
     $html .= "
     <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryValueActive'] . ":</label>
+        <label class='col-sm-3 control-label'>" . $GLOBALS['langChatActive'] . ":</label>
         <div class='col-sm-9'>
             <input class='form-control' type='checkbox' name='active' value='1' " . $check_active . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategoryValueActive2'] . "</small></span>

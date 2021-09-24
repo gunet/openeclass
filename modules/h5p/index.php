@@ -94,7 +94,7 @@ if ($content) {
     $tool_content .= "<table class='table-default'>
         <thead>
             <tr class='list-header''>
-                <th class='text-left'>H5P</th>
+                <th class='text-left'>$langH5pInteractiveContent</th>               
                 <th class='text-center' style='width:109px;'>
                     <span class='fa fa-gears'></span>
                 </th>

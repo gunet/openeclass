@@ -26,7 +26,7 @@ require_once '../../include/baseTheme.php';
 $content_id = $_GET['id'];
 $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 $toolName = $langImport;
-$navigation[] = ['url' => $backUrl, 'name' => "H5P"];
+$navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
 $tool_content .= action_bar([[
     'title' => $langBack,

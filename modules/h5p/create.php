@@ -35,7 +35,7 @@ $tool_content .= action_bar(array(
 ), false);
 
 $toolName = $langCreate;
-$navigation[] = ['url' => $backUrl, 'name' => "H5P"];
+$navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
 // h5p variables
 $factory = new H5PFactory();
@@ -85,9 +85,7 @@ $tool_content .= "
                     <input name='h5paction' type='hidden' value='' />
                     <input name='id' type='hidden' value='" . $id . "' />
                 </div>
-
-                " . addActionButtons() . "
-
+                
                 <div class='h5p-editor-wrapper' id='h5p-editor-region'>
                     <div class='h5p-editor'>
                         <span class='loading-icon icon-no-margin'><i class='icon fa fa-circle-o-notch fa-spin fa-fw' title='$langLoading' aria-label='$langLoading'></i></span>

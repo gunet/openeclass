@@ -922,11 +922,11 @@ $langCheckOk = "Έχετε εγκαταστήσει όλα τα προαπαιτ
 
 
 /* * **********************************************************
- * conference
+ * chat
  * **************************************************************** */
 $langWash = "Καθάρισμα";
-$langWashSuccess = "Η κουβέντα καθάρισε με επιτυχία.";
-$langWashFrom = "Η κουβέντα καθάρισε από";
+$langWashSuccess = "Οι συνομιλίες διαγράφηκαν με επιτυχία.";
+$langWashFrom = "Οι συνομιλίες διαγράφηκαν από";
 $langSave = "Αποθήκευση";
 $langClearedBy = "καθαρισμός από";
 $langChatError = "Δεν είναι δυνατόν να ξεκινήσει η Ζωντανή Τηλεσυνεργασία";
@@ -935,16 +935,16 @@ $langButtonVideo = "Μετάδοση";
 $langButtonPresantation = "Μετάδοση";
 $langActivateConference = "Ενεργοποίηση τηλεσυνεργασίας";
 $langpresantation = "Σύνδεσμος παρουσίασης ιστοσελίδας";
-$langSaveChat = "Αποθήκευση κουβέντας";
-$langSaveMessage = "Η κουβέντα αποθηκεύθηκε στα Έγγραφα";
-$langSaveErrorMessage = "Η κουβέντα δεν μπόρεσε να αποθηκευθεί";
-$langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα 'Κουβέντα' !";
-$langChatToSpecUsers = "Στην κουβέντα θα συμμετέχουν οι παρακάτω χρήστες";
-$langChatDeleted ="Η κουβέντα διαγράφηκε";
-$langNoChatAvailable = "Δεν υπάρχουν διαθέσιμες \"Κουβεντούλες\"";
+$langSaveChat = "Αποθήκευση συνομιλίας";
+$langSaveMessage = "Η συνομιλία αποθηκεύθηκε στα Έγγραφα";
+$langSaveErrorMessage = "Η συνομιλία δεν μπόρεσε να αποθηκευθεί";
+$langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα!";
+$langChatToSpecUsers = "Στην συνομιλία θα συμμετέχουν οι παρακάτω χρήστες";
+$langChatDeleted ="Η συνομιλία διαγράφηκε";
+$langNoChatAvailable = "Δεν υπάρχουν συνομιλίες";
 $langChatActive = "Ενεργή";
 $langChatInactive = "Ανενεργή";
-$langChatTitleError = "Παρακαλώ συμπληρώστε τον τίτλο της Κουβεντούλας";
+$langChatTitleError = "Παρακαλώ συμπληρώστε τον τίτλο της συνομιλίας";
 $langUntitledChat = "Ελεύθερη κουβεντούλα $langsOfCourse";
 $langChatActivity = "Συνομιλία Δραστηριότητας ColMOOC";
 $langCreateAgent = "Δημιουργία Agent";
@@ -2538,7 +2538,7 @@ $langNoBlock = "Μη φραγή";
 $langRestrictedLPath = "Για την παρακολούθηση αυτής της Γραμμής Μάθησης καθώς και των επακόλουθων, θα πρέπει να έχει προηγηθεί η παρακολούθηση των ανωτέρων";
 $langBrowserCannotSeeFrames = "Ο browser σας δεν αναγνωρίζει frames.";
 $langChangeRaw = "Αλλαγή του ελάχιστου αρχικού σημείου για να περάσει αυτή η ενότητα (ποσοστό): ";
-$langChat = "Κουβεντούλα";
+$langChat = "Συνομιλία";
 $langConfirmYourChoice = "Παρακαλώ επιβεβαιώστε την επιλογή σας";
 $langCourseDescription = "Πληροφορίες";
 $langCourseDescriptionAsModule = "Χρήση Πληροφοριών $langOfCourse";
@@ -5735,7 +5735,6 @@ $langCourseCategoryMultiple = "Πολλαπλότητα";
 $langCourseCategoryMultiple2 = "Η κατηγορία μεταδεδομένων θα έχει πολλαπλές τιμές";
 $langCourseCategorySearchable = "Αναζητήσιμη";
 $langCourseCategorySearchable2 = "Η κατηγορία μεταδεδομένων θα συμμετέχει στην ειδική εργαλειοθήκη αναζήτησης";
-$langCourseCategoryActive = "Ενεργή";
 $langCourseCategoryActive2 = "Η κατηγορία μεταδεδομένων θα εμφανίζεται στους χρήστες";
 $langCourseCategoryOrdering = "Ταξινόμηση";
 $langCourseCategoryOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
@@ -5751,7 +5750,6 @@ $langEditCourseCategoryValueSuccess = "Η επεξεργασία πραγματ�
 $langCourseCategoryValue2 = "(π.χ. 1 - 30)";
 $langCourseCategoryValueOrdering = "Ταξινόμηση";
 $langCourseCategoryValueOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
-$langCourseCategoryValueActive = "Ενεργή";
 $langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδεδομένων θα εμφανίζεται στους χρήστες";
 $langInactiveCourseCategories = "Ανενεργές κατηγορίες";
 $langActiveCourseCategories = "Ενεργές κατηγορίες";
@@ -5907,7 +5905,7 @@ $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμε
 // h5p
 $langH5p = "Διαδραστικό περιεχόμενο";
 $langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε. Μπορείτε να επιστρέψετε στην κεντρική σελίδα και να επιλέγετε Δημιουργία.';
-$langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο H5P';
-$langH5pNoContent = 'Δεν υπάρχει περιεχόμενο H5P';
-$langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο H5P αποθηκεύθηκε με επιτυχία";
-$langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο H5P διαγράφτηκε με επιτυχία";
+$langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο τύπου H5P';
+$langH5pNoContent = 'Δεν υπάρχει περιεχόμενο τύπου H5P';
+$langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P αποθηκεύτηκε με επιτυχία";
+$langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P διαγράφτηκε με επιτυχία";
