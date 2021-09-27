@@ -70,6 +70,9 @@ if (isset($_GET['id'])) {
     }
 } else {
     $id = "";
+    if (!isset($_GET['library'])) {
+        redirect($backUrl);
+    }
     $library = $_GET['library'];
     $maincontentdata = ['params' => (object)[]]; // {&quot;params&quot;:{}}
 }
@@ -166,7 +169,7 @@ function getH5pIntegrationObject(): array {
     // Editor settings
     $editorajaxtoken = H5PCore::createToken(EditorAjax::EDITOR_AJAX_TOKEN);
     $settings['editor'] = [
-        'filesPath' => $urlServer . "courses/h5p", // TODO: check
+        'filesPath' => $urlServer . "courses/h5p/editor",
         'fileIcon' => [
             'path' => $urlServer . $jsH5pEditor . 'images/binary-file.png',
             'width' => 50,
@@ -308,19 +311,30 @@ function saveContent(stdClass $data): int {
     if (!file_exists($contentJsonPath)) {
         mkdir($contentJsonPath, 0775, true);
     }
-    $editorTmpPath = $webDir . "/courses/h5p/editor/";
     $contentTmpPath = $webDir . "/courses/h5p/content/" . $data->id . "/";
     if (isset($params->params->files)) {
         foreach ($params->params->files as $file) {
-            if (file_exists($contentTmpPath . $file->path)) {
-                $targetDir = dirname($contentJsonPath . "/" . $file->path);
-                if (!file_exists($targetDir)) {
-                    mkdir($targetDir, 0775, true);
+            handleUpload($contentTmpPath, $contentJsonPath, $file);
+        }
+    }
+    if (isset($params->params->image)) {
+        handleUpload($contentTmpPath, $contentJsonPath, $params->params->image);
+    }
+    if (isset($params->params->hotspots) && is_array($params->params->hotspots)) {
+        foreach ($params->params->hotspots as $hotspot) {
+            if (isset($hotspot->content) && is_array($hotspot->content)) {
+                foreach ($hotspot->content as $hcontent) {
+                    if (isset($hcontent->params)) {
+                        if (isset($hcontent->params->file)) {
+                            handleUpload($contentTmpPath, $contentJsonPath, $hcontent->params->file);
+                        }
+                        if (isset($hcontent->params->sources) && is_array($hcontent->params->sources)) {
+                            foreach ($hcontent->params->sources as $hsource) {
+                                handleUpload($contentTmpPath, $contentJsonPath, $hsource);
+                            }
+                        }
+                    }
                 }
-                rename($contentTmpPath . $file->path, $contentJsonPath . "/" . $file->path);
-            }
-            if (file_exists($editorTmpPath . $file->path)) {
-                unlink($editorTmpPath . $file->path);
             }
         }
     }
@@ -357,4 +371,14 @@ function saveContent(stdClass $data): int {
     Database::get()->query("UPDATE h5p_content SET title = ?s WHERE id = ?d AND course_id = ?d", $data->title, $data->id, $course_id);
 
     return $data->id;
+}
+
+function handleUpload($contentTmpPath, $contentJsonPath, $file) {
+    if (file_exists($contentTmpPath . $file->path)) {
+        $targetDir = dirname($contentJsonPath . "/" . $file->path);
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0775, true);
+        }
+        rename($contentTmpPath . $file->path, $contentJsonPath . "/" . $file->path);
+    }
 }
