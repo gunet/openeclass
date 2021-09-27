@@ -56,7 +56,6 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('editTitle'));
-        //$v->rule('numeric', array('editId'));
         $v->labels(array(
             'editTitle' => "$langTheField $langTitle"
         ));
@@ -67,12 +66,12 @@ if ($is_editor) {
                 updateCourseDescription(null, $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
             }
             Session::Messages($langCourseUnitAdded,"alert-success");
-            redirect_to_home_page("modules/course_description/index.php");
+            redirect_to_home_page("modules/course_description/index.php?course=$course_code");
         } else {
-            
+
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             $edit_id = isset($_POST['editId']) ? "&id=" . urlencode(getIndirectReference(getDirectReference($_POST['editId']))) : "";
-            redirect_to_home_page("modules/course_description/edit.php?course=$course_code$edit_id");          
+            redirect_to_home_page("modules/course_description/edit.php?course=$course_code$edit_id");
         }
     }
 }
@@ -112,7 +111,7 @@ if ($q && count($q) > 0) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=" . getIndirectReference($row->id),
                                 'icon' => 'fa-times',
                                 'class' => 'delete',
-                                'confirm' => $langConfirmDelete)                            
+                                'confirm' => $langConfirmDelete)
                         )
                 ) ."</div>";
         }
@@ -121,7 +120,7 @@ if ($q && count($q) > 0) {
               </div>
               <div class='panel-body'>"
                 .handleType($row->type)."<br><br>"
-               . standard_text_escape($row->comments) . 
+               . standard_text_escape($row->comments) .
               "</div>
             </div>";
         $i++;
@@ -169,7 +168,7 @@ function processActions() {
         CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::Messages($langResourceCourseUnitDeleted, "alert-success");
         redirect_to_home_page("modules/course_description/index.php?course=$course_code");
-    } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
+    } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval(getDirectReference($_REQUEST['vis']));
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
         $newvis = (intval($vis->visible) === 1) ? 0 : 1;
@@ -187,6 +186,14 @@ function processActions() {
     }
 }
 
+
+/**
+ * @brief update course description
+ * @param $cdId
+ * @param $title
+ * @param $comments
+ * @param $type
+ */
 function updateCourseDescription($cdId, $title, $comments, $type) {
     global $course_id, $course_code;
     $type = (isset($type)) ? intval($type) : null;
@@ -196,7 +203,7 @@ function updateCourseDescription($cdId, $title, $comments, $type) {
                 title = ?s,
                 comments = ?s,
                 type = ?d,
-                update_dt = NOW()
+                update_dt = " . DBHelper::timeAfter() . "
                 WHERE id = ?d", $title, $comments, $type, intval($cdId));
     } else {
         $res = Database::get()->querySingle("SELECT MAX(`order`) AS max FROM course_description WHERE course_id = ?d", $course_id);
@@ -208,7 +215,7 @@ function updateCourseDescription($cdId, $title, $comments, $type) {
                 comments = ?s,
                 type = ?d,
                 `order` = ?d,
-                update_dt = NOW()", $course_id, $title, purify($comments), $type, $maxorder);
+                update_dt = " . DBHelper::timeAfter() . "", $course_id, $title, purify($comments), $type, $maxorder);
     }
     CourseXMLElement::refreshCourse($course_id, $course_code);
 }
