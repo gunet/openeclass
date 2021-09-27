@@ -112,13 +112,13 @@ if (isset($_POST['welcomeScreen'])) {
         $dbPassForm = '';
     }
     $dbNameForm = 'eclass';
-    $dbMyAdmin = $emailForm = '';     
+    $dbMyAdmin = $emailForm = '';
     $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']) ? 'https://' : 'http://') .
             $_SERVER['SERVER_NAME'] .
             str_replace('/install/index.php', '/', $_SERVER['SCRIPT_NAME']);
     if (isset($_SERVER['SERVER_ADMIN'])) { // only for apache
         $emailForm = $_SERVER['SERVER_ADMIN'];
-    }    
+    }
     $nameForm = $langDefaultAdminName;
     $loginForm = 'admin';
     $passForm = genPass();
@@ -555,7 +555,7 @@ elseif (isset($_POST['install1'])) {
     <h3>$langCheckReq</h3>
     <ul class='list-unstyled'>
         <li>" . icon('fa-check') . " <b>Webserver</b> $langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>";
-    if (version_compare(PHP_VERSION, '7.2') >= 0) {
+    if (version_compare(PHP_VERSION, '7.4') >= 0) {
         $info_icon = icon('fa-check');
         $info_text = '';
     } else {
@@ -640,4 +640,3 @@ elseif (isset($_POST['install1'])) {
     </div>";
     draw($tool_content, array('no-menu' => true));
 }
-
