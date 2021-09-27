@@ -157,8 +157,10 @@ if ($appName) {
                 $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success om-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger om-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
             } elseif ($app->getName() == 'webconf') {
                 $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success webconf-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger webconf-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
+            } elseif ($app->getName() == 'h5p') { // h5p is enabled
+                $app_active = "<button type='button' class='btn btn-success' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>";
             } else {
-            $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
+                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
             }
         } else {
             $app_active = "<button type='button' class='btn btn-default' data-app='" . $app->getName() . "'  data-toggle='modal' data-target='#noSettings'> <i class='fa fa-warning'></i> </button>";

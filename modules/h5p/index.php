@@ -68,13 +68,6 @@ if ($is_editor) {
         $tool_content .= "</div><div class='btn-group'>";
     }
 
-    // Update
-    $tool_content .= "
-        <a class='btn btn-success' href='update.php?course=$course_code' data-placement='bottom' data-toggle='tooltip'  title='$langMaj'>
-            <span class='fa fa-refresh space-after-icon'></span>
-            <span class='hidden-xs'>$langMaj</span>
-        </a>";
-
     // Import
     $tool_content .= "
         <a class='btn btn-success' href='upload.php?course=$course_code' data-placement='bottom' data-toggle='tooltip'  title='$langImport'>
