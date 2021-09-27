@@ -52,6 +52,7 @@ if (isset($_REQUEST['id'])) {
 
 $toolName = $langCourseUnits;
 $pageName = ''; // delete $pageName set in doc_init.php
+
 $lang_editor = $language;
 load_js('tools.js');
 load_js('sortable/Sortable.min.js');
