@@ -3,7 +3,7 @@
 http://www.openeclass.org/
 
 **Warning**: This is the next major release, currently under development. The
-current stable release is in the 3.10 branch.
+current stable release is in the 3.11 branch.
 
 The Open eClass platform (formerly known as GUnet eClass) is a complete Course
 Management System, used to store and present educational materials. It is the
@@ -18,7 +18,7 @@ have contributed a great amount of work and ideas and we would like to express
 our gratitude to all of them for their support. A complete list of
 contributors can be found in the CREDITS.txt file.
 
-Installation of Open eClass requires a web server with support for PHP >= 7.2
+Installation of Open eClass requires a web server with support for PHP >= 7.3
 and a database server (MySQL or MariaDB). You can find detailed installation
 instructions as well as other manuals at the following address:
 
