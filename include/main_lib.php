@@ -1034,7 +1034,6 @@ function visible_module($module_id) {
 
 /**
  * @brief check if a module is disabled
- * @param type $module_id
  * @return boolean
  */
 function is_module_disable($module_id) {

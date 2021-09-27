@@ -237,11 +237,7 @@ function show_resources($unit_id) {
 
 /**
  * @brief display unit resources
- * @global type $tool_content
- * @global type $langUnknownResType
- * @global type $is_editor
  * @param type $info
- * @return type
  */
 function show_resource($info) {
     global $tool_content, $langUnknownResType, $is_editor;
@@ -256,7 +252,7 @@ function show_resource($info) {
         case 'text':
             $tool_content .= show_text($info->comments, $info->id, $info->visible);
             break;
-        case 'description':
+        case 'description': // deprecated module. only for compatibility !
             $tool_content .= show_description($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'lp':
@@ -303,6 +299,9 @@ function show_resource($info) {
         case 'chat':
             $tool_content .= show_chat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
+        case 'blog':
+            $tool_content .= show_blog($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            break;
         case 'tc':
             $tool_content .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
@@ -313,16 +312,6 @@ function show_resource($info) {
 
 /**
  * @brief display resource documents
- * @global type $is_editor
- * @global type $course_id
- * @global type $langWasDeleted
- * @global type $urlServer
- * @global type $id
- * @global type $course_code
- * @param type $title
- * @param type $comments
- * @param type $resource_id
- * @param type $file_id
  * @return string
  */
 function show_doc($title, $comments, $resource_id, $file_id) {
@@ -378,59 +367,44 @@ function show_doc($title, $comments, $resource_id, $file_id) {
 
 /**
  * @brief display resource text
- * @global string $tool_content
- * @param type $comments
- * @param type $resource_id
- * @param type $visibility
+ * @return string
  */
 function show_text($comments, $resource_id, $visibility) {
-    global $tool_content;
 
+    $content = '';
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
-    $tool_content .= "
+    $content .= "
         <tr$class_vis data-id='$resource_id'>
           <td colspan='2'>$comments</td>" .
             actions('text', $resource_id, $visibility) .
             "
         </tr>";
+
+    return $content;
 }
 
 /**
  * @brief display course description resource
- * @global string $tool_content
- * @param type $title
- * @param type $comments
- * @param type $id
- * @param type $res_id
- * @param type $visibility
+ * @return string
  */
 function show_description($title, $comments, $id, $res_id, $visibility) {
-    global $tool_content;
 
+    $content = '';
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
-    $tool_content .= "
+    $content .= "
         <tr>
           <td colspan='2'>
             <div class='title'>" . q($title) . "</div>
             <div class='content'>$comments</div>
           </td>" . actions('description', $id, $visibility, $res_id) . "
         </tr>";
+
+    return $content;
 }
 
 /**
  * @brief display resource learning path
- * @global type $id
- * @global type $urlAppend
- * @global type $course_id
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_code
- * @global type $langInactiveModule
- * @param type $title
- * @param type $comments
- * @param type $resource_id
- * @param type $lp_id
  * @return string
  */
 function show_lp($title, $comments, $resource_id, $lp_id) {
@@ -1236,6 +1210,47 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
           <td width='1'>$imagelink</td>
           <td>$chatlink $comment_box</td>" .
         actions('chat', $resource_id, $visibility) . '
+        </tr>';
+}
+
+/**
+ * @brief display chat resources
+ * @param $title
+ * @param $comments
+ * @param $resource_id
+ * @param $blog_id
+ * @param $visibility
+ */
+function show_blog($title, $comments, $resource_id, $blog_id, $visibility) {
+
+    global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id;
+
+    $comment_box = '';
+    $title = q($title);
+    $blog = Database::get()->querySingle("SELECT * FROM blog_post WHERE course_id = ?d AND id = ?d", $course_id, $blog_id);
+    if (!$blog) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-times');
+            $bloglink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+        }
+    } else {
+        //$link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $link = "<a href='${urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
+        $bloglink = $link . "$title</a>";
+        $imagelink = $link . "</a>" .icon('fa-columns') . "";
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br />$comments";
+    }
+
+    return "
+        <tr data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td>$bloglink $comment_box</td>" .
+        actions('blog', $resource_id, $visibility) . '
         </tr>';
 }
 

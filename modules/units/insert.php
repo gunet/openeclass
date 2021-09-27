@@ -24,8 +24,6 @@
  * @file insert.php
  */
 
-
-
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -86,6 +84,8 @@ if (isset($_POST['submit_doc'])) {
     insert_ebook($id);
 } elseif (isset($_POST['submit_chat'])) {
     insert_chat($id);
+} elseif (isset($_POST['submit_blog'])) {
+    insert_blog($id);
 } elseif (isset($_POST['submit_tc'])) {
     insert_tc($id);
 }
@@ -139,6 +139,10 @@ switch ($_GET['type']) {
         include "insert_chat.php";
         list_chats();
         break;
+    case 'blog': $pageName = "$langAdd $langInsertBlog";
+        include "insert_blog.php";
+        list_blogs();
+        break;
     case 'tc': $pageName = "$langAdd $langInsertTcMeeting";
         include "insert_tc.php";
         list_tcs();
@@ -151,14 +155,7 @@ draw($tool_content, 2, null, $head_content);
 
 /**
  * @brief insert docs in database
- * @global type $webDir
- * @global type $course_id
- * @global type $course_code
- * @global string $group_sql
- * @global string $subsystem
- * @global string $subsystem_id
- * @global string $basedir
- * @param type $id
+ * @param integer $id
  */
 function insert_docs($id) {
     global $webDir, $course_id, $course_code, $group_sql, $subsystem, $subsystem_id, $basedir;
@@ -221,10 +218,7 @@ function insert_docs($id) {
 
 /**
  * @brief insert text in database
- * @global type $comments
- * @global type $course_code
- * @global type $course_id
- * @param type $id
+ * @param integer $id
  */
 function insert_text($id) {
     global $comments, $course_code, $course_id;
@@ -245,9 +239,7 @@ function insert_text($id) {
 
 /**
  * @brief insert lp in database
- * @global type $course_code
- * @global type $course_id
- * @param type $id
+ * @param integer $id
  */
 function insert_lp($id) {
     global $course_code, $course_id;
@@ -273,9 +265,7 @@ function insert_lp($id) {
 
 /**
  * @brief insert video in database
- * @global type $course_code
- * @global type $course_id
- * @param type $id
+ * @param integer $id
  */
 function insert_video($id) {
     global $course_code, $course_id;
@@ -313,9 +303,7 @@ function insert_video($id) {
 
 /**
  * @brief insert work (assignment) in database
- * @global type $course_code
- * @global type $course_id
- * @param type $id
+ * @param integer $id
  */
 function insert_work($id) {
     global $course_code, $course_id;
@@ -352,9 +340,7 @@ function insert_work($id) {
 
 /**
  * @brief insert exercise in database
- * @global type $course_code
- * @global type $course_id
- * @param type $id
+ * @param integer $id
  */
 function insert_exercise($id) {
     global $course_code, $course_id;
@@ -385,9 +371,7 @@ function insert_exercise($id) {
 
 /**
  * @brief insert forum in database
- * @global type $course_code
- * @global type $course_id
- * @param type $id
+ * @param integer $id
  */
 function insert_forum($id) {
     global $course_code, $course_id;
@@ -427,9 +411,7 @@ function insert_forum($id) {
 
 /**
  * @brief insert poll in database
- * @global type $course_id
- * @global type $course_code
- * @param type $id
+ * @param integer $id
  */
 function insert_poll($id) {
     global $course_id, $course_code;
@@ -453,9 +435,7 @@ function insert_poll($id) {
 
 /**
  * @brief insert wiki in database
- * @global type $course_code
- * @global type $course_id
- * @param type $id
+ * @param integer $id
  */
 function insert_wiki($id) {
     global $course_code, $course_id;
@@ -481,9 +461,7 @@ function insert_wiki($id) {
 
 /**
  * @brief insert link in database
- * @global type $course_id
- * @global type $course_code
- * @param type $id
+ * @param integer $id
  */
 function insert_link($id) {
     global $course_id, $course_code;
@@ -521,9 +499,7 @@ function insert_link($id) {
 
 /**
  * @brief insert ebook in database
- * @global type $course_id
- * @global type $course_code
- * @param type $id
+ * @param integer $id
  */
 function insert_ebook($id) {
     global $course_id, $course_code;
@@ -550,6 +526,7 @@ function insert_ebook($id) {
 
 /**
  * @brief insert chat resource in course units resources
+ * @param integer $id
  */
 function insert_chat($id) {
 
@@ -575,8 +552,34 @@ function insert_chat($id) {
 
 
 /**
- * @param $id
+ * @brief insert blog resource in course units resources
+ * @param integer $id
+ */
+function insert_blog($id) {
+
+    global $course_code, $course_id;
+    if(isset($_POST['blog'])){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['blog'] as $blog_id) {
+            $order++;
+            $blog = Database::get()->querySingle("SELECT * FROM blog_post WHERE course_id = ?d AND id = ?d", $course_id, $blog_id);
+            $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='blog', title = ?s, comments = ?s,
+                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                $id, $blog->title, $blog->content, $order, $blog->id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+    }
+    header('Location: index.php?course=' . $course_code . '&id=' . $id);
+    exit;
+
+}
+
+/**
  * @brief insert tc resource in course units resources
+ * @param integer $id
  */
 function insert_tc($id) {
     global $course_code, $course_id;
@@ -605,9 +608,6 @@ function insert_tc($id) {
 
 /**
  * @brief insert common docs
- * @global type $course_id
- * @global type $course_code
- * @global string $group_sql
  * @param type $file
  * @param type $target_dir
  */

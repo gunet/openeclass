@@ -4551,7 +4551,8 @@ $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
 $langInsertPoll = "ερωτηματολογίου";
 $langInsertTcMeeting = "τηλεσυνεργασίας";
-$langInsertChat = "κουβεντούλας";
+$langInsertChat = "συνομιλίας";
+$langInsertBlog = "ιστολογίου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 $langAddToCourseHome = "Εμφάνιση στην κεντρική σελίδα του $langsOfCourse";
@@ -5163,7 +5164,7 @@ $langBlogPosts = "Αναρτήσεις ιστολογίου";
 $langBlogPopular = "Δημοφιλείς αναρτήσεις";
 $langBlogPostDelSucc = "Η διαγραφή της ανάρτησης ήταν επιτυχής";
 $langBlogPostDelFail = "Η διαγραφή της ανάρτησης απέτυχε";
-$langBlogPostNotFound = "Η ανάρτηση δεν ήταν εφικτό να βρεθεί";
+$langBlogPostNotFound = "Η ανάρτηση δεν βρέθηκε";
 $langBlogAddPost = "Προσθήκη ανάρτησης";
 $langBlogEmpty = "Δεν υπάρχουν αναρτήσεις ιστολογίου";
 $langBlogNewerPosts = "Νεότερες αναρτήσεις";
@@ -5175,7 +5176,7 @@ $langBlogPostTitle = "Τίτλος Ανάρτησης";
 $langBlogPost = "Ανάρτηση Ιστολογίου";
 $langModifBlogPost = "Αλλαγή της ανάρτησης";
 $langEmptyBlogPostTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανάρτησης";
-$langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύθηκε με επιτυχία";
+$langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύτηκε με επιτυχία";
 $langBlogPostSaveFail = "Υπήρξε πρόβλημα κατά την αποθήκευση της ανάρτησης";
 $langBlogPostHistory = "Ιστορικό αναρτήσεων";
 $langBlogPostNotAllowedCreate = "Δεν έχετε δικαίωμα δημιουργίας ανάρτησης";
@@ -5656,7 +5657,7 @@ $langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνε
 <p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
 $langUnplagShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Unicheck (πρώην Unplag). Δείτε περισσότερες πληροφορίες στο <a href=\"https://unicheck.com\">https://unicheck.com</a>";
 $langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής.";
-$langTurnitinShortDescription = "Σύνδεση με υπηρεσία σδτστστ (plagiarism).
+$langTurnitinShortDescription = "Σύνδεση με υπηρεσία λογοκλοπής (plagiarism).
 Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Turnitin.
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://turnitin.com\">https://turnitin.com</a>";
 $langLimesurveyShortDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας (survey).
@@ -5664,6 +5665,8 @@ $langLimesurveyShortDescription = "Σύνδεση με υπηρεσία στατ
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://www.limesurvey.org\">https://www.limesurvey.org</a>";
 $langLimesurveyLongDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας.";
 $langColmoocDescription = "Περιγραφή του ColMOOC";
+$langH5PShortDescription = "Ενημέρωση του υποσυστήματος H5P";
+$langH5PLongDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
@@ -5904,7 +5907,7 @@ $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμε
 
 // h5p
 $langH5p = "Διαδραστικό περιεχόμενο";
-$langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε. Μπορείτε να επιστρέψετε στην κεντρική σελίδα και να επιλέγετε Δημιουργία.';
+$langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε!';
 $langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο τύπου H5P';
 $langH5pNoContent = 'Δεν υπάρχει περιεχόμενο τύπου H5P';
 $langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P αποθηκεύτηκε με επιτυχία";
