@@ -5,14 +5,14 @@
     @if ($user_requests)
         <div class='table-responsive'>
             <table id='requests_table' class='table-default'>
-                {!! table_header() !!}        
+                {!! table_header() !!}
                 <tbody>
                 @foreach ($user_requests as $user_request)
                     <tr>
                         <td>{{ $user_request->givenname }} {{ $user_request->surname }}</td>
                         <td>{{ $user_request->username }}</td>
                         <td>{!! $tree->getFullPath($user_request->faculty_id) !!}</td>
-                        <td class='text-center'>
+                        <td data-sort='{{ date("Y-m-d H:i", strtotime($req->date_open)) }}'>
                             <small>{{ nice_format(date('Y-m-d', strtotime($user_request->date_open))) }}</small>
                         </td>
                         <td class='option_btn_cell'>
@@ -57,11 +57,11 @@
                                 array('title' => trans('langElaboration'),
                                       'icon' => 'fa-edit',
                                       'url' => "newuseradmin.php?id=$user_request->id")
-                            )) !!}                       
+                            )) !!}
                         @endif
                         </td>
-                    </tr>            
-                @endforeach               
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>
