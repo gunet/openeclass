@@ -1,11 +1,58 @@
 <?php
+/*
+ * ========================================================================
+ * Open eClass 3.12 - E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2021  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ *
+ * For a full list of contributors, see "credits.txt".
+ */
 
-require_once 'test.php';
+$require_current_course = true;
+require_once '../../include/baseTheme.php';
 
-global $webDir;
+if (showContent($_GET['id'])) {
+    redirect($urlAppend . 'modules/h5p/show.php?course=' . $course_code . '&id=' . intval($_GET['id']));
+}
 
-$content_id = $_GET['id'];
+function showContent($contentId): bool {
+    global $course_code, $webDir;
 
-if (show_content($content_id)) {
-    header("location: show.php?id=" . urlencode($content_id));
+    $content_dir = $webDir . "/courses/" . $course_code . "/h5p/content/" . $contentId;
+    $workspace_dir = $content_dir . "/workspace";
+    if (file_exists($workspace_dir)) {
+        return true;
+    } else {
+        $h5p = scandir($content_dir, 1);
+        $sentence_we_need = '.h5p';
+        foreach ($h5p as $h) {
+            if (strpos($h, $sentence_we_need)) {
+                $h5p = $h;
+            }
+        }
+        mkdir($workspace_dir);
+        $content = $content_dir . "/" . $h5p;
+
+        $zip = new ZipArchive;
+        $res = $zip->open($content);
+        if ($res) {
+            $zip->extractTo($workspace_dir);
+            if ($zip->close()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }

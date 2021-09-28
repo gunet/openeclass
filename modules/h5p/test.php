@@ -48,34 +48,3 @@ function upload_content() { // anebasma // na elen3w to database & na balw to us
         return false;
     }
 }
-
-function show_content($content_id) {
-    global $course_code, $webDir;
-
-    $content_dir = $webDir . "/courses/" . $course_code . "/h5p/content/" . $content_id;
-    $workspace_dir = $content_dir . "/workspace";
-    if (file_exists($workspace_dir)) {
-        return true;
-    } else {
-        $h5p = scandir($content_dir, 1);
-        $sentence_we_need = '.h5p';
-        foreach ($h5p as $h) {
-            if (strpos($h, $sentence_we_need)) {
-                $h5p = $h;
-            }
-        }
-        mkdir($workspace_dir);
-        $content = $content_dir . "/" . $h5p;
-
-        $zip = new ZipArchive;
-        $res = $zip->open($content);
-        if ($res) {
-            $zip->extractTo($workspace_dir);
-            if ($zip->close()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-}
