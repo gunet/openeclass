@@ -31,14 +31,35 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
+$close = isset($_GET['close']) ? $_GET['close'] : (isset($_POST['close']) ? $_POST['close'] : '');
+$id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
+$show = isset($_GET['show']) ? $_GET['show'] : (isset($_POST['show']) ? $_POST['show'] : '');
+
+$columns = 'null, null, null, null, { orderable: false }';
+
+// Deal with navigation
+switch ($show) {
+    case "closed":
+        $toolName = $langReqHaveClosed;
+        $pagination_link = '&amp;show=closed';
+        $columns = 'null, null, null, null, null, { orderable: false }';
+        break;
+    case "rejected":
+        $toolName = $langReqHaveBlocked;
+        $columns = 'null, null, null, null, null, { orderable: false }';
+        break;
+}
+
 load_js('datatables');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#requests_table').DataTable ({                                
+            $('#requests_table').DataTable ({       
+                'columns': [ $columns ],                         
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
+                'order' : [[4, 'desc']],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -60,17 +81,6 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
-$head_content .= '
-<script type="text/javascript">
-function confirmation() {
-   if (confirm("' . $langCloseConf . '")) {
-                return true;
-   } else {
-          return false;
-  }
-}
-</script>';
-
 $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
     $list_status = 5;
@@ -88,14 +98,9 @@ if (isset($_GET['type']) and $_GET['type'] == 'user') {
 }
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-// Main body
-$close = isset($_GET['close']) ? $_GET['close'] : (isset($_POST['close']) ? $_POST['close'] : '');
-$id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
-$show = isset($_GET['show']) ? $_GET['show'] : (isset($_POST['show']) ? $_POST['show'] : '');
-
 // id validation
 if ($id > 0) {
-    $req = Database::get()->querySingle("SELECT faculty_id FROM user_request WHERE id = ?d", $id);    
+    $req = Database::get()->querySingle("SELECT faculty_id FROM user_request WHERE id = ?d", $id);
     if ($req->faculty_id > 0) {
         validateNode($req->faculty_id, isDepartmentAdmin());
     }
@@ -106,17 +111,6 @@ $depqryadd = '';
 if (isDepartmentAdmin()) {
     $deps = $user->getDepartmentIds($uid);
     $depqryadd = ' AND faculty_id IN (' . implode(', ', $deps) . ')';
-}
-
-// Deal with navigation
-switch ($show) {
-    case "closed":
-        $toolName = $langReqHaveClosed;
-        $pagination_link = '&amp;show=closed';
-        break;
-    case "rejected":        
-        $toolName = $langReqHaveBlocked;
-        break;
 }
 
 // Display Actions Toolbar
@@ -135,7 +129,7 @@ $tool_content .= "
             array('title' => $langReqHaveBlocked,
                 'url' => "$_SERVER[SCRIPT_NAME]?show=rejected$reqtype",
                 'icon' => 'fa-ban',
-                'level' => 'primary'),            
+                'level' => 'primary'),
             array('title' => $langBack,
                 'url' => "$basetoolurl",
                 'icon' => 'fa-reply',
@@ -147,44 +141,42 @@ $tool_content .= "
 // display closed requests
 // ----------------------------------
 if (!empty($show) and $show == 'closed') {
-    if (!empty($id) and $id > 0) {        
+    if (!empty($id) and $id > 0) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        $tool_content .= "<div class='alert alert-success'>$langReintroductionApplication</div>";     
+        $tool_content .= "<div class='alert alert-success'>$langReintroductionApplication</div>";
     } else {
-        $count_req = count(Database::get()->queryArray("SELECT * FROM user_request WHERE (state = 2 AND status = ?d)", $list_status));
-
         $q = "SELECT id, givenname, surname, username, email, faculty_id,
                              phone, am, date_open, date_closed, comment
                           FROM user_request
-                          WHERE (state = 2 AND status = $list_status)";
-
-        $q .= "ORDER BY date_open DESC";
+                          WHERE (state = 2 AND status = $list_status) ORDER BY date_closed DESC";
 
         $sql = Database::get()->queryArray($q);
         $tool_content .= "<div class='table-responsive'><table id = 'requests_table' class='table-default'>";
-        $tool_content .= table_header(1, $langDateClosed_small);        
+        $tool_content .= table_header(1);
         foreach ($sql as $req) {
+            $sort_date_open = date("Y-m-d H:i", strtotime($req->date_open));
+            $sort_date_closed = date("Y-m-d H:i", strtotime($req->date_closed));
             $tool_content .= "<tr>";
             $tool_content .= '<td>' . q($req->givenname) . "&nbsp;" . q($req->surname) . "";
             $tool_content .= '<td>' . q($req->username) . '</td>';
             $tool_content .= '<td>' . $tree->getFullPath($req->faculty_id) . '</td>';
-            $tool_content .= "<td align='center'>
+            $tool_content .= "<td class='text-center' data-sort='$sort_date_open'>
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
-            $tool_content .= "<td align='center'>
+            $tool_content .= "<td class='text-center' data-sort='$sort_date_closed'>
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
-                                array('title' => $langRestore, 
+                                array('title' => $langRestore,
                                       'url' => "$_SERVER[SCRIPT_NAME]?id=$req->id&amp;show=closed$reqtype",
                                       'icon' => 'fa-retweet')));
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</table></div>";
     }
-    
+
 // -----------------------------------
-// display rejected requests 
+// display rejected requests
 // ----------------------------------
 } elseif (!empty($show) && ($show == 'rejected')) {
     if (!empty($id) && ($id > 0)) {
@@ -193,20 +185,22 @@ if (!empty($show) and $show == 'closed') {
         $tool_content .= "<div class='alert alert-success'>$langReintroductionApplication</div>";
     } else {
         $tool_content .= "<div class='table-responsive'><table id = 'requests_table' class='table-default'>";
-        $tool_content .= table_header(1, $langDateReject_small);
+        $tool_content .= table_header(2);
         $sql = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_open DESC");
+                                        WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_closed DESC");
         $tool_content .= "<tbody>";
         foreach ($sql as $req) {
+            $sort_date_open = date("Y-m-d H:i", strtotime($req->date_open));
+            $sort_date_closed = date("Y-m-d H:i", strtotime($req->date_closed));
             $tool_content .= "<tr>";
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
             $tool_content .= "<td>" . q($req->username) . "&nbsp;</td>";
             $tool_content .= "<td>" . $tree->getFullPath($req->faculty_id) . "</td>";
-            $tool_content .= "<td align='center'>
+            $tool_content .= "<td class='text-center' data-sort='$sort_date_open'>
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
-            $tool_content .= "<td align='center'>
+            $tool_content .= "<td class='text-center' data-sort='$sort_date_closed'>
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
@@ -294,31 +288,31 @@ if (!empty($show) and $show == 'closed') {
                 $d = Database::get()->querySingle("SELECT comment, givenname, surname, email, status FROM user_request WHERE id = ?d", $id);
                 $warning = ($d->status == 5) ? $langWarnReject : $langGoingRejectRequest;
                 $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-			<div class='alert alert-warning'>$warning</div>
-			<table class='table-default'>
-			<tr><th class='left'>$langName</th>
-			<td>" . q($d->givenname) . "</td></tr>
-			<tr><th class='left'>$langSurname</th>
-			<td>" . q($d->surname) . "</td></tr>
-			<tr><th class='left'>$langEmail</th>
-			<td>" . q($d->email) . "</td></tr>
-			<tr><th class='left'>$langComments</th>
-			<td>
-			<input type='hidden' name='id' value='" . $id . "'>
-			<input type='hidden' name='close' value='2'>
-			<input type='hidden' name='prof_givenname' value='" . q($d->givenname) . "'>
-			<input type='hidden' name='prof_surname' value='" . q($d->surname) . "'>
-			<textarea class='auth_input' name='comment' rows='5' cols='60'>" . q($d->comment) . "</textarea>
-			</td></tr>
-			<tr><th class='left'>$langRequestSendMessage</th>
-			<td>&nbsp;<input type='text' class='auth_input' name='prof_email' value='" . q($d->email) . "'>
-			<input type='checkbox' name='sendmail' value='1' checked='yes'> <small>($langGroupValidate)</small>
-			</td></tr>
-			<tr><th class='left'>&nbsp;</th>
-			<td><input class='btn btn-primary' type='submit' name='submit' value='" . q($langRejectRequest) . "'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
-			</tr></table>
-            ". generate_csrf_token_form_field() ."
-			</form>";
+                <div class='alert alert-warning'>$warning</div>
+                <table class='table-default'>
+                <tr><th class='left'>$langName</th>
+                <td>" . q($d->givenname) . "</td></tr>
+                <tr><th class='left'>$langSurname</th>
+                <td>" . q($d->surname) . "</td></tr>
+                <tr><th class='left'>$langEmail</th>
+                <td>" . q($d->email) . "</td></tr>
+                <tr><th class='left'>$langComments</th>
+                <td>
+                <input type='hidden' name='id' value='" . $id . "'>
+                <input type='hidden' name='close' value='2'>
+                <input type='hidden' name='prof_givenname' value='" . q($d->givenname) . "'>
+                <input type='hidden' name='prof_surname' value='" . q($d->surname) . "'>
+                <textarea class='auth_input' name='comment' rows='5' cols='60'>" . q($d->comment) . "</textarea>
+                </td></tr>
+                <tr><th class='left'>$langRequestSendMessage</th>
+                <td>&nbsp;<input type='text' class='auth_input' name='prof_email' value='" . q($d->email) . "'>
+                <input type='checkbox' name='sendmail' value='1' checked='yes'> <small>($langGroupValidate)</small>
+                </td></tr>
+                <tr><th class='left'>&nbsp;</th>
+                <td><input class='btn btn-primary' type='submit' name='submit' value='" . q($langRejectRequest) . "'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
+                </tr></table>
+                ". generate_csrf_token_form_field() ."
+                </form>";
             }
             break;
         default:
@@ -327,26 +321,26 @@ if (!empty($show) and $show == 'closed') {
 }
 
 // -----------------------------------
-// display all the requests
+// display all requests
 // -----------------------------------
 else {
-    // show username as well (useful)
     $sql = Database::get()->queryArray("SELECT id, givenname, surname, username, faculty_id, date_open, comment, password FROM user_request
-                                WHERE (state = 1 AND status = $list_status $depqryadd)");
+                                WHERE (state = 1 AND status = $list_status $depqryadd) ORDER BY date_open DESC");
     if (count($sql) > 0) {
         $tool_content .= "<div class='table-responsive'><table id='requests_table' class='table-default'>";
-        $tool_content .= table_header();        
+        $tool_content .= table_header();
         $tool_content .= "<tbody>";
-        foreach ($sql as $req) {                        
+        foreach ($sql as $req) {
+            $sort_date = date("Y-m-d H:i", strtotime($req->date_open));
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
             $tool_content .= "<td>" . q($req->username) . "</td>";
             $tool_content .= "<td>" . $tree->getFullPath($req->faculty_id) . "</td>";
-            $tool_content .= "<td class='text-center'>
+            $tool_content .= "<td data-sort='$sort_date'>
                                 <small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
             $tool_content .= "<td class='option_btn_cell'>";
             switch ($req->password) {
                 case 'pop3':
-                    $link = "../auth/ldapnewprofadmin.php?id=$req->id&amp;auth=2";                                                  
+                    $link = "../auth/ldapnewprofadmin.php?id=$req->id&amp;auth=2";
                     $authmethod = "($langViaPop)";
                     break;
                 case 'imap':
@@ -379,7 +373,7 @@ else {
                       'icon' => 'fa-edit',
                       'url' => $link)
             ));
-            $tool_content .= "</td></tr>";            
+            $tool_content .= "</td></tr>";
         }
         $tool_content .= "</tbody>";
         $tool_content .= "</table>";
@@ -393,41 +387,27 @@ draw($tool_content, 3, null, $head_content);
 
 /**
  * @brief function to display table header
- * @global type $langName
- * @global type $langSurname
- * @global type $langFaculty
- * @global type $langDate
- * @global type $langActions
- * @global type $langUsername
- * @global type $langDateRequest_small
- * @param type $addon
- * @param type $message
  * @return string
  */
-function table_header($addon = FALSE, $message = FALSE) {
+function table_header($addon = FALSE) {
 
-    global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langUsername;
-    global $langDateRequest_small;
+    global $langSurnameName, $langFaculty, $langUsername, $langDateRequest, $langDateClosed, $langDateReject;
 
-    $string = '<thead>';
-    if ($addon) {
-        $rowspan = 2;
-        $datestring = "<th colspan='2'>$langDate</th>
-		<th scope='col' rowspan='$rowspan'><div align='center'>$langActions</div></th>
-		</tr><tr class='list-header'>
-		<th>$langDateRequest_small</th>
-		<th>$message</th>";
-    } else {
-        $rowspan = 1;
-        $datestring = "<th scope='col'><div align='center'>$langDate<br />$langDateRequest_small</div></th>
-		<th scope='col'><div align='center'>$langActions</div></th>";
+    $string = "<thead>";
+    $datestring = '';
+    if ($addon == 1) {
+        $datestring = "<th class='text-center'>$langDateClosed</th>";
+    } else if ($addon == 2) {
+        $datestring = "<th class='text-center'>$langDateReject</th>";
     }
 
     $string .= "<tr class='list-header'>
-	<th scope='col' rowspan='$rowspan'><div align='left'>&nbsp;&nbsp;$langName $langSurname</div></th>
-	<th scope='col' rowspan='$rowspan'><div align='left'>$langUsername</div></th>
-	<th scope='col' rowspan='$rowspan'><div align='center'>$langFaculty</div></th>";
+                    <th scope='col'><div class='text-center'>$langSurnameName</div></th>
+                    <th scope='col'><div class='text-center'>$langUsername</div></th>
+                    <th scope='col'><div class='text-center'>$langFaculty</div></th>
+                    <th class='text-center'>$langDateRequest</th>";
     $string .= $datestring;
+    $string .= "<th scope='col'>" . icon('fa-gears') . "</th>";
     $string .= "</tr></thead>";
 
     return $string;
