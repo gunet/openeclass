@@ -379,6 +379,6 @@ function handleUpload($contentTmpPath, $contentJsonPath, $file) {
         if (!file_exists($targetDir)) {
             mkdir($targetDir, 0775, true);
         }
-        rename($contentTmpPath . $file->path, $contentJsonPath . "/" . $file->path);
+        copy($contentTmpPath . $file->path, $contentJsonPath . "/" . $file->path);
     }
 }

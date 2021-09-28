@@ -79,13 +79,3 @@ function show_content($content_id) {
         }
     }
 }
-
-function delete_content($content_id) {
-    global $course_id, $course_code, $webDir;
-    $content_dir = $webDir . "/courses/" . $course_code . "/h5p/content/" . $content_id;
-    H5PCore::deleteFileTree($content_dir);
-    Database::get()->query("DELETE FROM h5p_content WHERE course_id = ?d AND id = ?d ", $course_id, $content_id);
-    Database::get()->query("DELETE FROM h5p_content_dependency WHERE content_id = ?d ", $content_id);
-    $content_dir_mod = $webDir . "/courses/h5p/content/" . $content_id;
-    return H5PCore::deleteFileTree($content_dir_mod);
-}
