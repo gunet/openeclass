@@ -20,9 +20,35 @@
  */
 
 $require_login = true;
+$require_current_course = true;
+require_once '../../include/baseTheme.php';
 
-require_once 'test.php';
-
-delete_content($_GET['id']);
+deleteContent($_GET['id']);
 Session::Messages($langH5pDeleteSuccess, 'alert-success');
 redirect($urlAppend . 'modules/h5p/?course=' . $course_code);
+
+function deleteContent($contentId): bool {
+    global $course_id, $course_code, $webDir;
+
+    $editorTmpDir = $webDir . "/courses/h5p/editor/";
+    $contentDir = $webDir . "/courses/" . $course_code . "/h5p/content/" . $contentId;
+    $filesDir = $contentDir . "/workspace/content";
+    $contentDirMod = $webDir . "/courses/h5p/content/" . $contentId;
+
+    foreach (scandir($filesDir) as $didx => $dir) {
+        if (!in_array($dir,array(".", "..")) && is_dir($filesDir . "/" . $dir)) {
+            foreach (scandir($filesDir . "/" . $dir) as $fidx => $file) {
+                if (!in_array($file,array(".", "..")) && is_file($filesDir . "/" . $dir . "/" . $file)) {
+                    if (file_exists($editorTmpDir . $dir . "/" . $file)) {
+                        unlink($editorTmpDir . $dir . "/" . $file);
+                    }
+                }
+            }
+        }
+    }
+
+    H5PCore::deleteFileTree($contentDir);
+    Database::get()->query("DELETE FROM h5p_content WHERE course_id = ?d AND id = ?d ", $course_id, $contentId);
+    Database::get()->query("DELETE FROM h5p_content_dependency WHERE content_id = ?d ", $contentId);
+    return H5PCore::deleteFileTree($contentDirMod);
+}
