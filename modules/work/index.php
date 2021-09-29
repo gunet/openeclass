@@ -4387,7 +4387,7 @@ function assignment_details($id, $row, $x =false) {
     global $tool_content, $head_content, $is_editor, $course_code, $m, $langDaysLeft, $course_id, $uid,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
-           $langGradeScale, $langGradeRubric, $langRubricCriteria, $langDetail, $urlServer,
+           $langGradeScale, $langGradeRubric, $langCriteria, $langDetail, $urlServer,
            $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine,
            $langReviewStart, $langReviewEnd, $langGradeReviews, $langImportGrades, $langGroupWorkDeadline_of_Submission;
 
@@ -4617,7 +4617,7 @@ function assignment_details($id, $row, $x =false) {
                     <table class='table-default'>
                         <thead>
                             <th>$langDetail</th>
-                            <th>$langRubricCriteria</th>
+                            <th>$langCriteria</th>
                         </thead>
                         <tr>
                             <td><h5>$rubric_name</h5><h6>$rubric_desc</h6></td>
