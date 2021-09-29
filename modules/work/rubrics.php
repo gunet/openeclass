@@ -25,7 +25,7 @@ $require_editor = true;
 $require_help = true;
 $helpTopic = 'assignments';
 $helpSubTopic = 'rubric';
-include '../../include/baseTheme.php'; 
+include '../../include/baseTheme.php';
 
 $toolName = $langGradeRubrics;
 $pageName = $langGradeRubrics;
@@ -61,7 +61,7 @@ if (isset($_POST['submitRubric'])) {
                 $criteria[$crit]['crit_scales'][$key]['scale_item_value'] = $_POST['scale_item_value'][$crit][$key];
             }
             $sum_weight += $criteria[$crit]['crit_weight'];
-        }		
+        }
         if ($sum_weight != 100) {
             Session::flashPost()->Messages($langRubricWeight);
             redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
@@ -75,10 +75,10 @@ if (isset($_POST['submitRubric'])) {
             } else {
                 Database::get()->query("INSERT INTO rubric (name, scales, description, preview_rubric, points_to_graded, course_id) VALUES (?s, ?s, ?s, ?d, ?d, ?d)", $name, $serialized_criteria, $desc, $preview_rubric, $points_to_graded, $course_id);
             }
-        }        
+        }
         Session::Messages($langRubricCreated, 'alert-success');
        redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
-    } else {	
+    } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
     }
@@ -185,11 +185,11 @@ if (isset($_GET['rubric_id'])) {
         });
     </script>
     ";
-	
+
     $toolName = $langGradeRubrics;
     $pageName = $langNewGradeRubric;
     $navigation[] = array("url" => "rubrics.php?course=$course_code", "name" => $langGradeRubrics);
-	
+
     $rubric_used = 0;
     if ($_GET['rubric_id']) {
         $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $_GET['rubric_id'], $course_id);
@@ -205,7 +205,7 @@ if (isset($_GET['rubric_id'])) {
         $unserialized_criteria = unserialize($rubric_data->scales);
         $desc = $rubric_data->description;
         $cc = -1;
-        foreach ($unserialized_criteria as $crit => $title) {            
+        foreach ($unserialized_criteria as $crit => $title) {
             $crit_rows .= "
                 <div id='critDiv$crit'>
                 <div class='form-group'>
@@ -266,7 +266,7 @@ if (isset($_GET['rubric_id'])) {
             </div>";
         }
     }
-	
+
     if ($rubric_used) {
         $tool_content .= "<div class='alert alert-info'>$langRubricNotEditable</div>";
     }
@@ -420,7 +420,7 @@ if (isset($_GET['rubric_id'])) {
             'url' => (isset($_GET['preview'])?"rubrics":"index").".php?course=$course_code"
         ),
     ),false);
-    
+
     $rubrics = Database::get()->queryArray("SELECT * FROM rubric WHERE course_id = ?d", $course_id);
     if ($rubrics) {
 	 if  (!isset($_GET['preview'])) {
@@ -498,12 +498,12 @@ draw($tool_content, 2, null, $head_content);
  */
 function show_rubric ($rubric_id) {
 
-    global $tool_content, $course_code, $course_id, 
-        $langName, $langDescription, $langRubricCriteria,
+    global $tool_content, $course_code, $course_id,
+        $langName, $langDescription, $langCriteria,
         $langEdit,$langDelete,$langConfirmDelete;
 
     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
-    
+
     $criteria = unserialize($rubric->scales);
     $criteria_list = "";
     foreach ($criteria as $ci => $criterio) {
@@ -519,7 +519,7 @@ function show_rubric ($rubric_id) {
             <thead>
                 <th>$langName</th> 
                 <th>$langDescription</th>
-                <th>$langRubricCriteria</th>
+                <th>$langCriteria</th>
                 <th class='text-center' rowspan='2'>" . icon('fa-gears') . "</th>
             </thead>
             <tr>
