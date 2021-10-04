@@ -66,6 +66,8 @@ if (isset($_POST['submit_doc'])) {
     insert_text($id);
 } elseif (isset($_POST['submit_lp'])) {
     insert_lp($id);
+} elseif (isset($_POST['submit_h5p'])) {
+    insert_h5p($id);
 } elseif (isset($_POST['submit_video'])) {
     insert_video($id);
 } elseif (isset($_POST['submit_exercise'])) {
@@ -146,6 +148,10 @@ switch ($_GET['type']) {
     case 'tc': $pageName = "$langAdd $langInsertTcMeeting";
         include "insert_tc.php";
         list_tcs();
+        break;
+    case 'h5p': $pageName = "$langAdd $langOfH5p";
+        include "insert_h5p.php";
+        list_h5p();
         break;
     default: break;
 }
@@ -262,6 +268,30 @@ function insert_lp($id) {
     exit;
 }
 
+/**
+ * @brief insert h5p in database
+ * @param $id
+ */
+function insert_h5p($id) {
+    global $course_code, $course_id;
+
+    if(isset($_POST['h5p'])) {
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['h5p'] as $h5p_id) {
+            $order++;
+            $h5p = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $h5p_id);
+            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='h5p', title = ?s, comments = '',
+                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                $id, $h5p->title, $order, $h5p->id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+    }
+    header('Location: index.php?course=' . $course_code . '&id=' . $id);
+    exit;
+}
 
 /**
  * @brief insert video in database
