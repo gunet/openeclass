@@ -39,14 +39,19 @@ $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
 // h5p variables
 $factory = new H5PFactory();
-$core = $factory->getCore();
-$contentValidator = $factory->getContentValidator();
 $jsCacheBuster = "?ver=" . time();
 
 if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
     if (isset($_POST['cancel'])) {
         redirect($backUrl);
     }
+    if (!isset($_POST['h5pcorecommonpath'])) {
+        redirect($backUrl);
+    }
+    // init core
+    $coreCommonPath = $_POST['h5pcorecommonpath'];
+    $core = new H5PCore($factory->getFramework(), $webDir . '/' . $coreCommonPath, $urlServer . $coreCommonPath, 'en', FALSE);
+
     // save h5p data
     $id = saveContent((object)$_POST);
 
@@ -56,6 +61,12 @@ if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
+
+    // init core and validator
+    $coreCommonPath = 'courses/' . $course_code . '/h5p/content/' . $id . '/workspace';
+    $core = new H5PCore($factory->getFramework(), $webDir . '/' . $coreCommonPath, $urlServer . $coreCommonPath, 'en', FALSE);
+    $contentValidator = new H5PContentValidator($factory->getFramework(), $core);
+
     $oldcontent = $core->loadContent($id);
     if ($oldcontent === null) {
         redirect($backUrl);
@@ -67,11 +78,23 @@ if (isset($_GET['id'])) {
     if (isset($oldcontent['metadata'])) {
         $maincontentdata['metadata'] = $oldcontent['metadata'];
     }
+
+    // prepare editor content
+    recurse_copy($webDir . '/' . $coreCommonPath . '/content', $webDir . '/' . $coreCommonPath . '/editor');
+    if (file_exists($webDir . '/' . $coreCommonPath . '/editor/content.json')) {
+        unlink($webDir . '/' . $coreCommonPath . '/editor/content.json');
+    }
 } else {
     $id = "";
     if (!isset($_GET['library'])) {
         redirect($backUrl);
     }
+
+    // init core and validator
+    $coreCommonPath = 'courses/' . $course_code . '/h5p';
+    $core = new H5PCore($factory->getFramework(), $webDir . '/' . $coreCommonPath, $urlServer . $coreCommonPath, 'en', FALSE);
+    $contentValidator = new H5PContentValidator($factory->getFramework(), $core);
+
     $library = $_GET['library'];
     $maincontentdata = ['params' => (object)[]]; // {&quot;params&quot;:{}}
 }
@@ -87,6 +110,7 @@ $tool_content .= "
                     <input name='h5pparams' type='hidden' value='" . q(json_encode($maincontentdata, true)) . "' />
                     <input name='h5paction' type='hidden' value='' />
                     <input name='id' type='hidden' value='" . $id . "' />
+                    <input name='h5pcorecommonpath' type='hidden' value='" . $coreCommonPath . "' />
                 </div>
                 
                 <div class='h5p-editor-wrapper' id='h5p-editor-region'>
@@ -186,7 +210,7 @@ function addActionButtons(): string {
 }
 
 function getH5pIntegrationObject(): array {
-    global $head_content, $urlServer, $urlAppend, $webDir, $jsCacheBuster, $language, $contentValidator;
+    global $head_content, $urlServer, $urlAppend, $webDir, $jsCacheBuster, $language, $contentValidator, $coreCommonPath;
 
     $settings = getCoreAssets();
 
@@ -225,8 +249,9 @@ function getH5pIntegrationObject(): array {
 
     // Editor settings
     $editorajaxtoken = H5PCore::createToken(EditorAjax::EDITOR_AJAX_TOKEN);
+    $_SESSION[$editorajaxtoken . '.h5pcorecommonpath'] = $coreCommonPath;
     $settings['editor'] = [
-        'filesPath' => $urlServer . "courses/h5p/editor",
+        'filesPath' => $urlServer . $coreCommonPath . '/editor',
         'fileIcon' => [
             'path' => $urlServer . $jsH5pEditor . 'images/binary-file.png',
             'width' => 50,
@@ -316,7 +341,7 @@ function getCoreSettings(): array {
  * @throws Exception
  */
 function saveContent(stdClass $data): int {
-    global $factory, $core, $webDir, $course_code, $course_id;
+    global $factory, $core, $webDir, $course_code, $course_id, $coreCommonPath;
 
     $framework = $factory->getFramework();
     $editor = $factory->getH5PEditor();
@@ -368,33 +393,9 @@ function saveContent(stdClass $data): int {
     if (!file_exists($contentJsonPath)) {
         mkdir($contentJsonPath, 0775, true);
     }
-    $contentTmpPath = $webDir . "/courses/h5p/content/" . $data->id . "/";
-    if (isset($params->params->files)) {
-        foreach ($params->params->files as $file) {
-            handleUpload($contentTmpPath, $contentJsonPath, $file);
-        }
-    }
-    if (isset($params->params->image)) {
-        handleUpload($contentTmpPath, $contentJsonPath, $params->params->image);
-    }
-    if (isset($params->params->hotspots) && is_array($params->params->hotspots)) {
-        foreach ($params->params->hotspots as $hotspot) {
-            if (isset($hotspot->content) && is_array($hotspot->content)) {
-                foreach ($hotspot->content as $hcontent) {
-                    if (isset($hcontent->params)) {
-                        if (isset($hcontent->params->file)) {
-                            handleUpload($contentTmpPath, $contentJsonPath, $hcontent->params->file);
-                        }
-                        if (isset($hcontent->params->sources) && is_array($hcontent->params->sources)) {
-                            foreach ($hcontent->params->sources as $hsource) {
-                                handleUpload($contentTmpPath, $contentJsonPath, $hsource);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+
+    recurse_copy($webDir . '/' . $coreCommonPath . '/editor', $contentJsonPath);
+    H5PCore::deleteFileTree($webDir . '/' . $coreCommonPath . '/editor');
 
     // create proper content.json file on disk with params
     file_put_contents($contentJsonPath . "/content.json", json_encode($params->params));
