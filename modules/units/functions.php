@@ -302,6 +302,9 @@ function show_resource($info) {
         case 'blog':
             $tool_content .= show_blog($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
+        case 'h5p':
+            $tool_content .= show_h5p($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            break;
         case 'tc':
             $tool_content .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
@@ -1252,6 +1255,47 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility) {
           <td>$bloglink $comment_box</td>" .
         actions('blog', $resource_id, $visibility) . '
         </tr>';
+}
+
+/**
+ * @brief display h5p resources
+ * @param $title
+ * @param $comments
+ * @param $resource_id
+ * @param $h5p_id
+ * @param $visibility
+ */
+function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
+    global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id;
+
+    $comment_box = '';
+    $title = q($title);
+    $h5p = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $h5p_id);
+    if (!$h5p) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-times');
+            $h5plink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+        }
+    } else {
+        //$link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $link = "<a href='${urlServer}modules/h5p/view.php?course=$course_code&amp;id=$h5p_id'>";
+        $h5plink = $link . "$title</a>";
+        $imagelink = $link . "</a>" .icon('fa-tablet') . "";
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br />$comments";
+    }
+
+    return "
+        <tr data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td>$h5plink $comment_box</td>" .
+        actions('h5p', $resource_id, $visibility) . '
+        </tr>';
+
 }
 
 
