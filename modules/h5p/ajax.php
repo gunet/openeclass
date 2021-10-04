@@ -69,6 +69,11 @@ switch ($_GET['action']) {
         $token = $_GET['token'];
         $contentid = $_POST['contentId'];
 
+        // init editor
+        $coreCommonPath = $_SESSION[$token . '.h5pcorecommonpath'];
+        $core = new H5PCore($factory->getFramework(), $webDir . '/' . $coreCommonPath, $urlServer . $coreCommonPath, 'en', FALSE);
+        $editor = new H5peditor($core, new EditorStorage(), $factory->getH5PEditorAjax());
+
         $maxsize = getMaxUploadFileSize();
         // Check size of each uploaded file.
         foreach ($_FILES as $uploadedfile) {

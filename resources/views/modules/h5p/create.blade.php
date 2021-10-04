@@ -49,6 +49,7 @@
                     <input name='h5pparams' type='hidden' value='{{ $h5pparams }}' />
                     <input name='h5paction' type='hidden' value='' />
                     <input name='id' type='hidden' value='{{ $id }}' />
+                    <input name='h5pcorecommonpath' type='hidden' value='{{ $h5pcorecommonpath }}' />
                 </div>
 
                 {!! $formActionButtons !!}
