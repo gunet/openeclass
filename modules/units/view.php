@@ -39,17 +39,23 @@ switch ($_REQUEST['res_type']) {
     case 'questionnaire_results':
         require_once "../questionnaire/pollresults.php";
         exit;
-    case 'forum';
+    case 'forum':
         require_once "../forum/viewforum.php";
         exit;
-    case 'forum_topic';
+    case 'forum_topic':
         require_once "../forum/viewtopic.php";
         exit;
-    case 'forum_new_topic';
+    case 'forum_new_topic':
         require_once "../forum/newtopic.php";
         exit;
-    case 'forum_topic_reply';
+    case 'forum_topic_reply':
         require_once "../forum/reply.php";
+        exit;
+    case 'h5p':
+        require_once "../h5p/view.php";
+        exit;
+    case 'h5p_show':
+        require_once "../h5p/show.php";
         exit;
     default:
         break;

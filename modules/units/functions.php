@@ -1279,8 +1279,8 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
             $h5plink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        //$link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
-        $link = "<a href='${urlServer}modules/h5p/view.php?course=$course_code&amp;id=$h5p_id'>";
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
+        //$link = "<a href='${urlServer}modules/h5p/view.php?course=$course_code&amp;id=$h5p_id'>";
         $h5plink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-tablet') . "";
     }

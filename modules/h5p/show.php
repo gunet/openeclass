@@ -23,8 +23,16 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 
+$unit = isset($_GET['unit'])? intval($_GET['unit']): null;
+$res_type = isset($_GET['res_type']);
+
 $content_id = $_GET['id'];
-$backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
+if (!$res_type) {
+    $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
+} else {
+    $backUrl = $urlAppend . 'modules/units/?course=' . $course_code . '&id=' . $_REQUEST['unit'];
+}
+
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
