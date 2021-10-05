@@ -22,10 +22,22 @@
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 
+$unit = isset($_GET['unit'])? intval($_GET['unit']): null;
+$res_type = isset($_GET['res_type']);
+
 if (showContent($_GET['id'])) {
-    redirect($urlAppend . 'modules/h5p/show.php?course=' . $course_code . '&id=' . intval($_GET['id']));
+    if (isset($unit)) {
+        redirect($urlServer . 'modules/units/view.php?course=' . $course_code . '&res_type=h5p_show&unit=' . $unit . '&id=' . intval($_GET['id']));;
+    } else {
+        redirect($urlAppend . 'modules/h5p/show.php?course=' . $course_code . '&id=' . intval($_GET['id']));
+    }
 }
 
+/**
+ * @brief show h5p content
+ * @param $contentId
+ * @return bool
+ */
 function showContent($contentId): bool {
     global $course_code, $webDir;
 
