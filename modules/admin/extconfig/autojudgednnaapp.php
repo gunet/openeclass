@@ -25,7 +25,7 @@ require_once 'autojudgeapp.php';
 class AutojudgeDnnaApp extends AutojudgeApp implements AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input) {
         //set POST variables
-        $url           = 'http://compile.dnna.gr/api/code/run';
+        $url           = 'https://compile.dnna.gr/api/code/run';
         $fields_string = null;
         $fields        = array(
             //'client_secret' => AutojudgeApp::getAutoJudgeApp(get_class($this))->getParam('key')->value(),
@@ -79,7 +79,7 @@ class AutojudgeDnnaApp extends AutojudgeApp implements AutoJudgeConnector {
 
     public function getSupportedLanguages() {
         global $langAutoJudgeConnectionError;
-        
+
         // Open curl connection
         $ch = curl_init();
         // Set the url, number of POST vars, POST data
@@ -93,7 +93,7 @@ class AutojudgeDnnaApp extends AutojudgeApp implements AutoJudgeConnector {
         curl_close($ch);
 
         if(!$result) {
-            return array("$langAutoJudgeConnectionError" => 'error');             
+            return array("$langAutoJudgeConnectionError" => 'error');
         }
 
         return $result;
