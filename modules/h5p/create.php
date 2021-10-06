@@ -68,6 +68,7 @@ if (isset($_GET['id'])) {
     $contentValidator = new H5PContentValidator($factory->getFramework(), $core);
 
     $oldcontent = $core->loadContent($id);
+
     if ($oldcontent === null) {
         redirect($backUrl);
     }
@@ -75,6 +76,7 @@ if (isset($_GET['id'])) {
 
     $params = $core->filterParameters($oldcontent);
     $maincontentdata = ['params' => json_decode($params)];
+
     if (isset($oldcontent['metadata'])) {
         $maincontentdata['metadata'] = $oldcontent['metadata'];
     }

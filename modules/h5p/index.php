@@ -43,7 +43,7 @@ if ($is_editor) {
     // Dropdown select for Creating H5P Content
     if (!empty($h5pcontenttypes)) {
         $tool_content .= "
-            <select id='createpicker' class='selectpicker' title='$langCreate' data-style='btn-primary' data-width='fit'>
+            <select id='createpicker' class='selectpicker' title='$langCreate' data-style='btn-success' data-width='fit'>
                 <optgroup label='$langH5pInteractiveContent'>";
 
         foreach ($h5pcontenttypes as $h5pcontenttype) {
@@ -70,7 +70,7 @@ if ($is_editor) {
 
     // Import
     $tool_content .= "
-        <a class='btn btn-success' href='upload.php?course=$course_code' data-placement='bottom' data-toggle='tooltip'  title='$langImport'>
+        <a class='btn btn-default' href='upload.php?course=$course_code' data-placement='bottom' data-toggle='tooltip'  title='$langImport'>
             <span class='fa fa-upload space-after-icon'></span>
             <span class='hidden-xs'>$langImport</span>
         </a>";
@@ -87,22 +87,30 @@ if ($content) {
     $tool_content .= "<table class='table-default'>
         <thead>
             <tr class='list-header''>
-                <th class='text-left'>$langH5pInteractiveContent</th>               
-                <th class='text-center' style='width:109px;'>
-                    <span class='fa fa-gears'></span>
-                </th>
+                <th class='text-left col-sm-8'>$langH5pInteractiveContent</th>
+                <th class='text-center col-sm-3'>$langTypeH5P</th>";
+                if ($is_editor) {
+                    $tool_content .= "
+                        <th class='text-center'>
+                        <span class='fa fa-gears'></span>
+                    </th>";
+                }
+    $tool_content .= "
             </tr>
         </thead>
         <tbody>";
 
     foreach ($content as $item) {
+        $h5p_content_type_title = Database::get()->querySingle("SELECT title FROM h5p_library WHERE id = ?s", $item->main_library_id)->title;
         $tool_content .= "<tr>
-                    <td>
+                    <td class='col-sm-8'>
                         <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>
                     </td>
-                    <td class='text-center'>";
-
+                    <td class='col-sm-3 text-center'>
+                        <em>$h5p_content_type_title</em>
+                    </td>";
         if ($is_editor) {
+            $tool_content .= "<td class='text-center'>";
             $tool_content .= action_button([[
                 'icon' => 'fa-edit',
                 'title' => $langEditChange,
@@ -114,8 +122,9 @@ if ($content) {
                 'class' => 'delete',
                 'confirm' => $langConfirmDelete
             ]], false);
+            $tool_content .= "</td>";
         }
-        $tool_content .= "</td></tr>";
+        $tool_content .= "</tr>";
     }
     $tool_content .= "</tbody></table>";
 } else {

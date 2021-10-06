@@ -5411,3 +5411,4 @@ $langH5pNoContent = 'There is no H5P content';
 $langH5pSaveSuccess = "The H5P interactive content was successfully saved";
 $langH5pDeleteSuccess = "The H5P interactive content was successfully deleted";
 $langOfH5p = "interactive content";
+$langTypeH5P = "H5P content type";
