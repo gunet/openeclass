@@ -192,6 +192,8 @@ $displayForm = true;
 /* submit form: new or updated event */
 if (isset($_POST['newTitle'])) {
 
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
     $newTitle = $_POST['newTitle'];
     $newContent = $_POST['newContent'];
     if (isset($_POST['visibility_level'])) {
@@ -456,6 +458,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                    <a class='btn btn-default' href='index.php'>$langCancel</a>
               </div>
             </div>
+            ". generate_csrf_token_form_field() ."
             </form>
         </div>";
 } else {
