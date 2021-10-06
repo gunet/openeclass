@@ -77,21 +77,24 @@ $displayForm = true;
 if (isset($_GET['down'])) {
     $thisNoteId = intval(getDirectReference($_GET['down']));
     Notes::movedown_note($thisNoteId);
-    redirect_to_home_page('main/notes/index.php');  
+    redirect_to_home_page('main/notes/index.php');
 }
 if (isset($_GET['up'])) {
     $thisNoteId = intval(getDirectReference($_GET['up']));
     Notes::moveup_note($thisNoteId);
-    redirect_to_home_page('main/notes/index.php');  
+    redirect_to_home_page('main/notes/index.php');
 }
 
 /* submit form: new or updated note */
 if (isset($_POST['submitNote'])) {
+
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('newTitle'));
     $v->labels(array(
         'newTitle' => "$langTheField $langTitle"
-    ));    
+    ));
     if($v->validate()) {
         $newTitle = $_POST['newTitle'];
         $newContent = $_POST['newContent'];
@@ -100,7 +103,7 @@ if (isset($_POST['submitNote'])) {
             $id = intval(getDirectReference($_POST['id']));
             Notes::update_note($id, $newTitle, $newContent, $refobjid);
             Session::Messages($langNoteModify, 'alert-success');
-            redirect_to_home_page('main/notes/index.php');        
+            redirect_to_home_page('main/notes/index.php');
         } else { // new note
             $id = Notes::add_note($newTitle, $newContent, $refobjid);
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -122,9 +125,8 @@ if (isset($_GET['delete'])) {
     $thisNoteId = intval(getDirectReference($_GET['delete']));
     Notes::delete_note($thisNoteId);
     Session::Messages($langNoteDel, 'alert-success');
-    redirect_to_home_page('main/notes/index.php');
+//    redirect_to_home_page('main/notes/index.php');
 }
-
 
 
 /* display form */
@@ -133,11 +135,11 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     if (isset($_GET['modify'])) {
         $langAdd = $pageName = $langModifNote;
         $modify = intval(getDirectReference($_GET['modify']));
-        $note = Notes::get_note($modify);      
+        $note = Notes::get_note($modify);
     } else {
         $pageName = $langAddNote;
     }
-    $noteToModify = isset($note) ? $note->id : '';    
+    $noteToModify = isset($note) ? $note->id : '';
     $titleToModify = Session::has('newTitle') ? Session::get('newTitle') : (isset($note) ? q($note->title) : '');
     $contentToModify = Session::has('newContent') ? Session::get('newContent') : (isset($note) ? $note->content : '');
     $gen_type_selected = isset($note) ? $note->reference_obj_module : null;
@@ -184,9 +186,10 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     if($noteToModify!=""){
         $tool_content .="<input type='hidden' name='id' value='" . getIndirectReference($noteToModify)."' />";
     }
-    $tool_content .="</fieldset>
+    $tool_content .= "</fieldset>
+    ". generate_csrf_token_form_field() ."
     </form></div>";
-    
+
 } elseif (isset($_GET['nid'])) {
     $tool_content .= action_bar(array(
         array(
@@ -196,10 +199,10 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             'url' => $_SERVER['SCRIPT_NAME']
         )
     ));
-    
+
     $note = Notes::get_note(intval(getDirectReference($_GET['nid'])));
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
-    $pageName = q($note->title);    
+    $pageName = q($note->title);
     $tool_content .= "
         <div class='panel panel-action-btn-default'>
             <div class='panel-heading'>
@@ -239,7 +242,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     if (isset($_GET['course'])) {
         $cid = course_code_to_id($_GET['course']);
         $notelist = Notes::get_all_course_notes($cid);
-    } else { 
+    } else {
         $notelist = Notes::get_user_notes();
     }
     //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
