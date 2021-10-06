@@ -5665,7 +5665,7 @@ $langLimesurveyShortDescription = "Σύνδεση με υπηρεσία στατ
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://www.limesurvey.org\">https://www.limesurvey.org</a>";
 $langLimesurveyLongDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας.";
 $langColmoocDescription = "Περιγραφή του ColMOOC";
-$langH5PShortDescription = "Ενημέρωση του υποσυστήματος H5P";
+$langH5PShortDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
 $langH5PLongDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
 
 // Messages for OpenMeetings
@@ -5913,3 +5913,8 @@ $langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο τύπ
 $langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P διαγράφτηκε με επιτυχία";
 $langOfH5p = "διαδραστικού περιεχομένου";
 $langTypeH5P = "Τύπος H5P";
+$langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι ώστε οι διαθέσιμοι τύποι διαδραστικού περιεχομένου H5P 
+                    να ενημερωθούν με τις πιο πρόσφατες αλλαγές (αν υπάρχουν). <br> 
+                    Δείτε περισσότερες λεπτομέρειες στο  
+                    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a> 
+                    για τους διαθέσιμους τύπους περιεχομένων.";

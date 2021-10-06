@@ -101,13 +101,21 @@ if ($content) {
         <tbody>";
 
     foreach ($content as $item) {
-        $h5p_content_type_title = Database::get()->querySingle("SELECT title FROM h5p_library WHERE id = ?s", $item->main_library_id)->title;
+        $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
+                                            FROM h5p_library WHERE id = ?s", $item->main_library_id);
+        $h5p_content_type_title = $q->title;
+        $typeFolder = $q->machine_name . "-" . $q->major_version . "." . $q->minor_version;
+        $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
+        $typeIconUrl = (file_exists($typeIconPath))
+            ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
+            : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
+
         $tool_content .= "<tr>
                     <td class='col-sm-8'>
                         <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>
                     </td>
                     <td class='col-sm-3 text-center'>
-                        <em>$h5p_content_type_title</em>
+                        <img src='$typeIconUrl' alt='$h5p_content_type_title' width='30px' height='30px'> <em>$h5p_content_type_title</em>
                     </td>";
         if ($is_editor) {
             $tool_content .= "<td class='text-center'>";
