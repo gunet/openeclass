@@ -36,6 +36,13 @@ $action = new action();
 $action->record(MODULE_ID_MINDMAP);
 /* * *********************************** */
 
+$toolName = $langMindmap;
+// guest user not allowed
+if (check_guest()) {
+    $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
+    draw($tool_content, 2, 'mindmap');
+}
+
 ////////////////////////////
     $json = file_get_contents('php://input');
     if($json != "") {
@@ -47,31 +54,24 @@ $action->record(MODULE_ID_MINDMAP);
         )));
         }
 
-        $json_decode = json_decode($json, true); 
+        $json_decode = json_decode($json, true);
         $mind_s1r=$_POST["mind_str"];
 
         $file_path=$mind_s1r+".jm";
         $fileName="jsmind.jm";
         $file_format = get_file_extension($fileName);
 
-        echo '<script language="javascript">';
+        echo '<script type="application/javascript">';
         echo 'alert("message successfully sent")';
         echo '</script>';
     }
-	
+
     if(isset($_GET["jmpath"])) {
         $path = json_decode( base64_decode( $_GET['jmpath'] ) );
         $myfile = fopen($path, "r") or die("Unable to open file!");
         $arr = fread($myfile,filesize($path));
         fclose($myfile);
     } else $arr = "{}";
-		
-$toolName = $langMindmap;
-// guest user not allowed
-if (check_guest()) {
-    $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
-    draw($tool_content, 2, 'mindmap');
-}
 
 $head_content .= '
 
@@ -158,7 +158,7 @@ $tool_content .="
     
     <div id='jsmind_container'></div>
 </div>";
-   
+
 
 $tool_content .= '      
 	<script type="text/javascript" src="jsmind.js"></script>
@@ -177,7 +177,7 @@ $tool_content .= '
         // _jm = jsMind.show(options,mind);
 		
 		var x = '.$arr.';
-		console.log(jQuery.isEmptyObject(x));
+		//console.log(jQuery.isEmptyObject(x));
 		if ( !jQuery.isEmptyObject(x)) {
 			_jm.show(x);
 		} 		
@@ -354,10 +354,13 @@ $tool_content .= '
         _jm.set_theme(node.getAttribute("data-theme"));
     }
 	
+    function prompt_info(string) {
+        alert(string);
+    }
 
     open_empty();
-</script>';  
-   
-   
+</script>';
+
+
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
