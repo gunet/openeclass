@@ -82,7 +82,9 @@ if (isset($_GET['id'])) {
     }
 
     // prepare editor content
-    recurse_copy($webDir . '/' . $coreCommonPath . '/content', $webDir . '/' . $coreCommonPath . '/editor');
+    if (file_exists($webDir . '/' . $coreCommonPath . '/content')) {
+        recurse_copy($webDir . '/' . $coreCommonPath . '/content', $webDir . '/' . $coreCommonPath . '/editor');
+    }
     if (file_exists($webDir . '/' . $coreCommonPath . '/editor/content.json')) {
         unlink($webDir . '/' . $coreCommonPath . '/editor/content.json');
     }
@@ -396,8 +398,11 @@ function saveContent(stdClass $data): int {
         mkdir($contentJsonPath, 0775, true);
     }
 
-    recurse_copy($webDir . '/' . $coreCommonPath . '/editor', $contentJsonPath);
-    H5PCore::deleteFileTree($webDir . '/' . $coreCommonPath . '/editor');
+    $tmpEditorPath = $webDir . '/' . $coreCommonPath . '/editor';
+    if (file_exists($tmpEditorPath)) {
+        recurse_copy($tmpEditorPath, $contentJsonPath);
+        H5PCore::deleteFileTree($tmpEditorPath);
+    }
 
     // create proper content.json file on disk with params
     file_put_contents($contentJsonPath . "/content.json", json_encode($params->params));
