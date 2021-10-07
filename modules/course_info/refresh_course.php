@@ -20,7 +20,6 @@
  * ======================================================================== */
 
 /**
- * @file refresh_course.php
  * @brief course clean up
  */
 
@@ -86,6 +85,9 @@ if (isset($_POST['submit'])) {
     }
     if (isset($_POST['delworkssubs'])) {
         $output[] = del_work_subs();
+    }
+    if (isset($_POST['hideexercises'])) {
+        $output[] = hide_exercises();
     }
     if (isset($_POST['purgeexercises'])) {
         $output[] = purge_exercises();
@@ -202,7 +204,12 @@ if (isset($_POST['submit'])) {
             </div>
             <div class='form-group'>
               <label for='purgeexercises' class='col-sm-2 control-label'>$langExercises</label>
-              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='purgeexercises'>$langPurgeExercisesResults</label></div>
+              <div class='col-sm-10 checkbox'>
+                    <label><input type='checkbox' name='hideexercises'>$langHideExercises</label>
+              </div>
+              <div class='col-sm-offset-2 col-sm-10 checkbox'>
+                    <label><input type='checkbox' name='purgeexercises'>$langPurgeExercisesResults</label>
+              </div>
             </div>
             <div class='form-group'>
               <label for='clearstats' class='col-sm-2 control-label'>$langUsage</label>
@@ -230,12 +237,8 @@ if (isset($_POST['submit'])) {
 draw($tool_content, 2, null, $head_content);
 
 /**
- *
- * @global type $course_id
- * @global type $langUsersDeleted
- * @param type $date
- * @param type $duration
- * @return type
+ * @brief unregister users from course
+ * @return string
  */
 function delete_users() {
     global $course_id, $langUsersDeleted;
@@ -332,10 +335,8 @@ function delete_users() {
 }
 
 /**
- *
- * @global type $course_id
- * @global type $langAnnDeleted
- * @return type
+ * @brief delete announcements
+ * @return string
  */
 function delete_announcements() {
     global $course_id, $langAnnDeleted;
@@ -345,10 +346,8 @@ function delete_announcements() {
 }
 
 /**
- *
- * @global type $langAgendaDeleted
- * @global type $course_id
- * @return type
+ * @brief delete calendar events
+ * @return string
  */
 function delete_agenda() {
     global $langAgendaDeleted, $course_id;
@@ -358,10 +357,8 @@ function delete_agenda() {
 }
 
 /**
- *
- * @global type $langDocsDeleted
- * @global type $course_id
- * @return type
+ * @brief hide documents
+ * @return string
  */
 function hide_doc() {
     global $langDocsDeleted, $course_id;
@@ -371,10 +368,8 @@ function hide_doc() {
 }
 
 /**
- *
- * @global type $langWorksDeleted
- * @global type $course_id
- * @return type
+ * @brief hide assignments
+ * @return string
  */
 function hide_work() {
     global $langWorksDeleted, $course_id;
@@ -384,11 +379,8 @@ function hide_work() {
 }
 /**
  *
- * @global type $langAllAssignmentSubsDeleted
- * @global type $webDir
- * @global type $course_id
- * @global type $course_code
- * @return type
+ @brief hide assignments submission
+ * @return string
  */
 function del_work_subs()  {
     global $langAllAssignmentSubsDeleted, $webDir, $course_id, $course_code;
@@ -413,10 +405,21 @@ function del_work_subs()  {
     return "<p>$langAllAssignmentSubsDeleted</p>";
 }
 
+
 /**
- *
- * @global type $langPurgeExercisesResults
- * @return type
+ * @brief hide exercises
+ * @return string
+ */
+function hide_exercises() {
+    global $langExercisesDeleted, $course_id;
+
+    Database::get()->query("UPDATE exercise SET active = 0 WHERE course_id = ?d", $course_id);
+    return "<p>$langExercisesDeleted</p>";
+}
+
+/**
+ * @brief purge exercise results
+ * @return string
  */
 function purge_exercises() {
     global $langPurgeExercisesResults, $course_id;
@@ -430,9 +433,8 @@ function purge_exercises() {
 }
 
 /**
- *
- * @global type $langStatsCleared
- * @return type
+ * @brief clear statistics
+ * @return string
  */
 function clear_stats() {
     global $langStatsCleared;
@@ -445,9 +447,8 @@ function clear_stats() {
 }
 
 /**
- *
- * @global type $langWallPostsDeleted
- * @return type
+ * @brief delete wall posts
+ * @return string
  */
 function del_wall_posts() {
     global $langWallPostsDeleted, $course_id;
@@ -468,8 +469,8 @@ function del_wall_posts() {
 
 /**
  *
- * @global type $langAllBlogPostsDeleted
- * @return type
+ * @brief delete blog posts
+ * @return string
  */
 function del_blog_posts() {
     global $langBlogPostsDeleted, $course_id;

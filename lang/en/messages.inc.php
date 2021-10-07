@@ -470,19 +470,21 @@ $langUserDel = "You are about to unregister all course users (they will not be d
 $langRefreshCourse = "Course Refresh";
 $langRefreshInfo = "If you want to create a course for a new academic year, you can delete the old data courses.";
 $langRefreshInfo_A = "Choose the appropriate actions";
-$langUserDelCourse = "Delete users from course";
+$langUserDelCourse = "Unregister users from course";
 $langUserDelNotice = "Notice: Users will not be unregistered from other courses";
 $langAnnouncesDel = "Delete course announcements";
 $langAgendaDel = "Delete course agenda data";
 $langHideDocuments = "Hide course documents";
 $langHideWork = "Hide course assignments";
+$langHideExercises = "Hide course exercises";
 $langSubmitActions = "Submit Actions";
 $langOptions = "Options";
 $langRefreshSuccess = "The refresh course operation was successful. The following actions took place:";
 $langUsersDeleted = "Users deleted from course";
 $langAnnDeleted = "Announcements deleted from course";
 $langAgendaDeleted = "Agenda data deleted from course";
-$langWorksDeleted = "Assignments deleted";
+$langWorksDeleted = "Assignments deactivated";
+$langExercisesDeleted = "Exercises deactivated";
 $langDocsDeleted = "Documents deleted";
 $langContactProf = "Contact $langTeachers";
 $langEmailEmpty = "Your e-mail address is empty. To contact the course $langsTeachers,
@@ -5413,6 +5415,6 @@ $langH5pDeleteSuccess = "The H5P interactive content was successfully deleted";
 $langOfH5p = "interactive content";
 $langTypeH5P = "H5P content type";
 $langH5pInfoUpdate = "Click in 'Update' in order to update h5p content types (if it is needed)<br> 
-                    For further details about the available h5p content types click in   
+                    For further details about the available h5p content types click inF$langHideDocuments   
                     <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a> 
                     .";
