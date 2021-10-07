@@ -37,6 +37,8 @@ $upload_target_url = 'courses/temp/h5p';
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
+$tool_content .= "<div class='alert alert-info'>$langImportH5P</div>";
+
 $tool_content .= "<div class='row'>
     <div class='col-md-12'>
         <div class='form-wrapper'>

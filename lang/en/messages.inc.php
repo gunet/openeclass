@@ -5414,6 +5414,7 @@ $langH5pSaveSuccess = "The H5P interactive content was successfully saved";
 $langH5pDeleteSuccess = "The H5P interactive content was successfully deleted";
 $langOfH5p = "interactive content";
 $langTypeH5P = "H5P content type";
+$langImportH5P = "Import an H5P interactive content via the following form.";
 $langH5pInfoUpdate = "Click in 'Update' in order to update h5p content types (if it is needed)<br> 
                     For further details about the available h5p content types click inF$langHideDocuments   
                     <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a> 
