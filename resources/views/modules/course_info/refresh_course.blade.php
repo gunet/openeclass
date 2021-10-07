@@ -9,7 +9,7 @@
 <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/js/bootstrap-datepicker.min.js'></script>
 <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/locales/bootstrap-datepicker.{{ $language }}.min.js'></script>
 
-<script type='text/javascript'>    
+<script type='text/javascript'>
 $(function() {
     $('#reg_date').datepicker({
             format: 'dd-mm-yyyy',
@@ -45,7 +45,7 @@ $(function() {
             </div>
             <div class='col-sm-3'>
                 <input type='text' name='reg_date' id='reg_date' value='{{ $date_format }}'>
-            </div>                
+            </div>
         </div>
     @if (!isset($_GET['from_user']))
         <div class='form-group'>
@@ -71,6 +71,9 @@ $(function() {
         </div>
         <div class='form-group'>
           <label for='purgeexercises' class='col-sm-2 control-label'>{{ trans('langExercises') }}</label>
+            <div class='col-sm-10 checkbox'>
+                <label><input type='checkbox' name='hideexercises'>{{ trans('langHideExercises') }}</label>
+            </div>
           <div class='col-sm-10 checkbox'>
               <label><input type='checkbox' name='purgeexercises'>{{ trans('langPurgeExercisesResults') }}</label>
           </div>
@@ -101,6 +104,6 @@ $(function() {
     </fieldset>
     {!! generate_csrf_token_form_field() !!}
     </form>
-    </div>    
+    </div>
 
 @endsection

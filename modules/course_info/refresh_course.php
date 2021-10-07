@@ -20,7 +20,6 @@
  * ======================================================================== */
 
 /**
- * @file refresh_course.php
  * @brief course clean up
  */
 
@@ -82,6 +81,9 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['delworkssubs'])) {
         $output[] = del_work_subs();
     }
+    if (isset($_POST['hideexercises'])) {
+        $output[] = hide_exercises();
+    }
     if (isset($_POST['purgeexercises'])) {
         $output[] = purge_exercises();
     }
@@ -100,25 +102,21 @@ if (isset($_POST['submit'])) {
         $data['output'] = $output;
         $data['menuTypeID'] = 2;
         view('modules.course_info.refresh_course_results', $data);
-    }    
-} else { // display form                 
+    }
+} else { // display form
     $data['selection_date'] = selection(array('before' => $langBefore, 'after' => $langAfter), 'reg_flag', $reg_flag, 'class="form-control"');
     $data['date_format'] = date("d-m-Y", time());
-        
+
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
     $data['form_url_from_user'] = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;from_user=true";
-    
+
     $data['menuTypeID'] = 2;
     view('modules.course_info.refresh_course', $data);
 }
 
 /**
- *
- * @global type $course_id
- * @global type $langUsersDeleted
- * @param type $date
- * @param type $duration
- * @return type
+ * @brief unregister users from course
+ * @return string
  */
 function delete_users() {
     global $course_id, $langUsersDeleted;
@@ -137,8 +135,8 @@ function delete_users() {
         FROM course_user, user ' . $sql_department . '
         WHERE course_user.user_id = user.id
           AND course_user.status <> ' . USER_TEACHER . '
-          AND course_user.editor = 0
-          AND course_user.reviewer = 0
+          AND (course_user.editor = 0 OR course_user.editor IS NULL)
+          AND (course_user.reviewer = 0 OR course_user.reviewer IS NULL)
           AND course_id = ?d';
     $args = array($course_id);
 
@@ -215,10 +213,8 @@ function delete_users() {
 }
 
 /**
- *
- * @global type $course_id
- * @global type $langAnnDeleted
- * @return type
+ * @brief delete announcements
+ * @return string
  */
 function delete_announcements() {
     global $course_id, $langAnnDeleted;
@@ -228,10 +224,8 @@ function delete_announcements() {
 }
 
 /**
- *
- * @global type $langAgendaDeleted
- * @global type $course_id
- * @return type
+ * @brief delete calendar events
+ * @return string
  */
 function delete_agenda() {
     global $langAgendaDeleted, $course_id;
@@ -241,10 +235,8 @@ function delete_agenda() {
 }
 
 /**
- *
- * @global type $langDocsDeleted
- * @global type $course_id
- * @return type
+ * @brief hide documents
+ * @return string
  */
 function hide_doc() {
     global $langDocsDeleted, $course_id;
@@ -254,10 +246,8 @@ function hide_doc() {
 }
 
 /**
- *
- * @global type $langWorksDeleted
- * @global type $course_id
- * @return type
+ * @brief hide assignments
+ * @return string
  */
 function hide_work() {
     global $langWorksDeleted, $course_id;
@@ -267,11 +257,8 @@ function hide_work() {
 }
 /**
  *
- * @global type $langAllAssignmentSubsDeleted
- * @global type $webDir
- * @global type $course_id
- * @global type $course_code
- * @return type
+ @brief hide assignments submission
+ * @return string
  */
 function del_work_subs()  {
     global $langAllAssignmentSubsDeleted, $webDir, $course_id, $course_code;
@@ -296,26 +283,36 @@ function del_work_subs()  {
     return "<p>$langAllAssignmentSubsDeleted</p>";
 }
 
+
 /**
- *
- * @global type $langPurgeExercisesResults
- * @return type
+ * @brief hide exercises
+ * @return string
+ */
+function hide_exercises() {
+    global $langExercisesDeleted, $course_id;
+
+    Database::get()->query("UPDATE exercise SET active = 0 WHERE course_id = ?d", $course_id);
+    return "<p>$langExercisesDeleted</p>";
+}
+
+/**
+ * @brief purge exercise results
+ * @return string
  */
 function purge_exercises() {
     global $langPurgeExercisesResults, $course_id;
 
-    Database::get()->query("DELETE d FROM exercise_answer_record d,exercise_question s 
+    Database::get()->query("DELETE d FROM exercise_answer_record d,exercise_question s
                     WHERE d.question_id =s.id AND s.course_id = ?d", $course_id);
-    Database::get()->query("DELETE d FROM exercise_user_record d,exercise s 
+    Database::get()->query("DELETE d FROM exercise_user_record d,exercise s
                     WHERE d.eid=s.id AND s.course_id = ?d", $course_id);
 
     return "<p>$langPurgeExercisesResults</p>";
 }
 
 /**
- *
- * @global type $langStatsCleared
- * @return type
+ * @brief clear statistics
+ * @return string
  */
 function clear_stats() {
     global $langStatsCleared;
@@ -328,9 +325,8 @@ function clear_stats() {
 }
 
 /**
- *
- * @global type $langWallPostsDeleted
- * @return type
+ * @brief delete wall posts
+ * @return string
  */
 function del_wall_posts() {
     global $langWallPostsDeleted, $course_id;
@@ -351,8 +347,8 @@ function del_wall_posts() {
 
 /**
  *
- * @global type $langAllBlogPostsDeleted
- * @return type
+ * @brief delete blog posts
+ * @return string
  */
 function del_blog_posts() {
     global $langBlogPostsDeleted, $course_id;
@@ -367,4 +363,3 @@ function del_blog_posts() {
 
     return "<p>$langBlogPostsDeleted</p>";
 }
-
