@@ -28,6 +28,7 @@ require_once 'include/mailconfig.php';
 require_once 'modules/db/recycle.php';
 require_once 'modules/db/foreignkeys.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'modules/h5p/classes/H5PHubUpdater.php';
 require_once 'upgradeHelper.php';
 
 stop_output_buffering();
@@ -2081,7 +2082,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 dependency_type VARCHAR(10) NOT NULL,
           PRIMARY KEY(id)) $tbl_options");
         }
-
+        // install h5p content
+        $hubUpdater = new H5PHubUpdater();
+        $hubUpdater->fetchLatestContentTypes();
+        set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
     }
 
 

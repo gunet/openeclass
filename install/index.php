@@ -2,10 +2,10 @@
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /* ========================================================================
- * Open eClass 3.5
+ * Open eClass 3.12
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017 Greek Universities Network - GUnet
+ * Copyright 2003-2021 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,19 +21,14 @@ header('Content-Type: text/html; charset=UTF-8');
  * ======================================================================== */
 
 /*
- * Installation wizard
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This is the installation wizard of eclass.
- *
+ * @brief Installation wizard of eclass.
  */
 require_once '../vendor/autoload.php';
 require_once '../include/main_lib.php';
 require_once '../include/lib/pwgen.inc.php';
 require_once '../include/mailconfig.php';
 require_once '../modules/db/database.php';
+require_once '../modules/h5p/classes/H5PHubUpdater.php';
 require_once '../upgrade/functions.php';
 require_once 'functions.php';
 
@@ -496,6 +491,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // install badge icons
         installBadgeIcons($installDir);
         chdir(dirname(__FILE__));
+        // install h5p content
+        $hubUpdater = new H5PHubUpdater();
+        $hubUpdater->fetchLatestContentTypes();
+        set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
         // message
         $tool_content .= "
         <div class='alert alert-success'>$langInstallSuccess</div>

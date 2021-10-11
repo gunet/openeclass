@@ -21,17 +21,22 @@ $tool_content .= action_bar(array(
 if (isset($_GET['update']) and $_GET['update']) {
     $hubUpdater = new H5PHubUpdater();
     $hubUpdater->fetchLatestContentTypes();
+    set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
     $tool_content .= "<div class='alert alert-info text text-center'>$langH5pUpdateComplete</div>";
 } else {
+    $ts = get_config('h5p_update_content_ts');
     $tool_content .= "
         <div class='col-sm-12'>
         <div class='alert alert-info'>$langH5pInfoUpdate</div>
             <div class='text-center'>            
                 <a class='btn btn-success' href='$_SERVER[SCRIPT_NAME]?update=true' data-placement='bottom' data-toggle='tooltip' title='$langMaj'>
                     <span class='fa fa-refresh space-after-icon'></span>
-                    <span class='hidden-xs'>$langMaj</span>
-                </a>
-            </div>
+                    <span class='hidden-xs'>$langMaj</span>                    
+                </a>";
+                if ($ts) {
+                    $tool_content .= "<span class='help-block'><em>$langlastUpdated: " . greek_format($ts, true) . "</em></span>";
+                }
+            $tool_content .= "</div>
         </div>";
 }
 
