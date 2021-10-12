@@ -254,13 +254,6 @@ $db->query("CREATE TABLE `user` (
     eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0,
     last_passreminder DATETIME DEFAULT NULL) $tbl_options");
 
-$db->query("CREATE TABLE `admin` (
-    user_id INT(11) NOT NULL PRIMARY KEY,
-    privilege INT(11) NOT NULL DEFAULT 0,
-    department_id INT(11) DEFAULT NULL,
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
-    FOREIGN KEY (department_id) REFERENCES hierarchy (id) ON DELETE CASCADE) $tbl_options");
-
 $db->query("CREATE TABLE `login_failure` (
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     ip varchar(45) NOT NULL,
@@ -1206,6 +1199,18 @@ $db->query("CREATE TABLE `user_department` (
 
 // create stored procedures
 refreshHierarchyProcedures();
+
+$db->query("CREATE TABLE `admin` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) NOT NULL,
+    `privilege` int(11) NOT NULL DEFAULT 0,
+    `department_id` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `user_id` (`user_id`,`department_id`),
+    KEY `admin_index` (`user_id`),
+    KEY `department_id` (`department_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $tbl_options");
 
 // encrypt the admin password into DB
 $password_encrypted = password_hash($passForm, PASSWORD_DEFAULT);
