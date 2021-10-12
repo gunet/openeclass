@@ -24,7 +24,7 @@
  * @brief installation data base queries
  */
 
-require_once '../modules/db/foreignkeys.php';
+require_once 'modules/db/foreignkeys.php';
 
 if (!defined('ECLASS_VERSION')) {
     exit;
@@ -2009,7 +2009,7 @@ $db->query("CREATE TABLE h5p_content_dependency (
 
 
 $_SESSION['theme'] = 'default';
-$webDir = '..';
+
 importThemes();
 
 set_config('theme_options_id', $db->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);

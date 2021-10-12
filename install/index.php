@@ -28,9 +28,13 @@ require_once '../include/main_lib.php';
 require_once '../include/lib/pwgen.inc.php';
 require_once '../include/mailconfig.php';
 require_once '../modules/db/database.php';
-require_once '../modules/h5p/classes/H5PHubUpdater.php';
 require_once '../upgrade/functions.php';
 require_once 'functions.php';
+
+chdir('..');
+$webDir = getcwd();
+
+require_once 'modules/h5p/classes/H5PHubUpdater.php';
 
 $tool_content = '';
 if (!isset($siteName)) {
@@ -66,19 +70,19 @@ if ($lang == 'el') {
 }
 
 // include_messages
-require_once "../lang/$lang/common.inc.php";
-$extra_messages = "../config/{$language_codes[$lang]}.inc.php";
+require_once "lang/$lang/common.inc.php";
+$extra_messages = "config/{$language_codes[$lang]}.inc.php";
 if (file_exists($extra_messages)) {
     include $extra_messages;
 } else {
     $extra_messages = false;
 }
-require_once "../lang/$lang/messages.inc.php";
+require_once "lang/$lang/messages.inc.php";
 if ($extra_messages) {
     include $extra_messages;
 }
 
-if (file_exists('../config/config.php')) {
+if (file_exists('config/config.php')) {
     // title = $langWelcomeWizard
     $tool_content .= "
         <div class='panel panel-info'>
@@ -248,7 +252,7 @@ if (isset($_POST['install2'])) {
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group'>
-             <pre class='pre-scrollable' style='col-sm-12'>" . q(wordwrap(file_get_contents('../info/license/gpl.txt'))) . "</pre>
+             <pre class='pre-scrollable' style='col-sm-12'>" . q(wordwrap(file_get_contents('info/license/gpl.txt'))) . "</pre>
            </div>
            <div class='form-group'>
              <div class='col-sm-12'>" . icon('fa-print') . " <a href='$gpl_link'>$langPrintVers</a></div>
@@ -457,7 +461,6 @@ elseif (isset($_POST['install7'])) {
     $langStep = sprintf($langStep1, 7, 7);
     $_SESSION['step'] = 7;
     $mysqlMainDb = $dbNameForm;
-    //$active_ui_languages = implode(' ', active_subdirs('../lang', 'messages.inc.php'));
     $active_ui_languages = 'el en';
 
     // create main database
@@ -475,7 +478,7 @@ $mysqlUser = ' . quote($dbUsernameForm) . ';
 $mysqlPassword = ' . quote($dbPassForm) . ';
 $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 ';
-    $fd = @fopen("../config/config.php", "w");
+    $fd = @fopen('config/config.php', 'w');
     if (!$fd) {
         $config_dir = dirname(__DIR__) . '/config';
         $tool_content .= "<p class='alert'>$langErrorConfig</p>" .
