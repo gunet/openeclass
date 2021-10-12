@@ -40,6 +40,7 @@ class EditorAjax implements H5PEditorAjaxInterface {
                         )
                  WHERE hl2.runnable = 1
                    AND hl1.major_version is null
+                   AND hl2.machine_name NOT IN ('H5P.AdventCalendar', 'H5P.Questionnaire', 'H5P.Summary')
               ORDER BY hl2.title";
         return Database::get()->queryArray($sql);
     }

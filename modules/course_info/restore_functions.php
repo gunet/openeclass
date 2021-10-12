@@ -1138,6 +1138,23 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
 
+        // H5P
+        $h5p_content_map = restore_table($restoreThis, 'h5p_content', array(
+            'set' => array('course_id' => $new_course_id),
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'h5p_content_dependency', array(
+            'map' => array('content_id' => $h5p_content_map),
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        foreach ($h5p_content_map as $hp5_content_oldid => $h5p_content_newid) {
+            $h5p_content_olddir = $courseDir . "/h5p/content/" . $hp5_content_oldid;
+            if (file_exists($h5p_content_olddir) && is_dir($h5p_content_olddir)) {
+                $h5p_content_newdir = $courseDir . "/h5p/content/" . $h5p_content_newid;
+                move_dir($h5p_content_olddir, $h5p_content_newdir);
+            }
+        }
+
         // Units
         if (!$weekly_view) {
             $unit_map = restore_table($restoreThis, 'course_units', array('set' => array('course_id' => $new_course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);

@@ -1616,6 +1616,8 @@ function delete_course($cid) {
         return;
     }
 
+    Database::get()->query("DELETE d FROM h5p_content_dependency d WHERE d.content_id IN (SELECT id FROM h5p_content WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE d FROM h5p_content d WHERE d.course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM user_badge_criterion d,badge_criterion s,badge s2 WHERE d.badge_criterion=s.id AND s.badge=s2.id AND s2.course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM badge_criterion d,badge s WHERE d.badge=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM user_badge d,badge s WHERE d.badge=s.id AND s.course_id = ?d", $cid);
