@@ -1,4 +1,4 @@
-f<?php
+<?php
 
 /* ========================================================================
  * Open eClass 3.6
@@ -256,7 +256,10 @@ $db->query("CREATE TABLE `user` (
 
 $db->query("CREATE TABLE `admin` (
     user_id INT(11) NOT NULL PRIMARY KEY,
-    privilege INT(11) NOT NULL DEFAULT 0) $tbl_options");
+    privilege INT(11) NOT NULL DEFAULT 0,
+    department_id INT(11) DEFAULT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES hierarchy (id) ON DELETE CASCADE) $tbl_options");
 
 $db->query("CREATE TABLE `login_failure` (
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
