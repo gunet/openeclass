@@ -151,7 +151,9 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'badge_icon' => 'true',
         'category' => 'true',
         'category_value' => 'true',
-        'course_category' => $sql_course
+        'course_category' => $sql_course,
+        'h5p_content' => $sql_course,
+        'h5p_content_dependency' => "content_id IN (SELECT id FROM h5p_content WHERE course_id = $course_id)"
         );
 
     foreach ($archive_conditions as $table => $condition) {
