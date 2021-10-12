@@ -2017,7 +2017,6 @@ set_config('theme_options_id', $db->querySingle('SELECT id FROM theme_options WH
 // create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
 $db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
-$db->query("CREATE INDEX `admin_index` ON admin(user_id)");
 $db->query("CREATE INDEX `agenda_index` ON agenda(course_id)");
 $db->query("CREATE INDEX `ann_index` ON announcement(course_id)");
 $db->query("CREATE INDEX `assignment_index` ON assignment(course_id)");
