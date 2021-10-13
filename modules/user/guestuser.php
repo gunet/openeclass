@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
     if ($password === '') {
         Session::Messages($langGuestWarnEmptyPassword, 'alert-warning');
     }
-    redirect_to_home_page('modules/user/');
+    redirect_to_home_page("modules/user/?course=$course_code");
 } else {
     $guest_info = guestinfo($course_id);
     if ($guest_info) {
