@@ -209,7 +209,7 @@ function showgroupsofcategory($catid) {
         $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
         $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
         $langEditChange, $uid, $totalRegistered, $student_desc, $allow_unreg,
-        $tutors, $group_name, $self_reg, $user_group_description, $user_groups,
+        $tutors, $group_name, $self_reg, $user_group_description, $user_visible_groups,
         $max_members, $group_description, $langCommentsUser, $langViewHide, $langViewShow;
 
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
@@ -260,7 +260,7 @@ function showgroupsofcategory($catid) {
             }
         } else {
             if ($user_group_description && $student_desc) {
-                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+                $tool_content .= "<small><a href = 'javascript:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
         }
         $tool_content .= "</td>";
@@ -311,7 +311,7 @@ function showgroupsofcategory($catid) {
 
             if ($uid) {
                 if (!$is_member) {
-                    if (($multi_reg == 0) and (!$user_groups)) {
+                    if (($multi_reg == 0) and (!$user_visible_groups)) {
                         $user_can_register_to_group = true;
                     } else if ($multi_reg == 1) {
                         $user_can_register_to_group = true;

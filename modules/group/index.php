@@ -652,7 +652,7 @@ if ($is_editor) {
                 if (!$is_member) {
                     if (($multi_reg == 0) and (!$user_visible_groups)) {
                         $user_can_register_to_group = true;
-                    } else if ($multi_reg == 1) {
+                    } else if ($multi_reg == 1 or $multi_reg == 2) {
                         $user_can_register_to_group = true;
                     } else {
                         $user_can_register_to_group = false;
