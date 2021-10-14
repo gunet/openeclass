@@ -23,6 +23,7 @@ $require_login = true;
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'h5p';
+$helpSubTopic = 'h5p_objects';
 
 require_once '../../include/baseTheme.php';
 require_once 'classes/H5PFactory.php';
