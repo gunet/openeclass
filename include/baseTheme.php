@@ -268,35 +268,39 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_ANNOUNCEMENTS', q($GLOBALS['langMyAnnouncements']));
         $t->set_var('ANNOUNCEMENTS_LINK', $urlAppend . 'modules/announcements/myannouncements.php');
         if (!$is_embedonce) {
-            if ((isset($is_admin) and $is_admin) or
-                (isset($is_power_user) and $is_power_user) or
-                (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-                    $t->set_var('LANG_ADMIN', q($langAdminTool));
-                    $t->set_var('ADMIN_LINK', $urlAppend . 'modules/admin/');
-                    $t->set_var('topMenuDivider', 'style="border-top: 1px solid #ddd"');
-                    $t->set_var('ADMIN_ICON',"<li><a href='". $urlAppend . "modules/admin/index.php'><span class='fa fa-wrench'></span></a></li>");
+            if ($session->status == USER_GUEST) {
+                $t->set_block('mainBlock', 'UserMenuBlock', 'delete');
             } else {
-                    $t->set_block('mainBlock', 'AdminToolsBlock', 'delete');
-            }
-            if (get_config('personal_blog')) {
-                $t->set_var('LANG_MYBLOG', q($GLOBALS['langMyBlog']));
-                $t->set_var('MYBLOG_LINK', $urlAppend . 'modules/blog/index.php');
-            } elseif ($menuTypeID > 0) {
-                $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
-            }
-            if (get_config('eportfolio_enable')) {
-                $t->set_var('LANG_MYEPORTFOLIO', q($GLOBALS['langMyePortfolio']));
-                $t->set_var('MYEPORTFOLIO_LINK', $urlAppend . 'main/eportfolio/index.php?id='.$GLOBALS['uid'].'&token='.token_generate('eportfolio' . $GLOBALS['uid']));
-            } elseif ($menuTypeID > 0) {
-                $t->set_block('mainBlock', 'ePortfolioBlock', 'delete');
-            }
-            if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
-                ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
-                $t->set_var('LANG_MYDOCS', q($GLOBALS['langMyDocs']));
-                $t->set_var('MYDOCS_LINK', $urlAppend . 'main/mydocs/index.php');
-            } elseif ($menuTypeID > 0) {
-                $t->set_block('mainBlock', 'MyDocsBlock', 'delete');
+                if ((isset($is_admin) and $is_admin) or
+                    (isset($is_power_user) and $is_power_user) or
+                    (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                    (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+                        $t->set_var('LANG_ADMIN', q($langAdminTool));
+                        $t->set_var('ADMIN_LINK', $urlAppend . 'modules/admin/');
+                        $t->set_var('topMenuDivider', 'style="border-top: 1px solid #ddd"');
+                        $t->set_var('ADMIN_ICON',"<li><a href='". $urlAppend . "modules/admin/index.php'><span class='fa fa-wrench'></span></a></li>");
+                } else {
+                        $t->set_block('mainBlock', 'AdminToolsBlock', 'delete');
+                }
+                if (get_config('personal_blog')) {
+                    $t->set_var('LANG_MYBLOG', q($GLOBALS['langMyBlog']));
+                    $t->set_var('MYBLOG_LINK', $urlAppend . 'modules/blog/index.php');
+                } elseif ($menuTypeID > 0) {
+                    $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
+                }
+                if (get_config('eportfolio_enable')) {
+                    $t->set_var('LANG_MYEPORTFOLIO', q($GLOBALS['langMyePortfolio']));
+                    $t->set_var('MYEPORTFOLIO_LINK', $urlAppend . 'main/eportfolio/index.php?id='.$GLOBALS['uid'].'&token='.token_generate('eportfolio' . $GLOBALS['uid']));
+                } elseif ($menuTypeID > 0) {
+                    $t->set_block('mainBlock', 'ePortfolioBlock', 'delete');
+                }
+                if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
+                    ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
+                    $t->set_var('LANG_MYDOCS', q($GLOBALS['langMyDocs']));
+                    $t->set_var('MYDOCS_LINK', $urlAppend . 'main/mydocs/index.php');
+                } elseif ($menuTypeID > 0) {
+                    $t->set_block('mainBlock', 'MyDocsBlock', 'delete');
+                }
             }
         }
         $t->set_var('QUICK_NOTES', q($GLOBALS['langQuickNotesSide']));
@@ -595,7 +599,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $head_content .= "
         <script>
         $(function() {
-            $('#help-btn').click(function(e) {                
+            $('#help-btn').click(function(e) {
                 e.preventDefault();
                 $.get($(this).attr(\"href\"), function(data) {
                     bootbox.alert({
