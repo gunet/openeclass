@@ -209,7 +209,7 @@ function expanded_faculte($facid, $uid) {
         $unlock_all_courses = true;
     } elseif ($is_departmentmanage_user) {
         $user = new User();
-        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        $subtrees = $tree->buildSubtrees($user->getAdminDepartmentIds($uid));
         $unlock_all_courses = in_array($facid, $subtrees);
     } else {
         $unlock_all_courses = false;
@@ -255,10 +255,10 @@ function expanded_faculte($facid, $uid) {
         if ($mycours->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$cid])) {
             // open course, registered to course, or power user who can see all
             $codelink = "<a href='{$urlAppend}courses/" . $mycours->k . "/'>$course_title</a>";
-        } elseif ($mycours->visible == COURSE_CLOSED) { // closed course            
+        } elseif ($mycours->visible == COURSE_CLOSED) { // closed course
             $disable_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $cid);
             if ($disable_course_user_requests) {
-                $codelink = $course_title;                
+                $codelink = $course_title;
             } else {
                 $codelink = "<a href='{$urlAppend}modules/contact/index.php?course_id=$cid'>$course_title</a>";
             }
@@ -269,9 +269,9 @@ function expanded_faculte($facid, $uid) {
         $coursePrerequisites = "";
         $prereqsCnt = 0;
         $result = Database::get()->queryArray("SELECT c.*
-                                 FROM course_prerequisite cp 
-                                 JOIN course c on (c.id = cp.prerequisite_course) 
-                                 WHERE cp.course_id = ?d 
+                                 FROM course_prerequisite cp
+                                 JOIN course c on (c.id = cp.prerequisite_course)
+                                 WHERE cp.course_id = ?d
                                  ORDER BY c.title", $cid);
         foreach ($result as $row) {
             $prereqTitle = q($row->title . " (" . $row->public_code . ")");

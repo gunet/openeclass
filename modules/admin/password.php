@@ -25,14 +25,31 @@
  */
 
 $require_login = true;
-$require_admin = true;
 $require_valid_uid = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/hierarchy_validations.php';
 
+if (isset($_REQUEST['userid'])) {
+    $userid = intval($_REQUEST['userid']);
+} else {
+    forbidden();
+}
+
+if (isDepartmentAdmin()) {
+    $tree = new Hierarchy();
+    $user = new User();
+    validateUserNodes($userid, true);
+} elseif (!$is_usermanage_user) {
+    forbidden();
+}
+
+$backUrl = $urlServer . 'modules/admin/edituser.php?u=' . urlencode($_REQUEST['userid']);
 $toolName = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'edituser.php', 'name' => $langEditUser);
+$navigation[] = array('url' => $backUrl, 'name' => $langEditUser);
 
 // javascript
 load_js('pwstrength.js');
@@ -64,7 +81,7 @@ check_uid();
 $passurl = $urlServer . 'modules/admin/password.php';
 $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "{$urlServer}modules/admin/edituser.php?u=" . urlencode($_REQUEST['userid']),
+                'url' => $backUrl,
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')
                 ));

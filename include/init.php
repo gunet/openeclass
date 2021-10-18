@@ -354,7 +354,7 @@ if (isset($require_current_course) and $require_current_course) {
                 $userObj = new User();
 
                 $atleastone = false;
-                $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
+                $subtrees = $treeObj->buildSubtrees($userObj->getAdminDepartmentIds($uid));
                 $depIds = $courseObj->getDepartmentIds($course_id);
                 foreach ($depIds as $depId) {
                     if (in_array($depId, $subtrees)) {

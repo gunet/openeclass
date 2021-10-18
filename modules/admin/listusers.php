@@ -85,14 +85,14 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 
     // Expiration date search
-    if (!empty($user_expires_until)) {        
+    if (!empty($user_expires_until)) {
         add_param('user_expires_until');
         // join the above with registered at search
         $criteria[] = 'expires_at > CURRENT_DATE() AND expires_at < ?s';
         $date_user_expires_until = DateTime::createFromFormat("d-m-Y", $user_expires_until);
         $terms[] = $date_user_expires_until->format("Y-m-d");
     }
-    
+
     // surname search
     if (!empty($lname)) {
         $criteria[] = 'surname LIKE ?s ' . $cs;
@@ -149,7 +149,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $criteria[] = 'expires_at < CURRENT_DATE()';
         add_param('search', 'inactive');
     }
-    
+
     // search for users with their account being expired in one month
     if ($search == 'wexpire') {
         $criteria[] = 'expires_at BETWEEN CURRENT_DATE() AND date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';
@@ -167,7 +167,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $subs = $tree->buildSubtrees(array($dep));
             add_param('department', $dep);
         } else if (isDepartmentAdmin()) {
-            $subs = $user->getDepartmentIds($uid);
+            $subs = $user->getAdminDepartmentIds($uid);
         }
 
         $ids = '';
@@ -290,7 +290,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                                                 OR email LIKE ?s)", $keywords)->total;
     }
 
-    
+
 
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;
@@ -490,7 +490,7 @@ $tool_content .= action_bar(array(
                 'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
                 'icon' => 'fa-search',
                 'level' => 'primary-label',
-                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive')),            
+                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive')),
             array('title' => $langBack,
                 'url' => "search_user.php",
                 'icon' => 'fa-reply',

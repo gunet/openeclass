@@ -68,8 +68,9 @@ $toolName = "$langEditUser: " . uid_to_name($u);
 $u_submitted = isset($_POST['u_submitted']) ? $_POST['u_submitted'] : '';
 
 if ($u) {
-    if (isDepartmentAdmin())
+    if (isDepartmentAdmin()) {
         validateUserNodes(intval($u), true);
+    }
 
     $info = Database::get()->querySingle("SELECT surname, givenname, username, password, email,
                               phone, registered_at, expires_at, status, am,

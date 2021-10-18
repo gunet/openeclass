@@ -2006,6 +2006,31 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.12'));
         Database::get()->query("ALTER TABLE user MODIFY `password` VARCHAR(255) NOT NULL DEFAULT 'empty'");
 
+        if (DBHelper::fieldExists('admin', 'department_id')) {
+            Database::get()->query('DELETE FROM admin
+                WHERE user_id IN (SELECT user_id FROM admin
+                    LEFT JOIN user ON user_id = user.id
+                    WHERE user.id IS NULL)');
+            if (DBHelper::indexExists('admin', 'idUser')) {
+                Database::get()->query('ALTER TABLE admin DROP index idUser');
+            }
+            Database::get()->query('ALTER TABLE admin
+                DROP PRIMARY KEY,
+                ADD COLUMN id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
+                ADD department_id INT(11) DEFAULT NULL,
+                ADD FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
+                ADD FOREIGN KEY (department_id) REFERENCES hierarchy (id) ON DELETE CASCADE,
+                ADD UNIQUE KEY (user_id, department_id)');
+            Database::get()->query('INSERT INTO admin (user_id, privilege, department_id)
+                SELECT user_id, ?d, department FROM admin, user_department
+                    WHERE user_id = user AND privilege = ?d',
+                    DEPARTMENTMANAGE_USER, DEPARTMENTMANAGE_USER);
+            Database::get()->query('DELETE FROM admin
+                WHERE department_id IS NULL AND privilege = ?d',
+                DEPARTMENTMANAGE_USER);
+
+        }
+
         // h5p
         if (!DBHelper::tableExists('h5p_library')) {
             Database::get()->query("CREATE TABLE h5p_library (

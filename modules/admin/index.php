@@ -22,7 +22,9 @@
 $require_usermanage_user = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'modalconfirmation.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'modules/admin/modalconfirmation.php';
 
 $toolName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
@@ -179,6 +181,20 @@ if ($lastadminloginres && $lastadminloginres->when) {
     $lastregisteredstuds = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = ". USER_STUDENT ." AND registered_at > ?t", $lastadminlogin)->cnt;
 }
 
+if ($is_admin) {
+    $accessMessage = $langAdministrator;
+} elseif ($is_power_user) {
+    $accessMessage = $langPowerUser;
+} elseif ($is_departmentmanage_user) {
+    $tree = new Hierarchy();
+    $userObj = new User();
+    $accessMessage = $langManageDepartment . '<ul>' .
+        implode('', array_map(function ($department_id) use ($tree) {
+            return '<li>' . $tree->getFullPath($department_id) . '</li>';
+        }, $userObj->getAdminDepartmentIds($uid))) . '</ul>';
+} elseif ($is_usermanage_user) {
+    $accessMessage = $langManageUser;
+}
 
 $tool_content .= "
     <div class='panel panel-default'>
@@ -220,14 +236,22 @@ $tool_content .= "
             </div>
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-4'>
-                <strong>$langAfterLastLoginInfo</strong>
+                    <strong>$langAfterLastLoginInfo</strong>
                 </div>
                 <div class='col-sm-8'>
-                $langAfterLastLogin
+                    $langAfterLastLogin
                     <ul class='custom_list'>
                       <li><b>" . $lastregisteredprofs . "</b> $langTeachers</li>
                       <li><b>" . $lastregisteredstuds . "</b> $langStudents </li>
                     </ul>
+                </div>
+            </div>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-4'>
+                    <strong>$langAccess</strong>
+                </div>
+                <div class='col-sm-8'>
+                    $accessMessage
                 </div>
             </div>
         </div>
@@ -268,23 +292,26 @@ if (get_config('enable_indexing')) {
                     $isOpt
                 </div>
             </div>";
-            if ($idx->getIndex() and $idx->getIndex()->hasDeletions()) {
-                $tool_content .= "
-                        <div class='row margin-bottom-thin'>
-                            <div class='col-sm-9 col-sm-offset-3'>
-                                <a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a>
-                            </div>
-                        </div>";
-            }
-        $tool_content .= "
-                <div class='row margin-bottom-thin'>
-                    <div class='col-sm-9 col-sm-offset-3'>
-                        <a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a>
-                    </div>
+    if ($is_admin) {
+        if ($idx->getIndex() and $idx->getIndex()->hasDeletions()) {
+            $tool_content .= "
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-9 col-sm-offset-3'>
+                    <a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a>
                 </div>
-            </div>
-        </div>";
-        $tool_content .= modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
+            </div>";
+        }
+        $tool_content .= "
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-9 col-sm-offset-3'>
+                    <a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a>
+                </div>
+            </div>";
+    }
+    $tool_content .= "
+        </div>
+    </div>" .
+    modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
 }
 
 // CRON RELATED

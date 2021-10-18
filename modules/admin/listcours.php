@@ -95,7 +95,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // Limit department admin search only to subtrees of own departments
     if (isDepartmentAdmin()) {
         $begin = true;
-        foreach ($user->getDepartmentIds($uid) as $department) {
+        foreach ($user->getAdminDepartmentIds($uid) as $department) {
             if ($begin) {
                 $query .= ' AND (';
                 $begin = false;

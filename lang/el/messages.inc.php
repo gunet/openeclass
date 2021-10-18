@@ -75,6 +75,9 @@ $langSearchResults = 'Αποτελέσματα αναζήτησης';
 /* * ******************************************
  * addadmin.php
  * ******************************************* */
+$langAddAdmin = 'Προσθήκη διαχειριστή';
+$langEditUser = 'Επεξεργασία χρήστη';
+$langEditPrivilege = 'Επεξεργασία δικαιωμάτων';
 $langDeleteAdmin = "H διαγραφή του διαχειριστή με id:";
 $langNotFeasible = "δεν είναι εφικτή";
 $langAdmins = "Διαχειριστές";
@@ -5916,8 +5919,8 @@ $langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο τύ
 $langOfH5p = "διαδραστικού περιεχομένου";
 $langTypeH5P = "Τύπος H5P";
 $langImportH5P = "Μπορείτε να εισάγετε ένα έτοιμο αρχείο διαδραστικού περιεχομένου τύπου H5P μέσω της παρακάτω φόρμας.";
-$langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι ώστε οι διαθέσιμοι τύποι διαδραστικού περιεχομένου H5P 
-                    να ενημερωθούν με τις πιο πρόσφατες αλλαγές (αν υπάρχουν). <br> 
-                    Δείτε περισσότερες λεπτομέρειες στο  
-                    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a> 
+$langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι ώστε οι διαθέσιμοι τύποι διαδραστικού περιεχομένου H5P
+                    να ενημερωθούν με τις πιο πρόσφατες αλλαγές (αν υπάρχουν). <br>
+                    Δείτε περισσότερες λεπτομέρειες στο
+                    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
                     για τους διαθέσιμους τύπους περιεχομένων.";

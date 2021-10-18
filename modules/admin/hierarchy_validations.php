@@ -49,7 +49,7 @@ function validateNode($id, $checkOwn) {
     }
 
     if ($checkOwn) {
-        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        $subtrees = $tree->buildSubtrees($user->getAdminDepartmentIds($uid));
 
         if (!in_array($id, $subtrees)) {
             exitWithError($notallowed);
@@ -59,9 +59,9 @@ function validateNode($id, $checkOwn) {
 
 /**
  * Validate a tree node's existence (and proper integer) based on its id value.
- * Optionally, validate that the current user has proper access for this node 
+ * Optionally, validate that the current user has proper access for this node
  * (the node must be within the nodes subtree that this user belongs to).
- * 
+ *
  * @param int     $id       - The node's id value
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
@@ -113,7 +113,7 @@ function validateUserNodes($userId, $checkOwn) {
 
     if ($checkOwn) {
         $atleastone = false;
-        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        $subtrees = $tree->buildSubtrees($user->getAdminDepartmentIds($uid));
 
         foreach ($deps as $depId) {
             if (in_array($depId, $subtrees)) {
@@ -152,7 +152,7 @@ function validateCourseNodes($courseId, $checkOwn) {
 
     if ($checkOwn) {
         $atleastone = false;
-        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        $subtrees = $tree->buildSubtrees($user->getAdminDepartmentIds($uid));
 
         foreach ($deps as $depId) {
             if (in_array($depId, $subtrees)) {
@@ -168,8 +168,8 @@ function validateCourseNodes($courseId, $checkOwn) {
 
 /**
  * Terminate execution and display an (optional) error message.
- * 
- * @param string $message - The optional error message to display 
+ *
+ * @param string $message - The optional error message to display
  */
 function exitWithError($message) {
     global $tool_content, $head_content;
@@ -183,7 +183,7 @@ function exitWithError($message) {
  * Checks if the current user's role is Department Admin.
  * The role is defined by having specific permissions (dep/user manage)
  * and lacking specific permissions (power and admin).
- * 
+ *
  * @return boolean $checkOwn
  */
 function isDepartmentAdmin() {

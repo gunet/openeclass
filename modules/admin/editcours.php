@@ -65,8 +65,7 @@ $tool_content .= action_bar(array(
 if (isset($c)) {
     // Get information about selected course
     $row = Database::get()->querySingle("SELECT course.code as code, course.title as title , course.prof_names as prof_names, course.visible as visible
-		  FROM course
-		 WHERE course.code = ?s", $_GET['c']);
+        FROM course WHERE course.code = ?s", $_GET['c']);
 
     // Display course information and link to edit
     $tool_content .= "<table class='table-default'>

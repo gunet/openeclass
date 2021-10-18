@@ -22,70 +22,200 @@
 $require_admin = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/hierarchy_validations.php';
 
-$toolName = $langAdmins;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = ['url' => 'index.php', 'name' => $langAdmin];
+
+$tree = new Hierarchy;
 
 // Initialize the incoming variables
-$username = isset($_POST['username']) ? $_POST['username'] : '';
+$username = isset($_POST['username']) ? trim($_POST['username']) : null;
 
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
-
-if (isset($_POST['submit']) and ! empty($username)) {
+if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    $res = Database::get()->querySingle("SELECT id FROM user WHERE username=?s", $username);
+    $res = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $username);
     if ($res) {
         $user_id = $res->id;
-        switch ($_POST['adminrights']) {
-            case 'admin': $privilege = '0'; // platform admin user
-                break;
-            case 'poweruser': $privilege = '1'; // power user
-                break;
-            case 'manageuser': $privilege = '2'; //  manage user accounts
-                break;
-            case 'managedepartment' : $privilege = '3'; // manage departments
-                break;
+        if ($user_id == $uid) {
+            Session::Messages($langErrorAddaAdmin, 'alert-danger');
+            redirect_to_home_page('modules/admin/addadmin.php');
         }
-
-        if (isset($privilege)) {
-            if (Database::get()->querySingle("SELECT * FROM admin WHERE user_id = ?d", $user_id)) {
-                $affected = Database::get()->query("UPDATE admin SET privilege = ?d
-                                WHERE user_id = ?d", $privilege, $user_id)->affectedRows;
+        $privilege = [
+            'admin' => ADMIN_USER,
+            'poweruser' => POWER_USER,
+            'manageuser' => USERMANAGE_USER,
+            'managedepartment' => DEPARTMENTMANAGE_USER,
+        ][$_POST['adminrights']];
+        if (!is_null($privilege)) {
+            Database::get()->query('DELETE FROM admin WHERE user_id = ?d', $user_id);
+            if ($privilege == DEPARTMENTMANAGE_USER) {
+                if (!isset($_POST['adminDeps']) or !$_POST['adminDeps']) {
+                    Session::Messages($langEmptyAddNode, 'alert-danger');
+                    redirect_to_home_page('modules/admin/addadmin.php?add=add');
+                }
+                $affected = 1;
+                foreach ($_POST['adminDeps'] as $dep_id) {
+                    validateNode($dep_id, false);
+                    $affected *= Database::get()->query('INSERT INTO admin
+                        SET user_id = ?d, privilege = ?d, department_id = ?d',
+                        $user_id, $privilege, $dep_id)->affectedRows;
+                }
             } else {
-                $affected = Database::get()->query("INSERT INTO admin VALUES(?d,?d)", $user_id, $privilege)->affectedRows;
+                $affected = Database::get()->query('INSERT INTO admin
+                    SET user_id = ?d, privilege = ?d',
+                    $user_id, $privilege)->affectedRows;
             }
-            if ($affected > 0) {
-                $tool_content .= "<div class='alert alert-success'>
-                    $langTheUser <b>" . q($username) . "</b> $langDone</div>";
+            if ($affected) {
+                Session::Messages("$langTheUser <b>" . q($username) . "</b> $langDone", 'alert-success');
+                redirect_to_home_page('modules/admin/addadmin.php');
             }
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langError</div>";
+            Session::Messages($langError, 'alert-danger');
+            redirect_to_home_page('modules/admin/addadmin.php?add=add');
         }
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langTheUser " . q($username) . " $langNotFound.</div>";
+        Session::Messages("$langTheUser " . q($username) . " $langNotFound", 'alert-danger');
+        redirect_to_home_page('modules/admin/addadmin.php?add=add');
     }
 } else if (isset($_GET['delete'])) { // delete admin users
-    $aid = intval(getDirectReference($_GET['aid']));
+    $aid = getDirectReference($_GET['delete']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-        if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {
-            $tool_content .= "<div class='alert alert-success'>$langNotAdmin</div>";
+        if (Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $aid)->affectedRows > 0) {
+            Session::Messages($langNotAdmin, 'alert-success');
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langDeleteAdmin" . q($aid) . " $langNotFeasible</p>";
+            Session::Messages("$langDeleteAdmin " . q($aid) . " $langNotFeasible", 'alert-danger');
         }
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langCannotDeleteAdmin</div>";
+        Session::Messages($langCannotDeleteAdmin, 'alert-danger');
     }
+    redirect_to_home_page('modules/admin/addadmin.php');
 }
 
-$tool_content .= printform($langUsername);
+if (isset($_GET['add']) or isset($_GET['edit'])) {
+    load_js('jstree3');
+    $navigation[] = ['url' => 'index.php', 'name' => $langAdmins];
+
+    if (isset($_GET['edit'])) {
+        $user_id = getDirectReference($_GET['edit']);
+        $user = Database::get()->querySingle('SELECT * FROM user WHERE id = ?d', $user_id);
+        $username = q($user->username);
+        $toolName = $langEditPrivilege;
+        $usernameValue = " readonly value='$username'";
+        $roles = Database::get()->queryArray('SELECT * FROM admin WHERE user_id = ?d', $user_id);
+        $privilege = $roles[0]->privilege;
+        $checked = [
+            'admin' => $privilege == ADMIN_USER? ' checked': '',
+            'poweruser' => $privilege == POWER_USER? ' checked': '',
+            'manageuser' => $privilege == USERMANAGE_USER? ' checked': '',
+            'managedepartment' => $privilege == DEPARTMENTMANAGE_USER? ' checked': '',
+        ];
+        if ($privilege == DEPARTMENTMANAGE_USER) {
+            $adminDeps = array_map(function ($item) {
+                return $item->department_id;
+            }, $roles);
+        }
+    } else {
+        $toolName = $langAddAdmin;
+        $usernameValue = " placeholder='$langUsername'";
+        $checked = [
+            'admin' => '',
+            'poweruser' => '',
+            'manageuser' => '',
+            'managedepartment' => '',
+        ];
+        $adminDeps = [];
+    }
+    list($pickerJs, $pickerHtml) = $tree->buildNodePicker([
+        'params' => 'name="adminDeps[]"',
+        'multiple' => true,
+        'defaults' => $adminDeps]);
+    $head_content .= $pickerJs;
+
+    $tool_content .= action_bar([
+        [ 'title' => $langBack,
+          'url' => "addadmin.php",
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ],
+    ]) . "
+            <div class='form-wrapper'>
+              <form class='form-horizontal' role='form' method='post' name='makeadmin' action='$_SERVER[SCRIPT_NAME]'>
+                <div class='form-group'>
+                  <label for='username' class='col-sm-2 control-label'>$langUsername</label>
+                  <div class='col-sm-10'><input class='form-control' type='text' name='username' $usernameValue></div>
+                </div>
+                <div class='form-group'>
+                  <label class='col-sm-2 control-label'>$langAddRole</label>
+                    <div class='col-sm-10'>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='adminrights' value='admin'$checked[admin]>$langAdministrator
+                        </label>
+                        <span class='help-block'><small>$langHelpAdministrator</small></span>
+                        <label>
+                          <input type='radio' name='adminrights' value='poweruser'$checked[poweruser]>$langPowerUser
+                        </label>
+                        <span class='help-block'><small>$langHelpPowerUser&nbsp;</small></span>
+                        <label>
+                          <input type='radio' name='adminrights' value='manageuser'$checked[manageuser]>$langManageUser
+                        </label>
+                        <span class='help-block'><small>$langHelpManageUser</small></span>
+                        <label>
+                          <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio'$checked[managedepartment]>$langManageDepartment
+                        </label>
+                        <span class='help-block'><small>$langHelpManageDepartment</small></span>
+                      </div>
+                  </div>
+                </div>
+                <div class='form-group hidden' id='departmentPicker'>
+                  <label class='col-sm-2 control-label'>$langFaculties</label>
+                  <div class='col-sm-10' style='padding-top: 7px;'>
+                    $pickerHtml
+                  </div>
+                </div>
+                <div class='form-group'>
+                  <div class='col-sm-10 col-sm-offset-2'>
+                    <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
+                    <button class='btn btn-default' data-dismiss='modal'>$langCancel</button>
+                  </div>
+                </div>" .
+                generate_csrf_token_form_field() . "
+              </form>
+            </div>
+            <script>
+                $(function () {
+                    if ($('#managedepartmentradio').is(':checked')) {
+                        $('#departmentPicker').removeClass('hidden').show();
+                    } else {
+                        $('#departmentPicker').removeClass('hidden').hide();
+                    }
+                    $('input[name=adminrights]').change(function (e) {
+                        $('#departmentPicker').removeClass('hidden');
+                        if ($('#managedepartmentradio').is(':checked')) {
+                            $('#departmentPicker').slideDown('fast');
+                        } else {
+                            $('#departmentPicker').slideUp('fast');
+                        }
+                    });
+                });
+            </script>";
+} else {
+    $toolName = $langAdmins;
+    $tool_content .= action_bar([
+        [ 'title' => $langAdd,
+          'url' => 'addadmin.php?add=admin',
+          'icon' => 'fa-plus-circle',
+          'button-class' => 'btn-success',
+          'level' => 'primary-label' ],
+        [ 'title' => $langBack,
+          'url' => "index.php",
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ],
+    ]);
+}
 
 $tool_content .= "<table class='table-default'>
         <tr>
-          <th class='center'>ID</th>
           <th>$langSurnameName</th>
           <th>$langUsername</th>
           <th class='center'>$langRole</th>
@@ -93,99 +223,55 @@ $tool_content .= "<table class='table-default'>
         </tr>";
 
 // Display the list of admins
-Database::get()->queryFunc("SELECT id, givenname, surname, username, admin.privilege as privilege
-                    FROM user, admin
-                    WHERE user.id = admin.user_id
-                    ORDER BY id", function ($row) use (&$tool_content, $langAdministrator, $langPowerUser, $langManageUser, $langManageDepartment, $themeimg, $langDelete) {
-    $tool_content .= "<tr>
-        <td align='left'>" . q($row->id) . ".</td>
-        <td>" . q($row->givenname) . " " . q($row->surname) . "</td>
-        <td>" . q($row->username) . "</td>";
-    switch ($row->privilege) {
-        case '0': $message = $langAdministrator;
-            break;
-        case '1': $message = $langPowerUser;
-            break;
-        case '2': $message = $langManageUser;
-            break;
-        case '3' : $message = $langManageDepartment;
-            break;
-    }
-    $tool_content .= "<td align='left'>$message</td>";
-    if ($row->id != 1) {
-        $tool_content .="<td class='center'>" .
-                action_button(array(
-                    array('title' => $langDelete,
-                        'url' => "$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . q(getIndirectReference($row->id)),
-                        'class' => 'delete',
-                        'icon' => 'fa-times'),
-                )) .
-                "</td>";
+$admins = Database::get()->queryArray('SELECT admin.*, user.username
+    FROM user, admin
+    WHERE user.id = admin.user_id
+    ORDER BY user_id');
+$out = [];
+foreach ($admins as $admin) {
+    if (isset($out[$admin->user_id])) {
+        $out[$admin->user_id]->department_id[] = $admin->department_id;
     } else {
-        $tool_content .= "<td class='center'></td>";
+        if (!is_null($admin->department_id)) {
+            $admin->department_id = [$admin->department_id];
+        }
+        $out[$admin->user_id] = $admin;
     }
-    $tool_content .= "</tr>";
-});
+}
+foreach ($out as $row) {
+    $message = [
+        ADMIN_USER => $langAdministrator,
+        POWER_USER => $langPowerUser,
+        USERMANAGE_USER => $langManageUser,
+        DEPARTMENTMANAGE_USER => $langManageDepartment,
+    ][$row->privilege];
+    if ($row->privilege == DEPARTMENTMANAGE_USER) {
+        $message .= '<ul>' .
+            implode('', array_map(function ($department_id) use ($tree) {
+                return '<li>' . $tree->getFullPath($department_id) . '</li>';
+            }, $row->department_id)) .
+            '</ul>';
+    }
+    $indirect = getIndirectReference($row->user_id);
+    $tool_content .= "<tr>
+        <td>" . display_user($row->user_id) . "</td>
+        <td>" . q($row->username) . "</td>
+        <td align='left'>$message</td>
+        <td class='text-center'>" .
+            ($row->user_id == 1? '&nbsp;':
+                action_button([
+                    [ 'title' => $langEditPrivilege,
+                      'url' => "{$urlAppend}modules/admin/addadmin.php?edit=$indirect",
+                      'icon' => 'fa-edit' ],
+                    [ 'title' => $langEditUser,
+                      'url' => "{$urlAppend}modules/admin/edituser.php?u={$row->user_id}",
+                      'icon' => 'fa-edit' ],
+                    [ 'title' => $langDelete,
+                      'url' => "$_SERVER[SCRIPT_NAME]?delete=$indirect",
+                      'class' => 'delete',
+                      'icon' => 'fa-times' ]])) . "</td>
+      </tr>";
+};
 $tool_content .= "</table>";
 
-draw($tool_content, 3);
-
-
-/**
- * @brief display administrator search form for grantint user administrator privileges
- * @global type $langAdd
- * @global type $langAdministrator
- * @global type $langPowerUser
- * @global type $langManageUser
- * @global type $langAddRole
- * @global type $langHelpAdministrator
- * @global type $langHelpPowerUser
- * @global type $langHelpManageUser
- * @global type $langUserFillData
- * @global type $langManageDepartment
- * @global type $langHelpManageDepartment
- * @param type $message
- * @return string
- */
-function printform($message) {
-
-    global $langAdd, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
-    $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUsername,
-    $langManageDepartment, $langHelpManageDepartment;
-
-    $ret = "<div class='form-wrapper'>
-            <form class='form-horizontal' role='form' method='post' name='makeadmin' action='$_SERVER[SCRIPT_NAME]'>";
-    $ret .= "<fieldset>
-                <div class='form-group'>
-                    <label for='username' class='col-sm-2 control-label'>" . $message . "</label>
-                    <div class='col-sm-10'><input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder='$langUsername'></div>
-                </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langAddRole</label>
-                        <div class='col-sm-10'>
-                            <div class='radio'>
-                                <input type='radio' name='adminrights' value='admin' checked>$langAdministrator<span class='help-block'><small>$langHelpAdministrator</small></span>
-                            </div>
-                            <div class='radio'>
-                                <input type='radio' name='adminrights' value='poweruser'>$langPowerUser<span class='help-block'><small>$langHelpPowerUser&nbsp;</small></span>
-                            </div>
-                            <div class='radio'>
-                                <input type='radio' name='adminrights' value='manageuser'>$langManageUser<span class='help-block'><small>$langHelpManageUser</small></span>
-                            </div>
-                            <div class='radio'>
-                                <input type='radio' name='adminrights' value='managedepartment'>$langManageDepartment<span class='help-block'><small>$langHelpManageDepartment</small></span>
-                            </div>
-                        </div>
-                    </label>
-                </div>
-                <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
-                    </div>
-                </div>       
-            </fieldset>
-            ". generate_csrf_token_form_field() ."
-            </form>
-        </div>";
-    return $ret;
-}
+draw($tool_content, 3, null, $head_content);
