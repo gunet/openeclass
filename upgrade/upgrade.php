@@ -2007,10 +2007,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("ALTER TABLE user MODIFY `password` VARCHAR(255) NOT NULL DEFAULT 'empty'");
 
         if (!DBHelper::fieldExists('admin', 'department_id')) {
-            Database::get()->query('DELETE FROM admin
-                WHERE user_id IN (SELECT user_id FROM admin
-                    LEFT JOIN user ON user_id = user.id
-                    WHERE user.id IS NULL)');
+            Database::get()->query('DELETE admin
+                FROM admin LEFT JOIN user ON user_id = user.id
+                WHERE user.id IS NULL');
             if (DBHelper::indexExists('admin', 'idUser')) {
                 Database::get()->query('ALTER TABLE admin DROP index idUser');
             }
