@@ -2006,7 +2006,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.12'));
         Database::get()->query("ALTER TABLE user MODIFY `password` VARCHAR(255) NOT NULL DEFAULT 'empty'");
 
-        if (DBHelper::fieldExists('admin', 'department_id')) {
+        if (!DBHelper::fieldExists('admin', 'department_id')) {
             Database::get()->query('DELETE FROM admin
                 WHERE user_id IN (SELECT user_id FROM admin
                     LEFT JOIN user ON user_id = user.id
