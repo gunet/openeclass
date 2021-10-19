@@ -148,7 +148,7 @@ $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $eid_temp = $objExercise->selectId();
 $recordStartDate = date("Y-m-d H:i:s", time());
-
+$questionList = $objExercise->selectQuestionList();
 $temp_CurrentDate = new DateTime();
 $temp_StartDate = new DateTime($objExercise->selectStartDate());
 $temp_EndDate = $objExercise->selectEndDate();
@@ -191,10 +191,10 @@ if (!isset($_SESSION['questionList'][$exerciseId])) {
         $i++;
     }
     // saves the question list into the session
-    if (count($questionList)) {
+    if (count($questionList) > 0) {
         $_SESSION['questionList'][$exerciseId] = $questionList;
     } else {
-        unset_exercise_var($exerciseId);
+        unset($_SESSION['objExercise'][$exerciseId]);
     }
 }
 
