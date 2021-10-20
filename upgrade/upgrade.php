@@ -2006,8 +2006,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.12'));
         Database::get()->query("ALTER TABLE user MODIFY `password` VARCHAR(255) NOT NULL DEFAULT 'empty'");
         // fix email status of guest user
-        Databasse:::get()->query("UPDATE `user` SET verified_mail = " . EMAIL_UNVERIFIED . ", receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE status = " . USER_GUEST . ")";
-        Databasse:::get()->query("UPDATE `course_user` set receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE status = " . USER_GUEST . ")";
+        Database::get()->query("UPDATE `user` SET verified_mail = " . EMAIL_UNVERIFIED . ", receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE status = " . USER_GUEST . "");
+        Database::get()->query("UPDATE `course_user` set receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE status = " . USER_GUEST . "");
 
         if (!DBHelper::fieldExists('admin', 'department_id')) {
             Database::get()->query('DELETE admin
