@@ -2472,6 +2472,7 @@ $langMailVerificationPendingU = "Bestätigung ist noch nicht erledigt";
 $langMailVerificationSettings = 'Einstellungen für die Bestätigung der e-mail Adresse der Benutzer';
 $langMailVerificationNotice = "Wenn die Bestätigung der e-mail Adresse des $langOfUser zwingend erforderlich ist und die Bestätigung noch nicht erledigt ist, dann gilt folgendes, bis die Bestätigung abgeschlossen wurde:<br /> <ul><li>Die Plattform wird den Benutzer an die Seite zur Bestätigung der e-mail Adresse weiterleiten</li> <li>der Benutzer wird keine Ankündigungen per e-mail erhalten von dem von Ihm belegten Kurs</li></ul>";
 $langMailVerificationNoticeAdmin = "Das Benutzerkonto Admin kann von dieser Seite nicht geändert werden.";
+$langMailVerificationNoticeGuest = "Guest users cannot been modified";
 $langChangeTo = "Ändern zu";
 $langMailVerificationChanged = "Wurde geändert";
 $langMailVerificationChangedNo = "Sie haben keine Änderung ausgewählt";

@@ -33,15 +33,15 @@ check_uid();
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['unsub'])) {
-        Database::get()->query("UPDATE user SET receive_mail = 1 WHERE id = ?d", $uid);
+        Database::get()->query("UPDATE user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . " WHERE id = ?d", $uid);
     }
     if (isset($_POST['cid'])) {  // change email subscription for one course
         $cid = intval(getDirectReference($_POST['cid']));
         if (isset($_POST['c_unsub'])) {
-            Database::get()->query("UPDATE course_user SET receive_mail = 1
+            Database::get()->query("UPDATE course_user SET receive_mail = ". EMAIL_NOTIFICATIONS_ENABLED . "
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
         } else {
-            Database::get()->query("UPDATE course_user SET receive_mail = 0
+            Database::get()->query("UPDATE course_user SET receive_mail = " .EMAIL_NOTIFICATIONS_DISABLED . "
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
         }
         $course_title = course_id_to_title($cid);
@@ -50,10 +50,10 @@ if (isset($_POST['submit'])) {
     } else { // change email subscription for all courses
         foreach ($_SESSION['courses'] as $course_code => $c_value) {
             if (@array_key_exists($course_code, $_POST['c_unsub'])) {
-                Database::get()->query("UPDATE course_user SET receive_mail = 1
+                Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . "
                                 WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);
             } else {
-                Database::get()->query("UPDATE course_user SET receive_mail = 0
+                Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . "
                                 WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);
             }
         }

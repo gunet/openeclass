@@ -135,12 +135,7 @@ draw($tool_content, 2, null, $head_content);
 
 /**
  * @brief create guest account or update password if it already exists
- * @global type $langGuestName
- * @global type $langGuestSurname
- * @param type $username
- * @param type $course_id
- * @param type $password
- * @return none
+ * @return void
  */
 function createguest($username, $course_id, $password) {
     global $langGuestName, $langGuestSurname;
@@ -154,18 +149,21 @@ function createguest($username, $course_id, $password) {
         $guest_id = $q->user_id;
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password, $guest_id);
     } else {
-        $q = Database::get()->query("INSERT INTO user (surname, givenname, username, password, status, registered_at, expires_at, whitelist, description)
-                                        VALUES (?s, ?s, ?s, ?s, " . USER_GUEST . ", ".DBHelper::timeAfter().", ".DBHelper::timeAfter(get_config('account_duration')).", '','')",
+        $q = Database::get()->query("INSERT INTO user (surname, givenname, username, password, status, registered_at, expires_at, whitelist, description, verified_mail, receive_mail)
+                                            VALUES (?s, ?s, ?s, ?s, " . USER_GUEST . ", 
+                                                ".DBHelper::timeAfter().", 
+                                                ".DBHelper::timeAfter(get_config('account_duration')).", 
+                                                '','', " . EMAIL_UNVERIFIED . ", " . EMAIL_NOTIFICATIONS_DISABLED . ")",
                                             $langGuestSurname, $langGuestName, $username, $password);
         $guest_id = $q->lastInsertID;
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $guest_id);
     }
-    Database::get()->query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
-                  VALUES (?d, ?d, " . USER_GUEST . ", ".DBHelper::timeAfter().")", $course_id, $guest_id);
+    Database::get()->query("INSERT IGNORE INTO course_user (course_id, user_id, status, receive_mail, reg_date)
+                                VALUES (?d, ?d, " . USER_GUEST . ", " . EMAIL_NOTIFICATIONS_DISABLED . " , " . DBHelper::timeAfter().")", $course_id, $guest_id);
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $guest_id,
-                                                               'right' => '+10'));
+                                                                                    'right' => '+10'));
     return;
 }
 
