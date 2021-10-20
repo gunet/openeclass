@@ -490,8 +490,9 @@ function has_group_categories($course_id) {
 }
 
 /**
- * @brief check whether is registered to more than one group belonging to category
+ * @brief check whether is registered to group belonging to category
  * @param $uid
+ * @param $category_id
  * @param $course_id
  */
 function is_user_register_to_group_category_course($uid, $category_id, $course_id) {
