@@ -72,7 +72,7 @@ if (isset($_GET['empty'])) { // if we come from newtopic.php
     $tool_content .= "<div class='alert alert-warning'>$langEmptyNewTopic</div>";
 }
 
-$pageName = q($forum_name);
+$pageName = $forum_name;
 if ($can_post) {
     $newtopicUrl = "newtopic.php?course=$course_code&amp;forum=$forum_id";
     if ($unit) {
