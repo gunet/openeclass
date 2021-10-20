@@ -343,7 +343,8 @@ if (isset($require_current_course) and $require_current_course) {
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
-            } elseif ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
+            }
+            if ($is_departmentmanage_user and isset($course_code)) {
                 // the department manager has rights to the courses of his department(s)
                 require_once 'include/lib/hierarchy.class.php';
                 require_once 'include/lib/course.class.php';
