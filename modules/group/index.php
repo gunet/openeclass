@@ -581,7 +581,17 @@ if ($is_editor) {
         ";
     }
 } else {
+    // ************************************
     // Begin student view
+    // ************************************
+    if (($multi_reg == 0) and !$user_visible_groups) {
+        $tool_content .= "<div class='alert alert-info text-center'>$langSingleGroupRegInfo</div>";
+    } else if ($multi_reg == 1) {
+        $tool_content .= "<div class='alert alert-info text-center'>$langMultipleGroupRegInfo</div>";
+    } else if (($multi_reg == 2)) {
+        $tool_content .= "<div class='alert alert-info text-center'>$langCategoryGroupRegInfo</div>";
+    }
+
     $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
     if (count($q) == 0) {
         $tool_content .= "
