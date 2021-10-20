@@ -2531,6 +2531,7 @@ $langMailVerificationPendingU = "Verifica di e-mail in attesa";
 $langMailVerificationSettings = "Impostazioni di verifica dell' indirizzo e-mail $langUsersOf";
 $langMailVerificationNotice = "Se è obbligatoria la verifica dell' indirizzo e-mail da parte $langOfUser ed essa è in attesa, allora le seguenti si applicano finché la verifica sia compiuta: <br/><ul><li>La piattaforma reindirizzerà l' utente alla pagina di verifica della sua e-mail.</li><li>L' utente non riceverà delle notifiche via e-mail dai corsi in cui si è registrato.</li></ul>";
 $langMailVerificationNoticeAdmin = "Da questa pagina, non si può modificare l' utente gestore.";
+$langMailVerificationNoticeGuest = "Guest users cannot been modified";
 $langChangeTo = "Cambiare a";
 $langMailVerificationChanged = "È cambiata";
 $langMailVerificationChangedNo = "Non hai selezionato alcuna modifica";

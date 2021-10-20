@@ -2742,6 +2742,7 @@ $langMailVerificationPendingU = "La vérification de l'e-mail est en attente";
 $langMailVerificationSettings = "Paramètres de confirmation de l'adresse e-mail des utilisateurs";
 $langMailVerificationNotice = "If email verification of $langOfUser is required and email verification is pending, then:<br /><ul><li>the platform will redirect user to email verification page</li><li>the user will not receive any emails (with announcements) from his registered courses</li></ul>";
 $langMailVerificationNoticeAdmin = "Vous ne pouvez pas modifier l'utilisateur admin sur cette page.";
++$langMailVerificationNoticeGuest = "Guest users cannot been modified";
 $langChangeTo = "Changer en";
 $langMailVerificationChanged = "Changement effectué";
 $langMailVerificationChangedNo = "Aucune modification n'a été sélectionnée";

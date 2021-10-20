@@ -97,7 +97,7 @@ if (isset($_POST['submit'])) {
         make_dir($webDir . '/courses/userimg/');
         touch($webDir."courses/userimg/index.php");
     }
-    $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';
+    $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? EMAIL_NOTIFICATIONS_ENABLED : EMAIL_NOTIFICATIONS_DISABLED;
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
     Database::get()->query("UPDATE user SET lang = ?s WHERE id = ?d", $langcode, $uid);

@@ -46,6 +46,9 @@ define('DEPARTMENTMANAGE_USER', 3); // departmentmanage user can admin departmen
 define('EMAIL_VERIFICATION_REQUIRED', 0);  /* email verification required. User cannot login */
 define('EMAIL_VERIFIED', 1); // email is verified. User can login.
 define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
+// user can receive mail notifications from platform or courses
+define('EMAIL_NOTIFICATIONS_DISABLED', 0);
+define('EMAIL_NOTIFICATIONS_ENABLED', 1);
 // course modules
 define('MODULE_ID_AGENDA', 1);
 define('MODULE_ID_LINKS', 2);

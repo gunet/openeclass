@@ -3614,6 +3614,7 @@ $langMailVerificationNotice = "Εάν είναι υποχρεωτική η επ�
                 η επιβεβαίωση:<br /><ul><li>η πλατφόρμα θα παραπέμπει τον χρήστη στη σελίδα επιβεβαίωσης του e-mail</li>
                 <li>ο χρήστης δεν θα λαμβάνει e-mail με ανακοινώσεις από τα $langsCourses που παρακολουθεί</li></ul>";
 $langMailVerificationNoticeAdmin = "Δεν είναι δυνατή η αλλαγή του χρήστη admin από αυτή την σελίδα.";
+$langMailVerificationNoticeGuest = "Δεν είναι δυνατή η αλλαγή των guest χρηστών από αυτή την σελίδα.";
 $langChangeTo = "Αλλαγή σε";
 $langMailVerificationChanged = "Έγινε αλλαγή";
 $langMailVerificationChangedNo = "Δεν επιλέξατε κάποια αλλαγή";

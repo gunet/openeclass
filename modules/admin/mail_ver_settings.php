@@ -48,16 +48,16 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
     if ($old_mail_ver != $new_mail_ver) {
         $old_mail_ver = intval($old_mail_ver);
         $new_mail_ver = intval($new_mail_ver);
-        $count = Database::get()->query("UPDATE `user` set verified_mail=?s WHERE verified_mail=?s AND id != 1", $new_mail_ver, $old_mail_ver)->affectedRows;
+        $count = Database::get()->query("UPDATE `user` SET verified_mail=?s WHERE verified_mail=?s AND id != 1 AND status != " . USER_GUEST, $new_mail_ver, $old_mail_ver)->affectedRows;
         if ($count > 0) {
             $user = ($count == 1) ? $langOfUser : $langUsersS;
             Session::Messages($langMailVerificationChanged . " " . $m['from'] . " «" . $mail_ver_data[$old_mail_ver] . "» " . $m['in'] . " «". $mail_ver_data[$new_mail_ver] . "» $m[in] $count $user", 'alert-success');
-            redirect_to_home_page('modules/admin/mail_ver_settings.php');            
+            redirect_to_home_page('modules/admin/mail_ver_settings.php');
         }
         // user is admin or no user selected
         else {
             Session::messages($langMailVerificationChangedNoAdmin, 'alert-danger');
-            redirect_to_home_page('modules/admin/mail_ver_settings.php');   
+            redirect_to_home_page('modules/admin/mail_ver_settings.php');
         }
     }
     // no change selected
@@ -84,17 +84,17 @@ if (empty($submit0) && empty($submit1) && empty($submit2)) {
     $data['mr'] = get_config('email_required') ? $langYes : $langNo;
     $data['mv'] = get_config('email_verification_required') ? $langYes : $langNo;
     $data['mm'] = get_config('dont_mail_unverified_mails') ? $langYes : $langNo;
-    
+
     $data['verified_email_cnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt;
     $data['unverified_email_cnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt;
     $data['verification_required_email_cnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt;
     $data['empty_email_user_cnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE email = '';")->cnt;
     $data['user_cnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user;")->cnt;
-    
+
     $view = 'admin.users.mail_ver_settings.index';
 }
 // admin wants to change user's mail verification value. 3 possible
-else { 
+else {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (!empty($submit0)) {
         $data['sub'] = 0;
