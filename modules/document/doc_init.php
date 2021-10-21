@@ -51,7 +51,7 @@ function doc_init() {
         $can_upload = $can_upload || $is_member;
         $pageName = $langGroupDocumentsLink;
         $navigation[] = array('url' => $urlAppend . 'modules/group/index.php?course=' . $course_code, 'name' => $langGroups);
-        $navigation[] = array('url' => $urlAppend . 'modules/group/group_space.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => q($group_name));
+        $navigation[] = array('url' => $urlAppend . 'modules/group/group_space.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => $group_name);
     } elseif (defined('EBOOK_DOCUMENTS')) {
         if (!isset($ebook_id) and isset($_REQUEST['ebook_id'])) {
             $ebook_id = intval($_REQUEST['ebook_id']);
@@ -66,7 +66,7 @@ function doc_init() {
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id'>";
         $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
         $pageName = $langFileAdmin;
-        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);    
+        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
     } elseif (defined('COMMON_DOCUMENTS')) {
         $subsystem = COMMON;
         $subsystem_id = 'NULL';

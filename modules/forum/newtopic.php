@@ -73,7 +73,7 @@ if (!add_units_navigation(TRUE)) {
         $navigation[] = array('url' => "../wall/index.php?course=$course_code", 'name' => $langWall);
     }
 }
-$navigation[] = array('url' => $forumUrl, 'name' => q($forum_name));
+$navigation[] = array('url' => $forumUrl, 'name' => $forum_name);
 
 if (!does_exists($forum_id, "forum")) {
     $tool_content .= "<div class='alert alert-danger'>$langErrorPost</div>";

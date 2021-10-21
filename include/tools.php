@@ -457,7 +457,7 @@ function adminMenu() {
     array_push($sideMenuLink, '../admin/mailtoprof.php');
     array_push($sideMenuImg, 'fa-caret-right');
 
-    if (isset($is_admin) and $is_admin) {
+    if ($is_admin) {
         array_push($sideMenuText, $GLOBALS['langAdmins']);
         array_push($sideMenuLink, '../admin/addadmin.php');
         array_push($sideMenuImg, 'fa-caret-right');
@@ -468,8 +468,7 @@ function adminMenu() {
     array_push($sideMenuSubGroup, $sideMenuImg);
     array_push($sideMenuGroup, $sideMenuSubGroup);
 
-    if ((isset($is_power_user) and $is_power_user) or
-            (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+    if ($is_power_user or $is_departmentmanage_user) {
         // lesson administration
         // reset sub-arrays so that we do not have duplicate entries
         $sideMenuSubGroup = array();
@@ -490,15 +489,17 @@ function adminMenu() {
         array_push($sideMenuLink, '../course_info/restore_course.php');
         array_push($sideMenuImg, 'fa-caret-right');
 
-        array_push($sideMenuText, $GLOBALS['langHierarchy']);
-        array_push($sideMenuLink, '../admin/hierarchy.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        if ($is_admin) {
+            array_push($sideMenuText, $GLOBALS['langHierarchy']);
+            array_push($sideMenuLink, '../admin/hierarchy.php');
+            array_push($sideMenuImg, 'fa-caret-right');
+        }
 
         array_push($sideMenuText, $GLOBALS['langMultiCourse']);
         array_push($sideMenuLink, '../admin/multicourse.php');
         array_push($sideMenuImg, 'fa-caret-right');
 
-        if (isset($is_admin) and $is_admin) {
+        if ($is_admin) {
             array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
             array_push($sideMenuLink, '../admin/autoenroll.php');
             array_push($sideMenuImg, 'fa-caret-right');
