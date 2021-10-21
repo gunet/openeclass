@@ -2009,6 +2009,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE `user` SET verified_mail = " . EMAIL_UNVERIFIED . ", receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE status = " . USER_GUEST . "");
         Database::get()->query("UPDATE `course_user` set receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE status = " . USER_GUEST . "");
 
+        // tc attendance
+        Database::get()->query("ALTER TABLE `tc_attendance` CHANGE `bbbuserid` `bbbuserid` varchar(100)");
+        Database::get()->query("ALTER TABLE `tc_log` CHANGE `bbbuserid` `bbbuserid` varchar(100)");
+
         if (!DBHelper::fieldExists('admin', 'department_id')) {
             Database::get()->query('DELETE admin
                 FROM admin LEFT JOIN user ON user_id = user.id
