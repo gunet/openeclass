@@ -120,7 +120,7 @@ if (($auth != 7) and ($auth != 6)) {
                             ))
                             ;
 } else {
-    redirect_to_home_page("modules/auth/altsearch.php?auth=$v&is_submit=true");
+    redirect_to_home_page("modules/auth/altsearch.php?auth=$auth&is_submit=true");
 }
 
 $tool_content .= "</div></div>";
