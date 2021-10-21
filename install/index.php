@@ -498,6 +498,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         $hubUpdater = new H5PHubUpdater();
         $hubUpdater->fetchLatestContentTypes();
         set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
+        chdir('..');
         // message
         $tool_content .= "
         <div class='alert alert-success'>$langInstallSuccess</div>
