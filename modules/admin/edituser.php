@@ -146,6 +146,12 @@ if ($u) {
                 'icon' => 'fa-key',
                 'level' => 'primary-label',
                 'show' => !(in_array($info->password, $auth_ids))),
+            array('title' => $langChangeUserAs . ' ' . q($info->username),
+                'url' => $urlAppend . 'modules/admin/change_user.php?username=' . urlencode($info->username),
+                'icon' => 'fa-sign-in',
+                'level' => 'primary',
+                'button-class' => 'btn-default change-user-link',
+                'show' => $is_admin),
             array('title' => $langEditAuth,
                 'url' => "$_SERVER[SCRIPT_NAME]?u=$u&amp;edit=auth",
                 'icon' => 'fa-key',
@@ -161,7 +167,8 @@ if ($u) {
                 'level' => 'primary')
         ));
 
-        $tool_content .= "<div class='form-wrapper'>
+        $tool_content .= "
+                  <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' name='edituser' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();'>
                     <fieldset>
                     <div class='form-group'>
@@ -478,4 +485,25 @@ if ($u) {
 } else {
     $tool_content .= "<div class='alert alert-danger'>$langError <a href='listcours.php'>$back</a></div>";
 }
+
+if ($is_admin) {
+    $tool_content .= "
+      <script>
+        var csrf_token = '$_SESSION[csrf_token]';
+        $(function() {
+          $(document).on('click', '.change-user-link', function (e) {
+            e.preventDefault();
+            $('<form>', {
+                'action': $(this).attr('href'),
+                'method': 'post'
+            }).append($('<input>', {
+                'type': 'hidden',
+                'name': 'token',
+                'value': csrf_token
+            })).appendTo(document.body).submit();
+          });
+        });
+     </script>";
+}
+
 draw($tool_content, 3, null, $head_content);
