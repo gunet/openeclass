@@ -2110,6 +2110,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           PRIMARY KEY(id)) $tbl_options");
         }
         // install h5p content
+        updateInfo(1, $langH5pInstall);
         $hubUpdater = new H5PHubUpdater();
         $hubUpdater->fetchLatestContentTypes();
         set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
@@ -2149,7 +2150,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     set_config('upgrade_begin', '');
 
     // create directory indexes to hinder directory traversal in misconfigured servers
-    updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.11'));
+    updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.12'));
     addDirectoryIndexFiles();
 
     updateInfo(1, $langUpgradeSuccess);

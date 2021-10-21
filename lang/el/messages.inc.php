@@ -5915,6 +5915,7 @@ $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμε
 
 // h5p
 $langH5p = "Διαδραστικό περιεχόμενο";
+$langH5pInstall = "Εγκατάσταση πακέτων και βιβλιοθηκών διαδραστικού περιεχομένου τύπου H5P";
 $langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε!';
 $langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο τύπου H5P';
 $langH5pNoContent = 'Δεν υπάρχει διαδραστικό περιεχόμενο τύπου H5P';
