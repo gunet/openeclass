@@ -70,44 +70,21 @@ if (isset($_SESSION['uid'])) {
     $uid = 0;
 }
 
-if (isset($_GET['logout']) and $uid) {
-    $cas = ($session->getLoginMethod() == 'cas')? get_auth_settings(7): false;
-    Database::get()->query("INSERT INTO loginout (loginout.id_user,
-                loginout.ip, loginout.when, loginout.action)
-                VALUES (?d, ?s, " .DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
-    foreach (array_keys($_SESSION) as $key) {
-        unset($_SESSION[$key]);
-    }
-
-    // include HybridAuth libraries
-    require_once 'modules/auth/methods/hybridauth/config.php';
-
-    $config = get_hybridauth_config();
-    $hybridauth = new Hybridauth\Hybridauth( $config );
-
-    session_destroy();
-    $uid = 0;
-    if ($cas and isset($cas['cas_ssout']) and intval($cas['cas_ssout']) === 1) {
-        phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
-        phpCAS::logoutWithRedirectService($urlServer);
-    }
-}
-
 // if we try to login... then authenticate user.
 $warning = '';
 
 if(isset($_SESSION['hybridauth_callback'])) {
-	switch($_SESSION['hybridauth_callback']) {
-		case 'login':
-			$_GET['provider'] = $_SESSION['hybridauth_provider'] ?? '';
-			break;
-		case 'profile':
-			$provider = $_SESSION['hybridauth_provider'] ?? '';
-			header('Location: /main/profile/profile.php?action=connect&provider='.$provider.'&'.$_SERVER['QUERY_STRING']);
-			exit;
+    switch($_SESSION['hybridauth_callback']) {
+        case 'login':
+            $_GET['provider'] = $_SESSION['hybridauth_provider'] ?? '';
+            break;
+        case 'profile':
+            $provider = $_SESSION['hybridauth_provider'] ?? '';
+            header('Location: /main/profile/profile.php?action=connect&provider='.$provider.'&'.$_SERVER['QUERY_STRING']);
+            exit;
         case 'auth_test':
-			$provider = $_SESSION['hybridauth_provider'] ?? '';
-			header('Location: /modules/admin/auth_test.php?auth='.$provider.'&'.$_SERVER['QUERY_STRING']);
+            $provider = $_SESSION['hybridauth_provider'] ?? '';
+            header('Location: /modules/admin/auth_test.php?auth='.$provider.'&'.$_SERVER['QUERY_STRING']);
             exit;
     }
 }
@@ -115,7 +92,7 @@ if(isset($_SESSION['hybridauth_callback'])) {
 if (isset($_SESSION['shib_uname'])) {
     // authenticate via shibboleth
     shib_cas_login('shibboleth');
-} elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
+} elseif (isset($_SESSION['cas_uname'])) {
     // authenticate via cas
     shib_cas_login('cas');
 } elseif (isset($_GET['provider'])) {
@@ -144,7 +121,7 @@ if (isset($language)) {
 }
 
 // check if we are guest user
-if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
+if (!$upgrade_begin and $uid) {
     if (check_guest()) {
         // if the user is a guest send him straight to the corresponding lesson
         $guest = Database::get()->querySingle("SELECT code FROM course_user, course

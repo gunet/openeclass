@@ -4079,6 +4079,7 @@ function warnCourseInvalidDepartment($prompt=false) {
  * 'am'          - Student id number
  */
 function login_hook($options) {
+    session_regenerate_id();
     if (!isset($options['am'])) {
         $options['am'] = '';
     }

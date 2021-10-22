@@ -94,7 +94,7 @@ if (!isset($_POST['doit'])) {
 
         $tool_content .= action_bar(array(
             array('title' => $langLogout,
-                'url' => "../index.php?logout=yes",
+                'url' => $urlAppend . 'modules/auth/logout.php',
                 'icon' => 'fa-sign-out',
                 'level' => 'primary-label')));
         $tool_content .= "<div class='alert alert-success'>$langDelSuccess</br>$langThanks</div>";

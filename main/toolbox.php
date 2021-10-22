@@ -115,7 +115,7 @@ foreach ($msgs as $msg) {
 $t->set_var('langSelectFromMenu', js_escape($langSelectFromMenu));
 if ($uid) {
     $t->set_var('loginLogout', q($_SESSION['givenname'] . ' ' . $_SESSION['surname']) .
-        " &nbsp; <a href='$urlAppend?logout=true'>$langLogout</a>");
+        " &nbsp; <a href='{$urlAppend}modules/auth/logout.php'>$langLogout</a>");
     $t->set_block('main', 'loginModalsBlock', 'delete');
 } else {
     $t->set_var('loginModal', 'loginModal');
