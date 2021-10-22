@@ -5366,3 +5366,16 @@ $langNoAvailableLimesurveyTemplates = "No LTI Tools available.";
 $langLimesurveyApp = "LimeSurvey Application";
 $langLimesurveyLTIOptions = "LimeSurvey Options";
 $langLimesurveyIntegration = "LimeSurvey Integration";
+$langH5p = "H5P Content";
+$langH5pUpdateComplete = 'The update of packages and libriares was successfully complete. You may return to the previous page and select Create.';
+$langH5pInteractiveContent = 'H5P interactive content';
+$langH5pNoContent = 'There is no H5P content';
+$langH5pSaveSuccess = "The H5P interactive content was successfully saved";
+$langH5pDeleteSuccess = "The H5P interactive content was successfully deleted";
+$langOfH5p = "interactive content";
+$langTypeH5P = "H5P content type";
+$langImportH5P = "Import an H5P interactive content via the following form.";
+$langH5pInfoUpdate = "Click in 'Update' in order to update h5p content types (if it is needed)<br>
+                    For further details about the available h5p content types click inF$langHideDocuments
+                    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
+                    .";
