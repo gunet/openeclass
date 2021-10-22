@@ -19,7 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_usermanage_user = TRUE;
+$require_usermanage_user = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -54,8 +54,8 @@ load_js('datatables');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#requests_table').DataTable ({       
-                'columns': [ $columns ],                         
+            $('#requests_table').DataTable ({
+                'columns': [ $columns ],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -109,8 +109,8 @@ if ($id > 0) {
 // department admin additional query where clause
 $depqryadd = '';
 if (isDepartmentAdmin()) {
-    $deps = $user->getDepartmentIds($uid);
-    $depqryadd = ' AND faculty_id IN (' . implode(', ', $deps) . ')';
+    $subtrees = $tree->buildSubtrees($user->getAdminDepartmentIds($uid));
+    $depqryadd = ' AND faculty_id IN (' . implode(', ', $subtrees) . ')';
 }
 
 // Display Actions Toolbar

@@ -339,12 +339,11 @@ $nodePickerParams = array(
     'params' => 'name="department"',
     'defaults' => $depid,
     'tree' => null,
-    'where' => "AND node.allow_user = true",
     'multiple' => false);
 if (isDepartmentAdmin()) {
-    $nodePickerParams['allowables'] = $user->getDepartmentIds($uid);
+    $nodePickerParams['allowables'] = $user->getAdminDepartmentIds($uid);
 }
-list($tree_js, $tree_html) = $tree->buildNodePicker($nodePickerParams);
+list($tree_js, $tree_html) = $tree->buildUserNodePicker($nodePickerParams);
 $head_content .= $tree_js;
 
 if ($eclass_method_unique) {
