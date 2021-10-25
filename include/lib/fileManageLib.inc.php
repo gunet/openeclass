@@ -88,12 +88,10 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
 }
 
 /*
- * Delete a file or a directory
- *
+ * @brief Delete a file or a directory
  * @author - Hugues Peeters
  * @param  - $file (String) - the path of file or directory to delete
  * @return - boolean - true if the delete succeed, false otherwise.
- * @see    - delete() uses check_name_exist() and removeDir() functions
  */
 
 function my_delete($file) {
@@ -108,14 +106,10 @@ function my_delete($file) {
 }
 
 /*
- * Rename a file or a directory
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @brief Rename a file or a directory
  * @param  - $filePath (string) - complete path of the file or the directory
  * @param  - $newFileName (string) - new name for the file or the directory
- * @return - boolean - true if succeed
- *         - boolean - false otherwise
- * @see    - rename() uses the check_name_exist() and php2phps() functions
+ * @return - boolean  (true if succeed, false otherwise)
  */
 
 function my_rename($filePath, $newFileName) {
@@ -137,13 +131,11 @@ function my_rename($filePath, $newFileName) {
 }
 
 /*
- * Move a file or a directory to an other area
- *
+ * @brief Move a file or a directory to another area
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - $source (String) - the path of file or directory to move
  * @param  - $target (String) - the path of the new area
- * @return - bolean - true if the move succeed
- *           bolean - false otherwise.
+ * @return - boolean - true if the move succeed false otherwise.
  * @see    - move() uses check_name_exist() and copyDirTo() functions
  */
 
@@ -152,18 +144,19 @@ function move($source, $target) {
         $fileName = my_basename($source);
         if (file_exists($target . "/" . $fileName)) {
             return false;
-        } else { /*         * * File case ** */
-            if (is_file($source)) {
+        } else {
+            if (is_file($source)) {  /*** File case ***/
                 copy($source, $target . "/" . $fileName);
                 unlink($source);
                 return true;
             }
-            /*             * * Directory case ** */ elseif (is_dir($source)) {
+            elseif (is_dir($source)) { /*** Directory case ** */
                 // check to not copy the directory inside itself
                 if (strpos($target, $source) === 0) {
                     return false;
                 } else {
                     copyDirTo($source, $target);
+                    removeDir($source);
                     return true;
                 }
             }
@@ -174,7 +167,7 @@ function move($source, $target) {
 }
 
 /*
- * Move a directory and its content to an other area
+ * Move a directory and its content to another area
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - $origDirPath (String) - the path of the directory to move
@@ -214,7 +207,7 @@ function move_dir($src, $dest) {
 }
 
 /*
- * Copy a directory and its content to an other area
+ * Copy a directory and its content to another area
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - $origDirPath (String) - the path of the directory to move
@@ -521,7 +514,7 @@ function claro_delete_file($filePath) {
 }
 
 /*
- * Copy a a file or a directory and its content to an other area
+ * Copy a file or a directory and its content to another area
  *
  * @param  - $origDirPath (String) - the path of the directory to move
  * @param  - $destination (String) - the path of the new area
