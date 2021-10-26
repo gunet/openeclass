@@ -226,7 +226,7 @@ if ($u) {
           <label class='col-sm-2 control-label'>$langFaculty:</label>
         <div class='col-sm-10'>";
         if (isDepartmentAdmin()) {
-            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
+            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getAdminDepartmentIds($uid)));
         } else {
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
         }

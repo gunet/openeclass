@@ -38,16 +38,16 @@ load_js('bootstrap-datepicker');
 $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#id_user_registered_at').datepicker({
-                format: 'dd-mm-yyyy', 
+                format: 'dd-mm-yyyy',
                 pickerPosition: 'bottom-right',
                 language: '" . $language . "',
-                autoclose: true    
+                autoclose: true
             });
             $('#id_user_expires_until').datepicker({
-                format: 'dd-mm-yyyy',              
+                format: 'dd-mm-yyyy',
                 pickerPosition: 'bottom-right',
                 language: '" . $language . "',
-                autoclose: true    
+                autoclose: true
             });
         });
     </script>";
@@ -77,7 +77,7 @@ if (isset($_GET['department'])) {
 }
 
 if (isDepartmentAdmin()) {
-    $allowables = array('allowables' => $user->getDepartmentIds($uid));
+    $allowables = array('allowables' => $user->getAdminDepartmentIds($uid));
     $depts_defaults = array_merge($depts_defaults, $allowables);
 }
 
@@ -146,7 +146,7 @@ $tool_content .= "
         <div class='col-sm-10'>
             <input class='form-control' type='text' name='email' id='email' value='" . q($email) . "'>
         </div>
-    </div>  
+    </div>
     <div class='form-group'>
         <label for='am' class='col-sm-2 control-label'>$langAm:</label>
         <div class='col-sm-10'>
@@ -170,15 +170,15 @@ $tool_content .= "
         <div class='col-sm-5'>
             " . selection(array('1' => $langAfter, '2' => $langBefore), 'reg_flag', $reg_flag, 'class="form-control"') . "
         </div>
-        <div class='col-sm-5'>       
+        <div class='col-sm-5'>
             <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='$user_registered_at' data-date-format='dd-mm-yyyy' placeholder='$langRegistrationDate'>
-        </div>   
-    </div>    
+        </div>
+    </div>
     <div class='form-group'>
-        <label class='col-sm-2 control-label'>$langExpirationDate:</label>        
+        <label class='col-sm-2 control-label'>$langExpirationDate:</label>
         <div class='col-sm-10'>
             <input class='form-control' name='user_expires_until' id='id_user_expires_until' type='text' value='$user_expires_until' data-date-format='dd-mm-yyyy' placeholder='$langUntil'>
-        </div>   
+        </div>
     </div>
     <div class='form-group'>
         <label class='col-sm-2 control-label'>$langEmailVerified:</label>
@@ -209,9 +209,9 @@ $tool_content .= "
                 <input type='checkbox' name='search' value='inactive'$inactive_checked>
                 $langInactiveUsers
               </label>
-            </div> 
+            </div>
         </div>
-    </div>    
+    </div>
     <div class='form-group'>
         <div class='col-sm-10 col-sm-offset-2'>
             <input class='btn btn-primary' type='submit' value='$langSearch'>

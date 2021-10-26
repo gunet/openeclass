@@ -29,7 +29,6 @@ require_once 'hierarchy_validations.php';
 
 $user = new User();
 $tree = new Hierarchy();
-$allowables = array();
 
 $toolName = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -43,13 +42,23 @@ $tool_content .= action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
 
+$allowables = [];
+if (isDepartmentAdmin()) {
+    $userdeps = $user->getAdminDepartmentIds($uid);
+    $subs = $tree->buildSubtreesFull($userdeps);
+    foreach ($subs as $node) {
+        if ($node->allow_user) {
+            $allowables[] = $node->id;
+        }
+    }
+}
+
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] == $langSend)) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isDepartmentAdmin()) {
-        $depwh = ' user_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ';
+        $depwh = ' user_department.department IN (' . implode(', ', $allowables) . ') ';
     }
-
 
     // Department search
     $depqryadd = $qry_criteria = '';
@@ -62,16 +71,14 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
             $subs = $tree->buildSubtrees(array($dep));
             //add_param('department', $dep);
         } else if (isDepartmentAdmin()) {
-            $subs = $user->getDepartmentIds($uid);
+            $subs = $user->getAdminDepartmentIds($uid);
         }
 
-        $ids = '';
         foreach ($subs as $key => $id) {
-            $ids .= $id . ',';
             validateNode($id, isDepartmentAdmin());
         }
         // remove last ',' from $ids
-        $deps = substr($ids, 0, -1);
+        $deps = implode(', ', $subs);
 
         $criteria[] = 'AND user.id = user_department.user';
         $criteria[] = 'department IN (' . $deps . ')';
@@ -140,7 +147,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         <div id='mail-footer'>
             <br>
             <div>
-                <small>" . sprintf($langLinkUnsubscribeFromPlatform, $siteName) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                <small>" . sprintf($langLinkUnsubscribeFromPlatform, $siteName) ." <a href='${urlServer}main/profile/emailunsubscribe.php'>$langHere</a></small>
             </div>
         </div>
         ";
@@ -161,16 +168,9 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
 } else {
     $body_mail = $email_title = '';
 
-    $userdeps = $user->getDepartmentIds($uid);
-    $subs = $tree->buildSubtreesFull($userdeps);
-    foreach ($subs as $node) {
-        if (intval($node->allow_course) === 1) {
-            $allowables[] = $node->id;
-        }
-    }
     // Display form to administrator
     $tool_content .= "<div class='form-wrapper'>
-    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>   
+    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
         <div class='form-group'>
             <label for='email_title' class='col-sm-2 control-label'>$langTitle</label>
             <div class='col-sm-10'>
@@ -184,8 +184,9 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
                   </div/>
         </div>";
 
-        list($js, $html) = $tree->buildCourseNodePicker(array('params' => 'name="department"',
-                                                              'tree' => array('0' => $langAllFacultes),
+        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="department"',
+                                                              'tree' => isDepartmentAdmin()? null: array('0' => $langAllFacultes),
+                                                              'allowables' => $allowables,
                                                               'defaults' => $allowables,
                                                               'skip_preloaded_defaults' => true,
                                                               'multiple' => false));
@@ -206,13 +207,13 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
                         <label>
                             <input type='checkbox' name='send_to_users' value='1'>$langStudentsOnly
                         </label>
-                    </div>                    
+                    </div>
                 </div>
             </div>
             <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
                   <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
-                    </div>    
+                    </div>
                 ". generate_csrf_token_form_field() ."
             </div>
     </form>
