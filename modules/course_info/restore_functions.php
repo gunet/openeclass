@@ -694,9 +694,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         $config_data = unserialize(file_get_contents($restoreThis . '/group_properties'));
         if (isset($config_data[0]['group_id'])) { // version >= 3.2
-            restore_table($restoreThis, 'group_properties',
-                array('set' => array('course_id' => $new_course_id),
-                      'map' => array('group_id' => $group_map)),
+            restore_table($restoreThis, 'group_properties', [
+                    'set' => ['course_id' => $new_course_id],
+                    'map' => ['group_id' => $group_map],
+                    'delete' => ['multiple_registration']],
                 $url_prefix_map, $backupData, $restoreHelper);
         } else {
             $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $new_course_id);
@@ -1121,7 +1122,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array('badge' => $badge_map),
             'map_function' => 'badge_criterion_map_function',
             'map_function_data' => array($document_map, $video_map, $videolink_map,
-                                         $blog_map, $forum_map, $forum_topic_map,
+                                         $blog_map, $comment_map, $forum_map, $forum_topic_map,
                                          $lp_learnPath_map, $ebook_map, $poll_map,
                                          $wiki_map, $assignments_map, $exercise_map),
             'delete' => array('id')
