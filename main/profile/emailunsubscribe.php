@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.12
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 $require_login = true;
-$require_valid_uid = TRUE;
+$require_valid_uid = true;
 include '../../include/baseTheme.php';
 load_js('tools.js');
 
@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
         Database::get()->query("UPDATE user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . " WHERE id = ?d", $uid);
     }
     if (isset($_POST['cid'])) {  // change email subscription for one course
-        $cid = intval(getDirectReference($_POST['cid']));
+        $cid = getDirectReference($_POST['cid']);
         if (isset($_POST['c_unsub'])) {
             Database::get()->query("UPDATE course_user SET receive_mail = ". EMAIL_NOTIFICATIONS_ENABLED . "
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
@@ -49,23 +49,24 @@ if (isset($_POST['submit'])) {
         Session::Messages($message, "alert-success");
     } else { // change email subscription for all courses
         foreach ($_SESSION['courses'] as $course_code => $c_value) {
-            if (@array_key_exists($course_code, $_POST['c_unsub'])) {
-                Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . "
-                                WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);
+            $cid = course_code_to_id($course_code);
+            if (isset($_POST['c_unsub']) and array_key_exists($course_code, $_POST['c_unsub'])) {
+                $receive_mail = EMAIL_NOTIFICATIONS_ENABLED;
             } else {
-                Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . "
-                                WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);
+                $receive_mail = EMAIL_NOTIFICATIONS_DISABLED;
             }
+            Database::get()->query("UPDATE course_user SET receive_mail = ?d
+                WHERE user_id = ?d AND course_id = ?d", $receive_mail, $uid, $cid);
         }
         Session::Messages($langWikiEditionSucceed, "alert-success");
     }
     redirect_to_home_page("main/profile/display_profile.php");
 } else {
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-          'url' => 'display_profile.php',
-          'icon' => 'fa-reply',
-          'level' => 'primary-label')));
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => 'display_profile.php',
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
     if (get_config('email_verification_required') or get_config('dont_mail_unverified_mails')) {
         $user_email_status = get_mail_ver_status($uid);
@@ -94,7 +95,7 @@ $tool_content .= action_bar(array(
             $cid = course_code_to_id($code);
             $selected = get_user_email_notification($uid, $cid) ? 'checked' : '';
             if (course_status($cid) != COURSE_INACTIVE) {
-                $tool_content .= "<input type='checkbox' name='c_unsub[$code]' value='1' $selected>&nbsp;" . q($title) . "<br />";
+                $tool_content .= "<div class='checkbox'><label><input type='checkbox' name='c_unsub[$code]' value='1' $selected>&nbsp;" . q($title) . "</label></div>";
             }
         }
     }
