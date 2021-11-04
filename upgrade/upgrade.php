@@ -2101,8 +2101,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 course_id INT(11) NOT NULL,
               PRIMARY KEY(id)) $tbl_options");
         } else {
-            Database::get()->query("ALTER TABLE h5p_content 
-                ADD title VARCHAR(255) AFTER id");
             Database::get()->query("ALTER TABLE h5p_content
                 MODIFY params LONGTEXT");
         }
@@ -2122,6 +2120,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
     }
 
+    if (!DBHelper::fieldExists('h5p_content', 'title')) {
+        Database::get()->query("ALTER TABLE h5p_content
+            ADD title VARCHAR(255) AFTER id");
+    }
 
     // Ensure that all stored procedures about hierarchy are up and running!
     refreshHierarchyProcedures();
