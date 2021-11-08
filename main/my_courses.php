@@ -85,7 +85,7 @@ if ($myCourses) {
         }
         $tool_content .= "
                     <tr class='$visclass'>
-                        <td><strong><a href='{$urlServer}courses/$course->code'>".q($course->title)."</a></strong> (".q($course->public_code).")
+                        <td><strong><a href='{$urlServer}courses/$course->code/'>".q($course->title)."</a></strong> (".q($course->public_code).")
                             <div><small>" . q($course->professor) . "</small></div>
                         </td>
                         <td class='text-center'>
