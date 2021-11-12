@@ -4,7 +4,7 @@
     {!! isset($action_bar) ?  $action_bar : '' !!}
     @if ($is_editor && $expand_glossary && $total_glossary_terms > $max_glossary_terms)
         <div class='alert alert-warning'>{!! trans('langGlossaryOverLimit',["<b>$max_glossary_terms</b>"]) !!}</div>
-    @endif        
+    @endif
     @if ($glossary_index && count($prefixes) > 1)
     <nav>
         <ul class="pagination">
@@ -35,15 +35,15 @@
                         <span>
                             <small>
                             @if ($glossary_term->category_id)
-                               <span class='text-muted'> 
-                                   {{ trans('langCategory') }}: 
-                                   <a href='{{ $base_url }}&amp;cat={{ getIndirectReference($glossary_term->category_id) }}'> 
+                               <span class='text-muted'>
+                                   {{ trans('langCategory') }}:
+                                   <a href='{{ $base_url }}&amp;cat={{ getIndirectReference($glossary_term->category_id) }}'>
                                        {{ $categories[$glossary_term->category_id] }}
                                    </a>
                                </span>
                             @endif
                             </small>
-                        </span>                            
+                        </span>
                     </td>
                     <td>
                         <em>
@@ -58,7 +58,7 @@
                                         </a>
                                     </small>
                                 </span>
-                            </div>                        
+                            </div>
                         @endif
                         @if ($glossary_term->notes)
                             <br>
@@ -70,7 +70,7 @@
                     </td>
                     @if ($is_editor)
                     <td class='option-btn-cell'>
-                        {!! 
+                        {!!
                             action_button(array(
                                 array('title' => trans('langEditChange'),
                                       'url' => $base_url ."&amp;edit=". getIndirectReference($glossary_term->id),
@@ -81,14 +81,14 @@
                                       'class' => 'delete',
                                       'confirm' => trans('langConfirmDelete'))
                                 )
-                            ) 
-                        !!}                          
-                    </td>                  
+                            )
+                        !!}
+                    </td>
                     @endif
                 @endforeach
             </table>
         </div>
     @else
-        <div class='alert alert-warning'>{{ trans('langNoResult') }}</div>
+        <div class='alert alert-warning'>{{ trans('langNoGlossary') }}</div>
     @endif
 @endsection

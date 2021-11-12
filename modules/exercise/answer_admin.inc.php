@@ -436,7 +436,7 @@ if (isset($_GET['modifyAnswers'])) {
                 <table class='table table-striped table-hover'>";
             $tool_content .= "<tr>
                           <th class='text-right'></th>
-                          <th class='text-center'>$langTrue</th>
+                          <th class='text-center'>$langCorrect</th>
                           <th class='text-center'>$langAnswer</th>
                           <th class='text-center'>$langComment</th>
                           <th class='text-center'>$langScore</th>
@@ -664,7 +664,7 @@ if (isset($_GET['modifyAnswers'])) {
                <td class='text-center'><b>$langScore</b></td>
              </tr>
              <tr>
-               <td width='30'>$langCorrect</td>
+               <td width='30'>$langTrue</td>
                <td><input type='radio' value='1' name='correct'$setChecked[1]></td>
                <td width='80%'>"  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
                <td><input class='form-control' type='text' name='weighting[1]' value='$setWeighting[1]'></td>

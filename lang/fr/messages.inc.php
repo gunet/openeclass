@@ -2805,6 +2805,7 @@ $langMailNotVerified = "Votre adresse e-mail n'est pas confirmée. Vous ne pourr
 $langExerciseMaxAttemptsReached = "Vous avez atteint le nombre maximum d'essais autorisés pour cet exercice.";
 $lang_max_glossary_terms = 'Displaying of term definitions in course pages is not allowed, if the total number of terms in the glossary is greater than:';
 $langGlossaryOverLimit = 'The number of glossary terms has exceeded the limit (%s) for displaying definitions in course pages.';
+$langNoGlossary = "Il n'y a pas de glossaire";
 $langVideoDirectory = "Fichiers multimédia";
 $langUserNotLogin = "Utilisateurs qui n'ont pas été connectés";
 $langExternalLinks = "Liens externes";
