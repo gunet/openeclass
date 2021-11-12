@@ -89,7 +89,7 @@ if ($glossary_data) {
  * ****************************************** */
 
 if ($is_editor) {
-    
+
     if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
         if (isset($_GET['add'])) {
             $pageName = $langAddGlossaryTerm;
@@ -118,7 +118,7 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'button-class' => 'btn-success'),
                 array('title' => $langConfig,
-                      'url' => "$base_url&amp;config=1",                      
+                      'url' => "$base_url&amp;config=1",
                       'icon' => 'fa-gear'),
                 array('title' => "$langGlossaryToCsv",
                       'url' => "dumpglossary.php?course=$course_code",
@@ -133,7 +133,7 @@ if ($is_editor) {
                       'show' => $categories)
             ));
     }
-    
+
     if (isset($_POST['submit_config'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $expand_glossary = isset($_POST['expand']) ? 1 : 0;
@@ -229,7 +229,7 @@ if ($is_editor) {
         }
         draw($tool_content, 2, null, $head_content);
         exit;
-    }       
+    }
 
     // display configuration form
     if (isset($_GET['config'])) {
@@ -311,7 +311,7 @@ if ($is_editor) {
         } else {
             $category_selection = '';
         }
-        
+
         $tool_content .= "
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' action='$edit_url' method='post'>
@@ -372,7 +372,7 @@ if ($is_editor) {
                       array('title' => $langCategories,
                             'url' => "categories.php?course=$course_code",
                             'icon' => 'fa-tasks',
-                            'level' => 'primary-label')));        
+                            'level' => 'primary-label')));
     }
 }
 
@@ -412,7 +412,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             $begin = false;
         }
         $tool_content .= "</div>";
-    }    
+    }
     if ($cat_id) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
         $pageName = q($categories[$cat_id]);
@@ -431,11 +431,11 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
         if ($is_editor) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
-        $tool_content .= "</tr>";    
+        $tool_content .= "</tr>";
         foreach ($sql as $g) {
             if (isset($_GET['id'])) {
                 $pageName = q($g->term);
-            }        
+            }
             if (!empty($g->url)) {
                 $urllink = "<div><span class='term-url'><small><a href='" . q($g->url) .
                         "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></small></span></div>";
@@ -476,12 +476,12 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                               'confirm' => $langConfirmDelete))
                     );
                $tool_content .= "</td>";
-            }                        
-            $tool_content .= "</tr>";        
+            }
+            $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
     } else {
-        $tool_content .= "<br><div class='alert alert-warning'>$langNoResult</div>";
+        $tool_content .= "<br><div class='alert alert-warning'>$langNoGlossary</div>";
     }
 }
 draw($tool_content, 2, null, $head_content);
