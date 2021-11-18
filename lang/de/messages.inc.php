@@ -5014,6 +5014,7 @@ $langForumPostFlatViewDesc = "Date view (newest first)";
 $langForumPostThreadedView = "Threaded view";
 $langGradeScalesDeleted = "Grading Scale deleted";
 $langInsertChat = 'chat';
+$langInsertBlog = 'blog';
 $langEBooks = 'E-Books';
 $langBBBExternalUsers = "External Users";
 $langBBBAnnDisplay = "to be displayed in announcements";
