@@ -30,14 +30,14 @@ function upload_content() { // anebasma // na elen3w to database & na balw to us
     if (file_exists($upload_dir)) {
         H5PCore::deleteFileTree($upload_dir);
     }
-    mkdir($upload_dir, 0700, true);
+    mkdir($upload_dir, 0755, true);
 
     $target_file = $upload_dir . "/" . basename($_FILES["userFile"]["name"]);
     move_uploaded_file($_FILES["userFile"]["tmp_name"], $target_file);
 
     $factory = new H5PFactory();
     $framework = $factory->getFramework();
-    
+
     $h5pPath = $webDir . '/courses/h5p';
     $classCore = new H5PCore($framework, $h5pPath, $upload_dir, 'en', FALSE);
     $classVal = new H5PValidator($framework, $classCore);
@@ -56,7 +56,7 @@ function upload_content() { // anebasma // na elen3w to database & na balw to us
         $courseH5pContent = $courseH5pWorkspace . "/content";
         $srcH5pContent = $h5pPath . "/content/" . $content_id;
 
-        mkdir($courseH5pContent, 0700, true);
+        mkdir($courseH5pContent, 0755, true);
         recurse_copy($srcH5pContent, $courseH5pContent);
         $fp = fopen($courseH5pWorkspace . "/h5p.json", "w");
         fwrite($fp, json_encode($classCore->mainJsonData));
