@@ -178,8 +178,9 @@ function archiveTables($course_id, $course_code, $archivedir) {
 function doArchive($course_id, $course_code) {
     global $webDir, $tool_content, $langGeneralError;
 
-    $basedir = "$webDir/courses/archive/$course_code";
+    $basedir = "$webDir/courses/archive/$course_code.$_SESSION[csrf_token]";
     file_exists($basedir) or make_dir($basedir);
+    touch("$webDir/courses/archive/index.html");
 
     // Remove previous back-ups older than 10 minutes
     cleanup("$webDir/courses/archive", 600);

@@ -36,18 +36,17 @@ if (isset($_POST['delete'])) {
             'url' => '../../index.php',
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-    
+
     // first archive course
-    doArchive($course_id, $course_code);    
-    
+    doArchive($course_id, $course_code);
+
     $garbage = "$webDir/courses/garbage";
-    if (!is_dir($garbage)) {
-        make_dir($garbage);
-    }
-    rename("$webDir/courses/archive/$course_code", "$garbage/$course_code");
-     
+    is_dir($garbage) or make_dir($garbage);
+    touch("$garbage/index.html");
+    rename("$webDir/courses/archive/$course_code.$_SESSION[csrf_token]", "$garbage/$course_code.$_SESSION[csrf_token]");
+
     delete_course($course_id);
-    
+
     // logging
     Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
                                                'code' => $course_code,
@@ -61,7 +60,7 @@ if (isset($_POST['delete'])) {
               'url' => "index.php?course=" . q($course_code),
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
-    
+
     $tool_content .= "<div class='alert alert-danger'>
             $langByDel_A <b>" . q($currentCourseName) . " ($course_code) ;</b></div>
     <div class='form-wrapper'>
@@ -72,7 +71,7 @@ if (isset($_POST['delete'])) {
         </div>
     </div>
     <span class='help-block'><small>$langByDel</small></span>
-    ". generate_csrf_token_form_field() ."                              
+    ". generate_csrf_token_form_field() ."
    </form></div>";
 }
 draw($tool_content, 2);

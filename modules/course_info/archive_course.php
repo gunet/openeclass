@@ -45,7 +45,7 @@ $tool_content .= "
     <div class='alert alert-success'>$langBackupSuccesfull</div>" .
     action_bar(array(
         array('title' => $langDownloadIt,
-              'url' => $urlAppend . "courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip",
+              'url' => $urlAppend . "courses/archive/$course_code.$_SESSION[csrf_token]/$course_code-" . date('Ymd') . ".zip",
               'icon' => 'fa-download',
               'button-class' => 'btn-success',
               'level' => 'primary-label'),
