@@ -43,10 +43,10 @@ if (!$user_registration) {
 if (isset($_REQUEST['auth'])) {
     $auth = intval($_REQUEST['auth']);
     $_SESSION['u_tmp'] = $auth;
-}
-if (!isset($_REQUEST['auth'])) {
-    $auth = 0;
+} elseif (isset($_SESSION['u_tmp'])) {
     $auth = $_SESSION['u_tmp'];
+} else {
+    $auth = 0;
 }
 
 unset($_SESSION['was_validated']);

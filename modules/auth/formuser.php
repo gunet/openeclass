@@ -127,11 +127,11 @@ if ($cpf_check[0] === false) {
 $user_data = $auth_id = $provider_name = $provider_id = null;
 
 // check if it's valid and the provider enabled in the db
-if (isset($_GET['auth']) and is_numeric($_GET['auth'])) {
-    $auth_id = $_GET['auth'];
-    $result = Database::get()->querySingle("SELECT auth_name, auth_default FROM auth WHERE auth_id = ?d", $auth_id);
-    if ($result and $result->auth_default and in_array($result->auth_name, $hybridAuthMethods)) {
+if (isset($_GET['auth'])) {
+    $result = Database::get()->querySingle("SELECT auth_id, auth_name, auth_default FROM auth WHERE auth_id = ?d", $_GET['auth']);
+    if ($result and $result->auth_default and in_array($result->auth_name, array_merge($extAuthMethods, $hybridAuthMethods))) {
         $provider_name = $result->auth_name;
+        $auth_id = $result->auth_id;
     }
 }
 
@@ -349,8 +349,8 @@ if ($all_set) {
 
     $tool_content .= "<div class='alert alert-info'>$langUserData</div>";
     $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=". @$_GET['auth'] ."' method='post'>
-        <input type='hidden' name='p' value='$prof'>        
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=$auth_id' method='post'>
+        <input type='hidden' name='p' value='$prof'>
         <div class='form-group'>
             <label for='Name' class='col-sm-2 control-label'>$langName:</label>
             <div class='col-sm-10'>";
@@ -378,7 +378,7 @@ if ($all_set) {
         }
 
         $tool_content .= "</div>
-        </div>        
+        </div>
         <div class='form-group'>
             <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
             <div class='col-sm-10'>";
@@ -470,7 +470,7 @@ if ($all_set) {
     $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
-                    </div></div>       
+                    </div></div>
       </form>
       </div>";
 }
