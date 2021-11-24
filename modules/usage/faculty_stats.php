@@ -55,7 +55,7 @@ if (isset($_GET['user_date_end'])) {
 }
 
 if (isset($_GET['stats_submit'])) {
-    if (isset($_GET['formsearchfaculte'])) {
+    if (isset($_GET['formsearchfaculte']) and !is_int($_GET['formsearchfaculte'])) {
         $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
         if ($searchfaculte) {
             $subs = $tree->buildSubtrees(array($searchfaculte));
@@ -65,13 +65,17 @@ if (isset($_GET['stats_submit'])) {
                 $ids++;
             }
             $query = ' AND hierarchy.id IN (' . implode(', ', array_fill(0, $ids, '?d')) . ')';
-        } else {
-            $query = $terms = '';
         }
     }
 
     // only one course
     if (isset($_GET['c'])) {
+        $tool_content .= "
+                        <div class='panel'>
+                            <div class='panel-body'>
+                                <div class='text-center alert alert-info'>$langFrom2 <strong>$user_date_start</strong> $langUntil <strong>$user_date_end</strong></div>
+                            </div>
+                        </div>";
         $tool_content .= "<div class='row'><div class='col-xs-12'>";
         $name = Database::get()->querySingle("SELECT name FROM hierarchy, course, course_department WHERE hierarchy.id = course_department.department
                                          AND course_department.course = course.id AND course.id = ?d", $_GET['c'])->name;
@@ -154,48 +158,53 @@ if (isset($_GET['stats_submit'])) {
         if (!empty($query)) {
             $s = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course, course_department, hierarchy
                                             WHERE course.id = course_department.course
-                                            AND hierarchy.id = course_department.department
-                                            $query", $terms)->total;
+                                                AND created BETWEEN ?t AND ?t
+                                                AND hierarchy.id = course_department.department
+                                                $query",
+                                            $u_date_start, $u_date_end, $terms)->total;
         } else { // get all courses
             $s = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course, course_department, hierarchy
                                             WHERE course.id = course_department.course
-                                            AND hierarchy.id = course_department.department")->total;
+                                                AND created BETWEEN ?t AND ?t 
+                                                AND hierarchy.id = course_department.department",
+                                            $u_date_start, $u_date_end)->total;
         }
-        $all = Database::get()->querySingle("SELECT COUNT(*) AS num_of_courses FROM course")->num_of_courses;
-        $tool_content .= "<div class='panel'><div class='panel-body'><p class='text-center'>$s $langCourses ($langFrom2 $all $langSumFrom $siteName)</p></div></div>";
+        $all = Database::get()->querySingle("SELECT COUNT(*) AS num_of_courses FROM course WHERE created BETWEEN ?t AND ?t", $u_date_start, $u_date_end)->num_of_courses;
+        $tool_content .= "
+                        <div class='panel'>
+                            <div class='panel-body'>
+                                <div class='text-center alert alert-info'>$langHaveCreated <strong>$s</strong> $langsCourses ($langFrom2 <strong>$all</strong> $langSumFrom)
+                                 $langFrom2 <strong>$user_date_start</strong> $langUntil <strong>$user_date_end</strong></div>
+                            </div>
+                        </div>";
 
-        // division info
-        /*$tool_content .= "<table class='table table-striped table-bordered table-condensed'>";
-        $tool_content .= "<tr class='success'><th class='col-xs-9'>Τομείς</th><th class='col-xs-3'>Μαθήματα</th></tr>";
-        $qf = db_query("SELECT id, name FROM division WHERE faculte_id = 19 ORDER BY id");
-        while ($f = mysql_fetch_array($qf)) {
-                $division = db_query_get_single_value("SELECT COUNT(*) FROM cours WHERE division_id = '$f[id]'");
-                $tool_content .= "<tr><td>$f[name]</td><td>$division</td></tr>";
-        }
-        $tool_content .= "</table>"; */
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<tr class='list-header'><th class='col-xs-3'>$langCourse - $langCode</th>
                                               <th class='col-xs-4'>$langTeacher</th>
                                               <th class='col-xs-3'>$langCreationDate</th>
-                                              <th class='col-xs-1'>$langActions</th>";
+                                              <th class='col-xs-1' style='text-align: center;'><span class='fa fa-gears'></span></th>";
+
         if (!empty($query)) {
-            $sql = Database::get()->queryArray("SELECT course.id, course.code, course.visible, title, prof_names, DATE_FORMAT(created, '%d-%m-%Y %h:%m') AS creation_time
+            $sql = Database::get()->queryArray("SELECT course.id, course.code, course.visible, title, prof_names, created AS creation_time
                                             FROM course, course_department, hierarchy
                                                 WHERE course.id = course_department.course
+                                                AND created BETWEEN ?t AND ?t
                                                 AND hierarchy.id = course_department.department $query
-                                                ORDER by creation_time DESC", $terms);
+                                                ORDER by creation_time DESC", $u_date_start, $u_date_end, $terms);
         } else { // get all courses
-            $sql = Database::get()->queryArray("SELECT course.id, course.code, course.visible, title, prof_names, DATE_FORMAT(created, '%d-%m-%Y %h:%m') AS creation_time
+            $sql = Database::get()->queryArray("SELECT course.id, course.code, course.visible, title, prof_names, created AS creation_time
                                 FROM course, course_department, hierarchy
                                     WHERE course.id = course_department.course
+                                    AND created BETWEEN ?t AND ?t                                      
                                     AND hierarchy.id = course_department.department
-                                    ORDER by creation_time DESC");
+                                    ORDER by creation_time DESC", $u_date_start, $u_date_end);
         }
         foreach ($sql as $data) {
             $tool_content .= "<tr>
             <td><a href='$_SERVER[SCRIPT_NAME]?c=$data->id&amp;user_date_start=$user_date_start&amp;user_date_end=$user_date_end&amp;stats_submit=true'>$data->title</a><br/><small>($data->code)</small></td>
             <td>$data->prof_names</td>
-            <td>$data->creation_time</td><td class='text-center'>". action_button(array(
+            <td>" . nice_format($data->creation_time, true) . "</td>
+            <td class='text-center'>". action_button(array(
                     array('title' => $langCsv,
                         'url' => "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end",
                         'icon' => 'fa-file-excel-o'),
@@ -203,7 +212,6 @@ if (isset($_GET['stats_submit'])) {
                         'url' => "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end&amp;enc=UTF-8",
                         'icon' => 'fa-file-excel-o')
                     ),
-
                     array(
                         'secondary_icon' => 'fa-download'))  ."
                             </td></tr>";
@@ -220,9 +228,9 @@ if (isset($_GET['stats_submit'])) {
     $tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langFaculty:</label>";
     $tool_content .= "<div class='col-sm-10'>";
     if (isDepartmentAdmin()) {
-        list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
     } else {
-        list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false));
     }
 
     $head_content .= $js;
@@ -230,7 +238,7 @@ if (isset($_GET['stats_submit'])) {
     $tool_content .= "</div></div>";
 
     $tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-2 control-label' for='user_date_start'>$langStartDate:</label>
+    <label class='col-sm-2 control-label' for='user_date_start'>$langFrom:</label>
         <div class='col-xs-10 col-sm-9'>
             <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
@@ -240,7 +248,7 @@ if (isset($_GET['stats_submit'])) {
         </div>
         </div>";
     $tool_content .= "<div class='input-append date form-group' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label' for='user_date_end'>$langEndDate:</label>
+        <label class='col-sm-2 control-label' for='user_date_end'>$langTill:</label>
             <div class='col-xs-10 col-sm-9'>
                 <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
