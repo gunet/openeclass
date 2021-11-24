@@ -114,7 +114,7 @@ class H5PHubUpdater {
         if (file_exists($this->uploadDir)) {
             H5PCore::deleteFileTree($this->uploadDir);
         }
-        mkdir($this->uploadDir, 0700, true);
+        mkdir($this->uploadDir, 0775, true);
 
         $endpoint = $this->getApiEndpoint($library['machineName']);
         $targetFile = $this->uploadDir . "/" . $library['machineName'] . '-' . $library['majorVersion'] . '.' . $library['minorVersion'] . '.h5p';
