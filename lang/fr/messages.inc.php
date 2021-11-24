@@ -4519,6 +4519,7 @@ $langLoginUser = "Logins";
 $langUsageCoursesHeader = "Total $langsOfCourses";
 $langUsageUsers = "Total users";
 $langStatOfFaculty = "Statistics of $langOfFaculty";
+$langHaveCreated = "Created";
 $langRecordLog = "Log actions";
 $langUnits = "Units";
 $langRegistrationLink = 'User registration link';

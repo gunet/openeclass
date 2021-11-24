@@ -5390,3 +5390,4 @@ $langH5pInfoUpdate = "Click in 'Update' in order to update h5p content types (if
                     For further details about the available h5p content types click inF$langHideDocuments
                     <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
                     .";
+$langHaveCreated = "Created";
