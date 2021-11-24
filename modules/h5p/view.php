@@ -53,7 +53,7 @@ function showContent($contentId): bool {
                 $h5p = $h;
             }
         }
-        mkdir($workspace_dir);
+        mkdir($workspace_dir, 0775, true);
         $content = $content_dir . "/" . $h5p;
 
         $zip = new ZipArchive;
