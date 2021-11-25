@@ -395,6 +395,8 @@ function saveContent(stdClass $data): int {
 
     // Move any uploaded images or files. Determine content dependencies.
     $editor->processParameters($data->id, $data->library, $params->params);
+    // Revert params because editor processParameters modifies them in a not predictable way.
+    $params = json_decode($data->params);
     $workspacePath = $webDir . "/courses/" . $course_code . "/h5p/content/" . $data->id . "/workspace";
     $contentJsonPath = $workspacePath . "/content";
     if (!file_exists($contentJsonPath)) {
@@ -424,14 +426,19 @@ function saveContent(stdClass $data): int {
 
     // create proper h5p.json file on disk
     $h5p = new stdClass();
+    $h5p->title = $data->title;
     $h5p->mainLibrary = $data->library['machineName'];
     $h5p->preloadedDependencies = array();
+    $vdepsAdded = array();
     foreach ($vdeps as $dependency) {
-        $h5p->preloadedDependencies[] = (object) array(
-            'machineName' => $dependency['library']['machineName'],
-            'majorVersion' => $dependency['library']['majorVersion'],
-            'minorVersion' => $dependency['library']['minorVersion']
-        );
+        if ($dependency['type'] !== "editor" && !in_array($dependency['library']['machineName'], $vdepsAdded)) {
+            $h5p->preloadedDependencies[] = (object)array(
+                'machineName' => $dependency['library']['machineName'],
+                'majorVersion' => $dependency['library']['majorVersion'],
+                'minorVersion' => $dependency['library']['minorVersion']
+            );
+            $vdepsAdded[] = $dependency['library']['machineName'];
+        }
     }
     file_put_contents($workspacePath . "/h5p.json", json_encode($h5p));
 
