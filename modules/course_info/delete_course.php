@@ -38,12 +38,13 @@ if (isset($_POST['delete'])) {
             'level' => 'primary-label')));
 
     // first archive course
-    doArchive($course_id, $course_code);
+    $zipfile = doArchive($course_id, $course_code);
 
     $garbage = "$webDir/courses/garbage";
-    is_dir($garbage) or make_dir($garbage);
+    $target = "$garbage/$course_code.$_SESSION[csrf_token]";
+    is_dir($target) or make_dir($target);
     touch("$garbage/index.html");
-    rename("$webDir/courses/archive/$course_code.$_SESSION[csrf_token]", "$garbage/$course_code.$_SESSION[csrf_token]");
+    rename($zipfile, "$target/$course_code.zip");
 
     delete_course($course_id);
 

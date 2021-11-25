@@ -178,12 +178,12 @@ function archiveTables($course_id, $course_code, $archivedir) {
 function doArchive($course_id, $course_code) {
     global $webDir, $tool_content, $langGeneralError;
 
-    $basedir = "$webDir/courses/archive/$course_code.$_SESSION[csrf_token]";
-    file_exists($basedir) or make_dir($basedir);
-    touch("$webDir/courses/archive/index.html");
-
     // Remove previous back-ups older than 10 minutes
+    touch("$webDir/courses/archive/index.html");
     cleanup("$webDir/courses/archive", 600);
+
+    $basedir = "$webDir/courses/archive/$_SESSION[csrf_token]/$course_code";
+    file_exists($basedir) or make_dir($basedir);
 
     $backup_date = date('Ymd-His');
     $backup_date_short = date('Ymd');
@@ -193,25 +193,30 @@ function doArchive($course_id, $course_code) {
 
     archiveTables($course_id, $course_code, $archivedir);
 
-    $zipfile = $basedir . "/$course_code-$backup_date_short.zip";
+    $zipfile = "$webDir/courses/archive/$_SESSION[csrf_token]/$course_code-$backup_date_short.zip";
+    if (file_exists($zipfile)) {
+        unlink($zipfile);
+    }
 
     // create zip file
     $zip = new ZipArchive;
     if ($zip->open($zipfile, ZipArchive::CREATE) !== true) {
         Session::Messages($langGeneralError, 'alert-danger');
-        redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
+        redirect_to_home_page('modules/course_info/?course=' . $course_code);
     }
     $result = $zip->addGlob($archivedir . '/*', GLOB_NOSORT, [
-            'remove_path' => "$webDir/courses/archive" ]) &&
+            'remove_path' => "$webDir/courses/archive/$_SESSION[csrf_token]" ]) &&
         addDir($zip, "$webDir/courses/$course_code", "$course_code/$backup_date/html") &&
         addDir($zip, "$webDir/video/$course_code", "$course_code/$backup_date/video_files");
     $zip->close();
-    removeDir($archivedir);
+    removeDir($basedir);
 
     if (!$result) {
         Session::Messages($langGeneralError, 'alert-danger');
         redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
     }
+
+    return $zipfile;
 }
 
 function addDir($zip, $path, $newPath) {
