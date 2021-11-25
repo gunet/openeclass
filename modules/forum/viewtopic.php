@@ -43,11 +43,11 @@ ModalBoxHelper::loadModalBox();
 $toolName = $langForums;
 
 $head_content .= "
-  <style>
+  <style>    
     .panel-primary .panel-heading .panel-title { color: #fff;}
     .panel-primary .panel-heading a { color: #fff;}
     .panel-title a {text-decoration:none;}
-
+    
     .img-rounded-corners {
       -webkit-border-radius: 15%;
       -moz-border-radius: 15%;
@@ -69,6 +69,14 @@ if ($is_editor) {
                             document.location.href = link;
                         }
                     });
+                });
+                $('.anchor_to_parent_post_id a').click(function(e) {
+                   $('.post-message').removeClass('panel-success').addClass('panel-default').css('border-color','').css('border', '');
+                   if ($('.parent-post-message').hasClass('panel-success')) {
+                       $('.parent-post-message').removeClass('panel-success').addClass('panel-primary').css('border-color','').css('border', '');
+                   }
+                   var parent_post_id = $(this).attr('id');
+                   $('#' + parent_post_id).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
                 });
             });
         </script>";
@@ -411,7 +419,7 @@ if ($view != POSTS_THREADED_VIEW) {
                 // all the rest with descending order
             }
             $res2 = Database::get()->queryArray("SELECT * FROM forum_post
-                    WHERE topic_id = ?d ORDER BY id DESC 
+                    WHERE topic_id = ?d ORDER BY id DESC
                             LIMIT ?d, " . POSTS_PER_PAGE . "", $topic, $_GET['start']);
             $result = array_merge($res1, $res2);
         } else {
@@ -424,13 +432,13 @@ if ($view != POSTS_THREADED_VIEW) {
             // initial post
             $res1 = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id LIMIT 1", $topic);
             // all the rest with descending order
-            $res2 = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id DESC 
+            $res2 = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id DESC
                             LIMIT " . POSTS_PER_PAGE . "", $topic);
             $res3 = array_pop($res2);
             $result = array_merge($res1, $res2); // remove last entry (we displayed it in $res1 already)
         } else {
-            $result = Database::get()->queryArray("SELECT * FROM forum_post 
-                WHERE topic_id = ?d ORDER BY id 
+            $result = Database::get()->queryArray("SELECT * FROM forum_post
+                WHERE topic_id = ?d ORDER BY id
                   LIMIT " . POSTS_PER_PAGE . "", $topic);
         }
     }
@@ -522,9 +530,9 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $langAttachedFile, $unit, $langFrom2,
            $langMessages, $course_code, $is_editor, $topic, $forum, $uid, $langMessage, $head_content,
-           $langModify, $langDelete, $langSent, $dateTimeFormatShort, $webDir;
+           $langModify, $langDelete, $langSent, $dateTimeFormatShort, $webDir, $langForumPostParent;
 
-    $content = $reply_button_link = '';
+    $content = '';
     if (!isset($user_stats[$myrow->poster_id])) {
         $user_num_posts = Database::get()->querySingle("SELECT num_posts FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $myrow->poster_id, $course_id);
         if ($user_num_posts) {
@@ -583,13 +591,13 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     }
 
     if ($count > 1) { // for all posts except first
-        $content .= "<div class='panel panel-default col-sm-offset-$offset'>";
+        $content .= "<div id='$myrow->id' class='post-message panel panel-default col-sm-offset-$offset'>";
         $content .= "<div class='panel-heading'><h5 class='panel-title'>$langMsgRe " . q($topic_subject);
     } else {
-        $content .= "<div class='panel panel-primary'>";
+        $content .= "<div id='$myrow->id' class='parent-post-message panel panel-primary'>";
         $content .= "<div class='panel-heading'><h5 class='panel-title'>". q($topic_subject);
     }
-    
+
     if ($is_editor) {
         $content .= "
                 <span class='pull-right'>
@@ -603,6 +611,14 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                             "data-original-title='$langDelete'></span></a>
                 </span>";
     }
+
+    // anchor to parent post
+    $achor_to_parent_post = '';
+    $parent_post_text = ellipsize(canonicalize_whitespace(strip_tags(get_post_text($myrow->parent_post_id))), 50);
+    if ($myrow->parent_post_id > 0) {
+        $achor_to_parent_post = "<div class='anchor_to_parent_post_id'>$langForumPostParent<a href='#$myrow->parent_post_id' id='$myrow->parent_post_id'>$parent_post_text</a></div>";
+    }
+
     $content .= "
             </h5>
         </div>
@@ -617,7 +633,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                             claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) .
                             " $langFrom2 " . display_user($myrow->poster_id, false, false) .
                             " ({$user_stats[$myrow->poster_id]})
-                        </small>";
+                        </small><small>$achor_to_parent_post</small>";
 
     if (!empty($dyntools)) {
         $content .= "<span style='margin-left: 20px;' class='pull-right'>";

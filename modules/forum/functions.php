@@ -154,6 +154,21 @@ function category_name($id) {
     }
 }
 
+/**
+ * @brief get post text
+ * @param $post_id
+ * @return mixed
+ */
+function get_post_text($post_id) {
+
+    $r = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $post_id);
+    if ($r) {
+        return $r->post_text;
+    } else {
+        return null;
+    }
+}
+
 function init_forum_group_info($forum_id) {
     global $course_id, $group_id, $can_post, $is_member, $is_editor;
 
