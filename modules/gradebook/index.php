@@ -561,10 +561,10 @@ if ($is_editor) {
 
     // delete gradebook
     } elseif (isset($_GET['delete_gb'])) {
+        triggerGameGradebook($course_id, 3, getDirectReference($_GET['delete_gb']));
         $log_details = array('id' => getDirectReference($_GET['delete_gb']),
                              'title' => get_gradebook_title(getDirectReference($_GET['delete_gb'])));
         delete_gradebook(getDirectReference($_GET['delete_gb']));
-        triggerGameGradebook($course_id, 3, getDirectReference($_GET['delete_gb']));
         Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_DELETE, $log_details);
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
