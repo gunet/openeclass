@@ -55,32 +55,37 @@ $head_content .= "
     }
   </style>";
 
-// delete confirmation
-if ($is_editor) {
-    load_js('tools.js');
-    $head_content .= "
+load_js('tools.js');
+$head_content .= "
         <script type='text/javascript'>
             $(document).ready(function() {
-                $('.delete-btn').click(function(e) {
-                    var link = $(this).attr('href');
-                    e.preventDefault();
-                    bootbox.confirm('" . js_escape($langConfirmDelete) . "', function(result) {
-                        if (result) {
-                            document.location.href = link;
-                        }
-                    });
-                });
-                $('.anchor_to_parent_post_id a').click(function(e) {
-                   $('.post-message').removeClass('panel-success').addClass('panel-default').css('border-color','').css('border', '');
-                   if ($('.parent-post-message').hasClass('panel-success')) {
-                       $('.parent-post-message').removeClass('panel-success').addClass('panel-primary').css('border-color','').css('border', '');
-                   }
-                   var parent_post_id = $(this).attr('id');
-                   $('#' + parent_post_id).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
-                });
+               $('.anchor_to_parent_post_id a').click(function(e) {
+               $('.post-message').removeClass('panel-success').addClass('panel-default').css('border-color','').css('border', '');
+               if ($('.parent-post-message').hasClass('panel-success')) {
+                   $('.parent-post-message').removeClass('panel-success').addClass('panel-primary').css('border-color','').css('border', '');
+               }
+               var parent_post_id = $(this).attr('id');
+               $('#' + parent_post_id).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
             });
-        </script>";
+";
+
+if ($is_editor) { // delete post confirmation
+    $head_content .= "
+        $('.delete-btn').click(function(e) {
+            var link = $(this).attr('href');
+            e.preventDefault();
+            bootbox.confirm('" . js_escape($langConfirmDelete) . "', function(result) {
+                if (result) {
+                    document.location.href = link;
+                }
+            });
+        });        
+    ";
 }
+
+$head_content .= "
+        });
+</script>";
 
 // get forums post view user settings
 $user_settings = new UserSettings($uid);
