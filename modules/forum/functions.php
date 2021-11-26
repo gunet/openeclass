@@ -124,7 +124,11 @@ function toggle_icon($notify) {
     }
 }
 
-// returns a category id from a forum id
+/**
+ * @brieg get category id
+ * @param $id
+ * @return false
+ */
 function forum_category($id) {
 
     global $course_id;
@@ -139,7 +143,11 @@ function forum_category($id) {
     }
 }
 
-// returns a category name from a category id
+
+/**
+ * @brief get category name
+ * @param $id
+ */
 function category_name($id) {
 
     global $course_id;
@@ -225,26 +233,6 @@ function find_child_posts($result, $post_data, $offset) {
 
 /**
  * @brief Send an e-mail notification for new messages to subscribed users
- * @global type $logo
- * @global type $langNewForumNotify
- * @global type $course_code
- * @global type $course_id
- * @global type $langForumFrom
- * @global type $uid
- * @global type $langBodyForumNotify
- * @global type $langInForums
- * @global type $urlServer
- * @global type $langdate
- * @global type $langSender
- * @global type $langCourse
- * @global type $langCategory
- * @global type $langForum
- * @global type $langSubject
- * @global type $langNote
- * @global type $langLinkUnsubscribe
- * @global type $langHere
- * @global type $langMailBody
- * @global type $langMailSubject
  * @param type $forum_id
  * @param type $forum_name
  * @param type $topic_id
@@ -254,7 +242,7 @@ function find_child_posts($result, $post_data, $offset) {
  */
 function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $topic_date) {
     global $logo, $langNewForumNotify, $course_code, $course_id, $langForumFrom,
-        $uid, $is_editor, $langBodyForumNotify, $langInForums, $urlServer, $langDate, $langSender,
+        $uid, $langBodyForumNotify, $langInForums, $urlServer, $langDate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
         $langLinkUnsubscribe, $langHere, $langMailBody, $langMailSubject;
 
