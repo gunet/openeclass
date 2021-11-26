@@ -57,9 +57,9 @@ $head_content .= "
 
 load_js('tools.js');
 $head_content .= "
-        <script type='text/javascript'>
-            $(document).ready(function() {
-               $('.anchor_to_parent_post_id a').click(function(e) {
+    <script type='text/javascript'>
+        $(document).ready(function() {
+           $('.anchor_to_parent_post_id a').click(function(e) {
                $('.post-message').removeClass('panel-success').addClass('panel-default').css('border-color','').css('border', '');
                if ($('.parent-post-message').hasClass('panel-success')) {
                    $('.parent-post-message').removeClass('panel-success').addClass('panel-primary').css('border-color','').css('border', '');
@@ -620,8 +620,9 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     // anchor to parent post
     $achor_to_parent_post = '';
     $parent_post_text = ellipsize(canonicalize_whitespace(strip_tags(get_post_text($myrow->parent_post_id))), 50);
+    $anchor_url_to_parent_post_id = "viewtopic.php?course=$course_code&topic=$topic&forum=$forum&all=true#$myrow->parent_post_id";
     if ($myrow->parent_post_id > 0) {
-        $achor_to_parent_post = "<div class='anchor_to_parent_post_id'>$langForumPostParent<a href='#$myrow->parent_post_id' id='$myrow->parent_post_id'>$parent_post_text</a></div>";
+        $achor_to_parent_post = "<div class='anchor_to_parent_post_id' style='padding-bottom: 15px;'><em>$langForumPostParent<a href='$anchor_url_to_parent_post_id' id='$myrow->parent_post_id'>$parent_post_text</a></em></div>";
     }
 
     $content .= "
