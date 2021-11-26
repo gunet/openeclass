@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2021-05-25 13:57:50
+// Generated 2021-11-26 15:55:08
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -1080,9 +1080,9 @@ $langDBSetting = "Paramètres de MySQL";
 $langMainLang = "Langue Principale de l'installation";
 $langLastCheck = "Dernière vérification avant l'installation";
 $langRequirements = "Exigences du système";
-$langInstallEnd = "Installation terminée"
+$langInstallEnd = "Installation terminée" 
 ;
-$langModuleNotInstalled = "Non installé"
+$langModuleNotInstalled = "Non installé" 
 ;
 $langReadHelp = "Lire plus";
 $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
@@ -1114,7 +1114,7 @@ $langLDAPBaseDn = "Base DN du Serveur LDAP";
 $langChooseLang = "Choisissez la langue";
 $langBeforeInstall1 = "Avant de procéder à l'installation, veuillez imprimer et lire attentivement les";
 $langBeforeInstall2 = "De plus, vous trouverez des informations générales concernant la plateforme";
-$langInstallInstr = "Instructions d'installation"
+$langInstallInstr = "Instructions d'installation" 
 ;
 $langAddComment = "Ajouter / Modifier un commentaire";
 $langLearningModule = "Section";
@@ -1175,7 +1175,7 @@ $langDocumentAsModule = "Utiliser un document";
 $langDocumentAsModuleLabel = "de Document";
 $langDocumentInModule = "Document dans un module";
 $langEXERCISETypeDesc = "Exercice de la plateforme";
-$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape."
+$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape." 
 ;
 $langErrorAssetNotFound = "Élément introuvable :";
 $langErrorCopyAttachedFile = "Impossible de copier le fichier : ";
@@ -1907,9 +1907,9 @@ $langNewId = "Nouveau identifiant"
 $langUsersWillAdd = "Les utilisateurs du cours seront ajoutés";
 $langErrorLang = "Erreur ! Aucune langue trouvée !"
 ;
-$langDoSearch = "Poursuivre la recherche"
+$langDoSearch = "Poursuivre la recherche" 
 ;
-$langSearch_terms = "Critères de recherche :"
+$langSearch_terms = "Critères de recherche :" 
 ;
 $langSearchIn = "Recherche dans :";
 $langSearchWith = "Recherche selon des critères :";
@@ -2743,7 +2743,6 @@ $langMailVerificationPendingU = "La vérification de l'e-mail est en attente";
 $langMailVerificationSettings = "Paramètres de confirmation de l'adresse e-mail des utilisateurs";
 $langMailVerificationNotice = "If email verification of $langOfUser is required and email verification is pending, then:<br /><ul><li>the platform will redirect user to email verification page</li><li>the user will not receive any emails (with announcements) from his registered courses</li></ul>";
 $langMailVerificationNoticeAdmin = "Vous ne pouvez pas modifier l'utilisateur admin sur cette page.";
-$langMailVerificationNoticeGuest = "Guest users cannot been modified";
 $langChangeTo = "Changer en";
 $langMailVerificationChanged = "Changement effectué";
 $langMailVerificationChangedNo = "Aucune modification n'a été sélectionnée";
@@ -2806,7 +2805,6 @@ $langMailNotVerified = "Votre adresse e-mail n'est pas confirmée. Vous ne pourr
 $langExerciseMaxAttemptsReached = "Vous avez atteint le nombre maximum d'essais autorisés pour cet exercice.";
 $lang_max_glossary_terms = 'Displaying of term definitions in course pages is not allowed, if the total number of terms in the glossary is greater than:';
 $langGlossaryOverLimit = 'The number of glossary terms has exceeded the limit (%s) for displaying definitions in course pages.';
-$langNoGlossary = "Il n'y a pas de glossaire";
 $langVideoDirectory = "Fichiers multimédia";
 $langUserNotLogin = "Utilisateurs qui n'ont pas été connectés";
 $langExternalLinks = "Liens externes";
@@ -4178,7 +4176,6 @@ $langSpecificUsers = "specific $langsStudents";
 $langAnswersDispLastAttempt = "Display correct answers after last attempt by $langsStudent";
 $langAnswersDispEndDate = "Display correct answers after the exercisei end date";
 $langAttempt = "Attempt";
-$langOfAttempt = "attempt";
 $langIPUnlock = "Unlock specific IP(s) or IP CIDR(s)";
 $langPasswordUnlock = "Unlock with password";
 $langPasswordModalTitle = "Enter the exercise password";
@@ -4319,7 +4316,7 @@ $langProviderIdAlreadyExists = 'An existent account in the platform is already l
 $langAuthSettingsSaved = 'Your connection settings have been stored';
 $langProviderConnectWithAlternativeProviders = 'Sign-in or register with alternative providers';
 $langProviderConnect = 'Connect';
-$langProviderConnectWith = 'Connect with profile';
+$langProviderConnectWith = 'Connect with account';
 $langProviderConnectWithTooltip = 'Your account will be linked with your social profile so you can authenticate with the platform';
 $langProviderConnected = 'You can connect with ';
 $langProviderDeleteConnection = 'Remove';
@@ -4519,7 +4516,6 @@ $langLoginUser = "Logins";
 $langUsageCoursesHeader = "Total $langsOfCourses";
 $langUsageUsers = "Total users";
 $langStatOfFaculty = "Statistics of $langOfFaculty";
-$langHaveCreated = "Created";
 $langRecordLog = "Log actions";
 $langUnits = "Units";
 $langRegistrationLink = 'User registration link';
@@ -4969,6 +4965,7 @@ $langCourseCategoryMultiple = "Multiplicity";
 $langCourseCategoryMultiple2 = "The category can have multiple values";
 $langCourseCategorySearchable = "Searchable";
 $langCourseCategorySearchable2 = "The category will participate in the special search toolbox";
+$langCourseCategoryActive = "Active";
 $langCourseCategoryActive2 = "The category will be visible to the users";
 $langCourseCategoryOrdering = "Ordering";
 $langCourseCategoryOrdering2 = "(i.e. 1, 2, etc.)";
@@ -4979,11 +4976,12 @@ $langCourseCategoryValueDel = "Delete category value";
 $langCourseCategoryValueEdit = "Edit category value";
 $langAllCourseCategoryValues = "Metadata Category Values";
 $langEmptyCourseCategoryValueName = "You left the name empty! Please try again";
-$langCourseCategoryValueErase = "Category value sdeleted";
+$langCourseCategoryValueErase = "Category value deleted";
 $langEditCourseCategoryValueSuccess = "Edit submitted successfully";
 $langCourseCategoryValue2 = "(i.e. 1 - 30)";
 $langCourseCategoryValueOrdering = "Ordering";
 $langCourseCategoryValueOrdering2 = "(i.e. 1, 2, etc.)";
+$langCourseCategoryValueActive = "Active";
 $langCourseCategoryValueActive2 = "The category value will be visible to the users";
 $langInactiveCourseCategories = "Inactive categories";
 $langActiveCourseCategories = "Active categories";
@@ -5017,9 +5015,6 @@ $langWithUsernames = 'usernames';
 $langldapfirstnameattr = "User given name attribute";
 $langldapsurnameattr = "User surname attribute";
 $langGroupInfiniteUsers = "0: unlimited members";
-$langSingleGroupRegInfo = "You can register to one user group (if group is not full and registration is allowed to it)";
-$langCategoryGroupRegInfo = "You can register to general groups and to one group per category (if groups are not full and registration are allowed to them)";
-$langMultipleGroupRegInfo = "You can register to many groups (if groups are not full and registration are allowed to them)";
 $langRegEnterCourse = "Register and enter $langsCourse";
 $langForumNotifications = "$langStudents notifications";
 $langActivateForumNotifications = "Enable $langsStudents notification (via email)";
@@ -5157,8 +5152,8 @@ $langHtmlFile = "Html file";
 $langRubricCreated = "Rubrique created successfully";
 $langDefaultMatchingOpt1 = "Athens";
 $langDefaultMatchingOpt2 = "London";
-$langTurnitinShortDescription = "Connect with plagiarism Service.
-Plagiarism service is a commercial product by Turnitin. For further information take a look at <a href=\"https://turnitin.com\">https://turnitin.com</a>";
+$langTurnitinShortDescription = 'Connect with anti-plagiarism service.
+Anti-plagiarism service is a commercial product by Turnitin. For further information take a look at <a href="https://turnitin.com">https://turnitin.com</a>';
 $langGroupFull = "full group";
 $langScoreDiffers = 'The recorded exercise score is different to the currently calculated one. Would you like to regrade the exercise?';
 $langRegrade = 'Regrade';
@@ -5311,7 +5306,6 @@ $langForumPostFlatViewDesc = "Date view (newest first)";
 $langForumPostThreadedView = "Threaded view";
 $langGradeScalesDeleted = "Grading Scale deleted";
 $langInsertChat = 'chat';
-$langInsertBlog = 'blog';
 $langEBooks = 'E-Books';
 $langBBBExternalUsers = "External Users";
 $langBBBAnnDisplay = "to be displayed in announcements";
@@ -5493,7 +5487,7 @@ $langShuffleQuestions = "Shuffle all questions";
 $langQuestionsManagement = "Questions administration";
 $langExerciseExecute = "Start exercise";
 $langGroupAllowRegistration = "Allow registration to one group";
-$langGroupAllowCategoryRegistration = "Allow registration to one group per category";
+$langGroupAllowCategoryRegistration = "Allow registration to general group categories and to one group per category";
 $langChooseRandomQuestions = "Choose random questions from exercise";
 $langFromRandomDifficultyQuestions = "random questions with difficulty";
 $langFromRandomCategoryQuestions = "random questions from category";
@@ -5589,7 +5583,33 @@ $langNoAvailableLimesurveyTemplates = "No LTI Tools available.";
 $langLimesurveyApp = "LimeSurvey Application";
 $langLimesurveyLTIOptions = "LimeSurvey Options";
 $langLimesurveyIntegration = "LimeSurvey Integration";
+$langAddAdmin = 'Add Admin';
+$langEditPrivilege = 'Edit Privileges';
+$langTransitionEnable = "Enable Transition";
+$langTransitionDisable = "Disable Transition";
+$langTransitionExcludeReq = "Transition Exclusion Requests";
+$langHideExercises = "Hide course exercises";
+$langExercisesDeleted = "Exercises deactivated";
+$langOfAttempt = "attempt";
+$langSingleGroupRegInfo = "You can register to one user group (if group is not full and registration is allowed to it)";
+$langCategoryGroupRegInfo = "You can register to general groups and to one group per category (if groups are not full and registration are allowed to them)";
+$langMultipleGroupRegInfo = "You can register to many groups (if groups are not full and registration are allowed to them)";
+$lang_email_prevent_autoset_change = "Disallow changing e-mail address if set automatically from auth method";
+$lang_am_prevent_autoset_change = "Disallow changing student ID if set automatically from auth method";
+$langHybridAuthSetup1 = "<br>For instructions on filling the <strong>";
+$langHybridAuthSetup2 = " Id/Key</strong> and <strong>";
+$langHybridAuthSetup3 = " Secret</strong> fileds please <a href=";
+$langHybridAuthSetup4 = " target='_blank'>click here</a>.";
+$langHybridAuthCallback = "<br>The <strong>callback</strong> URL for the app is: ";
+$langMailVerificationNoticeGuest = "Guest users cannot been modified";
+$dateTimeFormatLongFull = '%A, %B %d, %Y at %I:%M %p';
+$langCriteria = 'Criteria';
+$langInsertBlog = 'blog';
+$langNoGlossary = "There is no glossary";
+$langH5PShortDescription = "H5P Interactive Content";
+$langH5PLongDescription = "H5P Interactive Content";
 $langH5p = "H5P Content";
+$langH5pInstall = "Install H5P interactive content packages and libraries";
 $langH5pUpdateComplete = 'The update of packages and libriares was successfully complete. You may return to the previous page and select Create.';
 $langH5pInteractiveContent = 'H5P interactive content';
 $langH5pNoContent = 'There is no H5P content';
@@ -5602,3 +5622,6 @@ $langH5pInfoUpdate = "Click in 'Update' in order to update h5p content types (if
                     For further details about the available h5p content types click inF$langHideDocuments
                     <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
                     .";
+$langMultipleCourseUsers = "Users registered to the most courses";
+$langLast30Entries = "30 top records";
+$langHaveCreated = "Created";
