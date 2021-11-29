@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
     }
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
     $placeholders = '(' . implode(', ', array_fill(0, count($found_users), '?d')) . ')';
-    if ($multi_reg == 0 or $multi_reg == 2) {
+    if ($found_users and ($multi_reg == 0 or $multi_reg == 2)) {
         if ($multi_reg == 2) {
             // Users can register to one group per category
             $other_group_users = Database::get()->queryArray("SELECT user_id, `group`.name
@@ -103,7 +103,7 @@ if (isset($_POST['submit'])) {
             $errors[] = $message;
         }
     }
-    if ($max_members) {
+    if ($found_users and $max_members) {
         $current_members = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM group_members
             WHERE group_id = ?d AND is_tutor = 0 AND user_id NOT IN $placeholders",
             $group_id, $found_users)->cnt;
@@ -118,7 +118,6 @@ if (isset($_POST['submit'])) {
         Session::flashPost();
         redirect_to_home_page("modules/group/muladduser.php?course=$course_code&group_id=$group_id");
     } else {
-        $placeholders = implode(', ', array_fill(0, count($found_users), "(?d, ?d, 0, '')"));
         $user_group_data = array_map(function ($user) {
             global $group_id;
             return [$group_id, $user];
