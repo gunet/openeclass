@@ -5405,3 +5405,4 @@ $langH5pInfoUpdate = "Click in 'Update' in order to update h5p content types (if
 $langMultipleCourseUsers = "Users registered to the most courses";
 $langLast30Entries = "30 top records";
 $langHaveCreated = "Created";
+$langInfoMonthlyStatistics = "also displayed the corresponding increase / decrease compared to the previous month";
