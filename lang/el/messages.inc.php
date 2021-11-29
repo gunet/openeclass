@@ -4010,6 +4010,7 @@ $langUsageCoursesHeader = "Σύνολο $langsOfCourses";
 $langUsageUsers = "Σύνολο χρηστών";
 $langStatOfFaculty = "Στατιστικά $langOfFaculty";
 $langHaveCreated = "Έχουν δημιουργηθεί";
+$langInfoMonthlyStatistics = "σε παρένθεση παρουσιάζονται η αντίστοιχη αύξηση / μείωση σε σχέση με τον προηγούμενο μήνα";
 
 // for platform statistics
 $langUsersCourse = "Χρήστες ανά $langsCourse";

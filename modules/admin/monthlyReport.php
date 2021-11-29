@@ -34,21 +34,64 @@ $toolName = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
-$data['action_bar'] = action_bar(array(                
+$data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "../usage/index.php?t=a",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
 
 
-$data['option_date'] = new Datetime();
+$months = "";
+for ($i = 0; $i < 12; $i++) {
+    $mon = mktime(0, 0, 0, date('m') - $i - 1, date('d'), date('Y'));
+    $mval = date('m Y', $mon);
+    if (isset($_POST['selectedMonth']) and $_POST['selectedMonth'] == $mval) {
+        $selected = ' selected';
+    } else {
+        $selected = '';
+    }
+    $months .= "<option value='$mval' $selected>" . $langMonths[date('m', $mon)] . date(' Y', $mon);
+}
+
+$data['months'] = $months;
+
 
 if (isset($_POST["selectedMonth"])) {
+
     $month = q($_POST["selectedMonth"]);
-    list($m, $data['y']) = explode(' ', $month);  //only month
-    
-    $data['monthly_data'] = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
+    list($m, $y) = explode(' ', $month);  //only month
+    $data['y'] = $y;
+    $data['coursNum'] = $coursNum = '';
+    $data['diff_profesNum'] = $data['diff_logins'] = $data['diff_studNum'] = $data['diff_visitorsNum'] = $data['diff_coursNum'] = 0;
+    $row = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
                        FROM monthly_summary WHERE `month` = ?s", $month);
+    if ($row) {
+        $data['profesNum'] = $profesNum = $row->profesNum;
+        $data['studNum'] = $studNum = $row->studNum;
+        $data['visitorsNum'] = $visitorsNum = $row->visitorsNum;
+        $data['coursNum'] = $coursNum = $row->coursNum;
+        $data['logins'] = $logins = $row->logins;
+        $data['details'] = $details = $row->details;
+        // previous month
+        $prev_month_date_format = date_create($y . "-" . $m);
+        date_sub($prev_month_date_format, date_interval_create_from_date_string('1 month'));
+        $prev_month = date_format($prev_month_date_format, 'm Y');
+        $row_prev = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
+                       FROM monthly_summary WHERE `month` = ?s", $prev_month);
+        if ($row_prev) {
+            $prev_profesNum = $row_prev->profesNum;
+            $prev_studNum = $row_prev->studNum;
+            $prev_visitorsNum = $row_prev->visitorsNum;
+            $prev_coursNum = $row_prev->coursNum;
+            $prev_logins = $row_prev->logins;
+
+            $data['diff_profesNum'] = $profesNum - $prev_profesNum;
+            $data['diff_studNum'] = $studNum - $prev_studNum;
+            $data['diff_visitorsNum'] = $visitorsNum - $prev_visitorsNum;
+            $data['diff_coursNum'] = $coursNum - $prev_coursNum;
+            $data['diff_logins'] = $logins - $prev_logins;
+        }
+    }
 
     if (isset($localize) and $localize == 'greek') {
         $data['msg_of_month'] = substr($langMonths[$m], 0, -1);
