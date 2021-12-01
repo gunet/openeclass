@@ -214,6 +214,8 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
                 if (!is_null($data[$newField])) {
                     if (isset($data[$newField]) && isset($map[$data[$newField]])) { // map needs reverse resolution
                         $data[$newField] = $map[$data[$newField]];
+                    } else {
+                        continue 2;
                     }
                 }
             }
