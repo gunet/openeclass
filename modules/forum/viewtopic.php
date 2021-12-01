@@ -43,11 +43,11 @@ ModalBoxHelper::loadModalBox();
 $toolName = $langForums;
 
 $head_content .= "
-  <style>    
+  <style>
     .panel-primary .panel-heading .panel-title { color: #fff;}
     .panel-primary .panel-heading a { color: #fff;}
     .panel-title a {text-decoration:none;}
-    
+
     .img-rounded-corners {
       -webkit-border-radius: 15%;
       -moz-border-radius: 15%;
@@ -58,15 +58,22 @@ $head_content .= "
 load_js('tools.js');
 $head_content .= "
     <script type='text/javascript'>
+        function highlight(selector) {
+            $(selector).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
+        }
         $(document).ready(function() {
-           $('.anchor_to_parent_post_id a').click(function(e) {
-               $('.post-message').removeClass('panel-success').addClass('panel-default').css('border-color','').css('border', '');
-               if ($('.parent-post-message').hasClass('panel-success')) {
-                   $('.parent-post-message').removeClass('panel-success').addClass('panel-primary').css('border-color','').css('border', '');
-               }
-               var parent_post_id = $(this).attr('id');
-               $('#' + parent_post_id).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
+            if (window.location.hash) {
+                highlight(window.location.hash);
+            }
+            $('.anchor_to_parent_post_id a').click(function(e) {
+                $('.post-message').removeClass('panel-success').addClass('panel-default').css('border-color','').css('border', '');
+                if ($('.parent-post-message').hasClass('panel-success')) {
+                    $('.parent-post-message').removeClass('panel-success').addClass('panel-primary').css('border-color','').css('border', '');
+                }
+                var parent_post_id = $(this).attr('id');
+                highlight('#' + parent_post_id);
             });
+
 ";
 
 if ($is_editor) { // delete post confirmation
@@ -79,7 +86,7 @@ if ($is_editor) { // delete post confirmation
                     document.location.href = link;
                 }
             });
-        });        
+        });
     ";
 }
 
