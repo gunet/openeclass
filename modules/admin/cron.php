@@ -69,7 +69,7 @@ function monthlycronjob() {
 }
 
 /**
- * 
+ *
  */
 function summarizeLogins() {
     error_log("cron summarizeLogins START");
@@ -182,7 +182,7 @@ function summarizeMonthlyData() {
                 <td class='text-center'>" . getSerializedMessage($row->dept) . "</td>
                 <td>" . $row->proff . "</td><td class='text-center'>" . $row->cnt . "</td></tr>";
         });
-        
+
         $mtext .= '</tbody></table>';
         $sql = "INSERT INTO monthly_summary SET month = ?s, profesNum = ?d, studNum = ?d,
             visitorsNum = ?d, coursNum = ?d, logins = ?d, details = ?s";
@@ -197,10 +197,10 @@ function summarizeMonthlyData() {
 function summarizeMonthlyActions() {
     error_log("cron summarizeMonthlyActions START");
     require_once 'include/action.php';
-    
+
     $action = new action();
     Database::get()->queryFunc("SELECT id FROM course", function($course) use (&$action) {
-        $min_time = ($res = Database::get()->querySingle("SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = ?d", intval($course->id))) ? $res->min_time : time();
+        $min_time = ($res = Database::get()->querySingle("SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = ?d", $course->id)) ? strtotime($res->min_time) : time();
         if ($min_time + get_config('actions_expire_interval') * 30 * 24 * 3600 < time()) {
             $action->summarize($course->id);
         }
@@ -209,7 +209,7 @@ function summarizeMonthlyActions() {
 }
 
 /**
- * 
+ *
  * @global type $webDir
  */
 function optimizeIndex() {
