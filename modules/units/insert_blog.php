@@ -23,16 +23,16 @@ function list_blogs() {
             "<input type='hidden' name='id' value='$id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
+            "<th width='80'>$langChoice</th>" .
             "<th><div class='text-left'>&nbsp;$langBlogPosts</div></th>" .
             "<th><div class='text-left'>$langBlogPostTitle</div></th>" .
-            "<th width='80'>$langChoice</th>" .
             "</tr>";
 
         foreach ($bloginfo as $entry) {
             $tool_content .= "<tr>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='blog[]' value='$entry[id]'></td>";
             $tool_content .= "<td>&nbsp;" . icon('fa fa-columns') . "&nbsp;&nbsp;<a href='${urlServer}modules/blog/index.php?course=$course_code&action=showPost&pId=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $tool_content .= "<td>" . $entry['content'] . "</td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='blog[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";

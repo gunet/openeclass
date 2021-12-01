@@ -42,7 +42,7 @@ doc_init();
  * @global type $langAddModulesButton
  * @global type $langChoice
  * @global type $langNoDocuments
- * @global type $course_code 
+ * @global type $course_code
  */
 function list_docs() {
     global $id, $webDir, $course_code, $tool_content,
@@ -120,10 +120,10 @@ function list_docs() {
         }
         $tool_content .=
                 "<tr class='list-header'>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "<th class='text-left'>$langName</th>" .
                 "<th class='text-center'>$langSize</th>" .
                 "<th class='text-center'>$langDate</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {
@@ -151,9 +151,10 @@ function list_docs() {
                 if ($entry['visible'] == 'i') {
                     $vis = 'invisible';
                 } else {
-                    $vis = '';                    
+                    $vis = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]'></td>";
                 $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
 
                 /* * * comments ** */
@@ -171,7 +172,6 @@ function list_docs() {
                     $date = nice_format($entry['date'], true, true);
                     $tool_content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
                 }
-                $tool_content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
                 $tool_content .= "</tr>";
                 $counter++;
             }
@@ -179,6 +179,6 @@ function list_docs() {
         $tool_content .= "</table>";
         $tool_content .= "<div class='text-right'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
-        
+
     }
 }

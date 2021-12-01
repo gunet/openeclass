@@ -35,10 +35,10 @@ function list_assignments() {
                 "<input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "<th class='text-left'>&nbsp;$langTitle</th>" .
                 "<th width='120'>$langGroupWorkDeadline_of_Submission</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "</tr>";        
+                "</tr>";
         foreach ($result as $row) {
             if ($row->password_lock) {
                 $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
@@ -53,12 +53,12 @@ function list_assignments() {
             $description = empty($row->description) ? '' :
                     "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $tool_content .= "<tr class='$vis'>" .
+                    "<td class='text-center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
                     "<td> " . q($row->title) . "$exclamation_icon<br><br><div class='text-muted'>$description</div></td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
-                    "<td class='text-center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
-                    "</tr>";            
+                    "</tr>";
         }
-        $tool_content .= 
+        $tool_content .=
                 "</table>" .
                 "<div style='text-align: right;'><input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
     }

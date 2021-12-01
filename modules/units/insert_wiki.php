@@ -54,15 +54,16 @@ function list_wikis() {
                 <input type='hidden' name='id' value='$id'>
                 <table class='table-default'>
                     <tr class='list-header'>
+                        <th width='80'>$langChoice</th>
                         <th class='text-leftt'>$langWikis</th>
                         <th>$langWikiDescriptionForm</th>
-                        <th>$langChoice</th>
-                    </tr>";        
+                    </tr>";
         foreach ($wikiinfo as $entry) {
-            $tool_content .= "<tr><td>&nbsp;".icon('fa-wikipedia-w')."&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>
-                                <td>$entry[description]</td>
+            $tool_content .= "<tr>
                                 <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>
-                            </tr>";            
+                                <td>&nbsp;".icon('fa-wikipedia-w')."&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>
+                                <td>$entry[description]</td>
+                            </tr>";
         }
         $tool_content .= "
                     </table>

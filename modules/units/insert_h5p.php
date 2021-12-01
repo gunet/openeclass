@@ -22,13 +22,13 @@ function list_h5p() {
             "<input type='hidden' name='id' value='$id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
-            "<th><div class='text-left'>&nbsp;$langH5p</div></th>" .
             "<th width='80'>$langChoice</th>" .
+            "<th><div class='text-left'>&nbsp;$langH5p</div></th>" .
             "</tr>";
         foreach ($h5pinfo as $entry) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;" . icon('fa fa-tablet') . "&nbsp;&nbsp;<a href='${urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='h5p[]' value='$entry[id]'></td>";
+            $tool_content .= "<td>&nbsp;" . icon('fa fa-tablet') . "&nbsp;&nbsp;<a href='${urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";

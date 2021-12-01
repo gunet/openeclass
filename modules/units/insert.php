@@ -450,7 +450,7 @@ function insert_poll($id) {
         foreach ($_POST['poll'] as $poll_id) {
             $order++;
             $poll = Database::get()->querySingle("SELECT * FROM poll where course_id = ?d AND pid = ?d", $course_id, $poll_id);
-            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll',
+            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll', comments = '',
                                             title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
                                         $id, $poll->name, $order, $poll->pid);
             $uresId = $q->lastInsertID;

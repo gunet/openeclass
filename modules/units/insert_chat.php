@@ -30,9 +30,9 @@ function list_chats() {
             "<input type='hidden' name='id' value='$id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
+            "<th width='80'>$langChoice</th>" .
             "<th><div class='text-left'>&nbsp;$langChat</div></th>" .
             "<th><div class='text-left'>$langDescription</div></th>" .
-            "<th width='80'>$langChoice</th>" .
             "</tr>";
         foreach ($chatinfo as $entry) {
             if ($entry['visible'] == 'inactive') {
@@ -44,9 +44,9 @@ function list_chats() {
             }
 
             $tool_content .= "<tr class='$vis'>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='chat[]' value='$entry[id]' $disabled></td>";
             $tool_content .= "<td>&nbsp;" . icon('fa fa-commenting') . "&nbsp;&nbsp;<a href='${urlServer}modules/chat/chat.php?conference_id=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $tool_content .= "<td>" . $entry['description'] . "</td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='chat[]' value='$entry[id]' $disabled></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";

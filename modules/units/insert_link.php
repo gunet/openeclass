@@ -40,42 +40,42 @@ function list_links() {
     global $id, $course_id, $course_code, $tool_content,
     $langNoCategory, $langCategorisedLinks, $langDescription, $langAddModulesButton,
     $langChoice, $langNoLinksExist, $langLinks, $course_code, $langSocialCategory;
-    
+
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoLinksExist</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
-				<input type='hidden' name='id' value='$id' />" .
+                <input type='hidden' name='id' value='$id' />" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
+                "<th width='10'>$langChoice</th>" .
                 "<th class='text-left' style='width:'>&nbsp;$langLinks</th>" .
                 "<th class='text-left'>$langDescription</th>" .
-                "<th width='10'>$langChoice</th>" .
                 "</tr>";
         $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d", $course_id);
         if (count($sql) > 0) {
-                        
+
             foreach ($sql as $catrow) {
                 $tool_content .= "<tr>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='catlink[]' value='$catrow->id' /></td>";
                 $tool_content .= "<td><b>".icon('fa-folder-o')."&nbsp;".
                         q($catrow->name) . "</b></td>";
                 $tool_content .= "<td >" . standard_text_escape($catrow->description) . "</td>";
-                $tool_content .= "<td class='text-center'><input type='checkbox' name='catlink[]' value='$catrow->id' /></td>";
                 $tool_content .= "</tr>";
-                $sql2 = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d AND category = ?d", $course_id, $catrow->id);                
+                $sql2 = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d AND category = ?d", $course_id, $catrow->id);
                 foreach ($sql2 as $linkcatrow) {
                     $tool_content .= "<tr>";
+                    $tool_content .= "<td class='text-center'><input type='checkbox' name='link[]' value='$linkcatrow->id'></td>";
                     $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank'>" .
                             q(($linkcatrow->title == '') ? $linkcatrow->url : $linkcatrow->title) . "</a></td>";
                     $tool_content .= "<td>" . standard_text_escape($linkcatrow->description) . "</td>";
-                    $tool_content .= "<td class='text-center'><input type='checkbox' name='link[]' value='$linkcatrow->id' /></td>";
                     $tool_content .= "</tr>";
                 }
             }
         }
         $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d AND category = 0", $course_id);
-        $linkinfo = array();        
+        $linkinfo = array();
         foreach ($result as $row) {
             $linkinfo[] = array(
                 'id' => $row->id,
@@ -90,9 +90,9 @@ function list_links() {
                     "</tr>";
             foreach ($linkinfo as $entry) {
                 $tool_content .= "<tr>" .
+                        "<td class='text-center'><input type='checkbox' name='link[]' value='$entry[id]'></td>";
                         "<td>&nbsp;&nbsp;&nbsp;&nbsp;".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a></td>" .
                         "<td>" . standard_text_escape($entry['comment']) . "</td>" .
-                        "<td class='text-center'><input type='checkbox' name='link[]' value='$entry[id]' /></td>";
                 "</tr>";
             }
         }
@@ -113,15 +113,15 @@ function list_links() {
                         "</tr>";
                 foreach ($linkinfo as $entry) {
                     $tool_content .= "<tr>" .
+                            "<td class='text-center'><input type='checkbox' name='link[]' value='$entry[id]'></td>" .
                             "<td>&nbsp;&nbsp;&nbsp;&nbsp;".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a></td>" .
                             "<td>" . standard_text_escape($entry['comment']) . "</td>" .
-                            "<td class='text-center'><input type='checkbox' name='link[]' value='$entry[id]' /></td>";
                     "</tr>";
                 }
-            } 
+            }
         }
         $tool_content .= "</table>";
         $tool_content .= "<div class='text-right'>" .
-                "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton' /></div></form>";
+                "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton'></div></form>";
     }
 }

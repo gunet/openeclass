@@ -43,9 +43,9 @@ function list_exercises() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "<th width='50%' class='text-left'>$langExercices</th>" .
                 "<th class='text-left'>$langDescription</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
@@ -59,10 +59,10 @@ function list_exercises() {
                 $exclamation_icon = '';
             }
             $tool_content .= "<tr class='$vis'>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
             $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a>$exclamation_icon</td>";
             $tool_content .= "<td class='text-left'>" . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
-            $tool_content .= "</tr>";            
+            $tool_content .= "</tr>";
         }
         $tool_content .= "</table>
                     <div class='text-right'>";

@@ -30,9 +30,9 @@ function list_tcs() {
             "<input type='hidden' name='id' value='$id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
+            "<th width='80'>$langChoice</th>" .
             "<th><div align='left'>&nbsp;$langBBB</div></th>" .
             "<th><div align='left'>$langDescription</div></th>" .
-            "<th width='80'>$langChoice</th>" .
             "</tr>";
         foreach ($tcinfo as $entry) {
             if ($entry['visible'] == 0) {
@@ -44,9 +44,9 @@ function list_tcs() {
             }
 
             $tool_content .= "<tr class='$vis'>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='tc[]' value='$entry[id]' $disabled></td>";
             $tool_content .= "<td>&nbsp;" . icon('fa fa-exchange') . "&nbsp;&nbsp;" . q($entry['name']) . "</a></td>";
             $tool_content .= "<td>" . $entry['description'] . "</td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='tc[]' value='$entry[id]' $disabled></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";

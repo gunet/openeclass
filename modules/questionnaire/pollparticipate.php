@@ -371,17 +371,14 @@ function printPollForm() {
             $tool_content .= "<input type='hidden' value='1' name='update'>";
         }
 
+        $backUrl = isset($_REQUEST['unit_id'])? "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]": "index.php?course=$course_code";
         $tool_content .= "<div class='text-center'>";
         if ($is_editor) {
-            $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langBack). "</a>";
+            $tool_content .= "<a class='btn btn-default' href='$backUrl'>" . q($langBack). "</a>";
         } else {
             if (!$temp_IsLime) {
-                $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
-                if (isset($_REQUEST['unit_id'])) {
-                    $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
-                } else {
-                    $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
-                }
+                $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>" .
+                    "<a class='btn btn-default' href='$backUrl'>" . q($langCancel) . "</a>";
             }
         }
         $tool_content .= "</div>";
