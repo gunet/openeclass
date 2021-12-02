@@ -332,10 +332,10 @@ if (count($res) >= 1) {
                     $langCronLastRun
                     <div class='row'>";
 
-foreach ($res as $row) {
-    $tool_content .= "<div class='col-xs-6'>" . $row->name . "</div><div class='col-xs-6'>" . $row->last_run . "</div>";
-}
-$tool_content .= "</div>
+    foreach ($res as $row) {
+        $tool_content .= "<div class='col-xs-6'>" . $row->name . "</div><div class='col-xs-6'>" . nice_format($row->last_run, true) . "</div>";
+    }
+    $tool_content .= "</div>
                 </div>
             </div>
         </div>

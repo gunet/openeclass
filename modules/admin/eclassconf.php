@@ -415,6 +415,7 @@ if (isset($_POST['submit'])) {
         'restrict_owndep' => true,
         'restrict_teacher_owndep' => true,
         'allow_teacher_clone_course' => true,
+        'disable_cron_jobs' => true,
         'disable_log_actions' => true,
         'disable_log_course_actions' => true,
         'disable_log_system_actions' => true,
@@ -570,7 +571,7 @@ else {
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formphpMyAdminURL' class='col-sm-2 col-sm-offset-1 control-label'>$langphpMyAdminURL:</label>
+                           <label for='formphpMyAdminURL' class='col-sm-2 col-sm-offset-1 control-label'>$langphpMyAdminURL</label>
                            <div class='col-sm-9'>
                                 <input class='form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='" . q(get_config('phpMyAdminURL')) . "'>
                            </div>
@@ -1366,6 +1367,7 @@ else {
                 </div>
             </div>";
 
+    $cbox_disable_cron_jobs = get_config('disable_cron_jobs') ? 'checked' : '';
     $cbox_disable_log_actions = get_config('disable_log_actions') ? 'checked' : '';
     $cbox_disable_log_course_actions = get_config('disable_log_course_actions') ? 'checked' : '';
     $cbox_disable_log_system_actions = get_config('disable_log_system_actions') ? 'checked' : '';
@@ -1373,52 +1375,56 @@ else {
 $tool_content .= "
             <div class='panel panel-primary' id='twelve'>
                 <div class='panel-heading'>
-                    <h2 class='panel-title'>$langLogActions</h2>
+                    <h2 class='panel-title'>$langUsage / $langLogActions</h2>
                 </div>
-                <div class='panel-body'>
-                    <fieldset>
-                        <div class='form-group'>
-                           <div class='col-sm-12'>
-                                <div class='checkbox'>
-                                    <label>
-                                        <input type='checkbox' name='disable_log_actions' value='1' $cbox_disable_log_actions>
-                                        $lang_disable_log_actions
-                                    </label>
-                                </div>
-                                <div class='checkbox'>
-                                    <label>
-                                        <input type='checkbox' name='disable_log_course_actions' value='1' $cbox_disable_log_course_actions>
-                                        $lang_disable_log_course_actions
-                                    </label>
-                                </div>
-                                <div class='checkbox'>
-                                    <label>
-                                        <input type='checkbox' name='disable_log_system_actions' value='1' $cbox_disable_log_system_actions>
-                                        $lang_disable_log_system_actions
-                                    </label>
-                                </div>
+                <div class='panel-body'>                    
+                    <div class='form-group'>
+                       <div class='col-sm-12'>
+                            <div class='checkbox'>
+                                <label>
+                                    <input type='checkbox' name='disable_cron_jobs' value='1' $cbox_disable_cron_jobs>
+                                    $lang_disable_cron_jobs
+                                </label>
+                            </div>
+                            <div class='checkbox'>
+                                <label>
+                                    <input type='checkbox' name='disable_log_actions' value='1' $cbox_disable_log_actions>
+                                    $lang_disable_log_actions
+                                </label>
+                            </div>
+                            <div class='checkbox'>
+                                <label>
+                                    <input type='checkbox' name='disable_log_course_actions' value='1' $cbox_disable_log_course_actions>
+                                    $lang_disable_log_course_actions
+                                </label>
+                            </div>
+                            <div class='checkbox'>
+                                <label>
+                                    <input type='checkbox' name='disable_log_system_actions' value='1' $cbox_disable_log_system_actions>
+                                    $lang_disable_log_system_actions
+                                </label>
                             </div>
                         </div>
-                        <hr><br>
-                        <div class='form-group'>
-                           <label for='log_expire_interval' class='col-sm-4 control-label'>$langLogExpireInterval ($langMonthsUnit):</label>
-                           <div class='col-sm-8'>
-                                <input class='form-control' type='text' name='log_expire_interval' id='log_expire_interval' value='" . get_config('log_expire_interval') . "'>
-                           </div>
+                    </div>
+                    <hr><br>
+                    <div class='form-group'>
+                       <label for='log_expire_interval' class='col-sm-4 control-label'>$langLogExpireInterval ($langMonthsUnit):</label>
+                       <div class='col-sm-8'>
+                            <input class='form-control' type='text' name='log_expire_interval' id='log_expire_interval' value='" . get_config('log_expire_interval') . "'>
+                       </div>
+                    </div>
+                    <div class='form-group'>
+                       <label for='log_purge_interval' class='col-sm-4 control-label'>$langLogPurgeInterval ($langMonthsUnit):</label>
+                       <div class='col-sm-8'>
+                            <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='" . get_config('log_purge_interval') . "'>
+                       </div>
+                    </div>
+                    <hr>
+                    <div class='form-group'>
+                        <div class='col-sm-12'>
+                            <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                         </div>
-                        <div class='form-group'>
-                           <label for='log_purge_interval' class='col-sm-4 control-label'>$langLogPurgeInterval ($langMonthsUnit):</label>
-                           <div class='col-sm-8'>
-                                <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='" . get_config('log_purge_interval') . "'>
-                           </div>
-                        </div>
-                        <hr>
-                        <div class='form-group'>
-                            <div class='col-sm-12'>
-                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
-                            </div>
-                        </div>
-                    </fieldset>
+                    </div>                    
                 </div>
             </div>
             <div class='panel panel-primary' id='thirteen'>
@@ -1566,7 +1572,7 @@ $tool_content .= "
                 <li><a href='#nine'>$langDocumentSettings</a></li>
                 <li><a href='#ten'>$langDefaultQuota</a></li>
                 <li><a href='#eleven'>$langUploadWhitelist</a></li>
-                <li><a href='#twelve'>$langLogActions</a></li>
+                <li><a href='#twelve'>$langUsage / $langLogActions</a></li>
                 <li><a href='#thirteen'>$langLoginFailCheck</a></li>
                 <li><a href='#fourteen'>$langPrivacyPolicy</a></li>
             </ul>

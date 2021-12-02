@@ -20,6 +20,11 @@
  * ======================================================================== */
 
 require_once '../../include/baseTheme.php';
+
+if (get_config('disable_cron_jobs')) {
+    exit;
+}
+
 ini_set("error_log", $webDir . '/courses/cron.log');
 error_log("cron START");
 
