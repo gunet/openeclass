@@ -41,6 +41,12 @@ $page_url = 'modules/course_tools/?course=' . $course_code;
 if (isset($_REQUEST['toolStatus'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
+    $old = Database::get()->queryArray('SELECT module_id FROM course_module
+        WHERE visible = 1 AND course_id = ?d', $course_id);
+    $old = array_map(function ($module) {
+        return $module->module_id;
+    }, $old);
+
     // deactivate all modules
     Database::get()->query("UPDATE course_module SET visible = 0
                          WHERE course_id = ?d", $course_id);
@@ -55,14 +61,26 @@ if (isset($_REQUEST['toolStatus'])) {
                                     WHERE course_id = ?d AND module_id IN ($placeholders)",
                                $course_id, $mids);
     }
-    Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, array());
+
+    $log = [];
+    $added = array_diff($mids, $old);
+    $removed = array_diff($old, $mids);
+    if ($added) {
+        $log['activate'] = $added;
+    }
+    if ($removed) {
+        $log['deactivate'] = $removed;
+    }
+    if ($log) {
+        Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, $log);
+    }
     Session::Messages($langRegDone, 'alert-success');
     redirect_to_home_page($page_url);
 }
 
 if (isset($_GET['delete'])) {
     $delete = getDirectReference($_GET['delete']);
-    $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);    
+    $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);
     Database::get()->query("DELETE FROM link WHERE id = ?d", $delete);
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
                                                                    'link' => $r->url,
@@ -99,11 +117,11 @@ if (isset($_POST['submit'])) {
                   'icon' => 'fa-reply',
                   'level' => 'primary-label'
                  )));
-        
-    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);    
+
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'>
-            <fieldset>            
+            <fieldset>
             <div class='form-group'>
                 <label for='link' class='col-sm-2 control-label'>$langLink:</label>
                 <div class='col-sm-10'>
@@ -114,15 +132,15 @@ if (isset($_POST['submit'])) {
                 <label for-'name_link' class='col-sm-2 control-label'>$langLinkName:</label>
                 <div class='col-sm-10'>
                     <input class='form-control' type='text' name='name_link' size='50'>
-                </div>              
+                </div>
             </div>
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
               <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
-            </div>  
+            </div>
             </div>
             </fieldset>
-            ". generate_csrf_token_form_field() ." 
+            ". generate_csrf_token_form_field() ."
             </form>
           </div>";
     draw($tool_content, 2, null, $head_content);
@@ -135,12 +153,17 @@ $module_list = Database::get()->queryArray('SELECT module_id, visible
                                 AND module_id NOT IN (SELECT module_id FROM module_disable)', $course_id);
 
 foreach ($module_list as $item) {
-    if ($item->module_id == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+    if ($item->module_id == MODULE_ID_TC and !is_configured_tc_server()) {
+        // hide teleconference when no tc servers are enabled
         continue;
-    } 
+    }
+    if (!isset($modules[$item->module_id]['title'])) {
+        // hide deprecated modules with no title
+        continue;
+    }
     $mid = getIndirectReference($item->module_id);
     $mtitle = q($modules[$item->module_id]['title']);
-    $toolSelection[$item->visible] .= "<option value='$mid'>$mtitle</option>";    
+    $toolSelection[$item->visible] .= "<option value='$mid'>$mtitle</option>";
 }
 
 
@@ -150,7 +173,7 @@ $tool_content .= <<<tForm
                         <h3 class='panel-title'>$langActivateCourseTools</h3>
                     </div>
     <form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
-        <div class="table-responsive">    
+        <div class="table-responsive">
             <table class="table-default">
                 <tr>
                     <th width="45%" class="text-center">$langInactiveTools</th>
@@ -213,7 +236,7 @@ $tool_content .= "</table></div>";
 
 $tool_content .= "<div class='panel panel-default panel-action-btn-default'>
                     <div class='panel-heading list-header'>
-                        <span class='panel-title' style='line-height: 50px;'>$langLtiConsumer</span>                                        
+                        <span class='panel-title' style='line-height: 50px;'>$langLtiConsumer</span>
                         <span class='pull-right' style='padding:8px;'>
                         <a class='btn btn-success' href='../lti_consumer/index.php?course=$course_code&amp;add=1'>
                         <span class='fa fa-plus-circle'></span> $langNewLTITool</a>

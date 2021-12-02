@@ -87,7 +87,7 @@ class Log {
      */
     public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now, $script_page) {
 
-        global $tool_content, $modules,
+        global $tool_content, $modules, $langToolManagement,
             $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, $langConfig,
             $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
             $langModifyInfo, $langAbuseReport, $langIpAddress;
@@ -179,7 +179,7 @@ class Log {
                     if ($mid == MODULE_ID_USERS) {
                         $tool_content .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
-                        $tool_content .= "<td>" . $langExternalLinks . "</td>";
+                        $tool_content .= "<td>$langToolManagement / $langExternalLinks</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
                         $tool_content .= "<td>" . $langCourseInfo . "</td>";
                     } elseif ($mid == MODULE_ID_ABUSE_REPORT) {
@@ -886,20 +886,31 @@ class Log {
      * @return string
      */
     private function external_link_action_details($details) {
-
-        global $langLinkName;
+        global $langLinkName, $langActivate, $langDeactivate;
 
         $details = unserialize($details);
         $content = '';
 
-        if (!empty($details['link'])) {
-            $content .= "URL: " . q($details['link']);
+        $parts = [];
+        if (isset($details['activate'])) {
+            $parts[] = "$langActivate: " .
+                implode(', ', array_map(function ($mid) {
+                    return q($GLOBALS['modules'][$mid]['title']);
+                }, $details['activate']));
         }
-        if(!empty($details['name_link'])) {
-            $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
+        if (isset($details['deactivate'])) {
+            $parts[] = "$langDeactivate: " .
+                implode(', ', array_map(function ($mid) {
+                    return q($GLOBALS['modules'][$mid]['title']);
+                }, $details['deactivate']));
         }
-
-        return $content;
+        if (isset($details['link']) and $details['link']) {
+            $parts[] = "URL: " . q($details['link']);
+        }
+        if (isset($details['name_link']) and $details['name_link']) {
+            $parts[] = "$langLinkName &laquo" . q($details['name_link']) . "&raquo";
+        }
+        return implode('<br>', $parts);
     }
 
     /**
