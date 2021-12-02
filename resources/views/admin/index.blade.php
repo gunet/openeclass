@@ -208,27 +208,27 @@
             {!! $idxModal !!}
             <img src='cron.php' width='2' height='1' alt=''>
             @if (count($cronParams) > 0)
-            <div class='panel panel-default'>
-                <div class='panel-heading'>
-                    <div class='panel-title h3'>{{ trans('langCronInfo') }}</div>
-                </div>
-                <div class='panel-body'>
-                    <div class='row margin-bottom-thin'>
-                        <div class='col-sm-3'>
-                        <strong>{{ trans('langCronName') }}</strong>
-                        </div>
-                        <div class='col-sm-9'>
-                            {{ trans('langCronLastRun') }}
-                            <div class='row'>
-                                @foreach ($cronParams as $cronParam)
-                                    <div class='col-xs-6'>{{ $cronParam->name }}</div>
-                                    <div class='col-xs-6'>{{ $cronParam->last_run }}</div>
-                                @endforeach
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <div class='panel-title h3'>{{ trans('langCronInfo') }}</div>
+                    </div>
+                    <div class='panel-body'>
+                        <div class='row margin-bottom-thin'>
+                            <div class='col-sm-3'>
+                            <strong>{{ trans('langCronName') }}</strong>
+                            </div>
+                            <div class='col-sm-9'>
+                                {{ trans('langCronLastRun') }}
+                                <div class='row'>
+                                    @foreach ($cronParams as $cronParam)
+                                        <div class='col-xs-6'>{{ $cronParam->name }}</div>
+                                        <div class='col-xs-6'>{{ nice_format($row->last_run, true) }}</div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>

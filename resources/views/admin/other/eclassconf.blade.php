@@ -27,7 +27,7 @@
                                </div>
                             </div>
                             <div class='form-group'>
-                               <label for='formphpMyAdminURL' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langphpMyAdminURL') }}:</label>
+                               <label for='formphpMyAdminURL' class='col-sm-2 col-sm-offset-1 control-label'>{{ trans('langphpMyAdminURL') }}</label>
                                <div class='col-sm-9'>
                                     <input class='form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='{{ get_config('phpMyAdminURL') }}'>
                                </div>
@@ -645,46 +645,50 @@
 
                 <div class='panel panel-default' id='twelve'>
                     <div class='panel-heading'>
-                        <h2 class='panel-title'>{{ trans('langLogActions') }}</h2>
+                        <h2 class='panel-title'>{{ trans('logUsage') }} / {{ trans('langLogActions') }}</h2>
                     </div>
                     <div class='panel-body'>
-                        <fieldset>
-                            <div class='form-group'>
-                               <div class='col-sm-12'>
-                                    <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' name='disable_log_actions' value='1' {{ $cbox_disable_log_actions }}>
-                                            {{ trans('lang_disable_log_actions') }}
-                                        </label>
-                                    </div>
-                                    <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' name='disable_log_course_actions' value='1' {{ $cbox_disable_log_course_actions }}>
-                                            {{ trans('lang_disable_log_course_actions') }}
-                                        </label>
-                                    </div>
-                                    <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' name='disable_log_system_actions' value='1' {{ $cbox_disable_log_system_actions }}>
-                                            {{ trans('lang_disable_log_system_actions') }}
-                                        </label>
-                                    </div>
+                        <div class='form-group'>
+                           <div class='col-sm-12'>
+                               <div class='checkbox'>
+                                   <label>
+                                       <input type='checkbox' name='disable_cron_jobs' value='1' {{ $cbox_disable_cron_jobs }}>
+                                       {{ trans('lang_disable_cron_jobs') }}
+                                   </label>
+                               </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_log_actions' value='1' {{ $cbox_disable_log_actions }}>
+                                        {{ trans('lang_disable_log_actions') }}
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_log_course_actions' value='1' {{ $cbox_disable_log_course_actions }}>
+                                        {{ trans('lang_disable_log_course_actions') }}
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_log_system_actions' value='1' {{ $cbox_disable_log_system_actions }}>
+                                        {{ trans('lang_disable_log_system_actions') }}
+                                    </label>
                                 </div>
                             </div>
-                            <hr><br>
-                            <div class='form-group'>
-                               <label for='log_expire_interval' class='col-sm-4 control-label'>{{ trans('langLogExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
-                               <div class='col-sm-8'>
-                                    <input class='form-control' type='text' name='log_expire_interval' id='log_expire_interval' value='{{ get_config('log_expire_interval') }}'>
-                               </div>
-                            </div>
-                            <div class='form-group'>
-                               <label for='log_purge_interval' class='col-sm-4 control-label'>{{ trans('langLogPurgeInterval') }} ({{ trans('langMonthsUnit') }}):</label>
-                               <div class='col-sm-8'>
-                                    <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='{{ get_config('log_purge_interval') }}'>
-                               </div>
-                            </div>
-                        </fieldset>
+                        </div>
+                        <hr><br>
+                        <div class='form-group'>
+                           <label for='log_expire_interval' class='col-sm-4 control-label'>{{ trans('langLogExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
+                           <div class='col-sm-8'>
+                                <input class='form-control' type='text' name='log_expire_interval' id='log_expire_interval' value='{{ get_config('log_expire_interval') }}'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='log_purge_interval' class='col-sm-4 control-label'>{{ trans('langLogPurgeInterval') }} ({{ trans('langMonthsUnit') }}):</label>
+                           <div class='col-sm-8'>
+                                <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='{{ get_config('log_purge_interval') }}'>
+                           </div>
+                        </div>
                     </div>
                 </div>
 
@@ -796,7 +800,7 @@
                 <li><a href='#ten'>{{ trans('langDefaultQuota') }}</a></li>
                 <li><a href='#eleven'>{{ trans('langUploadWhitelist') }}</a></li>
                 <li><a href='#twelve'>{{ trans('langLogActions') }}</a></li>
-                <li><a href='#thirteen'>{{ trans('langLoginFailCheck') }}</a></li>
+                <li><a href='#thirteen'>{{ trans('langUsage') }} / {{ trans('langLoginFailCheck') }}</a></li>
                 <li><a href='#fourteen'>{{ trans('langPrivacyPolicy') }}</a></li>
             </ul>
         </div>

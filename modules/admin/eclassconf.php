@@ -141,6 +141,7 @@ if (isset($_POST['submit'])) {
         'restrict_owndep' => true,
         'restrict_teacher_owndep' => true,
         'allow_teacher_clone_course' => true,
+        'disable_cron_jobs' => true,
         'disable_log_actions' => true,
         'disable_log_course_actions' => true,
         'disable_log_system_actions' => true,
@@ -354,6 +355,7 @@ else {
     $data['id_enable_mobileapi'] = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
     $data['cbox_block_duration_account'] = get_config('block_duration_account') ? 'checked' : '';
     $data['cbox_block_duration_alt_account'] = get_config('block_duration_alt_account') ? 'checked' : '';
+    $data['cbox_disable_cron_jobs'] = get_config('disable_cron_jobs') ? 'checked' : '';
     $data['cbox_disable_log_actions'] = get_config('disable_log_actions') ? 'checked' : '';
     $data['cbox_disable_log_course_actions'] = get_config('disable_log_course_actions') ? 'checked' : '';
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';

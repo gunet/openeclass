@@ -2475,6 +2475,7 @@ $lang_restrict_owndep = "Να μην επιτρέπεται η αλλαγή τμ
 $lang_restrict_teacher_owndep = "Να μην επιτρέπεται η δημιουργία $langsOfCourses από τους $langsTeachers στα τμήματα που δεν ανήκουν";
 $lang_allow_teacher_clone_course = "Να επιτρέπεται η κλωνοποίηση $langsOfCourses από τους $langsTeachers";
 $lang_disable_log_actions = "Απενεργοποίηση καταγραφής ενεργειών";
+$lang_disable_cron_jobs = "Απενεργοποίηση μηνιαίων ενεργειών στατιστικών";
 $lang_disable_log_course_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών μέσα στα $langsCourses";
 $lang_disable_log_system_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών εκτός $langsOfCourses";
 $langPossibleReasons = 'Πιθανοί λόγοι';
