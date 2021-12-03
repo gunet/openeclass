@@ -1246,6 +1246,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 ), $url_prefix_map, $backupData, $restoreHelper);
         }
 
+        fix_media_links($course_data['code'], $new_course_code, $new_course_id, $video_map);
+
         removeDir($restoreThis);
 
         // index course after restoring
@@ -1288,6 +1290,66 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')), false);
 
+    }
+}
+
+
+function getid($map, $old_id) {
+    if (isset($map[$old_id])) {
+        return $map[$old_id];
+    } else {
+        return null;
+    }
+}
+
+function fix_media_links($oldcode, $newcode, $new_course_id, $video_map) {
+    $fixes = [
+      [ 'table' => 'course',
+        'field' => 'description',
+        'query' => 'SELECT id, description FROM course
+                       WHERE id = ?d' ],
+      [ 'table' => 'unit_resources',
+        'field' => 'comments',
+        'query' => 'SELECT id, comments FROM unit_resources
+                       WHERE unit_id IN (SELECT id FROM course_units WHERE course_id = ?d)' ],
+      [ 'table' => 'assignment',
+        'field' => 'description',
+        'query' => 'SELECT id, description FROM assignment
+                       WHERE course_id = ?d' ],
+      [ 'table' => 'exercise_question',
+        'field' => 'description',
+        'query' => 'SELECT id, description FROM exercise_question
+                       WHERE course_id = ?d' ],
+      [ 'table' => 'exercise_answer',
+        'field' => 'answer',
+        'query' => 'SELECT id, answer FROM exercise_answer
+                       WHERE question_id IN (SELECT id FROM exercise_question
+                           WHERE course_id = ?d)' ],
+    ];
+
+    foreach ($fixes as $fix) {
+        $all = Database::get()->queryArray($fix['query'], $new_course_id);
+        foreach ($all as $entry) {
+            $field = $fix['field'];
+            $table = $fix['table'];
+            $newcontents = preg_replace_callback('|(/video/file.php\?course=\w+&amp;id=)(\d+)|',
+                function ($match) use ($video_map, $oldcode, $newcode) {
+                    $new_id = getid($video_map, $match[2]);
+                    if ($new_id) {
+                        // $fix[table]: $match[2] => $new_id
+                        $base = str_replace("course=$oldcode", "course=$newcode", $match[1]);
+                        return $base . $new_id;
+                    } else {
+                        // $fix[table]: $match[2] not found
+                        return $match[1] . $match[2];
+                    }
+                }, $entry->$field);
+            if ($entry->$field != $newcontents) {
+                Database::get()->query("UPDATE `$table`
+                    SET `$field` = ?s WHERE id = ?d",
+                    $newcontents, $entry->id);
+            }
+        }
     }
 }
 
