@@ -54,7 +54,7 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * reads question information from the data base
+         * reads question information from the database
          *
          * @author - Olivier Brouckaert
          * @param - integer $id - question ID
@@ -559,6 +559,32 @@ if (!class_exists('Question')) {
 
             return $id;
         }
+
+        /**
+         * @brief check if question has been answered
+         * @return bool
+         */
+        function hasAnswered($exercise_id = NULL) {
+
+            $question_id = $this->id;
+            if (isset($exercise_id)) {
+                $query_vars = array($question_id, $exercise_id);
+                $sql = "SELECT * FROM exercise_answer_record JOIN exercise_user_record 
+                            ON exercise_answer_record.eurid = exercise_user_record.eurid 
+                        AND question_id = ?d 
+                        AND eid = ?d";
+            } else {
+                $query_vars[] = $question_id;
+                $sql = "SELECT * FROM exercise_answer_record WHERE question_id = ?d";
+            }
+            $q = Database::get()->queryArray($sql, $query_vars);
+            if (count($q) > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         /**
          *
          * Calculate Question success rate

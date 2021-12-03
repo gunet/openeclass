@@ -68,7 +68,7 @@ if (isset($_GET['exerciseId'])) {
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
     // construction of the Question object
     $objQuestion = new Question();
-    
+
     // reads question data
     if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
         if (isset($_GET['modifyQuestion'])) {
@@ -113,14 +113,14 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
                     exit();
                 }
             } else {
-                $objAnswer = new Answer($question_id);                
+                $objAnswer = new Answer($question_id);
             }
             include 'answer_admin.inc.php';
             $pageName = $langQuestionManagement;
             $navigation[] = array(
                 'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
                 'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
-            );            
+            );
         } else {
             $pageName = $langInfoQuestion;
             $navigation[] = array(
@@ -144,7 +144,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
       'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
     );
     include 'imsqti.inc.php';
-    
+
 } elseif (isset($_GET['preview'])) { // exercise preview
     $pageName = $langSee;
     display_exercise($exerciseId);

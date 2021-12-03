@@ -512,6 +512,12 @@ if ($nbrQuestions) {
 
         $tool_content .= "<div class='pull-left'>";
         if (!is_array($id)) {
+            if ($objQuestionTmp->hasAnswered($exerciseId)) {
+                $warning_message = $langWarnAboutAnsweredQuestion;
+            } else {
+                $warning_message = $langConfirmYourChoice;
+            }
+
             $tool_content .=
                 action_button(array(
                     array('title' => $langEditChange,
@@ -523,7 +529,7 @@ if ($nbrQuestions) {
                         'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id",
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $langConfirmYourChoice,
+                        'confirm' => $warning_message,
                         'show' => !isset($fromExercise))
                 ));
         } else {
