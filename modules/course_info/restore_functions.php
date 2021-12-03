@@ -1308,6 +1308,10 @@ function fix_media_links($oldcode, $newcode, $new_course_id, $video_map) {
         'field' => 'description',
         'query' => 'SELECT id, description FROM course
                        WHERE id = ?d' ],
+      [ 'table' => 'course_units',
+        'field' => 'comments',
+        'query' => 'SELECT id, comments FROM course_units
+                       WHERE course_id = ?d' ],
       [ 'table' => 'unit_resources',
         'field' => 'comments',
         'query' => 'SELECT id, comments FROM unit_resources
@@ -1332,7 +1336,7 @@ function fix_media_links($oldcode, $newcode, $new_course_id, $video_map) {
         foreach ($all as $entry) {
             $field = $fix['field'];
             $table = $fix['table'];
-            $newcontents = preg_replace_callback('|(/video/file.php\?course=\w+&amp;id=)(\d+)|',
+            $newcontents = preg_replace_callback('<(/video/(?:file|play).php\?course=\w+&amp;id=)(\d+)>',
                 function ($match) use ($video_map, $oldcode, $newcode) {
                     $new_id = getid($video_map, $match[2]);
                     if ($new_id) {
