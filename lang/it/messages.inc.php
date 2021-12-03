@@ -697,6 +697,7 @@ $langUsedInSeveralExercises = "Attenzione! La domanda e le sue risposte sono uti
 $langModifyInAllExercises = "in tutti gli esercizi";
 $langModifyInThisExercise = "solo in questo esercizio";
 $langQuestionView = "Visualizzare";
+$langWarnAboutAnsweredQuestion = "Warning! The question has already been answered! If you delete it, exercise results will be modified.";
 $langAnswerType = "Tipo di risposta";
 $langUniqueSelect = "Scelta multipla (una sola risposta)";
 $langMultipleSelect = "Scelta multipla (più di una risposte)";

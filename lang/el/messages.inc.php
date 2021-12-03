@@ -1902,6 +1902,7 @@ $langModifyInAllExercises = "σε όλες τις ασκήσεις";
 $langModifyInThisExercise = "μόνο στην τρέχουσα άσκηση";
 $langModifyInQuestionPool = "μόνο στην τράπεζα ερωτήσεων";
 $langQuestionView = "Προβολή";
+$langWarnAboutAnsweredQuestion = "Προσοχή! Η ερώτηση έχει ήδη απαντηθεί! Η διαγραφή της θα αλλάξει τα αποτελέσματα της άσκησης.";
 
 // statement_admin.php
 $langAnswerType = "Τύπος Απάντησης";

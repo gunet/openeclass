@@ -366,7 +366,11 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
                     <small>" . $question_type_legend . " " . $question_difficulty_legend . " " . $question_category_legend . $exercises_used_in ."</small>
                     </td>";
             }
-
+            if ($question_temp->hasAnswered()) {
+                $warning_message = $langWarnAboutAnsweredQuestion;
+            } else {
+                $warning_message = $langConfirmYourChoice;
+            }
             $tool_content .= "<td class='option-btn-cell'>".
                 action_button(array(
                     array('title' => $langEditChange,
@@ -387,7 +391,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
                           'icon' => 'fa-times',
                           'class' => 'delete',
-                          'confirm' => $langConfirmYourChoice,
+                          'confirm' => $warning_message,
                           'show' => !isset($fromExercise))
                  )) .
                  "</td></tr>";
