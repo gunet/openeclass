@@ -546,7 +546,7 @@ if ($is_editor) {
 
                     $emailContent = $emailHeaderContent . $emailBodyContent . $emailFooterContent;
 
-                    $emailSubject = "$professorMessage ($public_code - " . q($title) . " - $langAnnouncement)";
+                    $emailSubject = "$professorMessage ($public_code - $title - $langAnnouncement)";
                     // select students email list
                     $countEmail = 0;
                     $invalid = 0;
