@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2017  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_current_course = true;
@@ -69,7 +69,7 @@ if (isset($_POST['create_restored_course'])) {
             $old_deps[] = array('name' => $treeObj->getFullPath($dep->department));
         }, $course_id);
 
-    $tool_content = course_details_form($public_code, $currentCourseName, $titulaires, $currentCourseLanguage, null, $visible, $desc, $old_deps);
+    $tool_content = course_details_form($public_code, $currentCourseName, $course_prof_names, $currentCourseLanguage, null, $visible, $desc, $old_deps);
 }
 
 load_js('jstree3');

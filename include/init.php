@@ -298,21 +298,23 @@ if (isset($require_current_course) and $require_current_course) {
     } else {
         $dbname = $_SESSION['dbname'];
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
-                course.title as title, course.prof_names as prof_names, course.lang as lang,
+                course.title as title, course.prof_names as prof_names, course.lang as lang, view_type,
                 course.visible as visible, hierarchy.name AS faculte
                                            FROM course, course_department, hierarchy
                                            WHERE course.id = course_department.course AND
                                                  hierarchy.id = course_department.department AND
                                                  course.code=?s",
-            function ($course_info) use (&$course_id, &$public_code, &$course_code, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseLanguage ) {
+            function ($course_info) {
+                global $course_id, $public_code, $course_code, $fac, $course_prof_names, $course_view_type,
+                    $languageInterface, $visible, $currentCourseName, $currentCourseLanguage;
                 $course_id = $course_info->cid;
                 $public_code = $course_info->public_code;
                 $course_code = $course_info->code;
                 $fac = $course_info->faculte;
-                $titulaires = $course_info->prof_names;
+                $course_prof_names = $course_info->prof_names;
+                $course_view_type = $course_info->view_type;
                 $languageInterface = $course_info->lang;
                 $visible = $course_info->visible;
-                // New variables
                 $currentCourseName = $course_info->title;
                 $currentCourseLanguage = $languageInterface;
             },

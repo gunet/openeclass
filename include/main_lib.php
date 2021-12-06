@@ -27,7 +27,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.12.2');
+define('ECLASS_VERSION', '3.12.3');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -605,19 +605,16 @@ function selection3($entries, $name, $default = '') {
  * @global type $uid
  * @return boolean
  */
-function check_guest($id = FALSE) {
-
+function check_guest($id = null) {
     if ($id) {
         $uid = $id;
     } else {
         $uid = $GLOBALS['uid'];
     }
     if (isset($uid) and $uid) {
-        if (DBHelper::fieldExists("user", "status")) {
-            $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
-            if ($status && $status->status == USER_GUEST) {
-                return TRUE;
-            }
+        $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
+        if ($status && $status->status == USER_GUEST) {
+            return true;
         }
     }
     return false;

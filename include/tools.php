@@ -78,50 +78,47 @@ function getSideMenu($menuTypeID, $rich=true) {
  * @see function lessonToolsMenu
  */
 function getToolsArray($cat) {
-    global $course_code;
-
-    $cid = course_code_to_id($course_code);
+    global $course_id, $course_view_type;
 
     switch ($cat) {
         case 'Public':
-            $sql = "SELECT * FROM course_module
-                        WHERE visible = 1 AND
-                        course_id = $cid AND
-                        module_id NOT IN (" . MODULE_ID_CHAT . ",
-                                          " . MODULE_ID_ASSIGN . ",
-                                          " . MODULE_ID_MESSAGE . ",
-                                          " . MODULE_ID_FORUM . ",
-                                          " . MODULE_ID_GROUPS . ",
-                                          " . MODULE_ID_ATTENDANCE . ",
-                                          " . MODULE_ID_GRADEBOOK . ",
-                                          " . MODULE_ID_MINDMAP . ",
-                                          " . MODULE_ID_PROGRESS . ",
-                                          " . MODULE_ID_LP . ",
-                                          " . MODULE_ID_TC . ") AND
-                        module_id NOT IN (SELECT module_id FROM module_disable)";
-            if (!check_guest()) {
-                if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-                    $result = Database::get()->queryArray("SELECT * FROM course_module
+            if (check_guest()) {
+                $sql = "SELECT * FROM course_module
                             WHERE visible = 1 AND
-                                  module_id NOT IN (SELECT module_id FROM module_disable) AND
-                            course_id = ?d", $cid);
-                } else {
-                    $result = Database::get()->queryArray($sql);
-                }
+                            course_id = ?d AND
+                            module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                              " . MODULE_ID_ASSIGN . ",
+                                              " . MODULE_ID_MESSAGE . ",
+                                              " . MODULE_ID_FORUM . ",
+                                              " . MODULE_ID_GROUPS . ",
+                                              " . MODULE_ID_ATTENDANCE . ",
+                                              " . MODULE_ID_GRADEBOOK . ",
+                                              " . MODULE_ID_MINDMAP . ",
+                                              " . MODULE_ID_PROGRESS . ",
+                                              " . MODULE_ID_LP . ",
+                                              " . MODULE_ID_TC . ") AND
+                            module_id NOT IN (SELECT module_id FROM module_disable)";
+                $result = Database::get()->queryArray($sql, $course_id);
             } else {
-                $result = Database::get()->queryArray($sql);
+                $result = Database::get()->queryArray("SELECT * FROM course_module
+                        WHERE visible = 1 AND
+                              module_id NOT IN (SELECT module_id FROM module_disable) AND
+                        course_id = ?d", $course_id);
             }
             break;
         case 'PublicButHide':
             $result = Database::get()->queryArray("SELECT * FROM course_module
-                                         WHERE visible = 0 AND
-                                               module_id NOT IN (SELECT module_id FROM module_disable) AND
-                                         course_id = ?d", $cid);
+                         WHERE visible = 0 AND
+                               module_id NOT IN (SELECT module_id FROM module_disable) AND
+                         course_id = ?d", $course_id);
             break;
     }
     // Ignore items not listed in $modules array
     // (for development, when moving to a branch with fewer modules)
     return array_filter($result, function ($item) {
+        if ($item->module_id == MODULE_ID_WALL and $course_view_type = 'wall') {
+            return false;
+        }
         return isset($GLOBALS['modules'][$item->module_id]);
     });
 }
