@@ -116,7 +116,8 @@ function getToolsArray($cat) {
     // Ignore items not listed in $modules array
     // (for development, when moving to a branch with fewer modules)
     return array_filter($result, function ($item) {
-        if ($item->module_id == MODULE_ID_WALL and $course_view_type = 'wall') {
+        global $course_view_type;
+        if ($item->module_id == MODULE_ID_WALL and $course_view_type == 'wall') {
             return false;
         }
         return isset($GLOBALS['modules'][$item->module_id]);
