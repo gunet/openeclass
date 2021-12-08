@@ -123,6 +123,10 @@ function getToolsArray($cat) {
     // Ignore items not listed in $modules array
     // (for development, when moving to a branch with fewer modules)
     return array_filter($result, function ($item) {
+        global $course_view_type;
+        if ($item->module_id == MODULE_ID_WALL and $course_view_type == 'wall') {
+            return false;
+        }
         return isset($GLOBALS['modules'][$item->module_id]);
     });
 }
@@ -614,11 +618,11 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langWidgets']);
         array_push($sideMenuLink, "../admin/widgets.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         if (get_config('phpMyAdminURL')) {
             array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
             array_push($sideMenuLink, get_config('phpMyAdminURL'));
