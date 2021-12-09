@@ -19,20 +19,16 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /**
- * @file oldStats.php
- * @brief Show old statistics for the course, taken from table "action_summary" of the course's database.
+ * @file old_stats.php
+ * @description Shows statistics older than twelve months that concern the number of visits
+  on the platform for a time period. Information for old statistics is taken from table 'loginout_summary' where
+  cummulative monthly data are stored.
+ *
  */
-$require_current_course = true;
-$require_course_admin = true;
-$require_help = true;
-$helpTopic = 'course_stats';
-$helpSubTopic = 'old_statistics';
-$require_login = true;
+$require_admin = TRUE;
 
-include '../../include/baseTheme.php';
-require_once 'include/action.php';
+require_once '../../include/baseTheme.php';
 require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
@@ -67,36 +63,32 @@ $head_content .= "<script type='text/javascript'>
 
 
         sdate = $('#user_date_start').datepicker('getDate');
-        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
+        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();        
         edate = $('#user_date_end').datepicker('getDate');
-        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();
-        module = $('#u_module_id option:selected').val();
-        refresh_oldstats_course_plot(startdate, enddate, $course_id, module);
+        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();                
+        refresh_oldstats_plot(startdate, enddate);
     });
 
-function refresh_oldstats_course_plot(startdate, enddate, course, module){
+function refresh_oldstats_plot(startdate, enddate){
     xAxisTicksAdjust();
-    $.getJSON('results.php',{t:'ocs', s:startdate, e:enddate, c:course, m:module},function(data){
+    $.getJSON('../usage/results.php',{t:'ols', s:startdate, e:enddate},function(data){
         var options = {
             data: {
                 json: data,
                 x: 'time',
                 xFormat: '%Y-%m-%d',
                 axes: {
-                    hits: 'y',
-                    duration: 'y2'
+                    hits: 'y'
                 },
                 types:{
-                    hits: 'bar',
-                    duration: 'spline'
+                    hits: 'bar'
                 },
                 names:{
-                    hits: '$langVisits',
-                    duration: '$langDuration'
+                    hits: '$langVisits'
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: '%m-%Y', values:xTicks, rotate:60}, label: '$langMonth', min: xMinVal}, y:{label:'$langVisits', min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label: '$langHours', min: 0, padding:{top:0, bottom:0}}},
-            bar:{width:{ratio:0.3}},
+            axis:{ x: {type:'timeseries', tick:{format: '%m-%Y', values:xTicks, rotate:60}, label: '$langMonth', min: xMinVal}, y:{label:'$langVisits', min: 0, padding:{top:0, bottom:0}}},
+            bar:{width:{ratio:0.9}},
             bindto: '#old_stats'
         };
         c3.generate(options);
@@ -107,7 +99,7 @@ function xAxisTicksAdjust()
 {
 	var xmin = sdate;
 	var xmax = edate;
-
+	
         dayMilliseconds = 24*60*60*1000;
         diffInDays = (edate-sdate)/dayMilliseconds;
         xTicks = new Array();
@@ -127,7 +119,7 @@ function xAxisTicksAdjust()
                         xTicks.push(tickval);
                         cur = tick.getMonth();
                     }
-            }
+            }    
         }
         else if(interval == 7){
             xminMonday = new Date(xmin.getTime() - xmin.getUTCDay()*dayMilliseconds);
@@ -145,8 +137,8 @@ function xAxisTicksAdjust()
                         xTicks.push(tickval);
                     }
                     i++;
-
-            }
+                    
+            } 
         }
         else if(interval == 30){
             xMinVal = xmin.getFullYear()+'-'+(xmin.getMonth()+1)+'-15';
@@ -157,7 +149,7 @@ function xAxisTicksAdjust()
                     tick.setMonth(tick.getMonth() + 1);
                     tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-15';
                     xTicks.push(tickval);
-            }
+            } 
         }
         else if(interval == 365){
             xMinVal = xmin.getFullYear()+'-06-30';
@@ -168,37 +160,43 @@ function xAxisTicksAdjust()
                     tick.setFullYear(tick.getFullYear() + 1);
                     tickval = tick.getFullYear()+'-06-30';
                     xTicks.push(tickval);
-            }
+            }     
         }
 }
 "
         . ""
 . " </script>";
 
-$toolName = $langUsage;
-$pageName = $langOldStats;
-$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-
+$toolName = $langOldStats;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
 $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                    'url' => "index.php?course=$course_code",
+                    'url' => "../usage/index.php?t=a",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ),false);
 
+//$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
+$query = "SELECT MIN(`when`) AS min_when FROM loginout";
+foreach (Database::get()->queryArray($query) as $row) {
+    $min_when = strtotime($row->min_when);
+}
+$min_w = date("d-m-Y", $min_when);
+
+$tool_content .= '<div class="alert alert-info">' . sprintf($langOldStatsLoginsExpl, get_config('actions_expire_interval')) . '</div>';
+
 /****   C3 plot   ****/
 $tool_content .= "<div class='row plotscontainer'>";
 $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
-$tool_content .= plot_placeholder("old_stats", $langOldStats);
+$tool_content .= plot_placeholder("old_stats", $langLoginUser);
 $tool_content .= "</div></div>";
-
 
 $endDate_obj = new DateTime();
 $user_date_start = $endDate_obj->format('d-m-Y');
 $startDate_obj = $endDate_obj->sub(new DateInterval('P2Y'));
 $user_date_start = $startDate_obj->format('d-m-Y');
-
 
 if (isset($_POST['user_date_start']) && isset($_POST['user_date_end'])) {
     $uds = DateTime::createFromFormat('d-m-Y', $_POST['user_date_start']);
@@ -217,58 +215,12 @@ if (isset($_POST['user_date_start']) && isset($_POST['user_date_end'])) {
 }
 
 
-$result = Database::get()->queryArray("SELECT MIN(day) AS min_time FROM actions_daily WHERE course_id = ?d", $course_id);
-foreach ($result as $row) {
-    if (!empty($row->min_time)) {
-        $min_time = strtotime($row->min_time);
-    } else
-        break;
-}
+//    $tool_content .= "<div class='alert alert-warning'>$langNoStatistics</div>";
 
-if ($min_time + get_config('actions_expire_interval') * 30 * 24 * 3600 < time()) { // actions more than X months old
-    $action = new action();
-    $action->summarize();     // move data to action_summary
-}
-
-$result = Database::get()->queryArray("SELECT MIN(day) AS min_time FROM actions_daily WHERE course_id = ?d", $course_id);
-foreach ($result as $row) {
-    if (!empty($row->min_time)) {
-        $min_time = strtotime($row->min_time);
-    } else
-        break;
-}
-
-$min_t = date("d-m-Y", $min_time);
-
-$made_chart = true;
-$usage_defaults = array(
-    'u_module_id' => -1
-);
-
-foreach ($usage_defaults as $key => $val) {
-    if (!isset($_POST[$key])) {
-        $$key = $val;
-    } else {
-        $$key = $_POST[$key];
-    }
-}
-
-$mod_opts = '<option value="-1">' . $langAllModules . "</option>";
-$result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
-foreach ($result as $row) {
-    $mid = $row->module_id;
-    $extra = '';
-    if ($u_module_id == $mid) {
-        $extra = 'selected';
-    }
-    $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
-}
-
-$tool_content .= '<div class="form-wrapper">';
-$tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
-$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-2 control-label'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>
+$tool_content .= '<div class="form-wrapper"><form class="form-horizontal" role="form" method="post">';
+$tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    <label class='col-sm-2 control-label' for='user_date_start'>$langStartDate:</label>
+        <div class='col-xs-10 col-sm-9'>               
             <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
         <div class='col-xs-2 col-sm-1'>
@@ -276,25 +228,19 @@ $tool_content .= "<div class='input-append date form-group' id='user_date_start'
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
         </div>";
-$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label'>$langEndDate:</label>
+$tool_content .= "<div class='input-append date form-group' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-2 control-label' for='user_date_end'>$langEndDate:</label>
             <div class='col-xs-10 col-sm-9'>
-                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+                <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
         <div class='col-xs-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
         </div>";
-$tool_content .= '<div class="form-group">
-        <label class="col-sm-2 control-label">' . $langModule . ':</label>
-        <div class="col-sm-10"><select name="u_module_id" id="u_module_id" class="form-control">' . $mod_opts . '</select></div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
-      </div>
-  </div>
+$tool_content .= '<div class="col-sm-offset-2 col-sm-10">    
+    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+    </div>  
 </form></div>';
 
-draw($tool_content, 2, null, $head_content);
+draw($tool_content, 3, null, $head_content);

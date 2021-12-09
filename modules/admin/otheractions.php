@@ -37,6 +37,7 @@ $head_content .= "<script type='text/javascript'>
             $('#log_results_table').DataTable ({                                
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
+                'iDisplayLength': 25,
                 'searchDelay': 1000,
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
@@ -64,23 +65,10 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $tool_content .= action_bar(array(
                     array('title' => $langBack,
-                        'url' => "index.php",
+                        'url' => "../usage/index.php?t=a",
                         'icon' => 'fa-reply',
                         'level' => 'primary-label')
                     ));
-
-$tool_content .= "<div class='table-responsive'>
-                <table class='table-default'>
-                    <tr><td><a href='../usage/displaylog.php?from_other=TRUE'>$langSystemActions</a></td></tr>
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></td></tr>
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=musers'>$langMultipleUsers</a></td></tr>
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=memail'>$langMultipleAddr e-mail</a></td></tr>                    
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td></tr>
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=cusers'>$langMultipleCourseUsers</a><small> ($langLast30Entries)</small></td></tr>
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=vmusers'>$langMailVerification</a></td></tr>
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=unregusers'>$langUnregUsers</a><small> ($langLastMonth)</small></td></tr>
-                </table>            
-            </div>";
 
 // ---------------------
 // actions

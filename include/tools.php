@@ -564,10 +564,6 @@ function adminMenu() {
         array_push($sideMenuLink, "../../modules/usage/?t=a");
         array_push($sideMenuImg, "fa-caret-right");
 
-        array_push($sideMenuText, $GLOBALS['langRecordLog']);
-        array_push($sideMenuLink, "../admin/otheractions.php");
-        array_push($sideMenuImg, "fa-caret-right");
-
         array_push($sideMenuText, $GLOBALS['langAdminAn']);
         array_push($sideMenuLink, "../admin/adminannouncements.php");
         array_push($sideMenuImg, "fa-caret-right");

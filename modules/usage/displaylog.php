@@ -94,10 +94,6 @@ if (isset($_GET['from_other'])) {
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../admin/otheractions.php', 'name' => $langRecordLog);
     $tool_content .= action_bar(array(
-        array('title' => $langRecordLog,
-            'url' => "../admin/otheractions.php",
-            'icon' => 'fa-bar-chart',
-            'level' => 'primary-label'),
         array('title' => $langBack,
             'url' => "../admin/index.php",
             'icon' => 'fa-reply',
@@ -149,7 +145,7 @@ if (isset($_REQUEST['submit'])) {
     exit();
 }
 
-// if we haven't choose 'system actions'
+// if we haven't chosen 'system actions'
 if (!isset($_GET['from_other'])) {
     $letterlinks = '';
     $result = Database::get()->queryArray("SELECT LEFT(a.surname, 1) AS first_letter
@@ -183,7 +179,7 @@ if (!isset($_GET['from_other'])) {
             $selected = '';
         }
         $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' .
-                q($row->givenname . ' ' . $row->surname) . "</option>";
+                q($row->surname . ' ' . $row->givenname) . "</option>";
     }
 }
 
@@ -194,7 +190,7 @@ if (isset($_GET['from_other'])) {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 }
 
-// if we haven't choose 'system actions'
+// if we haven't chosen 'system actions'
 if (!isset($_GET['from_other'])) {
     $tool_content .= '<div class="form-group">
             <label class="col-sm-2 control-label">' . $langLogModules . ':</label>
@@ -261,7 +257,7 @@ $tool_content .= "<div class='input-append date form-group' data-date= '" . q($u
         </div>";
 
 
-// if we haven't choose 'system actions'
+// if we haven't chosen 'system actions'
 if (!isset($_GET['from_other'])) {
     $tool_content .= '<div class="form-group">  
     <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
