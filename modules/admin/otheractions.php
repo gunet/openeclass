@@ -38,6 +38,7 @@ $head_content .= "<script type='text/javascript'>
             $('#log_results_table').DataTable ({                                
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
+                'iDisplayLength': 25,
                 'searchDelay': 1000,
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
@@ -65,7 +66,7 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $data['action_bar'] = action_bar(array(
                     array('title' => $langBack,
-                        'url' => "index.php",
+                        'url' => "../usage/index.php?t=a",
                         'icon' => 'fa-reply',
                         'level' => 'primary-label')
                     ));
