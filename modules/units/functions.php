@@ -1266,7 +1266,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility) {
  * @param $visibility
  */
 function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
-    global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id;
+    global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id, $webDir, $urlAppend;
 
     $comment_box = '';
     $title = q($title);
@@ -1279,10 +1279,17 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
             $h5plink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
+        $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
+                                            FROM h5p_library WHERE id = ?s", $h5p->main_library_id);
+        $h5p_content_type_title = $q->title;
+        $typeFolder = $q->machine_name . "-" . $q->major_version . "." . $q->minor_version;
+        $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
+        $typeIcon = (file_exists($typeIconPath))
+            ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
+            : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
         $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
-        //$link = "<a href='${urlServer}modules/h5p/view.php?course=$course_code&amp;id=$h5p_id'>";
         $h5plink = $link . "$title</a>";
-        $imagelink = $link . "</a>" .icon('fa-tablet') . "";
+        $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";
     }
 
     if (!empty($comments)) {
@@ -1291,7 +1298,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
 
     return "
         <tr data-id='$resource_id'>
-          <td width='1'>$imagelink</td>
+          <td>$imagelink</td>
           <td>$h5plink $comment_box</td>" .
         actions('h5p', $resource_id, $visibility) . '
         </tr>';
@@ -1309,8 +1316,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
  * @return string
  */
 function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
-    global $urlServer, $is_editor,
-           $langWasDeleted, $langInactiveModule, $course_id, $course_code;
+    global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
 

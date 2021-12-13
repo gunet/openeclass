@@ -22,13 +22,14 @@
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
 
+/**
+ * @brief display list of available videos (if any)
+ */
 function list_videos() {
-    global $id, $tool_content, $themeimg, $course_id,
-    $langTitle, $langDescription, $langDate, $langChoice, $langCatVideoDirectory,
-    $langAddModulesButton, $langNoVideo, $course_code;
+    global $id, $tool_content, $course_id,
+            $langVideo, $langDate, $langChoice, $langAddModulesButton,
+            $langNoVideo, $course_code;
 
-
-    $count = 0;
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
     $cnt2 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE course_id = ?d", $course_id)->cnt;
@@ -38,13 +39,12 @@ function list_videos() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
                     $tool_content .= "<table class='table-default'>";
                     $tool_content .= "<tr class='list-header'>" .
-                                     "<th width='80'>$langChoice</th>" .
-                                     "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
-                                     "<th class='text-left'>$langDescription</th>" .
-                                     "<th width='100'>$langDate</th>" .
+                                     "<th style='width: 10px;'>$langChoice</th>" .
+                                     "<th class='text-left'>&nbsp;$langVideo</th>" .
+                                     "<th style='width: 10px;'>$langDate</th>" .
                                      "</tr>";
         foreach (array('video', 'videolink') as $table) {
-            $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0) AND course_id = ?d", $course_id);
+            $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0) AND course_id = ?d ORDER BY date DESC", $course_id);
             foreach ($result as $row) {
                 $row->course_id = $course_id;
                 if ($table == 'video') {
@@ -54,9 +54,13 @@ function list_videos() {
                     $vObj = MediaResourceFactory::initFromVideoLink($row);
                     $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                 }
+                if (!empty($row->description)) {
+                    $description_text = "<div style='margin-top: 10px;'>" .  q($row->description). "</div>";
+                } else {
+                    $description_text = '';
+                }
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
-                                 "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
-                                 "<td>" . q($row->description) . "</td>".
+                                 "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description_text . "</td>" .
                                  "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
                                  "</tr>";
             }
@@ -65,21 +69,30 @@ function list_videos() {
         if ($sql) {
             foreach ($sql as $videocat) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td align='center'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /></td>";
-                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" .
-                                 q($videocat->name) . "</td>";
-                $tool_content .= "<td colspan='2'>" . standard_text_escape($videocat->description) . "</td>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /></td>";
+                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;<strong>" . q($videocat->name) . "</strong>";
+                if (!empty($videocat->description)) {
+                    $videocat_description_text = "<div style='margin-top: 10px;'>" .  q($videocat->description). "</div>";
+                } else {
+                    $videocat_description_text = '';
+                }
+                $tool_content .= $videocat_description_text . "</td>";
                 $tool_content .= "</tr>";
                 foreach (array('video', 'videolink') as $table) {
-                    $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d", $videocat->id);
+                    $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d ORDER BY date DESC", $videocat->id);
                     foreach ($sql2 as $linkvideocat) {
-                            $tool_content .= "<tr>";
-                            $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /></td>";
-                            $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
-                                    q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
-                            $tool_content .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
-                            $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
-                            $tool_content .= "</tr>";
+                        if (!empty($linkvideocat->description)) {
+                            $linkvideocat_description_text = "<div style='margin-top: 10px;'>" .  q($linkvideocat->description). "</div>";
+                        } else {
+                            $linkvideocat_description_text = '';
+                        }
+                        $tool_content .= "<tr>";
+                        $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /></td>";
+                        $tool_content .= "<td>&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
+                                q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>";
+                        $tool_content .= $linkvideocat_description_text . "</td>";
+                        $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                        $tool_content .= "</tr>";
                     }
                 }
             }

@@ -231,8 +231,7 @@ elseif (isset($_GET['forumgosave'])) {
                                 AND course_id = ?d"
             , $_POST['forum_name'], purify($_POST['forum_desc']), $cat_id, $forum_id, $course_id);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUM, $forum_id);
-    $tool_content .= "<div class='alert alert-success'>$langForumDataChanged</div>
-                                <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+    $tool_content .= "<div class='alert alert-success'>$langForumDataChanged</div>";
 }
 
 // Add category to forums
@@ -497,8 +496,7 @@ elseif (isset($_GET['forumgodel'])) {
                     WHERE id = ?d",$num_replies+1,$last_post_id, $current_forum_id);
         }//if user selected the current forum do nothing
 
-       $tool_content .= "<div class='alert alert-success'>$langTopicDataChanged</div>
-                         <p>&laquo; <a href='viewforum.php?course=$course_code&amp;forum=$new_forum'>$langBack</a></p>";
+       $tool_content .= "<div class='alert alert-success'>$langTopicDataChanged</div>";
     }
 
 } elseif (isset($_GET['settings'])) {

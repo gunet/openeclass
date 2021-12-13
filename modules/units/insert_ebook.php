@@ -20,16 +20,7 @@
  * ======================================================================== */
 
 /**
- *
- * @global type $id
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoEbook
- * @global type $langEBook
- * @global type $course_code
+ * @brief display available ebooks
  */
 function list_ebooks() {
     global $id, $course_id, $tool_content,
@@ -53,8 +44,7 @@ function list_ebooks() {
                             <input type='checkbox' name='ebook[]' value='$catrow->id' />
                             <input type='hidden' name='ebook_title[$catrow->id]'
                                value='" . q($catrow->title) . "'></td>";
-            $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
-                    q($catrow->title) . "</td>";
+            $tool_content .= "<td>" . q($catrow->title) . "</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .=

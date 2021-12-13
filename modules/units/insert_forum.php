@@ -21,20 +21,10 @@
 
 /**
  * display available forums (if any)
- * @global type $id
- * @global type $tool_content
- * @global type $urlServer
- * @global type $course_id
- * @global type $langComments
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoForums
- * @global type $langForums
- * @global type $course_code
  */
 function list_forums() {
     global $id, $tool_content, $urlServer, $course_id,
-    $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums, $course_code;
+           $langAddModulesButton, $langChoice, $langNoForums, $langForums, $course_code;
 
     // select topics from forums (not from group forums)
     $foruminfo = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d
@@ -47,15 +37,18 @@ function list_forums() {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th>$langForums</th>" .
-                "<th>$langComments</th>" .
+                "<th class='text-left'>&nbsp;$langForums</th>" .
                 "</tr>";
 
         foreach ($foruminfo as $entry) {
+            if (!empty($entry->desc)) {
+                $description_text = "<div style='margin-top: 10px;'>" .  q($entry->desc) . "</div>";
+            } else {
+                $description_text = '';
+            }
             $tool_content .= "<tr>
                 <td class='text-center'><input type='checkbox' name='forum[]' value='{$entry->id}'></td>
-                <td><a href='${urlServer}/modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'><b>" . q($entry->name) . "</b></a></td>
-                <td>" . ($entry->desc? q($entry->desc): '&nbsp;') . "</td>
+                <td><a href='${urlServer}/modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'>" . $entry->name . "</a>$description_text</td>
               </tr>";
 
             $r = Database::get()->queryArray("SELECT * FROM forum_topic WHERE forum_id = ?d", $entry->id);
@@ -71,7 +64,6 @@ function list_forums() {
                     $tool_content .= "<tr>";
                     $tool_content .= "<td class='text-center'><input type='checkbox' name='forum[]'  value='{$entry->id}:$topicentry[topic_id]'></td>";
                     $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum={$entry->id}'>" . q($topicentry['topic_title']) . "</a></td>";
-                    $tool_content .= "<td>&nbsp;</td>";
                     $tool_content .= "</tr>";
                 }
             }
@@ -80,6 +72,5 @@ function list_forums() {
         $tool_content .= "<div class='text-right'>
                             <input class='btn btn-primary' type='submit' name='submit_forum' value='$langAddModulesButton' />
                         </div></form>";
-
     }
 }

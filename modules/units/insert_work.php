@@ -24,8 +24,8 @@
  * @brief display list of available assignments (if any)
  */
 function list_assignments() {
-    global $id, $tool_content, $langTitle, $langChoice, $langGroupWorkDeadline_of_Submission,
-    $langAddModulesButton, $langNoAssign, $langPassCode, $course_id, $course_code;
+    global $id, $tool_content, $langWorks, $langChoice, $langGroupWorkDeadline_of_Submission,
+    $langAddModulesButton, $langNoAssign, $langPassCode, $course_id, $course_code, $urlServer;
 
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
     if (count($result) == 0) {
@@ -36,7 +36,7 @@ function list_assignments() {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-left'>&nbsp;$langTitle</th>" .
+                "<th class='text-left'>&nbsp;$langWorks</th>" .
                 "<th width='120'>$langGroupWorkDeadline_of_Submission</th>" .
                 "</tr>";
         foreach ($result as $row) {
@@ -51,10 +51,10 @@ function list_assignments() {
                 $vis = '';
             }
             $description = empty($row->description) ? '' :
-                    "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
+                    "<div class='margin-top: 10px;'>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $tool_content .= "<tr class='$vis'>" .
                     "<td class='text-center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
-                    "<td> " . q($row->title) . "$exclamation_icon<br><br><div class='text-muted'>$description</div></td>" .
+                    "<td><a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$exclamation_icon $description</td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
                     "</tr>";
         }

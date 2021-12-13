@@ -22,15 +22,6 @@
 
 /**
  * display available polls
- * @global type $course_id
- * @global type $course_code
- * @global type $urlServer
- * @global type $tool_content
- * @global type $id
- * @global type $langPollNone
- * @global type $langQuestionnaire
- * @global type $langChoice
- * @global type $langAddModulesButton
  */
 function list_polls() {
 
@@ -43,6 +34,7 @@ function list_polls() {
         $pollinfo[] = array(
             'id' => $row->pid,
             'title' => $row->name,
+            'description' => $row->description,
             'active' => $row->active);
     }
     if (count($pollinfo) == 0) {
@@ -56,9 +48,14 @@ function list_polls() {
                 "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .
                 "</tr>";
         foreach ($pollinfo as $entry) {
+            if (!empty($entry['description'])) {
+                $description_text = "<div style='margin-top: 10px;'>" .  $entry['description'] . "</div>";
+            } else {
+                $description_text = '';
+            }
             $tool_content .= "<tr>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";
-            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";
+            $tool_content .= "<td><a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
