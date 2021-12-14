@@ -31,8 +31,6 @@ require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
 
-$pageName = $langExercicesResult;
-
 if (isset($_GET['unit'])) {
     $unit_name = Database::get()->querySingle('SELECT title FROM course_units WHERE course_id = ?d AND id = ?d',
         $course_id, $_GET['unit'])->title;
@@ -215,6 +213,28 @@ $showScore = $displayScore == 1
             || $is_editor
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
+
+$toolName = $langExercicesResult;
+
+if (isset($_REQUEST['unit'])) {
+    $tool_content .= action_bar([
+        [
+            'title' => $langBack,
+            'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
+            'icon' => 'fa fa-reply',
+            'level' => 'primary-label'
+        ]
+    ]);
+} else {
+    $tool_content .= action_bar([
+        [
+            'title' => $langBack,
+            'url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'",
+            'icon' => 'fa fa-reply',
+            'level' => 'primary-label'
+        ]
+    ]);
+}
 
 $tool_content .= "<div class='alert alert-info'>";
 if ($user) { // user details
@@ -621,8 +641,6 @@ if ($regrade) {
     }
 }
 
-
-
 $totalScore = round($totalScore, 2);
 $totalWeighting = round($totalWeighting, 2);
 $oldScore = round($exercise_user_record->total_score, 2);
@@ -649,17 +667,8 @@ if ($checking) {
     exit;
 }
 
-$tool_content .= "
-  <div class='text-center'>";
-    if ($is_editor) {
-        $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a>&nbsp;";
-    }
-    if (isset($_REQUEST['unit'])) {
-        $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&id=$_REQUEST[unit]'>$langBack</a>";
-    } else {
-        $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>";
-    }
-
-$tool_content .= "</div>";
+if ($is_editor) {
+    $tool_content .= "<div class='text-center'><a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a></div>";
+}
 
 draw($tool_content, 2, null, $head_content);
