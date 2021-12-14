@@ -91,21 +91,39 @@ $showScore = $displayScore == 1
 
 if ($is_editor) {
     $tool_content .= action_bar([
-        [ 'title' => $langCheckGrades,
-          'icon' => 'fa-bar-chart',
-          'class' => 'check-grades',
-          'level' => 'primary-label',
-          'button-class' => 'btn-success'
+        [
+            'title' => $langCheckGrades,
+            'icon' => 'fa-bar-chart',
+            'class' => 'check-grades',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'
         ],
-        [ 'title' => "$langResults ($langDumpUser)",
-          'url' => "csv.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
-          'icon' => 'fa-sort-numeric-desc',
-          'button-class' => 'btn-success',
+        [
+            'title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa fa-reply',
+            'level' => 'primary-label'
         ],
-        [ 'title' => "$langPollFullResults ($langDumpUser)",
-          'url' => "csv_full.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
-          'icon' => 'fa-sort-numeric-desc',
-          'button-class' => 'btn-success',
+        [
+            'title' => "$langResults ($langDumpUser)",
+            'url' => "csv.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
+            'icon' => 'fa-sort-numeric-desc',
+            'button-class' => 'btn-success',
+        ],
+        [
+            'title' => "$langPollFullResults ($langDumpUser)",
+            'url' => "csv_full.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
+            'icon' => 'fa-sort-numeric-desc',
+            'button-class' => 'btn-success',
+        ]
+    ]);
+} else {
+    $tool_content .= action_bar([
+        [
+            'title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa fa-reply',
+            'level' => 'primary-label'
         ]
     ]);
 }
