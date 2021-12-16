@@ -648,7 +648,7 @@ $action_bar
                                         <span class='hidden'>.</span>
                                     </a>";
                             } else {
-                                if ($visible == COURSE_CLOSED) {
+                                if ($visible == COURSE_CLOSED or $is_editor) {
                                     $tool_content .= "<a href = '{$urlAppend}modules/user/userslist.php?course=$course_code'>
                                             <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
                                             <span class='hidden'>.</span>
