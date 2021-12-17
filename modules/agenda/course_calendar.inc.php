@@ -506,19 +506,22 @@ require_once 'include/lib/references.class.php';
    function get_list_course_events($display = 'all', $sens = 'ASC') {
        global $is_editor, $course_id;
 
-       $extra_sql = '';
+       $param = [ $course_id ];
        if ($display != 'all') {
-           $extra_sql = "AND id = $display";
-       }
+           $extra_sql = "AND id = ?d";
+           $param[] = $display;
+       } else {
+           $extra_sql = '';
+        }
        $result = array();
        if ($is_editor) {
             $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end
                                     FROM agenda WHERE course_id = ?d $extra_sql
-                                ORDER BY start " . $sens, $course_id);
+                                ORDER BY start " . $sens, $param);
         } else {
             $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible
                                     FROM agenda WHERE course_id = ?d $extra_sql
-                                AND visible = 1 ORDER BY start " . $sens, $course_id);
+                                AND visible = 1 ORDER BY start " . $sens, $param);
         }
         return $result;
 

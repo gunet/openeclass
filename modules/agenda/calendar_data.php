@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 
@@ -42,5 +42,5 @@ else{
    $day = (isset($_GET['day']))? intval($_GET['day']):null;
    $month = (isset($_GET['month']))? intval($_GET['month']):null;
    $year = (isset($_GET['year']))? intval($_GET['year']):null;
-   echo event_list_view($day, $month, $year, 'small');  
+   echo event_list_view($day, $month, $year, 'small');
 }
