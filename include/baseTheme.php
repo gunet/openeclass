@@ -138,7 +138,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     $t->set_var('LANG', $language);
-    $t->set_var('ECLASS_VERSION', ECLASS_VERSION);
+    $t->set_var('ECLASS_VERSION', CACHE_SUFFIX);
 
     if (!$is_embedonce) {
         // Remove search if not enabled
@@ -263,6 +263,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('STATS_LINK', $urlAppend . 'modules/usage/?t=u');
         $t->set_var('LANG_LOGOUT', q($langLogout));
         $t->set_var('LOGOUT_LINK', $urlAppend . 'modules/auth/logout.php');
+        $t->set_var('CSRF_TOKEN', $_SESSION['csrf_token']);
         $t->set_var('MY_COURSES', q($GLOBALS['langMyCoursesSide']));
         $t->set_var('MY_MESSAGES', q($GLOBALS['langNewMyMessagesSide']));
         $t->set_var('LANG_ANNOUNCEMENTS', q($GLOBALS['langMyAnnouncements']));

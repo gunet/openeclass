@@ -31,7 +31,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/auth/methods/hybridauth/config.php';
 
-if ($uid) {
+if ($uid and isset($_POST['token']) and validate_csrf_token($_POST['token'])) {
     $login_method = $session->getLoginMethod();
     Database::get()->query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
@@ -62,6 +62,15 @@ if ($uid) {
         phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
         phpCAS::logoutWithRedirectService($urlServer);
     }
+} elseif ($uid) {
+    $pageName = $langLogout;
+    $tool_content = "
+        <form method='post' action='logout.php'>
+            <input type='hidden' name='token' value='$_SESSION[csrf_token]'>
+            <input type='submit' name='submit' value='$langLogout'>
+        </form>";
+    draw_popup();
+    exit;
 }
 
 redirect_to_home_page();

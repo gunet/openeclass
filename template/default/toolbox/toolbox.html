@@ -13,30 +13,6 @@
     <script src="{%template_base%}/js/bootstrap.min.js"></script>
     {%EXTRA_CSS%}
     {%HEAD_EXTRAS%}
-    <script>
-        $(document).ready(function () {
-            $(".loginModal").click(function () {
-                $('#registerModalContent').modal('hide');
-                $("#lostPassModalContent").modal('hide');
-                $("#loginModalContent").modal();
-            });
-            $(".registerModal").click(function () {
-                $('#loginModalContent').modal('hide');
-                $("#lostPassModalContent").modal('hide');
-                $("#registerModalContent").modal();
-            });
-            $(".lost-pass-link").click(function (e) {
-                e.preventDefault();
-                $('#registerModalContent').modal('hide');
-                $('#loginModalContent').modal('hide');
-                $("#lostPassModalContent").modal();
-            });
-            $("select").select2({
-                theme: "bootstrap",
-                placeholder: "{%langSelectFromMenu%}"
-            });
-        });
-    </script>
 
     <!-- Favicon for various devices -->
     <link rel="shortcut icon" href="{%FAVICON_PATH%}" />
@@ -326,6 +302,34 @@
     </div>
 </div>
 <!-- END loginModalsBlock -->
+<script>
+    $(document).ready(function () {
+        $('.loginModal').click(function () {
+            $('#registerModalContent').modal('hide');
+            $('#lostPassModalContent').modal('hide');
+            $('#loginModalContent').modal();
+        });
+        $('.registerModal').click(function () {
+            $('#loginModalContent').modal('hide');
+            $('#lostPassModalContent').modal('hide');
+            $('#registerModalContent').modal();
+        });
+        $('.lost-pass-link').click(function (e) {
+            e.preventDefault();
+            $('#registerModalContent').modal('hide');
+            $('#loginModalContent').modal('hide');
+            $('#lostPassModalContent').modal();
+        });
+        $('select').select2({
+            theme: 'bootstrap',
+            placeholder: '{%langSelectFromMenu%}'
+        });
+        $('.logout-button').click(function (e) {
+            e.preventDefault();
+            $(this).parent('form').submit();
+        });
+    });
+</script>
 {%HTML_FOOTER%}
 </body>
 </html>

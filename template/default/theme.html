@@ -155,7 +155,10 @@
                                     </li>
                                     <!-- END UserMenuBlock -->
                                     <li role="presentation" style="border-top: 1px solid #ddd">
-                                        <a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><span class="fa fa-unlock fa-fw"></span>{%LANG_LOGOUT%}</a>
+                                        <form method='post' action='{%LOGOUT_LINK%}'>
+                                            <input type='hidden' name='token' value='{%CSRF_TOKEN%}'>
+                                            <a class='logout-button' role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><span class="fa fa-unlock fa-fw"></span>{%LANG_LOGOUT%}</a>
+                                        </form>
                                     </li>
                                 </ul>
                             </li>
