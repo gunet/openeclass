@@ -110,29 +110,21 @@ if (isset($_GET['showQuota'])) {
 }
 
 // ---------------------------
-//mindmap save button
+// Mindmap save button
 // ---------------------------
 if (isset($_GET['mindmap'])) {
     $mindmap = $_GET['mindmap'];
     $title = $_GET['mindtitle'];
 
-    //$uploadPath = " ";
-    $filename = $title . ".jm";
-    $safe_fileName = safe_filename(get_file_extension($filename));
-    $file_path = '/' . $safe_fileName;
-    $file_date = date('Y\-m\-d G\:i\:s');
-    $file_format = get_file_extension($filename);
-
-    $myfile = fopen($basedir . $file_path, 'w') or die('Unable to open file!');
-    $txt = $mindmap;
-
-    fwrite($myfile, $txt);
-    fclose($myfile);
-
-    move_uploaded_file($myfile , $basedir . $file_path);
-
-    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-    Database::get()->query("INSERT INTO document SET
+    $file_path = '/' . safe_filename(get_file_extension($filename));
+    if (!file_put_contents($basedir . $file_path, $_GET['mindmap'])) {
+        Session::Messages($langGeneralError, 'alert-danger');
+    } else {
+        $filename = $title . '.jm';
+        $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+        $file_date = date('Y-m-d G:i:s');
+        $file_format = 'jm';
+        Database::get()->query("INSERT INTO document SET
             course_id = ?d,
             subsystem = ?d,
             subsystem_id = ?d,
@@ -158,13 +150,14 @@ if (isset($_GET['mindmap'])) {
             $filename, $title, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
             $language, $uid);
-    Session::Messages($langMindMapSaved,"alert-success");
-    redirect_to_home_page("modules/mindmap/index.php");
+        Session::Messages($langMindMapSaved,"alert-success");
+    }
+    redirect_to_home_page('modules/mindmap/?course=' . $course_code);
 }
 
 
 // ---------------------------
-// mindmap screenshot save
+// Mindmap screenshot save
 // ---------------------------
 if (isset($_POST['imgBase64'])) {
     $shootname = $_POST['imgname'];
@@ -172,17 +165,16 @@ if (isset($_POST['imgBase64'])) {
     $img = str_replace('data:image/png;base64,', '', $img);
     $img = str_replace(' ', '+', $img);
     $fileData = base64_decode($img);
-    $filename = $shootname . '.png';
     $safe_fileName = safe_filename(get_file_extension($filename));
     $file_path = '/' . $safe_fileName;
-    $file_date = date("Y\-m\-d G\:i\:s");
-    $file_format = get_file_extension($filename);
+    $file_date = date('Y-m-d G:i:s');
 
     // mindmap save in database
-    file_put_contents($basedir . $file_path, $fileData);
-
-    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-    Database::get()->query("INSERT INTO document SET
+    if (file_put_contents($basedir . $file_path, $fileData)) {
+        $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+        $filename = $shootname . '.png';
+        $file_format = 'png';
+        Database::get()->query("INSERT INTO document SET
             course_id = ?d,
             subsystem = ?d,
             subsystem_id = ?d,
@@ -208,6 +200,7 @@ if (isset($_POST['imgBase64'])) {
             $filename, $shootname, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
             $language, $uid);
+    }
     exit;
 }
 
@@ -1536,16 +1529,13 @@ if ($doc_count == 0) {
             // open jm in mindmap module
             if ($entry['format'] == "jm"){
 
-                $jmname = $entry['title'];
-                $jmpath = base64_encode( json_encode($basedir . $entry['path']) );
-
-                $edit_url = "../mindmap/index.php?course=$course_code&amp;jmpath=$jmpath";
-
-
+                $jmpath = preg_replace('|^/[^/]+/|', '', explode('file.php', $file_url)[1]);
+                $jmname = q($entry['title']);
+                $edit_url = $urlAppend . "modules/mindmap/index.php?course=$course_code&amp;jmpath=" . urlencode($jmpath);
                 $tool_content .= "<tr $style><td class='text-center'>.jm</td>
                               <td><a href='$edit_url'>$jmname $link_title_extra</a>";
 
-            }else{
+            } else {
 
                 $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
                               <td><input type='hidden' value='$download_url'>$link_href $link_title_extra";
