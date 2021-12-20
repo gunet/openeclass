@@ -116,7 +116,7 @@ if (isset($_GET['mindmap'])) {
     $mindmap = $_GET['mindmap'];
     $title = $_GET['mindtitle'];
 
-    $file_path = '/' . safe_filename(get_file_extension($filename));
+    $file_path = '/' . safe_filename('jm');
     if (!file_put_contents($basedir . $file_path, $_GET['mindmap'])) {
         Session::Messages($langGeneralError, 'alert-danger');
     } else {
@@ -152,7 +152,7 @@ if (isset($_GET['mindmap'])) {
             $language, $uid);
         Session::Messages($langMindMapSaved,"alert-success");
     }
-    redirect_to_home_page('modules/mindmap/?course=' . $course_code);
+    redirect_to_home_page('modules/document/?course=' . $course_code);
 }
 
 
@@ -165,8 +165,7 @@ if (isset($_POST['imgBase64'])) {
     $img = str_replace('data:image/png;base64,', '', $img);
     $img = str_replace(' ', '+', $img);
     $fileData = base64_decode($img);
-    $safe_fileName = safe_filename(get_file_extension($filename));
-    $file_path = '/' . $safe_fileName;
+    $file_path = '/' . safe_filename('png');
     $file_date = date('Y-m-d G:i:s');
 
     // mindmap save in database
