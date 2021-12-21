@@ -24,9 +24,37 @@
  * @brief produce statistic analysis results in JSON
  */
 
-$require_login = TRUE;
+if (isset($_REQUEST['t'])) {
+    switch ($_REQUEST['t']) {
+        case 'cg':
+        case 'cmp':
+        case 'cm':
+        case 'cd':
+        case 'crs':
+        case 'ocs':
+        case 'crd':
+        case 'cad':
+            $require_current_course = true;
+            $require_course_admin = true;
+        break;
+        case 'du':
+        case 'dc':
+        case 'pcs':
+        case 'ul':
+        case 'ols':
+        case 'ucp':
+        case 'uc':
+        case 'uld':
+            $require_admin = true;
+        break;
+        case 'ud':
+        case 'ug':
+            $require_login = true;
+        break;
+    }
+}
 
-require_once '../../include/init.php';
+require_once '../../include/baseTheme.php';
 require_once 'modules/usage/usage.lib.php';
 
 $result = null;

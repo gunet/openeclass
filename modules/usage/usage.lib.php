@@ -36,7 +36,7 @@ require_once 'include/lib/textLib.inc.php';
 */
 function get_course_stats($start = null, $end = null, $interval, $cid, $user_id = null)
 {
-        
+
     $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
     if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
         $g = build_group_selector_cond($interval);
@@ -105,7 +105,6 @@ function get_course_module_stats($start = null, $end = null, $interval, $cid, $m
 */
 function get_module_preference_stats($start = null, $end = null, $cid, $user_id = null){
 
-    global $modules;
     if(is_numeric($user_id)){
         $q = "SELECT module_id mdl, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d GROUP BY module_id ORDER BY hits DESC";
         $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);
@@ -226,12 +225,10 @@ function get_course_activity_details($start = null, $end = null, $user, $course,
 */
 function get_course_details($start = null, $end = null, $interval, $cid, $user_id = null)
 {
-    global $modules;
-    if(is_numeric($user_id)){
+    if (is_numeric($user_id)){
         $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d ORDER BY day, module_id";
         $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);
-    }
-    else{
+    } else {
         $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t ORDER BY day, module_id";
         $r = Database::get()->queryArray($q, $cid, $start, $end);
     }
@@ -366,7 +363,6 @@ function get_user_course_stats($start = null, $end = null, $interval, $user, $co
 */
 function get_user_details($start = null, $end = null, $interval, $user, $course = null)
 {
-    global $modules;
     if(is_numeric($course)){
         $q = "SELECT day, hits hits, duration dur, module_id, c.title FROM actions_daily a JOIN course c ON a.course_id=c.id WHERE user_id = ?d AND day BETWEEN ?t AND ?t AND course_id = ?d ORDER BY day";
         $r = Database::get()->queryArray($q, $user, $start, $end, $course);
@@ -409,7 +405,7 @@ function get_user_login_stats($start = null, $end = null, $interval, $user, $roo
     foreach($r1 as $record){
         $temp[$record->cat_title]['logins'] = $record->c;
     }
-    
+
     $g = build_group_selector_cond($interval, 'day');
     $groupby = $g['groupby'];
     $date_components = $g['select'];
@@ -420,7 +416,7 @@ function get_user_login_stats($start = null, $end = null, $interval, $user, $roo
     foreach($r2 as $record){
         $temp[$record->cat_title]['visits'] = $record->hits;
     }
-    
+
     $formattedr = array('time'=>array(),'logins'=>array());
     foreach($temp as $k=>$v){
         $formattedr['time'][] = $k;
@@ -759,9 +755,9 @@ function course_hits($cid, $userid = 0){
  * @return type
  */
 function course_visits($cid) {
-    
+
     $logins = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM logins WHERE course_id = ?d", $cid)->cnt;
-    
+
     return $logins;
 }
 
@@ -835,7 +831,7 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
  * @global $langDurationVisitsPerCourse
 */
 function user_duration_per_course($u) {
-   
+
     global $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons;
 
     $totalDuration = 0;
@@ -892,9 +888,9 @@ function user_duration_per_course($u) {
  * @param type $u
  */
 function user_last_logins($u) {
-    
+
     global $langLastVisits, $dateFormatLong, $tool_content;
-    
+
     $result = Database::get()->queryArray("SELECT * FROM loginout
                                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 5", $u);
     if (count($result) > 0) {
@@ -905,11 +901,11 @@ function user_last_logins($u) {
                         <div class='row'>
                           <div class='col-sm-12'><b>$langLastVisits</b></div>
                         </div>";
-                
+
         foreach ($result as $lastVisit) {
             $tool_content .= "<li class='list-group-item'>
                         <div class='row'>
-                          <div class='col-sm-8'><b>" . claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) . 
+                          <div class='col-sm-8'><b>" . claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) .
                         "</b>&nbsp;&nbsp;(" . date_format(date_create($lastVisit->when),'H:i') . ")</div>
                         </div>
                       </li>";
@@ -925,7 +921,7 @@ function user_last_logins($u) {
 
 
 /**
- * Get old statistics of visits and visit duration to a course. 
+ * Get old statistics of visits and visit duration to a course.
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @param int $cid the id of the course
@@ -933,7 +929,7 @@ function user_last_logins($u) {
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_course_old_stats($start = null, $end = null, $cid, $mid)
-{    
+{
     $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
     if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
         $g = build_group_selector_cond('month', 'start_date');
@@ -957,7 +953,7 @@ function get_course_old_stats($start = null, $end = null, $cid, $mid)
 }
 
 /**
- * Get old statistics of logins/logouts to the platform. 
+ * Get old statistics of logins/logouts to the platform.
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
@@ -969,10 +965,10 @@ function get_login_old_stats($start = null, $end = null)
         $g = build_group_selector_cond('month', 'start_date');
         $groupby = $g['groupby'];
         $date_components = $g['select'];
-        
+
         $q = "SELECT $date_components, SUM(login_sum) visits FROM loginout_summary WHERE start_date BETWEEN ?t AND ?t $groupby";
         $r = Database::get()->queryArray($q, $start, $end);
-        
+
         foreach($r as $record){
            $formattedr['time'][] = $record->cat_title;
            $formattedr['hits'][] = $record->visits;
