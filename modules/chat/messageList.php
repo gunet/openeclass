@@ -33,9 +33,10 @@ require_once 'modules/document/doc_init.php';
 
 $coursePath = $webDir . '/courses/';
 if (isset($_REQUEST['conference_id'])) {
-    $conference_id = $_REQUEST['conference_id'];
-} else {
-    redirect_to_home_page("modules/chat/messageList.php?course=$course_code");
+    $conference_id = intval($_REQUEST['conference_id']);
+}
+if (!isset($conference_id) or !$conference_id) {
+    forbidden();
 }
 
 $fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';

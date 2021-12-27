@@ -193,7 +193,7 @@ $head_content .= "<script type='text/javascript'>
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bProcessing': true,
                 'bServerSide': true,
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
+                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
@@ -266,7 +266,7 @@ if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_nume
     $tool_content .= "<form action='multieditcourse.php' method='post'>";
     // redirect all request vars towards action
     foreach ($_REQUEST as $key => $value) {
-        $tool_content .= "<input type='hidden' name='$key' value='$value'>";
+        $tool_content .= "<input type='hidden' name='" . q($key) . "' value='" . q($value) . "'>";
     }
 
     $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
