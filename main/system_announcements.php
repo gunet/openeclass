@@ -90,7 +90,7 @@ $head_content .= "<script type='text/javascript'>
                 'sScrollX': true,
                 'responsive': true,
                 'searchDelay': 1000,
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
+                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here

@@ -164,10 +164,10 @@ Class Blog {
         if ((isset($newer) && $newer) || (isset($older) && $older)) {
             $out = "<ul class='pager'>";
             if(isset($older) && $older) {
-                $out .= "<li class='previous'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>&larr; ".$langBlogOlderPosts."</a></li>";
+                $out .= "<li class='previous'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>&larr; ".$langBlogOlderPosts."</a></li>";
             }
             if(isset($newer) && $newer) {
-                $out .= "<li class='next'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts." &rarr;</a></li>";
+                $out .= "<li class='next'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts." &rarr;</a></li>";
             }
             $out .= "</ul>";
         }

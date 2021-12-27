@@ -38,7 +38,7 @@ function validateNode($id, $checkOwn) {
     global $tool_content, $head_content, $tree, $user, $uid,
     $langBack, $langNotAllowed;
 
-    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[SCRIPT_NAME]'>" . $langBack . "</a></p>";
 
     if ($id <= 0) {
         exitWithError($notallowed);
@@ -67,7 +67,7 @@ function validateNode($id, $checkOwn) {
  */
 function validateParentId($id, $checkOwn) {
     global $tool_content, $head_content, $tree, $user, $uid, $langBack, $langNotAllowed;
-    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[SCRIPT_NAME]'>" . $langBack . "</a></p>";
 
     // special parent check
     if ((!$checkOwn && $id < 0) || ($checkOwn && $id <= 0)) {
@@ -99,7 +99,7 @@ function validateUserNodes($userId, $checkOwn) {
     global $tool_content, $head_content, $tree, $user, $uid,
     $langBack, $langNotAllowed;
 
-    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[SCRIPT_NAME]'>" . $langBack . "</a></p>";
 
     if ($userId <= 0) {
         exitWithError($notallowed);
@@ -138,7 +138,7 @@ function validateUserNodes($userId, $checkOwn) {
 function validateCourseNodes($courseId, $checkOwn) {
     global $tool_content, $head_content, $tree, $course, $user, $uid, $langBack, $langNotAllowed;
 
-    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[SCRIPT_NAME]'>" . $langBack . "</a></p>";
 
     if ($courseId <= 0) {
         exitWithError($notallowed);

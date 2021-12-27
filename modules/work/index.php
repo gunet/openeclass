@@ -3025,7 +3025,7 @@ function show_edit_assignment($id) {
     $tool_content .= action_bar(array(
         array('title' => $langBack,
               'level' => 'primary-label',
-              'url' => "$_SERVER[PHP_SELF]?course=$course_code",
+              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
               'icon' => 'fa-reply')));
 
     //Get possible validation errors

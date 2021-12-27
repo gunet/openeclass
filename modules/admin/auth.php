@@ -30,12 +30,12 @@ require_once 'modules/auth/auth.inc.php';
 $toolName = $langUserAuthentication;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "$_SERVER[PHP_SELF]",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')
-                ),false);
+$tool_content .= action_bar([
+    [ 'title' => $langBack,
+      'url' => "{$urlAppend}modules/admin/",
+      'icon' => 'fa-reply',
+      'level' => 'primary-label' ],
+], false);
 
 // sso transition
 if (isset($_GET['transition'])) {
@@ -130,7 +130,7 @@ if (isset($_GET['auth'])) {
         $primary = $info->auth_default > 1;
         $primaryLabel = $primary? "&nbsp;&nbsp;<small><span class='label label-default'>$langPrimaryAuthType</span></small>": '';
         $visibility = $active? '': ' class=not_visible';
-        $activation_url = "$_SERVER[PHP_SELF]?auth=$auth_id&amp;q=" . !$active;
+        $activation_url = "auth.php?auth=$auth_id&amp;q=" . !$active;
         $activation_title = $active? $langDeactivate: $langActivate;
         $activation_icon = $active? 'fa-toggle-off': 'fa-toggle-on';
         $tool_content .= "<tr><td$visibility>" . strtoupper($auth_name) . "$primaryLabel</td><td class='option-btn-cell'>";
@@ -139,11 +139,11 @@ if (isset($_GET['auth'])) {
                   'url' => "auth_process.php?auth=$auth_id",
                   'icon' => 'fa-gear'),
             array('title' => $langPrimaryAuthType,
-                  'url' => "$_SERVER[PHP_SELF]?auth=$auth_id&amp;p=1",
+                  'url' => "auth.php?auth=$auth_id&amp;p=1",
                   'icon' => 'fa-flag',
                   'show' => $active and !$primary),
             array('title' => $langSecondaryAuthType,
-                  'url' => "$_SERVER[PHP_SELF]?auth=$auth_id&amp;p=0",
+                  'url' => "auth.php?auth=$auth_id&amp;p=0",
                   'icon' => 'fa-circle-o',
                   'show' => $primary),
             array('title' => $langConnTest,
@@ -155,17 +155,17 @@ if (isset($_GET['auth'])) {
                   'icon' => $activation_icon,
                   'show' => $auth_id == 1 || $info->auth_settings),
             array('title' => $langTransitionEnable,
-                'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
-                'icon' => 'fa-bell',
-                'show' => ($auth_name == 'cas' && !get_config('sso_transition'))),
+                  'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
+                  'icon' => 'fa-bell',
+                  'show' => ($auth_name == 'cas' && !get_config('sso_transition'))),
             array('title' => $langTransitionDisable,
-                'url' => "$_SERVER[SCRIPT_NAME]?transition=false",
-                'icon' => 'fa-bell-slash',
-                'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))),
+                  'url' => "$_SERVER[SCRIPT_NAME]?transition=false",
+                  'icon' => 'fa-bell-slash',
+                  'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))),
             array('title' => $langTransitionExcludeReq,
-                'url' => "../auth/transition/admin_auth_transition.php",
-                'icon' => 'fa-exclamation',
-                'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))),
+                  'url' => "../auth/transition/admin_auth_transition.php",
+                  'icon' => 'fa-exclamation',
+                  'show' => ($auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition'))),
             ));
             $tool_content .= "</td><tr>";
     }

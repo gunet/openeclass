@@ -280,11 +280,10 @@ if ($action == 'rqEdit') {
 // Breadcrumps
 switch ($action) {
     case "rqEdit": {
-            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId", 'name' => $langWiki);
-            $pageName = $langWikiCreateWiki;
-            $noPHP_SELF = true;
-            break;
-        }
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId", 'name' => $langWiki);
+        $pageName = $langWikiCreateWiki;
+        break;
+    }
     case "list":
     default: {
         $pageName = $langWiki;
