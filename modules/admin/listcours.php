@@ -193,7 +193,7 @@ $head_content .= "<script type='text/javascript'>
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bProcessing': true,
                 'bServerSide': true,
-                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',
+                'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
