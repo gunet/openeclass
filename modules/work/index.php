@@ -5896,6 +5896,7 @@ function submit_grades($grades_id, $grades, $email = false) {
 function send_file($id, $file_type) {
     global $uid, $is_editor;
 
+    $files_to_download = [];
     if (!$is_editor and is_module_disable(MODULE_ID_ASSIGN)) {
         return false;
     }
