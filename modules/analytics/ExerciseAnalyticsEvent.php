@@ -25,26 +25,24 @@ class ExerciseAnalyticsEvent extends Event {
                 . " AND a.course_id = ?d"
                 . " AND s.attempt_status = 1"
                 . " ORDER BY total_score DESC LIMIT 1", $this->context['user_id'], $this->context['resource'], $this->context['course_id']);
-                
+
                 $this->context['value'] = 0;
-                if ($record && floatval($record->total_score) > 0) {
-                    $this->context['value'] = floatval($record->total_score);
+                $objExercise = new Exercise();
+                $objExercise->read($record->eid);
+                $canonical_score = $objExercise->canonicalize_exercise_score($record->total_score, $record->total_weighting);
+                if ($record && $canonical_score > 0) {
+                    $this->context['value'] = $canonical_score;
                 }
 
-                // print_r($this->context);
-                // print_r($this->elements);
-                //die("aaa");
-                
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-                            
+
                     if ($record) {
                         $id = $record->id;
                         $value = $this->context['value'];
-
                         $this->updateValue($id, $value);
                     } else {
                         $user_id = $this->context['user_id'];
@@ -70,18 +68,17 @@ class ExerciseAnalyticsEvent extends Event {
                     . " ORDER BY s.total_score DESC LIMIT 1", $resource, $course_id, 1, $data->start_date, $data->end_date);
 
                 foreach ($exercise_records as $exercise_record) {
+                    $objExercise = new Exercise();
+                    $objExercise->read($exercise_record->eid);
+                    $canonical_score = $objExercise->canonicalize_exercise_score($exercise_record->total_score, $exercise_record->total_weighting);
                     $value = 0;
-                    if ($exercise_record && floatval($exercise_record->total_score) > 0) {
-                        $value = floatval($exercise_record->total_score);
+                    if ($exercise_record && $canonical_score > 0) {
+                        $value = $canonical_score;
                     }
-
-                    $this->insertValue($exercise_record->uid, $analytics_element_id, $value, $exercise_record->record_end_date); 
-                } 
-           
+                    $this->insertValue($exercise_record->uid, $analytics_element_id, $value, $exercise_record->record_end_date);
+                }
             }
         };
-
         $this->on(self::EXERCISEGRADE, $eventfunction);
-
     }
 }
