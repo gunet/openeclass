@@ -5408,7 +5408,7 @@ function show_assignments() {
         $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions, $langNoDeadline,
         $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics, $langWillStartAt,
         $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission,
-        $langActivate, $langDeactivate;
+        $langActivate, $langDeactivate, $urlAppend;
 
         // ordering assignments first by deadline then by title
     $result = Database::get()->queryArray("SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
@@ -5511,7 +5511,11 @@ function show_assignments() {
                     array('title' => $langEditChange,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
-
+                    array(
+                        'title' => $m['WorkUserGroupNoSubmission'],
+                        'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;disp_non_submitted=true",
+                        'icon' => 'fa-minus-square'
+                    ),
                     array('title' => $row->active == 1 ? $langDeactivate: $langActivate,
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
                           'icon' => $row->active == 1 ? 'fa-eye-slash': 'fa-eye'),
