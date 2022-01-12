@@ -115,7 +115,7 @@ if ($is_editor) {
     } elseif (isset($_GET['u'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true", "name" => $langUsers);
-        $pageName = "$langProgress $langsOfStudent";
+        $pageName = uid_to_name($_GET['u']);
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true",
