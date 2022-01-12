@@ -2055,32 +2055,25 @@ function student_view_progress() {
 
 /**
  * @brief display users progress (teacher view)
- * @global type $tool_content
- * @global type $course_code
- * @global type $course_id
- * @global type $langNoCertificateUsers
- * @global type $langName
- * @global type $langSurname
- * @global type $langAmShort
- * @global type $langID
- * @global type $langProgress
- * @global type $langUsersCertResults
- * @global type $langUsersS
  * @param type $element
  * @param type $element_id
  */
 function display_users_progress($element, $element_id) {
 
-    global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langNameSurname, $langUsersS,
+    global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langSurnameName, $langUsersS,
            $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
 
     if ($element == 'certificate') {
-        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
-                                            JOIN course_user ON user_certificate.user=course_user.user_id 
-                                                AND status = " .USER_STUDENT . " 
+        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria 
+                                            FROM user_certificate 
+                                            JOIN course_user ON user_certificate.user=course_user.user_id
+                                             JOIN user ON user.id = user_certificate.user
+                                                AND course_user.status = " .USER_STUDENT . " 
                                                 AND editor = 0 
                                                 AND course_id = ?d
-                                                AND certificate = ?d", $course_id, $element_id);
+                                                AND certificate = ?d
+                                            ORDER BY user.surname, user.givenname
+                                            ASC", $course_id, $element_id);
         $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate
                                             JOIN course_user ON user_certificate.user=course_user.user_id 
                                                 AND status = " .USER_STUDENT . " 
@@ -2090,12 +2083,16 @@ function display_users_progress($element, $element_id) {
                                                 AND certificate = ?d", $course_id,$element_id)->t;
         $param_name = 'certificate_id';
     } else {
-        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_badge
-                                            JOIN course_user ON user_badge.user=course_user.user_id 
-                                                AND status = " .USER_STUDENT . " 
+        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria 
+                                            FROM user_badge
+                                            JOIN course_user ON user_badge.user=course_user.user_id
+                                            JOIN user ON user.id = user_badge.user
+                                                AND course_user. status = " .USER_STUDENT . " 
                                                 AND editor = 0 
                                                 AND course_id = ?d
-                                                AND badge = ?d", $course_id, $element_id);
+                                                AND badge = ?d 
+                                            ORDER BY user.surname, user.givenname 
+                                            ASC", $course_id, $element_id);
         $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge 
                                             JOIN course_user ON user_badge.user=course_user.user_id 
                                                 AND status = " .USER_STUDENT . " 
@@ -2116,7 +2113,7 @@ function display_users_progress($element, $element_id) {
             $tool_content .= "<thead>
                         <tr>
                           <th style='width:5%'>$langID</th>
-                          <th>$langNameSurname</th>
+                          <th>$langSurnameName</th>
                           <th style='width: 20%;'>$langProgress</th>
                         </tr>
                     </thead>
