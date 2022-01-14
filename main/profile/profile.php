@@ -47,7 +47,6 @@ $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 $tree = new Hierarchy();
 $userObj = new User();
 $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
-
 load_js('jstree3');
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>
@@ -94,7 +93,9 @@ if (isset($_POST['delimage'])) {
 }
 
 if (isset($_POST['submit'])) {
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        csrf_token_error();
+    }
     // First process language changes
     checkSecondFactorChallenge();
     saveSecondFactorUserProfile();
@@ -157,9 +158,7 @@ if (isset($_POST['submit'])) {
     }
 
 
-
     // check if email is valid
-    //if ((get_config('email_required') or get_config('email_verification_required')) and !valid_email($email_form)) {
     if (!empty($email_form) and !valid_email($email_form)) {
         Session::Messages($langEmailWrong);
         redirect_to_home_page("main/profile/profile.php");
@@ -173,6 +172,11 @@ if (isset($_POST['submit'])) {
 
     if (!$allow_username_change) {
         $username_form = $_SESSION['uname'];
+    }
+
+    if (!$allow_name_change) {
+        $surname_form = $_SESSION['surname'];
+        $givenname_form = $_SESSION['givenname'];
     }
 
     $username_form = canonicalize_whitespace($username_form);
@@ -198,7 +202,6 @@ if (isset($_POST['submit'])) {
     }
 
     $need_email_verification = false;
-    // TODO: Allow admin to configure allowed username format
     if (!empty($email_form) && ($email_form != $_SESSION['email']) && get_config('email_verification_required')) {
         $verified_mail_sql = ", verified_mail = " . EMAIL_UNVERIFIED;
         $need_email_verification = true;
@@ -608,7 +611,7 @@ Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d'
 
 // HybridAuth settings and links
 // check if there are any available alternative providers for authentication and show the corresponding links on
-// the homepage, or no mesage if no providers are enabled
+// the homepage, or no message if no providers are enabled
 $config = get_hybridauth_config();
 
 $hybridauth = new Hybridauth( $config );
