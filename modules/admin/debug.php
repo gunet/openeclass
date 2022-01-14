@@ -54,9 +54,12 @@ class Debug {
                 $backtrace_line = $backtrace_entry[1]['line'];
             }
             $full_message = "<p>In file <b>" . $backtrace_file . "</b> on line <b>" . $backtrace_line . "</b> : " . "<i>$message</i></p>";
-            if (is_null(Debug::$output))
-                echo $full_message;
-            else {
+            if (is_null(Debug::$output)) {
+                error_log($full_message);
+                if (ini_get('display_errors')) {
+                    echo $full_message;
+                }
+            } else {
                 $curoutput = Debug::$output;
                 $curoutput($full_message, $level);
             }
