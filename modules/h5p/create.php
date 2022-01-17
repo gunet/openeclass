@@ -409,8 +409,13 @@ function saveContent(stdClass $data): int {
         H5PCore::deleteFileTree($tmpEditorPath);
     }
 
+    // Generates filtered params
+    $contentarray = $core->loadContent($data->id);
+    $contentarray['title'] = $data->title;
+    $fparams = $core->filterParameters($contentarray);
+
     // create proper content.json file on disk with params
-    file_put_contents($contentJsonPath . "/content.json", json_encode($params->params));
+    file_put_contents($contentJsonPath . "/content.json", $fparams);
 
     // Calculate dependencies by validating and filtering against main library semantics
     $vdeps = array();
