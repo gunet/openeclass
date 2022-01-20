@@ -4718,10 +4718,28 @@ function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $head_content, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
     $langWorkOnlineText, $langGradeOk, $langPlagiarismResult, $langHasAssignmentPublished, $langMailToUsers,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
-    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer,
+    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer, $langTransferGrades,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress, $langFileName,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
     $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
+
+    // transfer grades in peer review assingnment
+    $head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+           $('a#transfer_grades').click(function(e) {
+               e.preventDefault();
+               $('input[name=grade_review]').each(function() {
+                   if (this.value) {
+                       var input_grade_value_name = 'grades[' + this.id + '][grade]';
+                       var input_grade = $('input[name=\"' + input_grade_value_name + '\"]');
+                       if (!input_grade.val()) {
+                           input_grade.val(this.value);
+                       }
+                   }
+              });
+           })
+        });
+    </script>";
 
     $head_content .= '
     <style>
@@ -4744,22 +4762,22 @@ function show_assignment($id, $display_graph_results = false) {
     $auto_judge_enabled_assign = $assign->auto_judge;
 
 	$cdate = date('Y-m-d H:i:s');
+    $count_of_ass = countSubmissions($id);
 	//to button anathesh tha emfanizetai sto xroniko diasthma apo deadline - start_date_review
-	if (($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline && $cdate < $assign->start_date_review)) {
-	    $count_of_ass = countSubmissions($id);
-		if ($assign->reviews_per_assignment < $count_of_ass) {
-			$tool_content .= " <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
-						   <input type='hidden' name='assign' value='$id'>
-						   <div class='form-group'>
-								<div class='pull-right'>
-									<input class='btn btn-primary' type='submit' name='ass_review' value='$langAssignmentDistribution'>
-								</div>
-						   </div>
-						   </form>";
-		} else {
-			Session::Messages($langPeerReviewImpossible, 'alert-warning');
-		}
-	}
+        if (($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline && $cdate < $assign->start_date_review)) {
+            if ($assign->reviews_per_assignment < $count_of_ass) {
+                $tool_content .= " <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
+                               <input type='hidden' name='assign' value='$id'>
+                               <div class='form-group'>
+                                    <div class='pull-right'>
+                                        <input class='btn btn-primary' type='submit' name='ass_review' value='$langAssignmentDistribution'>
+                                    </div>
+                               </div>
+                               </form>";
+            } else {
+                Session::Messages($langPeerReviewImpossible, 'alert-warning');
+            }
+        }
 
 
     $rev = (@($_REQUEST['rev'] == 1)) ? 'DESC' : 'ASC';
@@ -4808,8 +4826,13 @@ function show_assignment($id, $display_graph_results = false) {
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
                 <div class='margin-bottom-thin'>
-                    <b>$langSubmissions:</b>&nbsp; $count_of_assignments
-                </div>";
+                    <strong>$langSubmissions:</strong>&nbsp; $count_of_assignments";
+                // button for transferring student peer review grades to teacher grades
+                if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0)) {
+                    $tool_content .= "<div class='text-right' style='margin-bottom: 15px;'><a class='btn btn-primary' href='$_SERVER[SCRIPT_NAME]?course=$course_code' id='transfer_grades'>$langTransferGrades</a></div>";
+                }
+                $tool_content .= "</div>";
+
             $tool_content .= "
                 <div class='table-responsive'>
                 <table class='table'>
@@ -4892,13 +4915,13 @@ function show_assignment($id, $display_graph_results = false) {
                             if ($sum != 0){
                                 $grade = $sum / $count_grade;
 
-                                if (is_float($grade)){
+                                if (is_float($grade)) {
                                     $grade_review = number_format($grade,1);
-                                }else{
+                                } else {
                                     $grade_review = $grade;
                                 }
                             }
-                            $grade_review_field = "<input class='form-control' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
+                            $grade_review_field = "<input class='form-control' id='$row->id' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
                         }
                     }
                 }
