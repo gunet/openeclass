@@ -83,6 +83,14 @@ $head_content .= "<script type='text/javascript'>
             var stringVal = [];
             $('#select-courses').val(stringVal).trigger('change');
         });
+        $('#allCourses').click(function(e) {
+            var sc = $('#select-courses');
+            e.preventDefault();
+            if (!sc.find('option[value=0]').length) {
+                sc.prepend('<option value=\"0\">" . js_escape($langToAllCourses) . "</option>');
+            }
+            $('#select-courses').val(['0']).trigger('change');
+        });
     });
 </script>";
 
@@ -243,7 +251,7 @@ else if (isset($_GET['add_server'])) {
                         $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
                     }
         $tool_content .= "</select>
-                    <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                    <a href='#' id='allCourses'>$langToAllCourses</a> | <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                 </div>
             </div>";
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'>";
@@ -640,7 +648,7 @@ else {
                                                                     AND visible != " . COURSE_INACTIVE . "
                                                                 ORDER BY title");
                     if ($server->all_courses == '1') {
-                        $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+                        $tool_content .= "<option value='0' selected>$langToAllCourses</option>";
                     } else {
                         $tc_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id
                                                     IN (SELECT course_id FROM course_external_server WHERE external_server = ?d) ORDER BY title", $_GET['edit_server']);
@@ -655,7 +663,7 @@ else {
                         $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
                     }
         $tool_content .= "</select>
-                    <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                    <a href='#' id='allCourses'>$langToAllCourses</a> | <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                 </div>
             </div>";
         $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$bbb_server'>";
