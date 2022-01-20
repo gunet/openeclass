@@ -92,8 +92,8 @@ class AutojudgeDnnaApp extends AutojudgeApp implements AutoJudgeConnector {
         // Close curl connection
         curl_close($ch);
 
-        if(!$result) {
-            return array("$langAutoJudgeConnectionError" => 'error');
+        if (!$result) {
+            return ['error' => $langAutoJudgeConnectionError];
         }
 
         return $result;

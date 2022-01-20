@@ -65,16 +65,22 @@ else {
         return "<option value='$connectorClass'$selected>".$connector->getName()."</option>";
     }, $connectorClasses);
     $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
-	 <div class='form-group'>
+         <div class='form-group'>
             <label class='col-sm-3 control-label'>$langAutoJudgeConnector:</label>
             <div class='col-sm-8'><select class='form-control' name='formconnector'>".implode('', $connectorOptions)."</select></div>
          </div>";
     foreach($connectorClasses as $curConnectorClass) {
         $connector = new $curConnectorClass();
+        $supported_languages = $connector->getSupportedLanguages();
+        if (isset($supported_languages['error'])) {
+            $supported_languages = '<div class="alert alert-danger">' . q($supported_languages['error']) . '</div>';
+        } else {
+            $supported_languages = q(implode(', ', array_keys($connector->getSupportedLanguages())));
+        }
         $tool_content .= "
         <div class='form-group connector-config connector-$curConnectorClass' style='display: none;'>
             <label class='col-sm-3 control-label'>$langAutoJudgeSupportedLanguages:</label>
-            <div class='col-sm-8'>".implode(', ', array_keys($connector->getSupportedLanguages()))."</div>
+            <div class='col-sm-8'>$supported_languages</div>
         </div>
         <div class='form-group connector-config connector-$curConnectorClass' style='display: none;'>
             <label class='col-sm-3 control-label'>$langAutoJudgeSupportsInput:</label>

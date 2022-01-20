@@ -2432,9 +2432,17 @@ function new_assignment() {
                     </div>
                 </div>
             </div>";
-        // Auto Judge Options
-            if($autojudge->isEnabled()) {
-                $tool_content .= "
+    // Auto Judge Options
+    if ($autojudge->isEnabled()) {
+        $supported_languages = $autojudge->getSupportedLanguages();
+        if (!isset($supported_languages['error'])) {
+            $supported_languages = "<select id='lang' name='lang'>" .
+                implode(array_map(function ($lang) {
+                    $lang = q($lang);
+                    return "<option value='$lang'>$lang</option>\n";
+                }, array_keys($supported_languages))) .
+                "</select>";
+            $tool_content .= "
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
                     <div class='col-sm-10'>
@@ -2500,15 +2508,12 @@ function new_assignment() {
                 <div class='form-group'>
                   <label class='col-sm-2 control-label'>$langAutoJudgeProgrammingLanguage:</label>
                   <div class='col-sm-10'>
-                    <select id='lang' name='lang'>";
-                    foreach($autojudge->getSupportedLanguages() as $lang => $ext) {
-                        $tool_content .= "<option value='$lang'>$lang</option>\n";
-                    }
-                    $tool_content .= "</select>
+                    $supported_languages
                   </div>
                 </div>";
-            }
-            $tool_content .= "
+        }
+    }
+    $tool_content .= "
             <div class='form-group'>
                 <label for='assignmentPasswordLock' class='col-sm-2 control-label'>$langPassCode:</label>
                 <div class='col-sm-10'>
