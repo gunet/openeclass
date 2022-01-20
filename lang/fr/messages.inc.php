@@ -22,15 +22,13 @@ $langAnd = "et";
 $langCoursesHeader = "Cours";
 $langClosed = "fermés";
 $langOpen = "ouverts";
-$langSemiopen = "sur inscription"
-;
+$langSemiopen = "sur inscription";
 $langUsers = "Utilisateurs";
 $langUsersS = "utilisateurs";
 $langUser = "Utilisateur";
 $langUserHeader = "Utilisateur :";
 $langUserS = "utilisateur";
-$langSupportUser = "Responsable de Soutien technique :"
-;
+$langSupportUser = "Responsable de Soutien technique :";
 $langAdminUsers = "Gestion des Utilisateurs";
 $langDeleteAdmin = "La suppression de l'administrateur avec id :";
 $langNotFeasible = "n'est pas possible";
@@ -40,8 +38,7 @@ $langNotFound = "introuvable";
 $langWith = "avec";
 $langDone = "a été devenu administrateur.";
 $langErrorAddaAdmin = "Erreur : l'utilisateur n'a pas été ajouté aux administrateurs. Il se peut qu'il soit déjà un des administrateurs.";
-$langInsertUserInfo = "Entrer les informations d'utilisateur"
-;
+$langInsertUserInfo = "Entrer les informations d'utilisateur";
 $langPage = "Page :";
 $langBeforePage = "Précédente";
 $langAfterPage = "Suivante";
@@ -49,8 +46,7 @@ $langComments = "Commentaires";
 $langAdmin = "Outils de Gestion de la Plateforme";
 $langState = "Gestion du Serveur";
 $langDevAdmin = "Gestion de la Base de Données";
-$langSysInfo = "À propos du Système"
-;
+$langSysInfo = "À propos du Système";
 $langCheckDatabase = "Vérifier la base de données principale";
 $langStatOf = "Statistiques de";
 $langSpeeSubscribe = "Inscription en tant qu'Administrateur de Cours";
@@ -5363,6 +5359,7 @@ $langReviewEnd = "End of Review Date";
 $langReviewDateHelpBlock = "Click here for different (future) start of review date";
 $langPeerReviewImpossible = "Number of assignments aren't sufficient for peer reviewing";
 $langPeerReviewGrade = "Review Grade";
+$langTransferGrades = "Transfer grades";
 $langPeerReviewCompletedByStudent = "His reviews have completed";
 $langPeerReviewPendingByStudent = "His reviews haven't completed";
 $langPeerReviewMissingByStudent = "His reviews haven't done";

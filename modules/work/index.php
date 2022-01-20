@@ -4715,7 +4715,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
     $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
 
-    // transfer grades in peer review assingnment
+    // transfer grades in peer review assignment
     $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
            $('a#transfer_grades').click(function(e) {

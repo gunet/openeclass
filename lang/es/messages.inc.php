@@ -5152,6 +5152,7 @@ $langReviewEnd = "End of Review Date";
 $langReviewDateHelpBlock = "Click here for different (future) start of review date";
 $langPeerReviewImpossible = "Number of assignments aren't sufficient for peer reviewing";
 $langPeerReviewGrade = "Review Grade";
+$langTransferGrades = "Transfer grades";
 $langPeerReviewCompletedByStudent = "His reviews have completed";
 $langPeerReviewPendingByStudent = "His reviews haven't completed";
 $langPeerReviewMissingByStudent = "His reviews haven't done";
