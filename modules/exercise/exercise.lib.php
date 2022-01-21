@@ -307,7 +307,7 @@ function display_exercise($exercise_id) {
                 </a>
               </h3>
             </div>
-            <div class='panel-body'>" . $exercise->selectDescription() . "</div>
+            <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>";
 
     $i = 1;
