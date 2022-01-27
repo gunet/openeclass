@@ -354,8 +354,10 @@ function html_charset($filename) {
     $f = fopen($filename, 'r');
     $contents = fread($f, 2048);
     fclose($f);
-    if (preg_match('#text/\w+;\scharset=([^\'"]+)"#i', $contents, $matches)) {
-        $matches[1];
+    if (preg_match('#meta\s+charset=[\'"]?([0-9a-z_-]+)#i', $contents, $matches)) {
+        return $matches[1];
+    } elseif (preg_match('#text/\w+;\scharset=[\'"]?([0-9a-z_-]+)#i', $contents, $matches)) {
+        return $matches[1];
     } else {
         return mb_detect_encoding($contents, 'UTF-8,ISO-8859-7,ISO-8859-1');
     }
