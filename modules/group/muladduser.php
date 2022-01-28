@@ -122,6 +122,7 @@ if (isset($_POST['submit'])) {
             global $group_id;
             return [$group_id, $user];
         }, $found_users);
+        $placeholders = implode(', ', array_fill(0, count($found_users), '(?d, ?d, 0, \'\')'));
         Database::get()->query('INSERT IGNORE INTO group_members
             (group_id, user_id, is_tutor, description) VALUES ' . $placeholders,
             $user_group_data);
