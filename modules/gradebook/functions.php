@@ -1223,18 +1223,6 @@ function display_available_lps($gradebook_id) {
 
 /**
  * @brief display users of gradebook
- * @global type $tool_content
- * @global type $course_id
- * @global type $course_code
- * @global type $langID
- * @global type $langName
- * @global type $langSurname
- * @global type $langAm
- * @global type $langRegistrationDateShort
- * @global type $langGradebookGrade
- * @global type $langGradebookGradeAlert
- * @global type $langGradebookBooking
- * @global type $langGradebookOutRange
  * @param type $gradebook_id
  * @param type $actID
  */
@@ -1253,12 +1241,12 @@ function register_user_grades($gradebook_id, $actID) {
     $tool_content .= "<div class='alert alert-info'>" .(!empty($result->title) ? q($result->title) : $langGradebookNoTitle) . " <br>
                         <small>$langGradebookActivityWeight: $result->weight%</small></div>";
     //display users
-    $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname,
-                                                    user.givenname as name, user.am as am, DATE(course_user.reg_date) AS reg_date
-                                                FROM gradebook_users, user, course_user
-                                                WHERE gradebook_id = ?d AND gradebook_users.uid = user.id
-                                                    AND `user`.id = `course_user`.`user_id`
-                                                    AND `course_user`.`course_id` = ?d ORDER BY surname,name", $gradebook_id, $course_id);
+    $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id AS recID, gradebook_users.uid as userID, user.surname AS surname,
+                                                            user.givenname AS name, user.am AS am, DATE(course_user.reg_date) AS reg_date
+                                                        FROM gradebook_users 
+                                                        JOIN user ON gradebook_users.uid = user.id AND gradebook_id = ?d 
+                                                        LEFT JOIN course_user ON user.id = course_user.user_id AND course_user.course_id = ?d
+                                                            ORDER BY surname,name", $gradebook_id, $course_id);
 
     if ($resultUsers) {
         $tool_content .= "<div class='form-wrapper'>
@@ -1976,7 +1964,7 @@ function userGradebookTotalActivityStats ($activity, $gradebook) {
 
     global $langUsers, $langMeanValue, $langMinValue, $langMaxValue;
 
-    $users = Database::get()->querySingle("SELECT SUM(grade) as count, COUNT(gradebook_users.uid) AS users
+    $users = Database::get()->querySingle("SELECT SUM(grade) as count, COUNT(DISTINCT gradebook_users.uid) AS users
                                         FROM gradebook_book, gradebook_users
                                         WHERE gradebook_users.uid=gradebook_book.uid
                                     AND gradebook_activity_id = ?d
@@ -1985,7 +1973,6 @@ function userGradebookTotalActivityStats ($activity, $gradebook) {
     $sumGrade = $users->count;
     //this is different than global participants number (it is limited to those that have taken degree)
     $participantsNumber = $users->users;
-    //die($users->users.'');
     $q = Database::get()->querySingle("SELECT grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade ASC limit 1 ", $activity->id, $gradebook->id);
     if ($q) {
         $userGradebookTotalActivityMin = $q->grade * $gradebook->range;
