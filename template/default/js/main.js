@@ -399,7 +399,7 @@ $(document).ready(function () {
 
 
     // Actions needed to be done after full DOM elements downloaded
-    $(window).on('load', function () {
+    $(function () {
         var initialHeight;
         var windowHeight = $(window).height();
         var contentHeight = $("#Frame").height();
