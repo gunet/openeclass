@@ -733,9 +733,9 @@ function user_is_registered_to_course($uid, $course_id) {
 function user_exists($login) {
 
     if (get_config('case_insensitive_usernames')) {
-        $qry = "COLLATE utf8_general_ci = ?s";
+        $qry = "COLLATE utf8mb4_general_ci = ?s";
     } else {
-        $qry = "COLLATE utf8_bin = ?s";
+        $qry = "COLLATE utf8mb4_bin = ?s";
     }
     $username_check = Database::get()->querySingle("SELECT id FROM user WHERE username $qry", $login);
     if ($username_check) {
@@ -770,9 +770,9 @@ function is_inactive_user($uid) {
 function user_app_exists($login) {
 
     if (get_config('case_insensitive_usernames')) {
-        $qry = "COLLATE utf8_general_ci = ?s";
+        $qry = "COLLATE utf8mb4_general_ci = ?s";
     } else {
-        $qry = "COLLATE utf8_bin = ?s";
+        $qry = "COLLATE utf8mb4_bin = ?s";
     }
     $username_check = Database::get()->querySingle("SELECT id FROM user_request WHERE state = 1 AND username $qry", $login);
     if ($username_check) {

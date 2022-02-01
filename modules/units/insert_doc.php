@@ -70,7 +70,7 @@ function list_docs() {
                                 WHERE $group_sql AND $visible_sql
                                       path LIKE ?s AND
                                       path NOT LIKE ?s
-                                ORDER BY sort_key COLLATE utf8_unicode_ci",
+                                ORDER BY sort_key COLLATE utf8mb4_unicode_ci",
                                 "$path/%", "$path/%/%");
 
     $fileinfo = array();

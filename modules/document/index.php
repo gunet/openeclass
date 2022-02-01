@@ -1191,7 +1191,7 @@ try {
     not_found($curDirPath);
 }
 
-$order = 'ORDER BY sort_key COLLATE utf8_unicode_ci';
+$order = 'ORDER BY sort_key COLLATE utf8mb4_unicode_ci';
 $sort = 'name';
 $reverse = false;
 if (isset($_GET['sort'])) {
