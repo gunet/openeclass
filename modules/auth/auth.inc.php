@@ -270,7 +270,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
-            $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = " : "COLLATE utf8_bin = ";
+            $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
             $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
             if ($result) {
                 $hasher = new PasswordHash(8, false);
@@ -641,9 +641,9 @@ function process_login() {
             $auth_allow = 8;
         } else {
             if (get_config('case_insensitive_usernames')) {
-                $sqlLogin = "COLLATE utf8_general_ci = ?s";
+                $sqlLogin = "COLLATE utf8mb4_general_ci = ?s";
             } else {
-                $sqlLogin = "COLLATE utf8_bin = ?s";
+                $sqlLogin = "COLLATE utf8mb4_bin = ?s";
             }
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
                                     username, status, email, lang, verified_mail, am
@@ -1323,9 +1323,9 @@ function shib_cas_login($type) {
 
     // user is authenticated, now let's see if he is registered also in db
     if (get_config('case_insensitive_usernames')) {
-        $sqlLogin = "COLLATE utf8_general_ci = ?s";
+        $sqlLogin = "COLLATE utf8mb4_general_ci = ?s";
     } else {
-        $sqlLogin = "COLLATE utf8_bin = ?s";
+        $sqlLogin = "COLLATE utf8mb4_bin = ?s";
     }
     $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
                             status, email, lang, verified_mail, am

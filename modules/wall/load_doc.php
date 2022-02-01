@@ -40,7 +40,7 @@ if (isset($_GET['id'])) {
     if (isset($_GET['post_id'])) {
         $post_id = intval($_GET['post_id']);
     }
-    
+
     if ($_GET['id'] == '#') {
         $path = '';
     } else {
@@ -48,18 +48,18 @@ if (isset($_GET['id'])) {
         $result = Database::get()->querySingle("SELECT path FROM document WHERE $sql AND id = ?d", $id);
         $path = $result->path;
     }
-        
+
     $result = Database::get()->queryArray("SELECT id, path, filename, format, title, visible, IF(title = '', filename, title) AS sort_key FROM document
             WHERE $sql AND
             visible = ?d AND
             path LIKE ?s AND
             path NOT LIKE ?s
-            ORDER BY sort_key COLLATE utf8_unicode_ci",
+            ORDER BY sort_key COLLATE utf8mb4_unicode_ci",
             1, "$path/%", "$path/%/%");
-    
+
     foreach ($result as $row) {
         $text = (empty($row->title))? $row->filename : $row->title;
-        
+
         if ($row->format == '.dir') {
             $data[] = array('id'=> $row->id, 'text' => $text, 'children' => true, 'state' => array('opened' => true), 'type' => 'folder');
         } else {

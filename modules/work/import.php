@@ -36,7 +36,7 @@ if (isset($_FILES['userfile'])) {
         } else {
             $username = $data[0];
         }
-        $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = " : "COLLATE utf8_bin = ";
+        $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
         $user = Database::get()->querySingle("SELECT * FROM user WHERE username $uname_where ?s", $username);
 
         if (!$user) {

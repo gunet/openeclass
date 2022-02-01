@@ -43,11 +43,11 @@ if (isset($_REQUEST['u'])) {
     $info = Database::get()->querySingle("SELECT * FROM user WHERE id = ?s", $u);
     if ($info) {
         $info = (array) $info;
-        if (in_array($info['password'], $auth_ids)) {            
+        if (in_array($info['password'], $auth_ids)) {
             $temp = array_keys($auth_ids, $info['password']);// to avoid strict standards warning
-            $auth_id = array_pop($temp);
+            $data['auth_id'] = array_pop($temp);
         } else {
-            $auth_id = 1; // eclass default method
+            $data['auth_id'] = 1; // eclass default method
         }
 
         $legend = q(sprintf($langUserMergeLegend, $info['username']));
@@ -55,12 +55,12 @@ if (isset($_REQUEST['u'])) {
         $target = false;
 
         $pageName = $legend;
-        $data['action_bar'] = action_bar(array(            
+        $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
                 'url' => "index.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary')));
-        
+
         if (isset($_POST['target'])) {
             $target = Database::get()->querySingle("SELECT * FROM user WHERE username COLLATE utf8_bin = ?s", $_POST['target']);
             if ($target)
@@ -103,7 +103,7 @@ if (isset($_REQUEST['u'])) {
         if (!$target) {
             $data['target_field'] .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
                                               <div class='col-sm-9'><input type='text' name='target' size='50'></div></div>";
-        }                
+        }
     }
     $data['info'] = $info;
 }

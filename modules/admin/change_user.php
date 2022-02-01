@@ -37,9 +37,9 @@ if (isset($_REQUEST['username'])) {
                 WHERE username ";
 
     if (get_config('case_insensitive_usernames')) {
-        $sql .= 'COLLATE utf8_general_ci = ?s';
+        $sql .= 'COLLATE utf8mb4_general_ci = ?s';
     } else {
-        $sql .= 'COLLATE utf8_bin = ?s';
+        $sql .= 'COLLATE utf8mb4_bin = ?s';
     }
     $myrow = Database::get()->querySingle($sql, $_REQUEST['username']);
     if ($myrow) {

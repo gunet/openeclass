@@ -59,7 +59,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // 'LIKE' argument prefix/postfix - default is substring search
     $l1 = $l2 = '%';
-    $cs = 'COLLATE utf8_general_ci';
+    $cs = 'COLLATE utf8mb4_general_ci';
     if (isset($_GET['search_type'])) {
         if ($_GET['search_type'] == 'exact') {
             $l1 = $l2 = $cs = '';
