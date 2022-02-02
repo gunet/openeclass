@@ -161,6 +161,7 @@ if ($is_editor) {
         $v->labels(array(
             'title' => "$langTheField $langTitle",
         ));
+
         if($v->validate()) {
             $table = (isset($_POST['newCertificate'])) ? 'certificate' : 'badge';
             $icon  = $_POST['template'];
@@ -318,17 +319,17 @@ if ($is_editor) {
         $display = FALSE;
     }
 } elseif (isset($_GET['u'])) { // student view
-    $tool_content .= action_bar(array(
-        array('title' => $langPrint,
-              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
-              'icon' => 'fa-print',
-              'level' => 'primary-label',
-              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate"),
-        array('title' => $langBack,
-              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')
-    ));
+        $tool_content .= action_bar(array(
+	        array('title' => $langPrint,
+	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
+	              'icon' => 'fa-print',
+	              'level' => 'primary-label',
+	              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate"),
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')
+                    ));
 }
 
 if (isset($display) and $display == TRUE) {
@@ -338,7 +339,7 @@ if (isset($display) and $display == TRUE) {
             // display certificate settings and resources
             display_activities($element, $element_id);
         } else { // display all certificate
-                display_course_completion();
+            display_course_completion();
 	        display_badges();
 	        display_certificates();
         }

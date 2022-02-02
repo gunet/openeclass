@@ -1403,7 +1403,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `active` tinyint(1) not null default 1,
             `created` datetime,
             `expires` datetime,
-            `bundle` int(11) not null default 0,
+            `bundle` int(11) not null default 0,            
             index `certificate_course` (`course_id`),
             foreign key (`course_id`) references `course` (`id`),
             foreign key (`template`) references `certificate_template`(`id`)
@@ -1411,7 +1411,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `badge` (
             `id` int(11) not null auto_increment primary key,
-            `course_id` int(11) not null,
+            `course_id` int(11) not null,            
             `issuer` varchar(255) not null default '',
             `icon` mediumint(8),
             `title` varchar(255) not null,
@@ -2124,7 +2124,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('h5p_content', 'title')) {
             Database::get()->query("ALTER TABLE h5p_content ADD title VARCHAR(255) AFTER id");
         }
+        // course units prerequisites
+        if (!DBHelper::fieldExists('certificate', 'unit_id')) {
+            Database::get()->query("ALTER TABLE certificate ADD unit_id INT(11) NOT NULL DEFAULT 0");
+        }
+        if (!DBHelper::fieldExists('badge', 'unit_id')) {
+            Database::get()->query("ALTER TABLE badge ADD unit_id INT(11) NOT NULL DEFAULT 0");
+        }
 
+        // change database_encoding to utf8 mb4
         updateInfo(1, $langChangeDBEncoding);
         convert_db_encoding_to_utf8mb4();
     }
@@ -2138,7 +2146,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // Import new themes
     importThemes();
     if (!get_config('theme_options_id')) {
-        set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
+        set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2022 - Default')->id);
     }
 
     // add new modules to courses by reinserting all modules
@@ -2163,7 +2171,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     set_config('upgrade_begin', '');
 
     // create directory indexes to hinder directory traversal in misconfigured servers
-    updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.12'));
+    updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.13'));
     addDirectoryIndexFiles();
 
     updateInfo(1, $langUpgradeSuccess);

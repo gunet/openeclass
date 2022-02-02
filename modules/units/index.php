@@ -84,6 +84,9 @@ if ($access) {
 
 if ($is_editor) {
     $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
+    $courseUrl = $urlAppend . "courses/$course_code/";
+    $manageUrl = "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$id";
+
     $tool_content .= "
     <div class='row'>
         <div class='col-md-12'>" .
@@ -93,6 +96,15 @@ if ($is_editor) {
                   'icon' => 'fa fa-edit',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success'),
+            array('title' => $langUnitManage,
+                'url' => "$manageUrl",
+                'icon' => 'fa fa-edit',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
+            array('title' => $langBack,
+                'url' => $courseUrl,
+                'icon' => 'fa fa-reply ',
+                'level' => 'primary-label'),
             array('title' => $langAdd.' '.$langInsertDoc,
                   'url' => $base_url . 'doc',
                   'icon' => 'fa fa-folder-open-o',
@@ -108,25 +120,25 @@ if ($is_editor) {
                   'level' => 'secondary',
                   'show' => !is_module_disable(MODULE_ID_LINKS)),
             array('title' => $langAdd.' '.$langInsertVideo,
-                'url' => $base_url . 'video',
-                'icon' => 'fa fa-film',
-                'level' => 'secondary',
-                'show' => !is_module_disable(MODULE_ID_VIDEO)),
+                  'url' => $base_url . 'video',
+                  'icon' => 'fa fa-film',
+                  'level' => 'secondary',
+                  'show' => !is_module_disable(MODULE_ID_VIDEO)),
             array('title' => $langAdd.' '.$langInsertWork,
-                'url' => $base_url . 'work',
-                'icon' => 'fa fa-flask',
-                'level' => 'secondary',
-                'show' => !is_module_disable(MODULE_ID_ASSIGN)),
+                  'url' => $base_url . 'work',
+                  'icon' => 'fa fa-flask',
+                  'level' => 'secondary',
+                  'show' => !is_module_disable(MODULE_ID_ASSIGN)),
             array('title' => $langAdd.' '.$langInsertExercise,
-                'url' => $base_url . 'exercise',
-                'icon' => 'fa fa-pencil-square-o',
-                'level' => 'secondary',
-                'show' => !is_module_disable(MODULE_ID_EXERCISE)),
+                  'url' => $base_url . 'exercise',
+                  'icon' => 'fa fa-pencil-square-o',
+                  'level' => 'secondary',
+                  'show' => !is_module_disable(MODULE_ID_EXERCISE)),
             array('title' => $langAdd.' '.$langOfH5p,
-                'url' => $base_url . 'h5p',
-                'icon' => 'fa fa-tablet',
-                'level' => 'secondary',
-                'show' => !is_module_disable(MODULE_ID_H5P)),
+                  'url' => $base_url . 'h5p',
+                  'icon' => 'fa fa-tablet',
+                  'level' => 'secondary',
+                  'show' => !is_module_disable(MODULE_ID_H5P)),
             array('title' => $langAdd.' '.$langLearningPath1,
                   'url' => $base_url . 'lp',
                   'icon' => 'fa fa-ellipsis-h',
@@ -174,9 +186,14 @@ if ($is_editor) {
 
 if ($is_editor) {
     $visibility_check = $check_start_week = '';
+    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
+        . "WHERE course_id = ?d ";
 } else {
     $visibility_check = "AND visible=1";
     $check_start_week = " AND (start_week <= CURRENT_DATE() OR start_week IS NULL)";
+    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
+        . "WHERE course_id = ?d "
+        . "AND visible = 1 ";
 }
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
@@ -196,6 +213,18 @@ if (isset($id) and $id !== false) {
 if (!isset($info) or !$info) {
     Session::Messages($langUnknownResType);
     redirect_to_home_page("courses/$course_code/");
+}
+
+$all_units = Database::get()->queryArray($query, $course_id);
+
+if (!$is_editor) {
+    $user_units = findUserVisibleUnits($uid, $all_units);
+} else {
+    $user_units = $all_units;
+}
+
+foreach ($user_units as $user_unit) {
+    $userUnitsIds[] = $user_unit->id;
 }
 
 // Links for next/previous unit
@@ -229,7 +258,8 @@ foreach (array('previous', 'next') as $i) {
                              $check_start_week
                        ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
-    if ($q) {
+
+    if ($q and in_array($q->id, $userUnitsIds)) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);
         $link[$i] = "<a class='$page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
