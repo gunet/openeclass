@@ -1891,6 +1891,7 @@ $db->query("CREATE TABLE `certificate` (
   `created` datetime,
   `expires` datetime,
   `bundle` int(11) not null default 0,
+  `unit_id` INT(11) NOT NULL DEFAULT 0,  
   index `certificate_course` (`course_id`),
   foreign key (`course_id`) references `course` (`id`),
   foreign key (`template`) references `certificate_template`(`id`)
