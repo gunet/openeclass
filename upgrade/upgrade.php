@@ -2117,6 +2117,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         $hubUpdater = new H5PHubUpdater();
         $hubUpdater->fetchLatestContentTypes();
         set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
+
+        // create directory indexes to hinder directory traversal in misconfigured servers
+        updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.12'));
+        addDirectoryIndexFiles();
     }
 
     if (version_compare($oldversion, '3.13', '<')) {
@@ -2169,10 +2173,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // update eclass version and unlock upgrade
     set_config('version', ECLASS_VERSION);
     set_config('upgrade_begin', '');
-
-    // create directory indexes to hinder directory traversal in misconfigured servers
-    updateInfo(-1, sprintf($langAddingDirectoryIndex, '3.13'));
-    addDirectoryIndexFiles();
 
     updateInfo(1, $langUpgradeSuccess);
 
