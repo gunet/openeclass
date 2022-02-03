@@ -954,7 +954,6 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `assignment` CHANGE title title varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `assignment` CHANGE description description text  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `assignment` CHANGE comments comments text  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE active active char(1)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `assignment` CHANGE secret_directory secret_directory varchar(30)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `assignment` CHANGE group_submissions group_submissions char(1)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `assignment` CHANGE assign_to_specific assign_to_specific char(1)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
@@ -1157,9 +1156,6 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `log_archive` CHANGE details details text  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `log_archive` CHANGE ip ip varchar(45)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `login_failure` CHANGE ip ip varchar(45)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `loginout` CHANGE ip ip char(45)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `loginout` CHANGE action action enum('LOGIN','LOGOUT')  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `logins` CHANGE ip ip char(45)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_asset` CHANGE path path varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_asset` CHANGE comment comment varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_learnPath` CHANGE name name varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
