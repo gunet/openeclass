@@ -145,6 +145,11 @@ foreach (array('previous', 'next') as $i) {
                        ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
 
+    // security check
+    if (!in_array($id, $userUnitsIds)) {
+        redirect_to_home_page("courses/$course_code/");
+    }
+
     if ($q and in_array($q->id, $userUnitsIds)) {
         $data[$i . 'Title'] = $q->title;
         $data[$i . 'Link'] = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&id=" . $q->id;
