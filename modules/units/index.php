@@ -259,6 +259,11 @@ foreach (array('previous', 'next') as $i) {
                        ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
 
+    // security check
+    if (!in_array($id, $userUnitsIds)) {
+        redirect_to_home_page("courses/$course_code/");
+    }
+
     if ($q and in_array($q->id, $userUnitsIds)) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);

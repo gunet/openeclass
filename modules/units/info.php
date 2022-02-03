@@ -50,10 +50,6 @@ $head_content .= "
 
 $start_week = $finish_week = '';
 if (isset($_GET['edit'])) { // display form for editing course unit
-    if ($is_cce_course and !$is_admin) {
-        Session::Messages($langForbidden);
-        redirect_to_home_page("courses/$course_code/");
-    }
     $id = $_GET['edit'];
     $cu = Database::get()->querySingle("SELECT id, title, comments, start_week, finish_week FROM course_units WHERE id = ?d AND course_id = ?d",$id, $course_id);
     if (!$cu) {
