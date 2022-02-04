@@ -298,7 +298,7 @@ function importThemes($themes = null) {
     global $webDir;
 
     $themesDir = "$webDir/template/$_SESSION[theme]/themes";
-    if(!is_dir("$webDir/courses/theme_data")) make_dir("$webDir/courses/theme_data");
+    if (!is_dir("$webDir/courses/theme_data")) make_dir("$webDir/courses/theme_data");
     if (is_dir($themesDir) && $handle = opendir($themesDir)) {
         while (false !== ($file_name = readdir($handle))) {
             if ($file_name != '.' && $file_name != '..') {
@@ -320,17 +320,18 @@ function installTheme($themesDir, $file_name) {
     $tempdir = "$webDir/courses/theme_data/temp";
     $archive = new ZipArchive;
     if (!$archive->open("$themesDir/$file_name") or !$archive->extractTo($tempdir)) {
-        die('Error: ' . $archive->getStatusString());
-    }
-    $base64_str = file_get_contents("$tempdir/theme_options.txt");
-    unlink("$tempdir/theme_options.txt");
-    $theme_options = unserialize(base64_decode($base64_str));
-    $exists = Database::get()->querySingle('SELECT id FROM theme_options
-        WHERE name = ?s', $theme_options->name);
-    if (!$exists) {
-        $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)",
-            $theme_options->name, $theme_options->styles)->lastInsertID;
-        rename($tempdir . '/' . $theme_options->id, "$webDir/courses/theme_data/$new_theme_id");
+        Debug::message("Error extracting theme $file_name: " . $archive->getStatusString(), Debug::CRITICAL);
+    } else {
+        $base64_str = file_get_contents("$tempdir/theme_options.txt");
+        unlink("$tempdir/theme_options.txt");
+        $theme_options = unserialize(base64_decode($base64_str));
+        $exists = Database::get()->querySingle('SELECT id FROM theme_options
+            WHERE name = ?s', $theme_options->name);
+        if (!$exists) {
+            $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)",
+                $theme_options->name, $theme_options->styles)->lastInsertID;
+            rename($tempdir . '/' . $theme_options->id, "$webDir/courses/theme_data/$new_theme_id");
+        }
     }
     removeDir($tempdir);
 }

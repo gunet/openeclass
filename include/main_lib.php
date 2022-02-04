@@ -1503,8 +1503,8 @@ function findUserVisibleUnits($uid, $all_units) {
     global $course_id;
 
     $user_units = [];
-    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, ub.completed 
-                                                          FROM course_units cu 
+    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, ub.completed
+                                                          FROM course_units cu
                                                           INNER JOIN badge b ON (b.unit_id = cu.id)
                                                           INNER JOIN user_badge ub ON (b.id = ub.badge)
                                                           WHERE ub.user = ?d
@@ -1520,7 +1520,7 @@ function findUserVisibleUnits($uid, $all_units) {
         }
     }
     foreach ($all_units as $unit) {
-        $unitPrereq = Database::get()->querySingle("SELECT prerequisite_unit FROM unit_prerequisite 
+        $unitPrereq = Database::get()->querySingle("SELECT prerequisite_unit FROM unit_prerequisite
                                                                 WHERE unit_id = ?d", $unit->id);
 
         if ( $unitPrereq and isset($userIncompleteUnits) and in_array($unitPrereq->prerequisite_unit, $userIncompleteUnits) ) {
@@ -2855,28 +2855,28 @@ function removeDir($dirPath) {
     } else { // if directory couldn't be removed...
         $ok = true;
         $cwd = getcwd();
-        chdir($dirPath);
-        $handle = opendir($dirPath);
+        if (@chdir($dirPath)) {
+            $handle = opendir($dirPath);
 
-        while ($element = readdir($handle)) {
-            if ($element == '.' or $element == '..') {
-                continue; // skip current and parent directories
-            } elseif (is_file($element)) {
-                $ok = @unlink($element) && $ok;
-            } elseif (is_dir($element)) {
-                $dirToRemove[] = $dirPath . '/' . $element;
+            while ($element = readdir($handle)) {
+                if ($element == '.' or $element == '..') {
+                    continue; // skip current and parent directories
+                } elseif (is_file($element)) {
+                    $ok = @unlink($element) && $ok;
+                } elseif (is_dir($element)) {
+                    $dirToRemove[] = $dirPath . '/' . $element;
+                }
+            }
+
+            closedir($handle);
+            chdir($cwd);
+
+            if (isset($dirToRemove) and count($dirToRemove)) {
+                foreach ($dirToRemove as $j) {
+                    $ok = removeDir($j) && $ok;
+                }
             }
         }
-
-        closedir($handle);
-        chdir($cwd);
-
-        if (isset($dirToRemove) and count($dirToRemove)) {
-            foreach ($dirToRemove as $j) {
-                $ok = removeDir($j) && $ok;
-            }
-        }
-
         return @rmdir($dirPath) && $ok;
     }
 }
