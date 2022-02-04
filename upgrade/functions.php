@@ -1213,7 +1213,7 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `tc_log` CHANGE fullName fullName varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_log` CHANGE type type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_servers` CHANGE webapp webapp varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `tc_servers` CHANGE `emabled` `enabled` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL");
+    Database::get()->query("ALTER TABLE `tc_servers` CHANGE `enabled` `enabled` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL");
     Database::get()->query("ALTER TABLE `tc_servers` CHANGE `enable_recordings` `enable_recordings` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
