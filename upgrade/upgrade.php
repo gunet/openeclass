@@ -2136,6 +2136,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE badge ADD unit_id INT(11) NOT NULL DEFAULT 0");
         }
 
+        if (!DBHelper::tableExists('unit_prerequisite')) {
+            Database::get()->query("CREATE TABLE `unit_prerequisite` (
+              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `course_id` int(11) not null,
+              `unit_id` int(11) not null,
+              `prerequisite_unit` int(11) not null,
+              PRIMARY KEY (`id`)) $tbl_options");
+        }
+
         // change database_encoding to utf8 mb4
         updateInfo(1, $langChangeDBEncoding);
         convert_db_encoding_to_utf8mb4();

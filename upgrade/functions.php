@@ -1019,6 +1019,7 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `conference` CHANGE conf_description conf_description text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `conference` CHANGE user_id user_id varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `conference` CHANGE group_id group_id varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `conference` CHANGE `status` `status` enum('active','inactive') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT 'active'");
     Database::get()->query("ALTER TABLE `config` CHANGE `key` `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `config` CHANGE `value` `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `course` CHANGE code code varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
@@ -1140,32 +1141,52 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `link_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `log` CHANGE details details text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `log_archive` CHANGE details details text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `loginout` CHANGE action action enum('LOGIN','LOGOUT') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL default 'LOGIN'");
     Database::get()->query("ALTER TABLE `lp_asset` CHANGE path path varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_asset` CHANGE comment comment varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_learnPath` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_learnPath` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `lp_learnPath` CHANGE `lock` `lock` enum('OPEN','CLOSE') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'OPEN'");
     Database::get()->query("ALTER TABLE `lp_module` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_module` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_module` CHANGE launch_data launch_data text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `lp_module` CHANGE `accessibility` `accessibility` enum('PRIVATE','PUBLIC') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'PRIVATE'");
+    Database::get()->query("ALTER TABLE `lp_module` CHANGE `contentType` `contentType` enum('CLARODOC', 'DOCUMENT', 'EXERCISE', 'HANDMADE',
+                                                                                                    'SCORM', 'SCORM_ASSET', 'LABEL', 'COURSE_DESCRIPTION', 'LINK',
+                                                                                                    'MEDIA','MEDIALINK') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL");
     Database::get()->query("ALTER TABLE `lp_rel_learnPath_module` CHANGE specificComment specificComment text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `lp_rel_learnPath_module` CHANGE `lock` `lock` enum('OPEN','CLOSE') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'OPEN'");
     Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE lesson_location lesson_location varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE total_time total_time varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE session_time session_time varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE suspend_data suspend_data text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE `lesson_status` `lesson_status` enum('NOT ATTEMPTED', 'PASSED', 'FAILED', 'COMPLETED',
+                                                                                                                    'BROWSED', 'INCOMPLETE', 'UNKNOWN') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'NOT ATTEMPTED'");
+    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE `entry` `entry` enum('AB-INITIO', 'RESUME', '') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'AB-INITIO'");
+    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE `credit` `credit` enum('CREDIT','NO-CREDIT') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'NO-CREDIT'");
     Database::get()->query("ALTER TABLE `lti_apps` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `lti_apps` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `monthly_summary` CHANGE month month varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `monthly_summary` CHANGE details details mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `note` CHANGE title title varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `note` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `note` CHANGE `reference_obj_type` `reference_obj_type` enum('course','personalevent','user',
+                                                                'course_ebook','course_event','course_assignment',
+                                                                'course_document','course_link','course_exercise',
+                                                                'course_learningpath','course_video','course_videolink') CHARACTER SET ascii COLLATE ascii_general_ci default NULL");
     Database::get()->query("ALTER TABLE `oai_metadata` CHANGE value value text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `personal_calendar` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `personal_calendar` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `personal_calendar` CHANGE recursion_period recursion_period varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `personal_calendar` CHANGE reference_obj_type reference_obj_type ENUM('course', 'personalevent', 'user',
+                                                            'course_ebook', 'course_event', 'course_assignment', 'course_document',
+                                                            'course_link', 'course_exercise', 'course_learningpath', 'course_video',
+                                                            'course_videolink') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL");
     Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE personal_color personal_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE course_color course_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE deadline_color deadline_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE admin_color admin_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE `view_type` `view_type` enum('day','month','week') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT 'month'");
     Database::get()->query("ALTER TABLE `poll` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `poll` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `poll` CHANGE end_message end_message mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
@@ -1192,11 +1213,14 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `tc_log` CHANGE fullName fullName varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_log` CHANGE type type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_servers` CHANGE webapp webapp varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `tc_servers` CHANGE `emabled` `enabled` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL");
+    Database::get()->query("ALTER TABLE `tc_servers` CHANGE `enable_recordings` `enable_recordings` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE external_users external_users text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE participants participants varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE options options text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `tc_session` CHANGE `record` `record` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT 'false'");
     Database::get()->query("ALTER TABLE `theme_options` CHANGE name name varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `theme_options` CHANGE styles styles longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `unit_resources` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
@@ -1233,6 +1257,7 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `videolink` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `videolink` CHANGE creator creator varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `videolink` CHANGE publisher publisher varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `wiki_acls` CHANGE `value` `value` ENUM('false','true') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'false'");
     Database::get()->query("ALTER TABLE `wall_post` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `wall_post` CHANGE extvideo extvideo varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `wall_post_resources` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
