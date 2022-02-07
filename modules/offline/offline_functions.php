@@ -87,7 +87,7 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
                                 WHERE
                                       course_id = ?d AND
                                       path LIKE ?s AND
-                                      path NOT LIKE ?s ORDER BY sort_key COLLATE utf8_unicode_ci", $course_id, $curDirPath . "/%", $curDirPath . "/%/%");
+                                      path NOT LIKE ?s ORDER BY sort_key COLLATE utf8mb4_general_ci", $course_id, $curDirPath . "/%", $curDirPath . "/%/%");
     foreach ($result as $row) {
         $is_dir = $row->format == '.dir';
         if ($real_path = common_doc_path($row->extra_path, true)) {

@@ -1018,7 +1018,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
                                           path NOT LIKE ?s AND id NOT IN
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d
                                             AND resource!='' AND activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "' AND module = " . MODULE_ID_DOCS . ")
-                                ORDER BY sort_key COLLATE utf8_unicode_ci",
+                                ORDER BY sort_key COLLATE utf8mb4_general_ci",
         "$path/%", "$path/%/%", $element_id);
 
     $fileinfo = array();

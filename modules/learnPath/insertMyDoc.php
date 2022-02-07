@@ -56,7 +56,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langL
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
 $toolName = $langInsertMyDocToolName;
 
-$tool_content .= 
+$tool_content .=
          action_bar(array(
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
@@ -74,7 +74,7 @@ function buildRequestModules() {
               WHERE LPM.`learnPath_id` = ?d";
 
     $firstResult = Database::get()->queryArray($firstSql, $_SESSION['path_id']);
-    
+
     // 2) We build the request to get the modules we need
     $sql = "SELECT M.*
          FROM `lp_module` AS M
@@ -99,8 +99,8 @@ if (isset($_POST['submitInsertedDocument'])) {
     foreach ($_POST['document'] as $file_id) {
         $sql_doc = Database::get()->querySingle("SELECT filename, path FROM document WHERE id = ?d", $file_id);
         $filenameDocument = $sql_doc->filename;
-        $sourceDoc = $sql_doc->path;        
-        $basename = $webDir . '/courses/' . $course_code . '/document' . $sourceDoc;        
+        $sourceDoc = $sql_doc->path;
+        $basename = $webDir . '/courses/' . $course_code . '/document' . $sourceDoc;
         if (file_exists($basename)) { // source file exists ?
             // check if a module of this course already used the same document
             $sql = "SELECT *
@@ -111,7 +111,7 @@ if (isset($_POST['submitInsertedDocument'])) {
                       AND M.`course_id` = ?d";
             $thisDocumentModule = Database::get()->querySingle($sql, $sourceDoc, CTDOCUMENT_, $course_id);
             if (!$thisDocumentModule) {
-                
+
                 // create new module
                 $insertedModule_id = Database::get()->query("INSERT INTO `lp_module`
                         (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
@@ -135,9 +135,9 @@ if (isset($_POST['submitInsertedDocument'])) {
                 // finally : insert in learning path
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
-                        VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);               
+                        VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);
                 Session::Messages($langInsertedAsModule, 'alert-info');
-            } else {                
+            } else {
                 // check if this is this LP that used this document as a module
                 $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
                              `lp_module` AS M,
@@ -184,7 +184,7 @@ $result = Database::get()->queryArray("SELECT id, course_id, path, filename, for
                                       visible = 1 AND
                                       path LIKE ?s AND
                                       path NOT LIKE ?s
-                                ORDER BY sort_key COLLATE utf8_unicode_ci",
+                                ORDER BY sort_key COLLATE utf8mb4_general_ci",
     "$path/%", "$path/%/%");
 
 $fileinfo = array();
