@@ -922,10 +922,10 @@ function convert_db_encoding_to_utf8mb4() {
 
     global $mysqlMainDb;
     // convert database
-    Database::core()->query("ALTER DATABASE $mysqlMainDb CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin;");
+    Database::core()->query("ALTER DATABASE `$mysqlMainDb` CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin;");
 
     // convert tables
-    $r = Database::core()->queryArray("SHOW TABLES FROM $mysqlMainDb");
+    $r = Database::core()->queryArray("SHOW TABLES FROM `$mysqlMainDb`");
     foreach ($r as $tables) {
         foreach ($tables as $table_name) {
             Database::get()->query("ALTER TABLE `$table_name` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
