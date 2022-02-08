@@ -101,7 +101,7 @@
         </thead>
         <tbody>
             @foreach ($content as $item)
-                <tr>
+                <tr{!! $item->enabled ? '' : " class='not_visible'" !!}>
                     <td>
                         <a href='view.php?course={{ $course_code }}&amp;id={{ $item->id }}'>{{ $item->title }}</a>
                     </td>
@@ -111,6 +111,10 @@
                                 [ 'icon' => 'fa-edit',
                                   'title' => trans('langEditChange'),
                                   'url' => "create.php?course=$course_code&amp;id=$item->id"
+                                ],
+                                [ 'icon' => $item->enabled ? 'fa-eye': 'fa-eye-slash',
+                                  'title' => $item->enabled ? trans('langDeactivate') : trans('langActivate'),
+                                  'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_" . ($item->enabled ? 'disable' : 'enable')
                                 ],
                                 [ 'icon' => 'fa-times',
                                   'title' => trans('langDelete'),
