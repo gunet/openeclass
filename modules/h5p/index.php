@@ -29,7 +29,8 @@ require_once 'classes/H5PFactory.php';
 
 $toolName = $langH5p;
 
-$content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d ORDER BY id ASC", $course_id);
+$onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
+$content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d $onlyEnabledWhere ORDER BY id ASC", $course_id);
 
 if ($is_editor) {
     $factory = new H5PFactory();
@@ -84,6 +85,22 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
+
+    // Control Flags
+    if (isset($_GET['choice'])) {
+        switch($_GET['choice']) {
+            case 'do_disable':
+                Database::get()->querySingle("UPDATE h5p_content set enabled = 0 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
+                Session::Messages($langH5pSaveSuccess, 'alert-success');
+                redirect_to_home_page("modules/h5p/index.php?course=$course_code");
+                break;
+            case 'do_enable':
+                Database::get()->querySingle("UPDATE h5p_content set enabled = 1 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
+                Session::Messages($langH5pSaveSuccess, 'alert-success');
+                redirect_to_home_page("modules/h5p/index.php?course=$course_code");
+                break;
+        }
+    }
 }
 
 if ($content) {
@@ -113,7 +130,7 @@ if ($content) {
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
             : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
 
-        $tool_content .= "<tr>
+        $tool_content .= "<tr" . ($item ->enabled ? '' : " class='not_visible'") . ">
                     <td class='col-sm-8'>
                         <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>
                     </td>
@@ -126,6 +143,10 @@ if ($content) {
                 'icon' => 'fa-edit',
                 'title' => $langEditChange,
                 'url' => "create.php?course=$course_code&amp;id=$item->id"
+            ], [
+                'icon' => $item->enabled? 'fa-eye': 'fa-eye-slash',
+                'title' => $item->enabled? $langDeactivate : $langActivate,
+                'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_" . ($item->enabled ? 'disable' : 'enable')
             ], [
                 'icon' => 'fa-times',
                 'title' => $langDelete,

@@ -26,7 +26,14 @@ require_once '../../include/baseTheme.php';
 $unit = isset($_GET['unit'])? intval($_GET['unit']): null;
 $res_type = isset($_GET['res_type']);
 
-$content_id = $_GET['id'];
+// validate
+$content_id = intval($_GET['id']);
+$onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
+$content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d $onlyEnabledWhere", $content_id, $course_id);
+if (!$content) {
+    redirect_to_home_page("modules/h5p/index.php?course=$course_code");
+}
+
 if (!$res_type) {
     $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 } else {
