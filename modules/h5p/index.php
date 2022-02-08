@@ -87,7 +87,7 @@ if ($is_editor) {
         </div>";
 
     // Control Flags
-    if (isset($_GET['choice'])) {
+    if (isset($_GET['choice']) && isset($_GET['id'])) {
         switch($_GET['choice']) {
             case 'do_disable':
                 Database::get()->querySingle("UPDATE h5p_content set enabled = 0 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
@@ -130,7 +130,7 @@ if ($content) {
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
             : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
 
-        $tool_content .= "<tr" . ($item ->enabled ? '' : " class='not_visible'") . ">
+        $tool_content .= "<tr" . ($item->enabled ? '' : " class='not_visible'") . ">
                     <td class='col-sm-8'>
                         <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>
                     </td>
@@ -144,8 +144,8 @@ if ($content) {
                 'title' => $langEditChange,
                 'url' => "create.php?course=$course_code&amp;id=$item->id"
             ], [
-                'icon' => $item->enabled? 'fa-eye': 'fa-eye-slash',
-                'title' => $item->enabled? $langDeactivate : $langActivate,
+                'icon' => $item->enabled ? 'fa-eye': 'fa-eye-slash',
+                'title' => $item->enabled ? $langDeactivate : $langActivate,
                 'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_" . ($item->enabled ? 'disable' : 'enable')
             ], [
                 'icon' => 'fa-times',
