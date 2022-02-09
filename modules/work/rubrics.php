@@ -94,7 +94,7 @@ if (isset($_GET['rubric_id'])) {
 		var trc=-1;
                 var ins_scale = function (par){
                 if(trc==-1) {
-                   trc=$(\"a[id^='remScale']\").size();
+                   trc=$(\"a[id^='remScale']\").length;
                 } else {
                    trc++;
                 }                
@@ -115,7 +115,7 @@ if (isset($_GET['rubric_id'])) {
                 $('#remScale'+ trc +'').bind('click', function(){del_scale($(this));});
         };
 					
-            $('a[id^=\'addScale\']').on('click', function(){ins_scale($(this));});           
+            $('a[id^=\'addScale\']').on('click', function(){ins_scale($(this));});
                 var del_scale  =  function (par){	
                     par.closest('tr').remove();
                 }
@@ -129,7 +129,7 @@ if (isset($_GET['rubric_id'])) {
 
             $('#addCriteria').on('click', function() {
                 if(j==-1) {
-                   j=$(\"div[id^='critDiv']\").size();
+                   j=$(\"div[id^='critDiv']\").length;
                 } else {
                    j++;
                 }
