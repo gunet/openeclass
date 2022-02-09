@@ -687,6 +687,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('HTML_FOOTER', $html_footer);
     }
 
+    if (get_config('ext_userway_enabled') and $html_footer = get_config('ext_userway_code')) {
+        $t->set_var('HTML_FOOTER', $html_footer);
+    }
+
     if (file_exists('node_modules/mathjax/es5/tex-chtml.js')) {
         $t->set_var('HTML_FOOTER', '<script type="text/javascript" id="MathJax-script" async src="'.
             $urlAppend . 'node_modules/mathjax/es5/tex-chtml.js"></script>', true);

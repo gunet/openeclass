@@ -714,6 +714,7 @@ $langAnswerType = "Answer type";
 $langUniqueSelect = "Multiple Choice (Single Answer)";
 $langMultipleSelect = "Multiple Choice (Multiple Answers)";
 $langFillBlanks = "Fill in the Blanks";
+$langFillFromSelectedWords = "From selected words";
 $langMatching = "Matching";
 $langAddPicture = "Add Picture";
 $langReplacePicture = "Replace Picture";

@@ -1934,6 +1934,7 @@ $langFillBlanksStrict = "Αυστηρή Ταυτοποίηση";
 $langFillBlanksTolerant = "Χαλαρή Ταυτοποίηση";
 $langFillBlanksStrictExample = "(Αθήνα ≠ αθηνα ≠ ΑΘΗΝΑ)";
 $langFillBlanksTolerantExample = "(Αθήνα = αθηνα = ΑΘΗΝΑ)";
+$langFillFromSelectedWords = "Από προκαθορισμένες λέξεις";
 $langMatching = "Αντιστοίχιση";
 $langTrueFalse = "Σωστό / Λάθος";
 $langFreeText = "Ελεύθερου Κειμένου";
@@ -1958,10 +1959,13 @@ $langCheckAccess = "Έλεγχος πρόσβασης";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
+$langWeightingForEachBlankandChoose = "Δώστε ένα βάρος σε κάθε κενό και διαλέξτε την σωστή απάντηση";
 $langUseTagForBlank = "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά και τον χαρακτήρα | αν θέλετε να ορίσετε περισσότερες από μία σωστές απαντήσεις για το ίδιο κενό (π.χ. [Ιωάννινα|Γιάννενα])";
+$langUseTagForSelectedWords = "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά και τον χαρακτήρα | για να ορίσετε τις πιθανές απαντήσεις";
 $langQuestionWeighting = "Βάρος";
 $langTypeTextBelow = "Πληκτρολογήστε το κείμενό σας παρακάτω";
 $langDefaultTextInBlanks = "Πρωτεύουσα της Ελλάδας είναι η [Αθήνα].";
+$langDefaultMissingWords = "Πρωτεύουσα της Ελλάδας είναι η [Πάτρα|ΑΘήνα|Θεσσαλονίκη].";
 $langDefaultMatchingOpt1 = "Αθήνα";
 $langDefaultMatchingOpt2 = "Λονδίνο";
 $langDefaultMakeCorrespond1 = "Πρωτεύουσα της Ελλάδας είναι η";
@@ -5674,6 +5678,8 @@ $langAnalyticsDescription = '<p>Μπορείτε να συνδέσετε την 
     εξωτερική υπηρεσία ανάλυσης επισκέψεων (Web Analytics, π.χ. Google
     Analytics, Piwik) προκειμένου να διατηρούνται αναλυτικά στατιστικά
     για τους επισκέπτες.</p>';
+$langUserWayShortDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
+$langUserWayLongDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
 $langBBBDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
