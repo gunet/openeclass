@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 /**
@@ -35,14 +35,13 @@ class GenericParam extends ExtParam {
     }
 
     protected function retrieveValue() {
-        $result = Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = ?s", $this->persist_key());
-        return $result ? $result->value : "";
+        $result = get_config($this->persist_key());
+        return $result ? $result : '';
     }
 
     public function persistValue() {
         $key = $this->persist_key();
-        Database::get()->query("DELETE FROM `config` WHERE `key` = ?s", $key);
-        Database::get()->querySingle("INSERT INTO `config` (`key`, `value`) VALUES (?s, ?s)", $key, $this->value());
+        set_config($key, $this->value());
     }
 
     private function persist_key() {
