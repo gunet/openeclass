@@ -5130,7 +5130,7 @@ $langInsertChat = 'chat';
 $langEBooks = 'E-Books';
 $langBBBExternalUsers = "External Users";
 $langBBBAnnDisplay = "to be displayed in announcements";
-$langColmoocDescription = "ColMOOC Description";
+$langColmoocDescription = 'Interface with the Conversational Agent and Learning Analytics modules of the <a href="https://colmooc.eu/">colMOOC</a> project.';
 $langColmoocCreateAgentFailed = "Agent Create Error Detected. Please retry.";
 $langColmoocCreateAgentSuccess = "Agent created successfully. Please instruct your students to enroll the chat.";
 $langColmoocRegisterStudentFailed = "Student Chat Loading Error Detected. Please retry.";

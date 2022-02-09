@@ -5712,7 +5712,7 @@ $langLimesurveyShortDescription = "Σύνδεση με υπηρεσία στατ
 Η υπηρεσία στατιστικής έρευνας είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία LimeSurvey GmbH.
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://www.limesurvey.org\">https://www.limesurvey.org</a>";
 $langLimesurveyLongDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας.";
-$langColmoocDescription = "Περιγραφή του ColMOOC";
+$langColmoocDescription = 'Διασύνδεση με τα υποσυστήματα Conversational Agent και Learning Analytics του έργου <a href="https://colmooc.eu/">colMOOC</a>.';
 $langH5PShortDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
 $langH5PLongDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
 
