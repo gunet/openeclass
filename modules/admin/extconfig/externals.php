@@ -31,7 +31,7 @@ class ExtAppManager {
         'UnPlagApp', 'OpenDelosApp', 'GoogleDriveApp', 'OneDriveApp',
         'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp', 'OpenMeetings',
         'WebConfApp', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
-        'AnalyticsApp', 'LimesurveyApp', 'ColmoocApp'];
+        'AnalyticsApp', 'UserWayApp', 'LimesurveyApp', 'ColmoocApp'];
     private static $APPS = null;
 
     /**
