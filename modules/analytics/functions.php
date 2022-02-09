@@ -429,6 +429,10 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             $userid = $data->userid;
             $values = compute_general_analytics_foruser($userid, $analytics_id, $startdate, $enddate);
             $percentage = $values['percentage'];
+            $userdata['surname'] = uid_to_name($userid, 'surname');
+            $userdata['givenname'] = uid_to_name($userid, 'givenname');
+            $userdata['percentage'] = $percentage;
+            $userdata['values'] = $values;
 
             $results .="<div class='row res-table-row'>
             <div class='col-sm-4'>
@@ -460,8 +464,11 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                 )
             ) . "</div>
             </div>";
+            $peruserarray[] = $userdata;
         }
+
     }
+
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
 
     if ($download) {
@@ -492,17 +499,17 @@ function generate_analytics_csv($peruserarray, $title) {
 
     require_once 'include/lib/csv.class.php';
 
-    global $langSurnameName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel;
+    global $langSurname, $langName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel;
 
     $csv = new CSV();
     $csv->setEncoding('UTF-8');
 
     $csv->filename =   $title . '_learning_analytics.csv';
 
-    $csv->outputRecord($langSurnameName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel);
+    $csv->outputRecord($langSurname, $langName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel);
 
     foreach($peruserarray as $array) {
-        $csv->outputRecord($array['givenname'] . ' ' . $array['surname'], $array['percentage'], $array['values']['text-success'], $array['values']['text-warning'], $array['values']['text-danger']);
+        $csv->outputRecord($array['surname'], $array['givenname'], $array['percentage'], $array['values']['text-success'], $array['values']['text-warning'], $array['values']['text-danger']);
     }
     exit;
 }
@@ -563,9 +570,6 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $max_value = $element_data->max_value;
         $min_value = $element_data->min_value;
 
-        $start = $start ." 00:00";
-        $end = $end ." 23:59";
-
         $elements_data = Database::get()->queryArray("SELECT value, updated 
                                                         FROM user_analytics
                                                         WHERE user_id = ?d
@@ -573,7 +577,6 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                                                         AND updated >= ?t
                                                         AND updated <= ?t", $userid, $element_id, $start, $end);
 
-        $percentage_value = 0;
         $total_value = 0;
 
         if(count($elements_data) > 0) {
@@ -629,21 +632,26 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
 function display_user_info($user_id) {
     global $tool_content, $langAnalyticsNotAvailable, $langEmail, $langAm, $langPhone;
+
     $user_data = Database::get()->querySingle("SELECT givenname, surname, email, am, phone FROM user WHERE id=?d", $user_id);
 
     $givenname = $user_data->givenname;
     $surname = $user_data->surname;
 
     $email = $user_data->email;
-    if($email == '')
+    if ($email == '') {
         $email = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>';
+    }
 
     $am = $user_data->am;
-    if($am == '')
+    if ($am == '') {
         $am = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>';
+    }
+
     $phone = $user_data->phone;
-    if($phone == '')
+    if ($phone == '') {
         $phone = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>';
+    }
 
     $tool_content .= "
     <div class='row'>
