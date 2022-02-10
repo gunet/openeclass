@@ -130,7 +130,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
-                'order' : [[1, 'desc']],
+                'order' : false,
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -716,18 +716,6 @@ function ipORcidr($field, $value, array $params) {
 
 /**
  * @brief insert the assignment into the database
- * @global type $tool_content
- * @global string $workPath
- * @global type $course_id
- * @global type $uid
- * @global type $langTheField
- * @global type $m
- * @global type $langTitle
- * @global type $course_code
- * @global type $langFormErrors
- * @global type $langNewAssignSuccess
- * @global type $langGeneralError
- * @global type $langErrorCreatingDirectory
  * @return type
  */
 function add_assignment() {
@@ -867,7 +855,7 @@ function add_assignment() {
         if (make_dir("$workPath/$secret") and make_dir("$workPath/admin_files/$secret")) {
             $id = Database::get()->query("INSERT INTO assignment
                     (course_id, title, description, deadline, late_submission,
-                    comments, submission_type, submission_date, secret_directory,
+                    comments, submission_type, submission_date, active, secret_directory,
                     group_submissions, grading_type, max_grade, grading_scale_id,
                     assign_to_specific, auto_judge, auto_judge_scenarios, lang,
                     notification, password_lock, ip_lock, assignment_type, lti_template,
@@ -876,7 +864,7 @@ function add_assignment() {
                     tii_submit_papers_to, tii_use_biblio_exclusion, tii_use_quoted_exclusion,
                     tii_exclude_type, tii_exclude_value, reviews_per_assignment,
                     start_date_review, due_date_review, max_submissions)
-                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t,
+                VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, 1, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t,
                 ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?t, ?t, ?d)",
                 $course_id, $title, $desc, $deadline, $late_submission, '',
                 $submission_type, $submission_date, $secret, $group_submissions, $grade_type,
@@ -1565,7 +1553,7 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $course_code, $course_id, $langAssignmentStartHelpBlock,
            $desc, $language, $head_content, $langGradeRubrics,
-           $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langWorkMultipleFiles,
+           $langBack, $langSubmit, $langStudents, $langMove, $langWorkFile, $langWorkMultipleFiles,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
            $langGradeNumbers, $langGradeType, $langGradeScales,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
@@ -2536,7 +2524,7 @@ function new_assignment() {
                     array(
                         'class'         => 'btn-primary',
                         'name'          => 'new_assign',
-                        'value'         => $langSave,
+                        'value'         => $langSubmit,
                         'javascript'    => "selectAll('assignee_box',true)"
                     ),
                     array(
@@ -2557,7 +2545,7 @@ function new_assignment() {
 function show_edit_assignment($id) {
 
     global $tool_content, $m, $langBack, $course_code,
-        $langSave, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
+        $langModify, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langWorkOnlineText, $langWorkSubType, $langGradeRubrics, $langWorkMultipleFiles,
         $langGradeType, $langGradeNumbers, $langGradeScales, $langNoGradeScales, $langNoGradeRubrics,
@@ -3640,7 +3628,7 @@ function show_edit_assignment($id) {
                         array(
                             'class'         => 'btn-primary',
                             'name'          => 'do_edit',
-                            'value'         => $langSave,
+                            'value'         => $langModify,
                             'javascript'    => "selectAll('assignee_box',true)"
                         ),
                         array(
@@ -5120,7 +5108,7 @@ function show_assignment($id, $display_graph_results = false) {
                 </form>";
             } else {
                 $result1 = Database::get()->queryArray("SELECT grade FROM assignment_submit WHERE assignment_id = ?d ORDER BY grade ASC", $id);
-                $gradeOccurances = array(); // Named array to hold grade occurances/stats
+                $gradeOccurances = array(); // Named array to hold grade occurrences/stats
                 $gradesExists = 0;
                 foreach ($result1 as $row) {
                     $theGrade = $row->grade;
@@ -5286,22 +5274,55 @@ function show_student_assignments() {
         $gids_sql_ready = "''";
     }
 
-    $result = Database::get()->queryArray("SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
-                FROM assignment WHERE course_id = ?d
-                    AND active = '1' AND
-                    (assign_to_specific = 0 OR id IN
-                        (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
-                            UNION
-                        SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
-                    )
-                ORDER BY
-                         CASE
-                             WHEN time < 0 THEN 2
-                             WHEN deadline IS NULL THEN 1
-                             ELSE 0
-                        END,
-                title
-                ", $course_id, $uid);
+    // ordering assignments by deadline, without deadline, expired.
+    // query uses pseudo limit in ordering results
+    // (see https://dev.mysql.com/doc/refman/5.7/en/union.html)
+    $result = Database::get()->queryArray("
+            (
+                SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
+                    FROM assignment WHERE course_id = ?d
+                        AND UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) > 0
+                        AND active = '1' AND
+                        (assign_to_specific = 0 OR id IN
+                            (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                                UNION
+                            SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                        )
+                    ORDER BY time
+                    DESC 
+                    LIMIT 1000
+            )
+            UNION 
+            (
+                SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
+                    FROM assignment WHERE course_id = ?d
+                        AND deadline IS NULL
+                        AND active = '1' AND
+                        (assign_to_specific = 0 OR id IN
+                            (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                                UNION
+                            SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                        )
+                    ORDER BY title
+                    DESC 
+                    LIMIT 1000            
+            )
+            UNION
+            (
+                SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
+                    FROM assignment WHERE course_id = ?d
+                        AND UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) < 0
+                        AND active = '1' AND
+                        (assign_to_specific = 0 OR id IN
+                            (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                                UNION
+                            SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                        )
+                    ORDER BY time
+                    DESC 
+                    LIMIT 1000
+            )                 
+            ", $course_id, $uid, $course_id, $uid, $course_id, $uid);
 
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
@@ -5348,10 +5369,8 @@ function show_student_assignments() {
             $title_temp = q($row->title);
             if ($row->deadline) {
                 $deadline = nice_format($row->deadline, true);
-                $sort_date = $row->deadline;
             } else {
                 $deadline = $langNoDeadline;
-                $sort_date = '';
             }
             if (strtotime(date("d-m-Y H:i:s")) < strtotime($row->submission_date)) { // assignment not starting yet
                 $not_started = true;
@@ -5368,7 +5387,7 @@ function show_student_assignments() {
 
             $tool_content .= "<tr class='$class_not_started'>
                                 <td>$link</td>
-                                <td class='text-center' data-sort='$sort_date'>" . $deadline ;
+                                <td class='text-center'>" . $deadline ;
 
             if ($not_started) {
                 $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . nice_format($row->submission_date, true). "</span></small>";
@@ -5438,14 +5457,40 @@ function show_assignments() {
         $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission,
         $langActivate, $langDeactivate, $urlAppend;
 
-        // ordering assignments first by deadline then by title
-    $result = Database::get()->queryArray("SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
-                                        FROM assignment WHERE course_id = ?d ORDER BY
-                                                CASE WHEN time < 0 THEN 2
-                                                     WHEN deadline IS NULL THEN 1
-                                                     ELSE 0
-                                                END,
-                                            title", $course_id);
+    // ordering assignments by deadline, without deadline, expired.
+    // query uses pseudo limit in ordering results
+    // (see https://dev.mysql.com/doc/refman/5.7/en/union.html)
+    $result = Database::get()->queryArray("
+            (
+                SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
+                    FROM assignment 
+                WHERE course_id = ?d
+                    AND UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) > 0
+                ORDER BY time
+                DESC 
+                LIMIT 10000
+            )
+            UNION
+            (
+                SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
+                    FROM assignment 
+                WHERE course_id = ?d
+                    AND deadline IS NULL 
+                ORDER BY title 
+                ASC 
+                LIMIT 10000
+            )
+            UNION
+            (
+                SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
+                    FROM assignment 
+                WHERE course_id = ?d
+                    AND UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) < 0 
+                ORDER BY time
+                DESC 
+                LIMIT 10000
+            )", $course_id, $course_id, $course_id);
+
     $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
@@ -5506,10 +5551,8 @@ function show_assignments() {
 
             if (isset($row->deadline)) {
                 $deadline = nice_format($row->deadline, true);
-                $sort_date = $row->deadline;
             } else {
                 $deadline = $langNoDeadline;
-                $sort_date = '';
             }
             if (strtotime(date("d-m-Y H:i:s")) < strtotime($row->submission_date)) { // assignment not starting yet
                 $not_started = true;
@@ -5524,7 +5567,7 @@ function show_assignments() {
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             <td class='text-center'>$num_submitted</td>
                             <td class='text-center'>$num_ungraded</td>
-                            <td class='text-center' data-sort='$sort_date'>$deadline";
+                            <td class='text-center'>$deadline";
 
             if ($not_started) {
                 $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . nice_format($row->submission_date, true). "</span></small>";
