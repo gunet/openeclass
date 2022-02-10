@@ -1403,7 +1403,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `active` tinyint(1) not null default 1,
             `created` datetime,
             `expires` datetime,
-            `bundle` int(11) not null default 0,            
+            `bundle` int(11) not null default 0,
             index `certificate_course` (`course_id`),
             foreign key (`course_id`) references `course` (`id`),
             foreign key (`template`) references `certificate_template`(`id`)
@@ -1411,7 +1411,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `badge` (
             `id` int(11) not null auto_increment primary key,
-            `course_id` int(11) not null,            
+            `course_id` int(11) not null,
             `issuer` varchar(255) not null default '',
             `icon` mediumint(8),
             `title` varchar(255) not null,

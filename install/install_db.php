@@ -233,7 +233,7 @@ $db->query("CREATE TABLE `user` (
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     surname VARCHAR(255) NOT NULL DEFAULT '',
     givenname VARCHAR(255) NOT NULL DEFAULT '',
-    username VARCHAR(255) NOT NULL UNIQUE KEY COLLATE utf8mb4_bin,
+    username VARCHAR(190) NOT NULL UNIQUE KEY COLLATE utf8mb4_bin,
     password VARCHAR(255) NOT NULL DEFAULT 'empty',
     email VARCHAR(255) NOT NULL DEFAULT '',
     parent_email VARCHAR(255) NOT NULL DEFAULT '',
@@ -679,7 +679,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
     `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
     `owner_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-    `title` VARCHAR(255) NOT NULL DEFAULT '',
+    `title` VARCHAR(190) NOT NULL DEFAULT '',
     `ctime` DATETIME NOT NULL,
     `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
     `last_mtime` DATETIME NOT NULL) $tbl_options");
@@ -693,7 +693,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
     `changelog` VARCHAR(255) )  $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
-    `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
+    `ptitle` VARCHAR(190) NOT NULL DEFAULT '',
     `wiki_id` INT(11) UNSIGNED NOT NULL,
     `uid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
     `ltime_created` DATETIME DEFAULT NULL,
@@ -1377,7 +1377,7 @@ store_mail_config();
 // table for cron parameters
 $db->query("CREATE TABLE `cron_params` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL UNIQUE,
+    `name` VARCHAR(100) NOT NULL UNIQUE,
     `last_run` DATETIME NOT NULL) $tbl_options");
 
 // tables for units module
@@ -1780,7 +1780,7 @@ $db->query("CREATE TABLE `certificate` (
   `created` datetime,
   `expires` datetime,
   `bundle` int(11) not null default 0,
-  `unit_id` INT(11) NOT NULL DEFAULT 0,  
+  `unit_id` INT(11) NOT NULL DEFAULT 0,
   index `certificate_course` (`course_id`),
   foreign key (`course_id`) references `course` (`id`),
   foreign key (`template`) references `certificate_template`(`id`)

@@ -1039,7 +1039,7 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `course_units` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `course_units` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `course_user_request` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `cron_params` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `cron_params` CHANGE name name varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE shortname shortname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
@@ -1228,7 +1228,7 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `unit_resources` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `user` CHANGE surname surname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `user` CHANGE givenname givenname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `user` CHANGE username username varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `user` CHANGE username username varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `user` CHANGE email email varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `user` CHANGE parent_email parent_email varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `user` CHANGE phone phone varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
@@ -1262,8 +1262,8 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `wall_post` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `wall_post` CHANGE extvideo extvideo varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `wall_post_resources` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `wiki_locks` CHANGE ptitle ptitle varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `wiki_pages` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `wiki_locks` CHANGE ptitle ptitle varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `wiki_pages` CHANGE title title varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `wiki_pages_content` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `wiki_pages_content` CHANGE changelog changelog varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `wiki_properties` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
