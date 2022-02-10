@@ -5869,3 +5869,5 @@ $langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και β�
 $langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο H5P';
 $langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο H5P αποθηκεύθηκε με επιτυχία";
 $langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο H5P διαγράφτηκε με επιτυχία";
+$langReuseActivate = "Ενεργοποίηση Διαμοιρασμού";
+$langReuseDeactivate = "Απενεργοποίηση Διαμοιρασμού";

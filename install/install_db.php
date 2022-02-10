@@ -2065,6 +2065,7 @@ $db->query("CREATE TABLE h5p_content (
     params LONGTEXT,
     course_id INT(11) NOT NULL,
     enabled TINYINT(4) NOT NULL DEFAULT 1,
+    reuse_enabled TINYINT(4) NOT NULL DEFAULT 1,
     PRIMARY KEY(id)) $tbl_options");
 
 $db->query("CREATE TABLE h5p_content_dependency (

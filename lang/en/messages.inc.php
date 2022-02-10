@@ -5340,3 +5340,5 @@ $langH5pUpdateComplete = 'The update of packages and libriares was successfully 
 $langH5pInteractiveContent = 'H5P interactive content';
 $langH5pSaveSuccess = "The H5P interactive content was successfully saved";
 $langH5pDeleteSuccess = "The H5P interactive content was successfully deleted";
+$langReuseActivate = "Activate Reuse";
+$langReuseDeactivate = "Deactivate Reuse";

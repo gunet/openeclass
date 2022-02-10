@@ -6,7 +6,7 @@ require_once '../../include/baseTheme.php';
 // validate
 $content_id = intval($_GET['id']);
 $onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
-$content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d $onlyEnabledWhere", $content_id, $course_id);
+$content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d $onlyEnabledWhere", $content_id, $course_id);
 if (!$content) {
     redirect_to_home_page("modules/h5p/index.php?course=$course_code");
 }
@@ -25,4 +25,5 @@ $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5P];
 $data['workspaceUrl'] = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
 $data['workspaceLibs'] = $urlAppend . 'courses/h5p/libraries';
+$data['content'] = $content;
 view('modules.h5p.show', $data);
