@@ -29,7 +29,7 @@ $res_type = isset($_GET['res_type']);
 // validate
 $content_id = intval($_GET['id']);
 $onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
-$content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d $onlyEnabledWhere", $content_id, $course_id);
+$content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d $onlyEnabledWhere", $content_id, $course_id);
 if (!$content) {
     redirect_to_home_page("modules/h5p/index.php?course=$course_code");
 }
@@ -70,12 +70,14 @@ $head_content .= "
             const options = {
               h5pJsonPath:  '$workspaceUrl',
               librariesPath: '$workspaceLibs',
-              frameJs: '$urlServer/js/h5p-standalone/frame.bundle.js',
-              frameCss: '$urlServer/js/h5p-standalone/styles/h5p.css',
+              frameJs: '" . $urlServer . "js/h5p-standalone/frame.bundle.js',
+              frameCss: '" . $urlServer . "js/h5p-standalone/styles/h5p.css',
               frame: true,
               copyright: true,
               icon: true,
-              fullScreen: true
+              fullScreen: true,
+              export: " . ($content->reuse_enabled ? "true" : "false") . ",
+              downloadUrl: '" . $urlServer . "modules/h5p/reuse.php?course=" . $course_code . "&id=" . $content->id . "'
             };
             new H5PStandalone.H5P(el, options);
         });

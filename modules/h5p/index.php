@@ -99,6 +99,16 @@ if ($is_editor) {
                 Session::Messages($langH5pSaveSuccess, 'alert-success');
                 redirect_to_home_page("modules/h5p/index.php?course=$course_code");
                 break;
+            case 'do_reuse_disable':
+                Database::get()->querySingle("UPDATE h5p_content set reuse_enabled = 0 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
+                Session::Messages($langH5pSaveSuccess, 'alert-success');
+                redirect_to_home_page("modules/h5p/index.php?course=$course_code");
+                break;
+            case 'do_reuse_enable':
+                Database::get()->querySingle("UPDATE h5p_content set reuse_enabled = 1 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
+                Session::Messages($langH5pSaveSuccess, 'alert-success');
+                redirect_to_home_page("modules/h5p/index.php?course=$course_code");
+                break;
         }
     }
 }
@@ -147,6 +157,10 @@ if ($content) {
                 'icon' => $item->enabled ? 'fa-eye': 'fa-eye-slash',
                 'title' => $item->enabled ? $langDeactivate : $langActivate,
                 'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_" . ($item->enabled ? 'disable' : 'enable')
+            ], [
+                'icon' => $item->reuse_enabled ? 'fa-bell': 'fa-bell-slash',
+                'title' => $item->reuse_enabled ? $langReuseDeactivate : $langReuseActivate,
+                'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_reuse_" . ($item->reuse_enabled ? 'disable' : 'enable')
             ], [
                 'icon' => 'fa-times',
                 'title' => $langDelete,

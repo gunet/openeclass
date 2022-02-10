@@ -2131,6 +2131,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('h5p_content', 'enabled')) {
             Database::get()->query("ALTER TABLE h5p_content ADD enabled TINYINT(4) NOT NULL DEFAULT 1 AFTER course_id");
         }
+        if (!DBHelper::fieldExists('h5p_content', 'reuse_enabled')) {
+            Database::get()->query("ALTER TABLE h5p_content ADD reuse_enabled TINYINT(4) NOT NULL DEFAULT 1 AFTER enabled");
+        }
         // course units prerequisites
         if (!DBHelper::fieldExists('certificate', 'unit_id')) {
             Database::get()->query("ALTER TABLE certificate ADD unit_id INT(11) NOT NULL DEFAULT 0");

@@ -5443,6 +5443,8 @@ $langImportH5P = "Import an H5P interactive content via the following form.";
 $langH5pInfoUpdate = "Click 'Update' in order to update H5P content types (if needed)<br>
     For further details about the available H5P content types please visit
     <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>.";
+$langReuseActivate = "Activate Reuse";
+$langReuseDeactivate = "Deactivate Reuse";
 $langMultipleCourseUsers = "Users registered to the most courses";
 $langLast30Entries = "Top 30 results";
 $langHaveCreated = "Created";
