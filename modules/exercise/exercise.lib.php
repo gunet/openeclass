@@ -20,10 +20,12 @@
  * ======================================================================== */
 
 
-
 /**
  * @brief display question
- * @return type
+ * @param $objQuestionTmp
+ * @param array $exerciseResult
+ * @param $question_number
+ * @return int
  */
 function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_number) {
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
@@ -90,7 +92,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                             </tr>";
     }
 
-    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
         $tool_content .= "<div class='form-inline' style='line-height:2.2;'>";
     }
 
@@ -100,6 +102,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             continue;
         }
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+        // fill in blanks
         if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = Question::blanksSplitAnswer($answer);
@@ -111,9 +114,24 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                     return "<input type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
             };
             $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
+            $tool_content .= $answer;
+        }
+        // fill in with selected words
+        elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+            $temp_string = unserialize($answer);
+            $answer_string = $temp_string[0];
+
+            // replaces [choices] with `select` field
+            $replace_callback = function ($blank) use ($questionId, $exerciseResult, $question_number) {
+                static $id = 0;
+                $id++;
+                return selection(explode("|", str_replace(array('[',']'), ' ', q($blank[0]))), "choice[$questionId][$id]", '','class="form-control"');
+            };
+            $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
+            $tool_content .= $answer_string;
         }
         // unique answer
-        if ($answerType == UNIQUE_ANSWER) {
+        elseif ($answerType == UNIQUE_ANSWER) {
             $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
             $tool_content .= "
                         <div class='radio'>
@@ -133,10 +151,6 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                             " . standard_text_escape($answer) . "
                           </label>
                         </div>";
-        }
-        // fill in blanks
-        elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-            $tool_content .= $answer;
         }
         // matching
         elseif ($answerType == MATCHING) {
@@ -192,7 +206,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     if ($answerType == MATCHING && $nbrAnswers>0) {
         $tool_content .= "</table>";
     }
-    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
         $tool_content .= "</div>";
     }
     if (!$nbrAnswers && $answerType != FREE_TEXT) {
@@ -394,7 +408,7 @@ function display_exercise($exercise_id) {
                   <td colspan='2'><strong>$langAnswer</strong></td>
                   <td><strong>$langComment</strong></td>
                 </tr>";
-            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
                 $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
             } elseif ($answerType == MATCHING) {
                 $tool_content .= "
@@ -416,10 +430,14 @@ function display_exercise($exercise_id) {
 
                     if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
                         list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
+                    } elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                        $answer_array = unserialize($answerTitle);
+                        $answer_text = $answer_array[0]; // answer text
+                        $correct_answer = $answer_array[1]; // correct answer
+                        $answer_weight = implode(' : ', $answer_array[2]); // answer weight
                     } else {
                         $answerTitle = standard_text_escape($answerTitle);
                     }
-
                     if ($answerType != MATCHING || $answerCorrect) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                             $tool_content .= "<tr><td style='width: 70px;'><div align='center'>";
@@ -435,6 +453,26 @@ function display_exercise($exercise_id) {
                         } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                             $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong>
                                           </td></tr>";
+                        } elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                            // fetch all possible answers
+                            preg_match_all('/\[[^]]+\]/', $answer_text, $out);
+                            foreach ($out[0] as $output) {
+                                $possible_answers[] = explode("|", str_replace(array('[',']'), '', q($output)));
+                            }
+                            // find correct answers
+                            foreach ($possible_answers as $possible_answer_key => $possible_answer) {
+                                $correct_answer_string[] = '['. $possible_answer[$correct_answer[$possible_answer_key]] . ']';
+                            }
+
+                            $formatted_answer_text = preg_replace_callback($correct_answer_string,
+                                    function ($string) {
+                                        return "<span style='color: red;'>$string[0]</span>";
+                                    },
+                                standard_text_escape(nl2br($answer_text)));
+                            // format correct answers
+                            $tool_content .= "<tr><td>" . $formatted_answer_text;
+                            $tool_content .= "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>";
+                            $tool_content .= "</td></tr>";
                         } else {
                             $tool_content .= "<tr><td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>";
                             $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>";

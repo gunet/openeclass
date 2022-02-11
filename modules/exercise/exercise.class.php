@@ -1022,6 +1022,23 @@ if (!class_exists('Exercise')) {
                         VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
                         $eurid, $key, $row_choice, $row_key, $weight, $as_answered, $q_position);
                 }
+            } elseif ($question_type == FILL_IN_FROM_SELECTED_WORDS) {
+                $objAnswersTmp = new Answer($key);
+                $answer = $objAnswersTmp->selectAnswer(1);
+                $answer_string = unserialize($answer);
+                $right_string = $answer_string[1]; // right answers
+                $weight_string = $answer_string[2]; // weight
+                foreach ($value as $choice_key => $choice) {
+                    if ($choice == $right_string[$choice_key-1]) {
+                        $weight = $weight_string[$choice_key-1];
+                    } else {
+                        $weight = 0;
+                    }
+                    Database::get()->query("INSERT INTO exercise_answer_record
+                        (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                        VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                        $eurid, $key, $choice, $choice_key, $weight, $as_answered, $q_position);
+                }
             } elseif ($question_type == MULTIPLE_ANSWER) {
                 if ($value == 0) {
                     $row_key = 0;
