@@ -106,16 +106,24 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
 
-    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
         $reponse = trim($_POST['reponse']);
         if (isset($_POST['weighting']) and isset($_POST['blanksDefined'])) {
             // a blank can't have a negative weighting
             $weighting = array_map('fix_float', $_POST['weighting']);
             $weighting = array_map('abs', $weighting);
-            // separate text and weightings by '::'
-            $reponse .= '::' . implode(',', $weighting);
-            $questionWeighting = array_sum($weighting);
-            $objAnswer->createAnswer($reponse, 0, '', 0, 1);
+            if ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                $questionWeighting = array_sum($_POST['weighting']);
+                $answer_array = [$_POST['reponse'], $_POST['correct_selected_word'], $_POST['weighting']];
+                $answer = serialize($answer_array);
+                $objAnswer->createAnswer($answer, 0, '', 0, 1);
+            } else {
+                // separate text and weightings by '::'
+                $reponse .= '::' . implode(',', $weighting);
+                $questionWeighting = array_sum($weighting);
+                $objAnswer->createAnswer($reponse, 0, '', 0, 1);
+            }
+            // update db
             $objAnswer->save();
             $objQuestion->updateWeighting($questionWeighting);
             if (isset($exerciseId)) {
@@ -488,23 +496,30 @@ if (isset($_GET['modifyAnswers'])) {
                     <td colspan='2'>&nbsp;</td>
                   </tr>
                 </table>";
-        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
              $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
              $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>";
              $tempSW = isset($_POST['setWeighting']) ? $_POST['setWeighting'] : '';
              $tool_content .= "
                    <input type='hidden' name='formSent' value='1' />
                    <input type='hidden' name='setWeighting' value='$tempSW'>";
+             if ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                 $legend = $langUseTagForSelectedWords;
+                 $defaultText = $langDefaultMissingWords;
+             } else {
+                 $legend = $langUseTagForBlank;
+                 $defaultText = $langDefaultTextInBlanks;
+             }
              if (!isset($displayBlanks)) {
                  $str_weighting = isset($weighting)? implode(',', $weighting): '';
                  $tool_content .= "<input type='hidden' name='str_weighting' value='$str_weighting'>
                    <fieldset>
                      <table class='table'>
                        <tr>
-                         <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
+                         <td>$langTypeTextBelow, $langAnd $legend :<br/><br/>
                            <textarea class='form-control' name='reponse' cols='70' rows='6'>";
                  if (!isset($submitAnswers) && empty($reponse)) {
-                     $tool_content .= $langDefaultTextInBlanks;
+                     $tool_content .= $defaultText;
                  } else {
                      $tool_content .= q($reponse);
                  }
@@ -528,20 +543,26 @@ if (isset($_GET['modifyAnswers'])) {
                  // if there is an error message
                  if (!empty($msgErr)) {
                      $tool_content .= "
-                                 <table border='0' cellpadding='3' align='center' width='400'>
+                                 <table style='border-style: none;' cellpadding='3' align='center' width='400'>
                                  <tr><td class='alert alert-danger'>$msgErr</td></tr>
                                  </table>";
-                 } else {
-                     $tool_content .= "
-                                     <fieldset>
-                                     <tr>
-                                         <td>$langWeightingForEachBlank</td>
-                                     </tr>
+                 } elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                     $tool_content .= "<tr><td>$langWeightingForEachBlankandChoose</td></tr>
                                      <table class='table'>";
                      foreach ($blanks as $i => $blank) {
                          $tool_content .= "<tr>
-                                         <td class='text-right'><b>[" . q($blank) . "] :</b></td>" . "
-                                             <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
+                                            <td style='border-style: none;' class='text-right'>" . selection(explode("|", q($blank)), "correct_selected_word[".$i."]", '','class="form-control"') . "</td>
+                                            <td style='border-style: none;'><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
+                                         </tr>";
+                     }
+                     $tool_content .= "</table>";
+                 } else {
+                     $tool_content .= "<tr><td>$langWeightingForEachBlank</td></tr>
+                                     <table class='table'>";
+                     foreach ($blanks as $i => $blank) {
+                         $tool_content .= "<tr>
+                                            <td style='border-style: none;' class='text-right'><strong>[" . q($blank) . "] :</strong></td>" . "
+                                            <td style='border-style: none;'><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
                                          </tr>";
                      }
                      $tool_content .= "</table>";
@@ -679,8 +700,8 @@ if (isset($_GET['modifyAnswers'])) {
      }
 
      $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
-     $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) && !isset($setWeighting) ? "$langNext &gt;" : $langCreate;
-     $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) && isset($setWeighting) ? "<input class='btn btn-primary' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
+     $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) && !isset($setWeighting) ? "$langNext &gt;" : $langCreate;
+     $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) && isset($setWeighting) ? "<input class='btn btn-primary' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
      $tool_content .= "
                      <div class='row'>
                          <div class='col-sm-10 col-sm-offset-2'>

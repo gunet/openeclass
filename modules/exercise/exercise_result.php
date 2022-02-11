@@ -344,7 +344,9 @@ if (count($exercise_question_ids) > 0) {
 
                 if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
                     list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
-                } else {
+                } elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                    $answer_array = unserialize($answer);
+                }  else {
                     $answer = standard_text_escape($answer);
                 }
                 $grade = 0;
@@ -432,7 +434,59 @@ if (count($exercise_question_ids) > 0) {
                             $temp = substr($temp, $pos + 1);
                         }
                         break;
-
+                    case FILL_IN_FROM_SELECTED_WORDS :
+                        $answer = $answer_array[0]; // answer text
+                        // fetch possible answers for all choices
+                        preg_match_all('/\[[^]]+\]/', $answer, $out);
+                        foreach ($out[0] as $output) {
+                            $possible_answers[] = explode("|", str_replace(array('[',']'), ' ', q($output)));
+                        }
+                        $answer_string = $answer_array[1]; // answers
+                        $answerWeighting = $answer_array[2]; // answer weight
+                        $temp = $answer;
+                        $answer = '';
+                        $j = 1;
+                        // the loop will stop at the end of the text
+                        while (true) {
+                            // quits the loop if there are no more blanks
+                            if (($pos = strpos($temp, '[')) === false) {
+                                // adds the end of the text
+                                $answer .= q($temp);
+                            }
+                            // adds the piece of text that is before the blank and ended by [
+                            $answer .= substr($temp, 0, $pos + 1);
+                            $temp = substr($temp, $pos + 1);
+                            // quits the loop if there are no more blanks
+                            if (($pos = strpos($temp, ']')) === false) {
+                                // adds the end of the text
+                                $answer .= q($temp);
+                                break;
+                            }
+                            $possible_answer = $possible_answers[$j-1]; // possible answers for each choice
+                            if ($choice[$j] == $answer_string[$j-1]) { // correct answer
+                                $questionScore += $answerWeighting[$j-1]; // weight assignment
+                                if ($regrade) {
+                                    Database::get()->query('UPDATE exercise_answer_record
+                                        SET weight = ?f
+                                        WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
+                                        $answerWeighting[$j-1], $eurid, $row->question_id, $j);
+                                }
+                                // adds the word in green at the end of the string
+                                $answer .= '<strong>' . q($possible_answer[$choice[$j]]) . '</strong>';
+                                $icon = "<span class='fa fa-check text-success'></span>";
+                            }  else { // wrong answer
+                                // adds the word in red at the end of the string, and strikes it
+                                $answer .= '<span class="text-danger"><s>' . q($possible_answer[$choice[$j]]) . '</s></span>';
+                                $icon = "<span class='fa fa-times text-danger'></span>";
+                            }
+                            // adds the correct word, followed by ] to close the blank
+                            $answer .= ' / <span class="text-success"><strong>' . q($possible_answer[$answer_string[$j-1]]) . '</strong></span>';
+                            $answer .= "]";
+                            $answer .= "&nbsp;&nbsp;$icon";
+                            $j++;
+                            $temp = substr($temp, $pos + 1);
+                        }
+                        break;
                     case MATCHING : if ($answerCorrect) {
                             $thisChoice = isset($choice[$answerId])? $choice[$answerId]: null;
                             if ($answerCorrect == $thisChoice) {
@@ -468,7 +522,7 @@ if (count($exercise_question_ids) > 0) {
                         break;
                 } // end switch()
 
-                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, MATCHING])) {
+                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_SELECTED_WORDS, MATCHING])) {
                     Database::get()->query('UPDATE exercise_answer_record
                         SET weight = ?f
                         WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
@@ -505,7 +559,7 @@ if (count($exercise_question_ids) > 0) {
                         }
                         $tool_content .= "</td>";
                         $tool_content .= "</tr>";
-                    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+                    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
                         $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
                     } else { // matching
                         $tool_content .= "<tr><td>" . standard_text_escape($answer) . "</td>";

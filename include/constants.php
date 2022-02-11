@@ -130,6 +130,7 @@ define('MATCHING', 4);
 define('TRUE_FALSE', 5);
 define('FREE_TEXT', 6);
 define('FILL_IN_BLANKS_TOLERANT', 7);
+define('FILL_IN_FROM_SELECTED_WORDS', 8);
 
 // exercise view type
 define('SINGLE_PAGE_TYPE', 1);
