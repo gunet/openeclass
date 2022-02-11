@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2021-11-26 15:55:04
+// Generated 2022-02-11 12:21:31
 
 $langYes = "Yes";
 $langNo = "No";
@@ -709,13 +709,10 @@ $langUsedInSeveralExercises = "Warning! This question and its answers are used i
 $langModifyInAllExercises = "in all exercises";
 $langModifyInThisExercise = "in this exercise";
 $langQuestionView = "View";
-$langWarnAboutAnsweredQuestion = "Warning! The question has already been answered! If you delete it, exercise results will be modified.";
 $langAnswerType = "Answer type";
 $langUniqueSelect = "Multiple Choice (Single Answer)";
 $langMultipleSelect = "Multiple Choice (Multiple Answers)";
 $langFillBlanks = "Fill in the Blanks";
-$langFillFromSelectedWords = "From selected words";
-$langWeightingForEachBlankandChoose = "Enter weight for each blank and choose the correct answer";
 $langMatching = "Matching";
 $langAddPicture = "Add Picture";
 $langReplacePicture = "Replace Picture";
@@ -726,8 +723,7 @@ $langWeightingForEachBlank = "Enter weight for each blank";
 $langUseTagForBlank = "Use tags [...] to define one or more blanks";
 $langQuestionWeighting = "Weight";
 $langTypeTextBelow = "Type your text below";
-$langDefaultTextInBlanks = "[Athens] is capital of Greece.";
-$langDefaultMissingWords = "Capital of Greece is [Patra|Athens|Thessaloniki].";
+$langDefaultTextInBlanks = "[Athens] is the capital of Greece.";
 $langDefaultMatchingOptA = "rich";
 $langDefaultMatchingOptB = "good looking";
 $langDefaultMakeCorrespond1 = "The capital of Greece is";
@@ -4337,8 +4333,6 @@ $langLoginUser = "Logins";
 $langUsageCoursesHeader = "Total $langsOfCourses";
 $langUsageUsers = "Total users";
 $langStatOfFaculty = "Statistics of $langOfFaculty";
-$langHaveCreated = "Created";
-$langInfoMonthlyStatistics = "also displayed the corresponding increase / decrease compared to the previous month";
 $langRecordLog = "Log actions";
 $langUnits = "Units";
 $langRegistrationLink = 'User registration link';
@@ -5179,7 +5173,6 @@ $langReviewEnd = "End of Review Date";
 $langReviewDateHelpBlock = "Click here for different (future) start of review date";
 $langPeerReviewImpossible = "Number of assignments aren't sufficient for peer reviewing";
 $langPeerReviewGrade = "Review Grade";
-$langTransferGrades = "Transfer grades";
 $langPeerReviewCompletedByStudent = "His reviews have completed";
 $langPeerReviewPendingByStudent = "His reviews haven't completed";
 $langPeerReviewMissingByStudent = "His reviews haven't done";
@@ -5445,8 +5438,38 @@ $langImportH5P = "Import an H5P interactive content via the following form.";
 $langH5pInfoUpdate = "Click 'Update' in order to update H5P content types (if needed)<br>
     For further details about the available H5P content types please visit
     <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>.";
-$langReuseActivate = "Activate Reuse";
-$langReuseDeactivate = "Deactivate Reuse";
 $langMultipleCourseUsers = "Users registered to the most courses";
 $langLast30Entries = "Top 30 results";
 $langHaveCreated = "Created";
+$langWarnAboutAnsweredQuestion = "Warning! The question has already been answered! If you delete it, exercise results will be modified.";
+$langFillFromSelectedWords = "From selected words";
+$langWeightingForEachBlankandChoose = "Enter weight for each blank and choose the correct answer";
+$langUseTagForSelectedWords = "use brackets [...] to specify one or more blanks and the character | to specify the possible answers";
+$langDefaultMissingWords = "The capital of Greece is [Patras|Athens|Thessaloniki].";
+$lang_disable_cron_jobs = "Disable monthly statistics generation";
+$langChangeDBEncoding = "Changing database encoding to utf8mb4";
+$langInfoMonthlyStatistics = "also displayed the corresponding increase / decrease compared to the previous month";
+$langTransferGrades = "Transfer grades";
+$langUnitManage = 'Manage Unit';
+$langUnitCompletion = "Unit Completion";
+$langUnitCompletionMessage = "The unit was completed successfully";
+$langUnitExerciseAdd = "The exercise was added to the unit";
+$langManage = "Manage Units";
+$langUnitActivity = "activity";
+$langUnitCompletionActivate = "Enable Unit Completion";
+$langUnitCompletionDeactivate = "Disable Unit Completion";
+$langUnitCompletionActivated = "Unit completion was enabled";
+$langUnitCompletionDeactivated = "Unit completion was disabled";
+$langUnitPrerequisites = "Prerequisite unit";
+$langNewUnitPrerequisite = "Add Prerequisites";
+$langNoUnitPrerequisite = "No prerequisite unit set.";
+$langUnitHasNotCompletionEnabled = "Unable to add; completion is not enabled for the selected unit.";
+$langNewUnitPrerequisiteFailInvalid = "Unable to add; please select a valid unit.";
+$langNewUnitPrerequisiteSuccess = "The prerequisite was successfully created!";
+$langDelUnitPrerequisiteSuccess = "The prerequisite was successfully deleted.";
+$langNewUnitPrerequisiteFailAlreadyIn = "Unable to add; the unit is already included in the prerequisites list.";
+$langsUnit = "unit";
+$langUserWayShortDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
+$langUserWayLongDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
+$langReuseActivate = "Activate Reuse";
+$langReuseDeactivate = "Deactivate Reuse";
