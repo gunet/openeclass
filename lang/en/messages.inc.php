@@ -5473,3 +5473,5 @@ $langUserWayShortDescription = "<p>Accessibility options via the UserWay service
 $langUserWayLongDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langReuseActivate = "Activate Reuse";
 $langReuseDeactivate = "Deactivate Reuse";
+$langOnlySubmissions = 'Only participants';
+$langOnlyNonSubmissions = 'Only non-participants';

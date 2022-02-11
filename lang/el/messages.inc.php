@@ -3241,6 +3241,8 @@ $langPollParticipationValid = "Οι απαντήσεις σας καταγράφ
 $langActivateMulSubmissions = "Ενεργοποίηση πολλαπλών υποβολών από τους $langsOfStudentss";
 $langActivateDefaultAnswer = "Ενεργοποίηση απάντησης 'δεν ξέρω / δεν απαντώ'";
 $langPollOutcomeClose = "Μπορείτε να κλείσετε αυτό το παράθυρο ή να επιστρέψετε στην προηγούμενη σελίδα.";
+$langOnlySubmissions = 'Μόνο συμμετέχοντες';
+$langOnlyNonSubmissions = 'Μόνο μη συμμετέχοντες';
 
 
 /* * **********************************************************

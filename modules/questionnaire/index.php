@@ -218,7 +218,8 @@ function printPolls() {
         $langParticipate,  $langHasParticipated, $langSee,
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
-        $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate;
+        $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate,
+        $langUserDuration;
 
 
     $poll_check = 0;
@@ -335,56 +336,47 @@ function printPolls() {
                     $tool_content .= "
                     <td class='text-center'>$total_participants</td>
                     <td class='text-center option-btn-cell'>" .
-                        action_button(array(
-                        array(
-                            'title' => $langEditChange,
-                            'icon' => 'fa-edit',
-                            'url' => "admin.php?course=$course_code&amp;pid=$pid"
-                        ),
-                        array(
-                            'title' => $visibility?  $langDeactivate : $langActivate,
-                            'icon' => $visibility ?  'fa-toggle-off' : 'fa-toggle-on',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
-                        ),
-                        array(
-                            'title' => $langUsage,
-                            'level' => 'primary',
-                            'icon' => 'fa-line-chart',
-                            'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
-                            'disabled' => $total_participants == 0
-                        ),
-                        array(
-                            'title' => $langSee,
-                            'icon' => 'fa-search',
-                            'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid"
-                        ),
-                        array(
-                            'title' => $thepoll->public ? $langResourceAccessLock : $langResourceAccessUnlock,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($thepoll->public ? "access=limited" : "access=public")."&amp;pid=$pid",
-                            'icon' => $thepoll->public ? 'fa-lock' : 'fa-unlock',
-                            'show' => course_status($course_id) == COURSE_OPEN),
-                        array(
-                            'title' => $langCreateDuplicate,
-                            'icon' => 'fa-copy',
-                            'icon-class' => 'warnLink',
-                            'icon-extra' => "data-pid='$pid'",
-                            'show' => $thepoll->type == POLL_NORMAL
-                        ),
-                        array(
-                            'title' => $langPurgeExercises,
-                            'icon' => 'fa-eraser',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
-                            'confirm' => $langConfirmPurgeExercises,
-                            'show' => $total_participants > 0
-                        ),
-                        array(
-                            'title' => $langDelete,
-                            'icon' => 'fa-times',
-                            'class' => 'delete',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
-                            'confirm' => $langConfirmDelete
-                        )
-                    ))."</td></tr>";
+                    action_button([
+                        [ 'title' => $langEditChange,
+                          'icon' => 'fa-edit',
+                          'url' => "admin.php?course=$course_code&amp;pid=$pid" ],
+                        [ 'title' => $visibility?  $langDeactivate : $langActivate,
+                          'icon' => $visibility ?  'fa-toggle-off' : 'fa-toggle-on',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}" ],
+                        [ 'title' => $langUsage,
+                          'level' => 'primary',
+                          'icon' => 'fa-line-chart',
+                          'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
+                          'disabled' => $total_participants == 0 ],
+                        [ 'title' => $langSee,
+                          'icon' => 'fa-search',
+                          'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid" ],
+                        [ 'title' => $langUserDuration,
+                          'icon' => 'fa-users',
+                          'url' => "participation.php?course=$course_code&amp;pid=$pid",
+                          'disabled' => $total_participants == 0,
+                          'show' => !$thepoll->anonymized ],
+                        [ 'title' => $thepoll->public ? $langResourceAccessLock : $langResourceAccessUnlock,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($thepoll->public ? "access=limited" : "access=public")."&amp;pid=$pid",
+                          'icon' => $thepoll->public ? 'fa-lock' : 'fa-unlock',
+                          'show' => course_status($course_id) == COURSE_OPEN],
+                        [ 'title' => $langCreateDuplicate,
+                          'icon' => 'fa-copy',
+                          'icon-class' => 'warnLink',
+                          'icon-extra' => "data-pid='$pid'",
+                          'show' => $thepoll->type == POLL_NORMAL ],
+                        [ 'title' => $langPurgeExercises,
+                          'icon' => 'fa-eraser',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
+                          'confirm' => $langConfirmPurgeExercises,
+                          'show' => $total_participants > 0 ],
+                        [ 'title' => $langDelete,
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
+                          'confirm' => $langConfirmDelete ],
+                    ]) . "
+                    </td></tr>";
                 } else {
                     $tool_content .= "<td class='text-center'>";
                     if ($poll_not_started == 1) {
