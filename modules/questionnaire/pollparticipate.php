@@ -514,7 +514,11 @@ function submitPoll() {
                 $aid = 0;
                 $answer_text = $answer[$pqid];
             } elseif ($qtype == QTYPE_SINGLE) {
-                $aid = intval($answer[$pqid]);
+                if (isset($answer[$pqid])) {
+                    $aid = intval($answer[$pqid]);
+                } else {
+                    $aid = -1;
+                }
                 $answer_text = '';
             } elseif ($qtype == QTYPE_FILL) {
                 $answer_text = $answer[$pqid];
