@@ -108,9 +108,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
 // Data Tables
 if ($is_editor) {
+    //  default ordering is deadline
+    $order = "[3, 'asc']";
     // disable ordering for action button column
     $columns = 'null, null, null, null, { orderable: false }';
 } else {
+    //  default ordering is deadline
+    $order = "[1, 'asc']";
     if (get_config('eportfolio_enable')) {
         $columns = 'null, null, null, null, { orderable: false }';
     } else {
@@ -130,7 +134,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
-                'order' : false,
+                'order' : [ $order ],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -5345,7 +5349,9 @@ function show_student_assignments() {
                       </tr>
                   </thead>
                   <tbody>";
+        $sort_id = 0;
         foreach ($result as $row) {
+            $sort_id++;
             $exclamation_icon = '';
             $class = '';
             $not_started = false;
@@ -5387,7 +5393,7 @@ function show_student_assignments() {
 
             $tool_content .= "<tr class='$class_not_started'>
                                 <td>$link</td>
-                                <td class='text-center'>" . $deadline ;
+                                <td class='text-center' data-sort='$sort_id'>" . $deadline ;
 
             if ($not_started) {
                 $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . nice_format($row->submission_date, true). "</span></small>";
@@ -5521,7 +5527,9 @@ function show_assignments() {
                     </thead>
                     <tbody>";
         $index = 0;
-        foreach ($result as $row) {
+        $sort_id = 0;
+        foreach ($result as $key => $row) {
+            $sort_id++;
             $not_started = false;
             $exclamation_icon = '';
             if ($row->password_lock or $row->ip_lock) {
@@ -5567,7 +5575,7 @@ function show_assignments() {
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             <td class='text-center'>$num_submitted</td>
                             <td class='text-center'>$num_ungraded</td>
-                            <td class='text-center'>$deadline";
+                            <td class='text-center' data-sort='$sort_id'>$deadline";
 
             if ($not_started) {
                 $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . nice_format($row->submission_date, true). "</span></small>";
