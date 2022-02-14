@@ -1519,7 +1519,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // tc attendance tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
             `id` int(11) NOT NULL DEFAULT '0',
-            `meetingid` varchar(20) NOT NULL,
+            `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
             `bbbuserid` varchar(20) DEFAULT NULL,
             `totaltime` int(11) NOT NULL DEFAULT '0',
             `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1531,7 +1531,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
                 `id` int(11) NOT NULL,
                 `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                `meetingid` varchar(20) NOT NULL,
+                `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
                 `bbbuserid` varchar(20) DEFAULT NULL,
                 `fullName` varchar(200) DEFAULT NULL,
                 `type` varchar(255) default 'bbb',

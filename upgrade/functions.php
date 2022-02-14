@@ -1207,9 +1207,9 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `rubric` CHANGE scales scales text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `rubric` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tag` CHANGE name name varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `tc_attendance` CHANGE meetingid meetingid varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `tc_attendance` CHANGE meetingid meetingid varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL");
     Database::get()->query("ALTER TABLE `tc_attendance` CHANGE bbbuserid bbbuserid varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `tc_log` CHANGE meetingid meetingid varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `tc_log` CHANGE meetingid meetingid varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL");
     Database::get()->query("ALTER TABLE `tc_log` CHANGE bbbuserid bbbuserid varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_log` CHANGE fullName fullName varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_log` CHANGE type type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
@@ -1221,6 +1221,7 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `tc_session` CHANGE external_users external_users text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE participants participants varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE options options text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `tc_session` CHANGE meeting_id meeting_id varchar(42) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL");
     Database::get()->query("ALTER TABLE `tc_session` CHANGE `record` `record` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT 'false'");
     Database::get()->query("ALTER TABLE `theme_options` CHANGE name name varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `theme_options` CHANGE styles styles longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");

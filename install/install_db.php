@@ -1440,7 +1440,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `logins` (
     PRIMARY KEY (`id`)) $tbl_options");
 
 // tc_sessions tables
-$db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
+$db->query("CREATE TABLE IF NOT EXISTS `tc_session1` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) DEFAULT NULL,
     `title` varchar(255) DEFAULT NULL,
@@ -1450,7 +1450,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `public` enum('0','1') DEFAULT NULL,
     `active` enum('0','1') DEFAULT NULL,
     `running_at` int(11) DEFAULT NULL,
-    `meeting_id` varchar(255) DEFAULT NULL,
+    `meeting_id` varchar(42) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
     `mod_pw` varchar(255) DEFAULT NULL,
     `att_pw` varchar(255) DEFAULT NULL,
     `unlock_interval` int(11) DEFAULT NULL,
@@ -1486,7 +1486,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
 
 $db->query("CREATE TABLE `tc_attendance` (
     `id` int(11) NOT NULL DEFAULT '0',
-    `meetingid` varchar(20) NOT NULL,
+    `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(20) DEFAULT NULL,
     `totaltime` int(11) NOT NULL DEFAULT '0',
     `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1497,7 +1497,7 @@ $db->query("CREATE TABLE `tc_attendance` (
 $db->query("CREATE TABLE `tc_log` (
     `id` int(11) NOT NULL,
     `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `meetingid` varchar(20) NOT NULL,
+    `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(255) DEFAULT NULL,
     `fullName` varchar(255) DEFAULT NULL,
     `type` varchar(255) default 'bbb',
