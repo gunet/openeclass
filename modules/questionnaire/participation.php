@@ -83,7 +83,7 @@ $emailUsers = [];
 $timestamp = [];
 foreach ($polledUsers as $user) {
     $ts = Database::get()->querySingle('SELECT submit_date
-            FROM poll_answer_record WHERE arid = ?d LIMIT 1',
+            FROM poll_answer_record WHERE poll_user_record_id = ?d LIMIT 1',
             $user->id)->submit_date;
     if ($user->uid) {
         $okUsers[] = $user->uid;
