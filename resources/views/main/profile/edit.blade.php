@@ -69,7 +69,7 @@
                     <div class='col-sm-5'>
                         @if (get_config('am_prevent_autoset_change') and isset($_SESSION['auth_user_info']['studentid']) and $_SESSION['auth_user_info']['studentid'])
                             <p class='form-control-static'>$am_form</p>
-                            <input type='hidden' name='surname_form' value='{{ $am_form }}'>
+                            <input type='hidden' name='am_form' value='{{ $am_form }}'>
                         @else
                             <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
                         @endif
