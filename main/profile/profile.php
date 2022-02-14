@@ -490,7 +490,7 @@ if (isset($_SESSION['auth_user_info'])) {
     }
     if (get_config('am_prevent_autoset_change') and isset($_SESSION['auth_user_info']['studentid']) and $_SESSION['auth_user_info']['studentid']) {
         $am_field = "<p class='form-control-static'>$am_form</p>";
-        $tool_content .= "<input type='hidden' name='surname_form' value='$am_form'>";
+        $tool_content .= "<input type='hidden' name='am_form' value='$am_form'>";
     }
 }
 
