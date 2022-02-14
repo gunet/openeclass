@@ -78,7 +78,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
         unset($_SESSION[$key]);
     }
 
-    $sqlLogin = get_config('case_insensitive_usernames') ? "COLLATE utf8_general_ci = ?s" : "COLLATE utf8_bin = ?s";
+    $sqlLogin = get_config('case_insensitive_usernames') ? "COLLATE utf8mb4_general_ci = ?s" : "COLLATE utf8mb4_bin = ?s";
     $myrow = Database::get()->querySingle("SELECT * FROM user WHERE username $sqlLogin", $uname);
 
     if (get_config('login_fail_check')) {
