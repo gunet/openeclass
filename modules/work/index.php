@@ -121,7 +121,7 @@ if ($is_editor) {
         $columns = 'null, null, null, null';
     }
 }
-//'order' : [[4, 'asc']],
+
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#assignment_table').DataTable ({
