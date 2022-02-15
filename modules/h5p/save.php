@@ -67,6 +67,9 @@ function uploadContent(): bool {
 
         return true;
     } else {
+        foreach ($framework->getMessages('error') as $errObj) {
+            Session::Messages($errObj->code . ": " . $errObj->message, 'alert-warning');
+        }
         return false;
     }
 }

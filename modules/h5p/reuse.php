@@ -36,6 +36,7 @@ $real_filename = $content->title . '.h5p';
 $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
 $contentDir = $webDir . '/courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
 $libsDir = $webDir . '/courses/h5p/libraries/';
+validateMainH5pJson($contentDir);
 zip_h5p_package($dload_filename, $contentDir, $libsDir);
 send_file_to_client($dload_filename, $real_filename, null, true, true);
 exit;
@@ -76,10 +77,34 @@ function zip_add_files($zipFile, $filesDir, $excludeLen) {
         $filePath = fix_directory_separator($file->getRealPath());
         $localPath = substr($filePath, $excludeLen);
 
+        // ignore editor entries
+        $editor = "editor";
+        if (substr($localPath, 0, strlen($editor)) === $editor) {
+            continue;
+        }
+
         // Skip directories (they will be added automatically)
         if (!$file->isDir()) {
             // Add current file to archive
             $zipFile->addFile($filePath, $localPath);
         }
+    }
+}
+
+function validateMainH5pJson($contentDir) {
+    $jsonpath = $contentDir . "/h5p.json";
+    $jsonfile = file_get_contents($jsonpath);
+    $data = json_decode($jsonfile, true);
+    $update = false;
+    if (!isset($data["language"])) {
+        $update = true;
+        $data["language"] = "und";
+    }
+    if (!isset($data["embedTypes"])) {
+        $update = true;
+        $data["embedTypes"] = array("div");
+    }
+    if ($update) {
+        file_put_contents($jsonpath, json_encode($data));
     }
 }
