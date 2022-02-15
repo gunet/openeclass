@@ -617,7 +617,7 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
     $num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
 
     $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
-    if ($count_video[0] > 0 or $count_video_links[0] > 0) {
+    if ($count_video or $count_video_links) {
         $tool_content .= " <div class='row'>
                                 <div class='col-sm-12'>
                                     <div class='table-responsive'>
