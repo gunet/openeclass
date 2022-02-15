@@ -167,6 +167,7 @@ $tool_content .= "
             <thead>
                 <tr>
                     <th>$m[username]</th>
+                    <th>$langEmail</th>
                     <th>$langAm</th>
                     <th>$langDate / $langHour</th>
                     <th class='text-center'>$m[subm]</th>
@@ -188,6 +189,7 @@ foreach ($allUsers as $user_id) {
     $tool_content .= "
                 <tr>
                     <td>" . display_user($user_id) . "</td>
+                    <td>" . q(uid_to_email($user_id)) . "</td>
                     <td>" . q(uid_to_am($user_id)) . "</td>
                     <td>$ts</td>
                     <td class='text-center' data-filter='$key' data-sort='$ok'>$participation_icon</td>
@@ -243,7 +245,7 @@ $tool_content .= "
                 placeholder : '$langSearch...'
             });
             $('#user_filter').on('change', function () {
-                table.column(3).search($(this).val()).draw();
+                table.column(4).search($(this).val()).draw();
             });
         });
         </script>";
