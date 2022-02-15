@@ -1965,7 +1965,7 @@ $langUseTagForSelectedWords = "χρησιμοποιήστε αγκύλες [...]
 $langQuestionWeighting = "Βάρος";
 $langTypeTextBelow = "Πληκτρολογήστε το κείμενό σας παρακάτω";
 $langDefaultTextInBlanks = "Πρωτεύουσα της Ελλάδας είναι η [Αθήνα].";
-$langDefaultMissingWords = "Πρωτεύουσα της Ελλάδας είναι η [Πάτρα|ΑΘήνα|Θεσσαλονίκη].";
+$langDefaultMissingWords = "Πρωτεύουσα της Ελλάδας είναι η [Πάτρα|Αθήνα|Θεσσαλονίκη].";
 $langDefaultMatchingOpt1 = "Αθήνα";
 $langDefaultMatchingOpt2 = "Λονδίνο";
 $langDefaultMakeCorrespond1 = "Πρωτεύουσα της Ελλάδας είναι η";
@@ -4591,7 +4591,7 @@ $langNoUnits = "Δεν υπάρχουν ενότητες";
 /* * ********************************************************************
   units_prerequisites
  * ********************************************************************* */
-$langUnitManage = 'Διαχείριση Ενότητας';
+$langUnitManage = 'Διαχείριση ενότητας';
 $langUnitCompletion = "Ολοκλήρωση ενότητας";
 $langUnitCompletionMessage = "Η ενότητα ολοκληρώθηκε με επιτυχία";
 $langUnitExerciseAdd = "Η άσκηση προστέθηκε με επιτυχία";
@@ -4603,7 +4603,7 @@ $langUnitCompletionActivated = "Η ολοκλήρωση της ενότητας 
 $langUnitCompletionDeactivated = "Η ολοκλήρωση της ενότητας απενεργοποιήθηκε";
 $langOfCourseCompletion = "Δραστηριοτήτων ολοκλήρωσης ενοτήτων";
 $langUnitPrerequisites = "Προαπαιτούμενη ενότητα";
-$langNewUnitPrerequisite = "Προσθήκη Προαπαιτουμένου";
+$langNewUnitPrerequisite = "Προσθήκη προαπαιτούμενου";
 $langNoUnitPrerequisite = "Δεν έχει οριστεί προαπαιτούμενη ενότητα.";
 $langUnitHasNotCompletionEnabled = "Αδυναμία προσθήκης, η ενότητας που επιλέξατε δεν έχει ενεργοποιημένη την ολοκλήρωση ενότητας.";
 $langNewUnitPrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε μία έγκυρη ενότητα.";
@@ -4611,6 +4611,7 @@ $langNewUnitPrerequisiteSuccess = "Το προαπαιτούμενο δημιο�
 $langDelUnitPrerequisiteSuccess = "Το προαπαιτούμενο διαγράφηκε με επιτυχία!";
 $langNewUnitPrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, η ενότητα που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
 $langsUnit = "ενότητα";
+$langInvalidCourseUnitPrerequisites = "Η ολοκλήρωση της ενότητας δεν είναι ενεργοποιημένη.";
 
 /* * ********************************************************************
   mail_verify.php

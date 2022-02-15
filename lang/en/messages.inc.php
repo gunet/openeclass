@@ -5469,6 +5469,8 @@ $langNewUnitPrerequisiteSuccess = "The prerequisite was successfully created!";
 $langDelUnitPrerequisiteSuccess = "The prerequisite was successfully deleted.";
 $langNewUnitPrerequisiteFailAlreadyIn = "Unable to add; the unit is already included in the prerequisites list.";
 $langsUnit = "unit";
+$langInvalidCourseUnitPrerequisites = "Course unit completion is not activated.";
+
 $langUserWayShortDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langUserWayLongDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langReuseActivate = "Activate Reuse";
