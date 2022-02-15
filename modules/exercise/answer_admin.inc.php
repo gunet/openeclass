@@ -140,17 +140,22 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code");
             }
         }
-
         if (empty($reponse)) {
             // if no text has been typed or the text contains no blank
             $msgErr = $langGiveText;
         } elseif (!preg_match('/\[.+\]/', $reponse)) {
             $msgErr = $langDefineBlanks;
-        } else {
-            // now we're going to give a weighting to each blank
-            $displayBlanks = true;
-            unset($submitAnswers);
-            $blanks = Question::getBlanks($_POST['reponse']);
+        } else { // now we're going to give a weighting to each blank
+                $displayBlanks = true;
+                unset($submitAnswers);
+            if ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                preg_match_all('/\[[^]]+\]/', $_POST['reponse'], $out);
+                foreach ($out[0] as $output) {
+                    $blanks[] = explode("|", str_replace(array('[',']'), '', q($output)));
+                }
+            } else {
+                $blanks = Question::getBlanks($_POST['reponse']);
+            }
         }
     } elseif ($answerType == MATCHING) {
 
@@ -303,6 +308,24 @@ if (isset($_GET['modifyAnswers'])) {
                 $weighting = explode(',', $_POST['str_weighting']);
             }
         }
+    }  elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+        if (!isset($submitAnswers) && !isset($buttonBack)) {
+            if (!(isset($_POST['setWeighting']) and $_POST['setWeighting'])) {
+                $answer = $objAnswer->selectAnswer(1);
+                if ($answer) {
+                    $answer_array = unserialize($answer);
+                    $reponse = $answer_array[0]; // answer text
+                    $correct_answer = $answer_array[1]; // correct answer
+                    $weighting = $answer_array[2]; // answer weight
+                } else {
+                    $reponse = '';
+                    $weighting = [];
+                }
+            } else {
+                $weighting = explode(',', $_POST['str_weighting']);
+            }
+        }
+
     } elseif ($answerType == MATCHING) {
 
         $option = $match = $sel = array();
@@ -533,8 +556,13 @@ if (isset($_GET['modifyAnswers'])) {
                      $tool_content .= "<tr><td>$langWeightingForEachBlankandChoose</td></tr>
                                      <table class='table'>";
                      foreach ($blanks as $i => $blank) {
+                         if (!empty($correct_answer)) {
+                             $default_selection = $correct_answer[$i];
+                         } else {
+                             $default_selection = '';
+                         }
                          $tool_content .= "<tr>
-                                            <td style='border-style: none;' class='text-right'>" . selection(explode("|", q($blank)), "correct_selected_word[".$i."]", '','class="form-control"') . "</td>
+                                            <td style='border-style: none;' class='text-right'>" . selection($blank, "correct_selected_word[".$i."]", $default_selection,'class="form-control"') . "</td>
                                             <td style='border-style: none;'><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
                                          </tr>";
                      }

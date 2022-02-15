@@ -472,6 +472,7 @@ if (count($exercise_question_ids) > 0) {
                         $answer = $answer_array[0]; // answer text
                         // fetch possible answers for all choices
                         preg_match_all('/\[[^]]+\]/', $answer, $out);
+                        $possible_answers = [];
                         foreach ($out[0] as $output) {
                             $possible_answers[] = explode("|", str_replace(array('[',']'), ' ', q($output)));
                         }

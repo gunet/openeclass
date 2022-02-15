@@ -28,6 +28,7 @@
  * @return int
  */
 function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_number) {
+
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
             $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered, $langClear;
@@ -120,7 +121,6 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
         elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
             $temp_string = unserialize($answer);
             $answer_string = $temp_string[0];
-
             // replaces [choices] with `select` field
             $replace_callback = function ($blank) use ($questionId, $exerciseResult, $question_number) {
                 static $id = 0;
@@ -454,6 +454,7 @@ function display_exercise($exercise_id) {
                             $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong>
                                           </td></tr>";
                         } elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                            $possible_answers = [];
                             // fetch all possible answers
                             preg_match_all('/\[[^]]+\]/', $answer_text, $out);
                             foreach ($out[0] as $output) {
