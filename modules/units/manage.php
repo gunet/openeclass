@@ -88,6 +88,7 @@ if ($is_editor) {
 
     if ($element_id) {
         $show_completion_button = false;
+
     } else {
         $show_completion_button = true;
     }
@@ -227,9 +228,13 @@ if ($is_editor) {
         Session::Messages("$langDelUnitPrerequisiteSuccess", "alert-success");
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } else {
-        Session::Messages('Something went wrong');
+        Session::Messages("$langGeneralError", "alert-danger");
         redirect($localhostUrl."/courses/$course_code/");
     }
+}
+
+if ($show_completion_button) {
+    $tool_content .= "<div class='text-center alert alert-warning'>$langInvalidCourseUnitPrerequisites</div>";
 }
 
 if (isset($display) and $display == TRUE) {
