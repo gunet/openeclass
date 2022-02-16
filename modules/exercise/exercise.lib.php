@@ -94,7 +94,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                             </tr>";
     }
 
-    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
+    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
         $tool_content .= "<div class='form-inline' style='line-height:2.2;'>";
     }
 
@@ -119,7 +119,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             $tool_content .= $answer;
         }
         // fill in with selected words
-        elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+        elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
             $temp_string = unserialize($answer);
             $answer_string = $temp_string[0];
             // replaces [choices] with `select` field
@@ -209,7 +209,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     if ($answerType == MATCHING && $nbrAnswers>0) {
         $tool_content .= "</table>";
     }
-    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
+    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
         $tool_content .= "</div>";
     }
     if (!$nbrAnswers && $answerType != FREE_TEXT) {
@@ -408,7 +408,7 @@ function display_exercise($exercise_id) {
                   <td colspan='2'><strong>$langAnswer</strong></td>
                   <td><strong>$langComment</strong></td>
                 </tr>";
-            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
+            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                 $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
             } elseif ($answerType == MATCHING) {
                 $tool_content .= "
@@ -430,7 +430,7 @@ function display_exercise($exercise_id) {
 
                     if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
                         list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
-                    } elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                    } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         $answer_array = unserialize($answerTitle);
                         $answer_text = $answer_array[0]; // answer text
                         $correct_answer = $answer_array[1]; // correct answer
@@ -453,7 +453,7 @@ function display_exercise($exercise_id) {
                         } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                             $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong>
                                           </td></tr>";
-                        } elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                        } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                             $possible_answers = [];
                             // fetch all possible answers
                             preg_match_all('/\[[^]]+\]/', $answer_text, $out);

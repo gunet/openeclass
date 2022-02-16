@@ -238,7 +238,7 @@ if (!class_exists('Question')) {
                     return $langFreeText;
                 case FILL_IN_BLANKS_TOLERANT:
                     return "$langFillBlanks ($langFillBlanksTolerant)";
-                case FILL_IN_FROM_SELECTED_WORDS:
+                case FILL_IN_FROM_PREDEFINED_ANSWERS:
                     return "$langFillFromSelectedWords";
             }
         }
@@ -528,7 +528,7 @@ if (!class_exists('Question')) {
                         $choice[$row->answer_id] = 1;
                     } elseif ($type == FREE_TEXT) {
                         $choice = $row->answer;
-                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_SELECTED_WORDS) {
+                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         $choice[$row->answer_id] = $row->answer;
                     } elseif ($type == MATCHING) {
                         $choice[$row->answer] = $row->answer_id;

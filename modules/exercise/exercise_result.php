@@ -344,7 +344,7 @@ if (count($exercise_question_ids) > 0) {
 
                 if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
                     list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
-                } elseif ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                     $answer_array = unserialize($answer);
                 }  else {
                     $answer = standard_text_escape($answer);
@@ -434,7 +434,7 @@ if (count($exercise_question_ids) > 0) {
                             $temp = substr($temp, $pos + 1);
                         }
                         break;
-                    case FILL_IN_FROM_SELECTED_WORDS :
+                    case FILL_IN_FROM_PREDEFINED_ANSWERS :
                         $answer = $answer_array[0]; // answer text
                         // fetch possible answers for all choices
                         preg_match_all('/\[[^]]+\]/', $answer, $out);
@@ -526,7 +526,7 @@ if (count($exercise_question_ids) > 0) {
                         break;
                 } // end switch()
 
-                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_SELECTED_WORDS, MATCHING])) {
+                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_PREDEFINED_ANSWERS, MATCHING])) {
                     Database::get()->query('UPDATE exercise_answer_record
                         SET weight = ?f
                         WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
@@ -563,7 +563,7 @@ if (count($exercise_question_ids) > 0) {
                         }
                         $tool_content .= "</td>";
                         $tool_content .= "</tr>";
-                    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) {
+                    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
                     } else { // matching
                         $tool_content .= "<tr><td>" . standard_text_escape($answer) . "</td>";
