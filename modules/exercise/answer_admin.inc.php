@@ -113,8 +113,8 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $weighting = array_map('fix_float', $_POST['weighting']);
             $weighting = array_map('abs', $weighting);
             if ($answerType == FILL_IN_FROM_SELECTED_WORDS) {
-                $questionWeighting = array_sum($_POST['weighting']);
-                $answer_array = [$_POST['reponse'], $_POST['correct_selected_word'], $_POST['weighting']];
+                $questionWeighting = array_sum($weighting);
+                $answer_array = [$_POST['reponse'], $_POST['correct_selected_word'], $weighting];
                 $answer = serialize($answer_array);
                 $objAnswer->createAnswer($answer, 0, '', 0, 1);
             } else {
@@ -134,6 +134,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $blanksDefined = true;
         }
         if (isset($buttonBack) or isset($blanksDefined)) {
+            Session::Messages($langQuestionUpdated, 'alert-success');
             if (isset($exerciseId)) {
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             } else {
@@ -556,6 +557,7 @@ if (isset($_GET['modifyAnswers'])) {
                      $tool_content .= "<tr><td>$langWeightingForEachBlankandChoose</td></tr>
                                      <table class='table'>";
                      foreach ($blanks as $i => $blank) {
+                         $blank = reindex_array_keys_from_one($blank);
                          if (!empty($correct_answer)) {
                              $default_selection = $correct_answer[$i];
                          } else {

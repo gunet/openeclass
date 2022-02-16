@@ -528,7 +528,7 @@ function group_secret($gid) {
 
 /**
  * displays a selection box
- * @param type $entries an array of (value => label)
+ * @param array $entries an array of (value => label)
  * @param type $name the name of the selection element
  * @param type $default if it matches one of the values, specifies the default entry
  * @param type $extra
@@ -4021,6 +4021,16 @@ function array_value_recursive($key, array $arr){
         if($k == $key) array_push($val, $v);
     });
     return $val;
+}
+
+/**
+ @brief reindex array keys so that they start from 1 (not from 0)
+ * @param $a array
+ * @return array
+ */
+function reindex_array_keys_from_one($a) {
+
+    return array_combine(range(1, count($a)), array_values($a));
 }
 
 /**

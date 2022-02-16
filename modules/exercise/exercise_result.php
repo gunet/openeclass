@@ -483,6 +483,7 @@ if (count($exercise_question_ids) > 0) {
                         $j = 1;
                         // the loop will stop at the end of the text
                         while (true) {
+                            $answer_string = reindex_array_keys_from_one($answer_string); // start from 1
                             // quits the loop if there are no more blanks
                             if (($pos = strpos($temp, '[')) === false) {
                                 // adds the end of the text
@@ -497,8 +498,10 @@ if (count($exercise_question_ids) > 0) {
                                 $answer .= q($temp);
                                 break;
                             }
+
                             $possible_answer = $possible_answers[$j-1]; // possible answers for each choice
-                            if ($choice[$j] == $answer_string[$j-1]) { // correct answer
+                            $possible_answer = reindex_array_keys_from_one($possible_answer); // start from 1
+                            if ($choice[$j] == $answer_string[$j]) { // correct answer
                                 $questionScore += $answerWeighting[$j-1]; // weight assignment
                                 if ($regrade) {
                                     Database::get()->query('UPDATE exercise_answer_record
@@ -515,7 +518,7 @@ if (count($exercise_question_ids) > 0) {
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             }
                             // adds the correct word, followed by ] to close the blank
-                            $answer .= ' / <span class="text-success"><strong>' . q($possible_answer[$answer_string[$j-1]]) . '</strong></span>';
+                            $answer .= ' / <span class="text-success"><strong>' . q($possible_answer[$answer_string[$j]]) . '</strong></span>';
                             $answer .= "]";
                             $answer .= "&nbsp;&nbsp;$icon";
                             $j++;
