@@ -1960,6 +1960,7 @@ $langChooseGoodAnswers = "Διαλέξτε μία ή περισσότερες σ
 $langColumnA = "Στήλη Α";
 $langColumnB = "Στήλη B";
 $langMoreLessChoices = "Προσθήκη/Αφαίρεση επιλογών";
+$langQuestionUpdated = "Τα στοιχεία της ερώτησης ενημερώθηκαν";
 
 // question_list_admin.php
 $langQuestionList = "Ερωτήσεις της άσκησης";

@@ -892,6 +892,8 @@ if (!class_exists('Exercise')) {
                         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                             $value[$answerId] = '';
                         }
+                    } elseif ($question_type == FILL_IN_FROM_SELECTED_WORDS) {
+                        $value = [];
                     } elseif ($question_type == FREE_TEXT) {
                         $value = '';
                     } else {
@@ -1017,7 +1019,7 @@ if (!class_exists('Exercise')) {
         private function update_answer_records($key, $value, $dummy1, $dummy2) {
             // construction of the Question object
             $objQuestionTmp = new Question();
-            // reads question informations
+            // reads question information
             $objQuestionTmp->read($key);
             $question_type = $objQuestionTmp->selectType();
             $id = $this->id;

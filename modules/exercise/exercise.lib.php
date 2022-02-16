@@ -29,7 +29,7 @@
  */
 function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_number) {
 
-    global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
+    global $tool_content, $picturePath, $langNoAnswer, $langQuestion, $langSelect,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
             $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
 
@@ -123,10 +123,12 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             $temp_string = unserialize($answer);
             $answer_string = $temp_string[0];
             // replaces [choices] with `select` field
-            $replace_callback = function ($blank) use ($questionId, $exerciseResult, $question_number) {
+            $replace_callback = function ($blank) use ($questionId, $langSelect) {
                 static $id = 0;
                 $id++;
-                return selection(explode("|", str_replace(array('[',']'), ' ', q($blank[0]))), "choice[$questionId][$id]", '','class="form-control"');
+                $selection_text = explode("|", str_replace(array('[',']'), ' ', q($blank[0])));
+                array_unshift($selection_text, "--- $langSelect ---");
+                return selection($selection_text, "choice[$questionId][$id]", 0,'class="form-control"');
             };
             $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
             $tool_content .= $answer_string;
@@ -460,7 +462,8 @@ function display_exercise($exercise_id) {
                             }
                             // find correct answers
                             foreach ($possible_answers as $possible_answer_key => $possible_answer) {
-                                $correct_answer_string[] = '['. $possible_answer[$correct_answer[$possible_answer_key]] . ']';
+                               $possible_answer = reindex_array_keys_from_one($possible_answer);
+                               $correct_answer_string[] = '['. $possible_answer[$correct_answer[$possible_answer_key]] . ']';
                             }
 
                             $formatted_answer_text = preg_replace_callback($correct_answer_string,
