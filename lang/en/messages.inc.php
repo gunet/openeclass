@@ -2134,7 +2134,6 @@ $m['in'] = "in";
 $m['today'] = "today";
 $m['tomorrow'] = "tomorrow";
 $m['submitted'] = "Submitted";
-$m['select'] = "Selection";
 $m['groupsubmit'] = "Submitted on behalf of";
 $m['ofgroup'] = "group";
 $m['deleted_work_by_user'] = "Previous submitted assignment was deleted";

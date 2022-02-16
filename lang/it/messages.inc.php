@@ -2095,7 +2095,6 @@ $m['in'] = "in";
 $m['today'] = "oggi";
 $m['tomorrow'] = "domani";
 $m['submitted'] = "È&nbsp;inviato";
-$m['select'] = "Selezione";
 $m['groupsubmit'] = "Inviato per conto ";
 $m['ofgroup'] = "del gruppo";
 $m['deleted_work_by_user'] = "È stato eliminato il compito precedente inviato con il file ";

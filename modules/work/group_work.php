@@ -59,36 +59,20 @@ if (isset($_GET['submit'])) {
 
 /**
  * @brief show non-expired assignments list to allow selection
- * @global type $m
- * @global type $uid
- * @global type $group_id
- * @global type $langSubmit
- * @global type $langNoAssign
- * @global type $tool_content
- * @global type $langWorks
- * @global type $course_id
- * @global type $course_code
- * @global type $themeimg
- * @global type $langCancel
- * @global type $urlServer
- * @global type $langTitle
- * @global type $langYes
- * @global type $langNo
- * @global type $langHasExpiredS
  * @return type
  */
 function show_assignments() {
-    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content,
+    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langSelect,
             $langYes, $langNo, $langWorks, $course_id, $course_code, $langGroupWorkDeadline_of_Submission,
             $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS;
-    
+
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
         $gids_sql_ready = implode(',',array_keys($gids));
     } else {
         $gids_sql_ready = "''";
     }
-    
+
     $res = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM assignment WHERE course_id = ?d AND active = '1' AND
                                  (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
@@ -140,14 +124,14 @@ function show_assignments() {
                     <input type='hidden' name='file' value='" . q($_GET['submit']) . "'>
                     <input type='hidden' name='group_id' value='$group_id'>
                     <div class='form-group'>
-                        <label for='title' class='col-sm-2 control-label'>$langWorks ($m[select]):</label>
+                        <label for='title' class='col-sm-2 control-label'>$langWorks ($langSelect):</label>
                         <div class='col-sm-10'>
                             <table class='table-default'>
                                 <tr>
                                     <th class='left' colspan='2'>$langTitle</th>
                                     <th align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
                                     <th align='center' width='10%'>$m[submitted]</th>
-                                    <th align='center' width='10%'>$m[select]</th>
+                                    <th align='center' width='10%'>$langSelect</th>
                                 </tr>
                                 $table_content
                             </table>

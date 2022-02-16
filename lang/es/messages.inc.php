@@ -2099,7 +2099,6 @@ $m['in'] = "En";
 $m['today'] = "hoy";
 $m['tomorrow'] = "mañana";
 $m['submitted'] = "Sometido";
-$m['select'] = "Selección";
 $m['groupsubmit'] = "Sometido de parte de";
 $m['ofgroup'] = "grupo";
 $m['deleted_work_by_user'] = "El trabajo sometido anteriormente ha sido borrado";

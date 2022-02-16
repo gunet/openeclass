@@ -2042,7 +2042,6 @@ $m['in'] = "in";
 $m['today'] = "heute";
 $m['tomorrow'] = "morgen";
 $m['submitted'] = "wurde abgeschickt";
-$m['select'] = "Auswahl";
 $m['groupsubmit'] = "wurde abgeschickt in Auftrag des";
 $m['ofgroup'] = "Gruppe";
 $m['deleted_work_by_user'] = "Die vorherige eingereichte Studienarbeit, die Sie mit der Datei geschickt hatten, wurde gelöscht";
