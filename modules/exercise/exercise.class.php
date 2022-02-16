@@ -971,7 +971,7 @@ if (!class_exists('Exercise')) {
                         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                             $value[$answerId] = '';
                         }
-                    } elseif ($question_type == FILL_IN_FROM_SELECTED_WORDS) {
+                    } elseif ($question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         $value = [];
                     } elseif ($question_type == FREE_TEXT) {
                         $value = '';
@@ -1024,7 +1024,7 @@ if (!class_exists('Exercise')) {
                         VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
                         $eurid, $key, $row_choice, $row_key, $weight, $as_answered, $q_position);
                 }
-            } elseif ($question_type == FILL_IN_FROM_SELECTED_WORDS) {
+            } elseif ($question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                 $objAnswersTmp = new Answer($key);
                 $answer = $objAnswersTmp->selectAnswer(1);
                 $answer_string = unserialize($answer);

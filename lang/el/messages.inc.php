@@ -1934,7 +1934,7 @@ $langFillBlanksStrict = "Αυστηρή Ταυτοποίηση";
 $langFillBlanksTolerant = "Χαλαρή Ταυτοποίηση";
 $langFillBlanksStrictExample = "(Αθήνα ≠ αθηνα ≠ ΑΘΗΝΑ)";
 $langFillBlanksTolerantExample = "(Αθήνα = αθηνα = ΑΘΗΝΑ)";
-$langFillFromSelectedWords = "Από προκαθορισμένες λέξεις";
+$langFillFromSelectedWords = "Επιλογή από προκαθορισμένες απαντήσεις";
 $langMatching = "Αντιστοίχιση";
 $langTrueFalse = "Σωστό / Λάθος";
 $langFreeText = "Ελεύθερου Κειμένου";

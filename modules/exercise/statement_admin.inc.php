@@ -264,13 +264,13 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='answerType' value='". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) ? $answerType : 3) ."' id='fill_in_blanks_selector' ". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_SELECTED_WORDS) ? "checked" : "") .">
+                        <input type='radio' name='answerType' value='". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? $answerType : 3) ."' id='fill_in_blanks_selector' ". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? "checked" : "") .">
                        $langFillBlanks
                       </label>
                     </div>
                     <div class='row'>
                         <div class='col-xs-11 col-xs-offset-1'>
-                            <div class='form-group ".(($answerType != FILL_IN_BLANKS && $answerType != FILL_IN_BLANKS_TOLERANT && $answerType != FILL_IN_FROM_SELECTED_WORDS) ? "hide": "")."' id='fillInBlanksOptions'>
+                            <div class='form-group ".(($answerType != FILL_IN_BLANKS && $answerType != FILL_IN_BLANKS_TOLERANT && $answerType != FILL_IN_FROM_PREDEFINED_ANSWERS) ? "hide": "")."' id='fillInBlanksOptions'>
                                 <div class='col-sm-8 col-sm-offest-4'>
                                     <div class='radio'>
                                         <label>
@@ -286,7 +286,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                     </div>
                                     <div class='radio'>
                                         <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_FROM_SELECTED_WORDS."' ". (($answerType == FILL_IN_FROM_SELECTED_WORDS) ? "checked" : "") .">
+                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_FROM_PREDEFINED_ANSWERS."' ". (($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? "checked" : "") .">
                                             $langFillFromSelectedWords
                                         </label>
                                     </div>
