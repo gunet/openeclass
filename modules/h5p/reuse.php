@@ -36,7 +36,7 @@ $real_filename = $content->title . '.h5p';
 $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
 $contentDir = $webDir . '/courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
 $libsDir = $webDir . '/courses/h5p/libraries/';
-validateMainH5pJson($contentDir);
+validateMainH5pJson($contentDir, $content->title);
 zip_h5p_package($dload_filename, $contentDir, $libsDir);
 send_file_to_client($dload_filename, $real_filename, null, true, true);
 exit;
@@ -91,11 +91,19 @@ function zip_add_files($zipFile, $filesDir, $excludeLen) {
     }
 }
 
-function validateMainH5pJson($contentDir) {
+function validateMainH5pJson($contentDir, $contentTitle) {
     $jsonpath = $contentDir . "/h5p.json";
     $jsonfile = file_get_contents($jsonpath);
     $data = json_decode($jsonfile, true);
     $update = false;
+    if (!isset($data["title"])) {
+        $update = true;
+        if (isset($contentTitle) && strlen($contentTitle) > 0) {
+            $data["title"] = $contentTitle;
+        } else {
+            $data["title"] = "und";
+        }
+    }
     if (!isset($data["language"])) {
         $update = true;
         $data["language"] = "und";
