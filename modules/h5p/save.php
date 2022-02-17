@@ -35,7 +35,7 @@ function uploadContent(): bool {
     }
     mkdir($upload_dir, 0755, true);
 
-    $target_file = $upload_dir . "/" . basename($_FILES["userFile"]["name"]);
+    $target_file = $upload_dir . "/" . my_basename($_FILES["userFile"]["name"]);
     move_uploaded_file($_FILES["userFile"]["tmp_name"], $target_file);
 
     $factory = new H5PFactory();
