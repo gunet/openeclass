@@ -204,6 +204,8 @@ function details($qid, $eurid) {
  */
 function question_answer_details($eurid, $qid) {
 
+    global $langChoice;
+
     $content = $temp_content = '';
     $q = Database::get()->queryArray("SELECT question_id, answer, answer_id, `type`
                        FROM exercise_answer_record
@@ -241,13 +243,20 @@ function question_answer_details($eurid, $qid) {
                 case FILL_IN_BLANKS:
                     $content .= "[" . $data->answer . "] ";
                 break;
+                case FILL_IN_FROM_PREDEFINED_ANSWERS:
+                    if ($data->answer > 0) {
+                        $content .= "[" . $langChoice . ": " . $data->answer . "] ";
+                    } else {
+                        $content .= " --- ";
+                    }
+                break;
                 case MATCHING:
-                    $col_a = Database::get()->querySingle("SELECT answer FROM exercise_answer 
-                                        WHERE question_id = ?d 
+                    $col_a = Database::get()->querySingle("SELECT answer FROM exercise_answer
+                                        WHERE question_id = ?d
                                         AND r_position = ?d",
                                     $data->question_id, $data->answer_id);
-                    $col_b = Database::get()->querySingle("SELECT answer FROM exercise_answer 
-                                        WHERE question_id = ?d 
+                    $col_b = Database::get()->querySingle("SELECT answer FROM exercise_answer
+                                        WHERE question_id = ?d
                                         AND r_position = ?d",
                                     $data->question_id, $data->answer);
                     if ($col_a) {
