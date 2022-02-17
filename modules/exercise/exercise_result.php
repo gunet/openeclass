@@ -479,8 +479,13 @@ if (count($exercise_question_ids) > 0) {
                                 $answer .= '<strong>' . q($possible_answer[$choice[$j]]) . '</strong>';
                                 $icon = "<span class='fa fa-check text-success'></span>";
                             }  else { // wrong answer
-                                // adds the word in red at the end of the string, and strikes it
-                                $answer .= '<span class="text-danger"><s>' . q($possible_answer[$choice[$j]]) . '</s></span>';
+                                if (isset($possible_answer[$choice[$j]])) { // if we have chosen something
+                                    // adds the word in red at the end of the string, and strikes it
+                                    $answer_choice = '<span class="text-danger"><s>' . q($possible_answer[$choice[$j]]) . '</s></span>';
+                                } else {
+                                    $answer_choice =  "&nbsp;&mdash;";
+                                }
+                                $answer .= $answer_choice;
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             }
                             // adds the correct word, followed by ] to close the blank
