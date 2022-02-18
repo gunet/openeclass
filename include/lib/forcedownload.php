@@ -391,7 +391,7 @@ function public_path_to_disk_path($path_components, $path = '') {
             $path = $r->path;
             $depth++;
         }
-        if (!preg_match("/\.$r->format$/", $component)) {
+        if (!preg_match("/\.$r->format$/i", $component)) {
             $component .= '.' . $r->format;
         }
         $r->filename = $component;
