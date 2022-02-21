@@ -38,8 +38,6 @@ require_once 'perso.php';
 $tree = new Hierarchy();
 $user = new User();
 
-//ModalBoxHelper::loadModalBox();
-
 if(!empty($langLanguageCode)){
     load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
 }
