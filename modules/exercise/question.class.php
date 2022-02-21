@@ -660,6 +660,8 @@ if (!class_exists('Question')) {
                     $i++;
                }
                $q_correct_answers_cnt = $i - 1;
+            } elseif ($type == FILL_IN_FROM_PREDEFINED_ANSWERS) { // TO BE implemented
+                $q_correct_answers_cnt = 0;
             }
             //FIND CORRECT ANSWER ATTEMPTS
             if ($type == FREE_TEXT) {
