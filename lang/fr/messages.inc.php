@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2021-11-26 15:55:08
+// Generated 2022-02-21 14:44:41
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -22,13 +22,15 @@ $langAnd = "et";
 $langCoursesHeader = "Cours";
 $langClosed = "fermés";
 $langOpen = "ouverts";
-$langSemiopen = "sur inscription";
+$langSemiopen = "sur inscription"
+;
 $langUsers = "Utilisateurs";
 $langUsersS = "utilisateurs";
 $langUser = "Utilisateur";
 $langUserHeader = "Utilisateur :";
 $langUserS = "utilisateur";
-$langSupportUser = "Responsable de Soutien technique :";
+$langSupportUser = "Responsable de Soutien technique :"
+;
 $langAdminUsers = "Gestion des Utilisateurs";
 $langDeleteAdmin = "La suppression de l'administrateur avec id :";
 $langNotFeasible = "n'est pas possible";
@@ -38,7 +40,8 @@ $langNotFound = "introuvable";
 $langWith = "avec";
 $langDone = "a été devenu administrateur.";
 $langErrorAddaAdmin = "Erreur : l'utilisateur n'a pas été ajouté aux administrateurs. Il se peut qu'il soit déjà un des administrateurs.";
-$langInsertUserInfo = "Entrer les informations d'utilisateur";
+$langInsertUserInfo = "Entrer les informations d'utilisateur"
+;
 $langPage = "Page :";
 $langBeforePage = "Précédente";
 $langAfterPage = "Suivante";
@@ -46,7 +49,8 @@ $langComments = "Commentaires";
 $langAdmin = "Outils de Gestion de la Plateforme";
 $langState = "Gestion du Serveur";
 $langDevAdmin = "Gestion de la Base de Données";
-$langSysInfo = "À propos du Système";
+$langSysInfo = "À propos du Système"
+;
 $langCheckDatabase = "Vérifier la base de données principale";
 $langStatOf = "Statistiques de";
 $langSpeeSubscribe = "Inscription en tant qu'Administrateur de Cours";
@@ -743,7 +747,6 @@ $langUsedInSeveralExercises = "Attention ! Cette question avec ses réponses son
 $langModifyInAllExercises = "à tous les exercices";
 $langModifyInThisExercise = "uniquement à cet exercice";
 $langQuestionView = "Afficher";
-$langWarnAboutAnsweredQuestion = "Warning! The question has already been answered! If you delete it, exercise results will be modified.";
 $langAnswerType = "Type de réponse";
 $langUniqueSelect = "Choix Multiple (Réponse Unique)";
 $langMultipleSelect = "Choix Multiple (Réponses Multiples)";
@@ -1077,9 +1080,9 @@ $langDBSetting = "Paramètres de MySQL";
 $langMainLang = "Langue Principale de l'installation";
 $langLastCheck = "Dernière vérification avant l'installation";
 $langRequirements = "Exigences du système";
-$langInstallEnd = "Installation terminée"
+$langInstallEnd = "Installation terminée" 
 ;
-$langModuleNotInstalled = "Non installé"
+$langModuleNotInstalled = "Non installé" 
 ;
 $langReadHelp = "Lire plus";
 $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
@@ -1111,7 +1114,7 @@ $langLDAPBaseDn = "Base DN du Serveur LDAP";
 $langChooseLang = "Choisissez la langue";
 $langBeforeInstall1 = "Avant de procéder à l'installation, veuillez imprimer et lire attentivement les";
 $langBeforeInstall2 = "De plus, vous trouverez des informations générales concernant la plateforme";
-$langInstallInstr = "Instructions d'installation"
+$langInstallInstr = "Instructions d'installation" 
 ;
 $langAddComment = "Ajouter / Modifier un commentaire";
 $langLearningModule = "Section";
@@ -1172,7 +1175,7 @@ $langDocumentAsModule = "Utiliser un document";
 $langDocumentAsModuleLabel = "de Document";
 $langDocumentInModule = "Document dans un module";
 $langEXERCISETypeDesc = "Exercice de la plateforme";
-$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape."
+$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape." 
 ;
 $langErrorAssetNotFound = "Élément introuvable :";
 $langErrorCopyAttachedFile = "Impossible de copier le fichier : ";
@@ -1904,9 +1907,9 @@ $langNewId = "Nouveau identifiant"
 $langUsersWillAdd = "Les utilisateurs du cours seront ajoutés";
 $langErrorLang = "Erreur ! Aucune langue trouvée !"
 ;
-$langDoSearch = "Poursuivre la recherche"
+$langDoSearch = "Poursuivre la recherche" 
 ;
-$langSearch_terms = "Critères de recherche :"
+$langSearch_terms = "Critères de recherche :" 
 ;
 $langSearchIn = "Recherche dans :";
 $langSearchWith = "Recherche selon des critères :";
@@ -5306,7 +5309,7 @@ $langInsertChat = 'chat';
 $langEBooks = 'E-Books';
 $langBBBExternalUsers = "External Users";
 $langBBBAnnDisplay = "to be displayed in announcements";
-$langColmoocDescription = "ColMOOC Description";
+$langColmoocDescription = 'Interface with the Conversational Agent and Learning Analytics modules of the <a href="https://colmooc.eu/">colMOOC</a> project.';
 $langColmoocCreateAgentFailed = "Agent Create Error Detected. Please retry.";
 $langColmoocCreateAgentSuccess = "Agent created successfully. Please instruct your students to enroll the chat.";
 $langColmoocRegisterStudentFailed = "Student Chat Loading Error Detected. Please retry.";
@@ -5353,7 +5356,6 @@ $langReviewEnd = "End of Review Date";
 $langReviewDateHelpBlock = "Click here for different (future) start of review date";
 $langPeerReviewImpossible = "Number of assignments aren't sufficient for peer reviewing";
 $langPeerReviewGrade = "Review Grade";
-$langTransferGrades = "Transfer grades";
 $langPeerReviewCompletedByStudent = "His reviews have completed";
 $langPeerReviewPendingByStudent = "His reviews haven't completed";
 $langPeerReviewMissingByStudent = "His reviews haven't done";
@@ -5616,11 +5618,41 @@ $langH5pDeleteSuccess = "The H5P interactive content was successfully deleted";
 $langOfH5p = "interactive content";
 $langTypeH5P = "H5P content type";
 $langImportH5P = "Import an H5P interactive content via the following form.";
-$langH5pInfoUpdate = "Click in 'Update' in order to update h5p content types (if it is needed)<br>
-                    For further details about the available h5p content types click inF$langHideDocuments
-                    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
-                    .";
-$langInfoMonthlyStatistics = "also displayed the corresponding increase / decrease compared to the previous month";
+$langH5pInfoUpdate = "Click 'Update' in order to update H5P content types (if needed)<br>
+    For further details about the available H5P content types please visit
+    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>.";
 $langMultipleCourseUsers = "Users registered to the most courses";
-$langLast30Entries = "30 top records";
+$langLast30Entries = "Top 30 results";
 $langHaveCreated = "Created";
+$langWarnAboutAnsweredQuestion = "Warning! The question has already been answered! If you delete it, exercise results will be modified.";
+$langFillFromSelectedWords = "À partir des mots sélectionnés";
+$langWeightingForEachBlankandChoose = "Entrez le poids de chaque blanc et choisissez la bonne réponse";
+$langUseTagForSelectedWords = "use brackets [...] to specify one or more blanks and the character | to specify the possible answers";
+$langDefaultMissingWords = "La capitale de la Grèce est [Patra|Athènes|Thessalonique].";
+$lang_disable_cron_jobs = "Disable monthly statistics generation";
+$langChangeDBEncoding = "Changing database encoding to utf8mb4";
+$langInfoMonthlyStatistics = "also displayed the corresponding increase / decrease compared to the previous month";
+$langTransferGrades = "Transfer grades";
+$langUnitManage = 'Manage Unit';
+$langUnitCompletion = "Unit Completion";
+$langUnitCompletionMessage = "The unit was completed successfully";
+$langUnitExerciseAdd = "The exercise was added to the unit";
+$langManage = "Manage Units";
+$langUnitActivity = "activity";
+$langUnitCompletionActivate = "Enable Unit Completion";
+$langUnitCompletionDeactivate = "Disable Unit Completion";
+$langUnitCompletionActivated = "Unit completion was enabled";
+$langUnitCompletionDeactivated = "Unit completion was disabled";
+$langUnitPrerequisites = "Prerequisite unit";
+$langNewUnitPrerequisite = "Add Prerequisites";
+$langNoUnitPrerequisite = "No prerequisite unit set.";
+$langUnitHasNotCompletionEnabled = "Unable to add; completion is not enabled for the selected unit.";
+$langNewUnitPrerequisiteFailInvalid = "Unable to add; please select a valid unit.";
+$langNewUnitPrerequisiteSuccess = "The prerequisite was successfully created!";
+$langDelUnitPrerequisiteSuccess = "The prerequisite was successfully deleted.";
+$langNewUnitPrerequisiteFailAlreadyIn = "Unable to add; the unit is already included in the prerequisites list.";
+$langsUnit = "unit";
+$langUserWayShortDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
+$langUserWayLongDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
+$langReuseActivate = "Activate Reuse";
+$langReuseDeactivate = "Deactivate Reuse";

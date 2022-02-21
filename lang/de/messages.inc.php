@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2021-11-26 15:55:07
+// Generated 2022-02-21 14:44:40
 
 $langYes = "Ja";
 $langNo = "Nein";
@@ -677,7 +677,6 @@ $langUsedInSeveralExercises = "Vorsicht! Die Frage und diese Antworten werden in
 $langModifyInAllExercises = "in allen Übungen";
 $langModifyInThisExercise = "in dieser Übung";
 $langQuestionView = "Ansicht";
-$langWarnAboutAnsweredQuestion = "Warning! The question has already been answered! If you delete it, exercise results will be modified.";
 $langAnswerType = "Antwort Typ";
 $langUniqueSelect = "Mehrere Auswahlmöglichkeiten (eine Antwort)";
 $langMultipleSelect = "Mehrere Auswahlmöglichkeiten (mehrere Antworten)";
@@ -5017,7 +5016,7 @@ $langInsertChat = 'chat';
 $langEBooks = 'E-Books';
 $langBBBExternalUsers = "External Users";
 $langBBBAnnDisplay = "to be displayed in announcements";
-$langColmoocDescription = "ColMOOC Description";
+$langColmoocDescription = 'Interface with the Conversational Agent and Learning Analytics modules of the <a href="https://colmooc.eu/">colMOOC</a> project.';
 $langColmoocCreateAgentFailed = "Agent Create Error Detected. Please retry.";
 $langColmoocCreateAgentSuccess = "Agent created successfully. Please instruct your students to enroll the chat.";
 $langColmoocRegisterStudentFailed = "Student Chat Loading Error Detected. Please retry.";
@@ -5064,7 +5063,6 @@ $langReviewEnd = "End of Review Date";
 $langReviewDateHelpBlock = "Click here for different (future) start of review date";
 $langPeerReviewImpossible = "Number of assignments aren't sufficient for peer reviewing";
 $langPeerReviewGrade = "Review Grade";
-$langTransferGrades = "Transfer grades";
 $langPeerReviewCompletedByStudent = "His reviews have completed";
 $langPeerReviewPendingByStudent = "His reviews haven't completed";
 $langPeerReviewMissingByStudent = "His reviews haven't done";
@@ -5327,11 +5325,41 @@ $langH5pDeleteSuccess = "The H5P interactive content was successfully deleted";
 $langOfH5p = "interactive content";
 $langTypeH5P = "H5P content type";
 $langImportH5P = "Import an H5P interactive content via the following form.";
-$langH5pInfoUpdate = "Click in 'Update' in order to update h5p content types (if it is needed)<br>
-                    For further details about the available h5p content types click inF$langHideDocuments
-                    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
-                    .";
+$langH5pInfoUpdate = "Click 'Update' in order to update H5P content types (if needed)<br>
+    For further details about the available H5P content types please visit
+    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>.";
 $langMultipleCourseUsers = "Users registered to the most courses";
-$langLast30Entries = "30 top records";
+$langLast30Entries = "Top 30 results";
 $langHaveCreated = "Created";
+$langWarnAboutAnsweredQuestion = "Warning! The question has already been answered! If you delete it, exercise results will be modified.";
+$langFillFromSelectedWords = "Füllen aus ausgewählten Wörtern ";;
+$langWeightingForEachBlankandChoose = "Geben Sie das Gewicht für jede Lücke ein und wählen Sie die richtige Antwort aus";
+$langUseTagForSelectedWords = "use brackets [...] to specify one or more blanks and the character | to specify the possible answers";
+$langDefaultMissingWords = "Die Hauptstadt von Griechenland ist [Patras|Athen|Thessaloniki]";
+$lang_disable_cron_jobs = "Disable monthly statistics generation";
+$langChangeDBEncoding = "Changing database encoding to utf8mb4";
 $langInfoMonthlyStatistics = "also displayed the corresponding increase / decrease compared to the previous month";
+$langTransferGrades = "Transfer grades";
+$langUnitManage = 'Manage Unit';
+$langUnitCompletion = "Unit Completion";
+$langUnitCompletionMessage = "The unit was completed successfully";
+$langUnitExerciseAdd = "The exercise was added to the unit";
+$langManage = "Manage Units";
+$langUnitActivity = "activity";
+$langUnitCompletionActivate = "Enable Unit Completion";
+$langUnitCompletionDeactivate = "Disable Unit Completion";
+$langUnitCompletionActivated = "Unit completion was enabled";
+$langUnitCompletionDeactivated = "Unit completion was disabled";
+$langUnitPrerequisites = "Prerequisite unit";
+$langNewUnitPrerequisite = "Add Prerequisites";
+$langNoUnitPrerequisite = "No prerequisite unit set.";
+$langUnitHasNotCompletionEnabled = "Unable to add; completion is not enabled for the selected unit.";
+$langNewUnitPrerequisiteFailInvalid = "Unable to add; please select a valid unit.";
+$langNewUnitPrerequisiteSuccess = "The prerequisite was successfully created!";
+$langDelUnitPrerequisiteSuccess = "The prerequisite was successfully deleted.";
+$langNewUnitPrerequisiteFailAlreadyIn = "Unable to add; the unit is already included in the prerequisites list.";
+$langsUnit = "unit";
+$langUserWayShortDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
+$langUserWayLongDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
+$langReuseActivate = "Activate Reuse";
+$langReuseDeactivate = "Deactivate Reuse";
