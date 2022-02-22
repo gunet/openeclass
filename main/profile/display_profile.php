@@ -247,7 +247,7 @@ if ($userdata) {
         </div>";
 
         // get completed certificates with public url
-        $sql = Database::get()->queryArray("SELECT identifier, template_id FROM certified_users WHERE user_id = ?d", $uid);
+        $sql = Database::get()->queryArray("SELECT identifier, template_id FROM certified_users WHERE user_id = ?d", $id);
         if (count($sql) > 0) {
             $tool_content .= "<div class='panel panel-default'>
                               <div class='panel-body'>";
@@ -282,7 +282,7 @@ if ($userdata) {
                 . "AND b.active = 1 "
                 . "AND b.bundle != -1 "
                 . "AND (b.expires IS NULL OR b.expires > NOW())";
-        $sql2 = Database::get()->queryArray($gameQ, $uid);
+        $sql2 = Database::get()->queryArray($gameQ, $id);
         if (count($sql2) > 0) {
             $tool_content .= "<div class='panel panel-default'>
                               <div class='panel-body'>";
