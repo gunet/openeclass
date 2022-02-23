@@ -2124,7 +2124,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.13', '<')) {
-
+        // h5p
         if (!DBHelper::fieldExists('h5p_content', 'title')) {
             Database::get()->query("ALTER TABLE h5p_content ADD title VARCHAR(255) AFTER id");
         }
@@ -2141,7 +2141,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('badge', 'unit_id')) {
             Database::get()->query("ALTER TABLE badge ADD unit_id INT(11) NOT NULL DEFAULT 0");
         }
-
         if (!DBHelper::tableExists('unit_prerequisite')) {
             Database::get()->query("CREATE TABLE `unit_prerequisite` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -2150,8 +2149,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
               `prerequisite_unit` int(11) not null,
               PRIMARY KEY (`id`)) $tbl_options");
         }
-
-        // change database_encoding to utf8 mb4
+        // course favorites
+        if (!DBHelper::tableExists('course_favorite')) {
+            Database::get()->query("CREATE TABLE `course_favorite` (
+             `user_id` INT NOT NULL,
+             `course_id` INT NOT NULL,
+             `favorite` datetime DEFAULT NULL,
+              KEY `user_id` (`user_id`),
+              KEY `course_id` (`course_id`),
+              CONSTRAINT `course_favorite_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+              CONSTRAINT `course_favorite_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+            ) $tbl_options");
+        }
+        // change database encoding to utf8mb4
         updateInfo(1, $langChangeDBEncoding);
         convert_db_encoding_to_utf8mb4();
     }
