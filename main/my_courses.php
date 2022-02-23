@@ -32,19 +32,23 @@ require_once 'perso_functions.php';
 $toolName = $langMyCourses;
 
 //  Get user's course list
-$myCourses = Database::get()->queryArray('SELECT course.id course_id,
+$myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course.code code,
                      course.public_code,
                      course.title title,
                      course.prof_names professor,
                      course.lang,
-                     course.visible,
-                     course_user.status status
-               FROM course, course_user
-               WHERE course.id = course_user.course_id AND
-                     course_user.user_id = ?d AND
-                     (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
-               ORDER BY course_user.status, course.title, course.prof_names', $uid);
+                     course.visible visible,
+                     course_user.status status,
+                     course_favorite.favorite
+               FROM course JOIN course_user
+                    ON course.id = course_user.course_id 
+                    AND course_user.user_id = ?d 
+                    AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                LEFT JOIN course_favorite
+                   ON course_favorite.course_id = course.id 
+                   AND course_favorite.user_id = course_user.user_id
+                ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
 $tool_content .= action_bar([
     [ 'title' => $langRegCourses,
@@ -69,11 +73,21 @@ if ($myCourses) {
         <div class='table-responsive'>
             <table class='table-default'>
                 <thead class='list-header'>
-                    <th>$langTitle</th>
+                    <th>$langCourse</th>
                     <th class='text-center'>".icon('fa-gears')."</th>
                 </thead>
                 <tbody>";
     foreach ($myCourses as $course) {
+        if (isset($course->favorite)) {
+            $favorite_icon = 'fa-star';
+            $fav_status = 0;
+            $fav_message = '';
+        } else {
+            $favorite_icon = 'fa-bookmark-o';
+            $fav_status = 1;
+            $fav_message = $langFavorite;
+        }
+        $favorite_button = icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=" . $fav_status. "&amp;from_ext_view=1");
         if ($course->status == USER_STUDENT) {
             $action_button = icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
         } elseif ($course->status == USER_TEACHER) {
@@ -89,6 +103,7 @@ if ($myCourses) {
                             <div><small>" . q($course->professor) . "</small></div>
                         </td>
                         <td class='text-center'>
+                            $favorite_button &nbsp;
                             $action_button
                         </td>
                     </tr>";

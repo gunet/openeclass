@@ -63,6 +63,7 @@ if (!isset($_POST['doit'])) {
                                     WHERE course_id = ?d
                                     AND user_id = ?d", $cid, $_GET['u']);
         if ($q->affectedRows > 0) {
+            Database::get()->query("DELETE FROM course_favorite WHERE course_id = ?d AND user_id = ?d", $cid, $_GET['u']);
             Database::get()->query("DELETE FROM group_members
                                 WHERE user_id = ?d AND
                                   group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $_GET['u'], $cid);
@@ -91,7 +92,7 @@ if (!isset($_POST['doit'])) {
             $tool_content .= "<div class='alert alert-danger'>$langCoursError</div>";
         }
     }
-    $tool_content .= "<br><br><div align=right><a href='../index.php' class=mainpage>$langBack</a></div>";
+    $tool_content .= "<br><br><div class='text-right'><a href='../index.php' class=mainpage>$langBack</a></div>";
 }
 
 if (isset($_SESSION['uid'])) {

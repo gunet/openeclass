@@ -643,7 +643,7 @@ if (count($allProviders)) {
                   <img src='$themeimg/tick.png' alt='$langProviderConnectWith $settings'>
                   <a href='$sec?action=delete&provider=$settings'>$langProviderDeleteConnection</a>";
         } else {
-	    $tool_content .= "<a href='$sec?action=connect&provider=$settings'>$langProviderConnect</a>";
+	    $tool_content .= "<a href='$sec?action=connect&provider=$settings'>$langLogIn</a>";
         }
         $tool_content .= "</div>";
     }

@@ -1725,6 +1725,7 @@ function delete_course($cid) {
         deleteUser($guest_user->user_id, true);
     }
     Database::get()->query("DELETE FROM course_user WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM course_favorite WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_department WHERE course = ?d", $cid);
     Database::get()->query("DELETE FROM course WHERE id = ?d", $cid);
     Database::get()->query("DELETE FROM video WHERE course_id = ?d", $cid);
@@ -1855,6 +1856,7 @@ function deleteUser($id, $log) {
                                     WHERE wall_post.user_id = ?d", $u);
             Database::get()->query("DELETE FROM wall_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM abuse_report WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM course_favorite WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
             Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
