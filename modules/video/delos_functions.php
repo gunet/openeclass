@@ -278,7 +278,7 @@ function requestDelosJSON() {
 }
 
 function displayDelosForm($jsonPublicObj, $jsonPrivateObj, $checkAuth, $currentVideoLinks) {
-    global $course_id, $course_code, $langTitle, $langDescription, $langcreator, $langpublisher, $langDate,
+    global $course_id, $course_code, $langTitle, $langDescription, $langCreator, $langpublisher, $langDate,
            $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory, $langNoVideo,
            $langOpenDelosPublicVideos, $langOpenDelosPrivateVideos, $urlServer, $langOpenDelosAuth,
            $langOpenDelosRequireAuth, $langOpenDelosRequireAuthHere, $langOpenDelosPrivateNote;
@@ -292,7 +292,7 @@ function displayDelosForm($jsonPublicObj, $jsonPrivateObj, $checkAuth, $currentV
             <tr class="list-header">
                 <th>$langTitle</th>
                 <th>$langDescription</th>
-                <th>$langcreator</th>
+                <th>$langCreator</th>
                 <th>$langpublisher</th>
                 <th>$langDate</th>
                 <th>$langSelect</th>

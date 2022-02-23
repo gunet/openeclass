@@ -327,7 +327,7 @@ function loggedOutMenu() {
     array_push($sideMenuImg, "fa-graduation-cap");
 
     if (get_config('user_registration') and get_config('registration_link') != 'hide') {
-        array_push($sideMenuText, $GLOBALS['langNewUser']);
+        array_push($sideMenuText, $GLOBALS['langRegistration']);
         array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
         array_push($sideMenuImg, "fa-pencil-square-o");
     }

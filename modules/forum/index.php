@@ -45,7 +45,7 @@ if ($is_editor) {
     $tool_content .= "
 	<div id='operations_container'>" .
             action_bar(array(
-                array('title' => $langAddCategory,
+                array('title' => $langCategoryAdd,
                     'url' => "forum_admin.php?course=$course_code",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',

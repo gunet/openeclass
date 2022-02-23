@@ -53,6 +53,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             Database::get()->query("DELETE FROM course_user
                                             WHERE user_id = ?d AND
                                                 course_id = ?d", $unregister_gid, $course_id);
+            Database::get()->query("DELETE FROM course_favorite WHERE course_id = ?d AND user_id = ?d", $course_id, $unregister_gid);
             Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND 
                                     badge_criterion IN
                                            (SELECT id FROM badge_criterion WHERE badge IN

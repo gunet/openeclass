@@ -469,7 +469,7 @@ $static_modules = array(
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage'),
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
     MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
-    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
+    MODULE_ID_UNITS => array('title' => $langCourseUnits, 'link' => 'units'),
     MODULE_ID_SEARCH => array('title' => $langSearch, 'link' => 'search'),
     MODULE_ID_CONTACT => array('title' => $langContact, 'link' => 'contact'),
     MODULE_ID_COMMENTS => array('title' => $langComments, 'link' => 'comments'),

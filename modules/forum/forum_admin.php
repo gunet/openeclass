@@ -62,7 +62,7 @@ function checkrequired(which, entry) {
 </script>
 hContent;
 $toolName = $langForums;
-$pageName = $langAddCategory;
+$pageName = $langCategoryAdd;
 if (isset($_GET['forumcatedit'])) {
     $pageName = $langModCatName;
 }

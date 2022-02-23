@@ -1571,7 +1571,7 @@ function new_assignment() {
            $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
            $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
            $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
-           $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
+           $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
            $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
            $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock,
            $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission;
@@ -2143,7 +2143,7 @@ function new_assignment() {
                     <div class='radio'>
                       <label>
                         <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' disabled>
-                        $langTiiExcludeTypePercentage
+                        $langPercentage
                       </label>
                     </div>
                 </div>
@@ -2564,7 +2564,7 @@ function show_edit_assignment($id) {
         $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck, $langTiiInstitutionCheck,
         $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
         $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
-        $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langTiiExcludeTypePercentage,
+        $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
         $langTiiExcludeValue, $langGradeReviews, $langReviewsPerUser, $langAllowableReviewValues,
         $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions;
 
@@ -3194,7 +3194,7 @@ function show_edit_assignment($id) {
                             <div class='radio'>
                               <label>
                                 <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' " . (($row->tii_exclude_type == 'percentage') ? 'checked' : '') . " $lti_disabled>
-                                $langTiiExcludeTypePercentage
+                                $langPercentage
                               </label>
                             </div>
                         </div>

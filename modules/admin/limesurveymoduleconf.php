@@ -126,7 +126,7 @@ if (isset($_GET['add_template'])) {
             $tool_content .= "<table class='table-default'>
                 <thead>
                 <tr><th class = 'text-center'>$langTitle</th>
-                    <th class = 'text-center'>$langNewLTIAppSessionDesc</th>
+                    <th class = 'text-center'>$langUnitDescr</th>
                     <th class = 'text-center'>$langLimesurveyEnabled</th>
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";

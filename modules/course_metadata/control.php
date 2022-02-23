@@ -203,7 +203,7 @@ $tool_content .= "
                 </li>
                 <li class='list-group-item'>
                     <span class='badge $unitsImgBadge'><i class='fa $unitsImg'></i></span>
-                    $langOpenCoursesHasUnits ($numUnits $langSections)
+                    $langOpenCoursesHasUnits ($numUnits $langCourseUnits)
                 </li>
                 <li class='list-group-item'>
                     <span class='badge $mediaImgBadge'><i class='fa $mediaImg'></i></span>

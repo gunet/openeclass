@@ -80,7 +80,7 @@ if (isset($_GET['delete'])) {
         $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-        <h4>$langSections</h4>
+        <h4>$langCourseUnits</h4>
         <input type='hidden' name='id' value='$ebook_id' />
           <table class='table-default'>
           <tr>
@@ -287,7 +287,7 @@ if (isset($_GET['delete'])) {
                     </div>
                     <div class='row  margin-bottom-fat'>
                         <div class='col-sm-2'>
-                            <strong>$langSections:</strong>
+                            <strong>$langCourseUnits:</strong>
                         </div>
                         <div class='col-sm-10'>
                             $sections_table

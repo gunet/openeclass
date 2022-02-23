@@ -28,7 +28,7 @@
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
-$navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
+$navigation[] = array('url' => 'registration.php', 'name' => $langRegistration);
 
 $user_registration = get_config('user_registration');
 $alt_auth_prof_reg = get_config('alt_auth_prof_reg');

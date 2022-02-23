@@ -63,7 +63,7 @@ $head_content .= <<<hContent
 hContent;
 
 $pageName = $langUserDetails;
-$navigation[] = array("url" => "registration.php", "name" => $langNewUser);
+$navigation[] = array("url" => "registration.php", "name" => $langRegistration);
 
 $user_registration = get_config('user_registration');
 $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass

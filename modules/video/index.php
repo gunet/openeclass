@@ -457,7 +457,7 @@ hContent;
                     <div class='col-sm-10'><textarea class='form-control' rows='3' name='description'></textarea></div>
                 </div>
                 <div class='form-group'>
-                    <label for='Creator' class='col-sm-2 control-label'>$langcreator:</label>
+                    <label for='Creator' class='col-sm-2 control-label'>$langCreator:</label>
                     <div class='col-sm-10'><input class='form-control' type='text' name='creator' value='$nick'></div>
                 </div>
                 <div class='form-group'>
@@ -564,7 +564,7 @@ hContent;
                     <div class='col-sm-10'><textarea class='form-control' rows='3' name='description'>" . q($description) . "</textarea></div>
                 </div>
                 <div class='form-group'>
-                    <label for='Creator' class='col-sm-2 control-label'>$langcreator:</label>
+                    <label for='Creator' class='col-sm-2 control-label'>$langCreator:</label>
                     <div class='col-sm-10'><input class='form-control' type='text' name='creator' value='" . q($creator) . "'></div>
                 </div>
                 <div class='form-group'>
@@ -847,7 +847,7 @@ function showlinksofcategory($cat_id = 0) {
         $langDelete, $langViewHide, $langViewShow, $langConfirmDelete,
         $display_tools, $is_in_tinymce, $langDownload, $langResourceAccessLock,
         $langResourceAccessUnlock, $langEditChange, $filterv, $filterl, $order,
-        $compatiblePlugin, $langcreator, $langpublisher, $langNonPublicFile;
+        $compatiblePlugin, $langCreator, $langpublisher, $langNonPublicFile;
 
     if ($is_editor) {
         $vis_q = '';
@@ -891,11 +891,11 @@ function showlinksofcategory($cat_id = 0) {
                 if (!$is_in_tinymce and ( !empty($myrow->creator) or ! empty($myrow->publisher))) {
                     $tool_content .= '<br><small>';
                     if ($myrow->creator == $myrow->publisher) {
-                        $tool_content .= "$langcreator: " . q($myrow->creator);
+                        $tool_content .= "$langCreator: " . q($myrow->creator);
                     } else {
                         $emit = false;
                         if (!empty($myrow->creator)) {
-                            $tool_content .= "$langcreator: " . q($myrow->creator);
+                            $tool_content .= "$langCreator: " . q($myrow->creator);
                             $emit = true;
                         }
                         if (!empty($myrow->publisher)) {

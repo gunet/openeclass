@@ -39,7 +39,7 @@ const RESOURCE_LINK_TYPE_POLL = "poll";
  * @param string $lti_url_default
  */
 function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
-    global $tool_content, $langAdd, $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret,
+    global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
            $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id;
@@ -59,7 +59,7 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
             </div>
         </div>
         <div class='form-group'>
-            <label for='desc' class='col-sm-2 control-label'>$langNewBBBSessionDesc:</label>
+            <label for='desc' class='col-sm-2 control-label'>$langUnitDescr:</label>
             <div class='col-sm-10'>
                 $textarea
             </div>
@@ -199,7 +199,7 @@ function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer
  * @param $session_id
  */
 function edit_lti_app($session_id) {
-    global $tool_content, $langModify, $langNewLTIAppSessionDesc, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
+    global $tool_content, $langModify, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
            $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;;
@@ -220,7 +220,7 @@ function edit_lti_app($session_id) {
                         </div>
                     </div>
                     <div class='form-group'>
-                        <label for='desc' class='col-sm-2 control-label'>$langNewLTIAppSessionDesc:</label>
+                        <label for='desc' class='col-sm-2 control-label'>$langUnitDescr:</label>
                         <div class='col-sm-10'>
                             $textarea
                         </div>
@@ -320,7 +320,7 @@ function edit_lti_app($session_id) {
  */
 function lti_app_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
-        $langConfirmDelete, $langNewLTIAppSessionDesc, $langNote,
+        $langConfirmDelete, $langUnitDescr, $langNote,
         $langTitle,$langActivate, $langDeactivate, $langLTIAppActions,
         $langEditChange, $langDelete, $langNoLTIApps, $m;
 
@@ -337,7 +337,7 @@ function lti_app_details() {
                            <table class='table-default'>
                              <tr class='list-header'>
                                <th style='width:30%'>$langTitle</th>
-                               <th class='text-center'>$langNewLTIAppSessionDesc</th>
+                               <th class='text-center'>$langUnitDescr</th>
                                <th class='text-center'>$langLTIAppActions</th>";
         if ($is_editor) {
             $headings .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
@@ -608,7 +608,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
     $button .= $extrabutton . '<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
     $button .='</form>';
 
-    return $button;  
+    return $button;
 }
 
 function lti_prepare_oauth_only_data($url, $oauth_consumer_key, $secret) {
