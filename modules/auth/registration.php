@@ -29,8 +29,11 @@ $data['eclass_stud_reg'] = get_config('eclass_stud_reg'); // student registratio
 $data['alt_auth_stud_reg']= get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
 $data['registration_info'] = get_config('registration_info');
 
-$toolName = $langNewUser;
+$toolName = $langRegistration;
 $data['auth'] = get_auth_active_methods();
+
+$data['provider'] = $provider = '';
+$data['provider_user_data'] = $provider_user_data = '';
 
 $data['action_bar'] = action_bar(
                                 [[

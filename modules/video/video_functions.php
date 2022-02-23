@@ -188,11 +188,11 @@ function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $
                 if (!$is_in_tinymce and ( !empty($myrow->creator) or ! empty($myrow->publisher))) {
                     $resultObj->extradescription .= '<br><small>';
                     if ($myrow->creator == $myrow->publisher) {
-                        $resultObj->extradescription .= $GLOBALS['langcreator'] . ": " . q($myrow->creator);
+                        $resultObj->extradescription .= $GLOBALS['langCreator'] . ": " . q($myrow->creator);
                     } else {
                         $emit = false;
                         if (!empty($myrow->creator)) {
-                            $resultObj->extradescription .= $GLOBALS['langcreator'] . ": " . q($myrow->creator);
+                            $resultObj->extradescription .= $GLOBALS['langCreator'] . ": " . q($myrow->creator);
                             $emit = true;
                         }
                         if (!empty($myrow->publisher)) {

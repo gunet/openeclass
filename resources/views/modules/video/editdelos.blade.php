@@ -10,7 +10,7 @@
         )
     )
     !!}
-    
+
     <form method='POST' action='{!! $urlAppend . "modules/video/edit.php?course=" . $course_code !!}'>
         <div class="table-responsive">
             <table class="table-default">
@@ -18,7 +18,7 @@
                     <tr class="list-header">
                         <th>{{ trans('langTitle') }}</th>
                         <th>{{ trans('langDescription') }}</th>
-                        <th>{{ trans('langcreator') }}</th>
+                        <th>{{ trans('langCreator') }}</th>
                         <th>{{ trans('langpublisher') }}</th>
                         <th>{{ trans('langDate') }}</th>
                         <th>{{ trans('langSelect') }}</th>

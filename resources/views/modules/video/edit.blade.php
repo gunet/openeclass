@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='Creator' class='col-sm-2 control-label'>{{ trans('langcreator') }}:</label>
+                            <label for='Creator' class='col-sm-2 control-label'>{{ trans('langCreator') }}:</label>
                             <div class='col-sm-10'>
                                 @if (isset($form_input))
                                     <input class='form-control' type='text' name='creator' value='{{ $nick }}'>

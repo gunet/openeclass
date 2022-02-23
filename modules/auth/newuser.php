@@ -72,7 +72,7 @@ $head_content .= <<<hContent
 hContent;
 
 $pageName = $langUserDetails;
-$navigation[] = array("url" => "registration.php", "name" => $langNewUser);
+$navigation[] = array("url" => "registration.php", "name" => $langRegistration);
 
 $data['action_bar'] = action_bar(
                                 [[

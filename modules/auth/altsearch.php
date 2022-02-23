@@ -90,7 +90,7 @@ $am_required = !$prof && get_config('am_required') &&
 
 $pageName = ($prof ? $langReqRegProf : $langUserData) . ' (' . (get_auth_info($auth)) . ')';
 $email_message = $langEmailNotice;
-$navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
+$navigation[] = array('url' => 'registration.php', 'name' => $langRegistration);
 
 register_posted_variables(array('uname' => true, 'passwd' => true,
     'is_submit' => true, 'submit' => true));

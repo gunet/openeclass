@@ -29,7 +29,7 @@ $tree = new Hierarchy();
 
 load_js('jstree3');
 
-$navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
+$navigation[] = array('url' => 'registration.php', 'name' => $langRegistration);
 
 $prof = isset($_REQUEST['p']) ? intval($_REQUEST['p']) : 0;
 $am = !empty($_REQUEST['am']) ? intval($_REQUEST['am']) : '';

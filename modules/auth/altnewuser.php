@@ -28,7 +28,7 @@
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
-$navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
+$navigation[] = array('url' => 'registration.php', 'name' => $langRegistration);
 
 $data['action_bar'] = action_bar(
                                 [[

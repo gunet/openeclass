@@ -20,13 +20,15 @@
  * ========================================================================
  */
 
+const LTI_TYPE = 'limesurvey';
+
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 
-$toolName = $langTurnitinConf;
+$toolName = $langLimesurveyConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
@@ -57,45 +59,49 @@ $head_content .= "<script type='text/javascript'>
 
 if (isset($_GET['add_template'])) {
 
-    $pageName = $langNewTIITool;
-    $navigation[] = array('url' => 'turnitinmoduleconf.php', 'name' => $langTurnitinConf);
+    $pageName = $langNewLimesurveyTool;
+    $navigation[] = array('url' => 'limesurveymoduleconf.php', 'name' => $langLimesurveyConf);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "turnitinmoduleconf.php",
+            'url' => "limesurveymoduleconf.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 
-    new_lti_app(true, null, "https://api.turnitin.com/api/lti/1p0/assignment");
+    new_lti_app(true, null, null); // TODO: can we have a default lime url?
 
 } else if (isset($_GET['delete_template'])) {
 
     delete_lti_app(getDirectReference($_GET['delete_template']));
-    Session::Messages($langTIIAppDeleteSuccessful, 'alert-success');
-    redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
+    Session::Messages($langLimesurveyAppDeleteSuccessful, 'alert-success');
+    redirect_to_home_page("modules/admin/limesurveymoduleconf.php");
 
 } else if (isset($_POST['new_lti_app'])) { // Create
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true);
-    Session::Messages($langTIIAppAddSuccessful, 'alert-success');
-    redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
+        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true,
+        false, null, LTI_TYPE);
+    Session::Messages($langLimesurveyAppAddSuccessful, 'alert-success');
+    redirect_to_home_page("modules/admin/limesurveymoduleconf.php");
 
 } else if (isset($_POST['update_lti_app'])) { // Update
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true, true, getDirectReference($_GET['id']));
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
+        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true,
+        true, getDirectReference($_GET['id']), LTI_TYPE);
     // Display result message
-    Session::Messages($langTIIAppAddSuccessful, 'alert-success');
-    redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
+    Session::Messages($langLimesurveyAppAddSuccessful, 'alert-success');
+    redirect_to_home_page("modules/admin/limesurveymoduleconf.php");
 
 } else { // Display config edit form
     if (isset($_GET['edit_template'])) {
 
         $pageName = $langEdit;
-        $navigation[] = array('url' => 'turnitinmoduleconf.php', 'name' => $langTurnitinConf);
+        $navigation[] = array('url' => 'limesurveymoduleconf.php', 'name' => $langLimesurveyConf);
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "turnitinmoduleconf.php",
+                'url' => "limesurveymoduleconf.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
@@ -104,8 +110,8 @@ if (isset($_GET['add_template'])) {
     } else { //display available TII templates
 
         $tool_content .= action_bar(array(
-            array('title' => $langNewTIITool,
-                'url' => "turnitinmoduleconf.php?add_template",
+            array('title' => $langNewLimesurveyTool,
+                'url' => "limesurveymoduleconf.php?add_template",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
@@ -114,14 +120,14 @@ if (isset($_GET['add_template'])) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-        $q = Database::get()->queryArray("SELECT * FROM lti_apps WHERE is_template = true AND course_id is null ORDER BY title ASC");
+        $q = Database::get()->queryArray("SELECT * FROM lti_apps WHERE is_template = true AND type = 'limesurvey' AND course_id is null ORDER BY title ASC");
         if (count($q) > 0) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
                 <tr><th class = 'text-center'>$langTitle</th>
                     <th class = 'text-center'>$langUnitDescr</th>
-                    <th class = 'text-center'>$langTurnitinEnabled</th>
+                    <th class = 'text-center'>$langLimesurveyEnabled</th>
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";
             foreach ($q as $lti) {
@@ -145,7 +151,7 @@ if (isset($_GET['add_template'])) {
             $tool_content .= "</table></div>";
 
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langNoAvailableTurnitinTemplates</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langNoAvailableLimesurveyTemplates</div>";
         }
     }
 }
