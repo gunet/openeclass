@@ -145,7 +145,7 @@
                             <div class='col-xs-2 text-center'>
                                 <img src='$themeimg/{{ strtolower($provider) }}.png' alt='{{ trans('langLoginVia') }}'><br>{{ $provider }}<br>";
                         @if ($userProviders[strtolower($provider)])
-                            <img src='{{ $themeimg }}/tick.png' alt='{{ trans('langProviderConnectWith') }} {{ $provider }}'>
+                            <img src='{{ $themeimg }}/tick.png' alt='{{ trans('langLogIn') }} {{ $provider }}'>
                             <a href='{{ $data[sec] }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>";
                         @else
                             <a href='{{ $data[sec] }}?action=connect&provider={{ $provider }}'>{{ trans('langProviderConnect') }}</a>

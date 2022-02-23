@@ -28,18 +28,10 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/message/class.mailbox.php';
 require_once 'modules/message/class.msg.php';
+
 /**
  * @brief display user courses
- * @global type $session
- * @global array $lesson_ids
- * @global type $urlServer
- * @global type $langUnregCourse
- * @global type $langAdm
- * @global type $langNotEnrolledToLessons
- * @global type $langWelcomeProfPerso
- * @global type $langWelcomeStudPerso
- * @global type $langWelcomeSelect
- * @param type $uid
+ * @param integer $uid
  * @return string
  */
 function getUserLessonInfo($uid) {
@@ -49,54 +41,60 @@ function getUserLessonInfo($uid) {
 
     $lesson_content = '';
     $lesson_ids = array();
-    if ($session->status == USER_TEACHER) {
-        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.lang,
-                             course.visible,
-                             course_user.status status
-                       FROM course, course_user, user
-                       WHERE course.id = course_user.course_id AND
-                             course_user.user_id = ?d AND
-                             user.id = ?d
-                       ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
-    } else {
-        $myCourses = Database::get()->queryArray('SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.lang,
-                             course.visible,
-                             course_user.status status
-                       FROM course, course_user, user
-                       WHERE course.id = course_user.course_id AND
-                             course_user.user_id = ?d AND
-                             user.id = ?d AND
-                             (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
-                       ORDER BY course.title, course.prof_names', $uid, $uid);
-    }
 
-    //getting user's lesson info
+    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
+                         course.code code,
+                         course.public_code,
+                         course.title title,
+                         course.prof_names professor,
+                         course.lang,
+                         course.visible visible,
+                         course_user.status status,
+                         course_favorite.favorite favorite
+                    FROM course JOIN course_user
+                        ON course.id = course_user.course_id 
+                        AND course_user.user_id = ?d 
+                        AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                    LEFT JOIN course_favorite
+                       ON course_favorite.course_id = course.id 
+                       AND course_favorite.user_id = course_user.user_id
+                    ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
+
+    $courses = [];
+    if ($myCourses) {
+        foreach ($myCourses as $myCourse) {
+            $courses[$myCourse->code] = $myCourse->status;
+        }
+    }
+    $_SESSION['courses'] = $courses;
+
     $teacher_courses_count = 0;
     $student_courses_count = 0;
     if ($myCourses) {
         $lesson_content .= "<table id='portfolio_lessons' class='table table-striped'>";
-        $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
+        $lesson_content .= "<thead><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $visclass = '';
             if ($data->visible == COURSE_INACTIVE) {
                 $visclass = "not_visible";
             }
+            if (isset($data->favorite)) {
+                $favorite_icon = 'fa-star';
+                $fav_status = 0;
+                $fav_message = '';
+            } else {
+                $favorite_icon = 'fa-bookmark-o';
+                $fav_status = 1;
+                $fav_message = $langFavorite;
+            }
             $lesson_content .= "<tr class='$visclass'>
 			  <td class='text-left'>
 			  <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>&nbsp;(" . q($data->public_code) . ")
 			  <div><small>" . q($data->professor) . "</small></div></td>";
             $lesson_content .= "<td class='text-center'>";
+            $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
+            $lesson_content .= "&nbsp;&nbsp;";
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;
@@ -120,12 +118,11 @@ function getUserLessonInfo($uid) {
 
 /**
  * @brief get last month course announcements
- * @global type $urlAppend
- * @global type $langMore
- * @global type $dateFormatLong
- * @global type $langNoAnnouncementsExist
- * @param type $param
- * @return string
+ * @param $lesson_id
+ * @param string $type
+ * @param false $to_ajax
+ * @param string $filter
+ * @return array|string
  */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
@@ -238,11 +235,6 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
 
 /**
  * @brief get user personal messages
- * @global type $uid
- * @global type $urlServer
- * @global type $langFrom
- * @global type $dateFormatLong
- * @param type $lesson_id
  * @return string
  */
 function getUserMessages() {
@@ -276,7 +268,6 @@ function getUserMessages() {
 
 /**
  * @brief check if user has accepted or rejected the current privacy policy
- * @global type $uid
  * @return boolean
  */
 function user_has_accepted_policy($uid) {
@@ -292,6 +283,8 @@ function user_has_accepted_policy($uid) {
 
 /*
  * @brief update user consent
+ * @param $uid
+ * @param bool $accept
  */
 function user_accept_policy($uid, $accept = true) {
     $accept = $accept? 1: 0;
