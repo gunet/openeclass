@@ -35,10 +35,12 @@ if (isset($_GET['htopic'])) {
     switch ($htopic) {
         case '1': $helpSubTopic = 'multiple_choice_one'; break;
         case '2': $helpSubTopic = 'multiple_choice_many'; break;
-        case '3': $helpSubTopic = 'fill_gaps'; break;
+        case '3':
+        case '7': $helpSubTopic = 'fill_gaps'; break;
         case '4': $helpSubTopic = 'matching'; break;
         case '5': $helpSubTopic = 'true_false'; break;
         case '6': $helpSubTopic = 'free_text'; break;
+        case '8': $helpSubTopic = 'fill_gaps_predefined_answers'; break;
     }
 }
 
