@@ -472,11 +472,7 @@ if ($nbrQuestions) {
         $aType = $objQuestionTmp->selectType();
         $question_difficulty_legend = $objQuestionTmp->selectDifficultyIcon($objQuestionTmp->selectDifficulty());
         $question_category_legend = $objQuestionTmp->selectCategoryName($objQuestionTmp->selectCategory());
-        $addon = '';
-        if ($objQuestionTmp->selectType() == MATCHING) {
-            $sql = Database::get()->querySingle("SELECT * FROM exercise_answer WHERE question_id = ?d", $id);
-            if (!$sql) $addon = "&amp;htopic=4";
-        }
+        $addon = "&amp;htopic=" . $aType;
 
         if (is_array($id)) {
             if ($id['criteria'] == 'difficulty') {
