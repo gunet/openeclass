@@ -23,6 +23,7 @@ $require_current_course = true;
 $require_editor = true;
 
 include '../../include/init.php';
+require_once 'include/lib/learnPathLib.inc.php';
 require_once 'functions.php';
 
 $gid = getDirectReference($_GET['gradebook_id']);
@@ -43,6 +44,7 @@ if ($activity_id) {
 } else {
     $activities = Database::get()->queryArray("SELECT * FROM gradebook_activities WHERE gradebook_id = ?d", $gid);
 }
+
 foreach ($activities as $act) {
     if (!$act->auto) {
         continue;
@@ -80,6 +82,11 @@ foreach ($activities as $act) {
                     $grade->grade / $max_grade,
                     GRADEBOOK_ACTIVITY_ASSIGNMENT, $gid);
             }
+        }
+    } elseif ($act->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
+        foreach ($users as $user) {
+            $lpProgress = get_learnPath_progress($act->module_auto_id, $user);
+            update_gradebook_book($user, $act->module_auto_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
         }
     }
 }
