@@ -81,13 +81,13 @@ $learnPathName = Database::get()->querySingle("SELECT `name` FROM `lp_learnPath`
 if ($learnPathName) {
     $titleTab['subTitle'] = htmlspecialchars($learnPathName->name);
     $pageName = $langLearnPath.": ".disp_tool_title($titleTab);
-    
+
     $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "index.php",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
-        
+
     $tool_content .= "<div class='table-responsive'>
                     <table id='lpu_progress' class='table-default'>
                     <thead>
@@ -96,14 +96,14 @@ if ($learnPathName) {
                             <th width='5px;'>$langProgress</th>
                         </tr>
                     </thead>";
-        
+
     $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`
 		FROM `user` AS U,
 		     `course_user` AS CU
 		WHERE U.`id` = CU.`user_id`
 		AND CU.`course_id` = ?d
 		ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
-        
+
     $tool_content .= "<tbody>";
     foreach ($usersList as $user) {
         $lpProgress = get_learnPath_progress($path_id, $user->id);
@@ -115,7 +115,7 @@ if ($learnPathName) {
                             . disp_progress_bar($lpProgress, 1) .
                         "</td>";
         $tool_content .= "</tr>";
-    }    
+    }
     $tool_content .= "</tbody></table></div>";
 }
 
