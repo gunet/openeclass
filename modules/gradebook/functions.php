@@ -1296,6 +1296,7 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
 
     require_once 'include/lib/learnPathLib.inc.php';
 
+    $gradebook = Database::get()->querySingle("SELECT * FROM gradebook WHERE id = ?d", $gradebook_id);
     $gradebookActivities = Database::get()->queryArray("SELECT * FROM gradebook_activities WHERE gradebook_id = ?d AND auto = 1", $gradebook_id);
     foreach ($gradebookActivities as $gradebookActivity) {
         if ($gradebookActivity->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
@@ -1307,6 +1308,8 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
                     . "WHERE eid = ?d "
                     . "AND uid = ?d "
                     . "AND attempt_status = " . ATTEMPT_COMPLETED . " "
+                    . "AND record_end_date <= '$gradebook->end_date' "
+                    . "AND record_end_date >= '$gradebook->start_date' "
                     . "ORDER BY total_score/total_weighting DESC limit 1", $gradebookActivity->module_auto_id, $uid);
             if ($exerciseUserRecord) {
                 $grade = $exerciseUserRecord->total_score/$exerciseUserRecord->total_weighting;
@@ -1326,6 +1329,8 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
                             . "FROM assignment_submit, assignment "
                             . "WHERE assignment_submit.assignment_id = assignment.id "
                             . "AND assignment.id =?d "
+                            . "AND assignment_submit.submission_date <= '$gradebook->end_date' "
+                            . "AND assignment_submit.submission_date >= '$gradebook->start_date' "
                             . "AND assignment_submit.group_id IN ($sql_ready_group_ids)", $gradebookActivity->module_auto_id);
                 }
             } else {
@@ -1333,6 +1338,8 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
                         . "FROM assignment_submit, assignment "
                         . "WHERE assignment_submit.assignment_id = assignment.id "
                         . "AND assignment.id =?d "
+                        . "AND assignment_submit.submission_date <= '$gradebook->end_date' "
+                        . "AND assignment_submit.submission_date >= '$gradebook->start_date' "
                         . "AND assignment_submit.uid = $uid", $gradebookActivity->module_auto_id);
             }
             if (isset($grd) && $grd && isset($grd->grade)) {
