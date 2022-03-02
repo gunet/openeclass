@@ -21,7 +21,7 @@
 
 /**
  * @file portfolio.php
- * @brief This component creates the content of the start page when the user is logged in 
+ * @brief This component creates the content of the start page when the user is logged in
  */
 
 $require_login = true;
@@ -30,38 +30,23 @@ include '../include/baseTheme.php';
 require_once 'perso_functions.php';
 
 $toolName = $langMyCourses;
-//  Get user's course info
-if ($session->status == USER_TEACHER) {
-    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                         course.code code,
-                         course.public_code,
-                         course.title title,
-                         course.prof_names professor,
-                         course.lang,
-                         course.visible,
-                         course_user.status status
-                   FROM course, course_user, user
-                   WHERE course.id = course_user.course_id AND
-                         course_user.user_id = ?d AND
-                         user.id = ?d
-                   ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
-} else {
-    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                         course.code code,
-                         course.public_code,
-                         course.title title,
-                         course.prof_names professor,
-                         course.lang,
-                         course.visible,
-                         course_user.status status                                
-                   FROM course, course_user, user
-                   WHERE course.id = course_user.course_id AND
-                         course_user.user_id = ?d AND
-                         user.id = ?d AND
-                         course.visible != ?d
-                   ORDER BY course.title, course.prof_names", $uid, $uid, COURSE_INACTIVE);
-}
-    
+
+//  Get user's course list
+$myCourses = Database::get()->queryArray("SELECT course.id course_id,
+                     course.code code,
+                     course.public_code,
+                     course.title title,
+                     course.prof_names professor,
+                     course.lang,
+                     course.visible visible,
+                     course_user.status status,
+                     course_user.favorite favorite
+               FROM course JOIN course_user
+                    ON course.id = course_user.course_id 
+                    AND course_user.user_id = ?d 
+                    AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
+                ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
+
 $data['action_bar'] = action_bar(array(
     array('title' => $langRegCourses,
         'url' => $urlAppend . 'modules/auth/courses.php',
@@ -83,16 +68,16 @@ $data['action_bar'] = action_bar(array(
 ),false);
 
 $data['myCourses'] = $myCourses;
-if ($myCourses) {        
+if ($myCourses) {
     foreach ($myCourses as $course) {
-        if ($course->status == USER_STUDENT) { 
+        if ($course->status == USER_STUDENT) {
             $action_button = icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
         } elseif ($course->status == USER_TEACHER) {
             $action_button = icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
-        }      
+        }
         $data['action_button'] = $action_button;
         $data['actions'] = icon('fa-gears');
     }
-}    
+}
 $data['menuTypeID'] = 1;
 view('main.my_courses.index', $data);

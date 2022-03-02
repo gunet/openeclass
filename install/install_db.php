@@ -169,6 +169,7 @@ $db->query("CREATE TABLE `course_user` (
       `reg_date` DATETIME NOT NULL,
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       `document_timestamp` datetime NOT NULL,
+      `favorite` datetime DEFAULT NULL,      
       PRIMARY KEY (course_id, user_id)) $tbl_options");
 
 $db->query("CREATE TABLE `course_user_request` (
@@ -2194,17 +2195,6 @@ $db->query("CREATE TABLE h5p_content_dependency (
     dependency_type VARCHAR(10) NOT NULL,
   PRIMARY KEY(id)) $tbl_options");
 
-// course favorites
-$db->query("CREATE TABLE `course_favorite` (
-     `user_id` INT NOT NULL,
-     `course_id` INT NOT NULL,
-     `favorite` datetime DEFAULT NULL,
-      KEY `user_id` (`user_id`),
-      KEY `course_id` (`course_id`),
-      CONSTRAINT `course_favorite_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-      CONSTRAINT `course_favorite_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
-    ) $tbl_options");
-
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();
@@ -2234,7 +2224,6 @@ $db->query('CREATE INDEX `cid` ON course_description (course_id)');
 $db->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
 $db->query("CREATE INDEX `crev_index` ON course_review(course_id)");
 $db->query("CREATE INDEX `course_units_index` ON course_units (course_id, `order`)");
-$db->query("CREATE INDEX `course_favorite_index` ON course_favorite (course_id, user_id)");
 $db->query("CREATE INDEX `cu_index` ON course_user (user_id, status)");
 $db->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
 $db->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
