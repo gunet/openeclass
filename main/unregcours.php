@@ -63,7 +63,6 @@ if (!isset($_POST['doit'])) {
                                     WHERE course_id = ?d
                                     AND user_id = ?d", $cid, $_GET['u']);
         if ($q->affectedRows > 0) {
-            Database::get()->query("DELETE FROM course_favorite WHERE course_id = ?d AND user_id = ?d", $cid, $_GET['u']);
             Database::get()->query("DELETE FROM group_members
                                 WHERE user_id = ?d AND
                                   group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $_GET['u'], $cid);

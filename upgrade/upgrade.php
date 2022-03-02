@@ -2150,16 +2150,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
               PRIMARY KEY (`id`)) $tbl_options");
         }
         // course favorites
-        if (!DBHelper::tableExists('course_favorite')) {
-            Database::get()->query("CREATE TABLE `course_favorite` (
-             `user_id` INT NOT NULL,
-             `course_id` INT NOT NULL,
-             `favorite` datetime DEFAULT NULL,
-              KEY `user_id` (`user_id`),
-              KEY `course_id` (`course_id`),
-              CONSTRAINT `course_favorite_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-              CONSTRAINT `course_favorite_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
-            ) $tbl_options");
+        if (!DBHelper::fieldExists('course_user','favorite')) {
+            Database::get()->query("ALTER TABLE course_user ADD favorite datetime DEFAULT NULL");
         }
         // change database encoding to utf8mb4
         updateInfo(1, $langChangeDBEncoding);

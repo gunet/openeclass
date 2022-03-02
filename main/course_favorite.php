@@ -21,11 +21,9 @@ $from_ext_view = intval($_GET['from_ext_view']);
 if (isset($_GET['fav']) and in_array($cid, $courses)) { // mark course as favorite.
     $fav = intval($_GET['fav']);
     if ($fav == 1) {
-        Database::get()->query("INSERT INTO course_favorite (user_id, course_id, favorite) 
-                                                    VALUES (?d, ?d, " . DBHelper::timeAfter() .")",
-                                          $uid, $cid);
+        Database::get()->query("UPDATE course_user SET favorite = " . DBHelper::timeAfter() ." WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
     } else {
-        Database::get()->query("DELETE FROM course_favorite WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
+        Database::get()->query("UPDATE course_user SET favorite = NULL WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
     }
     if ($from_ext_view) {
         redirect_to_home_page('main/my_courses.php');
