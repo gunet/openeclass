@@ -16,7 +16,9 @@ if ($myCourses) {
 }
 
 $cid = course_code_to_id($_GET['course']);
-$from_ext_view = intval($_GET['from_ext_view']);
+if (isset($_GET['from_ext_view'])) {
+    $from_ext_view = intval($_GET['from_ext_view']);
+}
 
 if (isset($_GET['fav']) and in_array($cid, $courses)) { // mark course as favorite.
     $fav = intval($_GET['fav']);
@@ -25,7 +27,7 @@ if (isset($_GET['fav']) and in_array($cid, $courses)) { // mark course as favori
     } else {
         Database::get()->query("UPDATE course_user SET favorite = NULL WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
     }
-    if ($from_ext_view) {
+    if (isset($from_ext_view)) {
         redirect_to_home_page('main/my_courses.php');
     } else {
         redirect_to_home_page('main/portfolio.php');
