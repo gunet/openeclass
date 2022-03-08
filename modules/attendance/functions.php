@@ -22,20 +22,10 @@
 
 /**
  * @brief admin available attendances
- * @global type $course_id
- * @global type $tool_content
- * @global type $course_code
- * @global type $langEditChange
- * @global type $langDelete
- * @global type $langConfirmDelete
- * @global type $langCreateDuplicate
- * @global type $langAvailableAttendances
- * @global type $langNoAttendances
- * @global type $is_editor
  */
 function display_attendances() {
 
-    global $course_id, $tool_content, $course_code, $langEditChange,
+    global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langAvailableAttendances, $langNoAttendances, $is_editor,
            $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd, $uid;
@@ -104,19 +94,8 @@ function display_attendances() {
 
 /**
  * @brief display attendance users
- * @global type $tool_content
- * @global type $course_id
- * @global type $course_code
- * @global type $actID
- * @global type $langName
- * @global type $langSurname
- * @global type $langRegistrationDateShort
- * @global type $langAttendanceAbsences
- * @global type $langAm
- * @global type $langAttendanceEdit
- * @global type $langAttendanceBooking
- * @global type $langID
- * @param type $attendance_id
+ * @param int $attendance_id
+ * @param int $actID
  */
 function register_user_presences($attendance_id, $actID) {
 
@@ -128,9 +107,10 @@ function register_user_presences($attendance_id, $actID) {
     $act_type = $result->auto; // type of activity
     $tool_content .= "<div class='alert alert-info'>" . q($result->title) . "</div>";
 
-    if(isset($_POST['bookUsersToAct'])) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-
+    if (isset($_POST['bookUsersToAct'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+            csrf_token_error();
+        }
         //get all the active users
         $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
         if ($activeUsers) {
@@ -152,13 +132,16 @@ function register_user_presences($attendance_id, $actID) {
     }
 
     //display users
-    $resultUsers = Database::get()->queryArray("SELECT attendance_users.id AS recID, attendance_users.uid AS userID,
-                                                user.surname AS surname, user.givenname AS name, user.am AS am, course_user.reg_date AS reg_date
-                                            FROM attendance_users, user, course_user
-                                                WHERE attendance_id = ?d
-                                                AND attendance_users.uid = user.id
-                                                AND `user`.id = `course_user`.`user_id`
-                                                AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
+    $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID,
+                                                    attendance_users.uid AS userID, user.surname AS surname,
+                                                    user.givenname AS name, user.am AS am,
+                                                    DATE(course_user.reg_date) AS reg_date
+                                                FROM attendance_users
+                                                JOIN user ON attendance_users.uid = user.id AND attendance_id = ?d
+                                                LEFT JOIN course_user ON user.id = course_user.user_id
+                                                    AND `course_user`.`course_id` = ?d
+                                                ORDER BY surname, name", $attendance_id, $course_id);
+
     if ($resultUsers) {
         //table to display the users
         $tool_content .= "<div class='form-wrapper'>
@@ -177,14 +160,18 @@ function register_user_presences($attendance_id, $actID) {
 
         $cnt = 0;
         foreach ($resultUsers as $resultUser) {
+            $classvis = '';
+            if (is_null($resultUser->reg_date)) {
+                $classvis = 'not_visible';
+            }
             $cnt++;
-            $tool_content .= "<tr>
+            $tool_content .= "<tr class='$classvis'>
                 <td class='text-center'>$cnt</td>
                 <td> " . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
                 <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
                 <td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
-                //check if the user has attendace for this activity already OR if it should be automatically inserted here
+                //check if the user has attendance for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
                 if(isset($q->attend) && $q->attend == 1) {
                     $tool_content .= " checked";
@@ -361,20 +348,11 @@ function display_attendance_activities($attendance_id) {
 
 /**
  * @brief display available exercises for adding them to attendance
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $langGradebookActivityDate2
- * @global type $langDescription
- * @global type $langAdd
- * @global type $langAttendanceNoActMessageExe4
- * @global type $langTitle
- * @param type $attendance_id
+ * @param int $attendance_id
  */
 function attendance_display_available_exercises($attendance_id) {
 
-    global $course_id, $course_code, $tool_content,
-           $langGradebookActivityDate2, $langDescription, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
+    global $course_id, $course_code, $tool_content, $langDescription, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $urlServer;
 
     $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
                                 AND exercise.active = 1 AND exercise.id
@@ -383,23 +361,19 @@ function attendance_display_available_exercises($attendance_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescription</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 
         foreach ($checkForExer as $newExerToGradebook) {
             $content = ellipsize_html($newExerToGradebook->description, 50);
-            $tool_content .= "<tr><td><b>";
-            if (!empty($newExerToGradebook->title)) {
-                $tool_content .= q($newExerToGradebook->title);
-            }
-            $tool_content .= "</b>";
-            $tool_content .= "</td>"
-                    . "<td><div class='smaller'><span class='day'>" . nice_format($newExerToGradebook->start_date, true, true) . " </div></td>"
-                    . "<td>" . $content . "</td>";
+            $tool_content .= "<tr>";
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
+            $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
+            $tool_content .= "</td></tr>";
         }
-        $tool_content .= "</td></tr></table></div></div></div>";
+        $tool_content .= "</table></div></div></div>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div>";
     }
@@ -407,23 +381,13 @@ function attendance_display_available_exercises($attendance_id) {
 
 /**
  * @brief display available assignments for adding them to attendance
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $dateFormatLong
- * @global type $m
- * @global type $langDescription
- * @global type $langAttendanceNoActMessageAss4
- * @global type $langAdd
- * @global type $langTitle
- * @global type $langHour
- * @param type $attendance_id
+ * @param int $attendance_id
  */
 function attendance_display_available_assignments($attendance_id) {
 
-    global $course_id, $course_code, $tool_content, $dateFormatLong,
-           $m, $langDescription, $langAttendanceNoActMessageAss4, $langNoDeadline,
-           $langAdd, $langTitle, $langHour, $langGroupWorkDeadline_of_Submission;
+    global $course_id, $course_code, $tool_content, $urlServer,
+           $m, $langDescription, $langAttendanceNoActMessageAss4,
+           $langAdd, $langTitle;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
                                                 AND assignment.active = 1
@@ -435,8 +399,8 @@ function attendance_display_available_assignments($attendance_id) {
 
     if ($checkForAssNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
-                            <table class='table-default'";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGroupWorkDeadline_of_Submission</th><th>$langDescription</th>";
+                            <table class='table-default'>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
@@ -450,25 +414,13 @@ function attendance_display_available_assignments($attendance_id) {
                     $content .= q($checkForAssSpecR->surname). " " . q($checkForAssSpecR->givenname) . "<br>";
                 }
             }
-            if ((int) $newAssToGradebook->deadline){
-                $d = strtotime($newAssToGradebook->deadline);
-                $date_str = ucfirst(claro_format_locale_date($dateFormatLong, $d));
-                $hour_str = "($langHour: " . ucfirst(date('H:i', $d)).")";
-            } else {
-                $date_str = $langNoDeadline;
-                $hour_str = "";
-            }
-            $tool_content .= "<tr><td><b>";
-            if (!empty($newAssToGradebook->title)) {
-                $tool_content .= q($newAssToGradebook->title);
-            }
-            $tool_content .= "</b>";
-            $tool_content .= "</td>"
-                    . "<td><div class='smaller'><span class='day'>$date_str</span> $hour_str </div></td>"
-                    . "<td>" . $content . "</td>";
+            $tool_content .= "<tr>";
+            $tool_content .= "<td><a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
+            $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
+            $tool_content .= "</td></tr>";
         } // end of while
-        $tool_content .= "</tr></table></div></div></div>";
+        $tool_content .= "</table></div></div></div>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div>";
     }
@@ -531,9 +483,8 @@ function attendance_display_available_tc($attendance_id) {
 function add_attendance_other_activity($attendance_id) {
 
     global $tool_content, $course_code, $langDescription,
-           $langTitle, $langAttendanceInsAut, $langAdd,
-           $langAdd, $langSave, $langAttendanceActivityDate,
-           $language, $head_content;
+           $langTitle, $langAttendanceInsAut, $langAdd, $langSave,
+           $langAttendanceActivityDate, $language, $head_content;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -855,31 +806,15 @@ function new_attendance() {
 }
 
 /**
- * @brief dislay user presences
- * @global type $course_code
- * @global type $tool_content
- * @global type $langTitle
- * @global type $langType
- * @global type $langAttendanceNewBookRecord
- * @global type $langDate
- * @global type $langAttendanceNoActMessage1
- * @global type $langAttendanceBooking
- * @global type $langAttendanceActAttend
- * @global type $langAttendanceActCour
- * @global type $langAttendanceInsAut
- * @global type $langAttendanceInsMan
- * @global type $langGradebookUpToDegree
- * @global type $langAttendanceBooking
- * @param type $attendance_id
+ * @brief display user presences
+ * @param int $attendance_id
  */
 function display_user_presences($attendance_id) {
 
     global $course_code, $tool_content,
            $langTitle, $langType, $langAttendanceNewBookRecord, $langDate,
-           $langAttendanceNoActMessage1, $langAttendanceBooking,
-           $langAttendanceActAttend, $langAttendanceActCour,
-           $langAttendanceInsAut, $langAttendanceInsMan,
-           $langAttendanceBooking;
+           $langAttendanceNoActMessage1, $langAttendanceActAttend, $langAttendanceActCour,
+           $langAttendanceInsAut, $langAttendanceInsMan, $langAttendanceBooking;
 
         $attendance_limit = get_attendance_limit($attendance_id);
 
@@ -970,21 +905,7 @@ function display_user_presences($attendance_id) {
 
 /**
  * @brief display all users presences
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $langName
- * @global type $langSurname
- * @global type $langID
- * @global type $langAm
- * @global type $langRegistrationDateShort
- * @global type $langAttendanceAbsences
- * @global type $langAttendanceBook
- * @global type $langAttendanceDelete
- * @global type $langConfirmDelete
- * @global type $langNoRegStudent
- * @global type $langHere
- * @param type $attendance_id
+ * @param int $attendance_id
  */
 function display_all_users_presences($attendance_id) {
 
@@ -999,11 +920,11 @@ function display_all_users_presences($attendance_id) {
                                                     attendance_users.uid AS userID, user.surname AS surname,
                                                     user.givenname AS name, user.am AS am,
                                                     DATE(course_user.reg_date) AS reg_date
-                                                FROM attendance_users, user, course_user
-                                                    WHERE attendance_id = ?d
-                                                    AND attendance_users.uid = user.id
-                                                    AND `user`.id = `course_user`.`user_id`
-                                                    AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
+                                                FROM attendance_users
+                                                JOIN user ON attendance_users.uid = user.id AND attendance_id = ?d
+                                                LEFT JOIN course_user ON user.id = course_user.user_id
+                                                    AND `course_user`.`course_id` = ?d
+                                                ORDER BY surname, name", $attendance_id, $course_id);
     if (count($resultUsers)) {
         //table to display the users
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
@@ -1020,8 +941,12 @@ function display_all_users_presences($attendance_id) {
             <tbody>";
         $cnt = 0;
         foreach ($resultUsers as $resultUser) {
+            $classvis = '';
+            if (is_null($resultUser->reg_date)) {
+                $classvis = 'not_visible';
+            }
             $cnt++;
-            $tool_content .= "<tr>
+            $tool_content .= "<tr class='$classvis'>
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID) . "</td>
                 <td>$resultUser->am</td>
@@ -1037,7 +962,7 @@ function display_all_users_presences($attendance_id) {
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;at=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
                             'confirm' => $langConfirmDelete,
                             'class' => 'delete')))."</td>
-            </tr>";
+                </tr>";
         }
         $tool_content .= "</tbody></table>";
     } else {
@@ -1047,22 +972,15 @@ function display_all_users_presences($attendance_id) {
 
 /**
  * @brief insert/modify attendance settings
- * @global string $tool_content
- * @global type $course_code
- * @global type $langTitle
- * @global type $langSave
- * @global type $langAttendanceLimitNumber
- * @global type $langAttendanceUpdate
- * @global type $langSave
- * @global type $attendance_title
- * @param type $attendance_id
+ * @param int $attendance_id
  */
 function attendance_settings($attendance_id) {
 
     global $tool_content, $course_code, $language,
-           $langTitle, $langSave, $langAttendanceLimitNumber,
+           $langTitle, $langAttendanceLimitNumber,
            $langAttendanceUpdate, $langSave, $head_content,
            $attendance, $langStart, $langEnd;
+
     load_js('bootstrap-datetimepicker');
     $head_content .= "
     <script type='text/javascript'>
@@ -1141,29 +1059,14 @@ function attendance_settings($attendance_id) {
 
 /**
  * @brief modify user attendance settings
- * @global string $tool_content
- * @global type $course_code
- * @global type $langGroups
- * @global type $langAttendanceUpdate
- * @global type $langAttendanceInfoForUsers
- * @global type $langRegistrationDate
- * @global type $langFrom2
- * @global type $langTill
- * @global type $langRefreshList
- * @global type $langUserDuration
- * @global type $langAll
- * @global type $langSpecificUsers
- * @global type $langStudents
- * @global type $langMove
- * @global type $langParticipate
- * @param type $attendance_id
+ * @param int $attendance_id
  */
 function user_attendance_settings($attendance_id) {
 
     global $tool_content, $course_code, $langGroups, $language,
            $langAttendanceUpdate, $langAttendanceInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
-           $langUserDuration, $langAll, $langSpecificUsers, $head_content,
+           $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
            $langStudents, $langMove, $langParticipate, $attendance;
 
     load_js('bootstrap-datetimepicker');
@@ -1180,9 +1083,6 @@ function user_attendance_settings($attendance_id) {
     </script>";
 
     // default values
-    $UsersStart = date('d-m-Y', strtotime('now -6 month'));
-    $UsersEnd = date('d-m-Y', strtotime('now'));
-
     $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->start_date)->format('d-m-Y H:i');
     $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->end_date)->format('d-m-Y H:i');
     $tool_content .= "
@@ -1195,13 +1095,7 @@ function user_attendance_settings($attendance_id) {
                     </div>
                     <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langUserDuration:</label>
-                        <div class='col-sm-10'>
-                            <div class='radio'>
-                              <label>
-                                <input type='radio' id='button_all_users' name='specific_attendance_users' value='0' checked>
-                                <span id='button_all_users_text'>$langAll</span>
-                              </label>
-                            </div>
+                        <div class='col-sm-10'>                            
                             <div class='radio'>
                               <label>
                                 <input type='radio' id='button_some_users' name='specific_attendance_users' value='1'>
@@ -1212,6 +1106,12 @@ function user_attendance_settings($attendance_id) {
                               <label>
                                 <input type='radio' id='button_groups' name='specific_attendance_users' value='2'>
                                 <span id='button_groups_text'>$langGroups</span>
+                              </label>
+                            </div>
+                            <div class='radio'>
+                              <label>
+                                <input type='radio' id='button_all_users' name='specific_attendance_users' value='0' checked>
+                                <span id='button_all_users_text'>$langGradebookAllBetweenRegDates</span>
                               </label>
                             </div>
                         </div>
@@ -1283,18 +1183,7 @@ function user_attendance_settings($attendance_id) {
 
 /**
  * @brief display user presences (student view)
- * @global type $tool_content
- * @global type $uid
- * @global type $langAttendanceStudentFailure
- * @global type $langGradebookTotalGrade
- * @global type $langTitle
- * @global type $langAttendanceActivityDate2
- * @global type $langDescription
- * @global type $langAttendanceAbsencesYes
- * @global type $langAttendanceAbsencesNo
- * @global type $langBack
- * @global type $course_code
- * @param type $attendance_id
+ * @param int $attendance_id
  */
 function student_view_attendance($attendance_id) {
 
