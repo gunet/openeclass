@@ -514,16 +514,13 @@ function display_all_users_grades($gradebook_id) {
            $langGradebookBook, $langGradebookDelete, $langConfirmDelete,
            $langNoRegStudent, $langHere, $langGradebookGradeAlert, $dateFormatMiddle;
 
-    $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID,
-                                                            gradebook_users.uid as userID,
-                                                            user.am as am, user.surname, user.givenname,
-                                                            DATE(course_user.reg_date) as reg_date
-                                                 FROM gradebook_users, user, course_user
-                                                    WHERE gradebook_id = ?d
-                                                    AND gradebook_users.uid = user.id
-                                                    AND `user`.id = `course_user`.`user_id`
-                                                    AND `course_user`.`course_id` = ?d
-                                                    ORDER by surname,givenname", $gradebook_id, $course_id);
+        $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id AS recID, gradebook_users.uid as userID, user.surname AS surname,
+                                                                user.givenname AS name, user.am AS am, DATE(course_user.reg_date) AS reg_date
+                                                            FROM gradebook_users
+                                                            JOIN user ON gradebook_users.uid = user.id AND gradebook_id = ?d
+                                                            LEFT JOIN course_user ON user.id = course_user.user_id AND course_user.course_id = ?d
+                                                                ORDER BY surname,name", $gradebook_id, $course_id);
+
     if (count($resultUsers)> 0) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
@@ -539,15 +536,19 @@ function display_all_users_grades($gradebook_id) {
             <tbody>";
         $cnt = 0;
         foreach ($resultUsers as $resultUser) {
+            $classvis = '';
+            if (is_null($resultUser->reg_date)) {
+                $classvis = 'not_visible';
+            }
             $cnt++;
             $tool_content .= "
-                <tr>
+                <tr class='$classvis'>
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
-                <td>$resultUser->am</td>
+                <td>" . $resultUser->am . "</td>
                 <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
                 <td class='text-center'>";
-                if(weightleft($gradebook_id, 0) == 0) {
+                if (weightleft($gradebook_id, 0) == 0) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>";
                 } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>" . " (<small>" . $langGradebookGradeAlert . "</small>)";
@@ -1009,7 +1010,7 @@ function display_available_assignments($gradebook_id) {
     if ($checkForAssNumber > 0) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
-                          <table class='table-default'";
+                          <table class='table-default'>";
         $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
@@ -1115,6 +1116,10 @@ function register_user_grades($gradebook_id, $actID) {
             <tbody>";
         $cnt = 0;
         foreach ($resultUsers as $resultUser) {
+            $classvis = '';
+            if (is_null($resultUser->reg_date)) {
+                $classvis = 'not_visible';
+            }
             $cnt++;
             $q = Database::get()->querySingle("SELECT grade FROM gradebook_book
                                                             WHERE gradebook_activity_id = ?d
@@ -1124,7 +1129,7 @@ function register_user_grades($gradebook_id, $actID) {
             $grade = Session::has($user_ind_id) ? Session::get($user_ind_id) : ($q ? round($q->grade * $gradebook_range, 2) : '');
             $total_grade = is_numeric($grade) ? round($grade * $result->weight / 100, 2) : ' - ';
             $tool_content .= "
-            <tr>
+            <tr class='$classvis'>
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
