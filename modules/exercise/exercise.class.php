@@ -895,7 +895,9 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * keeps record of user answers
+         * @brief fetch user answers from DB
+         * @param $eurid
+         * @return array
          */
         function get_attempt_results_array($eurid)
         {
@@ -903,14 +905,14 @@ if (!class_exists('Exercise')) {
             $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0 ORDER BY q_position", $eurid);
             foreach ($results as $row) {
                 $objQuestionTmp = new Question();
-                // reads question informations
+                // reads question information
                 $objQuestionTmp->read($row->question_id);
                 $question_type = $objQuestionTmp->selectType();
                 if ($question_type == FREE_TEXT) {
                     $exerciseResult[$row->question_id] = $row->answer;
                 } elseif ($question_type == MATCHING) {
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
-                } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
+                } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                     $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
                 } elseif ($question_type == MULTIPLE_ANSWER) {
                     $exerciseResult[$row->question_id][$row->answer_id] = 1;

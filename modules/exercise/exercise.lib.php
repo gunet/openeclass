@@ -122,12 +122,13 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             $temp_string = unserialize($answer);
             $answer_string = $temp_string[0];
             // replaces [choices] with `select` field
-            $replace_callback = function ($blank) use ($questionId, $question_number, $langSelect) {
+            $replace_callback = function ($blank) use ($questionId, $exerciseResult, $question_number, $langSelect) {
                 static $id = 0;
                 $id++;
                 $selection_text = explode("|", str_replace(array('[',']'), ' ', q($blank[0])));
                 array_unshift($selection_text, "--- $langSelect ---");
-                return selection($selection_text, "choice[$questionId][$id]", 0,"class='form-control' onChange='questionUpdateListener($question_number, $questionId)'");
+                $value = (isset($exerciseResult[$questionId][$id])) ? ($exerciseResult[$questionId][$id]) : '';
+                return selection($selection_text, "choice[$questionId][$id]", $value,"class='form-control' onChange='questionUpdateListener($question_number, $questionId)'");
             };
             $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
             $tool_content .= $answer_string;
