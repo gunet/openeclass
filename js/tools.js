@@ -509,7 +509,7 @@ function exercise_init_countdown(params) {
 
 
 /**
- * @brief update question number button color (type = 'matching', 'fill-in-blanks')
+ * @brief update question number button color (type = 'matching', 'fill-in-blanks', 'fill-with-predefined-answers')
  * @param question_number
  * @param question_id
  */
@@ -529,7 +529,7 @@ function questionUpdateListener(question_number, question_id) {
             }
         });
     } else if (el.is('select')) {
-        // Selects are matching questions:
+        // Selects are matching questions and / or fill-with-predefined-answers
         // if any remain unset, question remains unanswered
         el.closest('.qPanel').find('select').each(function () {
             if (this.value == '0') {

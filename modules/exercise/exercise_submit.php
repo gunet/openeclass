@@ -652,7 +652,7 @@ foreach ($questionList as $k => $q_id) {
     } elseif ($t_question->selectType() == FREE_TEXT
         and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
         $answered = true;
-    } elseif ($t_question->selectType() == MATCHING and array_key_exists($q_id, $exerciseResult)) {
+    } elseif (($t_question->selectType() == MATCHING or $t_question->selectType() == FILL_IN_FROM_PREDEFINED_ANSWERS) and array_key_exists($q_id, $exerciseResult)) {
         if (is_array($exerciseResult[$q_id])) {
             $answered = true;
             foreach ($exerciseResult[$q_id] as $key => $value) {
