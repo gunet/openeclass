@@ -123,12 +123,12 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             $temp_string = unserialize($answer);
             $answer_string = $temp_string[0];
             // replaces [choices] with `select` field
-            $replace_callback = function ($blank) use ($questionId, $langSelect) {
+            $replace_callback = function ($blank) use ($questionId, $question_number, $langSelect) {
                 static $id = 0;
                 $id++;
                 $selection_text = explode("|", str_replace(array('[',']'), ' ', q($blank[0])));
                 array_unshift($selection_text, "--- $langSelect ---");
-                return selection($selection_text, "choice[$questionId][$id]", 0,'class="form-control"');
+                return selection($selection_text, "choice[$questionId][$id]", 0,"class='form-control' onChange='questionUpdateListener($question_number, $questionId)'");
             };
             $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
             $tool_content .= $answer_string;
@@ -160,12 +160,12 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             if (!$answerCorrect) {
                 // options (A, B, C, ...) that will be put into the list-box
                 $Select[$answerId]['Lettre'] = $cpt1++;
-                // answers that will be shown at the right side
+                // answers that will be shown on the right side
                 $Select[$answerId]['Reponse'] = standard_text_escape($answer);
             } else {
                 $tool_content .= "<tr>
                                   <td><strong>${cpt2}.</strong> " . standard_text_escape($answer) . "</td>
-                                  <td><div align='left'>
+                                  <td><div class='text-left'>
                                    <select name='choice[${questionId}][${answerId}]' onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>
                                      <option value='0'>--</option>";
 
@@ -184,7 +184,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                 $cpt2++;
                 // if the left side of the "matching" has been completely shown
                 if ($answerId == $nbrAnswers) {
-                    // if it remains answers to shown at the right side
+                    // if it remains answers to shown on the right side
                     while (isset($Select[$cpt2])) {
                             $tool_content .= "<tr class='even'>
                                               <td>&nbsp;</td>
