@@ -1765,7 +1765,6 @@ $langEvalSet = "Ρυθμίσεις βαθμολογίας";
 $langExercice = "Ασκηση";
 $langActive = "ενεργό";
 $langInactive = "μη ενεργό";
-$langNoEx = "Δεν υπάρχει διαθέσιμη άσκηση";
 $langNewEx = "Νέα Άσκηση";
 $langExerciseType = "Τύπος Άσκησης";
 $langExerciseName = "Όνομα Άσκησης";

@@ -240,7 +240,7 @@ if ($is_editor) {
 }
 
 if (!$nbrExercises) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoEx</div>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
     //For Correction Script
     $cf_result_data = 0;
 } else {

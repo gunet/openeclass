@@ -621,7 +621,6 @@ $langEvalSet = "Einstellungen bzgl Benotung";
 $langExercice = "Übung";
 $langActive = "Aktiviert";
 $langInactive = "Nicht aktiviert";
-$langNoEx = "Im Moment gibt es keine Übungen";
 $langNewEx = "Neue Übung";
 $langExerciseType = "Art der Übung";
 $langExerciseName = "Name der Übung";
