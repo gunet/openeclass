@@ -653,7 +653,6 @@ $langEvalSet = "Scoring settings";
 $langExercice = "Exercise";
 $langActive = "Active";
 $langInactive = "Inactive";
-$langNoEx = "There are no exercises";
 $langNewEx = "New exercise";
 $langExerciseType = "Exercise Type";
 $langExerciseName = "Exercise Name";

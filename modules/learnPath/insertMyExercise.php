@@ -72,10 +72,7 @@ $tool_content .=
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'))) ;
 
-// see checked exercises to add
 $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1", $course_id);
-
-// for each exercise checked, try to add it to the learning path.
 foreach ($resultex as $listex) {
     if (isset($_REQUEST['insertExercise']) && isset($_REQUEST['check_' . $listex->id])) {  //add
         $insertedExercise = $listex->id;
@@ -117,12 +114,10 @@ foreach ($resultex as $listex) {
 
         if ($num == 0) {
             $comment = ($exercise && !empty($exercise->description)) ? $exercise->description : $langDefaultModuleComment;
-
             // create new module
             $insertedExercice_id = Database::get()->query("INSERT INTO lp_module
                 (course_id, name, comment, contentType, launch_data)
                 VALUES (?d, ?s, ?s, ?s, ?s) ", $course_id, $exercise->title, $comment, CTEXERCISE_, '')->lastInsertID;
-
             // create new asset
             $insertedAsset_id = Database::get()->query("INSERT INTO lp_asset
                 (path, module_id, comment)

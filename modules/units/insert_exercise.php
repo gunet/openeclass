@@ -38,7 +38,7 @@ function list_exercises() {
             'password_lock' => $row->password_lock];
     }
     if (count($quizinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
+        $tool_content .= "<div class='alert alert-warning text-center'>$langNoExercises</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
@@ -59,7 +59,7 @@ function list_exercises() {
             }
             $tool_content .= "<tr class='$vis'>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a>"
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$entry[id]&amp;preview=1'>" . q($entry['name']) . "</a>"
                 . $exclamation_icon . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
             $tool_content .= "</tr>";
         }

@@ -641,7 +641,6 @@ $langEvalSet = "Impostazioni di punteggio";
 $langExercice = "Esercizio";
 $langActive = "attivo";
 $langInactive = "inattivo";
-$langNoEx = "Non non c' è alcun esercizio disponibile";
 $langNewEx = "Nuovo esercizio";
 $langExerciseType = "Tipo di esercizio";
 $langExerciseName = "Nome di esercizio";

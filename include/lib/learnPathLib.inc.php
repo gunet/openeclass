@@ -119,7 +119,7 @@ function commentBox($type, $mode) {
     // - update and show the comment and the pencil and the delete cross (UPDATE_)
     // - update and nothing displayed after form sent (UPDATENOTSHOWN_)
     if (( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ ) && $is_editor) {
-        if (isset($_POST['insertCommentBox'])) {            
+        if (isset($_POST['insertCommentBox'])) {
             Database::get()->query("UPDATE $tbl_name SET $col_name = ?s WHERE " . $where_cond . "", $_POST['insertCommentBox']);
 
             if ($mode == UPDATE_) {
@@ -174,13 +174,13 @@ function commentBox($type, $mode) {
             // display edit and delete links if user as the right to see it
             // display comment
             $output .= standard_text_escape($currentComment);
-            
-            if ($is_editor) {                
+
+            if ($is_editor) {
                 $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
                 $output .= "&nbsp;&nbsp;&nbsp";
                 $output .= icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
-                        
-            }            
+
+            }
         }
     }
 
@@ -247,7 +247,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
             $output .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n";
 
-            if ($formlabel != FALSE) {                
+            if ($formlabel != FALSE) {
                 $output .= '<div class="col-xs-10"><div class="input-group">'
                         . '<input class="form-control" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">' . "\n"
                         . '<span class="input-group-btn">'
@@ -535,81 +535,53 @@ function get_learnPath_progress($lpid, $lpUid) {
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 function display_my_exercises($dialogBox, $style) {
-    
-    global $langAddModulesButton, $langExercise, $langNoEx, $langSelection, $course_code, $course_id;
 
-    $output = "";    
+    global $langAddModulesButton, $langExercise, $langNoExercises, $langSelection, $course_code, $course_id, $urlServer;
+
+    $output = "";
     /* --------------------------------------
       DIALOG BOX SECTION
       -------------------------------------- */
     if (!empty($dialogBox)) {
         $output .= disp_message_box($dialogBox, $style) . '<br />' . "\n";
     }
-    $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n";
-    $output .= '<div class="table-responsive"><table class="table-default">' . "\n"
-            . '<tr class="list-header">' . ""
-            . '<th><div align="left">'
-            . $langExercise
-            . '</div></th>' . "\n"
-            . '<th width="10"><div align="center">'
-            . $langSelection
-            . '</div></th>' . "\n"
-            . '</tr>';
-
     // Display available modules
-    $atleastOne = FALSE;
     $sql = "SELECT `id`, `title`, `description`
             FROM `exercise`
             WHERE course_id = ?d
             AND active = 1
-            ORDER BY `title`, `id`";
+            ORDER BY `title`";
     $exercises = Database::get()->queryArray($sql, $course_id);
 
-    if (is_array($exercises) && !empty($exercises)) {        
-        foreach ($exercises as $exercise) {            
-
-            $output .= '<tr>' 
-                    . '<td align="left">'
-                    . '<label for="check_' . $exercise->id . '" >'
-                    . icon('fa-pencil-square-o', $langExercise) .'&nbsp;'
-                    . q($exercise->title)
-                    . '</label>'
-                    . '<br />';
-            // COMMENT
-            if (!empty($exercise->description)) {
-                $output .= '<span class="comments">' . standard_text_escape($exercise->description) . '</span>'
-                        . '</td>';
-            } else {
-                $output .= '</td>';
+    if (!empty($exercises)) {
+        $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">';
+        $output .= "<div class='table-responsive'><table class='table-default'>
+                    <tr class='list-header'> 
+                        <th class='text-left'>
+                            $langExercise
+                        </th> 
+                        <th class='text-center'>
+                            $langSelection
+                        </th> 
+                    </tr>";
+            foreach ($exercises as $exercise) {
+                $output .= "<tr><td class='text-left'>
+                            <a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$exercise->id&amp;preview=1'>" . q($exercise->title) . "</a>";
+                if (!empty($exercise->description)) {
+                    $output .= "<span class='comments'>" . standard_text_escape($exercise->description) . "</span></td>";
+                } else {
+                    $output .= "</td>";
+                }
+                $output .= '<td class="text-center">'
+                        . '<input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" />'
+                        . '</td></tr>';
             }
-            $output .= '<td align="center">'
-                    . '<input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" />'
-                    . '</td>'
-                    . '</tr>';
-
-            $atleastOne = true;            
-        }//end while another module to display        
+        $output .= "</table></div>";
+        $output .= "<div class='text-right'><input class='btn btn-primary' type='submit' name='insertExercise' value='$langAddModulesButton'></div>";
+        $output .= "</form>";
+    } else {
+        $output .= "<div class='alert alert-warning text-center'>$langNoExercises</div>";
     }
-
-    if (!$atleastOne) {
-        $output .= '<tr>'
-                . '<td colspan="2" align="center">'
-                . $langNoEx
-                . '</td>'
-                . '</tr>';
-    }
-
-    // Display button to add selected modules
-
-    if ($atleastOne) {
-        $output .= '<tr>'
-                . '<th colspan="2"><div class="pull-right">'
-                . '<input class="btn btn-primary" type="submit" name="insertExercise" value="'.$langAddModulesButton.'">'                
-                . '</div></th>'
-                . '</tr>';
-    }
-    $output .= '</table></div></form>';            
-
     return $output;
 }
 
@@ -1540,7 +1512,7 @@ function triggerLPGame($courseId, $uid, $lpId, $eventName) {
     $eventData->activityType = LearningPathEvent::ACTIVITY;
     $eventData->module = MODULE_ID_LP;
     $eventData->resource = intval($lpId);
-    
+
     LearningPathEvent::trigger($eventName, $eventData);
 }
 

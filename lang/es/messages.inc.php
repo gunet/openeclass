@@ -644,7 +644,6 @@ $langEvalSet = "Anotando los ajustes";
 $langExercice = "Ejercicio";
 $langActive = "Activo";
 $langInactive = "Inactivo";
-$langNoEx = "No hay ejercicio por el momento";
 $langNewEx = "Nuevo ejercicio";
 $langExerciseType = "Ejercicio Tipo";
 $langExerciseName = "Nombre del ejercicio";
