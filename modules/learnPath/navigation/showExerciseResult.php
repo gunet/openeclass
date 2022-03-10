@@ -40,7 +40,6 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/exercise/game.php';
 ModalBoxHelper::loadModalBox();
 
-// Ksekiname to diko mas html output giati probaloume mesa se iframe
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'
  . "\n<html>\n"
  . '<head>' . "\n"
@@ -61,11 +60,9 @@ if (isset($_GET['exerciseId'])) {
     $exerciseId = intval($_GET['exerciseId']);
 }
 
-// ypologismos tou xronou pou xreiasthke o xrhsths gia thn oloklhrwsh ths askhshs
 if (isset($_SESSION['exercise_begin_time'][$exerciseId])) {
     $timeToCompleteExe = time() - $_SESSION['exercise_begin_time'][$exerciseId];
 }
-
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
     $objExercise = $_SESSION['objExercise'][$exerciseId];
@@ -125,18 +122,16 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         $colspan = 1;
     }
     $iplus = $i + 1;
-    echo "<br/>
+    echo "<br>
         <table class='table-default graded'>
         <tr class='odd list-header'>
-        <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
+            <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
         </tr>
         <tr>
-        <td colspan='${colspan}'>
-        <b>" . q_math($questionName) . "</b>
-        <br />" .
-        standard_text_escape($questionDescription)
-        . "<br/><br/>
-        </td>
+            <td colspan='${colspan}'>
+                <strong>" . q_math($questionName) . "</strong>
+                <br>" . standard_text_escape($questionDescription) . "<br/><br/>
+            </td>
         </tr>";
 
     $questionScore = 0;
@@ -149,15 +144,15 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                         <td valign='top'><b>$langAnswer</b></td>
                         <td valign='top'><b>$langComment</b></td>
                         </tr>";
-        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
             echo "<tr>
-                        <td><b>$langAnswer</b></td>
-                        </tr>";
+                    <td><strong>$langAnswer</strong></td>
+                </tr>";
         } else {
             echo "<tr>
-                        <td><b>$langElementList</b></td>
-                        <td><b>$langCorrespondsTo</b></td>
-                        </tr>";
+                    <td><b>$langElementList</b></td>
+                    <td><b>$langCorrespondsTo</b></td>
+                  </tr>";
         }
     }
     // construction of the Answer object
@@ -219,9 +214,9 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     // if the word entered is the same as the one defined by the professor
                     if (strtolower(substr($temp, 0, $pos)) == strtolower($choice[$j])) {
                         // gives the related weighting to the student
-                        $questionScore+=$answerWeighting[$j];
+                        $questionScore += $answerWeighting[$j];
                         // increments total score
-                        $totalScore+=$answerWeighting[$j];
+                        $totalScore += $answerWeighting[$j];
                         // adds the word in green at the end of the string
                         $answer.=$choice[$j];
                     }
@@ -239,6 +234,64 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     $temp = substr($temp, $pos + 1);
                 }
                 break;
+            case FILL_IN_FROM_PREDEFINED_ANSWERS :
+                $answer_array = unserialize($answer);
+                $answer = $answer_array[0]; // answer text
+                // fetch possible answers for all choices
+                preg_match_all('/\[[^]]+\]/', $answer, $out);
+                $possible_answers = [];
+                foreach ($out[0] as $output) {
+                    $possible_answers[] = explode("|", str_replace(array('[',']'), ' ', q($output)));
+                }
+                $answer_string = $answer_array[1]; // answers
+                $answerWeighting = $answer_array[2]; // answer weight
+                $temp = $answer;
+                $answer = '';
+                $j = 1;
+                // the loop will stop at the end of the text
+                while (true) {
+                    $answer_string = reindex_array_keys_from_one($answer_string); // start from 1
+                    // quits the loop if there are no more blanks
+                    if (($pos = strpos($temp, '[')) === false) {
+                        // adds the end of the text
+                        $answer .= q($temp);
+                    }
+                    // adds the piece of text that is before the blank and ended by [
+                    $answer .= substr($temp, 0, $pos + 1);
+                    $temp = substr($temp, $pos + 1);
+                    // quits the loop if there are no more blanks
+                    if (($pos = strpos($temp, ']')) === false) {
+                        // adds the end of the text
+                        $answer .= q($temp);
+                        break;
+                    }
+
+                    $possible_answer = $possible_answers[$j-1]; // possible answers for each choice
+                    $possible_answer = reindex_array_keys_from_one($possible_answer); // start from 1
+                    if ($choice[$j] == $answer_string[$j]) { // correct answer
+                        $questionScore += $answerWeighting[$j-1]; // weight assignment
+                        $totalScore += $answerWeighting[$j-1]; // weight assignment
+                        // adds the word in green at the end of the string
+                        $answer .= '<strong>' . q($possible_answer[$choice[$j]]) . '</strong>';
+                        $icon = "<span class='fa fa-check text-success'></span>";
+                    }  else { // wrong answer
+                        if (isset($possible_answer[$choice[$j]])) { // if we have chosen something
+                            // adds the word in red at the end of the string, and strikes it
+                            $answer_choice = '<span class="text-danger"><s>' . q($possible_answer[$choice[$j]]) . '</s></span>';
+                        } else {
+                            $answer_choice =  "&nbsp;&mdash;";
+                        }
+                        $answer .= $answer_choice;
+                        $icon = "<span class='fa fa-times text-danger'></span>";
+                    }
+                    // adds the correct word, followed by ] to close the blank
+                    $answer .= ' / <span class="text-success"><strong>' . q($possible_answer[$answer_string[$j]]) . '</strong></span>';
+                    $answer .= "]";
+                    $answer .= "&nbsp;&nbsp;$icon";
+                    $j++;
+                    $temp = substr($temp, $pos + 1);
+                }
+                break;
             // for matching
             case MATCHING : if ($answerCorrect) {
                     if ($answerCorrect == $choice[$answerId]) {
@@ -248,9 +301,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     } elseif (!$choice[$answerId]) {
                         $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
                     } else {
-                        $choice[$answerId] = '<font color="red">
-							<s>' . $matching[$choice[$answerId]] . '</s>
-							</font>';
+                        $choice[$answerId] = '<span class="text-danger"><del>' . $matching[$choice[$answerId]] . '</del></span>';
                     }
                 } else {
                     $matching[$answerId] = $answer;
@@ -266,7 +317,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         if ($displayResults == 1) {
             if ($answerType != MATCHING || $answerCorrect) {
                 if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                    echo "<tr><td><div align='center'>";
+                    echo "<tr><td><div class='text-center'>";
                     if ($studentChoice) {
                         $icon_choice= "fa-check-square-o";
                     } else {
@@ -280,39 +331,36 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                         $icon_choice = "fa-square-o";
                     }
                     echo icon($icon_choice) . "</div>";
-                    echo ("</td>
+                    echo "</td>
                             <td>" . standard_text_escape($answer) . "</td>
-                            <td>");
+                            <td>";
                     if ($studentChoice) {
                         echo standard_text_escape($answerComment);
                     } else {
-                        echo ('&nbsp;');
+                        echo "&nbsp;";
                     }
-                    echo ("</td></tr>");
-                } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-                    echo ("
-                        <tr>
+                    echo "</td></tr>";
+                } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+                    echo "<tr>
                           <td>" . standard_text_escape($answer) . "</td>
-                        </tr>");
+                        </tr>";
                 } else {
-                    echo ("
-                        <tr>
+                    echo "<tr>
                           <td>" . standard_text_escape($answer) . "</td>
-                          <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
-                        </tr>");
+                          <td>${choice[$answerId]} / <span class='text-success'><strong>${matching[$answerCorrect]}</strong></span></td>
+                        </tr>";
                 }
             }
         } // end of if
     } // end for()
     if ($displayScore == 1) {
-        echo ("
-                <tr>
-                  <th colspan='$colspan'><div align='right'>
-                            $langQuestionScore: <b>" . round($questionScore, 2) . " / $questionWeighting</b></div>
-                  </th>
-                </tr>");
+        echo "<tr>
+              <th colspan='$colspan'><div class='text-right'>
+                        $langQuestionScore: <strong>" . round($questionScore, 2) . " / $questionWeighting</strong></div>
+              </th>
+            </tr>";
     }
-    echo ("</table>");
+    echo "</table>";
     // destruction of Answer
     unset($objAnswerTmp);
     $i++;
@@ -325,24 +373,20 @@ $attempt = Database::get()->querySingle("SELECT COUNT(record_start_date) AS coun
 $eurid = Database::get()->querySingle("SELECT MAX(eurid) AS max FROM `exercise_user_record` WHERE eid = ?d AND uid = ?d", $eid, $uid)->max;
 
 // record results of exercise
-Database::get()->query("UPDATE exercise_user_record SET total_score = ?d, total_weighting = ?d, attempt = ?d WHERE eurid = ?d", $totalScore, $totalWeighting, $attempt, $eurid);
-triggerGame($course_id, $uid, $eid);
+Database::get()->query("UPDATE exercise_user_record SET total_score = ?f, total_weighting = ?f, attempt = ?d WHERE eurid = ?d", $totalScore, $totalWeighting, $attempt, $eurid);
 
 if ($displayScore == 1) {
-    echo ("
-    <br/>
-    <table class='table-default'>
-    <tr>
-	<td class='right'>$langYourTotalScore: <b>" . round($totalScore, 2) . "/$totalWeighting</b>
-      </td>
-    </tr>
-    </table>");
+    echo "<br>
+        <table class='table-default'>
+            <tr>
+                <td class='right'>$langYourTotalScore: <strong>" . round($totalScore, 2) . "/$totalWeighting</strong></td>
+            </tr>
+        </table>";
 }
-echo ("
-  <br/>
-  <div align='center'><input class='btn btn-primary' type='submit' value='$langNext' /></div>
-  <br />
-  </form><br />");
+echo "<br>
+  <div class='text-center'><input class='btn btn-primary' type='submit' value='$langNext'></div>
+  <br>
+  </form><br>";
 
 // apo edw kai katw einai LP specific
 // record progression
@@ -352,7 +396,7 @@ if ($uid) {
     // so if totalScore is negative use 0 as result
     $totalScore = max($totalScore, 0);
     if ($totalWeighting != 0) {
-        $newRaw = @round($totalScore / $totalWeighting * 100);
+        $newRaw = round($totalScore / $totalWeighting * 100);
     } else {
         $newRaw = 0;
     }

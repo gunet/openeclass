@@ -292,7 +292,7 @@ foreach ($questionList as $questionId) {
 } // end foreach()
 
 if (!$questionList) {
-    echo ("<div class='alert alert-alert'>$langNoQuestion</div>");
+    echo "<div class='alert alert-alert'>$langNoQuestion</div>";
 } else {
     echo "<div class='panel'><div class='panel-body'><input class='btn btn-primary' type='submit' value=\"";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
@@ -315,12 +315,11 @@ echo "</html>" . "\n";
 // pio panw se auto edw to php arxeio.
 function showQuestion($questionId, $onlyAnswers = false) {
 
-    global $picturePath, $urlServer;
-    global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
+    global $picturePath, $urlServer, $langSelect, $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
     // construction of the Question object
     $objQuestionTmp = new Question();
-    // reads question informations
+    // reads question information
     if (!$objQuestionTmp->read($questionId)) {
         // question not found
         return false;
@@ -330,7 +329,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
     if (!$onlyAnswers) {
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
-        echo "<b>" . q_math($questionName) . "</b><br />" .
+        echo "<strong>" . q_math($questionName) . "</strong><br>" .
             standard_text_escape($questionDescription);
         if (file_exists($picturePath . '/quiz-' . $questionId)) {
             echo "<img src='$urlServer/$picturePath/quiz-$questionId' />";
@@ -365,37 +364,46 @@ function showQuestion($questionId, $onlyAnswers = false) {
             // replaces [blank] by an input field
             $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer));
         }
-        // unique answer
-        if ($answerType == UNIQUE_ANSWER) {
-            echo "
-                      <div class='radio'>
-                          <label>
-                            <input type='radio' name='choice[${questionId}]' value='${answerId}'>
-                            " . $answer . "
-                          </label>
-                        </div>";
 
-        }
-        // multiple answers
-        elseif ($answerType == MULTIPLE_ANSWER) {
-            echo ("
-                      <div class='checkbox'>
-                          <label>
-                            <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1'>
-                            " . $answer . "
-                          </label>
-                        </div>");
+        if ($answerType == UNIQUE_ANSWER) { // unique answer
+            echo "
+                  <div class='radio'>
+                      <label>
+                        <input type='radio' name='choice[${questionId}]' value='${answerId}'>
+                        " . $answer . "
+                      </label>
+                    </div>";
+
+        } elseif ($answerType == MULTIPLE_ANSWER) { // multiple answers
+            echo "
+                  <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1'>
+                        " . $answer . "
+                      </label>
+                    </div>";
         }
         // fill in blanks
         elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-            echo ($answer);
-        }
-        // matching
-        elseif ($answerType == MATCHING) {
+            echo $answer;
+        } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+            $temp_string = unserialize($answer);
+            $answer_string = $temp_string[0];
+            // replaces [choices] with `select` field
+            $replace_callback = function ($blank) use ($questionId, $langSelect) {
+                static $id = 0;
+                $id++;
+                $selection_text = explode("|", str_replace(array('[',']'), ' ', q($blank[0])));
+                array_unshift($selection_text, "--- $langSelect ---");
+                return selection($selection_text, "choice[$questionId][$id]", 0);
+            };
+            $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
+            echo $answer_string;
+        } elseif ($answerType == MATCHING) { // matching
             if (!$answerCorrect) {
                 // options (A, B, C, ...) that will be put into the list-box
                 $select[$answerId]['Lettre'] = $cpt1++;
-                // answers that will be shown at the right side
+                // answers that will be shown on the right side
                 $select[$answerId]['Reponse'] = $answer;
             } else {
                 echo "<tr class='even'>
@@ -410,16 +418,16 @@ function showQuestion($questionId, $onlyAnswers = false) {
                 }
                 echo "</select></td>
                                     <td width='200'>";
-                if (isset($select[$cpt2]))
+                if (isset($select[$cpt2])) {
                     echo '<b>' . $select[$cpt2]['Lettre'] . '.</b> ' . $select[$cpt2]['Reponse'];
-                else
+                } else {
                     echo '&nbsp;';
-
+                }
                 echo "</td></tr>";
                 $cpt2++;
                 // if the left side of the "matching" has been completely shown
                 if ($answerId == $nbrAnswers) {
-                    // if it remains answers to shown at the right side
+                    // if it remains answers to shown on the right side
                     while (isset($select[$cpt2])) {
                         echo "<tr class='even'>
                                 <td width='60%' colspan='2'>&nbsp;</td>
