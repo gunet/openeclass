@@ -143,12 +143,12 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
             if (!$answerCorrect) {
                 // options (A, B, C, ...) that will be put into the list-box
                 $Select[$answerId]['Lettre'] = $cpt1++;
-                // answers that will be shown at the right side
-                $Select[$answerId]['Reponse'] = standard_text_escape($answer);
+                // answers that will be shown on the right side
+                $Select[$answerId]['Reponse'] = $answer;
             } else {
                 $tool_content .= "<tr>
-                                  <td><strong>${cpt2}.</strong> " . standard_text_escape($answer) . "</td>
-                                  <td><div align='left'>
+                                  <td><strong>${cpt2}.</strong> " . q($answer) . "</td>
+                                  <td><div class='text-left'>
                                    <select name='choice[${questionId}][${answerId}]' onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>
                                      <option value='0'>--</option>";
 
@@ -159,7 +159,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                 }
                 $tool_content .= "</select></div></td><td width='200'>";
                 if (isset($Select[$cpt2])) {
-                    $tool_content .= '<strong>' . q($Select[$cpt2]['Lettre']) . '.</strong> ' . $Select[$cpt2]['Reponse'];
+                    $tool_content .= '<strong>' . q($Select[$cpt2]['Lettre']) . '.</strong> ' . q($Select[$cpt2]['Reponse']);
                 } else {
                     $tool_content .= '&nbsp;';
                 }
@@ -167,7 +167,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
                 $cpt2++;
                 // if the left side of the "matching" has been completely shown
                 if ($answerId == $nbrAnswers) {
-                    // if it remains answers to shown at the right side
+                    // if it remains answers to shown on the right side
                     while (isset($Select[$cpt2])) {
                             $tool_content .= "<tr class='even'>
                                               <td>&nbsp;</td>
@@ -416,6 +416,8 @@ function display_exercise($exercise_id) {
 
                     if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
                         list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
+                    } elseif ($answerType == MATCHING) {
+                        $answerTitle = q($answerTitle);
                     } else {
                         $answerTitle = standard_text_escape($answerTitle);
                     }

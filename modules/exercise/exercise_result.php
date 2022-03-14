@@ -472,14 +472,14 @@ if (count($exercise_question_ids) > 0) {
                             if ($answerCorrect == $thisChoice) {
                                 $questionScore += $answerWeighting;
                                 $grade = $answerWeighting;
-                                $choice[$answerId] = $matching[$choice[$answerId]];
+                                $choice[$answerId] = q($matching[$choice[$answerId]]);
                                 $icon = "<span class='fa fa-check text-success'></span>";
                             } elseif (!$thisChoice) {
                                 $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             } else {
                                 $choice[$answerId] = "<span class='text-danger'><del>" .
-                                    $matching[$choice[$answerId]] . "</del></span>";
+                                    q($matching[$choice[$answerId]]) . "</del></span>";
                                 $icon = "<span class='fa fa-times text-danger'></span>";
                             }
                         } else {
@@ -541,14 +541,13 @@ if (count($exercise_question_ids) > 0) {
                         $tool_content .= "</tr>";
                     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                         $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
-                    } else { // matching
-                        $tool_content .= "<tr><td>" . standard_text_escape($answer) . "</td>";
-                        $tool_content .= "<td>" . $choice[$answerId] . "";
-                        $tool_content .= " / <span class='text-success'><strong>" . $matching[$answerCorrect] . "</strong></span>&nbsp;&nbsp;$icon";
+                    } elseif ($answerType == MATCHING) {
+                        $tool_content .= "<tr><td>" . q($answer) . "</td>";
+                        $tool_content .= "<td>" . $choice[$answerId];
+                        $tool_content .= " / <span class='text-success'><strong>" . q($matching[$answerCorrect]). "</strong></span>&nbsp;&nbsp;$icon";
                         $tool_content .= "</td></tr>";
                     }
                 }
-
             } // end for()
         } else { // If FREE TEXT type
             $questionScore = $question_weight;
