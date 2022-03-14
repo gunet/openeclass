@@ -34,8 +34,9 @@ load_js('datatables');
 
 $picturePath = "courses/$course_code/image";
 
-$head_content .= "<script type='text/javascript'>
-        $(document).ready(function() {
+$head_content .= "
+    <script type='text/javascript'>
+        $(function() {
             $('#questions').DataTable ({
                 'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
                 'sPaginationType': 'full_numbers',
@@ -59,16 +60,12 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm',
-                          placeholder : '$langSearch...'
-                        });
-        });
-    </script>";
 
-$head_content .= "
-    <script>
-        $(function() {
+            $('.dataTables_filter input').attr({
+                class : 'form-control input-sm',
+                placeholder : '$langSearch...'
+            });
+
             $(document).on('click', '.warnLink', function(e){
                 var modifyAllLink = $(this).attr('href');
                 var modifyOneLink = modifyAllLink.concat('&clone=true');
@@ -435,11 +432,11 @@ function clone_question_pool($clone_course_id)
     global $course_code, $course_id;
     $cat = [];
 
-    $q = Database::get()->queryArray("SELECT question_cat_id, question_cat_name FROM exercise_question_cats 
+    $q = Database::get()->queryArray("SELECT question_cat_id, question_cat_name FROM exercise_question_cats
                                                 WHERE course_id = ?d", $course_id);
     if (count($q) > 0) {
         foreach ($q as $data) {
-            $new_cat_id = Database::get()->query("INSERT INTO exercise_question_cats (question_cat_name, course_id) 
+            $new_cat_id = Database::get()->query("INSERT INTO exercise_question_cats (question_cat_name, course_id)
                                                                 VALUES (?s, ?d)",
                                                 $data->question_cat_name, $clone_course_id)->lastInsertID;
             $cat[$data->question_cat_id] = $new_cat_id;
