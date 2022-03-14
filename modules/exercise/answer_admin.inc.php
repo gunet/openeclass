@@ -257,10 +257,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
 if (isset($_GET['modifyAnswers'])) {
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-
-        if (($htopic == 2) or ($htopic == 1)) {
-            $nbrAnswers = 2; // default
-        } elseif ($newAnswer) {
+        if ($newAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else {
             $nbrAnswers = $objAnswer->selectNbrAnswers();
@@ -342,8 +339,7 @@ if (isset($_GET['modifyAnswers'])) {
         if (isset($_POST['weighting'])) {
             $weighting = fix_float($_POST['weighting']);
         }
-
-        if ($htopic == 4) { // new matching question
+        if ($objAnswer->selectNbrAnswers() == 2) { // new matching question
             $nbrOptions = $nbrMatches = 2; // default options
                 // option
             for ($k = 1; $k <= $nbrOptions; $k++) {
