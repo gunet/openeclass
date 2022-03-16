@@ -167,91 +167,50 @@
                     </div>
                 </div>
                 <div class='row boxlist no-list' id='boxlistSort'>
-                    @if ($course_units)
+                    @if ($all_units)
                         <?php $count_index = 0;?>
-                        @foreach ($course_units as $key => $course_unit)
-                            <?php
-                                $not_shown = false;
-                                if (!(is_null($course_unit->start_week)) and (date('Y-m-d') < $course_unit->start_week)) {
-                                    $not_shown = true;
-                                }
-                            ?>
-                            @if ($course_unit->visible == 1)
-                               <?php $count_index++; ?>
-                            @endif
-                            @if (!$is_editor and $not_shown)
-                                @continue;
-                            @else
-                                <div id='unit_{{ getIndirectReference($course_unit->id) }}' class='col-xs-12' data-id='{{ $course_unit->id }}'>
-                                    <div class='panel clearfix'>
-                                        <div class='col-xs-12'>
-                                            <div class='item-content'>
-                                                <div class='item-header clearfix'>
-                                                    <div class='item-title h4'>
-                                                        <a {!! (!$course_unit->visible or $not_shown)? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
-                                                            {{ $course_unit->title }}
-                                                        </a>
-                                                        <small>
-                                                            <span class='help-block'>
-                                                            <?php
-                                                                if (!(is_null($course_unit->start_week))) {
-                                                                    echo $GLOBALS['langFrom2'];
-                                                                    echo "&nbsp;";
-                                                                    echo nice_format($course_unit->start_week);
-                                                                }
-                                                            ?>
-                                                            <?php
-                                                                if (!(is_null($course_unit->finish_week))) {
-                                                                    echo $GLOBALS['langTill'];
-                                                                    echo "&nbsp;";
-                                                                    echo nice_format($course_unit->finish_week);
-                                                                }
-                                                            ?>
-                                                            </span>
-                                                        </small>
-                                                    </div>
-                            @endif
-                                                @if ($is_editor)
-                                                    <div class='item-side'>
-                                                        <div class='reorder-btn'>
-                                                            <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title ='{{ trans('langReorder') }}'></span>
-                                                        </div>
-                                                        {!! action_button([
-                                                            [
-                                                                'title' => trans('langEditChange'),
-                                                                'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$course_unit->id",
-                                                                'icon' => 'fa-edit'
-                                                            ],
-                                                            [
-                                                                'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
-                                                                'url' => "$_SERVER[REQUEST_URI]?vis=". getIndirectReference($course_unit->id),
-                                                                'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
-                                                            ],
-                                                            [
-                                                                'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
-                                                                'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
-                                                                'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
-                                                                'show' => $course_info->visible == COURSE_OPEN
-                                                            ],
-                                                            [
-                                                                'title' => trans('langDelete'),
-                                                                'url' => "$_SERVER[REQUEST_URI]?del=". getIndirectReference($course_unit->id),
-                                                                'icon' => 'fa-times',
-                                                                'class' => 'delete',
-                                                                'confirm' => trans('langCourseUnitDeleteConfirm')
-                                                            ]
-                                                        ]) !!}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class='item-body'>
-                                                {!! $course_unit->comments == ' ' ? '' : standard_text_escape($course_unit->comments) !!}
-                                            </div>
-                                        </div>
+                        @foreach ($course_units as $cu)
+                            @if ($is_editor)
+                                <div class='item-side'>
+                                    <div class='reorder-btn'>
+                                        <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title ='{{ trans('langReorder') }}'></span>
                                     </div>
+                                    {!! action_button([
+                                        [
+                                            'title' => trans('langEditChange'),
+                                            'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$course_unit->id",
+                                            'icon' => 'fa-edit'
+                                        ],
+                                        [
+                                            'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
+                                            'url' => "$_SERVER[REQUEST_URI]?vis=". getIndirectReference($course_unit->id),
+                                            'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
+                                        ],
+                                        [
+                                            'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
+                                            'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
+                                            'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
+                                            'show' => $course_info->visible == COURSE_OPEN
+                                        ],
+                                        [
+                                            'title' => trans('langDelete'),
+                                            'url' => "$_SERVER[REQUEST_URI]?del=". getIndirectReference($course_unit->id),
+                                            'icon' => 'fa-times',
+                                            'class' => 'delete',
+                                            'confirm' => trans('langCourseUnitDeleteConfirm')
+                                        ]
+                                    ]) !!}
+                                </div>
+                            @endif
+                                </div>
+                                <div class='item-body'>
+                                    {!! $course_unit->comments == ' ' ? '' : standard_text_escape($course_unit->comments) !!}
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
+                    </div>
+                    </div>
+                @endforeach
                     @else
                         <div class='col-sm-12'>
                             <div class='panel'>

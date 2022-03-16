@@ -386,7 +386,7 @@ if ($uid and !$is_editor) {
     }
 }
 
-// display opencourses level in bar
+// display open-courses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
@@ -458,12 +458,66 @@ if ($is_editor) {
             . "AND `order` >= 0 "
             . "ORDER BY `order`";
 }
-$data['course_units'] = $sql = Database::get()->queryArray($query, $course_id);
-$total_cunits = count($sql);
+$data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
 
-// Contentbox: Course Units
-// Contentbox: Calendar
-// Contentbox: Announcements
+foreach ($all_units as $unit) {
+    check_unit_progress($unit->id);  // check unit completion - call to Game.php
+}
+
+$visible_units_id = [];
+if (!$is_editor) {
+    $visible_user_units = findUserVisibleUnits($uid, $all_units);
+    foreach ($visible_user_units as $data) {
+        $visible_units_id[] = $data->id;
+    }
+}
+
+$total_cunits = count($all_units);
+$cunits_content = "";
+$count_index = 0;
+
+foreach ($all_units as $cu) {
+    $not_shown = false;
+    // check if course unit has started or has completed
+    if (!$is_editor) {
+        if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
+            $not_shown = true;
+            $icon = icon('fa-clock-o', $langUnitNotStarted);
+        } elseif (!in_array($cu->id, $visible_units_id)) {
+            $not_shown = true;
+            $icon = icon('fa-minus-circle', $langUnitNotCompleted);
+        }
+    }
+    // check visibility
+    if ($cu->visible == 1) {
+        $count_index++;
+    }
+    $access = $cu->public;
+    $vis = $cu->visible;
+    $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
+    $cu_indirect = getIndirectReference($cu->id);
+    $cunits_content .= "<div id='unit_$cu_indirect' class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
+            <div class='item-content'>
+                <div class='item-header clearfix'>
+                    <div class='item-title h4 $class_vis'>";
+    if ($not_shown) {
+        $cunits_content .= $icon . "&nbsp;&nbsp;" . q($cu->title);
+    } else {
+        $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+    }
+    $cunits_content .= "<small><span class='help-block'>";
+    if (!(is_null($cu->start_week))) {
+        $cunits_content .= "$langFrom2 " . nice_format($cu->start_week);
+    }
+    if (!(is_null($cu->finish_week))) {
+        $cunits_content .= " $langTill " . nice_format($cu->finish_week);
+    }
+    $cunits_content .= "</span></small>";
+    $cunits_content .= "</div>";
+}
+
+$data['cunits_content'] = $cunits_content;
+
 if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple')) {
     $data['alter_layout'] = $alter_layout = FALSE;
     $data['cunits_sidebar_columns'] = $cunits_sidebar_columns = 4;
