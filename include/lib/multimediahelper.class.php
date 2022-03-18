@@ -257,12 +257,38 @@ class MultimediaHelper {
      */
     public static function serveVideojs($mime, $mediaPlay, $startdiv, $enddiv) {
         global $urlAppend;
-        $ret = "<link rel='stylesheet' href='{$urlAppend}node_modules/video.js/dist/video-js.min.css'>" .
-               "<script type='text/javascript' src='{$urlAppend}node_modules/video.js/dist/video.min.js'></script>" .
-               $startdiv .
-               '<div style="max-width: ' . (self::getObjectWidth() - 4) . 'px; max-height: ' . (self::getObjectWidth() - 4) . '">' .
-                 "<video class='video-js vjs-fluid' controls autoplay preload='auto' data-setup='{\"responsive\": true}'>" .
-                   "<source type='{$mime}' src='{$mediaPlay}'></video></div>" .
+        $data_setup = [ 'responsive' => true ];
+        $css = "<link rel='stylesheet' href='{$urlAppend}node_modules/video.js/dist/video-js.min.css'>";
+        $js = "<script src='{$urlAppend}node_modules/video.js/dist/video.min.js'></script>";
+        if (false and strpos($mime, 'audio') !== false) {
+            $element = 'audio';
+            $css .= "<link rel='stylesheet' href='{$urlAppend}node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.css'>";
+            $js .= "<script src='{$urlAppend}node_modules/wavesurfer.js/dist/wavesurfer.js'></script>" .
+                "<script src='{$urlAppend}node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js'></script>";
+            $data_setup['plugins'] = [
+                'wavesurfer' => [
+                    'backend' => 'MediaElement',
+                    'displayMilliseconds' => true,
+                    'debug' => true,
+                    'waveColor' => 'grey',
+                    'progressColor' => 'black',
+                    'cursorColor' => 'black',
+                    'hideScrollbar' => true,
+                ]];
+        } else {
+            $element = 'video';
+            $extra = '';
+        }
+        $data_setup = json_encode($data_setup);
+        $ret = $css . $js . $startdiv .
+               '<div style="max-width: ' . (self::getObjectWidth() - 4) . 'px">' .
+                 "<$element id='media-element' class='video-js vjs-default-skin vjs-fluid' controls autoplay preload='auto' data-setup='$data_setup'>" .
+                   "<source type='{$mime}' src='{$mediaPlay}'></$element></div>" . "
+                    <script>
+                      document.getElementById('media-element').addEventListener('loadeddata', function () {
+                        parent.jQuery && parent.jQuery.colorbox.resize({width: this.offsetWidth, height: this.offsetHeight + 52});
+                      });
+                    </script>" .
                $enddiv;
         return $ret;
     }
