@@ -187,48 +187,13 @@ class MultimediaHelper {
             case "m2v":
             case "aac":
             case "m4a":
-            // case "mp4": // can be served with QT
-                $ret .= $startdiv;
-                if (self::isUsingIE()) {
-                    $ret .= '<object width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '" kioskmode="true"
-                                classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"
-                                codebase="http://www.apple.com/qtactivex/qtplugin.cab#version=6,0,2,0">
-                                <param name="src" value="' . $mediaPlay . '">
-                                <param name="scale" value="aspect">
-                                <param name="controller" value="true">
-                                <param name="autoplay" value="true">
-                                <param name="wmode" value="transparent">
-                            </object>';
-                } else {
-                    $ret .= '<object width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '" kioskmode="true"
-                                type="video/quicktime"
-                                data="' . $mediaPlay . '">
-                                <param name="src" value="' . $mediaPlay . '">
-                                <param name="scale" value="aspect">
-                                <param name="controller" value="true">
-                                <param name="autoplay" value="true">
-                                <param name="wmode" value="transparent">
-                            </object>';
-                }
-                $ret .= $enddiv;
-                break;
-            // Flowplayer HTML5
-            case "mp3":
-                $mime = 'video/mp4';
-                $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
-                break;
+            case "mp4":
             case "ogg":
-                $mime = 'video/ogg';
-                $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
-                break;
+            case "mp3":
             case "ogv":
             case "webm":
                 $mime = get_mime_type("." . $extension);
-                $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
-                break;
-            case "mp4":
-                $mime = get_mime_type("." . $extension);
-                $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
+                $ret .= self::serveVideojs($mime, $mediaPlay, $startdiv, $enddiv);
                 break;
             case "f4v":
             case "m4v":
@@ -268,21 +233,6 @@ class MultimediaHelper {
                 }
                 $ret .= $enddiv;
                 break;
-            // raw native support
-//            case "webm":
-//            case "ogv":
-//            case "ogg":
-//                $ret .= $startdiv;
-//                if (self::isUsingIE())
-//                    $ret .= '<a href="' . $mediaDL . '">Download media</a>';
-//                else
-//                    $ret .= '<video controls="" autoplay="" width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '"
-//                                 style="margin: auto; position: absolute; top: 0; right: 0; bottom: 0; left: 0;"
-//                                 name="media"
-//                                 src="' . $mediaPlay . '">
-//                             </video>';
-//                $ret .= $enddiv;
-//                break;
             default:
                 $ret .= $startdiv;
                 $ret .= '<a href="' . $mediaDL . '">Download media</a>';
@@ -292,6 +242,28 @@ class MultimediaHelper {
 
         $ret .= '</html>';
 
+        return $ret;
+    }
+
+    /**
+     * Serve HTML5 Video.js player.
+     *
+     * @global string $urlAppend
+     * @param  string $mime
+     * @param  string $mediaPlay
+     * @param  string $startdiv
+     * @param  string $enddiv
+     * @return string
+     */
+    public static function serveVideojs($mime, $mediaPlay, $startdiv, $enddiv) {
+        global $urlAppend;
+        $ret = "<link rel='stylesheet' href='{$urlAppend}node_modules/video.js/dist/video-js.min.css'>" .
+               "<script type='text/javascript' src='{$urlAppend}node_modules/video.js/dist/video.min.js'></script>" .
+               $startdiv .
+               '<div style="max-width: ' . (self::getObjectWidth() - 4) . 'px; max-height: ' . (self::getObjectWidth() - 4) . '">' .
+                 "<video class='video-js vjs-fluid' controls autoplay preload='auto' data-setup='{\"responsive\": true}'>" .
+                   "<source type='{$mime}' src='{$mediaPlay}'></video></div>" .
+               $enddiv;
         return $ret;
     }
 
