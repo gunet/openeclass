@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "mathjax": "3"
+    "mathjax": "3",
+    "video.js": "^7.18.1"
   }
 }

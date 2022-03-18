@@ -143,7 +143,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public static function getModalWidth() {
@@ -151,7 +151,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public static function getModalHeight() {
@@ -159,7 +159,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @global string $webDir
      * @return string
      */
@@ -169,7 +169,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @global string $webDir
      * @return string
      */
@@ -179,7 +179,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @global string $webDir
      * @return string
      */
@@ -189,7 +189,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public static function getShadowboxWidth() {
@@ -197,7 +197,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public static function getShadowboxHeight() {
