@@ -2560,10 +2560,16 @@ function display_user_progress_details($element, $element_id, $user_id) {
                             <div class='col-sm-12'>
                             	<div class='pn-info-title-sct'>$langTotalPercentCompleteness</div>";
                                 if ($user_data) {
-                                    $tool_content .= "<div class='pn-info-text-sct'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
+                                    $percentage = round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%";
                                 } else {
-                                    $tool_content .= "<div class='pn-info-text-sct'>0%</div>";
+                                    $percentage = "0%";
                                 }
+                                $tool_content .= "<div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
+                                            <p class='progress-bar active from-control-static' role='progressbar'
+                                                    aria-valuenow='\".str_replace('%','',$percentage).\"'
+                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
+                                            </p>
+                                        </div>";
                                 $tool_content .= "<div class='pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
                                 <div class='pn-info-title-sct'>$langpublisher</div>
