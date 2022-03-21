@@ -96,9 +96,14 @@
                             </div>
                         </div>
                         @if (isset($form_input))
-                            <div class='form-group'>
-                                <label for='Date' class='col-sm-2 control-label'>{{ trans('langDate') }}:</label>
-                                <div class='col-sm-10'><input class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
+                            <div class='input-append date form-group' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                                <label for='startdate' class='col-sm-2 control-label'>{{ trans('langDate') }} :</label>
+                                <div class='col-sm-10'>
+                                    <div class='input-group'>
+                                        <input class='form-control' name='videodate' id='videodate' type='text' name='date' value = '{{ date('d-m-Y H:i', strtotime('now')) }}'>
+                                        <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                         <div class='form-group'>

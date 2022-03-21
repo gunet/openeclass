@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // setup
@@ -54,7 +54,7 @@ $navigation[] = array('url' => $backPath, 'name' => $langVideo);
 
 
 if (isset($_GET['form_input'])) {
-    $form_input = $_GET['form_input'];    
+    $form_input = $_GET['form_input'];
 } else {
     $form_input = '';
 }
@@ -63,11 +63,11 @@ $data['form_input'] = $form_input;
 // handle submitted data
 if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
     $id = $_POST['id'];
-    
+
     if (isset($_POST['table'])) {
         $table = select_table($_POST['table']);
     }
-    
+
     if ($table == 'video') {
         Database::get()->query("UPDATE video
                     SET title = ?s,
@@ -75,7 +75,7 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
                         creator = ?s,
                         publisher = ?s,
                         category = ?d
-                  WHERE id = ?d", 
+                  WHERE id = ?d",
             $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['selectcategory'], $id);
     } elseif ($table == 'videolink') {
         Database::get()->query("UPDATE videolink
@@ -85,10 +85,10 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
                     creator = ?s,
                     publisher = ?s,
                     category = ?d
-              WHERE id = ?d", 
+              WHERE id = ?d",
             canonicalize_url($_POST['url']), $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['selectcategory'], $id);
     }
-    
+
     // index and log
     if ($table == 'video') {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEO, $id);
@@ -99,7 +99,7 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
         'url' => canonicalize_url($_POST['url']),
         'title' => $_POST['title'],
         'description' => ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+')));
-    
+
     // navigate
     Session::Messages($langGlossaryUpdated, "alert-success");
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
@@ -107,30 +107,30 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
 
 // handle submitted data
 if (isset($_POST['add_submit'])) { // add
-    
+    $uploaded = false;
+    $videodate = date_format(date_create_from_format( 'd-m-Y H:i', $_POST['videodate']), "Y-m-d H:i");
     if (isset($_POST['URL'])) { // add videolink
         $url = $_POST['URL'];
         $title = ($_POST['title'] == '') ? $url : $_POST['title'];
-        $id = Database::get()->query('INSERT INTO videolink 
-            (course_id, url, title, description, category, creator, publisher, date)
-            VALUES (?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s)', 
-            $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['selectcategory'], 
-            $_POST['creator'], $_POST['publisher'], $_POST['date'])->lastInsertID;
-        
+        $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
+                                                        VALUES (?s, ?s, ?s, ?s, ?d, ?s, ?s, ?t)',
+            $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['selectcategory'], $_POST['creator'], $_POST['publisher'], $videodate);
+        $id = $q->lastInsertID;
         // index and log
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+        $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
         Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
             'url' => canonicalize_url($url),
             'title' => $title,
-            'description' => ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+')));
-        
+            'description' => $txt_description));
+
         // navigate
         $successAlert = $langLinkAdded;
-        
+
     } else { // add video
-        
+
         list($diskQuotaVideo, $updir, $diskUsed) = getQuotaInfo($course_code, $webDir);
-        
+
         if (isset($_POST['fileCloudInfo'])) { // upload cloud file
             $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
             $file_name = $cloudfile->name();
@@ -149,16 +149,16 @@ if (isset($_POST['add_submit'])) { // add
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
 
-        // convert php file in phps to protect the platform against malicious codes        
+        // convert php file in phps to protect the platform against malicious codes
         $file_name = str_replace(" ", "%20", $file_name);
         $file_name = str_replace("%20", "", $file_name);
         $file_name = str_replace("\'", "", $file_name);
         $safe_filename = sprintf('%x', time()) . randomkeys(16) . "." . get_file_extension($file_name);
-        
-        $iscopy = (isset($cloudfile)) 
+
+        $iscopy = (isset($cloudfile))
                 ? ($cloudfile->storeToLocalFile("$updir/$safe_filename") == CloudDriveResponse::OK)
                 : copy("$tmpfile", "$updir/$safe_filename");
-        
+
         if (!$iscopy) {
             Session::Messages($langFileNot, "alert-danger");
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
@@ -175,10 +175,10 @@ if (isset($_POST['add_submit'])) { // add
         $path = '/' . $safe_filename;
         $url = $file_name;
         $id = Database::get()->query('INSERT INTO video
-            (course_id, path, url, title, description, category, creator, publisher, date)
-            VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s)',
-            $course_id, $path, $url, $_POST['title'], $_POST['description'], $_POST['selectcategory'], 
-            $_POST['creator'], $_POST['publisher'], $_POST['date'])->lastInsertID;
+                                                       (course_id, path, url, title, description, category, creator, publisher, date)
+                                                       VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?t)'
+            , $course_id, $path, $url, $_POST['title'], $_POST['description'], $_POST['selectcategory']
+            , $_POST['creator'], $_POST['publisher'], $videodate)->lastInsertID;
 
         // index and log
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEO, $id);
@@ -191,7 +191,7 @@ if (isset($_POST['add_submit'])) { // add
         // navigate
         $successAlert = $langFAdd;
     }
-    
+
     // navigate
     Session::Messages($successAlert, "alert-success");
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
@@ -219,8 +219,16 @@ $data['resultcategories'] = Database::get()->queryArray("SELECT * FROM video_cat
 
 // js and view
 load_js('tools.js');
-    $head_content .= <<<hContent
+load_js('bootstrap-datetimepicker');
+$head_content .= <<<hContent
 <script type="text/javascript">
+$(function() {
+        $('#videodate').datetimepicker({
+            format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right',
+            language: '".$language."',
+            autoclose: true
+        });
+});
 function checkrequired(which, entry) {
     var pass=true;
     if (document.images) {
@@ -235,7 +243,7 @@ function checkrequired(which, entry) {
         }
     }
     if (!pass) {
-        alert("$langEmptyVideoTitle");
+        alert('" . $langEmptyVideoTitle . "');
         return false;
     } else {
         return true;
