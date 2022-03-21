@@ -182,4 +182,4 @@ define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 10);
 
-define('JQUERY_VERSION', '2.1.1');
+define('JQUERY_VERSION', '3.6.0');
