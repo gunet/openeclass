@@ -90,8 +90,7 @@ $(function() {
                        'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
-                       'sSearch':       '".$langSearch."',
-                       'sSearch':       '',
+                       'sSearch':       '',                       
                        'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
