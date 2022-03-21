@@ -749,14 +749,29 @@ if ($total_cunits > 0) {
     $count_index = 0;
     foreach ($all_units as $cu) {
         $not_shown = false;
-        // check if course unit has started or has completed
+        $icon = '';
+            // check if course unit has started
         if (!$is_editor) {
             if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
                 $not_shown = true;
                 $icon = icon('fa-clock-o', $langUnitNotStarted);
-            } elseif (!in_array($cu->id, $visible_units_id)) {
+            // or has completed units (if any)
+            } else if (!in_array($cu->id, $visible_units_id)) {
                 $not_shown = true;
                 $icon = icon('fa-minus-circle', $langUnitNotCompleted);
+            } else {
+                if (in_array($cu->id, $visible_units_id)) {
+                    $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                    if ($sql_badge) {
+                        $badge_id = $sql_badge->id;
+                        $per = get_cert_percentage_completion('badge', $badge_id);
+                        if ($per == 100) {
+                            $icon = icon('fa-check-circle', $langInstallEnd);
+                        } else {
+                            $icon = icon('fa-hourglass-2', $per . "%");
+                        }
+                    }
+                }
             }
         }
         // check visibility
@@ -772,7 +787,7 @@ if ($total_cunits > 0) {
                 <div class='item-header clearfix'>
                     <div class='item-title h4 $class_vis'>";
         if ($not_shown) {
-            $cunits_content .= $icon . "&nbsp;&nbsp;" . q($cu->title) ;
+            $cunits_content .= q($cu->title) ;
         } else {
             $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
         }
@@ -808,7 +823,12 @@ if ($total_cunits > 0) {
                           'class' => 'delete',
                           'confirm' => $langCourseUnitDeleteConfirm))) .
                 '</div>';
+        } else {
+            $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
+            $cunits_content .= $icon;
+            $cunits_content .= "</div>";
         }
+
         $cunits_content .= "</div>
             <div class='item-body'>";
         $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
