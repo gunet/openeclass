@@ -82,31 +82,38 @@ if ($is_in_tinymce) {
 
 if ($display_tools) {
     load_js('tools.js');
+    load_js('bootstrap-datetimepicker');
     ModalBoxHelper::loadModalBox(true);
-    $head_content .= <<<hContent
-<script type="text/javascript">
-function checkrequired(which, entry) {
-    var pass=true;
-    if (document.images) {
-        for (i = 0; i < which.length; i++) {
-            var tempobj = which.elements[i];
-            if (tempobj.name == entry) {
-                if (tempobj.type == "text" && tempobj.value == '') {
-                    pass=false;
-                    break;
+    $head_content .= "<script type='text/javascript'>
+    $(function() {
+        $('#videodate').datetimepicker({
+            format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right',
+            language: '".$language."',
+            autoclose: true
+        });
+    });
+    function checkrequired(which, entry) {
+        var pass=true;
+        if (document.images) {
+            for (i = 0; i < which.length; i++) {
+                var tempobj = which.elements[i];
+                if (tempobj.name == entry) {
+                    if (tempobj.type == 'text' && tempobj.value == '') {
+                        pass=false;
+                        break;
+                    }
                 }
             }
         }
+        if (!pass) {
+            alert('" . $langEmptyVideoTitle . "');
+            return false;
+        } else {
+            return true;
+        }
     }
-    if (!pass) {
-        alert("$langEmptyVideoTitle");
-        return false;
-    } else {
-        return true;
-    }
-}
-</script>
-hContent;
+    </script>";
+
 
     $head_content .= getDelosJavaScript();
 
@@ -293,6 +300,7 @@ hContent;
     }
     if (isset($_POST['add_submit'])) {  // add
         $uploaded = false;
+        $videodate = date_format(date_create_from_format( 'd-m-Y H:i', $_POST['videodate']), "Y-m-d H:i");
         if (isset($_POST['URL'])) { // add videolink
             $url = trim($_POST['URL']);
             if ($_POST['title'] == '') {
@@ -301,7 +309,8 @@ hContent;
                 $title = $_POST['title'];
             }
             $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
-                                                        VALUES (?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s)', $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['selectcategory'], $_POST['creator'], $_POST['publisher'], $_POST['date']);
+                                                        VALUES (?s, ?s, ?s, ?s, ?d, ?s, ?s, ?t)',
+                                                $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['selectcategory'], $_POST['creator'], $_POST['publisher'], $videodate);
             $id = $q->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
             $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
@@ -355,9 +364,9 @@ hContent;
                 $url = $file_name;
                 $id = Database::get()->query('INSERT INTO video
                                                        (course_id, path, url, title, description, category, creator, publisher, date)
-                                                       VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s)'
+                                                       VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?t)'
                                 , $course_id, $path, $url, $_POST['title'], $_POST['description'], $_POST['selectcategory']
-                                , $_POST['creator'], $_POST['publisher'], $_POST['date'])->lastInsertID;
+                                , $_POST['creator'], $_POST['publisher'], $videodate)->lastInsertID;
 
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEO, $id);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
@@ -464,9 +473,14 @@ hContent;
                     <label for='Publisher' class='col-sm-2 control-label'>$langpublisher:</label>
                     <div class='col-sm-10'><input class='form-control' type='text' name='publisher' value='$nick'></div>
                 </div>
-                <div class='form-group'>
-                    <label for='Date' class='col-sm-2 control-label'>$langDate:</label>
-                    <div class='col-sm-10'><input class='form-control' type='text' name='date' value='" . date('Y-m-d G:i') . "'></div>
+                <div class='input-append date form-group' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                    <label for='startdate' class='col-sm-2 control-label'>$langDate :</label>
+                    <div class='col-sm-10'>
+                        <div class='input-group'>
+                            <input class='form-control' name='videodate' id='videodate' type='text' name='date' value = '" . date('d-m-Y H:i', strtotime('now')) . "'>
+                            <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                        </div>
+                    </div>
                 </div>
                 <div class='form-group'>
                     <label for='Category' class='col-sm-2 control-label'>$langCategory:</label>
