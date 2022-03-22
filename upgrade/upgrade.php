@@ -2153,6 +2153,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('course_user','favorite')) {
             Database::get()->query("ALTER TABLE course_user ADD favorite datetime DEFAULT NULL");
         }
+        Database::get()->query('ALTER TABLE dropbox_msg MODIFY subject TEXT');
+
         // change database encoding to utf8mb4
         updateInfo(1, $langChangeDBEncoding);
         convert_db_encoding_to_utf8mb4();

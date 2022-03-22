@@ -169,7 +169,7 @@ $db->query("CREATE TABLE `course_user` (
       `reg_date` DATETIME NOT NULL,
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       `document_timestamp` datetime NOT NULL,
-      `favorite` datetime DEFAULT NULL,      
+      `favorite` datetime DEFAULT NULL,
       PRIMARY KEY (course_id, user_id)) $tbl_options");
 
 $db->query("CREATE TABLE `course_user_request` (
@@ -584,7 +584,7 @@ $db->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
     `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,
     `author_id` INT(11) UNSIGNED NOT NULL,
-    `subject` VARCHAR(255) NOT NULL,
+    `subject` TEXT NOT NULL,
     `body` LONGTEXT NOT NULL,
     `timestamp` INT(11) NOT NULL) $tbl_options");
 
