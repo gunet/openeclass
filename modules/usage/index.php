@@ -117,22 +117,45 @@ $head_content .= "<style>
 </style>";
 
 $pageName = $langUsage;
-if (isset($_GET['per_course_dur'])) {
-    $tool_content .= action_bar(array(
-        array('title' => $langPersonalStats,
-            'url' => "../usage/?t=u",
-            'level' => 'primary-label'),
-        array('title' => $langBack,
-            'url' => "../../main/portfolio.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')
-        ),false);
-    if (($_REQUEST['u'] != $uid) and !$is_admin) { // security check
+
+if (isset($_REQUEST['u'])) {
+    if (!$is_admin) { // security check
         redirect_to_home_page();
     } else {
-        $tool_content .= user_duration_per_course($_REQUEST['u']);
-        $tool_content .= user_last_logins($_REQUEST['u']);
+        $uid_stats = intval($_REQUEST['u']);
     }
+} else {
+    $uid_stats = $uid;
+}
+
+if (isset($_GET['per_course_dur'])) {
+    if ($is_admin) {
+        $toolName .= "$langUserStats: " . uid_to_name($uid_stats)." (".uid_to_name($uid_stats, 'username').")";
+        $pageName = "$langUserStats: " . uid_to_name($uid_stats)." (".uid_to_name($uid_stats, 'username').")";
+        $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
+        $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
+        $tool_content .= action_bar(array(
+            array('title' => $langPersonalStats,
+                'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;u=$uid_stats",
+                'level' => 'primary-label'),
+            array('title' => $langBack,
+                'url' => '../admin/listusers.php',
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')
+        ),false);
+    } else {
+        $tool_content .= action_bar(array(
+            array('title' => $langPersonalStats,
+                'url' => "../usage/?t=u",
+                'level' => 'primary-label'),
+            array('title' => $langBack,
+                'url' => "../../main/portfolio.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')
+        ),false);
+    }
+    $tool_content .= user_duration_per_course($uid_stats);
+    $tool_content .= user_last_logins($uid_stats);
 } else {
     if ($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)) { // course statistics
         if (isset($_REQUEST['gc_stats'])) {
