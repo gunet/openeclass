@@ -200,7 +200,7 @@ function is_admin($username, $password) {
     if (!$user) {
         return false;
     } else {
-        if (isset($user->privilege) and $user->privilege !== '0') {
+        if (isset($user->privilege) and intval($user->privilege) !== ADMIN_USER) {
             return false;
         }
 
@@ -1058,7 +1058,7 @@ function convert_db_encoding_to_utf8mb4() {
     Database::get()->query("ALTER TABLE `document` CHANGE format format varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `dropbox_attachment` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `dropbox_attachment` CHANGE real_filename real_filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `dropbox_msg` CHANGE subject subject varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+    Database::get()->query("ALTER TABLE `dropbox_msg` CHANGE subject subject text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `dropbox_msg` CHANGE body body longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `ebook` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `ebook_section` CHANGE public_id public_id varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
