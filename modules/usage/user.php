@@ -22,8 +22,10 @@
 
 if (isset($_REQUEST['u']) and $is_admin) {
     $statsuser = intval($_REQUEST['u']);
+    $add_link = "&amp;u=$statsuser";
 } else {
     $statsuser = $uid;
+    $add_link = '';
 }
 
 $urlback = "../../main/portfolio.php";
@@ -32,7 +34,7 @@ if ($is_admin) {
 }
 $tool_content .= action_bar(array(
     array('title' => $langDurationVisitsPerCourse,
-        'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;u=$statsuser&amp;per_course_dur=TRUE",
+        'url' => "$_SERVER[SCRIPT_NAME]?t=u$add_link&amp;per_course_dur=TRUE",
         'level' => 'primary-label'),
     array('title' => $langBack,
         'url' => $urlback,
@@ -40,8 +42,7 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label')
 ),false);
 
-
-if ($statsuser != $uid) {
+if ($is_admin) {
     $toolName .= "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
     $pageName = "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
@@ -86,4 +87,3 @@ $tschema = "<thead><tr>"
         . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>";
 $tool_content .= table_placeholder("udetails1", "table table-striped table-bordered", $tschema, "$langHits $langAnd $langDuration");
 $tool_content .= "</div>";
-
