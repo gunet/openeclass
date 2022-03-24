@@ -143,7 +143,7 @@ if ($can_upload) {
             <option selected='selected' value='0'>$langCategoryOther</option>
             <option value='1'>$langCategoryExcercise</option>
             <option value='2'>$langCategoryLecture</option>
-            <option value='3'>$langCategoryEssay</option>
+            <option value='3'>$langAssignment</option>
             <option value='4'>$langCategoryDescription</option>
             <option value='5'>$langCategoryExample</option>
             <option value='6'>$langCategoryTheory</option>

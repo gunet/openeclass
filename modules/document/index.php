@@ -1042,7 +1042,7 @@ if ($can_upload or $user_upload) {
                         selection(array('0' => $langCategoryOther,
                             '1' => $langCategoryExcercise,
                             '2' => $langCategoryLecture,
-                            '3' => $langCategoryEssay,
+                            '3' => $langAssignment,
                             '4' => $langCategoryDescription,
                             '5' => $langCategoryExample,
                             '6' => $langCategoryTheory), 'file_category', $oldCategory, "class='form-control'") . "</div>
@@ -1427,7 +1427,7 @@ if ($doc_count == 0) {
                      "<th class='text-left'>$langSize</th>" .
                      "<th class='text-left'>" . headlink($langDate, 'date') . '</th>';
     if (!$is_in_tinymce) {
-        $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
+        $tool_content .= "<th class='text-center'>".icon('fa-gears', $langActions)."</th>";
     }
     $tool_content .= "</tr>";
 
@@ -1476,7 +1476,7 @@ if ($doc_count == 0) {
                         // External file URL
                         $file_url = $entry['extra_path'];
                         if ($can_upload) {
-                            $link_title_extra .= '&nbsp;' . icon('fa-external-link', $langLINKTypeDesc);
+                            $link_title_extra .= '&nbsp;' . icon('fa-external-link', $langLink);
                         }
                     }
                 }

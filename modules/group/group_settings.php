@@ -30,7 +30,7 @@ require_once 'modules/group/group_functions.php';
 $toolName = $langGroups;
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroups);
-$pageName = $langGroupProperties;
+$pageName = $langCourseInfo;
 
 $tool_content .= action_bar(array(
     array(  'title' => $langBack,
@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
         setting_set(SETTING_GROUP_STUDENT_DESCRIPTION, $_POST['student_desc'], $course_id);
     } else {
         setting_set(SETTING_GROUP_STUDENT_DESCRIPTION, 0, $course_id);
-    }    
+    }
     Session::Messages($langGlossaryUpdated, "alert-success");
     redirect_to_home_page("modules/group/group_settings.php?course=$course_code");
 } else {

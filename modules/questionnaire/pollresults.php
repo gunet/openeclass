@@ -172,7 +172,7 @@ $export_box
         </div>
         <div class='row  margin-bottom-fat'>
             <div class='col-sm-3'>
-                <strong>$langPollStart:</strong>
+                <strong>$langStart:</strong>
             </div>
             <div class='col-sm-9'>
                 " . nice_format(date("Y-m-d H:i", strtotime($thePoll->start_date)), true) . "

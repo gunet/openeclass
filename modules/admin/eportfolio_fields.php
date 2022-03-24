@@ -110,7 +110,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
 
-    $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langCPFLink );
+    $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langLink );
 
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
@@ -292,7 +292,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
 
         load_js('validation.js');
 
-        $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langCPFLink);
+        $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langLink);
         $yes_no = array(0 => $langNo, 1 => $langYes);
 
         $tool_content .= "<div class='form-wrapper'>";
@@ -451,7 +451,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 $tool_content .= "</tbody>";
             } else {
 
-                $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langCPFLink);
+                $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langLink);
                 $yes_no = array(0 => $langNo, 1 => $langYes);
 
                 $tool_content .= "<tbody class='tile__list'>";

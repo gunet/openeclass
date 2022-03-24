@@ -1055,7 +1055,7 @@ function resource_usage($element, $element_resource_id) {
  */
 function get_resource_details($element, $resource_id) {
 
-    global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath, $langNumOfForums,
+    global $course_id, $langCategoryExcercise, $langAssignment, $langLearnPath, $langNumOfForums,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire,
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
@@ -1076,11 +1076,11 @@ function get_resource_details($element, $resource_id) {
                 break;
         case AssignmentEvent::ACTIVITY:
                 $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $resource)->title;
-                $type = "$langCategoryEssay";
+                $type = "$langAssignment";
             break;
         case LearningPathEvent::ACTIVITY:
                 $title = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource)->name;
-                $type = "$langLearningPath";
+                $type = "$langLearnPath";
             break;
         case ViewingEvent::DOCUMENT_ACTIVITY:
                 $cer_res = Database::get()->queryArray("SELECT (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) AS file_details FROM document

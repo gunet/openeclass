@@ -272,7 +272,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
             </div>
             <div class='form-group'>
                 <div class='col-sm-8'>
-                    <button class='btn btn-primary' type='submit' name='send_link' value='$lang_pass_submit'>$lang_pass_submit</button>
+                    <button class='btn btn-primary' type='submit' name='send_link' value='$langSend'>$langSend</button>
                     <button class='btn btn-default' href='$urlServer'>$langCancel</button>
                 </div>
             </div>

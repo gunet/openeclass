@@ -58,7 +58,7 @@ EOF;
 
 $dialogBox = "";
 
-$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPath);
+$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearnPath);
 $navigation[] = array("url" => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], "name" => $langAdm);
 $toolName = $langInsertMyLinkToolName;
 
@@ -130,7 +130,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
 					VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $thisLinkModule->module_id, $order);
-                
+
                 Session::Messages($langInsertedAsModule, 'alert-info');
             } else {
                 Session::Messages($langAlreadyUsed, 'alert-warning');
@@ -145,7 +145,7 @@ if ($iterator > 1) {
 }
 
 
-$tool_content .= 
+$tool_content .=
          action_bar(array(
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
@@ -156,7 +156,7 @@ $tool_content .= showlinks();
 draw($tool_content, 2, null, $head_content);
 
 /**
- * @brief display links 
+ * @brief display links
  * @return string
  */
 function showlinks() {

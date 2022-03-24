@@ -110,7 +110,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyCourseCategoryValueName, 'alert alert-danger');
+            Session::Messages($langEmptyNodeName, 'alert alert-danger');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=add');
         } else {
             // OK Create the new course category value
@@ -149,7 +149,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyCourseCategoryValueName, 'alert-danger');
+            Session::Messages($langEmptyNodeName, 'alert-danger');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=edit&id=' . $id);
         } else {
             // OK Update the course category value

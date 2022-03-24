@@ -40,7 +40,7 @@ $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv'
 $exercise_details[] = $objExercise->selectTitle();
 $exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
 if (!empty($objExercise->selectStartDate())) {
-    $exercise_details[] = "$langPollStart: " . greek_format($objExercise->selectStartDate(), true);
+    $exercise_details[] = "$langStart: " . greek_format($objExercise->selectStartDate(), true);
 }
 if (!empty($objExercise->selectEndDate())) {
     $exercise_details[] = "$langPollEnd: " . greek_format($objExercise->selectEndDate(), true);

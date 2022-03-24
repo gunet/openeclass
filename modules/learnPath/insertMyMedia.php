@@ -34,7 +34,7 @@ require_once 'include/lib/mediaresource.factory.php';
 
 $dialogBox = '';
 
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearnPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
 $toolName = $langInsertMyMediaToolName;
 $tool_content .=
@@ -131,7 +131,7 @@ while ($iterator <= $_POST['maxMediaForm']) {
             $num = Database::get()->querySingle($sql, $videolink->url, $_SESSION['path_id'], $course_id)->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                //reuse_module($thisLinkModule->module_id);                 
+                //reuse_module($thisLinkModule->module_id);
                 // TODO ---- needs improvement //
                 create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
                 Session::Messages($langInsertedAsModule, 'alert-info');

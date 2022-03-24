@@ -23,7 +23,7 @@
 require_once '../include/baseTheme.php';
 $pageName = $langFaq;
 
-      
+
 
 $tool_content .= action_bar(array(
                                 array('title' => $langFaqExpandAll,
@@ -71,7 +71,7 @@ $tool_content .= "
                 </div>
                 <div id='faq-$faq->id' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading$faq->id'>
                   <div class='panel-body'>
-                    <p><strong><u>$langFaqAnswer:</u></strong></p>
+                    <p><strong><u>$langReply:</u></strong></p>
                     $faq->body
                   </div>
                 </div>
@@ -79,7 +79,7 @@ $tool_content .= "
               ";
             }
           }
-                
+
 $tool_content .= "
           </div>
         </div>

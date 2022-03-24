@@ -73,7 +73,7 @@ if (!isset($_POST['doit'])) {
                     'url' => "profile/profile.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
-            $tool_content .= "<div class='alert alert-danger'>$langNotice:</br>$langExplain</div>";
+            $tool_content .= "<div class='alert alert-danger'>$langNote:</br>$langExplain</div>";
         }
     }  //endif is admin
 } else {

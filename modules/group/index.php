@@ -445,7 +445,7 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'level' => 'primary-label',
                       'button-class' => 'btn-success'),
-                array('title' => $langGroupProperties,
+                array('title' => $langCourseInfo,
                       'url' => "group_settings.php?course=$course_code",
                       'icon' => 'fa-gears',
                       'level' => 'primary-label'),

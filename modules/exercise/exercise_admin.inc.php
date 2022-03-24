@@ -639,7 +639,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
           'icon' => 'fa-play-circle',
           'level' => 'primary-label',
           'button-class' => 'btn-danger' ],
-        [ 'title' => $langGroupProperties,
+        [ 'title' => $langCourseInfo,
           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
           'icon' => 'fa-edit',
           'level' => 'primary-label',

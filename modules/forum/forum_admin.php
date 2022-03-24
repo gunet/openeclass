@@ -101,7 +101,7 @@ if (isset($_GET['forumgo'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <fieldset>
             <div class='form-group'>
-                <label for='cat_title' class='col-sm-2 control-label'>$langCat:</label>
+                <label for='cat_title' class='col-sm-2 control-label'>$langCategory:</label>
                 <div class='col-sm-10'>
                     <input type='text' class='form-control' id='cat_title' value='$ctg' disabled>
                 </div>
@@ -199,9 +199,9 @@ elseif (isset($_GET['forumcatedit'])) {
         <input type='hidden' name='cat_id' value='$cat_id'>
         <fieldset>
         <div class='form-group'>
-            <label for='cat_title' class='col-sm-2 control-label'>$langCat:</label>
+            <label for='cat_title' class='col-sm-2 control-label'>$langCategory:</label>
             <div class='col-sm-10'>
-                <input name='cat_title' type='text' class='form-control' id='cat_title' placeholder='$langCat' value='$cat_title'>
+                <input name='cat_title' type='text' class='form-control' id='cat_title' placeholder='$langCategory' value='$cat_title'>
             </div>
         </div>
         <div class='form-group'>
@@ -546,9 +546,9 @@ elseif (isset($_GET['forumgodel'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
         <fieldset>
         <div class='form-group'>
-            <label for='categories' class='col-sm-2 control-label'>$langCat:</label>
+            <label for='categories' class='col-sm-2 control-label'>$langCategory:</label>
             <div class='col-sm-10'>
-              <input name='categories' type='text' class='form-control' id='categories' placeholder='$langCat'>
+              <input name='categories' type='text' class='form-control' id='categories' placeholder='$langCategory'>
             </div>
         </div>
         <div class='form-group'>

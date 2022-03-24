@@ -65,10 +65,10 @@ $(document).ready(function() {
 </script>
 EOF;
 
-$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPath);
+$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearnPath);
 $navigation[] = array("url" => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], "name" => $langAdm);
 $toolName = $langInsertMyModulesTitle;
-$tool_content .= 
+$tool_content .=
          action_bar(array(
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
@@ -197,6 +197,6 @@ function buildRequestModules() {
 
     foreach ($firstResult as $list) {
         $sql .=" AND M.`module_id` != " . intval($list->module_id);
-    }   
+    }
     return $sql;
 }

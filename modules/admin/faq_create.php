@@ -96,7 +96,7 @@ if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
   $id = "";
   $title = "";
   $body = "";
-  
+
   if ($_GET['faq'] == 'modify') {
 
     $submitBtn = 'modifyFaq';
@@ -122,7 +122,7 @@ if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
                   </div>
               </div>
               <div class='form-group'>
-                  <label for='answer' class='col-sm-2 control-label'>$langFaqAnswer <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
+                  <label for='answer' class='col-sm-2 control-label'>$langReply <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
                   <div class='col-sm-10'>" . rich_text_editor('answer', 5, 40, $body) . "</div>
               </div>
               <div class='form-group'>
@@ -188,7 +188,7 @@ $tool_content .= "
                 </div>
                 <div id='faq-$faq->id' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading-$faq->id'>
                   <div class='panel-body'>
-                    <p><strong><u>$langFaqAnswer:</u></strong></p>
+                    <p><strong><u>$langReply:</u></strong></p>
                     $faq->body
                   </div>
                 </div>
@@ -196,7 +196,7 @@ $tool_content .= "
               ";
             }
           }
-                
+
 $tool_content .= "
           </div>
         </div>

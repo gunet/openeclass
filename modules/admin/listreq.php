@@ -369,7 +369,7 @@ else {
                     break;
             }
             $tool_content .= action_button(array(
-                array('title' => "$langElaboration $authmethod",
+                array('title' => "$langEditChange $authmethod",
                       'icon' => 'fa-edit',
                       'url' => $link)
             ));

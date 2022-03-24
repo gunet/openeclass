@@ -821,7 +821,7 @@ else {
                     <th class = 'text-center'>$langTitle</th>
                     <th class = 'text-center'>$langUsers</th>
                     <th class = 'text-center'>$langBBBMics / $langBBBCameras</th>
-                    <th class = 'text-center'>$langNewBBBSessionStart</th>
+                    <th class = 'text-center'>$langStart</th>
                 </thead>";
            foreach ($q as $srv) {
                 $meetings = get_active_rooms_details($srv->server_key, $srv->api_url);

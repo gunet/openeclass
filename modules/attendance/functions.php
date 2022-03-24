@@ -233,7 +233,7 @@ function display_attendance_activities($attendance_id) {
            $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut,
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1,
            $langHere, $langAttendanceNoActMessage3, $langcsvenc2, $langAttendanceActivity,
-           $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
+           $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
            $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
@@ -250,7 +250,7 @@ function display_attendance_activities($attendance_id) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityAs=1",
                                 'icon' => 'fa fa-flask space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langInsertExerciseCap",
+                          array('title' => "$langExercise",
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityEx=1",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
@@ -1189,7 +1189,7 @@ function student_view_attendance($attendance_id) {
 
     global $tool_content, $uid, $langAttendanceAbsencesNo, $langAttendanceAbsencesFrom,
            $langAttendanceAbsencesFrom2, $langAttendanceStudentFailure,
-           $langTitle, $langAttendanceActivityDate2, $langDescription,
+           $langTitle, $langDate, $langDescription,
            $langAttendanceAbsencesYes, $langBack, $course_code;
 
     $attendance_limit = get_attendance_limit($attendance_id);
@@ -1220,7 +1220,7 @@ function student_view_attendance($attendance_id) {
 
         $tool_content .= "<table class='table-default' >";
         $tool_content .= "<tr><th>$langTitle</th>
-                              <th>$langAttendanceActivityDate2</th>
+                              <th>$langDate</th>
                               <th>$langDescription</th>
                               <th>$langAttendanceAbsencesYes</th>
                           </tr>";

@@ -30,7 +30,7 @@ function bbb_session_form($session_id = 0) {
 
     global $course_id, $uid, $tc_type;
     global $tool_content, $langAdd, $course_code;
-    global $langUnitDescr, $langNewBBBSessionStart;
+    global $langUnitDescr, $langStart;
     global $langVisible, $langInvisible;
     global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
     global $start_session, $BBBEndDate, $langAnnouncements, $langBBBAnnDisplay;
@@ -166,7 +166,7 @@ function bbb_session_form($session_id = 0) {
             </div>
         </div>
         <div class='form-group'>
-            <label for='start_session' class='col-sm-2 control-label'>$langNewBBBSessionStart:</label>
+            <label for='start_session' class='col-sm-2 control-label'>$langStart:</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' name='start_session' id='start_session' value='$start_session'>
             </div>
@@ -688,7 +688,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
 function bbb_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid, $tc_type,
-        $langNewBBBSessionStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
+        $langStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
         $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
@@ -828,7 +828,7 @@ function bbb_session_details() {
                     </td>
                     <td class='text-center'>
                         <div style='padding-top: 7px;'>
-                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
+                            <span class='text-success'>$langStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
                         </div>
                         <div style='padding-top: 7px;'>
                             <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
@@ -897,7 +897,7 @@ function bbb_session_details() {
                     </td>
                     <td class='text-center'>
                         <div style='padding-top: 7px;'>
-                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
+                            <span class='text-success'>$langStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
                         </div>
                         <div style='padding-top: 7px;'>
                             <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
