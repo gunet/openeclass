@@ -415,7 +415,7 @@ if (isset($_POST['optionsSave'])) {
                             $langPreviewState &nbsp;".$themes_arr[$preview_theme].".
                         </div>
                         <div class='col-sm-3'>
-                            <a href='#' class='theme_enable btn btn-success btn-xs'>$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-xs'>$langLeave</a>
+                            <a href='#' class='theme_enable btn btn-success btn-xs'>$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-xs'>$langLogout</a>
                         </div>
                     </div>
                 </div>

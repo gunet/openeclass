@@ -34,7 +34,7 @@ if (!$found) { // exercise not found
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
-$toolName = $langExerciseStats;
+$toolName = $langUsage;
 $pageName = $objExercise->selectTitle();
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
@@ -44,13 +44,13 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label',
         'icon' => 'fa-reply',
         'url' => "index.php?course=$course_code"
-    ),          
+    ),
 ));
- 
+
 $completedAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_COMPLETED)->count;
 $pausedAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_PAUSED)->count;
 $pendingAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_PENDING)->count;
-$cancelledAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_CANCELED)->count; 
+$cancelledAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_CANCELED)->count;
 $total_attempts = $completedAttempts + $pausedAttempts + $pendingAttempts + $cancelledAttempts;
 
 $grade_stats = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS unique_users, 
@@ -199,7 +199,7 @@ foreach($questionList as $id) {
             </tr>";
     }
 }
-               
+
 $tool_content .= "
             </tbody>
         </table>

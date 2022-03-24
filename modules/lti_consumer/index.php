@@ -98,7 +98,7 @@ elseif(isset($_GET['choice']))
             break;
         case 'do_delete':
             delete_lti_app(getDirectReference($_GET['id']));
-            Session::Messages($langLTIAppDeleteSuccessful, 'alert-success');
+            Session::Messages($langBBBDeleteSuccessful, 'alert-success');
             redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
             break;
         case 'do_disable':

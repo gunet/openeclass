@@ -74,7 +74,7 @@ draw($tool_content, 2, null, $head_content);
 
 function new_prereq() {
     global $tool_content, $head_content, $urlServer, $course_code,
-           $langBack, $langCourse, $langSubmit, $langCancel, $langNewCoursePrerequisiteHelp1, $langNewCoursePrerequisiteHelp2;
+           $langBack, $langCourse, $langSubmit, $langCancel, $langNote, $langNewCoursePrerequisiteHelp2;
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -105,7 +105,7 @@ function new_prereq() {
 hContent;
 
     $tool_content .= "
-    <div class='alert alert-info'><label>$langNewCoursePrerequisiteHelp1</label> $langNewCoursePrerequisiteHelp2</div>
+    <div class='alert alert-info'><label>$langNote</label> $langNewCoursePrerequisiteHelp2</div>
     <div class='form-wrapper'>
         <form role='form' class='form-horizontal' method='post' action='index.php?course=" . $course_code . "'>
           <input type='hidden' name='addcommit' value='1'>

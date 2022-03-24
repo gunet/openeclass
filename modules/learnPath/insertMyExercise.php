@@ -62,7 +62,7 @@ $(document).ready(function() {
 EOF;
 
 $messBox = '';
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearnPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']), 'name' => $langAdm);
 $toolName = $langInsertMyExerciseToolName;
 $tool_content .=

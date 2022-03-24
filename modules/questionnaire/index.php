@@ -201,7 +201,7 @@ draw($tool_content, 2, null, $head_content);
 function printPolls() {
     global $tool_content, $course_id, $course_code,
         $langTitle, $langCancel, $langOpenParticipation,
-        $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
+        $langStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
         $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
         $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
         $langParticipate,  $langHasParticipated, $langSee,
@@ -352,7 +352,7 @@ function printPolls() {
                                     </div></td>";
                 $tool_content .= "
                         <td class='text-center'>
-                            <div style='padding-top: 7px;'><span class='text-success'>$langPollStart</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->start_date)), true) . "</div>
+                            <div style='padding-top: 7px;'><span class='text-success'>$langStart</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->start_date)), true) . "</div>
                             <div style='padding-top: 7px;'><span class='text-danger'>$langPollEnd</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->end_date)), true) . "</div>
                         </td>";
 

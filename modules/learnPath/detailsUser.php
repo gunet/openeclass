@@ -104,11 +104,11 @@ $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));      
+                      'level' => 'primary-label')));
 // table header
 $tool_content .= '<div class="table-responsive"><table class="table-default">' . "\n"
         . '      <tr class="list-header text-left">' . "\n"
-        . '        <th>' . $langLearningPath . '</th>' . "\n"
+        . '        <th>' . $langLearnPath . '</th>' . "\n"
         . '        <th>' . $langProgress . '</th>' . "\n"
         . '      </tr>' . "\n";
 if (count($lpList) == 0) {

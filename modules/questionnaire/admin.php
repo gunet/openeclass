@@ -134,7 +134,7 @@ if (isset($_POST['submitQuestion'])) {
         $v->rule('numeric', array('questionScale'));
         $v->rule('min', array('questionScale'), 1);
         $v->labels(array(
-            'questionName' => "$langTheField $langPollStart",
+            'questionName' => "$langTheField $langStart",
             'questionScale' => "$langTheField $langPollEnd"
         ));
     }
@@ -352,7 +352,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               </div>
             </div>
             <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")."' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
-                <label for='PollStart' class='col-sm-2 control-label'>$langPollStart:</label>
+                <label for='PollStart' class='col-sm-2 control-label'>$langStart:</label>
                 <div class='col-xs-10 col-sm-9'>
                     <input class='form-control' name='PollStart' id='PollStart' type='text' value='$PollStart'>
                     <span class='help-block'>".Session::getError('PollStart')."</span>
@@ -736,7 +736,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langPollStart:</strong>
+                    <strong>$langStart:</strong>
                 </div>
                 <div class='col-sm-9'>
                     ".date('d-m-Y H:i',strtotime($poll->start_date))."
@@ -830,7 +830,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
                               <th colspan='2'>$langQuesList</th>
-                              <th class='text-center'>".icon('fa-gears', $langCommands)."</th>
+                              <th class='text-center'>".icon('fa-gears', $langActions)."</th>
                             </tr>";
             $i=1;
             $nbrQuestions = count($questions);

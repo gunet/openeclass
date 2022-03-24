@@ -695,7 +695,7 @@ function display_gradebook($gradebook) {
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
-           $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath,
+           $langGradebookAddActivity, $langInsertWorkCap, $langExercise, $langLearnPath,
            $langExport, $langcsvenc2, $langBack, $langNoRegStudent, $langStudents, $langRefreshGrade,
            $langExportGradebook, $langExportGradebookWithUsers;
 
@@ -714,11 +714,11 @@ function display_gradebook($gradebook) {
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityAs=1",
                             'icon' => 'fa fa-flask space-after-icon',
                             'class' => ''),
-                      array('title' => "$langInsertExerciseCap",
+                      array('title' => "$langExercise",
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityEx=1",
                             'icon' => 'fa fa-edit space-after-icon',
                             'class' => ''),
-                      array('title' => "$langLearningPath",
+                      array('title' => "$langLearnPath",
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityLp=1",
                             'icon' => 'fa fa-ellipsis-h space-after-icon',
                             'class' => ''),
@@ -1165,7 +1165,7 @@ function register_user_grades($gradebook_id, $actID) {
  */
 function add_gradebook_activity($gradebook_id, $id, $type) {
 
-    global $course_id, $langLearningPath;
+    global $course_id, $langLearnPath;
 
     if ($type == GRADEBOOK_ACTIVITY_ASSIGNMENT) { //  add  assignments
         //checking if it's new or not
@@ -1275,7 +1275,7 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
             $module_weight = weightleft($gradebook_id, '');
             $actTitle = $checkForLp->name;
             $actDate = date("Y-m-d");
-            $actDesc = $langLearningPath . ": " . $checkForLp->name;
+            $actDesc = $langLearnPath . ": " . $checkForLp->name;
             Database::get()->query("INSERT INTO gradebook_activities
                             SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s,
                                 weight = ?d, module_auto_id = ?d, auto = ?d, module_auto_type = ?d, visible = 1",

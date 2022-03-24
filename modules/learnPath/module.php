@@ -226,7 +226,7 @@ if ($module->contentType != CTLABEL_) { //
             $contentDescType = $langDOCUMENTTypeDesc;
         }
         if ($resultBrowsed->contentType == CTLINK_) {
-            $contentDescType = $langLINKTypeDesc;
+            $contentDescType = $langLink;
         }
         if ($resultBrowsed->contentType == CTCOURSE_DESCRIPTION_) {
             $contentDescType = $langDescriptionCours;

@@ -210,7 +210,7 @@ function display_general_lists($analytics_id) {
 function display_analytics_elements($analytics_id) {
 
     global $tool_content, $course_code, $langAdd, $langAnalyticsNoElements,
-           $langAnalyticsType, $langAnalyticsGradeLimits, $langAnalyticsThresholds,
+           $langType, $langAnalyticsGradeLimits, $langAnalyticsThresholds,
            $langAnalyticsWeight, $langAnalyticsCriticalLevel, $langAnalyticsAdvancedLevel,
            $langModify, $langDelete, $langAnalyticsConfirmDeletion,
            $langAnalyticsParameters;
@@ -239,7 +239,7 @@ function display_analytics_elements($analytics_id) {
     } else {
         $results ="<div class='row res-table-header'>
                         <div class='col-sm-2'>
-                            $langAnalyticsType
+                            $langType
                         </div>
                         <div class='col-sm-3'>
                             $langAnalyticsGradeLimits
@@ -555,7 +555,7 @@ function generate_analytics_csv($peruserarray, $title) {
  */
 function display_analytics_user($userid, $analytics_id, $start, $end, $previous, $next) {
 
-    global $tool_content, $course_code, $langAnalyticsType, $langPercentage;
+    global $tool_content, $course_code, $langType, $langPercentage;
 
     $backclass = '';
     if (is_null($previous)) {
@@ -571,7 +571,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
             <h5>
                 <div class='row res-table-header'>
                     <div class='col-sm-5'>
-                        $langAnalyticsType 
+                        $langType 
                     </div>
                     <div class='col-sm-3'>
                         $langPercentage
