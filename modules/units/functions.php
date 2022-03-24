@@ -1360,16 +1360,6 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
 
 /**
  * @brief resource actions
- * @global type $is_editor
- * @global type $langEdit
- * @global type $langDelete
- * @global type $langVisibility
- * @global type $langAddToCourseHome
- * @global type $langDown
- * @global type $langUp
- * @global type $langConfirmDelete
- * @global type $course_code
- * @staticvar boolean $first
  * @param type $res_type
  * @param type $resource_id
  * @param type $status
@@ -1379,12 +1369,29 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
 function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEditChange, $langDelete,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
-    $langViewHide, $langViewShow, $langReorder;
-
-    static $first = true;
+    $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed, $langNeverBrowsed;
 
     if (!$is_editor) {
-        return '';
+        if (prereq_unit_has_completion_enabled($_GET['id'])) {
+            $activity_result = unit_resource_completion($_GET['id'], $resource_id);
+            switch ($activity_result) {
+                case 1: $content = "<td class='style='padding: 10px 0; width: 85px;'>
+                                    <span class='fa fa-check-circle text-center' data-toggle='tooltip' data-placement='top' title='$langAlreadyBrowsed'></span>
+                                    </td>";
+                    break;
+                case 0:
+                    $content = "<td class='style='padding: 10px 0; width: 85px;'>
+                                <span class='fa fa-hourglass-2 text-center' data-toggle='tooltip' data-placement='top' title='$langNeverBrowsed'></span>
+                                </td>";
+                    break;
+                case 2:
+                    $content = '';
+                    break;
+            }
+            return $content;
+        } else {
+            return '';
+        }
     }
 
     if ($res_type == 'description') {
@@ -1421,21 +1428,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'class' => 'delete')
             ));
 
-    $content .= "</div>";
-
-    $first = false;
+    $content .= "</div></td>";
     return $content;
 }
 
 /**
  * @brief edit resource
- * @global type $id
- * @global type $urlServer
- * @global type $langTitle
- * @global type $langDescription
- * @global type $langContents
- * @global type $langModify
- * @global type $course_code
  * @param type $resource_id
  * @return string
  */
@@ -1548,4 +1546,39 @@ function prereq_unit_has_completion_enabled($prereq_unit_id) {
 function delete_unit_prerequisite($unit_id) {
     $query = "DELETE FROM unit_prerequisite WHERE unit_id = ?d";
     Database::get()->query($query, $unit_id);
+}
+
+
+/**
+ * @brief check if unit resource has completed
+ * @param $unit_id
+ * @param $unit_resource_id
+ * @return integer
+ */
+function unit_resource_completion($unit_id, $unit_resource_id) {
+
+    global $uid, $course_id;
+
+    $sql_res = Database::get()->querySingle("SELECT res_id FROM unit_resources WHERE unit_id = ?d AND id = ?d", $unit_id, $unit_resource_id);
+    if ($sql_res) {
+        $res_id = $sql_res->res_id;
+        $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $unit_id);
+        if ($sql) {
+            $badge_id = $sql->id;
+            $q = Database::get()->querySingle("SELECT completed FROM user_badge JOIN badge_criterion 
+                                                        ON user_badge.badge = badge_criterion.badge 
+                                                        AND user = ?d
+                                                        AND user_badge.badge = ?d
+                                                        AND resource = ?d", $uid, $badge_id, $res_id);
+            if ($q) {
+                if ($q->completed) {
+                    return 1; // activity has been completed
+                } else {
+                    return 0; // activity has not been completed
+                }
+            } else {
+                return 2; // there is no activity
+            }
+        }
+    }
 }

@@ -91,7 +91,7 @@ if ($is_editor) {
     <div class='row'>
         <div class='col-md-12'>" .
         action_bar(array(
-            array('title' => $langEditUnitSection,
+            array('title' => $langEditChange,
                   'url' => "info.php?course=$course_code&amp;edit=$id&amp;next=1",
                   'icon' => 'fa fa-edit',
                   'level' => 'primary-label',

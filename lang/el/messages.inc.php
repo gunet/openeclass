@@ -208,9 +208,6 @@ $langNewEclassVersionInfo = 'Μια νέα έκδοση της πλατφόρμ�
 $langAdminCreateFaq = "Δημιουργία FAQ";
 $langFaq = "Συχνές ερωτήσεις";
 $langFaqQuestion = "Ερώτηση";
-$langFaqAnswer = "Απάντηση";
-$langFaqOrder = "Ταξινόμηση";
-$langFaqCategory = "Κατηγορία";
 $langFaqAdd = "Προσθήκη ερώτησης";
 $langFaqExpandAll = "Άνοιγμα όλων";
 $langFaqCloseAll = "Κλείσιμο όλων";
@@ -219,7 +216,7 @@ $langFaqAddSuccess = "Η ερώτηση αποθηκεύτηκε με επιτυ
 $langFaqDeleteSuccess = "Η ερώτηση διαγράφτηκε με επιτυχία";
 $langFaqNoEntries = "Δεν υπάρχουν ερωτήσεις.";
 $langFaqAddNew = "Προσθέστε μία νέα πατώντας το κουμπί \"Προσθήκη ερώτησης\".";
-$langFaqReorderSuccess = "Η ταξινόμηση έγινε επιτυχώς";
+$langFaqReorderSuccess = "Η ταξινόμηση έγινε με επιτυχία";
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
@@ -396,8 +393,6 @@ $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην �
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 $langReintroductionApplication = "Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!";
 $langBackRequests = "Επιστροφή στις αιτήσεις";
-$langElaboration = "Επεξεργασία";
-
 
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
@@ -3310,7 +3305,6 @@ $langProfileInfoPrivate = 'ιδιωτικό';
 $langProfileInfoProfs = "εμφάνιση στους $langsTeachers";
 $langProfileInfoUsers = 'εμφάνιση σε όλους';
 $langEmailSettings = 'Ρυθμίσεις ηλεκτρονικού ταχυδρομείου';
-$langEditProfile = 'Επεξεργασία';
 $langProfileSendMail = 'Αποστολή προσωπικού μηνύματος';
 $langProfileNotAvailable = 'Μη διαθέσιμο';
 $langProfilePersInfo = 'Προσωπικά Στοιχεία';
@@ -4543,7 +4537,6 @@ $langUpdates = "ενημερώσεις";
  * ********************************************************************* */
 $langAddUnit = "Προσθήκη ενότητας";
 $langEditUnit = "Επεξεργασία ενότητας";
-$langEditUnitSection = "Επεξεργασία";
 $langUnitTitle = "Τίτλος ενότητας";
 $langUnitDescr = "Σύντομη περιγραφή";
 $langUnitUnknown = "Άγνωστη ενότητα";
@@ -4599,8 +4592,8 @@ $langOfCourseCompletion = "Δραστηριοτήτων ολοκλήρωσης �
 $langUnitPrerequisites = "Προαπαιτούμενη ενότητα";
 $langNewUnitPrerequisite = "Προσθήκη προαπαιτούμενου";
 $langNoUnitPrerequisite = "Δεν έχει οριστεί προαπαιτούμενη ενότητα.";
-$langUnitHasNotCompletionEnabled = "Αδυναμία προσθήκης, η ενότητας που επιλέξατε δεν έχει ενεργοποιημένη την ολοκλήρωση ενότητας.";
-$langNewUnitPrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε μία έγκυρη ενότητα.";
+$langUnitHasNotCompletionEnabled = "Αδυναμία προσθήκης! Η ενότητα που επιλέξατε δεν έχει ενεργοποιημένη την ολοκλήρωση ενότητας.";
+$langNewUnitPrerequisiteFailInvalid = "Αδυναμία προσθήκης! Παρακαλούμε επιλέξτε μία έγκυρη ενότητα.";
 $langNewUnitPrerequisiteSuccess = "Το προαπαιτούμενο δημιουργήθηκε με επιτυχία!";
 $langDelUnitPrerequisiteSuccess = "Το προαπαιτούμενο διαγράφηκε με επιτυχία!";
 $langNewUnitPrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, η ενότητα που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
@@ -4658,7 +4651,6 @@ $langNoGlossary = "Δεν υπάρχει γλωσσάριο";
   Ebook
  * ***************************************** */
 
-$langEBookEditStructure = 'Επεξεργασία';
 $langEBook = 'Ηλεκτρονικό βιβλίο';
 $langEBooks = 'Ηλεκτρονικά βιβλία';
 $langEBookCreate = "Δημιουργία Ηλεκτρονικού βιβλίου";
@@ -5782,7 +5774,6 @@ $langCourseCategoryMultiple2 = "Η κατηγορία μεταδεδομένων
 $langCourseCategorySearchable = "Αναζητήσιμη";
 $langCourseCategorySearchable2 = "Η κατηγορία μεταδεδομένων θα συμμετέχει στην ειδική εργαλειοθήκη αναζήτησης";
 $langCourseCategoryActive2 = "Η κατηγορία μεταδεδομένων θα εμφανίζεται στους χρήστες";
-$langCourseCategoryOrdering = "Ταξινόμηση";
 $langCourseCategoryOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
 $langEditCourseCategoryValues = "Επεξεργασία τιμών";
 $langCourseCategoryValues = "Τιμές Κατηγοριών Μεταδεδομένων";
@@ -5794,7 +5785,6 @@ $langEmptyCourseCategoryValueName= "Αφήσατε το όνομα κενό! Δ�
 $langCourseCategoryValueErase = "Η τιμή της κατηγορίας μεταδεδομένων διαγράφηκε";
 $langEditCourseCategoryValueSuccess = "Η επεξεργασία πραγματοποιήθηκε επιτυχώς";
 $langCourseCategoryValue2 = "(π.χ. 1 - 30)";
-$langCourseCategoryValueOrdering = "Ταξινόμηση";
 $langCourseCategoryValueOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
 $langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδεδομένων θα εμφανίζεται στους χρήστες";
 $langInactiveCourseCategories = "Ανενεργές κατηγορίες";
