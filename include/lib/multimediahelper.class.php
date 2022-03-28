@@ -192,14 +192,12 @@ class MultimediaHelper {
             case "mp3":
             case "ogv":
             case "webm":
+            case "m4v":
                 $mime = get_mime_type("." . $extension);
                 $ret .= self::serveVideojs($mime, $mediaPlay, $startdiv, $enddiv);
                 break;
             case "f4v":
-            case "m4v":
             case "flv":
-            // case "mp3": // can be server with Flowplayer Flash
-            // case "mp4": // can be served with Flowplayer Flash
                 $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.13.min.js'></script>";
                 if (self::isUsingIOS()) {
                     $ret .= $startdiv;
