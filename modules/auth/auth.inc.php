@@ -1556,6 +1556,10 @@ function external_DB_Check_Pass($test_password, $hash, $encryption) {
             return (md5($test_password) == $hash);
         case 'ehasher':
             return password_verify($test_password, $hash);
+        case 'phpass':
+            require_once 'include/lib/PasswordHash.php';
+            $hasher = new Hautelook\Phpass\PasswordHash(8, false);
+            return $hasher->CheckPassword($test_password, $hash);
         default:
             /* Maybe append an error message to tool_content, telling not supported encryption */
     }

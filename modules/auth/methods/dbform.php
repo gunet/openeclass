@@ -31,10 +31,11 @@ if (empty($auth_data['auth_settings'])) {
     $auth_data['dbpassencr'] = 'none';
 }
 
-$dbpassencr_data = array(
+$dbpassencr_data = [
     'none' => 'Plain Text',
     'md5' => 'MD5',
-    'ehasher' => 'Eclass Hasher');
+    'ehasher' => 'Eclass Hasher',
+    'phpass' => 'phpass' ];
 
 $tool_content .= "
     <div class='form-group'>
@@ -85,4 +86,3 @@ $tool_content .= "
         </div>
     </div>" .
     eclass_auth_form($auth_data['auth_title'], $auth_data['auth_instructions']);
-
