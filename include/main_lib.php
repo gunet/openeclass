@@ -200,7 +200,11 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-datepicker') {
             $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
             js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-            $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
+            if ($language == 'en') {
+                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language-GB.min.js";
+            } else {
+                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
+            }
         } elseif ($file == 'bootstrap-validator') {
             $file = "bootstrap-validator/validator.js";
         } elseif ($file == 'bootstrap-slider') {
@@ -899,7 +903,7 @@ function nice_format($date, $time = FALSE, $dont_display_time = FALSE) {
 }
 
 /**
- * @brief remove seoconds from a given datetime
+ * @brief remove seconds from a given datetime
  * @param type $datetime
  * @return datetime without seconds
  */
