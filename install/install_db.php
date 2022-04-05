@@ -714,7 +714,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `blog_post` (
     `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `commenting` TINYINT NOT NULL DEFAULT '1',
     `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-    `course_id` INT(11) NOT NULL) $tbl_options");
+    `course_id` INT(11) NOT NULL,
+    `visible` TINYINT UNSIGNED NOT NULL DEFAULT '1'
+    ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `comments` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

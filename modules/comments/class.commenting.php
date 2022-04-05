@@ -25,10 +25,10 @@ require_once 'modules/abuse_report/abuse_report.php';
  * This class represents a commenting system
 */
 Class Commenting {
-    
+
     private $rtype = '';
     private $rid = 0;
-    
+
     /**
      * Constructor
      * @param course_id the id of the course in case of a course blog
@@ -38,8 +38,8 @@ Class Commenting {
     	$this->rtype = $rtype;
     	$this->rid = $rid;
     }
-    
-    
+
+
     /**
      * Get number of comments for a resource
      * @return int
@@ -49,7 +49,7 @@ Class Commenting {
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid);
         return $res->c;
     }
-    
+
     /**
      * Get comments from DB
      * @return array with Comment objects
@@ -66,7 +66,7 @@ Class Commenting {
     	}
     	return $ret;
     }
-    
+
     /**
      * Injects all commenting module code in other subsystems
      * @param courseCode the course code
@@ -75,11 +75,9 @@ Class Commenting {
      * @return string
      */
     public function put($courseCode, $isEditor, $uid, $always_open = false) {
-        global $langComments, $langBlogPostUser, $langSubmit, $themeimg, $langModify, $langDelete,
+        global $langComments, $langBlogPostUser, $langSubmit, $langModify, $langDelete,
         $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content;
-        
-        //$head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/comments/style.css">';
-        
+
         $commentsNum = $this->getCommentsNum();
 
         if (!$always_open) {
@@ -94,13 +92,13 @@ Class Commenting {
                           </div>
                           <div class='modal-body' id='comments-$this->rid'>";
         } else {
-            $comments_title = "<h4 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h4><br>";
+            $comments_title = "<h5 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5><br>";
             $out = "<div class='commenting'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>
                     <div id='comments-$this->rid'>";
         }
-        
+
         if ($commentsNum != 0) {
             //retrieve comments
             $comments = $this->getCommentsDB();
@@ -139,7 +137,7 @@ Class Commenting {
                             $post_actions = '';
                         }
                     }
-                }           
+                }
                 $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
                           <div class='col-xs-12'>
                            <div class='media'>
@@ -147,25 +145,25 @@ Class Commenting {
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble'>
-                             <div class='label label-success media-heading'>".nice_format($comment->getTime(), true).'</div>'.
+                             <div class='label label-success media-heading'>".nice_format(datetime_remove_seconds($comment->getTime()), true).'</div>'.
                               "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                $post_actions
                                ."<div class='margin-top-thin' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                                </div>
                             </div>
                           </div>
-                         </div>";              
+                         </div>";
             }
         }
         $out .= "</div>";
-        
+
         if (is_null($courseCode)) { //for the case of personal blog posts comments
             if (isset($_SESSION['uid'])) {
                 $out .= '<form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
                 $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';
                 $out .= '</form>';
-            } 
+            }
         } else {
             if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
                 $out .= '<form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
@@ -174,20 +172,20 @@ Class Commenting {
                 $out .= '</form>';
             }
         }
-        
+
         if (!$always_open) {
             $out .= '<div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                      </div>';
             $out .= '</div>';
         }
-        
+
         $out .= '</div>';
         $out .= '</div>';
-        
+
         return $out;
     }
-    
+
     /**
      * Check if a user has permission to create comments
      * @param isEditor boolean showing if user is teacher
@@ -211,9 +209,9 @@ Class Commenting {
     	    } else {//user is not course member
                 return false;
             }
-        } 
+        }
     }
-    
+
     /**
      * Delete all comments of a resource
      * @param rtype the resource type
@@ -239,10 +237,10 @@ Class Commenting {
             }
             Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $c->id, 'comment');
         }
-        
+
         Database::get()->query("DELETE FROM `comments` WHERE `rtype`=?s AND `rid`=?d", $rtype, $rid);
     }
-    
+
 }
 
 /**
