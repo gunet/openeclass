@@ -2113,7 +2113,6 @@ $langNodePublic = "Δημόσια προβολή";
 $langNodePublic2 = "Η $langsFaculty θα εμφανίζεται για όλους τους χρήστες";
 $langNodeSubscribed = "Προβολή Εγγεγραμμένων";
 $langNodeSubscribed2 = "Η $langsFaculty θα εμφανίζεται μόνο για τους εγγεγραμμένους σε αυτήν χρήστες";
-$langNodeHidden = "Απόκρυψη";
 $langNodeHidden2 = "Η $langsFaculty θα παραμένει κρυμμένη από όλους τους χρήστες";
 $langNodeOrderPriority = "Προτεραιότητα Ταξινόμησης";
 $langNodeOrderPriority2 = "(όσο ψηλότερη τιμή, τόσο ψηλότερα στην ταξινόμηση)";
@@ -5212,13 +5211,13 @@ $langBlogUserNotExist = "Ο ιδιοκτήτης αυτού του προσωπ�
  * comments
  * ************************************************************ */
 $langCommentsDelConfirm = "Είστε σίγουροι πως θέλετε να διαγράψετε το σχόλιο;";
-$langCommentsDelSuccess = "Το σχόλιο διαγράφηκε επιτυχώς";
+$langCommentsDelSuccess = "Το σχόλιο διαγράφηκε με επιτυχία";
 $langCommentsDelFail = "Η διαγραφή του σχολίου απέτυχε";
 $langCommentsLoadFail = "Το σχόλιο δεν ήταν δυνατό να βρεθεί";
-$langCommentsSaveConfirm = "Είστε σίγουροι πως θέλετε να αποθηκεύσετε το σχόλιο;";
-$langCommentsSaveSuccess = "Το σχόλιο αποθηκεύθηκε με επιτυχία";
+$langCommentsSaveConfirm = "Επιβεβαίωση υποβολής του σχολίου";
+$langCommentsSaveSuccess = "Το σχόλιο υποβλήθηκε με επιτυχία";
 $langCommentsSaveFail = "Η αποθήκευση του σχολίου απέτυχε";
-$langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας σχολίου";
+$langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας του σχολίου";
 $langCommentsDelNoPerm = "Δεν έχετε δικαίωμα διαγραφής του σχολίου";
 $langCommentsEditNoPerm = "Δεν έχετε δικαίωμα επεξεργασίας του σχολίου";
 $langCourseCommenting = "Σχολιασμός στην αρχική σελίδα του $langsOfCourse";

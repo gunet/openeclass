@@ -109,7 +109,7 @@ $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
 
 //define allowed actions
-$allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
+$allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings", "makeVisible", "makeInvisible");
 
 //initialize $_REQUEST vars
 $action = (isset($_REQUEST['action']) && in_array($_REQUEST['action'], $allowed_actions))? $_REQUEST['action'] : "showBlog";
@@ -309,6 +309,24 @@ if ($blog_type == 'course_blog' && $is_editor) {
 
 //instantiate the object representing this blog
 $blog = new Blog($course_id, $user_id);
+
+// make blog post visible
+if ($action == "makeVisible") {
+    $post = new BlogPost();
+    if ($post->loadFromDB($pId)) {
+        $post->visibility(1);
+    }
+    redirect_to_home_page("modules/blog/index.php?$url_params");
+}
+
+// make blog post invisible
+if ($action == "makeInvisible") {
+    $post = new BlogPost();
+    if ($post->loadFromDB($pId)) {
+        $post->visibility(0);
+    }
+    redirect_to_home_page("modules/blog/index.php?$url_params");
+}
 
 //delete post
 if ($action == "delPost") {
@@ -600,7 +618,7 @@ if ($action == "showPost") {
                                             'title' => $langAddResePortfolio,
                                             'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
                                             'icon' => 'fa-star',
-                                            'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
+                                            'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid && $post->getVisible())
                                         ),
                                     ))."
                                 </div>
@@ -608,7 +626,7 @@ if ($action == "showPost") {
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
-                            <div class='panel-body'><div class='label label-success'>" . nice_format($post->getTime(), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-body'><div class='label label-success'>" . nice_format(datetime_remove_seconds($post->getTime()), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
                             <div class='panel-footer'>
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>
@@ -668,10 +686,10 @@ if ($action == "showBlog") {
 
         //retrieve blog posts
         $posts = $blog->getBlogPostsDB($page, $posts_per_page);
-
         /***blog posts area***/
         $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='col-sm-9'>";
+
         foreach ($posts as $post) {
             if ($blog_type == 'course_blog') {
                 $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
@@ -697,9 +715,23 @@ if ($action == "showBlog") {
                 $comm = new Commenting('blogpost', $post->getId());
                 $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {
-                $comment_content = "<div class=\"blog_post_empty_space\"></div>";
+                $comment_content = "<div class='blog_post_empty_space'></div>";
             }
-            $tool_content .= "<div class='panel panel-action-btn-default'>
+            if ($post->getVisible()) {
+                $vis_panel_style = 'panel-action-btn-default';
+                $vis_color = '';
+                $vis_title = $langViewHide;
+                $vis_action = 'makeInvisible';
+                $vis_icon = 'fa fa-eye-slash';
+            } else {
+                $vis_panel_style = '';
+                $vis_color = "style='color: darkgrey;'";
+                $vis_title = $langViewShow;
+                $vis_action = 'makeVisible';
+                $vis_icon = 'fa fa-eye';
+            }
+            $tool_content .= "<div $vis_color>";
+            $tool_content .= "<div class='panel $vis_panel_style'>
                                 <div class='panel-heading'>
                                     <div class='pull-right'>
                                         ". action_button(array(
@@ -707,6 +739,12 @@ if ($action == "showBlog") {
                                                 'title' => $langEditChange,
                                                 'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
                                                 'icon' => 'fa-edit',
+                                                'show' => $allow_to_edit
+                                            ),
+                                            array(
+                                                'title' => $vis_title,
+                                                'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=$vis_action&amp;pId=".$post->getId(),
+                                                'icon' => $vis_icon,
                                                 'show' => $allow_to_edit
                                             ),
                                             array(
@@ -721,7 +759,7 @@ if ($action == "showBlog") {
                                                 'title' => $langAddResePortfolio,
                                                 'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
                                                 'icon' => 'fa-star',
-                                                'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
+                                                'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid && $post->getVisible())
                                             ),
                                         ))."
                                     </div>
@@ -730,7 +768,7 @@ if ($action == "showBlog") {
                                     </h3>
                                 </div>
                                 <div class='panel-body'>
-                                    <div class='label label-success'>" . nice_format($post->getTime(), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                    <div class='label label-success'>" . nice_format(datetime_remove_seconds($post->getTime()), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
                                 <div class='panel-footer'>
@@ -740,6 +778,7 @@ if ($action == "showBlog") {
                                     </div>
                                 </div>
                              </div>";
+            $tool_content .= "</div>";
         }
 
 

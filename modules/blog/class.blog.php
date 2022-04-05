@@ -45,13 +45,23 @@ Class Blog {
      * @return int
      */
     public function blogPostsNumber() {
+        global $is_editor;
+
         $sql = 'SELECT COUNT(`id`) as c FROM `blog_post` WHERE ';
         $params = array();
         if ($this->course_id != 0) {//course blog
-            $sql .= '`course_id` = ?d';
+            if ($is_editor) {
+                $sql .= '`course_id` = ?d';
+            } else {
+                $sql .= '`course_id` = ?d AND visible = 1';
+            }
             $params[] = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = ?d AND `user_id` = ?d';
+            if ($this->user_id == $_SESSION['uid']) {
+                $sql .= '`course_id` = ?d AND `user_id` = ?d';
+            } else {
+                $sql .= '`course_id` = ?d AND visible = 1 AND `user_id` = ?d';
+            }
             $params[] = 0;
             $params[] = $this->user_id;
         }
@@ -66,14 +76,25 @@ Class Blog {
      * @return array with blog post objects
      */
     public function getBlogPostsDB($page, $postsPerPage) {
+        global $is_editor;
+
         $offset = $page*$postsPerPage;
         $sql = 'SELECT * FROM `blog_post` WHERE ';
         $params = array();
         if ($this->course_id != 0) {//course blog
-            $sql .= '`course_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
+            if ($is_editor) {
+                $sql .= '`course_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
+            } else {
+                $sql .= '`course_id` = ?d AND visible = 1 ORDER BY `time` DESC LIMIT ?d,?d';
+            }
             $params[] = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
+            if ($this->user_id == $_SESSION['uid']) {
+                $sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
+            } else {
+                $sql .= '`course_id` = ?d AND visible = 1 AND `user_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
+            }
+
             $params[] = 0;
             $params[] = $this->user_id;
         }
@@ -93,13 +114,24 @@ Class Blog {
      * @return array with blog post objects
      */
     private function getPopularBlogPostsDB($num) {
+        global $is_editor;
+
         $sql = 'SELECT * FROM `blog_post` WHERE ';
         $params = array();
         if ($this->course_id != 0) {//course blog
-            $sql .= '`course_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+            if ($is_editor) {
+                $sql .= '`course_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+            } else {
+                $sql .= '`course_id` = ?d AND visible = 1 ORDER BY `views` DESC LIMIT ?d';
+            }
             $params[] = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+            if ($this->user_id == $_SESSION['uid']) {
+                $sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+            } else {
+                $sql .= '`course_id` = ?d AND visible = 1 AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+            }
+
             $params[] = 0;
             $params[] = $this->user_id;
         }
@@ -119,6 +151,7 @@ Class Blog {
      */
     public function popularBlogPostsHTML($num) {
         global $langBlogPopular;
+
         if ($this->course_id != 0) { //course blog
             global $course_code;
             $url_params = "course=$course_code";
@@ -129,7 +162,12 @@ Class Blog {
         $out = "<h5><strong>$langBlogPopular</strong></h5>
                     <div class='list-group'>";
         foreach ($posts as $post) {
-            $out .= "<a class='list-group-item' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
+            if (!$post->getVisible()) {
+                $style = 'not_visible';
+            } else {
+                $style = '';
+            }
+            $out .= "<a class='list-group-item $style' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
         }
         $out .= "</div>";
         return $out;
@@ -158,8 +196,9 @@ Class Blog {
             $older = FALSE;
         }
 
-        if($page > 0)
+        if ($page > 0) {
             $newer = TRUE;
+        }
         $out = '';
         if ((isset($newer) && $newer) || (isset($older) && $older)) {
             $out = "<ul class='pager'>";
@@ -182,7 +221,8 @@ Class Blog {
      * @return string HMTL code
      */
     public function chronologicalTreeHTML($tree_month, $tree_year) {
-        global $langBlogPostHistory, $langMonthNames, $head_content;
+        global $langBlogPostHistory, $langMonthNames, $head_content, $is_editor;
+
         if ($this->course_id != 0) { //course blog
             global $course_code;
             $url_params = "course=$course_code";
@@ -193,10 +233,19 @@ Class Blog {
 
         if ($this->blogPostsNumber()>0) {
             if ($this->course_id != 0) { //course blog
-                $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d ORDER BY `time` DESC";
+                if ($is_editor) {
+                    $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d ORDER BY `time` DESC";
+                } else {
+                    $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d AND visible = 1 ORDER BY `time` DESC";
+                }
+
                 $result = Database::get()->queryArray($sql, $this->course_id);
             } else { //user blog
-                $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d AND user_id = ?d ORDER BY `time` DESC";
+                if ($this->user_id == $_SESSION['uid']) {
+                    $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d AND user_id = ?d ORDER BY `time` DESC";
+                } else {
+                    $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d AND visible = 1 AND user_id = ?d ORDER BY `time` DESC";
+                }
                 $result = Database::get()->queryArray($sql, 0, $this->user_id);
             }
             load_js('jstree3');

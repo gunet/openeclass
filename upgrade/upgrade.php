@@ -2153,6 +2153,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('course_user','favorite')) {
             Database::get()->query("ALTER TABLE course_user ADD favorite datetime DEFAULT NULL");
         }
+        // blog post visibility
+        if (!DBHelper::fieldExists('blog_post', 'visible')) {
+            Database::get()->query("ALTER TABLE blog_post ADD `visible` TINYINT UNSIGNED NOT NULL DEFAULT '1'");
+        }
 
         // change database encoding to utf8mb4
         updateInfo(1, $langChangeDBEncoding);

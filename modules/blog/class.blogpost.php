@@ -22,7 +22,7 @@
  * This class represents page of a Blog Post
  */
 Class BlogPost {
-    
+
     private $id = 0;
     private $title = '';
     private $content = '';
@@ -31,6 +31,7 @@ Class BlogPost {
     private $views = 0;
     private $courseId = 0;
     private $commenting = 0;
+    private $visible = 1;
 
     /**
      * Load a blog post from db
@@ -38,16 +39,24 @@ Class BlogPost {
      * @return boolean true on success, false on failure
      */
     public function loadFromDB($postId) {
-        global $course_id;
-        if ($course_id == 0) {
-            global $user_id;
-            $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d AND course_id = ?d AND user_id = ?d';
+        global $course_id, $is_editor, $user_id;
+
+        if ($course_id == 0) { // personal blog posts
+            if ($user_id == $_SESSION['uid']) {
+                $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d AND course_id = ?d AND user_id = ?d';
+            } else {
+                $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d AND course_id = ?d AND visible = 1 AND user_id = ?d';
+            }
             $result = Database::get()->querySingle($sql, $postId, $course_id, $user_id);
-        } else {
-            $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d AND course_id = ?d';
+        } else { // course blog posts
+            if ($is_editor) {
+                $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d AND course_id = ?d';
+            } else {
+                $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d AND visible = 1 AND course_id = ?d';
+            }
             $result = Database::get()->querySingle($sql, $postId, $course_id);
         }
-        
+
         if (is_object($result)) {
             $this->authorId = $result->user_id;
             $this->content = $result->content;
@@ -57,12 +66,13 @@ Class BlogPost {
             $this->views = $result->views;
             $this->courseId = $result->course_id;
             $this->commenting = $result->commenting;
+            $this->visible = $result->visible;
             return true;
         } else {
             return false;
         }
     }
-    
+
     /**
      * Load multiple blog posts from a PDO array
      * @param arr the array with the data retrieved from DB
@@ -81,11 +91,12 @@ Class BlogPost {
             $ret[$i]->courseId = $a->course_id;
             $ret[$i]->creationTime = $a->time;
             $ret[$i]->commenting = $a->commenting;
-            $i++; 
+            $ret[$i]->visible = $a->visible;
+            $i++;
         }
         return $ret;
     }
-    
+
     /**
      * Save a blog post in database
      * @param title the blog post title
@@ -111,7 +122,7 @@ Class BlogPost {
             return false;
         }
     }
-     
+
     /**
      * Delete blog post
      * @return boolean true on success, false on failure
@@ -127,7 +138,16 @@ Class BlogPost {
             return false;
         }
     }
-    
+
+    /**
+     * @brief modify blog post visibility
+     * @param $visible
+     */
+    public function visibility($visible) {
+        Database::get()->querySingle("UPDATE blog_post SET visible = ?d WHERE id = ?d", $visible, $this->id);
+    }
+
+
     /**
      * Update a blog post in database
      * @param title the blog post title
@@ -165,7 +185,7 @@ Class BlogPost {
             return true;
         }
     }
-    
+
     /**
      * Increase views for a blog post
      * @return boolean true on success, false on failure
@@ -178,8 +198,8 @@ Class BlogPost {
         } else {
         	return false;
         }
-    }    
-    
+    }
+
     /**
      * Get blog post id
      * @return int
@@ -187,7 +207,7 @@ Class BlogPost {
     public function getId() {
         return $this->id;
     }
-    
+
     /**
      * Get blog post title
      * @return string
@@ -195,7 +215,7 @@ Class BlogPost {
     public function getTitle() {
     	return $this->title;
     }
-    
+
     /**
      * Get blog post content
      * @return string
@@ -203,7 +223,7 @@ Class BlogPost {
     public function getContent() {
     	return $this->content;
     }
-    
+
     /**
      * Get blog post author id
      * @return int
@@ -211,7 +231,7 @@ Class BlogPost {
     public function getAuthor() {
     	return $this->authorId;
     }
-    
+
     /**
      * Get blog post course id
      * @return int
@@ -219,7 +239,7 @@ Class BlogPost {
     public function getCourse() {
     	return $this->courseId;
     }
-    
+
     /**
      * Get blog post views
      * @return int
@@ -227,23 +247,31 @@ Class BlogPost {
     public function getViews() {
     	return $this->views;
     }
-    
+
     /**
      * Get blog post creation time
-     * @return DateTime
+     * @return
      */
     public function getTime() {
     	return $this->creationTime;
     }
-    
+
     /**
      * Get blog post commenting setting value
-     * @return DateTime
+     * @return
      */
     public function getCommenting() {
         return $this->commenting;
     }
-    
+
+    /**
+     * @brief get blog post visibility
+     * @return int
+     */
+    public function getVisible() {
+        return$this->visible;
+    }
+
     /**
      * Check if a user has permission to edit/delete course blog posts
      * @param isEditor boolean showing if user is teacher
