@@ -1443,7 +1443,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `logins` (
     PRIMARY KEY (`id`)) $tbl_options");
 
 // tc_sessions tables
-$db->query("CREATE TABLE IF NOT EXISTS `tc_session1` (
+$db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) DEFAULT NULL,
     `title` varchar(255) DEFAULT NULL,
