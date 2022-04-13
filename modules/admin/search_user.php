@@ -49,6 +49,12 @@ $head_content .= "<script type='text/javascript'>
                 language: '" . $language . "',
                 autoclose: true
             });
+            $('#id_user_last_login').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '" . $language . "',
+                autoclose: true
+            });
         });
     </script>";
 
@@ -69,6 +75,7 @@ $email = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 $user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
 $user_expires_until = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
+$user_last_login = isset($_GET['user_last_login']) ? $_GET['user_last_login'] : '';
 
 if (isset($_GET['department'])) {
     $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
@@ -172,6 +179,12 @@ $tool_content .= "
         </div>
         <div class='col-sm-5'>
             <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='$user_registered_at' data-date-format='dd-mm-yyyy' placeholder='$langRegistrationDate'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label class='col-sm-2 control-label'>$langLastLogin:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='user_last_login' id='id_user_last_login' type='text' value='$user_last_login' data-date-format='dd-mm-yyyy' placeholder='$langFrom2'>
         </div>
     </div>
     <div class='form-group'>
