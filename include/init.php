@@ -449,6 +449,30 @@ $modules = array(
     MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap'),
     MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-tablet')
 );
+
+// ----------------------------------------
+// Course activites array
+// user activities
+// ----------------------------------------
+$activities = array(
+    MODULE_ID_EBOOK_READ => array('title' => $langFCEbook, 'tools' => array(18,17,2,3)),
+    MODULE_ID_VIDEO_WATCH => array('title' => $langFCVideo,'tools' => array(4,46,2)),
+    MODULE_ID_VIDEO_INTERACTION => array('title' => $langFCVideoInteract,'tools' => array(2,46)),
+    MODULE_ID_REVIEW => array('title' => $langFCReview,'tools' => array(3,46,2)),
+    MODULE_ID_REVISION => array('title' => $langFCRevision,'tools' => array(23,47)),
+    MODULE_ID_GAMES => array('title' => $langFCGames,'tools' => array(2)),
+    MODULE_ID_DISCUSS => array('title' => $langFCDiscuss,'tools' => array(9,19,2,37,46,26,34)),
+    MODULE_ID_PROJECT => array('title' => $langFCProject,'tools' => array(10,26,15,2)),
+    MODULE_ID_BRAINSTORMING => array('title' => $langFCBrainstorming,'tools' => array(46,37,9,19)),
+    MODULE_ID_WORK_PAPER => array('title' => $langFCWorkPaper,'tools' => array(3,46,10,23,2)),
+    MODULE_ID_ROLE_PLAY => array('title' => $langFCRolePlay,'tools' => array(9,19,2,37,46,26,34)),
+    MODULE_ID_SIMULATE => array('title' => $langFCSimulate,'tools' => array(2)),
+    MODULE_ID_PROBLEM_SOLVING => array('title' => $langFCProblemSolving,'tools' => array(5,26,10)),
+    MODULE_ID_MINDMAP_FC => array('title' => $langFCMindMap,'tools' => array(47)),
+    MODULE_ID_EVALUATE=> array('title' => $langFCEvaluate,'tools' => array(21)),
+    MODULE_ID_DISCUSS_AC => array('title' => $langFCDiscuss,'tools' => array(9,19,2,37,46,26,34,38))
+);
+
 // ----------------------------------------
 // course admin modules
 // ----------------------------------------

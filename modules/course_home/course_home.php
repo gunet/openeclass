@@ -634,8 +634,14 @@ $action_bar
 
             <div class='panel-body'>
                 <div id='course-title-wrapper' class='course-info-title clearfix'>
-                    <div class='pull-left h4'>$langDescription</div> $edit_link
-                    <ul class='course-title-actions clearfix pull-right list-inline'>" .
+                    <div class='pull-left h4'>$langDescription</div> $edit_link";
+
+$q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE id = ?d", $course_id);
+
+
+
+                    
+$tool_content .= "<ul class='course-title-actions clearfix pull-right list-inline'>" .
 
                         ($is_course_admin? "<li class='access pull-right'><a href='{$urlAppend}modules/course_info/?course=$course_code' style='color: #23527C;'><span class='fa fa-wrench fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInfo'></span></a></li>": '') . "
                         <li class='access pull-right'><a href='javascript:void(0);'>". course_access_icon($visible) . "</a></li>
@@ -648,7 +654,7 @@ $action_bar
                                         <span class='hidden'>.</span>
                                     </a>";
                             } else {
-                                if ($visible == COURSE_CLOSED or $is_editor) {
+                                if ($visible == COURSE_CLOSED) {
                                     $tool_content .= "<a href = '{$urlAppend}modules/user/userslist.php?course=$course_code'>
                                             <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
                                             <span class='hidden'>.</span>
@@ -934,7 +940,11 @@ if ($course_info->view_type == 'activity') {
         $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
               <span class='fa fa-plus-circle'></span><span class='hidden'>.</span></a>";
     }
-
+	if($q->flipped_flag==2 and $is_editor){
+        $edit_flipped = $urlAppend . "modules/create_course/edit_flipped_classroom.php?course=$course_code";
+        $tool_content .= "<a href='$edit_flipped' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langFlippedEdit'>
+        <span class='fa fa-pencil'></span><span class='hidden'>.</span></a>";
+    }
     $tool_content .= "
             </div>
         </div>

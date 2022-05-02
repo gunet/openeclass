@@ -65,12 +65,23 @@ function process_actions() {
         $res_id = intval($_GET['del']);
         if (check_admin_unit_resource($res_id)) {
             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", $res_id);
+            Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
             Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
             redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
         }
+    } elseif (isset($_REQUEST['del_act'])) { // delete resource from course unit
+        $res_id = intval($_GET['del_act']);
+        
+        Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
+        //Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
+        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        //CourseXMLElement::refreshCourse($course_id, $course_code);
+        Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
+        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+        
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);
         if (check_admin_unit_resource($res_id)) {
@@ -83,6 +94,19 @@ function process_actions() {
             Session::Messages($langViMod, 'alert-success');
             redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
         }
+    }elseif (isset($_REQUEST['vis_act'])) { // modify visibility in text resources only
+        
+        $res_id = intval($_REQUEST['vis_act']);
+        
+        $vis = Database::get()->querySingle("SELECT `visible` FROM course_units_activities WHERE id = ?d", $res_id)->visible;
+        $newvis = ($vis == 1) ? 0 : 1;
+        Database::get()->query("UPDATE course_units_activities SET visible = '$newvis' WHERE id = ?d", $res_id);
+        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ACTIVITYRESOURCE, $res_id);
+        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        // CourseXMLElement::refreshCourse($course_id, $course_code);
+        Session::Messages($langViMod, 'alert-success');
+        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+        
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
         if (check_admin_unit_resource($res_id)) {
