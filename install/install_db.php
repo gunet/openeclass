@@ -79,7 +79,7 @@ $db->query("CREATE TABLE IF NOT EXISTS`course_units_activities` (
 	`activity_id` VARCHAR(5) NOT NULL , 
 	`unit_id` INT NOT NULL , 
 	`tool_ids` TEXT NOT NULL , 
-    `activity_type INT NOT NULL,
+    `activity_type` INT NOT NULL,
     `visible` INT NOT NULL,
 	PRIMARY KEY (`ID`))$tbl_options");
 
