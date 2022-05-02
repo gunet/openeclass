@@ -3576,7 +3576,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'class' => 'primary danger')
  *
  */
-function action_button($options, $secondary_menu_options = array()) {
+function action_button($options, $secondary_menu_options = array(), $fc=false) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
     $primary_form_begin = $primary_form_end = $primary_icon_class = '';
@@ -3646,7 +3646,12 @@ function action_button($options, $secondary_menu_options = array()) {
     }
     $action_button = "";
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
-    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
+
+    if($fc){
+        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-wrench";
+    }else{
+        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
+    }
     $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
