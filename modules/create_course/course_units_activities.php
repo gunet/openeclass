@@ -171,7 +171,7 @@ if(!isset($_POST['final_submit'])){
                 
                 $tool_content .= " 
                 
-                    <div class='form-wrapper'>
+                    <div class='form-wrapper '>
                         <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
                         <div class='panel panel-default'>
                             <div class='panel-heading'>
@@ -184,8 +184,8 @@ if(!isset($_POST['final_submit'])){
                        
                         
                         <fieldset>
-                            <div class='form-group'>
-                                <table class='table table-bordered'>
+                            <div class='table-responsive'>
+                                <table class='table table-bordered '>
                                 <tr>
                                     <td></td><th scope='col'><label for='title' class='col-sm-2 control-label'>$langActivities</th>
                     ";
@@ -357,7 +357,7 @@ if(!isset($_POST['final_submit'])){
                 </div>
 
                 <fieldset>
-                    <div class='form-group'>
+                    <div class='table-responsive'>
                     <table class='table table-bordered'>
                         <tr>
                             <td></td><th scope='col'><label for='title' class='col-sm-2 control-label'>$langActivities</th>
