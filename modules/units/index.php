@@ -385,10 +385,128 @@ if($q->flipped_flag ==2){
             <div class='panel-body'>
                 <table class='table table-bordered'>
                     <tbody>
-                        <tr><th scope='row'><label class='col-2 control-label'>$langActInClass</label></th>";
-        
-        $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
+                    </tr><tr><th scope='row'><label class='col-2 control-label'>$langActInHome</label></th>";
+                    $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
 
+                    foreach($q_in_home as $in_home){
+                        $act_title = q($activities[$in_home->activity_id]['title']);
+                    
+            
+                        $vis = $in_home->visible;
+                        $class_vis = $vis == 0  ? 'not_visible' : '';
+                        $act_indirect = getIndirectReference($in_home->ID);
+            
+                        $tool_content .= "<td><span class='col-sm-20 $class_vis control-label'>$act_title</span></td>";
+                        if($is_editor){
+                            $tool_content .= "<td>". action_button(array(
+                                array('title' => $langAdd.' '.$langInsertExercise,
+                                    'url' => $base_url . 'exercise',
+                                    'icon' => 'fa fa-pencil-square-o',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_EXERCISE,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertDoc,
+                                    'url' => $base_url . 'doc',
+                                    'icon' => 'fa fa-folder-open-o',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_DOCS,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertLink,
+                                    'url' => $base_url . 'link',
+                                    'icon' => 'fa fa-link',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_LINKS,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langLearningPath1,
+                                    'url' => $base_url . 'lp',
+                                    'icon' => 'fa fa-ellipsis-h',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_LP,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertVideo,
+                                    'url' => $base_url . 'video',
+                                    'icon' => 'fa fa-film',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_VIDEO,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertForum,
+                                    'url' => $base_url . 'forum',
+                                    'icon' => 'fa fa-comments',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_FORUM,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertEBook,
+                                    'url' => $base_url . 'ebook',
+                                    'icon' => 'fa fa-book',
+                                    'level' => 'secondary',
+                                    'show' =>  !is_module_disable_FC(MODULE_ID_EBOOK,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertWork,
+                                    'url' => $base_url . 'work',
+                                    'icon' => 'fa fa-flask',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_ASSIGN,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertPoll,
+                                    'url' => $base_url . 'poll',
+                                    'icon' => 'fa fa-question-circle',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_QUESTIONNAIRE,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertWiki,
+                                    'url' => $base_url . 'wiki',
+                                    'icon' => 'fa fa-wikipedia-w',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_WIKI,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertChat,
+                                    'url' => $base_url . 'chat',
+                                    'icon' => 'fa fa-exchange',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_CHAT,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langInsertTcMeeting,
+                                    'url' => $base_url . 'tc',
+                                    'icon' => 'fa fa-exchange',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$in_home->activity_id) && is_configured_tc_server()),
+                                array('title' => $langAdd.' '.$langGlossary,
+                                    'url' => $base_url . 'glossary',
+                                    'icon' => 'fa fa-list',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_GLOSSARY,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langWall,
+                                    'url' => $base_url . 'wall',
+                                    'icon' => 'fa fa-list',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langMindmap,
+                                    'url' => $base_url . 'mindmap',
+                                    'icon' => 'fa fa-sitemap',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_MINDMAP,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langBlog,
+                                    'url' => $base_url . 'blog',
+                                    'icon' => 'fa fa-columns',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_BLOG,$course_code,$id,$in_home->activity_id)),
+                                array('title' => $langAdd.' '.$langComments,
+                                    'url' => $base_url . 'comments',
+                                    'icon' => 'fa fa-comments',
+                                    'level' => 'secondary',
+                                    'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$in_home->activity_id))
+                                
+                            ),'',true) . "</td><td>";
+                            
+                        
+                        $tool_content .= action_button(array(
+                                array('title' => $vis == 1? $langViewHide : $langViewShow,
+                                'url' => "$_SERVER[REQUEST_URI]&vis_act=$in_home->ID",
+                                'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                                array('title' => $langDelete,
+                                    'url' => "$_SERVER[REQUEST_URI]&del_act=$in_home->ID&actid=".$in_home->activity_id,
+                                    'icon' => 'fa-times',
+                                    'class' => 'delete',
+                                    'confirm' => $langUnitActivityDeleteConfirm))) ;
+                            
+                            
+                            
+                            
+                        }
+                        $tool_content .= "</td></tr><tr><td></td>";
+                    }
+            $tool_content .= "<tr><th scope='row'><label class='col-2 control-label'>$langActInClass</label></th>";
+        
+       
         foreach($q_in_class as $in_class){
             $act_title = q($activities[$in_class->activity_id]['title']);        
 
@@ -507,130 +625,6 @@ if($q->flipped_flag ==2){
             }
             $tool_content .= "</td></tr><tr><td></td>";
 
-        }
-
-        $tool_content .= "</tr><tr><th scope='row'><label class='col-2 control-label'>$langActInHome</label></th>";
-
-        foreach($q_in_home as $in_home){
-            $act_title = q($activities[$in_home->activity_id]['title']);
-        
-
-            $vis = $in_home->visible;
-            $class_vis = $vis == 0  ? 'not_visible' : '';
-            $act_indirect = getIndirectReference($in_home->ID);
-
-            $tool_content .= "<td><span class='col-sm-20 $class_vis control-label'>$act_title</span></td>";
-            if($is_editor){
-                $tool_content .= "<td>". action_button(array(
-                    array('title' => $langAdd.' '.$langInsertExercise,
-                        'url' => $base_url . 'exercise',
-                        'icon' => 'fa fa-pencil-square-o',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_EXERCISE,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertDoc,
-                        'url' => $base_url . 'doc',
-                        'icon' => 'fa fa-folder-open-o',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_DOCS,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertLink,
-                        'url' => $base_url . 'link',
-                        'icon' => 'fa fa-link',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_LINKS,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langLearningPath1,
-                        'url' => $base_url . 'lp',
-                        'icon' => 'fa fa-ellipsis-h',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_LP,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertVideo,
-                        'url' => $base_url . 'video',
-                        'icon' => 'fa fa-film',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_VIDEO,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertForum,
-                        'url' => $base_url . 'forum',
-                        'icon' => 'fa fa-comments',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_FORUM,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertEBook,
-                        'url' => $base_url . 'ebook',
-                        'icon' => 'fa fa-book',
-                        'level' => 'secondary',
-                        'show' =>  !is_module_disable_FC(MODULE_ID_EBOOK,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertWork,
-                        'url' => $base_url . 'work',
-                        'icon' => 'fa fa-flask',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_ASSIGN,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertPoll,
-                        'url' => $base_url . 'poll',
-                        'icon' => 'fa fa-question-circle',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_QUESTIONNAIRE,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertWiki,
-                        'url' => $base_url . 'wiki',
-                        'icon' => 'fa fa-wikipedia-w',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_WIKI,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertChat,
-                        'url' => $base_url . 'chat',
-                        'icon' => 'fa fa-exchange',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_CHAT,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langInsertTcMeeting,
-                        'url' => $base_url . 'tc',
-                        'icon' => 'fa fa-exchange',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$in_home->activity_id) && is_configured_tc_server()),
-                    array('title' => $langAdd.' '.$langGlossary,
-                        'url' => $base_url . 'glossary',
-                        'icon' => 'fa fa-list',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_GLOSSARY,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langWall,
-                        'url' => $base_url . 'wall',
-                        'icon' => 'fa fa-list',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langMindmap,
-                        'url' => $base_url . 'mindmap',
-                        'icon' => 'fa fa-sitemap',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_MINDMAP,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langGroups,
-                        'url' => $base_url . 'group',
-                        'icon' => 'fa fa-users',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_GROUPS,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langBlog,
-                        'url' => $base_url . 'blog',
-                        'icon' => 'fa fa-columns',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_BLOG,$course_code,$id,$in_home->activity_id)),
-                    array('title' => $langAdd.' '.$langComments,
-                        'url' => $base_url . 'comments',
-                        'icon' => 'fa fa-comments',
-                        'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$in_home->activity_id))
-                    
-                ),'',true) . "</td><td>";
-                
-            
-            $tool_content .= action_button(array(
-                    array('title' => $vis == 1? $langViewHide : $langViewShow,
-                    'url' => "$_SERVER[REQUEST_URI]&vis_act=$in_home->ID",
-                    'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,
-                        'url' => "$_SERVER[REQUEST_URI]&del_act=$in_home->ID&actid=".$in_home->activity_id,
-                        'icon' => 'fa-times',
-                        'class' => 'delete',
-                        'confirm' => $langUnitActivityDeleteConfirm))) ;
-                
-                
-                
-                
-            }
-            $tool_content .= "</td></tr><tr><td></td>";
         }
 
         $tool_content .= "<tr><th scope='row'><label class='col-md-auto control-label'>$langActAfterClass</label></th>";

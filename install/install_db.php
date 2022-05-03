@@ -249,7 +249,6 @@ $db->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC1',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC2',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC3',0,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC4',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC5',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC6',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC7',1,0,0,0)");
