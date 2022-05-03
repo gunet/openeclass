@@ -709,6 +709,8 @@ $langUnitActivityDeleteConfirm= "Είστε σίγουρη/σίγουρος ότ
 $langUnitJustEdited="Μόλις ενημερώσατε την δραστηριότητα με τίτλο";
 $langConfirmDeleteUnit = "Θέλετε σίγουρα να αφαιρέσετε την συγκεκριμένη ενότητα;";
 $langConfirmDeleteGoal = "Θέλετε σίγουρα να αφαιρέσετε τον συγκεκριμένο Μαθησιακό Στόχο;";
+$langUnits = "Θεματικές Ενότητες";
+$langEditUnitSection = "Διόρθωση";
 
 
 
