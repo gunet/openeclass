@@ -22,7 +22,7 @@ $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
-$toolName = $langCourseCreate;
+
 
 load_js('jstree3');
 load_js('pwstrength.js');
@@ -41,9 +41,9 @@ function checkedBoxes() {
     var checked_in_class = [];
     var checked_after_class = [];
     var checked_in_home = [];
-
+    widnow.alert();
     for(let i=0; i<parseInt(checkboxes_in_class.length); i++) {
-        window.alert();
+        widnow.alert();
         if(checkboxes_in_class[i].checked){
             checked_in_class.push(checkboxes[i].attr('id'));
         }
@@ -68,6 +68,8 @@ function checkedBoxes() {
    
 }
 
+
+
 /* ]]> */
 </script>
 hContent;
@@ -84,10 +86,13 @@ if (empty($prof_names)) {
     $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
 }
 
+$ids_list = array();
+
 if(!isset($_POST['final_submit'])){ 
     
     if(!isset($_GET['edit_act'])){ //show activities selection when creation
         
+        $toolName = $langCourseCreate;
 
                 $validationFailed = false;
 
@@ -172,7 +177,7 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= " 
                 
                     <div class='form-wrapper '>
-                        <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
+                        <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
                         <div class='panel panel-default'>
                             <div class='panel-heading'>
                                 <div class='paenel-title h4'>
@@ -276,7 +281,7 @@ if(!isset($_POST['final_submit'])){
 
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
-                                <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
+                                <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
                                 <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
                             </div>
                         </div>
@@ -291,6 +296,7 @@ if(!isset($_POST['final_submit'])){
             ";
                     
     }else{ //show activities selection when it is edit
+        $toolName = $langCourseEdit;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                 'url' => "${urlServer}modules/units/?course=$course_code&id=$unit_id",
@@ -492,14 +498,25 @@ if(!isset($_POST['final_submit'])){
             $totalhours = $_SESSION['totalhours'];
 
             $validationFailed = false;
-
+            $validationFailed_activities = false;
 
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
-            if(!isset($_POST['in_class'])||!isset($_POST['in_home'])||!isset($_POST['after_class'])){
-                Session::Messages($langFieldsMissing);
-                $validationFailed = true;
-            }
+            // print("in_class:");
+            // print_r(array_values($_POST['in_class']));
+
+            // print("in_home:");
+            // print_r(array_values($_POST['in_home']));
+
+            // print("after_class");
+            // print_r(array_values($_POST['after_class']));
+
+            // if((!isset($_POST['in_class'])||!isset($_POST['in_home'])||!isset($_POST['after_class'])){
+            //      Session::Messages($langFieldsMissing);
+            //     $validationFailed_activities = true;
+            // }
+
+            
             
             if (count($_SESSION['code']) < 1 || empty($_SESSION['code'][0])) {
                 Session::Messages($langEmptyAddNode);
@@ -511,8 +528,8 @@ if(!isset($_POST['final_submit'])){
                 $validationFailed = true;
             }
 
-            if ($validationFailed) {
-                redirect_to_home_page('modules/create_course/flipped_classroom.php');
+            if ($validationFailed_activities) {
+                redirect_to_home_page('modules/create_course/course_units_activities.php');
             }
 
             // create new course code: uppercase, no spaces allowed
@@ -748,102 +765,104 @@ if(!isset($_POST['final_submit'])){
             $nrlz_tools_in_home ="";
             $nrlz_tools_after_class = "";
 
-            //print_r($_POST['in_class']);
-            foreach($_POST['in_class'] as $in_class){
-                $nrlz_in_class = explode("_",$in_class);
+            if(isset($_POST['in_class'])){
+                foreach($_POST['in_class'] as $in_class){
+                    $nrlz_in_class = explode("_",$in_class);
 
-                $activity_id = $nrlz_in_class[2];
-                $unit_id = $nrlz_in_class[1];
+                    $activity_id = $nrlz_in_class[2];
+                    $unit_id = $nrlz_in_class[1];
 
-                $tool_ids = $activities[$activity_id]['tools'];
+                    $tool_ids = $activities[$activity_id]['tools'];
+                    
+                    foreach ($tool_ids as $ids){
+                        $nrlz_tools_in_class .=$ids." ";
+                    }
+                    
                 
-                foreach ($tool_ids as $ids){
-                    $nrlz_tools_in_class .=$ids." ";
+                    Database::get()->query(
+                        "INSERT INTO course_units_activities SET
+                                                    course_code = ?s,
+                                                    activity_id = ?s,
+                                                    unit_id = ?d,
+                                                    tool_ids = ?s, 
+                                                    activity_type=?d,
+                                                    `visible` =?d",
+                        $code,
+                        $activity_id,
+                        $unit_id,
+                        $nrlz_tools_in_class,
+                        0,
+                        1
+                    );
+
+                    $nrlz_tools_in_class ="";
+
                 }
-                
-            
-                Database::get()->query(
-                    "INSERT INTO course_units_activities SET
-                                                course_code = ?s,
-                                                activity_id = ?s,
-                                                unit_id = ?d,
-                                                tool_ids = ?s, 
-                                                activity_type=?d,
-                                                `visible` =?d",
-                    $code,
-                    $activity_id,
-                    $unit_id,
-                    $nrlz_tools_in_class,
-                    0,
-                    1
-                );
-
-                $nrlz_tools_in_class ="";
-
             }
-            
-            //print_r($_POST['in_home']);
-            foreach($_POST['in_home'] as $in_home){
-                $nrlz_in_home = explode("_",$in_home);
 
-                $activity_id = $nrlz_in_home[2];
-                $unit_id = $nrlz_in_home[1];
+            if(isset($_POST['in_home'])){
+                foreach($_POST['in_home'] as $in_home){
+                    $nrlz_in_home = explode("_",$in_home);
 
-                $tool_ids = $activities[$activity_id]['tools'];
+                    $activity_id = $nrlz_in_home[2];
+                    $unit_id = $nrlz_in_home[1];
 
-                foreach ($tool_ids as $ids){
-                    $nrlz_tools_in_home .=$ids." ";
+                    $tool_ids = $activities[$activity_id]['tools'];
+
+                    foreach ($tool_ids as $ids){
+                        $nrlz_tools_in_home .=$ids." ";
+                    }
+                    
+
+                    Database::get()->query(
+                        "INSERT INTO course_units_activities SET
+                                                    course_code = ?s,
+                                                    activity_id = ?s,
+                                                    unit_id = ?d,
+                                                    tool_ids = ?s, 
+                                                    activity_type=?d,
+                                                    `visible` =?d",
+                        $code,
+                        $activity_id,
+                        $unit_id,
+                        $nrlz_tools_in_home,
+                        1,
+                        1
+                    );
+                    $nrlz_tools_in_home ="";
                 }
-                
-
-                Database::get()->query(
-                    "INSERT INTO course_units_activities SET
-                                                course_code = ?s,
-                                                activity_id = ?s,
-                                                unit_id = ?d,
-                                                tool_ids = ?s, 
-                                                activity_type=?d,
-                                                `visible` =?d",
-                    $code,
-                    $activity_id,
-                    $unit_id,
-                    $nrlz_tools_in_home,
-                    1,
-                    1
-                );
-                $nrlz_tools_in_home ="";
             }
-            
-            //print_r($_POST['after_class']);
-            foreach($_POST['after_class'] as $after_class){
-                $nrlz_after_class = explode("_",$after_class);
+            if(isset($_POST['after_class'])){
+                foreach($_POST['after_class'] as $after_class){
+                    $nrlz_after_class = explode("_",$after_class);
 
-                $activity_id = $nrlz_after_class[2];
-                $unit_id = $nrlz_after_class[1];
+                    $activity_id = $nrlz_after_class[2];
+                    $unit_id = $nrlz_after_class[1];
 
-                $tool_ids = $activities[$activity_id]['tools'];
+                    $tool_ids = $activities[$activity_id]['tools'];
 
-                foreach ($tool_ids as $ids){
-                    $nrlz_tools_after_class .=$ids." ";
+                    foreach ($tool_ids as $ids){
+                        $nrlz_tools_after_class .=$ids." ";
+                    }
+                    
+
+                    Database::get()->query(
+                        "INSERT INTO course_units_activities SET
+                                                    course_code = ?s,
+                                                    activity_id = ?s,
+                                                    unit_id = ?d,
+                                                    tool_ids = ?s, 
+                                                    activity_type=?d,
+                                                    `visible` =?d",
+                        $code,
+                        $activity_id,
+                        $unit_id,
+                        $nrlz_tools_after_class,
+                        2,
+                        1
+                    );
+                    $nrlz_tools_after_class ="";
                 }
-                
-
-                Database::get()->query(
-                    "INSERT INTO course_units_activities SET
-                                                course_code = ?s,
-                                                activity_id = ?s,
-                                                unit_id = ?d,
-                                                tool_ids = ?s, 
-                                                activity_type=?d,
-                                                `visible` =?d",
-                    $code,
-                    $activity_id,
-                    $unit_id,
-                    $nrlz_tools_after_class,
-                    2,
-                    1
-                );
-                $nrlz_tools_after_class ="";
             }
 
             $course->refresh($new_course_id, $_SESSION['code']);
@@ -882,10 +901,10 @@ if(!isset($_POST['final_submit'])){
     }else{      //complete actions if it is edit
 
         $validationFailed = false;
-        if(!isset($_POST['in_class'])||!isset($_POST['in_home'])||!isset($_POST['after_class'])){
-            Session::Messages($langFieldsMissing);
-            $validationFailed = true;
-        }
+        // if(!isset($_POST['in_class'])||!isset($_POST['in_home'])||!isset($_POST['after_class'])){
+        //     Session::Messages($langFieldsMissing);
+        //     $validationFailed = true;
+        // }
 
         if ($validationFailed) {
             redirect_to_home_page('modules/create_course/course_units_activities.php?course='.$course_code.'&edit_act='.$unit_id);
@@ -900,100 +919,106 @@ if(!isset($_POST['final_submit'])){
         $nrlz_tools_in_class ="";
         $nrlz_tools_in_home ="";
         $nrlz_tools_after_class = "";
-        foreach($_POST['in_class'] as $in_class){
-            $nrlz_in_class = explode("_",$in_class);
+        if(isset($_POST['in_class'])){
+            foreach($_POST['in_class'] as $in_class){
+                $nrlz_in_class = explode("_",$in_class);
 
-            $activity_id = $nrlz_in_class[1];
-            $unit_id = $nrlz_in_class[0];
+                $activity_id = $nrlz_in_class[1];
+                $unit_id = $nrlz_in_class[0];
 
-            $tool_ids = $activities[$activity_id]['tools'];
+                $tool_ids = $activities[$activity_id]['tools'];
+                
+                foreach ($tool_ids as $ids){
+                    $nrlz_tools_in_class .=$ids." ";
+                }
+                
+                
             
-            foreach ($tool_ids as $ids){
-                $nrlz_tools_in_class .=$ids." ";
+                Database::get()->query(
+                    "INSERT INTO course_units_activities SET
+                                                course_code = ?s,
+                                                activity_id = ?s,
+                                                unit_id = ?d,
+                                                tool_ids = ?s, 
+                                                activity_type=?d,
+                                                `visible` =?d",
+                    $course_code,
+                    $activity_id,
+                    $unit_id,
+                    $nrlz_tools_in_class,
+                    0,
+                    1
+                );
+
+                $nrlz_tools_in_class ="";
+
             }
-            
-            
-        
-            Database::get()->query(
-                "INSERT INTO course_units_activities SET
-                                            course_code = ?s,
-                                            activity_id = ?s,
-                                            unit_id = ?d,
-                                            tool_ids = ?s, 
-                                            activity_type=?d,
-                                            `visible` =?d",
-                $course_code,
-                $activity_id,
-                $unit_id,
-                $nrlz_tools_in_class,
-                0,
-                1
-            );
-
-            $nrlz_tools_in_class ="";
-
         }
 
-        foreach($_POST['in_home'] as $in_home){
-            $nrlz_in_home = explode("_",$in_home);
+        if(isset($_POST['in_home'])){
+            foreach($_POST['in_home'] as $in_home){
+                $nrlz_in_home = explode("_",$in_home);
 
-            $activity_id = $nrlz_in_home[1];
-            $unit_id = $nrlz_in_home[0];
+                $activity_id = $nrlz_in_home[1];
+                $unit_id = $nrlz_in_home[0];
 
-            $tool_ids = $activities[$activity_id]['tools'];
+                $tool_ids = $activities[$activity_id]['tools'];
 
-            foreach ($tool_ids as $ids){
-                $nrlz_tools_in_home .=$ids." ";
+                foreach ($tool_ids as $ids){
+                    $nrlz_tools_in_home .=$ids." ";
+                }
+                
+
+                Database::get()->query(
+                    "INSERT INTO course_units_activities SET
+                                                course_code = ?s,
+                                                activity_id = ?s,
+                                                unit_id = ?d,
+                                                tool_ids = ?s, 
+                                                activity_type=?d,
+                                                `visible` =?d",
+                    $course_code,
+                    $activity_id,
+                    $unit_id,
+                    $nrlz_tools_in_home,
+                    1,
+                    1
+                );
+                $nrlz_tools_in_home ="";
             }
-            
-
-            Database::get()->query(
-                "INSERT INTO course_units_activities SET
-                                            course_code = ?s,
-                                            activity_id = ?s,
-                                            unit_id = ?d,
-                                            tool_ids = ?s, 
-                                            activity_type=?d,
-                                            `visible` =?d",
-                $course_code,
-                $activity_id,
-                $unit_id,
-                $nrlz_tools_in_home,
-                1,
-                1
-            );
-            $nrlz_tools_in_home ="";
         }
 
-        foreach($_POST['after_class'] as $after_class){
-            $nrlz_after_class = explode("_",$after_class);
+        if(isset($_POST['after_class'])){
+            foreach($_POST['after_class'] as $after_class){
+                $nrlz_after_class = explode("_",$after_class);
 
-            $activity_id = $nrlz_after_class[1];
-            $unit_id = $nrlz_after_class[0];
+                $activity_id = $nrlz_after_class[1];
+                $unit_id = $nrlz_after_class[0];
 
-            $tool_ids = $activities[$activity_id]['tools'];
+                $tool_ids = $activities[$activity_id]['tools'];
 
-            foreach ($tool_ids as $ids){
-                $nrlz_tools_after_class .=$ids." ";
+                foreach ($tool_ids as $ids){
+                    $nrlz_tools_after_class .=$ids." ";
+                }
+                
+
+                Database::get()->query(
+                    "INSERT INTO course_units_activities SET
+                                                course_code = ?s,
+                                                activity_id = ?s,
+                                                unit_id = ?d,
+                                                tool_ids = ?s, 
+                                                activity_type=?d,
+                                                `visible` =?d",
+                    $course_code,
+                    $activity_id,
+                    $unit_id,
+                    $nrlz_tools_after_class,
+                    2,
+                    1
+                );
+                $nrlz_tools_after_class ="";
             }
-            
-
-            Database::get()->query(
-                "INSERT INTO course_units_activities SET
-                                            course_code = ?s,
-                                            activity_id = ?s,
-                                            unit_id = ?d,
-                                            tool_ids = ?s, 
-                                            activity_type=?d,
-                                            `visible` =?d",
-                $course_code,
-                $activity_id,
-                $unit_id,
-                $nrlz_tools_after_class,
-                2,
-                1
-            );
-            $nrlz_tools_after_class ="";
         }
 
         $tool_content .= "<div class='alert alert-success'><b>$langUnitJustEdited:</b> " . q($_SESSION['title']) . "<br></div>";

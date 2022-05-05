@@ -25,7 +25,7 @@ $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
-$toolName = $langCourseCreate;
+$toolName = $langCourseEdit;
 
 load_js('jstree3');
 load_js('pwstrength.js');
@@ -197,7 +197,7 @@ $q4 = Database::get()->querySingle("SELECT title,`description`,lectures_model FR
 
 $q5_a =  Database::get()->querySingle("SELECT ID, lang, visible FROM course WHERE public_code=?s",$course_code);
 
-$q5_b =  Database::get()->queryArray("SELECT title FROM course_units WHERE course_id=?d",$q5_a->ID);
+$q5_b =  Database::get()->queryArray("SELECT ID, title FROM course_units WHERE course_id=?d",$q5_a->ID);
 
 $q7 = Database::get()->querySingle("SELECT count(ID) as num_units FROM course_units WHERE course_id=?s",$q5_a->ID);
 
@@ -353,6 +353,7 @@ if(!isset($_POST['next'])){
                                 <label for='unit_$count_units' id='utitle_$count_units' class= 'col-sm-3 control-label'>$count_units: </label>
                                 <div class='col-sm-8'>
                                     <input name='units[]' id='unit_$count_units' type='text' class='form-control' value='".$unit->title."' placeholder='$langUnits'>
+                                    <input name='ids[]' type='hidden' value='$unit->ID'>
                                     ";
 
                                     if($count_units ==1){
@@ -365,8 +366,7 @@ if(!isset($_POST['next'])){
                                     }else{
                                         
                                         $tool_content.="<a href='#!' class='btn_remove btn disabled' name='remove_u' id='rm_u_".$count_units."' disabled>
-                                                <span class='fa fa-minus-circle text-disabled'>
-                                                </span>
+                                               
                                             </a>
                                         ";
                                     }
@@ -410,6 +410,7 @@ if(!isset($_POST['next'])){
     $validationFailed = false;
   
     $_SESSION['units'] = $_POST['units'];
+    $_SESSION['ids'] = $_POST['ids'];
     $_SESSION['goals'] =$_POST['goals'];
 
     $_SESSION['units_old']= $_SESSION['units'];
@@ -501,18 +502,21 @@ if(!isset($_POST['next'])){
                         <th scope='col'><label for='title' class='col-sm-2 control-label'>$langActivities</th>
                 ";
             $i=1;
+
+            $count_ids = 0;
+            
             foreach ($_SESSION['units'] as $utitle){
-
-                $q=  Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$utitle,$q5_a->ID);
-
-                if(!$q){
+                if(!isset($_SESSION['ids'][$count_ids])){
+                    
                     $tool_content .= "
                     
                         <th scope='col'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.substr($utitle,0,6).":</label></th>
             
                     ";
                     $i++;
+                    
                 }
+                $count_ids += 1;
             }
 
                 $tool_content .= "
@@ -525,17 +529,16 @@ if(!isset($_POST['next'])){
                     $j=1;
                     $tool_content .= "<td>$title_home</td>";
                     $newUnitId =$maxUnitId->muid +1; 
+                    $count_ids = 0;
                     foreach ($_SESSION['units'] as $utitle){
-                        $q=  Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$utitle,$q5_a->ID);
-
-                        if(!$q){
+                        if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
                                   <td><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input></td>
                               ";
                               $newUnitId ++;
                               $j++;
                         }
-                        
+                        $count_ids +=1;
                     }
                     $tool_content .= "</tr><tr><td></td>";
                     
@@ -551,15 +554,16 @@ if(!isset($_POST['next'])){
                     $k=1;
                     $tool_content .= "<td>$title_class</td>";
                     $newUnitId =$maxUnitId->muid +1;
+                    $count_ids = 0;
                     foreach ( $_SESSION['units'] as $utitle) {
-                        $q=  Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$utitle,$q5_a->ID);
 
-                        if(!$q){
+                        if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
                                     <td><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input></td>";
                              $newUnitId ++;
                                 $k++;
                         }
+                        $count_ids += 1;
                     }
                     
                     $tool_content .="</tr><tr><td></td>
@@ -577,15 +581,17 @@ if(!isset($_POST['next'])){
                     $z=1;
                     $tool_content .= "<td>$title_after_class</td>";
                     $newUnitId =$maxUnitId->muid +1;
+                    $count_ids = 0;
                     foreach( $_SESSION['units'] as $utitle) {
-                        $q=  Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$utitle,$q5_a->ID);
+                        
 
-                        if(!$q){
+                        if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
                                   <td><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input></td>";
                               $newUnitId++;
                               $z++;
                         }
+                        $count_ids += 1;
                     }
                     $tool_content .= "</tr><tr><td></td>";
                 
@@ -611,7 +617,7 @@ if(!isset($_POST['next'])){
         </div>
         ";
        
-    }else{
+    }else {
         if (empty($_SESSION['goals']) or array_search("",$_SESSION['goals'])) {
             Session::Messages($langEmptyGoal);
             $validationFailed = true;
@@ -657,11 +663,6 @@ if(!isset($_POST['next'])){
         }
 
         $result = Database::get()->query(
-            "DELETE FROM course_units WHERE course_id=?d",
-            $q5_a->ID
-        );
-
-        $result = Database::get()->query(
             "UPDATE course SET
                             lectures_model = ?d",
             $_SESSION['lectures_model']
@@ -682,42 +683,17 @@ if(!isset($_POST['next'])){
             $course_code
         );   
 
-        foreach($q8 as $unit_info){
-            if(array_search($unit_info->title,$_SESSION['units']) !== FALSE){
         
-                Database::get()->query(
-                    "INSERT INTO course_units SET
-                                                ID = ?d,
-                                                title = ?s,
-                                                comments=?s,
-                                                start_week=?s,
-                                                finish_week=?,
-                                                visible = ?d,
-                                                public = ?d,
-                                                `order` =?d,
-                                                course_id = ?d",
-                    $unit_info->ID,
-                    $unit_info->title,
-                    $unit_info->comments,
-                    $unit_info->start_week,
-                    $unit_info->finish_week,
-                    $unit_info->visible,
-                    $unit_info->public,
-                    $unit_info->order,
-                    $unit_info->course_id
-                );
-            }else{
-                $result = Database::get()->query(
-                    "DELETE FROM course_units WHERE title =?s and course_id=?d",
-                    $unit_info->title,
-                    $q5_a->ID
-                );
-
-                $result = Database::get()->query(
-                    "DELETE FROM course_units_activities WHERE unit_id=?d",
-                    $unit_info->ID
-                );
-            }    
+        $i=0;
+        foreach($q8 as $unit_info){
+            
+        
+            Database::get()->query(
+                "UPDATE course_units SET title = ?s WHERE ID =?d",
+                $_POST['units'][$i],
+                $unit_info->ID,
+            );
+            $i+=1;
             
         }
         $maxOrderGoal = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_description WHERE course_id=?d",$q5_a->ID);
@@ -860,10 +836,6 @@ if(!isset($_POST['next'])){
         }
 
 
-        $result = Database::get()->query(
-            "DELETE FROM course_units WHERE course_id=?d",
-            $q5_a->ID
-        );
 
         $result = Database::get()->query(
             "UPDATE course SET
@@ -887,31 +859,6 @@ if(!isset($_POST['next'])){
         );   
         
         
-        foreach($q8 as $unit_info){
-        
-            Database::get()->query(
-                "INSERT INTO course_units SET
-                                            ID = ?d,
-                                            title = ?s,
-                                            comments=?s,
-                                            start_week=?s,
-                                            finish_week=?,
-                                            visible = ?d,
-                                            public = ?d,
-                                            `order` =?d,
-                                            course_id = ?d",
-                $unit_info->ID,
-                $unit_info->title,
-                $unit_info->comments,
-                $unit_info->start_week,
-                $unit_info->finish_week,
-                $unit_info->visible,
-                $unit_info->public,
-                $unit_info->order,
-                $unit_info->course_id
-            );
-            
-        }
        
         
         $maxOrderUnit = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_units WHERE course_id=?d",$q5_a->ID);
@@ -919,6 +866,7 @@ if(!isset($_POST['next'])){
         if ($maxOrderUnit->morder ==NULL){
             $maxOrderUnit->morder = 1;
         }
+        
         
         foreach ($_SESSION['units'] as $unit){
             $q=  Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$unit,$q5_a->ID);
@@ -1020,101 +968,108 @@ if(!isset($_POST['next'])){
         $nrlz_tools_in_class ="";
         $nrlz_tools_in_home ="";
         $nrlz_tools_after_class = "";
-        foreach($_POST['in_class'] as $in_class){
-            $nrlz_in_class = explode("_",$in_class);
 
-            $activity_id = $nrlz_in_class[2];
-            $unit_id = $nrlz_in_class[1];
+        if(isset($_POST['in_class'])){
+            foreach($_POST['in_class'] as $in_class){
+                $nrlz_in_class = explode("_",$in_class);
 
-            $tool_ids = $activities[$activity_id]['tools'];
+                $activity_id = $nrlz_in_class[2];
+                $unit_id = $nrlz_in_class[1];
+
+                $tool_ids = $activities[$activity_id]['tools'];
+                
+                foreach ($tool_ids as $ids){
+                    $nrlz_tools_in_class .=$ids." ";
+                }
+                
             
-            foreach ($tool_ids as $ids){
-                $nrlz_tools_in_class .=$ids." ";
+                Database::get()->query(
+                    "INSERT INTO course_units_activities SET
+                                                course_code = ?s,
+                                                activity_id = ?s,
+                                                unit_id = ?d,
+                                                tool_ids = ?s,
+                                                activity_type=?d,
+                                                visible=?d",
+                    $course_code,
+                    $activity_id,
+                    $unit_id,
+                    $nrlz_tools_in_class,
+                    0,
+                    1
+                );
+
+                $nrlz_tools_in_class ="";
+
             }
-            
+        }
+
+        if(isset($_POST['in_home'])){
+            foreach($_POST['in_home'] as $in_home){
+                $nrlz_in_home = explode("_",$in_home);
+
+                $activity_id = $nrlz_in_home[2];
+                $unit_id = $nrlz_in_home[1];
+
+                $tool_ids = $activities[$activity_id]['tools'];
+
+                foreach ($tool_ids as $ids){
+                    $nrlz_tools_in_home .=$ids." ";
+                }
+                
+
+                Database::get()->query(
+                    "INSERT INTO course_units_activities SET
+                                                course_code = ?s,
+                                                activity_id = ?s,
+                                                unit_id = ?d,
+                                                tool_ids = ?s,
+                                                activity_type=?d,
+                                                visible=?d",
+                    $course_code,
+                    $activity_id,
+                    $unit_id,
+                    $nrlz_tools_in_home,
+                    1,
+                    1
+                );
+                $nrlz_tools_in_home ="";
+            }
+        }
+
+        if(isset($_POST['after_class'])){
+            foreach($_POST['after_class'] as $after_class){
+                $nrlz_after_class = explode("_",$after_class);
+
+                $activity_id = $nrlz_after_class[2];
+                $unit_id = $nrlz_after_class[1];
+
+                $tool_ids = $activities[$activity_id]['tools'];
+
+                foreach ($tool_ids as $ids){
+                    $nrlz_tools_after_class .=$ids." ";
+                }
+                
+
+                Database::get()->query(
+                    "INSERT INTO course_units_activities SET
+                                                course_code = ?s,
+                                                activity_id = ?s,
+                                                unit_id = ?d,
+                                                tool_ids = ?s,
+                                                activity_type=?d,
+                                                visible=?d",
+                    $course_code,
+                    $activity_id,
+                    $unit_id,
+                    $nrlz_tools_after_class,
+                    2,
+                    1
+                );
+                $nrlz_tools_after_class ="";
+            }
+        }
         
-            Database::get()->query(
-                "INSERT INTO course_units_activities SET
-                                            course_code = ?s,
-                                            activity_id = ?s,
-                                            unit_id = ?d,
-                                            tool_ids = ?s,
-                                            activity_type=?d,
-                                            visible=?d",
-                $course_code,
-                $activity_id,
-                $unit_id,
-                $nrlz_tools_in_class,
-                0,
-                1
-            );
-
-            $nrlz_tools_in_class ="";
-
-        }
-
-        foreach($_POST['in_home'] as $in_home){
-            $nrlz_in_home = explode("_",$in_home);
-
-            $activity_id = $nrlz_in_home[2];
-            $unit_id = $nrlz_in_home[1];
-
-            $tool_ids = $activities[$activity_id]['tools'];
-
-            foreach ($tool_ids as $ids){
-                $nrlz_tools_in_home .=$ids." ";
-            }
-            
-
-            Database::get()->query(
-                "INSERT INTO course_units_activities SET
-                                            course_code = ?s,
-                                            activity_id = ?s,
-                                            unit_id = ?d,
-                                            tool_ids = ?s,
-                                            activity_type=?d,
-                                            visible=?d",
-                $course_code,
-                $activity_id,
-                $unit_id,
-                $nrlz_tools_in_home,
-                1,
-                1
-            );
-            $nrlz_tools_in_home ="";
-        }
-
-        foreach($_POST['after_class'] as $after_class){
-            $nrlz_after_class = explode("_",$after_class);
-
-            $activity_id = $nrlz_after_class[2];
-            $unit_id = $nrlz_after_class[1];
-
-            $tool_ids = $activities[$activity_id]['tools'];
-
-            foreach ($tool_ids as $ids){
-                $nrlz_tools_after_class .=$ids." ";
-            }
-            
-
-            Database::get()->query(
-                "INSERT INTO course_units_activities SET
-                                            course_code = ?s,
-                                            activity_id = ?s,
-                                            unit_id = ?d,
-                                            tool_ids = ?s,
-                                            activity_type=?d,
-                                            visible=?d",
-                $course_code,
-                $activity_id,
-                $unit_id,
-                $nrlz_tools_after_class,
-                2,
-                1
-            );
-            $nrlz_tools_after_class ="";
-        }
-
         $tool_content .= "<div class='alert alert-success'><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></div>";
         $tool_content .= action_bar(array(
             array(
