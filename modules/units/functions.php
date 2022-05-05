@@ -365,7 +365,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
           <td width='1'>" . icon($image, '') . "</td>
           <td class='text-left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
-            '</tr>';
+            "</tr>";
 }
 
 /**
@@ -381,8 +381,7 @@ function show_text($comments, $resource_id, $visibility) {
         <tr$class_vis data-id='$resource_id'>
           <td colspan='2'>$comments</td>" .
             actions('text', $resource_id, $visibility) .
-            "
-        </tr>";
+            "</tr>";
 
     return $content;
 }
@@ -400,8 +399,7 @@ function show_description($title, $comments, $id, $res_id, $visibility) {
           <td colspan='2'>
             <div class='title'>" . q($title) . "</div>
             <div class='content'>$comments</div>
-          </td>" . actions('description', $id, $visibility, $res_id) . "
-        </tr>";
+          </td>" . actions('description', $id, $visibility, $res_id) . "</tr>";
 
     return $content;
 }
@@ -410,17 +408,10 @@ function show_description($title, $comments, $id, $res_id, $visibility) {
  * @brief display resource learning path
  * @return string
  */
-function show_lp($title, $comments, $resource_id, $lp_id) {
-    global $id, $urlAppend, $course_id, $is_editor,
-    $langWasDeleted, $course_code, $langInactiveModule;
+function show_lp($title, $comments, $resource_id, $lp_id): string
+{
 
-    $module_visible = visible_module(MODULE_ID_LP); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-
-    $class_vis = (!$module_visible) ?
-            ' class="not_visible"' : ' ';
+    global $id, $urlAppend, $course_id, $is_editor, $langWasDeleted, $course_code;
 
     $title = q($title);
     $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
@@ -434,19 +425,8 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         }
     } else {
         $status = $lp->visible;
-        if ($is_editor) {
-            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
-            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
-            if (!$module_visible) {
-                $link .= " <i>($langInactiveModule)</i> ";
-            }
-        } else {
-            if ($status == 0) {
-                return '';
-            }
-            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
-            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
-        }
+        $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
+        $link = "<a href='${urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title";
         $imagelink = icon('fa-ellipsis-h');
     }
 
@@ -456,11 +436,10 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis data-id='$resource_id'>
+        <tr data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
-          <td>$link$title</a>$comment_box</td>" .
-            actions('lp', $resource_id, $status) . '
-        </tr>';
+          <td>$link</a>$comment_box</td>" .
+            actions('lp', $resource_id, $status) . "</tr>";
 }
 
 /**
@@ -945,9 +924,6 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
 
 /**
  * @brief display resource link category
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_id
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -959,7 +935,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 
     global $is_editor, $langWasDeleted, $course_id;
 
-    $content = $linkcontent = $comment_box = $class_vis = $link = '';
+    $content = $linkcontent = $comment_box = '';
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $linkcat_id);
     if (!$sql) { // check if it was deleted
@@ -985,6 +961,11 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
                 $ltitle = q(($l->title == '') ? $l->url : $l->title);
                 $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank'>$ltitle</a>";
             }
+        }
+        if (!empty($comments)) {
+            $comment_box = '<br />' . standard_text_escape($comments);
+        } else {
+            $comment_box = '';
         }
     }
     return $content . $comment_box . $linkcontent . '

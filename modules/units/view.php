@@ -57,6 +57,9 @@ switch ($_REQUEST['res_type']) {
     case 'h5p_show':
         require_once "../h5p/show.php";
         exit;
+    case 'lp':
+        require_once "../learnPath/viewer.php";
+        exit;
     default:
         break;
 }
