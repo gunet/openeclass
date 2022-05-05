@@ -263,7 +263,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         foreach ($session->active_ui_languages as $key => $langcode) {
             $tool_content .= "<div class='form-group'>
                     <label class='col-sm-3 control-label'>$langNodeDescription:</label>";
-            $tdpre = ($j >= 0) ? "<div class='col-sm-9'>" : '';            
+            $tdpre = ($j >= 0) ? "<div class='col-sm-9'>" : '';
             $tool_content .= $tdpre . rich_text_editor('description-' . $langcode, 8, 20, '') . "</div></div>";
             $j++;
         }
@@ -548,15 +548,19 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 draw($tool_content, 3, null, $head_content);
 
 function formVisible($visibleChecked) {
+
+    global $langViewHide, $langNodeHidden2, $langNodeSubscribed2,
+           $langNodePublic2, $langNodeSubscribed, $langNodePublic, $langAvailableTypes;
+
     $ret = "
     <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langAvailableTypes'] . ":</label>
+        <label class='col-sm-3 control-label'>" . $langAvailableTypes . ":</label>
         <div class='col-sm-9'>
             <div class='radio'>
                 <label>
                     <input id='nodeopen' type='radio' name='visible' value='2' $visibleChecked[2]>
-                    <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;" . $GLOBALS['langNodePublic'] . "
-                    <span class='help-block'><small>" . $GLOBALS['langNodePublic2'] . "</small></span>
+                    <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;" . $langNodePublic . "
+                    <span class='help-block'><small>" . $langNodePublic2 . "</small></span>
                 </label>
             </div>
             <div class='radio'>
@@ -564,15 +568,15 @@ function formVisible($visibleChecked) {
                     <input id='nodeforsubscribed' type='radio' name='visible' value='1' $visibleChecked[1]>
                     <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
                         <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
-                    </span>&nbsp;" . $GLOBALS['langNodeSubscribed'] . "
-                    <span class='help-block'><small>" . $GLOBALS['langNodeSubscribed2'] . "</small></span>
+                    </span>&nbsp;" . $langNodeSubscribed . "
+                    <span class='help-block'><small>" . $langNodeSubscribed2 . "</small></span>
                 </label>
             </div>
             <div class='radio'>
                 <label>
                     <input id='nodehidden' type='radio' name='visible' value='0' $visibleChecked[0]>
-                    <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;" . $GLOBALS['langNodeHidden'] . "
-                    <span class='help-block'><small>" . $GLOBALS['langNodeHidden2'] . "</small></span>
+                    <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;" . $langViewHide . "
+                    <span class='help-block'><small>" . $langNodeHidden2 . "</small></span>
                 </label>
             </div>
         </div>
