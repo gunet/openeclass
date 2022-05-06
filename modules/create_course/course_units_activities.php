@@ -448,7 +448,7 @@ if(!isset($_POST['final_submit'])){
                     
                     
                     if($title_home == $end){
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
                     }else{
                         $tool_content .= "</tr><tr><td></td>";
                     }
@@ -481,7 +481,7 @@ if(!isset($_POST['final_submit'])){
                     }
                                 
                     if($title_class == $end){
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
                     }else{
                         $tool_content .= "</tr><tr><td></td>";
                     }
@@ -521,7 +521,7 @@ if(!isset($_POST['final_submit'])){
                     }
                         
                     if($title_after_class == $end){
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
                     }else{
                         $tool_content .= "</tr><tr><td></td>";
                     }
