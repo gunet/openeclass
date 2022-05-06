@@ -208,7 +208,7 @@ if(!isset($_POST['final_submit'])){
                     $tool_content .= "
                                     </tr>
                                     <tr>
-                                        <th scope='row' style='color:#3a4d6b; '>$langActInHome:</th>
+                                        <th scope='row' style='color:#31708f; '>$langActInHome:</th>
                     ";
 
                     $end=end($mtitles_in_home);
@@ -245,7 +245,7 @@ if(!isset($_POST['final_submit'])){
                     $tool_content .= "
                         </tr>
                         <tr>
-                            <th scope='row' style='color:#3a4d6b;'>$langActInClass:</th>
+                            <th scope='row' style='color:#31708f;'>$langActInClass:</th>
                             ";
                         
                     $end=end($mtitles_in_class);
@@ -281,7 +281,7 @@ if(!isset($_POST['final_submit'])){
                     $tool_content .= "
                     </tr>
                     <tr>
-                        <th scope='row' style='color:#3a4d6b;'>$langActAfterClass:</th>
+                        <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>
                     ";
                     
                     $end=end($mtitles_after_class);
@@ -410,14 +410,14 @@ if(!isset($_POST['final_submit'])){
             
             $tool_content .= "
                     
-                 <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'>title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>
+                 <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'> <label for='title' class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>
             
                 ";
 
                 $tool_content .= "
                                 </tr>
                                 <tr>
-                                    <th scope='row' style='color:#3a4d6b;'>$langActInHome:</th>
+                                    <th scope='row' style='color:#31708f;'>$langActInHome:</th>
                         ";
                 
                 $end=end($mtitles_in_home);
@@ -458,7 +458,7 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "
                     </tr>
                     <tr>
-                        <th scope='row' style='color:#3a4d6b;'>$langActInClass:</th>
+                        <th scope='row' style='color:#31708f;'>$langActInClass:</th>
                         ";
                 
                 $end=end($mtitles_in_class);
@@ -498,7 +498,7 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "
                 </tr>
                 <tr>
-                    <th scope='row' style='color:#3a4d6b;'>$langActAfterClass:</th>
+                    <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>
                 ";
                 
                 $end=end($mtitles_after_class);

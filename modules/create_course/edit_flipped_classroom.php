@@ -523,7 +523,7 @@ if(!isset($_POST['next'])){
                 $tool_content .= "
                                 </tr>
                                 <tr>
-                                    <th scope='row' style='color:#3a4d6b;'>$langActInHome:</th>
+                                    <th scope='row' style='color:#31708f;'>$langActInHome:</th>
                         ";
                         
                 $end=end($mtitles_in_home);
@@ -564,7 +564,7 @@ if(!isset($_POST['next'])){
                 $tool_content .= "
                     </tr>
                     <tr>
-                        <th scope='row' style='color:#3a4d6b;'>$langActInClass:</th>
+                        <th scope='row' style='color:#31708f;'>$langActInClass:</th>
                         ";
 
                 
@@ -608,7 +608,7 @@ if(!isset($_POST['next'])){
                 $tool_content .= "
                 </tr>
                 <tr>
-                    <th scope='row' style='color:#3a4d6b;'>$langActAfterClass:</th>
+                    <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>
                 ";
                 
                 $end=end($mtitles_after_class);
