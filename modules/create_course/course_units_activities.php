@@ -190,7 +190,7 @@ if(!isset($_POST['final_submit'])){
                         
                         <fieldset>
                             <div class='table-responsive'>
-                                <table class='table table-bordered '>
+                                <table class='table table-bordered table-striped'>
                                 <tr>
                                     <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
                     ";
@@ -402,7 +402,7 @@ if(!isset($_POST['final_submit'])){
 
                 <fieldset>
                     <div class='table-responsive'>
-                    <table class='table table-bordered table-striped border-primary'>
+                    <table class='table table-bordered table-striped '>
                         <tr>
                         <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
                 ";
@@ -438,23 +438,19 @@ if(!isset($_POST['final_submit'])){
                             <td><input type='checkbox'  id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></td>
                         ";
                     }
-                    $tool_content .="<td style='background-color:#d1d9e5;'></td>
-                    ";
 
-                    foreach ($_SESSION['units'] as $utitle) {
-                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
-                        ";
-                    }
-                    
-                    
                     if($title_home == $end){
                         $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
                     }else{
                         $tool_content .= "</tr><tr><td></td>";
                     }
                     
+                    
                 }
-
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                        ";
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                ";
                 $tool_content .= "
                     </tr>
                     <tr>
@@ -488,12 +484,11 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 $tool_content .="<td style='background-color:#d1d9e5;'></td>
-                    ";
-
-                    foreach ($_SESSION['units'] as $utitle) {
-                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
-                        ";
-                    }
+                ";
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                ";
+                
+                    
 
                 $tool_content .= "
                 </tr>
@@ -510,7 +505,7 @@ if(!isset($_POST['final_submit'])){
                     
                     $tool_content .= "<td>$title_after_class</td>";
                     
-                if($q) {
+                    if($q) {
                         $tool_content .= "
                             <td><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input></td>
                         ";
@@ -529,12 +524,10 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 $tool_content .="<td style='background-color:#d1d9e5;'></td>
-                    ";
-
-                    foreach ($_SESSION['units'] as $utitle) {
-                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
                         ";
-                    }
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                ";
+                
                 $tool_content .= "</tr>
                         </table>
                     </div>

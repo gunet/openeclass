@@ -497,7 +497,7 @@ if(!isset($_POST['next'])){
                 
                 <fieldset>
                     <div class='table-responsive'>
-                        <table class='table table-bordered'>
+                        <table class='table table-bordered table-striped'>
                         <tr><td style='background-color:#d1d9e5;' ></td>
                         <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
                 ";
