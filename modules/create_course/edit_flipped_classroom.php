@@ -498,8 +498,8 @@ if(!isset($_POST['next'])){
                 <fieldset>
                     <div class='table-responsive'>
                         <table class='table table-bordered'>
-                        <tr><td></td>
-                        <th scope='col'><label for='title' class='col-sm-2 control-label'>$langActivities</th>
+                        <tr><td style='background-color:#d1d9e5;' ></td>
+                        <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
                 ";
             $i=1;
 
@@ -510,7 +510,7 @@ if(!isset($_POST['next'])){
                     
                     $tool_content .= "
                     
-                        <th scope='col'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.substr($utitle,0,6).":</label></th>
+                        <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>
             
                     ";
                     $i++;
@@ -518,13 +518,15 @@ if(!isset($_POST['next'])){
                 }
                 $count_ids += 1;
             }
+            
 
                 $tool_content .= "
                                 </tr>
                                 <tr>
-                                    <th scope='row'>$langActInHome:</th>
+                                    <th scope='row' style='color:#3a4d6b;'>$langActInHome:</th>
                         ";
-                
+                        
+                $end=end($mtitles_in_home);
                 foreach($mtitles_in_home as $title_home) {
                     $j=1;
                     $tool_content .= "<td>$title_home</td>";
@@ -540,16 +542,33 @@ if(!isset($_POST['next'])){
                         }
                         $count_ids +=1;
                     }
-                    $tool_content .= "</tr><tr><td></td>";
+                    if($title_home == $end){
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    }else{
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
                     
                 }
+
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
+                    $count_ids =0;
+                    foreach ($_SESSION['units'] as $utitle) {
+                        if(!isset($_SESSION['ids'][$count_ids])){
+                            $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                            ";
+                        }
+                        $count_ids += 1;
+                    }
 
                 $tool_content .= "
                     </tr>
                     <tr>
-                        <th scope='row'>$langActInClass:</th>
+                        <th scope='row' style='color:#3a4d6b;'>$langActInClass:</th>
                         ";
+
                 
+                $end=end($mtitles_in_class);
                 foreach($mtitles_in_class as $title_class) {
                     $k=1;
                     $tool_content .= "<td>$title_class</td>";
@@ -566,17 +585,33 @@ if(!isset($_POST['next'])){
                         $count_ids += 1;
                     }
                     
-                    $tool_content .="</tr><tr><td></td>
-                    ";
+                    if($title_class == $end){
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    }else{
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
                 }
+
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
+                    $count_ids = 0;
+                    foreach ($_SESSION['units'] as $utitle) {
+                        
+                        if(!isset($_SESSION['ids'][$count_ids])){
+                            
+                            $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                            ";
+                        }
+                        $count_ids += 1;
+                    }
 
                 $tool_content .= "
                 </tr>
                 <tr>
-                    <th scope='row'>$langActAfterClass:</th>
+                    <th scope='row' style='color:#3a4d6b;'>$langActAfterClass:</th>
                 ";
                 
-                
+                $end=end($mtitles_after_class);
                 foreach($mtitles_after_class as $title_after_class) {
                     $z=1;
                     $tool_content .= "<td>$title_after_class</td>";
@@ -593,9 +628,24 @@ if(!isset($_POST['next'])){
                         }
                         $count_ids += 1;
                     }
-                    $tool_content .= "</tr><tr><td></td>";
+                    if($title_after_class == $end){
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    }else{
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
                 
                 }
+
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
+                    $count_ids =0;
+                    foreach ($_SESSION['units'] as $utitle) {
+                        if(!isset($_SESSION['ids'][$count_ids])){
+                            $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                            ";
+                        }
+                        $count_ids += 1;
+                    }
 
 
                 $tool_content .= "</tr>
@@ -1069,7 +1119,7 @@ if(!isset($_POST['next'])){
                 $nrlz_tools_after_class ="";
             }
         }
-        
+
         $tool_content .= "<div class='alert alert-success'><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></div>";
         $tool_content .= action_bar(array(
             array(

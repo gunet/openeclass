@@ -192,14 +192,14 @@ if(!isset($_POST['final_submit'])){
                             <div class='table-responsive'>
                                 <table class='table table-bordered '>
                                 <tr>
-                                    <td></td><th scope='col'><label for='title' class='col-sm-2 control-label'>$langActivities</th>
+                                    <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
                     ";
                 $i=1;
                 foreach ($_SESSION['units'] as $utitle){
             
                     $tool_content .= "
                         
-                            <th scope='col'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.substr($utitle,0,6).":</label></th>
+                            <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-10 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>
                 
                     ";
                     $i++;
@@ -208,8 +208,10 @@ if(!isset($_POST['final_submit'])){
                     $tool_content .= "
                                     </tr>
                                     <tr>
-                                        <th scope='row'>$langActInHome:</th>
+                                        <th scope='row' style='color:#3a4d6b; '>$langActInHome:</th>
                     ";
+
+                    $end=end($mtitles_in_home);
                     
                     foreach($mtitles_in_home as $title_home) {
                         $j=1;
@@ -224,17 +226,29 @@ if(!isset($_POST['final_submit'])){
                             $j++;
                             
                         }
-                        $tool_content .= "
-                                    </tr><tr><td></td>";
+                        if($title_home == $end){
+                            $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        }else{
+                            $tool_content .= "</tr><tr><td></td>";
+                        }  
                         
+                    }
+
+                    $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
+
+                    foreach ($_SESSION['units'] as $utitle) {
+                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                        ";
                     }
             
                     $tool_content .= "
                         </tr>
                         <tr>
-                            <th scope='row'>$langActInClass:</th>
+                            <th scope='row' style='color:#3a4d6b;'>$langActInClass:</th>
                             ";
-                    
+                        
+                    $end=end($mtitles_in_class);
                     foreach($mtitles_in_class as $title_class) {
                         $k=1;
                         $tool_content .= "<td>$title_class</td>";
@@ -247,17 +261,30 @@ if(!isset($_POST['final_submit'])){
                             $k++;
                         }
                         
-                        $tool_content .="</tr><tr><td></td>
+                        ;
+                        if($title_class == $end){
+                            $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        }else{
+                            $tool_content .= "</tr><tr><td></td>";
+                        }   
+                    }
+                    
+                    $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
+
+                    foreach ($_SESSION['units'] as $utitle) {
+                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
                         ";
                     }
+
             
                     $tool_content .= "
                     </tr>
                     <tr>
-                        <th scope='row'>$langActAfterClass:</th>
+                        <th scope='row' style='color:#3a4d6b;'>$langActAfterClass:</th>
                     ";
                     
-                    
+                    $end=end($mtitles_after_class);
                     foreach($mtitles_after_class as $title_after_class) {
                         $z=1;
                         $tool_content .= "<td>$title_after_class</td>";
@@ -269,10 +296,21 @@ if(!isset($_POST['final_submit'])){
                             $newUnitId++;
                             $z++;
                         }
-                        $tool_content .= "</tr><tr><td></td>";
+                        if($title_after_class == $end){
+                            $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        }else{
+                            $tool_content .= "</tr><tr><td></td>";
+                        } 
                     
                     }
-            
+                    
+                    $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
+
+                    foreach ($_SESSION['units'] as $utitle) {
+                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                        ";
+                    }
             
                     $tool_content .= "</tr>
                             </table>
@@ -364,24 +402,25 @@ if(!isset($_POST['final_submit'])){
 
                 <fieldset>
                     <div class='table-responsive'>
-                    <table class='table table-bordered'>
+                    <table class='table table-bordered table-striped border-primary'>
                         <tr>
-                            <td></td><th scope='col'><label for='title' class='col-sm-2 control-label'>$langActivities</th>
+                        <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
                 ";
             $i=1;
             
             $tool_content .= "
                     
-                    <th scope='col'><label for='title' class='col-md-10' title='$unit_title->title'>".substr($unit_title->title,0,6).":</label></th>
+                 <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'>title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>
             
                 ";
 
                 $tool_content .= "
                                 </tr>
                                 <tr>
-                                    <th scope='row'>$langActInHome:</th>
+                                    <th scope='row' style='color:#3a4d6b;'>$langActInHome:</th>
                         ";
                 
+                $end=end($mtitles_in_home);
                 foreach($mtitles_in_home as $title_home) {
 
                     $act_id = array_search($title_home,$mtitles_in_home);
@@ -392,24 +431,37 @@ if(!isset($_POST['final_submit'])){
                     
                     if($q) {
                         $tool_content .= "
-                            <td><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input></td>
+                            <td ><input type='checkbox'  id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></td>
                         ";
                     }else{
                         $tool_content .= "
-                            <td><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input></td>
+                            <td><input type='checkbox'  id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></td>
                         ";
                     }
+                    $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
 
-                    $tool_content .= "</tr><tr><td></td>";
+                    foreach ($_SESSION['units'] as $utitle) {
+                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                        ";
+                    }
+                    
+                    
+                    if($title_home == $end){
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;></td>";
+                    }else{
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
                     
                 }
 
                 $tool_content .= "
                     </tr>
                     <tr>
-                        <th scope='row'>$langActInClass:</th>
+                        <th scope='row' style='color:#3a4d6b;'>$langActInClass:</th>
                         ";
                 
+                $end=end($mtitles_in_class);
                 foreach($mtitles_in_class as $title_class) {
 
                     $act_id = array_search($title_class,$mtitles_in_class);
@@ -428,17 +480,28 @@ if(!isset($_POST['final_submit'])){
                         ";
                     }
                                 
-                    $tool_content .="</tr><tr><td></td>
-                    ";
+                    if($title_class == $end){
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;></td>";
+                    }else{
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
                 }
+
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
+
+                    foreach ($_SESSION['units'] as $utitle) {
+                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                        ";
+                    }
 
                 $tool_content .= "
                 </tr>
                 <tr>
-                    <th scope='row'>$langActAfterClass:</th>
+                    <th scope='row' style='color:#3a4d6b;'>$langActAfterClass:</th>
                 ";
                 
-                
+                $end=end($mtitles_after_class);
                 foreach($mtitles_after_class as $title_after_class) {
 
                     $act_id =array_search($title_after_class,$mtitles_after_class);
@@ -457,11 +520,21 @@ if(!isset($_POST['final_submit'])){
                         ";
                     }
                         
-                    $tool_content .= "</tr><tr><td></td>";
+                    if($title_after_class == $end){
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;></td>";
+                    }else{
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
                 
                 }
 
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                    ";
 
+                    foreach ($_SESSION['units'] as $utitle) {
+                        $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                        ";
+                    }
                 $tool_content .= "</tr>
                         </table>
                     </div>
