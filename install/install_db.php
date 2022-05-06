@@ -1459,6 +1459,8 @@ $db->query("CREATE TABLE `unit_resources` (
     `visible` TINYINT(4),
     `order` INT(11) NOT NULL DEFAULT 0,
     `date` DATETIME NOT NULL,
+    `fc_type` INT(11) NOT NULL,
+    `activity_title`  VARCHAR(50) NOT NULL,
     UNIQUE KEY `unit_resources_order` (`unit_id`,`order`)) $tbl_options");
 
 $db->query("CREATE TABLE `actions_daily` (
