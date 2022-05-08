@@ -468,7 +468,7 @@ $activities = array(
     MODULE_ID_SIMULATE => array('title' => $langFCSimulate,'tools' => array(2)),
     MODULE_ID_PROBLEM_SOLVING => array('title' => $langFCProblemSolving,'tools' => array(5,26,10)),
     MODULE_ID_MINDMAP_FC => array('title' => $langFCMindMap,'tools' => array(47)),
-    MODULE_ID_EVALUATE=> array('title' => $langFCEvaluate,'tools' => array(21)),
+    MODULE_ID_EVALUATE=> array('title' => $langFCEvaluate,'tools' => array(21,2,48,32)),
     MODULE_ID_DISCUSS_AC => array('title' => $langFCDiscuss,'tools' => array(9,19,2,37,46,26,34,38))
 );
 

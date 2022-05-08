@@ -485,7 +485,17 @@ if($q->flipped_flag ==2){
                             'url' => $base_url . 'comments&fc_type=0&act_name='. $act_title,
                             'icon' => 'fa fa-comments',
                             'level' => 'secondary',
-                            'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$in_home->activity_id))
+                            'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$in_home->activity_id)),
+                        array('title' => $langAdd.' '.$langGradebook,
+                            'url' => $base_url . 'gradebook&fc_type=0&act_name='. $act_title,
+                            'icon' => 'fa fa-sort-numeric-desc',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$in_home->activity_id)),
+                        array('title' => $langAdd.' '.$langProgress,
+                            'url' => $base_url . 'progress&fc_type=0&act_name='. $act_title,
+                            'icon' => 'fa fa-trophy',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_home->activity_id))
                         
                     ),'',true) . "</td><td>";
                     
@@ -609,7 +619,17 @@ if($q->flipped_flag ==2){
                             'url' => $base_url . 'comments&fc_type=1&act_name='. $act_title,
                             'icon' => 'fa fa-comments',
                             'level' => 'secondary',
-                            'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$in_class->activity_id))
+                            'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$in_class->activity_id)),
+                        array('title' => $langAdd.' '.$langGradebook,
+                            'url' => $base_url . 'gradebook&fc_type=1&act_name='. $act_title,
+                            'icon' => 'fa fa-sort-numeric-desc',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$in_class->activity_id)),
+                        array('title' => $langAdd.' '.$langProgress,
+                            'url' => $base_url . 'progress&fc_type=1&act_name='. $act_title,
+                            'icon' => 'fa fa-trophy',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_class->activity_id))
                         
                     ),'',true). "</td><td>";
             
@@ -735,7 +755,17 @@ if($q->flipped_flag ==2){
                             'url' => $base_url . 'comments&fc_type=2&act_name='. $act_title,
                             'icon' => 'fa fa-comments',
                             'level' => 'secondary',
-                            'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$after_class->activity_id))
+                            'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$after_class->activity_id)),
+                        array('title' => $langAdd.' '.$langGradebook,
+                            'url' => $base_url . 'gradebook&fc_type=2&act_name='. $act_title,
+                            'icon' => 'fa fa-sort-numeric-desc',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$after_class->activity_id)),
+                        array('title' => $langAdd.' '.$langProgress,
+                            'url' => $base_url . 'progress&fc_type=2&act_name='. $act_title,
+                            'icon' => 'fa fa-trophy',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$after_class->activity_id))
                         
                     ),'',true) . "</td><td>";
                 
