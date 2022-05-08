@@ -870,11 +870,6 @@ if(!isset($_POST['next'])){
 
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     
-        
-        if(!isset($_POST['in_class'])||!isset($_POST['in_home'])||!isset($_POST['after_class'])){
-            Session::Messages($langFieldsMissing);
-            $validationFailed = true;
-        }
 
         if (empty($_SESSION['title'])) {
             Session::Messages($langFieldsMissing);
@@ -916,23 +911,48 @@ if(!isset($_POST['next'])){
         if ($maxOrderUnit->morder ==NULL){
             $maxOrderUnit->morder = 1;
         }
+
+        $existing_units=0;
+        $changed_units = array("start");
+        foreach($q5_b as $unit){
+            
+            if($unit->title != $_SESSION['units'][$existing_units]){
+                
+                
+                $result = Database::get()->query(
+                    "UPDATE course_units SET
+                                    title = ?s WHERE (title=?s AND course_id=?d)",
+                    $_SESSION['units'][$existing_units], $unit->title, $q5_a->ID
+                );
+                array_push($changed_units,$_SESSION['units'][$existing_units]);
+            }
+            
+            $existing_units+=1;
+        }
+
+
         
         
         foreach ($_SESSION['units'] as $unit){
-            $q=  Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$unit,$q5_a->ID);
+        
+            if(!array_search($unit,$changed_units)){
 
-            if(!$q){
-                $maxOrderUnit->morder += 1;
-                Database::get()->query(
-                    "INSERT INTO course_units SET
-                                            title = ?s,
-                                            visible = 1,
-                                            public = 1,
-                                            `order` =".$maxOrderUnit->morder.",
-                                            course_id = ?d",
-                $unit,
-                $q5_a->ID
-                );
+                $q=  Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$unit,$q5_a->ID);
+                
+                if(!$q){
+                
+                    $maxOrderUnit->morder += 1;
+                    Database::get()->query(
+                        "INSERT INTO course_units SET
+                                                title = ?s,
+                                                visible = 1,
+                                                public = 1,
+                                                `order` =".$maxOrderUnit->morder.",
+                                                course_id = ?d",
+                    $unit,
+                    $q5_a->ID
+                    );
+                }
             }
         }
 

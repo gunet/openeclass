@@ -372,7 +372,16 @@ if (!isset($_POST['create_course'])) {
     $_SESSION['view_type']= $_POST['view_type'];
     $_SESSION['description']=purify($_POST['description']);
     
-        redirect_to_home_page('modules/create_course/flipped_classroom.php');
+    if (empty($title)) {
+        Session::Messages($langFieldsMissing);
+        $validationFailed = true;
+    }
+
+    if ($validationFailed) {
+        redirect_to_home_page('modules/create_course/create_course.php');
+    }
+    
+    redirect_to_home_page('modules/create_course/flipped_classroom.php');
 }else  { // create the course and the course database
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
