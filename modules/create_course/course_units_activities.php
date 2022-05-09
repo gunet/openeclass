@@ -431,11 +431,11 @@ if(!isset($_POST['final_submit'])){
                     
                     if($q) {
                         $tool_content .= "
-                            <td ><input type='checkbox'  id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></td>
+                            <td ><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></td>
                         ";
                     }else{
                         $tool_content .= "
-                            <td><input type='checkbox'  id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></td>
+                            <td><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></td>
                         ";
                     }
 
@@ -985,6 +985,8 @@ if(!isset($_POST['final_submit'])){
         $nrlz_tools_in_class ="";
         $nrlz_tools_in_home ="";
         $nrlz_tools_after_class = "";
+
+
         if(isset($_POST['in_class'])){
             foreach($_POST['in_class'] as $in_class){
                 $nrlz_in_class = explode("_",$in_class);
