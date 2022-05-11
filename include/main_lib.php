@@ -3149,7 +3149,10 @@ function framebusting_code() {
  * other web pages of the platform in case this functionality is needed.
  */
 function add_framebusting_headers() {
-    header('X-Frame-Options: SAMEORIGIN');
+    require_once 'modules/admin/extconfig/ltipublishapp.php';
+    $ltipublishapp = ExtAppManager::getApp('ltipublish');
+    $framebustheader = $ltipublishapp->getFramebustHeader();
+    header($framebustheader);
 }
 
 /**

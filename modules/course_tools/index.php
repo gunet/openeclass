@@ -28,6 +28,8 @@ $require_login = true;
 include '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'modules/lti_consumer/lti-functions.php';
+require_once 'publish-functions.php';
+require_once 'modules/admin/extconfig/ltipublishapp.php';
 
 $toolName = $langToolManagement;
 add_units_navigation(TRUE);
@@ -233,16 +235,30 @@ foreach ($q as $externalLinks) {
 }
 $tool_content .= "</table></div>";
 
-
+// display table for LTI Consumer
 $tool_content .= "<div class='panel panel-default panel-action-btn-default'>
                     <div class='panel-heading list-header'>
                         <span class='panel-title' style='line-height: 50px;'>$langLtiConsumer</span>
                         <span class='pull-right' style='padding:8px;'>
                         <a class='btn btn-success' href='../lti_consumer/index.php?course=$course_code&amp;add=1'>
                         <span class='fa fa-plus-circle'></span> $langNewLTITool</a>
-                    </div>";
-
-$tool_content .= "</div>";
+                    </div>
+                  </div>";
 lti_app_details();
+
+// display table for LTI Provider - Publish as LTI tool
+// check if LTI Provider is enabled (global config) and available for the current course
+$ltipublishapp = ExtAppManager::getApp('ltipublish');
+if ($ltipublishapp->isEnabledForCurrentCourse()) {
+    $tool_content .= "<div class='panel panel-default panel-action-btn-default'>
+                    <div class='panel-heading list-header'>
+                        <span class='panel-title' style='line-height: 50px;'>$langLtiPublishTool</span>
+                        <span class='pull-right' style='padding:8px;'>
+                        <a class='btn btn-success' href='editpublish.php?course=$course_code'>
+                        <span class='fa fa-plus-circle'></span> $langAdd</a>
+                    </div>
+                  </div>";
+    lti_provider_details();
+}
 
 draw($tool_content, 2, null, $head_content);

@@ -109,7 +109,7 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
                     <label class='col-sm-3 control-label'>$langUseOfApp:&nbsp;&nbsp;
                     <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>                    
                     <div class='col-sm-9'>                                
-                        <select class='form-control' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
+                        <select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                             WHERE id NOT IN (SELECT course_id FROM course_lti_app)
                                                             AND visible != " . COURSE_INACTIVE . "

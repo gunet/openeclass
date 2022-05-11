@@ -225,6 +225,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     $t->set_var('URL_PATH', $urlAppend);
+    $t->set_var('LOGO_URL_PATH', $urlAppend);
     $t->set_var('SITE_NAME', $siteName);
     $t->set_var('FAVICON_PATH', $urlAppend . 'template/favicon/favicon.ico');
     $t->set_var('ICON_PATH', $urlAppend . 'template/favicon/openeclass_128x128.png');
@@ -248,6 +249,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('USER_SURNAME', q($_SESSION['surname']));
         $t->set_var('LANG_USER_ICON', $langProfileMenu);
         $t->set_var('USER_ICON', user_icon($_SESSION['uid']));
+        $t->set_var('PROFILE_MENU_DATA_TOGGLE', "data-toggle='dropdown'");
         $t->set_var('USERNAME', q($_SESSION['uname']));
         $t->set_var('LANG_PROFILE', q($GLOBALS['langMyProfile']));
         $t->set_var('PROFILE_LINK', $urlAppend . 'main/profile/display_profile.php');
@@ -314,6 +316,16 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('langFieldsRequ', q($langFieldsRequ));
 
         $t->set_var('LOGGED_IN', 'true');
+
+        // customization for LTI enrolled users
+        $is_lti_enrol_user = substr($_SESSION['uname'], 0, strlen("enrol_lti_") ) === "enrol_lti_";
+        if ($is_lti_enrol_user) {
+            $t->set_var('USERNAME', q($_SESSION['givenname'] . " " . $_SESSION['surname']));
+            $t->set_var('HOMEBUTTON_STYLE', "style='display: none;'");
+            $t->set_var('BREADCRUMB_STYLE', "style='display: none;'");
+            $t->set_var('LOGO_URL_PATH', "#");
+            $t->set_var('PROFILE_MENU_DATA_TOGGLE', "");
+        }
     } else {
         if (get_config('hide_login_link')) {
             $t->set_block('mainBlock', 'LoginIconBlock', 'delete');
