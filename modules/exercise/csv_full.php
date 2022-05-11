@@ -93,6 +93,7 @@ foreach ($item as $data) { // check for random questions with criteria
 $headers[] = $langSurname;
 $headers[] = $langName;
 $headers[] = $langAm;
+$headers[] = $langEmail;
 $headers[] = $langGroup;
 
 foreach ($possible_qids as $qid) {
@@ -164,6 +165,7 @@ foreach ($q as $d) { // for each attempt
                 $output[] = uid_to_name($user, 'surname');
                 $output[] = uid_to_name($user, 'givenname');
                 $output[] = uid_to_am($user);
+                $output[] = uid_to_email($user);
                 $output[] = user_groups($course_id, $user, 'txt');
             } else {
                 $question = $results[$i][$j]; // question id
