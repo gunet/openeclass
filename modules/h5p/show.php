@@ -14,12 +14,19 @@ if (!$content) {
 $data = [];
 $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 
-$data['action_bar'] = action_bar([[
-    'title' => $langBack,
-    'url' => $backUrl,
-    'icon' => 'fa-reply',
-    'level' => 'primary-label'
-]], false);
+$data['action_bar'] = action_bar([
+    [ 'title' => $langDownload,
+      'url' => $urlServer . "modules/h5p/reuse.php?course=" . $course_code . "&id=" . $content->id,
+      'icon' => 'fa-download',
+      'level' => 'primary-label',
+      'button-class' => 'btn-success'
+    ],
+    [ 'title' => $langBack,
+      'url' => $backUrl,
+      'icon' => 'fa-reply',
+      'level' => 'primary-label'
+    ]
+], false);
 
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5P];
