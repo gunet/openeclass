@@ -43,12 +43,19 @@ if (!$res_type) {
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
-$tool_content .= action_bar([[
-    'title' => $langBack,
-    'url' => $backUrl,
-    'icon' => 'fa-reply',
-    'level' => 'primary-label'
-]], false);
+$tool_content .= action_bar([
+    [ 'title' => $langDownload,
+      'url' => $urlServer . "modules/h5p/reuse.php?course=" . $course_code . "&id=" . $content->id,
+      'icon' => 'fa-download',
+      'level' => 'primary-label',
+      'button-class' => 'btn-success'
+    ],
+    [ 'title' => $langBack,
+      'url' => $backUrl,
+      'icon' => 'fa-reply',
+      'level' => 'primary-label'
+    ]
+], false);
 
 $workspaceUrl = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
 $workspaceLibs = $urlAppend . 'courses/h5p/libraries';
