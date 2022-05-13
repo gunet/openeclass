@@ -102,7 +102,7 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
                     <label class='col-sm-3 control-label'>$langUseOfApp:&nbsp;&nbsp;
                     <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>                    
                     <div class='col-sm-9'>                                
-                        <select class='form-control' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
+                        <select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                             WHERE id NOT IN (SELECT course_id FROM course_lti_app)
                                                             AND visible != " . COURSE_INACTIVE . "
@@ -309,12 +309,13 @@ function edit_lti_app($session_id) {
 /**
  * @brief display available lti apps (if any)
  */
-function lti_app_details() {
-    global $course_id, $tool_content, $is_editor, $course_code, $head_content,
+function lti_app_details(): string {
+    global $course_id, $is_editor, $course_code, $head_content,
         $langConfirmDelete, $langNewLTIAppSessionDesc, $langNote,
         $langTitle,$langActivate, $langDeactivate, $langLTIAppActions,
         $langEditChange, $langDelete, $langNoLTIApps, $m;
 
+    $tool_content = "";
     load_js('trunk8');
 
     $activeClause = ($is_editor) ? '' : "AND enabled = 1";
@@ -407,6 +408,8 @@ function lti_app_details() {
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoLTIApps</div>";
     }
+
+    return $tool_content;
 }
 
 function disable_lti_app($id)

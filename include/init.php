@@ -59,8 +59,6 @@ if (!session_id()) {
 header('Content-Type: text/html; charset=UTF-8');
 
 // Will add headers to prevent against clickjacking.
-add_framebusting_headers();
-
 add_xxsfilter_headers();
 
 add_nosniff_headers();
@@ -618,6 +616,8 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
 set_glossary_cache();
 
 $tool_content = $head_content = '';
+
+add_framebusting_headers();
 
 function fix_directory_separator($path) {
     if (DIRECTORY_SEPARATOR !== '/') {

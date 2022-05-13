@@ -53,6 +53,7 @@ $auth_ids = array(1 => 'eclass',
     11 => 'live',
     12 => 'yahoo',
     13 => 'linkedin',
+    14 => 'lti_publish',
 );
 
 $authFullName = array(

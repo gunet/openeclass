@@ -1145,6 +1145,111 @@ $db->query("CREATE TABLE `course_lti_app` (
       FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`))
    $tbl_options");
 
+$db->query("CREATE TABLE `course_lti_publish` (
+      `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      `course_id` int(11) NOT NULL,
+      `title` VARCHAR(255) NOT NULL,
+      `description` TEXT,
+      `lti_provider_key` VARCHAR(255) NOT NULL,
+      `lti_provider_secret` VARCHAR(255) NOT NULL,
+      `enabled` TINYINT(4) NOT NULL DEFAULT 1,
+      FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE) $tbl_options");
+
+$db->query("CREATE TABLE `course_lti_publish_user_enrolments` (
+      `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      `publish_id` int(11) NOT NULL,
+      `user_id` int(11) NOT NULL,
+      `created` int(11) NOT NULL,
+      `updated` int(11) NOT NULL,
+      FOREIGN KEY (`publish_id`) REFERENCES `course_lti_publish` (`id`) ON DELETE CASCADE,
+      FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE) $tbl_options");
+
+$db->query("CREATE TABLE `course_lti_enrol_users` (
+      `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      `publish_id` int(11) NOT NULL,
+      `user_id` int(11) NOT NULL,
+      `service_url` TEXT,
+      `source_id` TEXT,
+      `consumer_key` TEXT,
+      `consumer_secret` TEXT,
+      `memberships_url` TEXT,
+      `memberships_id` TEXT,
+      `last_grade` FLOAT,
+      `last_access` int(11),
+      `time_created` int(11),
+      FOREIGN KEY (`publish_id`) REFERENCES `course_lti_publish` (`id`) ON DELETE CASCADE,
+      FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE) $tbl_options");
+
+// lti provider tables
+$db->query("CREATE TABLE `lti_publish_lti2_consumer` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(50) NOT NULL,
+    `consumerkey256` VARCHAR(255) NOT NULL UNIQUE,
+    `consumerkey` TEXT,
+    `secret` VARCHAR(1024) NOT NULL,
+    `ltiversion` VARCHAR(10),
+    `consumername` VARCHAR(255),
+    `consumerversion` VARCHAR(255),
+    `consumerguid` VARCHAR(1024),
+    `profile` TEXT,
+    `toolproxy` TEXT,
+    `settings` TEXT,
+    `protected` smallint(6) NOT NULL,
+    `enabled` smallint(6) NOT NULL,
+    `enablefrom` int(11),
+    `enableuntil` int(11),
+    `lastaccess` int(11),
+    `created` int(11) NOT NULL,
+    `updated` int(11) NOT NULL) $tbl_options");
+
+$db->query("CREATE TABLE `lti_publish_lti2_context` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `consumerid` int(11) NOT NULL,
+    `lticontextkey` VARCHAR(255) NOT NULL,
+    `type` VARCHAR(100),
+    `settings` TEXT,
+    `created` int(11) NOT NULL,
+    `updated` int(11) NOT NULL) $tbl_options");
+
+$db->query("CREATE TABLE `lti_publish_lti2_nonce` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `consumerid` int(11) NOT NULL,
+    `value` VARCHAR(64) NOT NULL,
+    `expires` int(11) NOT NULL) $tbl_options");
+
+$db->query("CREATE TABLE `lti_publish_lti2_resource_link` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `contextid` int(11),
+    `consumerid` int(11),
+    `ltiresourcelinkkey` VARCHAR(255) NOT NULL,
+    `settings` TEXT,
+    `primaryresourcelinkid` int(11),
+    `shareapproved` smallint(6),
+    `created` int(11) NOT NULL,
+    `updated` int(11) NOT NULL) $tbl_options");
+
+$db->query("CREATE TABLE `lti_publish_lti2_share_key` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `sharekey` VARCHAR(32) NOT NULL UNIQUE,
+    `resourcelinkid` int(11) NOT NULL UNIQUE,
+    `autoapprove` smallint(6) NOT NULL,
+    `expires` int(11) NOT NULL) $tbl_options");
+
+$db->query("CREATE TABLE `lti_publish_lti2_tool_proxy` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `toolproxykey` VARCHAR(32) NOT NULL UNIQUE,
+    `consumerid` int(11) NOT NULL,
+    `toolproxy` TEXT NOT NULL,
+    `created` int(11) NOT NULL,
+    `updated` int(11) NOT NULL) $tbl_options");
+
+$db->query("CREATE TABLE `lti_publish_lti2_user_result` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `resourcelinkid` int(11) NOT NULL,
+    `ltiuserkey` VARCHAR(255) NOT NULL,
+    `ltiresultsourcedid` VARCHAR(1024) NOT NULL,
+    `created` int(11) NOT NULL,
+    `updated` int(11) NOT NULL) $tbl_options");
 
 // hierarchy tables
 $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
@@ -2215,6 +2320,7 @@ $db->query('CREATE INDEX course_id on forum_user_stats(course_id)');
 $db->query('CREATE INDEX user_id on note(user_id)');
 $db->query('CREATE INDEX course_id on conference(course_id)');
 $db->query('CREATE INDEX course_id_enabled on lti_apps(course_id,enabled)');
+$db->query('CREATE INDEX course_id_enabled on course_lti_publish(course_id, enabled)');
 $db->query('CREATE INDEX am on `user`(am)');
 $db->query('CREATE INDEX forum_id on `group`(forum_id)');
 $db->query('CREATE INDEX email on `user`(email)');
@@ -2223,3 +2329,14 @@ $db->query('CREATE INDEX category_visible ON video(category,visible)');
 $db->query('CREATE INDEX courseID on analytics(courseID)');
 $db->query('CREATE INDEX useractionwhen on loginout (id_user,action,`when` desc)');
 $db->query('CREATE INDEX group_id on wiki_properties(group_id)');
+$db->query('CREATE INDEX consumerid on lti_publish_lti2_context(consumerid)');
+$db->query('CREATE INDEX consumerid on lti_publish_lti2_nonce(consumerid)');
+$db->query('CREATE INDEX consumerid on lti_publish_lti2_resource_link(consumerid)');
+$db->query('CREATE INDEX contextid on lti_publish_lti2_resource_link(contextid)');
+$db->query('CREATE INDEX primaryresourcelinkid on lti_publish_lti2_resource_link(primaryresourcelinkid)');
+$db->query('CREATE INDEX consumerid on lti_publish_lti2_tool_proxy(consumerid)');
+$db->query('CREATE INDEX resourcelinkid on lti_publish_lti2_user_result(resourcelinkid)');
+$db->query('CREATE INDEX publish_id on course_lti_publish_user_enrolments(publish_id)');
+$db->query('CREATE INDEX user_id on course_lti_publish_user_enrolments(user_id)');
+$db->query('CREATE INDEX publish_id on course_lti_enrol_users(publish_id)');
+$db->query('CREATE INDEX user_id on course_lti_enrol_users(user_id)');

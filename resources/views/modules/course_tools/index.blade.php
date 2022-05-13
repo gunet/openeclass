@@ -82,10 +82,23 @@
             <span class='panel-title' style='line-height: 50px;'>{{ trans('langLtiConsumer') }}</span>
             <span class='pull-right' style='padding:8px;'>
             <a class='btn btn-success' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
-            <span class='fa fa-plus-circle'></span>{{ trans('langNewLTITool') }}</a>
+            <span class='fa fa-plus-circle'></span> {{ trans('langNewLTITool') }}</a>
         </div>
     </div>
 
 {!! lti_app_details() !!}
+
+    @if ($ltiPublishIsEnabledForCurrentCourse)
+        <div class='panel panel-default panel-action-btn-default'>
+            <div class='panel-heading list-header'>
+                <span class='panel-title' style='line-height: 50px;'>{{ trans('langLtiPublishTool') }}</span>
+                <span class='pull-right' style='padding:8px;'>
+                <a class='btn btn-success' href='editpublish.php?course={{ $course_code }}'>
+                <span class='fa fa-plus-circle'></span> {{ trans('langAdd') }}</a>
+            </div>
+        </div>
+
+        {!! lti_provider_details() !!}
+    @endif
 
 @endsection

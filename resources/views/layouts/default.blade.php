@@ -79,7 +79,7 @@
                             <span class="fa fa-bars" style='color: #777;'></span>
                             <span class="sr-only">{{ trans('langMenu') }}</span>
                         </button>
-                        <a href='{{ $urlAppend }}' class="navbar-brand small-logo">
+                        <a href='{{ $logo_url_path }}' class="navbar-brand small-logo">
                             <img class="img-responsive hidden-md hidden-lg" src="{{ $logo_img_small }}" style="height: 36px;margin-top:8px;" alt='{{ $pageTitle }} logo'>
                         </a>
                         <ul class="nav navbar-nav navbar-right">
@@ -95,14 +95,20 @@
                                         </a>
                                     </li>
                                 @endif
-                                <li>
-                                    <a href="{{ $urlAppend }}main/portfolio.php">
-                                        <span class="fa fa-home"></span>
-                                        <span class="sr-only">{{ trans('langPortfolio') }}</span>
-                                    </a>
-                                </li>
+                                @if (!$is_lti_enrol_user)
+                                    <li>
+                                        <a href="{{ $urlAppend }}main/portfolio.php">
+                                            <span class="fa fa-home"></span>
+                                            <span class="sr-only">{{ trans('langPortfolio') }}</span>
+                                        </a>
+                                    </li>
+                                @endif
                                 <li id="profile_menu_dropdown" class="dropdown">
-                                   <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" data-toggle="dropdown">
+                                   <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1"
+                                      @if (!$is_lti_enrol_user)
+                                        data-toggle="dropdown"
+                                      @endif
+                                   >
                                        <img alt="{{ trans('langProfileMenu') }}" class="img-circle user-icon" src="{{ user_icon($uid) }}" style="display: block; float: left; max-height: 20px;">
                                        <div style="display: block; float: left;">{{ $uname }}</div>
                                     </a>
@@ -259,7 +265,7 @@
 
             <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar float-menu">
                 <div class="logo">
-                    <a href='{{ $urlAppend }}'>
+                    <a href='{{ $logo_url_path }}'>
                     <img class="img-responsive hidden-xs hidden-sm" src="{{ $logo_img }}" alt='{{ $pageTitle }} logo'>
                     </a>
                 </div>

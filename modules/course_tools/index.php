@@ -28,6 +28,8 @@ $require_login = true;
 include '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'modules/lti_consumer/lti-functions.php';
+require_once 'publish-functions.php';
+require_once 'modules/admin/extconfig/ltipublishapp.php';
 
 $toolName = $langToolManagement;
 $page_url = 'modules/course_tools/?course=' . $course_code;
@@ -119,5 +121,9 @@ foreach ($module_list as $item) {
 $data['q'] = Database::get()->queryArray("SELECT id, url, title FROM link
                         WHERE category = -1 AND
                         course_id = ?d", $course_id);
+
+// check if LTI Provider is enabled (global config) and available for the current course
+$ltipublishapp = ExtAppManager::getApp('ltipublish');
+$data['ltiPublishIsEnabledForCurrentCourse'] = $ltipublishapp->isEnabledForCurrentCourse();
 
 view('modules.course_tools.index', $data);

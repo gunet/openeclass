@@ -76,7 +76,7 @@
                 <div id="bgr-cheat-header" class="hidden-xs hidden-sm col-md-2">
 <!--                     BEGIN logoBlock
                     <div class="logo">
-                        <a href='{%URL_PATH%}'>
+                        <a href='{%LOGO_URL_PATH%}'>
                         <img class="img-responsive hidden-xs hidden-sm" src="{%template_base%}/img/{%logo_img%}" alt=''>
                         </a>
                     </div>
@@ -93,17 +93,17 @@
                         </button>
                         <!-- END normalViewOpenDiv -->
                         <!-- BEGIN logoBlock -->
-                        <a href='{%URL_PATH%}' class="navbar-brand small-logo">
+                        <a href='{%LOGO_URL_PATH%}' class="navbar-brand small-logo">
                             <img class="img-responsive hidden-md hidden-lg" src="{%logo_img_small%}" style="height: 36px;margin-top:8px;" alt='{%GO_TO_HOME%}'>
                             </a>
                         <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
                             <!-- BEGIN LoggedInBlock -->
 
-                            <li><a href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home"></span><span class="sr-only">{%LANG_PORTFOLIO%}</span></a></li>
+                            <li {%HOMEBUTTON_STYLE%}><a href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home"></span><span class="sr-only">{%LANG_PORTFOLIO%}</span></a></li>
                             {%ADMIN_ICON%}
                             <li id="profile_menu_dropdown" class="dropdown">
-                               <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" data-toggle="dropdown">
+                               <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" {%PROFILE_MENU_DATA_TOGGLE%}>
                                    <img alt="{%LANG_USER_ICON%}" class="img-circle user-icon" src="{%USER_ICON%}" style="display: block; float: left; max-height: 20px;"><div style="display: block; float: left;">{%USERNAME%}</div>
                                 </a>
 
@@ -190,7 +190,7 @@
                 <div class="row row-main">
                     <div class="col-md-12 add-gutter">
                         <!-- BEGIN breadCrumbs -->
-                        <div class="row">
+                        <div class="row" {%BREADCRUMB_STYLE%}>
                             <nav role="navigation" class="col-xs-12">
                                 <ol class="breadcrumb">
                                     <!-- BEGIN breadCrumbLinkBlock -->
@@ -263,7 +263,7 @@
 
                 <!-- BEGIN logoBlock -->
                     <div class="logo">
-                        <a href='{%URL_PATH%}'>
+                        <a href='{%LOGO_URL_PATH%}'>
                         <img class="img-responsive hidden-xs hidden-sm" src="{%logo_img%}" alt='{%GO_TO_HOME%}'>
                         </a>
                     </div>

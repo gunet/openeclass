@@ -1,6 +1,6 @@
-                            @if (!empty($breadcrumbs))
+                            @if (!empty($breadcrumbs) && !$is_lti_enrol_user)
                                 <!-- BEGIN breadCrumbs -->
-                                <div class="row">                            
+                                <div class="row">
                                     <nav role="navigation" class="col-xs-12"> 
                                         <ol class="breadcrumb">
                                             @foreach ($breadcrumbs as $key => $item)

@@ -2118,6 +2118,133 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE user
                 ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
         }
+
+        // lti publish provider
+        if (!DBHelper::tableExists('course_lti_publish')) {
+            Database::get()->query("CREATE TABLE `course_lti_publish` (
+              `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+              `course_id` int(11) NOT NULL,
+              `title` VARCHAR(255) NOT NULL,
+              `description` TEXT,
+              `lti_provider_key` VARCHAR(255) NOT NULL,
+              `lti_provider_secret` VARCHAR(255) NOT NULL,
+              `enabled` TINYINT(4) NOT NULL DEFAULT 1,
+              FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('course_lti_publish_user_enrolments')) {
+            Database::get()->query("CREATE TABLE `course_lti_publish_user_enrolments` (
+              `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+              `publish_id` int(11) NOT NULL,
+              `user_id` int(11) NOT NULL,
+              `created` int(11) NOT NULL,
+              `updated` int(11) NOT NULL,
+              FOREIGN KEY (`publish_id`) REFERENCES `course_lti_publish` (`id`),
+              FOREIGN KEY (`user_id`) REFERENCES  `user` (`id`)) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('course_lti_enrol_users')) {
+            Database::get()->query("CREATE TABLE `course_lti_enrol_users` (
+              `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+              `publish_id` int(11) NOT NULL,
+              `user_id` int(11) NOT NULL,
+              `service_url` TEXT,
+              `source_id` TEXT,
+              `consumer_key` TEXT,
+              `consumer_secret` TEXT,
+              `memberships_url` TEXT,
+              `memberships_id` TEXT,
+              `last_grade` FLOAT,
+              `last_access` int(11),
+              `time_created` int(11),
+              FOREIGN KEY (`publish_id`) REFERENCES `course_lti_publish` (`id`),
+              FOREIGN KEY (`user_id`) REFERENCES  `user` (`id`)) $tbl_options");
+        }
+
+        // lti provider tables
+        if (!DBHelper::tableExists('lti_publish_lti2_consumer')) {
+            Database::get()->query("CREATE TABLE `lti_publish_lti2_consumer` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `name` VARCHAR(50) NOT NULL,
+                `consumerkey256` VARCHAR(255) NOT NULL UNIQUE,
+                `consumerkey` TEXT,
+                `secret` VARCHAR(1024) NOT NULL,
+                `ltiversion` VARCHAR(10),
+                `consumername` VARCHAR(255),
+                `consumerversion` VARCHAR(255),
+                `consumerguid` VARCHAR(1024),
+                `profile` TEXT,
+                `toolproxy` TEXT,
+                `settings` TEXT,
+                `protected` smallint(6) NOT NULL,
+                `enabled` smallint(6) NOT NULL,
+                `enablefrom` int(11),
+                `enableuntil` int(11),
+                `lastaccess` int(11),
+                `created` int(11) NOT NULL,
+                `updated` int(11) NOT NULL) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('lti_publish_lti2_context')) {
+            Database::get()->query("CREATE TABLE `lti_publish_lti2_context` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `consumerid` int(11) NOT NULL,
+                `lticontextkey` VARCHAR(255) NOT NULL,
+                `type` VARCHAR(100),
+                `settings` TEXT,
+                `created` int(11) NOT NULL,
+                `updated` int(11) NOT NULL) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('lti_publish_lti2_nonce')) {
+            Database::get()->query("CREATE TABLE `lti_publish_lti2_nonce` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `consumerid` int(11) NOT NULL,
+                `value` VARCHAR(64) NOT NULL,
+                `expires` int(11) NOT NULL) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('lti_publish_lti2_resource_link')) {
+            Database::get()->query("CREATE TABLE `lti_publish_lti2_resource_link` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `contextid` int(11),
+                `consumerid` int(11),
+                `ltiresourcelinkkey` VARCHAR(255) NOT NULL,
+                `settings` TEXT,
+                `primaryresourcelinkid` int(11),
+                `shareapproved` smallint(6),
+                `created` int(11) NOT NULL,
+                `updated` int(11) NOT NULL) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('lti_publish_lti2_share_key')) {
+            Database::get()->query("CREATE TABLE `lti_publish_lti2_share_key` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `sharekey` VARCHAR(32) NOT NULL UNIQUE,
+                `resourcelinkid` int(11) NOT NULL UNIQUE,
+                `autoapprove` smallint(6) NOT NULL,
+                `expires` int(11) NOT NULL) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('lti_publish_lti2_tool_proxy')) {
+            Database::get()->query("CREATE TABLE `lti_publish_lti2_tool_proxy` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `toolproxykey` VARCHAR(32) NOT NULL UNIQUE,
+                `consumerid` int(11) NOT NULL,
+                `toolproxy` TEXT NOT NULL,
+                `created` int(11) NOT NULL,
+                `updated` int(11) NOT NULL) $tbl_options");
+        }
+
+        if (!DBHelper::tableExists('lti_publish_lti2_user_result')) {
+            Database::get()->query("CREATE TABLE `lti_publish_lti2_user_result` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `resourcelinkid` int(11) NOT NULL,
+                `ltiuserkey` VARCHAR(255) NOT NULL,
+                `ltiresultsourcedid` VARCHAR(1024) NOT NULL,
+                `created` int(11) NOT NULL,
+                `updated` int(11) NOT NULL) $tbl_options");
+        }
     }
 
     // Ensure that all stored procedures about hierarchy are up and running!

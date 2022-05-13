@@ -308,6 +308,13 @@ function view($view_file, $view_data = array()) {
         $uname = null;
     }
 
+    // customization for LTI enrolled users
+    $logo_url_path = $urlAppend;
+    $is_lti_enrol_user = substr($_SESSION['uname'], 0, strlen("enrol_lti_") ) === "enrol_lti_";
+    if ($is_lti_enrol_user) {
+        $uname = q($_SESSION['givenname'] . " " . $_SESSION['surname']);
+        $logo_url_path = "#";
+    }
 
     $views = $webDir.'/resources/views';
     $cache = $webDir . '/storage/views';
@@ -322,7 +329,8 @@ function view($view_file, $view_data = array()) {
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
-            'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user');
+            'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
+            'logo_url_path');
     $data = array_merge($global_data, $view_data);
     echo $blade->view()->make($view_file, $data)->render();
 }

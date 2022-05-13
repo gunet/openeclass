@@ -704,6 +704,8 @@ function create_indexes() {
         Database::get()->query('CREATE INDEX course_id on conference(course_id)');
     DBHelper::indexExists('lti_apps', 'course_id_enabled') or
         Database::get()->query('CREATE INDEX course_id_enabled on lti_apps(course_id,enabled)');
+    DBHelper::indexExists('course_lti_publish', 'course_id_enabled') or
+    Database::get()->query('CREATE INDEX course_id_enabled on course_lti_publish(course_id, enabled)');
     DBHelper::indexExists('user', 'am') or
         Database::get()->query('CREATE INDEX am on `user`(am)');
     DBHelper::indexExists('group', 'forum_id') or
@@ -732,6 +734,28 @@ function create_indexes() {
         Database::get()->query('CREATE INDEX index_surname on user(surname)');
     DBHelper::indexExists('wiki_properties', 'group_id') or
         Database::get()->query('CREATE INDEX group_id on wiki_properties(group_id)');
+    DBHelper::indexExists('lti_publish_lti2_context', 'consumerid') or
+        Database::get()->query('CREATE INDEX consumerid on lti_publish_lti2_context(consumerid)');
+    DBHelper::indexExists('lti_publish_lti2_nonce', 'consumerid') or
+        Database::get()->query('CREATE INDEX consumerid on lti_publish_lti2_nonce(consumerid)');
+    DBHelper::indexExists('lti_publish_lti2_resource_link', 'consumerid') or
+        Database::get()->query('CREATE INDEX consumerid on lti_publish_lti2_resource_link(consumerid)');
+    DBHelper::indexExists('lti_publish_lti2_resource_link', 'contextid') or
+        Database::get()->query('CREATE INDEX contextid on lti_publish_lti2_resource_link(contextid)');
+    DBHelper::indexExists('lti_publish_lti2_resource_link', 'primaryresourcelinkid') or
+        Database::get()->query('CREATE INDEX primaryresourcelinkid on lti_publish_lti2_resource_link(primaryresourcelinkid)');
+    DBHelper::indexExists('lti_publish_lti2_tool_proxy', 'consumerid') or
+        Database::get()->query('CREATE INDEX consumerid on lti_publish_lti2_tool_proxy(consumerid)');
+    DBHelper::indexExists('lti_publish_lti2_user_result', 'resourcelinkid') or
+        Database::get()->query('CREATE INDEX resourcelinkid on lti_publish_lti2_user_result(resourcelinkid)');
+    DBHelper::indexExists('course_lti_publish_user_enrolments', 'publish_id') or
+        Database::get()->query('CREATE INDEX publish_id on course_lti_publish_user_enrolments(publish_id)');
+    DBHelper::indexExists('course_lti_publish_user_enrolments', 'user_id') or
+        Database::get()->query('CREATE INDEX user_id on course_lti_publish_user_enrolments(user_id)');
+    DBHelper::indexExists('course_lti_enrol_users', 'publish_id') or
+        Database::get()->query('CREATE INDEX publish_id on course_lti_enrol_users(publish_id)');
+    DBHelper::indexExists('course_lti_enrol_users', 'user_id') or
+        Database::get()->query('CREATE INDEX user_id on course_lti_enrol_users(user_id)');
 }
 
 /**
