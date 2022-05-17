@@ -1061,7 +1061,7 @@ function edit_assignment($id) {
         } else {
             validateUploadedFile($_FILES['userfile']['name'], 2);
             $student_name = trim(uid_to_name($uid));
-            $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
+            $local_name = !empty($student_name)? $student_name : uid_to_name($uid, 'username');
             $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
             if (!empty($am)) {
                 $local_name .= $am;
@@ -1085,10 +1085,10 @@ function edit_assignment($id) {
         $tii_internetcheck = isset($_POST['tii_internetcheck']) ? 1 : 0;
         $tii_institutioncheck = isset($_POST['tii_institutioncheck']) ? 1 : 0;
         $tii_journalcheck = isset($_POST['tii_journalcheck']) ? 1 : 0;
-        $tii_s_view_reports = isset($_POST['tii_s_view_reports']) ? 1 : 0;;
-        $tii_studentpapercheck = isset($_POST['tii_studentpapercheck']) ? 1 : 0;;
-        $tii_use_biblio_exclusion = isset($_POST['tii_use_biblio_exclusion']) ? 1 : 0;;
-        $tii_use_quoted_exclusion = isset($_POST['tii_use_quoted_exclusion']) ? 1 : 0;;
+        $tii_s_view_reports = isset($_POST['tii_s_view_reports']) ? 1 : 0;
+        $tii_studentpapercheck = isset($_POST['tii_studentpapercheck']) ? 1 : 0;
+        $tii_use_biblio_exclusion = isset($_POST['tii_use_biblio_exclusion']) ? 1 : 0;
+        $tii_use_quoted_exclusion = isset($_POST['tii_use_quoted_exclusion']) ? 1 : 0;
         $tii_report_gen_speed = 0;
         if (isset($_POST['tii_report_gen_speed']) && intval($_POST['tii_report_gen_speed']) == 1) {
             $tii_report_gen_speed = 1;

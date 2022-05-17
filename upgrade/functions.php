@@ -2910,8 +2910,9 @@ function convert_db_encoding_to_utf8mb4(): void
     Database::get()->query("ALTER TABLE `assignment` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `assignment` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `assignment` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE group_submissions group_submissions char(1) CHARACTER SET utf8mb4 COLLATE ascii_general_ci");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE assign_to_specific assign_to_specific char(1) CHARACTER SET utf8mb4 COLLATE ascii_general_ci");
+    Database::get()->query("ALTER TABLE `assignment` CHANGE active active TINYINT NOT NULL DEFAULT 1");
+    Database::get()->query("ALTER TABLE `assignment` CHANGE group_submissions group_submissions TINYINT NOT NULL DEFAULT 0");
+    Database::get()->query("ALTER TABLE `assignment` CHANGE assign_to_specific assign_to_specific TINYINT NOT NULL DEFAULT 0");
     Database::get()->query("ALTER TABLE `assignment` CHANGE file_path file_path varchar(255) CHARACTER SET ascii COLLATE ascii_bin");
     Database::get()->query("ALTER TABLE `assignment` CHANGE file_name file_name varchar(255) CHARACTER SET utf8mb4");
     Database::get()->query("ALTER TABLE `assignment` CHANGE auto_judge_scenarios auto_judge_scenarios text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
