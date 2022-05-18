@@ -78,6 +78,11 @@ global@^4.3.1, global@^4.4.0, global@~4.4.0:
     min-document "^2.19.0"
     process "^0.11.10"
 
+h5p-standalone@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/h5p-standalone/-/h5p-standalone-3.5.1.tgz#ddd52df61313ed99997916c961a594c50a03f197"
+  integrity sha512-vw+3l2hmcG/bkNG0iYyZk3dtTLfMOAyQk95XYuCn2ZuKnUo1A4Oc9uvqMzBS/Rrjs7uQrKCQaQYDF6MfjI/jLg==
+
 individual@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/individual/-/individual-2.0.0.tgz#833b097dad23294e76117a98fb38e0d9ad61bb97"

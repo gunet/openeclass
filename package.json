@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "h5p-standalone": "^3.5.1",
     "mathjax": "3",
     "video.js": "^7.18.1"
   }
