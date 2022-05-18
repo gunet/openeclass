@@ -91,6 +91,9 @@ function select_proper_filters($requestDocsFilter) {
  * @brief add / edit video category
  */
 function submit_video_category($course_id, $course_code) {
+
+    register_posted_variables(array('categoryname' => true,
+        'description' => true), 'all', 'trim');
     $pdesc = purify($_POST['description']);
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('categoryname'))->message($GLOBALS['langTheFieldIsRequired'])->label('');

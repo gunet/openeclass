@@ -4,11 +4,10 @@
     {!! isset($action_bar) ?  $action_bar : '' !!}
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-        <fieldset>
             <div class='form-group'>
                 <label for='email_title' class='col-sm-2 control-label'>{{ trans('langTitle') }}</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='email_title' value=''>
+                    <input class='form-control' type='text' name='email_title' value='{{ $email_title }}' size='50' />
                 </div>
             </div>
             <div class='form-group'>
@@ -37,11 +36,12 @@
                 </div>
             </div>
             {!! showSecondFactorChallenge() !!}
-            <div class='col-sm-offset-2 col-sm-10'>	
-              <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSend') }}'>          
-            </div>	
-        </fieldset>
-        {!! generate_csrf_token_form_field() !!}
+            <div class='form-group'>
+                <div class='col-sm-offset-2 col-sm-10'>
+                  <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSend') }}'>
+                </div>
+                    {!! generate_csrf_token_form_field() !!}
+            </div>
         </form>
     </div>
 @endsection
