@@ -102,8 +102,9 @@ if (isset($_POST['submitAnnouncement'])) {
             $message = $langAnnAdd;
         }
         if (isset($_POST['tags'])) {
+            $tagsArray = $_POST['tags'];
             $moduleTag = new ModuleElement($id);
-            $moduleTag->syncTags($_POST['tags']);
+            $moduleTag->syncTags($tagsArray);
         }
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');

@@ -24,7 +24,7 @@
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>
                                 <select class='form-control' name='recipients[]' multiple='multiple' id='select-recipients'>
-                                    <option value='-1' selected>{{ trans('langAllUsers') }}</option>
+                                    <option value='-1' {!! $selected_email !!}><h2>{{ trans('langAllUsers') }}</h2></option>
                                     @foreach ($course_users as $cu)
                                         <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
                                     @endforeach

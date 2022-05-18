@@ -47,6 +47,7 @@ if (isset($_GET['modify'])) {
 
     $langAdd = $pageName = $langModifAnn;
     $data['checked_public'] = $announce->visible ? 'checked' : '';
+    $data['selected_email'] = '';
     if (!is_null($announce->start_display)) {
         // $showFrom is set earlier
         $data['start_checkbox'] = 'checked';
@@ -73,6 +74,7 @@ if (isset($_GET['modify'])) {
 
 } else {
     $pageName = $langAddAnn;
+    $data['selected_email'] = 'selected';
     $data['announce_id'] = '';
     $data['checked_public'] = 'checked';
     $data['start_checkbox'] = Session::has('startdate_active') ? 'checked' : '';
@@ -92,9 +94,11 @@ $data['enddate_error'] = Session::getError('enddate', "<span class='help-block'>
 load_js('select2');
 load_js('bootstrap-datetimepicker');
 
+
+
 $data['action_bar'] = action_bar([
     [ 'title' => $langBack,
-      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+      'url' => "index.php?course=$course_code",
       'icon' => 'fa-reply',
       'level' => 'primary-label' ]
 ]);
