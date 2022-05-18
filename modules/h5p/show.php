@@ -19,7 +19,8 @@ $data['action_bar'] = action_bar([
       'url' => $urlServer . "modules/h5p/reuse.php?course=" . $course_code . "&id=" . $content->id,
       'icon' => 'fa-download',
       'level' => 'primary-label',
-      'button-class' => 'btn-success'
+      'button-class' => 'btn-success',
+      'show' => $content->reuse_enabled
     ],
     [ 'title' => $langBack,
       'url' => $backUrl,

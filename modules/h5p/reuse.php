@@ -31,6 +31,9 @@ $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d
 if (!$content) {
     exit;
 }
+if (!$content->reuse_enabled) {
+    exit;
+}
 
 $real_filename = $content->title . '.h5p';
 $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
