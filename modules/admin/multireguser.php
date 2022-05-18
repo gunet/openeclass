@@ -61,7 +61,7 @@ if (isset($_POST['submit'])) {
     }
 
     foreach ($fields as $field) {
-        if (!in_array($field, $acceptable_fields)) {           
+        if (!in_array($field, $acceptable_fields)) {
             Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
             redirect_to_home_page('modules/admin/multireguser.php');
             exit;
@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                     $info[$field] = array_shift($userl);
                 }
 
-                if (!isset($info['email']) or !valid_email($info['email'])) {
+                if (!isset($info['email']) or !valid_email(trim($info['email']))) {
                     $info['email'] = '';
                 }
 
@@ -140,7 +140,7 @@ if (isset($_POST['submit'])) {
                     'level' => 'primary-label')
                 ), false);
 
-    $data['eclass_method_unique'] = TRUE;        
+    $data['eclass_method_unique'] = TRUE;
     $auth = get_auth_active_methods();
     $data['auth_m'] = array();
     foreach ($auth as $methods) {
@@ -148,7 +148,7 @@ if (isset($_POST['submit'])) {
             $data['eclass_method_unique'] = FALSE;
         }
         $auth_text = get_auth_info($methods);
-        $data['auth_m'][$methods] = $auth_text;            
+        $data['auth_m'][$methods] = $auth_text;
     }
 
     if (isDepartmentAdmin()) {
@@ -159,18 +159,18 @@ if (isset($_POST['submit'])) {
     }
     $head_content .= $js;
     $data['html'] = $html;
-    
+
     $view = 'admin.users.multireguser';
 }
 $data['menuTypeID'] = 3;
 view($view, $data);
 
 function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public) {
-    global $charset, $langAsProf, $langYourReg, $siteName, $langDestination,
+    global $langAsProf, $langYourReg, $siteName,
         $langYouAreReg, $langSettings, $langPass, $langAddress, $langIs,
         $urlServer, $langProblem, $langPassSameAuth, $langManager, $langTel,
         $langEmail, $profsuccess, $usersuccess, $langWithSuccess, $user,
-        $langUserCodename, $uname_form, $auth_ids, $auth_methods_form;
+        $langUserCodename, $auth_ids, $auth_methods_form;
 
     if ($status == 1) {
         $message = $profsuccess;
