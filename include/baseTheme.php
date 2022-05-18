@@ -227,7 +227,16 @@ function view($view_file, $view_data = array()) {
         $(function() {
             $('#help-btn').click(function(e) {
                 e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
+                $.get($(this).attr(\"href\"), function(data) {
+                    bootbox.alert({
+                        message: data,
+                        buttons: {
+                            ok: {
+                                label: '". js_escape($GLOBALS['langClose']). "'
+                            }
+                        }
+                    });
+                });
             });
         });
         </script>
