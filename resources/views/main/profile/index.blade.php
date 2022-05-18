@@ -144,23 +144,16 @@
                     <div class='badge-container'>
                         <div class='clearfix'>
                             @foreach ($cert_completed as $key => $certificate)
-                                <div class='col-xs-12 col-sm-4 col-xl-2'>
+                                <?php
+                                    $template_details = get_certificate_template($certificate->template_id);
+                                    $template_name = key($template_details);
+                                    $template_filename = $template_details[$template_name];
+                                    $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
+                                    $icon_link = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
+                                ?>
+                                <div class='col-sm-5' style='padding-top: 20px;'>";
                                     <a style='display:inline-block; width: 100%;' href='../out.php?i={{ $certificate->identifier }}'>
-                                        <div class='certificate_panel' style='width:210px; height:120px;'>
-                                            <h4 class='certificate_panel_title' style='font-size:15px; margin-top:2px;'>
-                                                {{ $certificate->cert_title }}
-                                            </h4>
-                                            <div style='font-size:10px;'>
-                                                {{ claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) }}
-                                            </div>
-                                            <div class='certificate_panel_issuer' style='font-size:11px;'>
-                                                {{ $certificate->cert_issuer }}
-                                            </div>
-
-                                            <div class='certificate_panel_state'>
-                                                <i class='fa fa-check-circle fa-inverse state_success'></i>
-                                            </div>
-                                        </div>
+                                        <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block' src='{{ $icon_link }}'>
                                     </a>
                                 </div>
                             @endforeach

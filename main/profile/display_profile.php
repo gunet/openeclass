@@ -127,10 +127,9 @@ if ($data['userdata']) {
 
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle');
 
-    $data['cert_completed'] = Database::get()->queryArray("SELECT course_title, cert_title, cert_issuer, cert_id, assigned, identifier "
+    $data['cert_completed'] = Database::get()->queryArray("SELECT identifier, template_id "
                                         . "FROM certified_users "
-                                        . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
-
+                                        . "WHERE user_fullname = ?s OR user_id = ?d", uid_to_name($uid, 'fullname'), $uid);
 
     //get completed badges
     $gameQ = "SELECT a.*, b.title,"
