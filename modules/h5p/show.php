@@ -86,7 +86,17 @@ $head_content .= "
               export: " . ($content->reuse_enabled ? "true" : "false") . ",
               downloadUrl: '" . $urlServer . "modules/h5p/reuse.php?course=" . $course_code . "&id=" . $content->id . "'
             };
-            new H5PStandalone.H5P(el, options);
+
+            new H5PStandalone.H5P(el, options).then(() => {
+                setTimeout(function() {
+                    let ifcont = $('#h5p-container').find('iframe').first().contents()[0];
+                    let jaxscr = ifcont.createElement('script');
+                    jaxscr.type = 'text/javascript';
+                    jaxscr.src = '" . $urlAppend . "node_modules/mathjax/es5/tex-chtml.js';
+                    jaxscr.id = 'MathJax-script';
+                    ifcont.head.appendChild(jaxscr);
+                }, 40);
+            });
         });
     </script>";
 
