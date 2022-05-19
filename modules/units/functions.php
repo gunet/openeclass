@@ -74,8 +74,9 @@ function process_actions() {
         }
     } elseif (isset($_REQUEST['del_act'])) { // delete resource from course unit
         $res_id = intval($_GET['del_act']);
-        
+        $act_id = $_GET['actid'];
         Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
+        Database::get()->query("DELETE FROM unit_resources WHERE activity_id = ?s", $act_id);
         //Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
         //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
         //CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -1608,11 +1609,19 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;edit=$resource_id";
     }
 
-    $content = "<td style='padding: 10px 0; width: 85px;'>
-                    <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
-                        <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
-                    </div>
-                <div class='pull-left'>";
+    $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
+
+    if($q->flipped_flag==2){
+        $content = "<td style='padding: 10px 0; width: 85px;'>
+        
+        <div class='pull-left'>";
+    }else{
+        $content = "<td style='padding: 10px 0; width: 85px;'>
+                        <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                            <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                        </div>
+                    <div class='pull-left'>";
+    }
     $content .= action_button(array(
                 array('title' => $langEditChange,
                       'url' => $edit_link,

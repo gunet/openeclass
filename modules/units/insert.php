@@ -73,6 +73,11 @@ if(isset($_GET['act_name'])){
     $_SESSION['act_name'] =$act_name;
     
 }
+if(isset($_GET['act_id'])){
+    $act_id = $_GET['act_id'];
+    $_SESSION['act_id'] =$act_id;
+    
+}
 
 
 if (isset($_POST['submit_doc'])) {
@@ -210,6 +215,7 @@ function insert_docs($id) {
                     '&openDir=' . $target_dir);
             unset($_SESSION['fc_type']);
             unset($_SESSION['act_name']);
+            unset($_SESSION['act_id']);
             exit;
         }
 
@@ -228,8 +234,8 @@ function insert_docs($id) {
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='doc',
                                                 title = ?s, comments = ?s,
                                                 visible = 1, `order` = ?d,
-                                                `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                                            $id, $title, $comment, $order, $file->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                                `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                            $id, $title, $comment, $order, $file->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='doc',
                                                 title = ?s, comments = ?s,
@@ -246,6 +252,7 @@ function insert_docs($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -262,7 +269,7 @@ function insert_text($id) {
         $comments = purify($comments);
         if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
             $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
-                                comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0,fc_type=?d,activity_title=?s", $id, $comments, $order,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0,fc_type=?d,activity_title=?s,activity_id=?s", $id, $comments, $order,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
         }else{
             $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
                                 comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $comments, $order);
@@ -275,6 +282,7 @@ function insert_text($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -292,8 +300,8 @@ function insert_lp($id) {
                             WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='lp', title = ?s, comments = ?s,
-                                                visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                                        $id, $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                                visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                        $id, $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='lp', title = ?s, comments = ?s,
                 visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -308,6 +316,7 @@ function insert_lp($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -325,8 +334,8 @@ function insert_h5p($id) {
             $h5p = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $h5p_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='h5p', title = ?s, comments = '',
-                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                    $id, $h5p->title, $order, $h5p->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                    $id, $h5p->title, $order, $h5p->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='h5p', title = ?s, comments = '',
                                             visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -341,6 +350,7 @@ function insert_h5p($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -356,9 +366,15 @@ function insert_video($id) {
         foreach ($_POST['videocatlink'] as $videocatlink_id) {
             $order++;
             $videolinkcat = Database::get()->querySingle("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videocatlink_id, $course_id);
-            Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='videolinkcategory', title = ?s,
-                        comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                    $id, $videolinkcat->name, $videolinkcat->description, $videolinkcat->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+            if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
+                Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='videolinkcategory', title = ?s,
+                            comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                        $id, $videolinkcat->name, $videolinkcat->description, $videolinkcat->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
+            }else{
+                Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='videolinkcategory', title = ?s,
+                            comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                        $id, $videolinkcat->name, $videolinkcat->description, $videolinkcat->id);
+            }
         }
     }
     if (isset($_POST['video']) and count($_POST['video']) > 0) {
@@ -370,8 +386,8 @@ function insert_video($id) {
                             WHERE course_id = ?d AND id = ?d", $course_id, $res_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q = Database::get()->query("INSERT INTO unit_resources
-                                        SET unit_id = ?d, type = '$table', title = ?s, comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                                    $id, $row->title, $row->description, $res_id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                        SET unit_id = ?d, type = '$table', title = ?s, comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                    $id, $row->title, $row->description, $res_id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources
                                         SET unit_id = ?d, type = '$table', title = ?s, comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -386,6 +402,7 @@ function insert_video($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -416,7 +433,7 @@ function insert_work($id) {
                                         visible = ?d,
                                         `order` = ?d,
                                         `date` = " . DBHelper::timeAfter() . ",
-                                        res_id = ?d,fc_type=?d,activity_title=?s", $id, $work->title, $work->description, $visibility, $order, $work->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                        res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s", $id, $work->title, $work->description, $visibility, $order, $work->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources SET
                                         unit_id = ?d,
@@ -437,6 +454,7 @@ function insert_work($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -460,8 +478,8 @@ function insert_exercise($id) {
             }
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='exercise', title = ?s,
-                                    comments = ?s, visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                            $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                    comments = ?s, visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                            $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='exercise', title = ?s,
                                     comments = ?s, visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -476,6 +494,7 @@ function insert_exercise($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -499,8 +518,8 @@ function insert_forum($id) {
                                             AND forum_id = ?d", $topic_id, $forum_id);
                 if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                     $q = Database::get()->query("INSERT INTO unit_resources
-                                                SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s comments = ''",
-                                            $id, $topic->title, $order, $topic->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                                SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s, comments = ''",
+                                            $id, $topic->title, $order, $topic->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
                 }else{
                     $q = Database::get()->query("INSERT INTO unit_resources
                                                 SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d, comments = ''",
@@ -513,8 +532,8 @@ function insert_forum($id) {
                                             AND course_id = ?d", $forum_id, $course_id);
                 if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                     $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'forum', title = ?s,
-                                                    comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                                            $id, $forum->name, q($forum->desc), $order, $forum->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                                    comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                            $id, $forum->name, q($forum->desc), $order, $forum->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
                 }else{
                     $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'forum', title = ?s,
                                                     comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -530,6 +549,7 @@ function insert_forum($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -547,8 +567,8 @@ function insert_poll($id) {
             $poll = Database::get()->querySingle("SELECT * FROM poll where course_id = ?d AND pid = ?d", $course_id, $poll_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll', comments = '',
-                                            title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                                        $id, $poll->name, $order, $poll->pid,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                            title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                        $id, $poll->name, $order, $poll->pid,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll', comments = '',
                 title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -563,6 +583,7 @@ function insert_poll($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -581,8 +602,8 @@ function insert_wiki($id) {
                             WHERE course_id = ?d AND id = ?d", $course_id, $wiki_id);
             if (isset($_SESSION['fc_type'])&&isset($_SESSION['act_name'])){
                 $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='wiki', title = ?s, comments = ?s,
-                                                visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                                            $id, $wiki->title, $wiki->description, $order, $wiki->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                                visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                            $id, $wiki->title, $wiki->description, $order, $wiki->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='wiki', title = ?s, comments = ?s,
                                                 visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -597,6 +618,7 @@ function insert_wiki($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -616,8 +638,8 @@ function insert_link($id) {
             $linkcat = Database::get()->querySingle("SELECT * FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $catlink_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='linkcategory', title = ?s,
-                                        comments = ?s, visible = 1, `order` = ?d, `date` = ". DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                                $id, $linkcat->name, $linkcat->description, $order, $linkcat->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                        comments = ?s, visible = 1, `order` = ?d, `date` = ". DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                $id, $linkcat->name, $linkcat->description, $order, $linkcat->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='linkcategory', title = ?s,
                                         comments = ?s, visible = 1, `order` = ?d, `date` = ". DBHelper::timeAfter() . ", res_id = ?d",
@@ -634,8 +656,8 @@ function insert_link($id) {
             $link = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'link', title = ?s,
-                                            comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                                $id, $link->title, $link->description, $order, $link->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                            comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                $id, $link->title, $link->description, $order, $link->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'link', title = ?s,
                                             comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -651,6 +673,7 @@ function insert_link($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -668,8 +691,8 @@ function insert_ebook($id) {
                 $order++;
                 if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                     $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = '$type',
-                                                    title = ?s, comments = '', visible=1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ",res_id = ?d,fc_type=?d,activity_title=?s",
-                                                $id, $_POST[$type . '_title'][$ebook_id], $order, $ebook_id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                                    title = ?s, comments = '', visible=1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ",res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                                                $id, $_POST[$type . '_title'][$ebook_id], $order, $ebook_id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
                 }else{
                     $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = '$type',
                     title = ?s, comments = '', visible=1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ",res_id = ?d",
@@ -685,6 +708,7 @@ function insert_ebook($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -704,8 +728,8 @@ function insert_chat($id) {
                             WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='chat', title = ?s, comments = ?s,
-                                                visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                    $id, $chat->conf_title, $chat->conf_description, $order, $chat->conf_id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                                visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                    $id, $chat->conf_title, $chat->conf_description, $order, $chat->conf_id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='chat', title = ?s, comments = ?s,
                                                 visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -721,6 +745,7 @@ function insert_chat($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 
@@ -739,8 +764,8 @@ function insert_blog($id) {
             $blog = Database::get()->querySingle("SELECT * FROM blog_post WHERE course_id = ?d AND id = ?d", $course_id, $blog_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='blog', title = ?s, comments = ?s,
-                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                    $id, $blog->title, $blog->content, $order, $blog->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                    $id, $blog->title, $blog->content, $order, $blog->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='blog', title = ?s, comments = ?s,
                                             visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -755,6 +780,7 @@ function insert_blog($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 
 }
@@ -774,8 +800,8 @@ function insert_tc($id) {
                             WHERE course_id = ?d AND id = ?d", $course_id, $tc_id);
             if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
                 $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='tc', title = ?s, comments = ?s,
-                                                visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s",
-                    $id, $tc->title, $tc->description, $order, $tc->id,$_SESSION['fc_type'],$_SESSION['act_name']);
+                                                visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d,fc_type=?d,activity_title=?s,activity_id=?s",
+                    $id, $tc->title, $tc->description, $order, $tc->id,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
             }else{
                 $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='tc', title = ?s, comments = ?s,
                 visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -790,6 +816,7 @@ function insert_tc($id) {
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
     exit;
 }
 

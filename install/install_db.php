@@ -1461,6 +1461,7 @@ $db->query("CREATE TABLE `unit_resources` (
     `date` DATETIME NOT NULL,
     `fc_type` INT(11) NOT NULL,
     `activity_title`  VARCHAR(50) NOT NULL,
+    `activity_id` VARCHAR(5) NOT NULL, 
     UNIQUE KEY `unit_resources_order` (`unit_id`,`order`)) $tbl_options");
 
 $db->query("CREATE TABLE `actions_daily` (
