@@ -54,7 +54,12 @@
                 <div class='form-group'>
                     <label for='email_form' class='col-sm-2 control-label'>{{ trans('langEmail') }}:</label>
                     <div class='col-sm-5'>
+                    @if (get_config('email_prevent_autoset_change') and isset($_SESSION['auth_user_info']['email']) and $_SESSION['auth_user_info']['email'])
+                        <p class='form-control-static'>{{ $email_form }} </p>
+                        <input type='hidden' name='email_form' value='{{ $email_form }}'>
+                    @else
                         <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
+                    @endif
                     </div>
                     <div class='col-sm-5'>
                         {!! selection($access_options, 'email_public', $email_public, "class='form-control'") !!}
@@ -63,7 +68,12 @@
                 <div class='form-group'>
                     <label for='am_form' class='col-sm-2 control-label'>{{ trans('langAm') }}:</label>
                     <div class='col-sm-5'>
-                        <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
+                        @if (get_config('am_prevent_autoset_change') and isset($_SESSION['auth_user_info']['studentid']) and $_SESSION['auth_user_info']['studentid'])
+                            <p class='form-control-static'>$am_form</p>
+                            <input type='hidden' name='surname_form' value='{{ $am_form }}'>
+                        @else
+                            <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
+                        @endif
                     </div>
                     <div class='col-sm-5'>
                         {!! selection($access_options, 'am_public', $am_public, "class='form-control'") !!}
