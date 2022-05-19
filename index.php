@@ -82,10 +82,9 @@ if (isset($_GET['logout']) and $uid) {
 
     // include HybridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+
     $config = get_hybridauth_config();
     $hybridauth = new Hybrid_Auth( $config );
-    $hybridauth->logoutAllProviders();
 
     session_destroy();
     $uid = 0;

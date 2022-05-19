@@ -42,9 +42,9 @@
                         @if ($v < 8)
                             <br><a href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                         @else
-                            @if($eclass_stud_reg == 1)
+                            @if($eclass_stud_reg == 1) and isset($provider))
                                 <br><a href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
-                            @elseif (!empty($provider))  <!-- hybridauth registration -->
+                            @elseif (isset($provider))  <!-- hybridauth registration -->
                                 <br><a href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                             @endif
                         @endif
@@ -75,7 +75,7 @@
                                     @else
                                        <br><a href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                                     @endif
-                                @elseif ($alt_auth_prof_reg and !empty($provider))
+                                @elseif ($alt_auth_prof_reg and isset($provider))
                                     <br><a href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
                                 @endif
                              @endif
@@ -84,19 +84,11 @@
                 </tr>
             @endif
             @if ($eclass_prof_reg)
-                @if (empty($provider))
-                    <tr>
-                        <td>
-                            <a href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a>
-                        </td>
-                    </tr>
-                @else
-                    <tr>
-                        <td>
-                            <a href='formuser.php&p=1'>{{ trans('langUserAccountInfo1') }}</a>
-                        </td>
-                    </tr>
-                @endif
+                <tr>
+                    <td>
+                        <a href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a>
+                    </td>
+                </tr>
             @endif
             </table>
          @else
