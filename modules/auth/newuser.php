@@ -24,7 +24,6 @@
  * @brief user registration process
  */
 use Hautelook\Phpass\PasswordHash;
-use Hybrid\Auth;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -104,7 +103,9 @@ if(!empty($_GET['provider_id'])) {
 if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and $_GET['auth'] < 14) {
     $auth = $_GET['auth'];
     $provider_name = $auth_ids[$auth];
-    if($provider_name == "linkedin") $provider_name = "linkedIn";
+    if ($provider_name == "linkedin") {
+        $provider_name = "linkedIn";
+    }
     $result = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_id = ?d", $auth);
     if (!$result->auth_default) {
         $provider_name = $provider_id = '';
@@ -156,8 +157,8 @@ if (!empty($provider_name)) {
                 case 3 : $warning = "<p class='alert alert-info'>$langProviderError4</p>"; break;
                 case 4 : $warning = "<p class='alert alert-info'>$langProviderError5</p>"; break;
                 case 5 : $warning = "<p class='alert alert-info'>$langProviderError6</p>"; break;
-                case 6 : $warning = "<p class='alert alert-info'>$langProviderError7</p>"; $adapter->logout(); break;
-                case 7 : $warning = "<p class='alert alert-info'>$langProviderError8</p>"; $adapter->logout(); break;
+                case 6 : $warning = "<p class='alert alert-info'>$langProviderError7</p>"; $adapter->disconnect(); break;
+                case 7 : $warning = "<p class='alert alert-info'>$langProviderError8</p>"; $adapter->disconnect(); break;
             }
         }
     }
@@ -196,8 +197,9 @@ if (!isset($_POST['submit'])) {
         $data['user_data_phone'] = $_GET['phone'];
     }
     if ($user_data) {
-        $data['user_data_firstname'] = $user_data->firstName;
-        $data['user_data_lastname'] = $user_data->lastName;
+        $user_data_first_name = explode(' ', $user_data->firstName);
+        $data['user_data_firstname'] = q($user_data_first_name[0]);
+        $data['user_data_lastname'] = q($user_data_first_name[1]);
         $data['user_data_displayName'] =  str_replace(' ', '', $user_data->displayName);
         $data['user_data_email'] = $user_data->email;
         $data['user_data_phone'] = $user_data->phone;
@@ -217,14 +219,24 @@ if (!isset($_POST['submit'])) {
         $am_arr_value = false;
     }
 
-    $var_arr = array('uname' => true,
-                    'surname_form' => true,
-                    'givenname_form' => true,
-                    'password' => true,
-                    'password1' => true,
-                    'email' => $email_arr_value,
-                    'phone' => false,
-                    'am' => $am_arr_value);
+    if (empty($provider) && empty($_POST['provider_id'])) {
+        $var_arr = array('uname' => true,
+            'surname_form' => true,
+            'givenname_form' => true,
+            'password' => true,
+            'password1' => true,
+            'email' => $email_arr_value,
+            'phone' => false,
+            'am' => $am_arr_value);
+    } else {
+        $var_arr = array(
+            'uname' => true,
+            'surname_form' => true,
+            'givenname_form' => true,
+            'email' => $email_arr_value,
+            'phone' => false,
+            'am' => $am_arr_value);
+    }
 
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
@@ -275,8 +287,11 @@ if (!isset($_POST['submit'])) {
     } else {
         $email = mb_strtolower(trim($email));
     }
-    if ($password != $_POST['password1']) { // check if the two passwords match
-        $registration_errors[] = $langPassTwice;
+
+    if (empty($provider) && empty($_POST['provider_id'])) {
+        if ($password != $_POST['password1']) { // check if the two passwords match
+            $registration_errors[] = $langPassTwice;
+        }
     }
     //check for validation errors in custom profile fields
     $cpf_check = cpf_validate_format();
@@ -314,6 +329,7 @@ if (!isset($_POST['submit'])) {
 
                 // grab the user profile and check if the provider_uid
                 $user_data = $adapter->getUserProfile();
+                $provider_id = $user_data->identifier;
                 if ($user_data->identifier) {
                     $result = Database::get()->querySingle("SELECT uid FROM user_ext_uid
                         WHERE uid = ?s AND auth_id = ?d", $user_data->identifier, $auth);
@@ -324,7 +340,7 @@ if (!isset($_POST['submit'])) {
                 // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
                 // let hybridauth forget all about the user so we can try to authenticate again.
 
-                // Display the recived error,
+                // Display the received error,
                 // to know more please refer to Exceptions handling section on the userguide
                 switch($e->getCode()) {
                     case 0 : $warning = "<p class='alert1'>$langProviderError1</p>"; break;
@@ -351,9 +367,12 @@ if (!isset($_POST['submit'])) {
             $verified_mail = 2;
             $vmail = FALSE;
         }
-
-        $hasher = new PasswordHash(8, false);
-        $password_encrypted = $hasher->HashPassword($password);
+        if (empty($provider) && empty($_POST['provider_id'])) {
+            $hasher = new PasswordHash(8, false);
+            $password_encrypted = $hasher->HashPassword($password);
+        } else {
+            $password_encrypted = $provider;
+        }
 
         // check if hybridauth provider and provider user id is used (the
         // validity of both is checked on a previous step in this script)
@@ -442,7 +461,7 @@ if (!isset($_POST['submit'])) {
             $givenname = $myrow->givenname;
 
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                             VALUES (?d, ?s, NOW(), 'LOGIN')", $uid, Log::get_client_ip());
+                             VALUES (?d, ?s, " . DBHelper::timeAfter() .", 'LOGIN')", $uid, Log::get_client_ip());
             $_SESSION['uid'] = $uid;
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname_form;

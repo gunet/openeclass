@@ -149,24 +149,8 @@ if ($u) {
         ));
 
 
-
-        if (in_array($info->password, $auth_ids)) {
-            switch ($info->password) {
-                case "pop3": $auth = 2;
-                    break;
-                case "imap": $auth = 3;
-                    break;
-                case "ldap": $auth = 4;
-                    break;
-                case "db": $auth = 5;
-                    break;
-                case "shibboleth": $auth = 6;
-                    break;
-                case "cas": $auth = 7;
-                    break;
-                default: $auth = 1;
-                    break;
-            }
+        if (in_array($info->password, $auth_ids)) { // means that it is external auth method, so the user cannot change this password
+            $auth = array_search($info->password, $auth_ids);
             $data['auth_info'] = get_auth_info($auth);
         }
 

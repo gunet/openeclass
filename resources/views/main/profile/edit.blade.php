@@ -43,12 +43,11 @@
                 <div class='form-group'>
                     <label for='username_form' class='col-sm-2 control-label'>{{ trans('langUsername') }}:</label>
                     <div class='col-sm-10'>
-                    @if ($allow_username_change)
-                        <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
-                    @else
-                        [{{ $auth_text }}]
-                        <p class='form-control-static'>{{ $username_form }}</p>
-                    @endif
+                        @if ($allow_username_change)
+                            <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
+                        @else
+                            <p class='form-control-static'><strong>{{ $username_form }}</strong>[{{ $auth_text }}]</p>
+                        @endif
                     </div>
                 </div>
                 <div class='form-group'>

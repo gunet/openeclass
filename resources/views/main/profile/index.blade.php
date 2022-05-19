@@ -90,12 +90,12 @@
                                 @endif
 
                                 @if($id == $uid && !empty($extAuthList))
-                                    <div>
-                                        @foreach ($extAuthList as $item)
-                                            <span class='tag'>{{ trans('langProviderConnectWith') }} : </span>
-                                            <span class='tag-value'><img src='{{ $themeimg }}/{{ $item->auth_name }}.png' alt=''> {{ $authFullName[$item->auth_id] }}</span><br>
-                                        @endforeach
-                                    </div>
+                                    @foreach ($extAuthList as $item)
+                                        <div>
+                                            <span style='font-weight: bold; color: #888;'>{{ trans('langProviderConnectWith') }} &nbsp;:&nbsp;</span>
+                                            <span class='tag-value'><img src='{{ $themeimg }}/{{ $item->auth_name }}.png' alt=''> {{ q($authFullName[$item->auth_id]) }}</span>
+                                        </div>
+                                    @endforeach
                                 @endif
                                 <div style="line-height:26px;">
                                     <span style="font-weight: bold; color: #888;">

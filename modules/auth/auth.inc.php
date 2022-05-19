@@ -33,7 +33,6 @@
   ==============================================================================
  */
 use Hautelook\Phpass\PasswordHash;
-use Hybrid\Auth;
 
 require_once 'include/log.class.php';
 require_once 'include/lib/user.class.php';
@@ -753,11 +752,13 @@ function process_login() {
 * ************************************************************** */
 
 function hybridauth_login() {
-    global $surname, $givenname, $email, $status, $is_admin, $language,
-        $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-        $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
-        $inactive_uid, $langTooManyFails, $warning, $langGeneralError,
-        $session;
+    global $surname, $givenname, $email, $status, $language,
+           $langInvalidId, $langAccountInactive1, $langAccountInactive2,
+           $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
+           $inactive_uid, $langTooManyFails, $warning, $langGeneralError,
+           $langProviderError1, $langProviderError2, $langProviderError3,
+           $langProviderError4, $langProviderError5, $langProviderError6,
+           $langProviderError7, $langProviderError8, $session;
 
     require_once 'modules/auth/methods/hybridauth/config.php';
 
@@ -778,36 +779,51 @@ function hybridauth_login() {
     // if user select a provider to login with then include hybridauth config
     // and main class, try to authenticate, finally redirect to profile
     if (isset($_GET['provider'])) {
-        try {
-            $hybridauth = new Hybrid_Auth($config);
-
-            // set selected provider name
+        if($_GET['provider'] == 'live'){
+            $provider = 'WindowsLive';
+        } else {
             $provider = @trim(strip_tags($_GET['provider']));
-
-            // try to authenticate the selected $provider
-            $adapter = $hybridauth->authenticate($provider);
-
-            // grab the user profile
-            $user_data = $adapter->getUserProfile();
-
-            // user profile debug print
-            // echo '<pre>'; print_r($user_data); echo '</pre>';
-
+        }
+        try {
+            if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'login'){
+                unset($_SESSION['hybridauth_callback']);
+                if(isset($_SESSION['hybridauth_provider'])) unset($_SESSION['hybridauth_provider']);
+            } else {
+                $_SESSION['hybridauth_callback'] = 'login';
+                $_SESSION['hybridauth_provider'] = $provider;
+            }
+            /**
+             * Feed configuration array to Hybridauth.
+             */
+            $hybridauth = new Hybridauth($config);
+            $hybridauth->authenticate($provider);
+            $adapters = $hybridauth->getConnectedAdapters();
+            foreach ($adapters as $name => $adapter) :
+                $user_data = $adapter->getUserProfile();
+            endforeach;
+            /**
+             * This will erase the current user authentication data from session, and any further
+             * attempt to communicate with provider.
+             */
+            if (isset($_GET['logout'])) {
+                $adapter = $hybridauth->getAdapter($_GET['logout']);
+                $adapter->disconnect();
+            }
         } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
 
-            // Display the recived error,
-            // to know more please refer to Exceptions handling section on the userguide
+            // Display the received error,
+            // to know more please refer to Exceptions handling section on the user guide
             switch($e->getCode()) {
-                case 0: Session::Messages($GLOBALS['langProviderError1']); break;
-                case 1: Session::Messages($GLOBALS['langProviderError2']); break;
-                case 2: Session::Messages($GLOBALS['langProviderError3']); break;
-                case 3: Session::Messages($GLOBALS['langProviderError4']); break;
-                case 4: Session::Messages($GLOBALS['langProviderError5']); break;
-                case 5: Session::Messages($GLOBALS['langProviderError6']); break;
-                case 6: Session::Messages($GLOBALS['langProviderError7']); $adapter->logout(); break;
-                case 7: Session::Messages($GLOBALS['langProviderError8']); $adapter->logout(); break;
+                case 0: Session::Messages($langProviderError1); break;
+                case 1: Session::Messages($langProviderError2); break;
+                case 2: Session::Messages($langProviderError3); break;
+                case 3: Session::Messages($langProviderError4); break;
+                case 4: Session::Messages($langProviderError5); break;
+                case 5: Session::Messages($langProviderError6); break;
+                case 6: Session::Messages($langProviderError7); $adapter->disconnect(); break;
+                case 7: Session::Messages($langProviderError8); $adapter->disconnect();; break;
             }
 
             // debug messages for hybridauth errors
@@ -980,7 +996,6 @@ function hybridauth_login() {
     } else {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
                 . "VALUES (?d, ?s, NOW(), 'LOGIN')", $_SESSION['uid'], $ip);
-        //triggerGame($_SESSION['uid'], $is_admin);
         if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
             $_SESSION['mail_verification_required'] = 1;

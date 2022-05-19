@@ -19,7 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-use Hybrid\Auth;
 $require_login = true;
 $require_valid_uid = true;
 $require_help = true;
@@ -190,7 +189,7 @@ if (isset($_POST['submit'])) {
         Session::Messages($cpf_error_str);
         redirect_to_home_page("main/profile/profile.php");
     }
-    
+
     $need_email_verification = false;
     // TODO: Allow admin to configure allowed username format
     if (!empty($email_form) && ($email_form != $_SESSION['email']) && get_config('email_verification_required')) {
@@ -244,6 +243,9 @@ if (isset($_POST['submit'])) {
     }
 }
 
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+
 // HybridAuth actions
 if (isset($_GET['provider'])) {
     // user requests hybridauth provider uid deletion
@@ -259,7 +261,7 @@ if (isset($_GET['provider'])) {
         } elseif ($_GET['action'] == 'connect') {
             // HybridAuth checks, authentication and user profile info and finally store provider user id in the db
             require_once 'modules/auth/methods/hybridauth/config.php';
-            require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+            require_once 'vendor/hybridauth/hybridauth/src/Hybridauth.php';
 
             $config = get_hybridauth_config();
             $user_data = '';
@@ -271,12 +273,43 @@ if (isset($_GET['provider'])) {
             if (count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
                 try {
                     if (in_array($provider, $hybridAuthMethods)) {
-                        $hybridauth = new Hybrid_Auth($config);
-                        $adapter = $hybridauth->authenticate($provider);
                         $providerAuthId = array_search(strtolower($provider), $auth_ids);
 
-                        // grab the user profile
-                        $user_data = $adapter->getUserProfile();
+                        if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'profile') {
+                            unset($_SESSION['hybridauth_callback']);
+                            if(isset($_SESSION['hybridauth_provider'])) {
+                                unset($_SESSION['hybridauth_provider']);
+                            }
+                        } else {
+                            $_SESSION['hybridauth_callback'] = 'profile';
+                            if($provider == 'linkedin') {
+                                $_SESSION['hybridauth_provider'] = 'LinkedIn';
+                            } else {
+                                $_SESSION['hybridauth_provider'] = ucfirst($provider);
+                            }
+                        }
+                        if ($provider == 'live') {
+                            $provider = 'WindowsLive';
+                        }
+
+                        /**
+                         * Feed configuration array to Hybridauth.
+                         */
+                        $hybridauth = new Hybridauth($config);
+                        $hybridauth->authenticate($provider);
+                        $adapters = $hybridauth->getConnectedAdapters();
+                        foreach ($adapters as $name => $adapter) :
+                            $user_data = $adapter->getUserProfile();
+                        endforeach;
+
+                        /**
+                         * This will erase the current user authentication data from session, and any further
+                         * attempt to communicate with provider.
+                         */
+                        if (isset($_GET['logout'])) {
+                            $adapter = $hybridauth->getAdapter($_GET['logout']);
+                            $adapter->disconnect();
+                        }
 
                         // Fetch user profile id and check if there is another
                         // instance in the db (this would happen if a user tried to
@@ -286,17 +319,17 @@ if (isset($_GET['provider'])) {
                             $r = Database::get()->querySingle('SELECT id FROM user_ext_uid
                                 WHERE auth_id = ?d AND uid = ?s AND user_id <> ?d',
                                 $providerAuthId, $user_data->identifier, $uid);
-                            if ($r) {
-                                // HybridAuth provider uid is already in the db!
-                                // (which means the user tried to authenticate a second
-                                // eClass account with the same facebook etc. account)
-                                Session::Messages($langProviderIdAlreadyExists, 'alert-warning');
-                            } else {
-                                Database::get()->querySingle('INSERT INTO user_ext_uid
+                        if ($r) {
+                            // HybridAuth provider uid is already in the db!
+                            // (which means the user tried to authenticate a second
+                            // eClass account with the same facebook etc. account)
+                            Session::Messages($langProviderIdAlreadyExists, 'alert-warning');
+                        } else {
+                            Database::get()->querySingle('INSERT INTO user_ext_uid
                                     SET user_id = ?d, auth_id = ?d, uid = ?s',
-                                    $uid, $providerAuthId, $user_data->identifier);
-                                Session::Messages($langProfileReg, 'alert-success');
-                            }
+                                $uid, $providerAuthId, $user_data->identifier);
+                            Session::Messages($langProfileReg, 'alert-success');
+                        }
                     } else {
                         Session::Messages($langProviderError, 'alert-danger');
                     }
@@ -328,11 +361,11 @@ if (isset($_GET['provider'])) {
                             break;
                         case 6:
                             Session::Messages($langProviderError7, 'alert-danger');
-                            $adapter->logout();
+                            $adapter->disconnect();
                             break;
                         case 7:
                             Session::Messages($langProviderError8, 'alert-danger');
-                            $adapter->logout();
+                            $adapter->disconnect();
                             break;
                     }
                     $_GET['msg'] = 11; // display generic error for now
@@ -465,7 +498,7 @@ Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d'
     }, $uid);
 
 // HybridAuth settings and links
-// check if there are any available alternative providers for authentication and show the corresponding links on 
+// check if there are any available alternative providers for authentication and show the corresponding links on
 // the homepage, or no mesage if no providers are enabled
 $config = get_hybridauth_config();
 

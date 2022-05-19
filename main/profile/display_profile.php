@@ -36,11 +36,11 @@ $data['user'] = new User();
 $toolName = $langMyProfile;
 
 if (isset($_GET['id']) and isset($_GET['token'])) {
-    $data['id'] = intval($_GET['id']);
+    $data['id'] = $id = intval($_GET['id']);
     if (!token_validate($data['id'], $_GET['token'], 3600)) {
         forbidden($_SERVER['REQUEST_URI']);
     }
-    $pageName = $langUserProfile;
+    $toolName = $langUserProfile;
 } else {
     $data['id'] = $id = $uid;
 }

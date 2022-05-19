@@ -47,16 +47,16 @@ $data['action_bar'] = action_bar(
     //HybridAuth checks, authentication and user profile info.
     $user_data = '';
     if(!empty($_GET['provider'])) {
+        $provider = $_GET['provider'];
         //check if there are any available alternative providers for authentication
         require_once 'modules/auth/methods/hybridauth/config.php';
-        require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
         $config = get_hybridauth_config();
 
         $hybridauth = new Hybrid_Auth( $config );
         $allProviders = $hybridauth->getProviders();
         $tool_content_providers = "";
 
-        if(count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) { 
+        if (count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) {
             $provider = '?provider=' . $_GET['provider'];
         }
 
@@ -78,7 +78,6 @@ $data['action_bar'] = action_bar(
                 if($user_data->email) $provider_user_data .= '&usermail=' . q($user_data->email) . '&email=' . q($user_data->email);
                 if($user_data->phone) $provider_user_data .= '&userphone=' . q($user_data->phone) . '&phone=' . q($user_data->phone);
                 if($user_data->identifier) $provider_user_data .= '&provider_id=' . q($user_data->identifier); //provider user identifier
-                //echo $user_data->photoURL;
                 $data['provider_user_data'] = $provider_user_data;
 
             } catch(Exception $e) {
@@ -88,17 +87,15 @@ $data['action_bar'] = action_bar(
                 // Display the recived error,
                 // to know more please refer to Exceptions handling section on the userguide
                 switch($e->getCode()) {
-                    case 0 : $warning = "<p class='alert1'>Unspecified error.</p>"; break;
-                    case 1 : $warning = "<p class='alert1'>HybridAuth configuration error.</p>"; break;
-                    case 2 : $warning = "<p class='alert1'>Provider not properly configured.</p>"; break;
-                    case 3 : $warning = "<p class='alert1'>Unknown or disabled provider.</p>"; break;
-                    case 4 : $warning = "<p class='alert1'>Missing provider application credentials.</p>"; break;
-                    case 5 : $warning = "<p class='alert1'>Authentication failed. The user has canceled the authentication or the provider refused the connection.</p>"; break;
-                    case 6 : $warning = "<p class='alert1'>User profile request failed. Most likely the user is not connected to the provider and he should to authenticate again.</p>"; $adapter->logout();
-                    break;
-                    case 7 : $warning = "<p class='alert1'>User not connected to the provider.</p>"; $adapter->logout(); break;
+                    case 0: $warning = "<p class='alert1'>$langProviderError1</p>"; break;
+                    case 1: $warning = "<p class='alert1'>$langProviderError2</p>"; break;
+                    case 2: $warning = "<p class='alert1'>$langProviderError3</p>"; break;
+                    case 3: $warning = "<p class='alert1'>$langProviderError4</p>"; break;
+                    case 4: $warning = "<p class='alert1'>$langProviderError5</p>"; break;
+                    case 5: $warning = "<p class='alert1'>$langProviderError6</p>"; break;
+                    case 6: $warning = "<p class='alert1'>$langProviderError7</p>";$adapter->disconnect(); break;
+                    case 7: $warning = "<p class='alert1'>$langProviderError8</p>";$adapter->disconnect(); break;
                 }
-
                 // debug messages for hybridauth errors
                 //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
                 //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
@@ -109,4 +106,4 @@ $data['action_bar'] = action_bar(
     } //endif(!empty($_GET['provider']))
 
 $data['menuTypeID'] = 0;
-view('modules.auth.registration', $data); 
+view('modules.auth.registration', $data);
