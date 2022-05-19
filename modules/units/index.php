@@ -52,7 +52,6 @@ if (isset($_REQUEST['id'])) {
 
 $toolName = $langCourseUnits;
 $pageName = ''; // delete $pageName set in doc_init.php
-
 $lang_editor = $language;
 load_js('tools.js');
 load_js('sortable/Sortable.min.js');
@@ -77,9 +76,14 @@ if ($is_editor) {
     $data['editUrl'] = "info.php?course=$course_code&amp;edit=$id&amp;next=1";
     $data['insertBaseUrl'] = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
     $visibility_check = $check_start_week = '';
+    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
+        . "WHERE course_id = ?d ";
 } else {
     $visibility_check = "AND visible=1";
     $check_start_week = " AND (start_week <= CURRENT_DATE() OR start_week IS NULL)";
+    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
+        . "WHERE course_id = ?d "
+        . "AND visible = 1 ";
 }
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units
@@ -101,6 +105,17 @@ if (isset($id) and $id !== false) {
     }
 }
 
+$all_units = Database::get()->queryArray($query, $course_id);
+
+if (!$is_editor) {
+    $user_units = findUserVisibleUnits($uid, $all_units);
+} else {
+    $user_units = $all_units;
+}
+
+foreach ($user_units as $user_unit) {
+    $userUnitsIds[] = $user_unit->id;
+}
 
 // Links for next/previous unit
 foreach (array('previous', 'next') as $i) {
@@ -129,7 +144,7 @@ foreach (array('previous', 'next') as $i) {
                        ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
 
-    if ($q) {
+    if ($q and in_array($q->id, $userUnitsIds)) {
         $data[$i . 'Title'] = $q->title;
         $data[$i . 'Link'] = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&id=" . $q->id;
     } else {
