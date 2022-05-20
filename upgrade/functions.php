@@ -2867,6 +2867,20 @@ function finalize_upgrade(): void
     Database::get()->query("DELETE FROM course_module WHERE module_id = " . MODULE_ID_DESCRIPTION);
     Database::get()->query("DELETE FROM course_module WHERE module_id = " . MODULE_ID_LTI_CONSUMER);
 
+    // Ensure that all stored procedures about hierarchy are up and running!
+    refreshHierarchyProcedures();
+
+    // create appropriate indices
+    create_indexes();
+
+    // Import new themes
+    importThemes();
+    if (!get_config('theme_options_id')) {
+        set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2022 - Default')->id);
+    }
+
+    set_config('version', ECLASS_VERSION);
+    set_config('upgrade_begin', '');
 }
 
 

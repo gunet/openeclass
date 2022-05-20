@@ -286,19 +286,8 @@ if (version_compare($oldversion, '3.13', '<')) {
     upgrade_to_3_13($tbl_options);
     // change database encoding to utf8mb4
     convert_db_encoding_to_utf8mb4();
-    // Ensure that all stored procedures about hierarchy are up and running!
-    refreshHierarchyProcedures();
-    // create appropriate indices
-    create_indexes();
-    // Import new themes
-    importThemes();
-    if (!get_config('theme_options_id')) {
-        set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2022 - Default')->id);
-    }
     finalize_upgrade();
 
-    set_config('version', ECLASS_VERSION);
-    set_config('upgrade_begin', '');
     if ($command_line) {
         echo "$langUpgForVersion " . ECLASS_VERSION . " -- $langChangeDBEncoding $error_message\n\n";
     } else {
