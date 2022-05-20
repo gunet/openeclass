@@ -1,6 +1,7 @@
 <?php
 
-$require_admin = true;
+define('UPGRADE', true);
+
 require_once '../include/baseTheme.php';
 require_once 'functions.php';
 
@@ -72,12 +73,16 @@ if (version_compare($oldversion, '3.1', '<')) {
     @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");
     $version = "3.1";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -85,12 +90,16 @@ if (version_compare($oldversion, '3.2', '<')) {
     upgrade_to_3_2($tbl_options);
     $version = "3.2";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -98,12 +107,16 @@ if (version_compare($oldversion, '3.3', '<')) {
     upgrade_to_3_3($tbl_options);
     $version = "3.3";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -111,12 +124,16 @@ if (version_compare($oldversion, '3.4', '<')) {
     upgrade_to_3_4($tbl_options);
     $version = "3.4";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -124,12 +141,16 @@ if (version_compare($oldversion, '3.5', '<')) {
     upgrade_to_3_5($tbl_options);
     $version = "3.5";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -137,12 +158,16 @@ if (version_compare($oldversion, '3.6', '<')) {
     upgrade_to_3_6($tbl_options);
     $version = "3.6";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -151,12 +176,16 @@ if (version_compare($oldversion, '3.7', '<')) {
     upgrade_to_3_7($tbl_options);
     $version = "3.7";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -164,12 +193,16 @@ if (version_compare($oldversion, '3.8', '<')) {
     upgrade_to_3_8($tbl_options);
     $version = "3.8";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -177,12 +210,16 @@ if (version_compare($oldversion, '3.9', '<')) {
     upgrade_to_3_9($tbl_options);
     $version = "3.9";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -190,12 +227,16 @@ if (version_compare($oldversion, '3.10', '<')) {
     upgrade_to_3_10($tbl_options);
     $version = "3.10";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -203,12 +244,16 @@ if (version_compare($oldversion, '3.11', '<')) {
     upgrade_to_3_11($tbl_options);
     $version = "3.11";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -224,12 +269,16 @@ if (version_compare($oldversion, '3.12', '<')) {
 
     $version = "3.12";
     set_config('version', $version);
-    $data = array(
-        "status" => 1,
-        "message" => "$langUpgForVersion $version -- $langH5pInstall",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion $version -- $langH5pInstall $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 1,
+            "message" => "$langUpgForVersion $version -- $langH5pInstall",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
     exit();
 }
 
@@ -243,7 +292,6 @@ if (version_compare($oldversion, '3.13', '<')) {
     create_indexes();
     // Import new themes
     importThemes();
-    sleep(120);
     if (!get_config('theme_options_id')) {
         set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2022 - Default')->id);
     }
@@ -251,11 +299,16 @@ if (version_compare($oldversion, '3.13', '<')) {
 
     set_config('version', ECLASS_VERSION);
     set_config('upgrade_begin', '');
-    $data = array(
-        "status" => 0,
-        "message" => "$langUpgForVersion " . ECLASS_VERSION . " -- $langChangeDBEncoding",
-        "error" => $error_message
-    );
-    echo json_encode($data);
+    if ($command_line) {
+        echo "$langUpgForVersion " . ECLASS_VERSION . " -- $langChangeDBEncoding $error_message\n\n";
+    } else {
+        $data = array(
+            "status" => 0,
+            "message" => "$langUpgForVersion " . ECLASS_VERSION . " -- $langChangeDBEncoding",
+            "error" => $error_message
+        );
+        echo json_encode($data);
+    }
+
     exit();
 }

@@ -2913,7 +2913,7 @@ function convert_db_encoding_to_utf8mb4(): void
     Database::get()->query("ALTER TABLE `assignment` CHANGE active active TINYINT NOT NULL DEFAULT 1");
     Database::get()->query("ALTER TABLE `assignment` CHANGE group_submissions group_submissions TINYINT NOT NULL DEFAULT 0");
     Database::get()->query("ALTER TABLE `assignment` CHANGE assign_to_specific assign_to_specific TINYINT NOT NULL DEFAULT 0");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE file_path file_path varchar(255) CHARACTER SET ascii COLLATE ascii_bin");
+    Database::get()->query("ALTER TABLE `assignment` CHANGE file_path file_path varchar(255) CHARACTER SET utf8mb4");
     Database::get()->query("ALTER TABLE `assignment` CHANGE file_name file_name varchar(255) CHARACTER SET utf8mb4");
     Database::get()->query("ALTER TABLE `assignment` CHANGE auto_judge_scenarios auto_judge_scenarios text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `assignment` CHANGE ip_lock ip_lock text CHARACTER SET ascii COLLATE ascii_bin");
@@ -3005,7 +3005,7 @@ function convert_db_encoding_to_utf8mb4(): void
     Database::get()->query("ALTER TABLE `custom_profile_fields_category` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `custom_profile_fields_data` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `custom_profile_fields_data_pending` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `document` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4");
+    Database::get()->query("ALTER TABLE `document` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4");
     Database::get()->query("ALTER TABLE `document` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `document` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `document` CHANGE creator creator text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
