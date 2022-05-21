@@ -716,8 +716,8 @@ if(!isset($_POST['next'])){
 
         $result = Database::get()->query(
             "UPDATE course SET
-                            lectures_model = ?d, `description`=?s",
-            $_SESSION['lectures_model'], $_SESSION['description']
+                            lectures_model = ?d, `description`=?s where `code`=?s",
+            $_SESSION['lectures_model'], $_SESSION['description'], $course_code
         );
 
         $result = Database::get()->query(
