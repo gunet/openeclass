@@ -662,7 +662,8 @@ if(!isset($_POST['final_submit'])){
             }
 
 
-            $description = purify( $_SESSION['description']);
+            $description = purify( $_SESSION['content']);
+            
             $result = Database::get()->query(
                 "INSERT INTO course SET
                                 code = ?s,
@@ -964,7 +965,7 @@ if(!isset($_POST['final_submit'])){
                 'visible' => $_SESSION['formvisible']
             ));
 
-    }else{      //complete actions if it is edit
+    }else{      //complete actions if it is edit course activities
 
         $validationFailed = false;
         // if(!isset($_POST['in_class'])||!isset($_POST['in_home'])||!isset($_POST['after_class'])){

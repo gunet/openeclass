@@ -293,7 +293,7 @@ if(!isset($_POST['next'])){
 }else if(!isset($_POST['final_submit'])){
 
     $_SESSION['lectures_model'] = $_POST['lectModel'];
-
+    $_SESSION['content'] = $_POST['description'];
     $_SESSION['stunum'] = $_POST['stunum'];
     $_SESSION['lectnum'] = $_POST['lectnum'];
     $_SESSION['lecthours'] = $_POST['lecthours'];

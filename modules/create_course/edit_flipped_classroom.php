@@ -412,6 +412,8 @@ if(!isset($_POST['next'])){
     $_SESSION['units'] = $_POST['units'];
     $_SESSION['ids'] = $_POST['ids'];
     $_SESSION['goals'] =$_POST['goals'];
+    $_SESSION['title'] = $_POST['title'];
+    $_SESSION['description'] = purify($_POST['description']);
 
     $_SESSION['units_old']= $_SESSION['units'];
 
@@ -419,7 +421,7 @@ if(!isset($_POST['next'])){
 
 
 
-    if($num_of_new_units > $q7->num_units){
+    if($num_of_new_units > $q7->num_units){ //new unit is added
     
             if (empty($_SESSION['goals']) or array_search("",$_SESSION['goals'])) {
                 Session::Messages($langEmptyGoal);
@@ -439,7 +441,7 @@ if(!isset($_POST['next'])){
             $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
 
 
-            $maxUnitId = Database::get()->querySingle("SELECT MAX(id) as muid FROM course_units WHERE course_id=?d",$q5_a->ID);
+            $maxUnitId = Database::get()->querySingle("SELECT MAX(id) as muid FROM course_units");
 
             
             $act_list_in_home = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_HOME."'");
@@ -714,8 +716,8 @@ if(!isset($_POST['next'])){
 
         $result = Database::get()->query(
             "UPDATE course SET
-                            lectures_model = ?d",
-            $_SESSION['lectures_model']
+                            lectures_model = ?d, `description`=?s",
+            $_SESSION['lectures_model'], $_SESSION['description']
         );
 
         $result = Database::get()->query(
@@ -884,8 +886,8 @@ if(!isset($_POST['next'])){
 
         $result = Database::get()->query(
             "UPDATE course SET
-                            lectures_model = ?d",
-            $_SESSION['lectures_model']
+                            lectures_model = ?d, `description`=?s",
+            $_SESSION['lectures_model'], $_SESSION['description']
         );
 
         $result = Database::get()->query(
@@ -1038,6 +1040,7 @@ if(!isset($_POST['next'])){
         $nrlz_tools_in_class ="";
         $nrlz_tools_in_home ="";
         $nrlz_tools_after_class = "";
+
 
         if(isset($_POST['in_class'])){
             foreach($_POST['in_class'] as $in_class){
