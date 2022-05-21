@@ -1630,7 +1630,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                 array('title' => $showorhide,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
                       'icon' => $icon_vis,
-                      'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
+                      'show' => $status != 'del' and (in_array($res_type, array('text', 'video', 'forum', 'topic')) or $q->flipped_flag==2)),
                 array('title' => $langAddToCourseHome,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
                       'icon' => $icon_vis,
