@@ -3200,7 +3200,7 @@ function convert_db_encoding_to_utf8mb4(): void
     Database::get()->query("ALTER TABLE `unit_resources` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `user` CHANGE surname surname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `user` CHANGE givenname givenname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE username username varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+    Database::get()->query("ALTER TABLE `user` CHANGE username username varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `user` CHANGE email email varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `user` CHANGE parent_email parent_email varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `user` CHANGE phone phone varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
@@ -3210,7 +3210,7 @@ function convert_db_encoding_to_utf8mb4(): void
     Database::get()->query("ALTER TABLE `user_ext_uid` CHANGE uid uid varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `user_request` CHANGE givenname givenname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `user_request` CHANGE surname surname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE username username varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+    Database::get()->query("ALTER TABLE `user_request` CHANGE username username varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
     Database::get()->query("ALTER TABLE `user_request` CHANGE password password varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `user_request` CHANGE email email varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `user_request` CHANGE phone phone varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
