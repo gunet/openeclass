@@ -117,6 +117,7 @@ if(!isset($_POST['final_submit'])){
                 if ($validationFailed) {
                     redirect_to_home_page('modules/create_course/flipped_classroom.php');
                 }
+                
                 $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
 
                 $maxUnitId = Database::get()->querySingle("SELECT MAX(id) as muid FROM course_units");

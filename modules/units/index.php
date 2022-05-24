@@ -57,13 +57,27 @@ load_js('tools.js');
 load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox(true);
 
-// Handle unit resource reordering
-if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    if (isset($_POST['toReorder'])) {
-        reorder_table('unit_resources', 'unit_id', $id, $_POST['toReorder'],
-            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
-        exit;
+$q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
+
+if($q->flipped_flag =="2"){
+     // Handle unit resource reordering
+     if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if (isset($_POST['toReorder'])) {
+            reorder_table('unit_resources', 'unit_id', $id, $_POST['toReorder'],
+                isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+            exit;
+        }
     }
+}else{
+    // Handle unit resource reordering
+    if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if (isset($_POST['toReorder'])) {
+            reorder_table('unit_resources', 'unit_id', $id, $_POST['toReorder'],
+                isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+            exit;
+        }
+    }
+
 }
 
 if (isset($_REQUEST['edit_submit'])) {
@@ -82,7 +96,7 @@ if ($access) {
     }
 }
 
-$q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
+
 
 if($q->flipped_flag ==2){
     if ($is_editor) {

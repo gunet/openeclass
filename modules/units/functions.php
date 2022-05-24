@@ -172,26 +172,78 @@ function show_resources($unit_id) {
             load_js('screenfull/screenfull.min.js');
             $head_content .= "<script>
             $(document).ready(function(){
-                Sortable.create(unitResources,{
-                    handle: '.fa-arrows',
-                    animation: 150,
-                    onEnd: function (evt) {
+                var count_1 = $('#unitResources_1').length;
+                var count_2 = $('#unitResources_2').length;
+                var count_3 = $('#unitResources_3').length;
+                
+                if(count_1>0){
+                    Sortable.create(unitResources_1,{
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onEnd: function (evt) {
 
-                    var itemEl = $(evt.item);
+                        var itemEl = $(evt.item);
 
-                    var idReorder = itemEl.attr('data-id');
-                    var prevIdReorder = itemEl.prev().attr('data-id');
+                        var idReorder = itemEl.attr('data-id');
+                        var prevIdReorder = itemEl.prev().attr('data-id');
 
-                    $.ajax({
-                    type: 'post',
-                    dataType: 'text',
-                    data: {
-                            toReorder: idReorder,
-                            prevReorder: prevIdReorder,
-                            }
-                        });
-                    }
-                });
+                        $.ajax({
+                        type: 'post',
+                        dataType: 'text',
+                        data: {
+                                toReorder: idReorder,
+                                prevReorder: prevIdReorder,
+                                }
+                            });
+                        }
+                    });
+                }
+
+                if(count_2>0){
+                    Sortable.create(unitResources_2,{
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onEnd: function (evt) {
+
+                        var itemEl = $(evt.item);
+
+                        var idReorder = itemEl.attr('data-id');
+                        var prevIdReorder = itemEl.prev().attr('data-id');
+
+                        $.ajax({
+                        type: 'post',
+                        dataType: 'text',
+                        data: {
+                                toReorder: idReorder,
+                                prevReorder: prevIdReorder,
+                                }
+                            });
+                        }
+                    });
+                }
+
+                if(count_3>0){
+                    Sortable.create(unitResources_3,{
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onEnd: function (evt) {
+
+                        var itemEl = $(evt.item);
+
+                        var idReorder = itemEl.attr('data-id');
+                        var prevIdReorder = itemEl.prev().attr('data-id');
+
+                        $.ajax({
+                        type: 'post',
+                        dataType: 'text',
+                        data: {
+                                toReorder: idReorder,
+                                prevReorder: prevIdReorder,
+                                }
+                            });
+                        }
+                    });
+                }
             });
             $(function(){
                 $('.fileModal').click(function (e)
@@ -1591,16 +1643,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     }
 
     $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
-    if ($q->flipped_flag==2) {
-        $content = "<td style='padding: 10px 0; width: 85px;'>        
-        <div class='pull-left'>";
-    } else {
-        $content = "<td style='padding: 10px 0; width: 85px;'>
+    $content = "<td style='padding: 10px 0; width: 85px;'>
                         <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
                             <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
                         </div>
                     <div class='pull-left'>";
-    }
+
     $content .= action_button(array(
                 array('title' => $langEditChange,
                       'url' => $edit_link,
@@ -1701,7 +1749,7 @@ function insert_prerequisite_unit ($unit_id, $prereq_unit_id) {
 
         // check already exists
         $result = Database::get()->queryArray("SELECT up.id
-                                 FROM unit_prerequisite up 
+                                 FROM unit_prerequisite up
                                  WHERE up.course_id = ?d
                                  AND up.unit_id = ?d
                                  AND up.prerequisite_unit = ?d", $course_id, $unit_id, $prereq_unit_id);
@@ -1712,7 +1760,7 @@ function insert_prerequisite_unit ($unit_id, $prereq_unit_id) {
         }
 
         Session::Messages($langNewUnitPrerequisiteSuccess, 'alert-success');
-        Database::get()->query("INSERT INTO unit_prerequisite (course_id, unit_id, prerequisite_unit) 
+        Database::get()->query("INSERT INTO unit_prerequisite (course_id, unit_id, prerequisite_unit)
                                                 VALUES (?d, ?d, ?d)", $course_id, $unit_id, $prereq_unit_id);
     } else {
         Session::Messages($langResultsFailed);
@@ -1758,8 +1806,8 @@ function unit_resource_completion($unit_id, $unit_resource_id) {
         $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $unit_id);
         if ($sql) {
             $badge_id = $sql->id;
-            $q = Database::get()->querySingle("SELECT completed FROM user_badge JOIN badge_criterion 
-                                                        ON user_badge.badge = badge_criterion.badge 
+            $q = Database::get()->querySingle("SELECT completed FROM user_badge JOIN badge_criterion
+                                                        ON user_badge.badge = badge_criterion.badge
                                                         AND user = ?d
                                                         AND user_badge.badge = ?d
                                                         AND resource = ?d", $uid, $badge_id, $res_id);

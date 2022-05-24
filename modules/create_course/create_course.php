@@ -382,8 +382,10 @@ if (!isset($_POST['create_course'])) {
     }
 
     redirect_to_home_page('modules/create_course/flipped_classroom.php');
+
 }else  { // create the course and the course database
     // validation in case it skipped JS validation
+    
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
