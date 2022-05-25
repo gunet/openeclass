@@ -35,8 +35,7 @@ $toolName = $langToolManagement;
 add_units_navigation(TRUE);
 
 load_js('tools.js');
-$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-        $langNoPgTitle . '";</script>';
+$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langNoPgTitle . '";</script>';
 
 $page_url = 'modules/course_tools/?course=' . $course_code;
 
