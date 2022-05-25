@@ -26,6 +26,7 @@ $require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'publish-functions.php';
 require_once 'modules/admin/extconfig/ltipublishapp.php';
+require_once 'modules/lti/classes/LtiEnrolHelper.php';
 
 // check if LTI Provider is enabled (global config) and available for the current course
 $ltipublishapp = ExtAppManager::getApp('ltipublish');
@@ -35,7 +36,7 @@ if (!$ltipublishapp->isEnabledForCurrentCourse()) {
     exit;
 }
 
-$toolName = $langToolManagement;
+$toolName = $langLtiPublishTool;
 $pageName = $langNewLTITool;
 if (isset($_GET['choice'])) {
     $pageName = $langModify;

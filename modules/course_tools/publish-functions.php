@@ -201,12 +201,14 @@ function edit_publish_ltiapp($id) {
  * @param id
  */
 function show_publish_ltiapp($id) {
-    global $tool_content, $urlServer, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret;
+    global $tool_content, $urlServer, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret, $langLTIProviderCartridgeUrl,
+           $langLTIProviderHelp1, $langLTIProviderHelp2;
 
     $row = Database::get()->querySingle("SELECT * FROM course_lti_publish WHERE id = ?d", $id);
     $launchurl = $urlServer . "modules/lti/tool.php?id=".$id;
     $key = $row->lti_provider_key;
     $secret = $row->lti_provider_secret;
+    $cartridgeurl = $urlServer . "modules/lti/cartridge.php?id=" . $id . "&token=" . LtiEnrolHelper::generate_cartridge_token($id);
 
     $tool_content .= "<div class='form-wrapper'><form class='form-horizontal'><fieldset>
             <div class='form-group'>
@@ -227,7 +229,13 @@ function show_publish_ltiapp($id) {
                     <input type='text' class='form-control' value='$secret' readonly>
                 </div>
             </div>
-        </fieldset></form></div>";
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langLTIProviderCartridgeUrl</label>
+                <div class='col-sm-10'>
+                    <input type='text' class='form-control' value='$cartridgeurl' readonly>
+                </div>
+            </div>
+        </fieldset></form></div><p>$langLTIProviderHelp1</p><p>$langLTIProviderHelp2</p>";
 }
 
 /**
@@ -285,8 +293,9 @@ function lti_provider_details() {
                     $tool_content .= $headings;
                     $headingsSent = true;
                 }
+                $showUrl = "editpublish.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=show";
                 $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
-                    <td class='text-left'>$title</td>
+                    <td class='text-left'><a href='$showUrl'>$title</</td>
                     <td>$desc</td>
                     <td class='option-btn-cell'>".
                     action_button(array(
@@ -294,7 +303,7 @@ function lti_provider_details() {
                             'url' => "editpublish.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
                             'icon' => 'fa-edit'),
                         array('title' => $langShow,
-                            'url' => "editpublish.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=show",
+                            'url' => $showUrl,
                             'icon' => 'fa-archive'),
                         array('title' => $row->enabled? $langDeactivate : $langActivate,
                             'url' => "editpublish.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
