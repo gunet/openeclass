@@ -222,6 +222,19 @@ class LtiEnrolHelper {
     /**
      * Returns a unique hash for this site and this enrolment instance.
      *
+     * Used to verify that the link to the cartridge has not just been guessed.
+     *
+     * @param int $toolid The id of the shared tool
+     * @return string MD5 hash of combined site ID and enrolment instance ID.
+     */
+    public static function generate_cartridge_token(int $toolid): string {
+        global $urlServer;
+        return md5($urlServer . '_enrol_lti_cartridge_' . $toolid);
+    }
+
+    /**
+     * Returns a unique hash for this site and this enrolment instance.
+     *
      * Used to verify that the link to the proxy has not just been guessed.
      *
      * @param int $toolid The id of the shared tool
@@ -233,6 +246,17 @@ class LtiEnrolHelper {
     }
 
     /**
+     * Verifies that the given token matches the cartridge token of the given shared tool.
+     *
+     * @param int $toolid The id of the shared tool
+     * @param string $token hash for this site and this enrolment instance
+     * @return boolean True if the token matches, false if it does not
+     */
+    public static function verify_cartridge_token(int $toolid, string $token): bool {
+        return $token == self::generate_cartridge_token($toolid);
+    }
+
+    /**
      * Verifies that the given token matches the proxy token of the given shared tool.
      *
      * @param int $toolid The id of the shared tool
@@ -241,6 +265,133 @@ class LtiEnrolHelper {
      */
     public static function verify_proxy_token(int $toolid, string $token): bool {
         return $token == self::generate_proxy_token($toolid);
+    }
+
+    /**
+     * Returns the parameters of the cartridge as an associative array of partial xpath.
+     *
+     * @param object $tool The shared tool
+     * @return array Recursive associative array with partial xpath to be concatenated into an xpath expression before setting the value.
+     */
+    protected static function get_cartridge_parameters(object $tool): array {
+        global $urlServer, $siteName, $Institution;
+
+        // Work out the tool properties
+        $title = $tool->title;
+        $launchurl = self::get_launch_url($tool->id);
+        $iconurl = self::get_icon($tool);
+        $securelaunchurl = null;
+        $secureiconurl = null;
+        $vendorurl = $urlServer;
+        $description = $tool->description;
+
+        // If we are a https site, we can add the launch url and icon urls as secure equivalents.
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']) {
+            $securelaunchurl = $launchurl;
+            $secureiconurl = $iconurl;
+        }
+
+        return array(
+            "/cc:cartridge_basiclti_link" => array(
+                "/blti:title" => $title,
+                "/blti:description" => $description,
+                "/blti:extensions" => array(
+                    "/lticm:property[@name='icon_url']" => $iconurl,
+                    "/lticm:property[@name='secure_icon_url']" => $secureiconurl
+                ),
+                "/blti:launch_url" => $launchurl,
+                "/blti:secure_launch_url" => $securelaunchurl,
+                "/blti:icon" => $iconurl,
+                "/blti:secure_icon" => $secureiconurl,
+                "/blti:vendor" => array(
+                    "/lticp:code" => $siteName,
+                    "/lticp:name" => $siteName,
+                    "/lticp:description" => $Institution,
+                    "/lticp:url" => $vendorurl
+                )
+            )
+        );
+    }
+
+    /**
+     * Traverses a recursive associative array, setting the properties of the corresponding
+     * xpath element.
+     *
+     * @param DOMXPath $xpath The xpath with the xml to modify
+     * @param array $parameters The array of xpaths to search through
+     * @param string $prefix The current xpath prefix (gets longer the deeper into the array you go)
+     * @return void
+     */
+    protected static function set_xpath(DOMXPath $xpath, array $parameters, string $prefix = '') {
+        foreach ($parameters as $key => $value) {
+            if (is_array($value)) {
+                self::set_xpath($xpath, $value, $prefix . $key);
+            } else {
+                $result = @$xpath->query($prefix . $key);
+                if ($result) {
+                    $node = $result->item(0);
+                    if ($node) {
+                        if (is_null($value)) {
+                            $node->parentNode->removeChild($node);
+                        } else {
+                            $node->nodeValue = self::xpath_quote($value);
+                        }
+                    }
+                } else {
+                    self::draw_popup_error('Please check your XPATH and try again.');
+                }
+            }
+        }
+    }
+
+    /**
+     * Add quotes to HTML characters.
+     *
+     * Returns $var with HTML characters (like "<", ">", etc.) properly quoted.
+     *
+     * @param string $var the string potentially containing HTML characters
+     * @return string
+     */
+    protected static function xpath_quote(string $var): string {
+        if ($var === false) {
+            return '0';
+        }
+        return preg_replace('/&amp;#(\d+|x[0-9a-f]+);/i', '&#$1;',
+            htmlspecialchars($var, ENT_QUOTES | ENT_HTML401 | ENT_SUBSTITUTE));
+    }
+
+    /**
+     * Create an IMS cartridge for the tool.
+     *
+     * @param object $tool The shared tool
+     * @return string representing the generated cartridge
+     */
+    public static function create_cartridge(object $tool): string {
+        $cartridge = new DOMDocument();
+        $cartridge->load(realpath(__DIR__ . '/../xml/imslticc.xml'));
+        $xpath = new DOMXpath($cartridge);
+        $xpath->registerNamespace('cc', 'http://www.imsglobal.org/xsd/imslticc_v1p0');
+        $parameters = self::get_cartridge_parameters($tool);
+        self::set_xpath($xpath, $parameters);
+        return $cartridge->saveXML();
+    }
+
+    /**
+     * Draw the popup screen with an error attached.
+     *
+     * @param string $msg
+     * @param string|null $type
+     * @return void
+     */
+    public static function draw_popup_error(string $msg, string $type = null) {
+        global $tool_content;
+        if (!empty($type)) {
+            $tool_content .= "<div class='alert alert-danger'>$type: $msg</div>";
+        } else {
+            $tool_content .= "<div class='alert alert-danger'>$msg</div>";
+        }
+        draw_popup();
+        exit;
     }
 
 }

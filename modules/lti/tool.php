@@ -44,25 +44,25 @@ use IMSGlobal\LTI\ToolProvider\ToolProvider;
 // require the tool id
 $toolid = (isset($_GET['id'])) ? $_GET['id'] : NULL;
 if ($toolid === NULL) {
-    print_error('Invalid Tool Id');
+    LtiEnrolHelper::draw_popup_error('Invalid Tool Id');
 }
 
 // Get the tool.
 $tool = LtiEnrolHelper::get_lti_tool($toolid);
 if (!$tool) {
-    print_error('Invalid Tool');
+    LtiEnrolHelper::draw_popup_error('Invalid Tool');
 }
 
 // check if LTI Provider is enabled (global config) and available for the proper course
 $ltipublishapp = ExtAppManager::getApp('ltipublish');
 if (!$ltipublishapp->isEnabledForCourse($tool->course_id)) {
-    print_error('Tool is not enabled for course');
+    LtiEnrolHelper::draw_popup_error('Tool is not enabled for course');
 }
 
 // require the consumer key
 $consumerkey = (isset($_POST['oauth_consumer_key'])) ? $_POST['oauth_consumer_key'] : NULL;
 if ($consumerkey === NULL) {
-    print_error('Invalid Consumer');
+    LtiEnrolHelper::draw_popup_error('Invalid Consumer');
 }
 
 // LTI version
@@ -71,7 +71,7 @@ $ltiversion = (isset($_POST['lti_version'])) ? $_POST['lti_version'] : NULL;
 // Only accept valid launch requests
 $messagetype = (isset($_POST['lti_message_type'])) ? $_POST['lti_message_type'] : NULL;
 if ($messagetype === NULL || $messagetype != "basic-lti-launch-request") {
-    print_error('Invalid Request');
+    LtiEnrolHelper::draw_popup_error('Invalid Request');
 }
 
 // Initialise tool provider.
@@ -106,14 +106,3 @@ if ($ltiversion === ToolProvider::LTI_VERSION1) {
 $toolprovider->handleRequest();
 
 draw_popup();
-
-function print_error($msg, $type = null) {
-    global $tool_content;
-    if (!empty($type)) {
-        $tool_content .= "<div class='alert alert-danger'>$type: $msg</div>";
-    } else {
-        $tool_content .= "<div class='alert alert-danger'>$msg</div>";
-    }
-    draw_popup();
-    exit;
-}
