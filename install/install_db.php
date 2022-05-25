@@ -61,8 +61,46 @@ $db->query("DROP TABLE IF EXISTS tc_servers");
 $db->query("DROP TABLE IF EXISTS tc_session");
 
 $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_bin ENGINE=InnoDB';
-
+// ********************************************
 // create tables
+// ********************************************
+
+// flipped classroom course type
+$db->query("CREATE TABLE IF NOT EXISTS `course_activities` (
+    `id` int(11) NOT NULL auto_increment,
+    `activity_id` varchar(4) NOT NULL,
+    `activity_type` tinyint(4) NOT NULL,
+    `visible` int(11) NOT NULL,
+    `unity_id` int(11) NOT NULL,
+    `module_id` int(11) NOT NULL,
+    PRIMARY KEY  (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS`course_units_activities` ( 
+	`id` INT NOT NULL AUTO_INCREMENT , 
+	`course_code` VARCHAR(20) NOT NULL , 
+	`activity_id` VARCHAR(5) NOT NULL , 
+	`unit_id` INT NOT NULL , 
+	`tool_ids` TEXT NOT NULL , 
+    `activity_type` INT NOT NULL,
+    `visible` INT NOT NULL,
+	PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `course_class_info` ( 
+    `id` INT NOT NULL AUTO_INCREMENT , 
+    `student_number` VARCHAR(50) NOT NULL , 
+    `lessons_number` INT NOT NULL , 
+    `lesson_hours` INT NOT NULL , 
+    `home_hours` INT NOT NULL , 
+    `total_hours` INT NOT NULL , 
+    `course_code` VARCHAR(20) NOT NULL,
+    PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `course_learning_objectives` ( 
+    `id` INT NOT NULL AUTO_INCREMENT , 
+    `course_code` VARCHAR(20) NOT NULL , 
+    `title` TEXT NOT NULL , 
+    PRIMARY KEY (`id`)) $tbl_options");
+// end of flipped classroom
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
   `id` int(11) NOT NULL auto_increment,
@@ -157,6 +195,8 @@ $db->query("CREATE TABLE `course` (
   `description` MEDIUMTEXT DEFAULT NULL,
   `home_layout` TINYINT(1) NOT NULL DEFAULT 1,
   `course_image` VARCHAR(400) NULL,
+  `flipped_flag` int(11) NOT NULL DEFAULT 0,
+  `lectures_model` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_user` (
@@ -208,6 +248,22 @@ $db->query("INSERT INTO `course_description_type` (`id`, `title`, `instructors`,
 $db->query("INSERT INTO `course_description_type` (`id`, `title`, `target_group`, `order`, `icon`) VALUES (8, 'a:2:{s:2:\"el\";s:23:\"Ομάδα στόχος\";s:2:\"en\";s:12:\"Target Group\";}', 1, 8, '7.png')");
 $db->query("INSERT INTO `course_description_type` (`id`, `title`, `featured_books`, `order`, `icon`) VALUES (9, 'a:2:{s:2:\"el\";s:47:\"Προτεινόμενα συγγράμματα\";s:2:\"en\";s:9:\"Textbooks\";}', 1, 9, '8.png')");
 $db->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
+
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC1',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC2',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC3',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC5',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC6',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC7',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC8',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC9',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC10',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC11',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC12',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC13',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC14',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC15',2,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC16',2,0,0,0)");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1511,6 +1567,9 @@ $db->query("CREATE TABLE `unit_resources` (
     `visible` TINYINT(4),
     `order` INT(11) NOT NULL DEFAULT 0,
     `date` DATETIME NOT NULL,
+    `fc_type` INT(11) NOT NULL DEFAULT 3,
+    `activity_title`  VARCHAR(50) NOT NULL DEFAULT '',
+    `activity_id` VARCHAR(5) NOT NULL DEFAULT 'FC000', 
     UNIQUE KEY `unit_resources_order` (`unit_id`,`order`)) $tbl_options");
 
 $db->query("CREATE TABLE `actions_daily` (

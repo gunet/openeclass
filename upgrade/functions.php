@@ -2366,6 +2366,79 @@ function upgrade_to_3_13($tbl_options): void
                 `updated` int(11) NOT NULL) $tbl_options");
     }
 
+    // flipped classroom course type
+    if (!DBHelper::tableExists('course_activities')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_activities` (
+                `id` int(11) NOT NULL auto_increment,
+                `activity_id` varchar(4) NOT NULL,
+                `activity_type` tinyint(4) NOT NULL,
+                `visible` int(11) NOT NULL,
+                `unity_id` int(11) NOT NULL,
+                `module_id` int(11) NOT NULL,
+                PRIMARY KEY  (`id`)) $tbl_options");
+
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC1',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC2',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC3',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC5',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC6',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC7',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC8',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC9',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC10',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC11',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC12',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC13',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC14',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC15',2,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC16',2,0,0,0)");
+    }
+    if (!DBHelper::tableExists('course_units_activities')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS`course_units_activities` ( 
+                `id` INT NOT NULL AUTO_INCREMENT , 
+                `course_code` VARCHAR(20) NOT NULL , 
+                `activity_id` VARCHAR(5) NOT NULL , 
+                `unit_id` INT NOT NULL, 
+                `tool_ids` TEXT NOT NULL , 
+                `activity_type` INT NOT NULL,
+                `visible` INT NOT NULL,
+                PRIMARY KEY (`id`)) $tbl_options");
+    }
+    if (!DBHelper::tableExists('course_class_info')) {
+            Database::get()->query("CREATE TABLE IF NOT EXISTS `course_class_info` ( 
+            `id` INT NOT NULL AUTO_INCREMENT , 
+            `student_number` VARCHAR(50) NOT NULL , 
+            `lessons_number` INT NOT NULL, 
+            `lesson_hours` INT NOT NULL, 
+            `home_hours` INT NOT NULL, 
+            `total_hours` INT NOT NULL, 
+            `course_code` VARCHAR(20) NOT NULL,
+            PRIMARY KEY (`id`)) $tbl_options");
+    }
+    if (!DBHelper::tableExists('course_learning_objectives')) {
+            Database::get()->query("CREATE TABLE `course_learning_objectives` ( 
+            `id` INT NOT NULL AUTO_INCREMENT, 
+            `course_code` VARCHAR(20) NOT NULL, 
+            `title` TEXT NOT NULL, 
+            PRIMARY KEY (`id`)) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('course','flipped_flag')) {
+        Database::get()->query("ALTER table course ADD `flipped_flag` INT(11) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('course','lectures_model')) {
+        Database::get()->query("ALTER table course ADD `lectures_model` INT(11) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('unit_resources', 'fc_type')) {
+        Database::get()->query("ALTER table unit_resources ADD `fc_type` INT(11) NOT NULL DEFAULT 3");
+    }
+    if (!DBHelper::fieldExists('unit_resources', 'activity_title')) {
+        Database::get()->query("ALTER table unit_resources ADD `activity_title` VARCHAR(50) NOT NULL DEFAULT ''");
+    }
+    if (!DBHelper::fieldExists('unit_resources', 'activity_id')) {
+        Database::get()->query("ALTER table unit_resources ADD `activity_id` VARCHAR(5) NOT NULL DEFAULT 'FC000'");
+    }
+
 }
 
 
@@ -2373,7 +2446,8 @@ function upgrade_to_3_13($tbl_options): void
  * @brief Create Indexes
  */
 
-function create_indexes() {
+function create_indexes(): void
+{
 
     DBHelper::indexExists('actions_daily', 'actions_daily_index') or
         Database::get()->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
@@ -3010,6 +3084,7 @@ function convert_db_encoding_to_utf8mb4(): void
     Database::get()->query("ALTER TABLE `course_units` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `course_units` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `course_user_request` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+    Database::get()->query("ALTER TABLE `course_learning_objectives` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `cron_params` CHANGE name name varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE shortname shortname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");

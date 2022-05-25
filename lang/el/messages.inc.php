@@ -661,6 +661,53 @@ $langYouHaveRejectedPrivacyPolicy = 'Απορρίψατε την {Πολιτικ
 $langYouHaveNotConsentedToPrivacyPolicy = 'Δεν έχετε συναινέσει στην {Πολιτική Απορρήτου}.';
 $langInvalidEmail = 'Μη έγκυρο e-mail';
 
+
+$langFlippedClassroom = "Mοντέλο Ανεστραμμένης Τάξης";
+$langCΕnabled = "Ενεργό";
+$langGoals = "Μαθησιακοί στόχοι";
+$langGoalTitle = "Στόχος";
+$langClassInfoTitle = "Στοιχεία μαθήματος";
+$langStuNum = "Αριθμός Εκπαιδευόμενων";
+$langLectNum = "Αριθμός Μαθημάτων";
+$langLectHours = "Χρόνος Μαθήματος";
+$langHomeHours = "Χρόνος στο σπίτι";
+$langTotalHours = "Συνολικός χρόνος";
+$langHoursSmall = "(ώρες)";
+$langLectModel = "Τρόπος διδασκαλίας";
+$langLectFromHome = "Εξ αποστάσεως διδασκαλία";
+$langLectMixed = "Μικτή διδασκαλία";
+$langUnitsTitle = "Ενότητα";
+$langFinalSubmit = "Τελική Υποβολή";
+$langCont = "Περιεχόμενο";
+$langActivities = "Δραστηριότητες";
+$langEmptyGoal ="Συμπληρώστε όλους τους μαθησιακούς στόχους που έχετε δημιουργήσει.";
+$langEmptyUnit ="Συμπληρώστε όλες τις θεματικές ενότητες που έχετε δημιουργήσει.";
+$langActSelect = "Επιλέξτε τις δραστηριότητες";
+$langActInHome = "Πριν την τάξη";
+$langActInClass = "Στην τάξη";
+$langActAfterClass = "Μετά την τάξη";
+$langFCEbook = "Μελέτη";
+$langFCVideo = "Παρακολούθηση βίντεο";
+$langFCVideoInteract = "Εκπόνηση αλληλεπιδραστικού βίντεο";
+$langFCRevision = "Επανάληψη/Σύνοψη εννοιών";
+$langFCGames = "Εκπαιδευτικό παιχνίδι";
+$langFCDiscuss = "Συζήτηση";
+$langFCProject = "Ομαδική εργασία";
+$langFCBrainstorming = "Καταιγισμός ιδεών";
+$langFCWorkPaper = "Φύλλα Εργασίας";
+$langFCRolePlay= "Παιχνίδι ρόλων";
+$langFCSimulate="Προσομοίωση";
+$langFCProblemSolving = "Επίλυση προβλήματος";
+$langFCMindMap="Δραστηριότητα εννοιολογικού χάρτη";
+$langFCEvaluate = "Αξιολόγηση";
+$langFlippedEdit = "Επεξεργασία του Μοντέλου Ανεστραμμένης Τάξης";
+$langJustEdited = "Μόλις ενημερώσατε το μάθημα με τίτλο ";
+$langUnitActivityDeleteConfirm= "Είστε σίγουρη/σίγουρος ότι θέλετε να διαγραφεί η συγκεκριμένη δραστηριότητα;";
+$langUnitJustEdited="Μόλις ενημερώσατε την δραστηριότητα με τίτλο";
+$langConfirmDeleteUnit = "Θέλετε σίγουρα να αφαιρέσετε την συγκεκριμένη ενότητα;";
+$langConfirmDeleteGoal = "Θέλετε σίγουρα να αφαιρέσετε το συγκεκριμένο Προσδοκόμενο Μαθησιακό Αποτέλεσμα;";
+$langUnits = "Θεματικές Ενότητες";
+
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
 $langAdminAddAnn = "Προσθήκη ανακοίνωσης διαχειριστή";
@@ -2733,7 +2780,6 @@ $langQuestionCorrectionTitle = "Βαθμολογήστε την απάντηση
 $langQuestionCorrectionTitle2 = "Υπολείπονται ";
 $langUngradedAnswers = " αβαθμολόγητες απαντήσεις.";
 $langDistributeError = "Ο συνολικός αριθμός διαμοιρασμού δεν πρέπει να είναι μεγαλύτερος από το σύνολο των ασκήσεων.";
-$langGradeCorrect = 'Διόρθωση';
 
 /* * ***********************************************
  * lessontools.php

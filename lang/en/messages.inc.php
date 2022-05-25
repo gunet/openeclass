@@ -1073,6 +1073,62 @@ $langCourseDescription = "Course Description";
 $langCourseDescriptionAsModule = "Use Course Description";
 $langCourseDescriptionAsModuleLabel = "Course Description";
 $langCourseHome = "Course Home";
+
+
+
+
+$langFlippedClassroom = "Flipped Classrοom Model";
+$langFlippedClassroomEnabled = "Enabled";
+$langFlipeedClassroomDisabled = "Disabled";
+$langGoals = "Intended Learning Outcomes (ILO)";
+$langGoalTitle = "ILO";
+$langClassInfoTitle = "Class Information";
+$langStuNum = "Number of Students";
+$langLectNum = "Number of Lessons";
+$langLectHours = "Hours per lesson";
+$langHomeHours = "Homework per week";
+$langTotalHours = "Total hours";
+$langHoursSmall = "(hours)";
+$langLectModel = "Lectures Model";
+$langLectFromHome = "E-learning";
+$langLectMixed = "Mixed Learning";
+$langUnitsTitle = "Unit";
+$langFinalSubmit = "Final Submit";
+$langCont = "Content";
+$langActivities = "Activities";
+$langEmptyGoal ="Fill in all the Learning Goals added.";
+$langEmptyUnit ="Fill in all the units added.";
+$langActSelect = "Select activities";
+$langActInHome = "Before Class";
+$langActInClass = "In Class";
+$langActAfterClass = "After Class";
+$langFCEbook = "Study";
+$langFCVideo = "Watch a video";
+$langFCVideoInteract = "Watch an interactive video";
+$langFCRevision = "Revision / Concepts Summary";
+$langFCGames = "Educational game";
+$langFCDiscuss = "Discussion";
+$langFCProject = "Project";
+$langFCBrainstorming = "Brainstorming";
+$langFCWorkPaper = "Worksheets";
+$langFCRolePlay= "Role game";
+$langFCSimulate="Simulation";
+$langFCProblemSolving = "Problem Solving";
+$langFCMindMap="Mind Map";
+$langFCEvaluate = "Evaluation";
+$langILOtype = "Course Objectives/Goals";
+$langFlippedEdit = "Edit Flipped Classroom Options";
+$langJustEdited = "You just edited the course titled ";
+$langUnitActivityDeleteConfirm = "Are you sure you want to delete this activity?";
+$langUnitJustEdited="You just edited the unit titled ";
+$langConfirmDeleteUnit = "Are you sure you want to remove this unit?";
+$langConfirmDeleteGoal ="Are you sure you want to remove this Intended Learning Outcome?";
+
+
+
+
+
+
 $langCreateLabel = "Create label";
 $langCreateNewLearningPath = "Create a new learning path";
 $langDOCUMENTTypeDesc = "Document";

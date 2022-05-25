@@ -37,6 +37,11 @@ define('ACCESS_PRIVATE', 0);
 define('ACCESS_PROFS', 1);
 define('ACCESS_USERS', 2);
 
+/* module type */
+define('MODULE_IN_HOME', 0);
+define('MODULE_IN_CLASS',1);
+define('MODULE_AFTER_CLASS',2);
+
 // user admin rights
 define('ADMIN_USER', 0); // admin user can do everything
 define('POWER_USER', 1); // poweruser can admin only users and courses
@@ -89,6 +94,23 @@ define('MODULE_ID_COURSEPREREQUISITE', 49);
 define('MODULE_ID_LTI_CONSUMER', 50);  /* deprecated. used only for compatibility in statistics*/
 define('MODULE_ID_ANALYTICS', 51);
 define('MODULE_ID_H5P', 52);
+
+//user activities
+define('MODULE_ID_EBOOK_READ','FC1');
+define('MODULE_ID_VIDEO_WATCH','FC2');
+define('MODULE_ID_VIDEO_INTERACTION','FC3');
+define('MODULE_ID_REVISION','FC5');
+define('MODULE_ID_GAMES','FC6');
+define('MODULE_ID_DISCUSS','FC7');
+define('MODULE_ID_PROJECT','FC8');
+define('MODULE_ID_BRAINSTORMING','FC9');
+define('MODULE_ID_WORK_PAPER','FC10');
+define('MODULE_ID_ROLE_PLAY','FC11');
+define('MODULE_ID_SIMULATE','FC12');
+define('MODULE_ID_PROBLEM_SOLVING','FC13');
+define('MODULE_ID_MINDMAP_FC','FC14');
+define('MODULE_ID_EVALUATE','FC15');
+define('MODULE_ID_DISCUSS_AC','FC16');
 
 // user modules
 
