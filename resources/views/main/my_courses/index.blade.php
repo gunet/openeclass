@@ -3,7 +3,7 @@
 @section('content')
 
 {!! $action_bar !!}
-    
+
     @if ($myCourses)
         <div class='table-responsive'>
             <table class='table-default'>
@@ -19,12 +19,12 @@
                 @foreach ($myCourses as $course)
                     @if ($course->visible == COURSE_INACTIVE)
                         <tr class = 'not_visible'>
-                    @else 
+                    @else
                         <tr>
                     @endif
                         <td>
                             <strong>
-                                <a href='{{ $urlServer }}courses/{{ q($course->code) }}'>{{ q($course->title) }}</a>
+                                <a href='{{ $urlServer }}courses/{{ q($course->code) }}/'>{{ q($course->title) }}</a>
                             </strong> ({{ q($course->public_code) }})
                             <div><small>{{ q($course->professor) }} </small></div>
                         </td>
@@ -38,5 +38,5 @@
         </div>
     @else
         <div class='alert alert-warning'>{{ trans('langNoCourses') }}</div>
-    @endif        
+    @endif
 @endsection
