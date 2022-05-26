@@ -71,7 +71,7 @@ if (($auth != 7) and ($auth != 6)) {
                                 )
                             ));
 } else {
-    redirect_to_home_page("modules/auth/altsearch.php?auth=$v&is_submit=true");
+    redirect_to_home_page("modules/auth/altsearch.php?auth=$auth&is_submit=true");
 }
 
 if (!empty($msg)) {
@@ -83,7 +83,7 @@ if (isset($_GET['p']) and $_GET['p']) {
 } else {
     $_SESSION['u_prof'] = 0;
 }
-   
+
 unset($uid);
 
 $data['menuTypeID'] = 0;
