@@ -32,6 +32,11 @@
             </tr>
             <tr>
                 <td>
+                    <a href='{{ $_SERVER['SCRIPT_NAME'] }}?stats=cusers'>{{ trans('langMultipleCourseUsers') }}</a><small> ({{ trans('langLast30Entries') }})</small>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <a href='{{ $_SERVER['SCRIPT_NAME'] }}?stats=vmusers'>{{ trans('langMailVerification') }}</a>
                 </td>
             </tr>
@@ -41,7 +46,7 @@
                     <small> ({{ trans('langLastMonth') }})</small>
                 </td>
             </tr>
-        </table>            
+        </table>
     </div>
     @if (isset($_GET['stats']))
         @if (in_array($_GET['stats'], ['failurelogin', 'unregusers']))
@@ -131,7 +136,7 @@
                     @endif
                 </table>
             </div>
-        @elseif  ($_GET['stats'] == 'vmusers')
+        @elseif ($_GET['stats'] == 'vmusers')
             <div class='row'>
                 <div class='col-sm-12'>
                     <div class='content-title h3'>
@@ -141,13 +146,13 @@
                         <li class='list-group-item'>
                             <label>
                                 <a href='listusers.php?search=yes&verified_mail=1'>{{ trans('langMailVerificationYes') }}</a>
-                            </label>          
+                            </label>
                             <span class='badge'>{{ $verifiedEmailUserCnt }}</span>
                         </li>
                         <li class='list-group-item'>
                             <label>
                                 <a href='listusers.php?search=yes&verified_mail=2'>{{ trans('langMailVerificationNo') }}</a>
-                            </label>                            
+                            </label>
                             <span class='badge'>{{ $unverifiedEmailUserCnt }}</span>
                         </li>
                         <li class='list-group-item'>
@@ -164,7 +169,21 @@
                         </li>
                     </ul>
                 </div>
-            </div>        
+            </div>
+        @elseif ($_GET['stats'] == 'cusers')
+            <div class='table-responsive'>
+                <table class='table-default'>
+                    <tr>
+                        <th class='list-header'><strong>{{ trans('langUsers') }}</strong></th>
+                        <th class='text-center'><strong>{{ trans('langResult') }}</strong></th>
+                    </tr>
+            @foreach ($q as $data)
+                <tr>
+                    <td>{{ $data->surname }} {{ $data->givenname }}  (<a href='{{ $urlServer }}modules/admin/edituser.php?u={{ $data->user_id }}'>{{ $data->username }}</a>)</td>
+                    <td class='text-center'>{{ $data->num_of_courses }}</td>
+                </tr>
+            @endforeach
+            </table></div>
         @endif
     @endif
 @endsection

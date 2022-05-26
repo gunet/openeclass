@@ -23,8 +23,8 @@
 /**
  * @file otheractions.php
  * @brief display other actions
- */ 
-  
+ */
+
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
@@ -90,7 +90,7 @@ if (isset($_GET['stats'])) {
             $page_link = "&amp;stats=unregusers";
             $log = new Log();
             $data['extra_info'] = $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
-            break;        
+            break;
         case 'musers':
             $data['loginDouble'] = list_ManyResult("SELECT DISTINCT BINARY(username) AS username, COUNT(*) AS nb
 				FROM user GROUP BY username HAVING nb > 1 ORDER BY nb DESC", 'username');
@@ -111,6 +111,17 @@ if (isset($_GET['stats'])) {
             $data['verificationRequiredEmailUserCnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt;
             $data['totalUserCnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user;")->cnt;
             break;
+        case 'cusers':
+            $data['q'] = $q = Database::get()->queryArray("SELECT surname, givenname, username, user_id, count(course_id) AS num_of_courses 
+                                FROM course_user 
+                                    JOIN user 
+                                ON course_user.user_id = user.id 
+                                WHERE course_user.status=5 
+                                    GROUP BY user_id 
+                                    ORDER BY num_of_courses 
+                                    DESC 
+                                    LIMIT 0,30");
+            break;
         default:
             break;
     }
@@ -120,15 +131,15 @@ $data['menuTypeID'] = 3;
 view('admin.other.otheractions', $data);
 
 /**
- * @brief output a <tr> with an array 
+ * @brief output a <tr> with an array
  * @param type $table
  * @return string
  */
-function tablize($table) {   
-    $ret = "";    
+function tablize($table) {
+    $ret = "";
     if (is_array($table)) {
-        foreach ($table as $key => $thevalue) {            
-            $ret .= "<tr>";            
+        foreach ($table as $key => $thevalue) {
+            $ret .= "<tr>";
             $ret .= "<td style='font-size: 90%'>" . $key . "</td>";
             $ret .= "<td class='right'><strong>" . $thevalue . "</strong></td></tr>";
         }
@@ -137,17 +148,17 @@ function tablize($table) {
 }
 
 /**
- * 
+ *
  * @param type $sql
  * @param type $fieldname
- * @return type
+ * @return array
  */
 function list_ManyResult($sql, $fieldname) {
-    
+
     $resu = array();
     $res = Database::get()->queryArray($sql);
-    foreach ($res as $resA) {     
-        $name = $resA->$fieldname;     
+    foreach ($res as $resA) {
+        $name = $resA->$fieldname;
         $resu[$name] = $resA->nb;
     }
     return $resu;
