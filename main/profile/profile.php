@@ -71,9 +71,9 @@ if ($auth != 1) {
 }
 
 if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
-    $data['allow_name_change'] = false;
+    $data['allow_name_change'] = $allow_name_change = false;
 } else {
-    $data['allow_name_change'] = true;
+    $data['allow_name_change'] = $allow_name_change = true;
 }
 
 
