@@ -1,9 +1,13 @@
 <?php
+
+//use Widgets\WidgetArea;
+
+session_start();
 /* ========================================================================
  * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -26,21 +30,16 @@
  *
  */
 
-session_start();
-
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
     $dbname = $matches[1];
     if (!is_dir('courses/' . $dbname)) {
         header('HTTP/1.0 404 Not Found');
         echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL ',htmlspecialchars($_SERVER['REQUEST_URI']),' was not found on this server.</p>
-</body></html>
-';
+                <html><head><title>404 Not Found</title></head><body>
+                <h1>Not Found</h1>
+                <p>The requested URL ',htmlspecialchars($_SERVER['REQUEST_URI']),' was not found on this server.</p>
+                </body></html>';
         exit;
     }
     $_SESSION['dbname'] = $dbname;
@@ -53,12 +52,14 @@ define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
 require_once 'include/baseTheme.php';
-require_once 'modules/auth/auth.inc.php';
+require_once 'modules/auth/login_form.inc.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/sendMail.inc.php';
 
 // unset system that records visitor only once by course for statistics
 require_once 'include/action.php';
+
+load_js('trunk8');
 if (isset($dbname)) {
     $action = new action();
     $action->record(MODULE_ID_UNITS, 'exit');
@@ -71,36 +72,29 @@ if (isset($_SESSION['uid'])) {
     $uid = 0;
 }
 
-if (isset($_GET['logout']) and $uid) {
-    $cas = ($session->getLoginMethod() == 'cas')? get_auth_settings(7): false;
-    Database::get()->query("INSERT INTO loginout (loginout.id_user,
-                loginout.ip, loginout.when, loginout.action)
-                VALUES (?d, ?s, NOW(), 'LOGOUT')", $uid, $_SERVER['REMOTE_ADDR']);
-    foreach (array_keys($_SESSION) as $key) {
-        unset($_SESSION[$key]);
-    }
-
-    // include HybridAuth libraries
-    require_once 'modules/auth/methods/hybridauth/config.php';
-
-    $config = get_hybridauth_config();
-    $hybridauth = new Hybrid_Auth( $config );
-
-    session_destroy();
-    $uid = 0;
-    if ($cas and isset($cas['cas_ssout']) and intval($cas['cas_ssout']) === 1) {
-        phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
-        phpCAS::logoutWithRedirectService($urlServer);
-    }
-}
-
 // if we try to login... then authenticate user.
 $warning = '';
+
+if(isset($_SESSION['hybridauth_callback'])) {
+    switch($_SESSION['hybridauth_callback']) {
+        case 'login':
+            $_GET['provider'] = $_SESSION['hybridauth_provider'] ?? '';
+            break;
+        case 'profile':
+            $provider = $_SESSION['hybridauth_provider'] ?? '';
+            header('Location: /main/profile/profile.php?action=connect&provider='.$provider.'&'.$_SERVER['QUERY_STRING']);
+            exit;
+        case 'auth_test':
+            $provider = $_SESSION['hybridauth_provider'] ?? '';
+            header('Location: /modules/admin/auth_test.php?auth='.$provider.'&'.$_SERVER['QUERY_STRING']);
+            exit;
+    }
+}
 
 if (isset($_SESSION['shib_uname'])) {
     // authenticate via shibboleth
     shib_cas_login('shibboleth');
-} elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
+} elseif (isset($_SESSION['cas_uname'])) {
     // authenticate via cas
     shib_cas_login('cas');
 } elseif (isset($_GET['provider'])) {
@@ -130,7 +124,7 @@ if (isset($language)) {
 }
 
 // check if we are guest user
-if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
+if (!$upgrade_begin and $uid) {
     if (check_guest()) {
         // if the user is a guest send him straight to the corresponding lesson
         $guest = Database::get()->querySingle("SELECT code FROM course_user, course
@@ -240,12 +234,13 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                                                 ORDER BY `order` DESC", $language);
     $data['dateFormatLong'] = $dateFormatLong;
 
-    $home_main_area = new \Widgets\WidgetArea(HOME_PAGE_MAIN);
+    $data['home_main_area_widgets'] = '';
+    /*$home_main_area = new WidgetArea(HOME_PAGE_MAIN);
     $data['home_main_area_widgets'] = '';
     foreach ($home_main_area->getWidgets() as $key => $widget) {
         $data['home_main_area_widgets'] .= $widget->run($key);
     }
-
+    */
     // display extras right
     $data['extra_right'] = $langExtrasRight ?:false;
 
@@ -257,12 +252,13 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         setOpenCoursesExtraHTML();
         $data['openCoursesExtraHTML'] = $openCoursesExtraHTML;
     }
-
-    $home_page_sidebar = new \Widgets\WidgetArea(HOME_PAGE_SIDEBAR);
+    $data['home_page_sidebar_widgets'] = '';
+    /*$home_page_sidebar = new WidgetArea(HOME_PAGE_SIDEBAR);
     $data['home_page_sidebar_widgets'] = '';
     foreach ($home_page_sidebar->getWidgets() as $key => $widget) {
         $data['home_page_sidebar_widgets'] .= $widget->run($key);
     }
+    */
     $data['menuTypeID'] = 0;
 
     view('home.index', $data);

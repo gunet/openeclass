@@ -26,7 +26,7 @@
  * the view() or draw() calls to output the UI to the user's browser.
  *
  */
-use Philo\Blade\Blade;
+use Jenssegers\Blade\Blade;
 $navigation = array();
 $sectionName = '';
 $pageName = '';
@@ -60,9 +60,11 @@ function view($view_file, $view_data = array()) {
             $require_editor, $langHomePage,
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user;
 
-    // negative course_id might be set in common documents
-    if (!isset($course_id) or !$course_id or $course_id < 1) {
+    if (!isset($course_id) or !$course_id) {
         $course_id = $course_code = null;
+    } else if ($course_id < 1) { // negative course_id might be set in common documents
+        unset($course_id);
+        unset($course_code);
     }
 
     $pageTitle = $siteName;
@@ -163,6 +165,7 @@ function view($view_file, $view_data = array()) {
                 }
                 $showStart = true;
             }
+
             if ($showStart) {
                 if (isset($require_current_course) or $pageName) {
                     $item['bread_href'] = $urlAppend;
@@ -254,6 +257,7 @@ function view($view_file, $view_data = array()) {
         $theme_options_styles = unserialize($theme_options->styles);
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+        $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
             if (isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'stretch') {
@@ -317,12 +321,16 @@ function view($view_file, $view_data = array()) {
         $uname = null;
     }
 
-    // customization for LTI enrolled users
-    $logo_url_path = $urlAppend;
-    $is_lti_enrol_user = substr($_SESSION['uname'], 0, strlen("enrol_lti_") ) === "enrol_lti_";
-    if ($is_lti_enrol_user) {
-        $uname = q($_SESSION['givenname'] . " " . $_SESSION['surname']);
-        $logo_url_path = "#";
+    if ($uid) {
+        // customization for LTI enrolled users
+        $logo_url_path = $urlAppend;
+        $is_lti_enrol_user = substr($_SESSION['uname'], 0, strlen("enrol_lti_")) === "enrol_lti_";
+        if ($is_lti_enrol_user) {
+            $uname = q($_SESSION['givenname'] . " " . $_SESSION['surname']);
+            $logo_url_path = "#";
+        }
+    } else {
+        $is_lti_enrol_user = $logo_url_path = '';
     }
 
     $views = $webDir.'/resources/views';
@@ -341,7 +349,7 @@ function view($view_file, $view_data = array()) {
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
             'logo_url_path');
     $data = array_merge($global_data, $view_data);
-    echo $blade->view()->make($view_file, $data)->render();
+    echo $blade->make($view_file, $data)->render();
 }
 
 /**
@@ -361,7 +369,7 @@ function widget_view($view_file, $view_data = array()) {
 
     $global_data = [];
     $data = array_merge($global_data, $view_data);
-    return $blade->view()->make($view_file, $data)->render();
+    return $blade->make($view_file, $data)->render();
 }
 /**
  * Function draw
@@ -543,7 +551,7 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
  *
  */
 function module_path($path) {
-    global $urlAppend, $urlServer, $is_admin;
+    global $urlAppend, $urlServer;
 
     if (strpos($path, 'modules/units/insert.php') !== false) {
         if (strpos($path, '&dir=') !== false) {
@@ -560,10 +568,7 @@ function module_path($path) {
         }
     }
 
-    if (strpos($path, '/usage/') !== false && strpos($path, 't=u') !== false && strpos($path, 'u=') !== false && $is_admin) {
-        return '/admin/search_user.php';
-    }
-
+    $original_path = $path;
     $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
                         array('/', '/', ''), $path);
@@ -592,6 +597,10 @@ function module_path($path) {
     } elseif (isset($GLOBALS['course_code']) and
               strpos($path, '/courses/' . $GLOBALS['course_code']) !== false) {
         return 'course_home';
+    } elseif (strpos($path, '/lti_consumer/launch.php') !== false or
+              strpos($path, '/lti_consumer/load.php') !== false) {
+        $lti_path = str_replace(array($urlServer, $urlAppend, '&amp;'), array('/', '/', '&'), $original_path);
+        return $lti_path;
     }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }

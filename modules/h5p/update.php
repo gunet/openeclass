@@ -26,10 +26,9 @@ $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'classes/H5PHubUpdater.php';
 
-$data = [];
 $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 
-$data['action_bar'] = action_bar(array(
+$tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => $backUrl,
         'icon' => 'fa-reply',
@@ -37,9 +36,11 @@ $data['action_bar'] = action_bar(array(
 ), false);
 
 $toolName = $langMaj;
-$navigation[] = ['url' => $backUrl, 'name' => $langH5P];
+$navigation[] = ['url' => $backUrl, 'name' => "H5P"];
 
 $hubUpdater = new H5PHubUpdater();
 $hubUpdater->fetchLatestContentTypes();
 
-view('modules.h5p.update', $data);
+$tool_content .= $langH5pUpdateComplete;
+
+draw($tool_content, 2);

@@ -1,7 +1,7 @@
 <?php
 /*
  * ========================================================================
- * Open eClass 3.12 - E-learning and Course Management System
+ * Open eClass 3.11 - E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".

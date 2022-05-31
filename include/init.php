@@ -59,24 +59,27 @@ if (!session_id()) {
 header('Content-Type: text/html; charset=UTF-8');
 
 // Will add headers to prevent against clickjacking.
+add_framebusting_headers();
+
 add_xxsfilter_headers();
 
 add_nosniff_headers();
 
 //add_hsts_headers();
 
-try {
-    @include_once 'config/config.php';
-} catch (Exception $e) {
+if (file_exists('config/config.php')) { // read config file
+    include_once 'config/config.php';
+} else {
     include_once 'include/not_installed.php';
+    $error_msg_en = "<p>There might be a problem with platform config file.</p>
+            <p>If you are accessing the platform <strong>for the first time</strong>, please use the <a href='install/?lang=en'><b>Installation Wizard</b></a> to begin installation.</p>";
+    $error_msg_el = "<p>Πιθανό πρόβλημα με το αρχείο ρυθμίσεων της πλατφόρμας.</p>
+            <p>Σε περίπτωση που χρησιμοποιείτε την πλατφόρμα <strong>για πρώτη</strong> φορά, επιλέξτε τον <a href='install/'><b>Οδηγό Εγκατάστασης</b></a> για να ξεκινήσετε το πρόγραμμα εγκατάστασης.</p>";
+    installation_error($error_msg_en, $error_msg_el);
 }
 
 // appended to JS and CSS links to break caching - changes per second in debug mode
 define('CACHE_SUFFIX', ECLASS_VERSION . (defined('DEBUG') && DEBUG ? ('-' . time()): ''));
-
-if (!isset($mysqlServer)) {
-    include_once 'include/not_installed.php';
-}
 
 // Initialize global debug mechanism
 require_once 'modules/admin/debug.php';
@@ -86,9 +89,13 @@ require_once 'modules/db/database.php';
 
 try {
     Database::get();
-} catch (Exception $ex) {
-    require_once 'include/not_installed.php';
+} catch (Exception $ex) { // db credentials are wrong
+    include_once 'include/not_installed.php';
+    $error_msg_en = "<p>Database is not running or credentials are wrong.</p>";
+    $error_msg_el = "<p>Η βάση δεδομένων δεν λειτουργεί ή τα στοιχεία σύνδεσης δεν είναι σωστά.</p>";
+    installation_error($error_msg_en, $error_msg_el);
 }
+
 require_once 'modules/admin/extconfig/externals.php';
 $connector = WafApp::getWaf();
 if ($connector->isEnabled() == true ){
@@ -309,21 +316,23 @@ if (isset($require_current_course) and $require_current_course) {
     } else {
         $dbname = $_SESSION['dbname'];
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
-                course.title as title, course.prof_names as prof_names, course.lang as lang,
+                course.title as title, course.prof_names as prof_names, course.lang as lang, view_type,
                 course.visible as visible, hierarchy.name AS faculte
                                            FROM course, course_department, hierarchy
                                            WHERE course.id = course_department.course AND
                                                  hierarchy.id = course_department.department AND
                                                  course.code=?s",
-            function ($course_info) use (&$course_id, &$public_code, &$course_code, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseLanguage ) {
+            function ($course_info) {
+                global $course_id, $public_code, $course_code, $fac, $course_prof_names, $course_view_type,
+                    $languageInterface, $visible, $currentCourseName, $currentCourseLanguage;
                 $course_id = $course_info->cid;
                 $public_code = $course_info->public_code;
                 $course_code = $course_info->code;
                 $fac = $course_info->faculte;
-                $titulaires = $course_info->prof_names;
+                $course_prof_names = $course_info->prof_names;
+                $course_view_type = $course_info->view_type;
                 $languageInterface = $course_info->lang;
                 $visible = $course_info->visible;
-                // New variables
                 $currentCourseName = $course_info->title;
                 $currentCourseLanguage = $languageInterface;
             },
@@ -343,8 +352,6 @@ if (isset($require_current_course) and $require_current_course) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
         }
 
-        $fac_lower = strtolower($fac);
-
         // Check for course visibility by current user
         $status = 0;
         // The admin and power users can see all courses as adminOfCourse
@@ -356,7 +363,8 @@ if (isset($require_current_course) and $require_current_course) {
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
-            } elseif ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
+            }
+            if ($is_departmentmanage_user and isset($course_code)) {
                 // the department manager has rights to the courses of his department(s)
                 require_once 'include/lib/hierarchy.class.php';
                 require_once 'include/lib/course.class.php';
@@ -367,7 +375,7 @@ if (isset($require_current_course) and $require_current_course) {
                 $userObj = new User();
 
                 $atleastone = false;
-                $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
+                $subtrees = $treeObj->buildSubtrees($userObj->getAdminDepartmentIds($uid));
                 $depIds = $courseObj->getDepartmentIds($course_id);
                 foreach ($depIds as $depId) {
                     if (in_array($depId, $subtrees)) {
@@ -433,31 +441,31 @@ require_once "license_info.php";
 // user modules
 // ----------------------------------------
 $modules = array(
-    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-calendar-o'),
-    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-link'),
-    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-folder-open-o'),
-    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-film'),
-    MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-flask'),
-    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-bullhorn'),
-    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'fa-comments'),
-    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-pencil-square-o'),
-    MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'fa-users'),
-    MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'fa-envelope-o'),
-    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
-    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'),
-    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-exchange'),
-    MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-question-circle'),
-    MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-ellipsis-h'),
-    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia-w'),
-    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-columns'),
+    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'calendar'),
+    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'links'),
+    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'docs'),
+    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'videos'),
+    MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'assignments'),
+    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'announcements'),
+    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'forum'),
+    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'exercise'),
+    MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'groups'),
+    MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'dropbox'),
+    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'glossary'),
+    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'ebook'),
+    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-commenting'),
+    MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'questionnaire'),
+    MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
+    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
+    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog'),
     MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-list'),
-    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
-    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
-    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-exchange'),
+    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
+    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
+    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'conference'),
     MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-trophy'),
-    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
     MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-ticket'),
-	MODULE_ID_H5P => array('title' => $langH5P, 'link' => 'h5p', 'image' => 'fa-caret-square-o-right')
+    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
+	MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-caret-square-o-right')
 );
 
 // ----------------------------------------
@@ -484,7 +492,7 @@ $static_modules = array(
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
     MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets'),
     MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
-    MODULE_ID_UNITS => array('title' => $langCourseUnits, 'link' => 'units'),
+    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
     MODULE_ID_SEARCH => array('title' => $langSearch, 'link' => 'search'),
     MODULE_ID_CONTACT => array('title' => $langContact, 'link' => 'contact'),
     MODULE_ID_COMMENTS => array('title' => $langComments, 'link' => 'comments'),
@@ -506,7 +514,6 @@ $offline_course_modules = array(
     MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-pencil-square-o'),
     MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
     /*MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'), */
-    MODULE_ID_DESCRIPTION => array('title' => $langCourseDescription, 'link' => 'course_description', 'image' => 'fa-info-circle')
     /*MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia'),*/
     /*MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-columns')*/
 );
@@ -616,8 +623,6 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
 set_glossary_cache();
 
 $tool_content = $head_content = '';
-
-add_framebusting_headers();
 
 function fix_directory_separator($path) {
     if (DIRECTORY_SEPARATOR !== '/') {

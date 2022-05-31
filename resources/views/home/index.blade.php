@@ -6,43 +6,43 @@
         <div class='col-md-12 remove-gutter'>
             <div class='jumbotron jumbotron-login'>
                 <div class='row'>
-                @if (!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
-                    <div class='col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right login-form'>
-                        <div class='wrapper-login-option'>
-                            @foreach ($authLinks as $i =>$authLink)
-                            <div class='{{ $authLink['class'] }}'>
-                                <h2>{{ trans('langUserLogin') }}</h2>
-                                <div>
-                                    @if ($authLink['showTitle'])
-                                        <span class='head-text' style='font-size:14px;'>$l[title]</span>
+                    @if (!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
+                        <div class='col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right login-form'>
+                            <div class='wrapper-login-option'>
+                                @foreach ($authLinks as $i =>$authLink)
+                                <div class='{{ $authLink['class'] }}'>
+                                    <h2>{{ trans('langUserLogin') }}</h2>
+                                    <div>
+                                        @if ($authLink['showTitle'])
+                                            <span class='head-text' style='font-size:14px;'>$l[title]</span>
+                                        @endif
+                                        {!! $authLink['html'] !!}
+                                    </div>
+                                    @if (count($authLinks) > 1)
+                                    <div class='login-settings row'>
+                                        <div class='or-separator'>
+                                            <span>{{ trans('langOr') }}</span>
+                                        </div>
+                                        <div class='alt_login text-center'>
+                                            <span>
+                                                @if (count($authLinks) <= 3)
+                                                    @foreach ($authLinks as $j => $otherAuth)
+                                                        @if ($j != $i)
+                                                            <button type='button' data-target='{{ $j }}' class='option-btn-login hide'>{{ $otherAuth['title'] }}</button>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                <a href='{{ $urlAppend }}main/login_form.php' class='btn btn-default option-btn-login'>{{ trans('langAlternateLogin') }}</a>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
                                     @endif
-                                    {!! $authLink['html'] !!}
                                 </div>
-                                @if (count($authLinks) > 1)
-                                <div class='login-settings row'>
-                                    <div class='or-separator'>
-                                        <span>{{ trans('langOr') }}</span>
-                                    </div>
-                                    <div class='alt_login text-center'>
-                                        <span>
-                                            @if (count($authLinks) <= 3)
-                                                @foreach ($authLinks as $j => $otherAuth)
-                                                    @if ($j != $i)
-                                                        <button type='button' data-target='{{ $j }}' class='option-btn-login hide'>{{ $otherAuth['title'] }}</button>
-                                                    @endif
-                                                @endforeach
-                                            @else
-                                            <a href='{{ $urlAppend }}main/login_form.php' class='btn btn-default option-btn-login'>{{ trans('langAlternateLogin') }}</a>
-                                            @endif
-                                        </span>
-                                    </div>
-                                </div>
-                                @endif
+                                @endforeach
                             </div>
-                            @endforeach
                         </div>
-                    </div>
-                @endif
+                    @endif
                 </div>
             </div>
         </div>
@@ -120,18 +120,18 @@
                 </div>
             </div>
             @if (get_config('enable_mobileapi'))
-            <div class='panel mobile-apps'>
-                <div class='panel-body'>
-                    <div class='row'>
-                        <div class='col-xs-6'>
-                            <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank><img src='{{ $themeimg }}/appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a>
-                        </div>
-                        <div class='col-xs-6'>
-                            <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='{{ $themeimg }}/playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a>
+                <div class='panel mobile-apps'>
+                    <div class='panel-body'>
+                        <div class='row'>
+                            <div class='col-xs-6'>
+                                <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank><img src='{{ $themeimg }}/appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a>
+                            </div>
+                            <div class='col-xs-6'>
+                                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='{{ $themeimg }}/playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endif
             {!! $home_page_sidebar_widgets !!}
         </div>

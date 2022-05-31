@@ -22,10 +22,6 @@
 define('UPGRADE', true);
 
 require_once '../include/baseTheme.php';
-require_once 'upgrade/functions.php';
-
-mkdir_or_error('storage');
-mkdir_or_error('storage/views');
 
 if ($urlAppend[strlen($urlAppend) - 1] != '/') {
     $urlAppend .= '/';
@@ -42,7 +38,7 @@ if ($language == 'el') {
 }
 
 // check PHP version
-if (version_compare(PHP_VERSION, '7.2') < 0) {
+if (version_compare(PHP_VERSION, '7.3') < 0) {
     $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
 }
 
@@ -69,7 +65,6 @@ $tool_content .= "
             <input class='form-control' name='password' placeholder='$langPass' type='password'>
           </div>
         </div>
-        ".showSecondFactorChallenge()."
         <div class='form-group'>
           <div class='col-xs-12'>
             <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>

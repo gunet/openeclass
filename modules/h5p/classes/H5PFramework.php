@@ -626,7 +626,6 @@ class H5PFramework implements H5PFrameworkInterface {
         if (empty($params->metadata)) {
             $params->metadata = new stdClass();
         }
-
         // Add title to metadata.
         if (!empty($params->title) && empty($params->metadata->title)) {
             $params->metadata->title = $params->title;

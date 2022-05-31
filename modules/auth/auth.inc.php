@@ -32,7 +32,6 @@
 
   ==============================================================================
  */
-use Hautelook\Phpass\PasswordHash;
 
 require_once 'include/log.class.php';
 require_once 'include/lib/user.class.php';
@@ -270,16 +269,15 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
-            $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
+            $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = " : "COLLATE utf8_bin = ";
             $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
             if ($result) {
-                $hasher = new PasswordHash(8, false);
-                if ($hasher->CheckPassword($test_password, $result->password)) {
+                if (password_verify($test_password, $result->password)) {
                     $testauth = true;
                 } else if (strlen($myrow->password) < 60 && md5($test_password) == $result->password) {
                     $testauth = true;
                     // password is in old md5 format, update transparently
-                    $password_encrypted = $hasher->HashPassword($test_password);
+                    $password_encrypted = password_hash($test_password, PASSWORD_DEFAULT);
                     Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $result->id);
                 }
             }
@@ -346,6 +344,20 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                         if (@ldap_bind($ldap, $user_dn, $test_password)) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
+                            foreach ($userinfo[0] as $key => $value) {
+                                if (!is_numeric($key)) {
+                                    if (is_array($value)) {
+                                        if ($value['count'] == 1) {
+                                            $GLOBALS['auth_userinfo'][strtolower($key)] = $value[0];
+                                        } else {
+                                            unset($value['count']);
+                                            $GLOBALS['auth_userinfo'][strtolower($key)] = $value;
+                                        }
+                                    } else {
+                                        $GLOBALS['auth_userinfo'][strtolower($key)] = $value;
+                                    }
+                                }
+                            }
                             if ($userinfo['count'] == 1) {
                                 $surname = $givenname = '';
                                 if (isset($settings['ldap_surname_attr']) and !empty($settings['ldap_surname_attr'])) {
@@ -751,19 +763,22 @@ function process_login() {
  Yahoo, Live accounts)
 * ************************************************************** */
 
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+
 function hybridauth_login() {
     global $surname, $givenname, $email, $status, $language,
-           $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-           $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
-           $inactive_uid, $langTooManyFails, $warning, $langGeneralError,
-           $langProviderError1, $langProviderError2, $langProviderError3,
-           $langProviderError4, $langProviderError5, $langProviderError6,
-           $langProviderError7, $langProviderError8, $session;
+        $langInvalidId, $langAccountInactive1, $langAccountInactive2,
+        $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
+        $inactive_uid, $langTooManyFails, $warning, $langGeneralError,
+        $langProviderError1, $langProviderError2, $langProviderError3,
+        $langProviderError4, $langProviderError5, $langProviderError6,
+        $langProviderError7, $langProviderError8, $session;
+
 
     require_once 'modules/auth/methods/hybridauth/config.php';
 
     $config = get_hybridauth_config();
-
     $_SESSION['canChangePassword'] = false;
     $autoregister = get_config('alt_auth_stud_reg') == 2;
 
@@ -811,36 +826,34 @@ function hybridauth_login() {
             }
         } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
-            // let hybridauth forget all about the user so we can try to authenticate again.
+                // let hybridauth forget all about the user so we can try to authenticate again.
 
-            // Display the received error,
-            // to know more please refer to Exceptions handling section on the user guide
-            switch($e->getCode()) {
-                case 0: Session::Messages($langProviderError1); break;
-                case 1: Session::Messages($langProviderError2); break;
-                case 2: Session::Messages($langProviderError3); break;
-                case 3: Session::Messages($langProviderError4); break;
-                case 4: Session::Messages($langProviderError5); break;
-                case 5: Session::Messages($langProviderError6); break;
-                case 6: Session::Messages($langProviderError7); $adapter->disconnect(); break;
-                case 7: Session::Messages($langProviderError8); $adapter->disconnect();; break;
-            }
+                // Display the received error,
+                // to know more please refer to Exceptions handling section on the user guide
+                switch($e->getCode()) {
+                    case 0: Session::Messages($langProviderError1); break;
+                    case 1: Session::Messages($langProviderError2); break;
+                    case 2: Session::Messages($langProviderError3); break;
+                    case 3: Session::Messages($langProviderError4); break;
+                    case 4: Session::Messages($langProviderError5); break;
+                    case 5: Session::Messages($langProviderError6); break;
+                    case 6: Session::Messages($langProviderError7); $adapter->disconnect(); break;
+                    case 7: Session::Messages($langProviderError8); $adapter->disconnect();; break;
+                }
 
-            // debug messages for hybridauth errors
-            //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
-            //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
+                // debug messages for hybridauth errors
+                //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
+                //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
 
-            return false;
+                return false;
         }
     } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
 
-
-    // from here on an alternative version of proccess_login() runs where
+    // from here on an alternative version of process_login() runs where
     // instead of a password, the provider uid is used and matched against
     // the corresponding field in the db table.
 
     $pass = $user_data->identifier; // password = provider user id
-    // $is_eclass_unique = is_eclass_unique();
 
     unset($_SESSION['uid']);
     $auth_allow = 0;
@@ -855,6 +868,9 @@ function hybridauth_login() {
     if (get_config('login_fail_check') && $r) {
         $auth_allow = 8;
     } else {
+	if($provider == 'WindowsLive') {
+		$provider = 'live';
+	}
         $auth_id = array_search(strtolower($provider), $auth_ids);
         $auth_methods = get_auth_active_methods();
         $myrow = Database::get()->querySingle("SELECT user.id, surname,
@@ -1028,16 +1044,15 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
 
     $_SESSION['canChangePassword'] = false;
     $pass_match = false;
-    $hasher = new PasswordHash(8, false);
 
     if (is_null($provider)) {
         if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
-            if ($hasher->CheckPassword($pass, $user_info_object->password)) {
+            if (password_verify($pass, $user_info_object->password)) {
                 $pass_match = true;
             } elseif (strlen($user_info_object->password) < 60 and md5($pass) == $user_info_object->password) {
                 $pass_match = true;
                 // password is in old md5 format, update transparently
-                $password_encrypted = $hasher->HashPassword($pass);
+                $password_encrypted = password_hash($pass, PASSWORD_DEFAULT);
                 $user_info_object->password = $password_encrypted;
                 Database::core()->query("SET sql_mode = TRADITIONAL");
                 Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
@@ -1100,6 +1115,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
                 $user_info_object->am = $options['am'];
                 Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
                     $options['am'], $user_info_object->id);
+                $_SESSION['auth_user_info']['studentid'] = $options['am'];
             }
             $userObj->refresh($user_info_object->id, $options['departments']);
             if (!array_search($user_info_object->password, $auth_ids)) {
@@ -1164,6 +1180,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
         return 6; // Redirect to Shibboleth login
     }
 
+    $GLOBALS['auth_userinfo'] = [];
     if ($user_info_object->password == $auth_method_settings['auth_name']) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
@@ -1196,7 +1213,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 
             $options = login_hook(array(
                 'user_id' => $user_info_object->id,
-                'attributes' => array(),
+                'attributes' => $GLOBALS['auth_userinfo'],
                 'status' => $user_info_object->status,
                 'departments' => $userObj->getDepartmentIds($user_info_object->id),
                 'am' => $user_info_object->am));
@@ -1368,7 +1385,7 @@ function shib_cas_login($type) {
             }
 
             $status = $options['status'];
-            $am = $options['am'];
+            $_SESSION['auth_user_info']['studentid'] = $am = $options['am'];
 
             // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
@@ -1430,6 +1447,7 @@ function shib_cas_login($type) {
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);
+        $_SESSION['auth_user_info']['studentid'] = $options['am'];
         $userObj = new User();
         $userObj->refresh($_SESSION['uid'], $options['departments']);
         user_hook($_SESSION['uid']);
@@ -1538,8 +1556,7 @@ function external_DB_Check_Pass($test_password, $hash, $encryption) {
         case 'md5':
             return (md5($test_password) == $hash);
         case 'ehasher':
-            $hasher = new PasswordHash(8, false);
-            return $hasher->CheckPassword($test_password, $hash);
+            return password_verify($test_password, $hash);
         default:
             /* Maybe append an error message to tool_content, telling not supported encryption */
     }

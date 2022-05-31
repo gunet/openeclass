@@ -4,24 +4,32 @@
  * ========================================================================
  * Open eClass 4.0 - E-learning and Course Management System
  * ========================================================================
-  Copyright(c) 2003-2020  Greek Universities Network - GUnet
-  A full copyright notice can be read in "/info/copyright.txt".
-
-  Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-  Yannis Exidaridis <jexi@noc.uoa.gr>
-  Alexandros Diamantidis <adia@noc.uoa.gr>
-
-  For a full list of contributors, see "credits.txt".
+ * Copyright 2003-2022  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ *
+ * For a full list of contributors, see "credits.txt".
  */
 
 /**
  * @file main.lib.php
- * @brief General useful functions for eClass.
+ * @brief General useful functions for eClass
+ * @authors many...
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.0-dev');
+//define('ECLASS_VERSION', '4.0-dev');
+define('ECLASS_VERSION', '3.8');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -31,7 +39,6 @@ if (isset($webDir)) { // needed for avoiding 'notices' in some files
 require_once 'constants.php';
 require_once 'lib/session.class.php';
 require_once 'lib/file_cache.class.php';
-
 
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below
@@ -51,13 +58,18 @@ function q_math($s) {
 
 // Escape string to use as JavaScript argument
 function js_escape($s) {
-    return q(str_replace("'", "\\'", $s));
+    return q(str_replace(["'", "\n"], ["\\'", '\n'], canonicalize_whitespace($s)));
 }
 
 function js_link($file) {
     global $urlAppend;
     $v = '?v=' . CACHE_SUFFIX;
-    return "<script type='text/javascript' src='{$urlAppend}js/$file$v'></script>\n";
+    if (strpos($file, 'node_modules') === 0) {
+        $root = 'node_modules';
+    } else {
+        $root = 'js';
+    }
+    return "<script type='text/javascript' src='{$urlAppend}$root/$file$v'></script>\n";
 }
 
 function css_link($file) {
@@ -132,9 +144,6 @@ function load_js($file, $init='') {
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
             $file = 'datatables/media/js/dataTables.bootstrap.js';
-        } elseif ($file == 'datatables_tabletools') {
-            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
-            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
         } elseif ($file == 'jszip') {
             $file = 'jszip/dist/jszip.min.js';
         } elseif ($file == 'pdfmake') {
@@ -200,11 +209,7 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-datepicker') {
             $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
             js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-            if ($language == 'en') {
-                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language-GB.min.js";
-            } else {
-                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
-            }
+            $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
         } elseif ($file == 'bootstrap-validator') {
             $file = "bootstrap-validator/validator.js";
         } elseif ($file == 'bootstrap-slider') {
@@ -213,10 +218,7 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-colorpicker') {
             $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
             $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-        } elseif ($file == 'bootstrap-combobox') {
-            $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
-            $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
-        } elseif ($file == 'spectrum') {
+        }   elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
         } elseif ($file == 'sortable') {
@@ -539,7 +541,7 @@ function group_secret($gid) {
 
 /**
  * displays a selection box
- * @param array $entries an array of (value => label)
+ * @param type $entries an array of (value => label)
  * @param type $name the name of the selection element
  * @param type $default if it matches one of the values, specifies the default entry
  * @param type $extra
@@ -616,19 +618,16 @@ function selection3($entries, $name, $default = '') {
  * @global type $uid
  * @return boolean
  */
-function check_guest($id = FALSE) {
-
+function check_guest($id = null) {
     if ($id) {
         $uid = $id;
     } else {
         $uid = $GLOBALS['uid'];
     }
     if (isset($uid) and $uid) {
-        if (DBHelper::fieldExists("user", "status")) {
-            $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
-            if ($status && $status->status == USER_GUEST) {
-                return TRUE;
-            }
+        $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
+        if ($status && $status->status == USER_GUEST) {
+            return true;
         }
     }
     return false;
@@ -747,9 +746,9 @@ function user_is_registered_to_course($uid, $course_id) {
 function user_exists($login) {
 
     if (get_config('case_insensitive_usernames')) {
-        $qry = "COLLATE utf8mb4_general_ci = ?s";
+        $qry = "COLLATE utf8_general_ci = ?s";
     } else {
-        $qry = "COLLATE utf8mb4_bin = ?s";
+        $qry = "COLLATE utf8_bin = ?s";
     }
     $username_check = Database::get()->querySingle("SELECT id FROM user WHERE username $qry", $login);
     if ($username_check) {
@@ -784,9 +783,9 @@ function is_inactive_user($uid) {
 function user_app_exists($login) {
 
     if (get_config('case_insensitive_usernames')) {
-        $qry = "COLLATE utf8mb4_general_ci = ?s";
+        $qry = "COLLATE utf8_general_ci = ?s";
     } else {
-        $qry = "COLLATE utf8mb4_bin = ?s";
+        $qry = "COLLATE utf8_bin = ?s";
     }
     $username_check = Database::get()->querySingle("SELECT id FROM user_request WHERE state = 1 AND username $qry", $login);
     if ($username_check) {
@@ -856,8 +855,7 @@ function new_code($fac) {
 
     // Make sure the code returned isn't empty!
     } else {
-        Session::Messages(trans('langGeneralError'), 'alert-danger');
-        redirect_to_home_page('main/portfolio.php');
+        die("Course Code is empty!");
     }
     return $code;
 }
@@ -903,7 +901,7 @@ function nice_format($date, $time = FALSE, $dont_display_time = FALSE) {
 }
 
 /**
- * @brief remove seconds from a given datetime
+ * @brief remove seoconds from a given datetime
  * @param type $datetime
  * @return datetime without seconds
  */
@@ -1508,46 +1506,6 @@ function add_units_navigation($entry_page = false) {
     }
 }
 
-/**
- * @global type $course_id
- * @param int $uid
- * @param type $all_units
- * @return array
- */
-function findUserVisibleUnits($uid, $all_units) {
-    global $course_id;
-
-    $user_units = [];
-    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, ub.completed 
-                                                          FROM course_units cu 
-                                                          INNER JOIN badge b ON (b.unit_id = cu.id)
-                                                          INNER JOIN user_badge ub ON (b.id = ub.badge)
-                                                          WHERE ub.user = ?d
-                                                          AND cu.course_id = ?d
-                                                          AND cu.visible = 1
-                                                          AND cu.public = 1
-                                                          AND cu.order >= 0", $uid, $course_id);
-    if ( isset($userInBadges) and $userInBadges ) {
-        foreach ($userInBadges as $userInBadge) {
-            if ($userInBadge->completed == 0) {
-                $userIncompleteUnits[] = $userInBadge->id;
-            }
-        }
-    }
-    foreach ($all_units as $unit) {
-        $unitPrereq = Database::get()->querySingle("SELECT prerequisite_unit FROM unit_prerequisite 
-                                                                WHERE unit_id = ?d", $unit->id);
-
-        if ( $unitPrereq and isset($userIncompleteUnits) and in_array($unitPrereq->prerequisite_unit, $userIncompleteUnits) ) {
-            continue;
-        }
-        $user_units[] = $unit;
-    }
-    return $user_units;
-}
-
-
-
 // Cut a string to be no more than $maxlen characters long, appending
 // the $postfix (default: ellipsis "...") if so
 function ellipsize($string, $maxlen, $postfix = '...') {
@@ -1912,11 +1870,18 @@ function deleteUser($id, $log) {
  * @return type
  */
 function get_config($key, $default = null) {
-
-    $r = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", $key);
-    if ($r) {
-        $row = $r->value;
-        return $row;
+    $cache = new FileCache('config', 300);
+    $config = $cache->get();
+    if ($config === false) {
+        $config = [];
+        $q = Database::get()->queryArray('SELECT `key`, `value` FROM config ORDER BY `key`');
+        foreach ($q as $item) {
+            $config[$item->key] = $item->value;
+        }
+        $cache->store($config);
+    }
+    if (isset($config[$key])) {
+        return $config[$key];
     } else {
         return $default;
     }
@@ -1928,10 +1893,9 @@ function get_config($key, $default = null) {
  * @param type $value
  */
 function set_config($key, $value) {
-    if (is_null($value)) {
-        $value = '';
-    }
     Database::get()->query("REPLACE INTO config (`key`, `value`) VALUES (?s, ?s)", $key, $value);
+    $cache = new FileCache('config', 300);
+    $cache->clear();
 }
 
 // Copy variables from $_POST[] to $GLOBALS[], trimming and canonicalizing whitespace
@@ -2114,10 +2078,20 @@ function openDocsPicker(field_name, url, type, win) {
 tinymce.init({
     // General options
     selector: 'textarea.mceEditor',
+    content_css: [
+        '{$urlAppend}template/default/CSS/bootstrap-custom.css',
+        '{$urlAppend}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css',
+    ],
+    content_style: 'body { margin: 8px; background: none !important; }',
+    extended_valid_elements: 'span[*]',
+    noneditable_noneditable_class: 'fa',
     language: '$language',
     cache_suffix: '?v=" . CACHE_SUFFIX . "',
     theme: 'modern',
     skin: 'light',
+    branding: false,
+    font_formats:
+    'Open Sans=open sans; Roboto=roboto; Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
     image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
@@ -2134,7 +2108,7 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking template wordcount advlist emoticons preview searchreplace table insertdatetime code textcolor colorpicker lists advlist',
+    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome',
     entity_encoding: 'raw',
     relative_urls: false,
     link_class_list: [
@@ -2143,19 +2117,10 @@ tinymce.init({
         {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'}
     ],
     $filebrowser
-    // Menubar options
-    menu : 'false',
+    menu: true,
     // Toolbar options
     toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview',
-    toolbar2: 'outdent indent | emoticons strikethrough superscript subscript table | pastetext cut copy paste | removeformat | formatselect | fontsizeselect | searchreplace undo redo | code',
-    // Replace values for the template plugin
-    // Toolbar options
-    //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
-    // Replace values for the template plugin
-    template_replace_values: {
-            username : 'Open eClass',
-            staffid : '991234'
-    }
+    toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome strikethrough superscript subscript table | pastetext cut copy paste | removeformat | searchreplace undo redo | code'
     $focus_init
 });
 </script>";
@@ -3153,10 +3118,7 @@ function framebusting_code() {
  * other web pages of the platform in case this functionality is needed.
  */
 function add_framebusting_headers() {
-    require_once 'modules/admin/extconfig/ltipublishapp.php';
-    $ltipublishapp = ExtAppManager::getApp('ltipublish');
-    $framebustheader = $ltipublishapp->getFramebustHeader();
-    header($framebustheader);
+    header('X-Frame-Options: SAMEORIGIN');
 }
 
 /**
@@ -3235,43 +3197,6 @@ function csrf_token_error() {
 
 
 
-/**
- * Indirect Reference to HelpFul Functions
- * @param  ArrayObject
- * @return ArrayObject
- */
-
-function arrayValuesToIndirect($inputarray){
-    $outputarray = [];
-    foreach ($inputarray as $key => $value) {
-        $outputarray[$key] = getIndirectReference($value);
-    }
-    return $outputarray;
-}
-
-function arrayKeysToIndirect($inputarray){
-    $outputarray = [];
-    foreach ($inputarray as $key => $value) {
-        $outputarray[getIndirectReference($key)] = $value;
-    }
-    return $outputarray;
-}
-
-function arrayValuesDirect($inputarray){
-    $outputarray = [];
-    foreach ($inputarray as $key => $value) {
-        $outputarray[$key] = getDirectReference($value);
-    }
-    return $outputarray;
-}
-
-function arrayKeysToDirect($inputarray){
-    $outputarray = [];
-    foreach ($inputarray as $key => $value) {
-        $outputarray[getDirectReference($key)] = $value;
-    }
-    return $outputarray;
-}
 
 
 
@@ -3568,7 +3493,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         return "<div class='row action_bar'>
                     <div class='col-sm-12 clearfix'>
                         $page_title
-                        <div class='margin-top-thin margin-bottom-fat pull-right hidden-print'>
+                        <div class='margin-top-thin margin-bottom-fat pull-right'>
                             <div class='btn-group'>
                             $out
                             $action_button
@@ -3590,73 +3515,90 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  *
  */
 function action_button($options, $secondary_menu_options = array()) {
-    $primary_form_begin = $primary_form_end = $secondary = $primary = '';
-    foreach ($options as $option) {
+    global $langConfirmDelete, $langCancel, $langDelete;
+    $out_primary = $out_secondary = array();
+    $primary_form_begin = $primary_form_end = $primary_icon_class = '';
+    foreach (array_reverse($options) as $option) {
+        $level = isset($option['level'])? $option['level']: 'secondary';
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-
-        $icon = isset($option['icon'])? $option['icon']: 'question-circle-o';
-        $level = isset($option['level'])? $option['level']: null;
-        $class = isset($option['class'])? " $option[class]": '';
-        $btn_class = isset($option['btn-class'])? $option['btn-class']: 'btn-default';
-        $link_attrs = isset($option['link-attrs'])? $option['link-attrs']: '';
-        $icon_class = isset($option['icon-class'])? $option['icon-class']: '';
-        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $url = isset($option['url'])? $option['url']: null;
-        $form_begin = $form_end = '';
-        if (isset($option['confirm'])) {
-            $btn_class .= ' confirmAction';
-            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : trans('langConfirmDelete'));
-            $accept = q(isset($option['confirm_button']) ? $option['confirm_button'] : trans('langDelete'));
-            $form_begin = "<form method=post action='$url'>";
-            $form_end = '</form>';
-            $url = null;
-            $link_attrs .= " data-title='$title' data-message='" . q($option['confirm']) .
-                "' data-cancel-txt='" . trans('langCancel') .
-                "' data-action-txt='$accept' data-action-class='btn-danger'";
-        }
-        if ($level == 'primary-label' or $level == 'primary') {
-            if ($level == 'primary') {
-                $link_attrs .= " data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "'";
-                $btn_label = '';
-            } else {
-                $icon .= ' space-after-icon';
-                $btn_label = q($option['title']) . "<span class='hidden'>.</span>";
-            }
-            $element = ($url? "<a href='$url' class='btn $btn_class$disabled' $link_attrs>":
-                "<button class='btn $btn_class$disabled' $link_attrs>") .
-                "<span class='fa $icon$icon_class'></span>$btn_label" .
-                ($url? '</a>': '</button>');
-            $primary_form_begin = $form_begin;
-            $primary_form_end = $form_end;
-            $primary .= $element;
+        if (isset($option['class'])) {
+            $class = ' ' . $option['class'];
         } else {
-            $url = $url? $url: '#';
-            $class .= isset($option['confirm'])? ' confirmAction': '';
-            $secondary .= $form_begin .
-                "<a href='$url' class='list-group-item$class'$link_attrs>" .
-                "<span class='fa $icon $icon_class'></span> " . q($option['title']) .
-                '</a>' . $form_end;
+            $class = '';
+        }
+        if (isset($option['btn_class'])) {
+            $btn_class = ' ' . $option['btn_class'];
+        } else {
+            $btn_class = ' btn-default';
+        }
+        if (isset($option['link-attrs'])) {
+            $link_attrs = ' ' . $option['link-attrs'];
+        } else {
+            $link_attrs = '';
+        }
+        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
+        $icon_class = "class='list-group-item $class$disabled";
+        if (isset($option['icon-class'])) {
+            $icon_class .= " " . $option['icon-class'];
+        }
+        if (isset($option['confirm'])) {
+            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
+            $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $form_begin = "<form method=post action='$option[url]'>";
+            $form_end = '</form>';
+            if ($level == 'primary-label' or $level == 'primary') {
+                $primary_form_begin = $form_begin;
+                $primary_form_end = $form_end;
+                $form_begin = $form_end = '';
+                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+            } else {
+                $icon_class .= " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+                $primary_icon_class = '';
+            }
+            $url = '#';
+        } else {
+            $icon_class .= "'";
+            $confirm_extra = $form_begin = $form_end = '';
+            $url = isset($option['url'])? $option['url']: '#';
+        }
+        if (isset($option['icon-extra'])) {
+            $icon_class .= ' ' . $option['icon-extra'];
+        }
+
+        if ($level == 'primary-label') {
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "<span class='hidden'>.</span></a>");
+        } elseif ($level == 'primary') {
+            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'>.</span></a>");
+        } else {
+            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }
     }
-
-    if ($secondary) {
-        $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
-        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : 'fa-gear';
-        $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : 'btn-default';
-        $action_list = q("<div class='list-group' id='action_button_menu'>" . $secondary . "</div>");
-        $secondary = "
+    $primary_buttons = "";
+    if (count($out_primary)) {
+        $primary_buttons = implode('', $out_primary);
+    }
+    $action_button = "";
+    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
+    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
+    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
+    if (count($out_secondary)) {
+        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
+        $action_button = "
                 <a tabindex='1' class='menu-popover btn $secondary_btn_class' data-container='body' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm' role='group'>" .
-         $primary . $secondary .
-         '</div>' . $primary_form_end;
+         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+                $primary_buttons
+                $action_button
+          </div>" . $primary_form_end;
 }
 
 /**
@@ -4055,16 +3997,6 @@ function array_value_recursive($key, array $arr){
 }
 
 /**
- @brief reindex array keys so that they start from 1 (not from 0)
- * @param $a array
- * @return array
- */
-function reindex_array_keys_from_one($a) {
-
-    return array_combine(range(1, count($a)), array_values($a));
-}
-
-/**
  * Function called whenever a user is created or changed
  *
  * @param $user_id integer
@@ -4157,6 +4089,7 @@ function warnCourseInvalidDepartment($prompt=false) {
  * 'am'          - Student id number
  */
 function login_hook($options) {
+    session_regenerate_id();
     if (!isset($options['am'])) {
         $options['am'] = '';
     }
@@ -4249,24 +4182,39 @@ function checkSecondFactorChallenge(){
     }
 }
 
-function trans($var_name, $var_array = []) {
-    if (preg_match("/\['.+'\]/", $var_name)) {
-        preg_match_all("([^\['\]]+)", $var_name, $matches);
-        global ${$matches[0][0]};
 
-        if ($var_array) {
-            return vsprintf(${$matches[0][0]}[$matches[0][1]], $var_array);
-        } else {
-            return ${$matches[0][0]}[$matches[0][1]];
-        }
+/**
+ * @brief Enable display of bootbox password dialog for assignments and
+ *        exercises and warn about paused exercises
+ */
+function enable_password_bootbox() {
+    global $head_content, $langCancel, $langSubmit,
+        $langAssignmentPasswordModalTitle, $langExercisePasswordModalTitle,
+        $langTheFieldIsRequired, $langTemporarySaveNotice2,
+        $langContinueAttemptNotice, $langContinueAttempt;
+
+    static $enabled = false;
+
+    if ($enabled) {
+        return;
     } else {
-        global ${$var_name};
-
-        if ($var_array) {
-            return vsprintf(${$var_name}, $var_array);
-        } else {
-            return ${$var_name};
-        }
+        $enabled = true;
+        $head_content .= "
+        <script>
+            var lang = {
+                assignmentPasswordModalTitle: '" . js_escape($langAssignmentPasswordModalTitle). "',
+                exercisePasswordModalTitle: '" . js_escape($langExercisePasswordModalTitle). "',
+                theFieldIsRequired: '" . js_escape($langTheFieldIsRequired). "',
+                temporarySaveNotice: '" . js_escape($langTemporarySaveNotice2). "',
+                continueAttemptNotice: '" . js_escape($langContinueAttemptNotice). "',
+                continueAttempt: '" . js_escape($langContinueAttempt). "',
+                cancel: '" . js_escape($langCancel). "',
+                submit: '" . js_escape($langSubmit). "',
+            };
+            $(function () {
+                $(document).on('click', '.ex_settings, .password_protected', unit_password_bootbox);
+            });
+        </script>";
     }
 }
 
@@ -4289,5 +4237,33 @@ function get_exercise_attempt_status_legend($status) {
             return $langAttemptPaused;
         case ATTEMPT_CANCELED:
             return $langAttemptCanceled;
+    }
+}
+
+
+/**
+ * @brief translate messages in blade views
+ * @param $var_name
+ * @param $var_array
+ * @return mixed|string
+ */
+function trans($var_name, $var_array = []) {
+    if (preg_match("/\['.+'\]/", $var_name)) {
+        preg_match_all("([^\['\]]+)", $var_name, $matches);
+        global ${$matches[0][0]};
+
+        if ($var_array) {
+            return vsprintf(${$matches[0][0]}[$matches[0][1]], $var_array);
+        } else {
+            return ${$matches[0][0]}[$matches[0][1]];
+        }
+    } else {
+        global ${$var_name};
+
+        if ($var_array) {
+            return vsprintf(${$var_name}, $var_array);
+        } else {
+            return ${$var_name};
+        }
     }
 }

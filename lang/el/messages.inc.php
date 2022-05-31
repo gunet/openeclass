@@ -75,6 +75,9 @@ $langSearchResults = 'Αποτελέσματα αναζήτησης';
 /* * ******************************************
  * addadmin.php
  * ******************************************* */
+$langAddAdmin = 'Προσθήκη διαχειριστή';
+$langEditUser = 'Επεξεργασία χρήστη';
+$langEditPrivilege = 'Επεξεργασία δικαιωμάτων';
 $langDeleteAdmin = "H διαγραφή του διαχειριστή με id:";
 $langNotFeasible = "δεν είναι εφικτή";
 $langAdmins = "Διαχειριστές";
@@ -358,6 +361,7 @@ $langBackCourse = "Επιστροφή στην αρχική σελίδα του 
 $langCourseFormat = "Mορφή $langsOfCourse";
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
 $langCourseActivityFormat = 'Μορφή δραστηριότητας';
+$langCourseWallFormat = 'Μορφή τοίχου';
 $langWithCourseUnits = "$langCourse με ενότητες (εβδομαδιαίες, θεματικές)";
 $langCourseSimpleFormat = 'Απλή μορφή';
 $langAddWeek = 'Προσθήκη εβδομάδας';
@@ -423,6 +427,9 @@ $langConnNo = "Η σύνδεση δεν λειτουργεί";
 $langAuthNoValidUser = "Τα στοιχεία που δώσατε δεν είναι σωστά. Η εγγραφή δεν πραγματοποιήθηκε.";
 $langConnTest = 'Δοκιμή τρόπου πιστοποίησης';
 $langAuthMethod = "Τρόπος πιστοποίησης χρηστών";
+$langTransitionEnable = "Ενεργοποίηση μετάβασης";
+$langTransitionDisable = "Απενεργοποίηση μετάβασης";
+$langTransitionExcludeReq = "Αιτήματα εξαιρέσεων μετάβασης";
 $langdbhost = "Εξυπηρέτης Βάσης Δεδομένων";
 $langdbname = "Όνομα Βάσης Δεδομένων";
 $langdbuser = "Χρήστης Βάσης Δεδομένων";
@@ -920,11 +927,11 @@ $langCheckOk = "Έχετε εγκαταστήσει όλα τα προαπαιτ
 
 
 /* * **********************************************************
- * conference
+ * chat
  * **************************************************************** */
 $langWash = "Καθάρισμα";
-$langWashSuccess = "Η κουβέντα καθάρισε με επιτυχία.";
-$langWashFrom = "Η κουβέντα καθάρισε από";
+$langWashSuccess = "Οι συνομιλίες διαγράφηκαν με επιτυχία.";
+$langWashFrom = "Οι συνομιλίες διαγράφηκαν από";
 $langSave = "Αποθήκευση";
 $langClearedBy = "καθαρισμός από";
 $langChatError = "Δεν είναι δυνατόν να ξεκινήσει η Ζωντανή Τηλεσυνεργασία";
@@ -933,16 +940,16 @@ $langButtonVideo = "Μετάδοση";
 $langButtonPresantation = "Μετάδοση";
 $langActivateConference = "Ενεργοποίηση τηλεσυνεργασίας";
 $langpresantation = "Σύνδεσμος παρουσίασης ιστοσελίδας";
-$langSaveChat = "Αποθήκευση κουβέντας";
-$langSaveMessage = "Η κουβέντα αποθηκεύθηκε στα Έγγραφα";
-$langSaveErrorMessage = "Η κουβέντα δεν μπόρεσε να αποθηκευθεί";
-$langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα 'Κουβέντα' !";
-$langChatToSpecUsers = "Στην κουβέντα θα συμμετέχουν οι παρακάτω χρήστες";
-$langChatDeleted ="Η κουβέντα διαγράφηκε";
-$langNoChatAvailable = "Δεν υπάρχουν διαθέσιμες \"Κουβεντούλες\"";
+$langSaveChat = "Αποθήκευση συνομιλίας";
+$langSaveMessage = "Η συνομιλία αποθηκεύθηκε στα Έγγραφα";
+$langSaveErrorMessage = "Η συνομιλία δεν μπόρεσε να αποθηκευθεί";
+$langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα!";
+$langChatToSpecUsers = "Στην συνομιλία θα συμμετέχουν οι παρακάτω χρήστες";
+$langChatDeleted ="Η συνομιλία διαγράφηκε";
+$langNoChatAvailable = "Δεν υπάρχουν συνομιλίες";
 $langChatActive = "Ενεργή";
 $langChatInactive = "Ανενεργή";
-$langChatTitleError = "Παρακαλώ συμπληρώστε τον τίτλο της Κουβεντούλας";
+$langChatTitleError = "Παρακαλώ συμπληρώστε τον τίτλο της συνομιλίας";
 $langUntitledChat = "Ελεύθερη κουβεντούλα $langsOfCourse";
 $langChatActivity = "Συνομιλία Δραστηριότητας ColMOOC";
 $langCreateAgent = "Δημιουργία Agent";
@@ -1114,11 +1121,15 @@ $langWithUsernames = 'ονόματα χρήστών';
 $langUnansweredQuestions = 'Μη απαντηθείσες ερωτήσεις';
 $langUnansweredQuestionsWarningOne = 'Δεν έχετε απαντήσει σε μία ερώτηση.';
 $langUnansweredQuestionsWarningMany = 'Δεν έχετε απαντήσει σε _ ερωτήσεις.';
+$langUnansweredQuestionsWarningThisOne = 'Δεν έχετε απαντήσει στην ερώτηση αυτή.';
+$langUnansweredQuestionsWarningUnseen = 'Δεν έχετε δει ακόμα όλες τις ερωτήσεις.';
 $langUnansweredQuestionsQuestion = 'Θέλετε να προχωρήσετε στην υποβολή ή να επιστρέψετε στην πρώτη αναπάντητη ερώτηση;';
+$langUnansweredQuestionsNoTurnBack = 'Θέλετε σίγουρα να προχωρήσετε στην επόμενη ερώτηση; Δε θα μπορείτε να επιστρέψετε.';
 $langNoDeadline = "Χωρίς προθεσμία";
 $langExerciseFinalSubmit = 'Οριστική υποβολή';
 $langExerciseFinalSubmitWarn = 'Προσοχή! Η άσκηση θα υποβληθεί οριστικά. Θέλετε να προχωρήσετε;';
 $langConvertedTo = "μετατράπηκε σε";
+$langNextQuestion = 'Επόμενη ερώτηση';
 
 
 /* * ***************************************************
@@ -1492,6 +1503,13 @@ $langGroupDeleted = "Η ομάδα χρηστών διαγράφηκε";
 $langGroupTeam = "Γενικές Ομάδες Χρηστών";
 $langInvalidNumericValue = "άκυρη τιμή πεδίου";
 $langGroupFull = "η ομάδα είναι πλήρης";
+$langGroupManyUsers = "<strong>Σημείωση</strong>: Οι χρήστες θα πρέπει να είναι ήδη εγγεγραμμένοι στο $langsCourse.";
+$langUsersNotFound = 'Οι παρακάτω χρήστες δε βρέθηκαν στην πλατφόρμα';
+$langUsersNotRegistered = "Οι παρακάτω χρήστες δεν έχουν εγγραφεί στο $langsCourse";
+$langUsersNotAdded = 'Δεν προστέθηκε κανένας χρήστης. Παρακαλούμε διορθώστε τα παρακάτω προβλήματα και επανυποβάλλετε τη φόρμα.';
+$langUsersInOtherGroups = 'Οι παρακάτω χρήστες βρέθηκαν σε άλλες ομάδες του μαθήματος και δεν επιτρέπεται η εγγραφή τους σε αυτήν';
+$langUsersOverMaximum = 'Ο τελικός αριθμός (%d) υπερβαίνει το μέγιστο πλήθος μελών της ομάδας (%d).';
+$langUsersAddedToGroup = 'Οι χρήστες προστέθηκαν στην ομάδα.';
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη 'Διαχείριση $langOfCourse'";
@@ -1765,6 +1783,7 @@ $langEvalSet = "Ρυθμίσεις βαθμολογίας";
 $langExercice = "Ασκηση";
 $langActive = "ενεργό";
 $langInactive = "μη ενεργό";
+$langNoEx = "Δεν υπάρχει διαθέσιμη άσκηση";
 $langNewEx = "Νέα Άσκηση";
 $langExerciseType = "Τύπος Άσκησης";
 $langExerciseName = "Όνομα Άσκησης";
@@ -1772,7 +1791,8 @@ $langExerciseScaleGrade = "Κλίμακα βαθμολογίας";
 $langExerciseNoScaleGrade = "χωρίς κλίμακα";
 $langExerciseDescription = "Περιγραφή Άσκησης";
 $langSimpleExercise = "Σε μία μόνο σελίδα";
-$langSequentialExercise = "Μία ερώτηση ανά σελίδα (στη σειρά)";
+$langSequentialExercise = "Μία ερώτηση ανά σελίδα με δυνατότητα πλοήγησης";
+$langOneWayExercise = "Μία ερώτηση ανά σελίδα χωρίς επιστροφή σε προηγούμενες ερωτήσεις";
 $langRandomQuestions = "Τυχαίες Ερωτήσεις";
 $langGiveExerciseName = "Δώστε το όνομα της άσκησης";
 $langGiveExerciseInts = "Τα πεδία Χρονικός Περιορισμός & Επιτρεπόμενες Επαναλήψεις πρέπει να είναι ακέραιοι αριθμοί";
@@ -1879,6 +1899,7 @@ $langConfirmQuestionPoolPurge = "Οι ερωτήσεις που δεν χρησ�
 $langQuestionPoolPurgeSuccess = "Η διαγραφή των αχρησιμοποίητων ερωτήσεων από την τράπεζα ερωτήσεων πραγματοποιήθηκε.";
 $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
 $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
+$langClear = 'Εκκαθάριση';
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -1889,6 +1910,7 @@ $langQuestionNotFound = "Δεν βρέθηκε η ερώτηση";
 $langAlertAdmin = "Παρακαλώ δηλώστε τουλάχιστον έναν διαχειριστή για το $langsCourse!";
 $langBackExerciseManagement = "Επιστροφή στη διαχείριση άσκησης";
 $langExerciseExecute = "Εκτέλεση";
+$langExercisePeriod = 'Περίοδος εκτέλεσης';
 
 // question_admin.php
 $langNoAnswer = "Δεν υπάρχει απάντηση αυτή την στιγμή!";
@@ -1914,7 +1936,6 @@ $langFillBlanksStrict = "Αυστηρή Ταυτοποίηση";
 $langFillBlanksTolerant = "Χαλαρή Ταυτοποίηση";
 $langFillBlanksStrictExample = "(Αθήνα ≠ αθηνα ≠ ΑΘΗΝΑ)";
 $langFillBlanksTolerantExample = "(Αθήνα = αθηνα = ΑΘΗΝΑ)";
-$langFillFromSelectedWords = "Επιλογή από προκαθορισμένες απαντήσεις";
 $langMatching = "Αντιστοίχιση";
 $langTrueFalse = "Σωστό / Λάθος";
 $langFreeText = "Ελεύθερου Κειμένου";
@@ -1939,13 +1960,10 @@ $langCheckAccess = "Έλεγχος πρόσβασης";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
-$langWeightingForEachBlankandChoose = "Δώστε ένα βάρος σε κάθε κενό και διαλέξτε την σωστή απάντηση";
 $langUseTagForBlank = "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά και τον χαρακτήρα | αν θέλετε να ορίσετε περισσότερες από μία σωστές απαντήσεις για το ίδιο κενό (π.χ. [Ιωάννινα|Γιάννενα])";
-$langUseTagForSelectedWords = "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά και τον χαρακτήρα | για να ορίσετε τις πιθανές απαντήσεις";
 $langQuestionWeighting = "Βάρος";
 $langTypeTextBelow = "Πληκτρολογήστε το κείμενό σας παρακάτω";
 $langDefaultTextInBlanks = "Πρωτεύουσα της Ελλάδας είναι η [Αθήνα].";
-$langDefaultMissingWords = "Πρωτεύουσα της Ελλάδας είναι η [Πάτρα|Αθήνα|Θεσσαλονίκη].";
 $langDefaultMatchingOpt1 = "Αθήνα";
 $langDefaultMatchingOpt2 = "Λονδίνο";
 $langDefaultMakeCorrespond1 = "Πρωτεύουσα της Ελλάδας είναι η";
@@ -1961,7 +1979,6 @@ $langChooseGoodAnswers = "Διαλέξτε μία ή περισσότερες σ
 $langColumnA = "Στήλη Α";
 $langColumnB = "Στήλη B";
 $langMoreLessChoices = "Προσθήκη/Αφαίρεση επιλογών";
-$langQuestionUpdated = "Τα στοιχεία της ερώτησης ενημερώθηκαν";
 
 // question_list_admin.php
 $langQuestionList = "Ερωτήσεις της άσκησης";
@@ -2020,6 +2037,7 @@ $langContinueAttemptExplanation = 'Ενεργοποίηση δυνατότητα
     διακόπηκαν απότομα, για περιορισμένο χρονικό διάστημα από την τελευταία ενέργεια
     του χρήστη.';
 $langContinueAttemptTime = 'Χρονικό περιθώριο: [] λεπτά.';
+$langWarnOneWayExercise = "Προσοχή: οι ερωτήσεις εμφανίζονται μία ανά σελίδα και δεν έχετε δυνατότητα επιστροφής σε προηγούμενες σελίδες.";
 
 // exercise result.php
 $langStart = "Έναρξη";
@@ -2105,6 +2123,7 @@ $langNodePublic = "Δημόσια προβολή";
 $langNodePublic2 = "Η $langsFaculty θα εμφανίζεται για όλους τους χρήστες";
 $langNodeSubscribed = "Προβολή Εγγεγραμμένων";
 $langNodeSubscribed2 = "Η $langsFaculty θα εμφανίζεται μόνο για τους εγγεγραμμένους σε αυτήν χρήστες";
+$langNodeHidden = "Απόκρυψη";
 $langNodeHidden2 = "Η $langsFaculty θα παραμένει κρυμμένη από όλους τους χρήστες";
 $langNodeOrderPriority = "Προτεραιότητα Ταξινόμησης";
 $langNodeOrderPriority2 = "(όσο ψηλότερη τιμή, τόσο ψηλότερα στην ταξινόμηση)";
@@ -2453,6 +2472,8 @@ $lang_max_glossary_terms = "Δεν επιτρέπεται η εμφάνιση ο
 $langCaseInsensitiveUsername = "Χωρίς διάκριση πεζών/κεφαλαίων στο όνομα χρήστη";
 $lang_email_required = "Να είναι υποχρεωτικό το email του $langOfUser";
 $lang_email_verification_required = "Να είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser";
+$lang_email_prevent_autoset_change = "Να μην επιτρέπεται η αλλαγή e-mail που έχει οριστεί αυτόματα κατά την πιστοποίηση";
+$lang_am_prevent_autoset_change = "Να μην επιτρέπεται η αλλαγή αριθμού μητρώου που έχει οριστεί αυτόματα κατά την πιστοποίηση";
 $lang_dont_mail_unverified_mails = "Να μην γίνεται αποστολή e-mail σε $langUsersS που δεν έχουν επιβεβαιώσει την ηλεκτρονική τους διεύθυνση";
 $lang_email_from = "Τα emails θα στέλνονται από την προσωπική διεύθυνση αποστολέα των χρηστών";
 $lang_am_required = "Να είναι υποχρεωτικός ο αριθμός μητρώου του $langsOfStudent κατά την εγγραφή";
@@ -2531,7 +2552,7 @@ $langNoBlock = "Μη φραγή";
 $langRestrictedLPath = "Για την παρακολούθηση αυτής της Γραμμής Μάθησης καθώς και των επακόλουθων, θα πρέπει να έχει προηγηθεί η παρακολούθηση των ανωτέρων";
 $langBrowserCannotSeeFrames = "Ο browser σας δεν αναγνωρίζει frames.";
 $langChangeRaw = "Αλλαγή του ελάχιστου αρχικού σημείου για να περάσει αυτή η ενότητα (ποσοστό): ";
-$langChat = "Κουβεντούλα";
+$langChat = "Συνομιλία";
 $langConfirmYourChoice = "Παρακαλώ επιβεβαιώστε την επιλογή σας";
 $langCourseDescription = "Πληροφορίες";
 $langCourseDescriptionAsModule = "Χρήση Πληροφοριών $langOfCourse";
@@ -3046,8 +3067,8 @@ $langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχε�
 $langSurveyCharts = "Αποτελέσματα έρευνας";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
 $langOpenParticipation = "Οι συμμετοχές είναι ανοικτές";
-$langSurveyNotStarted = "Δεν έχει ανοίξει ακόμα";
-$langQQuestionNotGiven = "Δεν έχετε εισαγάγει την τελευταία ερώτηση.";
+$langSurveyNotStarted = "Δεν έχει ξεκινήσει";
+$langQQuestionNotGiven = "Δεν έχετε εισάγει την τελευταία ερώτηση.";
 $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
 $langCreateDuplicate = "Δημιουργία Αντιγράφου";
 $langCopy2 = "Αντίγραφο";
@@ -3058,6 +3079,7 @@ $langCopySuccess = "Το αντίγραφο δημιουργήθηκε με επ
 $langGeneralSurvey = "Γενικό ερωτηματολόγιο";
 $langCollesSurvey = "COLLES";
 $langATTLSSurvey = "A.T.T.L.S.";
+$langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 
 //COLLES survey
@@ -3198,7 +3220,7 @@ $langPollInactive = "Το Ερωτηματολόγιο έχει λήξει ή δ
 $langPollCharts = "Αποτελέσματα Ερωτηματολογίου";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
 $langPollAnonymize = "Ανωνυμοποίηση αποτελεσμάτων";
-$langPollShowResults = "Εμφάνιση αποτελεσμάτων στους συμμετέχοντες";
+$langPollShowResults = "Εμφάνιση αποτελεσμάτων στους $langsOfStudentss";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
@@ -3214,6 +3236,10 @@ $langPollParticipateConfirm = "Κάντε κλικ στον παρακάτω σ�
 $langPollEmailUsed = 'περιέχει ένα λογαριασμό που έχει χρησιμοποιηθεί για την απάντηση του ερωτηματολογίου';
 $langPollParticipateConfirmation = "Επιβεβαίωση Συμμετοχής σε Ερωτηματολόγιο";
 $langPollParticipationValid = "Οι απαντήσεις σας καταγράφηκαν με επιτυχία.";
+$langActivateMulSubmissions = "Ενεργοποίηση πολλαπλών υποβολών από τους $langsOfStudentss";
+$langActivateDefaultAnswer = "Ενεργοποίηση απάντησης 'δεν ξέρω / δεν απαντώ'";
+$langPollOutcomeClose = "Μπορείτε να κλείσετε αυτό το παράθυρο ή να επιστρέψετε στην προηγούμενη σελίδα.";
+
 
 /* * **********************************************************
  * registration.php
@@ -3299,16 +3325,16 @@ $langProviderIdAlreadyExists = 'Η ρύθμιση δεν είναι αποθηκ
 $langAuthSettingsSaved = "Οι ρυθμίσεις σας έχουν αποθηκευτεί";
 $langProviderConnectWithAlternativeProviders = 'Σύνδεση ή εγγραφή με εναλλακτικούς παρόχους';
 $langProviderConnect = 'Σύνδεση';
-$langProviderConnectWith = 'Σύνδεση με προφίλ';
+$langProviderConnectWith = 'Σύνδεση με λογαριασμό';
 $langProviderConnectWithTooltip = 'Ο λογαριασμός σας θα συνδεθεί με το αντίστοιχο προφίλ σας ώστε να μπορείτε να εισέρχεστε στην πλατφόρμα με αυτό';
 $langProviderConnected = 'Έχετε δυνατότητα σύνδεσης με το ';
 $langProviderDeleteConnection = 'Διαγραφή';
 $langProviderError = 'Οι ρυθμίσεις σχετικά με τον πάροχο αυθεντικοποίησης δεν είναι ορθές';
 $langProviderError1 = 'Άγνωστο σφάλμα αυθεντικοποίησης';
-$langProviderError2 = 'Σφάλμα ρύθμισης του HybridAuth';
-$langProviderError3 = 'Οι ρυθμίσεις για τον συγκεκριμένο πάροχο δεν είναι ορθές';
+$langProviderError2 = 'Σφάλμα ρύθμισης της βιβλιοθήκης HybridAuth';
+$langProviderError3 = 'Οι ρυθμίσεις για τον συγκεκριμένο πάροχο δεν είναι σωστές';
 $langProviderError4 = 'Άγνωστος ή απενεργοποιημένος πάροχος';
-$langProviderError5 = 'Τα στοιχεία σύνδεσης για την εφαρμογή στον πάροχο δεν είναι ορθά';
+$langProviderError5 = 'Τα στοιχεία σύνδεσης για την εφαρμογή στον πάροχο δεν είναι σωστά';
 $langProviderError6 = 'Η αυθεντικοποίηση απέτυχε λόγω αναφοράς σφάλματος από τον πάροχο';
 $langProviderError7 = 'Η λήψη του προφίλ απέτυχε διότι δεν είστε συνδεδεμένοι με τον πάροχο. Δοκιμάστε να επανασυνδεθείτε';
 $langProviderError8 = 'Ο χρήστης δεν είναι συνδεδεμένος με τον πάροχο';
@@ -3353,6 +3379,7 @@ $langGUser = "χρήστη επισκέπτη";
 $langAddGUser = "Προσθήκη χρήστη επισκέπτη";
 $langNoUsersFound = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε ή ο χρήστης υπάρχει ήδη στο $langsCourse.";
 $langNoUsersFound2 = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε";
+$langUserAlreadyRegisterd = 'έχει ήδη εγγραφεί';
 $langRegister = "Εγγραφή";
 $langUnRegister = "Απεγγραφή";
 $langAdded = " προστέθηκε στο $langsCourse.";
@@ -3502,6 +3529,11 @@ $langNewProfAccountActivation = "Ενεργοποίηση Λογαριασμού
 $langNewAccountActivation1 = "την ενεργοποίηση λογαριασμού σας";
 $langUserExistingAccount = "Στοιχεία Εισόδου";
 $langMultiRegUserData = "Στοιχεία Λογαριασμών Χρηστών";
+$langHybridAuthSetup1 = "<br>Για οδηγίες σχετικά με τον ορισμό των πεδίων <strong>";
+$langHybridAuthSetup2 = " Id/Key</strong> και <strong>";
+$langHybridAuthSetup3 = " Secret</strong> πατήστε <a href=";
+$langHybridAuthSetup4 = " target='_blank'>εδώ</a>.";
+$langHybridAuthCallback = "<br>Ο σύνδεσμος <strong>callback</strong> της εφαρμογής είναι: ";
 
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";
@@ -3811,6 +3843,8 @@ $langDatabaseExists = 'Προσοχή: Η βάση δεδομένων "%s" υπ�
     χρησιμοποιεί η πλατφόρμα (είτε συμπτωματικά, είτε αν πρόκειται για υπάρχουσα
     εγκατάσταση του Open eClass). Πριν προχωρήσετε, επιβεβαιώστε ότι δεν υπάρχει
     πρόβλημα ή επιστρέψτε στο προηγούμενο βήμα και εισαγάγετε άλλο όνομα βάσης.';
+$langAddingDirectoryIndex = 'Προσθήκη αρχείων index.html στους υποκαταλόγους μαθημάτων';
+$langChangeDBEncoding = "Αλλαγή κωδικοποίησης της βάσης δεδομένων σε utf8mb4";
 
 /* * *****************************************************************
  * course_tools.php
@@ -4236,6 +4270,7 @@ $m['today'] = "σήμερα";
 $m['tomorrow'] = "αύριο";
 $m['submitted'] = "Έχει&nbsp;αποσταλεί";
 $m['pending'] = "Προς επιβεβαίωση";
+$m['select'] = "Επιλογή";
 $m['groupsubmit'] = "Υποβλήθηκε εκ μέρους της";
 $m['ofgroup'] = "ομάδας";
 $m['deleted_work_by_user'] = "Διαγράφηκε η προηγούμενη υποβληθείσα
@@ -4306,6 +4341,7 @@ $langGroupWorkIntro = "
 	δεν μπορείτε να στείλετε αρχείο σε εργασία που έχει ήδη βαθμολογηθεί
 	από τον διδάσκοντα.";
 $langAssignmentPasswordModalTitle = "Παρακαλώ πληκτρολογήστε τον κωδικό της εργασίας";
+$langWillStartAt = 'έναρξη στις';
 $langGroupWorkSubmitted = "Έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία υποβολής";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";
@@ -4440,6 +4476,7 @@ $langReviewEnd = "Λήξη αξιολόγησης";
 $langReviewDateHelpBlock = "Κάντε κλικ για να ορίσετε μια διαφορετική (μελλοντική) Ημερομηνία Έναρξης Αξιολόγησης";
 $langPeerReviewImpossible = "Το πλήθος των εργασιών δεν επαρκεί για να γίνει αξιολόγηση από ομότιμους";
 $langPeerReviewGrade = "Βαθμός αξιολόγησης";
+$langTransferGrades = "Μεταφορά βαθμών";
 $langPeerReviewCompletedByStudent = "Ολοκλήρωσε τις αξιολογήσεις του";
 $langPeerReviewPendingByStudent = "Οι αξιολογήσεις του δεν έχουν ολοκληρωθεί";
 $langPeerReviewMissingByStudent = "Δεν έχει εκτελέσει τις αξιολογήσεις του";
@@ -4533,7 +4570,8 @@ $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
 $langInsertPoll = "ερωτηματολογίου";
 $langInsertTcMeeting = "τηλεσυνεργασίας";
-$langInsertChat = "κουβεντούλας";
+$langInsertChat = "συνομιλίας";
+$langInsertBlog = "ιστολογίου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 $langAddToCourseHome = "Εμφάνιση στην κεντρική σελίδα του $langsOfCourse";
@@ -4547,33 +4585,6 @@ $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
 $langNoUnits = "Δεν υπάρχουν ενότητες";
 
 /* * ********************************************************************
-  units_prerequisites
- * ********************************************************************* */
-$langUnitManage = 'Διαχείριση ενότητας';
-$langUnitCompletion = "Ολοκλήρωση ενότητας";
-$langUnitCompletionMessage = "Η ενότητα ολοκληρώθηκε με επιτυχία";
-$langUnitExerciseAdd = "Η άσκηση προστέθηκε με επιτυχία";
-$langManage = "Διαχείριση ενοτήτων";
-$langUnitActivity = "δραστηριότητας";
-$langUnitCompletionActivate = "Ενεργοποίηση Ολοκλήρωσης";
-$langUnitCompletionDeactivate = "Απενεργοποίηση Ολοκλήρωσης";
-$langUnitCompletionActivated = "Η ολοκλήρωσης της ενότητας ενεργοποιήθηκε";
-$langUnitCompletionDeactivated = "Η ολοκλήρωσης της ενότητας απενεργοποιήθηκε";
-$langOfCourseCompletion = "Δραστηριοτήτων ολοκλήρωσης ενοτήτων";
-$langUnitPrerequisites = "Προαπαιτούμενη ενότητα";
-$langNewUnitPrerequisite = "Προσθήκη προαπαιτούμενου";
-$langNoUnitPrerequisite = "Δεν έχει οριστεί προαπαιτούμενη ενότητα.";
-$langUnitHasNotCompletionEnabled = "Αδυναμία προσθήκης, η ενότητας που επιλέξατε δεν έχει ενεργοποιημένη την ολοκλήρωση ενότητας.";
-$langNewUnitPrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε μία έγκυρη ενότητα.";
-$langNewUnitPrerequisiteSuccess = "Το προαπαιτούμενο δημιουργήθηκε με επιτυχία!";
-$langDelUnitPrerequisiteSuccess = "Το προαπαιτούμενο διαγράφηκε με επιτυχία!";
-$langNewUnitPrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, η ενότητα που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
-$langsUnit = "ενότητα";
-$langInvalidCourseUnitPrerequisites = "Η ολοκλήρωση της ενότητας δεν είναι ενεργοποιημένη.";
-$langUnitNotCompleted = "Οι δραστηριότητες της προηγούμενης ενότητας δεν έχουν ολοκληρωθεί";
-$langUnitNotStarted = "Η ενότητα δεν έχει ξεκινήσει";
-
-/* * ********************************************************************
   mail_verify.php
  * ********************************************************************* */
 $langMailVerify = "Επιβεβαίωση email";
@@ -4581,11 +4592,10 @@ $langMailVerifyCodeError = "Ο κωδικός επιβεβαίωσης είνα�
 $langMailVerifyNoCode = "Ο σύνδεσμος που ακολουθήσατε δεν ισχύει. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
 $langMailVerifyNoId = "Ο σύνδεσμος που ακολουθήσατε είναι λάθος. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
 $langMailVerifyDB = "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
-$langMailVerifyNoApplication = "Δεν βρέθηκε η αίτηση σας. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
+$langMailVerifyNoApplication = "Δεν βρέθηκε η αίτησή σας. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
 $langMailVerifyNoAccount = "Δεν βρέθηκε ο λογαριασμός σας. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία ή επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langMailVerifySuccess = "Το email σας επιβεβαιώθηκε με επιτυχία.";
 $langMailVerifySuccess2 = "Το email σας έχει επιβεβαιωθεί με επιτυχία.";
-$langMailVerifySuccessReq = "Η αίτηση δημιουργίας λογαριασμού ανανεώθηκε.";
 $langMailVerifySuccessU = "Ο λογαριασμός σας ενεργοποιήθηκε.";
 $langVerifiedMail = "Επιβεβαιωμένη διεύθυνση email";
 $langMailNotVerified = "Το email σας δεν είναι επιβεβαιωμένο. Δεν θα μπορείτε να λαμβάνετε emails από τα $langsCourses έως ότου το επιβεβαιώσετε.
@@ -5044,16 +5054,31 @@ $langBBBOptions = 'Τροποποίηση';
 $langBBBRemoveServer = 'Κατάργηση';
 $langBBBServerOrderP = "Σειρά";
 $langBBBServerLoad = "Φόρτος";
+$langBBBMics = "Μικρόφωνα";
+$langBBBCameras = "Κάμερες";
 $langBBBConfigLB = 'Κατανομή φορτίου';
+$langBBBLBWeights = 'Υπολογισμός φορτίου';
+$langBBBLBWeightParticipant = "Βάρος χρήστη";
+$langBBBLBWeightMic = "Βάρος μικροφώνου";
+$langBBBLBWeightCamera = "Βάρος κάμερας";
+$langBBBLBWeightRoom = "Βάρος τηλεσυνεργασίας";
+$langBBBLBWeightParticipantInfo = "Προτεινόμενη τιμή: 1";
+$langBBBLBWeightMicInfo = "Προτεινόμενη τιμή: 2";
+$langBBBLBWeightCameraInfo = "Προτεινόμενη τιμή: 2";
+$langBBBLBWeightRoomInfo = "Προτεινόμενη τιμή: 50";
 $langBBBLBMethod = 'Μέθοδος Κατανομής φορτίου';
 $langBBBLBMethodWO = "$langBBBServerOrderP μόνο";
 $langBBBLBMethodWLL = "$langBBBServerOrderP, λιγότερος φόρτος";
 $langBBBLBMethodWLR = "$langBBBServerOrderP, λιγότερα δωμάτια";
 $langBBBLBMethodWLC = "$langBBBServerOrderP, λιγότεροι χρήστες";
+$langBBBLBMethodWLM = "$langBBBServerOrderP, λιγότερα μικρόφωνα";
+$langBBBLBMethodWLV = "$langBBBServerOrderP, λιγότερες κάμερες";
 $langBBBLBMethodWOInfo = "$langBBBLBMethodWO: Λαμβάνεται υπόψιν μόνο η σειρά των εξυπηρετητών. Πρώτα γεμίζει ο εξυπηρετητης με τη χαμηλότερη σειρά και μετά χρησιμοποιείται ο επόμενος";
 $langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τον λιγότερο φόρτο";
 $langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τα λιγότερα δωμάτια";
 $langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τους λιγότερους χρήστες";
+$langBBBLBMethodWLMInfo = "$langBBBLBMethodWLM: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τα λιγότερα μικρόφωνα";
+$langBBBLBMethodWLVInfo = "$langBBBLBMethodWLV: Λαμβάνεται υπόψιν πρώτα η σειρά των εξυπηρετητών και στη συνέχεια ο εξυπηρετητής με τις λιγότερες κάμερες";
 $langBBBmuteOnStart = "Σίγαση μικροφώνου όλων των χρηστών κατά την είσοδο";
 $langBBBlockSettingsDisableCam = "Να μην επιτρέπεται διαμοιρασμός κάμερας από τους φοιτητές";
 $langBBBwebcamsOnlyForModerator = "Εμφάνιση κάμερας φοιτητών μόνο στους καθηγητές";
@@ -5061,9 +5086,12 @@ $langBBBlockSettingsDisableMic = "Να μην επιτρέπεται η χρήσ
 $langBBBlockSettingsDisablePrivateChat = "Απενεργοποίηση ιδιωτικών συνομιλιών μεταξύ φοιτητών";
 $langBBBlockSettingsDisablePublicChat = "Απενεργοποίηση δημόσιων συνομιλιών από τους φοιτητές";
 $langBBBlockSettingsDisableNote = "Απενεργοποίηση κοινόχρηστων σημειώσεων από τους φοιτητές";
-$langBBBlockSettingsHideUserList = "Απόκρυψη λίστας χρηστών στους φοιτητές";
+$langBBBlockSettingsHideUserList = "Απόκρυψη λίστας χρηστών στους φοιτητές (μέσα στο BBB)";
+$langBBBHideParticipants = "Απόκρυψη συμμετεχόντων";
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
+$langBBBNotStarted = "Η τηλεσυνεργασία δεν έχει ξεκινήσει ακόμα";
+$langBBBHasEnded = "Η τηλεσυνεργασία έχει ολοκληρωθεί";
 $langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";
 $langBBB = "Τηλεσυνεργασία";
 $langNewBBBSession = "Νέα Τηλεσυνεργασία";
@@ -5081,7 +5109,7 @@ $langNewBBBSessionStatus = "Κατάσταση";
 $langBBBAddSuccessful = "Ο προγραμματισμός της νέας τηλεσυνεργασίας πραγματοποιήθηκε με επιτυχία.";
 $langBBBNoteEnableJoin = "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίες είναι σε εξέλιξη.";
 $langBBBNoteEnableJoinEditor = "Ο σύνδεσμος ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης.";
-$langBBBNoParticipation = "Δεν υπάρχει συμμετοχή σε καμμία τηλεσυνεργασία.";
+$langBBBNoParticipation = "Δεν υπάρχει συμμετοχή σε καμία τηλεσυνεργασία.";
 $langBBBNotifyUsers = "Ειδοποίηση συμμετεχόντων για τον προγραμματισμό της τηλεδιάσκεψης";
 $langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων για τον προγραμματισμό της τηλεδιάσκεψης";
 $langBBBExternalUsers = "Εξωτερικοί συμμετέχοντες";
@@ -5112,6 +5140,11 @@ $langBBBImportRecordingsNo = "Η εισαγωγή στα πολυμέσα δεν
 $langBBBImportRecordingsNoNew = "Δε βρέθηκαν νεότερες καταγραφές για τη συγκεκριμένη συνεδρία.";
 $langMaxUsers = "Μέγ. αριθμός χρηστών";
 $langMaxRooms = "Μέγ. αριθμός δωματίων";
+$langBBBDefaultNewRoom = "Προεπιλεγμένες τιμές για νέες τηλεσυνεργασίες";
+$langBBBMaxDuration = "Μέγ. διάρκεια τηλεσυνεργασίας";
+$langInMinutes = "σε λεπτά. 0 για κανένα περιορισμό";
+$langBBBMaxPartPerRoom = 'Μέγ. αριθμός συμμετεχόντων ανά τηλεσυνεργασία';
+$langBBBMaxPartPerRoomInfo = '0 για μη περιορισμό';
 $langPresharedKey = "Διαμοιραζόμενο κλειδί";
 $langBBBSessionMaxUsers = "Μέγ. αριθμός συμμετεχόντων";
 $langBBBSessionSuggestedUsers = "Προτεινόμενο πλήθος συμμετεχόντων";
@@ -5151,7 +5184,7 @@ $langBlogPosts = "Αναρτήσεις ιστολογίου";
 $langBlogPopular = "Δημοφιλείς αναρτήσεις";
 $langBlogPostDelSucc = "Η διαγραφή της ανάρτησης ήταν επιτυχής";
 $langBlogPostDelFail = "Η διαγραφή της ανάρτησης απέτυχε";
-$langBlogPostNotFound = "Η ανάρτηση δεν ήταν εφικτό να βρεθεί";
+$langBlogPostNotFound = "Η ανάρτηση δεν βρέθηκε";
 $langBlogAddPost = "Προσθήκη ανάρτησης";
 $langBlogEmpty = "Δεν υπάρχουν αναρτήσεις ιστολογίου";
 $langBlogNewerPosts = "Νεότερες αναρτήσεις";
@@ -5163,7 +5196,7 @@ $langBlogPostTitle = "Τίτλος Ανάρτησης";
 $langBlogPost = "Ανάρτηση Ιστολογίου";
 $langModifBlogPost = "Αλλαγή της ανάρτησης";
 $langEmptyBlogPostTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανάρτησης";
-$langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύθηκε με επιτυχία";
+$langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύτηκε με επιτυχία";
 $langBlogPostSaveFail = "Υπήρξε πρόβλημα κατά την αποθήκευση της ανάρτησης";
 $langBlogPostHistory = "Ιστορικό αναρτήσεων";
 $langBlogPostNotAllowedCreate = "Δεν έχετε δικαίωμα δημιουργίας ανάρτησης";
@@ -5190,13 +5223,13 @@ $langBlogUserNotExist = "Ο ιδιοκτήτης αυτού του προσωπ�
  * comments
  * ************************************************************ */
 $langCommentsDelConfirm = "Είστε σίγουροι πως θέλετε να διαγράψετε το σχόλιο;";
-$langCommentsDelSuccess = "Το σχόλιο διαγράφηκε με επιτυχία";
+$langCommentsDelSuccess = "Το σχόλιο διαγράφηκε επιτυχώς";
 $langCommentsDelFail = "Η διαγραφή του σχολίου απέτυχε";
 $langCommentsLoadFail = "Το σχόλιο δεν ήταν δυνατό να βρεθεί";
-$langCommentsSaveConfirm = "Επιβεβαίωση υποβολής του σχολίου";
-$langCommentsSaveSuccess = "Το σχόλιο υποβλήθηκε με επιτυχία";
+$langCommentsSaveConfirm = "Είστε σίγουροι πως θέλετε να αποθηκεύσετε το σχόλιο;";
+$langCommentsSaveSuccess = "Το σχόλιο αποθηκεύθηκε με επιτυχία";
 $langCommentsSaveFail = "Η αποθήκευση του σχολίου απέτυχε";
-$langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας του σχολίου";
+$langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας σχολίου";
 $langCommentsDelNoPerm = "Δεν έχετε δικαίωμα διαγραφής του σχολίου";
 $langCommentsEditNoPerm = "Δεν έχετε δικαίωμα επεξεργασίας του σχολίου";
 $langCourseCommenting = "Σχολιασμός στην αρχική σελίδα του $langsOfCourse";
@@ -5619,8 +5652,6 @@ $langAnalyticsDescription = '<p>Μπορείτε να συνδέσετε την 
     εξωτερική υπηρεσία ανάλυσης επισκέψεων (Web Analytics, π.χ. Google
     Analytics, Piwik) προκειμένου να διατηρούνται αναλυτικά στατιστικά
     για τους επισκέπτες.</p>';
-$langUserWayShortDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
-$langUserWayLongDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
 $langBBBDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
@@ -5646,13 +5677,16 @@ $langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνε
 <p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
 $langUnplagShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Unicheck (πρώην Unplag). Δείτε περισσότερες πληροφορίες στο <a href=\"https://unicheck.com\">https://unicheck.com</a>";
 $langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής.";
-$langTurnitinShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism).
+$langTurnitinShortDescription = "Σύνδεση με υπηρεσία λογοκλοπής (plagiarism).
 Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Turnitin.
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://turnitin.com\">https://turnitin.com</a>";
+$langLimesurveyShortDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας (survey).
+Η υπηρεσία στατιστικής έρευνας είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία LimeSurvey GmbH.
+Δείτε περισσότερες πληροφορίες στο <a href=\"https://www.limesurvey.org\">https://www.limesurvey.org</a>";
+$langLimesurveyLongDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας.";
 $langColmoocDescription = "Περιγραφή του ColMOOC";
-$langLtiPublishShortDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
-$langLtiPublishLongDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
-$langLtiPublishFrameAncestorsTooltip = "Λίστα urls χωριζομενη με κόμματα πχ https://url1, https://url2";
+$langH5PShortDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
+$langH5PLongDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
@@ -5724,7 +5758,6 @@ $langCourseCategoryMultiple = "Πολλαπλότητα";
 $langCourseCategoryMultiple2 = "Η κατηγορία μεταδεδομένων θα έχει πολλαπλές τιμές";
 $langCourseCategorySearchable = "Αναζητήσιμη";
 $langCourseCategorySearchable2 = "Η κατηγορία μεταδεδομένων θα συμμετέχει στην ειδική εργαλειοθήκη αναζήτησης";
-$langCourseCategoryActive = "Ενεργή";
 $langCourseCategoryActive2 = "Η κατηγορία μεταδεδομένων θα εμφανίζεται στους χρήστες";
 $langCourseCategoryOrdering = "Ταξινόμηση";
 $langCourseCategoryOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
@@ -5740,7 +5773,6 @@ $langEditCourseCategoryValueSuccess = "Η επεξεργασία πραγματ�
 $langCourseCategoryValue2 = "(π.χ. 1 - 30)";
 $langCourseCategoryValueOrdering = "Ταξινόμηση";
 $langCourseCategoryValueOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
-$langCourseCategoryValueActive = "Ενεργή";
 $langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδεδομένων θα εμφανίζεται στους χρήστες";
 $langInactiveCourseCategories = "Ανενεργές κατηγορίες";
 $langActiveCourseCategories = "Ενεργές κατηγορίες";
@@ -5763,27 +5795,19 @@ $langPrerequisitesNotComplete = "Τα προαπαιτούμενα $langsCourses
 
 // Messages for Lti Consumer
 $langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
-$langLtiPublishTool = "Δημοσίευση ως εργαλείο LTI";
 $langNewLTITool = "Προσθήκη νέας εφαρμογής LTI";
 $langNewTIITool = "Προσθήκη νέας εφαρμογής TurnItIn (LTI)";
 $langLTIProviderUrl = "LTI Provider URL";
 $langLTIProviderKey = "LTI Provider Key";
 $langLTIProviderSecret = "LTI Provider Secret";
-$langLTIProviderCartridgeUrl = "LTI Cartridge URL";
-$langLTIProviderHelp1 = "Εφόσον η απομακρυσμένη πλατφόρμα το υποστηρίζει, μπορείτε να εισάγετε το <b>Cartridge URL</b> και να επιλέξετε <b>Προσθήκη Legacy LTI</b>, στη συνέχεια θα σας ζητηθεί αυτόματα να εισάγετε το <b>Key</b> και το <b>Secret</b>, δε θα χρειαστείτε το Provider URL καθώς θα εισαχθεί αυτόματα.";
-$langLTIProviderHelp2 = "Σε αντίθετη περίπτωση, στην απομακρυσμένη πλατφόρμα θα πρέπει να επιλέξετε τη χειροκίνητη προσθήκη υπό το πρότυπο <b>LTI 1.0/1.1</b> και να εισάγετε το <b>Provider URL</b>, το <b>Key</b> και το <b>Secret</b>, δε θα χρειαστείτε το Cartridge URL.";
 $langNewLTIAppStatus = "Κατάσταση";
 $langNewLTIAppActive = "Ενεργή";
 $langNewLTIAppInActive = "Μη ενεργή";
 $langNoLTIApps = "Δεν υπάρχουν Εξωτερικές Εφαρμογές LTI.";
-$langNoPUBLTIApps = "Δεν υπάρχουν Δημοσιευμένα Εργαλεία LTI.";
 $langLTIAPPlertTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της Εφαρμογής LTI";
 $langLTIAPPlertURL = "Παρακαλώ πληκτρολογήστε το URL του LTI Provider";
-$langLTIAPPlertKey = "Παρακαλώ πληκτρολογήστε το Key του LTI Provider";
-$langLTIAPPlertSecret = "Παρακαλώ πληκτρολογήστε το Secret του LTI Provider";
 $langLTIAppAddSuccessful = "Η καταχώριση της Εξωτερικής Εφαρμογής LTI ολοκληρώθηκε με επιτυχία.";
 $langTIIAppAddSuccessful = "Η καταχώριση της TurnItIn Εφαρμογής ολοκληρώθηκε με επιτυχία.";
-$langPUBLTIAppAddSuccessful = "Η καταχώριση της δημοσίευσης ως εφαρμογή LTI ολοκληρώθηκε με επιτυχία.";
 $langLTIAppUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
 $langLTIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
 $langTIIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
@@ -5824,6 +5848,16 @@ $langTiiExcludeValue = "Τιμή εξαίρεσης";
 $langLTIOptions = "Επιλογές Turnitin";
 $langUseOfApp = "Χρήση της εφαρμογής";
 $langUseOfAppInfo = "Επιλέξτε σε ποια $langsCourses θα χρησιμοποιείται η εφαρμογή";
+$langLimesurveyConf = "Ρυθμίσεις \"LimeSurvey\" του $siteName";
+$langLimesurveyAppAddSuccessful = "Η καταχώριση της LimeSurvey Εφαρμογής ολοκληρώθηκε με επιτυχία.";
+$langLimesurveyAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
+$langLimesurveyEnabled = "Ενεργοποιημένο";
+$langNewLimesurveyTool = "Προσθήκη νέας εφαρμογής LimeSurvey (LTI)";
+$langNoAvailableLimesurveyTemplates = "Δεν υπάρχουν διαθέσιμες εφαρμογές LTI.";
+$langLimesurveyApp = "Εφαρμογή LimeSurvey";
+$langLimesurveyLTIOptions = "Επιλογές LimeSurvey";
+$langLimesurveyIntegration = "Ενσωμάτωση με LimeSurvey";
+
 
 // Messages for colmooc
 $langColmooc = "colMOOC";
@@ -5890,6 +5924,24 @@ $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
 
+// h5p
+$langH5p = "Διαδραστικό περιεχόμενο";
+$langH5pInstall = "Εγκατάσταση πακέτων και βιβλιοθηκών διαδραστικού περιεχομένου τύπου H5P";
+$langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε!';
+$langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο τύπου H5P';
+$langH5pNoContent = 'Δεν υπάρχει διαδραστικό περιεχόμενο τύπου H5P';
+$langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P αποθηκεύτηκε με επιτυχία";
+$langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P διαγράφτηκε με επιτυχία";
+$langOfH5p = "διαδραστικού περιεχομένου";
+$langTypeH5P = "Τύπος H5P";
+$langImportH5P = "Μπορείτε να εισάγετε ένα έτοιμο αρχείο διαδραστικού περιεχομένου τύπου H5P μέσω της παρακάτω φόρμας.";
+$langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι ώστε οι διαθέσιμοι τύποι διαδραστικού περιεχομένου H5P
+                    να ενημερωθούν με τις πιο πρόσφατες αλλαγές (αν υπάρχουν). <br>
+                    Δείτε περισσότερες λεπτομέρειες στο
+                    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
+                    για τους διαθέσιμους τύπους περιεχομένων.";
+
+
 // ticketing (aka request)
 $langRequests = "Αιτήματα";
 $langMyRequests = "Τα αιτήματά μου";
@@ -5923,13 +5975,3 @@ $langHourAgo = '%d ώρα πριν';
 $langHoursAgo = '%d ώρες πριν';
 $langShowClosedRequests = 'Εμφάνιση κλειστών αιτημάτων';
 $langChangeDescription = 'Περιγραφή αλλαγών';
-
-// H5P
-$langH5P = 'Διαδραστικό περιεχόμενο';
-$langNoH5PContent = 'Δεν υπάρχει διαδραστικό περιεχόμενο';
-$langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε. Μπορείτε να επιστρέψετε στην κεντρική σελίδα και να επιλέγετε Δημιουργία.';
-$langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο H5P';
-$langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο H5P αποθηκεύθηκε με επιτυχία";
-$langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο H5P διαγράφτηκε με επιτυχία";
-$langReuseActivate = "Ενεργοποίηση Διαμοιρασμού";
-$langReuseDeactivate = "Απενεργοποίηση Διαμοιρασμού";
