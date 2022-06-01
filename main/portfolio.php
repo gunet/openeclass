@@ -123,7 +123,7 @@ jQuery(document).ready(function() {
 </script>';
 
 $data['action_bar'] = action_bar(array(
-        array('title' => $langRegCourses, 
+        array('title' => $langRegCourses,
               'url' => $urlAppend . 'modules/auth/courses.php',
               'icon' => 'fa-check',
               'level' => 'primary-label',
@@ -138,16 +138,16 @@ $data['action_bar'] = action_bar(array(
 $data['perso_tool_content'] = $perso_tool_content;
 $data['user_announcements'] = $user_announcements;
 
-$portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
 $data['portfolio_page_main_widgets'] = '';
+/*$portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
 foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
     $data['portfolio_page_main_widgets'] .= $widget->run($key);
-}      
-$portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
+} */
 $data['portfolio_page_sidebar_widgets'] = "";
+/*$portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
 foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
     $data['portfolio_page_sidebar_widgets'] .= $widget->run($key);
-} 
+} */
 $data['departments'] = $user->getDepartmentIds($uid);
 
 $data['lastVisit'] = Database::get()->querySingle("SELECT * FROM loginout

@@ -36,7 +36,7 @@ require_once 'modules/message/class.msg.php';
  */
 function getUserLessonInfo($uid) {
     global $teacher_courses_count, $student_courses_count, $langCourse, $langActions;
-    global $session, $lesson_ids, $urlServer, $langUnregCourse, $langAdm;
+    global $session, $lesson_ids, $urlServer, $langUnregCourse, $langAdm, $langFavorite;
     global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 
     $lesson_content = '';
