@@ -4,6 +4,7 @@ define('UPGRADE', true);
 
 require_once '../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'modules/h5p/classes/H5PHubUpdater.php';
 
 set_config('upgrade_begin', time());
 
