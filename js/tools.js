@@ -1,46 +1,14 @@
 
 // javascript menu swapper
-
 function move(fbox_id, tbox_id) {
-    var arrFbox = new Array();
-    var arrTbox = new Array();
-    var arrLookup = new Array();
-    var i;
-    var fbox = document.getElementById(fbox_id);
-    var tbox = document.getElementById(tbox_id);
-    for (i = 0; i < tbox.options.length; i++) {
-        arrLookup[tbox.options[i].text] = tbox.options[i].value;
-        arrTbox[i] = tbox.options[i].text;
-    }
-    var fLength = 0;
-    var tLength = arrTbox.length;
-    for(i = 0; i < fbox.options.length; i++) {
-        arrLookup[fbox.options[i].text] = fbox.options[i].value;
-        if (fbox.options[i].selected && fbox.options[i].value != "") {
-            arrTbox[tLength] = fbox.options[i].text;
-            tLength++;
-        } else {
-            arrFbox[fLength] = fbox.options[i].text;
-            fLength++;
-        }
-    }
-    arrFbox.sort();
-    arrTbox.sort();
-    fbox.length = 0;
-    tbox.length = 0;
-    var c;
-    for(c = 0; c < arrFbox.length; c++) {
-        var no = new Option();
-        no.value = arrLookup[arrFbox[c]];
-        no.text = arrFbox[c];
-        fbox[c] = no;
-    }
-    for(c = 0; c < arrTbox.length; c++) {
-        var no = new Option();
-        no.value = arrLookup[arrTbox[c]];
-        no.text = arrTbox[c];
-        tbox[c] = no;
-    }
+    var fbox = $(document.getElementById(fbox_id)),
+        tbox = $(document.getElementById(tbox_id)),
+        options = fbox.find('option:selected').detach().toArray();
+    options = options.concat(tbox.find('option').detach().toArray());
+    options.sort(function(a, b) {
+        return a.text > b.text ? 1 : -1;
+    });
+    tbox.append(options);
 }
 
 function selectAll(cbList_id,bSelect) {
@@ -305,6 +273,11 @@ function exercise_init_countdown(params) {
     var exerciseId = params.exerciseId,
         eurid = params.eurid;
 
+    $('.clearSelect').click(function (e) {
+        e.preventDefault();
+        $(this).closest('.panel-body').find('input[type=radio]').prop('checked', false);
+    });
+
     // Don't submit question on enter keypress in input field
     $('.exercise input').keydown(function(event) {
             if (event.which === 13) {
@@ -338,21 +311,23 @@ function exercise_init_countdown(params) {
         });
     });
 
-    var timer = $('#progresstime');
-    timer.time = timer.text();
-    timer.text(secondsToHms(timer.time--));
-    var hidden_timer = $('#secsRemaining');
-    hidden_timer.time = timer.time;
-    setInterval(function() {
-        hidden_timer.val(hidden_timer.time--);
-        if (hidden_timer.time + 1 == 0) {
-            clearInterval();
-        }
-    }, 1000);
-    countdown(timer, function() {
-        $('<input type="hidden" name="autoSubmit" value="true">').appendTo('.exercise');
-        continueSubmit();
-    });
+    if ($('#secsRemaining').length) {
+        var timer = $('#progresstime');
+        timer.remaining = $('#secsRemaining').val() - 1;
+        timer.text(secondsToHms(timer.remaining));
+        timer.start = performance.now();
+        timer.interval = setInterval(function() {
+            var elapsed = (performance.now() - timer.start) / 1000.0;
+            if (elapsed > timer.remaining) {
+                clearInterval(timer.interval);
+                $('<input type="hidden" name="autoSubmit" value="true">').appendTo('.exercise');
+                continueSubmit();
+            } else {
+                timer.text(secondsToHms(timer.remaining - elapsed));
+            }
+        }, 1000);
+    }
+
     setInterval(function() {
         $.ajax({
           type: 'POST',
@@ -403,12 +378,20 @@ function exercise_init_countdown(params) {
                 });
             }
         });
-        $('input[name=q_id], input.navbutton').click(function () {
-            continueSubmit();
-        });
+        if (!params.checkSinglePage) {
+            $('input[name=q_id], input.navbutton').click(function () {
+                continueSubmit();
+            });
+        }
+        var finishClicked = false;
+        if (params.checkSinglePage) {
+            $('.btn[name=buttonFinish]').click(function () {
+                finishClicked = true;
+            });
+        }
         $('.exercise').submit(function (e) {
-            var unansweredCount = 0, firstUnanswered;
-
+            var unansweredCount = 0;
+            var firstUnanswered;
             if ('tinymce' in window) {
                 // Check for empty tinyMCE instances
                 tinymce.get().forEach(function (e) {
@@ -429,9 +412,20 @@ function exercise_init_countdown(params) {
             e.preventDefault();
             var message, title;
 
-            if (unansweredCount === 0) {
+            if (finishClicked) {
                 title = params.finalSubmit;
-                message = params.finalSubmitWarn;
+                message = (params.isFinalQuestion?
+                            (unansweredCount === 0? '': params.oneUnanswered):
+                            params.unseenQuestions) + ' ' +
+                    params.finalSubmitWarn;
+            } else if (unansweredCount === 0) {
+                if (params.checkSinglePage && !params.isFinalQuestion) {
+                    continueSubmit();
+                    return;
+                } else {
+                    title = params.finalSubmit;
+                    message = params.finalSubmitWarn;
+                }
             } else {
                 title = params.unansweredQuestions;
                 message = ((unansweredCount === 1)?
@@ -445,7 +439,6 @@ function exercise_init_countdown(params) {
                 message:
                     '<div class="row">' +
                       '<div class="col-md-12">' +
-                        '<h4>' + title + '</h4>' +
                         '<p>' + message + '</p>' +
                       '</div>' +
                     '</div>',
@@ -454,6 +447,7 @@ function exercise_init_countdown(params) {
                         label: params.goBack,
                         className: 'btn-success',
                         callback: function () {
+                            finishClicked = false;
                             var moveTo = $('#qPanel' + firstUnanswered);
                             if (moveTo.length) {
                                 $('html').animate({
@@ -463,18 +457,23 @@ function exercise_init_countdown(params) {
                         }
                     },
                     submit: {
-                        label: params.submit,
-                        className: 'btn-warning',
+                        label: finishClicked? params.finalSubmit: params.submit,
+                        className: (params.checkSinglePage && !params.isFinalQuestion && !finishClicked)? 'btn-primary': 'btn-warning',
                         callback: function () {
-                            $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
+                            if (finishClicked || !params.checkSinglePage || params.isFinalQuestion) {
+                                $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
+                            }
                             continueSubmit();
-                        }
+                        },
+                        onHide: function () {
+                            finishClicked = false;
+                        },
                     },
                 }
             });
         });
     }
-    var checkUnanswered = $('.qPanel').length >= 1;
+    var checkUnanswered = params.checkSinglePage || $('.qPanel').length >= 1;
     $('.btn[name=buttonSave]').click(continueSubmit);
     $('#cancelButton').click(function (e) {
       e.preventDefault();
@@ -515,41 +514,35 @@ function exercise_init_countdown(params) {
  * @param question_id
  */
 function questionUpdateListener(question_number, question_id) {
+    var button_id = "#q_num" + question_number;
+    var qpanel_id = "#qPanel" + question_id;
+    var check_id = "#qCheck" + question_number; // `check` icon
+    var el = $(qpanel_id + " :input");
+    var answered = true; // by default we assume that an interaction has answered the question
 
-    var button_id = "q_num" + question_number;
-    var qpanel_id = "qPanel" + question_id;
-    var check_id = "qCheck" + question_number; // `check` icon
-
-    $(function() {
-        $.ajax({
-            url: 'exercise_submit.php',
-            success: function() {
-                var el = $("#"+qpanel_id+" :input");
-                answered = true;
-                if (el.attr('type') == 'text') {
-                    // Text inputs are fill-in-blanks questions:
-                    // if any remain empty, question remains unanswered
-                    el.siblings('input').each(function () {
-                        if (this.value == '') {
-                            answered = false;
-                        }
-                    });
-                } else if (el.is('select')) {
-                    // Selects are matching questions:
-                    // if any remain unset, question remains unanswered
-                    el.closest('.qPanel').find('select').each(function () {
-                        if (this.value == '0') {
-                            answered = false;
-                        }
-                    });
-                }
-                if (answered === true) {
-                    $("#"+button_id).removeClass('btn-default').addClass('btn-info');
-                    $("#"+check_id).addClass('fa fa-check');
-                }
+    if (el.attr('type') == 'text') {
+        // Text inputs are fill-in-blanks questions:
+        // if any remain empty, question remains unanswered
+        el.siblings('input').each(function () {
+            if (this.value == '') {
+                answered = false;
             }
         });
-   });
+    } else if (el.is('select')) {
+        // Selects are matching questions:
+        // if any remain unset, question remains unanswered
+        el.closest('.qPanel').find('select').each(function () {
+            if (this.value == '0') {
+                answered = false;
+            }
+        });
+    }
+
+    if (answered) {
+        $(button_id).removeClass('btn-default').addClass('btn-info')
+            .attr('data-original-title', langHasAnswered).tooltip('setContent');
+        $(check_id).addClass('fa fa-check');
+    }
 }
 
 
@@ -558,30 +551,12 @@ function questionUpdateListener(question_number, question_id) {
  * @param question_number
  */
 function updateQuestionNavButton(question_number) {
+    var button_id = "#q_num" + question_number; // button
+    var check_id = "#qCheck" + question_number; // `check` icon
 
-    var button_id = "q_num" + question_number; // button
-    var check_id = "qCheck" + question_number; // `check` icon
-    $(function() {
-        $.ajax({
-            url: 'exercise_submit.php',
-            success: function() {
-                $("#"+button_id).removeClass('btn-default').addClass('btn-info');
-                $("#"+check_id).addClass('fa fa-check');
-            }
-        });
-    });
-}
-
-
-function countdown(timer, callback) {
-    int = setInterval(function() {
-      timer.text(secondsToHms(timer.time--));
-      if (timer.time + 1 == 0) {
-        clearInterval(int);
-        // 600ms - width animation time
-        callback && setTimeout(callback, 600);
-      }
-    }, 1000);
+    $(button_id).removeClass('btn-default').addClass('btn-info')
+        .attr('data-original-title', langHasAnswered).tooltip('setContent');
+    $(check_id).addClass('fa fa-check');
 }
 
 function secondsToHms(d) {
@@ -628,4 +603,180 @@ function enableCheckFileSize() {
     form.on('submit', function () {
         return checkFileSize(input, maxSize);
     });
+}
+
+// Multiple file submission support for assignments
+function initialize_multifile_submission(max) {
+    var formGroup = $('input[type=file]').closest('.form-group');
+    var fileInputCount = function () {
+        return formGroup.find('input[type=file]').length;
+    };
+    formGroup.on('change', 'input[type=file]', function () {
+        var emptyInputs = 0;
+        formGroup.find('input[type=file]').each(function () {
+            if (!$(this).val()) {
+                emptyInputs++;
+            }
+        });
+        if (emptyInputs == 0) {
+            $('.moreFiles.btn-info').click();
+        }
+    });
+    $('body').on('click', '.moreFiles.btn-info', function (e) {
+        e.preventDefault();
+        fileInputs = fileInputCount();
+        if (fileInputs < max) {
+            var newInput = $(this).closest('.col-sm-10').clone();
+            $(newInput).addClass('col-sm-offset-2').find('input').val(null);
+            if (fileInputs == max - 1) {
+                $(newInput).find('button').prop('disabled', true);
+            }
+            formGroup.append(newInput);
+            $(this).removeClass('btn-info').addClass('btn-danger')
+                .find('.fa-plus').removeClass('fa-plus').addClass('fa-times');
+        }
+    });
+    $('body').on('click', '.moreFiles.btn-danger', function (e) {
+        e.preventDefault();
+        fileInputs = fileInputCount();
+        if (fileInputs == max) {
+            formGroup.find('button').prop('disabled', false);
+        }
+        $(this).closest('.col-sm-10').remove();
+        formGroup.children('.col-sm-10').first().removeClass('col-sm-offset-2');
+    });
+}
+
+var filemodal_initialized = false;
+function initialize_filemodal(lang) {
+  if (filemodal_initialized) {
+    return;
+  } else {
+    filemodal_initialized = true;
+  }
+  $('.fileModal').click(function (e) {
+    e.preventDefault();
+    var fileURL = $(this).attr('href');
+    var downloadURL = fileURL + '&download=true';
+    var fileTitle = $(this).text();
+    var buttons = {};
+    buttons.download = {
+      label: '<i class="fa fa-download"></i> ' + lang.download,
+      className: 'btn-success',
+      callback: function (d) {
+        window.location = downloadURL;
+      }
+    };
+    buttons.print = {
+      label: '<i class="fa fa-print"></i> ' + lang.print,
+      className: 'btn-primary',
+      callback: function (d) {
+        var iframe = document.getElementById('fileFrame');
+        iframe.contentWindow.print();
+      }
+    };
+    if (screenfull.enabled) {
+      buttons.fullscreen = {
+        label: '<i class="fa fa-arrows-alt"></i> ' + lang.fullScreen,
+        className: 'btn-primary',
+        callback: function() {
+          screenfull.request(document.getElementById('fileFrame'));
+          return false;
+        }
+      };
+    }
+    buttons.newtab = {
+      label: '<i class="fa fa-plus"></i> ' + lang.newTab,
+      className: 'btn-primary',
+      callback: function() {
+        window.open(fileURL);
+        return false;
+      }
+    };
+    buttons.cancel = {
+      label: lang.cancel,
+      className: 'btn-default'
+    };
+    bootbox.dialog({
+      size: 'large',
+      title: fileTitle,
+      message: '<div class="row">'+
+        '<div class="col-sm-12">'+
+        '<div class="iframe-container"><iframe id="fileFrame" src="'+fileURL+'"></iframe></div>'+
+        '</div>'+
+        '</div>',
+      buttons: buttons
+    });
+  });
+}
+
+function unit_password_bootbox(e) {
+  var el = $(this),
+      link = el.attr('href'),
+      passwordForm = '',
+      passwordCallback = null,
+      notice = '',
+      title;
+
+  if (el.hasClass('paused_exercise')) {
+    lang.submit = title = lang.continueAttempt;
+    notice = '<p>' + lang.temporarySaveNotice + '</p>';
+  } else if (el.hasClass('active_exercise')) {
+    lang.submit = title = lang.continueAttempt;
+    notice = '<p>' + lang.continueAttemptNotice + '</p>';
+  }
+  if (el.hasClass('password_protected')) {
+    passwordForm = (notice? ('<p>' + lang.exercisePasswordModalTitle + '</p>'): '')+
+      '<form class="form-horizontal" role="form" action="'+link+'" method="post" id="password_form">'+
+        '<div class="form-group">'+
+          '<div class="col-sm-12">'+
+            '<input type="text" class="form-control" id="password" name="password">'+
+          '</div>'+
+        '</div>'+
+      '</form>';
+    passwordCallback = function () {
+      var password = $('#password').val();
+      if (password != '') {
+        $('#password_form').submit();
+      } else {
+        if (!$('#password').siblings('.help-block').length) {
+          $('#password').after('<p class="help-block">'+lang.theFieldIsRequired+'</p>');
+        }
+        $('#password').closest('.form-group').addClass('has-error');
+        return false;
+      }
+    };
+    if (!title) {
+      title = el.hasClass('ex_settings')?
+        lang.exercisePasswordModalTitle:
+        lang.assignmentPasswordModalTitle;
+    }
+  }
+
+  if (!title) {
+    return;
+  }
+
+  if (!passwordCallback) {
+    passwordCallback = function () {
+      window.location = link;
+    };
+  }
+
+  e.preventDefault();
+  bootbox.dialog({
+    title: title,
+    message: notice + passwordForm,
+    buttons: {
+      cancel: {
+        label: lang.cancel,
+        className: 'btn-default'
+      },
+      success: {
+        label: lang.submit,
+        className: 'btn-success',
+        callback: passwordCallback,
+      }
+    }
+  });
 }

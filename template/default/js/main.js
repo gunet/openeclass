@@ -5,11 +5,7 @@ function act_confirm() {
         var cancel_text = $(this).attr('data-cancel-txt');
         var action_text = $(this).attr('data-action-txt');
         var action_btn_class = $(this).attr('data-action-class');
-        var form = $(this).closest('form').clone().appendTo('body');
-
-        e.preventDefault();
-        e.stopPropagation();
-
+        var form = $(this).closest('form').attr('action');
         bootbox.dialog({
             message: message,
             title: title,
@@ -22,7 +18,7 @@ function act_confirm() {
                     label: action_text,
                     className: action_btn_class,
                     callback: function () {
-                        form.submit();
+                        window.location = form;
                     }
                 }
             }
@@ -206,20 +202,20 @@ $(document).ready(function () {
             { hide: $(this).data('state') },
             function () { location.reload(); });
     });
-    
+
     // External Apps activate/deactivate button
     $('.extapp-status').on('click', function () {
         var url = window.location.href;
         var button = $(this).children('i');
         var state = button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        
+
         button.removeClass(state).addClass('fa-spinner fa-spin');
-        
+
         $.post( url,
                 {state: state,
                  appName: appName},
-                function (data) {           
+                function (data) {
                     var newState = (data === "0")? "fa-toggle-off":"fa-toggle-on";
                     button.removeClass('fa-spinner fa-spin').addClass(newState);
                     btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
@@ -227,7 +223,7 @@ $(document).ready(function () {
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });
-    
+
     // deactivate om + webconf button when bbb button is enabled
     $('.bbb-status').on('click', function () {
         var url = window.location.href;
@@ -238,15 +234,15 @@ $(document).ready(function () {
         var om_state = om_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var webconf_state = webconf_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        
+
         button.removeClass(state).addClass('fa-spinner fa-spin');
-        
+
         $.post( url,
                 {state: state,
                  appName: appName},
-                function (data) {                    
+                function (data) {
                     if (data === "0") {
-                        newState = "fa-toggle-off";                        
+                        newState = "fa-toggle-off";
                     } else {
                         newState = "fa-toggle-on";
                         if (om_state === 'fa-toggle-on') {
@@ -264,13 +260,13 @@ $(document).ready(function () {
                            webconf_button.parent('button').removeClass(webconf_btnColorState).addClass(webconf_newBtnColorState);
                         }
                     }
-                    button.removeClass('fa-spinner fa-spin').addClass(newState);                    
-                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';                    
-                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';                    
-                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);                    
+                    button.removeClass('fa-spinner fa-spin').addClass(newState);
+                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });
-    
+
     // deactivate bbb + webconf button when om button is enabled
     $('.om-status').on('click', function () {
         var url = window.location.href;
@@ -281,15 +277,15 @@ $(document).ready(function () {
         var bbb_state = bbb_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var webconf_state = webconf_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        
+
         button.removeClass(state).addClass('fa-spinner fa-spin');
-        
+
         $.post( url,
                 {state: state,
                  appName: appName},
-                function (data) {                    
+                function (data) {
                     if (data === "0") {
-                        newState = "fa-toggle-off";                        
+                        newState = "fa-toggle-off";
                     } else {
                         newState = "fa-toggle-on";
                         if (bbb_state === 'fa-toggle-on') {
@@ -306,14 +302,14 @@ $(document).ready(function () {
                            webconf_newBtnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
                            webconf_button.parent('button').removeClass(webconf_btnColorState).addClass(webconf_newBtnColorState);
                         }
-                    }                    
-                    button.removeClass('fa-spinner fa-spin').addClass(newState);                    
-                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';                    
-                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';                    
-                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);                    
+                    }
+                    button.removeClass('fa-spinner fa-spin').addClass(newState);
+                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });
-    
+
     // deactivate bbb + om button when webconf button is enabled
     $('.webconf-status').on('click', function () {
         var url = window.location.href;
@@ -324,15 +320,15 @@ $(document).ready(function () {
         var bbb_state = bbb_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var om_state = om_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        
+
         button.removeClass(state).addClass('fa-spinner fa-spin');
-        
+
         $.post( url,
                 {state: state,
                  appName: appName},
-                function (data) {                    
+                function (data) {
                     if (data === "0") {
-                        newState = "fa-toggle-off";                        
+                        newState = "fa-toggle-off";
                     } else {
                         newState = "fa-toggle-on";
                         if (bbb_state === 'fa-toggle-on') {
@@ -356,7 +352,7 @@ $(document).ready(function () {
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });
-                
+
 
     // Leftnav - rotate Category Menu Item icon
     if ($(".collapse.in").length > 0) { //when page first loads the show.bs.collapse event is not triggered
@@ -403,12 +399,10 @@ $(document).ready(function () {
 
 
     // Actions needed to be done after full DOM elements downloaded
-    $(window).load(function ()
-    {
+    $(function () {
         var initialHeight;
         var windowHeight = $(window).height();
         var contentHeight = $("#Frame").height();
-
 
 
         $("#innerpanel-container").slimScroll({height: '215px'});
@@ -420,6 +414,10 @@ $(document).ready(function () {
         $("#Frame").css({"min-height": initialHeight});
         $("#sidebar").css({"min-height": initialHeight + margin_offset});
 
+        $('.logout-button').click(function (e) {
+            e.preventDefault();
+            $(this).parent('form').submit();
+        });
 
         // Right Side toggle menu animation
         $('#toggle-sidebar').click(function () {
@@ -482,11 +480,10 @@ $(document).ready(function () {
                     }, 2500);
                 } else {
                     note_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
-                    ssc = (sidebarConfig.courseId == "")? 0:1;
                     $.ajax({
                         type: "POST",
                         url: sidebarConfig.notesLink,
-                        data: {newTitle: note_title, newContent: note_text, refobjgentype: 0, refcourse: 0, refobjtype: 0, refobjid: 0, submitNote: 1, setsessioncourse: ssc},
+                        data: {newTitle: note_title, newContent: note_text, refobjgentype: 0, refcourse: 0, refobjtype: 0, refobjid: 0, submitNote: 1},
                         success: function (data) {
                             $(".spinner-div p").text(data);
                             $(".spinner-div img").toggleClass("hidden");

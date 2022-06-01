@@ -164,7 +164,11 @@
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/usage/?t=u"><span class="fa fa-area-chart fa-fw"></span>{{ trans('langMyStats') }}</a>
                                         </li>
                                         <li role="presentation" style="border-top: 1px solid #ddd">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}index.php?logout=yes"><span class="fa fa-unlock fa-fw"></span>{{ trans('langLogout') }}</a>
+
+                                            <form method='post' action='{{ $urlAppend }}modules/auth/logout.php'>
+                                                <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
+                                                <a class='logout-button' role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/auth/logout.php"><span class="fa fa-unlock fa-fw"></span>{{ trans('langLogout') }}</a>
+                                            </form>
                                         </li>
                                     </ul>
                                 </li>

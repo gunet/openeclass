@@ -38,6 +38,7 @@ if ($uid and isset($_POST['token']) and validate_csrf_token($_POST['token'])) {
                 VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
 
     $config = get_hybridauth_config();
+    var_dump($config);
     $hybridauth = new Hybridauth\Hybridauth($config);
     foreach ($hybridauth->getConnectedAdapters() as $adapter) {
         $adapter->disconnect();
