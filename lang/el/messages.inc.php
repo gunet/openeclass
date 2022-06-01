@@ -2780,6 +2780,7 @@ $langQuestionCorrectionTitle = "Βαθμολογήστε την απάντηση
 $langQuestionCorrectionTitle2 = "Υπολείπονται ";
 $langUngradedAnswers = " αβαθμολόγητες απαντήσεις.";
 $langDistributeError = "Ο συνολικός αριθμός διαμοιρασμού δεν πρέπει να είναι μεγαλύτερος από το σύνολο των ασκήσεων.";
+$langGradeCorrect = 'Διόρθωση';
 
 /* * ***********************************************
  * lessontools.php
