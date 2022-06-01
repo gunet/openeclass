@@ -249,21 +249,21 @@ $db->query("INSERT INTO `course_description_type` (`id`, `title`, `target_group`
 $db->query("INSERT INTO `course_description_type` (`id`, `title`, `featured_books`, `order`, `icon`) VALUES (9, 'a:2:{s:2:\"el\";s:47:\"Προτεινόμενα συγγράμματα\";s:2:\"en\";s:9:\"Textbooks\";}', 1, 9, '8.png')");
 $db->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
 
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC1',0,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC2',0,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC3',0,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC5',0,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC6',0,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC7',1,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC8',1,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC9',1,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC10',1,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC11',1,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC12',1,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC13',1,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC14',1,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC15',2,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity_id`,`module_id`) VALUES ('FC16',2,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC1',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC2',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC3',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC5',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC6',0,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC7',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC8',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC9',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC10',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC11',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC12',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC13',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC14',1,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC15',2,0,0,0)");
+$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC16',2,0,0,0)");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
