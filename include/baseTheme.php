@@ -321,16 +321,15 @@ function view($view_file, $view_data = array()) {
         $uname = null;
     }
 
+    $logo_url_path = $urlAppend;
+    $is_lti_enrol_user = '';
     if ($uid) {
         // customization for LTI enrolled users
-        $logo_url_path = $urlAppend;
         $is_lti_enrol_user = substr($_SESSION['uname'], 0, strlen("enrol_lti_")) === "enrol_lti_";
         if ($is_lti_enrol_user) {
             $uname = q($_SESSION['givenname'] . " " . $_SESSION['surname']);
             $logo_url_path = "#";
         }
-    } else {
-        $is_lti_enrol_user = $logo_url_path = '';
     }
 
     $views = $webDir.'/resources/views';
