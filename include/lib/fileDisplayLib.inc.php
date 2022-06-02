@@ -18,17 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**
- * @brief strip submit value
- * @param type $submitArray
- */
-function stripSubmitValue(&$submitArray) {
-    while ($array_element = each($submitArray)) {
-        $name = $array_element['key'];
-        $GLOBALS[$name] = stripslashes($GLOBALS [$name]);
-        $GLOBALS[$name] = str_replace("\"", "'", $GLOBALS [$name]);
-    }
-}
 
  /**
  * @brief  Define the image to display for each file extension

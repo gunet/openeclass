@@ -83,7 +83,20 @@ class User {
         }, $id);
         return $ret;
     }
-    
+
+    /**
+     * Get an array with the hierarchy nodes that a user can admin.
+     *
+     * @param  int   $id  - The id of a given user
+     * @return array $ret - Array containing the node ids the user can admin
+     */
+    public function getAdminDepartmentIds($id) {
+        return array_map(function ($item) {
+            return $item->department_id;
+        }, Database::get()->queryArray('SELECT department_id FROM admin
+            WHERE user_id = ?d AND privilege = ' . DEPARTMENTMANAGE_USER, $id));
+    }
+
     /**
      * Get an array with a given user's hierarchy nodes that he belongs to.
      *
@@ -101,7 +114,7 @@ class User {
         }, $id);
         return $ret;
     }
-    
+
     public function getDepartmentIdsAllowedForCourseCreation($id) {
         $ret = array();
         Database::get()->queryFunc("SELECT ud.department AS id

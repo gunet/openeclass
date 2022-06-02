@@ -269,9 +269,8 @@ function directory_list() {
 }
 
 /*
- * Return a list of info for directories in the current course documents
- * excluding the one with path $entryToExclude and all under $directoryToExclude.
- * Each entry contains filename, path, disabled and depth attributes.
+ * Returns HTML form select element listing all directories in current course documents
+ * excluding the one with path $entryToExclude and all under $directoryToExclude
  */
 function directory_selection($source_value, $command, $entryToExclude, $directoryToExclude) {
     $dirList = directory_list();
@@ -372,7 +371,7 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
         }
         $GLOBALS['path_visibility'][$files->path] = ($include_invisible or resource_access($files->visible, $files->public));
         array_push($encoded_filenames, $files->path);
-        array_push($filename, $files->filename);
+        array_push($filename, str_replace(['/', '\\'], '_', $files->filename));
         if (!$include_invisible and $files->format == '.dir' and !resource_access($files->visible, $files->public)) {
             $parentdir = preg_replace('|/[^/]+$|', '', $files->path);
             // Don't need to check lower-level hidden dir if parent is there

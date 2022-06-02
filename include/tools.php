@@ -298,7 +298,7 @@ function loggedInMenu($rich=true) {
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_GRADEBOOK)) {
         array_push($sideMenuText, $GLOBALS['langGradeTotal']);
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
-        array_push($sideMenuImg, "fa-sort-numeric-desc");
+        array_push($sideMenuImg, "gradebook");
     }
 
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_PROGRESS)) {
@@ -310,7 +310,7 @@ function loggedInMenu($rich=true) {
     if (get_config('personal_blog')) {
         array_push($sideMenuText, $GLOBALS['langMyBlog']);
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
-        array_push($sideMenuImg, "fa-columns");
+        array_push($sideMenuImg, "blog");
     }
 
     if (get_config('eportfolio_enable')) {
@@ -324,16 +324,12 @@ function loggedInMenu($rich=true) {
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
         array_push($sideMenuText, q($GLOBALS['langMyDocs']));
         array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php'));
-        array_push($sideMenuImg, 'fa-folder-open-o');
+        array_push($sideMenuImg, 'docs.png');
     }
 
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
     array_push($sideMenuImg, "fa-user");
-
-    array_push($sideMenuText, $GLOBALS['langMyWidgets']);
-    array_push($sideMenuLink, $urlServer . "main/my_widgets.php");
-    array_push($sideMenuImg, "fa-magic");
 
     array_push($sideMenuText, $GLOBALS['langMyStats']);
     array_push($sideMenuLink, $urlServer . "modules/usage/?t=u");
@@ -385,7 +381,7 @@ function loggedOutMenu() {
     array_push($sideMenuImg, "fa-graduation-cap");
 
     if (get_config('user_registration') and get_config('registration_link') != 'hide') {
-        array_push($sideMenuText, $GLOBALS['langRegistration']);
+        array_push($sideMenuText, $GLOBALS['langRegister']);
         array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
         array_push($sideMenuImg, "fa-pencil-square-o");
     }
@@ -514,7 +510,7 @@ function adminMenu() {
     array_push($sideMenuLink, '../admin/mailtoprof.php');
     array_push($sideMenuImg, 'fa-caret-right');
 
-    if (isset($is_admin) and $is_admin) {
+    if ($is_admin) {
         array_push($sideMenuText, $GLOBALS['langAdmins']);
         array_push($sideMenuLink, '../admin/addadmin.php');
         array_push($sideMenuImg, 'fa-caret-right');
@@ -529,8 +525,7 @@ function adminMenu() {
     array_push($sideMenuSubGroup, $sideMenuImg);
     array_push($sideMenuGroup, $sideMenuSubGroup);
 
-    if ((isset($is_power_user) and $is_power_user) or
-            (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+    if ($is_power_user or $is_departmentmanage_user) {
         // lesson administration
         // reset sub-arrays so that we do not have duplicate entries
         $sideMenuSubGroup = array();
@@ -551,15 +546,17 @@ function adminMenu() {
         array_push($sideMenuLink, '../course_info/restore_course.php');
         array_push($sideMenuImg, 'fa-caret-right');
 
-        array_push($sideMenuText, $GLOBALS['langHierarchy']);
-        array_push($sideMenuLink, '../admin/hierarchy.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        if ($is_admin) {
+            array_push($sideMenuText, $GLOBALS['langHierarchy']);
+            array_push($sideMenuLink, '../admin/hierarchy.php');
+            array_push($sideMenuImg, 'fa-caret-right');
+        }
 
         array_push($sideMenuText, $GLOBALS['langMultiCourse']);
         array_push($sideMenuLink, '../admin/multicourse.php');
         array_push($sideMenuImg, 'fa-caret-right');
 
-        if (isset($is_admin) and $is_admin) {
+        if ($is_admin) {
             array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
             array_push($sideMenuLink, '../admin/autoenroll.php');
             array_push($sideMenuImg, 'fa-caret-right');

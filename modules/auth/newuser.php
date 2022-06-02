@@ -23,7 +23,6 @@
  * @file newuser.php
  * @brief user registration process
  */
-use Hautelook\Phpass\PasswordHash;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -72,7 +71,7 @@ $head_content .= <<<hContent
 hContent;
 
 $pageName = $langUserDetails;
-$navigation[] = array("url" => "registration.php", "name" => $langRegistration);
+$navigation[] = array("url" => "registration.php", "name" => $langRegister);
 
 $data['action_bar'] = action_bar(
                                 [[
@@ -93,11 +92,7 @@ $data['buildusernode'] = $html;
 
 $data['render_profile_fields_form'] = render_profile_fields_form(array('origin' => 'student_register'));
 
-if(!empty($_GET['provider_id'])) {
-    $provider_id = @q($_GET['provider_id']);
-} else {
-    $provider_id = '';
-}
+if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
 
 // check if it's valid and the provider enabled in the db
 if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and $_GET['auth'] < 14) {
@@ -114,13 +109,15 @@ if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and
     $provider_name = '';
 }
 
+
 // authenticate user via hybridauth if requested by URL
 $user_data = null;
+$registration_errors = [];
 if (!empty($provider_name)) {
     require_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
 
-    $hybridauth = new Hybrid_Auth( $config );
+    $hybridauth = new Hybridauth\Hybridauth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
 
@@ -128,13 +125,12 @@ if (!empty($provider_name)) {
     if (count($allProviders) && in_array(ucfirst($provider_name), $allProviders)) {
         try {
             // create an instance for Hybridauth with the configuration file path as parameter
-            $hybridauth = new Hybrid_Auth($config);
-
+            $hybridauth = new Hybridauth\Hybridauth( $config );
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate(strtolower($provider_name));
-
             // grab the user profile and check if the provider_uid
             $user_data = $adapter->getUserProfile();
+            $provider_id = $user_data->identifier;
             if ($user_data->identifier) {
                 $result = Database::get()->querySingle("SELECT uid FROM user_ext_uid
                     WHERE uid = ?s AND auth_id = ?d", $user_data->identifier, $auth);
@@ -148,7 +144,7 @@ if (!empty($provider_name)) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
 
-            // Display the recived error,
+            // Display the received error,
             // to know more please refer to Exceptions handling section on the userguide
             switch($e->getCode()) {
                 case 0 : $warning = "<p class='alert alert-info'>$langProviderError1</p>"; break;
@@ -252,7 +248,6 @@ if (!isset($_POST['submit'])) {
         $departments = $_POST['department'];
     }
 
-    $registration_errors = array();
     // check if there are empty fields
     if (!$missing) {
         $registration_errors[] = $langFieldsMissing;
@@ -277,6 +272,7 @@ if (!isset($_POST['submit'])) {
         }
         if ($display_captcha) {
             // captcha check
+            $securimage = new Securimage();
             if (!$securimage->check($_POST['captcha_code'])) {
                 $registration_errors[] = $langCaptchaWrong;
             }
@@ -309,7 +305,7 @@ if (!isset($_POST['submit'])) {
         require_once 'modules/auth/methods/hybridauth/config.php';
         $config = get_hybridauth_config();
 
-        $hybridauth = new Hybrid_Auth( $config );
+        $hybridauth = new Hybridauth\Hybridauth( $config );
         $allProviders = $hybridauth->getProviders();
         $provider = '';
         $warning = '';
@@ -322,14 +318,13 @@ if (!isset($_POST['submit'])) {
             // if !empty($provider), it means the provider is existent and valid - it's checked above
             try {
                 // create an instance for Hybridauth with the configuration file path as parameter
-                $hybridauth = new Hybrid_Auth($config);
+                $hybridauth = new Hybridauth\Hybridauth( $config );
 
                 // try to authenticate the selected $provider
                 $adapter = $hybridauth->authenticate($provider);
 
                 // grab the user profile and check if the provider_uid
                 $user_data = $adapter->getUserProfile();
-                $provider_id = $user_data->identifier;
                 if ($user_data->identifier) {
                     $result = Database::get()->querySingle("SELECT uid FROM user_ext_uid
                         WHERE uid = ?s AND auth_id = ?d", $user_data->identifier, $auth);
@@ -368,8 +363,7 @@ if (!isset($_POST['submit'])) {
             $vmail = FALSE;
         }
         if (empty($provider) && empty($_POST['provider_id'])) {
-            $hasher = new PasswordHash(8, false);
-            $password_encrypted = $hasher->HashPassword($password);
+            $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
         } else {
             $password_encrypted = $provider;
         }

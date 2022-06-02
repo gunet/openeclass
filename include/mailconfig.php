@@ -51,15 +51,28 @@ EOF;
 // Store mail configuration from POST variables
 function store_mail_config() {
     global $smtp_server, $smtp_port, $smtp_encryption, $smtp_username,
-        $smtp_password, $dont_mail_unverified_mails, $email_from;
+        $smtp_password, $dont_mail_unverified_mails, $email_from,
+        $langInvalidEmail, $langEmailAnnounce, $langEmailBounces;
 
     register_posted_variables(array(
         'dont_mail_unverified_mails' => true,
         'email_from' => true), 'all', 'intval');
     set_config('dont_mail_unverified_mails', $dont_mail_unverified_mails);
     set_config('email_from', $email_from);
-    set_config('email_announce', $_POST['email_announce']);
-    set_config('email_bounces', $_POST['email_bounces']);
+    $email_announce = trim($_POST['email_announce']);
+    if ($email_announce == '' or valid_email($email_announce)) {
+        set_config('email_announce', $email_announce);
+    } else {
+        Session::Messages("$langEmailAnnounce: $langInvalidEmail: " . q($email_announce),
+            'alert-warning');
+    }
+    $email_bounces = trim($_POST['email_bounces']);
+    if ($email_bounces == '' or valid_email($email_bounces)) {
+        set_config('email_bounces', $email_bounces);
+    } else {
+        Session::Messages("$langEmailBounces: $langInvalidEmail: " . q($email_bounces),
+            'alert-warning');
+    }
     if ($_POST['email_transport'] == 1) {
         set_config('email_transport', 'smtp');
         register_posted_variables(array('smtp_encryption' => true,
@@ -105,7 +118,7 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $tool_content, $langEmailBounces, $langSave;
+        $tool_content, $langEmailBounces, $langSave, $langEG;
 
     // True if running initial install
     $install = isset($GLOBALS['input_fields']);
@@ -215,6 +228,7 @@ function mail_settings_form() {
                            <label for='formSendmailCommand' class='col-sm-3 control-label'>$langEmailSendmail:</label>
                            <div class='col-sm-9'>
                                 <input type='text' class='form-control' name='sendmail_command' id='formSendmailCommand' value='".q(get_var('sendmail_command', ini_get('sendmail_path')))."'>
+                                <span class='help-text'>$langEG <code>/usr/sbin/sendmail -t -i</code></span>
                            </div>
                         </div>
                         <hr>";

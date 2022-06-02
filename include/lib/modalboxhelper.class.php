@@ -40,7 +40,7 @@ class ModalBoxHelper {
      * @param  boolean $gallery
      */
     public static function loadModalBox($gallery = false) {
-        global $langColorboxCurrent, $langClose;
+        global $langColorboxCurrent;
 
         $shadowbox_gallery = ($gallery) ? 'gallery: "gallery"' : '';
         $shadowbox_init = '<script type="text/javascript">
@@ -105,32 +105,13 @@ class ModalBoxHelper {
                              });
                           });
                           </script>';
-        
-        $standard_init = '<script type="text/javascript">
-                            $(document).ready(function() {
-                                $(".bootboxframe").on("click", function(e) {
-                                    e.preventDefault();
-                                    bootbox.dialog({
-                                        size: "large",
-                                        title: e.target.text,
-                                        message: "<iframe src=\'" + e.target.getAttribute("href") + "\' style=\'border:0;\' width=\'100%\' height=\'700px\'></iframe>",
-                                        buttons : {
-                                            close: {
-                                                label: "' . $langClose . '",
-                                                callback: function() {}
-                                            }
-                                        }
-                                    });
-                                });
-                            });
-                        </script>';
 
         if (file_exists(self::getShadowboxDir())) {
-            load_js('shadowbox', $shadowbox_init . $standard_init);
+            load_js('shadowbox', $shadowbox_init);
         } else if (file_exists(self::getFancybox2Dir())) {
-            load_js('fancybox2', $fancybox2_init . $standard_init);
+            load_js('fancybox2', $fancybox2_init);
         } else if (file_exists(self::getColorboxDir())) {
-            load_js('colorbox', $colorbox_init . $standard_init);
+            load_js('colorbox', $colorbox_init);
         }
     }
 
@@ -162,7 +143,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public static function getModalWidth() {
@@ -170,7 +151,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public static function getModalHeight() {
@@ -178,7 +159,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @global string $webDir
      * @return string
      */
@@ -188,7 +169,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @global string $webDir
      * @return string
      */
@@ -198,7 +179,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @global string $webDir
      * @return string
      */
@@ -208,7 +189,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public static function getShadowboxWidth() {
@@ -216,7 +197,7 @@ class ModalBoxHelper {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public static function getShadowboxHeight() {

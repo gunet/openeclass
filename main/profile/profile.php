@@ -272,7 +272,7 @@ if (isset($_GET['provider'])) {
             $user_data = '';
             $provider = q(trim(strtolower($_GET['provider'])));
 
-            $hybridauth = new Hybrid_Auth($config);
+            $hybridauth = new Hybridauth( $config );
             $allProviders = $hybridauth->getProviders();
 
             if (count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
@@ -507,7 +507,7 @@ Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d'
 // the homepage, or no message if no providers are enabled
 $config = get_hybridauth_config();
 
-$hybridauth = new Hybrid_Auth($config);
+$hybridauth = new Hybridauth( $config );
 $data['allProviders'] = $hybridauth->getProviders();
 $activeAuthMethods = get_auth_active_methods();
 foreach ($data['allProviders'] as $provider => $settings) {

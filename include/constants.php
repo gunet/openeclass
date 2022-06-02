@@ -82,14 +82,14 @@ define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
 define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_ABUSE_REPORT', 42);
-define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_WALL', 46);
 define('MODULE_ID_MINDMAP', 47);
 define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_COURSEPREREQUISITE', 49);
 define('MODULE_ID_LTI_CONSUMER', 50);  /* deprecated. used only for compatibility in statistics*/
 define('MODULE_ID_ANALYTICS', 51);
-define('MODULE_ID_H5P', 60);
+define('MODULE_ID_H5P', 52);
+define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_REQUEST', 100);
 
 // user modules
@@ -135,6 +135,7 @@ define('FILL_IN_FROM_PREDEFINED_ANSWERS', 8);
 // exercise view type
 define('SINGLE_PAGE_TYPE', 1);
 define('MULTIPLE_PAGE_TYPE', 2);
+define('ONE_WAY_TYPE', 3);
 
 // exercise attempt types
 define('ATTEMPT_ACTIVE', 0);
@@ -169,6 +170,7 @@ define('ASSIGNMENT_PEER_REVIEW_GRADE', 3);
 define('POLL_NORMAL', 0);
 define('POLL_COLLES', 1);
 define('POLL_ATTLS', 2);
+define('POLL_LIMESURVEY', 99);
 
 // gradebook activity type
 define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
@@ -191,4 +193,3 @@ define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
 define('MAX_IDLE_TIME', 10);
 
 define('JQUERY_VERSION', '2.1.1');
-

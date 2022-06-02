@@ -87,7 +87,7 @@ class Log {
      */
     public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now, $script_page) {
 
-        global $tool_content, $modules,
+        global $tool_content, $modules, $langToolManagement,
             $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, $langConfig,
             $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
             $langModifyInfo, $langAbuseReport, $langIpAddress;
@@ -179,7 +179,7 @@ class Log {
                     if ($mid == MODULE_ID_USERS) {
                         $tool_content .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
-                        $tool_content .= "<td>" . $langExternalLinks . "</td>";
+                        $tool_content .= "<td>$langToolManagement / $langExternalLinks</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
                         $tool_content .= "<td>" . $langCourseInfo . "</td>";
                     } elseif ($mid == MODULE_ID_ABUSE_REPORT) {
@@ -656,12 +656,12 @@ class Log {
      */
     private function group_action_details($details) {
 
-        global $langGroup, $langRegistration, $langInGroup;
+        global $langGroup, $langRegister, $langInGroup;
 
         $details = unserialize($details);
 
         if (!empty($details['uid'])) {
-            $content = "$langRegistration &laquo" . display_user($details['uid'], false, false) . "&raquo $langInGroup &laquo" . q($details['name']) . "&raquo";
+            $content = "$langRegister &laquo" . display_user($details['uid'], false, false) . "&raquo $langInGroup &laquo" . q($details['name']) . "&raquo";
         } else {
             $content = "$langGroup &laquo" . q($details['name']) . "&raquo";
         }
@@ -733,14 +733,12 @@ class Log {
 
     /**
      * display action details in exercises
-     * @global type $langTitle
-     * @global type $langDescription
-     * @param type $details
      * @return string
      */
     private function exercise_action_details($details) {
 
-        global $langTitle, $langDescription;
+        global $langTitle, $langDescription, $langAttempt, $urlAppend, $course_code,
+               $langDelete, $langOfAttempt, $langOfUser, $langModify, $langIn, $langPurgeExercises;
 
         $details = unserialize($details);
         if (is_object($details['title'])) {
@@ -750,6 +748,22 @@ class Log {
         if (!empty($details['description'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
         }
+        if (!empty($details['legend'])) {
+            $content .= "&nbsp;&mdash;&nbsp;" . q($details['legend']) ;
+        }
+        if (isset($details['eurid']) and isset($course_code) and $course_code) {
+            $content .= "<br><a href='{$urlAppend}modules/exercise/exercise_result.php?course=$course_code&amp;eurId=$details[eurid]'>$langAttempt</a>";
+        }
+        if (isset($details['del_eurid_uid'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langDelete $langOfAttempt $langOfUser &laquo;" . uid_to_name($details['del_eurid_uid']) . "&raquo;";
+        }
+        if (isset($details['mod_eurid_uid'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langModify $langOfAttempt $langOfUser &laquo;" . uid_to_name($details['mod_eurid_uid']) . "&raquo;&nbsp;$langIn&nbsp;&laquo;" . get_exercise_attempt_status_legend($details['new_eurid_status']) . "&raquo";
+        }
+        if (isset($details['purge_results'])) {
+            $content .= "&nbsp;&mdash;&nbsp;$langPurgeExercises";
+        }
+
         return $content;
     }
 
@@ -809,7 +823,7 @@ class Log {
     private function course_user_action_details($details, $type) {
 
         global $langOfUser, $langToUser,
-        $langsOfTeacher, $langsOfEditor, $langRegistration, $langAddGUser,
+        $langsOfTeacher, $langsOfEditor, $langRegister, $langAddGUser,
         $langUnCourse, $langTheU, $langGiveRight,
         $langRemovedRight, $langsOfGroupTutor,
         $langDelUsers, $langParams;
@@ -826,7 +840,7 @@ class Log {
         }
 
         switch ($details['right']) {
-            case '+5': $content = $langRegistration;
+            case '+5': $content = $langRegister;
                        $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
                 break;
             case '-5': $content = $langUnCourse;
@@ -872,20 +886,31 @@ class Log {
      * @return string
      */
     private function external_link_action_details($details) {
-
-        global $langLinkName;
+        global $langLinkName, $langActivate, $langDeactivate;
 
         $details = unserialize($details);
         $content = '';
 
-        if (!empty($details['link'])) {
-            $content .= "URL: " . q($details['link']);
+        $parts = [];
+        if (isset($details['activate'])) {
+            $parts[] = "$langActivate: " .
+                implode(', ', array_map(function ($mid) {
+                    return q($GLOBALS['modules'][$mid]['title']);
+                }, $details['activate']));
         }
-        if(!empty($details['name_link'])) {
-            $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
+        if (isset($details['deactivate'])) {
+            $parts[] = "$langDeactivate: " .
+                implode(', ', array_map(function ($mid) {
+                    return q($GLOBALS['modules'][$mid]['title']);
+                }, $details['deactivate']));
         }
-
-        return $content;
+        if (isset($details['link']) and $details['link']) {
+            $parts[] = "URL: " . q($details['link']);
+        }
+        if (isset($details['name_link']) and $details['name_link']) {
+            $parts[] = "$langLinkName &laquo" . q($details['name_link']) . "&raquo";
+        }
+        return implode('<br>', $parts);
     }
 
     /**
@@ -895,7 +920,7 @@ class Log {
      */
     private function abuse_report_action_details($details) {
 
-        global $langCreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
+        global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
                $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
                $langAbuseReportOpen, $langAbuseReportClosed, $langLinks, $langWallPost;
 
@@ -910,7 +935,7 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langCreator: ". display_user($details['user_id'], false, false)."<br/>";
+        $content = "$langcreator: ". display_user($details['user_id'], false, false)."<br/>";
         $content .= "$langAbuseReportCat: &laquo".$reports_cats[$details['reason']]."&raquo<br/>";
         $content .= "$langMessage: &laquo".q($details['message'])."&raquo<br/>";
         $content .= "$langAbuseResourceType: &laquo".$resource_types[$details['rtype']]."&raquo<br/>";
