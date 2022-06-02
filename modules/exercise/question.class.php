@@ -497,7 +497,6 @@ if (!class_exists('Question')) {
             $id = $this->id;
 
             // if the question must be removed from all exercises
-            //if($deleteFromEx === 0)
             if (!$deleteFromEx) {
                 Database::get()->query("DELETE FROM `exercise_with_questions` WHERE question_id = ?d", $id);
                 Database::get()->query("DELETE FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);

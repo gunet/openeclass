@@ -156,7 +156,7 @@ Class Blog {
             global $course_code;
             $url_params = "course=$course_code";
         } else { //user blog
-            $url_params = "token=".token_generate('personal_blog' . $this->user_id)."&amp;user_id=$this->user_id";
+            $url_params = "user_id=$this->user_id";
         }
         $posts = $this->getPopularBlogPostsDB($num);
         $out = "<h5><strong>$langBlogPopular</strong></h5>
@@ -185,7 +185,7 @@ Class Blog {
             global $course_code;
             $url_params = "course=$course_code";
         } else { //user blog
-            $url_params = "token=".token_generate('personal_blog' . $this->user_id)."&amp;user_id=$this->user_id";
+            $url_params = "user_id=$this->user_id";
         }
 
         $num_posts = $this->blogPostsNumber();
@@ -203,10 +203,10 @@ Class Blog {
         if ((isset($newer) && $newer) || (isset($older) && $older)) {
             $out = "<ul class='pager'>";
             if(isset($older) && $older) {
-                $out .= "<li class='previous'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>&larr; ".$langBlogOlderPosts."</a></li>";
+                $out .= "<li class='previous'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>&larr; ".$langBlogOlderPosts."</a></li>";
             }
             if(isset($newer) && $newer) {
-                $out .= "<li class='next'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts." &rarr;</a></li>";
+                $out .= "<li class='next'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts." &rarr;</a></li>";
             }
             $out .= "</ul>";
         }
@@ -227,7 +227,7 @@ Class Blog {
             global $course_code;
             $url_params = "course=$course_code";
         } else { //user blog
-            $url_params = "token=".token_generate('personal_blog' . $this->user_id)."&amp;user_id=$this->user_id";
+            $url_params = "user_id=$this->user_id";
         }
         $out = '';
 
@@ -285,9 +285,9 @@ Class Blog {
                     $count_id = 0;
                     $out_p = "";
                     foreach ($monthard as $id => $title) {
-                    	$count_id += 1;
-                    	$out_p .= "<li data-jstree='{\"icon\":\"fa fa-file-text-o\"}'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=$id'>".q($title)."</a></li>";
-            	    }                    
+                        $count_id += 1;
+                        $out_p .= "<li data-jstree='{\"icon\":\"fa fa-file-text-o\"}'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=$id'>".q($title)."</a></li>";
+                    }
                     $out_m .= "<li data-jstree='{\"icon\":\"fa fa-folder-o\"".(($month == $tree_month && $year == $tree_year)? ",\"opened\":true,\"selected\":true" :"")."}'>$m ($count_id)
                                     <ul>
                                         $out_p

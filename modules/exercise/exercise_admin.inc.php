@@ -29,9 +29,9 @@ require_once 'modules/tags/moduleElement.class.php';
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group` 
-                                          WHERE course_id = ?d 
-                                          AND visible = 1 
+            $data = Database::get()->queryArray("SELECT name,id FROM `group`
+                                          WHERE course_id = ?d
+                                          AND visible = 1
                                       ORDER BY name", $course_id);
         } elseif ($_POST['assign_type'] == 1) {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
@@ -131,13 +131,15 @@ if (isset($_POST['submitExercise'])) {
     if (is_null($exerciseStartDate) && !Session::has('exerciseStartDate')) {
         $exerciseStartDate = '';
     } else {
-        $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
+        $startDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $exerciseStartDate);
+        $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : $startDateTime->format('d-m-Y H:i');
     }
     $exerciseEndDate = $objExercise->selectEndDate();
     if (is_null($exerciseEndDate) && !Session::has('exerciseEndDate')) {
         $exerciseEndDate = '';
     } else {
-        $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
+        $endDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $exerciseEndDate);
+        $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : $endDateTime->format('d-m-Y H:i');
     }
     $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : ($exerciseStartDate ? 1 : 0);;
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($exerciseEndDate ? 1 : 0);
@@ -165,7 +167,7 @@ if (isset($_POST['submitExercise'])) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                 FROM exercise_to_specific, `group`
                 WHERE `group`.id = exercise_to_specific.group_id
-                    AND `group`.visible = 1 
+                    AND `group`.visible = 1
                     AND exercise_to_specific.exercise_id = ?d", $exerciseId);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -186,7 +188,7 @@ if (isset($_POST['submitExercise'])) {
             $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
                 FROM user, course_user
                 WHERE user.id = course_user.user_id
-                AND course_user.course_id = ?d 
+                AND course_user.course_id = ?d
                 AND course_user.status = " . USER_STUDENT . "
                 AND user.id", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -246,7 +248,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     }
                     $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                 }
-            });                                    
+            });
             $('#exerciseAttemptsAllowed').blur(function(){
                 var attempts = $(this).val();
                 if (attempts ==0) {
@@ -311,7 +313,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             'level' => 'primary-label'
         )
     ));
-   $tool_content .= "
+    $tool_content .= "
         <div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
              <fieldset>
@@ -333,14 +335,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <div class='col-sm-10'>
                          <div class='radio'>
                            <label>
-                             <input type='radio' name='exerciseType' value='1' ".(($exerciseType <= 1)? 'checked' : '').">
+                             <input type='radio' name='exerciseType' value='".SINGLE_PAGE_TYPE."' ".(($exerciseType == SINGLE_PAGE_TYPE)? 'checked' : '').">
                              $langSimpleExercise
                            </label>
                          </div>
                          <div class='radio'>
                            <label>
-                             <input type='radio' name='exerciseType' value='2' ".(($exerciseType >= 2)? 'checked' : '').">
+                             <input type='radio' name='exerciseType' value='".MULTIPLE_PAGE_TYPE."' ".(($exerciseType == MULTIPLE_PAGE_TYPE)? 'checked' : '').">
                              $langSequentialExercise
+                           </label>
+                         </div>
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='exerciseType' value='".ONE_WAY_TYPE."' ".(($exerciseType == ONE_WAY_TYPE)? 'checked' : '').">
+                             $langOneWayExercise
                            </label>
                          </div>
                      </div>
@@ -617,76 +625,113 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         case 2: $assign_to_users_message = $m['WorkToGroup'];
             break;
     }
-    $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise;
-    $moduleTag = new ModuleElement($exerciseId);
-    $tool_content .= action_bar(array(
-        array('title' => $langGroupProperties,
-            'url' => "$_SERVER[SCRIPT_NAME]?$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
-            'icon' => 'fa-edit',
-            'level' => 'primary-label',
-            'button-class' => 'btn btn-success'),
-        array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
-        )
-    ));
-
-    $tool_content .= "<div class='row margin-bottom-fat form-wrapper' style='margin-top: 10px; margin-bottom: 30px; margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
-    $tool_content .= "<div class='col-sm-12'><h4 style='font-weight: bold;'>$exerciseTitle</h4></div>";
-    if (!empty($exerciseDescription)) {
-        $tool_content .= "<div class='col-sm-12'>
-                            <em>" . mathfilter($exerciseDescription, 12, "../../courses/mathimg/") . "</em>
-                          </div>";
+    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+        $exerciseType = $langSequentialExercise;
+    } elseif ($exerciseType == ONE_WAY_TYPE) {
+        $exerciseType = $langOneWayExercise;
+    } else {
+        $exerciseType = $langSimpleExercise;
     }
-    $tool_content .= "<div class='course-info-title clearfix'>
-                        <a role='button' data-toggle='collapse' href='#MoreSettings' aria-expanded='false' aria-controls='MoreSettings>
-                            <h5 class='panel-heading'>
-                                <span class='fa fa-chevron-down fa-fw'></span> $langGroupProperties
-                            </h5>
-                        </a>
+    $moduleTag = new ModuleElement($exerciseId);
+    $tool_content .= action_bar([
+        [ 'title' => $langExerciseExecute,
+          'url' => "exercise_submit.php?course=$course_code&amp;exerciseId=$exerciseId",
+          'icon' => 'fa-play-circle',
+          'level' => 'primary-label',
+          'button-class' => 'btn-danger' ],
+        [ 'title' => $langCourseInfo,
+          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
+          'icon' => 'fa-edit',
+          'level' => 'primary-label',
+          'button-class' => 'btn btn-success' ],
+        [ 'title' => $langBack,
+          'url' => "index.php?course=$course_code",
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ],
+    ]);
+
+    $exerciseDescription = trim($exerciseDescription);
+    if ($exerciseDescription !== '') {
+        $exerciseDescription = "<div class='col-sm-12'>" .
+            standard_text_escape($exerciseDescription) . '</div>';
+    }
+
+    $startParts = explode(' ', $exerciseStartDate);
+    $endParts = explode(' ', $exerciseEndDate);
+    if ($exerciseStartDate and $exerciseEndDate) {
+        $startWeekDay = $langDay_of_weekNames['long'][$startDateTime->format('w')];
+        $periodLabel = "$langExercisePeriod:";
+        if ($startParts[0] == $endParts[0]) { // start and end on same date
+            $timeDuration = format_time_duration($endDateTime->getTimestamp() - $startDateTime->getTimestamp());
+            $periodInfo = "$startWeekDay, $startParts[0] $startParts[1] &ndash; $endParts[1] <small>($timeDuration)</small>";
+        } else {
+            $endWeekDay = $langDay_of_weekNames['long'][$endDateTime->format('w')];
+            $periodInfo = "$startWeekDay, $exerciseStartDate &ndash; $endWeekDay, $exerciseEndDate";
+        }
+    } elseif ($exerciseStartDate) {
+        $periodLabel = "<span style='color: green;'>$langStart:</span>";
+        $periodInfo = $langDay_of_weekNames['long'][$startDateTime->format('w')] . ', ' . $exerciseStartDate;
+    } elseif ($exerciseEndDate) {
+        $periodLabel = "<span style='color: red;'>$langFinish:</span>";
+        $periodInfo = $langDay_of_weekNames['long'][$endDateTime->format('w')] . ', ' . $exerciseEndDate;
+    } else {
+        $periodLabel = null;
+    }
+    $period = $periodLabel? "<div class='col-xs-12'>$periodLabel <b>$periodInfo</b></div>": '';
+
+    $tool_content .= "
+        <div class='panel panel-default'>
+            <div class='panel-heading' data-toggle='collapse' href='#exerciseInfoPanel' aria-expanded='false' aria-controls='#exerciseInfoPanel' style='cursor: pointer'>
+                <h4><span class='fa fa-chevron-right fa-fw' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "</h4>
+            </div>
+            <div class='panel-body collapse' id='exerciseInfoPanel'>
+                <div class='row'>
+                    $exerciseDescription
+                    $period
+                    <div class='col-sm-12'>
+                        $exerciseType
                     </div>";
 
-    $tool_content .= "<div id='MoreSettings' class='collapse'>";
-    $tool_content .= "<span class='col-sm-12'>";
-    if (isset($exerciseStartDate)) {
-        $tool_content .= "<span style='color: green; padding-right: 30px;'>$langStart: <em>$exerciseStartDate</em></span>";
-    }
-    if (isset($exerciseEndDate) && !empty($exerciseEndDate)) {
-        $tool_content .= "<span style='color: red;'>$langFinish: <em>$exerciseEndDate</em></span>";
-    }
-    $tool_content .= "</span>";
-
-    $tool_content .= "<span class='col-sm-12'>$langViewShow: <em><strong>$exerciseType</strong></em></span>";
-
-    $tool_content .= "<span class='col-sm-12' style='margin-top: 15px;'>";
     if ($exerciseTempSave == 1) {
-        $tool_content .= "<span style='padding-right: 30px';>$langTemporarySave: <em><strong>$langYes</strong></em></span>";
+        $tool_content .= "<div class='col-xs-12'><b>$langTemporarySave:</b> $langYes</div>";
     }
     if ($exerciseTimeConstraint > 0) {
-        $tool_content .= "<span style='padding-right: 30px';>$langDuration: <em><strong>$exerciseTimeConstraint</strong> $langExerciseConstrainUnit</em></span>";
+        if ($exerciseTimeConstraint == 1) {
+            $langExerciseConstrainUnit = $langminute;
+        }
+        $tool_content .= "<div class='col-xs-12'>$langExerciseConstrain: <b>$exerciseTimeConstraint $langExerciseConstrainUnit</b></div>";
     }
     if ($exerciseAttemptsAllowed > 0) {
-        $tool_content .= "$langExerciseAttemptsAllowed: <em><strong>$exerciseAttemptsAllowed</strong> $langExerciseAttemptsAllowedUnit</em>";
+        $tool_content .= "<div class='col-xs-12'>$langExerciseAttemptsAllowed: <b>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</b></div>";
     }
-    $tool_content .= "</span>";
 
-    $tool_content .= "<span class='col-sm-12' style='margin-top: 15px;'>$langAnswers: <em><strong>$disp_results_message</strong></em></span>";
-    $tool_content .= "<span class='col-sm-12'>$langScore: <em><strong>$disp_score_message</strong></em></span>";
+    $tool_content .= "
+                    <div class='col-sm-12' style='margin-top: 10px;'>$disp_results_message</div>
+                    <div class='col-sm-12'>$disp_score_message</div>";
 
     if ($exerciseAssignToSpecific > 0) {
-        $tool_content .= "<span class='col-sm-12' style='margin-top: 15px;'>$m[WorkAssignTo]: <strong>$assign_to_users_message</strong></span>";
+        $tool_content .= "<div class='col-sm-12' style='margin-top: 10px;'>$m[WorkAssignTo]: <b>$assign_to_users_message</b></div>";
     }
 
     $tags_list = $moduleTag->showTags();
     if ($tags_list) {
-        $tool_content .= "<span class='col-sm-3'>
-                            <strong>$langTags:</strong>
-                         </span>
-                         <span class='col-sm-9'>
-                                $tags_list
-                         </span>";
+        $tool_content .= "
+                    <div class='col-sm-12'>
+                        $langTags: $tags_list
+                    </div>";
     }
-    $tool_content .= "</div>";
-    $tool_content .= "</div>";
+    $tool_content .= "
+                </div>
+            </div>
+        </div>
+        <script>$(function () {
+            $('#exerciseInfoPanel')
+                .on('show.bs.collapse', function () {
+                    $('#exerciseInfoPanelIndicator').addClass('fa-rotate-90');
+                })
+                .on('hidden.bs.collapse', function () {
+                    $('#exerciseInfoPanelIndicator').removeClass('fa-rotate-90');
+                });
+        });</script>";
+
 }

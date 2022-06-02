@@ -117,7 +117,7 @@ final class Database {
                     break;
                 case "MYSQL":
                     $dsn = 'mysql:host=' . $server . ';charset=utf8mb4' . $databasename;
-                    $params = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4");
+                    $params = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4,time_zone='" . date('P') . "'");
                     break;
                 default :
                     Debug::message("Unknown database backend: " . DB_TYPE, Debug::ALWAYS);

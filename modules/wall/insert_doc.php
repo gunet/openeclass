@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
-    global $course_code, $langNoDocuments;
+    global $course_code, $langNoDocuments, $urlServer;
     
     load_js('jstree3');
     
@@ -59,7 +59,7 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
                            'responsive': true
                          },
 	                     'data' : {
-                           'url' : 'load_doc.php?course=$course_code$sys$id_str',
+                           'url' : '".$urlServer."modules/wall/load_doc.php?course=$course_code$sys$id_str',
                            'data' : function (node) {
                              return { 'id' : node.id };
                            }
@@ -67,8 +67,8 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
                        },
                        'plugins' : [ 'checkbox', 'types' ]
                      });";
-
-        if (!$expanded) {
+        
+        if (!$expanded) {             
             $ret_str .= "
                          $('#$div_id').on('ready.jstree', function(e, data) {
                              if(data.instance._cnt == 0) {
@@ -84,7 +84,7 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
                                  $('#".$input_id."_div').html('<div class=\"alert alert-warning\">$langNoDocuments</div>');
                              }
                          })";
-        }
+        }                     
                      
                      
                      

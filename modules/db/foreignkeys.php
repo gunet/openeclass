@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass
+ * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ========================================================================
+ * ======================================================================== 
  */
 
 require_once 'database.php';
@@ -32,7 +32,7 @@ final class ForeignKeys {
      * @param type $detailFieldName The detail table's field name, which
      * connects with the master table
      * @param type $masterTableName The master table name
-     * @param type $defaultEntryResolver A numeric value or a function which
+     * @param type $defaultEntryResolver A numeric value or a function which 
      * returns a numeric value, in order to get the master id field value. This
      * will be used as default for those entries of the detail table, who are
      * orphaned (have a wrong reference). If this value is null, or if the

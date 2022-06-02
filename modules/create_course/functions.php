@@ -96,14 +96,17 @@ function create_course_dirs($code) {
     global $langDirectoryCreateError;
 
     $base = "courses/$code";
-    umask(0);
-    foreach (array($base, "$base/image", "$base/document", "$base/dropbox",
-                   "$base/page", "$base/work", "$base/group", "$base/temp",
-                   "$base/scormPackages", "video/$code") as $dir) {
-       if (!make_dir($dir)) {
+    $dirs = [$base, "$base/image", "$base/document", "$base/dropbox",
+        "$base/page", "$base/work", "$base/group", "$base/temp",
+        "$base/scormPackages", "video/$code"];
+    foreach ($dirs as $dir) {
+        if (!make_dir($dir)) {
             Session::Messages(sprintf($langDirectoryCreateError, $dir));
             return false;
-       }
+        }
+        if ($dir != $base) {
+            touch("$dir/index.html");
+        }
     }
     return true;
 }

@@ -19,12 +19,12 @@
 * ======================================================================== */
 
 if (isset($_GET['course'])) { //course blog
-    $require_current_course = TRUE;
+    $require_current_course = true;
     $blog_type = 'course_blog';
 } else { //personal blog
     $require_login = true;
-    $require_valid_uid = TRUE;
-    $require_current_course = FALSE;
+    $require_valid_uid = true;
+    $require_current_course = false;
     $blog_type = 'perso_blog';
 }
 $require_help = TRUE;
@@ -42,18 +42,18 @@ require_once 'modules/analytics/BlogAnalyticsEvent.php';
 
 if ($blog_type == 'course_blog') {
     $user_id = 0;
-    
-    define_rss_link();    
+
+    define_rss_link();
     $toolName = $langBlog;
-    
+
     //check if commenting is enabled for course blogs
     $comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
     //check if rating is enabled for course blogs
     $ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
-    
+
     $sharing_allowed = is_sharing_allowed($course_id);
     $sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
-    
+
     $url_params = "course=$course_code";
 } elseif ($blog_type == 'perso_blog') {
     if (!get_config('personal_blog')) {
@@ -77,20 +77,20 @@ if ($blog_type == 'course_blog') {
         $user_id = $_SESSION['uid']; //current user's blog
         $is_blog_editor = true;
     }
-    
+
     $db_user = Database::get()->querySingle("SELECT surname, givenname FROM user WHERE id = ?d", $user_id);
     if (!$db_user) {
         $tool_content = "<div class='alert alert-danger'>$langBlogUserNotExist</div>";
         draw($tool_content, 1);
         exit;
     }
-    
+
     if ($user_id == $_SESSION['uid']) {
         $toolName = $langMyBlog;
     } else {
         $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
-    }    
-    
+    }
+
     //check if commenting is enabled for personal blogs
     $comments_enabled = get_config('personal_blog_commenting');
     //check if rating is enabled for personal blogs
@@ -98,7 +98,7 @@ if ($blog_type == 'course_blog') {
     //check if sharing is platform widely allowed and enabled for personal blogs
     $sharing_allowed = get_config('enable_social_sharing_links');
     $sharing_enabled = get_config('personal_blog_sharing');
-    
+
     $url_params = "user_id=$user_id";
 }
 
@@ -153,7 +153,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
             Session::Messages($langRegDone, 'alert-success');
             redirect_to_home_page('modules/blog/index.php?course='.$course_code);
         }
-        
+
         if (isset($message) && $message) {
         	$tool_content .= $message . "<br/>";
         	unset($message);
@@ -196,7 +196,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $sharing_radio_dis = "";
             $sharing_dis_label = "";
         }
-		
+
         if ($sharing_enabled == 1) {
             $checkSharingDis = "";
             $checkSharingEn = "checked";
@@ -204,17 +204,17 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $checkSharingDis = "checked";
             $checkSharingEn = "";
         }
-        
-        
+
+
         $tool_content .= "
             <div class='row'>
                 <div class='col-sm-12'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' action='' role='form' method='post'>
-                            <fieldset>                               
+                            <fieldset>
                                 <div class='form-group'>
                                     <label class='col-sm-3'>$langBlogPerm</label>
-                                    <div class='col-sm-9'> 
+                                    <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='0' name='1_radio' $checkTeach>$langBlogPermTeacher

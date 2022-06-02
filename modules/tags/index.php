@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2019  Greek Universities Network - GUnet

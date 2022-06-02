@@ -37,7 +37,7 @@ if ($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == USER_STUDENT) 
                course.public_code,
                course_user.status AS status
           FROM course JOIN course_user ON course.id = course_user.course_id
-         WHERE course_user.user_id = ?d 
+         WHERE course_user.user_id = ?d
            AND (course.visible != ?d
                 OR course_user.status = ?d)
       ORDER BY status, course.title, course.prof_names",
@@ -93,10 +93,6 @@ function createCoursesDom($coursesArr) {
             $c->appendChild(new DOMAttr('code', $course->code));
             $c->appendChild(new DOMAttr('title', $titleStr));
             $c->appendChild(new DOMAttr('description', ""));
-
-            //$c->appendChild(new DOMAttr('teacher', $course->titulaires));
-            //$c->appendChild(new DOMAttr('visible', $course->visible));
-            //$c->appendChild(new DOMAttr('visibleName', getVisibleName($course->visible)));
 
             $k++;
         }

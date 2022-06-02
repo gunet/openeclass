@@ -359,7 +359,8 @@ class BigBlueButton {
                         'participantCount' => $m->participantCount,
                         'listenerCount' => $m->listenerCount,
                         'voiceParticipantCount' => $m->voiceParticipantCount,
-                        'videoCount' => $m->videoCount
+                        'videoCount' => $m->videoCount,
+                        'moderatorCount' => $m->moderatorCount
                     );
                 }
                 return $result;

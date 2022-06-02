@@ -553,6 +553,9 @@ if ($is_editor) {
                         array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
                             'icon' => 'fa-edit'),
+                        array('title' => $langAddManyUsers,
+                            'url' => "muladduser.php?course=$course_code&amp;group_id=$group->id",
+                            'icon' => 'fa-plus-circle'),
                         array('title' => $visibility_text,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group->id&amp;$visibility_url",
                             'icon' => $visibility_icom),
@@ -690,7 +693,7 @@ if ($is_editor) {
             <div class='margin-bottom-thin' style='font-weight: bold;'>";
         if ($aantalcategories > 0) {
             $tool_content .= "$langCategorisedGroups&nbsp;";
-            if (isset($urlview) and abs($urlview) == 0) {
+            if (isset($urlview) and abs(intval($urlview)) == 0) {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
             } else {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";

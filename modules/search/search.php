@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -130,6 +130,7 @@ $tool_content .= "<th class='text-left'>" . $langCourse . " ($langCode)</th>
       <th class='text-left'>$langKeywords</th>
       <th class='text-left'>$langType</th>
     </tr>";
+
 
 foreach ($courses as $course) {
     $courseHref = "../../courses/" . q($course->code) . "/";

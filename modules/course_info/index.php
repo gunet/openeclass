@@ -110,6 +110,7 @@ if (isset($_POST['submit'])) {
         if (get_config('opencourses_enable') && $isOpenCourseCertified) {
             $_POST['formvisible'] = '2';
         }
+
         // validate departments
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
@@ -119,6 +120,7 @@ if (isset($_POST['submit'])) {
                 break;
             }
         }
+
 
         $old_deps = $course->getDepartmentIds($course_id);
         $deps_changed = count(array_diff($old_deps, $departments)) +

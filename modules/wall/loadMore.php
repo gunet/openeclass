@@ -31,7 +31,7 @@ if (visible_module(MODULE_ID_WALL)) {
         if ($page > 1) {//first page is shown in index.php
             $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d,?d", $course_id, ($page-1)*$posts_per_page, $posts_per_page);
             if (count($posts) != 0) {
-                echo generate_infinite_container_html($posts, ++$page);
+                echo generate_infinite_container_html($posts, $posts_per_page, ++$page);
             }  
         }
     }

@@ -214,34 +214,28 @@ if (@$_POST['questionNum']) {
     $QUERY_STRING = "questionNum=$questionNum";
 }
 
-$exerciseDescription_temp = standard_text_escape($exerciseDescription);
+$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
-echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w3.org/TR/html4/frameset.dtd">'
- . "\n<html>\n"
- . '<head>' . "\n"
- . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
- . "<link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>\n"
- . '<title>' . $langExercice . '</title>' . "\n"
- . $head_content
- . '</head>' . "\n"
- . '<body style="margin: 0px; padding-left: 0px; height: 100% !important; height: auto; background-color: #ffffff;">' . "\n"
- . '<div id="content" style="padding:20px;">';
+echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.org/TR/html4/frameset.dtd'>
+ <html>
+ <head>
+     <meta http-equiv='Content-Type' content='text/html' charset='" . $charset . "'>
+     <link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>
+     <link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>
+     <title>$langExercice</title>" . $head_content ."
+ </head>
+ <body style='margin: 0px; padding-left: 0px; height: 100% !important; height: auto; background-color: #ffffff;'>
+ <div id='content' style='padding:20px;'>";
 
-echo ("
-
-<div class='panel panel-primary'>
+echo "<div class='panel panel-primary'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>" . q($exerciseTitle) . "</h3>
-    </div>");
+        <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
+    </div>";
 if (!empty($exerciseDescription_temp)) {
-    echo ("<div class='panel-body'>
-        $exerciseDescription_temp
-    </div>");
+    echo "<div class='panel-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
 }
-    echo ("</div>
 
-
+echo "</div>
   <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='exerciseId' value='$exerciseId' />
@@ -250,7 +244,7 @@ if (!empty($exerciseDescription_temp)) {
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
   <input type='hidden' name='exerciseTimeConstraint' value='$exerciseTimeConstraint' />
   <input type='hidden' name='eid_temp' value='$eid_temp' />
-  <input type='hidden' name='record_start_date' value='$recordStartDate' />");
+  <input type='hidden' name='record_start_date' value='$recordStartDate' />";
 
 $i = 0;
 foreach ($questionList as $questionId) {
@@ -298,7 +292,7 @@ if (!$questionList) {
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         echo "$langContinue\" />&nbsp;";
     } else {
-        echo $langNext . " &gt;&nbsp;" . "\" />";
+        echo $langNext . " &gt;&nbsp;" . "\" />&nbsp;";
     }
     echo "<input class='btn btn-primary' type='submit' name='buttonCancel' value='$langCancel' /></div></div>";
 }

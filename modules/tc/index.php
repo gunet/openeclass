@@ -260,14 +260,23 @@ elseif(isset($_POST['update_bbb_session'])) { // update existing BBB session
     if (isset($_POST['lockSettingsHideUserList']) and $_POST['lockSettingsHideUserList']) {
         $options_arr['lockSettingsHideUserList'] = 1;
     }
+    if (isset($_POST['hideParticipants']) and $_POST['hideParticipants']) {
+        $options_arr['hideParticipants'] = 1;
+    }
     if (count($options_arr) > 0) {
         $options = serialize($options_arr);
     } else {
         $options = NULL;
     }
 
+    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+    $sessionUsers = $_POST['sessionUsers'];
+    if (!empty($bbb_max_part_per_room) and ($sessionUsers > $bbb_max_part_per_room)) {
+        $sessionUsers = $bbb_max_part_per_room;
+    }
+
     // update existing BBB session
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $_POST['sessionUsers'], $options, true, getDirectReference($_POST['id']));
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $sessionUsers, $options, true, getDirectReference($_POST['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -305,7 +314,19 @@ elseif(isset($_GET['choice']))
                     } else {
                         $options = NULL;
                     }
-                    create_bbb_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record, $options);
+                   $now = date('Y-m-d H:i:s');
+                   if ($sess->active <> '1') {
+                        Session::Messages($langBBBDisabled, 'alert-danger');
+                        redirect("index.php?course=$course_code");
+                   } else if (date_diff_in_minutes($sess->start_date, $now) > $sess->unlock_interval) {
+                        Session::Messages($langBBBNotStarted, 'alert-danger');
+                        redirect("index.php?course=$course_code");
+                   } else if (!empty($sess->end_date) and date_diff_in_minutes($now, $sess->end_date) > 0) {
+                        Session::Messages($langBBBHasEnded, 'alert-danger');
+                        redirect("index.php?course=$course_code");
+                   } else {
+                        create_bbb_meeting($title_meeting, $_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record, $options);
+                   }
                 }
                 if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
@@ -393,14 +414,23 @@ elseif(isset($_GET['choice']))
     if (isset($_POST['lockSettingsHideUserList']) and $_POST['lockSettingsHideUserList']) {
         $options_arr['lockSettingsHideUserList'] = 1;
     }
+    if (isset($_POST['hideParticipants']) and $_POST['hideParticipants']) {
+        $options_arr['hideParticipants'] = 1;
+    }
     if (count($options_arr) > 0) {
         $options = serialize($options_arr);
     } else {
         $options = NULL;
     }
 
+    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+    $sessionUsers = $_POST['sessionUsers'];
+    if (!empty($bbb_max_part_per_room) and ($sessionUsers > $bbb_max_part_per_room)) {
+        $sessionUsers = $bbb_max_part_per_room;
+    }
+
     // new BBB session
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $_POST['sessionUsers'], $options, false);
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $sessionUsers, $options, false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }

@@ -43,11 +43,11 @@ ModalBoxHelper::loadModalBox();
 $toolName = $langForums;
 
 $head_content .= "
-  <style>    
+  <style>
     .panel-primary .panel-heading .panel-title { color: #fff;}
     .panel-primary .panel-heading a { color: #fff;}
     .panel-title a {text-decoration:none;}
-    
+
     .img-rounded-corners {
       -webkit-border-radius: 15%;
       -moz-border-radius: 15%;
@@ -58,15 +58,22 @@ $head_content .= "
 load_js('tools.js');
 $head_content .= "
     <script type='text/javascript'>
+        function highlight(selector) {
+            $(selector).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
+        }
         $(document).ready(function() {
-           $('.anchor_to_parent_post_id a').click(function(e) {
-               $('.post-message').removeClass('panel-success').addClass('panel-default').css('border-color','').css('border', '');
-               if ($('.parent-post-message').hasClass('panel-success')) {
-                   $('.parent-post-message').removeClass('panel-success').addClass('panel-primary').css('border-color','').css('border', '');
-               }
-               var parent_post_id = $(this).attr('id');
-               $('#' + parent_post_id).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
+            if (window.location.hash) {
+                highlight(window.location.hash);
+            }
+            $('.anchor_to_parent_post_id a').click(function(e) {
+                $('.post-message').removeClass('panel-success').addClass('panel-default').css('border-color','').css('border', '');
+                if ($('.parent-post-message').hasClass('panel-success')) {
+                    $('.parent-post-message').removeClass('panel-success').addClass('panel-primary').css('border-color','').css('border', '');
+                }
+                var parent_post_id = $(this).attr('id');
+                highlight('#' + parent_post_id);
             });
+
 ";
 
 if ($is_editor) { // delete post confirmation
@@ -79,7 +86,7 @@ if ($is_editor) { // delete post confirmation
                     document.location.href = link;
                 }
             });
-        });        
+        });
     ";
 }
 
@@ -101,6 +108,7 @@ if (isset($_GET['all'])) {
 }
 
 $unit = isset($_GET['unit'])? $_GET['unit']: null;
+$res_type = isset($_GET['res_type']);
 
 // get attached forum topic file (if any)
 if (isset($_GET['get'])) {
@@ -245,8 +253,15 @@ if ($paging and $total > POSTS_PER_PAGE) {
 $topic_subject = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $topic)->title;
 
 if (!add_units_navigation(TRUE)) {
-    $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-    $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum", 'name' => q($forum_name));
+    if (!$res_type) {
+        $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
+        $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum", 'name' => q($forum_name));
+    } else {
+        $navigation[] = array('url' => "../wall/index.php?course=$course_code", 'name' => $langWall);
+        $navigation[] = array('url' => "../units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum", 'name' => q($forum_name));
+    }
+} else {
+    $navigation[] = array('url' => "../units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum&amp;unit=$unit", 'name' => q($forum_name));
 }
 $pageName = $langTopic;
 
@@ -261,6 +276,9 @@ if ($topic_locked == 1) {
     if ($unit) {
         $back_url = "../units/index.php?course=$course_code&id=$unit";
         $reply_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&amp;forum=$forum&amp;unit=$unit";
+    } else if ($res_type) {
+        $back_url = "../wall/index.php?course=$course_code";
+        $reply_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&amp;forum=$forum";
     } else {
         $back_url = "viewforum.php?course=$course_code&forum=$forum";
         $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum";
@@ -290,6 +308,9 @@ if ($topic_locked == 1) {
         $selection_url = "../units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum&unit=$unit";
         $hidden_inputs = "<input type='hidden' name='res_type' value='forum_topic'>
                           <input type='hidden' name='unit' value='$unit'>";
+    } else if ($res_type) {
+        $selection_url = "../units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum";
+        $hidden_inputs = "<input type='hidden' name='res_type' value='forum_topic'>";
     } else {
         $selection_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&topic=$topic&forum=$forum";
         $hidden_inputs = '';
@@ -340,6 +361,8 @@ if ($view != POSTS_THREADED_VIEW) {
         if (isset($start) && $start > 0) {
             if ($unit) {
                 $pagination_btns = "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page&amp;unit=$unit'><span aria-hidden='true'>&laquo;</span></a></li>";
+            } else if ($res_type) {
+                $pagination_btns = "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'><span aria-hidden='true'>&laquo;</span></a></li>";
             } else {
                 $pagination_btns = "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'><span aria-hidden='true'>&laquo;</span></a></li>";
             }
@@ -354,6 +377,8 @@ if ($view != POSTS_THREADED_VIEW) {
             } else {
                 if ($unit) {
                     $pagination_btns .= "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$x&amp;unit=$unit'>$times</a></li>";
+                } else if ($res_type) {
+                    $pagination_btns .= "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a></li>";
                 } else {
                     $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a></li>";
                 }
@@ -365,6 +390,8 @@ if ($view != POSTS_THREADED_VIEW) {
             $next_page = $start + POSTS_PER_PAGE;
             if ($unit) {
                 $pagination_btns .= "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page&amp;unit=$unit'><span aria-hidden='true'>&raquo;</span></a></li>";
+            } else if ($res_type) {
+                $pagination_btns .= "<li><a href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'><span aria-hidden='true'>&raquo;</span></a></li>";
             } else {
                 $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'><span aria-hidden='true'>&raquo;</span></a></li>";
             }
@@ -380,6 +407,8 @@ if ($view != POSTS_THREADED_VIEW) {
                 <div class='pull-right'>";
                 if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langAllOfThem</a>";
+                } else if ($res_type) {
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
                 } else {
                     $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
                 }
@@ -394,6 +423,8 @@ if ($view != POSTS_THREADED_VIEW) {
                 <div class='pull-right'>";
                 if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
+                } else if ($res_type) {
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
                 } else {
                     $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
                 }
@@ -493,6 +524,8 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
             <div class='pull-right'>";
             if ($unit) {
                 $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langAllOfThem</a>";
+            } else if ($res_type) {
+                $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
             } else {
                 $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
             }
@@ -508,6 +541,8 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
                 <div class='pull-right'>";
                 if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
+                } else if ($res_type) {
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
                 } else {
                     $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
                 }
@@ -533,7 +568,7 @@ draw($tool_content, 2, null, $head_content);
  */
 function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offset, $count) {
 
-    global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $langAttachedFile, $unit, $langFrom2,
+    global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $langAttachedFile, $unit, $res_type, $langFrom2,
            $langMessages, $course_code, $is_editor, $topic, $forum, $uid, $langMessage, $head_content,
            $langModify, $langDelete, $langSent, $dateTimeFormatShort, $webDir, $langForumPostParent;
 
@@ -576,9 +611,13 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         $actual_filename = $webDir . "/courses/" . $course_code . "/forum/" . $myrow->topic_filepath;
         $fileinfo = "<p>
                         <span class='help-block'>$langAttachedFile: " .
-                            "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$myrow->id" .
-                            ($unit? "&amp;unit=$unit&amp;res_type=forum_topic": '') .
-                            "'>" .q($myrow->topic_filename) ."</a> <i class='fa fa-save'></i> (" . format_file_size(filesize($actual_filename)) . ")</span>
+                            "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$myrow->id";
+        if ($unit) {
+            $fileinfo .= "&amp;unit=$unit&amp;res_type=forum_topic";
+        } else if ($res_type) {
+            $fileinfo .= "&amp;res_type=forum_topic";
+        }
+        $fileinfo .= "'>" .q($myrow->topic_filename) ."</a> <i class='fa fa-save'></i> (" . format_file_size(filesize($actual_filename)) . ")</span>
                     </p>";
     } else {
         $fileinfo = '';
@@ -587,6 +626,8 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     if ($topic_locked != 1 and $count > 1) { // `reply` button except first post (and if topic is not locked)
         if ($unit) {
             $reply_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id&amp;unit=$unit";
+        } else if ($res_type) {
+            $reply_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id";
         } else {
             $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id";
         }

@@ -131,7 +131,7 @@ $(function() {
         $('#all_users').hide();
         $('#participants_tbl').removeClass('hide');
         var type = $('input:radio[name=specific_gradebook_users]:checked').val();
-        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . urlencode($_REQUEST[gradebook_id]) . "&editUsers=1',
+        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . urlencode($_REQUEST['gradebook_id']) . "&editUsers=1',
         {
           assign_type: type
         },

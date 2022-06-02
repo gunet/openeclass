@@ -33,19 +33,21 @@ if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_e
 
 set_time_limit(0);
 
-doArchive($course_id, $course_code);
+$zipfile = doArchive($course_id, $course_code);
+$zipfile = $urlAppend . str_replace("$webDir/", '', $zipfile);
 
-$data['action_bar'] = 
-    action_bar(array(
-        array('title' => $langDownloadIt,
-              'url' => $urlAppend . "courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip",
-              'icon' => 'fa-download',
-              'button-class' => 'btn-success',
-              'level' => 'primary-label'),
-        array('title' => $langBack,
-              'url' => "index.php?course=$course_code",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')), false);
+$data['action_bar'] =
+    action_bar([
+        [ 'title' => $langDownloadIt,
+            'url' => $zipfile,
+            'icon' => 'fa-download',
+            'button-class' => 'btn-success',
+            'level' => 'primary-label' ],
+        [ 'title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label' ]
+    ], false);
 
 
 $data['menuTypeID'] = 2;

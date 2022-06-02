@@ -177,7 +177,7 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
     }
     $bladeData['fileInfo'] = array_merge($dirs, $files);
     $bladeData['curDirPath'] = $curDirPath;
-    $docout = $blade->view()->make('modules.document.index', $bladeData)->render();
+    $docout = $blade->make('modules.document.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/' . $curDirName . '.html', 'w');
     fwrite($fp, $docout);
     fclose($fp);
@@ -218,7 +218,7 @@ function offline_announcements($bladeData) {
                                             ORDER BY `order` DESC , `date` DESC", $course_id);
 
 
-    $out = $blade->view()->make('modules.announcements.index', $bladeData)->render();
+    $out = $blade->make('modules.announcements.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/announcements.html', 'w');
     fwrite($fp, $out);
 
@@ -245,7 +245,7 @@ function offline_announcements($bladeData) {
             $bladeData['ann_title'] = $a->title;
             $bladeData['ann_body'] = $a->content;
             $bladeData['ann_date'] = $a->date;
-            $out = $blade->view()->make('modules.announcements.ann', $bladeData)->render();
+            $out = $blade->make('modules.announcements.ann', $bladeData)->render();
             $fp = fopen($downloadDir . '/modules/announcement/' . $a->id . '.html', 'w');
             fwrite($fp, $out);
         }
@@ -283,7 +283,7 @@ function offline_videos($bladeData) {
     $bladeData['items'] = getLinksOfCategory(0, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin); // uncategorized items
     $bladeData['categories'] = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
 
-    $out = $blade->view()->make('modules.video.index', $bladeData)->render();
+    $out = $blade->make('modules.video.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/video.html', 'w');
     fwrite($fp, $out);
 }
@@ -371,7 +371,7 @@ function offline_unit_resources($bladeData, $downloadDir) {
                                 . "WHERE unit_id = ?d AND visible = 1 "
                                 . "AND `type` NOT IN ('poll', 'work', 'forum')"
                                 . "ORDER BY `order`", $cu->id);
-            $out = $blade->view()->make('modules.unit', $bladeData)->render();
+            $out = $blade->make('modules.unit', $bladeData)->render();
             $fp = fopen($downloadDir . '/modules/unit/' . $cu->id . '.html', 'w');
             fwrite($fp, $out);
         }
@@ -396,7 +396,7 @@ function offline_exercises($bladeData) {
 
     $bladeData['exercises'] = $exercises = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY start_date DESC", $course_id);
 
-    $out = $blade->view()->make('modules.exercise.index', $bladeData)->render();
+    $out = $blade->make('modules.exercise.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/exercise.html', 'w');
     fwrite($fp, $out);
 
@@ -442,7 +442,7 @@ function offline_exercises($bladeData) {
             $bladeData['langScore'] = $langScore;
             $bladeData['langExerciseDone'] = $langExerciseDone;
 
-            $out = $blade->view()->make('modules.exercise.exer', $bladeData)->render();
+            $out = $blade->make('modules.exercise.exer', $bladeData)->render();
             $fp = fopen($downloadDir . '/modules/exercise/' . $e->id . '.html', 'w');
             fwrite($fp, $out);
         }
@@ -452,7 +452,7 @@ function offline_exercises($bladeData) {
 function offline_ebook($bladeData) {
     global $blade, $downloadDir;
 
-    $out = $blade->view()->make('modules.ebook.index', $bladeData)->render();
+    $out = $blade->make('modules.ebook.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/ebook.html', 'w');
     fwrite($fp, $out);
 
@@ -461,7 +461,7 @@ function offline_ebook($bladeData) {
 function offline_agenda($bladeData) {
     global $blade, $downloadDir;
 
-    $out = $blade->view()->make('modules.agenda.index', $bladeData)->render();
+    $out = $blade->make('modules.agenda.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/agenda.html', 'w');
     fwrite($fp, $out);
 }
@@ -469,7 +469,7 @@ function offline_agenda($bladeData) {
 function offline_blog($bladeData) {
     global $blade, $downloadDir;
 
-    $out = $blade->view()->make('modules.blog.index', $bladeData)->render();
+    $out = $blade->make('modules.blog.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/blog.html', 'w');
     fwrite($fp, $out);
 
@@ -492,7 +492,7 @@ function offline_description($bladeData, $downloadDir) {
                                 . "AND visible = 1 "
                                 . "ORDER BY `order`", $course_id);
 
-    $out = $blade->view()->make('modules.course_description.index', $bladeData)->render();
+    $out = $blade->make('modules.course_description.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/course_description.html', 'w');
     fwrite($fp, $out);
 }
@@ -531,7 +531,7 @@ function offline_links($bladeData, $downloadDir) {
         }
     }
 
-    $out = $blade->view()->make('modules.link.index', $bladeData)->render();
+    $out = $blade->make('modules.link.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/link.html', 'w');
     fwrite($fp, $out);
 }
@@ -541,7 +541,7 @@ function offline_links($bladeData, $downloadDir) {
 function offline_wiki($bladeData) {
     global $blade, $downloadDir;
 
-    $out = $blade->view()->make('modules.wiki.index', $bladeData)->render();
+    $out = $blade->make('modules.wiki.index', $bladeData)->render();
     $fp = fopen($downloadDir . '/modules/wiki.html', 'w');
     fwrite($fp, $out);
 }
@@ -590,7 +590,7 @@ function offline_glossary($bladeData, $downloadDir) {
                                 FROM glossary WHERE course_id = ?d AND term LIKE '$letter%'
                                 GROUP BY term, definition, url, notes, category_id, id
                                 ORDER BY term", $course_id);
-            $out = $blade->view()->make('modules.glossary.index', $bladeData)->render();
+            $out = $blade->make('modules.glossary.index', $bladeData)->render();
             if ($begin) {
                 $fp = fopen($downloadDir . "/modules/glossary.html", 'w');
             } else {

@@ -31,8 +31,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
 
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion, $langSelect,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
-            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
-
+            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered, $langClear;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -49,10 +48,10 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     $questionName = $objQuestionTmp->selectTitle();
     $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
     $questionTypeWord = $objQuestionTmp->selectTypeLegend($answerType);
-    if ($exerciseType == MULTIPLE_PAGE_TYPE) {
-        $qNumber = "$question_number / $nbrQuestions";
-    } else {
+    if ($exerciseType == SINGLE_PAGE_TYPE) {
         $qNumber = $question_number;
+    } else {
+        $qNumber = "$question_number / $nbrQuestions";
     }
     $tool_content .= "
             <div class='panel panel-default qPanel' id='qPanel$questionId'>
@@ -216,6 +215,9 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
     if (!$nbrAnswers && $answerType != FREE_TEXT) {
         $tool_content .= "<div class='alert alert-danger'>$langNoAnswer</div>";
     }
+    if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
+        $tool_content .= "<button class='pull-right clearSelect btn btn-default btn-sm'><span class='fa fa-times'></span> $langClear</button>";
+    }
     $tool_content .= "
                 </div>
             </div>";
@@ -322,7 +324,7 @@ function display_exercise($exercise_id) {
                 </a>
               </h3>
             </div>
-            <div class='panel-body'>" . $exercise->selectDescription() . "</div>
+            <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>";
 
     $i = 1;

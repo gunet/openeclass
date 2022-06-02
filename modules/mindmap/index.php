@@ -29,6 +29,8 @@ $require_help = TRUE;
 $helpTopic = 'mind_map';
 
 require_once '../../include/baseTheme.php';
+require_once 'modules/document/doc_init.php';
+require_once 'include/lib/forcedownload.php';
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -37,41 +39,27 @@ $action->record(MODULE_ID_MINDMAP);
 /* * *********************************** */
 
 $toolName = $langMindmap;
+
 // guest user not allowed
 if (check_guest()) {
     $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
     draw($tool_content, 2, 'mindmap');
 }
 
-////////////////////////////
-    $json = file_get_contents('php://input');
-    if($json != "") {
-        function outputJSON($msg, $status = 'error'){
-        header('Content-Type: application/json');
-        die(json_encode(array(
-                'data' => $msg,
-                'status' => $status
-        )));
-        }
-
-        $json_decode = json_decode($json, true);
-        $mind_s1r=$_POST["mind_str"];
-
-        $file_path=$mind_s1r+".jm";
-        $fileName="jsmind.jm";
-        $file_format = get_file_extension($fileName);
-
-        echo '<script type="application/javascript">';
-        echo 'alert("message successfully sent")';
-        echo '</script>';
+if (isset($_GET['jmpath'])) {
+    doc_init();
+    $path_components = explode('/', $_GET['jmpath']);
+    $file_path = public_path_to_disk_path($path_components);
+    $arr = null;
+    if ($file_path and $file_path->format == 'jm') {
+        $arr = file_get_contents($basedir . $file_path->path);
     }
-
-    if(isset($_GET["jmpath"])) {
-        $path = json_decode( base64_decode( $_GET['jmpath'] ) );
-        $myfile = fopen($path, "r") or die("Unable to open file!");
-        $arr = fread($myfile,filesize($path));
-        fclose($myfile);
-    } else $arr = "{}";
+    if (!$arr) {
+       not_found();
+    }
+} else {
+    $arr = "{}";
+}
 
 $head_content .= '
 
@@ -92,7 +80,7 @@ $head_content .= '
             border:solid 1px #ccc;
             background:#f4f4f4;
         }
-        
+
         jmnodes.theme-greensea jmnode.selected{
         	color: black ;
         }
@@ -155,12 +143,12 @@ $tool_content .="
 			</div>
 		</div>
 	</div>
-    
+
     <div id='jsmind_container'></div>
 </div>";
 
 
-$tool_content .= '      
+$tool_content .= '
 	<script type="text/javascript" src="jsmind.js"></script>
 	<script type="text/javascript" src="jsmind.draggable.js"></script>
 	<script type="text/javascript" src="jsmind.screenshot.js"></script>
@@ -175,12 +163,12 @@ $tool_content .= '
         }
         _jm = jsMind.show(options);
         // _jm = jsMind.show(options,mind);
-		
+
 		var x = '.$arr.';
 		//console.log(jQuery.isEmptyObject(x));
 		if ( !jQuery.isEmptyObject(x)) {
 			_jm.show(x);
-		} 		
+		}
     }
 
     function open_json(){
@@ -210,7 +198,7 @@ $tool_content .= '
         }
         _jm.show(mind);
     }
-	
+
 	function toggle_editable(btn){
         var editable = _jm.get_editable();
         if(editable){
@@ -233,7 +221,7 @@ $tool_content .= '
 				};
 		_jm.show(mind);
 	}
-		
+
     function screen_shot(){
         _jm.screenshot.shootDownload();
 	}
@@ -252,39 +240,39 @@ $tool_content .= '
         jsMind.util.file.save(mind_str,"text/jsmind",mind_name+".jm");
 	}
     }
-    
+
 	function save_file_in_doc(){
-	
-		var x = prompt("'.$langPleaseEnterName.'", "Name");	
+
+		var x = prompt("'.$langPleaseEnterName.'", "Name");
 		if (x!=null){
 			_jm.screenshot.shootAsDataURL(save_file_as_image);
 			_jm.mind.name=x;
 		}
-		
+
 	}
-	
+
 	function save_file_as_image(){
 		var urldat = _jm.screenshot.canvas_elem.toDataURL();
 		var imagename = _jm.mind.name;
-        //var mind_data = _jm.get_data();   
+        //var mind_data = _jm.get_data();
 		//console.log(_jm);
-		 
+
 		//image post in document in base64 format//
 			$.ajax({
 			  type: "POST",
 			  url: "../document/index.php",
-			  data: { 
+			  data: {
 				 imgBase64: urldat,
 				 imgname: imagename
 			  }
 			})
 			.done(function(data, textStatus, jqXHR) {
 			    var mind_data = _jm.get_data();
-				var data = jsMind.util.json.json2string(mind_data);	
-				window.location.href = "../document/index.php?mindmap=" + data +"&mindtitle=" + imagename; 
+				var data = jsMind.util.json.json2string(mind_data);
+				window.location.href = "../document/index.php?mindmap=" + data +"&mindtitle=" + imagename;
 			});
 	}
-		
+
     function open_file(){
         var file_input = document.getElementById("file_input");
         var files = file_input.files;
@@ -332,7 +320,7 @@ $tool_content .= '
             return null;
         }
     }
-	
+
     function add_node(){
         var selected_node = _jm.get_selected_node(); // as parent of new node
         if(!selected_node){prompt_info("'.$langPleaseSelectNode.'");}
@@ -353,7 +341,7 @@ $tool_content .= '
     function set_theme(node){
         _jm.set_theme(node.getAttribute("data-theme"));
     }
-	
+
     function prompt_info(string) {
         alert(string);
     }

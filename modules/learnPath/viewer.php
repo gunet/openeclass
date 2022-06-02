@@ -65,7 +65,18 @@ if (!add_units_navigation()) {
     $navigation[] = array('url' => "learningPath.php?course=$course_code", 'name' => $langAdm);
 }
 
-$unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
+if (isset($_GET['res_type'])) {
+    $res_type = $_GET['res_type'];
+}
+
+if (isset($_GET['unit'])) {
+    $unitParam = "&amp;unit=$_GET[unit]";
+    $startModuleLink = "../learnPath/navigation/startModule.php?course=$course_code$unitParam";
+} else {
+    $unitParam = '';
+    $startModuleLink = "navigation/startModule.php?course=$course_code$unitParam";
+}
+
 
 if (!isset($titlePage)) {
     $titlePage = '';
@@ -86,31 +97,29 @@ if (isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen'])) {
     $displayFull = FULL_SCREEN;
 }
 if ($displayFull == 0) {
-    $tool_content .= "<iframe src=\"navigation/startModule.php?course=$course_code$unitParam\" name=\"mainFrame\" "
-            . "width=\"100%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
+    $tool_content .= "<iframe src='$startModuleLink' name='mainFrame' "
+            . "width='100%' height='550' scrolling='no' frameborder='0'"
             . $langBrowserCannotSeeFrames
             . "<br />" . "\n"
-            . "      <a href=\"module.php?course=$course_code\">" . $langBack . "</a>" . "\n"
-            . "      </iframe>" . "\n";
+            . "<a href=\"module.php?course=$course_code\">" . $langBack . "</a>" . "\n"
+            . "</iframe>" . "\n";
     draw($tool_content, 2, null, $head_content);
-} else {       
-    echo
-    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
-    . "   \"http://www.w3.org/TR/html4/frameset.dtd\">" . "\n"
-    . "<html>" . "\n"
-    . "<head>" . "\n"
-    . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
-    . "<title>" . q($titlePage) . "</title>" . "\n"
-    . "</head>" . "\n"
+} else {
+    echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.org/TR/html4/frameset.dtd'>"
+    . "<html>"
+    . "<head>"
+    . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">'
+    . "<title>" . q($titlePage) . "</title>"
+    . "</head>"
     . "<frameset cols=\"*\" border=\"0\" frameborder=\"0\">" . "\n"
-    . "<frame src=\"navigation/startModule.php?course=$course_code$unitParam\" name=\"mainFrame\" />" . "\n"
-    . "</frameset>" . "\n"
-    . "<noframes>" . "\n"
-    . "<body>" . "\n"
+    . "<frame src='$startModuleLink' name='mainFrame' />" . "\n"
+    . "</frameset>"
+    . "<noframes>"
+    . "<body>"
     . $langBrowserCannotSeeFrames
-    . "<br />" . "\n"
-    . "<a href=\"module.php?course=$course_code\">" . $langBack . "</a>" . "\n"
-    . "</body>" . "\n"
-    . "</noframes>" . "\n"
-    . "</html>" . "\n";
+    . "<br />"
+    . "<a href=\"module.php?course=$course_code\">" . $langBack . "</a>"
+    . "</body>"
+    . "</noframes>"
+    . "</html>";
 }

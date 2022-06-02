@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.13
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2022  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,23 +17,19 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ * ========================================================================
 
-/* ===========================================================================
-  toc.php
+  @file toc.php
   @authors list: Yannis Exidaridis <jexi@noc.uoa.gr>
   Alexandros Diamantidis <adia@noc.uoa.gr>
   Thanos Kyritsis <atkyritsis@upnet.gr>
   ==============================================================================
-  @Description: Aristerh sthlh me ta Table Of Contents mias grammhs ma8hshs,
-  dhladh lista me ola ta modules ths.
-
-  @Comments:
-  ==============================================================================
+  @description: Table of contents left column
  */
 
 $require_current_course = TRUE;
-require_once '../../include/baseTheme.php';
+
+require_once '../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
@@ -42,7 +38,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
     <!-- jQuery -->
-    <script type='text/javascript' src='{$urlAppend}js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='$urlAppend}js/jquery-'" . JQUERY_VERSION . "'.js'></script>
 
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>
@@ -96,7 +92,7 @@ foreach ($result as $list) {
     if (empty($list->name) and $list->contentType == 'LINK') {
         $modar['name'] = $list->path;
     } else {
-        $modar['name'] = $list->name;    
+        $modar['name'] = $list->name;
     }
     $modar['comment'] = $list->comment;
     $modar['accessibility'] = $list->accessibility;

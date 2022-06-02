@@ -136,7 +136,7 @@ if ($is_editor) {
         </div>";
 }
 if (isset($_REQUEST['unit_id'])) {
-    $back_link = "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]";
+    $back_link = "../units/index.php?course=$course_code&amp;id=" . intval($_REQUEST['unit_id']);
 } else {
     $back_link = "index.php?course=$course_code";
 }
@@ -236,9 +236,9 @@ if ($PollType == POLL_NORMAL) {
                             AND a.poll_user_record_id = c.id
                             AND (c.email_verification = 1 OR c.email_verification IS NULL)
                             GROUP BY a.aid ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
-                $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record, poll_user_record 
-                                                                        WHERE poll_user_record_id = id 
-                                                                        AND (email_verification=1 OR email_verification IS NULL) 
+                $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record, poll_user_record
+                                                                        WHERE poll_user_record_id = id
+                                                                        AND (email_verification=1 OR email_verification IS NULL)
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
 
                 $answers_table = "
@@ -309,15 +309,15 @@ if ($PollType == POLL_NORMAL) {
                     $this_chart_data['percentage'][] = 0;
                 }
 
-                $answers = Database::get()->queryArray("SELECT a.answer_text, count(a.answer_text) AS count 
+                $answers = Database::get()->queryArray("SELECT a.answer_text, count(a.answer_text) AS count
                         FROM poll_answer_record a, poll_user_record b
                         WHERE a.qid = ?d
                         AND a.poll_user_record_id = b.id
                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
                         GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
-                $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record, poll_user_record 
-                                                                        WHERE poll_user_record_id = id 
-                                                                        AND (email_verification=1 OR email_verification IS NULL) 
+                $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record, poll_user_record
+                                                                        WHERE poll_user_record_id = id
+                                                                        AND (email_verification=1 OR email_verification IS NULL)
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
 
                 $answers_table = "

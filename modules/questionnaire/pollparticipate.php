@@ -33,6 +33,7 @@ require_once 'include/log.class.php';
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/progress/ViewingEvent.php';
+require_once 'modules/lti_consumer/lti-functions.php';
 
 load_js('bootstrap-slider');
 
@@ -49,12 +50,16 @@ if (!isset($_REQUEST['UseCase'])) {
     $_REQUEST['UseCase'] = "";
 }
 if (!isset($_REQUEST['pid'])) {
-    die();
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
+$pid = intval($_REQUEST['pid']);
+if (!$pid) {
+    forbidden();
 }
 
 $query = "SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d";
 $query_params[] = $course_id;
-$query_params[] = $_REQUEST['pid'];
+$query_params[] = $pid;
 if (!$is_editor) {
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -73,10 +78,16 @@ $p = Database::get()->querySingle($query, $query_params);
 if (!$p) { // check poll access
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
+// check poll type (for limesurvey)
+$pollObj = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
+$pollIsLime = false;
+if ($pollObj && $pollObj->type == POLL_LIMESURVEY) {
+    $pollIsLime = true;
+}
 // check poll validity
-$pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $_REQUEST['pid']);
-if(!$pq) {
-    Session::messages($langPollNoQuestions);
+$pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $pid);
+if(!$pq && !$pollIsLime) {
+    Session::Messages($langPollNoQuestions);
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
@@ -95,39 +106,39 @@ draw($tool_content, 2, null, $head_content);
 
 /**
  * @brief display poll form
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $langSubmit
- * @global type $langPollInactive
- * @global type $langPollUnknown
- * @global type $uid
- * @global type $langPollAlreadyParticipated
- * @global type $is_editor
- * @global type $langBack
- * @global type $langQuestion
- * @global type $langCancel
- * @global type $langCollesLegend
- * @global type $head_content
- * @global type $pageName
- * @global type $langPollParticipantInfo
  */
 function printPollForm() {
     global $course_id, $course_code, $tool_content,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName, $lang_rate1, $lang_rate5;
+    $pageName, $lang_rate1, $lang_rate5, $pid;
 
+    $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     $head_content .= "
     <style>.slider-tick-label { font-size: 12px; white-space: normal; }</style>
     <script>
         $(function() {
-            $('.grade_bar').slider({
-               ticks: [1, 2, 3, 4, 5],
-               ticks_labels: ['$lang_rate1', '', '', '', '$lang_rate5']
-            });
+            $('.grade_bar').each(function () {
+                var max = parseInt($(this).attr('data-slider-max'));
+                if (max > 10) {
+                    $(this).slider({ ticks: [1, max] });
+                } else {
+                    var ticks = Array.from(Array(max).keys());
+                    if (max == 5) {
+                        $(this).slider({
+                            ticks: ticks.map(function (i) { return i + 1 }),
+                            ticks_labels: ['" . js_escape($lang_rate1) . "', '', '', '', '" . js_escape($lang_rate5) . "']
+                        });
+                    } else {
+                        $(this).slider({
+                            ticks: ticks.map(function (i) { return i + 1 }),
+                            ticks_labels: ticks.map(function (i) { return i + 1 })
+                        });
+                    }
+                }
+            })
             setInterval(function() {
                 $.ajax({
                   type: 'POST',
@@ -137,36 +148,38 @@ function printPollForm() {
         });
     </script>";
 
-    $pid = $_REQUEST['pid'];
-
+    // Get poll data
+    $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+    $multiple_submissions = $thePoll->multiple_submissions;
+    $default_answer = $thePoll->default_answer;
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
-    if ($uid && $has_participated > 0 && !$is_editor){
+    if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
         Session::Messages($langPollAlreadyParticipated);
-        if (isset($_REQUEST['unit_id'])) {
-            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit_id']);
+        if ($unit_id) {
+            redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $unit_id);
+        } else if (isset($_REQUEST['res_type'])) {
+            redirect_to_home_page('modules/wall/?course=' . $course_code);
         } else {
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }
     }
-    // *****************************************************************************
-    //      Get poll data
-    //******************************************************************************/
 
-    $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d "
-            . "ORDER BY pid",$course_id, $pid);
     $temp_CurrentDate = date("Y-m-d H:i");
     $temp_StartDate = $thePoll->start_date;
     $temp_EndDate = $thePoll->end_date;
     $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
     $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
+    $temp_IsLime = ($thePoll->type == POLL_LIMESURVEY) ? true : false;
 
     if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 
         $pageName = $thePoll->name;
-        if (isset($_REQUEST['unit_id'])) {
-            $back_link = "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]";
+        if ($unit_id) {
+            $back_link = "../units/index.php?course=$course_code&amp;id=$unit_id";
+        } else if (isset($_REQUEST['res_type'])) {
+            $back_link = "../wall/?course=$course_code";
         } else {
             $back_link = "index.php?course=$course_code";
         }
@@ -187,17 +200,21 @@ function printPollForm() {
                 </div>
             </div>";
         }
-        if (isset($_REQUEST['unit_id'])) {
-            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$_REQUEST[unit_id]";
+        if ($unit_id) {
+            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$unit_id";
+        } else if (isset($_REQUEST['res_type'])) {
+            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire";
         } else {
             $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         }
-        $tool_content .= "
-            <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
-            <input type='hidden' value='2' name='UseCase'>
-            <input type='hidden' value='$pid' name='pid'>";
-        if (isset($_REQUEST['unit_id'])) {
-            $tool_content .= "<input type='hidden' value='$_REQUEST[unit_id]' name='unit_id'>";
+        if (!$temp_IsLime) {
+            $tool_content .= "
+                <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
+                <input type='hidden' value='2' name='UseCase'>
+                <input type='hidden' value='$pid' name='pid'>";
+            if ($unit_id) {
+                $tool_content .= "<input type='hidden' value='$unit_id' name='unit_id'>";
+            }
         }
 
         //*****************************************************************************
@@ -227,9 +244,12 @@ function printPollForm() {
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
         $i=1;
         foreach ($questions as $theQuestion) {
+            if ($temp_IsLime) {
+                break;
+            }
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
-            if($qtype==QTYPE_LABEL) {
+            if ($qtype == QTYPE_LABEL) {
                 $tool_content .= "
                     <div class='alert alert-info' role='alert'>
                         <strong>" . standard_text_escape($theQuestion->question_text) . "</strong>
@@ -244,50 +264,99 @@ function printPollForm() {
                             <h5>".q_math($theQuestion->question_text)."</h5>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
-                    $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
-                    $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+                    if ($multiple_submissions) { // get user answers (if any)
+                        $user_answers = Database::get()->queryArray("SELECT a.aid
+                                FROM poll_user_record b, poll_answer_record a
+                                LEFT JOIN poll_question_answer c
+                                    ON a.aid = c.pqaid
+                                WHERE a.poll_user_record_id = b.id
+                                    AND a.qid = ?d
+                                    AND b.uid = ?d", $pqid, $uid);
+                    }
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                                 WHERE pqid = ?d ORDER BY pqaid", $pqid);
-                    if ($qtype == QTYPE_MULTIPLE) $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
+                    $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
+                    $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+                    if ($qtype == QTYPE_MULTIPLE) {
+                        $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
+                    }
                     foreach ($answers as $theAnswer) {
+                            $checked = '';
+                        if ($multiple_submissions) {
+                            if (count($user_answers) > 1) { // multiple answers
+                                foreach ($user_answers as $ua) {
+                                    if ($ua->aid == $theAnswer->pqaid) {
+                                        $checked = 'checked';
+                                    }
+                                }
+                            } else {
+                                if (count($user_answers) == 1) { // single answer
+                                    if ($user_answers[0]->aid == $theAnswer->pqaid) {
+                                        $checked = 'checked';
+                                    }
+                                }
+                            }
+                        }
                         $tool_content .= "
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
                                     <label>
-                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid'>".q_math($theAnswer->answer_text)."
+                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>".q_math($theAnswer->answer_text)."
                                     </label>
                                 </div>
                             </div>
                         </div>";
                     }
-                    if ($qtype == QTYPE_SINGLE) {
+                    if ($qtype == QTYPE_SINGLE && $default_answer) {
                         $tool_content .= "
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
                                     <label>
-                                        <input type='$type_attr' name='answer[$pqid]' value='-1' checked>$langPollUnknown
+                                        <input type='$type_attr' name='answer[$pqid]' value='-1'>$langPollUnknown
                                     </label>
                                 </div>
                             </div>
                         </div>";
-
                     }
                 } elseif ($qtype == QTYPE_SCALE) {
-                    if (($pollType == 1) or ($pollType == 2)) {
+                    $slider_value = 1;
+                    if ($multiple_submissions) { // get user answers (if any)
+                        $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                                            FROM poll_answer_record a, poll_user_record b
+                                        WHERE qid = ?d
+                                            AND a.poll_user_record_id = b.id
+                                            AND b.uid = ?d", $pqid, $uid);
+                        if ($user_answers) {
+                            $slider_value = $user_answers->answer_text;
+                        }
+                    }
+
+                    if (($pollType == POLL_COLLES) or ($pollType == POLL_ATTLS)) {
                         $tool_content .= "<div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>";
                     }
                     $tool_content .= "<div class='form-group'>
-                        <div class='col-sm-offset-2 col-sm-10' style='padding-top:15px;'>
-                            <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
+                        <div class='col-xs-offset-1 col-sm-10' style='padding: 15px;'>
+                            <input style='width: 80%' name='answer[$pqid]' class='grade_bar' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='$slider_value'>
                         </div>
                     </div>";
                 } elseif ($qtype == QTYPE_FILL) {
+                    $text = '';
+                    if ($multiple_submissions) { // get user answers (if any)
+                        $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                                            FROM poll_answer_record a, poll_user_record b
+                                        WHERE qid = ?d
+                                            AND a.poll_user_record_id = b.id
+                                            AND b.uid = ?d", $pqid, $uid);
+                        if ($user_answers) {
+                            $text = $user_answers->answer_text;
+                        }
+                    }
                     $tool_content .= "
                         <div class='form-group margin-bottom-fat'>
                             <div class='col-sm-12 margin-top-thin'>
-                                <textarea class='form-control' name='answer[$pqid]'></textarea>
+                                <textarea class='form-control' name='answer[$pqid]'>$text</textarea>
                             </div>
                         </div>";
                 }
@@ -298,21 +367,67 @@ function printPollForm() {
                 $i++;
             }
         }
+        if ($temp_IsLime) {
+            show_limesurvey_integration($thePoll);
+        }
+        if ($multiple_submissions) {
+            $tool_content .= "<input type='hidden' value='1' name='update'>";
+        }
+
+        $backUrl = $unit_id? "../units/index.php?course=$course_code&amp;id=$unit_id": "index.php?course=$course_code";
         $tool_content .= "<div class='text-center'>";
         if ($is_editor) {
-            $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langBack). "</a>";
+            $tool_content .= "<a class='btn btn-default' href='$backUrl'>" . q($langBack). "</a>";
         } else {
-            $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'>";
-            if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
-            } else {
-                $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+            if (!$temp_IsLime) {
+                $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>" .
+                    "<a class='btn btn-default' href='$backUrl'>" . q($langCancel) . "</a>";
             }
         }
-        $tool_content .= "</div></form>";
+        $tool_content .= "</div>";
+        if (!$temp_IsLime) {
+            $tool_content .= "</form>";
+        }
     } else {
         Session::Messages($langPollInactive);
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
+}
+
+/**
+ * @brief limesurvey integration
+ * @param $thePoll
+ */
+function show_limesurvey_integration($thePoll) {
+    global $tool_content, $course_id, $course_code, $langLimesurveyIntegration, $urlAppend, $uid;
+
+    $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $thePoll->lti_template);
+    $_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$thePoll->pid.'_COURSE_ID'] = $course_id;
+    $_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$thePoll->pid.'_COURSE_CODE'] = $course_code;
+
+    if ($thePoll->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
+        $tool_content .= '<iframe id="contentframe"
+            src="' . $urlAppend . "modules/questionnaire/post_launch.php?course=" . $course_code . "&amp;pid=" . $thePoll->pid . '"
+            webkitallowfullscreen=""
+            mozallowfullscreen=""
+            allowfullscreen=""
+            width="100%"
+            height="800px"
+            style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
+    } else {
+        $joinLink = create_join_button(
+            $lti->lti_provider_url,
+            $lti->lti_provider_key,
+            $lti->lti_provider_secret,
+            $thePoll->pid,
+            RESOURCE_LINK_TYPE_POLL,
+            $thePoll->name,
+            $thePoll->description,
+            $thePoll->launchcontainer,
+            $langLimesurveyIntegration . ":&nbsp;&nbsp;"
+        );
+
+        $tool_content .= "<div class='form-wrapper'>" . $joinLink . "</div>";
     }
 }
 
@@ -322,9 +437,9 @@ function printPollForm() {
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
            $langUsage, $langTheField, $langFormErrors, $urlServer, $langPollParticipateConfirm,
-           $langPollEmailUsed, $langPollParticipateConfirmation, $course_id;
+           $langPollEmailUsed, $langPollParticipateConfirmation, $course_id, $pid;
 
-    $pid = intval($_POST['pid']);
+    $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
     $v = new Valitron\Validator($_POST);
     if (!$uid) {
@@ -349,6 +464,10 @@ function submitPoll() {
             $eventData->resource = intval($pid);
             ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 
+            if (isset($_REQUEST['update'])) { // if poll has enabled multiple submissions first delete the previous answers
+                Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d)", $uid, $pid);
+                Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
+            }
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
             require_once 'include/sendMail.inc.php';
@@ -395,7 +514,11 @@ function submitPoll() {
                 $aid = 0;
                 $answer_text = $answer[$pqid];
             } elseif ($qtype == QTYPE_SINGLE) {
-                $aid = intval($answer[$pqid]);
+                if (isset($answer[$pqid])) {
+                    $aid = intval($answer[$pqid]);
+                } else {
+                    $aid = -1;
+                }
                 $answer_text = '';
             } elseif ($qtype == QTYPE_FILL) {
                 $answer_text = $answer[$pqid];
@@ -418,14 +541,18 @@ function submitPoll() {
             $tool_content .=  $end_message;
         }
         $tool_content .= "<br><div class='text-center'>";
-        if (isset($_REQUEST['unit_id'])) {
-            $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>$langBack</a>";
+        if ($unit_id) {
+            $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&amp;id=$unit_id'>$langBack</a>";
+        } else if (isset($_REQUEST['res_type'])) {
+            $tool_content .= "<a class='btn btn-primary' href='../wall/?course=$course_code'>$langBack</a>";
         } else {
             $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>";
         }
         if ($poll->show_results) {
-            if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn btn-primary' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
+            if ($unit_id) {
+                $tool_content .= "<a class='btn btn-primary' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$unit_id&amp;pid=$pid'>$langUsage</a>";
+            } else if (isset($_REQUEST['res_type'])) {
+                $tool_content .= "<a class='btn btn-primary' href='../wall/?course=$course_code'>$langUsage</a>";
             } else {
                 $tool_content .= "<a class='btn btn-primary' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
             }

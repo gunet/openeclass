@@ -39,7 +39,7 @@ function visibility_select($current) {
 
 // Unzip backup file
 function unpack_zip_inner($zipfile, $clone) {
-    global $webDir, $uid;
+    global $webDir, $uid, $langGeneralError;
     require_once 'include/lib/fileUploadLib.inc.php';
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
@@ -52,7 +52,29 @@ function unpack_zip_inner($zipfile, $clone) {
         Session::Messages($langGeneralError, 'alert-danger');
         redirect_to_home_page('modules/course_info/restore_course.php');
     }
+    // see if any files use backslash as directory separator
+    $filesToMove = [];
+    for ($i = 0; $i < $zip->numFiles; $i++) {
+        $filename = $zip->getNameIndex($i);
+        if (strpos($filename, '\\') !== false) {
+            $filesToMove[] = $filename;
+        }
+    }
     $zip->close();
+
+    foreach ($filesToMove as $filename) {
+        $filename = $destdir . '/' . $filename;
+        $newname = str_replace('\\', '/', $filename);
+        $parentdir = my_dirname($newname);
+        if (!is_dir($parentdir)) {
+            mkdir($parentdir, 0700, true);
+        }
+        if (!is_dir($filename)) {
+            rename($filename, $newname);
+        } else {
+            rmdir($filename);
+        }
+    }
 
     $retArr = array();
     foreach (find_backup_folders($destdir) as $folder) {
@@ -192,6 +214,8 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
                 if (!is_null($data[$newField])) {
                     if (isset($data[$newField]) && isset($map[$data[$newField]])) { // map needs reverse resolution
                         $data[$newField] = $map[$data[$newField]];
+                    } else {
+                        continue 2;
                     }
                 }
             }
@@ -672,9 +696,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         $config_data = unserialize(file_get_contents($restoreThis . '/group_properties'));
         if (isset($config_data[0]['group_id'])) { // version >= 3.2
-            restore_table($restoreThis, 'group_properties',
-                array('set' => array('course_id' => $new_course_id),
-                      'map' => array('group_id' => $group_map)),
+            restore_table($restoreThis, 'group_properties', [
+                    'set' => ['course_id' => $new_course_id],
+                    'map' => ['group_id' => $group_map],
+                    'delete' => ['multiple_registration']],
                 $url_prefix_map, $backupData, $restoreHelper);
         } else {
             $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $new_course_id);
@@ -911,6 +936,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $files = [];
         $baseDir = "$webDir/courses/$new_course_code/work";
         foreach ($assignments_map as $old_id => $new_id) {
+            Database::get()->queryFunc('SELECT file_path FROM assignment
+                WHERE id = ?d',
+                function ($item) use (&$files, $baseDir) {
+                    if ($item->file_path) {
+                        $files[] = $baseDir . '/admin_files/' . $item->file_path;
+                    }
+                }, $new_id);
             Database::get()->queryFunc('SELECT file_path, grade_comments_filepath
                 FROM assignment_submit WHERE assignment_id = ?d',
                 function ($item) use (&$files, $baseDir) {
@@ -1092,7 +1124,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array('badge' => $badge_map),
             'map_function' => 'badge_criterion_map_function',
             'map_function_data' => array($document_map, $video_map, $videolink_map,
-                                         $blog_map, $forum_map, $forum_topic_map,
+                                         $blog_map, $comment_map, $forum_map, $forum_topic_map,
                                          $lp_learnPath_map, $ebook_map, $poll_map,
                                          $wiki_map, $assignments_map, $exercise_map),
             'delete' => array('id')
@@ -1140,6 +1172,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $ebook_subsection_map,
                     $video_map,
                     $videolink_map,
+                    $videocat_map,
                     $lp_learnPath_map,
                     $wiki_map,
                     $assignments_map,
@@ -1180,6 +1213,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $ebook_subsection_map,
                     $video_map,
                     $videolink_map,
+                    $videocat_map,
                     $lp_learnPath_map,
                     $wiki_map,
                     $assignments_map,
@@ -1211,6 +1245,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 'delete' => array('id')
                 ), $url_prefix_map, $backupData, $restoreHelper);
         }
+
+        fix_media_links($course_data['code'], $new_course_code, $new_course_id, $video_map);
 
         removeDir($restoreThis);
 
@@ -1254,6 +1290,70 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')), false);
 
+    }
+}
+
+
+function getid($map, $old_id) {
+    if (isset($map[$old_id])) {
+        return $map[$old_id];
+    } else {
+        return null;
+    }
+}
+
+function fix_media_links($oldcode, $newcode, $new_course_id, $video_map) {
+    $fixes = [
+      [ 'table' => 'course',
+        'field' => 'description',
+        'query' => 'SELECT id, description FROM course
+                       WHERE id = ?d' ],
+      [ 'table' => 'course_units',
+        'field' => 'comments',
+        'query' => 'SELECT id, comments FROM course_units
+                       WHERE course_id = ?d' ],
+      [ 'table' => 'unit_resources',
+        'field' => 'comments',
+        'query' => 'SELECT id, comments FROM unit_resources
+                       WHERE unit_id IN (SELECT id FROM course_units WHERE course_id = ?d)' ],
+      [ 'table' => 'assignment',
+        'field' => 'description',
+        'query' => 'SELECT id, description FROM assignment
+                       WHERE course_id = ?d' ],
+      [ 'table' => 'exercise_question',
+        'field' => 'description',
+        'query' => 'SELECT id, description FROM exercise_question
+                       WHERE course_id = ?d' ],
+      [ 'table' => 'exercise_answer',
+        'field' => 'answer',
+        'query' => 'SELECT id, answer FROM exercise_answer
+                       WHERE question_id IN (SELECT id FROM exercise_question
+                           WHERE course_id = ?d)' ],
+    ];
+
+    foreach ($fixes as $fix) {
+        $all = Database::get()->queryArray($fix['query'], $new_course_id);
+        foreach ($all as $entry) {
+            $field = $fix['field'];
+            $table = $fix['table'];
+            $newcontents = preg_replace_callback('<(/video/(?:file|play).php\?course=\w+&amp;id=)(\d+)>',
+                function ($match) use ($video_map, $oldcode, $newcode) {
+                    $new_id = getid($video_map, $match[2]);
+                    if ($new_id) {
+                        // $fix[table]: $match[2] => $new_id
+                        $base = str_replace("course=$oldcode", "course=$newcode", $match[1]);
+                        return $base . $new_id;
+                    } else {
+                        // $fix[table]: $match[2] not found
+                        return $match[1] . $match[2];
+                    }
+                }, $entry->$field);
+            if ($entry->$field != $newcontents) {
+                Database::get()->query("UPDATE `$table`
+                    SET `$field` = ?s WHERE id = ?d",
+                    $newcontents, $entry->id);
+            }
+        }
     }
 }
 
@@ -1612,7 +1712,7 @@ function unit_map_function(&$data, $maps) {
     // opoy yparxei if isset, isxyei h:
     // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
     // des to ekei comment gia ta spasmena FKs
-    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map) = $maps;
+    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $video_category_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map) = $maps;
     if ($data['type'] == 'videolinks') {
         $data['type'] == 'videolink';
     }
@@ -1639,6 +1739,8 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = @$video_map[$data['res_id']];
     } elseif ($type == 'videolink') {
         $data['res_id'] = @$videolink_map[$data['res_id']];
+    } elseif ($type == 'videolinkcategory') {
+        $data['res_id'] = @$video_category_map[$data['res_id']];
     } elseif ($type == 'lp') {
         $data['res_id'] = @$lp_learnPath_map[$data['res_id']];
     } elseif ($type == 'wiki') {

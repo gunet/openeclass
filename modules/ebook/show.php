@@ -306,8 +306,8 @@ if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analy
 $t->pparse('Output', 'page');
 
 /**
- * 
- * @global type $basedir 
+ *
+ * @global type $basedir
  * @param type $file_path
  * @param type $initial_path
  */
@@ -325,13 +325,13 @@ function send_file_by_url_file_path($file_path, $initial_path = '') {
 
 function triggerGame($ebookId) {
     global $course_id, $uid;
-    
+
     $eventData = new stdClass();
     $eventData->courseId = $course_id;
     $eventData->uid = $uid;
     $eventData->activityType = ViewingEvent::EBOOK_ACTIVITY;
     $eventData->module = MODULE_ID_EBOOK;
     $eventData->resource = intval($ebookId);
-    
+
     ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 }

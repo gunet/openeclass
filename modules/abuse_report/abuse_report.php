@@ -24,23 +24,19 @@ require_once 'include/course_settings.php';
  * Needed javascript for abuse report to work
  * @return string
  */
-function abuse_report_add_js($deleg_selector = NULL) {
+function abuse_report_add_js() {
     global $urlServer, $langError;
     static $loaded;
-    
+
     if ($loaded) {
         return;
     }
-     
+
     $loaded = true;
-    
-    if (is_null($deleg_selector)) {
-        $deleg_selector = ".modal-footer";
-    }
-    
+
     return '<script>
               $(function() {
-                $("'.$deleg_selector.'").on("click", "button.btn-primary", function(event){
+                $(".modal-footer").on("click", "button.btn-primary", function(event){
                   var id = $(this).attr("id");
                   var sub_id = id.substr(13);
                   var splitted_id = sub_id.split("_");
@@ -79,9 +75,9 @@ function abuse_report_add_js($deleg_selector = NULL) {
  * @return string html flag icon
  */
 function abuse_report_icon_flag ($rtype, $rid, $course_id) {
-    global $head_content, $langAbuseReport, $langClose, $langSend, 
+    global $head_content, $langAbuseReport, $langClose, $langSend,
     $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
-    
+
     $out = '<a href="javascript:void(0);" data-toggle="modal" data-target="#abuse_modal_'.$rtype.'_'.$rid.'"><span class="fa fa-flag-o pull-right" data-original-title="'.$langAbuseReport.'" title="" data-toggle="tooltip"></span></a>';
     $out .= '<div class="modal fade" id="abuse_modal_'.$rtype.'_'.$rid.'" tabindex="-1" role="dialog" aria-labelledby="abuse_modal_label_'.$rtype.'_'.$rid.'" aria-hidden="true">
                  <div class="modal-dialog">
@@ -118,7 +114,7 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
                      </div>
                  </div>
              </div>';
-    
+
     return $out;
 }
 
@@ -132,14 +128,14 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
 function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
     global $head_content, $langAbuseReport, $urlServer, $langClose, $langSend, $langError,
     $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
-    
+
     $ret = array();
-    
+
     $ret[] = array('title' => $langAbuseReport,
             'url' => "javascript:void(0);",
             'icon' => 'fa-flag-o',
             'link-attrs' => "data-toggle='modal' data-target='#abuse_modal_".$rtype."_".$rid."'");
-    
+
     $ret[] = '<div class="modal fade" id="abuse_modal_'.$rtype.'_'.$rid.'" tabindex="-1" role="dialog" aria-labelledby="abuse_modal_label_'.$rtype.'_'.$rid.'" aria-hidden="true">
                  <div class="modal-dialog">
                      <div class="modal-content">
@@ -175,7 +171,7 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
                      </div>
                  </div>
              </div>';
-    
+
     return $ret;
 }
 
@@ -189,7 +185,7 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
  * @return boolean
  */
 function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
-    
+
     global $uid;
     if ($uid == 0) { //do not show for not logged in users
         return false;
@@ -206,7 +202,7 @@ function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
         if ($result->c != 0) {
             return false;
         }
-        
+
         //check for each resource type if resource exists and user is author
         if ($rtype == 'comment') {
             $result = Database::get()->querySingle("SELECT `user_id` FROM `comments` WHERE `id` = ?d", $rid);
@@ -248,6 +244,6 @@ function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
             return false;
         }
     }
-    
+
     return true;
 }

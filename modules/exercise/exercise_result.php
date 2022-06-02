@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.7
+ * Open eClass 3.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,8 +31,14 @@ require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
 
-$pageName = $langExercicesResult;
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
+if (isset($_GET['unit'])) {
+    $unit_name = Database::get()->querySingle('SELECT title FROM course_units WHERE course_id = ?d AND id = ?d',
+        $course_id, $_GET['unit'])->title;
+    $navigation[] = ['url' => "index.php?course=$course_code&amp;id=" . intval($_GET['unit']),
+        'name' => q($unit_name)];
+} else {
+    $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langExercices];
+}
 
 # is this an AJAX request to check grades?
 $checking = false;
@@ -40,8 +46,43 @@ $ajax_regrade = false;
 
 // picture path
 $picturePath = "courses/$course_code/image";
-// Identifying ajax request
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
+
+require_once 'include/lib/modalboxhelper.class.php';
+require_once 'include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
+
+load_js('tools.js');
+
+$user = null;
+if (isset($_GET['eurId'])) {
+    $eurid = $_GET['eurId'];
+    $exercise_user_record = Database::get()->querySingle("SELECT *, DATE_FORMAT(record_start_date, '%Y-%m-%d %H:%i') AS record_start_date,
+                                                                      TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration
+                                                                    FROM exercise_user_record WHERE eurid = ?d", $eurid);
+    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, q_position FROM exercise_answer_record WHERE eurid = ?d ORDER BY q_position", $eurid);
+    if (!$exercise_user_record) {
+        // No record matches with this exercise user record id
+        Session::Messages($langExerciseNotFound);
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    }
+    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
+    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
+       // student is not allowed to view other people's exercise results
+       // Nobody can see results of a paused exercise
+       redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    }
+    $objExercise = new Exercise();
+    $objExercise->read($exercise_user_record->eid);
+    if (!isset($_GET['unit'])) {
+        $navigation[] = array('url' => "results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
+    }
+} else {
+    // exercise user recird id is not set
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+}
+
+// Handle AJAX requests for course editor
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' and $is_editor) {
     if (isset($_GET['check'])) {
         $checking = true;
         header('Content-Type: application/json');
@@ -50,70 +91,36 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     } else {
         $grade = $_POST['question_grade'];
         $question_id = $_POST['question_id'];
-        $eurid = $_GET['eurId'];
         Database::get()->query("UPDATE exercise_answer_record
                     SET weight = ?f WHERE eurid = ?d AND question_id = ?d",
             $grade, $eurid, $question_id);
         $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
             FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
             $eurid)->count;
+        $totalScore = $objExercise->calculate_total_score($eurid);
         if ($ungraded == 0) {
-            // if no more ungraded questions, set attempt as complete and
-            // recalculate sum of grades
-            Database::get()->query("UPDATE exercise_user_record
-                SET attempt_status = ?d,
-                    total_score = GREATEST(0, (SELECT SUM(weight) FROM exercise_answer_record
-                                        WHERE eurid = ?d))
-                WHERE eurid = ?d",
-                ATTEMPT_COMPLETED, $eurid, $eurid);
+            // if no more ungraded questions, set attempt as complete
+            $attempt_status = ATTEMPT_COMPLETED;
         } else {
-            // if ungraded questions still exist, just update the grade sum
-            Database::get()->query("UPDATE exercise_user_record
-                SET total_score = GREATEST(0, (SELECT SUM(weight) FROM exercise_answer_record
-                                        WHERE eurid = ?d AND weight IS NOT NULL))
-                WHERE eurid = ?d",
-                $eurid, $eurid);
+            $attempt_status = ATTEMPT_PENDING;
         }
+        Database::get()->query('UPDATE exercise_user_record
+            SET attempt_status = ?d, total_score = ?f WHERE eurid = ?d',
+            $attempt_status, $totalScore, $eurid);
         $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting
                              FROM exercise_user_record WHERE eurid = ?d", $eurid);
         // update gradebook
-        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+        if (is_null($data->total_weighting) or $data->total_weighting == 0) {
+            update_gradebook_book($data->uid, $data->eid, 0, GRADEBOOK_ACTIVITY_EXERCISE);
+        } else {
+            update_gradebook_book($data->uid, $data->eid, $data->total_score / $data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
+        }
         triggerGame($course_id, $uid, $data->eid);
         triggerExerciseAnalytics($course_id, $uid, $data->eid);
         exit();
     }
 }
 
-require_once 'include/lib/modalboxhelper.class.php';
-require_once 'include/lib/multimediahelper.class.php';
-ModalBoxHelper::loadModalBox();
-
-load_js('tools.js');
-
-if (isset($_GET['eurId'])) {
-    $eurid = $_GET['eurId'];
-    $exercise_user_record = Database::get()->querySingle("SELECT *, DATE_FORMAT(record_start_date, '%Y-%m-%d %H:%i') AS record_start_date,
-                                                                      TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration
-                                                                    FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id
-                                                        FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
-    if (!$exercise_user_record) {
-        // No record matches with this exercise user record id
-        Session::Messages($langExerciseNotFound);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-    }
-    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
-       // student is not allowed to view other people's exercise results
-       // Nobody can see results of a paused exercise
-       redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-    }
-    $objExercise = new Exercise();
-    $objExercise->read($exercise_user_record->eid);
-} else {
-    // exercise user recird id is not set
-    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-}
 if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $exercise_user_record->attempt_status == ATTEMPT_COMPLETED)) {
     $head_content .= "<script type='text/javascript'>
             $(document).ready(function(){
@@ -191,6 +198,7 @@ $exerciseRange = $objExercise->selectRange();
 $canonical_score = $objExercise->canonicalize_exercise_score($exercise_user_record->total_score, $exercise_user_record->total_weighting);
 $displayScore = $objExercise->selectScore();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
+$calc_grade_method = $objExercise->getCalcGradeMethod();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
@@ -205,6 +213,28 @@ $showScore = $displayScore == 1
             || $is_editor
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
+
+$toolName = $langExercicesResult;
+
+if (isset($_REQUEST['unit'])) {
+    $tool_content .= action_bar([
+        [
+            'title' => $langBack,
+            'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
+            'icon' => 'fa fa-reply',
+            'level' => 'primary-label'
+        ]
+    ]);
+} else {
+    $tool_content .= action_bar([
+        [
+            'title' => $langBack,
+            'url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'",
+            'icon' => 'fa fa-reply',
+            'level' => 'primary-label'
+        ]
+    ]);
+}
 
 $tool_content .= "<div class='alert alert-info'>";
 if ($user) { // user details
@@ -310,7 +340,14 @@ if (count($exercise_question_ids) > 0) {
             }
         } else {
              if (($showScore) and (!is_null($choice))) {
-                 $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight / $questionWeighting</strong></span>)</small>";
+                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $calc_grade_method == 1) {
+                     $qw_legend1 = "<span style='color: red;'>$question_weight</span>";
+                     $qw_legend2 = " $langConvertedTo <strong>0 / $questionWeighting</strong>";
+                 } else {
+                     $qw_legend1 = "$question_weight";
+                     $qw_legend2 = "";
+                 }
+                 $tool_content .= " <small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong></span>$qw_legend2)</small>";
              }
         }
         $tool_content .= "<small class='help-block'>($questionType)</small>"; // question type
@@ -363,9 +400,6 @@ if (count($exercise_question_ids) > 0) {
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $grade = $answerWeighting;
-                        }
-                        if ($questionScore < 0) {
-                            $questionScore = 0;
                         }
                         break;
 
@@ -602,10 +636,19 @@ if (count($exercise_question_ids) > 0) {
             }
         }
 
-        if ($showScore and $question_weight != $questionScore) {
+        if ($answerType == MULTIPLE_ANSWER and $questionScore < 0) {
+            $questionScore = 0;
+        }
+        $rounded_weight = round($question_weight, 2);
+
+        if ($rounded_weight < 0 and $answerType == MULTIPLE_ANSWER) {
+            $rounded_weight = 0;
+        }
+        $rounded_score = round($questionScore, 2);
+        if ($showScore and $rounded_weight != $rounded_score) {
             $tool_content .= "<tr class='warning'>
                                 <th colspan='2' class='text-right'>
-                                    $langQuestionStoredScore: " . round($question_weight, 2) . " / $questionWeighting
+                                    $langQuestionStoredScore: $rounded_weight / $questionWeighting
                                 </th>
                               </tr>";
 
@@ -664,6 +707,7 @@ $totalScore = round($totalScore, 2);
 $totalWeighting = round($totalWeighting, 2);
 $oldScore = round($exercise_user_record->total_score, 2);
 $oldWeighting = round($exercise_user_record->total_weighting, 2);
+
 if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting)) {
     if ($checking) {
         echo json_encode(['result' => 'regrade', 'eurid' => $eurid,
@@ -685,17 +729,8 @@ if ($checking) {
     exit;
 }
 
-$tool_content .= "
-  <div class='text-center'>";
-    if ($is_editor) {
-        $tool_content .= "<a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a>&nbsp;";
-    }
-    if (isset($_REQUEST['unit'])) {
-        $tool_content .= "<a class='btn btn-default' href='../units/index.php?course=$course_code&id=$_REQUEST[unit]'>$langBack</a>";
-    } else {
-        $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>$langBack</a>";
-    }
-
-$tool_content .= "</div>";
+if ($is_editor) {
+    $tool_content .= "<div class='text-center'><a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a></div>";
+}
 
 draw($tool_content, 2, null, $head_content);

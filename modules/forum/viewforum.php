@@ -30,10 +30,15 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/forum/functions.php';
 
-if (!add_units_navigation(true)) {
-    $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-}
 $unit = isset($_GET['unit'])? intval($_GET['unit']): null;
+$res_type = isset($_GET['res_type']);
+if (!add_units_navigation(true)) {
+    if (!$res_type) {
+        $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
+    } else {
+        $navigation[] = array('url' => "../wall/index.php?course=$course_code", 'name' => $langWall);
+    }
+}
 
 if ($is_editor) {
     load_js('tools.js');
@@ -67,14 +72,18 @@ if (isset($_GET['empty'])) { // if we come from newtopic.php
     $tool_content .= "<div class='alert alert-warning'>$langEmptyNewTopic</div>";
 }
 
-$pageName = q($forum_name);
+$pageName = $forum_name;
 if ($can_post) {
+    $newtopicUrl = "newtopic.php?course=$course_code&amp;forum=$forum_id";
+    if ($unit) {
+        $newtopicUrl = "view.php?course=$course_code&amp;res_type=forum_new_topic&amp;forum=$forum_id&amp;unit=$unit";
+    } else if ($res_type) {
+        $newtopicUrl = "view.php?course=$course_code&amp;res_type=forum_new_topic&amp;forum=$forum_id";
+    }
     $tool_content .=
             action_bar(array(
                 array('title' => $langNewTopic,
-                    'url' => $unit?
-                    "view.php?course=$course_code&amp;res_type=forum_new_topic&amp;forum=$forum_id&amp;unit=$unit":
-                    "newtopic.php?course=$course_code&amp;forum=$forum_id",
+                    'url' => $newtopicUrl,
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
@@ -283,9 +292,12 @@ if (count($result) > 0) { // topics found
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
         $pagination = '';
-        $topiclink = $unit?
-            "view.php?course=$course_code&amp;&amp;res_type=forum_topic&amp;topic=$topic_id&amp;forum=$forum_id&amp;unit=$unit":
-            "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
+        $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
+        if ($unit) {
+            $topiclink = "view.php?course=$course_code&amp;&amp;res_type=forum_topic&amp;topic=$topic_id&amp;forum=$forum_id&amp;unit=$unit";
+        } else if ($res_type) {
+            $topiclink = "view.php?course=$course_code&amp;&amp;res_type=forum_topic&amp;topic=$topic_id&amp;forum=$forum_id";
+        }
         if ($topic_locked) {
             $image = icon('fa-lock');
         } else {

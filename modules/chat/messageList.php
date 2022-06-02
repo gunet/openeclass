@@ -33,9 +33,10 @@ require_once 'modules/document/doc_init.php';
 
 $coursePath = $webDir . '/courses/';
 if (isset($_REQUEST['conference_id'])) {
-    $conference_id = $_REQUEST['conference_id'];
-} else {
-    redirect_to_home_page("modules/chat/messageList.php?course=$course_code");
+    $conference_id = intval($_REQUEST['conference_id']);
+}
+if (!isset($conference_id) or !$conference_id) {
+    forbidden();
 }
 
 $fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';
@@ -194,7 +195,7 @@ if (isset($_GET['store']) && $is_editor) {
                       </div>\n";
             } else {
                 $user_id = intval(trim($str_1[1]));
-                $str_2 = explode(' - ', $str_1[0]);
+                $str_2 = explode(' - ', $str_1[0], 2);
                 $datetime = $str_2[0];
                 $str_3 = explode(' : ', $str_2[1]);
                 $username = $str_3[0];

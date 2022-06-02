@@ -46,8 +46,9 @@ if (!$p) {
 
 $csv->filename = $course_code . '_poll_results_' . ($full ? 'full_' : '') . $p->name . '.csv';
 
+$qlist = [];
+$submit_date = [];
 $anonymized = $p->anonymized;
-$qlist = array();
 $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total
     FROM poll_user_record WHERE pid = ?d AND
          (email_verification = 1 OR email_verification IS NULL)", $p->pid)->total;
@@ -61,10 +62,11 @@ if ($full) {
     } else {
         $heading = array($langSurname, $langName, $langAm, $langUsername, $langEmail);
     }
+    $heading[] = $langDate;
     $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position', $pid);
 
     $users = Database::get()->queryArray("SELECT uid AS user_identifier
-                        FROM poll_user_record 
+                        FROM poll_user_record
                         WHERE pid = ?d
                         AND uid != 0
                         UNION
@@ -81,14 +83,14 @@ if ($full) {
             foreach ($users as $user) {
                 $qlist[$user->user_identifier][$q->pqid] = '-';
             }
-        } elseif ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {  
-            $answers = Database::get()->queryArray("SELECT c.answer_text, a.aid, b.uid, b.email
-                                FROM poll_user_record b, poll_answer_record a 
+        } elseif ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {
+            $answers = Database::get()->queryArray("SELECT c.answer_text, a.aid, b.uid, b.email, a.submit_date
+                                FROM poll_user_record b, poll_answer_record a
                                 LEFT JOIN poll_question_answer c
                                 ON a.aid = c.pqaid
                                 WHERE a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                AND a.qid = ?d", $q->pqid);            
+                                AND a.qid = ?d", $q->pqid);
             foreach ($answers as $a) {
                 $answer_text = ($a->aid < 0)? $langPollUnknown: $a->answer_text;
                 $user_identifier = $a->uid ?: $a->email;
@@ -97,9 +99,12 @@ if ($full) {
                 } else {
                     $qlist[$user_identifier][$q->pqid] = $answer_text;
                 }
+                if (!isset($submit_date[$user_identifier])) {
+                    $submit_date[$user_identifier] = $a->submit_date;
+                }
             }
         } else { // free text questions
-            $answers = Database::get()->queryArray("SELECT a.answer_text, b.uid, b.email
+            $answers = Database::get()->queryArray("SELECT a.answer_text, b.uid, b.email, a.submit_date
                                 FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
                                 AND a.poll_user_record_id = b.id
@@ -108,6 +113,9 @@ if ($full) {
             foreach ($answers as $a) {
                 $user_identifier = $a->uid ?: $a->email;
                 $qlist[$user_identifier][$q->pqid] = $a->answer_text;
+                if (!isset($submit_date[$user_identifier])) {
+                    $submit_date[$user_identifier] = $a->submit_date;
+                }
             }
         }
     }
@@ -120,7 +128,7 @@ if ($full) {
         } else {
             $user_info = get_user($user_identifier);
         }
-        $csv->outputRecord($user_info, $answers);
+        $csv->outputRecord($user_info, $submit_date[$user_identifier], $answers);
     }
 } else {
     $csv->outputRecord($langQuestions);
@@ -140,12 +148,12 @@ if ($full) {
                                     AND (a.email_verification = 1 OR a.email_verification IS NULL)
                                     GROUP BY b.aid", $q->pqid);
             } else {
-                $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text 
+                $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text
                                                         FROM poll_answer_record a, poll_user_record b
-                                                        WHERE a.qid = ?d 
+                                                        WHERE a.qid = ?d
                                                         AND a.poll_user_record_id = b.id
                                                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                                        GROUP BY a.answer_text", $q->pqid);                
+                                                        GROUP BY a.answer_text", $q->pqid);
             }
             $answer_counts = array();
             $answer_text = array();
@@ -186,4 +194,3 @@ function get_user($uid) {
         return array($langAnonymous, '-', '-', '-', $uid);
     }
 }
-

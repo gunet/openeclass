@@ -30,7 +30,7 @@ function bbb_session_form($session_id = 0) {
 
     global $course_id, $uid, $tc_type;
     global $tool_content, $langAdd, $course_code;
-    global $langUnitDescr, $langNewBBBSessionStart;
+    global $langUnitDescr, $langStart;
     global $langVisible, $langInvisible;
     global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
     global $start_session, $BBBEndDate, $langAnnouncements, $langBBBAnnDisplay;
@@ -44,6 +44,7 @@ function bbb_session_form($session_id = 0) {
     global $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat;
     global $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote;
     global $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator;
+    global $langBBBMaxPartPerRoom, $langBBBHideParticipants;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -51,6 +52,11 @@ function bbb_session_form($session_id = 0) {
     $c = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
     if ($c > 80) {
         $c = floor($c/2); // If more than 80 course users, we suggest 50% of them
+    }
+    $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+    if (!empty($bbb_max_part_per_room) and ($c > $bbb_max_part_per_room)) {
+        $c = $bbb_max_part_per_room;
+        $bbb_max_part_per_room_limit = true;
     }
     $found_selected = false;
 
@@ -90,11 +96,20 @@ function bbb_session_form($session_id = 0) {
             $options = NULL;
             $options_show = "";
         }
+        $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
+        $checked_lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? 'checked' : '';
+        $checked_lockSettingsDisableCam = isset($options['lockSettingsDisableCam']) ? 'checked' : '';
+        $checked_webcamsOnlyForModerator = isset($options['webcamsOnlyForModerator']) ? 'checked' : '';
+        $checked_lockSettingsDisablePrivateChat = isset($options['lockSettingsDisablePrivateChat']) ? 'checked' : '';
+        $checked_lockSettingsDisablePublicChat = isset($options['lockSettingsDisablePublicChat']) ? 'checked' : '';
+        $checked_lockSettingsDisableNote = isset($options['lockSettingsDisableNote']) ? 'checked' : '';
+        $checked_lockSettingsHideUserList = isset($options['lockSettingsHideUserList']) ? 'checked' : '';
+        $checked_hideParticipants = isset($options['hideParticipants']) ? 'checked' : '';
+
         $submit_name = 'update_bbb_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
     } else { // new BBB meeting
-        $record = true;
         $status = 1;
         $unlock_interval = '10';
         $r_group = array();
@@ -110,16 +125,26 @@ function bbb_session_form($session_id = 0) {
         $submit_id = '';
         $value_message = $langAdd;
         $options = NULL;
-        $options_show = "";
+        $record = get_config('bbb_recording', 1);
+        $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
+        $checked_lockSettingsDisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
+        $checked_lockSettingsDisableCam = get_config('bbb_DisableCam', 0) ? 'checked' : '';
+        $checked_webcamsOnlyForModerator = get_config('bbb_webcamsOnlyForModerator', 0) ? 'checked' : '';
+        $checked_lockSettingsDisablePrivateChat = get_config('bbb_DisablePrivateChat', 0) ? 'checked' : '';
+        $checked_lockSettingsDisablePublicChat = get_config('bbb_DisablePublicChat', 0) ? 'checked' : '';
+        $checked_lockSettingsDisableNote = get_config('bbb_DisableNote', 0) ? 'checked' : '';
+        $checked_lockSettingsHideUserList = get_config('bbb_HideUserList', 0) ? 'checked' : '';
+        $checked_hideParticipants = get_config('bbb_hideParticipants', 0) ? 'checked' : '';
+        if (!empty($checked_muteOnStart) or !empty($checked_lockSettingsDisableMic) or
+           !empty($checked_lockSettingsDisableCam) or !empty($checked_webcamsOnlyForModerator) or
+           !empty($checked_lockSettingsDisablePrivateChat) or !empty($checked_lockSettingsDisablePublicChat) or
+           !empty($checked_lockSettingsDisableNote) or !empty($checked_lockSettingsHideUserList) or
+           !empty($checked_hideParticipants)) {
+            $options_show = "show";
+        } else {
+            $options_show = "";
+        }
     }
-    $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
-    $checked_lockSettingsDisableCam = isset($options['lockSettingsDisableCam']) ? 'checked' : '';
-    $checked_webcamsOnlyForModerator = isset($options['webcamsOnlyForModerator']) ? 'checked' : '';
-    $checked_lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? 'checked' : '';
-    $checked_lockSettingsDisablePrivateChat = isset($options['lockSettingsDisablePrivateChat']) ? 'checked' : '';
-    $checked_lockSettingsDisablePublicChat = isset($options['lockSettingsDisablePublicChat']) ? 'checked' : '';
-    $checked_lockSettingsDisableNote = isset($options['lockSettingsDisableNote']) ? 'checked' : '';
-    $checked_lockSettingsHideUserList = isset($options['lockSettingsHideUserList']) ? 'checked' : '';
 
     $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
@@ -141,7 +166,7 @@ function bbb_session_form($session_id = 0) {
             </div>
         </div>
         <div class='form-group'>
-            <label for='start_session' class='col-sm-2 control-label'>$langNewBBBSessionStart:</label>
+            <label for='start_session' class='col-sm-2 control-label'>$langStart:</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' name='start_session' id='start_session' value='$start_session'>
             </div>
@@ -212,8 +237,13 @@ function bbb_session_form($session_id = 0) {
         <div class='form-group'>
             <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type='text' name='sessionUsers' id='sessionUsers' value='$value_session_users'> $langBBBSessionSuggestedUsers:
-                <strong>$c</strong> ($langBBBSessionSuggestedUsers2)
+                <input class='form-control' type='number' min='1' pattern='\d+' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
+        if (isset($bbb_max_part_per_room_limit)) {
+            $tool_content .= " $langBBBMaxPartPerRoom: <strong>$bbb_max_part_per_room</strong>";
+        } else {
+            $tool_content .= " $langBBBSessionSuggestedUsers: <strong>$c</strong> ($langBBBSessionSuggestedUsers2)";
+        }
+        $tool_content .= "
             </div>
         </div>";
         $tool_content .= "<div class='form-group'>
@@ -373,7 +403,16 @@ function bbb_session_form($session_id = 0) {
                       </label>
                     </div>
             </div>
-        </div>";
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                     <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'>$langBBBHideParticipants
+                      </label>
+                    </div>
+            </div>
+        </div> ";
 
         $tool_content .= "</div>
         $submit_id
@@ -567,7 +606,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
                 // Notify course users for new bbb session
-                send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
+                send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}", $_SESSION['email'], '', $recipients, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -598,7 +637,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 ";
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
-                send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent);
+                send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}", $_SESSION['email'], '', $row, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -649,12 +688,13 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
 function bbb_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid, $tc_type,
-        $langNewBBBSessionStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
+        $langStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
-        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd, $langBBBNotServerAvailableTeacherCovid,
-        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langDate, $langBBBNoServerForRecording;
-
+        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
+        $langBBBNotServerAvailableTeacherCovid, $langBBBNotServerAvailableTeacher,
+        $langBBBImportRecordings, $langAllUsers, $langDate, $langBBBNoServerForRecording,
+        $langBBBHideParticipants;
 
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
         if ($is_editor) {
@@ -689,29 +729,42 @@ function bbb_session_details() {
         $i = 0;
 
         foreach ($result as $row) {
-            $participants = '';
-            // Get participants
-            $r_group = explode(",",$row->participants);
-            foreach ($r_group as $participant_uid) {
-                if ($participants) {
-                    $participants .= ', ';
-                }
-                $participant_uid = str_replace("'", '', $participant_uid);
-                if (preg_match('/^_/', $participant_uid)) {
-                    $participants .= gid_to_name(str_replace("_", '', $participant_uid));
-                } else {
-                    if ($participant_uid == 0) {
-                        $participants .= $langAllUsers;
+            $options = unserialize($row->options);
+            if ($is_editor or empty($options['hideParticipants'])) {
+                $participants = '';
+                // Get participants
+                $r_group = explode(",",$row->participants);
+                foreach ($r_group as $participant_uid) {
+                    if ($participants) {
+                        $participants .= ', ';
+                    }
+                    $participant_uid = str_replace("'", '', $participant_uid);
+                    if (preg_match('/^_/', $participant_uid)) {
+                        $participants .= gid_to_name(str_replace("_", '', $participant_uid));
                     } else {
-                        $participants .= uid_to_name($participant_uid, 'fullname');
+                        if ($participant_uid == 0) {
+                            $participants .= $langAllUsers;
+                        } else {
+                            $participants .= uid_to_name($participant_uid, 'fullname');
+                        }
                     }
                 }
+                $participants = "<span class='trunk8'>$participants</span>";
+            } else {
+                $participants = "<span class='trunk8'>$langBBBHideParticipants</span>";
             }
-            $participants = "<span class='trunk8'>$participants</span>";
             $id = $row->id;
             $title = $row->title;
             $start_date = $row->start_date;
             $end_date = $row->end_date;
+            $starttimeLabel = '';
+            if (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) > 0) {
+                $starttimeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
+                $starttimeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
+                    format_time_duration($starttimeLeft * 60) .
+                    "</small></span>";
+            }
+
             if($end_date) {
                 $timeLeft = date_diff_in_minutes($end_date, date('Y-m-d H:i:s'));
                 $timeLabel = nice_format($end_date, TRUE);
@@ -719,7 +772,7 @@ function bbb_session_details() {
                 $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
                 $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
-            if ($timeLeft > 0) {
+            if ($timeLeft > 0 and date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < 0) {
                 $timeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
@@ -775,7 +828,7 @@ function bbb_session_details() {
                     </td>
                     <td class='text-center'>
                         <div style='padding-top: 7px;'>
-                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
+                            <span class='text-success'>$langStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
                         </div>
                         <div style='padding-top: 7px;'>
                             <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
@@ -844,7 +897,7 @@ function bbb_session_details() {
                     </td>
                     <td class='text-center'>
                         <div style='padding-top: 7px;'>
-                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
+                            <span class='text-success'>$langStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
                         </div>
                         <div style='padding-top: 7px;'>
                             <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
@@ -998,6 +1051,11 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $opt
             $end = new DateTime($r->end_date);
             $interval = $now->diff($end);
             $duration = $interval->y * 365 * 24 * 60 + $interval->m * 31 * 24 * 60 + $interval->d * 24 * 60 + $interval->h * 60 + $interval->i + ($interval->s >= 30? 1: 0);
+        }
+
+        $bbb_max_duration = get_config('bbb_max_duration', 0);
+        if ($bbb_max_duration > 0 and ($duration === 0 or $duration > $bbb_max_duration)) {
+            $duration = $bbb_max_duration;
         }
 
         $bbb = new BigBlueButton($salt, $bbb_url);
@@ -1555,43 +1613,43 @@ function is_bbb_server_available($server_id, $participants)
 }
 
 /**
- * @brief get load of all active BBB servers
+ * @brief get load of all enabled BBB servers
  * @return array
  */
 function get_bbb_servers_load()
 {
-    $servers = array();
-    // weight of all participants: they get the presentation
-    $participant_weight = 1;
-    // weight of audio: audio is sent to listeners. double weight due to free switch mixing in cpu
-    $audio_weight = 2;
-    // weight of video: video is sent to participants. double weight due to higher bandwidth and cpu of SFU
-    $video_weight = 2;
-    // each room allocates resources. take that into account
-    $room_load = 10;
-
     $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' AND `enabled` = 'true' ORDER BY weight ASC");
 
     $server_count = count($q);
 
     if ($server_count <= 0 ) {
         return false;
-    } else if ($server_count == 1) {
-        $server[0]['id'] = $q[0]->id;
-        return $server;
     }
 
+    // weight of all participants: they get the presentation
+    $participant_weight = get_config('bbb_lb_weight_part', 1);
+    // weight of audio: audio is sent to listeners. double weight due to mixing in cpu
+    // Notice: listeners get audio from Kurento. Microphone/voice users get audio from Freeswitch
+    // We handle it the same way (for now)
+    $audio_weight = get_config('bbb_lb_weight_mic', 2);
+    // weight of video: video is sent to participants. double weight due to higher bandwidth and cpu of SFU/Kurento
+    $video_weight = get_config('bbb_lb_weight_camera', 2);
+    // each room allocates resources. take that into account
+    $room_load = get_config('bbb_lb_weight_room', 50);
+
+    $servers = array();
     foreach ($q as $server) {
-        $rooms = $participants = $load = 0;
+        $rooms = $tparticipants = $tlisten = $tvoice = $tvideo = $load = 0;
         $bbb_url = $server->api_url;
         $salt = $server->server_key;
+        $server_id = $server->id;
         // instantiate the BBB class
         $bbb = new BigBlueButton($salt, $bbb_url);
 
         $meetings = $bbb->getMeetingsWithXmlResponseArray();
         // no active meetings
         if (empty($meetings)) {
-            $continue;
+            continue;
         }
         foreach ($meetings as $meeting) {
             if (!isset($meeting['meetingId'])) {
@@ -1605,15 +1663,31 @@ function get_bbb_servers_load()
             $listenerCount = $meeting['listenerCount'];
             $voiceParticipantCount = $meeting['voiceParticipantCount'];
             $videoCount = $meeting['videoCount'];
+            $moderatorCount = $meeting['moderatorCount'];
 
             // presentation is going to all participants
             $presentation_load = $participantCount * $participant_weight;
+
             // voice is mixed. streams_in: voicePart / streams_out: listenPart
             $audio_load = ($voiceParticipantCount + $listenerCount) * $audio_weight;
-            // video creates many streams
-            $video_load = ($videoCount + $participantCount - 1) * $video_weight;
 
-            $participants += $participantCount;
+            // each camera by default generates a stream to all participants
+            $video_load = $videoCount * $participantCount * $video_weight;
+
+            // unless cameras are locked to be shown only to moderators/professors
+            // first check if meeting is local to us
+            $res = Database::get()->querySingle("SELECT tc_session.options FROM tc_session WHERE meeting_id='${meeting['meetingId']}' AND running_at=$server_id");
+            if (!empty($res->options)) {
+                $options = unserialize($res->options);
+                if (isset($options['lockSettingsDisableCam'])) {
+                    $video_load = $videoCount * $moderatorCount * $video_weight;
+                }
+            }
+
+            $tparticipants += $participantCount;
+            $tlisten += $listenerCount;
+            $tvoice += $voiceParticipantCount;
+            $tvideo += $videoCount;
             $load += $presentation_load + $audio_load + $video_load + $room_load;
         }
 
@@ -1627,13 +1701,40 @@ function get_bbb_servers_load()
             'id' => $server->id,
             'weight' => $server->weight,
             'rooms' => $rooms,
-            'participants' => $participants,
+            'participants' => $tparticipants,
+            'listeners' => $tlisten,
+            'voice' => $tvoice,
+            'video' => $tvideo,
             'load' => $load,
             'enable_recordings' => $enable_recordings,
         );
 
     }
     return $servers;
+}
+
+/**
+ * @brief get load of all enabled BBB servers
+ * @return array indexed by server id in DB
+ */
+function get_bbb_servers_load_by_id()
+{
+    $servers = get_bbb_servers_load();
+    if (empty($servers)) {
+        return false;
+    }
+
+    foreach ($servers as $server) {
+        $arr[$server['id']]['weight'] = $server['weight'];
+        $arr[$server['id']]['rooms'] = $server['rooms'];
+        $arr[$server['id']]['participants'] = $server['participants'];
+        $arr[$server['id']]['listeners'] = $server['listeners'];
+        $arr[$server['id']]['voice'] = $server['voice'];
+        $arr[$server['id']]['video'] = $server['video'];
+        $arr[$server['id']]['load'] = $server['load'];
+        $arr[$server['id']]['enable_recordings'] = $server['enable_recordings'];
+    }
+    return $arr;
 }
 
 /**
@@ -1657,6 +1758,9 @@ function get_bbb_servers($record = 'false')
     $load = array_column($servers, 'load');
     $rooms = array_column($servers, 'rooms');
     $participants = array_column($servers, 'participants');
+    $listeners = array_column($servers, 'listeners');
+    $microphones = array_column($servers, 'voice');
+    $cameras = array_column($servers, 'video');
     $enable_recordings = array_column($servers, 'enable_recordings');
 
     $record_sort = ($record=='true') ? SORT_DESC : SORT_ASC;
@@ -1675,6 +1779,14 @@ function get_bbb_servers($record = 'false')
         // weighted least connections. Sort first by recording, then by weight and last by #participants
         case 'wlc':
             array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $participants, SORT_ASC, SORT_NUMERIC, $servers);
+            break;
+        // weighted least microphones. Sort first by recording, then by weight and last by #microphones
+        case 'wlm':
+            array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $microphones, SORT_ASC, SORT_NUMERIC, $servers);
+            break;
+        // weighted least cameras. Sort first by recording, then by weight and last by #cameras
+        case 'wlv':
+            array_multisort($enable_recordings, $record_sort, SORT_NUMERIC, $weight, SORT_ASC, SORT_NUMERIC, $cameras, SORT_ASC, SORT_NUMERIC, $servers);
             break;
         // Default. Sort by recording and then by weight only. No distribution of load. Each server fills based
         // max number of rooms and max number of participants. Then we move to next server

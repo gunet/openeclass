@@ -326,8 +326,8 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             case 'home':
             case 'main':
             {
-			    global $langWikiMainPage,$course_code;
-                $str = "<a href=\"".$_SERVER['PHP_SELF']
+                global $langWikiMainPage,$course_code;
+                $str = "<a href=\"".$_SERVER['SCRIPT_NAME']
                     ."?course=".$course_code."&amp;action=show&amp;title=".rawurlencode('__MainPage__')
                     . "&amp;wikiId=" . $this->wiki->getWikiId()
                     . "\" class=\"wikiShow\">"
@@ -561,7 +561,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
         $this->escape_table = $this->all_tags;
         array_walk($this->escape_table, function(&$a) {
             $a = '\\\\'.$a;
-        });        
+        });
     }
 
     function __parseColor($str, &$tag, &$attr, &$type) {

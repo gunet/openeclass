@@ -101,7 +101,7 @@ function form($user) {
     foreach ($profdata as $prof) {
         $userprof .= "$prof->surname $prof->givenname &nbsp;&nbsp;";
     }
-
+        
     $ret = "<div class='alert alert-info'>$langInfoAboutRegistration</div>";
     $ret .= "<div class='form-wrapper'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>

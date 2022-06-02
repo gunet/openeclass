@@ -48,7 +48,7 @@ echo create_join_button(
     $lti_app->lti_provider_key,
     $lti_app->lti_provider_secret,
     $lti_app->id,
-    "lti_tool",
+    RESOURCE_LINK_TYPE_LTI_TOOL,
     $lti_app->title,
     $lti_app->description,
     $lti_app->launchcontainer

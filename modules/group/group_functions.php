@@ -210,7 +210,8 @@ function showgroupsofcategory($catid) {
         $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
         $langEditChange, $uid, $totalRegistered, $student_desc, $allow_unreg,
         $tutors, $group_name, $self_reg, $user_group_description, $user_visible_groups,
-        $max_members, $group_description, $langCommentsUser, $langViewHide, $langViewShow;
+        $max_members, $group_description, $langCommentsUser, $langViewHide, $langViewShow,
+        $langAddManyUsers;
 
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
@@ -293,6 +294,9 @@ function showgroupsofcategory($catid) {
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
                       'url' => "group_edit.php?course=$course_code&amp;category=$catid&amp;group_id=$group_id"),
+                array('title' => $langAddManyUsers,
+                    'url' => "muladduser.php?course=$course_code&amp;group_id=$group_id",
+                    'icon' => 'fa-plus-circle'),
                 array('title' => $visibility_text,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;$visibility_url",
                     'icon' => $visibility_icom),
@@ -465,8 +469,8 @@ function change_group_visibility($choice, $group_id, $course_id) {
     } else {
         $vis = 0;
     }
-    Database::get()->query("UPDATE `group` SET visible = ?d 
-                                      WHERE id = ?d 
+    Database::get()->query("UPDATE `group` SET visible = ?d
+                                      WHERE id = ?d
                                       AND course_id = ?d",
                                 $vis, $group_id, $course_id);
 
@@ -479,8 +483,8 @@ function change_group_visibility($choice, $group_id, $course_id) {
  */
 function has_group_categories($course_id) {
 
-    $q = Database::get()->querySingle("SELECT * FROM `group` WHERE 
-                                      category_id > 0 
+    $q = Database::get()->querySingle("SELECT * FROM `group` WHERE
+                                      category_id > 0
                                       AND course_id = ?d", $course_id);
     if ($q) {
         return true;
@@ -502,8 +506,8 @@ function is_user_register_to_group_category_course($uid, $category_id, $course_i
                       WHERE group_members.group_id = `group`.id
                         AND group.category_id = group_category.id
                         AND user_id = ?d
-                        AND `group`.course_id = ?d 
-                        AND `group`.visible = 1 
+                        AND `group`.course_id = ?d
+                        AND `group`.visible = 1
                         AND group_category.id = ?d",
                     $uid, $course_id, $category_id);
     if ($q) {

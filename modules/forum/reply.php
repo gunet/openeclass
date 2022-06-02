@@ -51,6 +51,7 @@ if (isset($_GET['topic'])) {
 if (isset($_GET['unit'])) {
     $unit = intval($_GET['unit']);
 }
+$res_type = isset($_GET['res_type']);
 $parent_post_ok = true;
 if (isset($_GET['parent_post'])) {
     $parent_post = intval($_GET['parent_post']);
@@ -77,9 +78,20 @@ $forum_id = $forum;
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-$navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
-$navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' => q($topic_title));
+if (!add_units_navigation(TRUE)) {
+    if (!$res_type) {
+        $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
+        $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
+        $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' => q($topic_title));
+    } else {
+        $navigation[] = array('url' => "../wall/index.php?course=$course_code", 'name' => $langWall);
+        $navigation[] = array('url' => "../units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum_id", 'name' => q($forum_name));
+        $navigation[] = array('url' => "../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum_id", 'name' => q($topic_title));
+    }
+} else {
+    $navigation[] = array('url' => "../units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum_id&amp;unit=$unit", 'name' => q($forum_name));
+    $navigation[] = array('url' => "../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum_id&amp;unit=$unit", 'name' => q($topic_title));
+}
 
 if (!does_exists($forum, "forum") || !does_exists($topic, "topic") || !$parent_post_ok) {
     $tool_content .= $langErrorTopicSelect;
@@ -150,6 +162,8 @@ if (isset($_POST['submit'])) {
 
     if (isset($unit)) {
         $page = "modules/units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum_id&unit=$unit";
+    } else if ($res_type) {
+        $page = "modules/units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum_id";
     } else {
         $page = "modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
     }
@@ -163,6 +177,9 @@ if (isset($_POST['submit'])) {
     if (isset($unit)) {
         $cancel_url = $back_url = "../units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum_id&unit=$unit";
         $form_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&forum=$forum_id&amp;unit=$unit";
+    } else if ($res_type) {
+        $cancel_url = $back_url = "../units/view.php?course=$course_code&res_type=forum_topic&topic=$topic&forum=$forum_id";
+        $form_url = "../units/view.php?course=$course_code&amp;res_type=forum_topic_reply&amp;topic=$topic&forum=$forum_id";
     } else {
         $cancel_url = $back_url = "viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
         $form_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id";

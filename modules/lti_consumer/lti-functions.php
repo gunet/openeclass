@@ -25,6 +25,13 @@ define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
 define('LTI_DESCRIPTION_MAX_LENGTH', 999);
 
+const TURNITIN_LTI_TYPE = "turnitin";
+const LIMESURVEY_LTI_TYPE = "limesurvey";
+
+const RESOURCE_LINK_TYPE_ASSIGNMENT = "assignment";
+const RESOURCE_LINK_TYPE_LTI_TOOL = "lti_tool";
+const RESOURCE_LINK_TYPE_POLL = "poll";
+
 /**
  * @brief new lti app (display form)
  * @param bool $is_template
@@ -32,7 +39,7 @@ define('LTI_DESCRIPTION_MAX_LENGTH', 999);
  * @param string $lti_url_default
  */
 function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
-    global $tool_content, $langAdd, $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret,
+    global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
            $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id;
@@ -52,7 +59,7 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
             </div>
         </div>
         <div class='form-group'>
-            <label for='desc' class='col-sm-2 control-label'>$langNewBBBSessionDesc:</label>
+            <label for='desc' class='col-sm-2 control-label'>$langUnitDescr:</label>
             <div class='col-sm-10'>
                 $textarea
             </div>
@@ -149,18 +156,20 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
  * @param bool $is_template
  * @param bool $update
  * @param string $session_id
+ * @param string $type
  * @brief add / update lti app settings
  */
-function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null, $is_template = false, $update = false, $session_id = '')  {
+function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null,
+                            $is_template = false, $update = false, $session_id = null, $type)  {
     if (in_array(0, $lti_courses)) {
         $all_courses = 1; // lti app is assigned to all courses
     } else {
         $all_courses = 0; // lti app is assigned to specific courses
     }
     if ($update == true) {
-        Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s,
-                                        lti_provider_key = ?s, lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s, all_courses = ?d WHERE id = ?d",
-                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $session_id);
+        Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s, lti_provider_key = ?s,
+                                        lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s, all_courses = ?d, type = ?s WHERE id = ?d",
+                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $type, $session_id);
         Database::get()->query("DELETE FROM course_lti_app WHERE lti_app = ?d", $session_id);
         if ($all_courses == 0) {
             foreach ($lti_courses as $data) {
@@ -173,9 +182,9 @@ function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer
 
         $q = Database::get()->query("INSERT INTO lti_apps (" . $firstparam . ", title, description,
                                                             lti_provider_url, lti_provider_key, lti_provider_secret,
-                                                            launchcontainer, enabled, all_courses)
-                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s,?d)",
-                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses);
+                                                            launchcontainer, enabled, all_courses, type)
+                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s,?d,?s)",
+                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $type);
         $lti_app_id = $q->lastInsertID;
         if ($all_courses == 0) {
             foreach ($lti_courses as $data) {
@@ -190,7 +199,7 @@ function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer
  * @param $session_id
  */
 function edit_lti_app($session_id) {
-    global $tool_content, $langModify, $langNewLTIAppSessionDesc, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
+    global $tool_content, $langModify, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
            $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;;
@@ -211,7 +220,7 @@ function edit_lti_app($session_id) {
                         </div>
                     </div>
                     <div class='form-group'>
-                        <label for='desc' class='col-sm-2 control-label'>$langNewLTIAppSessionDesc:</label>
+                        <label for='desc' class='col-sm-2 control-label'>$langUnitDescr:</label>
                         <div class='col-sm-10'>
                             $textarea
                         </div>
@@ -309,13 +318,12 @@ function edit_lti_app($session_id) {
 /**
  * @brief display available lti apps (if any)
  */
-function lti_app_details(): string {
-    global $course_id, $is_editor, $course_code, $head_content,
-        $langConfirmDelete, $langNewLTIAppSessionDesc, $langNote,
+function lti_app_details() {
+    global $course_id, $tool_content, $is_editor, $course_code, $head_content,
+        $langConfirmDelete, $langUnitDescr, $langNote,
         $langTitle,$langActivate, $langDeactivate, $langLTIAppActions,
         $langEditChange, $langDelete, $langNoLTIApps, $m;
 
-    $tool_content = "";
     load_js('trunk8');
 
     $activeClause = ($is_editor) ? '' : "AND enabled = 1";
@@ -329,7 +337,7 @@ function lti_app_details(): string {
                            <table class='table-default'>
                              <tr class='list-header'>
                                <th style='width:30%'>$langTitle</th>
-                               <th class='text-center'>$langNewLTIAppSessionDesc</th>
+                               <th class='text-center'>$langUnitDescr</th>
                                <th class='text-center'>$langLTIAppActions</th>";
         if ($is_editor) {
             $headings .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
@@ -408,8 +416,6 @@ function lti_app_details(): string {
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoLTIApps</div>";
     }
-
-    return $tool_content;
 }
 
 function disable_lti_app($id)
@@ -535,7 +541,7 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
         //$launch_data['custom_institutioncheck'] = intval($extraobj->tii_institutioncheck);
         //$launch_data['custom_submit_papers_to'] = intval($extraobj->tii_submit_papers_to);
 
-        if ($resource_link_type == "assignment") {
+        if ($resource_link_type == RESOURCE_LINK_TYPE_ASSIGNMENT) {
             $assignment_secret = Database::get()->querySingle("SELECT secret_directory FROM assignment WHERE id = ?d", $resource_link_id)->secret_directory;
             $token = token_generate($assignment_secret, true);
             $launch_data['lis_result_sourcedid'] = $token . "-" . $resource_link_id . "-" . $uid;
@@ -543,6 +549,10 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
             $launch_data['lis_outcome_service_url'] = $urlServer . "modules/work/tii_outcome.php";
         }
     }
+
+    /*if ($resource_link_type == RESOURCE_LINK_TYPE_POLL) {
+        $launch_data['lis_outcome_service_url'] = $urlServer . "modules/questionnaire/poll_outcome.php";
+    }*/
 
     return $launch_data;
 }
@@ -598,7 +608,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
     $button .= $extrabutton . '<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
     $button .='</form>';
 
-    return $button;  
+    return $button;
 }
 
 function lti_prepare_oauth_only_data($url, $oauth_consumer_key, $secret) {
@@ -723,27 +733,22 @@ function getLTILinksForTools() {
     }
 }
 
-
-function is_active_lti_app($turnitinapp, $course_id) {
-
-    if ($turnitinapp->isEnabled()) {
-        $q = Database::get()->querySingle("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = 'turnitin'");
+function is_active_external_lti_app($externalapp, $lti_type, $course_id) {
+    if ($externalapp->isEnabled()) {
+        $q = Database::get()->querySingle("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = ?s", $lti_type);
         if (!is_null($q->course_id)) {
             return true;
         } else {
-            if ($q->all_courses == 1) { // turnitin is enabled for all courses
+            if ($q->all_courses == 1) { // external app is enabled for all courses
                 return true;
-            } else { // otherwise check if turnitin is enabled for specific course
-                $s = Database::get()->querySingle("SELECT * FROM course_lti_app
-                            WHERE course_id = ?d AND lti_app = $q->id", $course_id);
+            } else { // otherwise check if external app is enabled for specific course
+                $s = Database::get()->querySingle("SELECT * FROM course_lti_app WHERE course_id = ?d AND lti_app = $q->id", $course_id);
                 if ($s) {
                     return true;
                 }
             }
         }
-
     } else {
         return false;
     }
-
 }

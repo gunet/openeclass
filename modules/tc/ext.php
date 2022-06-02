@@ -57,28 +57,41 @@ if ($q) {
     exit;
 }
 
+$now = date('Y-m-d H:i:s');
 $server_type = Database::get()->querySingle("SELECT `type` FROM tc_servers WHERE id = ?d", $server_id)->type;
 
-if ($active <> '1'
-    or date_diff_in_minutes($start_date,date('Y-m-d H:i:s')) > $unlock_interval
-    or !in_array($_GET['username'],$r_group)) {
-        $msg = "Η τηλεδιάσκεψη δεν έχει ξεκινήσει ακόμα. Παρακαλώ δοκιμάστε να συνδεθείτε αργότερα ή επικοινωνήστε με τους διαχειριστές.";
-        display_message($msg);
-        exit;
+// meeting is disabled
+if ($active <> '1') {
+    display_message($langBBBDisabled);
+    exit;
+}
+// wrong external email
+if (!in_array($_GET['username'],$r_group)) {
+    display_message($langNoAccessPrivilages);
+    exit;
+}
+// meeting not started yet
+if (date_diff_in_minutes($start_date, $now) > $unlock_interval) {
+    display_message($langBBBNotStarted);
+    exit;
+}
+// meeting is expired
+if (!empty($end_date) and date_diff_in_minutes($now, $end_date) > 0) {
+    display_message($langBBBHasEnded);
+    exit;
 }
 
 if ($server_type == 'bbb') { // bbb server
-    if(bbb_session_running($meeting_id) == false) {
+    if (bbb_session_running($meeting_id) == false) {
         create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $options);
     }
     # Get session capacity
     $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session WHERE meeting_id=?s",$meeting_id);
     $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
 
-    if($sess->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$meeting_id,$sess->mod_pw))
+    if ($sess->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$meeting_id,$sess->mod_pw))
     {
-        $msg = "Έχει συμπληρωθεί ο μέγιστος αριθμός συμμετεχόντων στην τηλεσυνεργασία. Παρακαλώ δοκιμάστε να συνδεθείτε αργότερα ή επικοινωνήστε με τους διαχειριστές.";
-        display_message($msg);
+        display_message($langBBBMaxUsersJoinError);
         exit;
     } else {
         header('Location: ' . bbb_join_user($meeting_id,$att_pw,$_GET['username'],""));
@@ -95,8 +108,7 @@ if ($server_type == 'om') { // OM server
 
     if ($sess->sessionUsers < get_om_connected_users($server_id))
     {
-        $msg = "Έχει συμπληρωθεί ο μέγιστος αριθμός συμμετεχόντων στην τηλεσυνεργασία. Παρακαλώ δοκιμάστε να συνδεθείτε αργότερα ή επικοινωνήστε με τους διαχειριστές.";
-        display_message($msg);
+        display_message($langBBBMaxUsersJoinError);
         exit;
     } else {
         header('Location: ' . om_join_user($meeting_id, $_GET['username'], -1, "", $_GET['username'], "", 0));
@@ -108,15 +120,15 @@ if ($server_type == 'om') { // OM server
  * @param message
  */
 function display_message($message) {
-
-    global $urlServer;
+    
+    global $urlServer, $langBBBWelcomeMsg;
 
     echo "
         <!DOCTYPE HTML>
         <html>
         <head>            
             <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-            <title>Υπηρεσία Τηλεδιάσκεψης</title>
+            <title>$langBBBWelcomeMsg</title>
             <link rel='stylesheet' href='{$urlServer}template/default/CSS/bootstrap-custom.css'>
         </head>        
         <body style='background-color: white;'>

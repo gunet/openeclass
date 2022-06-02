@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass 3.6
  * E-learning and Course Management System
@@ -77,7 +76,7 @@ $data['deps_valid'] = $deps_valid;
 // display form
 if (!isset($_POST['create_course'])) {
         // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
-        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));        
+        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
         $head_content .= $js;
         $data['buildusernode'] = $html;
         $public_code = $title = '';
@@ -95,7 +94,7 @@ if (!isset($_POST['create_course'])) {
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-        
+
         $data['icon_course_open'] = course_access_icon(COURSE_OPEN);
         $data['icon_course_registration'] = course_access_icon(COURSE_REGISTRATION);
         $data['icon_course_closed'] = course_access_icon(COURSE_CLOSED);
@@ -104,10 +103,10 @@ if (!isset($_POST['create_course'])) {
         $data['rich_text_editor'] = rich_text_editor('description', 4, 20, @$description);
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-control"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
-        generate_csrf_token_form_field(); 
+        generate_csrf_token_form_field();
         $data['menuTypeID'] = 1;
         view('modules.create_course.index', $data);
-        
+
 } else  { // create the course and the course database
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -198,7 +197,6 @@ if (!isset($_POST['create_course'])) {
                         password = ?s,
                         view_type = ?s,
                         start_date = " . DBHelper::timeAfter() . ",
-                        finish_date = " . DBHelper::timeAfter(31536000) . ",
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
@@ -237,7 +235,7 @@ if (!isset($_POST['create_course'])) {
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
 
     $_SESSION['courses'][$code] = USER_TEACHER;
-       
+
     $data['action_bar'] = action_bar(array(
         array('title' => $langEnter,
               'url' => $urlAppend . "courses/$code/",
