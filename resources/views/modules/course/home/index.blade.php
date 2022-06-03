@@ -50,7 +50,7 @@
                             @if ($uid)
                                 <li class="access pull-right">
                                  @if ($is_course_admin)
-                                     <a href="{{ $urlAppend }}modules/user/index.php?course=={{$course_code}}"><span class="fa fa-users fa-fw" data-toggle="tooltip" data-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span><span class="hidden">.</span></a>
+                                     <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}"><span class="fa fa-users fa-fw" data-toggle="tooltip" data-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span><span class="hidden">.</span></a>
                                  @else
                                      @if ($visible == COURSE_CLOSED)
                                             <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}"><span class="fa fa-users fa-fw" data-toggle="tooltip" data-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span></a>

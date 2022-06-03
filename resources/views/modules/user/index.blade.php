@@ -2,24 +2,23 @@
 
 @push('head_scripts')
 <script type='text/javascript'>
-    $(function () {
-        var initComplete = function () {
-            var api = this.api();
-            var column = api.column(1);
-            var select = $('<select id="select_role">' +
-                           '<option value="0">-- {{ js_escape(trans('langAllUsers')) }} --</option>' +
-                           '<option value="teacher">{{ js_escape(trans('langTeacher')) }}</option>' +
-                           '<option value="student">{{ js_escape(trans('langStudent')) }}</option>' +
-                           '<option value="editor">{{ js_escape(trans('langEditor')) }}</option>' +
-                           '<option value="tutor">{{ js_escape(trans('langTutor')) }}</option>' +
-                        @if (get_config('opencourses_enable'))
-                           '<option value="reviewer">{{ js_escape(trans('langOpenCoursesReviewer')) }}</option>' +
-                        @endif
-                           '</select>')
-                .appendTo($(column.footer()).empty());
-        }
-        var oTable = $('#users_table_{{ $course_code }}').DataTable({
-            initComplete: initComplete,
+        $(document).ready(function() {
+            var oTable = $('#users_table{{ $course_id }}').DataTable ({
+                initComplete: function () {
+                var api = this.api();
+                var column = api.column(1);
+                var select = $('<select id="select_role">' +
+                               '<option value="0">-- {{ js_escape(trans('langAllUsers')) }} --</option>' +
+                               '<option value="teacher">{{ js_escape(trans('langTeacher')) }}</option>' +
+                               '<option value="student">{{ js_escape(trans('langStudent')) }}</option>' +
+                               '<option value="editor">{{ js_escape(trans('langEditor')) }}</option>' +
+                               '<option value="tutor">{{ js_escape(trans('langTutor')) }}</option>' +
+                            @if (get_config('opencourses_enable'))
+                               '<option value="reviewer">{{ js_escape(trans('langOpenCoursesReviewer')) }}</option>' +
+                            @endif
+                               '</select>')
+                    .appendTo($(column.footer()).empty());
+            },
             createdRow: function(row, data, dataIndex) {
                 if (data[5] == 1) {
                     $(row). addClass('not_visible');
@@ -124,7 +123,7 @@
 
     {!! $action_bar !!}
 
-    <table id='users_table_{{ $course_code }}' class='table-default'>
+    <table id='users_table{{ $course_id }}' class='table-default'>
         <thead>
             <tr>
               <th>{{ trans('langSurnameName') }}</th>

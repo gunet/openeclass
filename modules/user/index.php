@@ -130,7 +130,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['aaData'] = array();
     foreach ($result as $myrow) {
         $full_name = sanitize_utf8($myrow->givenname . " " . $myrow->surname);
-        $am_message = sanitize_utf8(empty($myrow->am) ? '' : ("<div class='right'>$langAmShort: " . q($myrow->am) . "</div>"));
+        $am_message = sanitize_utf8(empty($myrow->am) ? '' : ("<div class='right'>" . q($myrow->am) . "</div>"));
         $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/index.php?course=$course_code&amp;id=$myrow->id");
         //create date field with unregister button
         $date_field = $myrow->reg_date ? claro_format_locale_date( $dateFormatMiddle, strtotime($myrow->reg_date)) : $langUnknownDate;
@@ -212,7 +212,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $roleColumn = "<div class='text-muted'>$user_role_string</div>";
         // search for inactive users
         $inactive_user = is_inactive_user($myrow->id);
-        //setting datables column data
+        //setting data table column data
         $data['aaData'][] = array(
             'DT_RowId' => getIndirectReference($myrow->id),
             'DT_RowClass' => 'smaller',
@@ -318,38 +318,38 @@ if (course_status($course_id) == COURSE_CLOSED) {
 
 $data['ajaxUrl'] = "$_SERVER[SCRIPT_NAME]?course=$course_code";
 $data['action_bar'] = action_bar([
-    [ 'title' => $langOneUser,
+    ['title' => $langOneUser,
       'url' => "adduser.php?course=$course_code",
       'icon' => 'fa-plus-circle',
       'button-class' => 'btn-success',
-      'level' => 'primary-label' ],
-    [ 'title' => $langManyUsers,
+      'level' => 'primary-label'],
+    ['title' => $langManyUsers,
       'url' => "muladduser.php?course=$course_code",
       'icon' => 'fa-plus-circle',
       'button-class' => 'btn-success',
-      'level' => 'primary-label' ],
-    [ 'title' => $langAddGUser,
+      'level' => 'primary-label'],
+    ['title' => $langAddGUser,
       'url' => "guestuser.php?course=$course_code",
       'icon' => 'fa-plane',
-      'show' => get_config('course_guest') != 'off' ],
-    [ 'title' => $num_requests . ' ' . trans('langsUserRequests'),
+      'show' => get_config('course_guest') != 'off'],
+    ['title' => $num_requests . ' ' . trans('langsUserRequests'),
       'url' => "course_user_requests.php?course=$course_code",
       'icon' => 'fa-child',
       'level' => 'primary-label',
       'show' => $course_user_requests ],
-    [ 'title' => $langGroupUserManagement,
-      'url' => $urlAppend . "modules/group/index.php?course=$course_code",
-      'icon' => 'fa-users' ],
-    [ 'title' => $langDumpUser,
+    ['title' => $langGroupUserManagement,
+      'url' => "../group/index.php?course=$course_code",
+      'icon' => 'fa-users'],
+     ['title' => $langDumpUser,
       'url' => "dumpuser.php?course=$course_code",
-      'icon' => 'fa-file-archive-o' ],
-    [ 'title' => "$langDumpUser ($langcsvenc2)",
+      'icon' => 'fa-file-archive-o'],
+    ['title' => "$langDumpUser ($langcsvenc2)",
       'url' => "dumpuser.php?course=$course_code&amp;enc=UTF-8",
-      'icon' => 'fa-file-archive-o' ],
-    [ 'title' => $langDelUsers,
+      'icon' => 'fa-file-archive-o'],
+    ['title' => $langDelUsers,
       'url' => "../course_info/refresh_course.php?course=$course_code&amp;from_user=true",
       'icon' => 'fa-times',
-      'button-class' => 'btn-danger' ]
+      'button-class' => 'btn-danger']
 ]);
 
 view('modules.user.index', $data);

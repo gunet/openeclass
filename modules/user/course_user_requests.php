@@ -43,6 +43,7 @@ $tool_content .= action_bar(array(
 
 if (isset($_POST['rejected_req_id'])) { // do reject course user request
     $from_name = uid_to_name($uid, 'fullname');
+    $from_address = uid_to_email($uid);
     $to_address = uid_to_email($_POST['rejected_uid']);
     $subject = "$langCourse: " .  course_id_to_title($course_id) . " - $langCourseUserRequestReject";
     $mailHeader = "<div id='mail-header'><div><br>
@@ -53,7 +54,7 @@ if (isset($_POST['rejected_req_id'])) { // do reject course user request
 
     $message = $mailHeader.$mailMain;
     $plainMessage = html2text($message);
-    if (!send_mail_multipart('', '', '', $to_address, $subject, $plainMessage, $message)) {
+    if (!send_mail_multipart($from_name, $from_address, '', $to_address, $subject, $plainMessage, $message)) {
         $tool_content .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
     }
     Database::get()->query("UPDATE course_user_request SET status = 0 WHERE id = ?d", $_POST['rejected_req_id']);
