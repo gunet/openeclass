@@ -31,24 +31,23 @@ $pageName = $langDelCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 if (isset($_POST['delete'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
     $data['action_bar'] = action_bar(array(
         array('title' => "$langBackHome $siteName",
             'url' => '../../index.php',
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-    
+
     // first archive course
-    doArchive($course_id, $course_code);    
-    
+    $zipfile = doArchive($course_id, $course_code);
+
     $garbage = "$webDir/courses/garbage";
-    if (!is_dir($garbage)) {
-        make_dir($garbage);
-    }
-    rename("$webDir/courses/archive/$course_code", "$garbage/$course_code");
-     
+    $target = "$garbage/$course_code.$_SESSION[csrf_token]";
+    is_dir($target) or make_dir($target);
+    touch("$garbage/index.html");
+    rename($zipfile, "$target/$course_code.zip");
+
     delete_course($course_id);
-    
+
     // logging
     Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
                                                'code' => $course_code,

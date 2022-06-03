@@ -9,9 +9,9 @@
         {{ trans('langRefreshSuccess') }}
     @endif
     <ul class='listBullet'>
-        @for ($i = 0; $i < $count_events; $i++) 
-            <li>{{ $output[$i] }}</li>
-        @endfor    
+        @for ($i = 0; $i < $count_events; $i++)
+            <li>{!! $output[$i] !!}</li>
+        @endfor
     </ul>
 </div>
 

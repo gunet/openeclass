@@ -104,7 +104,15 @@ if (isset($_POST['submit'])) {
         view('modules.course_info.refresh_course_results', $data);
     }
 } else { // display form
+    load_js('jstree3');
+    $tree = new Hierarchy();
+    list($js, $html) = $tree->buildUserNodePicker(array('multiple' => true));
+    $head_content .= $js;
+    $data['buildusernode'] = $html;
+
     $data['selection_date'] = selection(array('before' => $langBefore, 'after' => $langAfter), 'reg_flag', $reg_flag, 'class="form-control"');
+    $data['selection_department'] = selection(array('yes' => $langWithDepartment, 'no' => $langWithoutDepartment), 'dept_flag', 'yes');
+    $data['selection_am'] = selection(array('am' => $langWithStudentId, 'uname' => $langWithUsernames), 'id_flag', 'am');
     $data['date_format'] = date("d-m-Y", time());
 
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";

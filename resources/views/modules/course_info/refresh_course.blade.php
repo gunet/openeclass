@@ -36,15 +36,47 @@ $(function() {
         @endif
     <fieldset>
         <div class='form-group'>
-            <label for='delusers' class='col-sm-2 control-label'>{{ trans('langUsers') }}</label>
-            <div class='col-sm-4 checkbox'>
-                <label><input type='checkbox' name='delusers'>{{ trans('langUserDelCourse') }}:</label>
+            <label class='col-sm-2 control-label'>{{ trans('langUsers') }}</label>
+            <div class='col-sm-10'>
+                <p class='form-control-static'>{{ trans('langUserDelCourse') }}:</p>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2 checkbox'>
+                <label><input type='checkbox' name='delusersinactive'>{{ trans('langInactiveUsers') }}</label>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-3 col-sm-offset-2 checkbox'>
+                <label><input type='checkbox' name='delusersdate'>{{ trans('langWithRegistrationDate') }}:</label>
             </div>
             <div class='col-sm-3'>
                 {!! $selection_date !!}
             </div>
             <div class='col-sm-3'>
                 <input type='text' name='reg_date' id='reg_date' value='{{ $date_format }}'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-1 col-sm-offset-2 checkbox'>
+                <label><input type='checkbox' name='delusersdept'>{{ trans('langWho') }}</label>
+            </div>
+            <div class='col-sm-2'>
+                {!! $selection_department !!}
+            </div>
+            <div class='col-sm-6'>
+                {!! $buildusernode !!}
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-1 col-sm-offset-2 checkbox'>
+                <label><input type='checkbox' name='delusersid'>{{ trans('langWith') }}</label>
+            </div>
+            <div class='col-sm-2'>
+                {!! $selection_am  !!}
+            </div>
+            <div class='col-sm-6'>
+                <textarea name='idlist' class='form-control' rows='5'></textarea>
             </div>
         </div>
     @if (!isset($_GET['from_user']))
@@ -74,7 +106,7 @@ $(function() {
             <div class='col-sm-10 checkbox'>
                 <label><input type='checkbox' name='hideexercises'>{{ trans('langHideExercises') }}</label>
             </div>
-          <div class='col-sm-10 checkbox'>
+            <div class='col-sm-offset-2 col-sm-10 checkbox'>
               <label><input type='checkbox' name='purgeexercises'>{{ trans('langPurgeExercisesResults') }}</label>
           </div>
         </div>
