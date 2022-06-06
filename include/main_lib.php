@@ -1047,25 +1047,25 @@ function is_module_disable($module_id) {
     }
 }
 
-// Flipped Classroom 
+// Flipped Classroom
 function is_module_disable_FC($module_id,$course_code,$unit_id,$act_id) {
-    
+
     $q = Database::get()->queryArray("SELECT unit_id,tool_ids FROM course_units_activities WHERE course_code = ?s and unit_id = ?d and activity_id=?s", $course_code, $unit_id,$act_id);
 
-    
+
     $nrlz_ids_final =array("start");
     foreach($q as $record){
-        
+
         $nrlz_ids = explode(" ",$record->tool_ids);
         foreach($nrlz_ids as $f_id){
-            
+
             array_push($nrlz_ids_final,$f_id);
         }
-        
+
 
     }
-    
-    
+
+
     $is_in_list = empty(array_search($module_id,$nrlz_ids_final));
     //print("Module: ".$module_id.", Found in: ".array_search($module_id,$nrlz_ids_final).", Disabled: ".$is_disabled.", Show: ".!$is_disabled);
 
@@ -2663,12 +2663,16 @@ function canonicalize_url($url) {
     }
 }
 
-function is_url_accepted($url,$protocols=""){
-    if ($url === 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', preg_replace('/\s+/', '', $url)) || ($protocols!=="" && !preg_match('/^'.$protocols.'/i', preg_replace('/\s+/', '', $url)))) {
-        return 0;
-    }
-    else{
-        return 1;
+function is_url_accepted($url, $protocols = null){
+    $url_nospace = preg_replace('/\s+/', '', $url);
+    if ($url === 'http://' or
+        empty($url) or
+        !filter_var($url, FILTER_VALIDATE_URL) or
+        preg_match('/^javascript/i', $url_nospace) or
+        ($protocols and !preg_match("/^$protocols/i", $url_nospace))) {
+        return false;
+    } else {
+        return true;
     }
 }
 

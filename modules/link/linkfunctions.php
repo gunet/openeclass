@@ -70,9 +70,9 @@ function showlinksofcategory($catid) {
                                    WHERE course_id = ?d AND category = ?d
                                    ORDER BY `order`", $course_id, $catid);
     $numberoflinks = count($result);
-    $links_num = 1;    
+    $links_num = 1;
     foreach ($result as $myrow) {
-        $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
+        $title = empty($myrow->title) ? $myrow->url : $myrow->title;
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
         $tool_content .= "<td class='nocategory-link'><a href='" . q($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if ($catid == -2 && $myrow->user_id != 0) {
@@ -87,8 +87,8 @@ function showlinksofcategory($catid) {
             $tool_content .= $rating->put($is_editor, $uid, $course_id);
         }
         $tool_content .= "</td>";
-        
-        if ($is_editor && !$is_in_tinymce) {   
+
+        if ($is_editor && !$is_in_tinymce) {
             $tool_content .= "<td class='option-btn-cell'>";
             $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
             if (isset($category)) {
@@ -137,7 +137,7 @@ function showlinksofcategory($catid) {
                     if (abuse_report_show_flag('link', $myrow->id , $course_id, $is_editor)) {
                         $head_content .= abuse_report_add_js();
                         $flag_arr = abuse_report_action_button_flag('link', $myrow->id, $course_id);
-                    
+
                         $tool_content .= "<td class='option-btn-cell'>".action_button(array($flag_arr[0])).$flag_arr[1]."</td>"; //action button option
                     } else {
                         $tool_content .= "<td>&nbsp;</td>";
@@ -145,7 +145,7 @@ function showlinksofcategory($catid) {
                 }
             }
         }
-        
+
         $tool_content .= "</tr>";
         $links_num++;
     }
@@ -190,7 +190,7 @@ function showcategoryadmintools($categoryid) {
                               'url' => "$basecaturl" . "action=deletecategory",
                               'class' => 'delete',
                               'confirm' => $langCatDel)
-                ));           
+                ));
     $catcounter++;
 }
 
@@ -220,7 +220,7 @@ function submit_link() {
     $v->rule('required', array('urllink'))->message($langTheFieldIsRequired)->label('');
     if($v->validate()) {
 		if (!is_url_accepted($urllink,"(https?|ftp)")){
-			$message = $langLinkNotPermitted;
+            Session::Messages($langLinkNotPermitted, 'alert-danger');
 			if (isset($_POST['id'])) {
 				$id =  getDirectReference($_POST['id']);
 				redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=" . getIndirectReference($id) . "&urlview=");
@@ -369,7 +369,7 @@ function delete_link($id) {
                                 WHERE rating.rtype = ?s AND rating.rid = ?d", 'link', $id);
         Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN `link` ON `link`.id = rating_cache.rid
                                 WHERE rating_cache.rtype = ?s AND rating_cache.rid = ?d", 'link', $id);
-        
+
     }
     Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_LINK, $id);
@@ -402,7 +402,7 @@ function delete_category($id) {
  */
 function is_link_creator($id) {
     global $uid;
-    
+
     $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `link` WHERE id = ?d AND user_id = ?d", $id, $uid);
     if ($result->c > 0) {
         return true;
