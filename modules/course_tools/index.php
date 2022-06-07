@@ -32,12 +32,19 @@ require_once 'publish-functions.php';
 require_once 'modules/admin/extconfig/ltipublishapp.php';
 
 $toolName = $langToolManagement;
-$page_url = 'modules/course_tools/?course=' . $course_code;
 add_units_navigation(TRUE);
+
 load_js('tools.js');
+$page_url = 'modules/course_tools/?course=' . $course_code;
 
 if (isset($_REQUEST['toolStatus'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    $old = Database::get()->queryArray('SELECT module_id FROM course_module
+        WHERE visible = 1 AND course_id = ?d', $course_id);
+    $old = array_map(function ($module) {
+        return $module->module_id;
+    }, $old);
 
     // deactivate all modules
     Database::get()->query("UPDATE course_module SET visible = 0
@@ -53,7 +60,19 @@ if (isset($_REQUEST['toolStatus'])) {
                                     WHERE course_id = ?d AND module_id IN ($placeholders)",
                                $course_id, $mids);
     }
-    Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, array());
+
+    $log = [];
+    $added = array_diff($mids, $old);
+    $removed = array_diff($old, $mids);
+    if ($added) {
+        $log['activate'] = $added;
+    }
+    if ($removed) {
+        $log['deactivate'] = $removed;
+    }
+    if ($log) {
+        Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, $log);
+    }
     Session::Messages($langRegDone, 'alert-success');
     redirect_to_home_page($page_url);
 }
@@ -109,8 +128,14 @@ $data['toolSelection'][0] = $data['toolSelection'][1] = array();
 $module_list = Database::get()->queryArray('SELECT module_id, visible
                                 FROM course_module WHERE course_id = ?d
                                 AND module_id NOT IN (SELECT module_id FROM module_disable)', $course_id);
+
 foreach ($module_list as $item) {
-    if ($item->module_id == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+    if ($item->module_id == MODULE_ID_TC and !is_configured_tc_server()) {
+        // hide teleconference when no tc servers are enabled
+        continue;
+    }
+    if (!isset($modules[$item->module_id]['title'])) {
+        // hide deprecated modules with no title
         continue;
     }
     $mid = getIndirectReference($item->module_id);

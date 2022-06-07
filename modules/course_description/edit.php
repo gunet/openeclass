@@ -33,13 +33,6 @@ $toolName = $langCourseDescription;
 $pageName = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
-$head_content .= "
-<script type='text/javascript'>
-    $(document).on('change', '#typSel', function (e) {
-        $('#titleSel').val( $(this).children(':selected').text() );
-    });
-</script>";
-
 if (isset($_REQUEST['id'])) {
     $data['editId'] = intval(getDirectReference($_REQUEST['id']));
     $course_desc = Database::get()->querySingle("SELECT title, comments, type FROM course_description WHERE course_id = ?d AND id = ?d", $course_id, $data['editId']);

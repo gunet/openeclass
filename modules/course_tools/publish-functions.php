@@ -258,12 +258,11 @@ function update_publish_ltiapp($id, $title, $desc, $key, $secret, $status) {
 /**
  * Display available published LTI configurations.
  */
-function lti_provider_details(): string {
-    global $course_id, $is_editor, $course_code,
+function lti_provider_details() {
+    global $course_id, $tool_content, $is_editor, $course_code,
            $langConfirmDelete, $langNewLTIAppSessionDesc, $langTitle, $langActivate,
            $langDeactivate, $langEditChange, $langDelete, $langNoPUBLTIApps, $langShow;
 
-    $tool_content = "";
     load_js('trunk8');
 
     $activeClause = ($is_editor) ? '' : "AND enabled = 1";
@@ -338,8 +337,6 @@ function lti_provider_details(): string {
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoPUBLTIApps</div>";
     }
-
-    return $tool_content;
 }
 
 function disable_publish_ltiapp($id) {
