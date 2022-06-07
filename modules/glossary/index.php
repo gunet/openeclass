@@ -82,8 +82,8 @@ if ($glossary_data) {
                 $prefixes[] = $prefix;
             }
         }, $course_id);
+        $data['prefixes'] = $prefixes;
     }
-    $data['prefixes'] = $prefixes;
 }
 
 
@@ -121,7 +121,7 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'button-class' => 'btn-success'),
                 array('title' => $langConfig,
-                      'url' => "$base_url&amp;config=1",                      
+                      'url' => "$base_url&amp;config=1",
                       'icon' => 'fa-gear'),
                 array('title' => "$langGlossaryToCsv",
                       'url' => "dumpglossary.php?course=$course_code",
@@ -136,7 +136,7 @@ if ($is_editor) {
                       'show' => $categories)
             ));
     }
-    
+
     if (isset($_POST['submit_config'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $expand_glossary = isset($_POST['expand']) ? 1 : 0;
@@ -175,7 +175,6 @@ if ($is_editor) {
             } else {
                 $url = '';
             }
-
             if (isset($_POST['id'])) {
                 $id = intval(getDirectReference($_POST['id']));
                 $q = Database::get()->query("UPDATE glossary
@@ -184,7 +183,7 @@ if ($is_editor) {
                                                       url = ?s,
                                                       notes = ?s,
                                                       category_id = ?d,
-                                                      datestamp = NOW()
+                                                      datestamp = " . DBHelper::timeAfter() . "
                                                   WHERE id = ?d AND course_id = ?d"
                         , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $id, $course_id);
                 $log_action = LOG_MODIFY;
@@ -196,10 +195,10 @@ if ($is_editor) {
                                                       url = ?s,
                                                       notes = ?s,
                                                       category_id = ?d,
-                                                      datestamp = NOW(),
+                                                      datestamp = " . DBHelper::timeAfter() . ",
                                                       course_id = ?d,
                                                       `order` = ?d"
-                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $category_id, $course_id, findorder($course_id));
+                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $course_id, findorder($course_id));
                 $log_action = LOG_INSERT;
                 $success_message = $langGlossaryAdded;
             }
@@ -233,13 +232,13 @@ if ($is_editor) {
             Session::Messages($langGlossaryDeleted, 'alert-success');
         }
         redirect_to_home_page("modules/glossary/index.php?course=$course_code");
-    }       
+    }
 
     // display configuration form
     if (isset($_GET['config'])) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
         $pageName = $langConfig;
-        
+
         $data['base_url'] = $base_url;
         $data['checked_expand'] = $expand_glossary ? ' checked="1"' : '';
         $data['checked_index'] = $glossary_index ? ' checked="1"' : '';
@@ -262,14 +261,14 @@ if ($is_editor) {
                 'url' => $base_url,
                 'name' => $langGlossary
             );
-        $data['action_bar'] =    
+        $data['action_bar'] =
             action_bar(array(
                 array('title' => $langBack,
                       'url' => "$base_url",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')
                 )
-            );          
+            );
         $category_id = 'none';
         if (isset($_GET['add'])) {
             $pageName = $langAddGlossaryTerm;
@@ -315,7 +314,7 @@ if ($is_editor) {
         view('modules.glossary.create', $data);
     }
     $data['total_glossary_terms'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
-                                                          WHERE course_id = ?d", $course_id)->count;       
+                                                          WHERE course_id = ?d", $course_id)->count;
 } else {
     // Show categories link for students if needed
     if ($categories) {
@@ -323,7 +322,7 @@ if ($is_editor) {
                       array('title' => $langCategories,
                             'url' => "categories.php?course=$course_code",
                             'icon' => 'fa-tasks',
-                            'level' => 'primary-label')));        
+                            'level' => 'primary-label')));
     }
 }
 
@@ -359,8 +358,8 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     $data['glossary_terms'] = $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                             FROM glossary WHERE course_id = ?d $where
                             GROUP BY term, definition, url, notes, category_id, id 
-                            ORDER BY term", $course_id, $terms);    
-    view('modules.glossary.index', $data);   
+                            ORDER BY term", $course_id, $terms);
+    view('modules.glossary.index', $data);
 }
 
 /**
