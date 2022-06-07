@@ -537,16 +537,15 @@ if (!class_exists('Question')) {
                 return $choice;
             }
         }
+
         /**
-         * duplicates the question
-         *
-         * @author - Olivier Brouckaert
-         * @return - integer - ID of the new question
+         * duplicates the question                  \
+         * @return integer
          */
         function duplicate() {
-            global $course_id;
+            global $course_id, $langCopyDuplicate;
 
-            $question = $this->question;
+            $question = $this->question . " $langCopyDuplicate";
             $description = $this->description;
             $weighting = $this->weighting;
             $type = $this->type;
