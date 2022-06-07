@@ -41,7 +41,7 @@ $head_content .= "
 </script>";
 
 if (isset($_REQUEST['id'])) {
-    $data['editId'] = getDirectReference($_REQUEST['id']);
+    $data['editId'] = intval(getDirectReference($_REQUEST['id']));
     $course_desc = Database::get()->querySingle("SELECT title, comments, type FROM course_description WHERE course_id = ?d AND id = ?d", $course_id, $data['editId']);
     $data['cdtitle'] = Session::has('editTitle') ? Session::get('editTitle') : $course_desc->title;
     $comments = Session::has('editComments') ? Session::get('editComments') : $course_desc->comments;
@@ -88,4 +88,4 @@ $data['form_buttons'] = form_buttons(array(
                 'href'  =>  "index.php?course=$course_code"
             )
         ));
-view('modules.course.description.create', $data);
+view('modules.course.description.edit', $data);
