@@ -1161,7 +1161,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `weight` FLOAT(11,2) DEFAULT NULL,
     `type` INT(11) DEFAULT 1,
     `difficulty` INT(1) DEFAULT 0,
-    `category` INT(11) DEFAULT 0) $tbl_options");
+    `category` INT(11) DEFAULT 0,
+    `copy_of_qid` INT(11) DEFAULT NULL, 
+     CONSTRAINT FOREIGN KEY (copy_of_qid) 
+     REFERENCES exercise_question(id) ON DELETE SET NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question_cats` (
     `question_cat_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1196,7 +1199,7 @@ $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `is_template` TINYINT(4) NOT NULL DEFAULT 0,
     `enabled` TINYINT(4) NOT NULL DEFAULT 1,
     `all_courses` TINYINT(1) NOT NULL DEFAULT 1,
-     `type` VARCHAR(255) NOT NULL DEFAULT 'turnitin',
+    `type` VARCHAR(255) NOT NULL DEFAULT 'turnitin',
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_lti_app` (

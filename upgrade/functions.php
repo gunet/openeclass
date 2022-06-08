@@ -2439,6 +2439,11 @@ function upgrade_to_3_13($tbl_options): void
         Database::get()->query("ALTER table unit_resources ADD `activity_id` VARCHAR(5) NOT NULL DEFAULT 'FC000'");
     }
 
+    if (!DBHelper::fieldExists('exercise_with_questions', 'copy_of_qid')) {
+        Database::get()->query("ALTER table exercise_question ADD copy_of_qid INT(11) DEFAULT NULL, 
+            ADD CONSTRAINT FOREIGN KEY (copy_of_qid) REFERENCES exercise_question(id) ON DELETE SET NULL");
+    }
+
 }
 
 

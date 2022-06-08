@@ -30,10 +30,10 @@ if (!class_exists('Question')) {
         private $question;
         private $description;
         private $weighting;
-        private $position;
         private $type;
         private $difficulty;
         private $category;
+        private $copy_of_qid;
         private $exerciseList;  // array with the list of exercises which this question is in
 
         /**
@@ -46,10 +46,10 @@ if (!class_exists('Question')) {
             $this->question = '';
             $this->description = '';
             $this->weighting = 0;
-            $this->position = 1;
             $this->type = 1;
             $this->difficulty = 0;
             $this->category = 0;
+            $this->copy_of_qid = null;
             $this->exerciseList = array();
         }
 
@@ -63,7 +63,7 @@ if (!class_exists('Question')) {
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, weight, `type`, difficulty, category
+            $object = Database::get()->querySingle("SELECT question, description, weight, `type`, difficulty, category, copy_of_qid 
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -74,6 +74,7 @@ if (!class_exists('Question')) {
                 $this->type = $object->type;
                 $this->difficulty = $object->difficulty;
                 $this->category = $object->category;
+                $this->copy_of_qid = $object->copy_of_qid;
 
                 $result = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $id);
                 // fills the array with the exercises which this question is in
@@ -89,63 +90,45 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * returns the question ID
-         *
-         * @author - Olivier Brouckaert
-         * @return - integer - question ID
+         * @brief returns the question ID
+         * @return integer
          */
         function selectId() {
             return $this->id;
         }
 
         /**
-         * returns the question title
-         *
-         * @author - Olivier Brouckaert
-         * @return - string - question title
+         * @brief returns the question title
+         * @return string
          */
         function selectTitle() {
             return $this->question;
         }
 
         /**
-         * returns the question description
-         *
-         * @author - Olivier Brouckaert
-         * @return - string - question description
+         * @brief returns the question description
+         * @return string
          */
         function selectDescription() {
             return $this->description;
         }
 
         /**
-         * returns the question weighting
-         *
-         * @author - Olivier Brouckaert
-         * @return - float - question weighting
+         * @brief returns the question weighting
+         * @return float
          */
         function selectWeighting() {
             return $this->weighting;
         }
 
         /**
-         * returns the question position
-         *
-         * @author - Olivier Brouckaert
-         * @return - integer - question position
-         */
-        function selectPosition() {
-            return $this->position;
-        }
-
-        /**
-         * returns the answer type
+         * @brief returns the answer type
          */
         function selectType() {
             return $this->type;
         }
         /**
-         * returns the question difficulty
+         * @brief returns the question difficulty
          */
         function selectDifficulty() {
             return $this->difficulty;
@@ -191,12 +174,18 @@ if (!class_exists('Question')) {
 
 
         /**
-         * returns the question category
+         * @brief returns the question category
          */
         function selectCategory() {
             return $this->category;
         }
 
+        /**
+         * @return null
+         */
+        function selectCopyOfQid() {
+            return $this->copy_of_qid;
+        }
 
         /*
          * @brief get category name
@@ -266,8 +255,6 @@ if (!class_exists('Question')) {
 
         /**
          * changes the question title
-         *
-         * @author - Olivier Brouckaert
          * @param - string $title - question title
          */
         function updateTitle($title) {
@@ -290,16 +277,6 @@ if (!class_exists('Question')) {
          */
         function updateWeighting($weighting) {
             $this->weighting = $weighting;
-        }
-
-        /**
-         * changes the question position
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $position - question position
-         */
-        function updatePosition($position) {
-            $this->position = $position;
         }
 
         /**
@@ -332,6 +309,11 @@ if (!class_exists('Question')) {
          */
         function updateCategory($category_id) {
             $this->category = $category_id;
+        }
+
+
+        function updateCopyOfQid($copy_of_qid) {
+            $this->copy_of_qid = $copy_of_qid;
         }
         /**
          * adds a picture to the question
@@ -424,12 +406,13 @@ if (!class_exists('Question')) {
             $type = $this->type;
             $difficulty = $this->difficulty;
             $category = $this->category;
+            $copy_of_qid = $this->copy_of_qid;
 
             // question already exists
             if ($id) {
                 Database::get()->query("UPDATE `exercise_question` SET question = ?s, description = ?s,
-                    weight = ?f, type = ?d, difficulty = ?d, category = ?d
-                    WHERE course_id = $course_id AND id='$id'", $question, $description, $weighting, $type, $difficulty, $category);
+                    weight = ?f, type = ?d, difficulty = ?d, category = ?d, copy_of_qid = ?d
+                    WHERE course_id = $course_id AND id='$id'", $question, $description, $weighting, $type, $difficulty, $category, $copy_of_qid);
             }
             // creates a new question
             else {
@@ -551,9 +534,10 @@ if (!class_exists('Question')) {
             $type = $this->type;
             $difficulty = $this->difficulty;
             $category = $this->category;
+            $copy_of_qid = $this->id;
 
-            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, `type`, difficulty, category)
-                        VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $type, $difficulty, $category)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, `type`, difficulty, category, copy_of_qid)
+                        VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $type, $difficulty, $category, $copy_of_qid)->lastInsertID;
 
             // duplicates the picture
             $this->exportPicture($id);
