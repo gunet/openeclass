@@ -216,7 +216,6 @@ function move_dir($src, $dest) {
  */
 
 function copyDirTo($origDirPath, $destination) {
-
     // extract directory name - create it at destination - update destination trail
     $dirName = my_basename($origDirPath);
     make_dir($destination . '/' . $dirName);

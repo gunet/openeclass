@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2018  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -656,12 +656,12 @@ class Log {
      */
     private function group_action_details($details) {
 
-        global $langGroup, $langRegister, $langInGroup;
+        global $langGroup, $langRegistration, $langInGroup;
 
         $details = unserialize($details);
 
         if (!empty($details['uid'])) {
-            $content = "$langRegister &laquo" . display_user($details['uid'], false, false) . "&raquo $langInGroup &laquo" . q($details['name']) . "&raquo";
+            $content = "$langRegistration &laquo" . display_user($details['uid'], false, false) . "&raquo $langInGroup &laquo" . q($details['name']) . "&raquo";
         } else {
             $content = "$langGroup &laquo" . q($details['name']) . "&raquo";
         }
@@ -823,7 +823,7 @@ class Log {
     private function course_user_action_details($details, $type) {
 
         global $langOfUser, $langToUser,
-        $langsOfTeacher, $langsOfEditor, $langRegister, $langAddGUser,
+        $langsOfTeacher, $langsOfEditor, $langRegistration, $langAddGUser,
         $langUnCourse, $langTheU, $langGiveRight,
         $langRemovedRight, $langsOfGroupTutor,
         $langDelUsers, $langParams;
@@ -840,7 +840,7 @@ class Log {
         }
 
         switch ($details['right']) {
-            case '+5': $content = $langRegister;
+            case '+5': $content = $langRegistration;
                        $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
                 break;
             case '-5': $content = $langUnCourse;
@@ -920,7 +920,7 @@ class Log {
      */
     private function abuse_report_action_details($details) {
 
-        global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
+        global $langCreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
                $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
                $langAbuseReportOpen, $langAbuseReportClosed, $langLinks, $langWallPost;
 
@@ -935,7 +935,7 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langcreator: ". display_user($details['user_id'], false, false)."<br/>";
+        $content = "$langCreator: ". display_user($details['user_id'], false, false)."<br/>";
         $content .= "$langAbuseReportCat: &laquo".$reports_cats[$details['reason']]."&raquo<br/>";
         $content .= "$langMessage: &laquo".q($details['message'])."&raquo<br/>";
         $content .= "$langAbuseResourceType: &laquo".$resource_types[$details['rtype']]."&raquo<br/>";

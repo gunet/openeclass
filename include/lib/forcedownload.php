@@ -339,7 +339,10 @@ function get_mime_type($filename) {
         'mp4' => 'video/mp4',
         'flv' => 'video/x-flv',
         'webm' => 'video/webm',
+        'webp' => 'image/webp',
         'ogv' => 'video/ogg',
+        'm4v' => 'video/mp4',
+        'jxl' => 'image/jxl',
         'jar' => 'application/java-archive',
         'jnlp' => 'application/x-java-jnlp-file');
     $ext = get_file_extension($filename);
@@ -391,7 +394,7 @@ function public_path_to_disk_path($path_components, $path = '') {
             $path = $r->path;
             $depth++;
         }
-        if (!preg_match("/\.$r->format$/", $component)) {
+        if (!preg_match("/\.$r->format$/i", $component)) {
             $component .= '.' . $r->format;
         }
         $r->filename = $component;

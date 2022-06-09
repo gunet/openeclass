@@ -31,9 +31,13 @@ if (!isset($require_login)) {
 
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
+/* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
-require_once 'modules/document/doc_init.php';
-require_once 'modules/document/doc_metadata.php';
+$action = new action();
+$action->record(MODULE_ID_DOCS);
+
+require_once 'doc_init.php';
+require_once 'doc_metadata.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
@@ -45,9 +49,6 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
 require_once 'modules/drives/clouddrive.php';
 require_once 'include/course_settings.php';
-
-$action = new action();
-$action->record(MODULE_ID_DOCS);
 
 $require_help = true;
 $helpTopic = 'documents';
@@ -110,29 +111,21 @@ if (isset($_GET['showQuota'])) {
 }
 
 // ---------------------------
-//mindmap save button
+// Mindmap save button
 // ---------------------------
 if (isset($_GET['mindmap'])) {
     $mindmap = $_GET['mindmap'];
     $title = $_GET['mindtitle'];
 
-    //$uploadPath = " ";
-    $filename = $title . ".jm";
-    $safe_fileName = safe_filename(get_file_extension($filename));
-    $file_path = '/' . $safe_fileName;
-    $file_date = date('Y\-m\-d G\:i\:s');
-    $file_format = get_file_extension($filename);
-
-    $myfile = fopen($basedir . $file_path, 'w') or die('Unable to open file!');
-    $txt = $mindmap;
-
-    fwrite($myfile, $txt);
-    fclose($myfile);
-
-    move_uploaded_file($myfile , $basedir . $file_path);
-
-    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-    Database::get()->query("INSERT INTO document SET
+    $file_path = '/' . safe_filename('jm');
+    if (!file_put_contents($basedir . $file_path, $_GET['mindmap'])) {
+        Session::Messages($langGeneralError, 'alert-danger');
+    } else {
+        $filename = $title . '.jm';
+        $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+        $file_date = date('Y-m-d G:i:s');
+        $file_format = 'jm';
+        Database::get()->query("INSERT INTO document SET
             course_id = ?d,
             subsystem = ?d,
             subsystem_id = ?d,
@@ -158,12 +151,14 @@ if (isset($_GET['mindmap'])) {
             $filename, $title, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
             $language, $uid);
-    Session::Messages($langMindMapSaved,"alert-success");
-    redirect_to_home_page("modules/mindmap/index.php");
+        Session::Messages($langMindMapSaved,"alert-success");
+    }
+    redirect_to_home_page('modules/document/?course=' . $course_code);
 }
 
+
 // ---------------------------
-// mindmap screenshot save
+// Mindmap screenshot save
 // ---------------------------
 if (isset($_POST['imgBase64'])) {
     $shootname = $_POST['imgname'];
@@ -171,17 +166,15 @@ if (isset($_POST['imgBase64'])) {
     $img = str_replace('data:image/png;base64,', '', $img);
     $img = str_replace(' ', '+', $img);
     $fileData = base64_decode($img);
-    $filename = $shootname . '.png';
-    $safe_fileName = safe_filename(get_file_extension($filename));
-    $file_path = '/' . $safe_fileName;
-    $file_date = date("Y\-m\-d G\:i\:s");
-    $file_format = get_file_extension($filename);
+    $file_path = '/' . safe_filename('png');
+    $file_date = date('Y-m-d G:i:s');
 
     // mindmap save in database
-    file_put_contents($basedir . $file_path, $fileData);
-
-    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-    Database::get()->query("INSERT INTO document SET
+    if (file_put_contents($basedir . $file_path, $fileData)) {
+        $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+        $filename = $shootname . '.png';
+        $file_format = 'png';
+        Database::get()->query("INSERT INTO document SET
             course_id = ?d,
             subsystem = ?d,
             subsystem_id = ?d,
@@ -207,8 +200,10 @@ if (isset($_POST['imgBase64'])) {
             $filename, $shootname, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
             $language, $uid);
+    }
     exit;
 }
+
 
 // ---------------------------
 // download directory or file
@@ -332,7 +327,7 @@ if ($can_upload or $user_upload) {
                     $extracted_file_name = process_extracted_file($stat);
                     if (!is_null($extracted_file_name)) {
                         $zipFile->renameIndex($i, $extracted_file_name);
-                        $zipFile->extractTo("$webDir/courses/$course_code/document/", $extracted_file_name);
+                        $zipFile->extractTo($basedir, $extracted_file_name);
                     }
                 }
                 $zipFile->close();
@@ -1011,10 +1006,14 @@ if (!isset($curDirPath)) {
 }
 $curDirName = my_basename($curDirPath);
 $parentDir = my_dirname($curDirPath);
-if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
-    Session::Messages($langInvalidDir, 'alert-danger');
-    view('layouts.default', $data);
-    exit;
+try {
+    if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
+        Session::Messages($langInvalidDir, 'alert-danger');
+        view('layouts.default', $data);
+        exit;
+    }
+} catch (Throwable $t) {
+    not_found($curDirPath);
 }
 
 $order = 'ORDER BY sort_key COLLATE utf8mb4_unicode_ci';

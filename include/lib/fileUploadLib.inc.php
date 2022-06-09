@@ -60,6 +60,9 @@ function replace_dangerous_char($string) {
 function dir_total_space($dirPath) {
     $sumSize = 0;
     $handle = opendir($dirPath);
+    if (!$handle) {
+        return 0;
+    }
     while ($element = readdir($handle)) {
         $file = $dirPath . '/' . $element;
         if ($element == '.' or $element == '..') {
