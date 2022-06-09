@@ -109,7 +109,6 @@ if (isset($_GET['socialview'])) {
 $action = $data['action'] = isset($_GET['action']) ? $_GET['action'] : '';
 
 if ($is_editor) {
-    //Link Submission
     if (isset($_POST['submitLink'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_link();
@@ -117,7 +116,6 @@ if ($is_editor) {
         Session::Messages($message, 'alert-success');
         redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
-    //Category Submission
     if (isset($_POST['submitCategory'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_category();
@@ -125,7 +123,6 @@ if ($is_editor) {
         Session::Messages($messsage, 'alert-success');
         redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
-    // Settings Submission
     if (isset($_POST['submitSettings'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['settings_radio'])) {
@@ -224,10 +221,9 @@ if ($is_editor) {
 
         view('modules.link.settings', $data);
     }
-// If the user !$is_editor and social bookmarks are enabled
 } elseif ($social_bookmarks_enabled) {
+    //check if user is course member
     if (isset($_SESSION['uid'])) {
-        //check if user is course member
         $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM course_user WHERE course_id = ?d AND user_id = ?d", $course_id, $uid);
         if ($result->c > 0) {
             if (isset($_POST['submitLink'])) {
@@ -304,7 +300,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
     if ($social_bookmarks_enabled == 1) {
         $data['countlinks'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d", $course_id, -1)->cnt;
     } else {
-        $data['countlinks'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d AND category <> ?d", $course_id, -1, -2)->cnt;
+        $data['countlinks'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d", $course_id, -1, -2)->cnt;
     }
 
     add_units_navigation(true);
@@ -312,15 +308,15 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
     $head_content .= abuse_report_add_js();
 
     //Uncategorized Links
-    $general_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, 0);
+    $general_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d ORDER BY `order`", $course_id, 0);
     $data['general_category'] = (object) ['id' => 0, 'links' => $general_links];
 
     //Social Links
-    $social_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -2);
+    $social_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d ORDER BY `order`", $course_id, -2);
     $data['social_category'] = (object) ['id' => -2, 'links' => $social_links];
 
     //Other Categories
-    $data['categories'] = FALSE;
+    $data['categories'] = [];
     DataBase::get()->queryFunc("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", function($category) use (&$data) {
         $links = Database::get()->queryArray("SELECT * FROM `link`
                                WHERE course_id = ?d AND category = ?d
@@ -331,7 +327,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
     }, $course_id);
 
     // making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
-    // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
+    // number of categories). Show all means urlview=1111 (number of 1 depending on the number of categories).
     if ($urlview === '') {
         $urlview = $data['urlview'] = str_repeat('0', count($data['categories']));
     }

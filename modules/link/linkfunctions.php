@@ -28,39 +28,34 @@ function makedefaultviewcode($locatie) {
 
     $view = str_repeat('0', $aantalcategories);
     $view[$locatie] = '1';
-
     return $view;
 }
 
 /**
  * @brief Enter the modified info submitted from the link form into the database
- * @global type $course_id
- * @global type $langLinkMod
- * @global type $langLinkAdded
- * @global type $urllink
- * @global type $title
- * @global type $description
- * @global type $selectcategory
- * @global type $langLinkNotPermitted
- * @global string $state
  * @return type
  */
 function submit_link() {
-    global $course_id, $langLinkMod, $langLinkAdded, $course_code, $uid, $langSocialCategory,
+    global $course_id, $course_code, $uid, $langSocialCategory,
     $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state,
-	$langFormErrors, $langTheFieldIsRequired, $langTheField;
+	$langFormErrors, $langTheFieldIsRequired;
 
     register_posted_variables(array('urllink' => true,
         'title' => true,
         'description' => true), 'all', 'trim');
     $urllink = canonicalize_url($urllink);
-
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', ['urllink']);
-    $v->rule('url', ['urllink']);
-    $v->rule('urlActive', ['url']);
-    $v->labels(['urllink' => "$langTheField URL"]);
+    $v->rule('required', array('urllink'))->message($langTheFieldIsRequired)->label('');
     if($v->validate()) {
+        if (!is_url_accepted($urllink,"(https?|ftp)")){
+            Session::Messages($langLinkNotPermitted, 'alert-danger');
+            if (isset($_POST['id'])) {
+                $id =  getDirectReference($_POST['id']);
+                redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=" . getIndirectReference($id) . "&urlview=");
+            } else {
+                redirect_to_home_page("modules/link/index.php?course=$course_code&action=addlink&urlview=");
+            }
+        }
         $set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
         $terms = array($urllink, $title, purify($description), intval(getDirectReference($_POST['selectcategory'])));
 

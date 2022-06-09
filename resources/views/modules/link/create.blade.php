@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='description' class='col-sm-2 control-label'>{{ trans('langInfoabout') }}:</label>
+                            <label for='description' class='col-sm-2 control-label'>{{ trans('langDescription') }}:</label>
                             <div class='col-sm-10'>{!! $description_textarea !!}</div>
                         </div>
                         <div class='form-group'>
@@ -52,6 +52,6 @@
                 </fieldset>
                 {!! generate_csrf_token_form_field() !!}
             </form>
-        </div>                    
+        </div>
 @endsection
 
