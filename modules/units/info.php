@@ -33,6 +33,7 @@ require_once 'modules/tags/moduleElement.class.php';
 
 load_js('tools.js');
 load_js('select2');
+load_js('bootstrap-datepicker');
 
 $data['start_week'] = $data['finish_week'] = '';
 if (isset($_GET['edit'])) {
@@ -49,13 +50,13 @@ if (isset($_GET['edit'])) {
     $unitDescr = $cu->comments;
     if (!(is_null($cu->start_week))) {
         $data['start_week'] = DateTime::createFromFormat('Y-m-d', $cu->start_week)->format('d-m-Y');
-    } 
+    }
     if (!(is_null($cu->finish_week))) {
         $data['finish_week'] = DateTime::createFromFormat('Y-m-d', $cu->finish_week)->format('d-m-Y');
     }
     $data['unitTitle'] = $cu->title;
-    $data['unitId'] = $cu->id;    
-    
+    $data['unitId'] = $cu->id;
+
 } else {
     $pageName = $langAddUnit;
     $unitDescr = '';

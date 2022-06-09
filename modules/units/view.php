@@ -6,7 +6,6 @@
  * Time: 2:38 μμ
  */
 
-
 switch ($_REQUEST['res_type']) {
     case 'assignment':
         require_once '../work/index.php';
@@ -57,6 +56,9 @@ switch ($_REQUEST['res_type']) {
         exit;
     case 'h5p_show':
         require_once "../h5p/show.php";
+        exit;
+    case 'lp':
+        require_once "../learnPath/viewer.php";
         exit;
     default:
         break;

@@ -21,24 +21,14 @@
 
 /**
  * @brief display list of available learning paths (if any)
- * @global type $id
- * @global type $course_id
- * @global type $tool_content
- * @global type $urlServer
- * @global type $langComments
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoLearningPath
- * @global type $langLearningPaths
- * @global type $course_code 
  */
 function list_lps() {
-    global $id, $course_id, $tool_content, $urlServer, $langComments,
+    global $id, $course_id, $tool_content, $urlServer,
     $langAddModulesButton, $langChoice, $langNoLearningPath,
     $langLearningPaths, $course_code;
 
     $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE course_id = ?d ORDER BY name", $course_id);
-    $lpinfo = array(); 
+    $lpinfo = array();
     foreach ($result as $row) {
         $lpinfo[] = array(
             'id' => $row->learnPath_id,
@@ -54,10 +44,9 @@ function list_lps() {
                 "<input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th><div align='left'>&nbsp;$langLearningPaths</div></th>" .
-                "<th><div align='left'>$langComments</div></th>" .
                 "<th width='80'>$langChoice</th>" .
-                "</tr>";        
+                "<th><div class='text-left'>&nbsp;$langLearningPaths</div></th>" .
+                "</tr>";
         foreach ($lpinfo as $entry) {
             if ($entry['visible'] == 0) {
                 $vis = 'not_visible';
@@ -65,21 +54,25 @@ function list_lps() {
             } else {
                 $vis = '';
                 $disabled = '';
-            }            
-            $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d 
+            }
+            $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d
                                                     AND `rank` = (SELECT MIN(`rank`) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)",
                                                 $entry['id'], $entry['id']);
             if (($m_id) and $m_id->module_id > 0) {
+                if (!empty($entry['comment'])) {
+                    $comment_text = "<div style='margin-top: 10px;'>" . $entry['comment'] . "</div>";
+                } else {
+                    $comment_text = '';
+                }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a></td>";
-                $tool_content .= "<td>" . $entry['comment'] . "</td>";
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled></td>";
-                $tool_content .= "</tr>";            
+                $tool_content .= "<td>&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>"
+                 . $comment_text . "</td>";
+                $tool_content .= "</tr>";
             }
         }
-        $tool_content .= "</table>\n";
+        $tool_content .= "</table>";
         $tool_content .= "<div class='text-right'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_lp' value='$langAddModulesButton'></div></form>";
-        
     }
 }

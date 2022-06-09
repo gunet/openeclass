@@ -127,6 +127,435 @@
         </div>
     </div>
 
+
+    <!-- flipped classroom activity buttons -->
+
+    @if ($q->flipped_flag == 2)
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <div class='paenel-title h4'>
+                            {{ trans('langActivities') }}
+                            @if ($is_editor)
+                                &nbsp;&nbsp; {!! icon('fa-pencil', $langEdit, $urlAppend."modules/create_course/course_units_activities.php?course=$course_code&amp;edit_act=$id") !!}
+                            @endif
+                        </div>
+                    </div>
+                    <div class='panel-body'>
+                        <table class='table table-bordered'>
+                            <tbody>
+            @if ($q_in_home)
+                    </tr><tr><th scope='row'><label class='col-2 control-label'>$langActInHome</label></th>
+            @endif
+
+            @foreach ($q_in_home as $in_home)
+                {!!
+                    $act_title = q($activities[$in_home->activity_id]['title']);
+                    $vis = $in_home->visible;
+                    $class_vis = $vis == 0  ? 'not_visible' : '';
+                    $act_indirect = getIndirectReference($in_home->ID);
+                 !!}
+                <td><span class='col-sm-20 {!! $class_vis !!} control-label'>{!! $act_title !!}</span></td>
+                @if ($is_editor)
+                    <td>
+                        {!! action_button(array(
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertExercise') ,
+                            'url' => $base_url . 'exercise&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-pencil-square-o',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_EXERCISE,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertDoc'),
+                            'url' => $base_url . 'doc&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-folder-open-o',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_DOCS,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertLink'),
+                            'url' => $base_url . 'link&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-link',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_LINKS,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langLearningPath1'),
+                            'url' => $base_url . 'lp&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-ellipsis-h',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_LP,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertVideo'),
+                            'url' => $base_url . 'video&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-film',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_VIDEO,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertForum'),
+                            'url' => $base_url . 'forum&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-comments',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_FORUM,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertEBook'),
+                            'url' => $base_url . 'ebook&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-book',
+                            'level' => 'secondary',
+                            'show' =>  !is_module_disable_FC(MODULE_ID_EBOOK,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertWork'),
+                            'url' => $base_url . 'work&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-flask',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_ASSIGN,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertPoll'),
+                            'url' => $base_url . 'poll&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-question-circle',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_QUESTIONNAIRE,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertWiki'),
+                            'url' => $base_url . 'wiki&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-wikipedia-w',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_WIKI,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertChat'),
+                            'url' => $base_url . 'chat&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-exchange',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_CHAT,$course_code,$id,$in_home->activity_id)),
+                            array('title' => $langAdd.' '.$langInsertTcMeeting,
+                            'url' => $base_url . 'tc&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-exchange',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$in_home->activity_id) && is_configured_tc_server()),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertGlossary'),
+                            'url' => $base_url . 'glossary&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-list',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_GLOSSARY,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertWall'),
+                            'url' => $base_url . 'wall&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-list',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertMindmap'),
+                            'url' => $base_url . 'mindmap&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-sitemap',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_MINDMAP,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertBlog'),
+                            'url' => $base_url . 'blog&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-columns',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_BLOG,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertComments'),
+                            'url' => $base_url . 'comments&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-comments',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertGradebook'),
+                            'url' => $base_url . 'gradebook&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-sort-numeric-desc',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$in_home->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertProgress'),
+                            'url' => $base_url . 'progress&fc_type=0&act_name='. $act_title. '&act_id='.$in_home->activity_id,
+                            'icon' => 'fa fa-trophy',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_home->activity_id))
+
+                            ),'',true);
+                        !!}
+                    </td><td>
+
+                    {!! action_button(array(
+                            array('title' => $vis == 1? trans('langViewHide') : trans('langViewShow'),
+                            'url' => "$_SERVER[REQUEST_URI]&vis_act=$in_home->ID",
+                            'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                            array('title' => trans('langDelete'),
+                            'url' => "$_SERVER[REQUEST_URI]&del_act=$in_home->ID&actid=".$in_home->activity_id,
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => trans('langUnitActivityDeleteConfirm')))) ;
+                    !!}
+                @endif
+                </td>
+            </tr><tr>
+            <td></td>
+        @endforeach
+
+        @if ($q_in_class)
+            <tr><th scope='row'><label class='col-2 control-label'>{{ trans('langActInClass') }}</label></th>
+        @endif
+            @foreach ($q_in_class as $in_class)
+                {!!
+                    $act_title = q($activities[$in_class->activity_id]['title']);
+
+                    $vis = $in_class->visible;
+                    $class_vis = $vis == 0  ? 'not_visible' : '';
+                    $act_indirect = getIndirectReference($in_class->activity_id);
+                !!}
+                <td><span class='col-sm-20  {!! $class_vis !!} control-label'>{!! $act_title !!}</span></td>
+                @if ($is_editor)
+                    <td>
+                        {!!
+                        action_button(array(
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertExercise') ,
+                            'url' => $base_url . 'exercise&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-pencil-square-o',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_EXERCISE,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertDoc') ,
+                            'url' => $base_url . 'doc&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-folder-open-o',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_DOCS,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertLink') ,
+                            'url' => $base_url . 'link&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-link',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_LINKS,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertLearningPath1') ,
+                            'url' => $base_url . 'lp&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-ellipsis-h',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_LP,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertVideo') ,
+                            'url' => $base_url . 'video&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-film',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_VIDEO,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertForum') ,
+                            'url' => $base_url . 'forum&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-comments',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_FORUM,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertEBook') ,
+                            'url' => $base_url . 'ebook&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-book',
+                            'level' => 'secondary',
+                            'show' =>  !is_module_disable_FC(MODULE_ID_EBOOK,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertWork') ,
+                            'url' => $base_url . 'work&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-flask',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_ASSIGN,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertPoll') ,
+                            'url' => $base_url . 'poll&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-question-circle',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_QUESTIONNAIRE,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertWiki') ,
+                            'url' => $base_url . 'wiki&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-wikipedia-w',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_WIKI,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertChat') ,
+                            'url' => $base_url . 'chat&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-exchange',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_CHAT,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting') ,
+                            'url' => $base_url . 'tc&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-exchange',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$in_class->activity_id) && is_configured_tc_server()),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertGlossary') ,
+                            'url' => $base_url . 'glossary&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-list',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_GLOSSARY,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertWall') ,
+                            'url' => $base_url . 'wall&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-list',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertMindmap') ,
+                            'url' => $base_url . 'mindmap&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-sitemap',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_MINDMAP,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertGroups') ,
+                            'url' => $base_url . 'group&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-users',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_GROUPS,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertBlog') ,
+                            'url' => $base_url . 'blog&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-columns',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_BLOG,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertComments') ,
+                            'url' => $base_url . 'comments&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-comments',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertGradebook') ,
+                            'url' => $base_url . 'gradebook&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-sort-numeric-desc',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$in_class->activity_id)),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertProgress') ,
+                            'url' => $base_url . 'progress&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
+                            'icon' => 'fa fa-trophy',
+                            'level' => 'secondary',
+                            'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_class->activity_id))
+
+                            ),'',
+                        true)
+                        !!}
+
+                    </td><td>
+                    {!!
+                        action_button(array(
+                            array('title' => $vis == 1? trans('langViewHide') : trans('langViewShow'),
+                                 'url' => "$_SERVER[REQUEST_URI]&vis_act=$in_class->ID",
+                                'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                            array('title' => trans('langDelete'),
+                                'url' => "$_SERVER[REQUEST_URI]&del_act=$in_class->ID&actid=".$in_class->activity_id,
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'confirm' => trans('langUnitActivityDeleteConfirm')))) ;
+                     !!}
+                @endif
+                    </td>
+                </tr><tr>
+                <td></td>
+            @endforeach
+        @if ($q_after_class)
+           <tr><th scope='row'><label class='col-md-auto control-label'>{{ trans('langActAfterClass') }}</label></th>
+           @foreach ($q_after_class as $after_class)
+               {!!
+                   $act_title = q($activities[$after_class->activity_id]['title']);
+
+                   $vis = $after_class->visible;
+                   $class_vis = $vis == 0  ? 'not_visible' : '';
+                   $act_indirect = getIndirectReference($after_class->ID);
+               !!}
+               <td><span class='col-sm-20 {!! $class_vis !!} control-label'>{!! $act_title !!}</span></td>
+               @if ($is_editor)
+                   <td>
+                       {!! action_button(array(
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertExercise') ,
+                           'url' => $base_url . 'exercise&fc_type=2&act_name='. $act_title,
+                           'icon' => 'fa fa-pencil-square-o',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_EXERCISE,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertDoc') ,
+                           'url' => $base_url . 'doc&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-folder-open-o',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_DOCS,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertLink') ,
+                           'url' => $base_url . 'link&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-link',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_LINKS,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertLearningPath1') ,
+                           'url' => $base_url . 'lp&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-ellipsis-h',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_LP,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertVideo') ,
+                           'url' => $base_url . 'video&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-film',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_VIDEO,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertForum') ,
+                           'url' => $base_url . 'forum&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-comments',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_FORUM,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertEBook') ,
+                           'url' => $base_url . 'ebook&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-book',
+                           'level' => 'secondary',
+                           'show' =>  !is_module_disable_FC(MODULE_ID_EBOOK,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertWork') ,
+                           'url' => $base_url . 'work&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-flask',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_ASSIGN,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertPoll') ,
+                           'url' => $base_url . 'poll&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-question-circle',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_QUESTIONNAIRE,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertWiki') ,
+                           'url' => $base_url . 'wiki&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-wikipedia-w',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_WIKI,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertChat') ,
+                           'url' => $base_url . 'chat&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-exchange',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_CHAT,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting') ,
+                           'url' => $base_url . 'tc&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-exchange',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$after_class->activity_id) && is_configured_tc_server()),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertGlossary') ,
+                           'url' => $base_url . 'glossary&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-list',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_GLOSSARY,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertWall') ,
+                           'url' => $base_url . 'wall&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-list',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertMindmap') ,
+                           'url' => $base_url . 'mindmap&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-sitemap',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_MINDMAP,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertGroups') ,
+                           'url' => $base_url . 'group&fc_type=2&act_name=='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-users',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_GROUPS,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertBlog') ,
+                           'url' => $base_url . 'blog&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-columns',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_BLOG,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertComments') ,
+                           'url' => $base_url . 'comments&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-comments',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_COMMENTS,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertGradebook') ,
+                           'url' => $base_url . 'gradebook&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-sort-numeric-desc',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$after_class->activity_id)),
+                           array('title' => trans('langAdd') . ' ' . trans('langInsertProgress') ,
+                           'url' => $base_url . 'progress&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                           'icon' => 'fa fa-trophy',
+                           'level' => 'secondary',
+                           'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$after_class->activity_id))
+
+                           ),'',true)
+                            !!}
+                        </td><td>
+                   {!!  action_button(array(
+                       array('title' => $vis == 1? trans('langViewHide') : trans('langViewShow'),
+                           'url' => "$_SERVER[REQUEST_URI]&vis_act=$after_class->ID",
+                           'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                       array('title' => trans('langDelete'),
+                           'url' => "$_SERVER[REQUEST_URI]&del_act=$after_class->ID&actid=".$after_class->activity_id,
+                           'icon' => 'fa-times',
+                           'class' => 'delete',
+                           'confirm' => trans('langUnitActivityDeleteConfirm'))))
+                    !!}
+
+                   @endif
+                   </td></tr><tr><td></td>
+           @endforeach
+           </tr>
+       @endif
+        </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+        </div>
+    @endif
+
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel panel-default'>

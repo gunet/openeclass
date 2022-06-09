@@ -24,7 +24,7 @@
  */
 function list_exercises() {
     global $id, $course_id, $tool_content, $urlServer, $langPassCode,
-            $langDescription, $langAddModulesButton, $langChoice, $langNoExercises,
+            $langAddModulesButton, $langChoice, $langNoExercises,
             $langExercices, $course_code;
 
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
@@ -38,14 +38,13 @@ function list_exercises() {
             'password_lock' => $row->password_lock];
     }
     if (count($quizinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
+        $tool_content .= "<div class='alert alert-warning text-center'>$langNoExercises</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th width='50%' class='text-left'>$langExercices</th>" .
-                "<th class='text-left'>$langDescription</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th class='text-left'>&nbsp;$langExercices</th>" .
                 "</tr>";
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
@@ -59,10 +58,10 @@ function list_exercises() {
                 $exclamation_icon = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a>$exclamation_icon</td>";
-            $tool_content .= "<td class='text-left'>" . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
-            $tool_content .= "</tr>";            
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$entry[id]&amp;preview=1'>" . q($entry['name']) . "</a>"
+                . $exclamation_icon . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
+            $tool_content .= "</tr>";
         }
         $tool_content .= "</table>
                     <div class='text-right'>";

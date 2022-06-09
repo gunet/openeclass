@@ -43,20 +43,42 @@ require_once 'modules/tc/functions.php';
 
 doc_init();
 
-$action = new action();
-$action->record(MODULE_ID_UNITS);
-
 if (isset($_REQUEST['id'])) {
     $id = intval($_REQUEST['id']);
 }
 
-$toolName = $langCourseUnits;
-$pageName = ''; // delete $pageName set in doc_init.php
+$action = new action();
+$action->record(MODULE_ID_UNITS);
 
+$pageName = ''; // delete $pageName set in doc_init.php
+$toolName = $langCourseUnits;
 $lang_editor = $language;
 load_js('tools.js');
 load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox(true);
+
+$q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
+
+if ($q->flipped_flag =="2"){
+    // Handle unit resource reordering
+    if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if (isset($_POST['toReorder'])) {
+            reorder_table('unit_resources', 'unit_id', $id, $_POST['toReorder'],
+                isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+            exit;
+        }
+    }
+} else {
+    // Handle unit resource reordering
+    if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if (isset($_POST['toReorder'])) {
+            reorder_table('unit_resources', 'unit_id', $id, $_POST['toReorder'],
+                isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+            exit;
+        }
+    }
+
+}
 
 if (isset($_POST['edit_submit'])) {
     handle_unit_info_edit();
@@ -87,11 +109,10 @@ if ($is_editor) {
         . "AND visible = 1 ";
 }
 if (isset($id) and $id !== false) {
-    $info = Database::get()->querySingle("SELECT * FROM course_units
-        WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
+    $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
     if ($info) {
         $data['pageName'] = $info->title;
-        $data['comments'] = trim($info->comments);
+        $data['comments'] = standard_text_escape(trim($info->comments));
         $data['unitId'] = $info->id;
         $data['course_start_week'] = $data['course_finish_week'] = '';
         if (!(is_null($info->start_week))) {
@@ -100,10 +121,12 @@ if (isset($id) and $id !== false) {
         if (!(is_null($info->finish_week))) {
             $data['course_finish_week'] = "$langTill " . nice_format($info->finish_week);
         }
-    } else {
-        Session::Messages($langUnknownResType);
-        redirect_to_home_page("courses/$course_code/");
     }
+}
+
+if (!isset($info) or !$info) {
+    Session::Messages($langUnknownResType);
+    redirect_to_home_page("courses/$course_code/");
 }
 
 $all_units = Database::get()->queryArray($query, $course_id);
@@ -129,11 +152,10 @@ foreach (array('previous', 'next') as $i) {
     }
 
     if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
-        $access_check = '';
+        $access_check = "";
     } else {
         $access_check = "AND public = 1";
     }
-
     $q = Database::get()->querySingle("SELECT id, title, start_week, finish_week, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
@@ -164,5 +186,36 @@ $data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM 
              WHERE course_id = ?d AND `order` > 0
                    $visibility_check $check_start_week
              ORDER BY `order`", $course_id);
+
+$data['base_url'] = $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
+
+if($is_editor) {
+    $data['q_in_class'] = Database::get()->queryArray("SELECT ID, activity_id, visible FROM course_units_activities
+             WHERE course_code = ?s AND unit_id = ?d AND activity_type=?d",
+        $course_code, $id, 0);
+
+    $data['q_in_home'] = Database::get()->queryArray("SELECT ID,activity_id,visible FROM course_units_activities
+             WHERE course_code = ?s AND unit_id = ?d AND activity_type=?d",
+        $course_code, $id, 1);
+
+    $data['q_after_class'] = Database::get()->queryArray("SELECT ID,activity_id,visible FROM course_units_activities
+             WHERE course_code = ?s AND unit_id = ?d AND activity_type=?d",
+        $course_code, $id, 2);
+} else {
+    $data['q_in_class'] = Database::get()->queryArray("SELECT ID, activity_id, visible FROM course_units_activities
+             WHERE course_code = ?s AND unit_id = ?d AND activity_type=?d AND visible=?d",
+        $course_code, $id, 0,1);
+
+    $data['q_in_home'] = Database::get()->queryArray("SELECT ID,activity_id,visible FROM course_units_activities
+             WHERE course_code = ?s AND unit_id = ?d AND activity_type=?d AND visible=?d",
+        $course_code, $id, 1,1);
+
+    $data['q_after_class'] = Database::get()->queryArray("SELECT ID,activity_id,visible FROM course_units_activities
+             WHERE course_code = ?s AND unit_id = ?d AND activity_type=?d AND visible=?d",
+        $course_code, $id, 2,1);
+}
+$cu_indirect = getIndirectReference($id);
+$data['q'] = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
+
 
 view('modules.units.index', $data);

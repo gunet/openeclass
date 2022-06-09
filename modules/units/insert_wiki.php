@@ -22,21 +22,10 @@
 
 /**
  * @brief display list of available wikis (if any)
- * @global type $id
- * @global type $course_id
- * @global type $tool_content
- * @global type $urlServer
- * @global type $langWikis
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langWikiNoWiki
- * @global type $langWikiDescriptionForm
- * @global type $course_code
  */
 function list_wikis() {
     global $id, $course_id, $tool_content, $urlServer,
-    $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki,
-    $langWikiDescriptionForm, $course_code;
+    $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki, $course_code;
 
 
     $result = Database::get()->queryArray("SELECT * FROM wiki_properties WHERE group_id = 0 AND course_id = ?d", $course_id);
@@ -54,20 +43,25 @@ function list_wikis() {
                 <input type='hidden' name='id' value='$id'>
                 <table class='table-default'>
                     <tr class='list-header'>
-                        <th class='text-leftt'>$langWikis</th>
-                        <th>$langWikiDescriptionForm</th>
-                        <th>$langChoice</th>
-                    </tr>";        
+                        <th style='width: 80px;'>$langChoice</th>
+                        <th class='text-left'>&nbsp;$langWikis</th>                        
+                    </tr>";
         foreach ($wikiinfo as $entry) {
-            $tool_content .= "<tr><td>&nbsp;".icon('fa-wikipedia-w')."&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>
-                                <td>$entry[description]</td>
+            if (!empty($entry['description'])) {
+                $description_text = "<div style='margin-top: 10px;'>" .  $entry['description']. "</div>";
+            } else {
+                $description_text = '';
+            }
+            $tool_content .= "<tr>
                                 <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>
-                            </tr>";            
+                                <td><a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a>
+                                $description_text</td>
+                            </tr>";
         }
-        $tool_content .= "
-                    </table>
+        $tool_content .= "</table>
                 <div class='text-right'>
                     <input class='btn btn-primary' type='submit' name='submit_wiki' value='$langAddModulesButton'>
-                </div></form>";
+                </div>
+            </form>";
     }
 }

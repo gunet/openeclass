@@ -20,44 +20,34 @@
  * ======================================================================== */
 
 /**
- * 
- * @global type $id
- * @global type $course_id
- * @global type $course_code
- * @global type $tool_content
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoEbook
- * @global type $langEBook
- * @global type $course_code
+ * @brief display available ebooks
  */
 function list_ebooks() {
     global $id, $course_id, $tool_content,
     $langAddModulesButton, $langChoice, $langNoEBook,
     $langEBook, $course_code;
-    
+
     $result = Database::get()->queryArray("SELECT * FROM ebook WHERE course_id = ?d ORDER BY `order`", $course_id);
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
-				<input type='hidden' name='id' value='$id'>" .
+                <input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left'>&nbsp;$langEBook</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th class='text-left'>&nbsp;$langEBook</th>" .
                 "</tr>";
-        foreach ($result as $catrow) {        
+        foreach ($result as $catrow) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
-                    q($catrow->title) . "</td>";
             $tool_content .= "<td class='text-center'>
                             <input type='checkbox' name='ebook[]' value='$catrow->id' />
                             <input type='hidden' name='ebook_title[$catrow->id]'
                                value='" . q($catrow->title) . "'></td>";
+            $tool_content .= "<td>" . q($catrow->title) . "</td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= 
+        $tool_content .=
                 "</table>
                 <div class='text-right'>
                 <input class='btn btn-primary' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></form>";
