@@ -65,7 +65,7 @@ $langOfCourse = "Μαθήματος";
 $langsCourse = "μάθημα";
 $langsCourses = "μαθήματα";
 $langsOfCourse = "μαθήματος";
-$langsOfCourses = "μαθημάτων";        
+$langsOfCourses = "μαθημάτων";
 
 $langFaculty = "Κατηγορία";
 $langOfFaculty = "Κατηγορίας";
@@ -76,16 +76,11 @@ $langsFaculty = "κατηγορία";
 $langsOfFaculty = "κατηγορίας";
 $langsFaculties = "κατηγορίες";
 
-$langpres = "Προπτυχιακά";
-$langposts = "Μεταπτυχιακά";
-$langothers = "Άλλα";
-
 $langpre = "Προπτυχιακό";
 $langpost = "Μεταπτυχιακό";
 $langother = "Άλλο";
 
 $langInfoAbout = "Η πλατφόρμα <strong>$siteName</strong> αποτελεί ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων. Ακολουθεί τη φιλοσοφία του λογισμικού ανοικτού κώδικα και υποστηρίζει την υπηρεσία Ασύγχρονης Τηλεκπαίδευσης χωρίς περιορισμούς και δεσμεύσεις. Η πρόσβαση στην υπηρεσία γίνεται με τη χρήση ενός απλού φυλλομετρητή (web browser) χωρίς την απαίτηση εξειδικευμένων τεχνικών γνώσεων.
 ";
-$langHelp = "Βοήθεια";
 $langExtrasLeft = '';
 $langExtrasRight = '';

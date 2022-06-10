@@ -55,7 +55,6 @@ $langPlatformStats = "Platform statistics";
 $langPlatformGenStats = "General statistics";
 $langVisitsStats = "Visits statistics";
 $langMonthlyReport = "Monthly reports";
-$langStatsReports = "Statistics reports";
 $langReport = "Monthly report ";
 $langNoReport = "No data available for this month";
 $langEmailNotSend = "Error: unable to send email to";
