@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -270,15 +270,17 @@ if (isset($_GET['provider'])) {
 
             $config = get_hybridauth_config();
             $user_data = '';
-            $provider = q(trim(strtolower($_GET['provider'])));
-
-            $hybridauth = new Hybridauth( $config );
+	    $provider = @trim(strip_tags(strtolower($_GET['provider'])));
+	    if($_GET['provider'] == 'Live') {
+		$_GET['provider'] = 'WindowsLive';
+	    }
+	    $hybridauth = new Hybridauth($config);
             $allProviders = $hybridauth->getProviders();
 
-            if (count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
+	    if (count($allProviders) && in_array($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
                 try {
                     if (in_array($provider, $hybridAuthMethods)) {
-                        $providerAuthId = array_search(strtolower($provider), $auth_ids);
+			            $providerAuthId = array_search(strtolower($provider), $auth_ids);
 
                         if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'profile') {
                             unset($_SESSION['hybridauth_callback']);
@@ -298,8 +300,8 @@ if (isset($_GET['provider'])) {
                         }
 
                         /**
-                         * Feed configuration array to Hybridauth.
-                         */
+                            * Feed configuration array to Hybridauth.
+                        */
                         $hybridauth = new Hybridauth($config);
                         $hybridauth->authenticate($provider);
                         $adapters = $hybridauth->getConnectedAdapters();
@@ -308,9 +310,9 @@ if (isset($_GET['provider'])) {
                         endforeach;
 
                         /**
-                         * This will erase the current user authentication data from session, and any further
-                         * attempt to communicate with provider.
-                         */
+                        * This will erase the current user authentication data from session, and any further
+                            * attempt to communicate with provider.
+                            */
                         if (isset($_GET['logout'])) {
                             $adapter = $hybridauth->getAdapter($_GET['logout']);
                             $adapter->disconnect();
@@ -324,17 +326,17 @@ if (isset($_GET['provider'])) {
                             $r = Database::get()->querySingle('SELECT id FROM user_ext_uid
                                 WHERE auth_id = ?d AND uid = ?s AND user_id <> ?d',
                                 $providerAuthId, $user_data->identifier, $uid);
-                        if ($r) {
-                            // HybridAuth provider uid is already in the db!
-                            // (which means the user tried to authenticate a second
-                            // eClass account with the same facebook etc. account)
-                            Session::Messages($langProviderIdAlreadyExists, 'alert-warning');
-                        } else {
-                            Database::get()->querySingle('INSERT INTO user_ext_uid
+                            if ($r) {
+                                // HybridAuth provider uid is already in the db!
+                                // (which means the user tried to authenticate a second
+                                // eClass account with the same facebook etc. account)
+                                Session::Messages($langProviderIdAlreadyExists, 'alert-warning');
+                            } else {
+                                Database::get()->querySingle('INSERT INTO user_ext_uid
                                     SET user_id = ?d, auth_id = ?d, uid = ?s',
-                                $uid, $providerAuthId, $user_data->identifier);
-                            Session::Messages($langProfileReg, 'alert-success');
-                        }
+                                    $uid, $providerAuthId, $user_data->identifier);
+                                Session::Messages($langProfileReg, 'alert-success');
+                            }
                     } else {
                         Session::Messages($langProviderError, 'alert-danger');
                     }
@@ -508,12 +510,16 @@ Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d'
 $config = get_hybridauth_config();
 
 $hybridauth = new Hybridauth( $config );
-$data['allProviders'] = $hybridauth->getProviders();
+$allProviders = $hybridauth->getProviders();
 $activeAuthMethods = get_auth_active_methods();
-foreach ($data['allProviders'] as $provider => $settings) {
-    $aid = array_search(strtolower($provider), $auth_ids);
-    if (array_search($aid, $data['allProviders']) === false) {
-        unset($data['allProviders'][$provider]);
+foreach ($allProviders as $provider => $settings) {
+    if($settings === 'WindowsLive' && array_search(array_search(strtolower('live'), $auth_ids), $activeAuthMethods)) {
+        $allProviders[$provider] = 'Live';
+        continue;
+    }
+    $aid = array_search(strtolower($settings), $auth_ids);
+    if (array_search($aid, $activeAuthMethods) === false) {
+        unset($allProviders[$provider]);
     }
 }
 

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2021  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -47,37 +47,25 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                     AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
                 ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
-$data['action_bar'] = action_bar(array(
-    array('title' => $langRegCourses,
-        'url' => $urlAppend . 'modules/auth/courses.php',
-        'icon' => 'fa-check',
-        'level' => 'primary-label',
-        'button-class' => 'btn-success'),
-    array('title' => $langCourseCreate,
-        'url' => $urlAppend . 'modules/create_course/create_course.php',
-        'show' => $_SESSION['status'] == USER_TEACHER,
-        'icon' => 'fa-plus-circle',
-        'level' => 'primary-label',
-        'button-class' => 'btn-success'),
-    array(
-        'title' => $langBack,
-        'icon' => 'fa-reply',
-        'level' => 'primary-label',
-        'url' => 'portfolio.php'
-    )
-),false);
+$data['action_bar']  = action_bar([
+    [ 'title' => $langRegCourses,
+      'url' => $urlAppend . 'modules/auth/courses.php',
+      'icon' => 'fa-check',
+      'level' => 'primary-label',
+      'button-class' => 'btn-success' ],
+    [ 'title' => $langCourseCreate,
+      'url' => $urlAppend . 'modules/create_course/create_course.php',
+      'show' => $_SESSION['status'] == USER_TEACHER,
+      'icon' => 'fa-plus-circle',
+      'level' => 'primary-label',
+      'button-class' => 'btn-success' ],
+    [ 'title' => $langBack,
+      'icon' => 'fa-reply',
+      'level' => 'primary-label',
+      'url' => 'portfolio.php' ],
+], false);
 
 $data['myCourses'] = $myCourses;
-if ($myCourses) {
-    foreach ($myCourses as $course) {
-        if ($course->status == USER_STUDENT) {
-            $action_button = icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
-        } elseif ($course->status == USER_TEACHER) {
-            $action_button = icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
-        }
-        $data['action_button'] = $action_button;
-        $data['actions'] = icon('fa-gears');
-    }
-}
+
 $data['menuTypeID'] = 1;
 view('main.my_courses.index', $data);

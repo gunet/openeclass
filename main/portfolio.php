@@ -45,10 +45,60 @@ load_js('bootstrap-calendar-master/js/calendar.js');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('datatables');
 
+// display privacy policy consent message to user if necessary
+$modalShow = '';
+if (get_config('activate_privacy_policy_text')) {
+    $consentMessage = get_config('privacy_policy_text_' . $session->language);
+    if (isset($_POST['accept_policy'])) {
+        if ($_POST['accept_policy'] == 'yes') {
+            user_accept_policy($uid);
+        } elseif ($_POST['accept_policy'] == 'no') {
+            user_accept_policy($uid, false);
+        } else {
+            $_SESSION['accept_policy_later'] = true;
+        }
+        if (isset($_POST['next']) and $_POST['next'] == 'profile') {
+            redirect_to_home_page('main/profile/display_profile.php#privacyPolicySection');
+        }
+        redirect_to_home_page();
+    }
+
+    if ($_SESSION['status'] == USER_STUDENT and
+        get_config('activate_privacy_policy_consent') and
+        !isset($_SESSION['accept_policy_later']) and
+        !user_has_accepted_policy($uid)) {
+        $tool_content .= "
+            <div class='modal fade' id='consentModal' tabindex='-1' role='dialog' aria-labelledby='consentModalLabel'>
+                <div class='modal-dialog' role='document'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                            <h4 class='modal-title' id='consentModalLabel'>$langUserConsent</h4>
+                        </div>
+                        <div class='modal-body' style='margin-left:20px; margin-right:20px;'>
+                            $consentMessage
+                        </div>
+                        <div class='modal-footer'>
+                            <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+                                <button type='submit' class='btn btn-success' role='button' name='accept_policy' value='yes'>$langAccept</button>
+                                <button type='submit' class='btn btn-danger' role='button' name='accept_policy' value='no'>$langRejectRequest</button>
+                                <button type='submit' class='btn btn-default' role='button' name='accept_policy' value='later'>$langLater</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>";
+        $modalShow = "$('#consentModal').modal('show')";
+    } else {
+        $modalShow = '';
+    }
+}
+
 $head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />"
-."<script type='text/javascript'>
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
+<script type='text/javascript'>
 jQuery(document).ready(function() {
+  $modalShow
   jQuery('#portfolio_lessons').DataTable({
     'bLengthChange': false,
     'iDisplayLength': 5,
@@ -158,8 +208,3 @@ $data['student_courses_count'] = $student_courses_count;
 
 $data['menuTypeID'] = 1;
 view('portfolio.index', $data);
-
-
-
-
-//draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);

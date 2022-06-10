@@ -36,14 +36,13 @@ require_once 'modules/message/class.msg.php';
  */
 function getUserLessonInfo($uid) {
     global $teacher_courses_count, $student_courses_count, $langCourse, $langActions;
-    global $session, $lesson_ids, $urlServer, $langUnregCourse, $langAdm, $langFavorite;
+    global $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite;
     global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 
     $lesson_content = '';
     $lesson_ids = array();
-
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                         course.code code,
+                             course.code code,
                              course.public_code,
                              course.title title,
                              course.prof_names professor,
@@ -65,6 +64,7 @@ function getUserLessonInfo($uid) {
     }
     $_SESSION['courses'] = $courses;
 
+    //getting user's lesson info
     $teacher_courses_count = 0;
     $student_courses_count = 0;
     if ($myCourses) {
@@ -164,17 +164,17 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                              announcement.content,
                                              course.code,
                                              course.title course_title
-                        FROM course, course_module, announcement
-                        WHERE course.id IN ($course_id_sql)
-                                AND course.id = course_module.course_id
-                                AND course.id = announcement.course_id
-                                AND announcement.visible = 1
-                                AND (announcement.start_display <= NOW() OR announcement.start_display IS NULL)
-                                AND (announcement.stop_display >= NOW() OR announcement.stop_display IS NULL)
-                                AND announcement.`date` >= ?s
-                                AND course_module.module_id = ?d
-                                AND course_module.visible = 1 $course_filter_sql)
-                                UNION
+                            FROM course, course_module, announcement
+                            WHERE course.id IN ($course_id_sql)
+                                    AND course.id = course_module.course_id
+                                    AND course.id = announcement.course_id
+                                    AND announcement.visible = 1
+                                    AND (announcement.start_display <= NOW() OR announcement.start_display IS NULL)
+                                    AND (announcement.stop_display >= NOW() OR announcement.stop_display IS NULL)
+                                    AND announcement.`date` >= ?s
+                                    AND course_module.module_id = ?d
+                                    AND course_module.visible = 1 $course_filter_sql)
+                            UNION
                                 (SELECT admin_announcement.title,
                                              admin_announcement.`date` AS admin_an_date,
                                              admin_announcement.id, admin_announcement.body AS content, '', ''
@@ -265,6 +265,7 @@ function getUserMessages() {
 
 /**
  * @brief check if user has accepted or rejected the current privacy policy
+ * @global integer $uid
  * @return boolean
  */
 function user_has_accepted_policy($uid) {
@@ -278,7 +279,7 @@ function user_has_accepted_policy($uid) {
 }
 
 
-/*
+/**
  * @brief update user consent
  * @param $uid
  * @param bool $accept

@@ -20,6 +20,7 @@
 
 $require_current_course = TRUE;
 require_once '../include/baseTheme.php';
+require_once 'include/log.class.php';
 
 if ($is_editor and isset($_GET['module_id']) and isset($_POST['hide'])) {
     $eclass_module_id = intval($_GET['module_id']);
@@ -27,4 +28,8 @@ if ($is_editor and isset($_GET['module_id']) and isset($_POST['hide'])) {
     Database::get()->query("UPDATE course_module SET visible = ?d
         WHERE module_id = ?d AND course_id = ?d",
         $visible, $eclass_module_id, $course_id);
+    $action = $visible? 'activate': 'deactivate';
+    Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, [
+        $action => [$eclass_module_id]
+    ]);
 }

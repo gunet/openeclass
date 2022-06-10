@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -154,7 +154,6 @@ view('main.profile.index', $data);
  * @param type $level
  * @return boolean
  */
-
 function allow_access($level) {
 
     global $id;
@@ -165,7 +164,7 @@ function allow_access($level) {
         return true;
     } elseif ($_SESSION['status'] == USER_TEACHER) { // if we are teacher
         return true;
-    }  elseif (isset($_GET['course'])) {
+    } elseif (isset($_GET['course'])) {
         $c = $_GET['course'];
         if ($_SESSION['courses'][$c] == USER_TEACHER) { // if we are course teacher
           return true;

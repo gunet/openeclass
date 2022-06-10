@@ -217,7 +217,6 @@ class Calendar_Events {
                         . "WHERE user_id = ?d " . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
             }
-            $st = Calendar_Events::get_user_visibility_level();
             if (Calendar_Events::$calsettings->show_admin == 1) {
                 //admin
                 if (!empty($q)) {
@@ -225,8 +224,10 @@ class Calendar_Events {
                 }
                 $dc = str_replace('start', 'adm.start', $datecond);
                 $q .= "SELECT id, title, start, date_format(start, '%Y-%m-%d') startdate, duration, date_format(addtime(start, time(duration)), '%Y-%m-%d %H:%i') `end`, content, 'admin' event_group, 'event-success' class, 'admin' event_type, null as course FROM admin_calendar adm "
-                        . "WHERE (visibility_level >= $st OR user_id = ?d) " . $dc;
-                $q_args = array_merge($q_args, $q_args_templ);
+                        . "WHERE visibility_level >= ?d " . $dc;
+                $q_admin_events_args = $q_args_templ;
+                $q_admin_events_args[0] = Calendar_Events::get_user_visibility_level();
+                $q_args = array_merge($q_args, $q_admin_events_args);
             }
             if (Calendar_Events::$calsettings->show_course == 1) {
                 // agenda
@@ -1467,9 +1468,9 @@ class Calendar_Events {
        global $langNextMonth, $langPreviousMonth;
 
        $calendar = "<div id='cal-header' class='btn-group btn-group-justified btn-group-sm'>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><i class='fa fa-caret-left'></i><span class='sr-only'>$langPreviousMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><span class='fa fa-caret-left'></span><span class='sr-only'>$langPreviousMonth</span></button></div>
                             <div class='btn-group btn-group-sm' style='width:60%;'><button id='current-month' type='button' class='btn btn-default' disabled='disabled'>&nbsp;</button></div>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><i class='fa fa-caret-right'></i><span class='sr-only'>$langNextMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><span class='fa fa-caret-right'></span><span class='sr-only'>$langNextMonth</span></button></div>
                     </div>";
 
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';
