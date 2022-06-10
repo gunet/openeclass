@@ -141,7 +141,7 @@
                     </div>
                     <div class='form-group'>
                         <div class='col-sm-8'>
-                            <button class='btn btn-primary' type='submit' name='send_link' value='{{ $lang_pass_submit }}'>{!! trans('lang_pass_submit') !!}</button>
+                            <button class='btn btn-primary' type='submit' name='send_link' value='{{ trans('langSend') }}'>{!! trans('langSend') !!}</button>
                             <button class='btn btn-default' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
                         </div>
                     </div>

@@ -127,11 +127,11 @@ if ($cpf_check[0] === false) {
 $user_data = $auth_id = $provider_name = $provider_id = null;
 
 // check if it's valid and the provider enabled in the db
-if (isset($_GET['auth']) and is_numeric($_GET['auth'])) {
-    $auth_id = $_GET['auth'];
-    $result = Database::get()->querySingle("SELECT auth_name, auth_default FROM auth WHERE auth_id = ?d", $auth_id);
-    if ($result and $result->auth_default and in_array($result->auth_name, $hybridAuthMethods)) {
+if (isset($_GET['auth'])) {
+    $result = Database::get()->querySingle("SELECT auth_id, auth_name, auth_default FROM auth WHERE auth_id = ?d", $_GET['auth']);
+    if ($result and $result->auth_default and in_array($result->auth_name, array_merge($extAuthMethods, $hybridAuthMethods))) {
         $provider_name = $result->auth_name;
+        $auth_id = $result->auth_id;
     }
 }
 
@@ -145,7 +145,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
     require_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
 
-    $hybridauth = new Hybrid_Auth( $config );
+    $hybridauth = new Hybridauth\Hybridauth( $config );
     $allProviders = $hybridauth->getProviders();
     $warning = '';
 
@@ -155,8 +155,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
     }
     if (count($allProviders) && in_array(ucfirst($provider_name), $allProviders)) {
         try {
-            $hybridauth = new Hybrid_Auth($config);
-
+            $hybridauth = new Hybridauth\Hybridauth( $config );
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate(strtolower($provider_name));
 
@@ -177,7 +176,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
             // let hybridauth forget all about the user so we can try to authenticate again.
 
             // Display the received error,
-            // to know more please refer to Exceptions handling section on the user-guide
+            // to know more please refer to Exceptions handling section on the user guide
             switch($e->getCode()) {
                 case 0 : $warning = "<p class='alert alert-info'>$langProviderError1</p>"; break;
                 case 1 : $warning = "<p class='alert alert-info'>$langProviderError2</p>"; break;
@@ -347,23 +346,24 @@ if ($all_set) {
                         'url' => "{$urlAppend}modules/auth/registration.php",
                         'icon' => 'fa-reply',
                         'level' => 'primary-label')), false);
-    $tool_content .= "<div class='alert alert-info'>$langUserData</div>";
 
+    $tool_content .= "<div class='alert alert-info'>$langUserData</div>";
     $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=". @$_GET['auth'] ."' method='post'>
-        <input type='hidden' name='p' value='$prof'>        
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=$auth_id' method='post'>
+        <input type='hidden' name='p' value='$prof'>
         <div class='form-group'>
             <label for='Name' class='col-sm-2 control-label'>$langName:</label>
             <div class='col-sm-10'>";
-            if ($user_data) {
-                $user_data_first_name = explode(' ', $user_data->firstName);
-                $givenname = $user_data_first_name[0];
-                $tool_content .= "<p class='form-control-static'>" . q($givenname) . "</p>";
-                $tool_content .= "<input type='hidden' name='givenname' value = '" . $givenname . "'>";
-            } else {
-                $tool_content .= "<input class='form-control' type='text' name='givenname' value='' size='30' maxlength='60' placeholder='$langName'></td>";
-            }
-            $tool_content .= "</div>
+
+        if ($user_data) {
+            $user_data_first_name = explode(' ', $user_data->firstName);
+            $givenname = $user_data_first_name[0];
+            $tool_content .= "<p class='form-control-static'>" . q($givenname) . "</p>";
+            $tool_content .= "<input type='hidden' name='givenname' value = '" . $givenname . "'>";
+        } else {
+            $tool_content .= "<input class='form-control' type='text' name='givenname' value='' size='30' maxlength='60' placeholder='$langName'></td>";
+        }
+        $tool_content .= "</div>
         </div>
         <div class='form-group'>
             <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
@@ -457,20 +457,20 @@ if ($all_set) {
     if ($provider_name and $provider_id) {
         $tool_content .= "<div class='form-group'>
           <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
-              <div class='col-sm-10'><p class='form-control-static'>
-                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q($authFullName[$auth_id]) . "<br /><small>$langProviderConnectWithTooltip</small></p>
-              </div>
-              <div class='col-sm-offset-2 col-sm-10'>
-                <input type='hidden' name='provider' value='" . $provider_name . "' />
-                <input type='hidden' name='provider_id' value='" . $provider_id . "' />
-              </div>
+          <div class='col-sm-10'><p class='form-control-static'>
+            <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q($authFullName[$auth_id]) . "<br /><small>$langProviderConnectWithTooltip</small></p>
+          </div>
+          <div class='col-sm-offset-2 col-sm-10'>
+            <input type='hidden' name='provider' value='" . $provider_name . "' />
+            <input type='hidden' name='provider_id' value='" . $provider_id . "' />
+          </div>
           </div>";
     }
     // add custom profile fields
     $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
-                    </div></div>        
+                    </div></div>
       </form>
       </div>";
 }

@@ -269,7 +269,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
-            $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = " : "COLLATE utf8_bin = ";
+            $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
             $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
             if ($result) {
                 if (password_verify($test_password, $result->password)) {
@@ -1557,6 +1557,10 @@ function external_DB_Check_Pass($test_password, $hash, $encryption) {
             return (md5($test_password) == $hash);
         case 'ehasher':
             return password_verify($test_password, $hash);
+        case 'phpass':
+            require_once 'include/lib/PasswordHash.php';
+            $hasher = new Hautelook\Phpass\PasswordHash(8, false);
+            return $hasher->CheckPassword($test_password, $hash);
         default:
             /* Maybe append an error message to tool_content, telling not supported encryption */
     }

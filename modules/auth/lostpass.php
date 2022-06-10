@@ -29,10 +29,9 @@
  * his/hers  information through a challenge/response system.
  *
  */
-use Hautelook\Phpass\PasswordHash;
 
 include '../../include/baseTheme.php';
-include 'auth.inc.php';
+include 'modules/auth/auth.inc.php';
 include 'include/sendMail.inc.php';
 $pageName = $lang_remind_pass;
 
@@ -92,6 +91,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                       'button-class' => 'btn-default')
                             ),false);
     }
+    $data['error_messages'] = $error_messages;
 } elseif (isset($_POST['send_link'])) {
 
     $data['email'] = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
@@ -112,7 +112,6 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
             $resetUrl = $urlServer . "modules/auth/lostpass.php?u=$id&amp;h=$token";
             $data['found_editable_password'] = true;
 
-            // prepare instruction for password reset
             $header_html_topic_notify = "<!-- Header Section -->
             <div id='mail-header'>
                 <br>
@@ -163,5 +162,4 @@ $data['action_bar'] = action_bar(array(
           'button-class' => 'btn-default')), false);
 
 $data['menuTypeID'] = 0;
-$data['error_messages'] = $error_messages;
 view('modules.auth.lostpass', $data);
