@@ -350,6 +350,41 @@ $head_content .= "
               $('a#modifyOne').attr('href', modifyOneLink);
         });
     });
+    $(document).on('click', '.previewQuestion', function(e) {
+        e.preventDefault();
+        var qid = $(this).data('qid'),
+            nbr = $(this).data('nbr'),
+            editUrl = $(this).data('editUrl'),
+            deleteUrl = $(this).data('deleteUrl'),
+            url = '" . js_escape($urlAppend) . "' + '/modules/exercise/question_preview.php?question=' + qid;
+        $.ajax({
+            url: url,
+            success: function(data) {
+                bootbox.dialog({
+                    message: data,
+                    title: '$langQuestionPreview ' + qid,
+                    onEscape: true,
+                    backdrop: true,
+                    buttons: {
+                        edit: {
+                            label: '<span class=\"fa fa-edit\"></span> $langEditChange',
+                            callback: function () {
+                                if (nbr > 1) {
+                                    $('#modalWarning').modal('show');
+                                } else {
+                                    window.location.href = editUrl;
+                                }
+                            }
+                        },
+                        success: {
+                            label: '$langClose',
+                            className: 'btn-default',
+                        },
+                    }
+               });
+            }
+        });
+    });
   });
 </script>
 ";
@@ -473,6 +508,8 @@ if ($nbrQuestions) {
         $question_difficulty_legend = $objQuestionTmp->selectDifficultyIcon($objQuestionTmp->selectDifficulty());
         $question_category_legend = $objQuestionTmp->selectCategoryName($objQuestionTmp->selectCategory());
         $addon = "&amp;htopic=" . $aType;
+        $editUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon";
+        $deleteUrl = "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id";
 
         if (is_array($id)) {
             if ($id['criteria'] == 'difficulty') {
@@ -494,8 +531,11 @@ if ($nbrQuestions) {
                     <em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) ."' $langFrom2 '" . $objQuestionTmp->selectCategoryName($category) . "'</em>";
             }
         } else {
-            $legend = q_math($objQuestionTmp->selectTitle()) . "<br>
-            <small>" . $objQuestionTmp->selectTypeLegend($aType) . "&nbsp;$question_difficulty_legend $question_category_legend</small>";
+            $legend = "<a class='previewQuestion' data-qid='$id' data-nbr='" .
+                $objQuestionTmp->selectNbrExercises() . " data-editUrl='$editUrl' data-deleteUrl='$deleteUrl' href='#'>" .
+                q_math($objQuestionTmp->selectTitle()) . "</a><br><small>" .
+                $objQuestionTmp->selectTypeLegend($aType) .
+                "&nbsp;$question_difficulty_legend $question_category_legend</small>";
         }
 
         $tool_content .= "<tr data-id='$ewq_id'>
@@ -517,12 +557,12 @@ if ($nbrQuestions) {
             $tool_content .=
                 action_button(array(
                     array('title' => $langEditChange,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon",
+                        'url' => $editUrl,
                         'icon-class' => 'warnLink',
                         'icon-extra' => $objQuestionTmp->selectNbrExercises() > 1 ? "data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "",
                         'icon' => 'fa-edit'),
                     array('title' => $langDelete,
-                        'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id",
+                        'url' => $deleteUrl,
                         'icon' => 'fa-times',
                         'class' => 'delete',
                         'confirm' => $warning_message,
