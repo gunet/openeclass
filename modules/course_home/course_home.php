@@ -25,6 +25,7 @@
  */
 $require_current_course = true;
 $guest_allowed = true;
+
 define('HIDE_TOOL_TITLE', 1);
 define('STATIC_MODULE', 1);
 require_once '../../include/baseTheme.php';
@@ -35,6 +36,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/action.php';
 require_once 'include/course_settings.php';
+require_once 'include/log.class.php';
 require_once 'modules/sharing/sharing.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/comments/class.comment.php';
@@ -44,8 +46,19 @@ require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'modules/progress/process_functions.php';
+require_once 'modules/wall/wall_wrapper.php';
 
 doc_init();
+$tree = new Hierarchy();
+$course = new Course();
+$pageName = ''; // delete $pageName set in doc_init.php
+
+$main_content = $cunits_content = $course_info_extra = "";
+
+add_units_navigation(TRUE);
+
+load_js('tools.js');
+
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
@@ -140,10 +153,11 @@ ModalBoxHelper::loadModalBox();
 $head_content .= "
 <script type='text/javascript'>
     $(document).ready(function() {
-        $('#btn-syllabus').click(function() {
+        $('#btn-syllabus').click(function () {
             $(this).find('.fa-chevron-right').toggleClass('fa-rotate-90');
         });";
 
+// Units sorting
 if ($is_editor and $course_info->view_type == 'units') {
     $head_content .= '
         Sortable.create(boxlistSort, {
@@ -166,7 +180,8 @@ if ($is_editor and $course_info->view_type == 'units') {
             }
         });';
 }
-//Calendar stuff
+
+// Calendar stuff
 $head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
                     events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
@@ -191,22 +206,18 @@ $head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
             $this.click(function() {
                 calendar.view($this.data("calendar-view"));
             });
-        });
-        $(".modal").on("show.bs.modal", function(e){
-            $("#lalou").popover("hide");
         });'
 
     ."})
     </script>";
-
 $registerUrl = js_escape($urlAppend . 'modules/course_home/register.php?course=' . $course_code);
 
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
     SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
-    $uid, $course_id, $_SERVER['REMOTE_ADDR']);
+    $uid, $course_id, Log::get_client_ip());
 
-// opencourses hits sumation
+// opencourses hits summation
 $visitsopencourses = 0;
 $hitsopencourses = 0;
 if (get_config('opencourses_enable')) {
@@ -234,7 +245,7 @@ if (isset($_GET['from_search'])) { // if we come from home page search
 
 $visible = $data['visible'] = $course_info->visible;
 
-$course_descriptions = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
+$res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 $course_descriptions_modals = "";
@@ -268,24 +279,24 @@ $head_content .= "
             };
         </script>";
 
-if(count($course_descriptions) > 0) {
-    $course_info_extra = "";
-    foreach ($course_descriptions as $key => $course_description) {
+if (count($res) > 0) {
+    foreach ($res as $key => $row) {
+        $desctype = intval($row->type) - 1;
         $hidden_id = "hidden_" . $key;
         $next_id = '';
         $previous_id = '';
-        if ($key + 1 < count($course_descriptions)) $next_id = "hidden_" . ($key + 1);
+        if ($key + 1 < count($res)) $next_id = "hidden_" . ($key + 1);
         if ($key > 0) $previous_id = "hidden_" . ($key - 1);
 
-        $course_descriptions_modals .= "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+        $course_descriptions_modals .= "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel_$key' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
                                         <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <div class='modal-title h4' id='myModalLabel'>" . q($course_description->title) . "</div>
+                                        <div class='modal-title h4' id='myModalLabel_$key'>" . q($row->title) . "</div>
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
-                                      standard_text_escape($course_description->comments)
+                                      standard_text_escape($row->comments)
                                     ."</div>
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
@@ -299,7 +310,7 @@ if(count($course_descriptions) > 0) {
                                   </div>
                                 </div>
                               </div>";
-        $course_info_extra .= "<a class='list-group-item' data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($course_description->title) ."</a>";
+        $course_info_extra .= "<a class='list-group-item' data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a>";
     }
 } else {
     $course_info_extra = "<div class='text-muted'>$langNoInfoAvailable</div>";
@@ -337,8 +348,8 @@ if (is_sharing_allowed($course_id)) {
     }
 }
 
-$data['course_descriptions'] = $course_descriptions;
-$data['courseDescriptionVisible'] = $courseDescriptionVisible = count($course_descriptions);
+$data['course_descriptions'] = $res;
+$data['courseDescriptionVisible'] = $courseDescriptionVisible = count($res);
 $data['edit_course_desc_link'] = '';
 if ($is_editor) {
     if ($courseDescriptionVisible > 0) {
@@ -378,15 +389,25 @@ switch ($visible) {
     }
 }
 
-if ($uid and !$is_editor) {
-    $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion enabled?
+if ($uid) {
+    $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
-        $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
-        $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+        if ($is_editor) {
+            $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
+                                                              JOIN course_user ON user_badge.user=course_user.user_id
+                                                                    AND status = " .USER_STUDENT . "
+                                                                    AND editor = 0
+                                                                    AND course_id = ?d
+                                                                    AND completed = 1
+                                                                    AND badge = ?d", $course_id, $course_completion_id)->t;
+        } else {
+            $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
+            $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+        }
     }
 }
 
-// display open-courses level in bar
+// display opencourses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
@@ -408,6 +429,7 @@ if (isset($level) && !empty($level)) {
     };
 
     $(document).ready(function() {
+
         dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
     });
 
@@ -446,20 +468,13 @@ if ($is_editor) {
     if ($last_id) {
         $last_id = $last_id->id;
     }
-    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
-            . "WHERE course_id = ?d "
-            . "AND `order` >= 0 "
-            . "ORDER BY `order`";
-
+    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order` FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
 } else {
-    $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
-            . "WHERE course_id = ?d "
-            . "AND visible = 1 "
-            . "AND `order` >= 0 "
-            . "ORDER BY `order`";
+    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order` FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
 }
-$data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
 
+
+$data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
 foreach ($all_units as $unit) {
     check_unit_progress($unit->id);  // check unit completion - call to Game.php
 }
@@ -473,47 +488,99 @@ if (!$is_editor) {
 }
 
 $total_cunits = count($all_units);
-$cunits_content = "";
-$count_index = 0;
-
-foreach ($all_units as $cu) {
-    $not_shown = false;
-    // check if course unit has started or has completed
-    if (!$is_editor) {
-        if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
-            $not_shown = true;
-            $icon = icon('fa-clock-o', $langUnitNotStarted);
-        } elseif (!in_array($cu->id, $visible_units_id)) {
-            $not_shown = true;
-            $icon = icon('fa-minus-circle', $langUnitNotCompleted);
+if ($total_cunits > 0) {
+    $cunits_content .= "";
+    $count_index = 0;
+    foreach ($all_units as $cu) {
+        $not_shown = false;
+        $icon = '';
+            // check if course unit has started
+        if (!$is_editor) {
+            if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
+                $not_shown = true;
+                $icon = icon('fa-clock-o', $langUnitNotStarted);
+            // or has completed units (if any)
+            } else if (!in_array($cu->id, $visible_units_id)) {
+                $not_shown = true;
+                $icon = icon('fa-minus-circle', $langUnitNotCompleted);
+            } else {
+                if (in_array($cu->id, $visible_units_id)) {
+                    $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                    if ($sql_badge) {
+                        $badge_id = $sql_badge->id;
+                        $per = get_cert_percentage_completion('badge', $badge_id);
+                        if ($per == 100) {
+                            $icon = icon('fa-check-circle', $langInstallEnd);
+                        } else {
+                            $icon = icon('fa-hourglass-2', $per . "%");
+                        }
+                    }
+                }
+            }
         }
-    }
-    // check visibility
-    if ($cu->visible == 1) {
-        $count_index++;
-    }
-    $access = $cu->public;
-    $vis = $cu->visible;
-    $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
-    $cu_indirect = getIndirectReference($cu->id);
-    $cunits_content .= "<div id='unit_$cu_indirect' class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
+        // check visibility
+        if ($cu->visible == 1) {
+            $count_index++;
+        }
+        $access = $cu->public;
+        $vis = $cu->visible;
+        $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
+        $cu_indirect = getIndirectReference($cu->id);
+        $cunits_content .= "<div id='unit_$cu_indirect' class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
             <div class='item-content'>
                 <div class='item-header clearfix'>
                     <div class='item-title h4 $class_vis'>";
-    if ($not_shown) {
-        $cunits_content .= $icon . "&nbsp;&nbsp;" . q($cu->title);
-    } else {
-        $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+        if ($not_shown) {
+            $cunits_content .= q($cu->title) ;
+        } else {
+            $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+        }
+        $cunits_content .= "<small><span class='help-block'>";
+        if (!(is_null($cu->start_week))) {
+            $cunits_content .= "$langFrom2 " . nice_format($cu->start_week);
+        }
+        if (!(is_null($cu->finish_week))) {
+            $cunits_content .= " $langTill " . nice_format($cu->finish_week);
+        }
+        $cunits_content .= "</span></small>";
+        $cunits_content .= "</div>";
+
+        if ($is_editor) {
+            $cunits_content .= "<div class='item-side'>
+                                  <div class='reorder-btn'>
+                                    <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                                      </div>" .
+                action_button(array(
+                    array('title' => $langEditChange,
+                          'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                          'icon' => 'fa-edit'),
+                    array('title' => $vis == 1? $langViewHide : $langViewShow,
+                          'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
+                          'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                    array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
+                          'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
+                          'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                          'show' => $visible == COURSE_OPEN),
+                    array('title' => $langDelete,
+                          'url' => "$_SERVER[REQUEST_URI]?del=$cu_indirect&order=".$cu->order,
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langCourseUnitDeleteConfirm))) .
+                '</div>';
+        } else {
+            $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
+            $cunits_content .= $icon;
+            $cunits_content .= "</div>";
+        }
+
+        $cunits_content .= "</div>
+            <div class='item-body'>";
+        $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
+        $cunits_content .= "</div></div>";
+        $cunits_content .= "</div></div></div>";
     }
-    $cunits_content .= "<small><span class='help-block'>";
-    if (!(is_null($cu->start_week))) {
-        $cunits_content .= "$langFrom2 " . nice_format($cu->start_week);
-    }
-    if (!(is_null($cu->finish_week))) {
-        $cunits_content .= " $langTill " . nice_format($cu->finish_week);
-    }
-    $cunits_content .= "</span></small>";
-    $cunits_content .= "</div>";
+} else {
+    $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
 }
 
 $data['cunits_content'] = $cunits_content;
@@ -603,8 +670,8 @@ function course_announcements() {
     if (visible_module(MODULE_ID_ANNOUNCE)) {
         $q = Database::get()->queryArray("SELECT title, `date`, id
                             FROM announcement
-                            WHERE course_id = ?d AND
-                                  visible = 1
+                            WHERE course_id = ?d
+                                AND visible = 1
                                 AND (start_display <= NOW() OR start_display IS NULL)
                                 AND (stop_display >= NOW() OR stop_display IS NULL)
                             ORDER BY `date` DESC LIMIT 5", $course_id);
