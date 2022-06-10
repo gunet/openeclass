@@ -75,7 +75,7 @@ $head_content .= "
             $(document).on('click', '.previewQuestion', function(e) {
                 e.preventDefault();
                 var qid = $(this).data('qid'),
-                    url = '" . js_escape($urlAppend) . "' + '/modules/exercise/question_preview.php?question=' + qid;
+                    url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?question=' + qid;
                 $.ajax({
                     url: url,
                     success: function(data) {
