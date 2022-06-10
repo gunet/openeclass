@@ -166,7 +166,9 @@
                         @endif
                     </div>
                 </div>
-                {!! $cunits_content !!}
+                <div class='row boxlist no-list' id='boxlistSort'>
+                    {!! $cunits_content !!}
+                </div>
                 {!! $course_home_main_area_widgets !!}
             </div>
         @endif
