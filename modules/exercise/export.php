@@ -200,14 +200,15 @@ $mpdf = new \Mpdf\Mpdf([
         ]
     ]
 ]);
+
 $mpdf->setFooter('||{PAGENO} / {nb}');
-$mpdf->SetCreator('HERMES Project');
-$mpdf->SetAuthor('HERMES Project');
+$mpdf->SetCreator(course_id_to_prof($course_id));
+$mpdf->SetAuthor(course_id_to_prof($course_id));
 $mpdf->WriteHTML($tool_content);
 $mpdf->Output("$course_code questions.pdf", 'D'); // 'D' or 'I' for download / inline display
 
 function question_html($question, $qid) {
-    global $langAnswer, $langScore, $langQuestionScore, $langChoice, $langCorrespondsTo, $langComment;
+    global $langAnswer, $langScore, $langChoice, $langCorrespondsTo, $langComment;
 
     $checkbox_checked = '<input type="checkbox" checked="checked">';
     $checkbox_empty = '<input type="checkbox">';
