@@ -166,10 +166,11 @@ function do_user_merge($source, $target) {
                                      MIN(status) AS status, MAX(tutor) AS tutor,
                                      MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,
                                      MAX(receive_mail) AS receive_mail,
-                                     MAX(document_timestamp) AS document_timestamp
+                                     MAX(document_timestamp) AS document_timestamp,
+                                     favorite
                                  FROM course_user
                                  WHERE user_id IN ($source_id, $target_id)
-                                 GROUP BY course_id");
+                                 GROUP BY course_id, favorite");
     if ($q) {
         Database::get()->query("DELETE FROM user WHERE id = ?d", $source_id);
         Database::get()->query("DELETE FROM course_user WHERE user_id IN ($source_id, $target_id)");
