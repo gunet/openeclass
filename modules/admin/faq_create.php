@@ -24,27 +24,15 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-
-
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
-  if (isset($_POST['toDelete'])){
-    Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`>?d", $_POST['oldOrder']);
-    Database::get()->query("DELETE FROM faq WHERE `id`=?d", $_POST['toDelete']);
-  }
-
-  if (isset($_POST['toReorder'])){
-
-    if ($_POST['newIndex'] < $_POST['oldIndex']){
-      Database::get()->query("UPDATE `faq` SET `order`=`order` + 1 WHERE `order`>=?d AND `order`<?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
-    }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
-      Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`<=?d AND `order`>?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toDelete'])) {
+        Database::get()->query("UPDATE `faq` SET `order` = `order` - 1 WHERE `order` > ?d", $_POST['oldOrder']);
+        Database::get()->query("DELETE FROM faq WHERE `id` = ?d", $_POST['toDelete']);
+    } elseif (isset($_POST['toReorder'])) {
+        reorder_table('faq', null, null, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
     }
-
-    Database::get()->query("UPDATE `faq` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
-  }
-
-  exit();
+    exit;
 }
 
 if (isset($_POST['submitFaq'])) {
@@ -70,6 +58,14 @@ if (isset($_POST['modifyFaq'])) {
     redirect_to_home_page("modules/admin/faq_create.php");
 }
 
+if (isset($_GET['faq']) && $_GET['faq'] == 'delete') {
+    $record = $_GET['id'];
+
+    Database::get()->query("DELETE FROM faq WHERE `id`=?d", $record);
+
+    Session::Messages("$langFaqDeleteSuccess", 'alert-success');
+    redirect_to_home_page("modules/admin/faq_create.php");
+}
 
 load_js('sortable/Sortable.min.js');
 
@@ -145,26 +141,25 @@ $head_content .= "
           onEnd: function (evt) {
 
             var itemEl = $(evt.item);
+                
             var idReorder = itemEl.attr('data-id');
-            console.log(idReorder);
+            var prevIdReorder = itemEl.prev().attr('data-id');
 
             $.ajax({
               type: 'post',
               dataType: 'text',
               data: { 
                       toReorder: idReorder,
-                      oldIndex: evt.oldIndex,
-                      newIndex: evt.newIndex
+                      prevReorder: prevIdReorder,
                     },
               success: function(data) {
                 $('.indexing').each(function (i){
-                    console.log(i);
                   $(this).html(i+1);
                 });
               }
             })
-
           }
+          
         });
     });
   </script>

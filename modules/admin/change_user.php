@@ -27,12 +27,13 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+$pageName = $langChangeUser;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['username'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
     $sql = "SELECT user.id, surname, username, password, givenname, status, email,
-                   admin.user_id AS is_admin, lang
+                   admin.user_id AS is_admin, admin.privilege, lang
                 FROM user LEFT JOIN admin ON user.id = admin.user_id
                 WHERE username ";
 
@@ -66,8 +67,7 @@ if (isset($_REQUEST['username'])) {
         redirect_to_home_page('modules/admin/change_user.php');
     }
 }
-$pageName = $langChangeUser;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
 $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "index.php",

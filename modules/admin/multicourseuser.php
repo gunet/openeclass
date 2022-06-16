@@ -23,9 +23,10 @@
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 
+$toolName = $langMultiRegCourseUser;
+$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 if (isset($_POST['submit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        checkSecondFactorChallenge();
         $ok = array();
         $not_found = array();
         $course_not_found = array();
@@ -58,9 +59,10 @@ if (isset($_POST['submit'])) {
             $usernames = implode('<br>', $not_found);
             $warn_messages[] = "$langUsersNotExist<br> $usernames";
         }
+
         if (count($course_not_found)) {
             $courses = implode('<br>', $course_not_found);
-            $warn_messages[] = "$langCourseNotExist<br> $courses";            
+            $warn_messages[] = "$langCourseNotExist<br> $courses";
         }
         Session::Messages($warn_messages);
         if (count($ok)) {
@@ -70,18 +72,17 @@ if (isset($_POST['submit'])) {
             $sucess_message = "$langUsersRegistered<br> $added_users";
             Session::Messages($sucess_message, 'alert-success');
         }
+
         if (count($existing)) {
             $already_registered_users = implode('<br>', array_map(function($userid) {
                 return display_user($userid);
             }, $existing));
             $info_message = "$langUsersAlreadyRegistered<br> $already_registered_users";
-            Session::Messages($info_message, 'alert-info');            
+            Session::Messages($info_message, 'alert-info');
         }
         redirect_to_home_page('modules/admin/multicourseuser.php');
 }
 
-$toolName = $langMultiRegCourseUser;
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $data['menuTypeID'] = 3;
 
 view('admin.users.multicourseuser', $data);
@@ -100,7 +101,7 @@ function finduser($user, $field) {
         return $userid;
     } else {
         return false;
-    }	
+    }
 }
 
 
@@ -119,5 +120,5 @@ function adduser($userid, $cid) {
         $result = Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
                                             VALUES (?d, ?d, ".USER_STUDENT.",  " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")", $userid, $cid);
         return true;
-    }	
+    }
 }

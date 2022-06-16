@@ -28,7 +28,7 @@
                 <div class='col-sm-10'>
                     <input class='form-control' type='text' name='email' id='email' value='{{ $email }}'>
                 </div>
-            </div>  
+            </div>
             <div class='form-group'>
                 <label for='am' class='col-sm-2 control-label'>{{ trans('langAm') }}:</label>
                 <div class='col-sm-10'>
@@ -52,9 +52,15 @@
                 <div class='col-sm-5'>
                     {!! selection(['1' => trans('langAfter'), '2' => trans('langBefore')], 'reg_flag', $reg_flag, 'class="form-control"') !!}
                 </div>
-                <div class='col-sm-5'>       
+                <div class='col-sm-5'>
                     <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='{{ $user_registered_at }}' placeholder='{{ trans('langRegistrationDate') }}'>
-                </div>   
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>{{ trans('langLastLogin') }}:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control' name='user_last_login' id='id_user_last_login' type='text' value='{{ trans('user_last_login') }}' data-date-format='dd-mm-yyyy' placeholder='{{ trans('langFrom2') }}'>
+                </div>
             </div>
             <div class='form-group'>
 	        	<label class='col-sm-2 control-label'>{{ trans('langExpirationDate') }}:</label>
@@ -91,9 +97,9 @@
                         <input type='checkbox' name='search' value='inactive'{{ $inactive_checked ? " checked" : "" }}>
                         {{ trans('langInactiveUsers') }}
                       </label>
-                    </div> 
+                    </div>
                 </div>
-            </div>    
+            </div>
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' value='{{ trans('langSearch') }}'>

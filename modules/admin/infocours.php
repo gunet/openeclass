@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
                     WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
     $course->refresh($cId, $departments);
     Session::Messages($langModifDone, 'alert-success');
-    redirect_to_home_page('modules/admin/infocours.php?c='.$_GET['c']);
+    redirect_to_home_page('modules/admin/editcours.php?c='.$_GET['c']);
 }
 
 $data['course'] = Database::get()->querySingle("SELECT course.code AS code, course.title AS title, course.prof_names AS prof_name, course.id AS id
@@ -100,12 +100,12 @@ if (isset($_GET['c'])) {
 }
 
 if (isDepartmentAdmin()) {
-    list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($data['course']->id), 'allowables' => $user->getDepartmentIds($uid)));
+    list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($data['course']->id), 'allowables' => $user->getDepartmentIds($uid)));
 } else {
-    list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($data['course']->id)));
+    list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($data['course']->id)));
 }
 $head_content .= $js;
 $data['node_picker'] = $html;
-    
+
 $data['menuTypeID'] = 3;
 view ('admin.courses.infocours', $data);

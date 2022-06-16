@@ -150,9 +150,7 @@ if (!empty($show) and $show == 'closed') {
         $q = "SELECT id, givenname, surname, username, email, faculty_id,
                              phone, am, date_open, date_closed, comment
                           FROM user_request
-                          WHERE (state = 2 AND status = $list_status)";
-
-        $q .= "ORDER BY date_open DESC";
+                          WHERE (state = 2 AND status = $list_status) ORDER BY date_closed DESC";
 
         $data['user_requests'] = Database::get()->queryArray($q);
 
@@ -175,7 +173,7 @@ if (!empty($show) and $show == 'closed') {
                                         FROM user_request
                                         WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_closed DESC");
 
-        $view = 'admin.users.listreq.closedRequests';
+        $view = 'admin.users.listreq.rejectedRequests';
     }
 
 // ------------------------------
@@ -255,6 +253,7 @@ if (!empty($show) and $show == 'closed') {
             } else {
                 // display the form
                 $data['user_request'] = Database::get()->querySingle("SELECT comment, givenname, surname, email, status FROM user_request WHERE id = ?d", $id);
+                $data['id'] = intval($id);
                 $view = 'admin.users.listreq.rejectForm';
             }
             break;

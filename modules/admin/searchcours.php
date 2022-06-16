@@ -40,10 +40,10 @@ load_js('bootstrap-datetimepicker');
 $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#id_date').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', 
+                format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
                 language: '" . $language . "',
-                autoclose: true    
+                autoclose: true
             });
         });
     </script>";
@@ -66,9 +66,9 @@ $data['reg_flag_data'][1] = $langAfter;
 $data['reg_flag_data'][2] = $langBefore;
 
 if (isDepartmentAdmin()) {
-    list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
 } else {
-    list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false));
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false));
 }
 
 $head_content .= $js;

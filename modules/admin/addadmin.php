@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 4.0
  * E-learning and Course Management System
@@ -21,66 +22,76 @@
 $require_admin = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/hierarchy_validations.php';
+
+$navigation[] = ['url' => 'index.php', 'name' => $langAdmin];
+
+$tree = new Hierarchy;
 
 // Initialize the incoming variables
-$username = isset($_POST['username']) ? $_POST['username'] : '';
+$username = isset($_POST['username']) ? trim($_POST['username']) : null;
 
-if (isset($_POST['submit']) && !empty($username)) {
+if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
-    $res = Database::get()->querySingle("SELECT id FROM user WHERE username=?s", $username);
+    $res = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $username);
     if ($res) {
         $user_id = $res->id;
-        switch ($_POST['adminrights']) {
-            case 'admin': $privilege = '0'; // platform admin user
-                break;
-            case 'poweruser': $privilege = '1'; // power user
-                break;
-            case 'manageuser': $privilege = '2'; //  manage user accounts
-                break;
-            case 'managedepartment' : $privilege = '3'; // manage departments
-                break;
+        if ($user_id == $uid) {
+            Session::Messages($langErrorAddaAdmin, 'alert-danger');
+            redirect_to_home_page('modules/admin/addadmin.php');
         }
-
-        if (isset($privilege)) {
-            if (Database::get()->querySingle("SELECT * FROM admin WHERE user_id = ?d", $user_id)) {
-                $affected = Database::get()->query("UPDATE admin SET privilege = ?d
-                                WHERE user_id = ?d", $privilege, $user_id)->affectedRows;
+        $privilege = [
+            'admin' => ADMIN_USER,
+            'poweruser' => POWER_USER,
+            'manageuser' => USERMANAGE_USER,
+            'managedepartment' => DEPARTMENTMANAGE_USER,
+        ][$_POST['adminrights']];
+        if (!is_null($privilege)) {
+            Database::get()->query('DELETE FROM admin WHERE user_id = ?d', $user_id);
+            if ($privilege == DEPARTMENTMANAGE_USER) {
+                if (!isset($_POST['adminDeps']) or !$_POST['adminDeps']) {
+                    Session::Messages($langEmptyAddNode, 'alert-danger');
+                    redirect_to_home_page('modules/admin/addadmin.php?add=add');
+                }
+                $affected = 1;
+                foreach ($_POST['adminDeps'] as $dep_id) {
+                    validateNode($dep_id, false);
+                    $affected *= Database::get()->query('INSERT INTO admin
+                        SET user_id = ?d, privilege = ?d, department_id = ?d',
+                        $user_id, $privilege, $dep_id)->affectedRows;
+                }
             } else {
-                $affected = Database::get()->query("INSERT INTO admin VALUES(?d,?d)", $user_id, $privilege)->affectedRows;
+                $affected = Database::get()->query('INSERT INTO admin
+                    SET user_id = ?d, privilege = ?d',
+                    $user_id, $privilege)->affectedRows;
             }
-            if ($affected > 0) {
-                Session::Messages(trans('langTheUser') . ' <b>' . q($username) .
-                    '</b> ' . trans('langDone'), 'alert-success');
+            if ($affected) {
+                Session::Messages("$langTheUser <b>" . q($username) . "</b> $langDone", 'alert-success');
+                redirect_to_home_page('modules/admin/addadmin.php');
             }
         } else {
-            Session::Messages(trans('langError'), 'alert-danger');
+            Session::Messages($langError, 'alert-danger');
+            redirect_to_home_page('modules/admin/addadmin.php?add=add');
         }
     } else {
-        Session::Messages(trans('langTheUser') . ' <b>' . q($username) .
-            '</b> ' . trans('langNotFound'), 'alert-danger');
+        Session::Messages("$langTheUser " . q($username) . " $langNotFound", 'alert-danger');
+        redirect_to_home_page('modules/admin/addadmin.php?add=add');
     }
-    redirect_to_home_page('modules/admin/addadmin.php');
 } else if (isset($_GET['delete'])) { // delete admin users
-    $aid = intval(getDirectReference($_GET['aid']));
+    $aid = getDirectReference($_GET['delete']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-        if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {
-            $message_type = "alert-success";
-            $message = $langNotAdmin;
+        if (Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $aid)->affectedRows > 0) {
+            Session::Messages($langNotAdmin, 'alert-success');
         } else {
-            $message_type = "alert-danger";
-            $message = $langDeleteAdmin. " " . $aid . " " . $langNotFeasible;
+            Session::Messages("$langDeleteAdmin " . q($aid) . " $langNotFeasible", 'alert-danger');
         }
     } else {
-        $message_type = "alert-danger";
-        $message = $langCannotDeleteAdmin;
+        Session::Messages($langCannotDeleteAdmin, 'alert-danger');
     }
-    Session::Messages($message, $message_type);
     redirect_to_home_page('modules/admin/addadmin.php');
 }
 
-$toolName = $langAdmins;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $data['action_bar'] = action_bar([
             [
@@ -91,10 +102,10 @@ $data['action_bar'] = action_bar([
             ]
         ]);
 
-$data['admins'] = Database::get()->queryArray("SELECT id, givenname, surname, username, admin.privilege as privilege
-                    FROM user, admin
-                    WHERE user.id = admin.user_id
-                    ORDER BY id");
+$data['admins'] = Database::get()->queryArray('SELECT admin.*, user.username
+    FROM user, admin
+    WHERE user.id = admin.user_id
+    ORDER BY user_id');
 $data['menuTypeID'] = 3;
 view ('admin.users.addadmin', $data);
 

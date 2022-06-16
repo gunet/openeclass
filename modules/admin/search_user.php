@@ -38,22 +38,56 @@ load_js('bootstrap-datepicker');
 $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#id_user_registered_at').datepicker({
-                format: 'dd-mm-yyyy', 
+                format: 'dd-mm-yyyy',
                 pickerPosition: 'bottom-right',
                 language: '" . $language . "',
-                autoclose: true    
+                autoclose: true
             });
             $('#id_user_expires_until').datepicker({
-                format: 'dd-mm-yyyy',              
+                format: 'dd-mm-yyyy',
                 pickerPosition: 'bottom-right',
                 language: '" . $language . "',
-                autoclose: true    
+                autoclose: true
+            });
+            $('#id_user_last_login').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '" . $language . "',
+                autoclose: true
             });
         });
     </script>";
 
 $navigation[] = ['url' => 'index.php', 'name' => $langAdmin];
 $toolName = $langSearchUser;
+
+// get the incoming values
+
+$data['inactive_checked'] = (isset($_GET['search']) and $_GET['search'] == 'inactive') ? ' checked' : '';
+$data['lname'] = isset($_GET['lname']) ? $_GET['lname'] : '';
+$data['fname'] = isset($_GET['fname']) ? $_GET['fname'] : '';
+$data['uname'] = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
+$data['am'] = isset($_GET['am']) ? $_GET['am'] : '';
+$data['verified_mail'] = isset($_GET['verified_mail']) ? intval($_GET['verified_mail']) : 3;
+//$user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : '';
+//$auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
+$data['email'] = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
+$data['reg_flag'] = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
+$data['user_registered_at'] = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
+$data['user_expires_until'] = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
+$data['user_last_login'] = isset($_GET['user_last_login']) ? $_GET['user_last_login'] : '';
+
+if (isset($_GET['department'])) {
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
+} else {
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false);
+}
+
+if (isDepartmentAdmin()) {
+    $allowables = array('allowables' => $user->getAdminDepartmentIds($uid));
+    $depts_defaults = array_merge($depts_defaults, $allowables);
+}
+
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(
             array('title' => $langAllUsers,
@@ -73,20 +107,6 @@ $data['action_bar'] = action_bar(array(
                 'icon' => 'fa-reply',
                 'level' => 'primary')));
 
-// get the incoming values
-$data['inactive_checked'] = isset($_GET['search']) && $_GET['search'] == 'inactive';
-$data['lname'] = isset($_GET['lname']) ? $_GET['lname'] : '';
-$data['fname'] = isset($_GET['fname']) ? $_GET['fname'] : '';
-$data['uname'] = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
-$data['am'] = isset($_GET['am']) ? $_GET['am'] : '';
-$data['verified_mail'] = isset($_GET['verified_mail']) ? intval($_GET['verified_mail']) : 3;
-//$user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : '';
-//$auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
-$data['email'] = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
-$data['reg_flag'] = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
-$data['user_registered_at'] = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
-$data['user_expires_until'] = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
-
 //Preparing form data
 $data['usertype_data'] = array(
     0 => $langAllUsers,
@@ -101,20 +121,11 @@ $data['verified_mail_data'] = array(
 $data['authtype_data'] = $auth_ids;
 $data['authtype_data'][0] = $langAllAuthTypes;
 
-if (isset($_GET['department'])) {
-    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', arrayValuesDirect($_GET['department'])));
-} else {
-    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false);
-}
 
-if (isDepartmentAdmin()) {
-    $allowables = array('allowables' => $user->getDepartmentIds($uid));
-    $depts_defaults = array_merge($depts_defaults, $allowables);
-}
 $tree = new Hierarchy();
-list($js, $html) = $tree->buildNodePickerIndirect($depts_defaults);
+list($js, $html) = $tree->buildNodePicker($depts_defaults);
 $head_content .= $js;
-$data['html'] = $html; 
+$data['html'] = $html;
 
 $data['menuTypeID'] = 3;
 view('admin.users.search_user', $data);

@@ -20,6 +20,8 @@
  * ========================================================================
  */
 
+const LTI_TYPE = 'turnitin';
+
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = true;
@@ -76,14 +78,18 @@ if (isset($_GET['add_template'])) {
 } else if (isset($_POST['new_lti_app'])) { // Create
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true);
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
+        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true,
+        false, null, LTI_TYPE);
     Session::Messages($langTIIAppAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
 
 } else if (isset($_POST['update_lti_app'])) { // Update
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true, true, getDirectReference($_GET['id']));
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
+        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], null, true,
+        true, getDirectReference($_GET['id']), LTI_TYPE);
     // Display result message
     Session::Messages($langTIIAppAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
@@ -114,7 +120,7 @@ if (isset($_GET['add_template'])) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-        $q = Database::get()->queryArray("SELECT * FROM lti_apps WHERE is_template = true AND course_id is null ORDER BY title ASC");
+        $q = Database::get()->queryArray("SELECT * FROM lti_apps WHERE is_template = true AND type = 'turnitin' AND course_id is null ORDER BY title ASC");
         if (count($q) > 0) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>

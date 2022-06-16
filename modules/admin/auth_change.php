@@ -36,7 +36,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 
 if (isset($_GET['auth'])) {
-    $data['auth'] = $auth = getDirectReference($_GET['auth']);
+    $auth = $_GET['auth'];
     $_SESSION['auth_temp'] = $auth;
 }
 

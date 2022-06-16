@@ -22,7 +22,7 @@
  * @file quotacours.php
  * @brief Edit course quota
  */
-  
+
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
@@ -43,9 +43,10 @@ $user = new User();
 $cId = course_code_to_id($_GET['c']);
 validateCourseNodes($cId, isDepartmentAdmin());
 
-$data['course'] = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", $_GET['c']); 
+$data['course'] = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", $_GET['c']);
 
 // Initialize some variables
+$quota_info = '';
 define('MB', 1048576);
 
 // Update course quota
@@ -64,9 +65,8 @@ if (isset($_POST['submit'])) {
     }
     // Nothing updated
     else {
-        Session::Messages($langQuotaFail);    
+        Session::Messages($langQuotaFail);
     }
-    redirect_to_home_page('modules/admin/quotacours.php?c='.$data['course']->code);
 }
 // Display edit form for course quota
 $toolName = $langQuota;
@@ -85,7 +85,7 @@ if (isset($_GET['c'])) {
             array('title' => $langBackAdmin,
                   'url' => "index.php",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));           
+                  'level' => 'primary-label')));
 }
 
 

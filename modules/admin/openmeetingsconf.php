@@ -29,6 +29,8 @@ $toolName = $langOpenMeetingsConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
+$available_themes = active_subdirs("$webDir/template", 'theme.html');
+
 load_js('tools.js');
 load_js('validation.js');
 load_js('select2');
@@ -51,8 +53,6 @@ $head_content .= "<script type='text/javascript'>
         });
     });
 </script>";
-
-$available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $pageName = isset($_GET['add_server']) ? $langAddServer : $langEdit;        
@@ -121,8 +121,8 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $hostname = $_POST['hostname_form'];
     $port = $_POST['port_form'];
     $username = $_POST['username_form'];
-    $password = $_POST['password_form'];
-    $webapp = $_POST['webapp_form'];
+    $password = $_POST['password_form'];    
+    $webapp = $_POST['webapp_form'];    
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
     $enable_recordings = $_POST['enable_recordings'];
@@ -136,8 +136,8 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     }
     
     if (isset($_POST['id_form'])) {        
-        $id = getDirectReference($_POST['id_form']);
-            Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
+        $id = $_POST['id_form'];
+        Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
                 port = ?s,
                 username = ?s,
                 password = ?s,                
@@ -148,9 +148,9 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                 enable_recordings = ?s,
                 weight = ?d,
                 all_courses = ?d
-            WHERE id = ?d", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $allcourses, $id);
+                WHERE id = ?d", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $allcourses, $id);
         Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $id);
-        if ($allcourses == 0) {        
+        if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
                 Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $id);
             }
@@ -163,8 +163,8 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
             foreach ($tc_courses as $tc_data) {
                 Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $tc_id);
             }
-        }                
-    }        
+        }
+    }
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
     redirect_to_home_page("modules/admin/openmeetingsconf.php");        

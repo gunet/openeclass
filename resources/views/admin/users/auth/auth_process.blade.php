@@ -4,8 +4,8 @@
     {!! isset($action_bar) ?  $action_bar : '' !!}
     <div class='form-wrapper'>
         <form class='form-horizontal' name='authmenu' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
-        <fieldset>	
-            <input type='hidden' name='auth' value='{{ getIndirectReference($auth) }}'>
+        <fieldset>
+            <input type='hidden' name='auth' value='{{ intval($auth) }}'>
             @if ($auth == 1)
                 @include('admin.users.auth.methods.eclass')
             @elseif ($auth == 2)
@@ -13,10 +13,10 @@
                 @include('admin.users.auth.methods.eclass')
             @elseif ($auth == 3)
                 @include('admin.users.auth.methods.imap')
-                @include('admin.users.auth.methods.eclass') 
+                @include('admin.users.auth.methods.eclass')
             @elseif ($auth == 4)
                 @include('admin.users.auth.methods.ldap')
-                @include('admin.users.auth.methods.eclass')   
+                @include('admin.users.auth.methods.eclass')
             @elseif ($auth == 5)
                 @include('admin.users.auth.methods.db')
                 @include('admin.users.auth.methods.eclass')
@@ -39,5 +39,5 @@
         </fieldset>
         {!! generate_csrf_token_form_field() !!}
         </form>
-    </div>            
+    </div>
 @endsection

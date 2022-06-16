@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 define('CPF_TEXTBOX', 1);
@@ -41,24 +41,24 @@ define('CPF_USER_TYPE_ALL', 10);
  */
 function render_profile_fields_form($context, $valitron = false) {
     global $langOptional, $langCompulsory;
-    
+
     if ($context['origin'] == 'admin_edit_profile') { //admin editing users' profile
         $uid = $context['user_id'];
     } else {
         global $uid;
     }
-    
+
     $return_string = "";
-    
+
     $result = Database::get()->queryArray("SELECT id, name FROM custom_profile_fields_category ORDER BY sortorder DESC");
-    
+
     foreach ($result as $c) {
-        
+
         $args = array();
         $args[0] = $c->id;
-        
+
         $registr = '';
-        
+
         if ($context['origin'] == 'student_register') { //student registration form
             $registr = 'AND registration = ?d ';
             $args[] = 1;
@@ -81,18 +81,18 @@ function render_profile_fields_form($context, $valitron = false) {
                 $args[] = CPF_USER_TYPE_PROF;
             }
         }
-        
-        $res = Database::get()->queryArray("SELECT id, name, shortname, description, required, datatype, data 
+
+        $res = Database::get()->queryArray("SELECT id, name, shortname, description, required, datatype, data
                                             FROM custom_profile_fields WHERE categoryid = ?d ".$registr.
                                             "AND user_type <> ?d ORDER BY sortorder DESC", $args);
-        
+
         if (count($res) > 0) {
             foreach ($res as $f) {
-                
+
                 if (isset($fdata)) {
                     unset($fdata);
                 }
-                
+
                 if ($valitron) {
                     if (Session::hasError('cpf_'.$f->shortname)) {
                         $form_class = 'form-group has-error';
@@ -108,10 +108,10 @@ function render_profile_fields_form($context, $valitron = false) {
                 $return_string .= '<div class="'.$form_class.'">';
                 $return_string .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.q($f->name).'</label>';
                 $return_string .= '<div class="col-sm-10">';
-                
+
                 //get data to prefill fields
                 if ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile') {
-                    $data_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data 
+                    $data_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
                                                           WHERE field_id = ?d AND user_id = ?d", $f->id, $uid);
                     if ($data_res) {
                         $fdata = $data_res->data;
@@ -123,16 +123,16 @@ function render_profile_fields_form($context, $valitron = false) {
                         $fdata = $data_res->data;
                     }
                 }
-                
+
                 if ($valitron) {
                     if (Session::has('cpf_'.$f->shortname)) {
                         $fdata = Session::get('cpf_'.$f->shortname);
                     }
                 }
-                
+
                 $val = '';
                 $placeholder = '';
-                
+
                 switch ($f->datatype) {
                     case CPF_TEXTBOX:
                         if (isset($fdata) && $fdata != '') {
@@ -319,14 +319,14 @@ function cpf_validate_required_edituser() {
  */
 function render_profile_fields_content($context) {
     global $uid, $langProfileNotAvailable;
-    
+
     $return_str = '';
-    
+
     $result = Database::get()->queryArray("SELECT id, name FROM custom_profile_fields_category ORDER BY sortorder DESC");
-    
+
     foreach ($result as $cat) {
         $args = array();
-        
+
         $ref_user_type = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $context['user_id'])->status;
         if ($ref_user_type == USER_TEACHER) {
             $user_type = '(user_type = ?d OR user_type = ?d)';
@@ -337,11 +337,11 @@ function render_profile_fields_content($context) {
             $args[]= 5;
             $args[] = 10;
         }
-        
+
         if ($context['user_id'] == $uid) { //viewing own profile
             $args[] = $cat->id;
-            $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields 
-                                                WHERE $user_type AND categoryid = ?d 
+            $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields
+                                                WHERE $user_type AND categoryid = ?d
                                                 ORDER BY sortorder DESC", $args);
         } else { //viewing other user's profile
             if ($_SESSION['status'] == USER_STUDENT) {
@@ -355,24 +355,26 @@ function render_profile_fields_content($context) {
             }
             $args[] = $cat->id;
             $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields
-                                                WHERE $user_type AND $visibility AND categoryid = ?d 
+                                                WHERE $user_type AND $visibility AND categoryid = ?d
                                                 ORDER BY sortorder DESC", $args);
         }
-        
+
         if (count($res) > 0) { //category start
-            $return_str .= "<div class='row'>
-                                <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-                                    <h4>".$cat->name."</h4>";
+            $return_str .= "<div class='row'><div class='col-sm-6'>
+                            <div class='profile-content-panel'>
+                                    <div class='profile-content-panel-title'>".$cat->name."</div>";
         }
-        
+
         foreach ($res as $f) { //get user data for each field
             $return_str .= "<div class='profile-pers-info-data'>";
-            
+
             $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
                                                        WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);
-            
-            $return_str .= "<span class='tag'>".$f->name." : </span>";
-            
+
+            $return_str .= "<div style='line-height:26px;'>
+                            <span style='font-weight: bold; color: #888;'>".$f->name." : </span>
+                        ";
+
             if (!$fdata_res || $fdata_res->data == '') {
                 $return_str .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
             } else {
@@ -399,13 +401,13 @@ function render_profile_fields_content($context) {
                         break;
                 }
             }
-            $return_str .= "</div>";
-        }
-        
-        if (count($res) > 0) { //category end
             $return_str .= "</div></div>";
         }
-        
+
+        if (count($res) > 0) { //category end
+            $return_str .= "</div></div></div>";
+        }
+
     }
     return $return_str;
 }
@@ -413,8 +415,9 @@ function render_profile_fields_content($context) {
 function augment_url_refill_custom_profile_fields_registr() {
     $ret_str = '';
     foreach ($_POST as $key => $value) {
-        if (substr($key, 0, 4) == 'cpf_' && $value != '')
-        $ret_str .= '&amp;'.$key.'='.urldecode($value);
+        if (substr($key, 0, 4) == 'cpf_' && $value != '') {
+            $ret_str .= '&amp;' . $key . '=' . urldecode($value);
+        }
     }
     return $ret_str;
 }

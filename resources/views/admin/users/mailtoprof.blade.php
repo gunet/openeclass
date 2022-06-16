@@ -35,7 +35,6 @@
                     </div>
                 </div>
             </div>
-            {!! showSecondFactorChallenge() !!}
             <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
                   <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSend') }}'>

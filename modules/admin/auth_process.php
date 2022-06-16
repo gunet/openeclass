@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,16 +33,16 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-if (isset($_REQUEST['auth']) && is_numeric(getDirectReference($_REQUEST['auth']))) {
-    $data['auth'] = $auth = intval(getDirectReference($_REQUEST['auth'])); // $auth gets the integer value of the auth method if it is set
+if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
+    $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
 } else {
     $data['auth'] = $auth = false;
 }
 
 register_posted_variables(array('imaphost' => true, 'pop3host' => true,
-    'ldaphost' => true, 'ldap_base' => true,
-    'ldapbind_dn' => true, 'ldapbind_pw' => true,
-    'ldap_login_attr' => true, 'ldap_login_attr2' => true,
+    'ldaphost' => true, 'ldap_base' => true, 'ldapbind_dn' => true,
+    'ldapbind_pw' => true, 'ldap_login_attr' => true,
+    'ldap_firstname_attr' => true, 'ldap_surname_attr' => true,
     'ldap_studentid' => true, 'ldap_mail_attr' => true,
     'dbhost' => true, 'dbtype' => true, 'dbname' => true,
     'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
@@ -54,8 +54,8 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'cas_cachain' => true, 'casusermailattr' => true,
     'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
     'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
-    'auth_instructions' => true, 'auth_title' => true,
-	'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
+    'cas_altauth_use' => true, 'auth_instructions' => true, 'auth_title' => true,
+    'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
     'test_username' => true), 'all');
 
 if (empty($ldap_login_attr)) {
@@ -64,7 +64,6 @@ if (empty($ldap_login_attr)) {
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
     switch ($auth) {
         case 1:
             $settings = array();
@@ -204,10 +203,10 @@ if (isset($_POST['submit'])) {
             $data['checkedshib'] = 'checked';
         } else {
             $data['checkedshib'] = $data['shibseparator'] = '';
-        }        
+        }
     } else {
         if (in_array($auth, [8, 9, 10, 11, 12, 13])) {
-            //$r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_name FROM auth WHERE auth_id = ?d", $auth);
+            $r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_name FROM auth WHERE auth_id = ?d", $auth);
             if (!empty($data['auth_data']['auth_settings'])) {
                 foreach (unserialize($data['auth_data']['auth_settings']) as $key => $auth_setting) {
                     $data['auth_data'][$key] = $auth_setting;
@@ -217,7 +216,22 @@ if (isset($_POST['submit'])) {
                 }
             } else {
                 $data['auth_data']['id'] = $data['auth_data']['key'] = $data['auth_data']['secret'] = '';
-            }       
+            }
+            $auth_instructions = $r->auth_instructions;
+            $authName = q(ucfirst($r->auth_name));
+            if (isset($_SERVER['HTTPS'])) {
+                $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+            } else {
+                $protocol = 'http';
+            }
+            $callbackUri = "<strong>" . $protocol . "://" . $_SERVER['HTTP_HOST'] . "/</strong>";
+
+            if (in_array($authName, ['Facebook','Twitter', 'Google', 'Linkedin', 'Live', 'Yahoo'], true )) {
+                $authHelpUrl = 'https://docs.openeclass.org/el/admin/users_administration/'.strtolower($authName);
+                $data['authHelp'] = $langHybridAuthSetup1 . $authName . $langHybridAuthSetup2 . $authName . $langHybridAuthSetup3 . $authHelpUrl . $langHybridAuthSetup4 . $langHybridAuthCallback . $callbackUri;
+            } else {
+                $data['authHelp'] = "";
+            }
         }
     }
 }

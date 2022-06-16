@@ -18,7 +18,7 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-use Hautelook\Phpass\PasswordHash;
+
 define('SUFFIX_LEN', 4);
 
 $require_usermanage_user = true;
@@ -43,7 +43,6 @@ $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
     register_posted_variables(array('email_public' => true,
         'am_public' => true,
         'phone_public' => true), 'all', 'intval');
@@ -80,12 +79,13 @@ if (isset($_POST['submit'])) {
         if (!empty($line)) {
             $userl = preg_split('/[ \t]+/', $line);
             if (count($userl) >= $numfields) {
-                $info = array();
+                $info = ['email' => '', 'phone' => '', 'id' => ''];
                 foreach ($fields as $field) {
-                    $info[$field] = array_shift($userl);
+                    $info[$field] = trim(array_shift($userl));
                 }
 
-                if (!isset($info['email']) or !valid_email(trim($info['email']))) {
+                if ($info['email'] and !valid_email($info['email'])) {
+                    Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
                     $info['email'] = '';
                 }
 
@@ -130,9 +130,8 @@ if (isset($_POST['submit'])) {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
         $facs[$n->id] = $n->name;
     });
-    $data['access_options'] = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
-        ACCESS_PROFS => $langProfileInfoProfs,
-        ACCESS_USERS => $langProfileInfoUsers);
+    $data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
+                                    ACCESS_USERS => $langProfileInfoUsers);
     $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "index.php",
@@ -152,10 +151,10 @@ if (isset($_POST['submit'])) {
     }
 
     if (isDepartmentAdmin()) {
-        list($js, $html) = $tree->buildUserNodePickerIndirect(array('params' => 'name="facid[]"',
+        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"',
             'allowables' => $user->getDepartmentIds($uid)));
     } else {
-        list($js, $html) = $tree->buildUserNodePickerIndirect(array('params' => 'name="facid[]"'));
+        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
     }
     $head_content .= $js;
     $data['html'] = $html;
@@ -196,8 +195,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $password = get_auth_info($auth_methods_form);
         $mail_message = $langPassSameAuth;
     } else {
-        $hasher = new PasswordHash(8, false);
-        $password_encrypted = $hasher->HashPassword($password);
+        $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
         $mail_message = $password;
     }
 

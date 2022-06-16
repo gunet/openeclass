@@ -33,7 +33,7 @@ if (isset($_GET['action'])) {
     $navigation[] = array('url' => $_SERVER['SCRIPT_NAME'], 'name' => $langCourseCategoryActions);
     switch ($_GET['action']) {
         case 'add':
-            $pageName = $langCourseCategoryAdd;
+            $pageName = $langCategoryAdd;
             break;
         case 'delete':
             $pageName = $langCourseCategoryDel;
@@ -239,7 +239,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     $orderingValue = ($id != null) ? "value='" . $ordering . "'" : '';
     $html .= "
     <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryOrdering'] . ":</label>
+        <label class='col-sm-3 control-label'>" . $GLOBALS['langReorder'] . ":</label>
         <div class='col-sm-9'>
             <input class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryOrdering2'] . "'>
         </div>

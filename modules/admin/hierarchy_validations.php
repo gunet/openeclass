@@ -48,7 +48,7 @@ function validateNode($id, $checkOwn) {
     }
 
     if ($checkOwn) {
-        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        $subtrees = $tree->buildSubtrees($user->getAdminDepartmentIds($uid));
 
         if (!in_array($id, $subtrees)) {
             exitWithError($notallowed);

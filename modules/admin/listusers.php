@@ -52,6 +52,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
     $user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
     $user_expires_until = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
+    $user_last_login = isset($_GET['user_last_login']) ? $_GET['user_last_login'] : '';
     $mail_ver_required = get_config('email_verification_required');
     // pagination
     $limit = intval($_GET['iDisplayLength']);
@@ -85,14 +86,23 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 
     // Expiration date search
-    if (!empty($user_expires_until)) {        
+    if (!empty($user_expires_until)) {
         add_param('user_expires_until');
         // join the above with registered at search
         $criteria[] = 'expires_at > CURRENT_DATE() AND expires_at < ?s';
         $date_user_expires_until = DateTime::createFromFormat("d-m-Y", $user_expires_until);
         $terms[] = $date_user_expires_until->format("Y-m-d");
     }
-    
+
+    // users who haven't logged in
+    if (!empty($user_last_login)) {
+        add_param('user_last_login');
+        $criteria[] = 'registered_at < ?s AND id NOT IN (SELECT id_user FROM loginout WHERE `when` > ?s GROUP BY id_user)';
+        $date_last_login = DateTime::createFromFormat("d-m-Y", $user_last_login);
+        $terms[] = $date_last_login->format("Y-m-d");
+        $terms[] = $date_last_login->format("Y-m-d");
+    }
+
     // surname search
     if (!empty($lname)) {
         $criteria[] = 'surname LIKE ?s ' . $cs;
@@ -149,7 +159,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $criteria[] = 'expires_at < CURRENT_DATE()';
         add_param('search', 'inactive');
     }
-    
+
     // search for users with their account being expired in one month
     if ($search == 'wexpire') {
         $criteria[] = 'expires_at BETWEEN CURRENT_DATE() AND date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';
@@ -167,7 +177,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $subs = $tree->buildSubtrees(array($dep));
             add_param('department', $dep);
         } else if (isDepartmentAdmin()) {
-            $subs = $user->getDepartmentIds($uid);
+            $subs = $user->getAdminDepartmentIds($uid);
         }
 
         $ids = '';
@@ -490,7 +500,7 @@ $data['action_bar'] = action_bar(array(
                 'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
                 'icon' => 'fa-search',
                 'level' => 'primary-label',
-                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive')),            
+                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive')),
             array('title' => $langBack,
                 'url' => "search_user.php",
                 'icon' => 'fa-reply',

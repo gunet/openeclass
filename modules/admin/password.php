@@ -23,46 +23,33 @@
  * @file password.php
  * @brief change user password
  */
-use Hautelook\Phpass\PasswordHash;
 
 $require_login = true;
-$require_admin = TRUE;
-$require_valid_uid = TRUE;
+$require_valid_uid = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/hierarchy_validations.php';
 
-check_uid();
-
-if (isset($_POST['changePass'])) {
-    $userid = intval(getDirectReference($_POST['userid']));
-
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
-    
-    if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
-        Session::Messages($langFieldsMissing);
-        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode(getIndirectReference($userid)));
-    }
-    if ($_POST['password_form1'] !== $_POST['password_form']) {
-        Session::Messages($langPassTwo);
-        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode(getIndirectReference($userid)));        
-    }
-    // All checks ok. Change password!
-    $hasher = new PasswordHash(8, false);
-    $new_pass = $hasher->HashPassword($_POST['password_form']);
-    Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
-    Session::Messages($langPassChanged, 'alert-sucess');
-    redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));    
+if (isset($_REQUEST['userid'])) {
+    $userid = intval($_REQUEST['userid']);
+} else {
+    forbidden();
 }
 
-if (!isset($_GET['userid'])) {
-    header("Location: {$urlServer}modules/admin/");
-    exit;
+if (isDepartmentAdmin()) {
+    $tree = new Hierarchy();
+    $user = new User();
+    validateUserNodes($userid, true);
+} elseif (!$is_usermanage_user) {
+    forbidden();
 }
 
+$backUrl = $urlServer . 'modules/admin/edituser.php?u=' . urlencode($_REQUEST['userid']);
 $toolName = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'edituser.php', 'name' => $langEditUser);
+$navigation[] = array('url' => $backUrl, 'name' => $langEditUser);
 
 // javascript
 load_js('pwstrength.js');
@@ -89,6 +76,9 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
+check_uid();
+
+$passurl = $urlServer . 'modules/admin/password.php';
 $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
                 'url' => "{$urlServer}modules/admin/edituser.php?u=" . urlencode(getDirectReference($_REQUEST['userid'])),

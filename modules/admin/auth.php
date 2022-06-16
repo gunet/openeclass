@@ -31,15 +31,15 @@ require_once 'modules/auth/auth.inc.php';
 // sso transition
 if (isset($_GET['transition'])) {
     if ($_GET['transition'] == 'true') {
-        Session::Messages("ΠΡΟΣΟΧΗ! Θα ενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON). 
-                                Επιβεβαιώστε την ενέργειά σας. 
+        Session::Messages("ΠΡΟΣΟΧΗ! Θα ενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON).
+                                Επιβεβαιώστε την ενέργειά σας.
                                 <ul>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=true'><strong>Ναι</strong></a></li>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
                                 </ul>", 'alert-warning');
     } else {
-        Session::Messages("ΠΡΟΣΟΧΗ! Θα απενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON). 
-                                Επιβεβαιώστε την ενέργειά σας. 
+        Session::Messages("ΠΡΟΣΟΧΗ! Θα απενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON).
+                                Επιβεβαιώστε την ενέργειά σας.
                                 <ul>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=false'><strong>Ναι</strong></a></li>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>

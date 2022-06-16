@@ -49,24 +49,24 @@
                         [
                             [
                                 'title' => $authMethod->auth_default ? trans('langDeactivate') : trans('langActivate'),
-                                'url' => "$_SERVER[PHP_SELF]?auth=" . getIndirectReference($authMethod->auth_id) . "&amp;q=" . !$authMethod->auth_default,
+                                'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;q=" . !$authMethod->auth_default,
                                 'icon' => $authMethod->auth_default ? 'fa-toggle-off' : 'fa-toggle-on',
                                 'show' => $authMethod->auth_id == 1 || $authMethod->auth_settings
                             ],
                             [
                                 'title' => trans('langAuthSettings'),
-                                'url' => "auth_process.php?auth=" . getIndirectReference($authMethod->auth_id),
+                                'url' => "auth_process.php?auth=" . $authMethod->auth_id,
                                 'icon' => 'fa-gear'
                             ],
                             [
                                 'title' => trans('langPrimaryAuthType'),
-                                'url' => "$_SERVER[PHP_SELF]?auth=" . getIndirectReference($authMethod->auth_id) . "&amp;p=1",
+                                'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;p=1",
                                 'icon' => 'fa-flag',
                                 'show' => $authMethod->auth_default and !$authMethod->auth_default > 1
                             ],
                             [
                                 'title' => trans('langSecondaryAuthType'),
-                                'url' => "$_SERVER[PHP_SELF]?auth=" . getIndirectReference($authMethod->auth_id) . "&amp;p=0",
+                                'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;p=0",
                                 'icon' => 'fa-circle-o',
                                 'show' => $authMethod->auth_default > 1
                             ],

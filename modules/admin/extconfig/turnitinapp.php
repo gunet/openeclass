@@ -58,6 +58,6 @@ class TurnitinApp extends ExtApp {
      * @return boolean
      */
     public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM lti_apps WHERE enabled = true AND is_template = true AND course_id is null")->count > 0;
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM lti_apps WHERE enabled = true AND is_template = true AND type = 'turnitin' AND course_id is null")->count > 0;
     }
 }

@@ -27,10 +27,11 @@ require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array('GoogleDriveApp', 'OneDriveApp',
-        'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp', 'OpenDelosApp',
-        'BBBApp', 'OpenMeetings', 'WebConfApp', 'AutojudgeApp', 'AntivirusApp',
-        'WafApp', 'secondfaApp', 'AnalyticsApp', 'UnPlagApp', 'TurnitinApp', 'LtiPublishApp');
+    public static $AppNames = ['H5PApp', 'BBBApp', 'TurnitinApp', 'LtiPublishApp',
+        'UnPlagApp', 'OpenDelosApp', 'GoogleDriveApp', 'OneDriveApp',
+        'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp', 'OpenMeetings',
+        'WebConfApp', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
+        'AnalyticsApp', 'UserWayApp', 'LimesurveyApp', 'ColmoocApp'];
     private static $APPS = null;
 
     /**
@@ -183,7 +184,7 @@ abstract class ExtApp {
 
     public function update_tc_sessions($type) {
 
-        $r = Database::get()->querySingle("SELECT id FROM tc_servers 
+        $r = Database::get()->querySingle("SELECT id FROM tc_servers
                                             WHERE `type` = '$type' AND enabled = 'true'
                                             ORDER BY weight ASC");
         if ($r) {

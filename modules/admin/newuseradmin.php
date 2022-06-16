@@ -18,9 +18,8 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-use Hautelook\Phpass\PasswordHash;
 
-$require_usermanage_user = TRUE;
+$require_usermanage_user = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -36,9 +35,8 @@ $user = new User();
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
     $requiredFields = array('auth_form', 'surname_form',
-        'givenname_form', 'language_form', 'department', 'pstatus');        
+        'givenname_form', 'language_form', 'department', 'pstatus');
     if (get_config('am_required') and @$_POST['pstatus'] == 5) {
         $requiredFields[] = 'am_form';
     }
@@ -61,9 +59,9 @@ if (isset($_POST['submit'])) {
     $v->rule('in', 'language_form', $session->active_ui_languages);
     $v->rule('in', 'auth_form', get_auth_active_methods());
     $v->rule('email', 'email_form');
-    
+
     cpf_validate_format_valitron($v);
-    
+
     if (!$v->validate()) {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
     } else {
@@ -86,8 +84,7 @@ if (isset($_POST['submit'])) {
 
         if ($auth_form == 1) { // eclass authentication
             validateNode(intval($depid), isDepartmentAdmin());
-            $hasher = new PasswordHash(8, false);
-            $password_encrypted = $hasher->HashPassword($_POST['password']);
+            $password_encrypted = password_hash($_POST['password'], PASSWORD_DEFAULT);
         } else {
             $password_encrypted = $auth_ids[$_POST['auth_form']];
         }
@@ -96,16 +93,16 @@ if (isset($_POST['submit'])) {
             $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
             $user_expires_at = $expires_at->format("Y-m-d H:i");
             $user_date_expires_at = $expires_at->format("d-m-Y H:i");
-        } else {                                    
+        } else {
             $expires_at = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now + 1 year")));
             $user_expires_at = $expires_at->format("Y-m-d H:i");
         }
         $uid = Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
                 VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '')",
-                    $surname_form, $givenname_form, $uname_form, 
-                    $password_encrypted, $email_form, 
-                    $pstatus, $phone_form, $am_form, 
+                    $surname_form, $givenname_form, $uname_form,
+                    $password_encrypted, $email_form,
+                    $pstatus, $phone_form, $am_form,
                     $user_expires_at, $language_form, $verified_mail)->lastInsertID;
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
@@ -114,7 +111,7 @@ if (isset($_POST['submit'])) {
         user_hook($uid);
         //process custom profile fields values
         process_profile_fields_data(array('uid' => $uid));
-        
+
         // close request if needed
         if ($rid) {
             $rid = intval($rid);
@@ -189,7 +186,7 @@ if (isset($_POST['submit'])) {
         } else {
             redirect_to_home_page('modules/admin/newuseradmin.php' . $reqtype);
         }
-    }    
+    }
 }
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -332,12 +329,11 @@ $nodePickerParams = array(
     'params' => 'name="department"',
     'defaults' => $depid,
     'tree' => null,
-    'where' => "AND node.allow_user = true",
     'multiple' => false);
 if (isDepartmentAdmin()) {
-    $nodePickerParams['allowables'] = $user->getDepartmentIds($uid);
+    $nodePickerParams['allowables'] = $user->getAdminDepartmentIds($uid);
 }
-list($tree_js, $tree_html) = $tree->buildNodePicker($nodePickerParams);
+list($tree_js, $tree_html) = $tree->buildUserNodePicker($nodePickerParams);
 $head_content .= $tree_js;
 $data['tree_html'] = $tree_html;
 
@@ -354,7 +350,7 @@ if ($ext_uid) {
 }
 
 $data['menuTypeID'] = 3;
-view('admin.users.newuseradmin', $data);     
+view('admin.users.newuseradmin', $data);
 
 function getValue($name, $default='') {
     if (Session::has($name)) {

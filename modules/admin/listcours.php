@@ -43,6 +43,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $searchcode = isset($_GET['formsearchcode']) ? $_GET['formsearchcode'] : '';
     $searchtype = isset($_GET['formsearchtype']) ? intval($_GET['formsearchtype']) : '-1';
     $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
+    $searchprof = isset($_GET['formsearchprof']) ? $_GET['formsearchprof'] : '';
     // pagination
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
@@ -61,6 +62,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     if ($searchtype != "-1") {
         $query .= ' AND course.visible = ?d';
         $terms[] = $searchtype;
+    }
+    if ($searchprof !== '') {
+        $query .= ' AND course.prof_names LIKE ?s';
+        $terms[] = '%' . $searchprof . '%';
     }
     if ($searchfaculte) {
         $subs = $tree->buildSubtrees(array($searchfaculte));
@@ -90,7 +95,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // Limit department admin search only to subtrees of own departments
     if (isDepartmentAdmin()) {
         $begin = true;
-        foreach ($user->getDepartmentIds($uid) as $department) {
+        foreach ($user->getAdminDepartmentIds($uid) as $department) {
             if ($begin) {
                 $query .= ' AND (';
                 $begin = false;
@@ -132,8 +137,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalDisplayRecords'] = $filtered_results;
 
     $data['aaData'] = array();
-        
-    foreach ($sql as $logs) {        
+
+    foreach ($sql as $logs) {
         $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
                         </a> (" . q($logs->code) . ")<br /><i>" . q($logs->prof_names) . "";
 
@@ -167,7 +172,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'title' => $langDelete,
                 'icon' => 'fa-times',
                 'url' => "delcours.php?c=$logs->id"
-            )            
+            )
         ));
         $data['aaData'][] = array(
             '0' => $course_title,
@@ -185,7 +190,7 @@ load_js('datatables');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#course_results_table').DataTable ({
-                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."            
+                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
@@ -234,13 +239,13 @@ $toolName = $langListCours;
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(
             array('title' => $langAllCourses,
-                'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=" . getIndirectReference(0) . "&amp;search_submit=$langSearch",
+                'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=0&amp;search_submit=$langSearch",
                 'icon' => 'fa-search',
-                'level' => 'primary-label'),            
+                'level' => 'primary-label'),
             array('title' => $langReturnSearch,
                 'url' => "searchcours.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary')));                    
+                'level' => 'primary')));
 
 $data['menuTypeID'] = 3;
 view('admin.courses.listcours', $data);
