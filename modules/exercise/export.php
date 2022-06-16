@@ -170,7 +170,7 @@ foreach ($result as $row) {
         <h3>$question_title</h3>
         <small>$question_type_legend &ndash; id: {$row->id}</small><br>" .
         (file_exists($picturePath)? "<img class='img-responsive' src='$picturePath' alt=''>": '') .
-        ($question_description? standard_text_escape($question_description): '') .
+        $question_description .
         question_html($question, $row->id) . "
         <div><span class='label'>$langQuestionScore:</span> " . round($questionWeighting, 2) . "</div>
         <small>$question_difficulty_legend $question_category_legend $exercises_used_in $answer_legend</small>";
