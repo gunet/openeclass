@@ -211,7 +211,7 @@ elseif (isset($_GET['recup']) and $fromExercise) {
 $exportUrl = "export.php?course=$course_code" .
     (isset($exerciseId)? "&amp;exerciseId=$exerciseId": '') .
     (isset($difficultyId)? "&amp;difficultyId=$difficultyId": '') .
-    (isset($categoryId)? "&amp;exerciseId=$categoryId": '');
+    (isset($categoryId)? "&amp;categoryId=$categoryId": '');
 
 if ($fromExercise) {
     $action_bar_options[] = [
