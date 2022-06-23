@@ -40,7 +40,6 @@ $data['action_bar'] = action_bar(array(
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
 
-
 $months = "";
 for ($i = 0; $i < 12; $i++) {
     $mon = mktime(0, 0, 0, date('m') - $i - 1, date('d'), date('Y'));
@@ -57,7 +56,6 @@ $data['months'] = $months;
 
 
 if (isset($_POST["selectedMonth"])) {
-
     $month = q($_POST["selectedMonth"]);
     list($m, $y) = explode(' ', $month);  //only month
     $data['y'] = $y;

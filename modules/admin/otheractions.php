@@ -31,7 +31,6 @@ require_once 'include/log.class.php';
 
 load_js('tools.js');
 load_js('datatables');
-load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
@@ -133,15 +132,30 @@ view('admin.other.otheractions', $data);
 
 /**
  * @brief output a <tr> with an array
- * @param type $table
  * @return string
  */
-function tablize($table) {
+function tablize($table, $search) {
+
+    global $urlServer;
+
     $ret = "";
     if (is_array($table)) {
         foreach ($table as $key => $thevalue) {
             $ret .= "<tr>";
-            $ret .= "<td style='font-size: 90%'>" . $key . "</td>";
+            switch($search) {
+                case 'email' : $link = $urlServer . "modules/admin/listusers.php?uname=&fname=&lname=&email=" . urlencode($key) . "&am=&user_type=0"
+                                        . "&auth_type=0&reg_flag=1&user_registered_at=&verified_mail=3"
+                                        . "&department=0&search_type=contains";
+                    break;
+                case 'username':
+                case 'pair': $link = $urlServer . "modules/admin/listusers.php?uname=" . urlencode($key) . "&fname=&lname=&email=&am=&user_type=0"
+                                        . "&auth_type=0&reg_flag=1&user_registered_at=&verified_mail=3"
+                                        . "&department=0&search_type=contains";
+                    break;
+                default : $link = '';
+            }
+
+            $ret .= "<td style='font-size: 90%'><a href='$link'>" . $key . "</a></td>";
             $ret .= "<td class='right'><strong>" . $thevalue . "</strong></td></tr>";
         }
     }

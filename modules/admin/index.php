@@ -22,15 +22,17 @@
 $require_usermanage_user = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'modalconfirmation.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'modules/admin/modalconfirmation.php';
 
 $toolName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
-$data['release_info'] = get_eclass_release();
 
 if (isset($is_admin) and $is_admin) {
     $data['is_admin'] = $is_admin;
 }
+$data['release_info'] = get_eclass_release();
 
 // Construct a table with platform identification info
 $data['action_bar'] = action_bar(array(

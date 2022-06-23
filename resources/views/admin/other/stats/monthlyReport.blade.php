@@ -3,7 +3,7 @@
 @section('content')
     <style>
         .prev_month { color: red; }
-    </style>";
+    </style>
 
     {!! isset($action_bar) ?  $action_bar : '' !!}
     <div class="form-wrapper">
@@ -20,8 +20,8 @@
     </div>
 
     @if (isset($_POST['selectedMonth']))
-        @if ($cours_num)
-            <div class='alert alert-info text-center'>{{ trans('langReport' }}: <strong>{{ $msg_of_month }} {{ $y }}</strong>
+        @if ($coursNum)
+            <div class='alert alert-info text-center'>{{ trans('langReport') }}: <strong>{{ $msg_of_month }} {{ $y }}</strong>
                 <div><small>({{ trans('langInfoMonthlyStatistics') }})</small></div>
             </div>
             <table class="table-default">

@@ -63,11 +63,11 @@
                         </th>
                     </tr>
                     @if (count($loginDouble) > 0)
-                        {!! tablize($loginDouble) !!}
+                        {!! tablize($loginDouble, 'username') !!}
                         <tr>
                             <td class='right' colspan='2'>
                                 <b>
-                                    <span style='color: #FF0000'>{{ trans('langExist') count($loginDouble) }}</span>
+                                    <span style='color: #FF0000'>{{ trans('langExist') }} {{ count($loginDouble) }}</span>
                                 </b>
                             </td>
                         </tr>
@@ -90,11 +90,11 @@
                         </th>
                     </tr>
                     @if (count($loginDouble) > 0)
-                        {!! tablize($loginDouble) !!}
+                        {!! tablize($loginDouble, 'email') !!}
                         <tr>
                             <td class=right colspan='2'>
                                 <b>
-                                    <span style='color: #FF0000'>{{ trans('langExist') count($loginDouble) }}</span>
+                                    <span style='color: #FF0000'>{{ trans('langExist') }} {{ count($loginDouble) }}</span>
                                 </b>
                             </td>
                         </tr>
@@ -119,11 +119,11 @@
                         </th>
                     </tr>
                     @if (count($loginDouble) > 0)
-                        {!! tablize($loginDouble) !!}
+                        {!! tablize($loginDouble, 'pair') !!}
                         <tr>
                             <td class='right' colspan='2'>
                                 <b>
-                                    <span style='color: #FF0000'>{{ trans('langExist') count($loginDouble) }}</span>
+                                    <span style='color: #FF0000'>{{ trans('langExist') }} {{ count($loginDouble) }}</span>
                                 </b>
                             </td>
                         </tr>
