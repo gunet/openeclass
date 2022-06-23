@@ -5,6 +5,7 @@ syntax: regexp
 ^secure/
 ^config/.*\.php
 ^html/
+^node_modules/
 
 ^composer\.phar
 ^storage/views/
