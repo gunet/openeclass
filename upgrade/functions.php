@@ -2394,32 +2394,32 @@ function upgrade_to_3_13($tbl_options): void
         Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC16',2,0,0,0)");
     }
     if (!DBHelper::tableExists('course_units_activities')) {
-        Database::get()->query("CREATE TABLE IF NOT EXISTS`course_units_activities` ( 
-                `id` INT NOT NULL AUTO_INCREMENT , 
-                `course_code` VARCHAR(20) NOT NULL , 
-                `activity_id` VARCHAR(5) NOT NULL , 
-                `unit_id` INT NOT NULL, 
-                `tool_ids` TEXT NOT NULL , 
+        Database::get()->query("CREATE TABLE IF NOT EXISTS`course_units_activities` (
+                `id` INT NOT NULL AUTO_INCREMENT ,
+                `course_code` VARCHAR(20) NOT NULL ,
+                `activity_id` VARCHAR(5) NOT NULL ,
+                `unit_id` INT NOT NULL,
+                `tool_ids` TEXT NOT NULL ,
                 `activity_type` INT NOT NULL,
                 `visible` INT NOT NULL,
                 PRIMARY KEY (`id`)) $tbl_options");
     }
     if (!DBHelper::tableExists('course_class_info')) {
-            Database::get()->query("CREATE TABLE IF NOT EXISTS `course_class_info` ( 
-            `id` INT NOT NULL AUTO_INCREMENT , 
-            `student_number` VARCHAR(50) NOT NULL , 
-            `lessons_number` INT NOT NULL, 
-            `lesson_hours` INT NOT NULL, 
-            `home_hours` INT NOT NULL, 
-            `total_hours` INT NOT NULL, 
+            Database::get()->query("CREATE TABLE IF NOT EXISTS `course_class_info` (
+            `id` INT NOT NULL AUTO_INCREMENT ,
+            `student_number` VARCHAR(50) NOT NULL ,
+            `lessons_number` INT NOT NULL,
+            `lesson_hours` INT NOT NULL,
+            `home_hours` INT NOT NULL,
+            `total_hours` INT NOT NULL,
             `course_code` VARCHAR(20) NOT NULL,
             PRIMARY KEY (`id`)) $tbl_options");
     }
     if (!DBHelper::tableExists('course_learning_objectives')) {
-            Database::get()->query("CREATE TABLE `course_learning_objectives` ( 
-            `id` INT NOT NULL AUTO_INCREMENT, 
-            `course_code` VARCHAR(20) NOT NULL, 
-            `title` TEXT NOT NULL, 
+            Database::get()->query("CREATE TABLE `course_learning_objectives` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `course_code` VARCHAR(20) NOT NULL,
+            `title` TEXT NOT NULL,
             PRIMARY KEY (`id`)) $tbl_options");
     }
 
@@ -2439,8 +2439,8 @@ function upgrade_to_3_13($tbl_options): void
         Database::get()->query("ALTER table unit_resources ADD `activity_id` VARCHAR(5) NOT NULL DEFAULT 'FC000'");
     }
 
-    if (!DBHelper::fieldExists('exercise_with_questions', 'copy_of_qid')) {
-        Database::get()->query("ALTER table exercise_question ADD copy_of_qid INT(11) DEFAULT NULL, 
+    if (!DBHelper::fieldExists('exercise_question', 'copy_of_qid')) {
+        Database::get()->query("ALTER table exercise_question ADD copy_of_qid INT(11) DEFAULT NULL,
             ADD CONSTRAINT FOREIGN KEY (copy_of_qid) REFERENCES exercise_question(id) ON DELETE SET NULL");
     }
 
