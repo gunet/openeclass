@@ -2377,21 +2377,21 @@ function upgrade_to_3_13($tbl_options): void
                 `module_id` int(11) NOT NULL,
                 PRIMARY KEY  (`id`)) $tbl_options");
 
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC1',0,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC2',0,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC3',0,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC5',0,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC6',0,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC7',1,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC8',1,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC9',1,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC10',1,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC11',1,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC12',1,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC13',1,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC14',1,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC15',2,0,0,0)");
-        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unity`,`module_id`) VALUES ('FC16',2,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC1',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC2',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC3',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC5',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC6',0,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC7',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC8',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC9',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC10',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC11',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC12',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC13',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC14',1,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC15',2,0,0,0)");
+        Database::get()->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC16',2,0,0,0)");
     }
     if (!DBHelper::tableExists('course_units_activities')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS`course_units_activities` ( 
@@ -2439,10 +2439,15 @@ function upgrade_to_3_13($tbl_options): void
         Database::get()->query("ALTER table unit_resources ADD `activity_id` VARCHAR(5) NOT NULL DEFAULT 'FC000'");
     }
 
+    if (!DBHelper::fieldExists('exercise_with_questions', 'copy_of_qid')) {
+        Database::get()->query("ALTER table exercise_question ADD copy_of_qid INT(11) DEFAULT NULL, 
+            ADD CONSTRAINT FOREIGN KEY (copy_of_qid) REFERENCES exercise_question(id) ON DELETE SET NULL");
+    }
+
 }
 
 /**
- * @brief upgrade queries to 3.13
+ * @brief upgrade queries to 4.0
  * @param $tbl_options
  * @return void
  */
@@ -2548,14 +2553,12 @@ function upgrade_to_4_0($tbl_options): void {
 }
 
 
-
 /**
  * @brief Create Indexes
  */
 
 function create_indexes(): void
 {
-    return;
 
     DBHelper::indexExists('actions_daily', 'actions_daily_index') or
         Database::get()->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
