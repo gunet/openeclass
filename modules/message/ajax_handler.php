@@ -52,6 +52,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $message_path = $inbox->get_mailbox_path();
         $msg = new Msg($mid, $uid, 'any');
         if (!$msg->error) {
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $msg->delete($message_path);
         }
         exit();
@@ -63,6 +64,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             foreach ($msgs as $msg) {
                 $message_path = $webDir . "/courses/" . course_id_to_code($msg->course_id) . "/dropbox";
                 if (!$msg->error) {
+                    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                     $msg->delete($message_path);
                 }
             }
@@ -72,6 +74,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $msgs = $inbox->getInboxMsgs();
             foreach ($msgs as $msg) {
                 if (!$msg->error) {
+                    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                     $msg->delete($message_path);
                 }
             }
@@ -86,6 +89,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             foreach ($msgs as $msg) {
                 $message_path = $webDir . "/courses/" . course_id_to_code($msg->course_id) . "/dropbox";
                 if (!$msg->error) {
+                    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                     $msg->delete($message_path);
                 }
             }
@@ -95,37 +99,38 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $msgs = $outbox->getOutboxMsgs();
             foreach ($msgs as $msg) {
                 if (!$msg->error) {
+                    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                     $msg->delete($message_path);
                 }
             }
         }
         exit();
     }
-    
+
     $mbox = new Mailbox($uid, $course_id);
-    
+
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
-    
+
     //Total records
     $data['iTotalRecords'] = $mbox->MsgsNumber($mbox_type);
-    
+
     $keyword = $_GET['sSearch'];
-    
+
     if ($mbox_type == 'inbox') {
         //Total records after applying search filter
         $data['iTotalDisplayRecords'] = count($mbox->getInboxMsgs($keyword));
-        
+
         $msgs = $mbox->getInboxMsgs($keyword, $limit, $offset);
     } else {
         //Total records after applying search filter
         $data['iTotalDisplayRecords'] = count($mbox->getOutboxMsgs($keyword));
-        
+
         $msgs = $mbox->getOutboxMsgs($keyword, $limit, $offset);
     }
-    
+
     $data['aaData'] = array();
-    
+
     foreach ($msgs as $msg) {
         if ($msg->is_read == 1) {
             $bold_start = "";
@@ -136,12 +141,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $bold_end = "</strong>";
             $envelove_icon = "fa-envelope";
         }
-    
+
         $urlstr = '';
         if ($course_id != 0) {
             $urlstr = "&amp;course=".course_id_to_code($course_id);
         }
-        
+
         if (($msg->filename != '') and ($msg->filesize != 0)) {
             $ahref = "message_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=".$msg->id;
             $filename = "&nbsp;&nbsp;&#124;&nbsp;&nbsp;" .
@@ -151,15 +156,15 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         } else {
             $filename = '';
         }
-        
+
         $i = 0;
-        
+
         if ($mbox_type == 'inbox') {
             $td[$i++] = "<i class='fa $envelove_icon' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;$bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$bold_end.$filename;
         } else {
             $td[$i++] = "<i class='fa fa-envelope-o' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;<a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
         }
-        
+
         if ($course_id == 0) {
             if ($msg->course_id != 0) {
                 $td[$i++] = "$bold_start<a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>$bold_end";
@@ -167,13 +172,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 $td[$i++] = "";
             }
         }
-        
+
         if ($mbox_type == 'inbox') {
             $td[$i++] = display_user($msg->author_id, false, false, "outtabs");
         } else {
             $recipients = '';
             foreach ($msg->recipients as $r) {
-                if ($r != $msg->author_id) {                    
+                if ($r != $msg->author_id) {
                     $recipients .= display_user($r, false, false, "outtabs").' ,&nbsp;';
                 }
             }
@@ -181,7 +186,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $td[$i++] = "<div><p class='recipients'>$recipients</p></div>";
         }
         $td[$i++] = nice_format(date('Y-m-d H:i:s',$msg->timestamp), true);
-            
+
 //            $td[$i++] = action_button(array(
 //                array(
 //                    'icon' => 'fa-times',
@@ -195,7 +200,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 //            );
         $btn_class = ($mbox_type == 'inbox')? 'delete_in' : 'delete_out';
         $td[$i++] = "<a href='javascript:void(0)' class='$btn_class' data-id='$msg->id'><span class='fa fa-times text-danger' style='padding-top:8px; font-size:1.2em;'></span></a>";
-        
+
         if ($course_id == 0) {
             $data['aaData'][] = array(
                     'DT_RowId' => $msg->id,
@@ -215,7 +220,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             );
         }
     }
-    
+
     echo json_encode($data);
     exit();
 }

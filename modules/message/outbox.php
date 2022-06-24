@@ -45,11 +45,11 @@ if (isset($_GET['mid'])) {
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
     if (!$msg->error) {
-         
+
         $urlstr = '';
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
-        }       
+        }
         $out = action_bar(array(
                             array('title' => $langBack,
                                   'url' => "outbox.php".$urlstr,
@@ -66,8 +66,8 @@ if (isset($_GET['mid'])) {
         foreach ($msg->recipients as $r) {
             if ($r != $msg->author_id) {
                 $recipients .= display_user($r, false, false, "outtabs").' ,&nbsp';
-            }            
-        }        
+            }
+        }
         $recipients = rtrim($recipients, ',&nbsp;'); // remove the last comma
         $out .= "<div id='out_del_msg'></div>
                 <div id='out_msg_area'>
@@ -137,7 +137,7 @@ if (isset($_GET['mid'])) {
                     &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")
                                 </div>
                             </div>";
-               }       
+               }
                $out .= "</div>
                     </div>";
 
@@ -159,7 +159,7 @@ if (isset($_GET['mid'])) {
         $(document).on( "click",".delete_out_inner", function (e) {
             e.preventDefault();
             var id = $(this).children("a").data("id");
-            var string = "mid="+id;
+            var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";            
             bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {                       
             if(result) {
                 $.ajax({
@@ -179,9 +179,8 @@ if (isset($_GET['mid'])) {
         $(".delete").click(function() {
             if (confirm("' . js_escape($langConfirmDelete) . '")) {
                 var rowContainer = $(this).parent().parent();
-                var id = rowContainer.attr("id");
-                var string = \'mid=\'+ id;
-
+                var id = rowContainer.attr("id");                
+                var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
                 $.ajax({
                        type: "POST",
                        url: "'.$ajax_url.'",
@@ -201,7 +200,7 @@ if (isset($_GET['mid'])) {
         </script>';
     }
 } else {
-    
+
     $out = "<div id='out_del_msg'></div><div id='outbox' class='table-responsive'>";
     $out .= "<table id='outbox_table' class='table-default'>
                <thead>
@@ -218,7 +217,7 @@ if (isset($_GET['mid'])) {
                <tbody>
                </tbody>
              </table></div>";
-    
+
     $out .= "<script type='text/javascript'>
                $(document).ready(function() {
 
@@ -271,8 +270,8 @@ if (isset($_GET['mid'])) {
                     $(document).off( 'click','.delete_out_inner');
                     $(document).on( 'click','.delete_out', function (e) {
                         e.preventDefault();
-                        var id = $(this).data('id');
-                        var string = 'mid='+ id ;
+                        var id = $(this).data('id');                        
+                        var string = 'mid='+id+'&". generate_csrf_token_link_parameter() ."';
                         bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
                             if (result) {
                                 $.ajax({
@@ -302,7 +301,7 @@ if (isset($_GET['mid'])) {
                     $('.delete_all_out').click(function() {
                       bootbox.confirm('".js_escape($langConfirmDeleteAllMsgs)."', function(result) {
                           if(result) {
-                            var string = 'all_outbox=1';
+                            var string = 'all_outbox=1&". generate_csrf_token_link_parameter() ."';                            
                             $.ajax({
                               type: 'POST',
                               url: '$ajax_url',

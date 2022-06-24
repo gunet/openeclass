@@ -434,29 +434,28 @@ if (isset($_GET['mid'])) {
                     $(document).on("click", ".delete_in_inner", function (e) {
                          e.preventDefault();
                          var id = $(this).children("a").data("id");
-                         var string = "mid="+id;
+                         var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";                         
                          bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {
                          if(result) {
                              $.ajax({
-                              type: "POST",
-                              url: "'.$ajax_url.'",
-                              datatype: "json",
-                              data: string,
-                              success: function(){
-                                 $("#del_msg").html("<p class=\"alert alert-success\">'.js_escape($langMessageDeleteSuccess).'</p>");
-                                 $(".alert-success").delay(3000).fadeOut(1500);
-                                 $("#msg_area").remove();
-                              }});
-                         }
+                                  type: "POST",
+                                  url: "'.$ajax_url.'",
+                                  datatype: "json",
+                                  data: string,
+                                  success: function(){
+                                     $("#del_msg").html("<p class=\"alert alert-success\">'.js_escape($langMessageDeleteSuccess).'</p>");
+                                     $(".alert-success").delay(3000).fadeOut(1500);
+                                     $("#msg_area").remove();
+                                  }});                             
+                             }
                         });
                       });
-
 
                     $(".delete").click(function() {
                       if (confirm("' . js_escape($langConfirmDelete) . '")) {
                         var rowContainer = $(this).parent().parent();
                         var id = rowContainer.attr("id");                        
-                        var string = "mid="+id;
+                        var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
                         $.ajax({
                           type: "POST",
                           url: "'.$ajax_url.'",
@@ -541,7 +540,7 @@ if (isset($_GET['mid'])) {
                  $(document).on( 'click','.delete_in', function (e) {
                      e.preventDefault();
                      var id = $(this).data('id');
-                     var string = 'mid='+id;
+                     var string = 'mid='+id+'&". generate_csrf_token_link_parameter() ."';
                      bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
                      if (result) {
                          $.ajax({
@@ -576,7 +575,7 @@ if (isset($_GET['mid'])) {
                  $('.delete_all_in').click(function() {
                      bootbox.confirm('".js_escape($langConfirmDeleteAllMsgs)."', function(result) {
                          if(result) {
-                             var string = 'all_inbox=1';
+                             var string = 'all_inbox=1&". generate_csrf_token_link_parameter() . "';
                              $.ajax({
                                  type: 'POST',
                                  url: '$ajax_url',
