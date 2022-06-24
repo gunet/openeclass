@@ -273,7 +273,8 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
         if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str }";
         if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
-            $styles_str .= ".jumbotron.jumbotron-login {background-size: cover, cover; background-position: 0% 0%;}";
+            // $styles_str .= ".jumbotron.jumbotron-login {background-size: cover, cover; background-position: 0% 0%;}";
+            $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover; width:auto; margin-top:-169px;}";
         }
         //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
         if (isset($theme_options_styles['fluidContainerWidth'])){
@@ -332,8 +333,8 @@ function view($view_file, $view_data = array()) {
         }
     }
 
-    $views = $webDir.'/resources/views';
-    $cache = $webDir . '/storage/views';
+    $views = $webDir . '/resources/views/' . get_config('theme');
+    $cache = $webDir . '/storage/views/' . get_config('theme');
     $blade = new Blade($views, $cache);
 
     $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
@@ -362,8 +363,8 @@ function widget_view($view_file, $view_data = array()) {
     $require_help, $professor, $helpTopic, $head_content, $toolName, $themeimg, $navigation,
     $require_current_course, $saved_is_editor, $require_course_admin, $require_editor;
 
-    $views = $webDir."/$view_data[widget_folder]/views";
-    $cache = $webDir . '/storage/views';
+    $views = $webDir . "/$view_data[widget_folder]/views/" . get_config('theme');
+    $cache = $webDir . '/storage/views/' . get_config('theme');
     $blade = new Blade($views, $cache);
 
     $global_data = [];

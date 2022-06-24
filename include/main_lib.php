@@ -1326,21 +1326,21 @@ function course_access_icon($visibility) {
 
     switch ($visibility) {
         case COURSE_OPEN: {
-            $access_icon = "<span class='fa fa-unlock fa-lg fa-fw' data-toggle='tooltip' data-placement='top' title='$langTypeOpen'></span>";
+            $access_icon = "<span class='fa fa-unlock fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen'></span>";
             break;
         }
         case COURSE_REGISTRATION: {
-            $access_icon = "<span class='fa fa-lock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langTypeRegistration'>
-                                    <span class='fa fa-pencil text-danger fa-custom-lock'></span>
+            $access_icon = "<span class='fa fa-lock fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'>
+                                    <span class='fa fa-pencil text-danger fa-custom-lock pt-1'></span>
                             </span>";
             break;
         }
         case COURSE_CLOSED: {
-            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-toggle='tooltip' data-placement='top' title='$langTypeClosed'></span>";
+            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed'></span>";
             break;
         }
         case COURSE_INACTIVE: {
-            $access_icon = "<span class='fa fa-ban fa-lg text-danger' data-toggle='tooltip' data-placement='top' title='$langTypeInactive'></span>";
+            $access_icon = "<span class='fa fa-ban fa-lg text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive'></span>";
             break;
         }
     }
@@ -3448,7 +3448,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $caret = '';
         $primaryTag = 'a';
         if ($level != 'primary-label' or isset($option['icon'])) {
-            $dataAttrs = "data-placement='bottom' data-toggle='tooltip'";
+            $dataAttrs = "data-bs-placement='bottom' data-bs-toggle='tooltip'";
         } else {
             $dataAttrs = '';
         }
@@ -3458,7 +3458,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $primaryTag = 'button';
             $button_class .= ' dropdown-toggle';
             $caret = ' <span class="caret"></span>';
-            $dataAttrs = 'data-toggle="dropdown" data-placement="right" aria-haspopup="true" aria-expanded="false"';
+            $dataAttrs = 'data-bs-toggle="dropdown" data-bs-placement="right" aria-haspopup="true" aria-expanded="false"';
             $form_begin = '<div class="btn-group" role="group">';
             $form_end = '</div>';
             $subMenu = '<ul class="dropdown-menu dropdown-menu-right">';
@@ -3506,25 +3506,27 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 
     $action_button = '';
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
-    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";
+    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
-        $action_button .= "<div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'>.</span></button>";
-        $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
+        $action_button .= "<div class='btn-group'><button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
+        $action_button .= "  <ul class='row p-4 dropdown-menu dropdown-menu-right myuls' role='menu'>
                      ".implode('', $out_secondary)."
                   </ul></div>";
     }
     if ($out && $i!=0) {
-        return "<div class='row action_bar'>
-                    <div class='col-sm-12 clearfix'>
+        return "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'><div class='action_bar'>
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
                         $page_title
-                        <div class='margin-top-thin margin-bottom-fat pull-right'>
+                    </div>   
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
+                        <div class='float-end margin-top-thin margin-bottom-fat hidden-print'>
                             <div class='btn-group'>
                             $out
                             $action_button
                             </div>
                         </div>
                     </div>
-                </div>";
+                </div></div><div class='row p-2'></div>";
     } else {
         return '';
     }
@@ -3619,11 +3621,11 @@ function action_button($options, $secondary_menu_options = array()) {
     }
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
-                $primary_buttons
-                $action_button
-          </div>" . $primary_form_end;
+         "<div class='btn-group btn-group-sm btn-secondary' role='group'>" .
+         $primary . $secondary .
+         '</div>' . $primary_form_end;
 }
+
 
 /**
  * Removes spcific get variable from Query String

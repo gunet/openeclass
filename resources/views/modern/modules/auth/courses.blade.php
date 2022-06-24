@@ -1,0 +1,238 @@
+
+<?php //echo "<hr>"; //var_dump($data_all[5]);?>
+<?php
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////// Nα μην σβηστει //////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      $all_registered_courses = array(); 
+      $all_prerequisites_courses = array();
+      $cid = array();
+      $password = array();
+      $myCourses = array();
+      $vis_class= array();
+
+      $all_registered_courses[] = $data_all[0];
+      $all_prerequisites_courses[] = $data_all[4];
+      $cid[] = $data_all[1];
+      $password = $data_all[3];
+      $myCourses = $data_all[5];
+      $vis_class = $data_all[2];
+
+      $prerequisite_course_title = ' ';
+      $prerequisite_course_public_code = ' ';
+      $i=0;
+      foreach($all_prerequisites_courses[0] as $key){
+            foreach($key[0] as $value){
+                if($i==3){
+                    $prerequisite_course_title = $value;
+                }
+                if($i==8){
+                    $prerequisite_course_public_code = $value;
+                }
+                $i++;
+            }
+      }
+
+      //print_r($myCourses[0]) 
+      //print_r($all_password[2]);
+      //print_r($all_registered_courses[0]);
+      //print_r($vis_class);
+      //print_r(strval( $all_registered_courses[0][0] ) )
+
+      
+?>
+
+
+@extends('layouts.default')
+
+@section('content')
+
+
+    <div class="pb-3 pt-3">
+
+        <div class="container-fluid main-container">
+
+            <div class="row">
+
+                <div class="col-xl-12 col-lg-8 col-md-12 col-sm-6 col-xs-6 justify-content-center courses-register-details col_maincontent_active">
+                   
+                   
+                        <div class="row p-5">
+
+                            <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-12 col-sm-6">
+                                    <legend class="float-none w-auto py-2 px-4 notes-legend"><span style="margin-left:-25px;"><i class="fas fa-registered"></i> {{$toolName}}</span></legend>
+                                    <div class="row p-2"></div>
+                            </div>
+
+                            @if(!$fac)
+                                {!! $tool_content2 !!}
+                            @else
+                            
+                            
+                                <form action='$_SERVER[SCRIPT_NAME]' method='post' style="padding-top:20px;">
+                                    <ul class='list-group list_grouping' style="padding-top:25px; padding-bottom:25px;">
+                                        <li class='list-group-item list-header'>
+                                            <a name='top'></a>
+                                            {!! $langFaculty !!}:{!! $getFullPath !!}
+                                            {!! $childHtml !!}
+                                        </li>
+                                    </ul>
+                                </form>
+
+                                @if($numofcourses > 0 )
+                                <form action="{{ $urlAppend }}modules/auth/courses.php" method="post">
+                                
+                                    <div class='table-responsive'>
+                                        <table id="mycoursesregister_table" class='table-default table_register_to_course'>
+                                            <thead class="notes_thead">
+                                                <tr>
+                                                    <th class="text-white" scope="col"><span class="types-cols" >{!! $langRegistration !!}</span></th>
+                                                    <th class="text-white" scope="col"><span class="types-cols" >{!! $langCourseCode !!}</span></th>
+                                                    <th class="text-white" scope="col"><span class="types-cols" >{!! $langTeacher !!}</span></th>
+                                                    <th class="text-white" scope="col"><span class="types-cols" >{!! $langType !!}</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="ps-3">
+                                                <?php $user = Database::get()->querySingle("SELECT * FROM `user` WHERE `user`.`id`='{$uid}' "); ?>
+                                                <?php for($i=0; $i<count($all_registered_courses[0]); $i++){ ?>
+                                                    <?php if($user->username != "admin"){ ?>
+                                                        <tr>
+                                                            <?php $myVar = strip_tags($all_registered_courses[0][$i]);?>
+                                                            <?php $course_visible = Database::get()->querySingle("SELECT * FROM `course` WHERE `course`.`title`='{$myVar}' "); ?>
+                                                            <?php $myTeacher = strip_tags($all_registered_courses[0][$i]);?>
+                                                            <?php $course_teacher = Database::get()->querySingle("SELECT * FROM `course` WHERE `course`.`title`='{$myTeacher}' "); ?>
+                                                            <?php if(isset($myCourses[$cid[0][$i]])) {?>
+                                                                <?php if ($myCourses[$cid[0][$i]]->status != 1) { ?>
+                                                                        <th scope="row">
+                                                                            <label class="checkbox_container2">
+                                                                                <input type='checkbox' name='selectCourse[]' value='{{$cid[0][$i]}}' checked='checked' $vis_class[$i] >
+                                                                                <input type='hidden' name='changeCourse[]' value='{{$cid[0][$i]}}' >
+                                                                                <span class="checkmark2"></span>
+                                                                                
+                                                                            </label>
+                                                                        </th>
+                                                                        <?php if (!empty($password[$i])) { ?>
+                                                                            <td class="ps-3">
+                                                                                <a class="info_reg_course" href="{{ $urlAppend }}main/info_mycourse.php?title=<?php echo $course_visible->title ?>">{!! $all_registered_courses[0][$i] !!}</a><br>
+                                                                                <small>{{trans('langPassCode')}}:</small> <input type='password' name='pass{{$cid[0][$i]}}' value='{{$password[$i]}}' autocomplete='off' />
+                                                                            
+                                                                            </td>
+                                                                            <td class="ps-3">{!! $course_teacher->prof_names !!}</td>
+                                                                            <td class="ps-3"><?php echo course_access_icon($course_visible->visible) ?></td>
+                                                                        <?php }else{ ?>
+                                                                            <td class="ps-3"><a class="info_reg_course" href="{{ $urlAppend }}main/info_mycourse.php?title=<?php echo $course_visible->title ?>">{!! $all_registered_courses[0][$i] !!}</a></td>
+                                                                            <td class="ps-3">{!! $course_teacher->prof_names !!}</td>
+                                                                            <td class="ps-3"><?php echo course_access_icon($course_visible->visible) ?></td>
+                                                                        <?php } ?>
+                                                                        
+                                                                <?php } ?>
+                                                                    
+                                                            <?php }else{ ?>
+                                                                <?php if($course_visible->visible == 1){?>
+                                                                    <th scope="row">
+                                                                        <label class="checkbox_container2">
+                                                                            <input type='checkbox' name='selectCourse[]' value='{{$cid[0][$i]}}' $vis_class[$i] />
+                                                                            <input type='hidden' name='changeCourse[]' value='{{$cid[0][$i]}}' >
+                                                                            <span class="checkmark2"></span>
+                                                                            
+                                                                        </label>
+                                                                    </th>
+                                                                    <td class="ps-3">
+                                                                        <a class="info_reg_course" href="{{ $urlAppend }}main/info_mycourse.php?title=<?php echo $course_visible->title ?>">{!! $all_registered_courses[0][$i] !!}</a><br>
+                                                                        <small style='color:red'>{{trans('langPassCode')}}:</small> <input type='password' name='pass{{$cid[0][$i]}}' autocomplete='off' />
+                                                                    </td>
+                                                                    <td class="ps-3">{!! $course_teacher->prof_names !!}</td>
+                                                                    <td class="ps-3"><?php echo course_access_icon($course_visible->visible) ?></td>
+                                                                <?php }else if($course_visible->visible == 2){?>
+                                                                    <th scope="row">
+                                                                        <label class="checkbox_container2">
+                                                                                <input type='checkbox' name='selectCourse[]' value='{{$cid[0][$i]}}' $vis_class[$i] />
+                                                                                <input type='hidden' name='changeCourse[]' value='{{$cid[0][$i]}}' >
+                                                                                <span class="checkmark2"></span>
+                                                                                
+                                                                        </label>
+                                                                        </th>
+                                                                    <td class="ps-3"><a class="info_reg_course" href="{{ $urlAppend }}main/info_mycourse.php?title=<?php echo $course_visible->title ?>">{!! $all_registered_courses[0][$i] !!}</a></td>
+                                                                    <td class="ps-3">{!! $course_teacher->prof_names !!}</td>
+                                                                    <td class="ps-3"><?php echo course_access_icon($course_visible->visible) ?></td>
+                                                                <?php }else if($course_visible->visible == 3){ ?>
+                                                                    <th scope="row">
+                                                                        <label class="checkbox_container2">
+                                                                                <input type='checkbox' name='selectCourse[]' value='{{$cid[0][$i]}}' disabled $vis_class[$i] />
+                                                                                <input type='hidden' name='changeCourse[]' value='{{$cid[0][$i]}}' >
+                                                                                <span class="checkmark2"></span>
+                                                                                
+                                                                            </label>
+                                                                        </th>
+                                                                    <td class="ps-3"><a class="info_reg_course" href="{{ $urlAppend }}main/info_mycourse.php?title=<?php echo $course_visible->title ?>">{!! $all_registered_courses[0][$i] !!}</a></td>
+                                                                    <td class="ps-3">{!! $course_teacher->prof_names !!}</td>
+                                                                    <td class="ps-3"><?php echo course_access_icon($course_visible->visible) ?></td>
+                                                                <?php }else{ ?>
+                                                                    <th scope="row">
+                                                                        <label class="checkbox_container2">
+                                                                                <input type="checkbox" name="selectCourse[]" value='{{$cid[0][$i]}}' disabled />
+                                                                                <input type='hidden' name='changeCourse[]' value='{{$cid[0][$i]}}' >
+                                                                                <span class="checkmark2"></span>
+                                                                                
+                                                                            </label>
+                                                                    </th>
+                                                                    <td class="ps-3"><a class="info_reg_course" href="{{ $urlAppend }}main/info_mycourse.php?title=<?php echo $course_visible->title ?>">{!! $all_registered_courses[0][$i] !!}</a></td>
+                                                                    <td class="ps-3">{!! $course_teacher->prof_names !!}</td>
+                                                                    <td class="ps-3"><?php echo course_access_icon($course_visible->visible) ?></td>
+                                                                <?php } ?>
+                                                                
+                                                            <?php } ?>   
+                                                        </tr>
+                                                    <?php }else{ ?>
+                                                        <?php $myVar = strip_tags($all_registered_courses[0][$i]);?>
+                                                        <?php $course_visible = Database::get()->querySingle("SELECT * FROM `course` WHERE `course`.`title`='{$myVar}' "); ?>
+                                                        <?php $myTeacher = strip_tags($all_registered_courses[0][$i]);?>
+                                                        <?php $course_teacher = Database::get()->querySingle("SELECT * FROM `course` WHERE `course`.`title`='{$myTeacher}' "); ?>
+                                                        <tr>
+                                                            
+                                                            <th class="ps-3" scope="row"><i class='fas fa-user'></i></th>
+                                                            <td class="ps-3"><a class="info_reg_course" href="{{ $urlAppend }}main/info_mycourse.php?title=<?php echo $course_visible->title ?>">{!! $all_registered_courses[0][$i] !!}</a></td>
+                                                            <td class="ps-3">{!! $course_teacher->prof_names !!}</td>
+                                                            <?php if($course_visible->visible == 1){?>
+                                                                <td class="ps-3"><?php echo course_access_icon($course_visible->visible) ?><i class="fas fa-pen-fancy" style="color:orange; margin-top:-20px; margin-left:10px;"></td>
+                                                            <?php }else{ ?>
+                                                                <td class="ps-3"><?php echo course_access_icon($course_visible->visible) ?></td>
+                                                            <?php } ?>
+
+                                                        </tr>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row p-2"></div>
+                                    <input class="btn btn-success" type="submit" name="submit_register_course" value="{{trans('langSubmitChanges')}}">
+
+                                    
+                                </form>
+                            @endif
+                                        
+                            
+                            <!-- <div class="col-xxl-4 col-xl-3 col-md-4 col-sm-6 col-xs-6 back_col_registerCourse">   
+                                <div class="row h-100">
+                                    <div class="col-sm-12 my-auto">
+                                            <button class="btn btn-dark back_btn_announcements1">{!! $action_bar !!}</button>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    @endif
+                        
+                   
+                </div>
+
+            </div>
+        </div>
+    </div>      
+
+@endsection
+    
+    
+

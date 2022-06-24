@@ -242,7 +242,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_departmentmanage_user = false;
 }
 
-$theme = $_SESSION['theme'] = 'default';
+$theme = $_SESSION['theme'] = get_config('theme');
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
 if (file_exists("template/$theme/settings.php")) {
     require_once "template/$theme/settings.php";
