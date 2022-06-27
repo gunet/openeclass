@@ -1,10 +1,10 @@
 <nav class="navbar h-auto navbar-eclass">
-    <div class="btn-group w-100 ps-4 pe-4" role="group" aria-label="Basic example">
+    <div class="btn-group w-100 ps-4" role="group" aria-label="Basic example">
 
         <a type="button" class="btn btn-transparent ps-2 pe-4 text-white" href="{{ $urlServer }}"><i class="fa fa-home"></i></a>
 
         <a type="button" class="btn btn-transparent ps-2 pe-4 text-white" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib"></i></a>
-               
+
         @if($_SESSION['uid'])
             @if($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == ADMIN_USER)
                 <a class="eclass-nav-link ps-2 pe-2" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fas fa-plus-circle"></i></a>
@@ -15,7 +15,7 @@
             (isset($is_power_user) and $is_power_user) or
             (isset($is_usermanage_user) and ($is_usermanage_user)) or
             (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                <a type="button" class="btn btn-transparent ps-2 pe-3" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white"></i></a>
+                <a type="button" class="btn btn-transparent" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white"></i></a>
         @endif
 
         <div class="dropdown d-inline">
@@ -51,7 +51,7 @@
                 <button class="btn btn-transparent dropdown-toogle text-warning" type="button"
                         id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-user"></i>
-                    
+
                 </button>
 
                     <ul class="dropdown-menu dropdown-user-menu-ul mt-3" aria-labelledby="dropdownMenuButton1">

@@ -7,16 +7,16 @@
 
         <div class="row">
             <div class="col-lg-8 pb-2 order-first">
-                <div class="col-lg-6 pb-2">
+                <div class="col-lg-8 pb-2">
                     <div class="intro welcome-intro">
                         <h1 class="welcome" >
-                            Καλως Ήρθατε στην <strong>Πλατφόρμα Τηλεκπαίδευσης</strong>
+                            {{trans('langWelcomeTo')}} <strong>{{trans('langEclass')}}</strong>
                         </h1>
                         {!! trans('langInfoAbout') !!}
                         @if (get_config('enable_mobileapi'))
-                            <div class="row">
-                                <div><a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>here<img src='template/modern/images/appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a></div>
-                                <div style='margin-left: 15px;'><a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='template/modern/images/playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a></div>
+                            <div class="row mt-2">
+                                <div class='col-sm-6'><a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank><img src='template/modern/images/appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a></div>
+                                <div class='col-sm-6'><a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='template/modern/images/playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a></div>
                             </div>
                         @endif
                     </div>
@@ -25,7 +25,7 @@
 
             <div class="col-lg-4 pb-2 order-last">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div id="idform" class="float-end login-form" >
                             <div class="login-form-icon">
 
@@ -51,7 +51,7 @@
                                     </div>
                                 </form>
                                 <div class="login-form-spacing2">
-                                    <a class="login-forgot" href="">{{ trans('lang_forgot_pass') }}</a>
+                                    <a class="login-forgot" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                                 </div>
                             </div>
                         </div>

@@ -3963,6 +3963,22 @@ $langMyPortfolio = "Το χαρτοφυλάκιο μου";
 $langAdvancedSearch = "Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
 $langType = "Τύπος";
+$langSummaryProfile = "ΣΥΝΟΠΤΙΚΟ ΠΡΟΦΙΛ";
+$langMoreInfo = "ΠΕΡΙΣΣΟΤΕΡΕΣ ΠΛΗΡΟΦΟΡΙΕΣ";
+$langAboutMe = "ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ";
+$langPersonalInfo = "ΠΡΟΣΩΠΙΚΑ ΣΤΟΙΧΕΙΑ";
+$langMyInterests = "ΤΑ ΕΝΔΙΑΦΕΡΟΝΤΑ ΜΟΥ";
+$langCoursesAttend = "Μαθήματα που παρακολουθώ";
+$langCoursesSupport = "Μαθήματα που υποστηρίζω";
+$langEditProfile = "ΕΠΕΞΕΡΓΑΣΙΑ ΠΡΟΦΙΛ";
+$langDeleteAccount ="ΔΙΑΓΡΑΦΗ ΛΟΓΑΡΙΑΣΜΟΥ";
+$langLastVisit = "Τελευταία επίσκεψη";
+$langMyCourses = "ΤΑ ΜΑΘΗΜΑΤΑ ΜΟΥ";
+$langAllAnnouncements = "ΟΛΕΣ ΟΙ ΑΝΑΚΟΙΝΩΣΕΙΣ";
+$langRecentMessages = "Πρόσφατα μηνύματα";
+$langAllMessages = "ΟΛΑ ΤΑ ΜΗΝΥΜΑΤΑ";
+$langWelcomeTo = "Καλως Ήρθατε στην ";
+
 /* * *************************************************************
  * unreguser.php
  * ************************************************************** */

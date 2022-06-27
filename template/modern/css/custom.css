@@ -54,6 +54,7 @@
 
 .login-form-spacing2 {
   padding-top: 17px;
+  margin-top:-12px;
   text-align: center;
 }
 
@@ -107,8 +108,8 @@ h2 {
 }
 
 .input-group-text{
-  background-color: transparent; 
-  border:transparent;  
+  background-color: transparent;
+  border:transparent;
   border-bottom:solid 1px white;
   margin-top:1px;
 }
@@ -120,7 +121,7 @@ h2 {
 }
 
 .button_lang_el{
-  height:30px; 
+  height:30px;
   width:30px;
   border-radius:50%;
   border:0;
@@ -290,7 +291,7 @@ h2 {
 .ul_top_hypers li{
   display: inline;
   margin: 30px 30px;
-  
+
 }
 
 .ul_top_hypers li a{
@@ -491,7 +492,7 @@ text-decoration: none;
   width: 66px;
   height: 66px;
   top: 50%;
-  left: 22vw;
+  left: 9vw;
   transform: translate(-50%, -50%);
   background: url(../images/prev.svg) no-repeat center;
   background-size: contain;
@@ -605,7 +606,7 @@ text-decoration: none;
 }
 
 .user-menu-link-simple {
-  
+
   padding: 5px;
   padding-inline: 11px;
   text-decoration: none;

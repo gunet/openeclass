@@ -1,56 +1,64 @@
 <nav id="bgr-cheat-header" class="navbar navbar-eclass">
 
 
-            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
-                @if(get_config('enable_search'))
-                    <form action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
-                        <div class="float-end mt-3">
-                            <input type="text" class="input-group-input inputSearch" id="search_terms" name="search_terms" placeholder="{{ trans('langSearch') }}...">
-                            <button id="btn-search" class="eclass-nav-link mt-0 me-4 border-0" type="submit" name="quickSearch"><i class="fa fa-search text-white"></i></button>
+        @if(get_config('enable_search'))
+            <form action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
+                <div class="float-end mt-3">
+
+                        <input type="text" class="w-50 input-group-input inputSearch" id="search_terms" name="search_terms" placeholder="{{ trans('langSearch') }}...">
+                        <button id="btn-search" class="eclass-nav-link mt-0 me-4 border-0" type="submit" name="quickSearch"><i class="fa fa-search text-white" style='margin-left:-15px;'></i></button>
+                        <div class="btn-group d-inline me-2">
+                            <a onclick="changeLang('el')" href="{{$urlAppend}}index.php?localize=el" class="GreekButton btn btn-primary rounded-circle">el</a>
+                            <a onclick="changeLang('en')" href="{{$urlAppend}}index.php?localize=en" class="EnglishButton btn btn-transparent border-primary rounded-circle text-white">en</a>
                         </div>
-                    </form>
-                @endif
 
-                @if ((isset($is_admin) and $is_admin) or
-                (isset($is_power_user) and $is_power_user) or
-                (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                    <a id="AdminToolBtn" type="button" class="float-end eclass-nav-link" aria-haspopup="true"
-                            aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="left"
-                            title="{{trans('langAdminTool')}}" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white"></i>
-                    </a>
-                @endif
-
-                <div class="dropdown">
-                    <a class="mt-0 float-end eclass-nav-link" type="button" href="#dropdownLanguage"
-                            data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
-                            data-bs-toggle-second="tooltip" data-bs-placement="left" title="{{trans('langLanguage')}}">
-                        <i class="fa fa-globe"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-language-ul" aria-labelledby="dropdownLanguage">
-                        <li class="language-li">
-                            <a class="language-item" href="{{$urlAppend}}index.php?localize=el"><i class="fas fa-language"></i> {{ trans('langGreek') }}</a>
-                        </li>
-                        <li class="language-li">
-                            <a class="language-item" href="{{$urlAppend}}index.php?localize=en"><i class="fas fa-language"></i> {{ trans('langEnglish') }}</a>
-                        </li>
-                        <li class="language-li">
-                            <a class="language-item" href="{{$urlAppend}}index.php?localize=fr"><i class="fas fa-language"></i> {{ trans('langFrench') }}</a>
-                        </li>
-                        <li class="language-li">
-                            <a class="language-item" href="{{$urlAppend}}index.php?localize=de"><i class="fas fa-language"></i> {{ trans('langGerman') }}</a>
-                        </li>
-                        <li class="language-li">
-                            <a class="language-item" href="{{$urlAppend}}index.php?localize=it"><i class="fas fa-language"></i> {{ trans('langItalian') }}</a>
-                        </li>
-                        <li class="language-li">
-                            <a class="language-item" href="{{$urlAppend}}index.php?localize=es"><i class="fas fa-language"></i> {{ trans('langSpanish') }}</a>
-                        </li>
-                    </ul>
                 </div>
+            </form>
+        @endif
 
-            </div>
+        @if ((isset($is_admin) and $is_admin) or
+        (isset($is_power_user) and $is_power_user) or
+        (isset($is_usermanage_user) and ($is_usermanage_user)) or
+        (isset($is_departmentmanage_user) and $is_departmentmanage_user))
+            <a id="AdminToolBtn" type="button" class="float-end eclass-nav-link" aria-haspopup="true"
+                    aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="left"
+                    title="{{trans('langAdminTool')}}" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white"></i>
+            </a>
+        @endif
+
+
+
+        <!-- <div class="dropdown">
+            <a class="mt-0 float-end eclass-nav-link" type="button" href="#dropdownLanguage"
+                    data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
+                    data-bs-toggle-second="tooltip" data-bs-placement="left" title="{{trans('langLanguage')}}">
+                <i class="fa fa-globe"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-language-ul" aria-labelledby="dropdownLanguage">
+                <li class="language-li">
+                    <a class="language-item" href="{{$urlAppend}}index.php?localize=el"><i class="fas fa-language"></i> {{ trans('langGreek') }}</a>
+                </li>
+                <li class="language-li">
+                    <a class="language-item" href="{{$urlAppend}}index.php?localize=en"><i class="fas fa-language"></i> {{ trans('langEnglish') }}</a>
+                </li>
+                <li class="language-li">
+                    <a class="language-item" href="{{$urlAppend}}index.php?localize=fr"><i class="fas fa-language"></i> {{ trans('langFrench') }}</a>
+                </li>
+                <li class="language-li">
+                    <a class="language-item" href="{{$urlAppend}}index.php?localize=de"><i class="fas fa-language"></i> {{ trans('langGerman') }}</a>
+                </li>
+                <li class="language-li">
+                    <a class="language-item" href="{{$urlAppend}}index.php?localize=it"><i class="fas fa-language"></i> {{ trans('langItalian') }}</a>
+                </li>
+                <li class="language-li">
+                    <a class="language-item" href="{{$urlAppend}}index.php?localize=es"><i class="fas fa-language"></i> {{ trans('langSpanish') }}</a>
+                </li>
+            </ul>
+        </div> -->
+
+    </div>
 
 
 
