@@ -34,7 +34,7 @@ $head_content .= "<script type='text/javascript'>
       });
       $(document).on('click', '.expand.revert', function(e) {
         e.preventDefault();
-        $('.faq-section .panel-collapse.in').collapse('hide');
+        $('.faq-section .panel-collapse.collapse').collapse('hide');
         $(this).toggleClass('revert');
         $(this).children().eq(0).toggleClass('fa-minus-circle').toggleClass('fa-plus-circle');
         $(this).children().eq(1).html('$langFaqExpandAll');
@@ -54,7 +54,7 @@ $data['action_bar'] = action_bar(array(
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
+                                      'button-class' => 'btn-secondary')
                             ),false);
 
 $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;

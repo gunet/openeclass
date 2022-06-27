@@ -36,7 +36,7 @@ $data['action_bar'] = action_bar(
                                             'url' => $urlServer,
                                             'icon' => 'fa-reply',
                                             'level' => 'primary-label',
-                                            'button-class' => 'btn-default'
+                                            'button-class' => 'btn-secondary'
                                         ]
                                     ], false);
 $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;

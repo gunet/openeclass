@@ -36,7 +36,7 @@ $data['action_bar'] = action_bar(array(
           'url' => $urlServer,
           'icon' => 'fa-reply',
           'level' => 'primary-label',
-          'button-class' => 'btn-default')
+          'button-class' => 'btn-secondary')
                             ),false);
 $data['terms'] = str_replace(
     array('{%INSTITUTION%}', '{%EMAIL_HELPDESK%}'),

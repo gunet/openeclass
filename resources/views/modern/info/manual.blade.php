@@ -1,25 +1,66 @@
-@extends('layouts.default_old')
+@extends('layouts.default')
 
 @section('content')
 
-    {!! $action_bar !!}
-    <div class='list-group'>
-        <li class='list-group-item list-header'>{{ $general_tutorials['title'] }}</li>
-        @foreach ($general_tutorials['links'] as $gt)
-            <a href='{{ $gt['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $gt['desc'] !!}</a>
-        @endforeach
+<div class="pb-3 pt-3">
+
+    <div class="container-fluid main-container">
+
+        <div class="row">
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+
+                <div class="row p-5">
+
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ $urlAppend }}">{{trans('langPortfolio')}}</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{trans('langManuals')}}</li>
+                            </ol>
+                        </nav>
+                        <hr>
+                    </div>
+
+
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                        <div class='row'>
+                            <div class='text-start text-secondary'>{{trans('langEclass')}} - {{trans('langManuals')}}</div>
+                            {!! $action_bar !!}
+                        </div>
+                    </div>
+
+
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='list-group shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                            <li class='list-group-item list-header notes_thead text-white'>{{ $general_tutorials['title'] }}</li>
+                            @foreach ($general_tutorials['links'] as $gt)
+                                <a href='{{ $gt['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $gt['desc'] !!}</a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='list-group shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                            <li class='list-group-item list-header notes_thead text-white'>{{ $teacher_tutorials['title'] }}</li>
+                            @foreach ($teacher_tutorials['links'] as $tt)
+                                <a href='{{ $tt['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $tt['desc'] !!}</a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='list-group shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                            <li class='list-group-item list-header notes_thead text-white'>{{ $student_tutorials['title'] }}</li>
+                            @foreach ($student_tutorials['links'] as $st)
+                                <a href='{{ $st['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $st['desc'] !!}</a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class='list-group'>
-        <li class='list-group-item list-header'>{{ $teacher_tutorials['title'] }}</li>
-        @foreach ($teacher_tutorials['links'] as $tt)
-            <a href='{{ $tt['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $tt['desc'] !!}</a>
-        @endforeach
-    </div>
-    <div class='list-group'>
-        <li class='list-group-item list-header'>{{ $student_tutorials['title'] }}</li>
-        @foreach ($student_tutorials['links'] as $st)
-            <a href='{{ $st['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $st['desc'] !!}</a>
-        @endforeach
-    </div>
+</div>
 
 @endsection
