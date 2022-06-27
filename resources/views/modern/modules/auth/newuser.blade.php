@@ -9,7 +9,7 @@
         <div class="row">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_ProfileUser">
-                    
+
                 <div class="row p-5">
 
                 <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -18,14 +18,9 @@
                     </a>
                 </nav>
 
-                <nav class="navbar_breadcrumb pe-5" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <?php $size_breadcrumb = count($breadcrumbs); $count=0; ?>
-                        <?php for($i=0; $i<$size_breadcrumb; $i++){ ?>
-                            <li class="breadcrumb-item"><a href="{!! $breadcrumbs[$i]['bread_href'] !!}">{!! $breadcrumbs[$i]['bread_text'] !!}</a></li>
-                        <?php } ?> 
-                    </ol>
-                </nav>
+                @include('layouts.common.breadcrumbs', ['breadcrumbs' => [0 => ['bread_href' => 'registration.php', 'bread_text' => trans('langCreateAccount')],
+                                                                          1 => ['bread_text' => trans('langRegister')]]
+                                                       ])
 
                 {!! $action_bar !!}
 
@@ -170,7 +165,7 @@
                             @endif
 
                             <div class="row p-2"></div>
-                            
+
                             <div class='form-group'>
                                 <div class='col-sm-offset-2 col-sm-10'>
                                     <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langRegistration') }}'>

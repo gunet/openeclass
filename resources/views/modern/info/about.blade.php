@@ -12,24 +12,13 @@
 
                 <div class="row p-5">
 
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ $urlAppend }}">{{trans('langPortfolio')}}</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">{{trans('langInfo')}}</li>
-                            </ol>
-                        </nav>
-                        <hr>
-                    </div>
-
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => [0 => ['bread_href' => 'about.php', 'bread_text' => trans('langInfo') ]]])
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='row'>
-                            <div class='text-start text-secondary'>{{trans('langEclass')}} - {{trans('langInfo')}}</div>
                             {!! $action_bar !!}
                         </div>
                     </div>
-
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='panel shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
