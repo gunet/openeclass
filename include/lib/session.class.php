@@ -241,15 +241,15 @@ class Session {
         }
     }
     public static function getMessages() {
-       if (!isset($_SESSION['messages'])) {
+        if (!isset($_SESSION['messages'])) {
             return null;
         }
         $item_messages = $_SESSION['messages'];
         $msg_boxes = '';
         foreach($item_messages as $class => $value){
             $msg_boxes .= "
-                <div class='alert $class alert-dismissible' role='alert'>
-                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                <div class='alert $class alert-dismissible fade show' role='alert'>
+                    <button type='button' class='close' data-bs-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                         <ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
         }
         unset($_SESSION['messages']);

@@ -67,7 +67,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
+                                      'button-class' => 'btn-secondary')
                             ),false);
 
             $hasher = new PasswordHash(8, false);
@@ -88,7 +88,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
+                                      'button-class' => 'btn-secondary')
                             ),false);
     }
     $data['error_messages'] = $error_messages;
@@ -159,7 +159,7 @@ $data['action_bar'] = action_bar(array(
           'url' => $urlServer,
           'icon' => 'fa-reply',
           'level' => 'primary-label',
-          'button-class' => 'btn-default')), false);
+          'button-class' => 'btn-secondary')), false);
 
 $data['menuTypeID'] = 0;
 view('modules.auth.lostpass', $data);

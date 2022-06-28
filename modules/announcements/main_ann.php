@@ -38,16 +38,16 @@ $tool_content .= action_bar(array(
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
+                                      'button-class' => 'btn-secondary')
                             ),false);
 if ($numOfAnnouncements > 0) {
-    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
+    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='panel shadow-lg p-3 mb-5 bg-body rounded bg-primary'><div class='panel-body'>";
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
-        $tool_content .= "<div class='single_announcement'><div class='announcement-title'>" . q($announceArr[$i]->title) . "</div>
+        $tool_content .= "<div class='single_announcement'><div class='announcement-title control-label-notes'>" . q($announceArr[$i]->title) . "</div><hr>
 		<span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>
 		<div class='announcement-main'>" . standard_text_escape($announceArr[$i]->body) . "</div>
 		</div>";
     }
-    $tool_content .= "</div></div></div></div>";
+    $tool_content .= "</div></div></div>";
 }
 draw($tool_content, 0);
