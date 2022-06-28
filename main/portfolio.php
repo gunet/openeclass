@@ -203,6 +203,12 @@ $data['departments'] = $user->getDepartmentIds($uid);
 $data['lastVisit'] = Database::get()->querySingle("SELECT * FROM loginout
                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
 
+$data['userdata'] = Database::get()->querySingle("SELECT am, phone, registered_at,
+                                            has_icon, description, password,
+                                            email_public, phone_public, am_public
+                                        FROM user
+                                        WHERE id = ?d", $uid);
+
 $data['teacher_courses_count'] = $teacher_courses_count;
 $data['student_courses_count'] = $student_courses_count;
 
