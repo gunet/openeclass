@@ -1,3 +1,5 @@
+
+
 .ColLegends{
   border-bottom:solid 1px blue; height:45px
 }
@@ -93,7 +95,7 @@ input[type=checkbox].toggles:checked + label::after{
   font-size: 11px;
   color: white;
   text-align: left;
- 
+
 }
 input[type=checkbox].toggles:checked + label::before{
   left:81px;
@@ -134,7 +136,7 @@ input[type="checkbox"].toggles + label.rounded::before{
   padding-right: 20px;
   border-radius: 6px;
   display: inline-block;
-  
+
 }
 /* .sidebarTexts i::after{
   content: "|\00a0\00a0" !important;
@@ -212,7 +214,7 @@ ul {
 .col_maincontent_active{
   transition: 0.4s;
   min-height:auto;
-  background-color: white; 
+  background-color: white;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -222,7 +224,7 @@ ul {
 .announcement-course-page{
   transition: 0.4s;
   min-height:auto;
-  background-color: white; 
+  background-color: white;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -235,7 +237,7 @@ ul {
 .col_maincontent_registration{
   transition: 0.4s;
   height:60vh;
-  background-color: white; 
+  background-color: white;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -245,7 +247,7 @@ ul {
 .col_maincontent_active_unit{
   transition: 0.4s;
   height:auto;
-  background-color: white; 
+  background-color: white;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -253,7 +255,7 @@ ul {
   -moz-box-shadow: 0 0 3px #ccc;
   -webkit-box-shadow: 0 0 3px #ccc;
   box-shadow: 0 0 3px #ccc;
-  
+
 }
 
 .col_maincontent_active_calendar{
@@ -265,7 +267,7 @@ ul {
 .col_maincontent_active_CourseComplete{
   transition: 0.4s;
   height:auto;
-  background-color: white; 
+  background-color: white;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -278,7 +280,7 @@ ul {
 .col_maincontent_active_PersonalDoc{
   transition: 0.4s;
   height:auto;
-  background-color: white; 
+  background-color: white;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -288,12 +290,12 @@ ul {
 .col_maincontent_active_all{
   transition: 0.4s;
   height:auto;
-  background-color: white; 
+  background-color: white;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
   border-top-left-radius: 15px;
-  
+
 }
 
 
@@ -327,7 +329,7 @@ ul {
 }
 
 .breadcrumb li{
-  white-space:nowrap; 
+  white-space:nowrap;
 }
 
 
@@ -335,13 +337,13 @@ ul {
 
 /* /* mobile - portrait * */
 
-@media(max-width: 425px){ 
+@media(max-width: 425px){
 
    .btn-close.text-reset{
      background-color:white;
    }
 
-    .offcanvas{
+    .offcanvas-start.d-lg-none.mr-auto.show{
       width:280px;
       overflow-y: scroll;
       background-color: #003F87;
@@ -399,7 +401,7 @@ ul {
       border-radius: 0.25rem;
       margin-left:5px;
     }
-    
+
     .navbar-toggler-icon {
       display: inline-block;
       width: 1.5em;
@@ -410,14 +412,14 @@ ul {
       background-size: 100% 100%;
       color:blue;
     }
-  
+
 }
 
 
 /* mobile L */
 
-@media (min-width: 426px) and (max-width: 767px){ 
-  .offcanvas{
+@media (min-width: 426px) and (max-width: 767px){
+  .offcanvas-start.d-lg-none.mr-auto.show{
     width:285px;
     overflow-y: scroll;
     background-color: #003F87;
@@ -425,7 +427,7 @@ ul {
 }
 
 /* tablet */
-@media (min-width: 768px) and (max-width: 1023px){ 
+@media (min-width: 768px) and (max-width: 1023px){
    .col_sidebar_active{
      opacity: 1;
      /* filter: brightness(100%); */
@@ -435,7 +437,7 @@ ul {
     background-color:white;
   }
 
-   .offcanvas{
+   .offcanvas-start.d-lg-none.mr-auto.show{
      width:285px;
      overflow-y: scroll;
      background-color: #003F87;
@@ -457,7 +459,7 @@ ul {
 
   .active-nav{
     opacity:1;
-    
+
   }
 
   .user-menu-section{
@@ -467,7 +469,7 @@ ul {
   .content-class{
     margin-top:0px;
   }
-  
+
   .container_input_search{
     margin-top:-50px;
   }
@@ -488,7 +490,7 @@ ul {
     border-radius: 0.25rem;
     margin-left:5px;
   }
-  
+
   .navbar-toggler-icon {
     display: inline-block;
     width: 1.5em;
@@ -499,10 +501,45 @@ ul {
     background-size: 100% 100%;
   }
 
-  
+
 }
 
 @media(min-width:1024px) and (max-width:1199px){
+
+  .on{
+    font-size:7px !important;
+  }
+  .off{
+    font-size:7px !important;
+  }
+  .on2{
+    font-size:7px !important;
+    padding-top: 18px !important;
+    padding-right: 15px !important;
+  }
+  .off2{
+    font-size:7px !important;
+    padding-left: 22px !important;
+    padding-top: 7px !important;
+  }
+
+  .viewPageAs{
+    font-size:12px !important;
+  }
+
+  .active_tools_dropdown2.nav-link.text-white{
+    font-size:12px !important;
+  }
+  .active_tools_dropdown3.nav-link.text-white{
+    font-size:12px !important;
+  }
+  .sidebarColToolText .text-wrap{
+    font-size:12px !important;
+    margin-top:5px !important;
+  }
+  .sidebarTexts{
+    padding-left: 25px !important;
+  }
 
   .col_maincontent_active_PersonalDoc{
     width:auto;
@@ -517,6 +554,13 @@ ul {
   .col_maincontent_registration{
     width:100%;
     margin-left: 0px;
+  }
+
+  .col_maincontent_active{
+    min-height: 60vh;
+  }
+  .col_maincontent_active_all{
+    min-height: 60vh;
   }
 
   .navbar_sidebar{
@@ -553,7 +597,7 @@ ul {
     align-items: end;
     margin: 0px 0px 0px auto;
 
-    
+
     background-color: white;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -561,12 +605,28 @@ ul {
     border-bottom-right-radius: 15px;
     /* background-color: red !important; */
   }
-  
+
 
 }
 
 /* laptop */
 @media (min-width: 1200px) and (max-width:1399px){
+
+  .on{
+    font-size:10px !important;
+  }
+  .off{
+    font-size:10px !important;
+  }
+  .on2{
+    font-size:10px !important;
+    padding-top: 15px !important;
+  }
+  .off2{
+    font-size:10px !important;
+    padding-left: 15px !important;
+    padding-top: 4px !important;
+  }
 
   .col_maincontent_active_PersonalDoc{
     width:auto;
@@ -583,6 +643,14 @@ ul {
     width:100%;
     margin-left: 0px;
   }
+
+  .col_maincontent_active{
+    min-height: 60vh;
+  }
+  .col_maincontent_active_all{
+    min-height: 60vh;
+  }
+
   .navbar_sidebar{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -592,7 +660,6 @@ ul {
     min-height:auto;
     position:relative;
     background-color: #003F87;
-
   }
   .active-nav{
     margin-left:-450px;
@@ -610,7 +677,7 @@ ul {
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
   }
- 
+
 
   .active-cont-completeCourse{
     width: 100% ;
@@ -627,7 +694,7 @@ ul {
 
 
 /* large desktop */
-@media (min-width: 1400px){ 
+@media (min-width: 1400px){
   .navbar_sidebar{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -667,7 +734,7 @@ ul {
     align-items: end;
     margin: 0px 0px 0px auto;
 
-    
+
     background-color: white;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -694,7 +761,7 @@ ul {
 }
 
 @media (min-width: 2560px){
-  
+
   .active-nav{
     margin-left:-870px;
   }
@@ -731,7 +798,7 @@ ul {
       width: 12rem;
   }
 }
-@media (min-width: 1200px) and (max-width: 1399px){ 
+@media (min-width: 1200px) and (max-width: 1399px){
   .table-responsive{
     overflow: inherit;
   }
@@ -742,7 +809,7 @@ ul {
     margin-left:-85px;
   }
 }
-@media (min-width: 1024px) and (max-width: 1199px){ 
+@media (min-width: 1024px) and (max-width: 1199px){
   .table-responsive{
     overflow: inherit;
   }
@@ -753,7 +820,7 @@ ul {
     margin-left:-85px;
   }
 }
-@media (min-width: 768px) and (max-width: 1023px){ 
+@media (min-width: 768px) and (max-width: 1023px){
   .btn-toggle{
     width: 11rem;
   }
@@ -761,7 +828,7 @@ ul {
     margin-left:-85px;
   }
 }
-@media (min-width: 426px) and (max-width: 767px){ 
+@media (min-width: 426px) and (max-width: 767px){
   .btn-toggle{
     width: 11rem;
   }
@@ -769,7 +836,7 @@ ul {
     margin-left:-85px;
   }
 }
-@media(max-width: 425px){ 
+@media(max-width: 425px){
   .btn-toggle{
     width: 11rem;
   }
